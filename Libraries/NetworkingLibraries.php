@@ -399,10 +399,7 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
     case 33: //Fully re-order layers
       break;
     case 99: //Pass
-      if($turn[0] == "MAT")
-      {
-        StartTurn();
-      } else if(CanPassPhase($turn[0])) {
+      if(CanPassPhase($turn[0])) {
         PassInput(false);
       }
       break;
@@ -723,11 +720,7 @@ function Passed(&$turn, $playerID)
 function PassInput($autopass = true)
 {
   global $turn, $currentPlayer;
-  if($turn[0] == "MAT")
-  {
-    StartTurn();
-  }
-  else if($turn[0] == "END" || $turn[0] == "MAYMULTICHOOSETEXT" || $turn[0] == "MAYCHOOSECOMBATCHAIN" || $turn[0] == "MAYCHOOSEMULTIZONE" || $turn[0] == "MAYMULTICHOOSEAURAS" ||$turn[0] == "MAYMULTICHOOSEHAND" || $turn[0] == "MAYCHOOSEHAND" || $turn[0] == "MAYCHOOSEDISCARD" || $turn[0] == "MAYCHOOSEARSENAL" || $turn[0] == "MAYCHOOSEPERMANENT" || $turn[0] == "MAYCHOOSEDECK" || $turn[0] == "MAYCHOOSEMYSOUL" || $turn[0] == "INSTANT" || $turn[0] == "OK") {
+  if($turn[0] == "END" || $turn[0] == "MAYMULTICHOOSETEXT" || $turn[0] == "MAYCHOOSECOMBATCHAIN" || $turn[0] == "MAYCHOOSEMULTIZONE" || $turn[0] == "MAYMULTICHOOSEAURAS" ||$turn[0] == "MAYMULTICHOOSEHAND" || $turn[0] == "MAYCHOOSEHAND" || $turn[0] == "MAYCHOOSEDISCARD" || $turn[0] == "MAYCHOOSEARSENAL" || $turn[0] == "MAYCHOOSEPERMANENT" || $turn[0] == "MAYCHOOSEDECK" || $turn[0] == "MAYCHOOSEMYSOUL" || $turn[0] == "INSTANT" || $turn[0] == "OK") {
     ContinueDecisionQueue("PASS");
   } else {
     if($autopass == true) WriteLog("Player " . $currentPlayer . " auto-passed.");
@@ -1122,7 +1115,7 @@ function FinalizeTurn()
   if ($mainPlayer == 2) {
     $currentTurn += 1;
   }
-  $turn[0] = "MAT";
+  $turn[0] = "M";
   //$turn[1] = $mainPlayer == 2 ? $turn[1] + 1 : $turn[1];
   $turn[2] = "";
   $turn[3] = "";
@@ -1146,6 +1139,7 @@ function FinalizeTurn()
   AllyBeginTurnEffects();
   ItemBeginTurnEffects($mainPlayer);
   StartTurnAbilities();
+  
   $MakeStartTurnBackup = true;
 
   $layerPriority[0] = ShouldHoldPriority(1);
@@ -1496,91 +1490,7 @@ function MaterializeCardEffect($cardID)
   global $currentPlayer;
   switch($cardID)
   {
-    //Spirit of Fire, Spirit of Water, Spirit of Wind, Lost Spirit
-    case "LMyKyVC2O9": case "tafqldAGRF": case "pNiyaGlIe7": case "cFdWXaILRT":
-      for($i=0; $i<7; ++$i) Draw($currentPlayer);
-      break;
-    case "RfPP8h16Wv"://Silvie, Wilds Whisperer
-      AddCurrentTurnEffect("RfPP8h16Wv", $currentPlayer);
-      break;
-    case "nllCALIXDT"://Silvie, With the Pack
-      if(SearchCount(SearchAllies($currentPlayer, "", "BEAST")) > 0) Draw($currentPlayer);
-      if(SearchCount(SearchAllies($currentPlayer, "", "ANIMAL")) > 0) Draw($currentPlayer);
-      break;
-    case "gPKTJKqvOI"://Rai, Spellcrafter
-      PlayAura("ENLIGHTEN", $currentPlayer, 2);
-      break;
-    case "ybdj1Db9jz"://Seed of Nature
-      AddCurrentTurnEffect("ybdj1Db9jz", $currentPlayer);
-      $items = &GetItems($currentPlayer);
-      $items[count($items)-ItemPieces()+2] = 1;
-      break;
-    case "qyQLlDYBlr"://Ornamental Greatsword
-      if(IsClassBonusActive($currentPlayer, "GUARDIAN") || IsClassBonusActive($currentPlayer, "WARRIOR"))
-      {
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
-        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
-        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "qyQLlDYBlr,HAND", 1);
-      }
-      break;
-    case "eSAIP7mx9z"://Drawn Blade
-      Draw($currentPlayer);
-      break;
-    case "dmbBXRTVIk"://Sword of Avarice
-      Draw($currentPlayer);
-      if(IsClassBonusActive($currentPlayer, "WARRIOR")) Draw($currentPlayer);
-      break;
-    case "DpHDGaX2Pn"://Lorraine, Wandering Warrior
-      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYMATERIAL:subtype=SWORD;maxCost=0");
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a sword to materialize", 1);
-      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-      AddDQFinishMaterialize($currentPlayer);
-      break;
-    case "TJTeWcZnsQ"://Lorraine, Blademaster
-      AddCurrentTurnEffect("TJTeWcZnsQ", $currentPlayer);
-      break;
-    case "FxYwR2azTt"://Prismatic Edge
-      if(IsClassBonusActive($currentPlayer, "WARRIOR"))
-      {
-        $otherPlayer = ($currentPlayer == 1 ? 2 : 1);
-        if(SearchMemory($currentPlayer, element:"FIRE") != "" || SearchMemory($otherPlayer, element:"FIRE") != "")
-        {
-          WriteLog("Dealt 3 damage because a fire card was revealed");
-          DealArcane(3, 2, "PLAYCARD", "FxYwR2azTt");
-        }
-        if(SearchMemory($currentPlayer, element:"WATER") != "" || SearchMemory($otherPlayer, element:"WATER") != "")
-        {
-          WriteLog("Drew a card because a water card was revealed");
-          Draw($currentPlayer);
-        }
-        if(SearchMemory($currentPlayer, element:"WIND") != "" || SearchMemory($otherPlayer, element:"WIND") != "")
-        {
-          WriteLog("Banished a card because a wind card was revealed");
-          BanishRandomMemory($otherPlayer);
-        }
-      }
-      break;
-    case "T3CIBknts0"://Zander, Prepared Scout
-      AddPreparationCounters($currentPlayer, 1);
-      PlayerOpt($currentPlayer, 2);
-      break;
-    case "ZR8tnLruR6"://Silvie, Earth's Tune
-      $deck = &GetDeck($currentPlayer);
-      $toReveal = "";
-      for($i=0; $i<count($deck); ++$i)
-      {
-        $card = array_shift($deck);
-        if($toReveal != "") $toReveal .= ",";
-        $toReveal .= $card;
-        if(CardElement($card) == "TERA" && (SubtypeContains($card, "BEAST", $currentPlayer) || SubtypeContains($card, "ANIMAL", $currentPlayer))) { AddHand($currentPlayer, $card); break; }
-        else array_push($deck, $card);
-      }
-      RevealCards($toReveal, $currentPlayer);
-      break;
-    case "b31x97n2jn"://Arisanna, Herbalist Prodigy
-      Gather($currentPlayer, 2);
-      break;
+
     default:
       break;
   }

@@ -94,9 +94,7 @@ function AddCharacter($cardID, $player)
   $char = &GetPlayerCharacter($player);
   array_push($char, $cardID);
   array_push($char, 2);
-  $durability = CardDurability($cardID);
-  if($durability < 0) $durability = 0;
-  array_push($char, $durability);
+  array_push($char, 0);
   array_push($char, 0);
   array_push($char, 0);
   array_push($char, 1);

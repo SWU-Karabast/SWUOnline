@@ -14,10 +14,17 @@ StatsStartTurn();
 $MakeStartTurnBackup = false;
 $MakeStartGameBackup = false;
 
+$p1Material = &GetMaterial(1);
+AddCharacter($p1Material[0], 1);
+AddCharacter($p1Material[MaterialPieces()], 1);
+
 $p2Material = &GetMaterial(2);
 if(count($p2Material) == 1 && $p2Material[0] == "DUMMY")
 {
   AddCharacter("DUMMY", 2);
+} else {
+  AddCharacter($p2Material[0], 2);
+  AddCharacter($p2Material[MaterialPieces()], 2);
 }
 
 if($p2Char[0] == "DUMMY") {

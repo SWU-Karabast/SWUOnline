@@ -30,7 +30,8 @@ function CardType($cardID)
 function CardSubType($cardID)
 {
   if(!$cardID) return "";
-  return CardSubTypes($cardID);
+  return "";
+  //return CardSubTypes($cardID);
 }
 
 function CharacterHealth($cardID)

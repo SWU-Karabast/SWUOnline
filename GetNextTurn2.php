@@ -686,10 +686,6 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     ChoosePopup($myBanish, $turn[2], 16, "Choose a card from your banish", BanishPieces());
   }
 
-  if (($turn[0] == "MAT") && $currentPlayer == $playerID) {
-    ChoosePopup($myMaterial, GetIndices(count($myMaterial)), 15, "Choose a card to materialize", 1);
-  }
-
   if (($turn[0] == "CHOOSEPERMANENT" || $turn[0] == "MAYCHOOSEPERMANENT") && $turn[1] == $playerID) {
     $myPermanents = &GetPermanents($playerID);
     ChoosePopup($myPermanents, $turn[2], 16, GetPhaseHelptext(), PermanentPieces());

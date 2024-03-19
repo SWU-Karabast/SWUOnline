@@ -106,26 +106,6 @@ function CharacterLevel($player)
   return GetClassState($player, $CS_CachedCharacterLevel);
 }
 
-function CalculateCharacterLevel($player)
-{
-  $char = &GetPlayerCharacter($player);
-  if(count($char) == 0) return 0;
-  $level = CardLevel($char[0]);
-  switch($char[0])
-  {
-    case "g92bHLtTNl": $level += SearchCount(SearchBanish($player, element:"ARCANE")); break;//Rai, Storm Seer
-    default: break;
-  }
-  return $level + CurrentEffectLevelModifier($player) + AllyLevelModifiers($player) + ItemLevelModifiers($player);
-}
-
-function CacheCharacterLevel()
-{
-  global $CS_CachedCharacterLevel;
-  SetClassState(1, $CS_CachedCharacterLevel, CalculateCharacterLevel(1));
-  SetClassState(2, $CS_CachedCharacterLevel, CalculateCharacterLevel(2));
-}
-
 function AddAttack(&$totalAttack, $amount)
 {
   global $combatChain;
@@ -196,7 +176,6 @@ function CacheCombatResult()
     $combatChainState[$CSS_CachedNumActionBlocked] = NumActionBlocked();
     $combatChainState[$CCS_CachedNumDefendedFromHand] = NumDefendedFromHand(); //Reprise
   }
-  CacheCharacterLevel();
 }
 
 function CachedTotalAttack()
@@ -272,32 +251,6 @@ function AddFloatingMemoryChoice($fromDQ=false)
     AddDecisionQueue("MULTIBANISH", $currentPlayer, "GY,-", 1);
     AddDecisionQueue("DECDQVAR", $currentPlayer, "0", 1);
   }
-}
-
-//This is always called from the decision queue
-function StartTurn()
-{
-  global $dqState, $currentPlayer, $mainPlayer, $turn, $firstPlayer, $currentTurn;
-  $mainPlayer = $currentPlayer;
-  $dqState[1] = "M";
-  $turn[0] = "M";
-  CharacterStartTurnAbility(0);
-  AllyStartTurnAbilities($mainPlayer);
-  if(!IsDecisionQueueActive()) ProcessDecisionQueue();
-  ReturnAllMemoryToHand($currentPlayer);
-  if($mainPlayer != $firstPlayer || $currentTurn > 1) Draw($currentPlayer);
-}
-
-//Recollection
-function ReturnAllMemoryToHand($player)
-{
-  ItemBeginRecollectionAbilities();
-  $memory = &GetMemory($player);
-  for($i=count($memory)-MemoryPieces(); $i>=0; $i-=MemoryPieces())
-  {
-    AddHand($player, RemoveMemory($player, $i));
-  }
-  if(!IsDecisionQueueActive()) ProcessDecisionQueue();
 }
 
 function StartTurnAbilities()
