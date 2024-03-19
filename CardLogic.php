@@ -564,6 +564,16 @@ function GiveAttackGoAgain()
   $combatChainState[$CCS_CurrentAttackGainedGoAgain] = 1;
 }
 
+function EndTurnProcedure($player) {
+  $resources = &GetResourceCards($player);
+  for($i=0; $i<count($resources); $i+=ResourcePieces()) {
+    $resources[$i+4] = "0";
+  }
+  Draw($player);
+  Draw($player);
+  MZMoveCard($player, "MYHAND", "MYRESOURCES", may:true);
+}
+
 function TopDeckToArsenal($player)
 {
   $deck = &GetDeck($player);
