@@ -129551,7 +129551,7 @@ default: return "";
 }
 }
 
-function CardType($cardID) {
+function DefinedCardType($cardID) {
 switch($cardID[0]) {
 case "2":
 switch($cardID[1]) {

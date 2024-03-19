@@ -106,7 +106,7 @@
   GenerateFunction($aspectsTrie, $handler, "CardAspects", true, "");
   GenerateFunction($traitsTrie, $handler, "CardTraits", true, "");
   GenerateFunction($arenasTrie, $handler, "CardArenas", true, "");
-  GenerateFunction($typeTrie, $handler, "CardType", true, "");
+  GenerateFunction($typeTrie, $handler, "DefinedCardType", true, "");
 
   GenerateFunction($uuidLookupTrie, $handler, "UUIDLookup", true, "");
 
