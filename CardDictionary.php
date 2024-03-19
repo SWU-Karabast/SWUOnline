@@ -128,6 +128,8 @@ function HasAmbush($cardID, $player, $index)
     case "6718924441":
     case "7285270931":
       return true;
+    case "2027289177"://Escort Skiff
+      return SearchCount(SearchAllies($player, aspect:"Command")) > 1;
     default: return false;
   }
 }

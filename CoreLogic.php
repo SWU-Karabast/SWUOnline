@@ -1282,6 +1282,12 @@ function ClassContains($cardID, $class, $player="")
   return DelimStringContains($cardClass, $class);
 }
 
+function AspectContains($cardID, $aspect, $player="")
+{
+  $cardAspect = CardAspects($cardID);
+  return DelimStringContains($cardAspect, $aspect);
+}
+
 function SubtypeContains($cardID, $subtype, $player="")
 {
   $cardSubtype = CardSubtype($cardID);
@@ -2111,6 +2117,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     $targetArr = explode("-", $target);
     if($targetArr[0] == "LAYERUID") { $targetArr[0] = "LAYER"; $targetArr[1] = SearchLayersForUniqueID($targetArr[1]); }
     $target = $targetArr[0] . "-" . $targetArr[1];
+  }
+  if(HasAmbush($cardID, $currentPlayer, GetClassState($currentPlayer, $CS_PlayIndex))) {
+    WriteLog("Has Ambush");
   }
   switch($cardID)
   {
