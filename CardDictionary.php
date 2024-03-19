@@ -55,6 +55,11 @@ function CardClass($cardID)
   return CardClasses($cardID);
 }
 
+function NumResources($player) {
+  $resources = &GetResourceCards($player);
+  return count($resources)/ResourcePieces();
+}
+
 function CardTalent($cardID)
 {
   $set = substr($cardID, 0, 3);
@@ -94,6 +99,10 @@ function HasSentinel($cardID, $player, $index)
   switch($cardID)
   {
     case "2524528997": return true;
+    case "2739464284"://Gamorrean Guards
+      return SearchCount(SearchAllies($player, aspect:"Cunning")) > 1;
+    case "3138552659"://Homestead Militia
+      return NumResources($player) >= 6;
     default: return false;
   }
 }

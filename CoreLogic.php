@@ -2126,6 +2126,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "4721628683"://Patrolling V-Wing
       if($from != "PLAY") Draw($currentPlayer);
       break;
+    case "2050990622"://Spark of Rebellion
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRHAND");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose which card you want your opponent to discard", 1);
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZDISCARD", $currentPlayer, "HAND," . $currentPlayer, 1);
+      AddDecisionQueue("MZREMOVE", $currentPlayer, "-", 1);
+      break;
     default: break;
   }
 }
