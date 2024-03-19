@@ -698,3 +698,14 @@ function HasEnergyCounters($array, $index)
     default: return false;
   }
 }
+
+function BlackOne($player) {
+  AddDecisionQueue("SETDQCONTEXT", $player, "Do you want to discard your hand to draw 3?");
+  AddDecisionQueue("YESNO", $player, "-");
+  AddDecisionQueue("NOPASS", $player, "-");
+  AddDecisionQueue("OP", $player, "DISCARDHAND", 1);
+  AddDecisionQueue("DRAW", $player, "-", 1);
+  AddDecisionQueue("DRAW", $player, "-", 1);
+  AddDecisionQueue("DRAW", $player, "-", 1);
+  
+}

@@ -343,7 +343,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         case "SINK": MZSink($player, $lastResult); return $lastResult;
         case "SUPPRESS": MZSuppress($player, $lastResult); return $lastResult;
         case "REST": MZRest($player, $lastResult); return $lastResult;
-        case "WAKEUP": MZWakeUp($player, $lastResult); return $lastResult;
+        case "READY": MZWakeUp($player, $lastResult); return $lastResult;
         case "ADDHEALTH": MZAddHealth($player, $lastResult); return $lastResult;
         case "ENDCOMBAT": MZEndCombat($player, $lastResult); return $lastResult;
         case "HEALALLY": MZHealAlly($player, $lastResult); return $lastResult;
@@ -388,6 +388,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           if(count($allies) == 0) return "";
           return "MYALLY-" . count($allies)-AllyPieces();
         case "GETATTACK": return AttackValue($lastResult);
+        case "DISCARDHAND": DiscardHand($player); return $lastResult;
         default: return $lastResult;
       }
     case "FILTER":
@@ -416,6 +417,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           {
             case "type": if(CardType($inputArr[0]) == $compareArr[$j]) $passFilter = !$passFilter; break;
             case "subtype": if(SubtypeContains($inputArr[0], $compareArr[$j], $player)) $passFilter = !$passFilter; break;
+            case "trait": if(TraitContains($inputArr[0], $compareArr[$j], $player)) $passFilter = !$passFilter; break;
             case "player": if($inputArr[0] == $compareArr[$j]) $passFilter = !$passFilter; break;
             default: break;
           }

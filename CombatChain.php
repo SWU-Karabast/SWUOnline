@@ -15,11 +15,13 @@ function ProcessHitEffect($cardID)
 
 function AttackModifier($cardID, $from = "", $resourcesPaid = 0, $repriseActive = -1)
 {
-  global $mainPlayer, $defPlayer, $combatChain, $combatChainState, $CS_NumLeveledUp;
+  global $mainPlayer, $defPlayer, $initiativePlayer, $combatChain, $combatChainState, $CS_NumLeveledUp;
   if($repriseActive == -1) $repriseActive = RepriseActive();
   switch($cardID) {
     case "3988315236"://Seasoned Shoretrooper
       return NumResources($mainPlayer) >= 6 ? 2 : 0;
+    case "6348804504"://Ardent Sympathizer
+      return $initiativePlayer == $mainPlayer ? 2 : 0;
     default: return 0;
   }
 }

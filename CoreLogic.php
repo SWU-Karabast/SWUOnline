@@ -643,22 +643,12 @@ function LoseHealth($amount, $player)
   PlayerLoseHealth($player, $amount);
 }
 
-function GainHealth($amount, $player)
+function Restore($amount, $player)
 {
-  $otherPlayer = ($player == 1 ? 2 : 1);
   $health = &GetHealth($player);
-  $otherHealth = &GetHealth($otherPlayer);
-  if(SearchCurrentTurnEffects("MON229", $player)) { WriteLog(CardLink("MON229","MON229") . " prevented you from gaining health."); return; }
-  if(SearchCharacterForCard($player, "CRU140") || SearchCharacterForCard($otherPlayer, "CRU140"))
-  {
-    if($health > $otherHealth)
-    {
-      WriteLog("Reaping Blade prevented player " . $player . " from gaining " . $amount . " health.");
-      return false;
-    }
-  }
   WriteLog("Player " . $player . " gained " . $amount . " health.");
-  $health += $amount;
+  $health -= $amount;
+  if($health < 0) $health = 0;
   return true;
 }
 
@@ -1286,6 +1276,12 @@ function AspectContains($cardID, $aspect, $player="")
 {
   $cardAspect = CardAspects($cardID);
   return DelimStringContains($cardAspect, $aspect);
+}
+
+function TraitContains($cardID, $trait, $player="")
+{
+  $cardTrait = CardTraits($cardID);
+  return DelimStringContains($cardTrait, $trait);
 }
 
 function ArenaContains($cardID, $arena, $player="")
@@ -2157,6 +2153,41 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       MZMoveCard($currentPlayer, "MYALLY:arena=Ground", "MYHAND", may:true);
       AddDecisionQueue("DRAW", $currentPlayer, "-", 1);
       break;
+    case "6702266551"://Smoke and Cinders
+      $hand = &GetHand(1);
+      for($i=0; $i<(count($hand)/HandPieces())-2; ++$i) PummelHit(1);
+      $hand = &GetHand(2);
+      for($i=0; $i<(count($hand)/HandPieces())-2; ++$i) PummelHit(2);
+      break;
+    case "8148673131"://Open Fire
+      DealArcane(ArcaneDamage($cardID), 1, "PLAYCARD", $cardID, resolvedTarget: $target);
+      break;
+    case "8429598559"://Black One
+      BlackOne($currentPlayer);
+      break;
+    case "8986035098"://Viper Probe Droid
+      LookAtHand($currentPlayer == 1 ? 2 : 1);
+      break;
+    case "9266336818"://Grand Moff Tarkin
+      AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE," . 5);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+      AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Imperial", 1);
+      AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
+      AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
+      AddDecisionQueue("OP", $currentPlayer, "REMOVECARD");
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+      AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Imperial", 1);
+      AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
+      AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
+      AddDecisionQueue("OP", $currentPlayer, "REMOVECARD");
+      AddDecisionQueue("CHOOSEBOTTOM", $currentPlayer, "<-");
+      break;
+    case "9459170449"://Cargo Juggernaut
+      if(SearchCount(SearchAllies($currentPlayer, aspect:"Vigilance")) > 0) {
+        Restore(4, $currentPlayer);
+      }
+      break;
+    break;
     default: break;
   }
 }
@@ -2281,28 +2312,7 @@ function PlayRequiresTarget($cardID)
 {
   switch($cardID)
   {
-    case "145y6KBhxe": return 3;//Focused Flames
-    case "RIVahUIQVD": return 2;//Fireball
-    case "rXHo9fLU32": return 2;//Ignite the Soul
-    case "SrBA7h2a1N": return 2;//Freezing Hail
-    case "L9yBqoOshh": return 2;//Spark Alight
-    case "LRsgl92Iqa": return 2;//Mark the Target
-    case "pn9gQjV3Rb": return 0;//Arcane Blast
-    case "XMb6pSHFJg": return 3;//Embersong
-    case "DqtlaMGMvd": return 2;//Erratic Bolt
-    case "iohZMWh5v5": return 2;//BLazing Throw
-    case "5X5W2Uda5a": return 2;//Planted Explosives
-    case "0ymvddv1au": return 2;//Illuminate Secrets
-    case "6ffqsuo6gb": return 2;//Refracting Missile
-    case "1bqry41lw9": return 2;//Explosive Rune
-    case "1n3gygojwk": return 2;//Evasive Maneuvers
-    case "2ugmnmp5af": return 2;//Take Cover
-    case "bro89w0ejc": return 2;//Displace
-    case "ch2bbmoqk2": return 2;//Organize the Alliance
-    case "igka5av43e": return 3;//Incendiary Fractal
-    case "x7u6wzh973": return 2;//Frostbinder Apostle
-    case "44vm5kt3q2": return 2;//Battlefield Spotter
-    case "vfq3huqj5b": return 2;//Reposition
+    case "8148673131": return 2;//Open Fire
     default: return -1;
   }
 }
@@ -2312,15 +2322,7 @@ function PlayRequiresTarget($cardID)
     global $currentPlayer;
     switch($cardID)
     {
-      case "145y6KBhxe": return 4;//Focused Flames
-      case "RIVahUIQVD": return 1+CharacterLevel($currentPlayer);
-      case "rXHo9fLU32": return 1;//Ignite the Soul
-      case "SrBA7h2a1N": return 2;//Freezing Hail
-      case "L9yBqoOshh": return (IsClassBonusActive($currentPlayer, "MAGE") ? 3 : 2);//Spark Alight
-      case "LRsgl92Iqa": return 1;//Mark the Target
-      case "pn9gQjV3Rb": return 11;//Arcane Blast
-      case "XMb6pSHFJg": return 2;//Embersong
-      case "iohZMWh5v5": return 4;//BLazing Throw
+      case "8148673131": return 4;//Open Fire
       return 0;
     }
   }

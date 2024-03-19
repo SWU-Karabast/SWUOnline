@@ -84,6 +84,7 @@ function AllyAddGraveyard($player, $cardID, $subtype)
 
 function AllyEntersPlayState($cardID, $player, $from="-")
 {
+  return 2;//TODO:delete
   //if(SearchCurrentTurnEffects("dxAEI20h8F", $player)) return 1;
   //if(PlayerHasAlly($player == 1 ? 2 : 1, "TqCo3xlf93")) return 1;//Lunete, Frostbinder Priest
   switch($cardID)
@@ -162,6 +163,15 @@ function AllyDestroyedAbility($player, $index)
     case "4405415770"://Yoda, Old Master
       WriteLog("Player $player drew a card from Yoda, Old Master");
       Draw($player);
+      break;
+    case "8429598559"://Black One
+      BlackOne($player);
+      break;
+    case "9996676854"://Admiral Motti
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to ready");
+      AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:aspect=Villainy");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+      AddDecisionQueue("MZOP", $player, "READY", 1);
       break;
     default: break;
   }

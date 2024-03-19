@@ -160,6 +160,7 @@ function HasShielded($cardID, $player, $index)
     case "0700214503":
     case "5264521057":
     case "9950828238":
+    case "9459170449":
       return true;
     default: return false;
   }
