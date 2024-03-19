@@ -129551,4 +129551,1280 @@ default: return "";
 }
 }
 
+function UUIDLookup($cardID) {
+switch($cardID[0]) {
+case "S":
+switch($cardID[1]) {
+case "O":
+switch($cardID[2]) {
+case "R":
+switch($cardID[3]) {
+case "_":
+switch($cardID[4]) {
+case "0":
+switch($cardID[5]) {
+case "0":
+switch($cardID[6]) {
+case "5":
+return "2579145458";
+case "1":
+return "8560666697";
+case "3":
+return "3572356139";
+case "0":
+return "8752877738";
+case "7":
+return "2912358777";
+case "9":
+return "6514927936";
+case "2":
+return "2048866729";
+case "4":
+return "4263394087";
+case "6":
+return "5784497124";
+case "8":
+return "7440067052";
+default: return "";
+}
+case "1":
+switch($cardID[6]) {
+case "0":
+return "6088773439";
+case "1":
+return "7911083239";
+case "4":
+return "4841169874";
+case "5":
+return "4626028465";
+case "7":
+return "5954056864";
+case "6":
+return "1951911851";
+case "9":
+return "2429341052";
+case "2":
+return "8600121285";
+case "3":
+return "3187874229";
+case "8":
+return "8244682354";
+default: return "";
+}
+case "8":
+switch($cardID[6]) {
+case "4":
+return "9266336818";
+case "3":
+return "8954587682";
+case "0":
+return "7929181061";
+case "1":
+return "3988315236";
+case "2":
+return "1780978508";
+case "6":
+return "8294130780";
+case "8":
+return "3830969722";
+case "9":
+return "3401690666";
+case "5":
+return "3280523224";
+case "7":
+return "8506660490";
+default: return "";
+}
+case "2":
+switch($cardID[6]) {
+case "9":
+return "8129465864";
+case "3":
+return "0507674993";
+case "2":
+return "8327910265";
+case "4":
+return "2055904747";
+case "5":
+return "1393827469";
+case "6":
+return "8659924257";
+case "8":
+return "2569134232";
+case "0":
+return "6366665313";
+case "1":
+return "3810584393";
+case "7":
+return "0461841375";
+default: return "";
+}
+case "3":
+switch($cardID[6]) {
+case "5":
+return "2855740390";
+case "0":
+return "6093792814";
+case "3":
+return "6458912354";
+case "7":
+return "7596515127";
+case "8":
+return "9624333142";
+case "1":
+return "9133080458";
+case "4":
+return "9412277544";
+case "6":
+return "1664771721";
+case "2":
+return "9633997311";
+case "9":
+return "6663619377";
+default: return "";
+}
+case "4":
+switch($cardID[6]) {
+case "9":
+return "4786320542";
+case "2":
+return "7485151088";
+case "4":
+return "0074718689";
+case "5":
+return "4405415770";
+case "6":
+return "8184790799";
+case "7":
+return "1662196707";
+case "8":
+return "7622279662";
+case "1":
+return "0176921487";
+case "0":
+return "8240629990";
+case "3":
+return "1353201082";
+default: return "";
+}
+case "5":
+switch($cardID[6]) {
+case "8":
+return "8615772965";
+case "3":
+return "6903722220";
+case "9":
+return "5449704164";
+case "2":
+return "3896582249";
+case "0":
+return "6931439330";
+case "1":
+return "7109944284";
+case "4":
+return "8495694166";
+case "7":
+return "4550121827";
+case "6":
+return "5707383130";
+case "5":
+return "7861932582";
+default: return "";
+}
+case "7":
+switch($cardID[6]) {
+case "4":
+return "8679831560";
+case "8":
+return "6472095064";
+case "2":
+return "3099663280";
+case "5":
+return "0867878280";
+case "7":
+return "4849184191";
+case "9":
+return "4566580942";
+case "0":
+return "8788948272";
+case "3":
+return "8981523525";
+case "6":
+return "3208391441";
+case "1":
+return "1323728003";
+default: return "";
+}
+case "9":
+switch($cardID[6]) {
+case "7":
+return "0827076106";
+case "0":
+return "4631297392";
+case "2":
+return "1900571801";
+case "9":
+return "6253392993";
+case "1":
+return "9785616387";
+case "3":
+return "2756312994";
+case "5":
+return "4317911650";
+case "6":
+return "3498814896";
+case "8":
+return "6912684909";
+case "4":
+return "2554951775";
+default: return "";
+}
+case "6":
+switch($cardID[6]) {
+case "0":
+return "8333567388";
+case "3":
+return "9702250295";
+case "6":
+return "7751685516";
+case "7":
+return "4599464590";
+case "9":
+return "9059202647";
+case "2":
+return "3503494534";
+case "4":
+return "5264521057";
+case "8":
+return "9459170449";
+case "5":
+return "5879557998";
+case "1":
+return "4166047484";
+default: return "";
+}
+default: return "";
+}
+case "2":
+switch($cardID[5]) {
+case "2":
+switch($cardID[6]) {
+case "9":
+return "2524528997";
+case "5":
+return "5562575456";
+case "6":
+return "9996676854";
+case "7":
+return "9097690846";
+case "8":
+return "8986035098";
+case "2":
+return "7202133736";
+case "4":
+return "1626462639";
+case "0":
+return "3809048641";
+case "1":
+return "7366340487";
+case "3":
+return "2202839291";
+default: return "";
+}
+case "4":
+switch($cardID[6]) {
+case "0":
+return "3038238423";
+case "6":
+return "3509161777";
+case "2":
+return "9799982630";
+case "4":
+return "1862616109";
+case "1":
+return "3443737404";
+case "5":
+return "4536594859";
+case "3":
+return "1081012039";
+case "8":
+return "4111616117";
+case "7":
+return "1598425314";
+case "9":
+return "4685993945";
+default: return "";
+}
+case "3":
+switch($cardID[6]) {
+case "5":
+return "5494760041";
+case "7":
+return "0494601180";
+case "0":
+return "1557302740";
+case "2":
+return "6072239164";
+case "3":
+return "0523973552";
+case "4":
+return "2758597010";
+case "6":
+return "9568000754";
+case "1":
+return "4092697474";
+case "8":
+return "8009713136";
+case "9":
+return "0046930738";
+default: return "";
+}
+case "1":
+switch($cardID[6]) {
+case "7":
+return "8297630396";
+case "8":
+return "6901817734";
+case "3":
+return "5346983501";
+case "4":
+return "7280213969";
+case "5":
+return "9985638644";
+case "9":
+return "3426168686";
+case "1":
+return "2739464284";
+case "2":
+return "5464125379";
+case "0":
+return "9448937272";
+case "6":
+return "2587711125";
+default: return "";
+}
+case "0":
+switch($cardID[6]) {
+case "3":
+return "3789633661";
+case "4":
+return "0949648290";
+case "0":
+return "2050990622";
+case "6":
+return "4299027717";
+case "7":
+return "0700214503";
+case "8":
+return "3613174521";
+case "9":
+return "6028207223";
+case "1":
+return "7257556541";
+case "2":
+return "1021495802";
+case "5":
+return "9859536518";
+default: return "";
+}
+case "7":
+switch($cardID[6]) {
+case "8":
+return "1854367252";
+case "1":
+return "5548637636";
+case "0":
+return "2612239618";
+case "2":
+return "0915651627";
+case "3":
+return "2577377107";
+case "4":
+return "9132115094";
+case "5":
+return "9372605851";
+case "6":
+return "1244433862";
+case "7":
+return "1882478690";
+case "9":
+return "2441020315";
+default: return "";
+}
+case "8":
+switch($cardID[6]) {
+case "7":
+return "1392344016";
+case "9":
+return "7200757934";
+case "0":
+return "4406716801";
+case "1":
+return "5149992935";
+case "2":
+return "4461797648";
+case "3":
+return "1265833747";
+case "4":
+return "6160646746";
+case "5":
+return "8174294945";
+case "6":
+return "6404118339";
+case "8":
+return "2025671451";
+default: return "";
+}
+case "9":
+switch($cardID[6]) {
+case "2":
+return "9810990107";
+case "0":
+return "8297718214";
+case "1":
+return "2773791260";
+case "3":
+return "5299216329";
+case "4":
+return "1746561124";
+case "5":
+return "8759737951";
+case "6":
+return "5487610656";
+case "7":
+return "5712079408";
+case "8":
+return "7912691664";
+case "9":
+return "3001136558";
+default: return "";
+}
+case "6":
+switch($cardID[6]) {
+case "0":
+return "6481531634";
+case "9":
+return "7892744779";
+case "1":
+return "4990055330";
+case "2":
+return "6514459251";
+case "3":
+return "0105825596";
+case "4":
+return "1577790898";
+case "5":
+return "8764450237";
+case "6":
+return "0758217902";
+case "7":
+return "6260848269";
+case "8":
+return "3738387449";
+default: return "";
+}
+case "5":
+switch($cardID[6]) {
+case "1":
+return "5950125325";
+case "5":
+return "6417741342";
+case "0":
+return "6385228745";
+case "3":
+return "9180569535";
+case "4":
+return "4206960629";
+case "2":
+return "6087834273";
+case "6":
+return "7260058240";
+case "7":
+return "4749593339";
+case "8":
+return "9075060299";
+case "9":
+return "4900081072";
+default: return "";
+}
+default: return "";
+}
+case "1":
+switch($cardID[5]) {
+case "8":
+switch($cardID[6]) {
+case "9":
+return "9680213078";
+case "6":
+return "8800836530";
+case "0":
+return "9950828238";
+case "2":
+return "0052542605";
+case "4":
+return "4300219753";
+case "5":
+return "7728042035";
+case "8":
+return "6208347478";
+case "1":
+return "5035052619";
+case "3":
+return "3684950815";
+case "7":
+return "2715652707";
+default: return "";
+}
+case "2":
+switch($cardID[6]) {
+case "6":
+return "2703877689";
+case "9":
+return "8117080217";
+case "5":
+return "3974134277";
+case "1":
+return "3987987905";
+case "3":
+return "3407775126";
+case "8":
+return "2383321298";
+case "4":
+return "2651321164";
+case "0":
+return "3463676231";
+case "2":
+return "8055390529";
+case "7":
+return "1349057156";
+default: return "";
+}
+case "3":
+switch($cardID[6]) {
+case "2":
+return "9002021213";
+case "6":
+return "0705773109";
+case "7":
+return "0160548661";
+case "0":
+return "4619930426";
+case "5":
+return "9097316363";
+case "9":
+return "1446471743";
+case "4":
+return "1047592361";
+case "1":
+return "8395007579";
+case "3":
+return "0828695133";
+case "8":
+return "2639435822";
+default: return "";
+}
+case "9":
+switch($cardID[6]) {
+case "8":
+return "9500514827";
+case "0":
+return "1880931426";
+case "2":
+return "9560139036";
+case "3":
+return "1785627279";
+case "4":
+return "1017822723";
+case "5":
+return "7285270931";
+case "6":
+return "8918765832";
+case "7":
+return "9250443409";
+case "1":
+return "3018017739";
+case "9":
+return "9644107128";
+default: return "";
+}
+case "0":
+switch($cardID[6]) {
+case "7":
+return "0073206444";
+case "0":
+return "4339330745";
+case "2":
+return "4919000710";
+case "9":
+return "0961039929";
+case "1":
+return "3377409249";
+case "6":
+return "1939951561";
+case "8":
+return "5575681343";
+case "5":
+return "9353672706";
+case "3":
+return "8988732248";
+case "4":
+return "8968669390";
+default: return "";
+}
+case "4":
+switch($cardID[6]) {
+case "3":
+return "5907868016";
+case "1":
+return "7495752423";
+case "2":
+return "3646264648";
+case "9":
+return "5230572435";
+case "5":
+return "3232845719";
+case "6":
+return "9647945674";
+case "7":
+return "8429598559";
+case "4":
+return "8995892693";
+case "0":
+return "9070397522";
+case "8":
+return "5335160564";
+default: return "";
+}
+case "5":
+switch($cardID[6]) {
+case "5":
+return "3736081333";
+case "7":
+return "2404916657";
+case "0":
+return "6954704048";
+case "2":
+return "5767546527";
+case "6":
+return "0256267292";
+case "9":
+return "4642322279";
+case "8":
+return "1746195484";
+case "1":
+return "6515891401";
+case "4":
+return "1208707254";
+case "3":
+return "5555846790";
+default: return "";
+}
+case "6":
+switch($cardID[6]) {
+case "4":
+return "6577517407";
+case "1":
+return "6348804504";
+case "2":
+return "2668056720";
+case "3":
+return "7517208605";
+case "6":
+return "0797226725";
+case "7":
+return "1705806419";
+case "9":
+return "3058784025";
+case "8":
+return "9210902604";
+case "0":
+return "7533529264";
+case "5":
+return "8098293047";
+default: return "";
+}
+case "7":
+switch($cardID[6]) {
+case "2":
+return "8148673131";
+case "1":
+return "7262314209";
+case "6":
+return "5154172446";
+case "9":
+return "4156799805";
+case "0":
+return "4323691274";
+case "8":
+return "3802299538";
+case "3":
+return "7916724925";
+case "4":
+return "6702266551";
+case "5":
+return "5871074103";
+case "7":
+return "7870435409";
+default: return "";
+}
+case "1":
+switch($cardID[6]) {
+case "2":
+return "1611702639";
+case "3":
+return "3138552659";
+case "5":
+return "2649829005";
+case "8":
+return "7648077180";
+case "1":
+return "4721628683";
+case "0":
+return "2471223947";
+case "6":
+return "6432884726";
+case "7":
+return "6718924441";
+case "9":
+return "8691800148";
+case "4":
+return "2027289177";
+default: return "";
+}
+default: return "";
+}
+case "3":
+switch($cardID[5]) {
+case "8":
+switch($cardID[6]) {
+case "8":
+return "8193028491";
+case "0":
+return "9063604201";
+case "1":
+return "9759294713";
+case "2":
+return "2460941052";
+case "3":
+return "5880479319";
+case "4":
+return "1152993066";
+case "5":
+return "9450807930";
+case "6":
+return "2398178224";
+case "7":
+return "5588295894";
+case "9":
+return "6727481176";
+default: return "";
+}
+case "6":
+switch($cardID[6]) {
+case "1":
+return "5922340440";
+case "0":
+return "6874951554";
+case "2":
+return "7323574647";
+case "3":
+return "9383033188";
+case "4":
+return "1909223563";
+case "5":
+return "5657120658";
+case "6":
+return "9951301765";
+case "7":
+return "4871474756";
+case "8":
+return "9452327422";
+case "9":
+return "9592489587";
+default: return "";
+}
+case "2":
+switch($cardID[6]) {
+case "3":
+return "1350797281";
+case "0":
+return "1032732321";
+case "1":
+return "6291808628";
+case "2":
+return "8628634443";
+case "4":
+return "2517900638";
+case "5":
+return "5280173799";
+case "6":
+return "3089614256";
+case "7":
+return "3970162936";
+case "8":
+return "3672307160";
+case "9":
+return "6649937351";
+default: return "";
+}
+case "1":
+switch($cardID[6]) {
+case "3":
+return "2720825327";
+case "0":
+return "4561334457";
+case "1":
+return "8993820520";
+case "2":
+return "5895365448";
+case "4":
+return "1729298103";
+case "5":
+return "0445682902";
+case "6":
+return "7025897408";
+case "7":
+return "6176577389";
+case "8":
+return "3133802764";
+case "9":
+return "4442275648";
+default: return "";
+}
+case "0":
+switch($cardID[6]) {
+case "0":
+return "7826218312";
+case "1":
+return "5696031727";
+case "2":
+return "6992646167";
+case "3":
+return "1282106153";
+case "4":
+return "2989758026";
+case "5":
+return "4255739017";
+case "6":
+return "5622736895";
+case "7":
+return "5541087245";
+case "8":
+return "3608500637";
+case "9":
+return "0497978870";
+default: return "";
+}
+case "3":
+switch($cardID[6]) {
+case "0":
+return "7370017518";
+case "1":
+return "4577862884";
+case "2":
+return "5730679165";
+case "3":
+return "3639447947";
+case "4":
+return "4325566853";
+case "5":
+return "6803807033";
+case "6":
+return "0867305267";
+case "7":
+return "7092094220";
+case "8":
+return "3866754880";
+case "9":
+return "0162747214";
+default: return "";
+}
+case "4":
+switch($cardID[6]) {
+case "0":
+return "2065245428";
+case "1":
+return "5245700328";
+case "2":
+return "6667278205";
+case "3":
+return "9675568897";
+case "4":
+return "0748605721";
+case "5":
+return "4219573902";
+case "6":
+return "0904421047";
+case "7":
+return "0900271290";
+case "8":
+return "9644513073";
+case "9":
+return "3460101227";
+default: return "";
+}
+case "5":
+switch($cardID[6]) {
+case "0":
+return "7862568082";
+case "1":
+return "1966094284";
+case "2":
+return "4501426139";
+case "3":
+return "4449073260";
+case "4":
+return "6829847010";
+case "5":
+return "0419535336";
+case "6":
+return "0407533255";
+case "7":
+return "6223362580";
+case "8":
+return "9528669769";
+case "9":
+return "8872086850";
+default: return "";
+}
+case "7":
+switch($cardID[6]) {
+case "0":
+return "1849264924";
+case "1":
+return "3995065278";
+case "2":
+return "1753777375";
+case "3":
+return "8800741049";
+case "4":
+return "1183328788";
+case "5":
+return "7337213115";
+case "6":
+return "0777233748";
+case "7":
+return "7729020518";
+case "8":
+return "5992386382";
+case "9":
+return "3777470834";
+default: return "";
+}
+case "9":
+switch($cardID[6]) {
+case "0":
+return "4044247541";
+case "1":
+return "1179361038";
+case "2":
+return "9022663680";
+case "3":
+return "5983502524";
+case "4":
+return "3229357744";
+case "5":
+return "5113858259";
+case "6":
+return "3338735880";
+case "7":
+return "7770162135";
+case "8":
+return "3629104510";
+case "9":
+return "2583736737";
+default: return "";
+}
+default: return "";
+}
+case "5":
+switch($cardID[5]) {
+case "0":
+switch($cardID[6]) {
+case "3":
+return "8136683590";
+case "9":
+return "9335875476";
+case "8":
+return "7691362334";
+case "7":
+return "5867961711";
+case "6":
+return "9053054590";
+case "5":
+return "6131167624";
+case "4":
+return "4492106433";
+case "2":
+return "3668464972";
+case "1":
+return "7440807459";
+case "0":
+return "0711440280";
+default: return "";
+}
+case "1":
+switch($cardID[6]) {
+case "0":
+return "6699848096";
+default: return "";
+}
+default: return "";
+}
+case "4":
+switch($cardID[5]) {
+case "2":
+switch($cardID[6]) {
+case "2":
+return "8254309983";
+case "0":
+return "3099458408";
+case "1":
+return "6458149789";
+case "3":
+return "1064639011";
+case "4":
+return "5348383305";
+case "5":
+return "3075362543";
+case "6":
+return "9863342365";
+case "7":
+return "0635185029";
+case "8":
+return "3804498876";
+case "9":
+return "5331404450";
+default: return "";
+}
+case "3":
+switch($cardID[6]) {
+case "0":
+return "5242368661";
+case "5":
+return "4717353445";
+case "1":
+return "2492673829";
+case "2":
+return "5883083208";
+case "3":
+return "7879429056";
+case "4":
+return "7154891806";
+case "6":
+return "7991997385";
+case "7":
+return "8785189802";
+case "8":
+return "4334426675";
+case "9":
+return "9180780689";
+default: return "";
+}
+case "1":
+switch($cardID[6]) {
+case "8":
+return "8420688171";
+case "2":
+return "7478256588";
+case "0":
+return "7951723447";
+case "1":
+return "2002133943";
+case "3":
+return "9859535654";
+case "4":
+return "2184048066";
+case "5":
+return "0394046085";
+case "6":
+return "4970529817";
+case "7":
+return "8578453935";
+case "9":
+return "1747081829";
+default: return "";
+}
+case "9":
+switch($cardID[6]) {
+case "9":
+return "7119886954";
+case "8":
+return "3426555630";
+case "7":
+return "9782435573";
+case "6":
+return "7559953363";
+case "5":
+return "9389048455";
+case "4":
+return "6379773254";
+case "3":
+return "7143211209";
+case "2":
+return "4475090589";
+case "1":
+return "4043021556";
+case "0":
+return "8927079848";
+default: return "";
+}
+case "8":
+switch($cardID[6]) {
+case "9":
+return "8308941044";
+case "8":
+return "5439918533";
+case "7":
+return "9510651427";
+case "6":
+return "6492506835";
+case "5":
+return "3161463067";
+case "4":
+return "2852924500";
+case "3":
+return "4002623060";
+case "2":
+return "3319227601";
+case "1":
+return "9926136634";
+case "0":
+return "9579145968";
+default: return "";
+}
+case "7":
+switch($cardID[6]) {
+case "9":
+return "2770743102";
+case "8":
+return "2200476647";
+case "7":
+return "4368671654";
+case "6":
+return "2599797802";
+case "5":
+return "9596832264";
+case "4":
+return "6991987820";
+case "3":
+return "4866329392";
+case "2":
+return "9722016911";
+case "1":
+return "3512766109";
+case "0":
+return "0439845723";
+default: return "";
+}
+case "0":
+switch($cardID[6]) {
+case "0":
+return "3342978793";
+case "1":
+return "4012735574";
+case "2":
+return "8826603181";
+case "3":
+return "2880778398";
+case "4":
+return "0800149592";
+case "5":
+return "8768295837";
+case "6":
+return "3497416324";
+case "7":
+return "4504882297";
+case "8":
+return "3987790495";
+case "9":
+return "4291210411";
+default: return "";
+}
+case "4":
+switch($cardID[6]) {
+case "0":
+return "9897730296";
+case "1":
+return "6710385551";
+case "2":
+return "0408494142";
+case "3":
+return "1106321537";
+case "4":
+return "6640355320";
+case "5":
+return "4883420915";
+case "6":
+return "6330618330";
+case "7":
+return "0300796390";
+case "8":
+return "3666440820";
+case "9":
+return "8926618985";
+default: return "";
+}
+case "5":
+switch($cardID[6]) {
+case "0":
+return "9211384507";
+case "1":
+return "4861576947";
+case "2":
+return "4155462314";
+case "3":
+return "1010475005";
+case "4":
+return "9782237476";
+case "5":
+return "0275239517";
+case "6":
+return "3728569784";
+case "7":
+return "0451231264";
+case "8":
+return "6058635927";
+case "9":
+return "6377890882";
+default: return "";
+}
+case "6":
+switch($cardID[6]) {
+case "9":
+return "4356354323";
+case "8":
+return "4354734900";
+case "7":
+return "4446791657";
+case "6":
+return "9105486404";
+case "5":
+return "9230236363";
+case "4":
+return "2383366433";
+case "3":
+return "1770609542";
+case "2":
+return "4527912964";
+case "1":
+return "9154501563";
+case "0":
+return "3523257452";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+}
+
 ?>
