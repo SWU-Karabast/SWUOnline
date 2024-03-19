@@ -5,24 +5,17 @@
 
   $hasMoreData = true;
   $page = 1;
-  $typeTrie = [];
-  $classTrie = [];
-  $subtypeTrie = [];
-  $nameTrie = [];
-  $nameToUUIDTrie = [];
-  $elementTrie = [];
-  $memoryCostTrie = [];
-  $reserveCostTrie = [];
-  $levelTrie = [];
+  $titleTrie = [];
+  $subtitleTrie = [];
+  $costTrie = [];
+  $hpTrie = [];
   $powerTrie = [];
-  $lifeTrie = [];
-  $durabilityTrie = [];
-  $speedTrie = [];
-  $floatingMemoryTrie = [];
-  $interceptTrie = [];
+  $aspectsTrie = [];
+  $traitsTrie = [];
+  $arenasTrie = [];
   while ($hasMoreData)
   {
-    $jsonUrl = "https://api.gatcg.com/cards/search?name=&page=" . $page;
+    $jsonUrl = "https://admin.starwarsunlimited.com/api/cards?pagination[page]=" . $page;
     $curl = curl_init();
     $headers = array(
       "Content-Type: application/json",
@@ -36,35 +29,56 @@
 
 
     $response = json_decode($cardData);
-
+    $meta = $response->meta;
 
     for ($i = 0; $i < count($response->data); ++$i)
     {
       $card = $response->data[$i];
+      $card = $card->attributes;
+      $vars = get_object_vars($card);
+      //Print out all the vars
+      //foreach ($vars as $key => $value) echo($key . "<BR>\n");
 
-      echo($card->name . " " . $card->element . " " . $card->uuid . " " . $card->speed . "<BR>\n");
+      AddToTrie($titleTrie, $card->cardUid, 0, $card->title);
+      AddToTrie($subtitleTrie, $card->cardUid, 0, $card->subtitle);
+      AddToTrie($costTrie, $card->cardUid, 0, $card->cost);
+      AddToTrie($hpTrie, $card->cardUid, 0, $card->hp);
+      AddToTrie($powerTrie, $card->cardUid, 0, $card->power);
 
-      AddToTrie($typeTrie, $card->uuid, 0, implode(",", $card->types));
-      AddToTrie($classTrie, $card->uuid, 0, implode(",", $card->classes));
-      AddToTrie($subtypeTrie, $card->uuid, 0, implode(",", $card->subtypes));
-      AddToTrie($elementTrie, $card->uuid, 0, $card->element);
-      AddToTrie($nameTrie, $card->uuid, 0, $card->name);
-      AddToTrie($nameToUUIDTrie, strtolower($card->name) . ";", 0, $card->uuid);
-      AddToTrie($memoryCostTrie, $card->uuid, 0, ($card->cost_memory == null ? -1 : $card->cost_memory));
-      AddToTrie($reserveCostTrie, $card->uuid, 0, ($card->cost_reserve == null ? -1 : $card->cost_reserve));
-      AddToTrie($levelTrie, $card->uuid, 0, ($card->level == null ? 0 : $card->level));
-      AddToTrie($powerTrie, $card->uuid, 0, ($card->power === null ? -1 : $card->power));
-      AddToTrie($lifeTrie, $card->uuid, 0, ($card->life == null ? -1 : $card->life));
-      AddToTrie($durabilityTrie, $card->uuid, 0, ($card->durability == null ? -1 : $card->durability));
-      AddToTrie($speedTrie, $card->uuid, 0, ($card->speed == null ? -1 : $card->speed));
-      if (str_contains($card->effect, "Floating Memory")) AddToTrie($floatingMemoryTrie, $card->uuid, 0, $card->name);
+      $aspects = "";
+      for($j = 0; $j < count($card->aspects->data); ++$j)
+      {
+        if($aspects != "") $aspects .= ",";
+        $aspects .= $card->aspects->data[$j]->attributes->name;
+      }
+      AddToTrie($aspectsTrie, $card->cardUid, 0, $card->aspects);
 
-      CheckImage($card->uuid);
+      $traits = "";
+      for($j = 0; $j < count($card->traits->data); ++$j)
+      {
+        if($traits != "") $traits .= ",";
+        $traits .= $card->traits->data[$j]->attributes->name;
+      }
+      AddToTrie($traitsTrie, $card->cardUid, 0, $traits);
+
+      $arenas = "";
+      for($j = 0; $j < count($card->arenas->data); ++$j)
+      {
+        if($arenas != "") $arenas .= ",";
+        $arenas .= $card->arenas->data[$j]->attributes->name;
+      }
+      AddToTrie($arenasTrie, $card->cardUid, 0, $arenas);
+
+      $imageUrl = $card->artFront->data->attributes->formats->card->url;
+      //$imageUrl = "https://cdn.starwarsunlimited.com/card_" . $imageName;
+      echo($imageUrl);
+
+      CheckImage($card->cardUid, $imageUrl);
     }
 
-    echo("Page: " . $response->page . "<BR>");
+    echo("Page: " . $meta->pagination->page . "/" . $meta->pagination->pageCount . "<BR>");
     ++$page;
-    $hasMoreData = $response->has_more;
+    $hasMoreData = $page <= $meta->pagination->pageCount;
   }
   /*
   subtypes - array
@@ -78,20 +92,14 @@
 
   fwrite($handler, "<?php\r\n");
 
-  GenerateFunction($typeTrie, $handler, "CardTypes", true, "");
-  GenerateFunction($classTrie, $handler, "CardClasses", true, "");
-  GenerateFunction($subtypeTrie, $handler, "CardSubTypes", true, "");
-  GenerateFunction($elementTrie, $handler, "CardElement", true, "");
-  GenerateFunction($nameTrie, $handler, "CardName", true, "");
-  GenerateFunction($nameToUUIDTrie, $handler, "CardUUIDFromName", true, "");
-  GenerateFunction($memoryCostTrie, $handler, "CardMemoryCost", false, -1);
-  GenerateFunction($reserveCostTrie, $handler, "CardReserveCost", false, -1);
-  GenerateFunction($levelTrie, $handler, "CardLevel", false, -1);
+  GenerateFunction($titleTrie, $handler, "CardTitle", true, "");
+  GenerateFunction($subtitleTrie, $handler, "CardSubtitle", true, "");
+  GenerateFunction($costTrie, $handler, "CardCost", false, -1);
+  GenerateFunction($hpTrie, $handler, "CardHP", false, -1);
   GenerateFunction($powerTrie, $handler, "CardPower", false, -1);
-  GenerateFunction($lifeTrie, $handler, "CardLife", false, -1);
-  GenerateFunction($durabilityTrie, $handler, "CardDurability", false, -1);
-  GenerateFunction($speedTrie, $handler, "CardSpeed", false, -1);
-  GenerateFunction($floatingMemoryTrie, $handler, "HasFloatingMemory", false, false, 1);
+  GenerateFunction($aspectsTrie, $handler, "CardAspects", true, "");
+  GenerateFunction($traitsTrie, $handler, "CardTraits", true, "");
+  GenerateFunction($arenasTrie, $handler, "CardArenas", true, "");
 
   fwrite($handler, "?>");
 

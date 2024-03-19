@@ -1,13 +1,12 @@
 <?php
 
-function CheckImage($cardID)
+function CheckImage($cardID, $url)
 {
   $filename = "./WebpImages/" . $cardID . ".webp";
+  $filenameNew = "./New Cards/" . $cardID . ".webp";
   if(!file_exists($filename))
   {
-    //$imageURL = "https://fabrary.net/images/cards/" . $cardID . ".webp";
-    $imageURL= "https://img.silvie.org/cdn/deck-builder/" . $cardID . ".jpg";
-    //$imageURL = "https://fabrary.net/images/cards/" . $cardID . ".width-450.webp";
+    $imageURL = $url;
     echo("Image for " . $cardID . " does not exist.<BR>");
     $handler = fopen($filename, "w");
     $ch = curl_init();
@@ -15,19 +14,26 @@ function CheckImage($cardID)
     curl_setopt($ch, CURLOPT_FILE, $handler);
     curl_exec($ch);
     curl_close($ch);
-    if(filesize($filename) < 10000) { unlink($filename); return; }
+    //if(filesize($filename) < 10000) { unlink($filename); return; }
     echo(filesize($filename));
     if(file_exists($filename)) echo("Image for " . $cardID . " successfully retrieved.<BR>");
     if(file_exists($filename))
     {
       echo("Normalizing file size for " . $cardID . ".<BR>");
-      //$image = imagecreatefromwebp($filename);
-      $image = imagecreatefromjpeg($filename);
+      $image = imagecreatefrompng($filename);
+      //$image = imagecreatefromjpeg($filename);
       $image = imagescale($image, 450, 628);
       imagewebp($image, $filename);
       // Free up memory
       imagedestroy($image);
     }
+  }
+  if(!file_exists($filenameNew)) {
+    echo("Converting image for " . $cardID . " to new format.<BR>");
+    $image = imagecreatefromwebp($filename);
+    //$image = imagecreatefrompng($filename);
+    imagewebp($image, $filenameNew);
+    imagedestroy($image);
   }
   $concatFilename = "./concat/" . $cardID . ".webp";
   if(!file_exists($concatFilename))
@@ -37,6 +43,7 @@ function CheckImage($cardID)
     {
       echo("Attempting to convert image for " . $cardID . " to concat.<BR>");
       $image = imagecreatefromwebp($filename);
+      //$image = imagecreatefrompng($filename);
       $imageTop = imagecrop($image, ['x' => 0, 'y' => 0, 'width' => 450, 'height' => 372]);
       $imageBottom = imagecrop($image, ['x' => 0, 'y' => 570, 'width' => 450, 'height' => 628]);
 
@@ -61,6 +68,7 @@ function CheckImage($cardID)
     {
       echo("Attempting to convert image for " . $cardID . " to crops.<BR>");
       $image = imagecreatefromwebp($filename);
+      //$image = imagecreatefrompng($filename);
       $image = imagecrop($image, ['x' => 50, 'y' => 100, 'width' => 350, 'height' => 270]);
       imagepng($image, $cropFilename);
       imagedestroy($image);
