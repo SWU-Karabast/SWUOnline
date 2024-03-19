@@ -79,6 +79,7 @@ function RestoreAmount($cardID, $player, $index)
     case "0074718689": return 1;
     case "1081012039": return 2;
     case "1611702639": return $initiativePlayer == $player ? 2 : 0;
+    case "4405415770": return 2;
     default: return 0;
   }
 }
@@ -111,6 +112,7 @@ function HasGrit($cardID, $player, $index)
 {
   switch($cardID)
   {
+    case "5335160564":
     case "9633997311":
       return true;
     default: return false;
@@ -136,6 +138,7 @@ function HasAmbush($cardID, $player, $index)
     case "5346983501":
     case "6718924441":
     case "7285270931":
+    case "3377409249":
       return true;
     case "2027289177"://Escort Skiff
       return SearchCount(SearchAllies($player, aspect:"Command")) > 1;

@@ -75,6 +75,10 @@ class Ally {
     return $fosterActive;
   }
 
+  function Ready() {
+    $this->allies[$this->index+1] = 2;
+  }
+
   function AddBuffCounter() {
     ++$this->allies[$this->index+2];
     ++$this->allies[$this->index+7];

@@ -2112,13 +2112,14 @@ function IsClassBonusActive($player, $class)
 function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalCosts = "-")
 {
   global $currentPlayer, $layers, $CS_NumAttacks, $CS_PlayIndex;
+  $index = GetClassState($currentPlayer, $CS_PlayIndex);
   if($target != "-")
   {
     $targetArr = explode("-", $target);
     if($targetArr[0] == "LAYERUID") { $targetArr[0] = "LAYER"; $targetArr[1] = SearchLayersForUniqueID($targetArr[1]); }
     $target = $targetArr[0] . "-" . $targetArr[1];
   }
-  if(HasAmbush($cardID, $currentPlayer, GetClassState($currentPlayer, $CS_PlayIndex))) {
+  if(HasAmbush($cardID, $currentPlayer, $index)) {
     WriteLog("Has Ambush");
   }
   switch($cardID)
@@ -2132,6 +2133,15 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZDISCARD", $currentPlayer, "HAND," . $currentPlayer, 1);
       AddDecisionQueue("MZREMOVE", $currentPlayer, "-", 1);
+      break;
+    case "3377409249"://Rogue Squadron Skirmisher
+      MZMoveCard($currentPlayer, "MYDISCARD:maxCost=2", "MYHAND", may:true);
+      break;
+    case "5335160564":
+      if(GetHealth(1) >= 15 || GetHealth(2) >= 15) {
+        $ally = new Ally("MYALLY-" . $index);
+        $ally->Ready();
+      }
       break;
     default: break;
   }

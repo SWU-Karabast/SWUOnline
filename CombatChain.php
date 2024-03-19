@@ -18,7 +18,8 @@ function AttackModifier($cardID, $from = "", $resourcesPaid = 0, $repriseActive 
   global $mainPlayer, $defPlayer, $combatChain, $combatChainState, $CS_NumLeveledUp;
   if($repriseActive == -1) $repriseActive = RepriseActive();
   switch($cardID) {
-
+    case "3988315236"://Seasoned Shoretrooper
+      return NumResources($mainPlayer) >= 6 ? 2 : 0;
     default: return 0;
   }
 }

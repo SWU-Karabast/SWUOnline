@@ -84,15 +84,11 @@ function AllyAddGraveyard($player, $cardID, $subtype)
 
 function AllyEntersPlayState($cardID, $player, $from="-")
 {
-  if(SearchCurrentTurnEffects("dxAEI20h8F", $player)) return 1;
-  if(PlayerHasAlly($player == 1 ? 2 : 1, "TqCo3xlf93")) return 1;//Lunete, Frostbinder Priest
+  //if(SearchCurrentTurnEffects("dxAEI20h8F", $player)) return 1;
+  //if(PlayerHasAlly($player == 1 ? 2 : 1, "TqCo3xlf93")) return 1;//Lunete, Frostbinder Priest
   switch($cardID)
   {
-    case "2Q60hBYO3i": return 1;
-    case "GXeEa0pe3B": return 1;//Rebellious Bull
-    case "G5E0PIUd0W": return 1;//Artificer's Opus
-    case "C7zFV2K7bL": return $from == "GY" ? 1 : 2;//Mistbound Cutthroat
-    default: return 2;
+    default: return 1;
   }
 }
 
@@ -163,23 +159,9 @@ function AllyDestroyedAbility($player, $index)
   $cardID = $allies[$index];
   OnKillAbility();
   switch($cardID) {
-    case "iD8qbpA8z5"://Library Witch
-      WriteLog("Player $player drew a card from Library Witch");
+    case "4405415770"://Yoda, Old Master
+      WriteLog("Player $player drew a card from Yoda, Old Master");
       Draw($player);
-      break;
-    case "l64yfOVhkp"://Prodigious Burstmage
-      Draw($player);
-      PummelHit($player, fromDQ:IsDecisionQueueActive());
-      break;
-    case "pnDhApDNvR"://Magus Disciple
-      if(IsClassBonusActive($player, "MAGE") || IsClassBonusActive($player, "CLERIC")) Draw($player);
-      break;
-    case "mttsvbgl6f"://Red Slime
-      $ally = new Ally("MYALLY-" . $index);
-      DamageAllAllies($ally->CurrentPower(), $cardID);
-      break;
-    case "urfp66pv4n"://Caretaker Drone
-      if(IsClassBonusActive($player, "CLERIC")) PlayerOpt($player, 4);
       break;
     default: break;
   }
