@@ -39,8 +39,8 @@
       //Print out all the vars
       //foreach ($vars as $key => $value) echo($key . "<BR>\n");
 
-      AddToTrie($titleTrie, $card->cardUid, 0, $card->title);
-      AddToTrie($subtitleTrie, $card->cardUid, 0, $card->subtitle);
+      AddToTrie($titleTrie, $card->cardUid, 0, str_replace('"', "'", $card->title));
+      AddToTrie($subtitleTrie, $card->cardUid, 0, str_replace('"', "'", $card->subtitle));
       AddToTrie($costTrie, $card->cardUid, 0, $card->cost);
       AddToTrie($hpTrie, $card->cardUid, 0, $card->hp);
       AddToTrie($powerTrie, $card->cardUid, 0, $card->power);

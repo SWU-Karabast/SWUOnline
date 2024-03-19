@@ -9482,7 +9482,7 @@ switch($cardID[8]) {
 case "9":
 switch($cardID[9]) {
 case "2":
-return "Benthic "Two Tubes"";
+return "Benthic 'Two Tubes'";
 default: return "";
 }
 default: return "";
@@ -14058,7 +14058,7 @@ switch($cardID[8]) {
 case "2":
 switch($cardID[9]) {
 case "9":
-return "Benthic "Two Tubes"";
+return "Benthic 'Two Tubes'";
 default: return "";
 }
 default: return "";
