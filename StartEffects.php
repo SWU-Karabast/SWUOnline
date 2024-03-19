@@ -32,7 +32,8 @@ if($p2Char[0] == "DUMMY") {
 }
 
 //Start of game effects go here
-
+$initiativePlayer = $firstPlayer;
+$intiativeTaken = 0;
 
 AddDecisionQueue("SHUFFLEDECK", 1, "SKIPSEED");
 AddDecisionQueue("SHUFFLEDECK", 2, "SKIPSEED");

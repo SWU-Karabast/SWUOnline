@@ -2114,7 +2114,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
   }
   switch($cardID)
   {
- 
+    case "4721628683"://Patrolling V-Wing
+      if($from != "PLAY") Draw($currentPlayer);
+      break;
     default: break;
   }
 }

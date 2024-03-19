@@ -398,6 +398,9 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
       break;
     case 33: //Fully re-order layers
       break;
+    case 34: //Claim Initiative
+
+      break;
     case 99: //Pass
       if(CanPassPhase($turn[0])) {
         PassInput(false);

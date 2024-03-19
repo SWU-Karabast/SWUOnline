@@ -95,6 +95,8 @@ $gamestateContent .= $lastUpdateTime . "\r\n"; //Last update time
 $gamestateContent .= $roguelikeGameID . "\r\n"; //Last update time
 $gamestateContent .= implode(" ", $events) . "\r\n";//Events
 $gamestateContent .= $EffectContext . "\r\n";//Update number the gamestate is for
+$gamestateContent .= $initiativePlayer . "\r\n";//The player that has initiative
+$gamestateContent .= $initiativeTaken . "\r\n";//If initiative was taken yet
 
 fwrite($handler, $gamestateContent);
 

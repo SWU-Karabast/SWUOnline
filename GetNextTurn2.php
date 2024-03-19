@@ -320,6 +320,9 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     echo ("</span>");
   }
   if (IsManualMode($playerID)) echo ("&nbsp;" . CreateButton($playerID, "Turn Off Manual Mode", 26, $SET_ManualMode . "-0", "18px", "", "", true));
+  
+  if($initiativeTaken != 1) echo ("&nbsp;" . CreateButton($playerID, "Claim Initiative", 34, "-", "18px"));
+  
   echo ("</span>");
 
   //Deduplicate current turn effects
