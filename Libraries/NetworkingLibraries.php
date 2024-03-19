@@ -1596,8 +1596,8 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
         case "ALLY":
           PlayAlly($cardID, $currentPlayer);
           break;
-        case "MATERIAL":
-          AddMaterial($cardID, $currentPlayer, $from);
+        case "RESOURCE":
+          AddResources($cardID, $currentPlayer, $from, "DOWN");
           break;
         case "MEMORY":
           AddMemory($cardID, $currentPlayer, $from, "DOWN");

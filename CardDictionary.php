@@ -68,10 +68,12 @@ function CardTalent($cardID)
 
 function RestoreAmount($cardID, $player, $index)
 {
+  global $initiativePlayer;
   switch($cardID)
   {
     case "0074718689": return 1;
     case "1081012039": return 2;
+    case "1611702639": return $initiativePlayer == $player ? 2 : 0;
     default: return 0;
   }
 }
@@ -84,6 +86,15 @@ function RaidAmount($cardID, $player, $index)
     case "2404916657": return 2;
     case "7495752423": return 2;
     default: return 0;
+  }
+}
+
+function HasSentinel($cardID, $player, $index)
+{
+  switch($cardID)
+  {
+    case "2524528997": return true;
+    default: return false;
   }
 }
 
@@ -139,6 +150,7 @@ function HasSaboteur($cardID, $player, $index)
   {
     case "1017822723":
     case "9859536518":
+    case "0046930738":
       return true;
     default: return false;
   }
@@ -429,6 +441,7 @@ function GoesWhereAfterResolving($cardID, $from = null, $player = "", $playedFro
   if($player == "") $player = $currentPlayer;
   if(IsAlly($cardID)) return "ALLY";
   switch($cardID) {
+    case "2703877689": return "RESOURCE";
     default: return "GY";
   }
 }
