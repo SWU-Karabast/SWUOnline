@@ -82,6 +82,8 @@ if ($matchup == "" && $playerID == 2 && $gameStatus >= $MGS_Player2Joined) {
 if ($decklink != "") {
   if ($playerID == 1) $p1DeckLink = $decklink;
   else if ($playerID == 2) $p2DeckLink = $decklink;
+
+  /*
   $curl = curl_init();
   $isSilvie2 = false; $isSilvie = false;
   if(str_contains($decklink, "build-v2.silvie")) $isSilvie2 = true;
@@ -115,8 +117,21 @@ if ($decklink != "") {
     WriteGameFile();
     exit;
   }
+  */
 
-  $deckObj = json_decode($apiDeck);
+  $deckObj = json_decode($decklink);
+  $leader = UUIDLookup($deckObj->leader->id);
+  $base = UUIDLookup($deckObj->base->id);
+  $deck = $deckObj->deck;
+  $cards = "";
+  for($i=0; $i<count($deck); ++$i) {
+    for($j=0; $j<$deck[$i]->count; ++$j) {
+      if($cards != "") $cards .= " ";
+      $cards .= UUIDLookup($deck[$i]->id);
+    }
+  }
+
+  /*
   // if has message forbidden error out.
   if ($apiInfo['http_code'] == 403) {
     $_SESSION['error'] =
@@ -155,12 +170,13 @@ if ($decklink != "") {
     if($materialCards != "") $materialCards .= " ";
     $materialCards .= $cardID;
   }
+  */
 
   //We have the decklist, now write to file
   $filename = "./Games/" . $gameName . "/p" . $playerID . "Deck.txt";
   $deckFile = fopen($filename, "w");
-  fwrite($deckFile, $materialCards . "\r\n");
-  fwrite($deckFile, $deckCards . "\r\n");
+  fwrite($deckFile, $leader . " " . $base . "\r\n");
+  fwrite($deckFile, $cards . "\r\n");
   fclose($deckFile);
   copy($filename, "./Games/" . $gameName . "/p" . $playerID . "DeckOrig.txt");
 
