@@ -1866,7 +1866,7 @@ function SameWeaponEquippedTwice()
 function SelfCostModifier($cardID)
 {
   global $currentPlayer, $CS_NumAttacks, $CS_LastAttack;
-  $modifier = HasEfficiency($cardID) ? -1 * CharacterLevel($currentPlayer) : 0;
+  $modifier = 0;
   switch($cardID) {
     case "145y6KBhxe": $modifier += (IsClassBonusActive($currentPlayer, "MAGE") ? -1 : 0); break;//Focused Flames
     case "RIVahUIQVD": $modifier += (IsClassBonusActive($currentPlayer, "MAGE") ? -2 : 0); break;//Fireball

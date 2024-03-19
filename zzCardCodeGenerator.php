@@ -38,6 +38,8 @@
       $card = $response->data[$i];
       $card = $card->attributes;
 
+      if($card->variantOf->data != null) continue;
+
       $cardNumber = $card->cardNumber;
       if($cardNumber < 10) $cardNumber = "00" . $cardNumber;
       else if($cardNumber < 100) $cardNumber = "0" . $cardNumber;

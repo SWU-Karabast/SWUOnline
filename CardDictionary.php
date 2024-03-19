@@ -66,22 +66,42 @@ function CardTalent($cardID)
   return "NONE";
 }
 
-function HasEfficiency($cardID)
+function RaidAmount($cardID, $player, $index)
 {
-  global $currentPlayer;
   switch($cardID)
   {
-    case "UfQh069mc3": return true;
-    case "SSu2eQZFJV": return true;
-    case "ZgA7cWNKGy": return true;
-    case "WsunZX4IlW": return true;//Ravaging Tempest
-    case "uTBsOYf15p": return true;//Purging Flames
-    case "IyXuaLKjSA": return IsClassBonusActive($currentPlayer, "MAGE");//Frozen Nova
-    case "4NkVdSx9ed": return true;//Careful Study
-    case "pn9gQjV3Rb": return true;//Arcane Blast
-    case "FhbVHkHQRb": return true;//Disintegrate
-    case "4V6qKuM7xs": return true;//Hurricane Sweep
-    case "G5E0PIUd0W": return IsClassBonusActive($currentPlayer, "TAMER");//Artificer's Opus
+    default: return 0;
+  }
+}
+
+function HasOverwhelm($cardID, $player, $index)
+{
+  switch($cardID)
+  {
+    default: return false;
+  }
+}
+
+function HasAmbush($cardID, $player, $index)
+{
+  switch($cardID)
+  {
+    default: return false;
+  }
+}
+
+function HasShielded($cardID, $player, $index)
+{
+  switch($cardID)
+  {
+    default: return false;
+  }
+}
+
+function HasSaboteur($cardID, $player, $index)
+{
+  switch($cardID)
+  {
     default: return false;
   }
 }
@@ -90,10 +110,6 @@ function HasCleave($cardID)
 {
   switch($cardID)
   {
-    case "4V6qKuM7xs": return true;//Hurricane Sweep
-    case "FGvq4eQPbP": return true;//Flame Sweep
-    case "GuDKuPKNgh": return true;//Tidal Sweep
-    case "G5E0PIUd0W": return true;//Artificer's Opus
     default: return false;
   }
 }
@@ -166,30 +182,6 @@ function HasStealth($cardID, $player, $index)
   switch($cardID)
   {
 
-    default: return false;
-  }
-}
-
-function HasSteadfast($cardID, $player, $index)
-{
-  switch($cardID)
-  {
-    default: return false;
-  }
-}
-
-function HasTaunt($cardID, $player, $index)
-{
-  switch($cardID)
-  {
-    default: return false;
-  }
-}
-
-function HasIntercept($cardID, $player, $index)
-{
-  switch($cardID)
-  {
     default: return false;
   }
 }
