@@ -2143,6 +2143,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         $ally->Ready();
       }
       break;
+    case "7262314209"://Mission Briefing
+      Draw($currentPlayer);
+      Draw($currentPlayer);
+      break;
     default: break;
   }
 }

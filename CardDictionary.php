@@ -99,7 +99,12 @@ function HasSentinel($cardID, $player, $index)
 {
   switch($cardID)
   {
-    case "2524528997": return true;
+    case "2524528997":
+    case "6385228745":
+    case "6912684909":
+    case "7751685516":
+    case "9702250295":
+      return true;
     case "2739464284"://Gamorrean Guards
       return SearchCount(SearchAllies($player, aspect:"Cunning")) > 1;
     case "3138552659"://Homestead Militia
@@ -114,6 +119,7 @@ function HasGrit($cardID, $player, $index)
   {
     case "5335160564":
     case "9633997311":
+    case "8098293047":
       return true;
     default: return false;
   }
