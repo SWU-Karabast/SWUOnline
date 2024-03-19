@@ -288,11 +288,11 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
 <?php
   }
 
-  if ($mainPlayer == $playerID || ($playerID == 3 && $mainPlayer != $otherPlayer)) {
-    echo ("<div style='position:absolute; top:117px; left:-153px; z-index:-4;'><img style='height:60px; width:170px;' src='./Images/p1APTracker.png' /><span style='position:absolute; margin-top:2px; left:85; top:22; z-index:10; color:#111; font-weight:600; font-size:28px; user-select: none;'>" . $actionPoints . "AP" . "</span>");
+  if($initiativePlayer == $playerID || ($playerID == 3 && $initiativePlayer == 2)) {
+    echo ("<div style='position:absolute; top:117px; left:-153px; z-index:-4;'><img style='height:60px; width:170px;' src='./Images/p1APTracker.png' /><span style='position:absolute; margin-top:2px; left:75; top:22; z-index:10; color:#111; font-weight:600; font-size:20px; user-select: none;'>Initiative</span>");
     echo (($manualMode ? "<span style='position:absolute; top:97%; right:0; display: inline-block;';>" . CreateButton($playerID, "+1", 10002, 0, "20px") . CreateButton($playerID, "-1", 10004, 0, "20px") . "</span>" : ""));
   } else {
-    echo ("<div style='position:absolute; top:24px; left:-153px; z-index:-4;'><img style='height:60px; width:170px;' src='./Images/p2APTracker.png' /><span style='position:absolute; margin-top:2px; left:85; top:8; z-index:10; color:#111; font-weight:600; font-size:28px; user-select: none;'>" . $actionPoints . "AP" . "</span>");
+    echo ("<div style='position:absolute; top:24px; left:-153px; z-index:-4;'><img style='height:60px; width:170px;' src='./Images/p2APTracker.png' /><span style='position:absolute; margin-top:2px; left:75; top:8; z-index:10; color:#111; font-weight:600; font-size:20px; user-select: none;'>Initiative</span>");
     echo (($manualMode ? "<span style='position:absolute; top:-60%; right:0; display: inline-block;';>" . CreateButton($playerID, "+1", 10002, 0, "20px") . CreateButton($playerID, "-1", 10004, 0, "20px") . "</span>" : ""));
   }
   echo ("</div></div>");

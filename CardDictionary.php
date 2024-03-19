@@ -640,7 +640,6 @@ function HasCombo($cardID)
 function ComboActive($cardID = "")
 {
   global $combatChainState, $combatChain, $chainLinkSummary, $mainPlayer;
-  if(SearchCurrentTurnEffects("OUT183", $mainPlayer)) return false;
   if ($cardID == "" && count($combatChain) > 0) $cardID = $combatChain[0];
   if ($cardID == "") return false;
   if(count($chainLinkSummary) == 0) return false;//No combat active if no previous chain links
@@ -649,86 +648,7 @@ function ComboActive($cardID = "")
   {
     $lastAttackName = GamestateUnsanitize($lastAttackNames[$i]);
     switch ($cardID) {
-      case "WTR081":
-        if($lastAttackName == "Mugenshi: RELEASE") return true;
-        break;
-      case "WTR083":
-        if($lastAttackName == "Whelming Gustwave") return true;
-        break;
-      case "WTR084":
-        if($lastAttackName == "Rising Knee Thrust") return true;
-        break;
-      case "WTR085":
-        if($lastAttackName == "Open the Center") return true;
-        break;
-      case "WTR086": case "WTR087": case "WTR088":
-        if($lastAttackName == "Open the Center") return true;
-        break;
-      case "WTR089": case "WTR090": case "WTR091":
-        if($lastAttackName == "Rising Knee Thrust") return true;
-        break;
-      case "WTR095": case "WTR096": case "WTR097":
-        if($lastAttackName == "Head Jab") return true;
-        break;
-      case "WTR104": case "WTR105": case "WTR106":
-        if($lastAttackName == "Leg Tap") return true;
-        break;
-      case "WTR110": case "WTR111": case "WTR112":
-        if($lastAttackName == "Surging Strike") return true;
-        break;
-      case "CRU054":
-        if($lastAttackName == "Crane Dance") return true;
-        break;
-      case "CRU055":
-        if($lastAttackName == "Rushing River" || $lastAttackName == "Flood of Force") return true;
-        break;
-      case "CRU056":
-        if($lastAttackName == "Crane Dance") return true;
-        break;
-      case "CRU057": case "CRU058": case "CRU059":
-        if($lastAttackName == "Soulbead Strike") return true;
-        break;
-      case "CRU060": case "CRU061": case "CRU062":
-        if($lastAttackName == "Torrent of Tempo") return true;
-        break;
-      case "EVR038":
-        if($lastAttackName == "Rushing River" || $lastAttackName == "Flood of Force") return true;
-        break;
-      case "EVR040":
-        if($lastAttackName == "Hundred Winds") return true;
-        break;
-      case "EVR041": case "EVR042": case "EVR043":
-        if($lastAttackName == "Hundred Winds") return true;
-        break;
-      case "DYN047":
-      case "DYN056": case "DYN057": case "DYN058":
-      case "DYN059": case "DYN060": case "DYN061":
-        if($lastAttackName == "Crouching Tiger") return true;
-        break;
-      case "OUT050":
-        if($lastAttackName == "Spinning Wheel Kick") return true;
-        break;
-      case "OUT051":
-        if($lastAttackName == "Bonds of Ancestry") return true;
-        break;
-      case "OUT056": case "OUT057": case "OUT058":
-        if(str_contains($lastAttackName, "Gustwave")) return true;
-        break;
-      case "OUT059": case "OUT060": case "OUT061":
-        if($lastAttackName == "Head Jab") return true;
-        break;
-      case "OUT062": case "OUT063": case "OUT064":
-        if($lastAttackName == "Twin Twisters" || $lastAttackName == "Spinning Wheel Kick") return true;
-        break;
-      case "OUT065": case "OUT066": case "OUT067":
-        if($lastAttackName == "Twin Twisters") return true;
-        break;
-      case "OUT074": case "OUT075": case "OUT076":
-        if($lastAttackName == "Surging Strike") return true;
-        break;
-      case "OUT080": case "OUT081": case "OUT082":
-        if($lastAttackName == "Head Jab") return true;
-        break;
+
       default: break;
     }
   }
@@ -738,16 +658,6 @@ function ComboActive($cardID = "")
 function HasBloodDebt($cardID)
 {
   switch ($cardID) {
-    case "MON123"; case "MON124"; case "MON125"; case "MON126": case "MON127": case "MON128"; case "MON129":
-    case "MON130": case "MON131"; case "MON135": case "MON136": case "MON137"; case "MON138": case "MON139":
-    case "MON140"; case "MON141": case "MON142": case "MON143"; case "MON144": case "MON145": case "MON146";
-    case "MON147": case "MON148": case "MON149"; case "MON156": case "MON158": case "MON159": case "MON160":
-    case "MON161": case "MON165": case "MON166": case "MON167": case "MON168": case "MON169": case "MON170":
-    case "MON171": case "MON172": case "MON173": case "MON174": case "MON175": case "MON176": case "MON177":
-    case "MON178": case "MON179": case "MON180": case "MON181": case "MON182": case "MON183": case "MON184":
-    case "MON185": case "MON187": case "MON191": case "MON192": case "MON194": case "MON200": case "MON201":
-    case "MON202": case "MON203": case "MON204": case "MON205": case "MON209": case "MON210": case "MON211":
-      return true;
     default: return false;
   }
 }
