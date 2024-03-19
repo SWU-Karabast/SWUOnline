@@ -1288,6 +1288,12 @@ function AspectContains($cardID, $aspect, $player="")
   return DelimStringContains($cardAspect, $aspect);
 }
 
+function ArenaContains($cardID, $arena, $player="")
+{
+  $cardArena = CardArenas($cardID);
+  return DelimStringContains($cardArena, $arena);
+}
+
 function SubtypeContains($cardID, $subtype, $player="")
 {
   $cardSubtype = CardSubtype($cardID);
@@ -2146,6 +2152,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "7262314209"://Mission Briefing
       Draw($currentPlayer);
       Draw($currentPlayer);
+      break;
+    case "6253392993"://Bright Hope
+      MZMoveCard($currentPlayer, "MYALLY:arena=Ground", "MYHAND", may:true);
+      AddDecisionQueue("DRAW", $currentPlayer, "-", 1);
       break;
     default: break;
   }

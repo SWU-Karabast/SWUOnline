@@ -41,6 +41,8 @@ function MZRemove($player, $lastResult)
       case "THEIRITEMS": $lastResult = DestroyItemForPlayer($otherPlayer, $mzIndex[1], true); break;
       case "MYBANISH": RemoveBanish($player, $mzIndex[1]); break;
       case "THEIRBANISH": RemoveBanish($otherPlayer, $mzIndex[1]); break;
+      case "MYALLY": $lastResult = RemoveAlly($player, $mzIndex[1]); break;
+      case "THEIRALLY": $lastResult = RemoveAlly($otherPlayer, $mzIndex[1]); break;
       case "MYARS": $lastResult = RemoveArsenal($player, $mzIndex[1]); break;
       case "THEIRARS": $lastResult = RemoveArsenal($otherPlayer, $mzIndex[1]); break;
       case "MYPITCH": RemovePitch($player, $mzIndex[1]); break;
