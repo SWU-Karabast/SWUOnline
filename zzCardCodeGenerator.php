@@ -51,7 +51,7 @@
         if($aspects != "") $aspects .= ",";
         $aspects .= $card->aspects->data[$j]->attributes->name;
       }
-      AddToTrie($aspectsTrie, $card->cardUid, 0, $card->aspects);
+      AddToTrie($aspectsTrie, $card->cardUid, 0, $aspects);
 
       $traits = "";
       for($j = 0; $j < count($card->traits->data); ++$j)
