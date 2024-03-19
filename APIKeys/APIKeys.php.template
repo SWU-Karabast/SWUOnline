@@ -1,0 +1,19 @@
+<?php
+
+// Fabrary
+$FaBraryKey = "op://$APP_ENV/Fabrary/credential";
+$fabraryOutgoingKey = "op://$APP_ENV/Fabrary/OutgoingKey";
+
+// Sendgrid
+$sendgridKey = "op://$APP_ENV/Sendgrid/credential";
+
+// Adsense - Not used
+$adsenseClientId = "op://$APP_ENV/Adsense/credential";
+
+// FABDB
+$fabDBToken = "op://$APP_ENV/FabDB/token";
+$fabDBSecret = "op://$APP_ENV/FabDB/secret";
+
+// Patreon
+$patreonClientID = "op://$APP_ENV/Patreon/username";
+$patreonClientSecret = "op://$APP_ENV/Patreon/credential";
