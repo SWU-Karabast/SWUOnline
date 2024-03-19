@@ -258,12 +258,6 @@ function PrepareAmount($cardID)
   }
 }
 
-//Minimum cost of the card
-function CardCost($cardID)
-{
-  return CardTypeContains($cardID, "REGALIA") ? CardMemoryCost($cardID) : CardReserveCost($cardID);
-}
-
 function AbilityCost($cardID)
 {
   global $currentPlayer;

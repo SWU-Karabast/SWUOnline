@@ -66,7 +66,7 @@
 
     <head>
       <meta charset="utf-8">
-      <title>Clarent</title>
+      <title>Karabast</title>
       <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
       <link rel="stylesheet" href="css/gamestyle.css">
     </head>
@@ -650,7 +650,7 @@
         var dimensions = "&windowWidth=" + window.innerWidth + "&windowHeight=" + window.innerHeight;
         var lcpEl = document.getElementById("lastCurrentPlayer");
         var lastCurrentPlayer = "&lastCurrentPlayer=" + (!lcpEl ? "0" : lcpEl.innerHTML);
-        if (lastUpdate == "NaN") window.location.replace("https://www.clarent.net/game/MainMenu.php");
+        if (lastUpdate == "NaN") window.location.replace("https://www.karabast.net/game/MainMenu.php");
         else xmlhttp.open("GET", "GetNextTurn2.php?gameName=<?php echo ($gameName); ?>&playerID=<?php echo ($playerID); ?>&lastUpdate=" + lastUpdate + lastCurrentPlayer + "&authKey=<?php echo ($authKey); ?>" + dimensions, true);
         xmlhttp.send();
       }

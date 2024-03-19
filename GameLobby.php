@@ -65,7 +65,7 @@ $isMobile = IsMobile();
 
 <head>
   <meta charset="utf-8">
-  <title>Clarent</title>
+  <title>Karabast</title>
   <link rel="stylesheet" href="./css/menuStyles2.css">
 </head>
 
