@@ -213,6 +213,20 @@ function &GetDiscard($player)
   }
 }
 
+function &GetResourceCards($player)
+{
+  global $currentPlayer, $mainPlayer, $mainPlayerGamestateStillBuilt;
+  global $myArsenal, $theirArsenal, $mainArsenal, $defArsenal;
+  global $myStateBuiltFor;
+  if ($mainPlayerGamestateStillBuilt) {
+    if ($player == $mainPlayer) return $mainArsenal;
+    else return $defArsenal;
+  } else {
+    if ($player == $myStateBuiltFor) return $myArsenal;
+    else return $theirArsenal;
+  }
+}
+
 function &GetMemory($player)
 {
   global $currentPlayer, $mainPlayer, $mainPlayerGamestateStillBuilt;

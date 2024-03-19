@@ -118,6 +118,17 @@ function AddMemory($cardID, $player, $from, $facing, $counters=0)
   array_push($arsenal, GetUniqueId()); //Unique ID
 }
 
+function AddResources($cardID, $player, $from, $facing, $counters=0)
+{
+  $arsenal = &GetArsenal($player);
+  array_push($arsenal, $cardID);
+  array_push($arsenal, $facing);
+  array_push($arsenal, 1); //Num uses - currently always 1
+  array_push($arsenal, $counters); //Counters
+  array_push($arsenal, "0"); //Is Frozen (1 = Frozen)
+  array_push($arsenal, GetUniqueId()); //Unique ID
+}
+
 function BanishRandomMemory($player, $mod="-")
 {
   $memory = &GetMemory($player);

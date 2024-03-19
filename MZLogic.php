@@ -107,12 +107,14 @@ function MZAddZone($player, $parameter, $lastResult)
     {
       case "MYBANISH": BanishCardForPlayer($cardIDs[$i], $player, $params[1], $params[2]); break;
       case "MYHAND": AddPlayerHand($cardIDs[$i], $player, "-"); break;
+      case "MYRESOURCES": AddResources($cardIDs[$i], $player, "HAND", "DOWN"); break;
       case "MYTOPDECK": AddTopDeck($cardIDs[$i], $player, "-"); break;
       case "MYBOTDECK": AddBottomDeck($cardIDs[$i], $player, "-"); break;
       case "THEIRBOTDECK": AddBottomDeck($cardIDs[$i], $otherPlayer, "-"); break;
       case "MYMEMORY": AddMemory($cardIDs[$i], $player, $params[1], $params[2]);
       case "THEIRMATERIAL": AddMaterial($cardIDs[$i], $otherPlayer, $params[1]);
       case "THEIRDISCARD": AddGraveyard($cardIDs[$i], $otherPlayer, $params[1]);
+      case "THEIRRESOURCES": AddResources($cardIDs[$i], $player, "HAND", "DOWN"); break;
       case "THEIRBANISH": BanishCardForPlayer($cardIDs[$i], $otherPlayer, $params[1], $params[2]); break;
       case "MYDISCARD":
         $from = $params[1];

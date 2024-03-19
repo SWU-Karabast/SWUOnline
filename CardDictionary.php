@@ -11,14 +11,20 @@ function CardIdFromName($cardName):string{
   return CardUUIDFromName(trim(strtolower($cardName)) . ";");
 }
 
+function CardName($cardID) {
+  return CardTitle($cardID) . " " . CardSubtitle($cardID);
+}
+
 function CardType($cardID)
 {
   if(!$cardID) return "";
+  /*
   if(CardTypeContains($cardID, "ATTACK")) return "AA";
   else if(CardTypeContains($cardID, "CHAMPION")) return "C";
   else if(CardTypeContains($cardID, "WEAPON")) return "W";
   if($cardID == "DUMMY") return "C";
-  return CardSpeed($cardID) == "1" ? "I" : "A";
+  */
+  return "A";
 }
 
 function CardSubType($cardID)

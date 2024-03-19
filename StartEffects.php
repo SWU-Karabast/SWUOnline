@@ -27,10 +27,10 @@ if($p2Char[0] == "DUMMY") {
 //Start of game effects go here
 
 
-AddDecisionQueue("SHUFFLEDECK", 1, "SKIPSEED"); //CR 2.0 4.1.7 Shuffle Deck
-AddDecisionQueue("SHUFFLEDECK", 2, "SKIPSEED"); //CR 2.0 4.1.7 Shuffle Deck
-AddDecisionQueue("STARTGAME", $mainPlayer, "-"); //CR ?? Start Game
-AddDecisionQueue("STARTTURNABILITIES", $mainPlayer, "-"); //CR 2.0 4.2 Start Phase
+AddDecisionQueue("SHUFFLEDECK", 1, "SKIPSEED");
+AddDecisionQueue("SHUFFLEDECK", 2, "SKIPSEED");
+AddDecisionQueue("STARTGAME", $mainPlayer, "-");
+AddDecisionQueue("STARTTURNABILITIES", $mainPlayer, "-");
 
 ProcessDecisionQueue();
 

@@ -1175,29 +1175,40 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       return "PERMANENT-" . ResolveTransformPermanent($player, $lastResult, $parameter);
     case "TRANSFORMAURA":
       return "AURA-" . ResolveTransformAura($player, $lastResult, $parameter);
-    case "AFTERTHAW":
-      $otherPlayer = ($player == 1 ? 2 : 1);
-      $params = explode("-", $lastResult);
-      if($params[0] == "MYAURAS") DestroyAura($player, $params[1]);
-      else UnfreezeMZ($player, $params[0], $params[1]);
-      return "";
-    case "SUCCUMBTOWINTER":
-      $params = explode("-", $lastResult);
-      $otherPlayer = ($player == 1 ? 2 : 1);
-      if($params[0] == "THEIRALLY") {
-        $allies = &GetAllies($otherPlayer);
-        WriteLog(CardLink($params[2], $params[2]) . " destroyed your frozen ally.");
-        if($allies[$params[1] + 8] == "1") DestroyAlly($otherPlayer, $params[1]);
-      } else {
-        DestroyFrozenArsenal($otherPlayer);
-        WriteLog(CardLink($params[2], $params[2]) . " destroyed your frozen arsenal card.");
-        break;
-      }
-      return $lastResult;
     case "STARTGAME":
       $inGameStatus = "1";
       $MakeStartTurnBackup = true;
       $MakeStartGameBackup = true;
+      for($i=0; $i<6; ++$i) {
+        Draw(1);
+        Draw(2);
+      }
+      AddDecisionQueue("SETDQCONTEXT", 1, "Would you like to mulligan?");
+      AddDecisionQueue("YESNO", 1, "-");
+      AddDecisionQueue("NOPASS", 1, "-");
+      AddDecisionQueue("MULLIGAN", 1, "-", 1);
+      AddDecisionQueue("SETDQCONTEXT", 2, "Would you like to mulligan?");
+      AddDecisionQueue("YESNO", 2, "-");
+      AddDecisionQueue("NOPASS", 2, "-");
+      AddDecisionQueue("MULLIGAN", 2, "-", 1);
+      AddDecisionQueue("SETDQCONTEXT", 1, "Choose a card to resource");
+      MZMoveCard(1, "MYHAND", "MYRESOURCES", may:false);
+      AddDecisionQueue("SETDQCONTEXT", 1, "Choose a card to resource");
+      MZMoveCard(1, "MYHAND", "MYRESOURCES", may:false);
+      AddDecisionQueue("SETDQCONTEXT", 1, "Choose a card to resource");
+      MZMoveCard(2, "MYHAND", "MYRESOURCES", may:false);
+      AddDecisionQueue("SETDQCONTEXT", 1, "Choose a card to resource");
+      MZMoveCard(2, "MYHAND", "MYRESOURCES", may:false);
+      return 0;
+    case "MULLIGAN":
+      $hand = &GetHand($player);
+      $deck = &GetDeck($player);
+      for($i=0; $i<count($hand); $i+=HandPieces()) {
+        AddBottomDeck($hand[$i], $player, "MULLIGAN");
+        PrependDecisionQueue("DRAW", $player, "-");
+      }
+      $hand = [];
+      PrependDecisionQueue("SHUFFLEDECK", $player, "-");
       return 0;
     case "QUICKREMATCH":
       $currentTime = round(microtime(true) * 1000);
