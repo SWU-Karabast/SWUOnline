@@ -775,8 +775,9 @@ function CardLink($caption, $cardNumber, $recordMenu = false)
           $color = "#AAA";
         }
         */
-  $element = CardElement($cardNumber);
+  //$element = CardElement($cardNumber);
   $color = "#AAA";
+  /*
   switch($element)
   {
     case "WIND": $color = "Green"; break;
@@ -788,6 +789,7 @@ function CardLink($caption, $cardNumber, $recordMenu = false)
     case "LUXEM": $color = "GoldenRod"; break;
     default: break;
   }
+  */
   //if (function_exists("IsColorblindMode") && !IsColorblindMode($playerID)) $pitchText = "";
   $file = "'./" . "WebpImages" . "/" . $cardNumber . ".webp'";
   return "<b><span style='color:" . $color . "; cursor:default;' onmouseover=\"ShowDetail(event," . $file . ")\" onmouseout='HideCardDetail()'>" . $name . "</span></b>";

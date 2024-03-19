@@ -65,7 +65,7 @@ function EvaluateCombatChain(&$totalAttack, &$totalDefense, &$attackModifiers=[]
       $attack = 0;
       if($attackType == "W") $attack = $mainCharacter[$combatChainState[$CCS_WeaponIndex]+3];
       else if(DelimStringContains(CardSubtype($combatChain[0]), "Aura")) $attack = $mainAuras[$combatChainState[$CCS_WeaponIndex]+3];
-      else if(CardTypeContains($combatChain[0], "ALLY", $mainPlayer))
+      else if(IsAlly($combatChain[0]))
       {
         $allies = &GetAllies($mainPlayer);
         $attack = $allies[$combatChainState[$CCS_WeaponIndex]+7];
@@ -669,7 +669,7 @@ function PlayerLoseHealth($player, $amount)
   $char = &GetPlayerCharacter($player);
   if(count($char) == 0) return;
   $health += $amount;
-  if($health >= CharacterHealth($char[0]))
+  if($health >= CardHP($char[0]))
   {
     PlayerWon(($player == 1 ? 2 : 1));
   }
@@ -2106,9 +2106,6 @@ function IsClassBonusActive($player, $class)
 function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalCosts = "-")
 {
   global $currentPlayer, $layers, $CS_NumAttacks, $CS_PlayIndex;
-  $cardID = ShiyanaCharacter($cardID);
-  $set = CardSet($cardID);
-  $class = CardClass($cardID);
   if($target != "-")
   {
     $targetArr = explode("-", $target);

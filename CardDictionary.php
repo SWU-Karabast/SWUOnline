@@ -18,12 +18,9 @@ function CardName($cardID) {
 function CardType($cardID)
 {
   if(!$cardID) return "";
-  /*
-  if(CardTypeContains($cardID, "ATTACK")) return "AA";
-  else if(CardTypeContains($cardID, "CHAMPION")) return "C";
-  else if(CardTypeContains($cardID, "WEAPON")) return "W";
-  if($cardID == "DUMMY") return "C";
-  */
+  $definedCardType = DefinedCardType($cardID);
+  if($definedCardType == "Leader") return "C";
+  else if($definedCardType == "Base") return "W";
   return "A";
 }
 
@@ -147,12 +144,6 @@ function HasReservable($cardID, $player, $index)
 {
   switch($cardID)
   {
-    case "1d47o7eanl": return true;//Explosive Fractal
-    case "1lw9n0wpbh": return true;//Protective Fractal
-    case "cfpwakb1k0": return true;//Fractal of Intrusion
-    case "hjdu50pces": return true;//Deep Sea Fractal
-    case "igka5av43e": return true;//Incendiary Fractal
-    case "rp5k1vt1cn": return true;//Fractal of Insight
     default: return false;
   }
 }
@@ -164,9 +155,6 @@ function CriticalAmount($cardID)
   global $mainPlayer;
   switch($cardID)
   {
-    case "kT8CeTFj82": return IsClassBonusActive($mainPlayer, "ASSASSIN") ? 1 : 0;//Bushwhack Bandit
-    case "5qWWpkgQLl": return SearchCurrentTurnEffects("5qWWpkgQLl", $mainPlayer) ? 4 : 0;//Coup de Grace
-    case "2Ch1Gp3jEL": return SearchCurrentTurnEffects("2Ch1Gp3jEL", $mainPlayer) ? 1 : 0;//Corhazi Lightblade
     default: return 0;
   }
 }
@@ -177,18 +165,7 @@ function HasStealth($cardID, $player, $index)
   if(CurrentEffectGrantsStealth($player, $allies[$index+5])) return true;
   switch($cardID)
   {
-    case "aKgdkLSBza": return IsClassBonusActive($player, "TAMER");//Wilderness Harpist
-    case "CvvgJR4fNa": return $allies[$index+1] == 2 && IsClassBonusActive($player, "ASSASSIN");//Patient Rogue
-    case "hHVf5xyjob": return GetClassState($player, $CS_PreparationCounters) >= 3;//Blackmarket Broker
-    case "zPC4Yqo9Fs": return true;//Kingdom Informant
-    case "YqQsXwEvv5": return true;//Corhazi Courier
-    case "UVAb8CmjtL": return true;//Dream Fairy
-    case "VAFTR5taNG": return true;//Corhazi Infiltrator
-    case "4s0c9XgLg7": return true;//Snow Fairy
-    case "ZfCtSldRIy": return true;//Windrider Mage
-    case "FWnxKjSeB1": return true;//Spark Fairy
-    case "wklzjmwuir": return true;//Shimmercloak Assassin
-    case "oy34bro89w": return true;//Cunning Broker
+
     default: return false;
   }
 }
@@ -197,23 +174,14 @@ function HasSteadfast($cardID, $player, $index)
 {
   switch($cardID)
   {
-    case "8lrj52215u": return true;//Vaporjet Shieldbearer
-    case "23yfzk96yd": return IsClassBonusActive($player, "GUARDIAN");//Veteran Blazebearer
     default: return false;
   }
 }
 
 function HasTaunt($cardID, $player, $index)
 {
-  if(CardTypeContains($cardID, "CHAMPION")) {
-    if(SearchCurrentTurnEffects("098kmoi0a5", $player)) return true;//Take Point
-  }
   switch($cardID)
   {
-    case "23yfzk96yd": return SearchCurrentTurnEffects($cardID, $player);//Veteran Blazebearer
-    case "eifnz0fgm3": return true;//Stalwart Shieldmate
-    case "pufyoz23yf": return IsClassBonusActive($player, "GUARDIAN");//Waverider Protector
-    case "y5ttkk39i1": return true;//Winbless Gatekeeper
     default: return false;
   }
 }
@@ -222,9 +190,6 @@ function HasIntercept($cardID, $player, $index)
 {
   switch($cardID)
   {
-    case "c9p4lpnvx7": return SearchCount(SearchAuras($player, type:"PHANTASIA"));//Awakened Deacon
-    case "x7u6wzh973": return true;//Frostbinder Apostle
-    case "urfp66pv4n": return true;//Caretaker Drone
     default: return false;
   }
 }
@@ -269,33 +234,10 @@ function AbilityCost($cardID)
 {
   global $currentPlayer;
   switch($cardID) {
-    case "8kmoi0a5uh"://Bulwark Sword
-      return 2;
-    case "0z2snsdwmx"://Scale of Souls
-      return 2;
-    case "5swaf8urrq"://Whirlwind Vizier
-      $abilityType = GetResolvedAbilityType($cardID);
-      if($abilityType == "A") return 3;
-      break;
-    case "xy5lh23qu7"://Obelisk of Fabrication
-      $cost = 6 - SearchCount(SearchAura($currentPlayer, "DOMAIN"));
-      if($cost < 0) $cost = 0;
-      return $cost;
-    case "d6soporhlq"://Obelisk of Protection
-      $cost = 4 - SearchCount(SearchAura($currentPlayer, "DOMAIN"));
-      if($cost < 0) $cost = 0;
-      return $cost;
-    case "wk0pw0y6is"://Obelisk of Armaments
-      $cost = 5 - SearchCount(SearchAura($currentPlayer, "DOMAIN"));
-      if($cost < 0) $cost = 0;
-      return $cost;
-    case "j68m69iq4d"://Sentinel Fabricator
-      return 3;
-    case "pv4n1n3gyg": return 1;//Cleric's Robe
-    case "u7d6soporh": return 1;//Ingredient Pouch
+
     default: break;
   }
-  if(CardTypeContains($cardID, "ALLY", $currentPlayer)) return 0;
+  if(IsAlly($cardID)) return 0;
   return 0;
 }
 
@@ -357,79 +299,10 @@ function HasGoAgain($cardID)
 function GetAbilityType($cardID, $index = -1, $from="-")
 {
   global $currentPlayer;
-  if(CardTypeContains($cardID, "ALLY", $currentPlayer) || CardTypeContains($cardID, "WEAPON", $currentPlayer)) return "AA";
+  if($from == "PLAY" && IsAlly($cardID)) return "AA";
   switch($cardID)
   {
-    case "s23UHXgcZq": return "A";//Luxera's Map
-    case "ENLIGHTEN": return "I";//Enlighten Counters
-    case "LROrzTmh55"://Fire Resonance Bauble
-    case "2gv7DC0KID"://Grand Crusader's Ring
-    case "bHGUNMFLg9"://Wind Resonance Bauble
-    case "dSSRtNnPtw"://Water Resonance Bauble
-    case "Z9TCpaMJTc"://Bauble of Abundance
-    case "yDARN8eV6B"://Tome of Knowledge
-    case "UiohpiTtgs"://Chalice of Blood
-    case "P7hHZBVScB"://Orb of Glitter
-    case "6e7lRnczfL"://Horn of Beastcalling
-    case "BY0E8si926"://Orb of Regret
-    case "dmfoA7jOjy"://Crystal of Empowerment
-    case "IC3OU6vCnF"://Mana Limiter
-    case "hLHpI5rHIK"://Bauble of Mending
-    case "WAFNy2lY5t"://Melodious Flute
-    case "AKA19OwaCh"://Jewel of Englightenment
-    case "j5iQQPd2m5"://Crystal of Argus
-    case "ybdj1Db9jz"://Seed of Nature
-    case "EBWWwvSxr3"://Channeling Stone
-    case "kk46Whz7CJ"://Surveillance Stone
-    case "1XegCUjBnY"://Life Essence Amulet
-    case "OofVX5hX8X"://Poisoned Coating Oil
-    case "Tx6iJQNSA6"://Majestic Spirit's Crest
-    case "qYH9PJP7uM"://Blinding Orb
-    case "iiZtKTulPg"://Eye of Argus
-    case "llQe0cg4xJ"://Orb of Choking Fumes
-    case "ScGcOmkoQt"://Smoke Bombs
-    case "F1t18omUlx"://Beastbond Paws
-    case "2bzajcZZRD"://Map of Hidden Passage
-    case "usb5FgKvZX"://Sharpening Stone
-    case "xjuCkODVRx"://Beastbond Boots
-    case "yj2rJBREH8"://Safeguard Amulet
-    case "EQZZsiUDyl"://Storm Tyrant's Eye
-    case "1bqry41lw9"://Explosive Rune
-    case "fp66pv4n1n"://Rusted Warshield
-    case "73fdt8ptrz"://Windwalker Boots
-    case "af098kmoi0"://Orb of Hubris
-    case "jxhkurfp66"://Charged Manaplate
-    case "lq2kkvoqk1"://Necklace of Foresight
-    case "ettczb14m4"://Alchemist's Kit
-    case "isxy5lh23q"://Flash Grenade
-    case "96659ytyj2"://Crimson Protective Trinket
-    case "h23qu7d6so"://Temporal Spectrometer
-    case "m3pal7cpvn"://Azure Protective Trinket
-    case "n0wpbhigka"://Wand of Frost
-    case "ojwk0pw0y6"://Crest of the Alliance
-    case "porhlq2kkv"://Wayfinder's Map
-      return "I";
-    case "i0a5uhjxhk"://Blightroot (1)
-    case "5joh300z2s"://Mana Root (2)
-    case "bd7ozuj68m"://Silvershine (3)
-    case "soporhlq2k"://Fraysia (4)
-    case "jnltv5klry"://Razorvine (5)
-    case "69iq4d5vet"://Springleaf (6)
-      return "I";
-    case "1lw9n0wpbh"://Protective Fractal
-    case "xy5lh23qu7"://Obelisk of Fabrication
-    case "d6soporhlq"://Obelisk of Protection
-    case "wk0pw0y6is"://Obelisk of Armaments
-    case "j68m69iq4d"://Sentinel Fabricator
-    case "8c9htu9agw"://Prototype Staff
-    case "n1voy5ttkk"://Shatterfall Keep
-    case "pv4n1n3gyg"://Cleric's Robe
-      return "I";
-    case "0z2snsdwmx"://Scale of Souls
-    case "2ha4dk88zq"://Cloak of Stillwater
-      return "I";
-    case "u7d6soporh"://Ingredient Pouch
-      return IsClassBonusActive($currentPlayer, "CLERIC") ? "I" : "";
+
     default: return "";
   }
 }
@@ -502,16 +375,6 @@ function IsPlayable($cardID, $phase, $from, $index = -1, &$restriction = null, $
   global $combatChain;
   if($from == "ARS" || $from == "BANISH") return false;
   if($player == "") $player = $currentPlayer;
-  if($from == "PLAY")
-  {
-    $pride = AllyPride($cardID);
-    if($pride >= 0 && CharacterLevel($player) < $pride) return false;
-    if(CardTypeContains($cardID, "ITEM"))
-    {
-      $items = &GetItems($player);
-      if($items[$index+2] < 2) return false;
-    }
-  }
   if($phase == "P" && $from == "HAND") return true;
   if(IsPlayRestricted($cardID, $restriction, $from, $index, $player)) return false;
   $cardType = CardType($cardID);
@@ -534,13 +397,8 @@ function GoesWhereAfterResolving($cardID, $from = null, $player = "", $playedFro
 {
   global $currentPlayer, $mainPlayer;
   if($player == "") $player = $currentPlayer;
-  $otherPlayer = $player == 2 ? 1 : 2;
-  if(CardTypeContains($cardID, "ALLY", $currentPlayer)) return "ALLY";
+  if(IsAlly($cardID)) return "ALLY";
   switch($cardID) {
-    case "2Ojrn7buPe": return "MATERIAL";//Tera Sight
-    case "PLljzdiMmq": return "MATERIAL";//Invoke Dominance
-    case "cVRIUJdTW5": return "MATERIAL";//Meadowbloom Dryad
-    case "P9Y1Q5cQ0F": return $resourcesPaid == "2" ? "BANISH" : "GY"; //Crux Sight
     default: return "GY";
   }
 }

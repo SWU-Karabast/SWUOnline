@@ -896,8 +896,6 @@ function FinalizeChainLink($chainClosed = false)
 
   if (DoesAttackHaveGoAgain() && !$chainClosed) {
     ++$actionPoints;
-    if ($combatChain[0] == "DVR002" && SearchCharacterActive($mainPlayer, "DVR001")) DoriQuicksilverProdigyEffect();
-    if (CardType($combatChain[0]) == "W" && GetClassState($mainPlayer, $CS_AnotherWeaponGainedGoAgain) == "-") SetClassState($mainPlayer, $CS_AnotherWeaponGainedGoAgain, $combatChain[0]);
   }
 
   ChainLinkResolvedEffects();
@@ -945,8 +943,8 @@ function FinalizeChainLink($chainClosed = false)
 
   array_push($chainLinkSummary, $combatChainState[$CCS_DamageDealt]);
   array_push($chainLinkSummary, $combatChainState[$CCS_LinkTotalAttack]);
-  array_push($chainLinkSummary, TalentOverride($combatChain[0], $mainPlayer));
-  array_push($chainLinkSummary, ClassOverride($combatChain[0], $mainPlayer));
+  array_push($chainLinkSummary, "-");//Talent
+  array_push($chainLinkSummary, "-");//Class
   array_push($chainLinkSummary, SerializeCurrentAttackNames());
   $numHitsOnLink = ($combatChainState[$CCS_DamageDealt] > 0 ? 1 : 0);
   $numHitsOnLink += intval($combatChainState[$CCS_HitThisLink]);
@@ -1170,9 +1168,8 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
       $layerIndex = AddLayer($cardID, $currentPlayer, $from, "-", "-");
       SetClassState($currentPlayer, $CS_LayerPlayIndex, $layerIndex);
     }
-    //CR 5.1.2 Announce (CR 2.0)
-    if($from == "ARS") WriteLog("Player " . $playerID . " " . PlayTerm($turn[0]) . " " . CardLink($cardID, $cardID) . " from arsenal", $turn[0] != "P" ? $currentPlayer : 0);
-    else WriteLog("Player " . $playerID . " " . PlayTerm($turn[0], $from, $cardID) . " " . CardLink($cardID, $cardID), $turn[0] != "P" ? $currentPlayer : 0);
+    //Announce the card being played
+    WriteLog("Player " . $playerID . " " . PlayTerm($turn[0], $from, $cardID) . " " . CardLink($cardID, $cardID), $turn[0] != "P" ? $currentPlayer : 0);
 
     LogPlayCardStats($currentPlayer, $cardID, $from);
     if($playingCard) {
@@ -1190,7 +1187,7 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
   if($turn[0] != "P") {
     if($dynCostResolved >= 0) {
       SetClassState($currentPlayer, $CS_DynCostResolved, $dynCostResolved);
-      $baseCost = ($from == "PLAY" || $from == "EQUIP" ? AbilityCost($cardID) : (CardReserveCost($cardID) + SelfCostModifier($cardID)));
+      $baseCost = ($from == "PLAY" || $from == "EQUIP" ? AbilityCost($cardID) : (CardCost($cardID) + SelfCostModifier($cardID)));
       if(!$playingCard) $resources[1] += $dynCostResolved;
       else {
         $frostbitesPaid = AuraCostModifier($cardID);
@@ -1217,11 +1214,13 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
         AddDecisionQueue("DYNPITCH", $currentPlayer, $dynCost);
         AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_LastDynCost);
       }
+      /*
       $reservableIndices = ReservableIndices($currentPlayer);
       if($reservableIndices != "") {
         AddDecisionQueue("MAYMULTICHOOSEAURAS", $currentPlayer, SearchCount($reservableIndices) . "-" . $reservableIndices . "-" . 0);
         AddDecisionQueue("RESERVABLE", $currentPlayer, "-", 1);
       }
+      */
 
       //CR 5.1.4. Declare Modes and Targets
       //CR 5.1.4a Declare targets for resolution abilities
@@ -1242,6 +1241,18 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
     //$pitchValue = PitchValue($cardID);
     $resources[0] += 1;
     AddMemory($cardID, $currentPlayer, "HAND", "DOWN");
+  }
+  $resourceCards = &GetResourceCards($currentPlayer);
+  for($i = 0; $i < count($resourceCards); $i += ResourcePieces()) {
+    if($resources[1] == 0) break;
+    if($resourceCards[$i+4] == "0") {
+      $resourceCards[$i+4] = "1";
+      --$resources[1];
+    }
+  }
+  if($resources[1] > 0) {
+    WriteLog("Not enough resources to pay for that. Reverting gamestate.");
+    RevertGamestate();
   }
   //CR 2.0 5.1.7. Pay Asset-Costs
   if($resources[0] < $resources[1]) {
@@ -1286,7 +1297,6 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
       }
       CombatChainPlayAbility($cardID);
       ItemPlayAbilities($cardID, $from);
-      ResetCardPlayed($cardID);
     }
     if ($playType == "A" || $playType == "AA") {
       if (!$canPlayAsInstant) --$actionPoints;
@@ -1441,19 +1451,6 @@ function PayAbilityAdditionalCosts($cardID)
 function PayAdditionalCosts($cardID, $from)
 {
   global $currentPlayer, $CS_AdditionalCosts, $CS_CharacterIndex, $CS_PlayIndex, $CS_PreparationCounters;
-  if($from == "PLAY" && CardTypeContains($cardID, "ITEM")) {
-    PayItemAbilityAdditionalCosts($cardID, $from);
-    return;
-  }
-  $prepareAmount = PrepareAmount($cardID);
-  if($prepareAmount > 0 && GetClassState($currentPlayer, $CS_PreparationCounters) >= $prepareAmount)
-  {
-    AddDecisionQueue("YESNO", $currentPlayer, "do_you_want_to_prepare_" . $prepareAmount . "?");
-    AddDecisionQueue("NOPASS", $currentPlayer, "-", 1);
-    AddDecisionQueue("SUBTRACTCLASSSTATE", $currentPlayer, $CS_PreparationCounters . "-" . $prepareAmount, 1);
-    AddDecisionQueue("PASSPARAMETER", $currentPlayer, "PREPARE", 1);
-    AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_AdditionalCosts, 1);
-  }
   if(RequiresDiscard($cardID)) {
     $discarded = DiscardRandom($currentPlayer, $cardID);
     if($discarded == "") {
@@ -1464,22 +1461,7 @@ function PayAdditionalCosts($cardID, $from)
     SetClassState($currentPlayer, $CS_AdditionalCosts, $discarded);
   }
   switch($cardID) {
-    case "qaA3sXFRFY"://Spirit's Blessing
-      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYITEMS:type=REGALIA&MYCHAR:type=REGALIA");
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a regalia to return", 1);
-      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-      AddDecisionQueue("MZADDZONE", $currentPlayer, "MYMATERIAL", 1);
-      AddDecisionQueue("MZREMOVE", $currentPlayer, "-", 1);
-      break;
-    case "lzjmwuir99"://Firetuned Automaton
-      MZMoveCard($currentPlayer, "MYHAND:element=FIRE", "MYDISCARD,HAND", may:false, isSubsequent: false);
-      break;
-    case "n1voy5ttkk"://Shatterfall Keep
-      AddFloatingMemoryChoice();
-      break;
-    case "oy34bro89w"://Cunning Broker
-      if($from == "PLAY") DecrementClassState($currentPlayer, $CS_PreparationCounters, 2);
-      break;
+
     default:
       break;
   }
@@ -1574,18 +1556,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
     SetClassState($currentPlayer, $CS_PlayCCIndex, $index);
   } else if ($from != "PLAY") {
     $cardSubtype = CardSubType($cardID);
-    $cardTypes = CardTypes($cardID);
-    if (DelimStringContains($cardTypes, "DOMAIN")) {
-      PlayAura($cardID, $currentPlayer);
-    } else if (DelimStringContains($cardTypes, "ITEM")) {
-      PutItemIntoPlay($cardID);
-    } else if (DelimStringContains($cardTypes, "PHANTASIA")) {
-      PlayAura($cardID, $currentPlayer);
-    } else if ($cardSubtype == "Landmark") {
-      PlayLandmark($cardID, $currentPlayer);
-    } else if(DelimStringContains($cardTypes, "WEAPON")) {
-      AddCharacter($cardID, $currentPlayer);
-    } else if ($definedCardType != "C" && $definedCardType != "E" && $definedCardType != "W") {
+    if ($definedCardType != "C" && $definedCardType != "E" && $definedCardType != "W") {
       $goesWhere = GoesWhereAfterResolving($cardID, $from, $currentPlayer, resourcesPaid:$resourcesPaid);
       switch ($goesWhere) {
         case "BOTDECK":

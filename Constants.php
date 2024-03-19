@@ -112,6 +112,7 @@ function ArsenalPieces()
   return 6;
 }
 function MemoryPieces() { return ArsenalPieces(); }
+function ResourcePieces() { return ArsenalPieces(); }
 
 //0 - Card ID
 //1 - Status: 2 = ready
@@ -507,14 +508,6 @@ function ResetMainClassState()
   $mainClassState[$CS_AnotherWeaponGainedGoAgain] = "-";
   $mainClassState[$CS_NumContractsCompleted] = 0;
   $mainClassState[$CS_HitsWithSword] = 0;
-}
-
-function ResetCardPlayed($cardID)
-{
-  global $currentPlayer, $CS_NextWizardNAAInstant, $CS_NextNAAInstant;
-  $type = CardType($cardID);
-  if($type == "A" && ClassContains($cardID, "WIZARD", $currentPlayer)) SetClassState($currentPlayer, $CS_NextWizardNAAInstant, 0);
-  if($type == "A") SetClassState($currentPlayer, $CS_NextNAAInstant, 0);
 }
 
 function ResetCharacterEffects()

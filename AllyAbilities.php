@@ -135,13 +135,9 @@ function AllyPride($cardID)
 
 function AllyHealth($cardID, $playerID="")
 {
-  $health = CardLife($cardID);
+  $health = CardHP($cardID);
   switch($cardID)
   {
-    case "HWFWO0TB8l": if(IsClassBonusActive($playerID, "TAMER")) $health += 2;//Tempest Silverback
-    case "7NMFSRR5V3": if(SearchCount(SearchAllies($playerID, subtype:"BEAST")) > 0) $health += 1;//Fervent Beastmaster
-    case "csMiEObm2l": if(CharacterLevel($playerID) >= 3 && IsClassBonusActive($playerID, "WARRIOR")) $health += 1;//Strapping Conscript
-    case "5swaf8urrq": if(IsClassBonusActive($playerID, "CLERIC")) $health += 1;//Whirlwind Vizier
     default: break;
   }
   return $health;
@@ -307,7 +303,7 @@ function IsAlly($cardID, $player="")
 {
   global $currentPlayer;
   if($player == "") $player = $currentPlayer;
-  return CardTypeContains($cardID, "ALLY", $player);
+  return DefinedCardType($cardID) == "Unit";
 }
 
 //NOTE: This is for the actual attack abilities that allies have
