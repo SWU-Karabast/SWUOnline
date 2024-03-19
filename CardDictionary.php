@@ -66,11 +66,34 @@ function CardTalent($cardID)
   return "NONE";
 }
 
+function RestoreAmount($cardID, $player, $index)
+{
+  switch($cardID)
+  {
+    case "0074718689": return 1;
+    case "1081012039": return 2;
+    default: return 0;
+  }
+}
+
 function RaidAmount($cardID, $player, $index)
 {
   switch($cardID)
   {
+    case "1017822723": return 2;
+    case "2404916657": return 2;
+    case "7495752423": return 2;
     default: return 0;
+  }
+}
+
+function HasGrit($cardID, $player, $index)
+{
+  switch($cardID)
+  {
+    case "9633997311":
+      return true;
+    default: return false;
   }
 }
 
@@ -78,6 +101,10 @@ function HasOverwhelm($cardID, $player, $index)
 {
   switch($cardID)
   {
+    case "6072239164":
+    case "6577517407":
+    case "6718924441":
+      return true;
     default: return false;
   }
 }
@@ -86,6 +113,10 @@ function HasAmbush($cardID, $player, $index)
 {
   switch($cardID)
   {
+    case "5346983501":
+    case "6718924441":
+    case "7285270931":
+      return true;
     default: return false;
   }
 }
@@ -94,6 +125,10 @@ function HasShielded($cardID, $player, $index)
 {
   switch($cardID)
   {
+    case "0700214503":
+    case "5264521057":
+    case "9950828238":
+      return true;
     default: return false;
   }
 }
@@ -102,6 +137,9 @@ function HasSaboteur($cardID, $player, $index)
 {
   switch($cardID)
   {
+    case "1017822723":
+    case "9859536518":
+      return true;
     default: return false;
   }
 }
