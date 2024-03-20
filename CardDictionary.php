@@ -107,6 +107,12 @@ function RaidAmount($cardID, $player, $index)
 
 function HasSentinel($cardID, $player, $index)
 {
+  $ally = new Ally("MYALLY-" . $index, $player);
+  $subcards = $ally->GetSubcards();
+  for($i=0; $i<count($subcards); ++$i)
+  {
+    if($subcards[$i] == "4550121827") return true;//Protector
+  }
   switch($cardID)
   {
     case "2524528997":
