@@ -16,14 +16,19 @@ function ProcessHitEffect($cardID)
 function AttackModifier($cardID, $from = "", $resourcesPaid = 0, $repriseActive = -1)
 {
   global $mainPlayer, $defPlayer, $initiativePlayer, $combatChain, $combatChainState, $CS_NumLeveledUp;
-  if($repriseActive == -1) $repriseActive = RepriseActive();
+  $attacker = AttackerMZID($mainPlayer);
+  $mzArr = explode("-", $attacker);
+  $modifier = RaidAmount($cardID, $mainPlayer, $mzArr[1]);
   switch($cardID) {
     case "3988315236"://Seasoned Shoretrooper
-      return NumResources($mainPlayer) >= 6 ? 2 : 0;
+      $modifier = NumResources($mainPlayer) >= 6 ? 2 : 0;
+      break;
     case "6348804504"://Ardent Sympathizer
-      return $initiativePlayer == $mainPlayer ? 2 : 0;
-    default: return 0;
+      $modifier = $initiativePlayer == $mainPlayer ? 2 : 0;
+      break;
+    default: break;
   }
+  return $modifier;
 }
 
 function BlockModifier($cardID, $from, $resourcesPaid)

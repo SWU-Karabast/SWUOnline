@@ -91,6 +91,7 @@ function RaidAmount($cardID, $player, $index)
     case "1017822723": return 2;
     case "2404916657": return 2;
     case "7495752423": return 2;
+    case "4642322279": return SearchCount(SearchAllies($player, aspect:"Aggression")) > 1 ? 2 : 0;
     default: return 0;
   }
 }
