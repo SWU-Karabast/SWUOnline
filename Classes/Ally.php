@@ -27,12 +27,27 @@ class Ally {
     return $this->allies[$this->index+5];
   }
 
+  function Health() {
+    return $this->allies[$this->index+2];
+  }
+
   function SetDistant() {
     $this->allies[$this->index+9] = 1;
   }
 
   function AddHealth($amount) {
     $this->allies[$this->index+2] += $amount;
+  }
+
+  function Heal($amount) {
+    $this->AddHealth($amount);
+    if($this->Health() > $this->MaxHealth()) $this->allies[$this->index+2] = $this->MaxHealth();
+  }
+
+  function MaxHealth() {
+    $max = CardHP($this->CardID());
+    $subcards = $this->GetSubcards();
+    for($i=0; $i<count($subcards); ++$i) $max += CardHP($subcards[$i]);
   }
 
   function CurrentPower() {

@@ -2219,6 +2219,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $ally = new Ally($target);
       $ally->Attach("8752877738");
       break;
+    case "8679831560"://Restore
+      $mzArr = explode("-", $target);
+      if($mzArr[0] == "MYCHAR") Restore(3, $currentPlayer);
+      else if($mzArr[0] == "MYALLY") {
+        $ally = new Ally($target);
+        $ally->Heal(3);
+      }
+      break;
     default: break;
   }
 }
@@ -2318,6 +2326,7 @@ function PlayRequiresTarget($cardID)
   {
     case "8148673131": return 2;//Open Fire
     case "8981523525": return 2;//Moment of Peace
+    case "8679831560": return 2;//Repair
     default: return -1;
   }
 }
