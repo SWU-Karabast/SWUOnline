@@ -1,5 +1,16 @@
 <?php
 
+function MZAttach($player, $mzIndex, $cardID) {
+  $mzArr = explode("-", $mzIndex);
+  switch($mzArr[0]) {
+    case "MYALLY": case "THEIRALLY":
+      $ally = new Ally($mzIndex, $player);
+      $ally->Attach($cardID);
+      break;
+    default: break;
+  }
+}
+
 function MZDestroy($player, $lastResult)
 {
   $lastResultArr = explode(",", $lastResult);

@@ -464,6 +464,7 @@ function GoesWhereAfterResolving($cardID, $from = null, $player = "", $playedFro
 {
   global $currentPlayer, $mainPlayer;
   if($player == "") $player = $currentPlayer;
+  if(DefinedTypesContains($cardID, "Upgrade", $currentPlayer)) return "ATTACHTARGET"; 
   if(IsAlly($cardID)) return "ALLY";
   switch($cardID) {
     case "2703877689": return "RESOURCE";

@@ -31,13 +31,8 @@ class Ally {
     $this->allies[$this->index+9] = 1;
   }
 
-  function IsDistant() {
-    if(SearchCurrentTurnEffects("7dedg616r0", $this->playerID)) return true;
-    return $this->allies[$this->index+9] == 1 ? true : false;
-  }
-
-  function IsFostered() {
-    return $this->allies[$this->index+10] == 2 ? true : false;
+  function AddHealth($amount) {
+    $this->allies[$this->index+2] += $amount;
   }
 
   function CurrentPower() {
@@ -87,6 +82,12 @@ class Ally {
   function ModifyNamedCounters($type, $amount = 1) {
     $this->allies[$this->index+6] += $amount;
     return $this->allies[$this->index+6];//Return the amount of that type of counter
+  }
+
+  function Attach($cardID) {
+    if($this->allies[$this->index + 4] == "-") $this->allies[$this->index + 4] = $cardID;
+    else $this->allies[$this->index + 4] = $this->allies[$this->index + 4] . "," . $cardID;
+    $this->AddHealth(CardHP($cardID));
   }
 
 }

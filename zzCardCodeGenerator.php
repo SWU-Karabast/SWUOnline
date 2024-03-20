@@ -15,6 +15,7 @@
   $arenasTrie = [];
   $uuidLookupTrie = [];
   $typeTrie = [];
+  $type2Trie = [];
   while ($hasMoreData)
   {
     $jsonUrl = "https://admin.starwarsunlimited.com/api/cards?pagination[page]=" . $page;
@@ -52,6 +53,7 @@
       AddToTrie($hpTrie, $card->cardUid, 0, $card->hp);
       AddToTrie($powerTrie, $card->cardUid, 0, $card->power);
       AddToTrie($typeTrie, $card->cardUid, 0, $card->type->data->attributes->name);
+      if($card->type2->data != null) AddToTrie($type2Trie, $card->cardUid, 0, $card->type2->data->attributes->name);
 
       $aspects = "";
       for($j = 0; $j < count($card->aspects->data); ++$j)
@@ -109,6 +111,7 @@
   GenerateFunction($traitsTrie, $handler, "CardTraits", true, "");
   GenerateFunction($arenasTrie, $handler, "CardArenas", true, "");
   GenerateFunction($typeTrie, $handler, "DefinedCardType", true, "");
+  GenerateFunction($type2Trie, $handler, "DefinedCardType2", true, "");
 
   GenerateFunction($uuidLookupTrie, $handler, "UUIDLookup", true, "");
 

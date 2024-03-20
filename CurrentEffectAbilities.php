@@ -32,38 +32,7 @@ function EffectAttackModifier($cardID)
   if(count($params) > 1) $subparam = $params[1];
   switch($cardID)
   {
-    case "dZ960Hnkzv": return SearchCount(SearchAllies($mainPlayer, "", "BEAST")) + SearchCount(SearchAllies($mainPlayer, "", "ANIMAL"));//Vertus, Gaia's Roar
-    case "FCbKYZcbNq": return 2;
-    case "4hbA9FT56L": return 1;
-    case "At1UNRG7F0": return 4;
-    case "CvvgJR4fNa": return 3;//Patient Rogue
-    case "W1vZwOXfG3": return 2;//Embertail Squirrel
-    case "rPpLwLPGaL": return 1;//Phalanx Captain
-    case "k71PE3clOI": return 1;//Inspiring Call
-    case "Huh1DljE0j": return 1;//Second Wind
-    case "IAkuSSnzYB": return 1;//Banner Knight
-    case "XMb6pSHFJg": return 2;//Embersong
-    case "qyQLlDYBlr": return 1;//Ornamental Greatsword
-    case "OofVX5hX8X": return 2;//Poisoned Coating Oil
-    case "TJTeWcZnsQ": return 2;//Lorraine, Blademaster
-    case "F1t18omUlx": return 1;//Beastbond Paws
-    case "fMv7tIOZwLAttack": return 1;//Aqueous Enchanting
-    case "GRkBQ1Uvir": return 2;//Ignited Strike
-    case "qufoIF014c": return 2;//Gleaming Cut
-    case "rxxwQT054x": return 2;//Command the Hunt
-    case "vcZSHNHvKX": return IsAlly($cardID) ? 0 : 1;//Spirit Blade: Ghost Strike
-    case "5kt3q2svd5": return $subparam;//Amorphous Strike
-    case "659ytyj2s3": return $subparam;//Imperious Highlander
-    case "i1f0ht2tsn": return 1;//Strategic Warfare
-    case "huqj5bbae3": return 2;//Winds of Retribution
-    case "r0zadf9q1w": return -2;//Conjure Downpour
-    case "fzcyfrzrpl": return 1;//Heatwave Generator
-    case "44vm5kt3q2"://Battlefield Spotter
-      $mzID = AttackerMZID($mainPlayer);
-      $ally = new Ally($mzID);
-      return $ally->IsDistant() ? 1 : 0;
-    case "lx6xwr42i6": return 3;//Windrider Invoker
-    case "n0wpbhigka": return -3;//Wand of Frost
+
     default: return 0;
   }
 }

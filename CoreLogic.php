@@ -1260,6 +1260,13 @@ function NameOverride($cardID, $player="")
   return $name;
 }
 
+function DefinedTypesContains($cardID, $type, $player="")
+{
+  $cardTypes = DefinedCardType($cardID);
+  $cardTypes2 = DefinedCardType2($cardID);
+  return DelimStringContains($cardTypes, $type) || DelimStringContains($cardTypes2, $type);
+}
+
 function CardTypeContains($cardID, $type, $player="")
 {
   $cardTypes = CardTypes($cardID);
@@ -2212,35 +2219,6 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
   }
 }
 
-function HasDistantUnit($player) {
-  $allies = &GetAllies($player);
-  for($i=0; $i<count($allies); $i+=AllyPieces()) {
-    if($allies[$i+9] == 1) return true;
-  }
-  return false;
-}
-
-function SpiritBladeDispersion($player)
-{
-  if(IsDecisionQueueActive())
-  {
-    PrependDecisionQueue("SPECIFICCARD", $player, "SPIRITBLADEDISPERSION", 1);
-    PrependDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-    PrependDecisionQueue("MULTIZONEINDICES", $player, "MYCHAR:type=WEAPON");
-  }
-  else
-  {
-    AddDecisionQueue("MULTIZONEINDICES", $player, "MYCHAR:type=WEAPON");
-    AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-    AddDecisionQueue("SPECIFICCARD", $player, "SPIRITBLADEDISPERSION", 1);
-  }
-}
-
-function Chill($player, $amount=1)
-{
-
-}
-
 function MemoryCount($player) {
   $memory = &GetMemory($player);
   return count($memory)/MemoryPieces();
@@ -2330,6 +2308,8 @@ function Recover($player, $amount)
 // 4: My Hero only (For afflictions)
 function PlayRequiresTarget($cardID)
 {
+  global $currentPlayer;
+  if(DefinedTypesContains($cardID, "Upgrade", $currentPlayer)) return 2;
   switch($cardID)
   {
     case "8148673131": return 2;//Open Fire

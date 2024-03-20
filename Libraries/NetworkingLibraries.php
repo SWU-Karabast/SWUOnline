@@ -1602,6 +1602,9 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
         case "MEMORY":
           AddMemory($cardID, $currentPlayer, $from, "DOWN");
           break;
+        case "ATTACHTARGET":
+          MZAttach($currentPlayer, $target, $cardID);
+          break;
         default:
           break;
       }
