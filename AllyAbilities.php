@@ -155,7 +155,7 @@ function AllyLeavesPlayAbility($player, $index)
 
 function AllyDestroyedAbility($player, $index)
 {
-  global $mainPlayer;
+  global $mainPlayer, $initiativePlayer;
   $allies = &GetAllies($player);
   $cardID = $allies[$index];
   OnKillAbility();
@@ -172,6 +172,9 @@ function AllyDestroyedAbility($player, $index)
       AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:aspect=Villainy");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
       AddDecisionQueue("MZOP", $player, "READY", 1);
+      break;
+    case "7517208605"://Star Wing Scout
+      if($player == $initiativePlayer) { Draw($player); Draw($player); }
       break;
     default: break;
   }

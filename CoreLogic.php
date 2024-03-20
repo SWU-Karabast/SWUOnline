@@ -2187,7 +2187,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         Restore(4, $currentPlayer);
       }
       break;
-    break;
+    case "7257556541"://Bodhi Rook
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an opponent card to discard");
+      AddDecisionQueue("FINDINDICES", $otherPlayer, "HAND");
+      AddDecisionQueue("CHOOSETHEIRHAND", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MULTIREMOVEHAND", $otherPlayer, "-", 1);
+      AddDecisionQueue("ADDDISCARD", $otherPlayer, "HAND", 1);
+      break;
     default: break;
   }
 }
