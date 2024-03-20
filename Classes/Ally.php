@@ -9,10 +9,10 @@ class Ally {
   private $index;
 
   // Constructor
-  function __construct($MZIndex) {
+  function __construct($MZIndex, $player="") {
     global $currentPlayer;
     $mzArr = explode("-", $MZIndex);
-    $player = ($mzArr[0] == "MYALLY" ? $currentPlayer : ($currentPlayer == 1 ? 2 : 1));
+    if($player == "") $player = ($mzArr[0] == "MYALLY" ? $currentPlayer : ($currentPlayer == 1 ? 2 : 1));
     $this->index = $mzArr[1];
     $this->allies = &GetAllies($player);
     $this->playerID = $player;
