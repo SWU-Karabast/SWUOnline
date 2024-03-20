@@ -2137,10 +2137,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZREMOVE", $currentPlayer, "-", 1);
       break;
     case "3377409249"://Rogue Squadron Skirmisher
-      MZMoveCard($currentPlayer, "MYDISCARD:maxCost=2", "MYHAND", may:true);
+      if($from != "PLAY") MZMoveCard($currentPlayer, "MYDISCARD:maxCost=2", "MYHAND", may:true);
       break;
     case "5335160564":
-      if(GetHealth(1) >= 15 || GetHealth(2) >= 15) {
+      if($from != "PLAY" && (GetHealth(1) >= 15 || GetHealth(2) >= 15)) {
         $ally = new Ally("MYALLY-" . $index);
         $ally->Ready();
       }
@@ -2150,8 +2150,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       Draw($currentPlayer);
       break;
     case "6253392993"://Bright Hope
-      MZMoveCard($currentPlayer, "MYALLY:arena=Ground", "MYHAND", may:true);
-      AddDecisionQueue("DRAW", $currentPlayer, "-", 1);
+      if($from != "PLAY") {
+        MZMoveCard($currentPlayer, "MYALLY:arena=Ground", "MYHAND", may:true);
+        AddDecisionQueue("DRAW", $currentPlayer, "-", 1);
+      }
       break;
     case "6702266551"://Smoke and Cinders
       $hand = &GetHand(1);
@@ -2163,37 +2165,48 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       DealArcane(ArcaneDamage($cardID), 1, "PLAYCARD", $cardID, resolvedTarget: $target);
       break;
     case "8429598559"://Black One
-      BlackOne($currentPlayer);
+      if($from != "PLAY") BlackOne($currentPlayer);
       break;
     case "8986035098"://Viper Probe Droid
-      LookAtHand($currentPlayer == 1 ? 2 : 1);
+      if($from != "PLAY") LookAtHand($currentPlayer == 1 ? 2 : 1);
       break;
     case "9266336818"://Grand Moff Tarkin
-      AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE," . 5);
-      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
-      AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Imperial", 1);
-      AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
-      AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
-      AddDecisionQueue("OP", $currentPlayer, "REMOVECARD");
-      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
-      AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Imperial", 1);
-      AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
-      AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
-      AddDecisionQueue("OP", $currentPlayer, "REMOVECARD");
-      AddDecisionQueue("CHOOSEBOTTOM", $currentPlayer, "<-");
+      if($from != "PLAY") {
+        AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE," . 5);
+        AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+        AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Imperial", 1);
+        AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
+        AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
+        AddDecisionQueue("OP", $currentPlayer, "REMOVECARD");
+        AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+        AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Imperial", 1);
+        AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
+        AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
+        AddDecisionQueue("OP", $currentPlayer, "REMOVECARD");
+        AddDecisionQueue("CHOOSEBOTTOM", $currentPlayer, "<-");
+      }
       break;
     case "9459170449"://Cargo Juggernaut
-      if(SearchCount(SearchAllies($currentPlayer, aspect:"Vigilance")) > 0) {
+      if($from != "PLAY" && SearchCount(SearchAllies($currentPlayer, aspect:"Vigilance")) > 0) {
         Restore(4, $currentPlayer);
       }
       break;
     case "7257556541"://Bodhi Rook
-      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an opponent card to discard");
-      AddDecisionQueue("FINDINDICES", $otherPlayer, "HAND");
-      AddDecisionQueue("CHOOSETHEIRHAND", $currentPlayer, "<-", 1);
-      AddDecisionQueue("MULTIREMOVEHAND", $otherPlayer, "-", 1);
-      AddDecisionQueue("ADDDISCARD", $otherPlayer, "HAND", 1);
+      if($from != "PLAY") {
+        $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an opponent card to discard");
+        AddDecisionQueue("FINDINDICES", $otherPlayer, "HAND");
+        AddDecisionQueue("CHOOSETHEIRHAND", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MULTIREMOVEHAND", $otherPlayer, "-", 1);
+        AddDecisionQueue("ADDDISCARD", $otherPlayer, "HAND", 1);
+      }
+      break;
+    case "6028207223"://Pirated Starfighter
+      if($from != "PLAY") {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "BOUNCE", 1);
+      }
       break;
     default: break;
   }
