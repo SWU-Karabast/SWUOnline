@@ -74,14 +74,22 @@ function CardTalent($cardID)
 function RestoreAmount($cardID, $player, $index)
 {
   global $initiativePlayer;
+  $amount = 0;
+  $ally = new Ally("MYALLY-" . $index, $player);
+  $subcards = $ally->GetSubcards();
+  for($i=0; $i<count($subcards); ++$i)
+  {
+    if($subcards[$i] == "8788948272") $amount += 2;
+  }
   switch($cardID)
   {
-    case "0074718689": return 1;
-    case "1081012039": return 2;
-    case "1611702639": return $initiativePlayer == $player ? 2 : 0;
-    case "4405415770": return 2;
-    default: return 0;
+    case "0074718689": $amount += 1; break;
+    case "1081012039": $amount += 2; break;
+    case "1611702639": $amount += $initiativePlayer == $player ? 2 : 0; break;
+    case "4405415770": $amount += 2; break;
+    default: break;
   }
+  return $amount;
 }
 
 function RaidAmount($cardID, $player, $index)

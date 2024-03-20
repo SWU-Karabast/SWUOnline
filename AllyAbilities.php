@@ -260,6 +260,8 @@ function AllyDamagePrevention($player, $index, $damage)
 function AllyAttackAbilities($attackID)
 {
   global $mainPlayer, $combatChainState, $CCS_AttackUniqueID;
+  $index = SearchAlliesForUniqueID($combatChainState[$CCS_AttackUniqueID], $mainPlayer);
+  Restore(RestoreAmount($attackID, $mainPlayer, $index), $mainPlayer);
   $allies = &GetAllies($mainPlayer);
   for($i = 0; $i < count($allies); $i += AllyPieces()) {
     switch($allies[$i]) {

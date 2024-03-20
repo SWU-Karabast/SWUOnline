@@ -90,6 +90,10 @@ class Ally {
     $this->AddHealth(CardHP($cardID));
   }
 
+  function GetSubcards() {
+    return explode(",", $this->allies[$this->index + 4]);
+  }
+
 }
 
 function LastAllyIndex($player) {
