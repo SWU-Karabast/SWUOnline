@@ -2236,6 +2236,15 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddCurrentTurnEffect($cardID, $currentPlayer);
       AddCurrentTurnEffect($cardID, $otherPlayer);
       break;
+    case "7596515127"://Academy Walker
+      if($from != "PLAY") {
+        $allies = &GetAllies($currentPlayer);
+        for($i=0; $i<count($allies); $i+=AllyPieces()) {
+          $ally = new Ally("MYALLY-" . $i);
+          if($ally->IsDamaged()) $ally->Attach("2007868442");//Experience token
+        }
+      }
+      break;
     default: break;
   }
 }

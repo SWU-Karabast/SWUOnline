@@ -47,7 +47,12 @@ class Ally {
   function MaxHealth() {
     $max = CardHP($this->CardID());
     $subcards = $this->GetSubcards();
-    for($i=0; $i<count($subcards); ++$i) $max += CardHP($subcards[$i]);
+    for($i=0; $i<count($subcards); ++$i) if($subcards[$i] != "-") $max += CardHP($subcards[$i]);
+    return $max;
+  }
+
+  function IsDamaged() {
+    return $this->Health() < $this->MaxHealth();
   }
 
   function CurrentPower() {

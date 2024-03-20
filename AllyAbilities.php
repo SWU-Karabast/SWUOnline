@@ -384,7 +384,6 @@ function AllyBeginEndTurnEffects()
   for($i = count($mainAllies) - AllyPieces(); $i >= 0; $i -= AllyPieces()) {
     if($mainAllies[$i+1] != 0) {
       if(HasVigor($mainAllies[$i], $mainPlayer, $i)) $mainAllies[$i+1] = 2;
-      $mainAllies[$i+2] = AllyHealth($mainAllies[$i], $mainPlayer) + $mainAllies[$i+7];
       $mainAllies[$i+3] = 0;
       $mainAllies[$i+8] = 1;
       $mainAllies[$i+9] = 0;//Reset distant -> normal
@@ -392,23 +391,13 @@ function AllyBeginEndTurnEffects()
     }
     switch($mainAllies[$i])
     {
-      case "mA4n0Z7BQz"://Mistbound Watcher
-        if(IsClassBonusActive($mainPlayer, "MAGE")) PlayAura("ENLIGHTEN", $mainPlayer);
-        break;
-      case "wFH1kBLrWh"://Arcane Elemental
-        if(SearchCurrentTurnEffects("wFH1kBLrWh", $mainPlayer))
-        {
-          RemoveAlly($mainPlayer, $i);
-          BanishCardForPlayer("wFH1kBLrWh", $mainPlayer, "PLAY");
-        }
-        break;
+      
       default: break;
     }
   }
   $defAllies = &GetAllies($defPlayer);
   for($i = 0; $i < count($defAllies); $i += AllyPieces()) {
     if($defAllies[$i+1] != 0) {
-      $defAllies[$i+2] = AllyHealth($defAllies[$i], $defPlayer) + $defAllies[$i + 7];
       $defAllies[$i+8] = 1;
     }
   }
