@@ -645,6 +645,10 @@ function LoseHealth($amount, $player)
 
 function Restore($amount, $player)
 {
+  if(SearchCurrentTurnEffects("7533529264", $player)) {
+    WriteLog("<span style='color:red;'>Wolffe prevents the healing</span>");
+    return false;
+  }
   $health = &GetHealth($player);
   WriteLog("Player " . $player . " gained " . $amount . " health.");
   $health -= $amount;
@@ -2219,13 +2223,18 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $ally = new Ally($target);
       $ally->Attach("8752877738");
       break;
-    case "8679831560"://Restore
+    case "8679831560"://Repair
       $mzArr = explode("-", $target);
       if($mzArr[0] == "MYCHAR") Restore(3, $currentPlayer);
       else if($mzArr[0] == "MYALLY") {
         $ally = new Ally($target);
         $ally->Heal(3);
       }
+      break;
+    case "7533529264"://Wolffe
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      AddCurrentTurnEffect($cardID, $currentPlayer);
+      AddCurrentTurnEffect($cardID, $otherPlayer);
       break;
     default: break;
   }
