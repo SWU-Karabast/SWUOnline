@@ -2245,6 +2245,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         }
       }
       break;
+    case "7202133736"://Waylay
+      if($target != "-") {
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, $target);
+        AddDecisionQueue("MZOP", $currentPlayer, "BOUNCE", 1);
+      }
     default: break;
   }
 }
@@ -2342,9 +2347,11 @@ function PlayRequiresTarget($cardID)
   if(DefinedTypesContains($cardID, "Upgrade", $currentPlayer)) return 2;
   switch($cardID)
   {
+    case "8679831560": return 2;//Repair
+    //Only allies v
     case "8148673131": return 2;//Open Fire
     case "8981523525": return 2;//Moment of Peace
-    case "8679831560": return 2;//Repair
+    case "7202133736": return 2;//Waylay
     default: return -1;
   }
 }
