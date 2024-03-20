@@ -121,6 +121,9 @@ function HasSentinel($cardID, $player, $index)
       return SearchCount(SearchAllies($player, aspect:"Cunning")) > 1;
     case "3138552659"://Homestead Militia
       return NumResources($player) >= 6;
+    case "7622279662"://Vigilant Honor Guards
+      $ally = new Ally("MYALLY-" . $index, $player);
+      return !$ally->IsDamaged();
     default: return false;
   }
 }
