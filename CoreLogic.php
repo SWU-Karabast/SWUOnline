@@ -2215,6 +2215,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "BOUNCE", 1);
       }
       break;
+    case "8981523525"://Moment of Peace
+      $ally = new Ally($target);
+      $ally->Attach("8752877738");
+      break;
     default: break;
   }
 }
@@ -2313,6 +2317,7 @@ function PlayRequiresTarget($cardID)
   switch($cardID)
   {
     case "8148673131": return 2;//Open Fire
+    case "8981523525": return 2;//Moment of Peace
     default: return -1;
   }
 }
