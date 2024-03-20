@@ -2250,6 +2250,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("PASSPARAMETER", $currentPlayer, $target);
         AddDecisionQueue("MZOP", $currentPlayer, "BOUNCE", 1);
       }
+      break;
+    case "7485151088"://Search your feelings
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYDECK");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZREMOVE", $currentPlayer, "-", 1);
+      AddDecisionQueue("MULTIADDHAND", $currentPlayer, "-", 1);
+      AddDecisionQueue("SHUFFLEDECK", $currentPlayer, "-");
+      break;
     default: break;
   }
 }
