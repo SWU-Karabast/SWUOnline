@@ -291,6 +291,11 @@ function AllyPlayCardAbility($cardID, $player="")
           DealArcane(2, 2, "TRIGGER", "0052542605", player:$player);
         }
         break;
+      case "0961039929"://Colonel Yularen
+        if(AspectContains($cardID, "Command", $player)) {
+          Restore(1, $player);
+        }
+        break;
       default: break;
     }
   }
