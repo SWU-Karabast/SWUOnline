@@ -1887,40 +1887,7 @@ function SelfCostModifier($cardID)
   global $currentPlayer, $CS_NumAttacks, $CS_LastAttack;
   $modifier = 0;
   switch($cardID) {
-    case "145y6KBhxe": $modifier += (IsClassBonusActive($currentPlayer, "MAGE") ? -1 : 0); break;//Focused Flames
-    case "RIVahUIQVD": $modifier += (IsClassBonusActive($currentPlayer, "MAGE") ? -2 : 0); break;//Fireball
-    case "MwXulmKsIg": $modifier += (IsClassBonusActive($currentPlayer, "TAMER") ? -1 : 0); break;//Song of Return
-    case "DBJ4DuLABr": $modifier += (IsClassBonusActive($currentPlayer, "ASSASSIN") ? -2 : 0); break;//Shroud in Mist
-    case "Uxn14UqyQg": $modifier += (IsClassBonusActive($currentPlayer, "ASSASSIN") ? -2 : 0); break;//Immolation Trap
-    case "rPpLwLPGaL": $modifier += (IsClassBonusActive($currentPlayer, "WARRIOR") ? -1*SearchCount(SearchAllies($currentPlayer, subtype:"HUMAN")) : 0); break;//Phalanx Captain
-    case "k71PE3clOI": $modifier += GetClassState($currentPlayer, $CS_NumAttacks) > 0 ? -2 : 0; break;//Inspiring Call
-    case "wFH1kBLrWh": $modifier -= (IsClassBonusActive($currentPlayer, "MAGE") ? SearchBanish($currentPlayer, element:"ARCANE") : 0); break;//Arcane Elemental
-    case "RUqtU0Lczf": $modifier -= (IsClassBonusActive($currentPlayer, "MAGE") ? 1 : 0); break;//Spellshield: Arcane
-    case "g7uDOmUf2u": $modifier += (SearchCount(SearchCharacter($currentPlayer, subtype:"SWORD")) > 0 ? -1 : 0); break;//Deflecting Edge
-    case "wPKxvzTmqq": $modifier += (DelimStringContains($additionalCosts, "PREPARE") ? -5 : 0); //Ensnaring Fumes
-    case "rxxwQT054x": $modifier += (GetClassState($currentPlayer, $CS_LastAttack) == "NA" ? -2 : 0);//Command the Hunt
-    case "CgyJxpEgzk": $modifier += (GetClassState($currentPlayer, $CS_AtksWWeapon) > 0 || GetClassState($currentPlayer, $CS_NumAttackCards) > 0 ? -2 : 0);
-    case "2ugmnmp5af": $modifier += (IsClassBonusActive($currentPlayer, "RANGER") ? -1 : 0); break;//Take Cover
-    case "5tlzsmw3rr": $modifier -= (IsClassBonusActive($currentPlayer, "GUARDIAN") ? SearchCount(SearchAura($currentPlayer, "DOMAIN")) : 0); break;//Summon Sentinels
-    case "215upufyoz": $modifier -= (IsClassBonusActive($currentPlayer, "CLERIC") ? 2 : 0); break;//Tether in Flames
-    case "99sx6q3p6i": $modifier -= (IsClassBonusActive($currentPlayer, "CLERIC") ? 1 : 0); break;//Spellshield: Wind
-    case "ao8bls6g7x": $modifier -= (IsClassBonusActive($currentPlayer, "CLERIC") ? 1 : 0); break;//Healing Aura
-    case "huqj5bbae3": $modifier -= (IsClassBonusActive($currentPlayer, "GUARDIAN") && CharacterLevel($currentPlayer) >= 2 ? 2 : 0); break;//Winds of Retribution
-    case "kvoqk1l75t": $modifier -= (IsClassBonusActive($currentPlayer, "GUARDIAN") ? 2 : 0); break;//Heavy Swing
-    case "xhs5jwsl7d": $modifier -= (IsClassBonusActive($currentPlayer, "CLERIC") ? 1 : 0); break;//Enchaining Gale
-    case "fzcyfrzrpl": $modifier -= (IsClassBonusActive($currentPlayer, "GUARDIAN") ? 1 : 0); break;//Heatwave Generator
-    case "lq2kkvoqk1": $modifier -= (IsClassBonusActive($currentPlayer, "CLERIC") ? 1 : 0); break;//Necklace of Foresight
-    case "ht2tsn0ye3": $modifier -= (IsClassBonusActive($currentPlayer, "CLERIC") ? 1 : 0); break;//Meltdown
-    case "ls6g7xgwve": $modifier -= (IsClassBonusActive($currentPlayer, "MAGE") ? 1 : 0); break;//Excoriate
-    case "k2c7wklzjm": $modifier -= (SearchCount(SearchItems($currentPlayer, subtype:"SHIELD")) > 0 ? 2 : 0); break;//Frigid Bash
-    case "mxqsm4o98v"://Seasprite Diver
-      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
-      $oppGY = &GetDiscard($otherPlayer);
-      $modifier -= (count($oppGY)/DiscardPieces() >= 4 ? 1 : 0);
-      break;
-    case "nmp5af098k": $modifier -= (IsClassBonusActive($currentPlayer, "CLERIC") ? 2 : 0); break;//Spellshield: Astra
-    case "o7eanl1gxr": $modifier -= (SearchCount(SearchItems($currentPlayer, subtype:"SHIELD")) > 0 ? 1 : 0); break;//Diffusive Block
-    case "rqtjot4nmx": $modifier -= (IsClassBonusActive($currentPlayer, "CLERIC") ? 1 : 0); break;//Scavenge the Distillery
+
     default: break;
   }
   return $modifier;
@@ -2312,6 +2279,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "6663619377"://AT-AT Suppressor
       ExhaustAllAllies("Ground", 1);
       ExhaustAllAllies("Ground", 2);
+      break;
+    case "6931439330"://The Ghost
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to give a shield");
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Spectre");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "ADDSHIELD", 1);
       break;
     default: break;
   }

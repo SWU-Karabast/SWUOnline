@@ -352,6 +352,10 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $ally = new Ally($lastResult);
           $ally->Attach("2007868442");//Experience token
           break;
+        case "ADDSHIELD":
+          $ally = new Ally($lastResult);
+          $ally->Attach("8752877738");//Shield Token
+          break;
         case "ADDDURABILITY":
           $mzArr = explode("-", $lastResult);
           $zone = &GetMZZone($player, $mzArr[0]);
