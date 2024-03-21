@@ -108,6 +108,7 @@ function RaidAmount($cardID, $player, $index)
 
 function HasSentinel($cardID, $player, $index)
 {
+  global $initiativePlayer;
   $ally = new Ally("MYALLY-" . $index, $player);
   $subcards = $ally->GetSubcards();
   for($i=0; $i<count($subcards); ++$i)
@@ -131,6 +132,8 @@ function HasSentinel($cardID, $player, $index)
     case "7622279662"://Vigilant Honor Guards
       $ally = new Ally("MYALLY-" . $index, $player);
       return !$ally->IsDamaged();
+    case "5879557998"://Baze Melbus
+      return $initiativePlayer == $player;
     default: return false;
   }
 }
@@ -142,6 +145,7 @@ function HasGrit($cardID, $player, $index)
     case "5335160564":
     case "9633997311":
     case "8098293047":
+    case "5879557998":
       return true;
     default: return false;
   }
