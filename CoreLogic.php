@@ -2293,6 +2293,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("SPECIFICCARD", $currentPlayer, "FORCETHROW", 1);
       }
       break;
+    case "1746195484"://Jedha Agitator
+      if($from == "PLAY" && HasLeader($currentPlayer)) DealArcane(2, 2, "PLAYCARD", $cardID); 
+      break;
     default: break;
   }
 }
