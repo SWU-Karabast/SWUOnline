@@ -2306,6 +2306,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddCurrentTurnEffect($cardID, $currentPlayer);
       }
       break;
+    case "6472095064"://Vanquish
+      MZChooseAndDestroy($currentPlayer, "THEIRALLY");
+      break;
     default: break;
   }
 }
