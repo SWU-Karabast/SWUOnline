@@ -30,7 +30,9 @@ function SpecificCardLogic($player, $card, $lastResult)
   global $dqVars, $CS_DamageDealt;
   switch($card)
   {
-
+    case "FORCETHROW":
+      DealArcane(CardCost($lastResult), 2, "PLAYCARD", "1705806419");
+      break;
     default: return "";
   }
 }

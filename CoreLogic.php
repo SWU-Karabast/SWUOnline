@@ -2272,17 +2272,26 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "0867878280"://It Binds All Things
       $ally = new Ally($target);
       $ally->Heal(3);
-      if(SearchCount(SearchAllies($currentPlayer, definedType:"Leader"))) {
+      if(HasLeader($currentPlayer)) {
         DealArcane($damage, 2, "PLAYCARD", $cardID);
       }
       break;
     case "1021495802"://Cantina Bouncer
-      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
-      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-      AddDecisionQueue("MZOP", $currentPlayer, "BOUNCE", 1);
+      if($from != "PLAY") {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "BOUNCE", 1);
+      }
       break;
     case "1353201082"://Superlaser Blast
       DestroyAllAllies();
+      break;
+    case "1705806419"://Force Throw
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      PummelHit($otherPlayer);
+      if(SearchCount(SearchAllies($currentPlayer, trait:"Force")) > 0) {
+        AddDecisionQueue("SPECIFICCARD", $currentPlayer, "FORCETHROW", 1);
+      }
       break;
     default: break;
   }

@@ -90,6 +90,10 @@ function AddAfterResolveEffect($cardID, $player, $from = "", $uniqueID = -1)
   array_push($afterResolveEffects, CurrentTurnEffectUses($cardID));
 }
 
+function HasLeader($player) {
+  return SearchCount(SearchAllies($player, definedType:"Leader")) > 0;
+}
+
 function CopyCurrentTurnEffectsFromAfterResolveEffects()
 {
   global $currentTurnEffects, $afterResolveEffects;
