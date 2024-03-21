@@ -2296,6 +2296,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "1746195484"://Jedha Agitator
       if($from == "PLAY" && HasLeader($currentPlayer)) DealArcane(2, 2, "PLAYCARD", $cardID); 
       break;
+    case "2587711125"://Disarm
+      $ally = new Ally($target);
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, $ally->UniqueID());
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $ally->PlayerID(), "2587711125,HAND");
+      break;
     default: break;
   }
 }
@@ -2418,6 +2423,7 @@ function PlayRequiresTarget($cardID)
     case "7202133736": return 2;//Waylay
     case "0827076106": return 2;//Admiral Ackbar
     case "0867878280": return 2;//It Binds All Things
+    case "2587711125": return 2;//Disarm
     default: return -1;
   }
 }

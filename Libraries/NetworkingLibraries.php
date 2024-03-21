@@ -995,8 +995,12 @@ function CleanUpCombatEffects($weaponSwap=false)
 
 function BeginRoundPass()
 {
-  global $initiativeTaken;
+  global $initiativeTaken, $mainPlayer, $currentTurnEffects, $nextTurnEffects;
   WriteLog("Both players have passed; ending the round.");
+  LogEndTurnStats($mainPlayer);
+  CurrentEffectEndTurnAbilities();
+  $currentTurnEffects = $nextTurnEffects;
+  $nextTurnEffects = [];
   $initiativeTaken = 0;
   EndTurnProcedure(1);
   EndTurnProcedure(2);
@@ -1081,8 +1085,6 @@ function FinalizeTurn()
     }
   }
 
-  LogEndTurnStats($mainPlayer);
-  CurrentEffectEndTurnAbilities();
   AuraEndTurnAbilities();
   AllyEndTurnAbilities();
   MainCharacterEndTurnAbilities();
@@ -1138,8 +1140,6 @@ function FinalizeTurn()
   $turn[3] = "";
   $actionPoints = 1;
   $combatChain = []; //TODO: Add cards to the discard pile?...
-  $currentTurnEffects = $nextTurnEffects;
-  $nextTurnEffects = [];
   for ($i = 0; $i < count($currentTurnEffects); $i += CurrentTurnEffectPieces()) {
     $effectCardID = explode("-", $currentTurnEffects[$i]);
     WriteLog("Start of turn effect for " . CardLink($effectCardID[0], $effectCardID[0]) . " is now active.");

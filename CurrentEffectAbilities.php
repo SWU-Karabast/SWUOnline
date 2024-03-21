@@ -32,7 +32,7 @@ function EffectAttackModifier($cardID)
   if(count($params) > 1) $subparam = $params[1];
   switch($cardID)
   {
-
+    case "2587711125": return -4;//Disarm
     default: return 0;
   }
 }
@@ -390,9 +390,7 @@ function CurrentEffectEndTurnAbilities()
       AddNextTurnEffect($currentTurnEffects[$i], $currentTurnEffects[$i + 1]);
     }
     switch($currentTurnEffects[$i]) {
-      case "wzh973fdt8"://Develop Mana
-        AddNextTurnEffect($currentTurnEffects[$i], $currentTurnEffects[$i + 1]);
-        break;
+      
       default: break;
     }
     if($remove) RemoveCurrentTurnEffect($i);
@@ -408,40 +406,7 @@ function IsCombatEffectActive($cardID)
   $cardID = $effectArr[0];
   switch($cardID)
   {
-    case "dZ960Hnkzv": return IsAlly($attackID);
-    case "FCbKYZcbNq": return true;
-    case "4hbA9FT56L": return IsAlly($attackID);
-    case "At1UNRG7F0": return true;//Devastating Blow
-    case "CvvgJR4fNa": return true;//Patient Rogue
-    case "W1vZwOXfG3": return true;//Embertail Squirrel
-    case "rPpLwLPGaL": return true;//Phalanx Captain
-    case "k71PE3clOI": return IsAlly($attackID);//Inspiring Call
-    case "Huh1DljE0j": return true;//Second Wind
-    case "IAkuSSnzYB": return true;//Banner Knight
-    case "XMb6pSHFJg": return true;//Embersong
-    case "qyQLlDYBlr": return true;//Ornamental Greatsword
-    case "OofVX5hX8X": return true;//Poisoned Coating Oil
-    case "TJTeWcZnsQ": return !IsAlly($attackID);//Lorraine, Blademaster
-    case "F1t18omUlx": return true;//Beastbond Paws
-    case "fMv7tIOZwLAttack": return IsAlly($attackID);//Aqueous Enchanting
-    case "GRkBQ1Uvir": return true;//Ignited Strike
-    case "mj3WSrghUH": return true;//Poised Strike
-    case "XLbCBxla8K": return true;//Thousand Refractions
-    case "qufoIF014c": return true;//Gleaming Cut
-    case "5qWWpkgQLl": return true;//Coup de Grace
-    case "2Ch1Gp3jEL": return true;//Corhazi Lightblade
-    case "rxxwQT054x": return true;//Command the Hunt
-    case "vcZSHNHvKX": return true;//Spirit Blade: Ghost Strike
-    case "7t9m4muq2r": return true;//Thieving Cut
-    case "5kt3q2svd5": return true;//Amorphous Strike
-    case "659ytyj2s3": return true;//Imperious Highlander
-    case "i1f0ht2tsn": return IsAlly($attackID);//Strategic Warfare
-    case "huqj5bbae3": return IsAlly($attackID);//Winds of Retribution
-    case "r0zadf9q1w": return true;//Conjure Downpour
-    case "fzcyfrzrpl": return true;//Heatwave Generator
-    case "44vm5kt3q2": return true;//Battlefield Spotter
-    case "lx6xwr42i6": return true;//Windrider Invoker
-    case "n0wpbhigka": return true;//Wand of Frost
+    case "2587711125": return true;//Disarm
     default: return false;
   }
 }
@@ -450,23 +415,8 @@ function IsCombatEffectPersistent($cardID)
 {
   global $currentPlayer;
   $effectArr = explode(",", $cardID);
-  $cardID = ShiyanaCharacter($effectArr[0]);
   switch($cardID) {
-    case "dZ960Hnkzv": return true;
-    case "4hbA9FT56L": return true;
-    case "CvvgJR4fNa": return true;//Patient Rogue
-    case "W1vZwOXfG3": return true;//Embertail Squirrel
-    case "k71PE3clOI": return true;//Inspiring Call
-    case "XMb6pSHFJg": return true;//Embersong
-    case "qyQLlDYBlr": return true;//Ornamental Greatsword
-    case "F1t18omUlx": return true;//Beastbond Paws
-    case "fMv7tIOZwLAttack": return true;//Aqueous Enchanting
-    case "rxxwQT054x": return true;//Command the Hunt
-    case "vcZSHNHvKX": return true;//Spirit Blade: Ghost Strike
-    case "i1f0ht2tsn": return true;//Strategic Warfare
-    case "huqj5bbae3": return true;//Winds of Retribution
-    case "r0zadf9q1w": return true;//Conjure Downpour
-    case "n0wpbhigka": return true;//Wand of Frost
+    case "2587711125": return true;//Disarm
     default:
       return false;
   }
