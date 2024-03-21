@@ -2276,6 +2276,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         DealArcane($damage, 2, "PLAYCARD", $cardID);
       }
       break;
+    case "1021495802"://Cantina Bouncer
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "BOUNCE", 1);
+      break;
     default: break;
   }
 }
