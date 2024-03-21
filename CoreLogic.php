@@ -2258,6 +2258,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MULTIADDHAND", $currentPlayer, "-", 1);
       AddDecisionQueue("SHUFFLEDECK", $currentPlayer, "-");
       break;
+    case "0176921487"://Power of the Dark Side
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      MZChooseAndDestroy($otherPlayer, "MYALLY");
+      break;
     default: break;
   }
 }
