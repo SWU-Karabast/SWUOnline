@@ -97,6 +97,10 @@ class Ally {
   function Ready() {
     $this->allies[$this->index+1] = 2;
   }
+  
+  function Exhaust() {
+    $this->allies[$this->index+1] = 1;
+  }
 
   function AddBuffCounter() {
     ++$this->allies[$this->index+2];

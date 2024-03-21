@@ -2309,6 +2309,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "6472095064"://Vanquish
       MZChooseAndDestroy($currentPlayer, "THEIRALLY");
       break;
+    case "6663619377"://AT-AT Suppressor
+      ExhaustAllAllies("Ground", 1);
+      ExhaustAllAllies("Ground", 2);
+      break;
     default: break;
   }
 }
@@ -2326,6 +2330,18 @@ function MemoryRevealRandom($player, $returnIndex=false)
   $toReveal = $memory[$index];
   $wasRevealed = RevealCards($toReveal);
   return $wasRevealed ? ($returnIndex ? $toReveal : $index) : ($returnIndex ? -1 : "");
+}
+
+function ExhaustAllAllies($arena, $player)
+{
+  $allies = &GetAllies($player);
+  for($i=0; $i<count($allies); $i+=AllyPieces())
+  {
+    if(CardArenas($allies[$i]) == $arena) {
+      $ally = new Ally("MYALLY-" . $i);
+      $ally->Exhaust();
+    }
+  }
 }
 
 function DestroyAllAllies()
