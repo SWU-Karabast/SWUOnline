@@ -2281,6 +2281,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "BOUNCE", 1);
       break;
+    case "1353201082"://Superlaser Blast
+      DestroyAllAllies();
+      break;
     default: break;
   }
 }
@@ -2298,6 +2301,22 @@ function MemoryRevealRandom($player, $returnIndex=false)
   $toReveal = $memory[$index];
   $wasRevealed = RevealCards($toReveal);
   return $wasRevealed ? ($returnIndex ? $toReveal : $index) : ($returnIndex ? -1 : "");
+}
+
+function DestroyAllAllies()
+{
+  global $currentPlayer;
+  $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+  $theirAllies = &GetAllies($otherPlayer);
+  for($i=count($theirAllies) - AllyPieces(); $i>=0; $i-=AllyPieces())
+  {
+    DestroyAlly($otherPlayer, $i);
+  }
+  $allies = &GetAllies($currentPlayer);
+  for($i=count($allies) - AllyPieces(); $i>=0; $i-=AllyPieces())
+  {
+    DestroyAlly($currentPlayer, $i);
+  }
 }
 
 function DamagePlayerAllies($player, $damage, $source, $type)
@@ -2328,6 +2347,8 @@ function DamageAllAllies($amount, $source, $alsoRest=false, $alsoFreeze=false)
     DealArcane($amount, source:$source, resolvedTarget:"MYALLY-$i");
   }
 }
+
+
 
 function IsHarmonizeActive($player)
 {
