@@ -33,6 +33,13 @@ function SpecificCardLogic($player, $card, $lastResult)
     case "FORCETHROW":
       DealArcane(CardCost($lastResult), 2, "PLAYCARD", "1705806419");
       break;
+    case "REINFORCEMENTWALKER":
+      if($lastResult == "YES") Draw($player);
+      else {
+        Mill($player, 1);
+        Restore(3, $player);
+      }
+      break;
     default: return "";
   }
 }

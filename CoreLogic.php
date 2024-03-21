@@ -2286,6 +2286,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "ADDSHIELD", 1);
       break;
+    case "8691800148"://Reinforcement Walker
+      AddDecisionQueue("FINDINDICES", $currentPlayer, "TOPDECK");
+      AddDecisionQueue("DECKCARDS", $currentPlayer, "<-", 1);
+      AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
+      AddDecisionQueue("YESNO", $currentPlayer, "if you want to draw", 1);
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "REINFORCEMENTWALKER", 1);
+      break;
     default: break;
   }
 }
