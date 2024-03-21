@@ -286,8 +286,10 @@ function AllyPlayCardAbility($cardID, $player="")
   {
     switch($allies[$i])
     {
-      case "aKgdkLSBza"://Wilderness Harpist
-        if(SubtypeContains($cardID, "HARMONY") || SubtypeContains($cardID, "MELODY")) AddCurrentTurnEffect("aKgdkLSBza", $player);
+      case "0052542605"://Bossk
+        if(DefinedTypesContains($cardID, "Event", $player)) {
+          DealArcane(2, 2, "TRIGGER", "0052542605", player:$player);
+        }
         break;
       default: break;
     }
