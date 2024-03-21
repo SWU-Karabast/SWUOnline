@@ -348,6 +348,10 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         case "ENDCOMBAT": MZEndCombat($player, $lastResult); return $lastResult;
         case "HEALALLY": MZHealAlly($player, $lastResult); return $lastResult;
         case "CHANGEATTACKTARGET": SetAttackTarget($lastResult); return $lastResult;
+        case "ADDEXPERIENCE":
+          $ally = new Ally($lastResult);
+          $ally->Attach("2007868442");//Experience token
+          break;
         case "ADDDURABILITY":
           $mzArr = explode("-", $lastResult);
           $zone = &GetMZZone($player, $mzArr[0]);
