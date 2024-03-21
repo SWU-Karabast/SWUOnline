@@ -100,24 +100,11 @@ function CurrentEffectCostModifiers($cardID, $from)
     $remove = false;
     if($currentTurnEffects[$i + 1] == $currentPlayer) {
       switch($currentTurnEffects[$i]) {
-        case "6e7lRnczfL"://Horn of Beastcalling
-          if(SubtypeContains($cardID, "BEAST")) { $costModifier -= 3; $remove = true; }
-          break;
-        case "EBWWwvSxr3"://Channeling Stone
-          $costModifier -= 2;
-          break;
-        case "llQe0cg4xJ"://Orb of Choking Fumes
-          $costModifier += 1;
-          break;
-        case "wPKxvzTmqq"://Ensnaring Fumes
-          $costModifier -= 5;
-          $remove = true;
-          break;
-        case "ir99sx6q3p"://Plea for Peace
-          if(CardTypeContains($cardID, "AA", $currentPlayer) || ($from == "PLAY" && IsAlly($cardID, $currentPlayer))) $costModifier += 1;
-          break;
-        case "sbierp5k1v"://Steady Verse
-          if(SubtypeContains($cardID, "HARMONY")) { $costModifier -= 1; $remove = true; }
+        case "5707383130"://Bendu
+          if(!AspectContains($cardID, "Heroism", $currentPlayer) && !AspectContains($cardID, "Villainy", $currentPlayer)) {
+            $costModifier -= 2;
+            $remove = true;
+          }
           break;
         default: break;
       }

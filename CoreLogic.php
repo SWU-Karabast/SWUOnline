@@ -2301,6 +2301,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, $ally->UniqueID());
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $ally->PlayerID(), "2587711125,HAND");
       break;
+    case "5707383130"://Bendu
+      if($from == "PLAY") {
+        AddCurrentTurnEffect($cardID, $currentPlayer);
+      }
+      break;
     default: break;
   }
 }
