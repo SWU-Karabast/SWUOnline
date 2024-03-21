@@ -190,6 +190,12 @@ function HasShielded($cardID, $player, $index)
 
 function HasSaboteur($cardID, $player, $index)
 {
+  $ally = new Ally("MYALLY-" . $index, $player);
+  $subcards = $ally->GetSubcards();
+  for($i=0; $i<count($subcards); ++$i)
+  {
+    if($subcards[$i] == "0797226725") return true;//Infiltrator's Skill
+  }
   switch($cardID)
   {
     case "1017822723":
