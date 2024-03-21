@@ -2262,6 +2262,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
       MZChooseAndDestroy($otherPlayer, "MYALLY");
       break;
+    case "0827076106"://Admiral Ackbar
+      $targetCard = GetMZCard($currentPlayer, $target);
+      $damage = SearchCount(SearchAllies($currentPlayer, arena:CardArenas($targetCard)));
+      DealArcane($damage, 1, "PLAYCARD", $cardID, resolvedTarget: $target);
+      break;
     default: break;
   }
 }
@@ -2364,6 +2369,7 @@ function PlayRequiresTarget($cardID)
     case "8148673131": return 2;//Open Fire
     case "8981523525": return 2;//Moment of Peace
     case "7202133736": return 2;//Waylay
+    case "0827076106": return 2;//Admiral Ackbar
     default: return -1;
   }
 }

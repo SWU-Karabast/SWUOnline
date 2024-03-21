@@ -87,6 +87,7 @@ function RestoreAmount($cardID, $player, $index)
     case "1081012039": $amount += 2; break;
     case "1611702639": $amount += $initiativePlayer == $player ? 2 : 0; break;
     case "4405415770": $amount += 2; break;
+    case "0827076106": $amount += 1; break;
     default: break;
   }
   return $amount;
