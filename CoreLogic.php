@@ -2263,9 +2263,18 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       MZChooseAndDestroy($otherPlayer, "MYALLY");
       break;
     case "0827076106"://Admiral Ackbar
-      $targetCard = GetMZCard($currentPlayer, $target);
-      $damage = SearchCount(SearchAllies($currentPlayer, arena:CardArenas($targetCard)));
-      DealArcane($damage, 1, "PLAYCARD", $cardID, resolvedTarget: $target);
+      if($from != "PLAY") {
+        $targetCard = GetMZCard($currentPlayer, $target);
+        $damage = SearchCount(SearchAllies($currentPlayer, arena:CardArenas($targetCard)));
+        DealArcane($damage, 1, "PLAYCARD", $cardID, resolvedTarget: $target);
+      }
+      break;
+    case "0867878280"://It Binds All Things
+      $ally = new Ally($target);
+      $ally->Heal(3);
+      if(SearchCount(SearchAllies($currentPlayer, definedType:"Leader"))) {
+        DealArcane($damage, 2, "PLAYCARD", $cardID);
+      }
       break;
     default: break;
   }
@@ -2370,6 +2379,7 @@ function PlayRequiresTarget($cardID)
     case "8981523525": return 2;//Moment of Peace
     case "7202133736": return 2;//Waylay
     case "0827076106": return 2;//Admiral Ackbar
+    case "0867878280": return 2;//It Binds All Things
     default: return -1;
   }
 }
