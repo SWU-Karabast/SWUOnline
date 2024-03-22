@@ -1279,8 +1279,12 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       EquipCard($player, $parameter);
       return "";
     case "GETTARGETOFATTACK":
+      global $CCS_WeaponIndex, $CS_PlayIndex;
       $params = explode(",", $parameter);
-      if(CardType($params[0]) == "AA" || GetResolvedAbilityType($params[0], $params[1]) == "AA") GetTargetOfAttack($params[0]);
+      if(CardType($params[0]) == "AA" || GetResolvedAbilityType($params[0], $params[1]) == "AA") {
+        $combatChainState[$CCS_WeaponIndex] = GetClassState($player, $CS_PlayIndex);
+        GetTargetOfAttack($params[0]);
+      }
       return $lastResult;
     case "BANISHRANDOMMEMORY":
       BanishRandomMemory($currentPlayer);

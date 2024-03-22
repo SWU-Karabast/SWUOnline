@@ -1426,19 +1426,19 @@ function GetTargetOfAttack($attackID)
     $combatChainState[$CCS_AttackTarget] = "THEIRCHAR-0";
     return;
   }
-  $numTargets = 1;
   $targets = "THEIRCHAR-0";
-  $isTrueSightActive = IsTrueSightActive($attackID);
-  if($isTrueSightActive || !CurrentEffectGrantsAllStealth($defPlayer))
+  $attacker = new Ally(AttackerMZID($mainPlayer));
+  $attackerUpgrades = $attacker->GetSubcards();
+  for($i=0; $i<count($attackerUpgrades); ++$i)
   {
-    $allies = &GetAllies($defPlayer);
-    for($i = 0; $i < count($allies); $i += AllyPieces()) {
-      if($isTrueSightActive || !HasStealth($allies[$i], $defPlayer, $i))
-      {
-        $targets .= ",THEIRALLY-" . $i;
-        ++$numTargets;
-      }
-    }
+    if($attackerUpgrades[$i] == "3099663280") $targets = "";
+  }
+  $numTargets = 1;
+  $allies = &GetAllies($defPlayer);
+  for($i = 0; $i < count($allies); $i += AllyPieces()) {
+    if($targets != "") $targets .= ",";
+    $targets .= "THEIRALLY-" . $i;
+    ++$numTargets;
   }
   if($numTargets > 1) {
     PrependDecisionQueue("PROCESSATTACKTARGET", $mainPlayer, "-");
@@ -1540,6 +1540,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
     if ($index == 0) {
       ChangeSetting($defPlayer, $SET_PassDRStep, 0);
       $combatChainState[$CCS_AttackPlayedFrom] = $from;
+      if ($definedCardType != "AA") $combatChainState[$CCS_WeaponIndex] = GetClassState($currentPlayer, $CS_PlayIndex);
       $chainClosed = ProcessAttackTarget();
       $baseAttackSet = CurrentEffectBaseAttackSet($cardID);
       $attackValue = ($baseAttackSet != -1 ? $baseAttackSet : AttackValue($cardID));
@@ -1552,7 +1553,6 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
         $char = &GetPlayerCharacter($currentPlayer);
         $char[1] = 1;
       }
-      if ($definedCardType != "AA") $combatChainState[$CCS_WeaponIndex] = GetClassState($currentPlayer, $CS_PlayIndex);
       // If you attacked an aura with Spectra
       if (!$chainClosed && ($definedCardType == "AA" || $definedCardType == "W")) {
         IncrementClassState($currentPlayer, $CS_NumAttacks);

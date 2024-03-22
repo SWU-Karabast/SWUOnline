@@ -2665,16 +2665,3 @@ function WakeUpChampion($player)
   $char[1] = 2;
 }
 
-function IsTrueSightActive($attackID)
-{
-  global $CS_PlayIndex, $mainPlayer;
-  $index = GetClassState($mainPlayer, $CS_PlayIndex);
-  if(HasTrueSight($attackID, $mainPlayer, $index)) return true;
-  if(IsAlly($attackID))
-  {
-    $allies = &GetAllies($mainPlayer);
-    $uniqueID = $allies[$index+5];
-    if(CurrentEffectGrantsTrueSight($mainPlayer, $uniqueID)) return true;
-  }
-  return false;
-}
