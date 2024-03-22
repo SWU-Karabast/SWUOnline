@@ -2418,6 +2418,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         }
       }
       break;
+    case "8240629990"://Avenger
+      MZChooseAndDestroy($otherPlayer, "MYALLY");
+      break;
     default: break;
   }
 }
