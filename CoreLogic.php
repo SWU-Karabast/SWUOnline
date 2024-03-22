@@ -2301,6 +2301,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "9133080458"://Inferno Four
       if($from != "PLAY") PlayerOpt($currentPlayer, 2);
       break;
+    case "9568000754"://R2-D2
+      PlayerOpt($currentPlayer, 1);
+      break;
     default: break;
   }
 }
