@@ -1887,7 +1887,9 @@ function SelfCostModifier($cardID)
   global $currentPlayer, $CS_NumAttacks, $CS_LastAttack;
   $modifier = 0;
   switch($cardID) {
-
+    case "1446471743"://Force Choke
+      if(SearchCount(SearchAllies($currentPlayer, trait:"Force")) > 0) $modifier -= 1;
+      break;
     default: break;
   }
   return $modifier;
@@ -2325,6 +2327,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "1208707254"://Rallying Cry
       AddCurrentTurnEffect($cardID, $currentPlayer);
+      break;
+    case "1446471743"://Force Choke
+      DealArcane(5, 2, "PLAYCARD", $cardID);
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      Draw($otherPlayer);
       break;
     default: break;
   }
