@@ -59,6 +59,11 @@ class Ally {
     return $this->Health() < $this->MaxHealth();
   }
 
+  function DealDamage($amount) {
+    $this->allies[$this->index+2] -= $amount;
+    if($this->Health() <= 0) DestroyAlly($this->playerID, $this->index);
+  }
+
   function CurrentPower() {
     return AttackValue($this->CardID()) + $this->allies[$this->index+7];
   }

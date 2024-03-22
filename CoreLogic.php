@@ -2444,12 +2444,17 @@ function DrawIntoMemory($player)
 
 function Mill($player, $amount)
 {
+  $cards = "";
   $deck = &GetDeck($player);
   if($amount > count($deck)) $amount = count($deck);
   for($i=0; $i<$amount; ++$i)
   {
-    AddGraveyard(array_shift($deck), $player, "DECK");
+    $card .= array_shift($deck);
+    if($cards != "") $cards .= ",";
+    $cards .= $card;
+    AddGraveyard($card, $player, "DECK");
   }
+  return $cards;
 }
 
 function Recover($player, $amount)

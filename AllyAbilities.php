@@ -190,6 +190,17 @@ function AllyDestroyedAbility($player, $index)
       DealArcane(2, 1, "PLAYCARD", $cardID, player:$player);
       DealArcane(2, 2, "PLAYCARD", $cardID, player:$player);
       break;
+    case "0949648290"://Greedo
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose if you want to discard a card to Greedo");
+      AddDecisionQueue("YESNO", $player, "-", 1);
+      AddDecisionQueue("NOPASS", $player, "-");
+      AddDecisionQueue("PASSPARAMETER", $player, "1", 1);
+      AddDecisionQueue("OP", $player, "MILL", 1);
+      AddDecisionQueue("NONECARDDEFINEDTYPEORPASS", $player, "Unit", 1);
+      AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:arena=Ground", 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+      AddDecisionQueue("MZOP", $player, "DEALDAMAGE,2", 1);
+      break;
     default: break;
   }
 }

@@ -324,7 +324,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       }
       return $lastResult;
     case "MZOP":
-      switch ($parameter)
+      $parameterArr = explode(",", $parameter);
+      switch ($parameterArr[0])
       {
         case "FREEZE": MZFreeze($lastResult); break;
         case "GAINCONTROL": MZGainControl($player, $lastResult); break;
@@ -348,6 +349,10 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         case "ENDCOMBAT": MZEndCombat($player, $lastResult); return $lastResult;
         case "HEALALLY": MZHealAlly($player, $lastResult); return $lastResult;
         case "CHANGEATTACKTARGET": SetAttackTarget($lastResult); return $lastResult;
+        case "DEALDAMAGE":
+          $ally = new Ally($lastResult);
+          $ally->DealDamage($parameterArr[1]);
+          return $lastResult;
         case "ADDEXPERIENCE":
           $ally = new Ally($lastResult);
           $ally->Attach("2007868442");//Experience token
@@ -397,6 +402,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           return "MYALLY-" . count($allies)-AllyPieces();
         case "GETATTACK": return AttackValue($lastResult);
         case "DISCARDHAND": DiscardHand($player); return $lastResult;
+        case "MILL": return Mill($player, $lastResult);
         default: return $lastResult;
       }
     case "FILTER":
@@ -638,6 +644,12 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $cards = explode(",", $lastResult);
       for($i = 0; $i < count($cards); ++$i) {
         if(!SubtypeContains($cards[$i], $parameter)) return "PASS";
+      }
+      return $lastResult;
+    case "NONECARDDEFINEDTYPEORPASS":
+      $cards = explode(",", $lastResult);
+      for($i = 0; $i < count($cards); ++$i) {
+        if(DefinedTypesContains($cards[$i], $parameter, $player)) return "PASS";
       }
       return $lastResult;
     case "ALLCARDELEMENTORPASS":
