@@ -2368,6 +2368,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
       }
       break;
+    case "3684950815"://Bounty Hunter Crew
+      MZMoveCard($currentPlayer, "MYDISCARD:definedType=Event", "MYHAND", may:true);
+      break;
     default: break;
   }
 }

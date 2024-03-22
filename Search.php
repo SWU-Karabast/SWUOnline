@@ -751,7 +751,7 @@ function SearchMultizone($player, $searches)
   $rv = "";
   for($i = 0; $i < count($unionSearches); ++$i) {
     $type = "";
-    $subtype = "";
+    $definedType = "";
     $maxCost = -1;
     $minCost = -1;
     $class = "";
@@ -780,8 +780,8 @@ function SearchMultizone($player, $searches)
           case "type":
             $type = $condition[1];
             break;
-          case "subtype":
-            $subtype = $condition[1];
+          case "definedType":
+            $definedType = $condition[1];
             break;
           case "maxCost":
             $maxCost = $condition[1];
@@ -885,52 +885,52 @@ function SearchMultizone($player, $searches)
     {
       switch ($zone) {
         case "MYDECK": case "THEIRDECK":
-          $searchResult = SearchDeck($searchPlayer, $type, $subtype, $maxCost, $minCost, $class, $arena, $floatingMemoryOnly, $phantasmOnly, $trait, $specOnly, $maxAttack, $maxDef, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
+          $searchResult = SearchDeck($searchPlayer, $type, $definedType, $maxCost, $minCost, $class, $arena, $floatingMemoryOnly, $phantasmOnly, $trait, $specOnly, $maxAttack, $maxDef, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
           break;
         case "MYHAND": case "THEIRHAND":
-          $searchResult = SearchHand($searchPlayer, $type, $subtype, $maxCost, $minCost, $class, $arena, $floatingMemoryOnly, $phantasmOnly, $trait, $specOnly, $maxAttack, $maxDef, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
+          $searchResult = SearchHand($searchPlayer, $type, $definedType, $maxCost, $minCost, $class, $arena, $floatingMemoryOnly, $phantasmOnly, $trait, $specOnly, $maxAttack, $maxDef, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
           break;
         case "MYDISCARD": case "THEIRDISCARD":
-          $searchResult = SearchDiscard($searchPlayer, $type, $subtype, $maxCost, $minCost, $class, $arena, $floatingMemoryOnly, $phantasmOnly, $trait, $specOnly, $maxAttack, $maxDef, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
+          $searchResult = SearchDiscard($searchPlayer, $type, $definedType, $maxCost, $minCost, $class, $arena, $floatingMemoryOnly, $phantasmOnly, $trait, $specOnly, $maxAttack, $maxDef, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
           break;
         case "MYMEM": case "THEIRMEM":
-          $searchResult = SearchMemory($searchPlayer, $type, $subtype, $maxCost, $minCost, $class, $arena, $floatingMemoryOnly, $phantasmOnly, $trait, $specOnly, $maxAttack, $maxDef, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
+          $searchResult = SearchMemory($searchPlayer, $type, $definedType, $maxCost, $minCost, $class, $arena, $floatingMemoryOnly, $phantasmOnly, $trait, $specOnly, $maxAttack, $maxDef, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
           break;
         case "MYAURAS": case "THEIRAURAS":
-          $searchResult = SearchAura($searchPlayer, $type, $subtype, $maxCost, $minCost, $class, $arena, $floatingMemoryOnly, $phantasmOnly, $trait, $specOnly, $maxAttack, $maxDef, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
+          $searchResult = SearchAura($searchPlayer, $type, $definedType, $maxCost, $minCost, $class, $arena, $floatingMemoryOnly, $phantasmOnly, $trait, $specOnly, $maxAttack, $maxDef, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
           break;
         case "MYCHAR": case "THEIRCHAR":
-          $searchResult = SearchCharacter($searchPlayer, $type, $subtype, $maxCost, $minCost, $class, $arena, $floatingMemoryOnly, $phantasmOnly, $trait, $specOnly, $maxAttack, $maxDef, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
+          $searchResult = SearchCharacter($searchPlayer, $type, $definedType, $maxCost, $minCost, $class, $arena, $floatingMemoryOnly, $phantasmOnly, $trait, $specOnly, $maxAttack, $maxDef, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
           break;
         case "MYITEMS": case "THEIRITEMS":
-          $searchResult = SearchItems($searchPlayer, $type, $subtype, $maxCost, $minCost, $class, $arena, $floatingMemoryOnly, $phantasmOnly, $trait, $specOnly, $maxAttack, $maxDef, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
+          $searchResult = SearchItems($searchPlayer, $type, $definedType, $maxCost, $minCost, $class, $arena, $floatingMemoryOnly, $phantasmOnly, $trait, $specOnly, $maxAttack, $maxDef, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
           break;
         case "MYALLY": case "THEIRALLY":
-          $searchResult = SearchAllies($searchPlayer, $type, $subtype, $maxCost, $minCost, $class, $arena, $floatingMemoryOnly, $phantasmOnly, $trait, $specOnly, $maxAttack, $maxDef, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
+          $searchResult = SearchAllies($searchPlayer, $type, $definedType, $maxCost, $minCost, $class, $arena, $floatingMemoryOnly, $phantasmOnly, $trait, $specOnly, $maxAttack, $maxDef, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
           break;
         case "MYPERM": case "THEIRPERM":
-          $searchResult = SearchPermanents($searchPlayer, $type, $subtype, $maxCost, $minCost, $class, $arena, $floatingMemoryOnly, $phantasmOnly, $trait, $specOnly, $maxAttack, $maxDef, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
+          $searchResult = SearchPermanents($searchPlayer, $type, $definedType, $maxCost, $minCost, $class, $arena, $floatingMemoryOnly, $phantasmOnly, $trait, $specOnly, $maxAttack, $maxDef, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
           break;
         case "MYBANISH": case "THEIRBANISH":
-          $searchResult = SearchBanish($searchPlayer, $type, $subtype, $maxCost, $minCost, $class, $arena, $floatingMemoryOnly, $phantasmOnly, $trait, $specOnly, $maxAttack, $maxDef, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
+          $searchResult = SearchBanish($searchPlayer, $type, $definedType, $maxCost, $minCost, $class, $arena, $floatingMemoryOnly, $phantasmOnly, $trait, $specOnly, $maxAttack, $maxDef, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
           break;
         case "MYPITCH": case "THEIRPITCH":
-          $searchResult = SearchPitch($searchPlayer, $type, $subtype, $maxCost, $minCost, $class, $arena, $floatingMemoryOnly, $phantasmOnly, $trait, $specOnly, $maxAttack, $maxDef, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
+          $searchResult = SearchPitch($searchPlayer, $type, $definedType, $maxCost, $minCost, $class, $arena, $floatingMemoryOnly, $phantasmOnly, $trait, $specOnly, $maxAttack, $maxDef, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
           break;
         case "MYMATERIAL": case "THEIRMATERIAL":
-          $searchResult = SearchMaterial($searchPlayer, $type, $subtype, $maxCost, $minCost, $class, $arena, $floatingMemoryOnly, $phantasmOnly, $trait, $specOnly, $maxAttack, $maxDef, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
+          $searchResult = SearchMaterial($searchPlayer, $type, $definedType, $maxCost, $minCost, $class, $arena, $floatingMemoryOnly, $phantasmOnly, $trait, $specOnly, $maxAttack, $maxDef, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
           break;
         case "MYMEMORY": case "THEIRMEMORY":
-          $searchResult = SearchMemory($searchPlayer, $type, $subtype, $maxCost, $minCost, $class, $arena, $floatingMemoryOnly, $phantasmOnly, $trait, $specOnly, $maxAttack, $maxDef, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
+          $searchResult = SearchMemory($searchPlayer, $type, $definedType, $maxCost, $minCost, $class, $arena, $floatingMemoryOnly, $phantasmOnly, $trait, $specOnly, $maxAttack, $maxDef, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
           break;
         case "COMBATCHAINLINK":
-          $searchResult = SearchCombatChainLink($searchPlayer, $type, $subtype, $maxCost, $minCost, $class, $arena, $floatingMemoryOnly, $phantasmOnly, $trait, $specOnly, $maxAttack, $maxDef, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
+          $searchResult = SearchCombatChainLink($searchPlayer, $type, $definedType, $maxCost, $minCost, $class, $arena, $floatingMemoryOnly, $phantasmOnly, $trait, $specOnly, $maxAttack, $maxDef, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
           break;
         case "LAYER":
-          $searchResult = SearchLayer($searchPlayer, $type, $subtype, $maxCost, $minCost, $class, $arena, $floatingMemoryOnly, $phantasmOnly, $trait, $specOnly, $maxAttack, $maxDef, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
+          $searchResult = SearchLayer($searchPlayer, $type, $definedType, $maxCost, $minCost, $class, $arena, $floatingMemoryOnly, $phantasmOnly, $trait, $specOnly, $maxAttack, $maxDef, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
           break;
         case "LANDMARK":
-          $searchResult = SearchLandmarks($searchPlayer, $type, $subtype,$maxCost, $minCost, $class, $arena, $floatingMemoryOnly, $phantasmOnly, $trait, $specOnly, $maxAttack, $maxDef, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
+          $searchResult = SearchLandmarks($searchPlayer, $type, $definedType,$maxCost, $minCost, $class, $arena, $floatingMemoryOnly, $phantasmOnly, $trait, $specOnly, $maxAttack, $maxDef, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
           break;
         default:
           break;
