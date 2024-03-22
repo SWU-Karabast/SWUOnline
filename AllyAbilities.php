@@ -89,6 +89,7 @@ function AllyEntersPlayState($cardID, $player, $from="-")
   //if(PlayerHasAlly($player == 1 ? 2 : 1, "TqCo3xlf93")) return 1;//Lunete, Frostbinder Priest
   switch($cardID)
   {
+    case "1785627279": return 2;//Millennium Falcon
     default: return 1;
   }
 }
@@ -443,7 +444,16 @@ function AllyEndTurnAbilities()
   $allies = &GetAllies($mainPlayer);
   for($i = count($allies) - AllyPieces(); $i >= 0; $i -= AllyPieces()) {
     switch($allies[$i]) {
-
+      case "1785627279"://Millennium Falcon
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Do you want to pay 1 to keep Millennium Falcon running?");
+        AddDecisionQueue("YESNO", $mainPlayer, "-", 0, 1);
+        AddDecisionQueue("NOPASS", $mainPlayer, "-");
+        AddDecisionQueue("PASSPARAMETER", $mainPlayer, "1", 1);
+        AddDecisionQueue("PAYRESOURCES", $mainPlayer, "<-", 1);
+        AddDecisionQueue("ELSE", $mainPlayer, "-");
+        AddDecisionQueue("PASSPARAMETER", $mainPlayer, "MYALLY-" . $i, 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "BOUNCE", 1);
+        break;
       default: break;
     }
   }

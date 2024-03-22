@@ -807,28 +807,13 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $dqVars[0] = $damage;
       return $damage;
     case "PAYRESOURCES":
-      $resources = &GetResources($player);
-      $lastResult = intval($lastResult);
-      if($lastResult < 0) $resources[0] += (-1 * $lastResult);
-      else if($resources[0] > 0) {
-        $res = $resources[0];
-        $resources[0] -= $lastResult;
-        $lastResult -= $res;
-        if($resources[0] < 0) $resources[0] = 0;
-      }
-      if($lastResult > 0) {
-        $hand = &GetHand($player);
-        if(count($hand) == 0) {
-          WriteLog("You have resources to pay for a declared effect, but have no cards to pitch. Reverting gamestate prior to that declaration.");
-          RevertGamestate();
+      $resourceCards = &GetResourceCards($currentPlayer);
+      for($i = 0; $i < count($resourceCards); $i += ResourcePieces()) {
+        if($parameter == 0) break;
+        if($resourceCards[$i+4] == "0") {
+          $resourceCards[$i+4] = "1";
+          --$parameter;
         }
-        PrependDecisionQueue("PAYRESOURCES", $player, $parameter, 1);
-        PrependDecisionQueue("SUBPITCHVALUE", $player, $lastResult, 1);
-        PrependDecisionQueue("ADDMEMORY", $player, "-", 1);
-        PrependDecisionQueue("REMOVEMYHAND", $player, "-", 1);
-        PrependDecisionQueue("CHOOSEHANDCANCEL", $player, "<-", 1);
-        PrependDecisionQueue("SETDQCONTEXT", $player, "Choose a card to reserve", 1);
-        PrependDecisionQueue("FINDINDICES", $player, "HAND", 1);
       }
       return $parameter;
     case "ADDCLASSSTATE":

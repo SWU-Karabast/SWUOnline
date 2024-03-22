@@ -997,6 +997,7 @@ function BeginRoundPass()
 {
   global $initiativeTaken, $mainPlayer, $currentTurnEffects, $nextTurnEffects;
   WriteLog("Both players have passed; ending the round.");
+  AllyEndTurnAbilities();
   LogEndTurnStats($mainPlayer);
   CurrentEffectEndTurnAbilities();
   $currentTurnEffects = $nextTurnEffects;
@@ -1086,7 +1087,6 @@ function FinalizeTurn()
   }
 
   AuraEndTurnAbilities();
-  AllyEndTurnAbilities();
   MainCharacterEndTurnAbilities();
 
   //All allies’ life totals are reset
