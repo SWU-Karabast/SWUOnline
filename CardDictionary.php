@@ -213,6 +213,8 @@ function HasAmbush($cardID, $player, $index)
       return true;
     case "2027289177"://Escort Skiff
       return SearchCount(SearchAllies($player, aspect:"Command")) > 1;
+    case "4685993945"://Frontier AT-RT
+      return SearchCount(SearchAllies($player, trait:"Vehicle")) > 1;
     default: return false;
   }
 }
