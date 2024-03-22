@@ -2309,6 +2309,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         MZChooseAndDestroy($currentPlayer, "MYALLY&THEIRALLY", may:true);
       }
       break;
+    case "9097316363":
+      if($from != "PLAY") {
+        for($i=0; $i<6; ++$i) DealArcane(1, 2, "PLAYCARD", $cardID);
+      }
+      break;
     default: break;
   }
 }
