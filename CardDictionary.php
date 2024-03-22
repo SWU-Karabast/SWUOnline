@@ -130,6 +130,7 @@ function RaidAmount($cardID, $player, $index)
     case "4642322279": $amount += SearchCount(SearchAllies($player, aspect:"Aggression")) > 1 ? 2 : 0; break;
     case "6028207223": $amount += 1; break;
     case "8995892693": $amount += 1; break;
+    case "3613174521": $amount += 1; break;
     default: break;
   }
   return $amount;
