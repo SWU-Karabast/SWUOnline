@@ -1891,6 +1891,9 @@ function SelfCostModifier($cardID)
     case "1446471743"://Force Choke
       if(SearchCount(SearchAllies($currentPlayer, trait:"Force")) > 0) $modifier -= 1;
       break;
+    case "4111616117"://Volunteer Soldier
+      if(SearchCount(SearchAllies($currentPlayer, trait:"Trooper")) > 0) $modifier -= 1;
+      break;
     default: break;
   }
   return $modifier;

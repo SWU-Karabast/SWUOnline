@@ -131,6 +131,7 @@ function RaidAmount($cardID, $player, $index)
     case "6028207223": $amount += 1; break;
     case "8995892693": $amount += 1; break;
     case "3613174521": $amount += 1; break;
+    case "4111616117": $amount += 1; break;
     default: break;
   }
   return $amount;
