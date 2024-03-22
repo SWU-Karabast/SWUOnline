@@ -31,6 +31,10 @@ class Ally {
     return $this->playerID;
   }
 
+  function Index() {
+    return $this->index;
+  }
+
   function Health() {
     return $this->allies[$this->index+2];
   }

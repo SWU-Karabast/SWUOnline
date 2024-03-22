@@ -1426,6 +1426,7 @@ function GetTargetOfAttack($attackID)
     $combatChainState[$CCS_AttackTarget] = "THEIRCHAR-0";
     return;
   }
+  $sentinelTargets = "";
   $targets = "THEIRCHAR-0";
   $attacker = new Ally(AttackerMZID($mainPlayer));
   $attackerUpgrades = $attacker->GetSubcards();
@@ -1433,19 +1434,22 @@ function GetTargetOfAttack($attackID)
   {
     if($attackerUpgrades[$i] == "3099663280") $targets = "";
   }
-  $numTargets = 1;
   $allies = &GetAllies($defPlayer);
   for($i = 0; $i < count($allies); $i += AllyPieces()) {
     if($targets != "") $targets .= ",";
     $targets .= "THEIRALLY-" . $i;
-    ++$numTargets;
+    if(HasSentinel($allies[$i], $defPlayer, $i)) {
+      if($sentinelTargets != "") $sentinelTargets .= ",";
+      $sentinelTargets .= "THEIRALLY-" . $i;
+    }
   }
-  if($numTargets > 1) {
+  if($sentinelTargets != "" && !HasSaboteur($attackID, $mainPlayer, $attacker->Index())) $targets = $sentinelTargets;
+  if(SearchCount($targets) > 1) {
     PrependDecisionQueue("PROCESSATTACKTARGET", $mainPlayer, "-");
     PrependDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, $targets);
     PrependDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a target for the attack");
   } else {
-    $combatChainState[$CCS_AttackTarget] = "THEIRCHAR-0";
+    $combatChainState[$CCS_AttackTarget] = $targets;
   }
 }
 
