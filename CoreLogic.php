@@ -2421,6 +2421,15 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "8240629990"://Avenger
       MZChooseAndDestroy($otherPlayer, "MYALLY");
       break;
+    case "8294130780"://Gladiator Star Destroyer
+      if($from != "PLAY") {
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to give Sentinel");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "8294130780,HAND", 1);
+      }
+      break;
     default: break;
   }
 }

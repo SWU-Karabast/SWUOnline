@@ -139,12 +139,21 @@ function RaidAmount($cardID, $player, $index)
 
 function HasSentinel($cardID, $player, $index)
 {
-  global $initiativePlayer;
+  global $initiativePlayer, $currentTurnEffects;
   $ally = new Ally("MYALLY-" . $index, $player);
   $subcards = $ally->GetSubcards();
   for($i=0; $i<count($subcards); ++$i)
   {
     if($subcards[$i] == "4550121827") return true;//Protector
+  }
+  $ally = new Ally("MYALLY-" . $index, $player);
+  for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnPieces()) {
+    if($currentTurnEffects[$i+1] != $player) continue;
+    if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
+    switch($currentTurnEffects[$i]) {
+      case "8294130780": return true;//Gladiator Star Destroyer
+      default: break;
+    }
   }
   switch($cardID)
   {
