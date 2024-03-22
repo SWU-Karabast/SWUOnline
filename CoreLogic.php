@@ -2298,6 +2298,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         DealArcane(3, 2, "PLAYCARD", $cardID);
       }
       break;
+    case "9133080458"://Inferno Four
+      if($from != "PLAY") PlayerOpt($currentPlayer, 2);
+      break;
     default: break;
   }
 }

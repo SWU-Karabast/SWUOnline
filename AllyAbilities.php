@@ -182,6 +182,9 @@ function AllyDestroyedAbility($player, $index)
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
       AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
       break;
+    case "9133080458"://Inferno Four
+      PlayerOpt($currentPlayer, 2);
+      break;
     default: break;
   }
 }
