@@ -2354,6 +2354,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "ADDEXPERIENCE", 1);
       }
       break;
+    case "3058784025"://Keep Fighting
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to ready");
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:maxAttack=3&THEIRALLY:maxAttack=3");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
+      break;
     default: break;
   }
 }
