@@ -2304,6 +2304,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "9568000754"://R2-D2
       PlayerOpt($currentPlayer, 1);
       break;
+    case "9624333142"://Count Dooku
+      if($from != "PLAY") {
+        MZChooseAndDestroy($currentPlayer, "MYALLY&THEIRALLY", may:true);
+      }
+      break;
     default: break;
   }
 }
