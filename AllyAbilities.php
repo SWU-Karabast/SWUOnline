@@ -183,7 +183,11 @@ function AllyDestroyedAbility($player, $index)
       AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
       break;
     case "9133080458"://Inferno Four
-      PlayerOpt($currentPlayer, 2);
+      PlayerOpt($player, 2);
+      break;
+    case "1047592361"://Ruthless Raider
+      DealArcane(2, 1, "PLAYCARD", $cardID, player:$player);
+      DealArcane(2, 2, "PLAYCARD", $cardID, player:$player);
       break;
     default: break;
   }

@@ -2333,6 +2333,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
       Draw($otherPlayer);
       break;
+    case "1047592361"://Ruthless Raider
+      DealArcane(2, 1, "PLAYCARD", $cardID);
+      DealArcane(2, 2, "PLAYCARD", $cardID);
+      break;
     default: break;
   }
 }
