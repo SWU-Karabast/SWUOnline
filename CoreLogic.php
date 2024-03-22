@@ -2338,8 +2338,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       Draw($otherPlayer);
       break;
     case "1047592361"://Ruthless Raider
-      DealArcane(2, 1, "PLAYCARD", $cardID);
-      DealArcane(2, 2, "PLAYCARD", $cardID);
+      if($from != "PLAY") {
+        DealArcane(2, 1, "PLAYCARD", $cardID);
+        DealArcane(2, 2, "PLAYCARD", $cardID);
+      }
       break;
     case "1862616109"://Snowspeeder
       if($from == "PLAY") {
@@ -2372,7 +2374,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "3684950815"://Bounty Hunter Crew
-      MZMoveCard($currentPlayer, "MYDISCARD:definedType=Event", "MYHAND", may:true);
+      if($from != "PLAY") MZMoveCard($currentPlayer, "MYDISCARD:definedType=Event", "MYHAND", may:true);
       break;
     case "4092697474"://TIE Advanced
       if($from != "PLAY") {
@@ -2404,6 +2406,17 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $ally = new Ally($target);
       $damage = $ally->MaxHealth() - $ally->Health() + 1;
       DealArcane($damage, 2, "PLAYCARD", $ally->CardID());
+      break;
+    case "7929181061"://General Tagge
+      if($from != "PLAY") {
+        WriteLog("Make sure you manually enforce limit 1 per unit");
+        for($i=0; $i<3; ++$i) {
+          AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to give experience");
+          AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Trooper");
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+          AddDecisionQueue("MZOP", $currentPlayer, "ADDEXPERIENCE", 1);
+        }
+      }
       break;
     default: break;
   }
