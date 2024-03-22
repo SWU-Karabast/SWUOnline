@@ -347,7 +347,9 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         case "READY": MZWakeUp($player, $lastResult); return $lastResult;
         case "ADDHEALTH": MZAddHealth($player, $lastResult); return $lastResult;
         case "ENDCOMBAT": MZEndCombat($player, $lastResult); return $lastResult;
-        case "HEALALLY": MZHealAlly($player, $lastResult); return $lastResult;
+        case "HEALALLY":
+          MZHealAlly($player, $lastResult, count($parameterArr) > 1 ? $parameterArr[1] : 1);
+          return $lastResult;
         case "CHANGEATTACKTARGET": SetAttackTarget($lastResult); return $lastResult;
         case "DEALDAMAGE":
           $ally = new Ally($lastResult);

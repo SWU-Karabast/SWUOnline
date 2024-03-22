@@ -195,7 +195,7 @@ function MZBuffAlly($player, $target)
   ++$allies[$targetArr[1]+2];//Life
 }
 
-function MZHealAlly($player, $target)
+function MZHealAlly($player, $target, $amount)
 {
   $targetArr = explode("-", $target);
   $allies = &GetAllies($player);
