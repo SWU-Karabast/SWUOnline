@@ -2346,6 +2346,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
       }
       break;
+    case "2554951775"://Bail Organa
+      if($from == "PLAY" && GetResolvedAbilityType($cardID) == "A") {
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to add an experience");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "ADDEXPERIENCE", 1);
+      }
+      break;
     default: break;
   }
 }

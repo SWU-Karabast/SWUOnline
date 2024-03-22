@@ -445,14 +445,8 @@ function GetAbilityType($cardID, $index = -1, $from="-")
 function GetAbilityTypes($cardID)
 {
   switch($cardID) {
-    case "7dedg616r0"://Freydis, Master Tactician
+    case "2554951775"://Bail Organa
       return "A,AA";
-    case "5swaf8urrq"://Whirlwind Vizier
-      return "A,AA";
-    case "nl1gxrpx8j"://Perse, Relentless Raptor
-      return "I,AA";
-    case "oy34bro89w"://Cunning Broker
-      return "I,AA";
     default: return "";
   }
 }
@@ -461,14 +455,8 @@ function GetAbilityNames($cardID, $index = -1)
 {
   global $currentPlayer;
   switch ($cardID) {
-    case "7dedg616r0"://Freydis, Master Tactician
-      return "Remove Counters,Attack";
-    case "5swaf8urrq"://Whirlwind Vizier
-      return "Sacrifice,Attack";
-    case "nl1gxrpx8j"://Perse, Relentless Raptor
-      return "Suppress,Attack";
-    case "oy34bro89w"://Cunning Broker
-      return "Broker,Attack";
+    case "2554951775"://Bail Organa
+      return "Give Experience,Attack";
     default: return "";
   }
 }
