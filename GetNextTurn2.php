@@ -378,32 +378,8 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     if (DoesAttackHaveGoAgain()) echo ("<td><img title='This attack has go again.' style='height:30px; width:30px; display:inline-block;' src='./Images/goAgain.png' /></td>");
     if (CachedDominateActive()) echo ("<td><img style='height:40px; display:inline-block;' src='./Images/dominate.png' /></td>");
     if (CachedOverpowerActive()) echo ("<td><img style='height:40px; display:inline-block;' src='./Images/overpower.png' /></td>");
-    //if($lastPlayed[3] == "FUSED") echo("<td><img title='This card was fused.' style='height:30px; width:30px; display:inline-block;' src='./Images/fuse2.png' /></td>");
+    echo("</tr></table>");
   }
-  echo ("<td>");
-  for ($i = 0; $i < count($chainLinks); ++$i) {
-    if ($i == 0) {
-      $iconLeft = 10;
-      $linkWidth = 60;
-      $linkImage = "chainLinkLeft.png";
-    }
-    //else if($i==count($chainLinks)-1) { $iconLeft = 27; $linkWidth = 60; $linkImage = "chainLinkRight.png"; }
-    else {
-      $iconLeft = 25;
-      $linkWidth = 70;
-      $linkImage = "chainLink.png";
-    }
-    echo ("<div onclick='ShowPopup(\"chainLinkPopup-" . $i . "\")'; style='cursor:pointer; position:relative; display:inline-block;'><img title='Chain Link $i' style='height:30px; width:" . $linkWidth . "px;' src='./Images/$linkImage'>");
-    $damage = $chainLinkSummary[$i * ChainLinkSummaryPieces()];
-    $linkOverlay = ($damage > 0 ? "./Images/hit.png" : "./Images/Defense.png");
-    $linkTitle = ($damage > 0 ? "Hit for $damage damage" : "Fully Blocked");
-    echo ("<div class='chainSummary' title='$linkTitle' style='position:absolute; left:" . $iconLeft . "px; top:4px;'><img style='width:22px; height:22px;' src='$linkOverlay' /></div>");
-    echo ("</img></div>");
-  }
-  if (count($chainLinks) > 0) {
-    echo ("<div title='Break the Combat Chain' " . ProcessInputLink($playerID, 100, 0) . " class='breakChain' style='height:30px; width:60px; position:relative; display:inline-block;'></div>");
-  }
-
 
   if ($displayCombatChain) {
     for ($i = 0; $i < count($combatChain); $i += CombatChainPieces()) {

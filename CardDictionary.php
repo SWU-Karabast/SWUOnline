@@ -190,6 +190,7 @@ function HasOverwhelm($cardID, $player, $index)
     case "6577517407":
     case "6718924441":
     case "9097316363":
+    case "3232845719":
       return true;
     default: return false;
   }

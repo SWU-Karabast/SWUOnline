@@ -5,10 +5,13 @@ function ModalAbilities($player, $card, $lastResult)
   global $combatChain, $defPlayer;
   switch($card)
   {
-    case "AQUEOUSENCHANTING":
-      WriteLog($lastResult);
-      if($lastResult == "1_Attack") AddCurrentTurnEffect("fMv7tIOZwLAttack", $player);
-      else GiveAlliesHealthBonus($player, 1);
+    case "K2SO":
+      $otherPlayer = ($player == 1 ? 2 : 1);
+      switch($lastResult[0]) {
+        case "Discard": PummelHit($otherPlayer); break;
+        case "Deal_3_damage": PlayerLoseHealth($otherPlayer, 3); break;
+        default: break;
+      }
       return $lastResult;
     default: return "";
   }

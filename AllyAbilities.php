@@ -201,6 +201,12 @@ function AllyDestroyedAbility($player, $index)
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
       AddDecisionQueue("MZOP", $player, "DEALDAMAGE,2", 1);
       break;
+    case "3232845719"://K-2SO
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a mode for K-2SO");
+      AddDecisionQueue("MULTICHOOSETEXT", $player, "1-Deal 3 damage,Discard-1");
+      AddDecisionQueue("SHOWMODES", $player, $cardID, 1);
+      AddDecisionQueue("MODAL", $player, "K2SO", 1);
+      break;
     default: break;
   }
 }
