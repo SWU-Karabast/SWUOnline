@@ -1647,6 +1647,10 @@ function ProcessAttackTarget()
       return true;
     }
   }
+  else if($target[0] == "THEIRALLY") {
+    $ally = new Ally($target[0] . "-" . $target[1], $defPlayer);
+    AllyAttackedAbility($ally->CardID(), $target[1]);
+  }
   return false;
 }
 
