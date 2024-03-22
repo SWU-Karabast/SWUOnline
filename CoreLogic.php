@@ -2323,6 +2323,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "0256267292,HAND", 1);
       }
       break;
+    case "1208707254"://Rallying Cry
+      AddCurrentTurnEffect($cardID, $currentPlayer);
+      break;
     default: break;
   }
 }

@@ -111,9 +111,12 @@ function RaidAmount($cardID, $player, $index)
   $ally = new Ally("MYALLY-" . $index, $player);
   for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnPieces()) {
     if($currentTurnEffects[$i+1] != $player) continue;
-    if($currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
+    if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
     switch($currentTurnEffects[$i]) {
       case "0256267292"://Benthic "Two Tubes"
+        $amount += 2;
+        break;
+      case "1208707254"://Rallying Cry
         $amount += 2;
         break;
       default: break;
