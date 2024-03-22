@@ -2400,6 +2400,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "HEALALLY", 1);
       }
       break;
+    case "6515891401"://Karabast
+      $ally = new Ally($target);
+      $damage = $ally->MaxHealth() - $ally->Health() + 1;
+      DealArcane($damage, 2, "PLAYCARD", $ally->CardID());
+      break;
     default: break;
   }
 }
@@ -2540,6 +2545,7 @@ function PlayRequiresTarget($cardID)
     case "0827076106": return 2;//Admiral Ackbar
     case "0867878280": return 2;//It Binds All Things
     case "2587711125": return 2;//Disarm
+    case "6515891401": return 2;//Karabast
     default: return -1;
   }
 }
