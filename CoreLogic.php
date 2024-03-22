@@ -1292,6 +1292,7 @@ function AspectContains($cardID, $aspect, $player="")
 function TraitContains($cardID, $trait, $player="")
 {
   $cardTrait = CardTraits($cardID);
+  WriteLog(CardName($cardID) . " " . $cardTrait);
   return DelimStringContains($cardTrait, $trait);
 }
 
@@ -2336,6 +2337,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "1047592361"://Ruthless Raider
       DealArcane(2, 1, "PLAYCARD", $cardID);
       DealArcane(2, 2, "PLAYCARD", $cardID);
+      break;
+    case "1862616109"://Snowspeeder
+      if($from == "PLAY") {
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to exhaust");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:trait=Vehicle");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
+      }
       break;
     default: break;
   }
