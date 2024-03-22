@@ -2293,6 +2293,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("YESNO", $currentPlayer, "if you want to draw", 1);
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "REINFORCEMENTWALKER", 1);
       break;
+    case "9002021213"://Imperial Interceptor
+      if($from != "PLAY") {
+        DealArcane(3, 2, "PLAYCARD", $cardID);
+      }
+      break;
     default: break;
   }
 }
