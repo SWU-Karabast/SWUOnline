@@ -95,6 +95,17 @@ function RestoreAmount($cardID, $player, $index)
 
 function RaidAmount($cardID, $player, $index)
 {
+  $allies = &GetAllies($player);
+  for($i=0; $i<count($allies); $i+=AllyPieces())
+  {
+    switch($allies[$i])
+    {
+      case "8995892693"://Red One
+        if($index != $i && AspectContains($cardID, "Aggression", $player)) return 1;
+        break;
+      default: break;
+    }
+  }
   switch($cardID)
   {
     case "1017822723": return 2;
@@ -102,6 +113,7 @@ function RaidAmount($cardID, $player, $index)
     case "7495752423": return 2;
     case "4642322279": return SearchCount(SearchAllies($player, aspect:"Aggression")) > 1 ? 2 : 0;
     case "6028207223": return 1;
+    case "8995892693": return 1;
     default: return 0;
   }
 }
