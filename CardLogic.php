@@ -569,6 +569,10 @@ function GiveAttackGoAgain()
 }
 
 function EndTurnProcedure($player) {
+  $allies = &GetAllies($player);
+  for($i = 0; $i < count($allies); $i += AllyPieces()) {
+    $allies[$i+1] = 2;
+  }
   $resources = &GetResourceCards($player);
   for($i=0; $i<count($resources); $i+=ResourcePieces()) {
     $resources[$i+4] = "0";

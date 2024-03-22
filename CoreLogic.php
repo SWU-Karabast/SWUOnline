@@ -2314,6 +2314,15 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         for($i=0; $i<6; ++$i) DealArcane(1, 2, "PLAYCARD", $cardID);
       }
       break;
+    case "0256267292":
+      if($from == "PLAY") {
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to give Raid 2");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:aspect=Aggression");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "0256267292,HAND", 1);
+      }
+      break;
     default: break;
   }
 }

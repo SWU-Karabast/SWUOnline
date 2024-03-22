@@ -95,27 +95,41 @@ function RestoreAmount($cardID, $player, $index)
 
 function RaidAmount($cardID, $player, $index)
 {
+  global $currentTurnEffects;
+  $amount = 0;
   $allies = &GetAllies($player);
   for($i=0; $i<count($allies); $i+=AllyPieces())
   {
     switch($allies[$i])
     {
       case "8995892693"://Red One
-        if($index != $i && AspectContains($cardID, "Aggression", $player)) return 1;
+        if($index != $i && AspectContains($cardID, "Aggression", $player)) $amount += 1;
+        break;
+      default: break;
+    }
+  }
+  $ally = new Ally("MYALLY-" . $index, $player);
+  for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnPieces()) {
+    if($currentTurnEffects[$i+1] != $player) continue;
+    if($currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
+    switch($currentTurnEffects[$i]) {
+      case "0256267292"://Benthic "Two Tubes"
+        $amount += 2;
         break;
       default: break;
     }
   }
   switch($cardID)
   {
-    case "1017822723": return 2;
-    case "2404916657": return 2;
-    case "7495752423": return 2;
-    case "4642322279": return SearchCount(SearchAllies($player, aspect:"Aggression")) > 1 ? 2 : 0;
-    case "6028207223": return 1;
-    case "8995892693": return 1;
-    default: return 0;
+    case "1017822723": $amount += 2; break;
+    case "2404916657": $amount += 2; break;
+    case "7495752423": $amount += 2; break;
+    case "4642322279": $amount += SearchCount(SearchAllies($player, aspect:"Aggression")) > 1 ? 2 : 0; break;
+    case "6028207223": $amount += 1; break;
+    case "8995892693": $amount += 1; break;
+    default: break;
   }
+  return $amount;
 }
 
 function HasSentinel($cardID, $player, $index)
