@@ -2502,6 +2502,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "1393827469"://Tarkin Town
       DealArcane(3, 2, "PLAYCARD", "1393827469");
       break;
+    case "1880931426"://Lothal Insurgent
+      global $CS_NumCardsPlayed;
+      if($from != "PLAY" && GetClassState($currentPlayer, $CS_NumCardsPlayed) > 1) {
+        $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+        Draw($otherPlayer);
+        DiscardRandom($otherPlayer, $cardID);
+      }
+      break;
     default: break;
   }
 }

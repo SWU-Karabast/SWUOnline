@@ -997,6 +997,8 @@ function BeginRoundPass()
 {
   global $initiativeTaken, $mainPlayer, $currentTurnEffects, $nextTurnEffects;
   WriteLog("Both players have passed; ending the round.");
+  ResetClassState(1);
+  ResetClassState(2);
   AllyEndTurnAbilities();
   LogEndTurnStats($mainPlayer);
   CurrentEffectEndTurnAbilities();
@@ -1123,7 +1125,6 @@ function FinalizeTurn()
   $defResources[1] = 0;
   $lastPlayed = [];
 
-  ResetMainClassState();
   ResetCharacterEffects();
   UnsetTurnBanish();
   AuraEndTurnCleanup();
@@ -1149,7 +1150,6 @@ function FinalizeTurn()
   $currentPlayer = $mainPlayer;
 
   BuildMainPlayerGameState();
-  ResetMainClassState();
 
   //Start of turn effects
   if ($mainPlayer == 1) StatsStartTurn();
