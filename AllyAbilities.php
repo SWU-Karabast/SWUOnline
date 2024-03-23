@@ -310,9 +310,14 @@ function AllyAttackAbilities($attackID)
       Restore(count($aspectArr), $mainPlayer);
       break;
     case "0ca1902a46"://Darth Vader
-      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY", 1);
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,2", 1);
+      break;
+    case "0dcb77795c"://Luke Skywalker
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "ADDSHIELD", 1);
       break;
     default: break;
   }
