@@ -145,6 +145,16 @@ function MZAddZone($player, $parameter, $lastResult)
   return $lastResult;
 }
 
+function MZPlayCard($player, $mzIndex) {
+  $mzArr = explode("-", $mzIndex);
+  $zone = &GetMZZone($player, $mzArr[0]);
+  $cardID = $zone[$mzArr[1]];
+  MZRemove($player, $mzIndex);
+  SetClassState($playerID, $CS_CharacterIndex, $index);
+  SetClassState($playerID, $CS_PlayIndex, $index);
+  PlayCard($cardID, $mzArr[0], -1, $mzArr[1]);
+}
+
 function MZUndestroy($player, $parameter, $lastResult)
 {
   $lastResultArr = explode(",", $lastResult);

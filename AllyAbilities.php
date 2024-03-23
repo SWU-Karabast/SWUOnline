@@ -331,7 +331,7 @@ function AllyPlayCardAbility($cardID, $player="")
     switch($allies[$i])
     {
       case "5555846790"://Saw Gerrera
-        DealArcane(2, 1, "TRIGGER", "5555846790", player:$otherPlayer);
+        if(DefinedTypesContains($cardID, "Event", $player)) DealArcane(2, 1, "TRIGGER", "5555846790", player:$otherPlayer);
         break;
       default: break;
     }

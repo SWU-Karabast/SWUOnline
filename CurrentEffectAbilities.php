@@ -106,6 +106,10 @@ function CurrentEffectCostModifiers($cardID, $from)
             $remove = true;
           }
           break;
+        case "4919000710"://Home One
+          $costModifier -= 3;
+          $remove = true;
+          break;
         default: break;
       }
       if($remove) RemoveCurrentTurnEffect($i);

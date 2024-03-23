@@ -75,6 +75,17 @@ function RestoreAmount($cardID, $player, $index)
 {
   global $initiativePlayer;
   $amount = 0;
+  $allies = &GetAllies($player);
+  for($i=0; $i<count($allies); $i+=AllyPieces())
+  {
+    switch($allies[$i])
+    {
+      case "4919000710"://Home One
+        if($index != $i) $amount += 1;
+        break;
+      default: break;
+    }
+  }
   $ally = new Ally("MYALLY-" . $index, $player);
   $subcards = $ally->GetSubcards();
   for($i=0; $i<count($subcards); ++$i)
@@ -88,6 +99,7 @@ function RestoreAmount($cardID, $player, $index)
     case "1611702639": $amount += $initiativePlayer == $player ? 2 : 0; break;
     case "4405415770": $amount += 2; break;
     case "0827076106": $amount += 1; break;
+    case "4919000710": $amount += 2; break;
     default: break;
   }
   return $amount;

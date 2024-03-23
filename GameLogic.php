@@ -345,6 +345,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         case "SUPPRESS": MZSuppress($player, $lastResult); return $lastResult;
         case "REST": MZRest($player, $lastResult); return $lastResult;
         case "READY": MZWakeUp($player, $lastResult); return $lastResult;
+        case "PLAYCARD": MZPlayCard($player, $lastResult); return $lastResult;
         case "ADDHEALTH": MZAddHealth($player, $lastResult); return $lastResult;
         case "ENDCOMBAT": MZEndCombat($player, $lastResult); return $lastResult;
         case "HEALALLY":

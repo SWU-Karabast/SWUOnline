@@ -2430,6 +2430,15 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "8294130780,HAND", 1);
       }
       break;
+    case "4919000710"://Home One
+      if($from != "PLAY") {
+        AddCurrentTurnEffect($cardID, $currentPlayer);//Cost discount
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to play");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYDISCARD:Aspect=Heroism");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
+      }
+      break;
     default: break;
   }
 }
