@@ -1526,7 +1526,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
 {
   global $turn, $combatChain, $currentPlayer, $defPlayer, $combatChainState, $CCS_AttackPlayedFrom, $CS_PlayIndex;
   global $CS_CharacterIndex, $CS_NumNonAttackCards, $CS_PlayCCIndex, $CS_NumAttacks, $CCS_LinkBaseAttack;
-  global $CCS_WeaponIndex, $EffectContext, $CCS_AttackUniqueID, $CS_NumLess3PowAAPlayed, $layers;
+  global $CCS_WeaponIndex, $EffectContext, $CCS_AttackUniqueID, $CS_NumLess3PowAAPlayed, $CS_AfterPlayedBy, $layers;
   global $CS_NumDragonAttacks, $CS_NumIllusionistAttacks, $CS_NumIllusionistActionCardAttacks, $CCS_IsBoosted;
   global $SET_PassDRStep;
 
@@ -1631,7 +1631,10 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
     $EffectContext = $cardID;
     $playText = "";
     if(!$chainClosed && (!DefinedTypesContains($cardID, "Event", $currentPlayer) || !SearchCurrentTurnEffects("3401690666", $currentPlayer, remove:true))) $playText = PlayAbility($cardID, $from, $resourcesPaid, $target, $additionalCosts);
-    if($from != "EQUIP" && $from != "PLAY") WriteLog("Resolving play ability of " . CardLink($cardID, $cardID) . ($playText != "" ? ": " : ".") . $playText);
+    if($from != "EQUIP" && $from != "PLAY") {
+      WriteLog("Resolving play ability of " . CardLink($cardID, $cardID) . ($playText != "" ? ": " : ".") . $playText);
+      if(GetClassState($currentPlayer, $CS_AfterPlayedBy) != "-") AfterPlayedByAbility(GetClassState($currentPlayer, $CS_AfterPlayedBy));
+    }
     else if($from == "EQUIP" || $from == "PLAY") WriteLog("Resolving activated ability of " . CardLink($cardID, $cardID) . ($playText != "" ? ": " : ".") . $playText);
     if (!$openedChain) ResolveGoAgain($cardID, $currentPlayer, $from);
     CopyCurrentTurnEffectsFromAfterResolveEffects();

@@ -163,6 +163,7 @@ function HasSentinel($cardID, $player, $index)
     if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
     switch($currentTurnEffects[$i]) {
       case "8294130780": return true;//Gladiator Star Destroyer
+      case "3572356139": return true;//Chewbacca, Walking Carpet
       default: break;
     }
   }
