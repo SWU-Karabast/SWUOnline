@@ -1007,6 +1007,8 @@ function BeginRoundPass()
   $initiativeTaken = 0;
   EndTurnProcedure(1);
   EndTurnProcedure(2);
+  AllyBeginRoundAbilities(1);
+  AllyBeginRoundAbilities(2);
   ProcessDecisionQueue();
 }
 
@@ -1628,7 +1630,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
     }
     $EffectContext = $cardID;
     $playText = "";
-    if(!$chainClosed) $playText = PlayAbility($cardID, $from, $resourcesPaid, $target, $additionalCosts);
+    if(!$chainClosed && (!DefinedTypesContains($cardID, "Event", $currentPlayer) || !SearchCurrentTurnEffects("3401690666", $currentPlayer))) $playText = PlayAbility($cardID, $from, $resourcesPaid, $target, $additionalCosts);
     if($from != "EQUIP" && $from != "PLAY") WriteLog("Resolving play ability of " . CardLink($cardID, $cardID) . ($playText != "" ? ": " : ".") . $playText);
     else if($from == "EQUIP" || $from == "PLAY") WriteLog("Resolving activated ability of " . CardLink($cardID, $cardID) . ($playText != "" ? ": " : ".") . $playText);
     if (!$openedChain) ResolveGoAgain($cardID, $currentPlayer, $from);

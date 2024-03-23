@@ -239,13 +239,16 @@ function OnKillAbility()
   }
 }
 
-function AllyStartTurnAbilities($player)
+function AllyBeginRoundAbilities($player)
 {
   global $CS_NumMaterializations;
   $allies = &GetAllies($player);
   for($i = count($allies) - AllyPieces(); $i >= 0; $i -= AllyPieces()) {
     switch($allies[$i]) {
-
+      case "3401690666"://Relentless
+        $otherPlayer = ($player == 1 ? 2 : 1);
+        AddCurrentTurnEffect("3401690666", $otherPlayer, from:"PLAY");
+        break;
       default: break;
     }
   }

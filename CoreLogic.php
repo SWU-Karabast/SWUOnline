@@ -2525,6 +2525,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         }
       }
       break;
+    case "3401690666"://Relentless
+      if($from != "PLAY") {
+        $otherPlayer = ($currentPlayer == 1 ? 2 : 1);
+        AddCurrentTurnEffect("3401690666", $otherPlayer, from:"PLAY");
+      }
+      break;
     default: break;
   }
 }
