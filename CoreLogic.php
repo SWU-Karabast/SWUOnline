@@ -2510,6 +2510,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         DiscardRandom($otherPlayer, $cardID);
       }
       break;
+    case "2429341052"://Security Complex
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to give a shield");
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "ADDSHIELD", 1);
+      break;
     default: break;
   }
 }

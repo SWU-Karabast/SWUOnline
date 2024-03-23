@@ -482,6 +482,8 @@ function GetAbilityType($cardID, $index = -1, $from="-")
       return "A";
     case "1393827469"://Tarkin Town
       return "A";
+    case "2429341052"://Security Complex
+      return "A";
     default: return "";
   }
 }
