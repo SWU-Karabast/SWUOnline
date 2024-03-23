@@ -2641,6 +2641,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         PlayAlly("3c60596a7a", $currentPlayer);
       }
       break;
+    case "4841169874"://Sabine Wren
+      $abilityName = GetResolvedAbilityName($cardID, $from);
+      if($abilityName == "Deal Damage") {
+        DealArcane(1, 1, "PLAYCARD", "4841169874");
+        DealArcane(1, 4, "PLAYCARD", "4841169874");
+      } else if($abilityName == "Deploy") {
+        PlayAlly("51e8757e4c", $currentPlayer);
+      }
     default: break;
   }
 }

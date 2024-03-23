@@ -511,6 +511,8 @@ function GetAbilityTypes($cardID)
       return "A,A";
     case "3187874229"://Cassian Andor
       return "A,A";
+    case "4841169874"://Sabine Wren
+      return "A,A";
     default: return "";
   }
 }
@@ -531,6 +533,8 @@ function GetAbilityNames($cardID, $index = -1)
       return "Give Experience,Deploy";
     case "3187874229"://Cassian Andor
       return "Draw Card,Deploy";
+    case "4841169874"://Sabine Wren
+      return "Deal Damage,Deploy";
     default: return "";
   }
 }
