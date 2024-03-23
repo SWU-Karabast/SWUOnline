@@ -2649,6 +2649,17 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       } else if($abilityName == "Deploy") {
         PlayAlly("51e8757e4c", $currentPlayer);
       }
+      break;
+    case "5871074103"://Forced Surrender
+      Draw($currentPlayer);
+      Draw($currentPlayer);
+      global $CS_DamageTaken;
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      if(GetClassState($otherPlayer, $CS_DamageTaken) > 0) {
+        PummelHit($otherPlayer);
+        PummelHit($otherPlayer);
+      }
+      break;
     default: break;
   }
 }
