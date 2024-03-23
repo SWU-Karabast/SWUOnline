@@ -1547,7 +1547,12 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
       if ($definedCardType != "AA") $combatChainState[$CCS_WeaponIndex] = GetClassState($currentPlayer, $CS_PlayIndex);
       $chainClosed = ProcessAttackTarget();
       $baseAttackSet = CurrentEffectBaseAttackSet($cardID);
-      $attackValue = ($baseAttackSet != -1 ? $baseAttackSet : AttackValue($cardID));
+      if($baseAttackSet != -1) $attackValue = $baseAttackSet;
+      else if(IsAllyAttacking()) {
+        $ally = new Ally("MYALLY-" . $index, $mainPlayer);
+        $attackValue = $ally->CurrentPower();
+      }
+      else $attackValue = ($baseAttackSet != -1 ? $baseAttackSet : AttackValue($cardID));
       $combatChainState[$CCS_LinkBaseAttack] = BaseAttackModifiers($attackValue);
       $combatChainState[$CCS_AttackUniqueID] = $uniqueID;
       if ($definedCardType == "AA" && $attackValue < 3) IncrementClassState($currentPlayer, $CS_NumLess3PowAAPlayed);

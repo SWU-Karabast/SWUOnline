@@ -69,7 +69,10 @@ class Ally {
   }
 
   function CurrentPower() {
-    return AttackValue($this->CardID()) + $this->allies[$this->index+7];
+    $power = AttackValue($this->CardID()) + $this->allies[$this->index+7];
+    $subcards = $this->GetSubcards();
+    for($i=0; $i<count($subcards); ++$i) if($subcards[$i] != "-") $power += AttackValue($subcards[$i]);
+    return $power;
   }
 
   function OnFoster() {

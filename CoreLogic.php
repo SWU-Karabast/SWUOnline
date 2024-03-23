@@ -2494,6 +2494,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, $ally->UniqueID());
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $ally->PlayerID(), "2569134232,HAND");
       break;
+    case "1349057156"://Strike True
+      $ally = new Ally($target);
+      $damage = $ally->CurrentPower();
+      DealArcane($damage, 2, "PLAYCARD", $ally->CardID());
+      break;
     default: break;
   }
 }
@@ -2636,6 +2641,7 @@ function PlayRequiresTarget($cardID)
     case "2587711125": return 2;//Disarm
     case "2569134232": return 2;//Jedha City
     case "6515891401": return 2;//Karabast
+    case "1349057156": return 2;//Strike True
     default: return -1;
   }
 }
