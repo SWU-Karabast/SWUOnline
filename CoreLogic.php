@@ -2578,7 +2578,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
       } else if($abilityName == "Deploy") {
-        PlayAlly($cardID . "-Back", $currentPlayer);
+        PlayAlly("8301e8d7ef", $currentPlayer);
       }
       break;
     default: break;
