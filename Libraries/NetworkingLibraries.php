@@ -1549,7 +1549,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
       $baseAttackSet = CurrentEffectBaseAttackSet($cardID);
       if($baseAttackSet != -1) $attackValue = $baseAttackSet;
       else if(IsAllyAttacking()) {
-        $ally = new Ally("MYALLY-" . $index, $mainPlayer);
+        $ally = new Ally("MYALLY-" . GetClassState($currentPlayer, $CS_PlayIndex), $currentPlayer);
         $attackValue = $ally->CurrentPower();
       }
       else $attackValue = ($baseAttackSet != -1 ? $baseAttackSet : AttackValue($cardID));
@@ -1647,7 +1647,6 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
 function ProcessAttackTarget()
 {
   global $defPlayer;
-  WriteLog("here");
   $target = explode("-", GetAttackTarget());
   if ($target[0] == "THEIRAURAS") {
     $auras = &GetAuras($defPlayer);

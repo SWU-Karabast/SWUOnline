@@ -291,23 +291,25 @@ function AllyAttackAbilities($attackID)
   $restoreAmount = RestoreAmount($attackID, $mainPlayer, $index);
   if($restoreAmount > 0) Restore($restoreAmount, $mainPlayer);
   $allies = &GetAllies($mainPlayer);
+  switch($attackID) {
+    case "1662196707"://Kanan Jarrus
+      $amount = SearchCount(SearchAllies($mainPlayer, trait:"Spectre"));
+      $cardsMilled = Mill($defPlayer, $amount);
+      $cardArr = explode(",", $cardsMilled);
+      $aspectArr = [];
+      for($j = 0; $j < count($cardArr); ++$j) {
+        $aspects = explode(",", CardAspects($cardArr[$j]));
+        for($k=0; $k<count($aspects); ++$k) {
+          if($aspects[$k] == "") break;
+          $aspectArr[$aspects[$k]] = 1;
+        }
+      }
+      Restore(count($aspectArr), $mainPlayer);
+      break;
+    default: break;
+  }
   for($i = 0; $i < count($allies); $i += AllyPieces()) {
     switch($allies[$i]) {
-      case "1662196707"://Kanan Jarrus
-        $amount = SearchCount(SearchAllies($mainPlayer, trait:"Spectre"));
-        $cardsMilled = Mill($defPlayer, $amount);
-        WriteLog($cardsMilled);
-        $cardArr = explode(",", $cardsMilled);
-        $aspectArr = [];
-        for($j = 0; $j < count($cardArr); ++$j) {
-          $aspects = explode(",", CardAspects($cardArr[$j]));
-          for($k=0; $k<count($aspects); ++$k) {
-            if($aspects[$k] == "") break;
-            $aspectArr[$aspects[$k]] = 1;
-          }
-        }
-        Restore(count($aspectArr), $mainPlayer);
-        break;
       default: break;
     }
   }

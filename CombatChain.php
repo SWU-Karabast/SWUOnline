@@ -7,7 +7,11 @@ function ProcessHitEffect($cardID)
   if(HitEffectsArePrevented()) return;
   switch($cardID)
   {
-
+    case "0828695133"://Seventh Sister
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY:arena=Ground");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,3", 1);
+      break;
     default: break;
   }
 
