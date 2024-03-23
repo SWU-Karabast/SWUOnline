@@ -80,10 +80,11 @@
       AddToTrie($arenasTrie, $card->cardUid, 0, $arenas);
 
       $imageUrl = $card->artFront->data->attributes->formats->card->url;
-      //$imageUrl = "https://cdn.starwarsunlimited.com/card_" . $imageName;
-      echo($imageUrl);
-
       CheckImage($card->cardUid, $imageUrl);
+      if($card->artBack->data != null) {
+        $imageUrl = $card->artBack->data->attributes->formats->card->url;
+        CheckImage($card->cardUid, $imageUrl, isBack:true);
+      }
     }
 
     echo("Page: " . $meta->pagination->page . "/" . $meta->pagination->pageCount . "<BR>");
