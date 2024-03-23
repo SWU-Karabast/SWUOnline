@@ -2480,6 +2480,15 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "ADDEXPERIENCE", 1);
       }
       break;
+    case "2756312994"://Alliance Dispatcher
+      if($from == "PLAY" && GetResolvedAbilityType($cardID) == "A") {
+        AddCurrentTurnEffect($cardID, $currentPlayer);//Cost discount
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to play");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND:definedType=Unit");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
+      }
+      break;
     default: break;
   }
 }

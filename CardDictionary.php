@@ -487,6 +487,8 @@ function GetAbilityTypes($cardID)
   switch($cardID) {
     case "2554951775"://Bail Organa
       return "A,AA";
+    case "2756312994"://Alliance Dispatcher
+      return "A,AA";
     default: return "";
   }
 }
@@ -497,6 +499,8 @@ function GetAbilityNames($cardID, $index = -1)
   switch ($cardID) {
     case "2554951775"://Bail Organa
       return "Give Experience,Attack";
+    case "2756312994"://Alliance Dispatcher
+      return "Play Unit,Attack";
     default: return "";
   }
 }

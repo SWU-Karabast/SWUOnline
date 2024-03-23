@@ -110,6 +110,10 @@ function CurrentEffectCostModifiers($cardID, $from)
           $costModifier -= 3;
           $remove = true;
           break;
+        case "2756312994"://Alliance Dispatcher
+          $costModifier -= 1;
+          $remove = true;
+          break;
         default: break;
       }
       if($remove) RemoveCurrentTurnEffect($i);
