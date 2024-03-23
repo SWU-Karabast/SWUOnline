@@ -479,6 +479,8 @@ function GetAbilityType($cardID, $index = -1, $from="-")
   {
     case "2569134232"://Jedha City
       return "A";
+    case "1393827469"://Tarkin Town
+      return "A";
     default: return "";
   }
 }
