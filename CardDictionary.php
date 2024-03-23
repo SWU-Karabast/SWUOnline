@@ -495,6 +495,8 @@ function GetAbilityTypes($cardID)
       return "A,AA";
     case "2756312994"://Alliance Dispatcher
       return "A,AA";
+    case "3572356139"://Chewbacca, Walking Carpet
+      return "A,A";
     default: return "";
   }
 }
@@ -507,6 +509,8 @@ function GetAbilityNames($cardID, $index = -1)
       return "Give Experience,Attack";
     case "2756312994"://Alliance Dispatcher
       return "Play Unit,Attack";
+    case "3572356139"://Chewbacca, Walking Carpet
+      return "Play Taunt,Deploy";
     default: return "";
   }
 }
@@ -558,7 +562,14 @@ function IsPlayable($cardID, $phase, $from, $index = -1, &$restriction = null, $
   }
   if($phase == "M" && $from == "HAND") return true;
   $isStaticType = IsStaticType($cardType, $from, $cardID);
-  if($isStaticType) $cardType = GetAbilityType($cardID, $index, $from);
+  if($isStaticType) {
+    $cardType = GetAbilityType($cardID, $index, $from);
+    if($cardType == "") {
+      $abilityTypes = GetAbilityTypes($cardID);
+      $typeArr = explode(",", $abilityTypes);
+      $cardType = $typeArr[0];
+    }
+  }
   if($phase == "M" && ($cardType == "A" || $cardType == "AA" || $cardType == "I")) return true;
   if($cardType == "I" && ($phase == "INSTANT" || $phase == "A" || $phase == "D")) return true;
   return false;

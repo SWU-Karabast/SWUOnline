@@ -2568,6 +2568,16 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYDECK-0", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
       break;
+    case "3572356139"://Chewbacca, Walking Carpet
+      $abilityName = GetResolvedAbilityName($cardID, $from);
+      if($abilityName == "Play Taunt") {
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to put into play");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND:definedType=Unit&maxCost=3");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
+        AddDecisionQueue("OP", $currentPlayer, "GETLASTALLYMZ", 1);
+      }
+      break;
     default: break;
   }
 }
