@@ -2442,6 +2442,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "4849184191"://Take Down
       MZChooseAndDestroy($currentPlayer, "THEIRALLY");
       break;
+    case "4631297392"://Devastator
+      if($from != "PLAY") {
+        $resourceCards = &GetResourceCards($currentPlayer);
+        $numResources = count($resourceCards)/ResourcePieces();
+        DealArcane($numResources, 2, "PLAYCARD", "4631297392");
+      }
+      break;
     default: break;
   }
 }

@@ -178,6 +178,7 @@ function HasSentinel($cardID, $player, $index)
     case "7596515127":
     case "5707383130":
     case "8918765832":
+    case "4631297392":
       return true;
     case "2739464284"://Gamorrean Guards
       return SearchCount(SearchAllies($player, aspect:"Cunning")) > 1;
@@ -214,6 +215,7 @@ function HasOverwhelm($cardID, $player, $index)
     case "6718924441":
     case "9097316363":
     case "3232845719":
+    case "4631297392":
       return true;
     default: return false;
   }
