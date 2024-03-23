@@ -2540,6 +2540,17 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("OP", $currentPlayer, "REMOVECARD");
       AddDecisionQueue("CHOOSEBOTTOM", $currentPlayer, "<-");
       break;
+    case "3498814896"://Mon Mothma
+      if($from != "PLAY") {
+        AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE," . 5);
+        AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+        AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Rebel", 1);
+        AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
+        AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
+        AddDecisionQueue("OP", $currentPlayer, "REMOVECARD");
+        AddDecisionQueue("CHOOSEBOTTOM", $currentPlayer, "<-");
+      }
+      break;
     default: break;
   }
 }
