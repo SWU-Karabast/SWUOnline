@@ -1892,6 +1892,17 @@ function SelfCostModifier($cardID)
 {
   global $currentPlayer, $CS_NumAttacks, $CS_LastAttack;
   $modifier = 0;
+  //Aspect Penalty
+  $penalty = 0;
+  $aspectArr = explode(",", CardAspects($cardID));
+  $playerAspects = PlayerAspects($currentPlayer);
+  for($i=0; $i<count($aspectArr); ++$i)
+  {
+    --$playerAspects[$aspectArr[$i]];
+    if($playerAspects[$aspectArr[$i]] < 0) ++$penalty;
+  }
+  $modifier += $penalty * 2;
+
   switch($cardID) {
     case "1446471743"://Force Choke
       if(SearchCount(SearchAllies($currentPlayer, trait:"Force")) > 0) $modifier -= 1;
@@ -1902,6 +1913,26 @@ function SelfCostModifier($cardID)
     default: break;
   }
   return $modifier;
+}
+
+function PlayerAspects($player)
+{
+  $char = &GetPlayerCharacter($player);
+  $aspects = [];
+  $aspects["Vigilance"] = 0;
+  $aspects["Command"] = 0;
+  $aspects["Aggression"] = 0;
+  $aspects["Cunning"] = 0;
+  $aspects["Heroism"] = 0;
+  $aspects["Villainy"] = 0;
+  for($i=0; $i<count($char); $i+=CharacterPieces())
+  {
+    $cardAspects = explode(",", CardAspects($char[$i]));
+    for($j=0; $j<count($cardAspects); ++$j) {
+      ++$aspects[$cardAspects[$j]];
+    }
+  }
+  return $aspects;
 }
 
 function IsAlternativeCostPaid($cardID, $from)
