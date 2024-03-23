@@ -133,7 +133,11 @@
     AddToTrie($hpTrie, $uuid, 0, $card->hp);
     AddToTrie($powerTrie, $uuid, 0, $card->power);
     AddToTrie($typeTrie, $uuid, 0, $card->type->data->attributes->name);
-    if($card->type2->data != null) AddToTrie($type2Trie, $uuid, 0, $card->type2->data->attributes->name);
+    if($card->type2->data != null) {
+      $type2 = $card->type2->data->attributes->name;
+      if($type2 == "Leader Unit") $type2 = "Unit";
+      AddToTrie($type2Trie, $uuid, 0, $type2);
+    }
   }
 
 ?>

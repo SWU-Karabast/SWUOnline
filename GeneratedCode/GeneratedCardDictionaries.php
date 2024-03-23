@@ -74954,7 +74954,7 @@ switch($cardID[8]) {
 case "5":
 switch($cardID[9]) {
 case "8":
-return "Leader Unit";
+return "Unit";
 default: return "";
 }
 default: return "";
@@ -74988,7 +74988,7 @@ switch($cardID[8]) {
 case "7":
 switch($cardID[9]) {
 case "7":
-return "Leader Unit";
+return "Unit";
 default: return "";
 }
 default: return "";
@@ -75052,7 +75052,7 @@ switch($cardID[8]) {
 case "2":
 switch($cardID[9]) {
 case "9":
-return "Leader Unit";
+return "Unit";
 default: return "";
 }
 default: return "";
@@ -75082,7 +75082,7 @@ switch($cardID[8]) {
 case "4":
 switch($cardID[9]) {
 case "8":
-return "Leader Unit";
+return "Unit";
 default: return "";
 }
 default: return "";
@@ -75120,7 +75120,7 @@ switch($cardID[8]) {
 case "5":
 switch($cardID[9]) {
 case "c":
-return "Leader Unit";
+return "Unit";
 default: return "";
 }
 default: return "";
@@ -75154,7 +75154,7 @@ switch($cardID[8]) {
 case "4":
 switch($cardID[9]) {
 case "6":
-return "Leader Unit";
+return "Unit";
 default: return "";
 }
 default: return "";
@@ -75188,7 +75188,7 @@ switch($cardID[8]) {
 case "f":
 switch($cardID[9]) {
 case "5":
-return "Leader Unit";
+return "Unit";
 default: return "";
 }
 default: return "";
@@ -75222,7 +75222,7 @@ switch($cardID[8]) {
 case "1":
 switch($cardID[9]) {
 case "e":
-return "Leader Unit";
+return "Unit";
 default: return "";
 }
 default: return "";
@@ -75260,7 +75260,7 @@ switch($cardID[8]) {
 case "3":
 switch($cardID[9]) {
 case "9":
-return "Leader Unit";
+return "Unit";
 default: return "";
 }
 default: return "";
@@ -75294,7 +75294,7 @@ switch($cardID[8]) {
 case "3":
 switch($cardID[9]) {
 case "6":
-return "Leader Unit";
+return "Unit";
 default: return "";
 }
 default: return "";
@@ -75328,7 +75328,7 @@ switch($cardID[8]) {
 case "7":
 switch($cardID[9]) {
 case "2":
-return "Leader Unit";
+return "Unit";
 default: return "";
 }
 default: return "";
@@ -75362,7 +75362,7 @@ switch($cardID[8]) {
 case "e":
 switch($cardID[9]) {
 case "f":
-return "Leader Unit";
+return "Unit";
 default: return "";
 }
 default: return "";
@@ -75400,7 +75400,7 @@ switch($cardID[8]) {
 case "9":
 switch($cardID[9]) {
 case "7":
-return "Leader Unit";
+return "Unit";
 default: return "";
 }
 default: return "";
@@ -75434,7 +75434,7 @@ switch($cardID[8]) {
 case "e":
 switch($cardID[9]) {
 case "f":
-return "Leader Unit";
+return "Unit";
 default: return "";
 }
 default: return "";
@@ -75498,7 +75498,7 @@ switch($cardID[8]) {
 case "9":
 switch($cardID[9]) {
 case "5":
-return "Leader Unit";
+return "Unit";
 default: return "";
 }
 default: return "";
@@ -75532,7 +75532,7 @@ switch($cardID[8]) {
 case "e":
 switch($cardID[9]) {
 case "b":
-return "Leader Unit";
+return "Unit";
 default: return "";
 }
 default: return "";
@@ -75566,7 +75566,7 @@ switch($cardID[8]) {
 case "8":
 switch($cardID[9]) {
 case "5":
-return "Leader Unit";
+return "Unit";
 default: return "";
 }
 default: return "";
@@ -75600,7 +75600,7 @@ switch($cardID[8]) {
 case "5":
 switch($cardID[9]) {
 case "4":
-return "Leader Unit";
+return "Unit";
 default: return "";
 }
 default: return "";
@@ -75638,7 +75638,7 @@ switch($cardID[8]) {
 case "3":
 switch($cardID[9]) {
 case "5":
-return "Leader Unit";
+return "Unit";
 default: return "";
 }
 default: return "";
@@ -75676,7 +75676,7 @@ switch($cardID[8]) {
 case "3":
 switch($cardID[9]) {
 case "9":
-return "Leader Unit";
+return "Unit";
 default: return "";
 }
 default: return "";
@@ -75710,7 +75710,7 @@ switch($cardID[8]) {
 case "2":
 switch($cardID[9]) {
 case "9":
-return "Leader Unit";
+return "Unit";
 default: return "";
 }
 default: return "";
@@ -75744,7 +75744,7 @@ switch($cardID[8]) {
 case "7":
 switch($cardID[9]) {
 case "a":
-return "Leader Unit";
+return "Unit";
 default: return "";
 }
 default: return "";
@@ -75782,7 +75782,7 @@ switch($cardID[8]) {
 case "2":
 switch($cardID[9]) {
 case "d":
-return "Leader Unit";
+return "Unit";
 default: return "";
 }
 default: return "";
@@ -75812,7 +75812,7 @@ switch($cardID[8]) {
 case "6":
 switch($cardID[9]) {
 case "4":
-return "Leader Unit";
+return "Unit";
 default: return "";
 }
 default: return "";
@@ -75846,7 +75846,7 @@ switch($cardID[8]) {
 case "4":
 switch($cardID[9]) {
 case "c":
-return "Leader Unit";
+return "Unit";
 default: return "";
 }
 default: return "";
@@ -75880,7 +75880,7 @@ switch($cardID[8]) {
 case "b":
 switch($cardID[9]) {
 case "0":
-return "Leader Unit";
+return "Unit";
 default: return "";
 }
 default: return "";
@@ -75914,7 +75914,7 @@ switch($cardID[8]) {
 case "2":
 switch($cardID[9]) {
 case "4":
-return "Leader Unit";
+return "Unit";
 default: return "";
 }
 default: return "";
@@ -75952,7 +75952,7 @@ switch($cardID[8]) {
 case "3":
 switch($cardID[9]) {
 case "9":
-return "Leader Unit";
+return "Unit";
 default: return "";
 }
 default: return "";
@@ -75986,7 +75986,7 @@ switch($cardID[8]) {
 case "5":
 switch($cardID[9]) {
 case "2":
-return "Leader Unit";
+return "Unit";
 default: return "";
 }
 default: return "";
@@ -76024,7 +76024,7 @@ switch($cardID[8]) {
 case "7":
 switch($cardID[9]) {
 case "4":
-return "Leader Unit";
+return "Unit";
 default: return "";
 }
 default: return "";
@@ -76058,7 +76058,7 @@ switch($cardID[8]) {
 case "6":
 switch($cardID[9]) {
 case "5":
-return "Leader Unit";
+return "Unit";
 default: return "";
 }
 default: return "";
@@ -76092,7 +76092,7 @@ switch($cardID[8]) {
 case "8":
 switch($cardID[9]) {
 case "7":
-return "Leader Unit";
+return "Unit";
 default: return "";
 }
 default: return "";
@@ -76130,7 +76130,7 @@ switch($cardID[8]) {
 case "5":
 switch($cardID[9]) {
 case "1":
-return "Leader Unit";
+return "Unit";
 default: return "";
 }
 default: return "";
@@ -76168,7 +76168,7 @@ switch($cardID[8]) {
 case "0":
 switch($cardID[9]) {
 case "5":
-return "Leader Unit";
+return "Unit";
 default: return "";
 }
 default: return "";
@@ -76206,7 +76206,7 @@ switch($cardID[8]) {
 case "e":
 switch($cardID[9]) {
 case "7":
-return "Leader Unit";
+return "Unit";
 default: return "";
 }
 default: return "";
@@ -76244,7 +76244,7 @@ switch($cardID[8]) {
 case "a":
 switch($cardID[9]) {
 case "4":
-return "Leader Unit";
+return "Unit";
 default: return "";
 }
 default: return "";

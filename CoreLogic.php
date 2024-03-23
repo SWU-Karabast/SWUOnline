@@ -2103,6 +2103,7 @@ function IsClassBonusActive($player, $class)
 
 function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalCosts = "-")
 {
+  WriteLog(DefinedCardType("8301e8d7ef") . " " . DefinedCardType2("8301e8d7ef"));
   global $currentPlayer, $layers, $CS_NumAttacks, $CS_PlayIndex;
   $index = GetClassState($currentPlayer, $CS_PlayIndex);
   if($target != "-")
