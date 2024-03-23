@@ -2,18 +2,10 @@
 
 function CheckImage($cardID, $url, $isBack=false)
 {
-  if($isBack) {
-    $filename = "./WebpImages/" . $cardID . "-Back.webp";
-    $filenameNew = "./New Cards/" . $cardID . "-Back.webp";
-    $concatFilename = "./concat/" . $cardID . "-Back.webp";
-    $cropFilename = "./crops/" . $cardID . "_cropped-Back.png";
-  }
-  else {
-    $filename = "./WebpImages/" . $cardID . ".webp";
-    $filenameNew = "./New Cards/" . $cardID . ".webp";
-    $concatFilename = "./concat/" . $cardID . ".webp";
-    $cropFilename = "./crops/" . $cardID . "_cropped.png";
-  }
+  $filename = "./WebpImages/" . $cardID . ".webp";
+  $filenameNew = "./New Cards/" . $cardID . ".webp";
+  $concatFilename = "./concat/" . $cardID . ".webp";
+  $cropFilename = "./crops/" . $cardID . "_cropped.png";
   if(!file_exists($filename))
   {
     $imageURL = $url;
@@ -38,7 +30,7 @@ function CheckImage($cardID, $url, $isBack=false)
       imagedestroy($image);
     }
   }
-  if(!file_exists($filename) && !file_exists($filenameNew)) {
+  if(!file_exists($filenameNew)) {
     echo("Converting image for " . $cardID . " to new format.<BR>");
     $image = imagecreatefromwebp($filename);
     //$image = imagecreatefrompng($filename);

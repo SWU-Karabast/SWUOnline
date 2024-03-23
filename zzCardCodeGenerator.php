@@ -45,15 +45,7 @@
       if($cardNumber < 10) $cardNumber = "00" . $cardNumber;
       else if($cardNumber < 100) $cardNumber = "0" . $cardNumber;
       $cardID = "SOR_" . $cardNumber;
-      AddToTrie($uuidLookupTrie, $cardID, 0, $card->cardUid);
-
-      AddToTrie($titleTrie, $card->cardUid, 0, str_replace('"', "'", $card->title));
-      AddToTrie($subtitleTrie, $card->cardUid, 0, str_replace('"', "'", $card->subtitle));
-      AddToTrie($costTrie, $card->cardUid, 0, $card->cost);
-      AddToTrie($hpTrie, $card->cardUid, 0, $card->hp);
-      AddToTrie($powerTrie, $card->cardUid, 0, $card->power);
-      AddToTrie($typeTrie, $card->cardUid, 0, $card->type->data->attributes->name);
-      if($card->type2->data != null) AddToTrie($type2Trie, $card->cardUid, 0, $card->type2->data->attributes->name);
+      AddToTries($cardID, $card->cardUid);
 
       $aspects = "";
       for($j = 0; $j < count($card->aspects->data); ++$j)
@@ -83,7 +75,11 @@
       CheckImage($card->cardUid, $imageUrl);
       if($card->artBack->data != null) {
         $imageUrl = $card->artBack->data->attributes->formats->card->url;
-        CheckImage($card->cardUid, $imageUrl, isBack:true);
+        $arr = explode("_", $imageUrl);
+        $arr = explode(".", $arr[count($arr)-1]);
+        $uuid = $arr[0];
+        CheckImage($uuid, $imageUrl, isBack:true);
+        AddToTries($cardID, $uuid);
       }
     }
 
@@ -125,6 +121,19 @@
     fwrite($handler, "function " . $functionName . "(\$cardID) {\r\n");
     TraverseTrie($cardArray, "", $handler, $isString, $defaultValue, $dataType);
     fwrite($handler, "}\r\n\r\n");
+  }
+
+  function AddToTries($cardID, $uuid)
+  {
+    global $uuidLookupTrie, $titleTrie, $subtitleTrie, $costTrie, $hpTrie, $powerTrie, $typeTrie, $type2Trie, $card;
+    AddToTrie($uuidLookupTrie, $cardID, 0, $uuid);
+    AddToTrie($titleTrie, $uuid, 0, str_replace('"', "'", $card->title));
+    AddToTrie($subtitleTrie, $uuid, 0, str_replace('"', "'", $card->subtitle));
+    AddToTrie($costTrie, $uuid, 0, $card->cost);
+    AddToTrie($hpTrie, $uuid, 0, $card->hp);
+    AddToTrie($powerTrie, $uuid, 0, $card->power);
+    AddToTrie($typeTrie, $uuid, 0, $card->type->data->attributes->name);
+    if($card->type2->data != null) AddToTrie($type2Trie, $uuid, 0, $card->type2->data->attributes->name);
   }
 
 ?>
