@@ -1298,7 +1298,6 @@ function AspectContains($cardID, $aspect, $player="")
 function TraitContains($cardID, $trait, $player="")
 {
   $cardTrait = CardTraits($cardID);
-  WriteLog(CardName($cardID) . " " . $cardTrait);
   return DelimStringContains($cardTrait, $trait);
 }
 
@@ -2589,6 +2588,16 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "ADDSHIELD", 1);
       } else if($abilityName == "Deploy") {
         PlayAlly("0dcb77795c", $currentPlayer);
+      }
+      break;
+    case "2912358777"://Grand Moff Tarkin
+      $abilityName = GetResolvedAbilityName($cardID, $from);
+      if($abilityName == "Give Experience") {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Imperial");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "ADDEXPERIENCE", 1);
+      } else if($abilityName == "Deploy") {
+        PlayAlly("59cd013a2d", $currentPlayer);
       }
       break;
     default: break;
