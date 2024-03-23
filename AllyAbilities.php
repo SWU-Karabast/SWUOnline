@@ -319,6 +319,11 @@ function AllyAttackAbilities($attackID)
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "ADDSHIELD", 1);
       break;
+    case "59cd013a2d"://Grand Moff Tarkin
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:trait=Imperial");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "ADDEXPERIENCE", 1);
+      break;
     default: break;
   }
   for($i = 0; $i < count($allies); $i += AllyPieces()) {
