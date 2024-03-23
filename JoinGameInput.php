@@ -175,7 +175,7 @@ if ($decklink != "") {
   //We have the decklist, now write to file
   $filename = "./Games/" . $gameName . "/p" . $playerID . "Deck.txt";
   $deckFile = fopen($filename, "w");
-  fwrite($deckFile, $leader . " " . $base . "\r\n");
+  fwrite($deckFile, $base . " " . $leader . "\r\n");
   fwrite($deckFile, $cards . "\r\n");
   fclose($deckFile);
   copy($filename, "./Games/" . $gameName . "/p" . $playerID . "DeckOrig.txt");

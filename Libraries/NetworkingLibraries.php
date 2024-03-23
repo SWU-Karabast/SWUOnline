@@ -1642,6 +1642,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
 function ProcessAttackTarget()
 {
   global $defPlayer;
+  WriteLog("here");
   $target = explode("-", GetAttackTarget());
   if ($target[0] == "THEIRAURAS") {
     $auras = &GetAuras($defPlayer);

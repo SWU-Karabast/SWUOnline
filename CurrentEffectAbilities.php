@@ -34,6 +34,7 @@ function EffectAttackModifier($cardID)
   {
     case "2587711125": return -4;//Disarm
     case "2569134232": return -4;//Jedha City
+    case "1323728003": return -1;//Electrostaff
     default: return 0;
   }
 }
@@ -404,6 +405,7 @@ function IsCombatEffectActive($cardID)
   {
     case "2587711125": return true;//Disarm
     case "2569134232": return true;//Jedha City
+    case "1323728003": return true;//Electrostaff
     default: return false;
   }
 }

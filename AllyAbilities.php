@@ -286,7 +286,17 @@ function AllyAttackAbilities($attackID)
 }
 
 function AllyAttackedAbility($attackTarget, $index) {
-  global $defPlayer;
+  global $mainPlayer, $defPlayer;
+  $ally = new Ally("MYALLY-" . $index, $defPlayer);
+  $subcards = $ally->GetSubcards();
+  for($i=0; $i<count($subcards); ++$i) {
+    switch($subcards[$i]) {
+      case "1323728003"://Electrostaff
+        AddCurrentTurnEffect("1323728003", $mainPlayer, from:"PLAY");
+        break;
+      default: break;
+    }
+  }
   switch($attackTarget) {
     case "8918765832"://Chewbacca
       $ally = new Ally("MYALLY-" . $index, $defPlayer);
@@ -352,16 +362,7 @@ function SpecificAllyAttackAbilities($attackID)
   $allies = &GetAllies($mainPlayer);
   $i = $combatChainState[$CCS_WeaponIndex];
   switch($allies[$i]) {
-    case "DsiRzt0trX"://Hasty Messenger
-      PummelHit($mainPlayer, true);
-      AddDecisionQueue("DRAW", $mainPlayer, "-", 1);
-      break;
-    case "gKVMTAeLXQ"://Blazing Direwolf
-      if(IsClassBonusActive($mainPlayer, "TAMER")) DealArcane(2, 2, "PLAYCARD", "gKVMTAeLXQ", true, $mainPlayer);
-      break;
-    case "wFH1kBLrWh"://Arcane Elemental
-      AddCurrentTurnEffect("wFH1kBLrWh", $mainPlayer);
-      break;
+
     default: break;
   }
 }
