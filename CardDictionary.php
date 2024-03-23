@@ -158,7 +158,6 @@ function HasSentinel($cardID, $player, $index)
   {
     if($subcards[$i] == "4550121827") return true;//Protector
   }
-  $ally = new Ally("MYALLY-" . $index, $player);
   for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnPieces()) {
     if($currentTurnEffects[$i+1] != $player) continue;
     if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
@@ -224,6 +223,17 @@ function HasOverwhelm($cardID, $player, $index)
 
 function HasAmbush($cardID, $player, $index)
 {
+  $allies = &GetAllies($player);
+  for($i=0; $i<count($allies); $i+=AllyPieces())
+  {
+    switch($allies[$i])
+    {
+      case "4566580942"://Admiral Piett
+        if(CardCost($cardID) >= 6) return true;
+        break;
+      default: break;
+    }
+  }
   switch($cardID)
   {
     case "5346983501":
