@@ -117,6 +117,9 @@ function RaidAmount($cardID, $player, $index)
       case "8995892693"://Red One
         if($index != $i && AspectContains($cardID, "Aggression", $player)) $amount += 1;
         break;
+      case "fb475d4ea4"://IG-88
+        if($index != $i) $amount += 1;
+        break;
       default: break;
     }
   }
