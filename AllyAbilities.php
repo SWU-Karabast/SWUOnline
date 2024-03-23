@@ -324,6 +324,18 @@ function AllyPlayCardAbility($cardID, $player="")
       default: break;
     }
   }
+  $otherPlayer = ($player == 1 ? 2 : 1);
+  $allies = &GetAllies($otherPlayer);
+  for($i=0; $i<count($allies); $i+=AllyPieces())
+  {
+    switch($allies[$i])
+    {
+      case "5555846790"://Saw Gerrera
+        DealArcane(2, 1, "TRIGGER", "5555846790", player:$otherPlayer);
+        break;
+      default: break;
+    }
+  }
 }
 
 function IsAlly($cardID, $player="")
