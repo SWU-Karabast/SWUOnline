@@ -2600,6 +2600,16 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         PlayAlly("59cd013a2d", $currentPlayer);
       }
       break;
+    case "3187874229"://Cassian Andor"
+      $abilityName = GetResolvedAbilityName($cardID, $from);
+      if($abilityName == "Draw Card") {
+        global $CS_DamageTaken;
+        $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+        if(GetClassState($otherPlayer, $CS_DamageTaken) >= 3) Draw($currentPlayer);
+      } else if($abilityName == "Deploy") {
+        PlayAlly("3c60596a7a", $currentPlayer);
+      }
+      break;
     default: break;
   }
 }

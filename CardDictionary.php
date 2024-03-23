@@ -417,6 +417,8 @@ function AbilityCost($cardID)
       return GetResolvedAbilityName($cardID) == "Give Shield" ? 1 : 0;
     case "2912358777"://Grand Moff Tarkin
       return GetResolvedAbilityName($cardID) == "Give Experience" ? 1 : 0;
+    case "3187874229"://Cassian Andor
+      return GetResolvedAbilityName($cardID) == "Draw Card" ? 1 : 0;
     default: break;
   }
   if(IsAlly($cardID)) return 0;
@@ -507,6 +509,8 @@ function GetAbilityTypes($cardID)
       return "A,A";
     case "2912358777"://Grand Moff Tarkin
       return "A,A";
+    case "3187874229"://Cassian Andor
+      return "A,A";
     default: return "";
   }
 }
@@ -525,6 +529,8 @@ function GetAbilityNames($cardID, $index = -1)
       return "Give Shield,Deploy";
     case "2912358777"://Grand Moff Tarkin
       return "Give Experience,Deploy";
+    case "3187874229"://Cassian Andor
+      return "Draw Card,Deploy";
     default: return "";
   }
 }
