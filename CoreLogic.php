@@ -2439,6 +2439,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
       }
       break;
+    case "4849184191"://Take Down
+      MZChooseAndDestroy($currentPlayer, "THEIRALLY");
+      break;
     default: break;
   }
 }
