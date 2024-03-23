@@ -209,6 +209,20 @@ function AllyDestroyedAbility($player, $index)
       break;
     default: break;
   }
+  //Abilities that trigger when an opposing ally is destroyed
+  $otherPlayer = ($player == 1 ? 2 : 1);
+  $allies = &GetAllies($otherPlayer);
+  for($i = count($allies) - AllyPieces(); $i >= 0; $i -= AllyPieces()) {
+    switch($allies[$i]) {
+      case "1664771721"://Gideon Hask
+        AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a unit to add an experience");
+        AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $otherPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $otherPlayer, "ADDEXPERIENCE", 1);
+        break;
+      default: break;
+    }
+  }
 }
 
 function OnKillAbility()
