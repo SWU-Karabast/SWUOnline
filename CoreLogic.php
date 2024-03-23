@@ -2449,6 +2449,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         DealArcane($numResources, 2, "PLAYCARD", "4631297392");
       }
       break;
+    case "4599464590"://Rugged Survivors
+      if($from == "PLAY" && HasLeader($currentPlayer)) {
+        Draw($currentPlayer);
+      }
+      break;
     default: break;
   }
 }

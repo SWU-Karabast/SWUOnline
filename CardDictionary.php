@@ -201,6 +201,7 @@ function HasGrit($cardID, $player, $index)
     case "9633997311":
     case "8098293047":
     case "5879557998":
+    case "4599464590":
       return true;
     default: return false;
   }
