@@ -2454,6 +2454,15 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         Draw($currentPlayer);
       }
       break;
+    case "4299027717"://Mining Guild Tie Fighter
+      if($from == "PLAY") {
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Do you want to pay 2 to draw a card?");
+        AddDecisionQueue("YESNO", $currentPlayer, "-", 0, 1);
+        AddDecisionQueue("NOPASS", $currentPlayer, "", 1);
+        AddDecisionQueue("PAYRESOURCES", $currentPlayer, "2", 1);
+        AddDecisionQueue("DRAW", $currentPlayer, "-", 1);
+      }
+      break;
     default: break;
   }
 }
