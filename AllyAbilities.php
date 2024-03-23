@@ -286,14 +286,28 @@ function AllyDamagePrevention($player, $index, $damage)
 //NOTE: This is for ally abilities that trigger when any ally attacks (for example miragai GRANTS an ability)
 function AllyAttackAbilities($attackID)
 {
-  global $mainPlayer, $combatChainState, $CCS_AttackUniqueID;
+  global $mainPlayer, $combatChainState, $CCS_AttackUniqueID, $defPlayer;
   $index = SearchAlliesForUniqueID($combatChainState[$CCS_AttackUniqueID], $mainPlayer);
   $restoreAmount = RestoreAmount($attackID, $mainPlayer, $index);
   if($restoreAmount > 0) Restore($restoreAmount, $mainPlayer);
   $allies = &GetAllies($mainPlayer);
   for($i = 0; $i < count($allies); $i += AllyPieces()) {
     switch($allies[$i]) {
-
+      case "1662196707"://Kanan Jarrus
+        $amount = SearchCount(SearchAllies($mainPlayer, trait:"Spectre"));
+        $cardsMilled = Mill($defPlayer, $amount);
+        WriteLog($cardsMilled);
+        $cardArr = explode(",", $cardsMilled);
+        $aspectArr = [];
+        for($j = 0; $j < count($cardArr); ++$j) {
+          $aspects = explode(",", CardAspects($cardArr[$j]));
+          for($k=0; $k<count($aspects); ++$k) {
+            if($aspects[$k] == "") break;
+            $aspectArr[$aspects[$k]] = 1;
+          }
+        }
+        Restore(count($aspectArr), $mainPlayer);
+        break;
       default: break;
     }
   }
