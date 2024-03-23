@@ -2531,6 +2531,15 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddCurrentTurnEffect("3401690666", $otherPlayer, from:"PLAY");
       }
       break;
+    case "3407775126"://Recruit
+      AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE," . 5);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+      AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-definedType-Unit", 1);
+      AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
+      AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
+      AddDecisionQueue("OP", $currentPlayer, "REMOVECARD");
+      AddDecisionQueue("CHOOSEBOTTOM", $currentPlayer, "<-");
+      break;
     default: break;
   }
 }

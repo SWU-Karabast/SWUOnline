@@ -436,6 +436,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             case "subtype": if(SubtypeContains($inputArr[0], $compareArr[$j], $player)) $passFilter = !$passFilter; break;
             case "trait": if(TraitContains($inputArr[0], $compareArr[$j], $player)) $passFilter = !$passFilter; break;
             case "player": if($inputArr[0] == $compareArr[$j]) $passFilter = !$passFilter; break;
+            case "definedType": if(DefinedTypesContains($inputArr[0], $compareArr[$j], $player)) $passFilter = !$passFilter; break;
             default: break;
           }
         }
