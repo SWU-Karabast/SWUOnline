@@ -2516,6 +2516,15 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "ADDSHIELD", 1);
       break;
+    case "3018017739"://Vanguard Ace
+      global $CS_NumCardsPlayed;
+      if($from != "PLAY") {
+        $ally = new Ally("MYALLY-" . LastAllyIndex($currentPlayer));
+        for($i=0; $i<GetClassState($currentPlayer, $CS_NumCardsPlayed); ++$i) {
+          $ally->Attach("2007868442");//Experience token
+        }
+      }
+      break;
     default: break;
   }
 }
