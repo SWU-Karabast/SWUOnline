@@ -324,6 +324,9 @@ function AllyAttackAbilities($attackID)
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "ADDEXPERIENCE", 1);
       break;
+    case "51e8757e4c"://Sabine Wren
+      DealArcane(1, 1, "PLAYCARD", "51e8757e4c");
+      break;
     default: break;
   }
   for($i = 0; $i < count($allies); $i += AllyPieces()) {
