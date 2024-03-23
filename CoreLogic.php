@@ -2103,7 +2103,6 @@ function IsClassBonusActive($player, $class)
 
 function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalCosts = "-")
 {
-  WriteLog(DefinedCardType("8301e8d7ef") . " " . DefinedCardType2("8301e8d7ef"));
   global $currentPlayer, $layers, $CS_NumAttacks, $CS_PlayIndex;
   $index = GetClassState($currentPlayer, $CS_PlayIndex);
   if($target != "-")
@@ -2580,6 +2579,16 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
       } else if($abilityName == "Deploy") {
         PlayAlly("8301e8d7ef", $currentPlayer);
+      }
+      break;
+    case "2579145458"://Luke Skywalker
+      $abilityName = GetResolvedAbilityName($cardID, $from);
+      if($abilityName == "Give Shield") {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "ADDSHIELD", 1);
+      } else if($abilityName == "Deploy") {
+        PlayAlly("0dcb77795c", $currentPlayer);
       }
       break;
     default: break;
