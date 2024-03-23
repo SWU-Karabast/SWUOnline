@@ -477,7 +477,8 @@ function GetAbilityType($cardID, $index = -1, $from="-")
   if($from == "PLAY" && IsAlly($cardID)) return "AA";
   switch($cardID)
   {
-
+    case "2569134232"://Jedha City
+      return "A";
     default: return "";
   }
 }

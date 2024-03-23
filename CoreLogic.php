@@ -2489,6 +2489,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
       }
       break;
+    case "2569134232"://Jedha City
+      $ally = new Ally($target);
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, $ally->UniqueID());
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $ally->PlayerID(), "2569134232,HAND");
+      break;
     default: break;
   }
 }
@@ -2629,6 +2634,7 @@ function PlayRequiresTarget($cardID)
     case "0827076106": return 2;//Admiral Ackbar
     case "0867878280": return 2;//It Binds All Things
     case "2587711125": return 2;//Disarm
+    case "2569134232": return 2;//Jedha City
     case "6515891401": return 2;//Karabast
     default: return -1;
   }

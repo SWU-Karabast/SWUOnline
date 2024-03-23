@@ -33,6 +33,7 @@ function EffectAttackModifier($cardID)
   switch($cardID)
   {
     case "2587711125": return -4;//Disarm
+    case "2569134232": return -4;//Jedha City
     default: return 0;
   }
 }
@@ -402,6 +403,7 @@ function IsCombatEffectActive($cardID)
   switch($cardID)
   {
     case "2587711125": return true;//Disarm
+    case "2569134232": return true;//Jedha City
     default: return false;
   }
 }
@@ -412,6 +414,7 @@ function IsCombatEffectPersistent($cardID)
   $effectArr = explode(",", $cardID);
   switch($cardID) {
     case "2587711125": return true;//Disarm
+    case "2569134232": return true;//Jedha City
     default:
       return false;
   }
