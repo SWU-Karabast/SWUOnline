@@ -116,6 +116,10 @@ function CurrentEffectCostModifiers($cardID, $from)
           $costModifier -= 1;
           $remove = true;
           break;
+        case "3509161777"://You're My Only Hope
+          $costModifier -= PlayerRemainingHealth($player) <= 5 ? 99 : 5;
+          $remove = true;
+          break;
         default: break;
       }
       if($remove) RemoveCurrentTurnEffect($i);

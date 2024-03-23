@@ -669,6 +669,12 @@ function PlayerLoseHealth($player, $amount)
   }
 }
 
+function PlayerRemainingHealth($player) {
+  $health = &GetHealth($player);
+  $char = &GetPlayerCharacter($player);
+  return CardHP($char[0]) - $health;
+}
+
 function IsGameOver()
 {
   global $inGameStatus, $GameStatus_Over;
@@ -2550,6 +2556,17 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("OP", $currentPlayer, "REMOVECARD");
         AddDecisionQueue("CHOOSEBOTTOM", $currentPlayer, "<-");
       }
+      break;
+    case "3509161777"://You're My Only Hope
+      $deck = new Deck($currentPlayer);
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, $deck->Top());
+      AddDecisionQueue("SETDQVAR", $currentPlayer, 0);
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Do you want to play <0>?");
+      AddDecisionQueue("YESNO", $currentPlayer, "-");
+      AddDecisionQueue("NOPASS", $currentPlayer, "-");
+      AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, "3509161777", 1);
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYDECK-0", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
       break;
     default: break;
   }

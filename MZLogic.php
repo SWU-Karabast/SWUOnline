@@ -146,12 +146,13 @@ function MZAddZone($player, $parameter, $lastResult)
 }
 
 function MZPlayCard($player, $mzIndex) {
+  global $CS_CharacterIndex, $CS_PlayIndex;
   $mzArr = explode("-", $mzIndex);
   $zone = &GetMZZone($player, $mzArr[0]);
   $cardID = $zone[$mzArr[1]];
   MZRemove($player, $mzIndex);
-  SetClassState($playerID, $CS_CharacterIndex, $index);
-  SetClassState($playerID, $CS_PlayIndex, $index);
+  SetClassState($player, $CS_CharacterIndex, $mzArr[1]);
+  SetClassState($player, $CS_PlayIndex, $mzArr[1]);
   PlayCard($cardID, $mzArr[0], -1, $mzArr[1]);
 }
 
