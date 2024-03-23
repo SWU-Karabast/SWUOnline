@@ -2463,6 +2463,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("DRAW", $currentPlayer, "-", 1);
       }
       break;
+    case "3802299538"://Cartel Spacer
+      if($from != "PLAY" && SearchCount(SearchAllies($currentPlayer, aspect:"Cunning")) > 1) {
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to exhaust");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:maxCost=4");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
+      }
+      break;
     default: break;
   }
 }
