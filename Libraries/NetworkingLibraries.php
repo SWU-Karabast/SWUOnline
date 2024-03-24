@@ -805,18 +805,17 @@ function ResolveChainLink()
 
   LogCombatResolutionStats($totalAttack, $totalDefense);
 
-  $target = explode("-", GetAttackTarget());
-  if ($target[0] == "THEIRALLY") {
-    $index = $target[1];
-    $allies = &GetAllies($defPlayer);
-    $totalAttack = AllyDamagePrevention($defPlayer, $index, $totalAttack);
-    if($combatChain[0] == "soO3hjaVfN" && SearchCurrentTurnEffects("soO3hjaVfN", $mainPlayer, true)) $totalAttack *= 2;
-    if($index < count($allies))
-    {
-      if(CriticalAmount($combatChain[0]) > 0) $totalAttack *= 2;
-      $allies[$index + 2] = intval($allies[$index+2]) - $totalAttack;
-      if ($totalAttack > 0) AllyDamageTakenAbilities($defPlayer, $index);
-      if ($allies[$index + 2] <= 0) DestroyAlly($defPlayer, $index, false, true);
+  $target = GetAttackTarget();
+  $targetArr = explode("-", $target);
+  if ($targetArr[0] == "THEIRALLY") {
+    $index = $targetArr[1];
+    $defender = new Ally($target, $defPlayer);
+    $defender->DealDamage($totalAttack);
+    $attackerMZ = AttackerMZID($mainPlayer);
+    $attackerArr = explode("-", $attackerMZ);
+    if($attackerArr[0] == "MYALLY") {
+      $attacker = new Ally($attackerMZ, $mainPlayer);
+      $attacker->DealDamage($defender->CurrentPower());
     }
     AddDecisionQueue("RESOLVECOMBATDAMAGE", $mainPlayer, $totalAttack);
   } else {

@@ -443,11 +443,6 @@ function AllyDamageTakenAbilities($player, $i)
 {
   $allies = &GetAllies($player);
   switch($allies[$i]) {
-    case "1Sl4Gq2OuV"://Blue slime
-      $allies[$i+2] += 1;
-      $allies[$i+7] += 1;
-      WriteLog(CardLink($allies[$i], $allies[$i]) . " got a buff counter");
-      break;
     default: break;
   }
 }
