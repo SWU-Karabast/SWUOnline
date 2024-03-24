@@ -250,6 +250,12 @@ function OnKillAbility()
       $ally = new Ally(AttackerMZID($mainPlayer), $mainPlayer);
       $ally->Ready();
       break;
+    case "9647945674"://Zeb Orrelios
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 4 damage to");
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY:arena=Ground");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,4", 1);
+      break;
     default: break;
   }
 }
