@@ -78,6 +78,16 @@ class Ally {
     $subcards = $this->GetSubcards();
     for($i=0; $i<count($subcards); ++$i) if($subcards[$i] != "-") $power += AttackValue($subcards[$i]);
     if(HasGrit($this->CardID(), $this->playerID, $this->index)) $power += $this->MaxHealth() - $this->Health();
+    //Other ally buffs
+    $otherAllies = &GetAllies($this->playerID);
+    for($i=0; $i<count($otherAllies); $i+=AllyPieces()) {
+      switch($otherAllies[$i]) {
+        case "e2c6231b35"://Director Krennig
+          if($this->Health() > $this->MaxHealth()) $power += 1;
+          break;
+        default: break;
+      }
+    }
     return $power;
   }
 
