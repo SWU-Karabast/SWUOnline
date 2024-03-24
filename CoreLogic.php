@@ -2688,6 +2688,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddCurrentTurnEffect($cardID, $currentPlayer);
       }
       break;
+    case "8560666697"://Director Krennig
+      PlayAlly("e2c6231b35", $currentPlayer);
+      break;
     default: break;
   }
 }

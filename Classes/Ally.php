@@ -88,6 +88,15 @@ class Ally {
         default: break;
       }
     }
+    $myChar = &GetPlayerCharacter($this->playerID);
+    for($i=0; $i<count($myChar); $i+=CharacterPieces()) {
+      switch($myChar[$i]) {
+        case "8560666697"://Director Krennig
+          if($this->Health() > $this->MaxHealth()) $power += 1;
+          break;
+        default: break;
+      }
+    }
     return $power;
   }
 
