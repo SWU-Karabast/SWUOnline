@@ -1902,7 +1902,7 @@ function SelfCostModifier($cardID)
     if($playerAspects[$aspectArr[$i]] < 0) ++$penalty;
   }
   $modifier += $penalty * 2;
-
+  //Self Cost Modifier
   switch($cardID) {
     case "1446471743"://Force Choke
       if(SearchCount(SearchAllies($currentPlayer, trait:"Force")) > 0) $modifier -= 1;
@@ -1911,6 +1911,19 @@ function SelfCostModifier($cardID)
       if(SearchCount(SearchAllies($currentPlayer, trait:"Trooper")) > 0) $modifier -= 1;
       break;
     default: break;
+  }
+  //Opponent ally cost modifier
+  $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+  $allies = &GetAllies($otherPlayer);
+  for($i=0; $i<count($allies); $i+=AllyPieces())
+  {
+    if($allies[$i+1] == 0) continue;
+    switch($allies[$i]) {
+      case "9412277544"://Del Meeko
+        if(DefinedTypesContains($cardID, "Event", $currentPlayer)) $modifier += 1;
+        break;
+      default: break;
+    }
   }
   return $modifier;
 }
