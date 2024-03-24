@@ -209,6 +209,18 @@ function AllyDestroyedAbility($player, $index)
       break;
     default: break;
   }
+  //Abilities that trigger when a different ally is destroyed
+  $allies = &GetAllies($player);
+  for($i = count($allies) - AllyPieces(); $i >= 0; $i -= AllyPieces()) {
+    if($i == $index) continue;
+    switch($allies[$i]) {
+      case "9353672706"://General Krell
+        Draw($player);
+        WriteLog("Drew a card from General Krell");
+        break;
+      default: break;
+    }
+  }
   //Abilities that trigger when an opposing ally is destroyed
   $otherPlayer = ($player == 1 ? 2 : 1);
   $allies = &GetAllies($otherPlayer);
