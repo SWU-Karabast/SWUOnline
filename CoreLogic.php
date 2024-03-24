@@ -2683,6 +2683,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         }
       }
       break;
+    case "9070397522"://Rebel Trooper
+      if($from != "PLAY") {
+        AddCurrentTurnEffect($cardID, $currentPlayer);
+      }
+      break;
     default: break;
   }
 }
