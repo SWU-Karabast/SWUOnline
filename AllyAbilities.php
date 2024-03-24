@@ -474,15 +474,8 @@ function AllyBeginTurnEffects()
     if($mainAllies[$i+1] != 0) {
       if($mainAllies[$i+3] != 1) $mainAllies[$i+1] = 2;
     }
-    $ally = new Ally("MYALLY-" . $i);
-    $ally->OnFoster();
     switch($ally->CardID()) {
-      case "7dedg616r0"://Freydis, Master Tactician
-        if(IsClassBonusActive($mainPlayer, "RANGER")) {
-          $amount = $ally->ModifyNamedCounters("TACTIC", 1);
-          PlayerOpt($mainPlayer, $amount);
-        }
-        break;
+      
       default: break;
     }
   }

@@ -63,6 +63,7 @@ class Ally {
     return $this->Health() < $this->MaxHealth();
   }
 
+  //8752877738 shield
   //Returns true if the ally is destroyed
   function DealDamage($amount) {
     $this->allies[$this->index+2] -= $amount;
@@ -98,37 +99,6 @@ class Ally {
       }
     }
     return $power;
-  }
-
-  function OnFoster() {
-    $fosterActive = $this->allies[$this->index+10] == 0;
-    $this->allies[$this->index+10] = 2;
-    if($fosterActive) {
-      switch($this->allies[$this->index]) {
-        case "22tk3ir1o0"://Novice Mechanist
-          PlayAlly("mu6gvnta6q", $this->playerID);
-          break;
-        case "kuz07nk45s"://Forgelight Shieldmaiden
-          Draw($this->playerID);
-          Draw($this->playerID);
-          PummelHit($this->playerID);
-          AddDecisionQueue("ALLCARDELEMENTORPASS", $this->playerID, "FIRE", 1);
-          AddDecisionQueue("PASSPARAMETER", $this->playerID, "MYALLY-" . $this->index, 1);
-          AddDecisionQueue("MZOP", $this->playerID, "BUFFALLY", 1);
-          break;
-        case "mnu1xhs5jw"://Awakened Frostguard
-          if(!IsClassBonusActive($this->playerID, "GUARDIAN")) break;
-          for($i=0; $i<2; ++$i) {
-            AddFloatingMemoryChoice();
-            AddDecisionQueue("DRAW", $this->playerID, "-", 1);
-            AddDecisionQueue("PASSPARAMETER", $this->playerID, "MYALLY-" . $this->index, 1);
-            AddDecisionQueue("MZOP", $this->playerID, "BUFFALLY", 1);
-          }
-          break;
-        default: break;
-      }
-    }
-    return $fosterActive;
   }
 
   function Ready() {
