@@ -232,6 +232,9 @@ function AllyDestroyedAbility($player, $index)
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $otherPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $otherPlayer, "ADDEXPERIENCE", 1);
         break;
+      case "b0dbca5c05"://Iden Versio
+        Restore(1, $otherPlayer);
+        break;
       default: break;
     }
   }
