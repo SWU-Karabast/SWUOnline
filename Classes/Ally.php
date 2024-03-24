@@ -63,15 +63,21 @@ class Ally {
     return $this->Health() < $this->MaxHealth();
   }
 
+  //Returns true if the ally is destroyed
   function DealDamage($amount) {
     $this->allies[$this->index+2] -= $amount;
-    if($this->Health() <= 0) DestroyAlly($this->playerID, $this->index);
+    if($this->Health() <= 0 && $this->CardID() != "d1a7b76ae7") {
+      DestroyAlly($this->playerID, $this->index);
+      return true;
+    }
+    return false;
   }
 
   function CurrentPower() {
     $power = AttackValue($this->CardID()) + $this->allies[$this->index+7];
     $subcards = $this->GetSubcards();
     for($i=0; $i<count($subcards); ++$i) if($subcards[$i] != "-") $power += AttackValue($subcards[$i]);
+    if(HasGrit($this->CardID(), $this->playerID, $this->index)) $power += $this->MaxHealth() - $this->Health();
     return $power;
   }
 

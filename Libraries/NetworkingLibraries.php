@@ -810,10 +810,10 @@ function ResolveChainLink()
   if ($targetArr[0] == "THEIRALLY") {
     $index = $targetArr[1];
     $defender = new Ally($target, $defPlayer);
-    $defender->DealDamage($totalAttack);
+    $destroyed = $defender->DealDamage($totalAttack);
     $attackerMZ = AttackerMZID($mainPlayer);
     $attackerArr = explode("-", $attackerMZ);
-    if($attackerArr[0] == "MYALLY") {
+    if($attackerArr[0] == "MYALLY" && (!$destroyed || $combatChain[0] != "9500514827")) { //Han Solo shoots first
       $attacker = new Ally($attackerMZ, $mainPlayer);
       $attacker->DealDamage($defender->CurrentPower());
     }

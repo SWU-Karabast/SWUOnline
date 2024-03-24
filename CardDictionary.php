@@ -252,6 +252,7 @@ function HasAmbush($cardID, $player, $index)
     case "0052542605":
     case "1862616109":
     case "3684950815":
+    case "9500514827":
       return true;
     case "2027289177"://Escort Skiff
       return SearchCount(SearchAllies($player, aspect:"Command")) > 1;
