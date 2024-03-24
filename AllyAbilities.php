@@ -551,6 +551,10 @@ function AllyEndTurnAbilities()
         AddDecisionQueue("PASSPARAMETER", $mainPlayer, "MYALLY-" . $i, 1);
         AddDecisionQueue("MZOP", $mainPlayer, "BOUNCE", 1);
         break;
+      case "d1a7b76ae7"://Chirrut Imwe
+        $ally = new Ally("MYALLY-" . $i, $mainPlayer);
+        if($ally->Health() <= 0) DestroyAlly($mainPlayer, $i);
+        break;
       default: break;
     }
   }
