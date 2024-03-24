@@ -184,22 +184,7 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
       if(CanPlayAsInstant($cardID, $index, "BANISH")) SetClassState($currentPlayer, $CS_PlayedAsInstant, "1");
       PlayCard($cardID, "BANISH", -1, $index, $banish[$index + 2]);
       break;
-    case 15: //Materialize
-      $index = $cardID;
-      $material = &GetMaterial($currentPlayer);
-      $cardID = $material[$index];
-      $cost = MemoryCost($cardID, $currentPlayer);
-      $memory = &GetMemory($currentPlayer);
-      if($cost > (count($memory) + SearchCount(SearchDiscard($currentPlayer, floatingMemoryOnly:true)))) { WriteLog("Not enough memory"); break; }
-      WriteLog("Player $currentPlayer materialized " . CardLink($cardID, $cardID));
-      AddDecisionQueue("PASSPARAMETER", $currentPlayer, $cost);
-      AddDecisionQueue("SETDQVAR", $currentPlayer, "0");
-      if($cost > 0) {
-        AddFloatingMemoryChoice();
-      }
-      AddDecisionQueue("FINISHMATERIALIZE", $currentPlayer, $index);
-      AddDecisionQueue("STARTTURN", $currentPlayer, "-");
-      ProcessDecisionQueue();
+    case 15: //Unused
       break;
     case 16: case 18: //Decision Queue (15 and 18 deprecated)
       if(count($decisionQueue) > 0)
@@ -1500,26 +1485,6 @@ function MaterializeCardEffect($cardID)
     default:
       break;
   }
-}
-
-function AddDQFinishMaterialize($player, $skipCosts=false)
-{
-  AddDecisionQueue("SETDQVAR", $player, "0", 1);
-  AddDecisionQueue("MZOP", $player, "GETCARDINDEX", 1);
-  AddDecisionQueue("SETDQVAR", $player, "1", 1);
-  if($skipCosts)
-  {
-    AddDecisionQueue("PASSPARAMETER", $player, "0", 1);
-    AddDecisionQueue("SETDQVAR", $player, "0", 1);
-  }
-  else
-  {
-    //TODO: Add floating memory
-    AddDecisionQueue("PASSPARAMETER", $player, "{0}", 1);
-    AddDecisionQueue("MZOP", $player, "GETMEMORYCOST", 1);
-    AddDecisionQueue("SETDQVAR", $player, "0", 1);
-  }
-  AddDecisionQueue("FINISHMATERIALIZE", $player, "{1}", 1);
 }
 
 function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $additionalCosts = "-", $uniqueID = "-1", $layerIndex = -1)

@@ -1290,39 +1290,6 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         GetTargetOfAttack($params[0]);
       }
       return $lastResult;
-    case "BANISHRANDOMMEMORY":
-      BanishRandomMemory($currentPlayer);
-      return $lastResult;
-    case "FINISHMATERIALIZE":
-      global $CS_NumMaterializations;
-      if(SearchCharacterForCard($currentPlayer, "4sm14RaEkg")) LoseHealth(2, $currentPlayer);
-      $cost = $dqVars[0];
-      $index = $parameter;
-      $cardID = RemoveMaterial($currentPlayer, $index);
-      for($i=0; $i<$cost; ++$i) BanishRandomMemory($currentPlayer);
-      if(CardTypeContains($cardID, "CHAMPION"))
-      {
-        $char = &GetPlayerCharacter($currentPlayer);
-        if(count($char) == 0) AddCharacter($cardID, $currentPlayer);
-        else {
-          $char[0] = $cardID;
-          $char[1] = 2;
-          IncrementClassState($currentPlayer, $CS_NumLeveledUp);
-        }
-      }
-      else if(CardTypeContains($cardID, "REGALIA"))
-      {
-        $player = ($cardID == "4sm14RaEkg" ? ($currentPlayer == 1 ? 2 : 1) : $currentPlayer);//Excalibur
-        if(CardTypeContains($cardID, "ITEM")) PutItemIntoPlayForPlayer($cardID, $player);
-        else AddCharacter($cardID, $player);
-      }
-      else
-      {
-        AddHand($currentPlayer, $cardID);
-      }
-      MaterializeCardEffect($cardID);
-      IncrementClassState($currentPlayer, $CS_NumMaterializations);
-      return $cardID;
     case "STARTTURN":
       StartTurn();
       return $lastResult;

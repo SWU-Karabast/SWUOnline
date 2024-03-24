@@ -289,6 +289,10 @@ function MZBounce($player, $target)
       $cardID = RemoveAlly($player, $pieces[1]);
       AddHand($player, $cardID);
       break;
+    case "MYRESOURCES": case "THEIRRESOURCES":
+      $cardID = RemoveResource($player, $pieces[1]);
+      AddHand($player, $cardID);
+      break;
     default: break;
   }
 }

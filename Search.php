@@ -47,7 +47,7 @@ function SearchCombatChainLink($player, $type = "", $definedType = "", $maxCost 
   return SearchInner($combatChain, $player, "CC", CombatChainPieces(), $type, $definedType, $maxCost, $minCost, $aspect, $arena, $floatingMemoryOnly, $phantasmOnly, $trait, $specOnly, $maxAttack, $maxDef, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
 }
 
-function SearchMemory($player, $type = "", $definedType = "", $maxCost = -1, $minCost = -1, $aspect = "", $arena = "", $floatingMemoryOnly = false, $phantasmOnly = false, $trait = -1, $specOnly = false, $maxAttack = -1, $maxDef = -1, $frozenOnly = false, $hasNegCounters = false, $hasEnergyCounters = false, $comboOnly = false, $minAttack = false)
+function SearchResources($player, $type = "", $definedType = "", $maxCost = -1, $minCost = -1, $aspect = "", $arena = "", $floatingMemoryOnly = false, $phantasmOnly = false, $trait = -1, $specOnly = false, $maxAttack = -1, $maxDef = -1, $frozenOnly = false, $hasNegCounters = false, $hasEnergyCounters = false, $comboOnly = false, $minAttack = false)
 {
   $arsenal = &GetMemory($player);
   return SearchInner($arsenal, $player, "MEM", MemoryPieces(), $type, $definedType, $maxCost, $minCost, $aspect, $arena, $floatingMemoryOnly, $phantasmOnly, $trait, $specOnly, $maxAttack, $maxDef, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
@@ -893,9 +893,6 @@ function SearchMultizone($player, $searches)
         case "MYDISCARD": case "THEIRDISCARD":
           $searchResult = SearchDiscard($searchPlayer, $type, $definedType, $maxCost, $minCost, $class, $arena, $floatingMemoryOnly, $phantasmOnly, $trait, $specOnly, $maxAttack, $maxDef, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
           break;
-        case "MYMEM": case "THEIRMEM":
-          $searchResult = SearchMemory($searchPlayer, $type, $definedType, $maxCost, $minCost, $class, $arena, $floatingMemoryOnly, $phantasmOnly, $trait, $specOnly, $maxAttack, $maxDef, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
-          break;
         case "MYAURAS": case "THEIRAURAS":
           $searchResult = SearchAura($searchPlayer, $type, $definedType, $maxCost, $minCost, $class, $arena, $floatingMemoryOnly, $phantasmOnly, $trait, $specOnly, $maxAttack, $maxDef, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
           break;
@@ -920,8 +917,8 @@ function SearchMultizone($player, $searches)
         case "MYMATERIAL": case "THEIRMATERIAL":
           $searchResult = SearchMaterial($searchPlayer, $type, $definedType, $maxCost, $minCost, $class, $arena, $floatingMemoryOnly, $phantasmOnly, $trait, $specOnly, $maxAttack, $maxDef, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
           break;
-        case "MYMEMORY": case "THEIRMEMORY":
-          $searchResult = SearchMemory($searchPlayer, $type, $definedType, $maxCost, $minCost, $class, $arena, $floatingMemoryOnly, $phantasmOnly, $trait, $specOnly, $maxAttack, $maxDef, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
+        case "MYRESOURCES": case "THEIRRESOURCES":
+          $searchResult = SearchResources($searchPlayer, $type, $definedType, $maxCost, $minCost, $class, $arena, $floatingMemoryOnly, $phantasmOnly, $trait, $specOnly, $maxAttack, $maxDef, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
           break;
         case "COMBATCHAINLINK":
           $searchResult = SearchCombatChainLink($searchPlayer, $type, $definedType, $maxCost, $minCost, $class, $arena, $floatingMemoryOnly, $phantasmOnly, $trait, $specOnly, $maxAttack, $maxDef, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);

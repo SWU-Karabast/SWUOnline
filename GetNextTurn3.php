@@ -895,8 +895,8 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       else if ($option[0] == "THEIRDECK") $source = $theirDeck;
       else if ($option[0] == "MYMATERIAL") $source = $myMaterial;
       else if ($option[0] == "THEIRMATERIAL") $source = $theirMaterial;
-      else if ($option[0] == "MYMEMORY") $source = &GetMemory($playerID);
-      else if ($option[0] == "THEIRMEMORY") $source = &GetMemory($playerID == 1 ? 2 : 1);
+      else if ($option[0] == "MYRESOURCES") $source = &GetMemory($playerID);
+      else if ($option[0] == "THEIRRESOURCES") $source = &GetMemory($playerID == 1 ? 2 : 1);
       else if ($option[0] == "LANDMARK") $source = $landmarks;
       else if ($option[0] == "CC") $source = $combatChain;
       else if ($option[0] == "COMBATCHAINLINK") $source = $combatChain;

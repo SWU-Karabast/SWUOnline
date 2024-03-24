@@ -292,6 +292,7 @@ function HasSaboteur($cardID, $player, $index)
     case "1746195484":
     case "5907868016":
     case "0828695133":
+    case "9250443409":
       return true;
     default: return false;
   }

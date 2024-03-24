@@ -122,13 +122,6 @@ function CharacterStartTurnAbility($index)
   if($char->status == 0 && !CharacterTriggerInGraveyard($char->cardID)) return;
   if($char->status == 1) return;
   switch($char->cardID) {
-    case "UAF6Nr7GUE"://Zander, Blinding Steel
-      if(RevealMemory($mainPlayer))
-      {
-        $numLuxem = SearchCount(SearchMemory($mainPlayer, element:"LUXEM"));
-        for($i=0; $i<$numLuxem; ++$i) HandIntoMemory($defPlayer);
-      }
-      break;
     default: break;
   }
 }

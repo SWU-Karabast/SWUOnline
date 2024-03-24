@@ -2673,6 +2673,16 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         PummelHit($otherPlayer);
       }
       break;
+    case "9250443409"://Lando Calrissian
+      if($from != "PLAY") {
+        for($i=0; $i<2; ++$i) {
+          AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose up to two resource cards to return to your hand");
+          AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYRESOURCES");
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+          AddDecisionQueue("MZOP", $currentPlayer, "BOUNCE", 1);
+        }
+      }
+      break;
     default: break;
   }
 }

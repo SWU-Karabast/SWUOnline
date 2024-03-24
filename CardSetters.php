@@ -127,16 +127,6 @@ function AddResources($cardID, $player, $from, $facing, $counters=0)
   array_push($arsenal, GetUniqueId()); //Unique ID
 }
 
-function BanishRandomMemory($player, $mod="-")
-{
-  $memory = &GetMemory($player);
-  if(count($memory) == 0) return;
-  $index = (GetRandom() % (count($memory)/MemoryPieces())) * MemoryPieces();
-  $cardID = $memory[$index];
-  RemoveMemory($player, $index);
-  BanishCardForPlayer($cardID, $player, "MEMORY", $mod, "MEMORY");
-}
-
 function AddArsenal($cardID, $player, $from, $facing, $counters=0)
 {
   global $mainPlayer;
@@ -182,7 +172,7 @@ function AddHand($player, $cardID)
   array_push($hand, $cardID);
 }
 
-function RemoveMemory($player, $index)
+function RemoveResource($player, $index)
 {
   $arsenal = &GetArsenal($player);
   if(count($arsenal) == 0) return "";
