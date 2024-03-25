@@ -322,38 +322,6 @@ function AllyAttackAbilities($attackID)
   if($restoreAmount > 0) Restore($restoreAmount, $mainPlayer);
   $allies = &GetAllies($mainPlayer);
   switch($attackID) {
-    case "1662196707"://Kanan Jarrus
-      $amount = SearchCount(SearchAllies($mainPlayer, trait:"Spectre"));
-      $cardsMilled = Mill($defPlayer, $amount);
-      $cardArr = explode(",", $cardsMilled);
-      $aspectArr = [];
-      for($j = 0; $j < count($cardArr); ++$j) {
-        $aspects = explode(",", CardAspects($cardArr[$j]));
-        for($k=0; $k<count($aspects); ++$k) {
-          if($aspects[$k] == "") break;
-          $aspectArr[$aspects[$k]] = 1;
-        }
-      }
-      Restore(count($aspectArr), $mainPlayer);
-      break;
-    case "0ca1902a46"://Darth Vader
-      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY");
-      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
-      AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,2", 1);
-      break;
-    case "0dcb77795c"://Luke Skywalker
-      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
-      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
-      AddDecisionQueue("MZOP", $mainPlayer, "ADDSHIELD", 1);
-      break;
-    case "59cd013a2d"://Grand Moff Tarkin
-      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:trait=Imperial");
-      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
-      AddDecisionQueue("MZOP", $mainPlayer, "ADDEXPERIENCE", 1);
-      break;
-    case "51e8757e4c"://Sabine Wren
-      DealArcane(1, 1, "PLAYCARD", "51e8757e4c");
-      break;
     default: break;
   }
   for($i = 0; $i < count($allies); $i += AllyPieces()) {
@@ -440,7 +408,46 @@ function SpecificAllyAttackAbilities($attackID)
   $allies = &GetAllies($mainPlayer);
   $i = $combatChainState[$CCS_WeaponIndex];
   switch($allies[$i]) {
-
+    case "1662196707"://Kanan Jarrus
+      $amount = SearchCount(SearchAllies($mainPlayer, trait:"Spectre"));
+      $cardsMilled = Mill($defPlayer, $amount);
+      $cardArr = explode(",", $cardsMilled);
+      $aspectArr = [];
+      for($j = 0; $j < count($cardArr); ++$j) {
+        $aspects = explode(",", CardAspects($cardArr[$j]));
+        for($k=0; $k<count($aspects); ++$k) {
+          if($aspects[$k] == "") break;
+          $aspectArr[$aspects[$k]] = 1;
+        }
+      }
+      Restore(count($aspectArr), $mainPlayer);
+      break;
+    case "0ca1902a46"://Darth Vader
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,2", 1);
+      break;
+    case "0dcb77795c"://Luke Skywalker
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "ADDSHIELD", 1);
+      break;
+    case "59cd013a2d"://Grand Moff Tarkin
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:trait=Imperial");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "ADDEXPERIENCE", 1);
+      break;
+    case "51e8757e4c"://Sabine Wren
+      DealArcane(1, 1, "PLAYCARD", "51e8757e4c");
+      break;
+    case "8395007579"://Fifth Brother
+      $ally = new Ally("MYALLY-" . $i, $mainPlayer);
+      $ally->DealDamage(1);
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 1 damage to");
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY:arena=Ground");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,1", 1);
+      break;
     default: break;
   }
 }

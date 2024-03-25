@@ -149,6 +149,7 @@ function RaidAmount($cardID, $player, $index)
     case "8995892693": $amount += 1; break;
     case "3613174521": $amount += 1; break;
     case "4111616117": $amount += 1; break;
+    case "8395007579": $amount += $ally->MaxHealth() - $ally->Health(); break;//Fifth Brother
     default: break;
   }
   return $amount;
