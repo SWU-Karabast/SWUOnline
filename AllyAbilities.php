@@ -449,6 +449,13 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,1", 1);
       break;
+    case "6827598372"://Grand Inquisitor
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 1 damage to");
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:maxPower=3");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,1", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "READY", 1);
+      break;
     default: break;
   }
 }
