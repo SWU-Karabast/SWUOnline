@@ -63,9 +63,17 @@ class Ally {
     return $this->Health() < $this->MaxHealth();
   }
 
-  //8752877738 shield
   //Returns true if the ally is destroyed
   function DealDamage($amount) {
+    $subcards = $this->GetSubcards();
+    for($i=0; $i<count($subcards); ++$i) {
+      if($subcards[$i] == "8752877738") {
+        unset($subcards[$i]);
+        $subcards = array_values($subcards);
+        $this->allies[$this->index+4] = count($subcards) > 0 ? implode(",", $subcards) : "-";
+        return false;//Cancel the damage if shield prevented it
+      }
+    }
     $this->allies[$this->index+2] -= $amount;
     if($this->Health() <= 0 && $this->CardID() != "d1a7b76ae7") {
       DestroyAlly($this->playerID, $this->index);

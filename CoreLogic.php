@@ -2243,7 +2243,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "8981523525"://Moment of Peace
       $ally = new Ally($target);
-      $ally->Attach("8752877738");
+      $ally->Attach("8752877738");//Shield
       break;
     case "8679831560"://Repair
       $mzArr = explode("-", $target);
