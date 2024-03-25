@@ -2713,6 +2713,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE," . $amount, 1);
       }
       break;
+    case "7366340487"://Outmaneuver
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a mode for K-2SO");
+      AddDecisionQueue("MULTICHOOSETEXT", $currentPlayer, "1-Ground,Space-1");
+      AddDecisionQueue("SHOWMODES", $currentPlayer, $cardID, 1);
+      AddDecisionQueue("MODAL", $currentPlayer, "OUTMANEUVER", 1);
+      break;
     default: break;
   }
 }
@@ -2750,7 +2756,7 @@ function ExhaustAllAllies($arena, $player)
   for($i=0; $i<count($allies); $i+=AllyPieces())
   {
     if(CardArenas($allies[$i]) == $arena) {
-      $ally = new Ally("MYALLY-" . $i);
+      $ally = new Ally("MYALLY-" . $i, $player);
       $ally->Exhaust();
     }
   }

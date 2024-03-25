@@ -13,6 +13,10 @@ function ModalAbilities($player, $card, $lastResult)
         default: break;
       }
       return $lastResult;
+    case "OUTMANEUVER":
+      ExhaustAllAllies($lastResult[0], 1);
+      ExhaustAllAllies($lastResult[0], 2);
+      return $lastResult;
     default: return "";
   }
 }

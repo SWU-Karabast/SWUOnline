@@ -47,30 +47,6 @@
       $cardID = "SOR_" . $cardNumber;
       AddToTries($cardID, $card->cardUid);
 
-      $aspects = "";
-      for($j = 0; $j < count($card->aspects->data); ++$j)
-      {
-        if($aspects != "") $aspects .= ",";
-        $aspects .= $card->aspects->data[$j]->attributes->name;
-      }
-      AddToTrie($aspectsTrie, $card->cardUid, 0, $aspects);
-
-      $traits = "";
-      for($j = 0; $j < count($card->traits->data); ++$j)
-      {
-        if($traits != "") $traits .= ",";
-        $traits .= $card->traits->data[$j]->attributes->name;
-      }
-      AddToTrie($traitsTrie, $card->cardUid, 0, $traits);
-
-      $arenas = "";
-      for($j = 0; $j < count($card->arenas->data); ++$j)
-      {
-        if($arenas != "") $arenas .= ",";
-        $arenas .= $card->arenas->data[$j]->attributes->name;
-      }
-      AddToTrie($arenasTrie, $card->cardUid, 0, $arenas);
-
       $imageUrl = $card->artFront->data->attributes->formats->card->url;
       CheckImage($card->cardUid, $imageUrl);
       if($card->artBack->data != null) {
@@ -126,6 +102,7 @@
   function AddToTries($cardID, $uuid)
   {
     global $uuidLookupTrie, $titleTrie, $subtitleTrie, $costTrie, $hpTrie, $powerTrie, $typeTrie, $type2Trie, $card;
+    global $aspectsTrie, $traitsTrie, $arenasTrie;
     AddToTrie($uuidLookupTrie, $cardID, 0, $uuid);
     AddToTrie($titleTrie, $uuid, 0, str_replace('"', "'", $card->title));
     AddToTrie($subtitleTrie, $uuid, 0, str_replace('"', "'", $card->subtitle));
@@ -138,6 +115,30 @@
       if($type2 == "Leader Unit") $type2 = "Unit";
       AddToTrie($type2Trie, $uuid, 0, $type2);
     }
+    
+    $aspects = "";
+    for($j = 0; $j < count($card->aspects->data); ++$j)
+    {
+      if($aspects != "") $aspects .= ",";
+      $aspects .= $card->aspects->data[$j]->attributes->name;
+    }
+    AddToTrie($aspectsTrie, $uuid, 0, $aspects);
+
+    $traits = "";
+    for($j = 0; $j < count($card->traits->data); ++$j)
+    {
+      if($traits != "") $traits .= ",";
+      $traits .= $card->traits->data[$j]->attributes->name;
+    }
+    AddToTrie($traitsTrie, $uuid, 0, $traits);
+
+    $arenas = "";
+    for($j = 0; $j < count($card->arenas->data); ++$j)
+    {
+      if($arenas != "") $arenas .= ",";
+      $arenas .= $card->arenas->data[$j]->attributes->name;
+    }
+    AddToTrie($arenasTrie, $uuid, 0, $arenas);
   }
 
 ?>
