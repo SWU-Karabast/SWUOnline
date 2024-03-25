@@ -207,6 +207,12 @@ function AllyDestroyedAbility($player, $index)
       AddDecisionQueue("SHOWMODES", $player, $cardID, 1);
       AddDecisionQueue("MODAL", $player, "K2SO", 1);
       break;
+    case "8333567388"://Distant Patroller
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to give a shield");
+      AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:aspect=Vigilance");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+      AddDecisionQueue("MZOP", $player, "ADDSHIELD", 1);
+      break;
     default: break;
   }
   //Abilities that trigger when a different ally is destroyed
