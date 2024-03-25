@@ -91,46 +91,9 @@ function CardIsArsenalable($storedPriorityNode)
 
 function RogSelfCostMod($cardID)
 {
-  global $CS_NumCharged, $currentPlayer, $combatChain, $CS_LayerTarget;
+  global $currentPlayer, $combatChain, $CS_LayerTarget;
   switch ($cardID) {
-    case "ARC080":
-      return (-1 * NumRunechants($currentPlayer));
-    case "ARC082":
-      return (-1 * NumRunechants($currentPlayer));
-    case "ARC088":
-    case "ARC089":
-    case "ARC090":
-      return (-1 * NumRunechants($currentPlayer));
-    case "ARC094":
-    case "ARC095":
-    case "ARC096":
-      return (-1 * NumRunechants($currentPlayer));
-    case "ARC097":
-    case "ARC098":
-    case "ARC099":
-      return (-1 * NumRunechants($currentPlayer));
-    case "ARC100":
-    case "ARC101":
-    case "ARC102":
-      return (-1 * NumRunechants($currentPlayer));
-    case "MON032":
-      return (-1 * (2 * GetClassState($currentPlayer, $CS_NumCharged)));
-    case "MON084":
-    case "MON085":
-    case "MON086":
-      return TalentContains($combatChain[GetClassState($currentPlayer, $CS_LayerTarget)], "SHADOW") ? -1 : 0;
-    case "DYN104":
-    case "DYN105":
-    case "DYN106":
-      $numHypers = 0;
-      $numHypers += CountItem("ARC036", $currentPlayer);
-      $numHypers += CountItem("DYN111", $currentPlayer);
-      $numHypers += CountItem("DYN112", $currentPlayer);
-      return $numHypers > 0 ? -1 : 0;
-    case "WTR206": case "WTR207": case "WTR208":
-      if(GetPlayerCharacter($currentPlayer)[0] == "ROGUE030"){
-        return -1;
-      }
+
     default:
       return 0;
   }

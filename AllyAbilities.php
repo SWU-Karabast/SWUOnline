@@ -40,10 +40,11 @@ function RemoveAlly($player, $index)
 
 function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
 {
-  global $combatChain, $mainPlayer;
+  global $combatChain, $mainPlayer, $CS_NumAlliesDestroyed;
   $allies = &GetAllies($player);
   if(!$skipDestroy) {
     AllyDestroyedAbility($player, $index);
+    IncrementClassState($player, $CS_NumAlliesDestroyed);
   }
   AllyLeavesPlayAbility($player, $index);
   $cardID = $allies[$index];

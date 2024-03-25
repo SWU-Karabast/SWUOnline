@@ -646,34 +646,8 @@ function DiscardCard($player, $index)
 
 function CardDiscarded($player, $discarded, $source = "")
 {
-  global $CS_Num6PowDisc, $mainPlayer;
+  global $mainPlayer;
   AddEvent("DISCARD", $discarded);
-  if(AttackValue($discarded) >= 6) {
-    $character = &GetPlayerCharacter($player);
-    $characterID = ShiyanaCharacter($character[0]);
-    if(($characterID == "WTR001" || $characterID == "WTR002" || $characterID == "RVD001") && $character[1] == 2 && $player == $mainPlayer) { //Rhinar
-      AddLayer("TRIGGER", $mainPlayer, $character[0]);
-    }
-    $index = FindCharacterIndex($player, "DYN006");
-    if($index >= 0 && IsEquipUsable($player, $index) && IsCharacterActive($player, $index) && $player == $mainPlayer) {
-      AddLayer("TRIGGER", $player, $character[$index]);
-    }
-    if(SearchCurrentTurnEffects("DYN009", $player)) {
-      $discard = &GetDiscard($player);
-      $found = -1;
-      for($i = 0; $i < count($discard) && $found == -1; $i += DiscardPieces()) {
-        if($discard[$i] == $discarded) $found = $i;
-      }
-      RemoveGraveyard($player, $found);
-      BanishCardForPlayer($discarded, $player, "GY", "-", $player);
-      AddLayer("TRIGGER", $player, "DYN009");
-    }
-    IncrementClassState($player, $CS_Num6PowDisc);
-  }
-  if($discarded == "CRU008" && $source != "" && ClassContains($source, "BRUTE", $mainPlayer) && CardType($source) == "AA") {
-    WriteLog(CardLink("CRU008", "CRU008") . " intimidated because it was discarded by a Brute attack action card.");
-    AddLayer("TRIGGER", $mainPlayer, $discarded);
-  }
 }
 
 function DestroyFrozenArsenal($player)

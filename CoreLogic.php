@@ -2703,6 +2703,16 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,2", 1);
       }
       break;
+    case "7109944284"://Luke Skywalker
+      global $CS_NumAlliesDestroyed;
+      if($from != "PLAY") {
+        $amount = GetClassState($CS_NumAlliesDestroyed) > 0 ? 6 : 3;
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to debuff");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE," . $amount, 1);
+      }
+      break;
     default: break;
   }
 }

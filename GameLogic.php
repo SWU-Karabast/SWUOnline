@@ -22,7 +22,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
   global $redirectPath, $playerID, $gameName;
   global $currentPlayer, $combatChain, $defPlayer;
   global $combatChainState;
-  global $defCharacter, $CS_NumCharged, $otherPlayer;
+  global $defCharacter, $otherPlayer;
   global $CS_NextNAACardGoAgain, $CCS_AttackTarget, $CS_NumLeveledUp;
   global $CS_LayerTarget, $dqVars, $mainPlayer, $lastPlayed, $dqState, $CS_AbilityIndex, $CS_CharacterIndex;
   global $CS_AdditionalCosts, $CS_AlluvionUsed, $CS_MaxQuellUsed, $CS_DamageDealt, $CS_ArcaneTargetsSelected, $inGameStatus;
