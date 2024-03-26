@@ -414,6 +414,16 @@ function IsAlly($cardID, $player="")
 function SpecificAllyAttackAbilities($attackID)
 {
   global $mainPlayer, $combatChainState, $CCS_WeaponIndex;
+  $attackerAlly = new Ally(AttackerMZID($mainPlayer), $mainPlayer);
+  $subcards = $attackerAlly->GetSubcards();
+  for($i=0; $i<count($subcards); ++$i) {
+    switch($subcards[$i]) {
+      case "7280213969"://Smuggling Compartment
+        ReadyResource($mainPlayer);
+        break;
+      default: break;
+    }
+  }
   $allies = &GetAllies($mainPlayer);
   $i = $combatChainState[$CCS_WeaponIndex];
   switch($allies[$i]) {
