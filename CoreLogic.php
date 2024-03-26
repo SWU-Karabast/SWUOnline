@@ -2754,7 +2754,26 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         PlayAlly("b0dbca5c05", $currentPlayer);
       }
       break;
+    case "9680213078"://Leia Organa
+      if($from != "PLAY") {
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a mode for Leia Organa");
+        AddDecisionQueue("MULTICHOOSETEXT", $currentPlayer, "1-Ready Resource,Exhaust Unit-1");
+        AddDecisionQueue("SHOWMODES", $currentPlayer, $cardID, 1);
+        AddDecisionQueue("MODAL", $currentPlayer, "LEIAORGANA", 1);
+      }
+      break;
     default: break;
+  }
+}
+
+function ReadyResource($player, $amount=1) {
+  $resourceCards = &GetResourceCards($player);
+  $numReadied = 0;
+  for($i=0; $i<count($resourceCards) && $numReadied < $amount; $i+=ResourcePieces()) {
+    if($resourceCards[$i*ResourcePieces() + 4] == 1) {
+      ++$numReadied;
+      $resourceCards[$i*ResourcePieces() + 4] = 0;
+    }
   }
 }
 

@@ -22,6 +22,19 @@ function ModalAbilities($player, $card, $lastResult)
         case "Leave": break;
         case "Play": MZPlayCard($player, "MYDECK-0"); break;
         case "Discard": Mill($player, 1); break;
+        default: break;
+      }
+      return 1;
+    case "LEIAORGANA":
+      switch($lastResult[0]) {
+        case "Ready_Resource": ReadyResource($player); break;
+        case "Exhaust_Unit":
+          AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to exhaust");
+          AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+          AddDecisionQueue("MZOP", $player, "REST", 1);
+          break;
+        default: break;
       }
       return 1;
     default: return "";
