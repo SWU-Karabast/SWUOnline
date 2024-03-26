@@ -456,6 +456,11 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,1", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "READY", 1);
       break;
+    case "80df3928eb"://Hera Sykulla
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "ADDEXPERIENCE", 1);
+      break;
     default: break;
   }
 }

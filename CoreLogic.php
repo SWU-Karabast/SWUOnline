@@ -1893,7 +1893,7 @@ function SelfCostModifier($cardID)
   global $currentPlayer, $CS_NumAttacks, $CS_LastAttack;
   $modifier = 0;
   //Aspect Penalty
-  if(!TraitContains($cardID, "Spectre", $currentPlayer) || HeroCard($currentPlayer) != "7440067052") {
+  if(!TraitContains($cardID, "Spectre", $currentPlayer) || (HeroCard($currentPlayer) != "7440067052" && SearchAlliesForCard($currentPlayer, "80df3928eb") == "")) {
     $penalty = 0;
     $aspectArr = explode(",", CardAspects($cardID));
     $playerAspects = PlayerAspects($currentPlayer);
