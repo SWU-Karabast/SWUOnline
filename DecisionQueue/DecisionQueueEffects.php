@@ -47,6 +47,10 @@ function SpecificCardLogic($player, $card, $lastResult)
         Restore(3, $player);
       }
       break;
+    case "OBIWANKENOBI":
+      $cardID = GetMZCard($player, $lastResult);
+      if(TraitContains($cardID, "Force", $player)) Draw($player);
+      break;
     default: return "";
   }
 }

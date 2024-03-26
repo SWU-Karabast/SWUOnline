@@ -214,6 +214,14 @@ function AllyDestroyedAbility($player, $index)
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
       AddDecisionQueue("MZOP", $player, "ADDSHIELD", 1);
       break;
+    case "4786320542"://Obi-Wan Kenobi
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to add an experience");
+      AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+      AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
+      AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
+      AddDecisionQueue("SPECIFICCARD", $player, "OBIWANKENOBI", 1);
+      break;
     default: break;
   }
   //Abilities that trigger when a different ally is destroyed

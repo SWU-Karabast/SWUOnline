@@ -188,6 +188,7 @@ function HasSentinel($cardID, $player, $index)
     case "8918765832":
     case "4631297392":
     case "8301e8d7ef":
+    case "4786320542":
       return true;
     case "2739464284"://Gamorrean Guards
       return SearchCount(SearchAllies($player, aspect:"Cunning")) > 1;
