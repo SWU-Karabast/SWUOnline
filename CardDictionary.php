@@ -531,6 +531,8 @@ function GetAbilityTypes($cardID)
       return "A,A";
     case "2048866729"://Iden Versio
       return "A,A";
+    case "6088773439"://Darth Vader
+      return "A,A";
     default: return "";
   }
 }
@@ -555,6 +557,8 @@ function GetAbilityNames($cardID, $index = -1)
       return "Deal Damage,Deploy";
     case "2048866729"://Iden Versio
       return "Heal,Deploy";
+    case "6088773439"://Darth Vader
+      return "Deal Damage,Deploy";
     default: return "";
   }
 }

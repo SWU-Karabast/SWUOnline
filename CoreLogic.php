@@ -2768,6 +2768,18 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("SHOWMODES", $currentPlayer, $cardID, 1);
       AddDecisionQueue("MODAL", $currentPlayer, "BOMBINGRUN", 1);
       break;
+    case "6088773439"://Darth Vader
+      $abilityName = GetResolvedAbilityName($cardID, $from);
+      if($abilityName == "Deal Damage") {
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 1 damage to");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1", 1);
+        DealArcane(1, 1, "PLAYCARD", "6088773439");
+      } else if($abilityName == "Deploy") {
+        PlayAlly("0ca1902a46", $currentPlayer);
+      }
+      break;
     default: break;
   }
 }
