@@ -2780,6 +2780,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         PlayAlly("0ca1902a46", $currentPlayer);
       }
       break;
+    case "3503494534"://Regional Governor
+      if($from != "PLAY") {
+        WriteLog("This is a partially manual card. Name the card in chat and enforce the restrictions.");
+      }
+      break;
     default: break;
   }
 }
