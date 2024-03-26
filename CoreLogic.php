@@ -2742,6 +2742,18 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,4", 1);
       }
       break;
+    case "2048866729"://Iden Versio
+      $abilityName = GetResolvedAbilityName($cardID, $from);
+      if($abilityName == "Heal") {
+        global $CS_NumAlliesDestroyed;
+        $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+        if(GetClassState($otherPlayer, $CS_NumAlliesDestroyed) > 0) {
+          Restore(1, $currentPlayer);
+        }
+      } else if($abilityName == "Deploy") {
+        PlayAlly("b0dbca5c05", $currentPlayer);
+      }
+      break;
     default: break;
   }
 }
