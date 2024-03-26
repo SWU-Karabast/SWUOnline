@@ -20,6 +20,14 @@ function ProcessHitEffect($cardID)
       AddDecisionQueue("SHOWMODES", $mainPlayer, $cardID, 1);
       AddDecisionQueue("MODAL", $mainPlayer, "EZRABRIDGER", 1);
       break;
+    case "3280523224"://Rukh
+      if(IsAllyAttackTarget()) {
+        $ally = new Ally(GetAttackTarget(), $mainPlayer);
+        if(!DefinedTypesContains($ally->CardID(), "Leader", $defPlayer)) {
+          DestroyAlly($defPlayer, $ally->Index());
+        }
+      }
+      break;
     default: break;
   }
 
