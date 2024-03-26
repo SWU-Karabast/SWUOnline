@@ -37,6 +37,9 @@ function ModalAbilities($player, $card, $lastResult)
         default: break;
       }
       return 1;
+    case "BOMBINGRUN":
+      DamageAllAllies(3, "7916724925", arena:$lastResult[0]);
+      return 1;
     default: return "";
   }
 }

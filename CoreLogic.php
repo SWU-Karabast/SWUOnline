@@ -2716,7 +2716,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "7366340487"://Outmaneuver
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a mode for K-2SO");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a mode for Outmaneuver");
       AddDecisionQueue("MULTICHOOSETEXT", $currentPlayer, "1-Ground,Space-1");
       AddDecisionQueue("SHOWMODES", $currentPlayer, $cardID, 1);
       AddDecisionQueue("MODAL", $currentPlayer, "OUTMANEUVER", 1);
@@ -2761,6 +2761,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("SHOWMODES", $currentPlayer, $cardID, 1);
         AddDecisionQueue("MODAL", $currentPlayer, "LEIAORGANA", 1);
       }
+      break;
+    case "7916724925"://Bombing Run
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a mode for Bombing Run");
+      AddDecisionQueue("MULTICHOOSETEXT", $currentPlayer, "1-Ground,Space-1");
+      AddDecisionQueue("SHOWMODES", $currentPlayer, $cardID, 1);
+      AddDecisionQueue("MODAL", $currentPlayer, "BOMBINGRUN", 1);
       break;
     default: break;
   }
@@ -2841,13 +2847,14 @@ function DamagePlayerAllies($player, $damage, $source, $type)
   }
 }
 
-function DamageAllAllies($amount, $source, $alsoRest=false, $alsoFreeze=false)
+function DamageAllAllies($amount, $source, $alsoRest=false, $alsoFreeze=false, $arena="")
 {
   global $currentPlayer;
   $otherPlayer = $currentPlayer == 1 ? 2 : 1;
   $theirAllies = &GetAllies($otherPlayer);
   for($i=count($theirAllies) - AllyPieces(); $i>=0; $i-=AllyPieces())
   {
+    if(!ArenaContains($theirAllies[$i], $arena, $otherPlayer)) continue;
     if($alsoRest) $theirAllies[$i+1] = 1;
     if($alsoFreeze) $theirAllies[$i+3] = 1;
     DealArcane($amount, source:$source, resolvedTarget:"THEIRALLY-$i");
@@ -2855,6 +2862,7 @@ function DamageAllAllies($amount, $source, $alsoRest=false, $alsoFreeze=false)
   $allies = &GetAllies($currentPlayer);
   for($i=count($allies) - AllyPieces(); $i>=0; $i-=AllyPieces())
   {
+    if(!ArenaContains($allies[$i], $arena, $currentPlayer)) continue;
     if($alsoRest) $allies[$i+1] = 1;
     if($alsoFreeze) $allies[$i+3] = 1;
     DealArcane($amount, source:$source, resolvedTarget:"MYALLY-$i");
