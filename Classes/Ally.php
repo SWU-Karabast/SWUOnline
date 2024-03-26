@@ -63,6 +63,10 @@ class Ally {
     return $this->Health() < $this->MaxHealth();
   }
 
+  function IsExhausted() {
+    return $this->allies[$this->index+1] == 1;
+  }
+
   //Returns true if the ally is destroyed
   function DealDamage($amount) {
     $subcards = $this->GetSubcards();

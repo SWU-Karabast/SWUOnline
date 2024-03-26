@@ -354,7 +354,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         case "CHANGEATTACKTARGET": SetAttackTarget($lastResult); return $lastResult;
         case "DEALDAMAGE":
           $ally = new Ally($lastResult);
-          $ally->DealDamage($parameterArr[1]);
+          $destroyed = $ally->DealDamage($parameterArr[1]);
+          if($destroyed && $lastResult == GetAttackTarget()) CloseCombatChain();
           return $lastResult;
         case "ADDEXPERIENCE":
           $ally = new Ally($lastResult);
@@ -610,6 +611,9 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       return 1;
     case "NOPASS":
       if($lastResult == "NO") return "PASS";
+      return 1;
+    case "YESPASS":
+      if($lastResult == "YES") return "PASS";
       return 1;
     case "NULLPASS":
       if($lastResult == "") return "PASS";
