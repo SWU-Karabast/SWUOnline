@@ -2795,6 +2795,17 @@ function ReadyResource($player, $amount=1) {
   }
 }
 
+function ExhaustResource($player, $amount=1) {
+  $resourceCards = &GetResourceCards($player);
+  $numExhausted = 0;
+  for($i=0; $i<count($resourceCards) && $numExhausted < $amount; $i+=ResourcePieces()) {
+    if($resourceCards[$i*ResourcePieces() + 4] == 0) {
+      ++$numExhausted;
+      $resourceCards[$i*ResourcePieces() + 4] = 1;
+    }
+  }
+}
+
 function AfterPlayedByAbility($cardID) {
   global $currentPlayer;
   switch($cardID) {

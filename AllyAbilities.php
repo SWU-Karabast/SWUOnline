@@ -413,7 +413,7 @@ function IsAlly($cardID, $player="")
 //NOTE: This is for the actual attack abilities that allies have
 function SpecificAllyAttackAbilities($attackID)
 {
-  global $mainPlayer, $combatChainState, $CCS_WeaponIndex;
+  global $mainPlayer, $defPlayer, $combatChainState, $CCS_WeaponIndex;
   $attackerAlly = new Ally(AttackerMZID($mainPlayer), $mainPlayer);
   $subcards = $attackerAlly->GetSubcards();
   for($i=0; $i<count($subcards); ++$i) {
@@ -489,6 +489,10 @@ function SpecificAllyAttackAbilities($attackID)
         AddDecisionQueue("PASSPARAMETER", $mainPlayer, $target, 1);
         AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,3", 1);
       }
+      break;
+    case "6208347478"://Chopper
+      $card = Mill($defPlayer, 1);
+      if(DefinedTypesContains($card, "Event", $defPlayer)) ExhaustResource($defPlayer);
       break;
     default: break;
   }
