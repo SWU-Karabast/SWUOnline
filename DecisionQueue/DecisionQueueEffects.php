@@ -17,6 +17,13 @@ function ModalAbilities($player, $card, $lastResult)
       ExhaustAllAllies($lastResult[0], 1);
       ExhaustAllAllies($lastResult[0], 2);
       return $lastResult;
+    case "EZRABRIDGER":
+      switch($lastResult[0]) {
+        case "Leave": break;
+        case "Play": MZPlayCard($player, "MYDECK-0"); break;
+        case "Discard": Mill($player, 1); break;
+      }
+      return 1;
     default: return "";
   }
 }

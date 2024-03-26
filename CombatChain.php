@@ -12,6 +12,14 @@ function ProcessHitEffect($cardID)
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,3", 1);
       break;
+    case "9560139036"://Ezra Bridger
+      AddDecisionQueue("DECKCARDS", $mainPlayer, "0");
+      AddDecisionQueue("SETDQVAR", $mainPlayer, "0");
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "The top card is <0>; Choose a mode for Ezra Bridger");
+      AddDecisionQueue("MULTICHOOSETEXT", $mainPlayer, "1-Leave,Play,Discard-1");
+      AddDecisionQueue("SHOWMODES", $mainPlayer, $cardID, 1);
+      AddDecisionQueue("MODAL", $mainPlayer, "EZRABRIDGER", 1);
+      break;
     default: break;
   }
 
