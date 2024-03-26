@@ -332,6 +332,11 @@ function &GetMainCharacterEffects($player)
   }
 }
 
+function HeroCard($player) {
+  $character = &GetPlayerCharacter($player);
+  return count($character) > CharacterPieces() ? $character[CharacterPieces()] : "";
+}
+
 function HasTakenDamage($player)
 {
   global $CS_DamageTaken;

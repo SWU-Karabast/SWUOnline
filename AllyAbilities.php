@@ -495,10 +495,6 @@ function AllyBeginTurnEffects()
     if($mainAllies[$i+1] != 0) {
       if($mainAllies[$i+3] != 1) $mainAllies[$i+1] = 2;
     }
-    switch($ally->CardID()) {
-      
-      default: break;
-    }
   }
 }
 

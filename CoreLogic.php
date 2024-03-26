@@ -1893,15 +1893,17 @@ function SelfCostModifier($cardID)
   global $currentPlayer, $CS_NumAttacks, $CS_LastAttack;
   $modifier = 0;
   //Aspect Penalty
-  $penalty = 0;
-  $aspectArr = explode(",", CardAspects($cardID));
-  $playerAspects = PlayerAspects($currentPlayer);
-  for($i=0; $i<count($aspectArr); ++$i)
-  {
-    --$playerAspects[$aspectArr[$i]];
-    if($playerAspects[$aspectArr[$i]] < 0) ++$penalty;
+  if(!TraitContains($cardID, "Spectre", $currentPlayer) || HeroCard($currentPlayer) != "7440067052") {
+    $penalty = 0;
+    $aspectArr = explode(",", CardAspects($cardID));
+    $playerAspects = PlayerAspects($currentPlayer);
+    for($i=0; $i<count($aspectArr); ++$i)
+    {
+      --$playerAspects[$aspectArr[$i]];
+      if($playerAspects[$aspectArr[$i]] < 0) ++$penalty;
+    }
+    $modifier += $penalty * 2;
   }
-  $modifier += $penalty * 2;
   //Self Cost Modifier
   switch($cardID) {
     case "1446471743"://Force Choke
@@ -2728,6 +2730,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:maxCost=3");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "ADDSHIELD", 1);
+      break;
+    case "7440067052"://Hera Sykulla
+      PlayAlly("80df3928eb", $currentPlayer);
       break;
     default: break;
   }
