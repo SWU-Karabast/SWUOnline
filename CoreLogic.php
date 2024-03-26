@@ -2788,9 +2788,9 @@ function ReadyResource($player, $amount=1) {
   $resourceCards = &GetResourceCards($player);
   $numReadied = 0;
   for($i=0; $i<count($resourceCards) && $numReadied < $amount; $i+=ResourcePieces()) {
-    if($resourceCards[$i*ResourcePieces() + 4] == 1) {
+    if($resourceCards[$i + 4] == 1) {
       ++$numReadied;
-      $resourceCards[$i*ResourcePieces() + 4] = 0;
+      $resourceCards[$i + 4] = 0;
     }
   }
 }
@@ -2799,9 +2799,9 @@ function ExhaustResource($player, $amount=1) {
   $resourceCards = &GetResourceCards($player);
   $numExhausted = 0;
   for($i=0; $i<count($resourceCards) && $numExhausted < $amount; $i+=ResourcePieces()) {
-    if($resourceCards[$i*ResourcePieces() + 4] == 0) {
+    if($resourceCards[$i + 4] == 0) {
       ++$numExhausted;
-      $resourceCards[$i*ResourcePieces() + 4] = 1;
+      $resourceCards[$i + 4] = 1;
     }
   }
 }

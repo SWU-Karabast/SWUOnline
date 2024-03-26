@@ -421,6 +421,14 @@ function SpecificAllyAttackAbilities($attackID)
       case "7280213969"://Smuggling Compartment
         ReadyResource($mainPlayer);
         break;
+      case "3987987905"://Hardpoint Heavy Blaster
+        if(GetAttackTarget() != "THEIRCHAR-0") {
+          AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 2 damage to");
+          AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY:arena=" . CardArenas($attackID));
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+          AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,2", 1);
+        }
+        break;
       default: break;
     }
   }
