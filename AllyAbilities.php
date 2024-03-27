@@ -436,8 +436,10 @@ function SpecificAllyAttackAbilities($attackID)
         }
         break;
       case "0160548661"://Fallen Lightsaber
-        WriteLog("Fallen Lightsaber deals 1 damage to all defending ground units");
-        DamagePlayerAllies($defPlayer, 1, "0160548661", "DAMAGE", arena:"Ground");
+        if(TraitContains($attackID, "Force", $mainPlayer)) {
+          WriteLog("Fallen Lightsaber deals 1 damage to all defending ground units");
+          DamagePlayerAllies($defPlayer, 1, "0160548661", "DAMAGE", arena:"Ground");
+        }
         break;
       default: break;
     }
