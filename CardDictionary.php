@@ -150,6 +150,7 @@ function RaidAmount($cardID, $player, $index)
     case "8995892693": $amount += 1; break;
     case "3613174521": $amount += 1; break;
     case "4111616117": $amount += 1; break;
+    case "87e8807695": $amount += 1; break;
     case "8395007579": $amount += $ally->MaxHealth() - $ally->Health(); break;//Fifth Brother
     case "6208347478": $amount += SearchCount(SearchAllies($player, trait:"Spectre")) > 1 ? 1 : 0; break;//Chopper
     default: break;

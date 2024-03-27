@@ -1,5 +1,6 @@
 <?php
 
+//Completes attack
 function ProcessHitEffect($cardID)
 {
   WriteLog("Processing hit effect for " . CardLink($cardID, $cardID));
@@ -27,6 +28,9 @@ function ProcessHitEffect($cardID)
           DestroyAlly($defPlayer, $ally->Index());
         }
       }
+      break;
+    case "87e8807695"://Leia Organa
+      WriteLog("This is a partially manual card. Manually pass priority to attack with an additional unit");
       break;
     default: break;
   }
