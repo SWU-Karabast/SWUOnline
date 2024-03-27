@@ -2806,6 +2806,20 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         $ally->Attach("8752877738");//Shield Token
       }
       break;
+    case "5494760041"://Galactic Ambition
+      global $CS_AfterPlayedBy;
+      SetClassState($currentPlayer, $CS_AfterPlayedBy, $cardID);
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to play");
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, 0, 1);
+      AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, "5494760041", 1);
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETCARDID", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, 1, 1);
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
+      break;
     default: break;
   }
 }
@@ -2839,6 +2853,10 @@ function AfterPlayedByAbility($cardID) {
       AddDecisionQueue("OP", $currentPlayer, "GETLASTALLYMZ");
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "3572356139,PLAY", 1);
+      break;
+    case "5494760041"://Galactic Ambition
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{1}", 1);
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "GALACTICAMBITION", 1);
       break;
     default: break;
   }

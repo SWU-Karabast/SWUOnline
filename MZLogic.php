@@ -154,6 +154,7 @@ function MZPlayCard($player, $mzIndex) {
   SetClassState($player, $CS_CharacterIndex, $mzArr[1]);
   SetClassState($player, $CS_PlayIndex, $mzArr[1]);
   PlayCard($cardID, $mzArr[0], -1, $mzArr[1]);
+  return $cardID;
 }
 
 function MZUndestroy($player, $parameter, $lastResult)

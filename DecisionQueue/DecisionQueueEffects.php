@@ -61,7 +61,7 @@ function SpecificCardLogic($player, $card, $lastResult)
   switch($card)
   {
     case "FORCETHROW":
-      DealArcane(CardCost($lastResult), 2, "PLAYCARD", "1705806419");
+      DealArcane(CardCost($lastResult), 2, "PLAYCARD", "1705806419", player:$player);
       break;
     case "REINFORCEMENTWALKER":
       if($lastResult == "YES") Draw($player);
@@ -73,6 +73,9 @@ function SpecificCardLogic($player, $card, $lastResult)
     case "OBIWANKENOBI":
       $cardID = GetMZCard($player, $lastResult);
       if(TraitContains($cardID, "Force", $player)) Draw($player);
+      break;
+    case "GALACTICAMBITION":
+      DealArcane(CardCost($lastResult), 4, "PLAYCARD", "5494760041", player:$player);
       break;
     default: return "";
   }

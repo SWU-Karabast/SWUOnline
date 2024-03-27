@@ -120,6 +120,10 @@ function CurrentEffectCostModifiers($cardID, $from)
           $costModifier -= PlayerRemainingHealth($player) <= 5 ? 99 : 5;
           $remove = true;
           break;
+        case "5494760041"://Galactic Ambition
+          $costModifier -= 99;
+          $remove = true;
+          break;
         default: break;
       }
       if($remove) RemoveCurrentTurnEffect($i);
