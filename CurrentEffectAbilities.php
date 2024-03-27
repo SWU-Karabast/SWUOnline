@@ -38,6 +38,7 @@ function EffectAttackModifier($cardID)
     case "2651321164": return 2;//Tactical Advantage
     case "1900571801": return 2;//Overwhelming Barrage
     case "3809048641": return 3;//Surprise Strike
+    case "3038238423": return 2;//Fleet Lieutenant
     default: return 0;
   }
 }
@@ -425,6 +426,7 @@ function IsCombatEffectActive($cardID)
     case "2569134232": return true;//Jedha City
     case "1323728003": return true;//Electrostaff
     case "3809048641": return true;//Surprise Strike
+    case "3038238423": return true;//Fleet Lieutenant
     default: return false;
   }
 }

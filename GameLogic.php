@@ -650,6 +650,13 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         if(CardType($cards[$i]) != $parameter) return "PASS";
       }
       return $lastResult;
+    case "MZALLCARDTRAITORPASS":
+      $cards = explode(",", $lastResult);
+      for($i = 0; $i < count($cards); ++$i) {
+        $cardID = GetMZCard($player, $cards[$i]);
+        if(!TraitContains($cardID, $parameter, $player)) return "PASS";
+      }
+      return $lastResult;
     case "NONECARDTYPEORPASS":
       $cards = explode(",", $lastResult);
       for($i = 0; $i < count($cards); ++$i) {
