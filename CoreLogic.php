@@ -2820,6 +2820,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
       break;
+    case "2651321164"://Tactical Advantage
+      $ally = new Ally($target);
+      $ally->AddHealth(2);
+      AddCurrentTurnEffect($cardID, $currentPlayer, "PLAY", $ally->UniqueID());
+      break;
     default: break;
   }
 }
@@ -3003,6 +3008,7 @@ function PlayRequiresTarget($cardID)
     case "2569134232": return 2;//Jedha City
     case "6515891401": return 2;//Karabast
     case "1349057156": return 2;//Strike True
+    case "2651321164": return 2;//Tactical Advantage
     default: return -1;
   }
 }

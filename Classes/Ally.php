@@ -87,6 +87,7 @@ class Ally {
   }
 
   function CurrentPower() {
+    global $currentTurnEffects;
     $power = AttackValue($this->CardID()) + $this->allies[$this->index+7];
     $subcards = $this->GetSubcards();
     for($i=0; $i<count($subcards); ++$i) if($subcards[$i] != "-") $power += AttackValue($subcards[$i]);
@@ -101,6 +102,7 @@ class Ally {
         default: break;
       }
     }
+    //Character buffs
     $myChar = &GetPlayerCharacter($this->playerID);
     for($i=0; $i<count($myChar); $i+=CharacterPieces()) {
       switch($myChar[$i]) {
@@ -109,6 +111,12 @@ class Ally {
           break;
         default: break;
       }
+    }
+    //Current effect buffs
+    for($i=0; $i<count($currentTurnEffects); ++$i) {
+      if($currentTurnEffects[$i+1] != $this->playerID) continue;
+      if($currentTurnEffects[$i+2] != $this->UniqueID()) continue;
+      $power += EffectAttackModifier($currentTurnEffects[$i]);
     }
     return $power;
   }

@@ -35,6 +35,7 @@ function EffectAttackModifier($cardID)
     case "2587711125": return -4;//Disarm
     case "2569134232": return -4;//Jedha City
     case "1323728003": return -1;//Electrostaff
+    case "2651321164": return 2;//Tactical Advantage
     default: return 0;
   }
 }
@@ -395,7 +396,10 @@ function CurrentEffectEndTurnAbilities()
       AddNextTurnEffect($currentTurnEffects[$i], $currentTurnEffects[$i + 1]);
     }
     switch($currentTurnEffects[$i]) {
-      
+      case "2651321164"://Tactical Advantage
+        $ally = new Ally("MYALLY-" . SearchAlliesForUniqueID($currentTurnEffects[$i+2], $currentTurnEffects[$i+1]), $currentTurnEffects[$i+1]);
+        $ally->DealDamage(2);
+        break;
       default: break;
     }
     if($remove) RemoveCurrentTurnEffect($i);
