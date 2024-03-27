@@ -255,6 +255,7 @@ function HasAmbush($cardID, $player, $index)
     case "3377409249":
     case "5230572435":
     case "0052542605":
+    case "2649829005":
     case "1862616109":
     case "3684950815":
     case "9500514827":

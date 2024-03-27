@@ -250,6 +250,12 @@ function AllyDestroyedAbility($player, $index)
       case "b0dbca5c05"://Iden Versio
         Restore(1, $otherPlayer);
         break;
+      case "2649829005"://Agent Kallus
+        if($allies[$i+8] > 0) {
+          --$allies[$i+8];
+          Draw($otherPlayer);
+        }
+        break;
       default: break;
     }
   }
