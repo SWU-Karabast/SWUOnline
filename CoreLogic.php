@@ -2870,6 +2870,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       WriteLog("This is a partially manual card. Do the extra attack by passing priority manually.");
       break;
+    case "9985638644"://Snapshot Reflexes
+      WriteLog("This is a partially manual card. Do the extra attack by passing priority manually.");
+      break;
     default: break;
   }
 }
