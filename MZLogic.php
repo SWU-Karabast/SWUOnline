@@ -209,9 +209,8 @@ function MZBuffAlly($player, $target)
 
 function MZHealAlly($player, $target, $amount)
 {
-  $targetArr = explode("-", $target);
-  $allies = &GetAllies($player);
-  $allies[$targetArr[1]+2] = AllyHealth($allies[$targetArr[1]], $player);//Life
+  $ally = new Ally($target, $player);
+  $ally->Heal($amount);
 }
 
 function MZAddHealth($player, $target)

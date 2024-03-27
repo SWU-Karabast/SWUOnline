@@ -2450,7 +2450,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to heal");
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "HEALALLY", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "HEALALLY,2", 1);
       }
       break;
     case "6515891401"://Karabast
@@ -2849,6 +2849,17 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
       AddDecisionQueue("OP", $currentPlayer, "REMOVECARD");
       AddDecisionQueue("CHOOSEBOTTOM", $currentPlayer, "<-");
+      break;
+    case "3896582249"://Redemption
+      $ally = new Ally("MYALLY-" . LastAllyIndex($currentPlayer));
+      for($i=0; $i<8; ++$i) {
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to restore 1", $i == 0 ? 0 : 1);
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYCHAR&MYALLY", $i == 0 ? 0 : 1);
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "RESTORE,1", 1);
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYALLY-" . LastAllyIndex($currentPlayer), 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1", 1);
+      }
       break;
     default: break;
   }

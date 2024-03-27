@@ -351,6 +351,14 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         case "HEALALLY":
           MZHealAlly($player, $lastResult, count($parameterArr) > 1 ? $parameterArr[1] : 1);
           return $lastResult;
+        case "RESTORE":
+          $mzArr = explode("-", $lastResult);
+          if($mzArr[0] == "MYCHAR") {
+            Restore(count($parameterArr) > 1 ? $parameterArr[1] : 1, $player);
+          } else if($mzArr[0] == "MYALLY") {
+            MZHealAlly($player, $lastResult, count($parameterArr) > 1 ? $parameterArr[1] : 1);
+          }
+          return $lastResult;
         case "CHANGEATTACKTARGET": SetAttackTarget($lastResult); return $lastResult;
         case "DEALDAMAGE":
           $ally = new Ally($lastResult);
