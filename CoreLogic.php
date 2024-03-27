@@ -2873,6 +2873,19 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "9985638644"://Snapshot Reflexes
       WriteLog("This is a partially manual card. Do the extra attack by passing priority manually.");
       break;
+    case "7728042035"://Chimaera
+      if($from != "PLAY") {
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Name the card in chat");
+        AddDecisionQueue("OK", $currentPlayer, "-");
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, "1");
+        $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+        AddDecisionQueue("FINDINDICES", $otherPlayer, "HAND");
+        AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a card to discard", 1);
+        AddDecisionQueue("MAYCHOOSEHAND", $otherPlayer, "<-", 1);
+        AddDecisionQueue("MULTIREMOVEHAND", $otherPlayer, "-", 1);
+        AddDecisionQueue("ADDDISCARD", $otherPlayer, "HAND", 1);
+      }
+      break;
     default: break;
   }
 }
