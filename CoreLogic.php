@@ -42,6 +42,7 @@ function EvaluateCombatChain(&$totalAttack, &$totalDefense, &$attackModifiers=[]
       }
     }
 
+    /*
     //Now check current turn effects
     for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnPieces())
     {
@@ -59,6 +60,7 @@ function EvaluateCombatChain(&$totalAttack, &$totalDefense, &$attackModifiers=[]
         }
       }
     }
+    */
 
     if($combatChainState[$CCS_WeaponIndex] != -1)
     {
@@ -2885,6 +2887,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MULTIREMOVEHAND", $otherPlayer, "-", 1);
         AddDecisionQueue("ADDDISCARD", $otherPlayer, "HAND", 1);
       }
+      break;
+    case "3809048641"://Surprise Strike
+      WriteLog("This is a partially manual card. Do the extra attack by passing priority manually.");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to attack and give +3");
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "3809048641,HAND", 1);
       break;
     default: break;
   }
