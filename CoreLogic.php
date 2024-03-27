@@ -2825,6 +2825,17 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $ally->AddHealth(2);
       AddCurrentTurnEffect($cardID, $currentPlayer, "PLAY", $ally->UniqueID());
       break;
+    case "1900571801"://Overwhelming Barrage
+      $ally = new Ally($target);
+      $ally->AddHealth(2);
+      AddCurrentTurnEffect($cardID, $currentPlayer, "PLAY", $ally->UniqueID());
+      for($i=0; $i<$ally->CurrentPower(); ++$i) {
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 1 damage to");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1", 1);
+      }
+      break;
     default: break;
   }
 }
@@ -3009,6 +3020,7 @@ function PlayRequiresTarget($cardID)
     case "6515891401": return 2;//Karabast
     case "1349057156": return 2;//Strike True
     case "2651321164": return 2;//Tactical Advantage
+    case "1900571801": return 2;//Overwhelming Barrage
     default: return -1;
   }
 }

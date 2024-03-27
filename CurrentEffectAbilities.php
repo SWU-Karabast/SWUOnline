@@ -36,6 +36,7 @@ function EffectAttackModifier($cardID)
     case "2569134232": return -4;//Jedha City
     case "1323728003": return -1;//Electrostaff
     case "2651321164": return 2;//Tactical Advantage
+    case "1900571801": return 2;//Overwhelming Barrage
     default: return 0;
   }
 }
@@ -397,6 +398,10 @@ function CurrentEffectEndTurnAbilities()
     }
     switch($currentTurnEffects[$i]) {
       case "2651321164"://Tactical Advantage
+        $ally = new Ally("MYALLY-" . SearchAlliesForUniqueID($currentTurnEffects[$i+2], $currentTurnEffects[$i+1]), $currentTurnEffects[$i+1]);
+        $ally->DealDamage(2);
+        break;
+      case "1900571801"://Overwhelming Barrage
         $ally = new Ally("MYALLY-" . SearchAlliesForUniqueID($currentTurnEffects[$i+2], $currentTurnEffects[$i+1]), $currentTurnEffects[$i+1]);
         $ally->DealDamage(2);
         break;
