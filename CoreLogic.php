@@ -2861,6 +2861,15 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1", 1);
       }
       break;
+    case "7861932582"://The Force is With Me
+      $ally = new Ally($target, $currentPlayer);
+      $ally->Attach("2007868442");//Experience token
+      $ally->Attach("2007868442");//Experience token
+      if(TraitContains($ally->CardID(), "Force", $currentPlayer)) {
+        $ally->Attach("8752877738");//Shield Token
+      }
+      WriteLog("This is a partially manual card. Do the extra attack by passing priority manually.");
+      break;
     default: break;
   }
 }
@@ -3048,6 +3057,7 @@ function PlayRequiresTarget($cardID)
     case "1349057156": return 2;//Strike True
     case "2651321164": return 2;//Tactical Advantage
     case "1900571801": return 2;//Overwhelming Barrage
+    case "7861932582": return 2;//The Force is With Me
     default: return -1;
   }
 }
