@@ -2921,12 +2921,14 @@ function DestroyAllAllies()
   }
 }
 
-function DamagePlayerAllies($player, $damage, $source, $type)
+function DamagePlayerAllies($player, $damage, $source, $type, $arena="")
 {
   $allies = &GetAllies($player);
   for($i=count($allies)-AllyPieces(); $i>=0; $i-=AllyPieces())
   {
-    DealAllyDamage($player, $i, $damage, $type);
+    if($arena != "" && !ArenaContains($allies[$i], $arena, $player)) continue;
+    $ally = new Ally("MYALLY-" . $i, $player);
+    $ally->DealDamage($damage);
   }
 }
 

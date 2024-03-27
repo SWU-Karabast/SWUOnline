@@ -435,6 +435,10 @@ function SpecificAllyAttackAbilities($attackID)
           AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,2", 1);
         }
         break;
+      case "0160548661"://Fallen Lightsaber
+        WriteLog("Fallen Lightsaber deals 1 damage to all defending ground units");
+        DamagePlayerAllies($defPlayer, 1, "0160548661", "DAMAGE", arena:"Ground");
+        break;
       default: break;
     }
   }
