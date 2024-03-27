@@ -39,6 +39,7 @@ function EffectAttackModifier($cardID)
     case "1900571801": return 2;//Overwhelming Barrage
     case "3809048641": return 3;//Surprise Strike
     case "3038238423": return 2;//Fleet Lieutenant
+    case "3208391441": return -1;//Make an Opening
     default: return 0;
   }
 }
