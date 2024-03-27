@@ -508,6 +508,9 @@ function SpecificAllyAttackAbilities($attackID)
       $card = Mill($defPlayer, 1);
       if(DefinedTypesContains($card, "Event", $defPlayer)) ExhaustResource($defPlayer);
       break;
+    case "3646264648"://Sabine Wren
+      DealArcane(1, 3, "PLAYCARD", "3646264648");
+      break;
     default: break;
   }
 }
