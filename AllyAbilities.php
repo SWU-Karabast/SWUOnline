@@ -85,12 +85,14 @@ function AllyAddGraveyard($player, $cardID, $subtype)
 
 function AllyEntersPlayState($cardID, $player, $from="-")
 {
-  return 2;//TODO:delete
   //if(SearchCurrentTurnEffects("dxAEI20h8F", $player)) return 1;
   //if(PlayerHasAlly($player == 1 ? 2 : 1, "TqCo3xlf93")) return 1;//Lunete, Frostbinder Priest
   switch($cardID)
   {
     case "1785627279": return 2;//Millennium Falcon
+    case "4300219753"://Fett's Firespray
+
+      return 2;
     default: return 1;
   }
 }

@@ -2957,6 +2957,17 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "4626028465"://Boba Fett
       PlayAlly("0e65f012f5", $currentPlayer);
       break;
+    case "4300219753"://Fett's Firespray
+      $abilityName = GetResolvedAbilityName($cardID, $from);
+      if($abilityName == "Exhaust") {
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal exhaust");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
+        $ally = new Ally("MYALLY-" . $index, $currentPlayer);
+        $ally->Ready();
+      }
+      break;
     default: break;
   }
 }

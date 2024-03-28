@@ -438,6 +438,8 @@ function AbilityCost($cardID)
       return GetResolvedAbilityName($cardID) == "Give Experience" ? 1 : 0;
     case "3187874229"://Cassian Andor
       return GetResolvedAbilityName($cardID) == "Draw Card" ? 1 : 0;
+    case "4300219753"://Fett's Firespray
+      return GetResolvedAbilityName($cardID) == "Exhaust" ? 2 : 0;
     default: break;
   }
   if(IsAlly($cardID)) return 0;
@@ -544,6 +546,8 @@ function GetAbilityTypes($cardID)
       return "A,A";
     case "4263394087"://Chirrut Imwe
       return "A,A";
+    case "4300219753"://Fett's Firespray
+      return "A,AA";
     default: return "";
   }
 }
@@ -572,6 +576,8 @@ function GetAbilityNames($cardID, $index = -1)
       return "Deal Damage,Deploy";
     case "4263394087"://Chirrut Imwe
       return "Buff Defense,Deploy";
+    case "4300219753"://Fett's Firespray
+      return "Exhaust,Attack";
     default: return "";
   }
 }
