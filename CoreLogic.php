@@ -2985,6 +2985,16 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         PlayAlly("6827598372", $currentPlayer);
       }
       break;
+    case "5954056864"://Han Solo
+      $abilityName = GetResolvedAbilityName($cardID, $from);
+      if($abilityName == "Play Resource") {
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to resource");
+        MZMoveCard($currentPlayer, "MYHAND", "MYRESOURCES", may:false);
+        AddCurrentTurnEffect($cardID, $currentPlayer);
+      } else if($abilityName == "Deploy") {
+        PlayAlly("5e90bd91b0", $currentPlayer);
+      }
+      break;
     default: break;
   }
 }

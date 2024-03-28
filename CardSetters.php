@@ -206,8 +206,9 @@ function DestroyArsenal($player, $index=-1)
     $cardIDs .= $arsenal[$i];
     WriteLog(CardLink($arsenal[$i], $arsenal[$i]) . " was destroyed from the arsenal");
     AddGraveyard($arsenal[$i], $player, "ARS");
+    for($j=$i+ArsenalPieces()-1; $j>=$i; --$j) unset($arsenal[$j]);
   }
-  $arsenal = [];
+  $arsenal = array_values($arsenal);
   return $cardIDs;
 }
 

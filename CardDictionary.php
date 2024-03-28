@@ -551,6 +551,8 @@ function GetAbilityTypes($cardID)
       return "A,AA";
     case "7911083239"://Grand Inquisitor
       return "A,A";
+    case "5954056864"://Han Solo
+      return "A,A";
     default: return "";
   }
 }
@@ -583,6 +585,8 @@ function GetAbilityNames($cardID, $index = -1)
       return "Exhaust,Attack";
     case "7911083239"://Grand Inquisitor
       return "Deal Damage,Deploy";
+    case "5954056864"://Han Solo
+      return "Play Resource,Deploy";
     default: return "";
   }
 }

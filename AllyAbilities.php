@@ -87,11 +87,11 @@ function AllyEntersPlayState($cardID, $player, $from="-")
 {
   //if(SearchCurrentTurnEffects("dxAEI20h8F", $player)) return 1;
   //if(PlayerHasAlly($player == 1 ? 2 : 1, "TqCo3xlf93")) return 1;//Lunete, Frostbinder Priest
+  if(DefinedTypesContains($cardID, "Leader", $player)) return 2;
   switch($cardID)
   {
     case "1785627279": return 2;//Millennium Falcon
     case "4300219753"://Fett's Firespray
-
       return 2;
     default: return 1;
   }
@@ -541,6 +541,12 @@ function SpecificAllyAttackAbilities($attackID)
         AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
         AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "6432884726,HAND", 1);
       }
+      break;
+    case "5e90bd91b0"://Han Solo
+      $deck = new Deck($mainPlayer);
+      $card = $deck->Top(remove:true);
+      AddResources($card, $mainPlayer, "DECK", "DOWN");
+      AddCurrentTurnEffect("5e90bd91b0", $mainPlayer);
       break;
     default: break;
   }
