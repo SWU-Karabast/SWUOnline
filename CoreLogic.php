@@ -2954,6 +2954,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1", 1);
       }
       break;
+    case "4626028465"://Boba Fett
+      PlayAlly("0e65f012f5", $currentPlayer);
+      break;
     default: break;
   }
 }

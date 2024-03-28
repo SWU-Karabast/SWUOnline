@@ -515,6 +515,8 @@ function GetAbilityType($cardID, $index = -1, $from="-")
       return "A";
     case "7440067052"://Hera Sykulla
       return "A";
+    case "4626028465"://Boba Fett
+      return "A";
     default: return "";
   }
 }

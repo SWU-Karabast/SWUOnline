@@ -148,10 +148,23 @@ function AllyLeavesPlayAbility($player, $index)
   $cardID = $allies[$index];
   switch($cardID)
   {
-    case "XZFXOE9sEV"://Zephyr Assistant
-      PlayAura("ENLIGHTEN", $player);
-      break;
     default: break;
+  }
+  //Opponent character abilities
+  $otherPlayer = ($player == 1 ? 2 : 1);
+  $char = &GetPlayerCharacter($otherPlayer);
+  for($i=0; $i<count($char); $i+=CharacterPieces())
+  {
+    switch($char[$i])
+    {
+      case "4626028465"://Boba Fett
+        if($char[$i+1] == 2) {
+          $char[$i+1] = 1;
+          ReadyResource($otherPlayer);
+        }
+        break;
+      default: break;
+    }
   }
 }
 
