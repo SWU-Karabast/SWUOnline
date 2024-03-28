@@ -40,6 +40,7 @@ function EffectAttackModifier($cardID)
     case "3809048641": return 3;//Surprise Strike
     case "3038238423": return 2;//Fleet Lieutenant
     case "3208391441": return -2;//Make an Opening
+    case "6432884726": return 2;//Steadfast Battalion
     default: return 0;
   }
 }
@@ -409,6 +410,10 @@ function CurrentEffectEndTurnAbilities()
         $ally->DealDamage(2);
         break;
       case "4263394087"://Chirrut Imwe
+        $ally = new Ally("MYALLY-" . SearchAlliesForUniqueID($currentTurnEffects[$i+2], $currentTurnEffects[$i+1]), $currentTurnEffects[$i+1]);
+        $ally->DealDamage(2);
+        break;
+      case "6432884726"://Steadfast Battalion
         $ally = new Ally("MYALLY-" . SearchAlliesForUniqueID($currentTurnEffects[$i+2], $currentTurnEffects[$i+1]), $currentTurnEffects[$i+1]);
         $ally->DealDamage(2);
         break;

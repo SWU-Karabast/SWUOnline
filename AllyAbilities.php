@@ -532,6 +532,16 @@ function SpecificAllyAttackAbilities($attackID)
     case "3646264648"://Sabine Wren
       DealArcane(1, 3, "PLAYCARD", "3646264648");
       break;
+    case "6432884726"://Steadfast Battalion
+      if($hasLeader($mainPlayer)) {
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to give +2/+2");
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "ADDHEALTH,2", 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
+        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "6432884726,HAND", 1);
+      }
+      break;
     default: break;
   }
 }
