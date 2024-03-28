@@ -549,6 +549,8 @@ function GetAbilityTypes($cardID)
       return "A,A";
     case "4300219753"://Fett's Firespray
       return "A,AA";
+    case "7911083239"://Grand Inquisitor
+      return "A,A";
     default: return "";
   }
 }
@@ -579,6 +581,8 @@ function GetAbilityNames($cardID, $index = -1)
       return "Buff Defense,Deploy";
     case "4300219753"://Fett's Firespray
       return "Exhaust,Attack";
+    case "7911083239"://Grand Inquisitor
+      return "Deal Damage,Deploy";
     default: return "";
   }
 }

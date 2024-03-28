@@ -2973,6 +2973,18 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("BUTTONINPUT", $currentPlayer, "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20");
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "C3PO", 1);
       break;
+    case "7911083239"://Grand Inquisitor
+      $abilityName = GetResolvedAbilityName($cardID, $from);
+      if($abilityName == "Deal Damage") {
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 2 damage and ready");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:maxPower=3");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,2", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
+      } else if($abilityName == "Deploy") {
+        PlayAlly("6827598372", $currentPlayer);
+      }
+      break;
     default: break;
   }
 }
