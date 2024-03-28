@@ -2917,6 +2917,17 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $otherPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $otherPlayer, "3208391441,HAND", 1);
       break;
+    case "2758597010"://Maximum Firepower
+      for($i=0; $i<2; ++$i) {
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to deal damage");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Imperial");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "POWER", 1);
+        AddDecisionQueue("SETDQVAR", $currentPlayer, 0, 1);
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, $target, 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,{0}", 1);
+      }
+      break;
     default: break;
   }
 }
@@ -3105,6 +3116,7 @@ function PlayRequiresTarget($cardID)
     case "2651321164": return 2;//Tactical Advantage
     case "1900571801": return 2;//Overwhelming Barrage
     case "7861932582": return 2;//The Force is With Me
+    case "2758597010": return 2;//Maximum Firepower
     default: return -1;
   }
 }

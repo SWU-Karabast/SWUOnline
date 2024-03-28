@@ -373,6 +373,10 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $ally = new Ally($lastResult);
           $ally->Attach("8752877738");//Shield Token
           break;
+        case "POWER":
+          $ally = new Ally($lastResult);
+          return $ally->CurrentPower();
+          break;
         case "ADDDURABILITY":
           $mzArr = explode("-", $lastResult);
           $zone = &GetMZZone($player, $mzArr[0]);
