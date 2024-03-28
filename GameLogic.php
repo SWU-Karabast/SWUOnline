@@ -335,7 +335,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $mzArr = explode("-", $lastResult);
           $zone = &GetMZZone($player, $mzArr[0]);
           switch($mzArr[0]) {
-            case "ALLY": case "MYALLY": case "THEIRALLY": WriteLog($zone[$mzArr[1] + 5]); return $zone[$mzArr[1] + 5];
+            case "ALLY": case "MYALLY": case "THEIRALLY": return $zone[$mzArr[1] + 5];
             case "BANISH": case "MYBANISH": case "THEIRBANISH": return $zone[$mzArr[1] + 2];
             default: return "-1";
           }
