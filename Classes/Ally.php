@@ -149,6 +149,14 @@ class Ally {
     return explode(",", $this->allies[$this->index + 4]);
   }
 
+  function NumUses() {
+    return $this->allies[$this->index + 8];
+  }
+
+  function ModifyUses($amount) {
+    $this->allies[$this->index + 8] += $amount;
+  }
+
 }
 
 function LastAllyIndex($player) {
