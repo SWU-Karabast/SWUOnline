@@ -553,6 +553,8 @@ function GetAbilityTypes($cardID)
       return "A,A";
     case "5954056864"://Han Solo
       return "A,A";
+    case "6514927936"://Leia Organa
+      return "A,A";
     default: return "";
   }
 }
@@ -587,6 +589,8 @@ function GetAbilityNames($cardID, $index = -1)
       return "Deal Damage,Deploy";
     case "5954056864"://Han Solo
       return "Play Resource,Deploy";
+    case "6514927936"://Leia Organa
+      return "Attack,Deploy";
     default: return "";
   }
 }

@@ -2995,6 +2995,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         PlayAlly("5e90bd91b0", $currentPlayer);
       }
       break;
+    case "6514927936"://Leia Organa
+      $abilityName = GetResolvedAbilityName($cardID, $from);
+      if($abilityName == "Attack") {
+        WriteLog("This is a partially manual card. Do the extra attacks by passing priority manually.");
+      } else if($abilityName == "Deploy") {
+        PlayAlly("87e8807695", $currentPlayer);
+      }
+      break;
     default: break;
   }
 }
