@@ -4,7 +4,7 @@
 function ProcessHitEffect($cardID)
 {
   WriteLog("Processing hit effect for " . CardLink($cardID, $cardID));
-  global $mainPlayer, $combatChainState, $CCS_GoesWhereAfterLinkResolves, $defPlayer, $CCS_AttackTarget;
+  global $mainPlayer, $combatChainState, $CCS_GoesWhereAfterLinkResolves, $defPlayer, $CCS_AttackTarget, $CS_NumAlliesDestroyed;
   if(HitEffectsArePrevented()) return;
   switch($cardID)
   {
@@ -38,6 +38,9 @@ function ProcessHitEffect($cardID)
         $ally->ModifyUses(-1);
         Draw($mainPlayer);
       }
+      break;
+    case "0e65f012f5"://Boba Fett
+      if(GetClassState($defPlayer, $CS_NumAlliesDestroyed) > 0) ReadyResource($mainPlayer, 2);
       break;
     default: break;
   }
