@@ -540,6 +540,8 @@ function GetAbilityTypes($cardID)
       return "A,A";
     case "6088773439"://Darth Vader
       return "A,A";
+    case "4263394087"://Chirrut Imwe
+      return "A,A";
     default: return "";
   }
 }
@@ -566,6 +568,8 @@ function GetAbilityNames($cardID, $index = -1)
       return "Heal,Deploy";
     case "6088773439"://Darth Vader
       return "Deal Damage,Deploy";
+    case "4263394087"://Chirrut Imwe
+      return "Buff Defense,Deploy";
     default: return "";
   }
 }

@@ -2928,6 +2928,20 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,{0}", 1);
       }
       break;
+    case "4263394087"://Chirrut Imwe
+      $abilityName = GetResolvedAbilityName($cardID, $from);
+      WriteLog($abilityName);
+      if($abilityName == "Buff Defense") {
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to give +2 hp");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "ADDHEALTH,2", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "4263394087,HAND", 1);
+      } else if($abilityName == "Deploy") {
+        PlayAlly("d1a7b76ae7", $currentPlayer);
+      }
+      break;
     default: break;
   }
 }

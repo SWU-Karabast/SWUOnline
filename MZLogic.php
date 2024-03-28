@@ -213,11 +213,11 @@ function MZHealAlly($player, $target, $amount)
   $ally->Heal($amount);
 }
 
-function MZAddHealth($player, $target)
+function MZAddHealth($player, $target, $amount=1)
 {
   $targetArr = explode("-", $target);
   $allies = &GetAllies($player);
-  ++$allies[$targetArr[1]+2];//Life
+  $allies[$targetArr[1]+2] += $amount;//hp
 }
 
 function MZFreeze($target)
