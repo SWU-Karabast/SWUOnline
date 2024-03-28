@@ -2930,7 +2930,6 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "4263394087"://Chirrut Imwe
       $abilityName = GetResolvedAbilityName($cardID, $from);
-      WriteLog($abilityName);
       if($abilityName == "Buff Defense") {
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to give +2 hp");
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
@@ -2940,6 +2939,19 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "4263394087,HAND", 1);
       } else if($abilityName == "Deploy") {
         PlayAlly("d1a7b76ae7", $currentPlayer);
+      }
+      break;
+    case "5154172446"://ISB Agent
+      if($from != "PLAY") {
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to reveal");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND:definedType=Event");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "GETCARDID", 1);
+        AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 1 damage", 1);
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY", 1);
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1", 1);
       }
       break;
     default: break;
