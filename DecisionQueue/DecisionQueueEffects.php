@@ -77,6 +77,21 @@ function SpecificCardLogic($player, $card, $lastResult)
     case "GALACTICAMBITION":
       DealArcane(CardCost($lastResult), 4, "PLAYCARD", "5494760041", player:$player);
       break;
+    case "C3PO":
+      $deck = new Deck($player);
+      AddDecisionQueue("PASSPARAMETER", $player, $deck->Top());
+      AddDecisionQueue("SETDQVAR", $player, 0);
+      if(CardCost($deck->Top()) == $lastResult) {
+        AddDecisionQueue("SETDQCONTEXT", $player, "Do you want to draw <0>?");
+        AddDecisionQueue("YESNO", $player, "-");
+        AddDecisionQueue("NOPASS", $player, "-");
+        AddDecisionQueue("DRAW", $player, "-", 1);
+      }
+      else {
+        AddDecisionQueue("SETDQCONTEXT", $player, "The top card of your deck is <0>");
+        AddDecisionQueue("OK", $player, "-");
+      }
+      break;
     default: return "";
   }
 }

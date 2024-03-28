@@ -2968,6 +2968,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         $ally->Ready();
       }
       break;
+    case "8009713136"://C-3PO
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a number");
+      AddDecisionQueue("BUTTONINPUT", $currentPlayer, "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20");
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "C3PO", 1);
+      break;
     default: break;
   }
 }
