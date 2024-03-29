@@ -2158,9 +2158,6 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     if($targetArr[0] == "LAYERUID") { $targetArr[0] = "LAYER"; $targetArr[1] = SearchLayersForUniqueID($targetArr[1]); }
     $target = $targetArr[0] . "-" . $targetArr[1];
   }
-  if(HasAmbush($cardID, $currentPlayer, $index)) {
-    WriteLog("Has Ambush");
-  }
   switch($cardID)
   {
     case "4721628683"://Patrolling V-Wing
@@ -3023,6 +3020,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         PlayAlly("20f21b4948", $currentPlayer);
       }
       break;
+    case "8327910265"://Energy Conversion Lab (ECL)
+      global $CS_AfterPlayedBy;
+      SetClassState($currentPlayer, $CS_AfterPlayedBy, $cardID);
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to put into play");
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND:definedType=Unit;maxCost=6");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
+      break;
     default: break;
   }
 }
@@ -3051,6 +3056,8 @@ function ExhaustResource($player, $amount=1) {
 
 function AfterPlayedByAbility($cardID) {
   global $currentPlayer;
+  $index = LastAllyIndex($currentPlayer);
+  $ally = new Ally("MYALLY-" . $index, $currentPlayer);
   switch($cardID) {
     case "3572356139"://Chewbacca, Walking Carpet
       AddDecisionQueue("OP", $currentPlayer, "GETLASTALLYMZ");
@@ -3061,7 +3068,13 @@ function AfterPlayedByAbility($cardID) {
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{1}", 1);
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "GALACTICAMBITION", 1);
       break;
+    case "8327910265"://Energy Conversion Lab (ECL)
+      AddCurrentTurnEffect($cardID, $currentPlayer, "PLAY", $ally->UniqueID());
+      break;
     default: break;
+  }
+  if(HasAmbush($cardID, $currentPlayer, $index)) {
+    WriteLog("Has Ambush");
   }
 }
 

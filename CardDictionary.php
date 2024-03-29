@@ -239,6 +239,16 @@ function HasOverwhelm($cardID, $player, $index)
 
 function HasAmbush($cardID, $player, $index)
 {
+  global $currentTurnEffects;
+  $ally = new Ally("MYALLY-" . $index, $player);
+  for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnPieces()) {
+    if($currentTurnEffects[$i+1] != $player) continue;
+    if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
+    switch($currentTurnEffects[$i]) {
+      case "8327910265": return true;//Energy Conversion Lab (ECL)
+      default: break;
+    }
+  }
   $allies = &GetAllies($player);
   for($i=0; $i<count($allies); $i+=AllyPieces())
   {
@@ -519,6 +529,8 @@ function GetAbilityType($cardID, $index = -1, $from="-")
     case "7440067052"://Hera Sykulla
       return "A";
     case "4626028465"://Boba Fett
+      return "A";
+    case "8327910265"://Energy Conversion Lab (ECL)
       return "A";
     default: return "";
   }
