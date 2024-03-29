@@ -7,17 +7,10 @@ function EffectHitEffect($cardID)
   global $combatChainState, $CCS_GoesWhereAfterLinkResolves, $defPlayer, $mainPlayer, $CCS_WeaponIndex, $combatChain, $CCS_DamageDealt;
   $attackID = $combatChain[0];
   switch($cardID) {
-    case "mj3WSrghUH"://Poised Strike
-      $char = &GetPlayerCharacter($mainPlayer);
-      $char[1] = 2;
-      break;
-    case "XLbCBxla8K"://Thousand Refractions
-      WakeUpChampion($mainPlayer);
-      $combatChainState[$CCS_GoesWhereAfterLinkResolves] = "HAND";
-      break;
-    case "7t9m4muq2r"://Thieving Cut
-      Draw($mainPlayer);
-      break;
+    case "6954704048"://Heroic Sacrifice
+      $ally = new Ally(AttackerMZID($mainPlayer), $mainPlayer);
+      WriteLog("Heroic Sacrifice defeated " . CardLink($ally->CardID(), $ally->CardID()));
+      $ally->Destroy();
     default:
       break;
   }
@@ -43,6 +36,7 @@ function EffectAttackModifier($cardID)
     case "6432884726": return 2;//Steadfast Battalion
     case "8244682354": return -1;//Jyn Erso
     case "8600121285": return 1;//IG-88
+    case "6954704048": return 2;//Heroic Sacrifice
     default: return 0;
   }
 }
@@ -444,6 +438,7 @@ function IsCombatEffectActive($cardID)
     case "3038238423": return true;//Fleet Lieutenant
     case "8244682354": return true;//Jyn Erso
     case "8600121285": return true;//IG-88
+    case "6954704048": return true;//Heroic Sacrifice
     default: return false;
   }
 }

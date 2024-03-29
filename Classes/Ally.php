@@ -67,6 +67,10 @@ class Ally {
     return $this->allies[$this->index+1] == 1;
   }
 
+  function Destroy() {
+    DestroyAlly($this->playerID, $this->index);
+  }
+
   //Returns true if the ally is destroyed
   function DealDamage($amount) {
     $subcards = $this->GetSubcards();
@@ -115,7 +119,7 @@ class Ally {
     //Current effect buffs
     for($i=0; $i<count($currentTurnEffects); ++$i) {
       if($currentTurnEffects[$i+1] != $this->playerID) continue;
-      if($currentTurnEffects[$i+2] != $this->UniqueID()) continue;
+      if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $this->UniqueID()) continue;
       $power += EffectAttackModifier($currentTurnEffects[$i]);
     }
     return $power;

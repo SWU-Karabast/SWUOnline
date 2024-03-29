@@ -3037,6 +3037,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         PlayAlly("fb475d4ea4", $currentPlayer);
       }
       break;
+    case "6954704048"://Heroic Sacrifice
+      Draw($currentPlayer);
+      WriteLog("This is a partially manual card. Do the extra attacks by passing priority manually.");
+      AddCurrentTurnEffect($cardID, $currentPlayer);
+      break;
     default: break;
   }
 }
