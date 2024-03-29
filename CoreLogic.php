@@ -3074,7 +3074,8 @@ function AfterPlayedByAbility($cardID) {
     default: break;
   }
   if(HasAmbush($cardID, $currentPlayer, $index)) {
-    WriteLog("Has Ambush");
+    $ally->Ready();
+    WriteLog("This is a partially manual effect. Pass priority manually to resolve the ambush attack.");
   }
 }
 
