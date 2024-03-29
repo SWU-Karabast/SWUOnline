@@ -41,6 +41,7 @@ function EffectAttackModifier($cardID)
     case "3038238423": return 2;//Fleet Lieutenant
     case "3208391441": return -2;//Make an Opening
     case "6432884726": return 2;//Steadfast Battalion
+    case "8244682354": return -1;//Jyn Erso
     default: return 0;
   }
 }
@@ -440,6 +441,7 @@ function IsCombatEffectActive($cardID)
     case "1323728003": return true;//Electrostaff
     case "3809048641": return true;//Surprise Strike
     case "3038238423": return true;//Fleet Lieutenant
+    case "8244682354": return true;//Jyn Erso
     default: return false;
   }
 }

@@ -3013,6 +3013,16 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       RemoveAlly($otherPlayer, $mzArr[1]);
       break;
+    case "8244682354"://Jyn Erso
+      $abilityName = GetResolvedAbilityName($cardID, $from);
+      if($abilityName == "Attack") {
+        WriteLog("This is a partially manual card. Do the extra attacks by passing priority manually.");
+        $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+        AddCurrentTurnEffect($cardID, $otherPlayer);
+      } else if($abilityName == "Deploy") {
+        PlayAlly("20f21b4948", $currentPlayer);
+      }
+      break;
     default: break;
   }
 }
