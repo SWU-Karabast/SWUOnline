@@ -2,9 +2,14 @@
 
 function MZAttach($player, $mzIndex, $cardID) {
   $mzArr = explode("-", $mzIndex);
+  $otherPlayer = ($player == 1 ? 2 : 1);
   switch($mzArr[0]) {
-    case "MYALLY": case "THEIRALLY":
+    case "MYALLY":
       $ally = new Ally($mzIndex, $player);
+      $ally->Attach($cardID);
+      break;
+    case "THEIRALLY":
+      $ally = new Ally($mzIndex, $otherPlayer);
       $ally->Attach($cardID);
       break;
     default: break;

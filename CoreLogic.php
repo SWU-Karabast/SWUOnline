@@ -3003,6 +3003,16 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         PlayAlly("87e8807695", $currentPlayer);
       }
       break;
+    case "8055390529"://Traitorous
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      $myAllies = &GetAllies($currentPlayer);
+      $theirAllies = &GetAllies($otherPlayer);
+      $mzArr = explode("-", $target);
+      for($i=$mzArr[1]; $i<$mzArr[1]+AllyPieces(); ++$i) {
+        array_push($myAllies, $theirAllies[$i]);
+      }
+      RemoveAlly($otherPlayer, $mzArr[1]);
+      break;
     default: break;
   }
 }
