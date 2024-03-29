@@ -94,6 +94,12 @@ function HasLeader($player) {
   return SearchCount(SearchAllies($player, definedType:"Leader")) > 0;
 }
 
+function HasMoreUnits($player) {
+  $allies = &GetAllies($player);
+  $theirAllies = &GetAllies($player == 1 ? 2 : 1);
+  return count($allies) > count($theirAllies);
+}
+
 function CopyCurrentTurnEffectsFromAfterResolveEffects()
 {
   global $currentTurnEffects, $afterResolveEffects;

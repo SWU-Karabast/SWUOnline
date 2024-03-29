@@ -3028,6 +3028,15 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
       break;
+    case "8600121285"://IG-88
+      $abilityName = GetResolvedAbilityName($cardID, $from);
+      if($abilityName == "Attack") {
+        WriteLog("This is a partially manual card. Do the extra attacks by passing priority manually.");
+        if(HasMoreUnits($currentPlayer)) AddCurrentTurnEffect($cardID, $currentPlayer);
+      } else if($abilityName == "Deploy") {
+        PlayAlly("fb475d4ea4", $currentPlayer);
+      }
+      break;
     default: break;
   }
 }

@@ -569,6 +569,8 @@ function GetAbilityTypes($cardID)
       return "A,A";
     case "8244682354"://Jyn Erso
       return "A,A";
+    case "8600121285"://IG-88
+      return "A,A";
     default: return "";
   }
 }
@@ -606,6 +608,8 @@ function GetAbilityNames($cardID, $index = -1)
     case "6514927936"://Leia Organa
       return "Attack,Deploy";
     case "8244682354"://Jyn Erso
+      return "Attack,Deploy";
+    case "8600121285"://IG-88
       return "Attack,Deploy";
     default: return "";
   }
