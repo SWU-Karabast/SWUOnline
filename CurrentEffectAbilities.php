@@ -37,6 +37,7 @@ function EffectAttackModifier($cardID)
     case "8244682354": return -1;//Jyn Erso
     case "8600121285": return 1;//IG-88
     case "6954704048": return 2;//Heroic Sacrifice
+    case "20f21b4948": return -1;//Jyn Erso
     default: return 0;
   }
 }
@@ -439,6 +440,7 @@ function IsCombatEffectActive($cardID)
     case "8244682354": return true;//Jyn Erso
     case "8600121285": return true;//IG-88
     case "6954704048": return true;//Heroic Sacrifice
+    case "20f21b4948": return true;//Jyn Erso
     default: return false;
   }
 }

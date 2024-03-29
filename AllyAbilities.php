@@ -356,6 +356,9 @@ function AllyAttackAbilities($attackID)
   }
   for($i = 0; $i < count($allies); $i += AllyPieces()) {
     switch($allies[$i]) {
+      case "20f21b4948"://Jyn Erso
+        AddCurrentTurnEffect("20f21b4948", $defPlayer);
+        break;
       default: break;
     }
   }
