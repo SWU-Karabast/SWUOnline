@@ -127,6 +127,10 @@ function CurrentEffectCostModifiers($cardID, $from)
           $costModifier -= 99;
           $remove = true;
           break;
+        case "3426168686"://Sneak Attack
+          $costModifier -= 1;
+          $remove = true;
+          break;
         default: break;
       }
       if($remove) RemoveCurrentTurnEffect($i);
@@ -416,6 +420,10 @@ function CurrentEffectEndTurnAbilities()
       case "6432884726"://Steadfast Battalion
         $ally = new Ally("MYALLY-" . SearchAlliesForUniqueID($currentTurnEffects[$i+2], $currentTurnEffects[$i+1]), $currentTurnEffects[$i+1]);
         $ally->DealDamage(2);
+        break;
+      case "3426168686"://Sneak Attack
+        $ally = new Ally("MYALLY-" . SearchAlliesForUniqueID($currentTurnEffects[$i+2], $currentTurnEffects[$i+1]), $currentTurnEffects[$i+1]);
+        $ally->Destroy();
         break;
       default: break;
     }

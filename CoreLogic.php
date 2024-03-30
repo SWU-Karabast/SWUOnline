@@ -3042,6 +3042,15 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       WriteLog("This is a partially manual card. Do the extra attacks by passing priority manually.");
       AddCurrentTurnEffect($cardID, $currentPlayer);
       break;
+    case "3426168686"://Sneak Attack
+      global $CS_AfterPlayedBy;
+      SetClassState($currentPlayer, $CS_AfterPlayedBy, $cardID);
+      AddCurrentTurnEffect($cardID, $currentPlayer);
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to put into play");
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND:definedType=Unit");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
+      break;
     default: break;
   }
 }
@@ -3084,6 +3093,12 @@ function AfterPlayedByAbility($cardID) {
       break;
     case "8327910265"://Energy Conversion Lab (ECL)
       AddCurrentTurnEffect($cardID, $currentPlayer, "PLAY", $ally->UniqueID());
+      break;
+    case "3426168686"://Sneak Attack
+      AddDecisionQueue("OP", $currentPlayer, "GETLASTALLYMZ");
+      AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "3426168686,PLAY", 1);
       break;
     default: break;
   }
