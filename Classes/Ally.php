@@ -13,7 +13,7 @@ class Ally {
     global $currentPlayer;
     $mzArr = explode("-", $MZIndex);
     if($player == "") $player = ($mzArr[0] == "MYALLY" ? $currentPlayer : ($currentPlayer == 1 ? 2 : 1));
-    $this->index = $mzArr[1];
+    $this->index = intval($mzArr[1]);
     $this->allies = &GetAllies($player);
     $this->playerID = $player;
   }

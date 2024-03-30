@@ -233,6 +233,11 @@ function HasOverwhelm($cardID, $player, $index)
     case "4631297392":
     case "6432884726":
       return true;
+    case "4619930426"://First Legion Snowtrooper
+      $target = GetAttackTarget();
+      if($target == "THEIRCHAR-0") return false;
+      $ally = new Ally($target);
+      return $ally->IsDamaged();
     default: return false;
   }
 }

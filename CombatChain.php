@@ -55,10 +55,16 @@ function AttackModifier($cardID, $from = "", $resourcesPaid = 0, $repriseActive 
   $modifier = RaidAmount($cardID, $mainPlayer, $mzArr[1]);
   switch($cardID) {
     case "3988315236"://Seasoned Shoretrooper
-      $modifier = NumResources($mainPlayer) >= 6 ? 2 : 0;
+      $modifier += NumResources($mainPlayer) >= 6 ? 2 : 0;
       break;
     case "6348804504"://Ardent Sympathizer
-      $modifier = $initiativePlayer == $mainPlayer ? 2 : 0;
+      $modifier += $initiativePlayer == $mainPlayer ? 2 : 0;
+      break;
+    case "4619930426"://First Legion Snowtrooper
+      $target = GetAttackTarget();
+      if($target == "THEIRCHAR-0") break;
+      $ally = new Ally($target);
+      $modifier += $ally->IsDamaged() ? 2 : 0;
       break;
     default: break;
   }

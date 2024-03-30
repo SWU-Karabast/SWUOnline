@@ -811,12 +811,16 @@ function ResolveChainLink()
     $index = $targetArr[1];
     $defender = new Ally($target, $defPlayer);
     $defenderPower = $defender->CurrentPower();
+    $excess = $totalAttack - $defender->Health();
     $destroyed = $defender->DealDamage($totalAttack);
     $attackerMZ = AttackerMZID($mainPlayer);
     $attackerArr = explode("-", $attackerMZ);
+    $attacker = new Ally($attackerMZ, $mainPlayer);
     if($attackerArr[0] == "MYALLY" && (!$destroyed || $combatChain[0] != "9500514827")) { //Han Solo shoots first
-      $attacker = new Ally($attackerMZ, $mainPlayer);
       $attacker->DealDamage($defenderPower);
+    }
+    if(HasOverwhelm($attacker->CardID(), $mainPlayer, $attacker->Index())) {
+      DealArcane($excess, 1, "OVERWHELM", $attacker->CardID(), player:$mainPlayer);
     }
     AddDecisionQueue("RESOLVECOMBATDAMAGE", $mainPlayer, $totalAttack);
   } else {
