@@ -2158,6 +2158,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     if($targetArr[0] == "LAYERUID") { $targetArr[0] = "LAYER"; $targetArr[1] = SearchLayersForUniqueID($targetArr[1]); }
     $target = $targetArr[0] . "-" . $targetArr[1];
   }
+  if(IsAlly($cardID, $currentPlayer)) {
+    $playAlly = new Ally("MYALLY-" . LastAllyIndex($currentPlayer));
+    if(HasShielded($cardID, $currentPlayer, $playAlly->Index())) $playAlly->Attach("8752877738");//Shield Token
+  }
   switch($cardID)
   {
     case "4721628683"://Patrolling V-Wing
