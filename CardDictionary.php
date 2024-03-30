@@ -299,6 +299,7 @@ function HasShielded($cardID, $player, $index)
     case "b0dbca5c05":
     case "3280523224":
     case "7728042035":
+    case "7870435409":
       return true;
     default: return false;
   }
@@ -585,6 +586,8 @@ function GetAbilityTypes($cardID)
       return "A,A";
     case "8600121285"://IG-88
       return "A,A";
+    case "7870435409"://Bib Fortuna
+      return "A,AA";
     default: return "";
   }
 }
@@ -625,6 +628,8 @@ function GetAbilityNames($cardID, $index = -1)
       return "Attack,Deploy";
     case "8600121285"://IG-88
       return "Attack,Deploy";
+    case "7870435409"://Bib Fortuna
+      return "Play Event,Attack";
     default: return "";
   }
 }

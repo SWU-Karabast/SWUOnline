@@ -2158,7 +2158,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     if($targetArr[0] == "LAYERUID") { $targetArr[0] = "LAYER"; $targetArr[1] = SearchLayersForUniqueID($targetArr[1]); }
     $target = $targetArr[0] . "-" . $targetArr[1];
   }
-  if(IsAlly($cardID, $currentPlayer)) {
+  if($from != "PLAY" && IsAlly($cardID, $currentPlayer)) {
     $playAlly = new Ally("MYALLY-" . LastAllyIndex($currentPlayer));
     if(HasShielded($cardID, $currentPlayer, $playAlly->Index())) $playAlly->Attach("8752877738");//Shield Token
   }
@@ -3080,6 +3080,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "9210902604", 1);
+      break;
+    case "7870435409"://Bib Fortuna
+      $abilityName = GetResolvedAbilityName($cardID, $from);
+      if($abilityName == "Play Event") {
+        
+      }
       break;
     default: break;
   }
