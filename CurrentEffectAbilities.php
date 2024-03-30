@@ -136,6 +136,10 @@ function CurrentEffectCostModifiers($cardID, $from)
           $costModifier -= 1;
           $remove = true;
           break;
+        case "7870435409"://Bib Fortuna
+          $costModifier -= 1;
+          $remove = true;
+          break;
         default: break;
       }
       if($remove) RemoveCurrentTurnEffect($i);

@@ -3084,7 +3084,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "7870435409"://Bib Fortuna
       $abilityName = GetResolvedAbilityName($cardID, $from);
       if($abilityName == "Play Event") {
-        
+        AddCurrentTurnEffect($cardID, $currentPlayer);
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an event to play");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND:definedType=Event");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
       }
       break;
     case "8297630396"://Shoot First
