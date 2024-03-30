@@ -306,7 +306,16 @@ function HasShielded($cardID, $player, $index)
 
 function HasSaboteur($cardID, $player, $index)
 {
+  global $currentTurnEffects;
   $ally = new Ally("MYALLY-" . $index, $player);
+  for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnPieces()) {
+    if($currentTurnEffects[$i+1] != $player) continue;
+    if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
+    switch($currentTurnEffects[$i]) {
+      case "9210902604": return true;//Precision Fire
+      default: break;
+    }
+  }
   $subcards = $ally->GetSubcards();
   for($i=0; $i<count($subcards); ++$i)
   {

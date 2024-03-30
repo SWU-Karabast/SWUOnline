@@ -39,6 +39,9 @@ function EffectAttackModifier($cardID)
     case "6954704048": return 2;//Heroic Sacrifice
     case "20f21b4948": return -1;//Jyn Erso
     case "9097690846": return 2;//Snowtrooper Lieutenant
+    case "9210902604"://Precision Fire
+      $attacker = new Ally(AttackerMZID($mainPlayer), $mainPlayer);
+      return TraitContains($attacker->CardID(), "Trooper", $mainPlayer) ? 2 : 0;
     default: return 0;
   }
 }
@@ -405,6 +408,7 @@ function IsCombatEffectActive($cardID)
     case "6954704048": return true;//Heroic Sacrifice
     case "20f21b4948": return true;//Jyn Erso
     case "9097690846": return true;//Snowtrooper Lieutenant
+    case "9210902604": return true;//Precision Fire
     default: return false;
   }
 }
