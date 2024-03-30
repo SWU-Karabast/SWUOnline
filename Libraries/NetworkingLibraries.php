@@ -822,6 +822,12 @@ function ResolveChainLink()
     if(HasOverwhelm($attacker->CardID(), $mainPlayer, $attacker->Index())) {
       DealArcane($excess, 1, "OVERWHELM", $attacker->CardID(), player:$mainPlayer);
     }
+    else if($attacker->CardID() == "3830969722") { //Blizzard Assault AT-AT
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal " . $excess . " damage to");
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE," . $excess, 1);
+    }
     AddDecisionQueue("RESOLVECOMBATDAMAGE", $mainPlayer, $totalAttack);
   } else {
     if ($combatChainState[$CCS_CombatDamageReplaced] == 1) $damage = 0;
