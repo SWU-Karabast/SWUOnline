@@ -38,6 +38,7 @@ function EffectAttackModifier($cardID)
     case "8600121285": return 1;//IG-88
     case "6954704048": return 2;//Heroic Sacrifice
     case "20f21b4948": return -1;//Jyn Erso
+    case "9097690846": return 2;//Snowtrooper Lieutenant
     default: return 0;
   }
 }
@@ -403,6 +404,7 @@ function IsCombatEffectActive($cardID)
     case "8600121285": return true;//IG-88
     case "6954704048": return true;//Heroic Sacrifice
     case "20f21b4948": return true;//Jyn Erso
+    case "9097690846": return true;//Snowtrooper Lieutenant
     default: return false;
   }
 }

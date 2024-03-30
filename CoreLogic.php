@@ -3064,6 +3064,15 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("ADDLIMITEDNEXTTURNEFFECT", $otherPlayer, "8800836530", 1);
       break;
+    case "9097690846"://Snowtrooper Lieutenant
+      WriteLog("This is a partially manual card. Do the extra attack by passing priority manually.");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to attack with");
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZALLCARDTRAITORPASS", $currentPlayer, "Imperial", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "9097690846", 1);
+      break;
     default: break;
   }
 }
