@@ -42,6 +42,7 @@ function EffectAttackModifier($cardID)
     case "9210902604"://Precision Fire
       $attacker = new Ally(AttackerMZID($mainPlayer), $mainPlayer);
       return TraitContains($attacker->CardID(), "Trooper", $mainPlayer) ? 2 : 0;
+    case "8297630396": return 1;//Shoot First
     default: return 0;
   }
 }
@@ -409,6 +410,7 @@ function IsCombatEffectActive($cardID)
     case "20f21b4948": return true;//Jyn Erso
     case "9097690846": return true;//Snowtrooper Lieutenant
     case "9210902604": return true;//Precision Fire
+    case "8297630396": return true;//Shoot First
     default: return false;
   }
 }

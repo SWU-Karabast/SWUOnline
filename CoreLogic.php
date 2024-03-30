@@ -3087,6 +3087,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         
       }
       break;
+    case "8297630396"://Shoot First
+      WriteLog("This is a partially manual card. Do the extra attack by passing priority manually.");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to attack with");
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "8297630396", 1);
+      break;
     default: break;
   }
 }
