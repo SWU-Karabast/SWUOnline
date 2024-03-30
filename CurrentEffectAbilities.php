@@ -164,73 +164,6 @@ function CurrentEffectDamagePrevention($player, $type, $damage, $source, $preven
     if($currentTurnEffects[$i + 1] == $player || $uniqueID != -1) {
       $effects = explode("-", $currentTurnEffects[$i]);
       switch($effects[0]) {
-        case "RUqtU0Lczf"://Spellshield: Arcane
-          if($preventable)
-          {
-            PlayAura("ENLIGHTEN", $player, $damage);
-            $damage = 0;
-          }
-          $remove = true;
-          break;
-        case "xWJND68I8X"://Water Barrier
-          if($preventable) $damage = 1;
-          $remove = true;
-          break;
-        case "yj2rJBREH8"://Safeguard Amulet
-          if($preventable && $type != "COMBAT") $damage -= 4;
-          break;
-        case "KoF3AMSlUe"://Veiling Breeze
-          if($preventable) $damage -= $effects[1];
-          break;
-        case "1lw9n0wpbh"://Protective Fractal
-          if($preventable) $damage -= 1;
-          $remove = true;
-          break;
-        case "2ha4dk88zq"://Cloak of Stillwater
-          if($preventable) $damage -= 3;
-          $remove = true;
-          break;
-        case "1n3gygojwk"://Evasive Maneuvers
-          if($preventable) $damage -= 2;
-          $remove = true;
-          break;
-        case "99sx6q3p6i"://Spellshield: Wind
-          if($preventable) {
-            if($damage >= 3) {
-              AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
-              AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
-              AddDecisionQueue("MZOP", $player, "BUFFALLY", 1);
-            }
-            $damage -= 3;
-          }
-          $remove = true;
-          break;
-        case "fp66pv4n1n"://Rusted Warshield
-          if($preventable) $damage -= 2;
-          $remove = true;
-          break;
-        case "d6soporhlq"://Obelisk of Protection
-          if($preventable) $damage -= 2;
-          $remove = true;
-          break;
-        case "isxy5lh23q"://Flash Grenade
-          if($preventable) $damage -= 3;
-          break;
-        case "nmp5af098k"://Spellshield: Astra
-          if($preventable) {
-            PlayerOpt($player, $damage);
-            $damage -= $damage;
-          }
-          $remove = true;
-          break;
-        case "nsdwmxz1vd"://Martial Guard
-          if($preventable) $damage -= 2;
-          $remove = true;
-          break;
-        case "o7eanl1gxr"://Diffusive Block
-          if($preventable) $damage -= 2;
-          $remove = true;
-          break;
         case "pv4n1n3gyg"://Cleric's Robe
           if($preventable) $damage -= 1;
           $remove = true;
@@ -424,6 +357,27 @@ function CurrentEffectEndTurnAbilities()
       case "3426168686"://Sneak Attack
         $ally = new Ally("MYALLY-" . SearchAlliesForUniqueID($currentTurnEffects[$i+2], $currentTurnEffects[$i+1]), $currentTurnEffects[$i+1]);
         $ally->Destroy();
+        break;
+      default: break;
+    }
+    if($remove) RemoveCurrentTurnEffect($i);
+  }
+}
+
+function CurrentEffectStartTurnAbilities()
+{
+  global $currentTurnEffects, $mainPlayer;
+  for($i = count($currentTurnEffects) - CurrentTurnPieces(); $i >= 0; $i -= CurrentTurnPieces()) {
+    $remove = false;
+    $cardID = substr($currentTurnEffects[$i], 0, 6);
+    if(SearchCurrentTurnEffects($cardID . "-UNDER", $currentTurnEffects[$i + 1])) {
+      AddNextTurnEffect($currentTurnEffects[$i], $currentTurnEffects[$i + 1]);
+    }
+    switch($currentTurnEffects[$i]) {
+      case "8800836530"://No Good To Me Dead
+        $ally = new Ally("MYALLY-" . SearchAlliesForUniqueID($currentTurnEffects[$i+2], $currentTurnEffects[$i+1]), $currentTurnEffects[$i+1]);
+        $ally->Exhaust();
+        $remove = true;
         break;
       default: break;
     }

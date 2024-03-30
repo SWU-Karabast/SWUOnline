@@ -39,10 +39,6 @@ class Ally {
     return $this->allies[$this->index+2];
   }
 
-  function SetDistant() {
-    $this->allies[$this->index+9] = 1;
-  }
-
   function AddHealth($amount) {
     $this->allies[$this->index+2] += $amount;
   }

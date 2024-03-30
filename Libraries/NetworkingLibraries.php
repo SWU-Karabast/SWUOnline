@@ -998,6 +998,7 @@ function BeginRoundPass()
   EndTurnProcedure(2);
   AllyBeginRoundAbilities(1);
   AllyBeginRoundAbilities(2);
+  CurrentEffectStartTurnAbilities();
   ProcessDecisionQueue();
 }
 

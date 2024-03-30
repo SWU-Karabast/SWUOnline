@@ -48,11 +48,6 @@ class Character
       $this->position = $array[$index+10];
     }
 
-    public function SetDistant()
-    {
-      $array[$this->arrIndex+10] = 1;
-    }
-
     public function Finished()
     {
       $array = &GetPlayerCharacter($this->player);

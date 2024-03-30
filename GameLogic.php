@@ -308,12 +308,6 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $mzID = AttackerMZID($currentPlayer);
       $type = GetMZType($mzID);
       switch($parameter) {
-        case "SETDISTANT":
-          if($type == "ALLY") {
-            $ally = new Ally($mzID);
-            $ally->SetDistant();
-          }
-          break;
         case "ADDDURABILITY":
           if($type == "CHAR") {
             $character = &GetPlayerCharacter($currentPlayer);
@@ -333,7 +327,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         case "GETCARDINDEX": $mzArr = explode("-", $lastResult); return $mzArr[1];
         case "GETUNIQUEID":
           $mzArr = explode("-", $lastResult);
-          $zone = &GetMZZone($player, $mzArr[0]);
+          if(substr($mzArr[0], 0, 5) == "THEIR") $zone = &GetMZZone(($player == 1 ? 2 : 1), $mzArr[0]);
+          else $zone = &GetMZZone($player, $mzArr[0]);
           switch($mzArr[0]) {
             case "ALLY": case "MYALLY": case "THEIRALLY": return $zone[$mzArr[1] + 5];
             case "BANISH": case "MYBANISH": case "THEIRBANISH": return $zone[$mzArr[1] + 2];
@@ -593,6 +588,9 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
     case "ADDLIMITEDCURRENTEFFECT":
       $params = explode(",", $parameter);
       AddCurrentTurnEffect($params[0], $player, $params[1], $lastResult);
+      return $lastResult;
+    case "ADDLIMITEDNEXTTURNEFFECT":
+      AddNextTurnEffect($parameter, $player, $lastResult);
       return $lastResult;
     case "ADDAIMCOUNTER":
       $arsenal = &GetArsenal($player);
