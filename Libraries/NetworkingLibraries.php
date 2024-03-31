@@ -116,7 +116,7 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
         $options = array_values($options);
         $options = implode(",", $options);
         $dqVars[0] = $options;
-        if (count($options) > 0) {
+        if ($options != "") {
           PrependDecisionQueue($turn[0], $currentPlayer, $options);
         }
         ContinueDecisionQueue($buttonInput);

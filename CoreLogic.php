@@ -3059,13 +3059,15 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("ADDLIMITEDNEXTTURNEFFECT", $otherPlayer, "8800836530", 1);
       break;
     case "9097690846"://Snowtrooper Lieutenant
-      WriteLog("This is a partially manual card. Do the extra attack by passing priority manually.");
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to attack with");
-      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
-      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-      AddDecisionQueue("MZALLCARDTRAITORPASS", $currentPlayer, "Imperial", 1);
-      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
-      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "9097690846", 1);
+      if($from != "PLAY") {
+        WriteLog("This is a partially manual card. Do the extra attack by passing priority manually.");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to attack with");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZALLCARDTRAITORPASS", $currentPlayer, "Imperial", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "9097690846", 1);
+      }
       break;
     case "9210902604"://Precision Fire
       WriteLog("This is a partially manual card. Do the extra attack by passing priority manually.");
@@ -3149,19 +3151,34 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL", 1);
       break;
     case "2855740390"://Lieutenant Childsen
-      $hand = &GetHand($currentPlayer);
-      $ally = new Ally("MYALLY-" . LastAllyIndex($currentPlayer), $currentPlayer);
-      $toReveal = "";
-      $amount = 0;
-      for($i=0; $i<count($hand); $i+=HandPieces()) {
-        if($amount < 4 && AspectContains($hand[$i], "Vigilance", $currentPlayer)) {
-          $ally->Attach("2007868442");//Experience token
-          if($toReveal != "") $toReveal .= ",";
-          $toReveal .= $hand[$i];
-          ++$amount;
+      if($from != "PLAY") {
+        $hand = &GetHand($currentPlayer);
+        $ally = new Ally("MYALLY-" . LastAllyIndex($currentPlayer), $currentPlayer);
+        $toReveal = "";
+        $amount = 0;
+        for($i=0; $i<count($hand); $i+=HandPieces()) {
+          if($amount < 4 && AspectContains($hand[$i], "Vigilance", $currentPlayer)) {
+            $ally->Attach("2007868442");//Experience token
+            if($toReveal != "") $toReveal .= ",";
+            $toReveal .= $hand[$i];
+            ++$amount;
+          }
         }
+        RevealCards($toReveal, $currentPlayer, "HAND");
       }
-      RevealCards($toReveal, $currentPlayer, "HAND");
+      break;
+    case "8506660490"://Darth Vader
+      if($from != "PLAY") {
+        $hand = &GetHand($currentPlayer);
+        AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE," . 10);
+        AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+        AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Imperial", 1);
+        AddDecisionQueue("MAYCHOOSECARD", $currentPlayer, "<-", 1);
+        AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
+        AddDecisionQueue("OP", $currentPlayer, "REMOVECARD", 1);
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYHAND-" . count($hand), 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
+      }
       break;
     default: break;
   }
