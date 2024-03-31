@@ -3005,14 +3005,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "8055390529"://Traitorous
-      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
-      $myAllies = &GetAllies($currentPlayer);
-      $theirAllies = &GetAllies($otherPlayer);
-      $mzArr = explode("-", $target);
-      for($i=$mzArr[1]; $i<$mzArr[1]+AllyPieces(); ++$i) {
-        array_push($myAllies, $theirAllies[$i]);
-      }
-      RemoveAlly($otherPlayer, $mzArr[1]);
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, $target);
+      AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL");
       break;
     case "8244682354"://Jyn Erso
       $abilityName = GetResolvedAbilityName($cardID, $from);
@@ -3117,6 +3111,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         $dqVars[0] = $cards;
         AddDecisionQueue("MAYCHOOSETOP", $currentPlayer, $cards);
         AddDecisionQueue("SPECIFICCARD", $currentPlayer, "FORACAUSEIBELIEVEIN");
+      }
+      break;
+    case "5784497124"://Emperor Palpatine
+      $abilityName = GetResolvedAbilityName($cardID, $from);
+      if($abilityName == "Deal Damage") {
+        
+      } else if($abilityName == "Deploy") {
+        PlayAlly("6c5b96c7ef", $currentPlayer);
       }
       break;
     default: break;

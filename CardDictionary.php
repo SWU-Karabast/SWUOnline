@@ -588,6 +588,8 @@ function GetAbilityTypes($cardID)
       return "A,A";
     case "7870435409"://Bib Fortuna
       return "A,AA";
+    case "5784497124"://Emperor Palpatine
+      return "A,A";
     default: return "";
   }
 }
@@ -630,6 +632,8 @@ function GetAbilityNames($cardID, $index = -1)
       return "Attack,Deploy";
     case "7870435409"://Bib Fortuna
       return "Play Event,Attack";
+    case "5784497124"://Emperor Palpatine
+      return "Deal Damage,Deploy";
     default: return "";
   }
 }

@@ -383,6 +383,16 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $mzArr = explode("-", $lastResult);
           $zone = &GetMZZone($player, $mzArr[0]);
           return MemoryCost($zone[$mzArr[1]], $player);
+        case "TAKECONTROL":
+          $otherPlayer = $player == 1 ? 2 : 1;
+          $myAllies = &GetAllies($player);
+          $theirAllies = &GetAllies($otherPlayer);
+          $mzArr = explode("-", $lastResult);
+          for($i=$mzArr[1]; $i<$mzArr[1]+AllyPieces(); ++$i) {
+            array_push($myAllies, $theirAllies[$i]);
+          }
+          RemoveAlly($otherPlayer, $mzArr[1]);
+          return $lastResult;
         default: break;
       }
       return $lastResult;
