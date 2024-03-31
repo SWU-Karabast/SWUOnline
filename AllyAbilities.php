@@ -562,6 +562,13 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,1", 1);
       break;
+    case "5464125379"://Strafing Gunship
+      $target = GetAttackTarget();
+      $ally = new Ally($target, $defPlayer);
+      if(CardArenas($ally->CardID()) == "Ground") {
+        AddCurrentTurnEffect("5464125379", $defPlayer, from:"PLAY");
+      }
+      break;
     default: break;
   }
 }

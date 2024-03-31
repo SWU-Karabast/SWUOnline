@@ -815,6 +815,7 @@ function ResolveChainLink()
     $index = $targetArr[1];
     $defender = new Ally($target, $defPlayer);
     $defenderPower = $defender->CurrentPower();
+    if($defenderPower < 0) $defenderPower = 0;
     $excess = $totalAttack - $defender->Health();
     $destroyed = $defender->DealDamage($totalAttack);
     $attackerMZ = AttackerMZID($mainPlayer);
@@ -1438,6 +1439,7 @@ function GetTargetOfAttack($attackID)
   }
   $allies = &GetAllies($defPlayer);
   for($i = 0; $i < count($allies); $i += AllyPieces()) {
+    if($attacker->CardID() != "5464125379" && CardArenas($attacker->CardID()) != CardArenas($allies[$i])) continue;//Strafing Gunship
     if($targets != "") $targets .= ",";
     $targets .= "THEIRALLY-" . $i;
     if(HasSentinel($allies[$i], $defPlayer, $i)) {
