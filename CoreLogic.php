@@ -3132,6 +3132,17 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         PlayAlly("6c5b96c7ef", $currentPlayer);
       }
       break;
+    case "8117080217"://Admiral Ozzel
+      $abilityName = GetResolvedAbilityName($cardID, $from);
+      if($abilityName == "Play Imperial Unit") {
+        global $CS_AfterPlayedBy;
+        SetClassState($currentPlayer, $CS_AfterPlayedBy, $cardID);
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to put into play");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND:definedType=Unit;trait=Imperial");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
+      }
+      break;
     default: break;
   }
 }
@@ -3180,6 +3191,14 @@ function AfterPlayedByAbility($cardID) {
       AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "3426168686,PLAY", 1);
+      break;
+    case "8117080217"://Admiral Ozzel
+      $ally->Ready();
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a unit to ready");
+      AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $otherPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $otherPlayer, "READY", 1);
       break;
     default: break;
   }
