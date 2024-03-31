@@ -3116,8 +3116,19 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "5784497124"://Emperor Palpatine
       $abilityName = GetResolvedAbilityName($cardID, $from);
       if($abilityName == "Deal Damage") {
-        
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an ally to destroy");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "DESTROY", 1);
+        AddDecisionQueue("DRAW", $currentPlayer, "-", 1);
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an ally to deal 1 damage");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1", 1);
       } else if($abilityName == "Deploy") {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL", 1);
         PlayAlly("6c5b96c7ef", $currentPlayer);
       }
       break;

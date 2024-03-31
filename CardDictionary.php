@@ -466,6 +466,8 @@ function AbilityCost($cardID)
       return GetResolvedAbilityName($cardID) == "Draw Card" ? 1 : 0;
     case "4300219753"://Fett's Firespray
       return GetResolvedAbilityName($cardID) == "Exhaust" ? 2 : 0;
+    case "5784497124"://Emperor Palpatine
+      return GetResolvedAbilityName($cardID) == "Deal Damage" ? 1 : 0;
     default: break;
   }
   if(IsAlly($cardID)) return 0;

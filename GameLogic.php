@@ -360,6 +360,10 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $destroyed = $ally->DealDamage($parameterArr[1]);
           if($destroyed && $lastResult == GetAttackTarget()) CloseCombatChain();
           return $lastResult;
+        case "DESTROY":
+          $ally = new Ally($lastResult);
+          $ally->Destroy();
+          return $lastResult;
         case "ADDEXPERIENCE":
           $ally = new Ally($lastResult);
           $ally->Attach("2007868442");//Experience token
