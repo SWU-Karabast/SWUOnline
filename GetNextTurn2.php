@@ -920,7 +920,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
 
   //Now display their arsenal
   if (count($theirArsenal) > 0) {
-    $arsenalLeft = (count($theirArsenal) == ArsenalPieces() ? "calc(50% - " . (intval($cardWidth / 2) + 4) . "px)" : "calc(50% - " . (intval($cardWidth) + 14) . "px)");
+    $arsenalLeft = "calc(50% - " . (count($theirArsenal)/ArsenalPieces()/2 * intval($cardWidth) + 14) . "px)";
     echo ("<div title='Your opponent's Arsenal' style='z-index:-10; position: fixed; left:" . $arsenalLeft . "; top:" . (intval(GetCharacterTop("C", "")) * 2 + 5) . "px;'>"); //arsenal div
 
     for ($i = 0; $i < count($theirArsenal); $i += ArsenalPieces()) {
@@ -1067,7 +1067,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
 
   //Now display my arsenal
   if (count($myArsenal) > 0) {
-    $arsenalLeft = (count($myArsenal) == ArsenalPieces() ? "calc(50% - " . (intval($cardWidth / 2) + 6) . "px)" : "calc(50% - " . (intval($cardWidth) + 14) . "px)");
+    $arsenalLeft = "calc(50% - " . (count($myArsenal)/ArsenalPieces()/2 * intval($cardWidth) + 14) . "px)";
     echo ("<div style='position:fixed; left:" . $arsenalLeft . "; bottom:" . (intval(GetCharacterBottom("C", "")) - $cardSize + 15) . "px;'>"); //arsenal div
     for ($i = 0; $i < count($myArsenal); $i += ArsenalPieces()) {
       echo ("<div style='position:relative; display:inline-block'>");
