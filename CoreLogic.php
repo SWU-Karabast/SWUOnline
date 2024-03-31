@@ -3148,6 +3148,21 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL", 1);
       break;
+    case "2855740390"://Lieutenant Childsen
+      $hand = &GetHand($currentPlayer);
+      $ally = new Ally("MYALLY-" . LastAllyIndex($currentPlayer), $currentPlayer);
+      $toReveal = "";
+      $amount = 0;
+      for($i=0; $i<count($hand); $i+=HandPieces()) {
+        if($amount < 4 && AspectContains($hand[$i], "Vigilance", $currentPlayer)) {
+          $ally->Attach("2007868442");//Experience token
+          if($toReveal != "") $toReveal .= ",";
+          $toReveal .= $hand[$i];
+          ++$amount;
+        }
+      }
+      RevealCards($toReveal, $currentPlayer, "HAND");
+      break;
     default: break;
   }
 }
