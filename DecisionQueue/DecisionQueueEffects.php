@@ -92,6 +92,12 @@ function SpecificCardLogic($player, $card, $lastResult)
         AddDecisionQueue("OK", $player, "-");
       }
       break;
+    case "FORACAUSEIBELIEVEIN":
+      $cardArr = explode(",", $dqVars[0]);
+      for($i=0; $i<count($cardArr); ++$i) {
+        AddGraveyard($cardArr[$i], $player, "DECK");
+      }
+      break;
     default: return "";
   }
 }

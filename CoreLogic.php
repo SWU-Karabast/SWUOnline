@@ -3099,6 +3099,26 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "8297630396", 1);
       break;
+    case "5767546527"://For a Cause I Believe In
+      $deck = new Deck($currentPlayer);
+      $deck->Reveal(4);
+      $cards = $deck->Top(remove:true, amount:4);
+      $cardArr = explode(",", $cards);
+      $damage = 0;
+      for($i=0; $i<count($cardArr); ++$i) {
+        if(AspectContains($cardArr[$i], "Heroism", $currentPlayer)) {
+          ++$damage;
+        }
+      }
+      WriteLog(CardLink($cardID, $cardID) . " is dealing " . $damage . " damage. Pass to discard the rest of the cards.");
+      DealArcane($damage, 1, "PLAYCARD", "5767546527");
+      if($cards != "") {
+        global $dqVars;
+        $dqVars[0] = $cards;
+        AddDecisionQueue("MAYCHOOSETOP", $currentPlayer, $cards);
+        AddDecisionQueue("SPECIFICCARD", $currentPlayer, "FORACAUSEIBELIEVEIN");
+      }
+      break;
     default: break;
   }
 }
