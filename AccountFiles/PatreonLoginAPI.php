@@ -17,7 +17,6 @@ SetHeaders();
 
 $client_id = $patreonClientIDReact;
 $client_secret = $patreonClientSecretReact;
-//$redirect_uri = "https://www.talishar.net/game/PatreonLogin.php";
 $redirect_uri = "https://talishar.net/user/profile/linkpatreon";
 
 

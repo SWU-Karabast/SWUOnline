@@ -548,8 +548,8 @@ function SendEmail($userEmail, $url)
 	require '../vendor/autoload.php';
 
 	$email = new Mail();
-	$email->setFrom("no-reply@fleshandbloodonline.com", "No-Reply");
-	$email->setSubject("Talishar Password Reset Link");
+	$email->setFrom("no-reply@karabast.net", "No-Reply");
+	$email->setSubject("Karabast Password Reset Link");
 	$email->addTo($userEmail);
 	$email->addContent(
 		"text/html",

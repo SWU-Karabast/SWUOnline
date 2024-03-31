@@ -26,7 +26,7 @@ if(IsUserLoggedIn()) {
      if($apiKey == $fabraryOutgoingKey)
      {
        storeFabraryId(LoggedInUser(), $deckbuilderID);
-       $response->message = "Linked successfully to Talishar user: " . LoggedInUser();
+       $response->message = "Linked successfully to Karabast user: " . LoggedInUser();
      }
      else $response->message = "Invalid fabrary auth key";
   }

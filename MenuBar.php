@@ -24,7 +24,7 @@ $isMobile = IsMobile();
 
 <head>
   <title>Karabast</title>
-  <link rel="shortcut icon" type="image/png" href="Images/clarentTiny.png" />
+  <link rel="shortcut icon" type="image/png" href="Images/karabastTiny.png" />
   <link rel="stylesheet" href="./css/menuStyles2.css">
   <style>
     body {
@@ -139,10 +139,9 @@ $isMobile = IsMobile();
   <div style='width: 100%'>
     <nav class='NavBarDiv'>
       <ul>
-        <?php if (!$isMobile) echo '<li><a target="_blank" href="https://discord.gg/QbNknZnn6T">Discord</a></li>'; ?>
-
         <?php
-        //if (!$isMobile) echo '<li><a target="_blank" href="https://twitter.com/talishar_online">Twitter</a></li>';
+          if (!$isMobile) echo '<li><a target="_blank" href="https://discord.gg/hKRaqHND4v">Discord</a></li>';
+          echo '<li><a target="_blank" href="https://github.com/OotTheMonk/SWUOnline">Github</a></li>';
         ?>
         <!--<li><a target="_blank" href="https://www.patreon.com/talishar_online">Support Us</a></li>-->
       </ul>
