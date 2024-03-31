@@ -86,7 +86,7 @@ $isMobile = IsMobile();
     color: rgb(240, 240, 240);
     overflow-y: hidden;
     color: #DDD;
-    background-image: url('Images/rout.jpg');
+    background-image: url('Images/LobbyBackground.webp');
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -184,7 +184,8 @@ $isMobile = IsMobile();
 
       return $a->name < $b->name ? -1 : 1;
     }
-
+    echo("Matchups are not yet supported!");
+    /*
     $decklink = ($playerID == 1 ? $p1DeckLink : $p2DeckLink);
     $matchups = ($playerID == 1 ? $p1Matchups : $p2Matchups);
     if ($matchups != NULL) {
@@ -204,7 +205,7 @@ $isMobile = IsMobile();
       echo ("<BR>The following deckbuilder sites support matchups:<BR>");
       echo ("<a href='https://fabrary.net' target='_blank'>Fabrary</a>");
     }
-
+    */
     ?>
 
   </div>
@@ -212,7 +213,7 @@ $isMobile = IsMobile();
   <div<?php if ($isMobile) echo (" style='display:none;'"); ?>>
     <div id="equipTab" style="position:absolute; z-index:1; cursor:pointer; top:20px; left:640px; width:280px; height:73px; background-color:rgba(175, 175, 175, 0.8); border: 2px solid #1a1a1a; border-radius: 5px;" onclick="TabClick('EQUIP');">
 
-      <h1>Your Equipment</h1>
+      <h1>Your Leader</h1>
     </div>
 
     <div id="equipDisplay" style="position:absolute; z-index:1; top:95px; left:640px; right:180px; bottom:3%; background-color:rgba(74, 74, 74, 0.9); border: 2px solid #1a1a1a; border-radius: 5px;">

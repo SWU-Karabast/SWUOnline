@@ -28,7 +28,7 @@ $isMobile = IsMobile();
   <link rel="stylesheet" href="./css/menuStyles2.css">
   <style>
     body {
-      background-image: url('Images/avalon-background.jpg');
+      background-image: url('Images/UnderDevBackground.webp');
       background-position: top center;
       background-repeat: no-repeat;
       background-size: cover;
@@ -57,12 +57,12 @@ $isMobile = IsMobile();
 
     .ContentWindow {
       padding: 0 1em;
-      background-color: rgba(0, 35, 85, .7);
+      background-color: rgba(70, 20, 20, .7);
       font-family: helvetica;
       color: white;
       position: absolute;
       border-radius: 8px;
-      border: 2px solid DodgerBlue;
+      border: 2px solid rgb(255, 87, 51);
     }
 
     .NavBarDiv {
@@ -73,7 +73,7 @@ $isMobile = IsMobile();
       height: 45px;
       width: 100%;
       z-index: 100;
-      background-color: rgba(0, 20, 50, .8);
+      background-color: rgba(40, 5, 5, .8);
     }
 
     .rightnav {
@@ -134,7 +134,7 @@ $isMobile = IsMobile();
   </style>
 </head>
 
-<body style="background-image: url('./Images/avalon-background.jpg');">
+<body style="background-image: url('./Images/UnderDevBackground.webp');">
 
   <div style='width: 100%'>
     <nav class='NavBarDiv'>

@@ -45,8 +45,8 @@ $canSeeQueue = isset($_SESSION["useruid"]);
 
 <div style="text-align: center; padding-top: 45px;">
   <!--<div style="display: inline-block; width:400px; height:180px; background-size: contain; background-image: url('Images/TalisharLogo.webp');"></div>-->
-  <h1 style='color:black;'>Karabast</h1>
-  <h3 style='color:black;'>A fan-made Star Wars Unlimited TCG Simulator</h3>
+  <h1 style='color:white;'>Karabast</h1>
+  <h3 style='color:white;'>A fan-made Star Wars Unlimited TCG Simulator</h3>
 </div>
 
 <div class="ContentWindow" style='width:27%; left:20px; top:60px; bottom:30px; overflow-y:auto;'>
