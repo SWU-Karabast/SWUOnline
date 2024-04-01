@@ -54,16 +54,6 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
   }
   for($j = $index + AllyPieces() - 1; $j >= $index; --$j) unset($allies[$j]);
   $allies = array_values($allies);
-  //On Kill abilities
-  if($fromCombat)
-  {
-    if(SearchCurrentTurnEffects("TJTeWcZnsQ", $mainPlayer)) Draw($mainPlayer);//Lorraine, Blademaster)
-    if($combatChain[0] == "zcVjsVRBV8" && CharacterLevel($mainPlayer) >= 2 && (IsClassBonusActive($mainPlayer, "WARRIOR") || IsClassBonusActive($mainPlayer, "ASSASSIN")))//Combo Strike
-    {
-      $char = &GetPlayerCharacter($mainPlayer);
-      $char[1] = 2;
-    }
-  }
   return $cardID;
 }
 

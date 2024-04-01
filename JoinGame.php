@@ -63,17 +63,17 @@ if (isset($_SESSION["userid"])) {
       echo ("</select></label>");
     }
   }
+  /*
   if (count($favoriteDecks) == 0) {
     echo ("<div><label class='SelectDeckInput'>Starter Decks: </label>");
     echo ("<select name='decksToTry' id='decksToTry'>");
-    echo ("<option value='1'>Lorraine Starter</option>");
-    echo ("<option value='2'>Silvie Starter</option>");
-    echo ("<option value='3'>Rai Starter</option>");
+    
     echo ("</select></div>");
   }
+  */
 
   ?>
-  <label for="fabdb">Deck Link</label>
+  <label for="fabdb">Deck Link (use the json export from <u><a style='color:lightblue;' href='https://www.swudb.com/' target='_blank'>SWU DB</a></u>):</label>
   <input type="text" id="fabdb" name="fabdb">
   <br>
   <?php

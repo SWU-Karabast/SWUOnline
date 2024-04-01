@@ -42,17 +42,9 @@ if ($matchup == "" && GetCachePiece($gameName, $playerID + 6) != "") {
 if ($decklink == "" && $deck == "" && $favoriteDeckLink == "0") {
   $starterDeck = true;
   switch($decksToTry) {
-    case '1':
-      $deck = "./lorraineStarter.txt";
-      break;
-    case '2':
-      $deck = "./silvieStarter.txt";
-      break;
-    case '3':
-      $deck = "./raiStarter.txt";
-      break;
+
     default:
-        $deck = "./lorraineStarter.txt";
+        $deck = "./test.txt";
       break;
   }
 }
