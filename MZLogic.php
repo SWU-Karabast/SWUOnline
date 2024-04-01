@@ -416,9 +416,10 @@ function MZStartTurnAbility($player, $MZIndex)
   }
 }
 
-function MZMoveCard($player, $search, $where, $may=false, $isReveal=false, $silent=false, $isSubsequent=false)
+function MZMoveCard($player, $search, $where, $may=false, $isReveal=false, $silent=false, $isSubsequent=false, $context="")
 {
   AddDecisionQueue("MULTIZONEINDICES", $player, $search, ($isSubsequent ? 1 : 0));
+  if($context != "") AddDecisionQueue("SETDQCONTEXT", $player, $context);
   if($may) AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
   else AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
   AddDecisionQueue("MZADDZONE", $player, $where, 1);

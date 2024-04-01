@@ -585,7 +585,7 @@ function EndTurnProcedure($player) {
   }
   Draw($player);
   Draw($player);
-  MZMoveCard($player, "MYHAND", "MYRESOURCES", may:true);
+  MZMoveCard($player, "MYHAND", "MYRESOURCES", may:true, context:"Choose a card to resource");
 }
 
 function TopDeckToArsenal($player)
