@@ -1513,6 +1513,17 @@ function MaterializeCardEffect($cardID)
   }
 }
 
+function UpdateLinkAttack()
+{
+  global $mainPlayer, $combatChainState, $CCS_LinkBaseAttack;
+  $ally = new Ally(AttackerMZID($mainPlayer), $mainPlayer);
+  $cardID = $ally->CardID();
+  $baseAttackSet = CurrentEffectBaseAttackSet($cardID);
+  if($baseAttackSet != -1) $attackValue = $baseAttackSet;
+  else $attackValue = $ally->CurrentPower();
+  $combatChainState[$CCS_LinkBaseAttack] = BaseAttackModifiers($attackValue);
+}
+
 function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $additionalCosts = "-", $uniqueID = "-1", $layerIndex = -1)
 {
   global $turn, $combatChain, $currentPlayer, $defPlayer, $combatChainState, $CCS_AttackPlayedFrom, $CS_PlayIndex;
