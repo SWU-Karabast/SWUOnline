@@ -1006,7 +1006,6 @@ function BeginRoundPass()
   $nextTurnEffects = [];
   $mainPlayer = $initiativePlayer;
   $initiativeTaken = 0;
-  $initiativePlayer = 0;
   EndTurnProcedure(1);
   EndTurnProcedure(2);
   AllyBeginRoundAbilities(1);
