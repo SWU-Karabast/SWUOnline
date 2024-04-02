@@ -1212,21 +1212,6 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   }
   echo ("</div>");
 
-  if(IsStreamerMode($playerID))
-  {
-    echo ("<div id='streamerPlaceholder' style='flex-grow:0; flex-shrink:0; height:200px;'></div>");
-  }
-  else {
-    echo ("<div style='position:relative; z-index:-1;'><img style='height:(" . intval($rightSideWidth / 2) . ")px; flex-grow:0; flex-shrink:0; width:100%;' src='./Images/phaseTracker2.png' />");
-    $trackerColor = ($playerID == $currentPlayer ? "blue" : "red");
-    if ($turn[0] == "B" || (count($layers) > 0 && $layers[0] == "DEFENDSTEP")) $trackerLeft = intval($rightSideWidth * .43);
-    else if ($turn[0] == "A" || $turn[0] == "D") $trackerLeft = intval($rightSideWidth * .61);
-    else if ($turn[0] == "PDECK" || $turn[0] == "ARS" || (count($layers) > 0 && ($layers[0] == "ENDTURN" || $layers[0] == "FINALIZECHAINLINK"))) $trackerLeft = intval($rightSideWidth * .795);
-    else if (count($chainLinks) > 0) $trackerLeft = $trackerLeft = intval($rightSideWidth * .245);
-    else $trackerLeft = $trackerLeft = intval($rightSideWidth * .065);
-    echo ("<div style='position:absolute; z-index:0; top:47px; left:" . $trackerLeft . "px;'><img style='height:29px; width:30px;' src='./Images/" . $trackerColor . "PhaseMarker.png' /></div>");
-    echo ("</div>");
-  }
   echo ("<div id='gamelog' style='flex-grow:1; top:3px; border: 3px solid " . $borderColor . "; border-radius: 5px; position:relative; background-color: " . $backgroundColor . "; overflow-y: scroll;'>");
   EchoLog($gameName, $playerID);
   echo ("</div>");
