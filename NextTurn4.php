@@ -371,7 +371,7 @@
           case "C":
             return "calc(50% - " + (cardSize / 2) + "px)";
           case "W":
-            return "calc(50% - " + (cardSize / 2 + cardSize + 10) + "px)";
+            return "calc(50% - " + (cardSize / 2) + "px)";
           default:
             break;
         }
@@ -394,7 +394,7 @@
           case "C":
             return (cardSize * 2 + 25) + "px";
           case "W":
-            return (cardSize * 2 + 25) + "px";
+            return (cardSize * 3 + 40) + "px";
           default:
             break;
         }
@@ -417,7 +417,7 @@
           case "C":
             return (cardSize * 2 + 25) + "px";
           case "W":
-            return (cardSize * 2 + 25) + "px";
+            return (cardSize * 3 + 40) + "px";
           default:
             break;
         }
