@@ -389,6 +389,7 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
       break;
     case 34: //Claim Initiative
       global $initiativeTaken, $initiativePlayer;
+      WriteLog("Player " . $playerID . " claimed initiative.");
       $initiativePlayer = $currentPlayer;
       $initiativeTaken = 1;
       break;
@@ -900,12 +901,9 @@ function FinalizeChainLink($chainClosed = false)
   global $turn, $actionPoints, $combatChain, $mainPlayer, $currentTurnEffects, $currentPlayer, $combatChainState, $actionPoints, $CCS_DamageDealt;
   global $mainClassState, $CS_AtksWWeapon, $CCS_GoesWhereAfterLinkResolves, $CS_LastAttack, $CCS_LinkTotalAttack, $CS_NumSwordAttacks, $chainLinks, $chainLinkSummary;
   global $CS_AnotherWeaponGainedGoAgain, $CCS_HitThisLink;
+  $chainClosed = true;
   UpdateGameState($currentPlayer);
   BuildMainPlayerGameState();
-
-  if (DoesAttackHaveGoAgain() && !$chainClosed) {
-    ++$actionPoints;
-  }
 
   ChainLinkResolvedEffects();
 
@@ -964,10 +962,6 @@ function FinalizeChainLink($chainClosed = false)
   CopyCurrentTurnEffectsFromCombat();
 
   //Don't change state until the end, in case it changes what effects are active
-  if (CardType($combatChain[0]) == "W" && !$chainClosed) {
-    ++$mainClassState[$CS_AtksWWeapon];
-    if (CardSubtype($combatChain[0]) == "Sword") ++$mainClassState[$CS_NumSwordAttacks];
-  }
   SetClassState($mainPlayer, $CS_LastAttack, $combatChain[0]);
 
   $combatChain = [];
@@ -1017,7 +1011,6 @@ function BeginRoundPass()
 function BeginTurnPass()
 {
   global $mainPlayer, $defPlayer, $decisionQueue;
-  WriteLog("Main player passed priority; attempting to end turn.");
   ResetCombatChainState(); // The combat chain must be closed prior to the turn ending. The close step is outlined in 7.8 - specifically: CR 2.1 - 7.8.7. Fifth and finally, the Close Step ends, and the Action Phase continues. The Action Phase will always continue after the combat chain is closed - so there is another round of priority windows
   AddLayer("ENDTURN", $mainPlayer, "-");
   ProcessDecisionQueue("");
@@ -1168,6 +1161,20 @@ function FinalizeTurn()
 
   DoGamestateUpdate();
   ProcessDecisionQueue();
+}
+
+function SwapTurn() {
+  global $turn, $mainPlayer, $combatChain, $actionPoints, $defPlayer, $currentPlayer;
+  $turn[0] = "M";
+  //$turn[1] = $mainPlayer == 2 ? $turn[1] + 1 : $turn[1];
+  $turn[2] = "";
+  $turn[3] = "";
+  $actionPoints = 1;
+  $combatChain = []; //TODO: Add cards to the discard pile?...
+  $defPlayer = $mainPlayer;
+  $mainPlayer = ($mainPlayer == 1 ? 2 : 1);
+  $currentPlayer = $mainPlayer;
+  BuildMainPlayerGameState();
 }
 
 function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID = -1)
