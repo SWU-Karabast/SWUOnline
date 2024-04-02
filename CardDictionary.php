@@ -60,6 +60,15 @@ function NumResources($player) {
   return count($resources)/ResourcePieces();
 }
 
+function NumResourcesAvailable($player) {
+  $resources = &GetResourceCards($player);
+  $numAvailable = 0;
+  for($i=0; $i<count($resources); $i+=ResourcePieces()) {
+    if($resources[$i+4] == 0) ++$numAvailable;
+  }
+  return $numAvailable;
+}
+
 function CardTalent($cardID)
 {
   $set = substr($cardID, 0, 3);
@@ -691,6 +700,7 @@ function IsPlayable($cardID, $phase, $from, $index = -1, &$restriction = null, $
     $char = &GetPlayerCharacter($player);
     if($char[1] != 2) return false;//Can't attack if rested
   }
+  if($from == "HAND" && ((CardCost($cardID) + SelfCostModifier($cardID)) > NumResourcesAvailable($currentPlayer))) return false;
   if($phase == "M" && $from == "HAND") return true;
   $isStaticType = IsStaticType($cardType, $from, $cardID);
   if($isStaticType) {
