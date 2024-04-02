@@ -863,6 +863,8 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     $otherPlayer = $playerID == 2 ? 1 : 2;
   }
   $theirAllies = GetAllies($otherPlayer);
+  $spaceAllies = "";
+  $groundAllies = "";
   if (count($theirAllies) > 0) {
     for ($i = 0; $i+AllyPieces()-1 < count($theirAllies); $i += AllyPieces()) {
       $lifeCounters = $theirAllies[$i + 2];
@@ -870,11 +872,15 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       $subcard = $theirAllies[$i + 4];
       if (SearchCurrentTurnEffectsForUniqueID($theirAllies[$i + 5]) != -1) $attackCounters = EffectAttackModifier(SearchUniqueIDForCurrentTurnEffects($theirAllies[$i + 5])) + AttackValue($theirAllies[$i]);
       else $attackCounters = 0;
-      echo ("<div style='position:relative; display: inline-block;'>");
-      if ($subcard != "-" && $subcard != "UPR043") echo (Card($subcard, "concat", $cardSizeAura, showHover: true, from: "SUBCARD", controller: $playerID));
-      echo (Card($theirAllies[$i], "concat", $cardSizeAura, 0, 1, $theirAllies[$i + 1] != 2 ? 1 : 0, 0, 0, "", "", False, $lifeCounters, $enduranceCounters, $attackCounters, ($subcard != "-" && $subcard != "UPR043") ? "HASSUBCARD" : "", controller: $otherPlayer) . "&nbsp");
-      if ($theirAllies[$i + 3] == 1) echo ("<img title='Frozen' style='position:absolute; z-index:1001; top: " . ($subcard == "-" || $subcard == "UPR043" ? "6px" : "24px") . "; left: 7px; cursor:pointer; height:" . $cardHeight . "; width:" . $cardWidth . ";' src='./Images/frozenOverlay.png' />");
-      echo ("</div>");
+      $cardArena = CardArenas($theirAllies[$i]);
+      if($cardArena == "Ground") $cardText = "<div style='position:relative; float:right; display: inline-block;'>";
+      else $cardText = "<div style='position:relative; display: inline-block;'>";
+      if ($subcard != "-" && $subcard != "UPR043") $cardText .= (Card($subcard, "concat", $cardSizeAura, showHover: true, from: "SUBCARD", controller: $playerID));
+      $cardText .= (Card($theirAllies[$i], "concat", $cardSizeAura, 0, 1, $theirAllies[$i + 1] != 2 ? 1 : 0, 0, 0, "", "", False, $lifeCounters, $enduranceCounters, $attackCounters, ($subcard != "-" && $subcard != "UPR043") ? "HASSUBCARD" : "", controller: $otherPlayer) . "&nbsp");
+      if ($theirAllies[$i + 3] == 1) $cardText .= ("<img title='Frozen' style='position:absolute; z-index:1001; top: " . ($subcard == "-" || $subcard == "UPR043" ? "6px" : "24px") . "; left: 7px; cursor:pointer; height:" . $cardHeight . "; width:" . $cardWidth . ";' src='./Images/frozenOverlay.png' />");
+      $cardText .= ("</div>");
+      if($cardArena == "Ground") $groundAllies .= $cardText;
+      else $spaceAllies .= $cardText;
     }
   }
   $theirPermanents = &GetPermanents($otherPlayer);
@@ -916,6 +922,15 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
 
   echo ("</div>");
 
+  //Their Ground Allies
+  echo ("<div style='overflow-y:auto; position: fixed; top:20%; left:8%; width:30%; max-height:" . $permHeight . "px;'>");
+  echo($groundAllies);
+  echo("</div>");
+
+  //Their Space Allies
+  echo ("<div style='overflow-y:auto; position: fixed; top:20%; left:60%; width:30%; max-height:" . $permHeight . "px;'>");
+  echo($spaceAllies);
+  echo("</div>");
 
 
   //Now display their arsenal
@@ -1000,6 +1015,8 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   }
 
   $myAllies = GetAllies($playerID);
+  $spaceAllies = "";
+  $groundAllies = "";
   if (count($myAllies) > 0) {
     for ($i = 0; $i < count($myAllies); $i += AllyPieces()) {
       $lifeCounters = $myAllies[$i + 2];
@@ -1009,11 +1026,15 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       else $attackCounters = 0;
       $playable = IsPlayable($myAllies[$i], $turn[0], "PLAY", $i, $restriction) && $myAllies[$i + 1] == 2;
       $border = CardBorderColor($myAllies[$i], "PLAY", $playable);
-      echo ("<div style='position:relative; display: inline-block;'>");
-      if ($subcard != "-" && $subcard != "UPR043") echo (Card($subcard, "concat", $cardSizeAura, showHover: true, from: "SUBCARD", controller: $playerID));
-      echo (Card($myAllies[$i], "concat", $cardSizeAura, $currentPlayer == $playerID && $turn[0] != "P" && $playable ? 24 : 0, 1, $myAllies[$i + 1] != 2 ? 1 : 0, $border, 0, strval($i), "", False, $lifeCounters, $enduranceCounters, $attackCounters, ($subcard != "-" && $subcard != "UPR043") ? "HASSUBCARD" : "", controller: $playerID) . "&nbsp");
-      if ($myAllies[$i + 3] == 1) echo ("<img title='Frozen' style='position:absolute; z-index:1001; top: " . ($subcard == "-" || $subcard == "UPR043" ? "6px" : "24px") . "; left: 6px; cursor:pointer; height:" . $cardHeight . "; width:" . $cardWidth . ";' src='./Images/frozenOverlay.png' />");
-      echo ("</div>");
+      $cardArena = CardArenas($myAllies[$i]);
+      if($cardArena == "Ground") $cardText = "<div style='position:relative; float:right; display: inline-block;'>";
+      else $cardText = "<div style='position:relative; display: inline-block;'>";
+      if ($subcard != "-" && $subcard != "UPR043") $cardText .= (Card($subcard, "concat", $cardSizeAura, showHover: true, from: "SUBCARD", controller: $playerID));
+      $cardText .= (Card($myAllies[$i], "concat", $cardSizeAura, $currentPlayer == $playerID && $turn[0] != "P" && $playable ? 24 : 0, 1, $myAllies[$i + 1] != 2 ? 1 : 0, $border, 0, strval($i), "", False, $lifeCounters, $enduranceCounters, $attackCounters, ($subcard != "-" && $subcard != "UPR043") ? "HASSUBCARD" : "", controller: $playerID) . "&nbsp");
+      if ($myAllies[$i + 3] == 1) $cardText .= ("<img title='Frozen' style='position:absolute; z-index:1001; top: " . ($subcard == "-" || $subcard == "UPR043" ? "6px" : "24px") . "; left: 6px; cursor:pointer; height:" . $cardHeight . "; width:" . $cardWidth . ";' src='./Images/frozenOverlay.png' />");
+      $cardText .= ("</div>");
+      if($cardArena == "Ground") $groundAllies .= $cardText;
+      else $spaceAllies .= $cardText;
     }
   }
   $myPermanents = &GetPermanents($playerID);
@@ -1026,7 +1047,17 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     }
   }
   echo ("</div>");
+  
+  //Ground allies
+  echo ("<div style='overflow-y:auto; position: fixed; bottom:20%; left:8%; width:30%; max-height:" . $permHeight . "px;'>");
+  echo($groundAllies);
+  echo("</div>");
 
+  //Space allies
+  echo ("<div style='overflow-y:auto; position: fixed; bottom:20%; left:60%; width:30%; max-height:" . $permHeight . "px;'>");
+  echo($spaceAllies);
+  echo("</div>");
+  
   //Now display my character and equipment
   $numWeapons = 0;
   $myCharData = "";
