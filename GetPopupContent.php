@@ -35,6 +35,9 @@ switch ($popupType) {
   case "myPitchPopup":
     echo (CreatePopup("myPitchPopup", $myPitch, 1, 0, "Your Pitch"));
     break;
+  case "myResourcePopup":
+    echo (CreatePopup("myResourcePopup", $myArsenal, 1, 0, "Your Resources", ArsenalPieces()));
+    break;
   case "myDiscardPopup":
     echo (CreatePopup("myDiscardPopup", $myDiscard, 1, 0, "Your Discard"));
     break;
@@ -76,6 +79,9 @@ switch ($popupType) {
     break;
   case "mySoulPopup":
     echo (CreatePopup("mySoulPopup", $mySoul, 1, 0, "My Soul"));
+    break;
+  case "theirResourcePopup":
+    echo (CreatePopup("theirResourcePopup", $theirArsenal, 1, 0, "Opponent's Resources", ArsenalPieces()));
     break;
   case "theirBanishPopup":
     $theirBanishDisplay = GetTheirBanishForDisplay($playerID);

@@ -940,24 +940,16 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   echo("</div>");
 
 
-  //Now display their arsenal
-  if (count($theirArsenal) > 0) {
-    $arsenalLeft = "calc(50% - " . (count($theirArsenal)/ArsenalPieces()/2 * intval($cardWidth) + 14) . "px)";
-    echo ("<div title='Your opponent's Arsenal' style='z-index:-10; position: fixed; left:" . $arsenalLeft . "; top:" . (intval(GetCharacterTop("C", "")) * 2 + 5) . "px;'>"); //arsenal div
-
-    for ($i = 0; $i < count($theirArsenal); $i += ArsenalPieces()) {
-      echo ("<div style='position:relative; display:inline;'>");
-      if ($playerID == 3 && IsCasterMode()) echo (Card($theirArsenal[$i], "concat", $cardSizeAura, 0, 1, $theirArsenal[$i + 2] == 0 ? 1 : 0, 0, $theirArsenal[$i + 3], from: "ARS", controller: $otherPlayer));
-      else if ($theirArsenal[$i + 1] == "UP") echo (Card($theirArsenal[$i], "concat", $cardSizeAura, 0, 1, $theirArsenal[$i + 2] == 0 ? 1 : 0, 0, $theirArsenal[$i + 3], from: "ARS", controller: $otherPlayer));
-      else echo (Card($TheirCardBack, "concat", $cardSizeAura, 0, 0));
-      if ($theirArsenal[$i + 4] == 1) echo ("<img title='Frozen' style='position:absolute; z-index:10; border-radius:5px; top:-80px; left:7px; height:" . $cardHeight . "; width:" . $cardWidth . ";' src='./Images/frozenOverlay.png' />");
-      echo ("</div>");
-    }
-  } else {
-    //Empty Arsenal div
-    echo ("<div style='position:fixed; left: calc(50% - " . (intval($cardWidth / 2)) . "px); top:" . (intval(GetCharacterTop("C", "")) * 2 + 12) . "px; border-radius:5%; padding:" . $cardSizeAura / 2 - 2 . "px; background-color: rgba(0, 0, 0, 0.4);'>");
-    echo ("<div style='position:absolute; margin: 0; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: " . $bordelessFontColor . "; user-select:none;'>Arsenal</div>");
+  //Now display their resources
+  $arsenalLeft = "calc(50% - " . (count($theirArsenal)/ArsenalPieces()/2 * intval($cardWidth) + 14) . "px)";
+  $numReady = 0;
+  $total = 0;
+  for ($i = 0; $i < count($theirArsenal); $i += ArsenalPieces()) {
+    ++$total;
+    if($theirArsenal[$i + 4] != 1) ++$numReady;
   }
+  echo ("<div title='Click to opponent's resources.' style='color:white; position:fixed; width:200px; left: calc(50% - " . (intval($cardWidth / 2) + 48) . "px); top:" . (intval(GetCharacterTop("C", "")) * 2 + 5) . "px; border-radius:5%; padding:" . $cardSizeAura / 2 - 2 . "px; cursor:pointer; font-size: 36px;' onclick='ShowPopup(\"theirResourcePopup\");'><img style='width:45px; height:45px;' src='./Images/Resource.webp' /><span style='position:relative; left:6px; bottom:10px;'>" . $numReady . "/" . $total . "</span></div>");
+
   echo ("</div>");
   echo ("</div>");
 
@@ -1103,36 +1095,16 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   echo ("</div>");
 
 
-  //Now display my arsenal
-  if (count($myArsenal) > 0) {
-    $arsenalLeft = "calc(50% - " . (count($myArsenal)/ArsenalPieces()/2 * intval($cardWidth) + 14) . "px)";
-    echo ("<div style='position:fixed; left:" . $arsenalLeft . "; bottom:" . (intval(GetCharacterBottom("C", "")) - $cardSize + 15) . "px;'>"); //arsenal div
-    for ($i = 0; $i < count($myArsenal); $i += ArsenalPieces()) {
-      echo ("<div style='position:relative; display:inline-block'>");
-      if ($playerID == 3) {
-        if ($myArsenal[$i + 1] == "UP" || IsCasterMode()) echo (Card($myArsenal[$i], "concat", $cardSizeAura, 0, 1, $myArsenal[$i + 2] == 0 ? 1 : 0, 0, $myArsenal[$i + 3]));
-        else echo (Card($MyCardBack, "concat", $cardSizeAura, 0, 0, 0, 0));
-      } else {
-        $playable = $playerID == $currentPlayer && $turn[0] != "P" && IsPlayable($myArsenal[$i], $turn[0], "ARS", $i, $restriction);
-        $border = CardBorderColor($myArsenal[$i], "ARS", $playable);
-        $counters = $myArsenal[$i + 3];
-        echo ("<div style='position:relative; margin:1px;>");
-        echo (Card($myArsenal[$i], "concat", $cardSizeAura, $currentPlayer == $playerID && $playable ? 5 : 0, 1, $myArsenal[$i + 2] > 0 ? 0 : 1, $border, $counters, strval($i), from: "ARS", controller: $playerID));
-        $iconHeight = $cardSize / 4;
-        $iconLeft = $cardWidth / 2 - intval($iconHeight * .71 / 2) + 5;
-        if ($myArsenal[$i + 1] == "UP") echo ("<img style='position:absolute; z-index: 5; left:" . $iconLeft . "px; bottom:3px; height:" . $iconHeight . "px; ' src='./Images/faceUp.png' title='This arsenal card is face up.'></img>");
-        else echo ("<img style='position:absolute; left:" . $iconLeft . "px; bottom:3px; z-index: 5; height:" . $iconHeight . "px; ' src='./Images/faceDown.png' title='This arsenal card is face down.'></img>");
-        if($restriction != "") echo ("<img style='position:absolute; left:26px; top:26px; z-index: 5;' src='./Images/restricted.png' title='$restriction'></img>");
-        echo ("</div>");
-      }
-      if ($myArsenal[$i + 4] == 1) echo ("<img title='Frozen' style='position:absolute; z-index:100; border-radius:5px; top:7px; left:7px; height:" . $cardHeight . "; width:" . $cardWidth . ";' src='./Images/frozenOverlay.png' />");
-      echo ("</div>");
-    }
-  } else {
-    //Empty Arsenal div
-    echo ("<div style='position:fixed; left: calc(50% - " . (intval($cardWidth / 2)) . "px); bottom:" . (intval(GetCharacterBottom("C", "")) - $cardSize + 22) . "px; border-radius:5%; padding:" . $cardSizeAura / 2 - 2 . "px; background-color: rgba(0, 0, 0, 0.4);'>");
-    echo ("<div style='position:absolute; margin: 0; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: " . $bordelessFontColor . "; user-select:none;'>Arsenal</div>");
+  //Display my resources
+  $numReady = 0;
+  $total = 0;
+  $arsenalLeft = "calc(50% - " . (count($myArsenal)/ArsenalPieces()/2 * intval($cardWidth) + 14) . "px)";
+  echo ("<div style='position:fixed; left:" . $arsenalLeft . "; bottom:" . (intval(GetCharacterBottom("C", "")) - $cardSize + 15) . "px;'>"); //arsenal div
+  for ($i = 0; $i < count($myArsenal); $i += ArsenalPieces()) {
+    ++$total;
+    if($myArsenal[$i + 4] != 1) ++$numReady;
   }
+  echo ("<div title='Click to see your resources.' style='color:white; position:fixed; width:200px; left: calc(50% - " . (intval($cardWidth / 2) + 48) . "px); bottom:" . (intval(GetCharacterBottom("C", "")) - $cardSize + 5) . "px; border-radius:5%; padding:" . $cardSizeAura / 2 - 2 . "px; cursor:pointer; font-size: 36px;' onclick='ShowPopup(\"myResourcePopup\");'><img style='width:45px; height:45px;' src='./Images/Resource.webp' /><span style='position:relative; left:6px; bottom:10px;'>" . $numReady . "/" . $total . "</span></div>");
   echo ("</div>"); //End arsenal div
 
   //Show deck, discard, pitch, banish
