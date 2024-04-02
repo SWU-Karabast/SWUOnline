@@ -388,12 +388,15 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
     case 33: //Fully re-order layers
       break;
     case 34: //Claim Initiative
-      global $initiativeTaken, $initiativePlayer;
+      global $initiativeTaken, $initiativePlayer, $isPass;
       WriteLog("Player " . $playerID . " claimed initiative.");
       $initiativePlayer = $currentPlayer;
       $initiativeTaken = 1;
+      $isPass = true;
       break;
     case 99: //Pass
+      global $isPass;
+      $isPass = true;
       if(CanPassPhase($turn[0])) {
         PassInput(false);
       }
@@ -998,7 +1001,7 @@ function BeginRoundPass()
   CurrentEffectEndTurnAbilities();
   $currentTurnEffects = $nextTurnEffects;
   $nextTurnEffects = [];
-  $mainPlayer = $initiativePlayer;
+  $mainPlayer = $initiativePlayer == 1 ? 2 : 1;
   $initiativeTaken = 0;
   EndTurnProcedure(1);
   EndTurnProcedure(2);
