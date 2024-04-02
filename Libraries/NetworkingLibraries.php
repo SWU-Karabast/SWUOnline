@@ -996,6 +996,7 @@ function BeginRoundPass()
   WriteLog("Both players have passed; ending the round.");
   ResetClassState(1);
   ResetClassState(2);
+  AllyBeginEndTurnEffects();
   AllyEndTurnAbilities();
   LogEndTurnStats($mainPlayer);
   CurrentEffectEndTurnAbilities();
@@ -1005,6 +1006,7 @@ function BeginRoundPass()
   $initiativeTaken = 0;
   EndTurnProcedure(1);
   EndTurnProcedure(2);
+  AllyBeginTurnEffects();
   AllyBeginRoundAbilities(1);
   AllyBeginRoundAbilities(2);
   CurrentEffectStartTurnAbilities();
@@ -1091,9 +1093,6 @@ function FinalizeTurn()
   AuraEndTurnAbilities();
   MainCharacterEndTurnAbilities();
 
-  //All allies’ life totals are reset
-  AllyBeginEndTurnEffects();
-
   ArsenalEndTurn($mainPlayer);
   ArsenalEndTurn($defPlayer);
 
@@ -1153,7 +1152,6 @@ function FinalizeTurn()
 
   //Start of turn effects
   if ($mainPlayer == 1) StatsStartTurn();
-  AllyBeginTurnEffects();
   ItemBeginTurnEffects($mainPlayer);
   StartTurnAbilities();
   
