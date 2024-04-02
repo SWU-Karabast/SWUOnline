@@ -995,7 +995,7 @@ function CleanUpCombatEffects($weaponSwap=false)
 
 function BeginRoundPass()
 {
-  global $initiativeTaken, $mainPlayer, $currentTurnEffects, $nextTurnEffects;
+  global $initiativeTaken, $mainPlayer, $currentTurnEffects, $nextTurnEffects, $initiativePlayer;
   WriteLog("Both players have passed; ending the round.");
   ResetClassState(1);
   ResetClassState(2);
@@ -1004,7 +1004,9 @@ function BeginRoundPass()
   CurrentEffectEndTurnAbilities();
   $currentTurnEffects = $nextTurnEffects;
   $nextTurnEffects = [];
+  $mainPlayer = $initiativePlayer;
   $initiativeTaken = 0;
+  $initiativePlayer = 0;
   EndTurnProcedure(1);
   EndTurnProcedure(2);
   AllyBeginRoundAbilities(1);
