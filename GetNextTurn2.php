@@ -350,6 +350,13 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   echo ("</div>");
   echo ("</div>");
 
+  //Ground Zone
+  echo ("<div style='overflow:none; position: fixed; top:20%; left:8%; width:35%; height:60%; border:1px solid darkgray; border-radius:7px; background-color: rgba(220, 220, 220, 0.55);'>");
+  echo("</div>");
+  //Space Zone
+  echo ("<div style='overflow:none; position: fixed; top:20%; left:55%; width:30%; height:60%; border:1px solid black; border-radius:7px; background-color: rgba(30, 30, 30, 0.55);'>");
+  echo("</div>");
+
 
   $displayCombatChain = count($combatChain) > 0;
 
@@ -923,12 +930,12 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   echo ("</div>");
 
   //Their Ground Allies
-  echo ("<div style='overflow-y:auto; position: fixed; top:20%; left:8%; width:30%; max-height:" . $permHeight . "px;'>");
+  echo ("<div style='overflow-y:auto; position: fixed; top:20%; left:8%; width:35%; max-height:" . $permHeight . "px;'>");
   echo($groundAllies);
   echo("</div>");
 
   //Their Space Allies
-  echo ("<div style='overflow-y:auto; position: fixed; top:20%; left:60%; width:30%; max-height:" . $permHeight . "px;'>");
+  echo ("<div style='overflow-y:auto; position: fixed; top:20%; left:55%; width:30%; max-height:" . $permHeight . "px;'>");
   echo($spaceAllies);
   echo("</div>");
 
@@ -1049,12 +1056,12 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   echo ("</div>");
   
   //Ground allies
-  echo ("<div style='overflow-y:auto; position: fixed; bottom:20%; left:8%; width:30%; max-height:" . $permHeight . "px;'>");
+  echo ("<div style='overflow-y:auto; position: fixed; bottom:20%; left:8%; width:35%; max-height:" . $permHeight . "px;'>");
   echo($groundAllies);
   echo("</div>");
 
   //Space allies
-  echo ("<div style='overflow-y:auto; position: fixed; bottom:20%; left:60%; width:30%; max-height:" . $permHeight . "px;'>");
+  echo ("<div style='overflow-y:auto; position: fixed; bottom:20%; left:55%; width:30%; max-height:" . $permHeight . "px;'>");
   echo($spaceAllies);
   echo("</div>");
   
