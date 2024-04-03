@@ -3361,7 +3361,7 @@ function Recover($player, $amount)
 function PlayRequiresTarget($cardID)
 {
   global $currentPlayer;
-  if(DefinedTypesContains($cardID, "Upgrade", $currentPlayer)) return 2;
+  if(DefinedTypesContains($cardID, "Upgrade", $currentPlayer)) return 6;
   switch($cardID)
   {
     case "8679831560": return 2;//Repair
@@ -3463,28 +3463,31 @@ function PlayRequiresTarget($cardID)
   // 2: Any Target
   // 3: Their Allies
   // 4: My Hero only (For afflictions)
+  // 6: Any ally
   function GetArcaneTargetIndices($player, $target)
   {
     global $CS_ArcaneTargetsSelected;
     $otherPlayer = ($player == 1 ? 2 : 1);
     if ($target == 4) return "MYCHAR-0";
-    if($target != 3) $rv = "THEIRCHAR-0";
+    if($target != 3 && $target != 6) $rv = "THEIRCHAR-0";
     else $rv = "";
     if(($target == 0 && !ShouldAutotargetOpponent($player)) || $target == 2)
     {
       $rv .= ",MYCHAR-0";
     }
-    if($target == 2)
+    if($target == 2 || $target == 6)
     {
       $theirAllies = &GetAllies($otherPlayer);
       for($i=0; $i<count($theirAllies); $i+=AllyPieces())
       {
-        $rv .= ",THEIRALLY-" . $i;
+        if($rv != "") $rv .= ",";
+        $rv .= "THEIRALLY-" . $i;
       }
       $myAllies = &GetAllies($player);
       for($i=0; $i<count($myAllies); $i+=AllyPieces())
       {
-        $rv .= ",MYALLY-" . $i;
+        if($rv != "") $rv .= ",";
+        $rv .= "MYALLY-" . $i;
       }
     }
     elseif($target == 3 || $target == 5)
