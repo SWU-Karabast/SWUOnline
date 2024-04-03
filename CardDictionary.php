@@ -797,6 +797,7 @@ function IsStaticType($cardType, $from = "", $cardID = "")
 
 function LeaderUnit($cardID) {
   switch($cardID) {
+    //Spark of Rebellion
     case "3572356139"://Chewbacca, Walking Carpet
       return "8301e8d7ef";
     case "2579145458"://Luke Skywalker
@@ -827,6 +828,45 @@ function LeaderUnit($cardID) {
       return "fb475d4ea4";
     case "5784497124"://Emperor Palpatine
       return "6c5b96c7ef";
+    //Shadows of the Galaxy
+    default: return "";
+  }
+}
+
+function LeaderUndeployed($cardID) {
+  switch($cardID) {
+    //Spark of Rebellion
+    case "8301e8d7ef"://Chewbacca, Walking Carpet
+      return "3572356139";
+    case "0dcb77795c"://Luke Skywalker
+      return "2579145458";
+    case "59cd013a2d"://Grand Moff Tarkin
+      return "2912358777";
+    case "3c60596a7a"://Cassian Andor
+      return "3187874229";
+    case "51e8757e4c"://Sabine Wren
+      return "4841169874";
+    case "b0dbca5c05"://Iden Versio
+      return "2048866729";
+    case "0ca1902a46"://Darth Vader
+      return "6088773439";
+    case "d1a7b76ae7"://Chirrut Imwe
+      return "4263394087";
+    case "0e65f012f5"://Boba Fett
+      return "4626028465";
+    case "6827598372"://Grand Inquisitor
+      return "7911083239";
+    case "5e90bd91b0"://Han Solo
+      return "5954056864";
+    case "87e8807695"://Leia Organa
+      return "6514927936";
+    case "20f21b4948"://Jyn Erso
+      return "8244682354";
+    case "fb475d4ea4"://IG-88
+      return "8600121285";
+    case "6c5b96c7ef"://Emperor Palpatine
+      return "5784497124";
+    //Shadows of the Galaxy
     default: return "";
   }
 }
