@@ -2163,9 +2163,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     if(HasShielded($cardID, $currentPlayer, $playAlly->Index())) $playAlly->Attach("8752877738");//Shield Token
   }
   if($from == "EQUIP" && DefinedTypesContains($cardID, "Leader", $currentPlayer)) {
-    //TODO Deploy
     $abilityName = GetResolvedAbilityName($cardID, $from);
     if($abilityName == "Deploy") {
+      if(NumResources($currentPlayer) < CardCost($cardID)) {
+        WriteLog("You don't control enough resources to deploy that leader; reverting the game state.");
+        RevertGamestate();
+      }
       PlayAlly(LeaderUnit($cardID), $currentPlayer);
       //On Deploy ability
       switch($cardID) {
