@@ -2376,7 +2376,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "9002021213"://Imperial Interceptor
       if($from != "PLAY") {
-        DealArcane(3, 2, "PLAYCARD", $cardID);
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a Space unit to deal 3 damage to");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:arena=Space");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,3", 1);
       }
       break;
     case "9133080458"://Inferno Four
