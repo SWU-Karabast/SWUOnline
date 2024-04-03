@@ -795,6 +795,42 @@ function IsStaticType($cardType, $from = "", $cardID = "")
   return false;
 }
 
+function LeaderUnit($cardID) {
+  switch($cardID) {
+    case "3572356139"://Chewbacca, Walking Carpet
+      return "8301e8d7ef";
+    case "2579145458"://Luke Skywalker
+      return "0dcb77795c";
+    case "2912358777"://Grand Moff Tarkin
+      return "59cd013a2d";
+    case "3187874229"://Cassian Andor
+      return "3c60596a7a";
+    case "4841169874"://Sabine Wren
+      return "51e8757e4c";
+    case "2048866729"://Iden Versio
+      return "b0dbca5c05";
+    case "6088773439"://Darth Vader
+      return "0ca1902a46";
+    case "4263394087"://Chirrut Imwe
+      return "d1a7b76ae7";
+    case "4626028465"://Boba Fett
+      return "0e65f012f5";
+    case "7911083239"://Grand Inquisitor
+      return "6827598372";
+    case "5954056864"://Han Solo
+      return "5e90bd91b0";
+    case "6514927936"://Leia Organa
+      return "87e8807695";
+    case "8244682354"://Jyn Erso
+      return "20f21b4948";
+    case "8600121285"://IG-88
+      return "fb475d4ea4";
+    case "5784497124"://Emperor Palpatine
+      return "6c5b96c7ef";
+    default: return "";
+  }
+}
+
 function HasBladeBreak($cardID)
 {
   global $defPlayer;

@@ -2162,6 +2162,24 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     $playAlly = new Ally("MYALLY-" . LastAllyIndex($currentPlayer));
     if(HasShielded($cardID, $currentPlayer, $playAlly->Index())) $playAlly->Attach("8752877738");//Shield Token
   }
+  if($from == "EQUIP" && DefinedTypesContains($cardID, "Leader", $currentPlayer)) {
+    //TODO Deploy
+    $abilityName = GetResolvedAbilityName($cardID, $from);
+    if($abilityName == "Deploy") {
+      PlayAlly(LeaderUnit($cardID), $currentPlayer);
+      //On Deploy ability
+      switch($cardID) {
+        case "5784497124"://Emperor Palpatine
+          AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+          AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL", 1);
+          break;
+        default: break;
+      }
+      RemoveCharacter($currentPlayer, CharacterPieces());
+      return CardLink($cardID, $cardID) . " was deployed.";
+    }
+  }
   switch($cardID)
   {
     case "4721628683"://Patrolling V-Wing
@@ -2625,8 +2643,6 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND:definedType=Unit&maxCost=3");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
-      } else if($abilityName == "Deploy") {
-        PlayAlly("8301e8d7ef", $currentPlayer);
       }
       break;
     case "2579145458"://Luke Skywalker
@@ -2635,8 +2651,6 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "ADDSHIELD", 1);
-      } else if($abilityName == "Deploy") {
-        PlayAlly("0dcb77795c", $currentPlayer);
       }
       break;
     case "2912358777"://Grand Moff Tarkin
@@ -2645,18 +2659,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Imperial");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "ADDEXPERIENCE", 1);
-      } else if($abilityName == "Deploy") {
-        PlayAlly("59cd013a2d", $currentPlayer);
       }
       break;
-    case "3187874229"://Cassian Andor"
+    case "3187874229"://Cassian Andor
       $abilityName = GetResolvedAbilityName($cardID, $from);
       if($abilityName == "Draw Card") {
         global $CS_DamageTaken;
         $otherPlayer = $currentPlayer == 1 ? 2 : 1;
         if(GetClassState($otherPlayer, $CS_DamageTaken) >= 3) Draw($currentPlayer);
-      } else if($abilityName == "Deploy") {
-        PlayAlly("3c60596a7a", $currentPlayer);
       }
       break;
     case "4841169874"://Sabine Wren
@@ -2664,8 +2674,6 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       if($abilityName == "Deal Damage") {
         DealArcane(1, 1, "PLAYCARD", "4841169874");
         DealArcane(1, 4, "PLAYCARD", "4841169874");
-      } else if($abilityName == "Deploy") {
-        PlayAlly("51e8757e4c", $currentPlayer);
       }
       break;
     case "5871074103"://Forced Surrender
@@ -2753,8 +2761,6 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         if(GetClassState($otherPlayer, $CS_NumAlliesDestroyed) > 0) {
           Restore(1, $currentPlayer);
         }
-      } else if($abilityName == "Deploy") {
-        PlayAlly("b0dbca5c05", $currentPlayer);
       }
       break;
     case "9680213078"://Leia Organa
@@ -2779,8 +2785,6 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1", 1);
         DealArcane(1, 1, "PLAYCARD", "6088773439");
-      } else if($abilityName == "Deploy") {
-        PlayAlly("0ca1902a46", $currentPlayer);
       }
       break;
     case "3503494534"://Regional Governor
@@ -2938,8 +2942,6 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "ADDHEALTH,2", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
         AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "4263394087,HAND", 1);
-      } else if($abilityName == "Deploy") {
-        PlayAlly("d1a7b76ae7", $currentPlayer);
       }
       break;
     case "5154172446"://ISB Agent
@@ -2954,9 +2956,6 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1", 1);
       }
-      break;
-    case "4626028465"://Boba Fett
-      PlayAlly("0e65f012f5", $currentPlayer);
       break;
     case "4300219753"://Fett's Firespray
       $abilityName = GetResolvedAbilityName($cardID, $from);
@@ -2982,8 +2981,6 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,2", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
-      } else if($abilityName == "Deploy") {
-        PlayAlly("6827598372", $currentPlayer);
       }
       break;
     case "5954056864"://Han Solo
@@ -2992,16 +2989,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to resource");
         MZMoveCard($currentPlayer, "MYHAND", "MYRESOURCES", may:false);
         AddCurrentTurnEffect($cardID, $currentPlayer);
-      } else if($abilityName == "Deploy") {
-        PlayAlly("5e90bd91b0", $currentPlayer);
       }
       break;
     case "6514927936"://Leia Organa
       $abilityName = GetResolvedAbilityName($cardID, $from);
       if($abilityName == "Attack") {
         WriteLog("This is a partially manual card. Do the extra attacks by passing priority manually.");
-      } else if($abilityName == "Deploy") {
-        PlayAlly("87e8807695", $currentPlayer);
       }
       break;
     case "8055390529"://Traitorous
@@ -3014,8 +3007,6 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         WriteLog("This is a partially manual card. Do the extra attacks by passing priority manually.");
         $otherPlayer = $currentPlayer == 1 ? 2 : 1;
         AddCurrentTurnEffect($cardID, $otherPlayer);
-      } else if($abilityName == "Deploy") {
-        PlayAlly("20f21b4948", $currentPlayer);
       }
       break;
     case "8327910265"://Energy Conversion Lab (ECL)
@@ -3031,8 +3022,6 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       if($abilityName == "Attack") {
         WriteLog("This is a partially manual card. Do the extra attacks by passing priority manually.");
         if(HasMoreUnits($currentPlayer)) AddCurrentTurnEffect($cardID, $currentPlayer);
-      } else if($abilityName == "Deploy") {
-        PlayAlly("fb475d4ea4", $currentPlayer);
       }
       break;
     case "6954704048"://Heroic Sacrifice
@@ -3127,11 +3116,6 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
         AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1", 1);
-      } else if($abilityName == "Deploy") {
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
-        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL", 1);
-        PlayAlly("6c5b96c7ef", $currentPlayer);
       }
       break;
     case "8117080217"://Admiral Ozzel
