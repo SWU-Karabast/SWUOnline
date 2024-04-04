@@ -1634,6 +1634,12 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
     if($from != "EQUIP" && $from != "PLAY") {
       WriteLog("Resolving play ability of " . CardLink($cardID, $cardID) . ($playText != "" ? ": " : ".") . $playText);
       if(GetClassState($currentPlayer, $CS_AfterPlayedBy) != "-") AfterPlayedByAbility(GetClassState($currentPlayer, $CS_AfterPlayedBy));
+      $index = LastAllyIndex($currentPlayer);
+      $ally = new Ally("MYALLY-" . $index, $currentPlayer);
+      if(HasAmbush($cardID, $currentPlayer, $index)) {
+        $ally->Ready();
+        WriteLog("This is a partially manual effect. Pass priority manually to resolve the ambush attack.");
+      }
     }
     else if($from == "EQUIP" || $from == "PLAY") WriteLog("Resolving activated ability of " . CardLink($cardID, $cardID) . ($playText != "" ? ": " : ".") . $playText);
     if (!$openedChain) ResolveGoAgain($cardID, $currentPlayer, $from);
