@@ -2131,7 +2131,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
   }
   if($from == "EQUIP" && DefinedTypesContains($cardID, "Leader", $currentPlayer)) {
     $abilityName = GetResolvedAbilityName($cardID, $from);
-    if($abilityName == "Deploy") {
+    if($abilityName == "Deploy" || $abilityName == "") {
       if(NumResources($currentPlayer) < CardCost($cardID)) {
         WriteLog("You don't control enough resources to deploy that leader; reverting the game state.");
         RevertGamestate();
