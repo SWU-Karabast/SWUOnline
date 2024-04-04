@@ -180,6 +180,7 @@ function DestroyItemForPlayer($player, $index, $skipDestroy=false)
 function ItemCostModifiers($cardID)
 {
   global $currentPlayer;
+  $cost = 0;
   $items = &GetItems($currentPlayer);
   for($i=0; $i<count($items); $i+=ItemPieces()) {
     switch($items[$i]) {
