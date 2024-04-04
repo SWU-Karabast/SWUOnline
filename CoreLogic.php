@@ -3328,6 +3328,7 @@ function Recover($player, $amount)
 // 2: Any Target
 // 3: Their Hero + Their Allies
 // 4: My Hero only (For afflictions)
+// 6: Any unit
 function PlayRequiresTarget($cardID)
 {
   global $currentPlayer;
@@ -3335,20 +3336,19 @@ function PlayRequiresTarget($cardID)
   switch($cardID)
   {
     case "8679831560": return 2;//Repair
-    //Only allies v
-    case "8148673131": return 2;//Open Fire
-    case "8981523525": return 2;//Moment of Peace
-    case "7202133736": return 2;//Waylay
-    case "0827076106": return 2;//Admiral Ackbar
-    case "0867878280": return 2;//It Binds All Things
-    case "2587711125": return 2;//Disarm
-    case "2569134232": return 2;//Jedha City
-    case "6515891401": return 2;//Karabast
-    case "1349057156": return 2;//Strike True
-    case "2651321164": return 2;//Tactical Advantage
-    case "1900571801": return 2;//Overwhelming Barrage
-    case "7861932582": return 2;//The Force is With Me
-    case "2758597010": return 2;//Maximum Firepower
+    case "8148673131": return 6;//Open Fire
+    case "8981523525": return 6;//Moment of Peace
+    case "7202133736": return 6;//Waylay
+    case "0827076106": return 6;//Admiral Ackbar
+    case "0867878280": return 6;//It Binds All Things
+    case "2587711125": return 6;//Disarm
+    case "2569134232": return 6;//Jedha City
+    case "6515891401": return 6;//Karabast
+    case "1349057156": return 6;//Strike True
+    case "2651321164": return 6;//Tactical Advantage
+    case "1900571801": return 6;//Overwhelming Barrage
+    case "7861932582": return 6;//The Force is With Me
+    case "2758597010": return 6;//Maximum Firepower
     default: return -1;
   }
 }
