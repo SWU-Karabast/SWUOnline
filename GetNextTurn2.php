@@ -948,7 +948,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     ++$total;
     if($theirArsenal[$i + 4] != 1) ++$numReady;
   }
-  echo ("<div title='Click to opponent's resources.' style='color:white; position:fixed; width:200px; left: calc(50% - " . (intval($cardWidth / 2) + 48) . "px); top:" . (intval(GetCharacterTop("C", "")) * 2 + 5) . "px; border-radius:5%; padding:" . $cardSizeAura / 2 - 2 . "px; cursor:pointer; font-size: 36px;' onclick='ShowPopup(\"theirResourcePopup\");'><img style='width:45px; height:45px;' src='./Images/Resource.webp' /><span style='position:relative; left:6px; bottom:10px;'>" . $numReady . "/" . $total . "</span></div>");
+  echo ("<div title='Click to opponent's resources.' style='color:white; position:fixed; width:200px; left: calc(50% - " . (intval($cardWidth / 2)) . "px); top:" . (intval(GetCharacterBottom("C", "")) - $cardSize / 2) . "px; border-radius:5%; cursor:default; font-size: 36px;'><img style='width:45px; height:45px;' src='./Images/Resource.webp' /><span style='position:relative; left:6px; bottom:10px;'>" . $numReady . "/" . $total . "</span></div>");
 
   echo ("</div>");
   echo ("</div>");
@@ -1104,7 +1104,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     ++$total;
     if($myArsenal[$i + 4] != 1) ++$numReady;
   }
-  echo ("<div title='Click to see your resources.' style='color:white; position:fixed; width:200px; left: calc(50% - " . (intval($cardWidth / 2) + 48) . "px); bottom:" . (intval(GetCharacterBottom("C", "")) - $cardSize + 5) . "px; border-radius:5%; padding:" . $cardSizeAura / 2 - 2 . "px; cursor:pointer; font-size: 36px;' onclick='ShowPopup(\"myResourcePopup\");'><img style='width:45px; height:45px;' src='./Images/Resource.webp' /><span style='position:relative; left:6px; bottom:10px;'>" . $numReady . "/" . $total . "</span></div>");
+  echo ("<div title='Click to see your resources.' style='color:white; position:fixed; width:200px; left: calc(50% - " . (intval($cardWidth / 2)) . "px); bottom:" . (intval(GetCharacterBottom("C", "")) - $cardSize / 2) . "px; border-radius:5%; cursor:pointer; font-size: 36px;' onclick='ShowPopup(\"myResourcePopup\");'><img style='width:45px; height:45px;' src='./Images/Resource.webp' /><span style='position:relative; left:6px; bottom:10px;'>" . $numReady . "/" . $total . "</span></div>");
   echo ("</div>"); //End arsenal div
 
   //Show deck, discard, pitch, banish
