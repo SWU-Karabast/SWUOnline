@@ -1241,13 +1241,13 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       AddDecisionQueue("NOPASS", 2, "-");
       AddDecisionQueue("MULLIGAN", 2, "-", 1);
       AddDecisionQueue("SETDQCONTEXT", 1, "Choose a card to resource");
-      MZMoveCard(1, "MYHAND", "MYRESOURCES", may:false);
+      MZMoveCard(1, "MYHAND", "MYRESOURCES", may:false, silent:true);
       AddDecisionQueue("SETDQCONTEXT", 1, "Choose a card to resource");
-      MZMoveCard(1, "MYHAND", "MYRESOURCES", may:false);
+      MZMoveCard(1, "MYHAND", "MYRESOURCES", may:false, silent:true);
       AddDecisionQueue("SETDQCONTEXT", 1, "Choose a card to resource");
-      MZMoveCard(2, "MYHAND", "MYRESOURCES", may:false);
+      MZMoveCard(2, "MYHAND", "MYRESOURCES", may:false, silent:true);
       AddDecisionQueue("SETDQCONTEXT", 1, "Choose a card to resource");
-      MZMoveCard(2, "MYHAND", "MYRESOURCES", may:false);
+      MZMoveCard(2, "MYHAND", "MYRESOURCES", may:false, silent:true);
       return 0;
     case "MULLIGAN":
       $hand = &GetHand($player);
