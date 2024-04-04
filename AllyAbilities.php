@@ -400,8 +400,7 @@ function AllyPlayCardAbility($cardID, $player="")
         break;
       case "5907868016"://Fighters for Freedom
         if(AspectContains($cardID, "Aggression", $player)) {
-          //TODO: Fix the target
-          DealArcane(1, 2, "TRIGGER", "5907868016", player:$player);
+          DealArcane(1, 1, "TRIGGER", "5907868016", player:$player);
         }
         break;
       default: break;

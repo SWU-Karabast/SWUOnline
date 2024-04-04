@@ -222,39 +222,6 @@ function CachedNumActionBlocked()
   return $combatChainState[$CSS_CachedNumActionBlocked];
 }
 
-function AddFloatingMemoryChoice($fromDQ=false)
-{
-  global $currentPlayer;
-  if($fromDQ)
-  {
-
-  }
-  else {
-    $items = &GetItems($currentPlayer);
-    for($i=0; $i<count($items); $i+=ItemPieces()) {
-      switch($items[$i]) {
-        case "h23qu7d6so"://Temporal Spectrometer
-          AddDecisionQueue("YESNO", $currentPlayer, "if you want to sacrifice Temporal Spectrometer to reduce the cost");
-          AddDecisionQueue("NOPASS", $currentPlayer, "-");
-          AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYITEMS-" . $i, 1);
-          AddDecisionQueue("MZBANISH", $currentPlayer, "PLAY," . $items[$i], 1);
-          AddDecisionQueue("MZREMOVE", $currentPlayer, "-", 1);
-          for($j=0; $j<$items[$i+1]; $j++) {
-            AddDecisionQueue("DECDQVAR", $currentPlayer, "0", 1);
-          }
-          break;
-        default: break;
-      }
-    }
-    AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYDISCARD:floatingMemoryOnly=true");
-    AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a floating memory card to banish", 1);
-    AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-    AddDecisionQueue("MZREMOVE", $currentPlayer, "-", 1);
-    AddDecisionQueue("MULTIBANISH", $currentPlayer, "GY,-", 1);
-    AddDecisionQueue("DECDQVAR", $currentPlayer, "0", 1);
-  }
-}
-
 function StartTurnAbilities()
 {
   global $mainPlayer, $defPlayer;
@@ -2398,7 +2365,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         for($i=0; $i<6; ++$i) DealArcane(1, 2, "PLAYCARD", $cardID);
       }
       break;
-    case "0256267292":
+    case "0256267292"://Benthic 'Two Tubes'
       if($from == "PLAY") {
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to give Raid 2");
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:aspect=Aggression");
