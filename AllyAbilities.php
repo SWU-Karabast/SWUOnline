@@ -511,14 +511,16 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MZOP", $mainPlayer, "ADDEXPERIENCE", 1);
       break;
     case "4156799805"://Boba Fett
-      $target = GetAttackTarget();
-      $ally = new Ally($target, $mainPlayer);
-      if($ally->IsExhausted()) {
-        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Did the unit enter play this turn?");
-        AddDecisionQueue("YESNO", $mainPlayer, "-");
-        AddDecisionQueue("YESPASS", $mainPlayer, "-");
-        AddDecisionQueue("PASSPARAMETER", $mainPlayer, $target, 1);
-        AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,3", 1);
+      if(IsAllyAttackTarget()) {
+        $target = GetAttackTarget();
+        $ally = new Ally($target, $mainPlayer);
+        if($ally->IsExhausted()) {
+          AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Did the unit enter play this turn?");
+          AddDecisionQueue("YESNO", $mainPlayer, "-");
+          AddDecisionQueue("YESPASS", $mainPlayer, "-");
+          AddDecisionQueue("PASSPARAMETER", $mainPlayer, $target, 1);
+          AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,3", 1);
+        }
       }
       break;
     case "6208347478"://Chopper
