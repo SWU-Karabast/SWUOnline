@@ -1000,6 +1000,8 @@ function BeginRoundPass()
   AllyEndTurnAbilities();
   LogEndTurnStats($mainPlayer);
   CurrentEffectEndTurnAbilities();
+  ResetCharacter(1);
+  ResetCharacter(2);
   $currentTurnEffects = $nextTurnEffects;
   $nextTurnEffects = [];
   $mainPlayer = $initiativePlayer == 1 ? 2 : 1;
@@ -1089,26 +1091,9 @@ function FinalizeTurn()
   }
 
   AuraEndTurnAbilities();
-  MainCharacterEndTurnAbilities();
 
   ArsenalEndTurn($mainPlayer);
   ArsenalEndTurn($defPlayer);
-
-  //Reset characters/equipment
-  for ($i = 1; $i < count($mainCharacter); $i += CharacterPieces()) {
-    if ($mainCharacter[$i + 6] == 1) $mainCharacter[$i] = 0; //Destroy if it was flagged for destruction
-    if ($mainCharacter[$i] != 0) {
-      $mainCharacter[$i] = 2;
-      $mainCharacter[$i + 4] = CharacterNumUsesPerTurn($mainCharacter[$i - 1]);
-    }
-  }
-  for ($i = 1; $i < count($defCharacter); $i += CharacterPieces()) {
-    if ($defCharacter[$i + 6] == 1) $defCharacter[$i] = 0; //Destroy if it was flagged for destruction
-    if ($defCharacter[$i] == 1 || $defCharacter[$i] == 2) {
-      $defCharacter[$i] = 2;
-      $defCharacter[$i + 4] = CharacterNumUsesPerTurn($defCharacter[$i - 1]);
-    }
-  }
 
   //Reset Auras
   for ($i = 0; $i < count($mainAuras); $i += AuraPieces()) {

@@ -144,17 +144,13 @@ function CharacterDestroyEffect($cardID, $player)
   }
 }
 
-function MainCharacterEndTurnAbilities()
-{
-  global $mainClassState, $CS_HitsWDawnblade, $CS_AtksWWeapon, $mainPlayer, $CS_NumNonAttackCards;
-  global $CS_NumAttackCards, $defCharacter, $CS_ArcaneDamageDealt;
-
-  $mainCharacter = &GetPlayerCharacter($mainPlayer);
-  for($i = 0; $i < count($mainCharacter); $i += CharacterPieces()) {
-    $characterID = ShiyanaCharacter($mainCharacter[$i]);
-    switch($characterID) {
-
-      default: break;
+function ResetCharacter($player) {
+  $char = &GetPlayerCharacter($player);
+  for ($i = 1; $i < count($char); $i += CharacterPieces()) {
+    if ($char[$i + 6] == 1) $char[$i] = 0; //Destroy if it was flagged for destruction
+    if ($char[$i] != 0) {
+      $char[$i] = 2;
+      $char[$i + 4] = CharacterNumUsesPerTurn($char[$i - 1]);
     }
   }
 }
