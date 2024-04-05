@@ -30,7 +30,8 @@ $playerID = $_GET["playerID"];
 $authKey = $_GET["authKey"];
 
 //We should also have some information on the type of command
-$mode = $_GET["mode"];
+$inputMode = $_GET["mode"];
+$mode = $inputMode;
 $buttonInput = isset($_GET["buttonInput"]) ? $_GET["buttonInput"] : ""; //The player that is the target of the command - e.g. for changing health total
 $cardID = isset($_GET["cardID"]) ? $_GET["cardID"] : "";
 $chkCount = isset($_GET["chkCount"]) ? $_GET["chkCount"] : 0;

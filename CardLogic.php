@@ -518,7 +518,7 @@ function GetDQHelpText()
 function FinalizeAction()
 {
   global $currentPlayer, $mainPlayer, $actionPoints, $turn, $combatChain, $defPlayer, $makeBlockBackup, $mainPlayerGamestateStillBuilt;
-  global $isPass;
+  global $isPass, $inputMode;
   if(!$mainPlayerGamestateStillBuilt) UpdateGameState(1);
   BuildMainPlayerGamestate();
   if($turn[0] == "M") {
@@ -533,7 +533,7 @@ function FinalizeAction()
         $turn[0] = "M";
         $currentPlayer = $mainPlayer;
         $turn[2] = "";
-        if(!$isPass) SwapTurn();
+        if(!$isPass || $inputMode == 99) SwapTurn();
         $isPass = false;
       } else {
         $currentPlayer = $mainPlayer;
