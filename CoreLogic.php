@@ -1916,6 +1916,14 @@ function PlayerAspects($player)
       ++$aspects[$cardAspects[$j]];
     }
   }
+  $leaderIndex = SearchAllies($player, definedType:"Leader");
+  if($leaderIndex != "") {
+    $allies = &GetAllies($player);
+    $cardAspects = explode(",", CardAspects($allies[$leaderIndex]));
+    for($j=0; $j<count($cardAspects); ++$j) {
+      ++$aspects[$cardAspects[$j]];
+    }
+  }
   return $aspects;
 }
 
