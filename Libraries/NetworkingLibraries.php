@@ -1498,7 +1498,8 @@ function MaterializeCardEffect($cardID)
 
 function UpdateLinkAttack()
 {
-  global $mainPlayer, $combatChainState, $CCS_LinkBaseAttack;
+  global $mainPlayer, $combatChainState, $CCS_LinkBaseAttack, $combatChain;
+  if(count($combatChain) == 0) return;
   $ally = new Ally(AttackerMZID($mainPlayer), $mainPlayer);
   $cardID = $ally->CardID();
   $baseAttackSet = CurrentEffectBaseAttackSet($cardID);
