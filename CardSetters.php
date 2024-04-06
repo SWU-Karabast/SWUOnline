@@ -454,16 +454,6 @@ function RemoveCharacterEffects($player, $index, $effect)
 
 function AddSpecificGraveyard($cardID, &$graveyard, $from, $player)
 {
-  if($from == "DECK" && CharacterLevel($player) >= 3 && IsAlly($cardID))//Mistbound Cutthroat
-  {
-    $indices = explode(",", SearchDiscardForCard($player, "C7zFV2K7bL"));
-    for($i=count($indices)-1; $i>=0; --$i)
-    {
-      unset($graveyard[$indices[$i]]);
-      PlayAlly("C7zFV2K7bL", $player, from:"GY");
-    }
-    $graveyard = array_values($graveyard);
-  }
   array_push($graveyard, $cardID);
 }
 

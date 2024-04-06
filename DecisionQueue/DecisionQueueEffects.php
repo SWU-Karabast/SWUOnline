@@ -40,6 +40,30 @@ function ModalAbilities($player, $card, $lastResult)
     case "BOMBINGRUN":
       DamageAllAllies(3, "7916724925", arena:$lastResult[0]);
       return 1;
+    case "VIGILANCE":
+      $params = explode(",", $lastResult);
+      for($i = 0; $i < count($params); ++$i) {
+        switch($params[$i]) {
+          case "Mill":
+            $otherPlayer = ($player == 1 ? 2 : 1);
+            Mill($otherPlayer, 6);
+            break;
+          case "Heal":
+            Restore(5, $player);
+            break;
+          case "Defeat":
+            MZChooseAndDestroy($player, "THEIRALLY", may:true);
+            break;
+          case "Shield":
+            AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to give a shield");
+            AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
+            AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+            AddDecisionQueue("MZOP", $player, "ADDSHIELD", 1);
+            break;
+          default: break;
+        }
+      }
+      return 1;
     default: return "";
   }
 }

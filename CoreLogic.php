@@ -3154,6 +3154,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
       }
       break;
+    case "8615772965"://Vigilance
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, $additionalCosts, 1);
+      AddDecisionQueue("MODAL", $currentPlayer, "VIGILANCE", 1);
+      break;
     default: break;
   }
 }
@@ -3319,7 +3323,7 @@ function Mill($player, $amount)
   if($amount > count($deck)) $amount = count($deck);
   for($i=0; $i<$amount; ++$i)
   {
-    $card .= array_shift($deck);
+    $card = array_shift($deck);
     if($cards != "") $cards .= ",";
     $cards .= $card;
     AddGraveyard($card, $player, "DECK");

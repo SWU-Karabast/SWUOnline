@@ -1480,7 +1480,12 @@ function PayAdditionalCosts($cardID, $from)
     SetClassState($currentPlayer, $CS_AdditionalCosts, $discarded);
   }
   switch($cardID) {
-
+    case "8615772965"://Vigilance
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose 2 modes");
+      AddDecisionQueue("MULTICHOOSETEXT", $currentPlayer, "2-Mill,Heal,Defeat,Shield-2");
+      AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_AdditionalCosts, 1);
+      AddDecisionQueue("SHOWMODES", $currentPlayer, $cardID, 1);
+      break;
     default:
       break;
   }
