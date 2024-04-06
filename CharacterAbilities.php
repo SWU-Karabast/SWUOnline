@@ -311,7 +311,12 @@ function EquipPayAdditionalCosts($cardIndex, $from)
   $cardID = $character[$cardIndex];
 
   switch($cardID) {
-
+    case "1393827469"://Tarkintown
+    case "2569134232"://Jedha City
+    case "2429341052"://Security Complex
+    case "8327910265"://Energy Conversion Lab (ECL)
+      $character[$cardIndex+1] = 0;
+      break;
     default:
       --$character[$cardIndex+5];
       if($character[$cardIndex+5] == 0) $character[$cardIndex+1] = 1; //By default, if it's used, set it to used
