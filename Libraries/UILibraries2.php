@@ -143,7 +143,7 @@ function JSONRenderedCard(
 }
 
 //Rotate is deprecated
-function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $overlay = 0, $borderColor = 0, $counters = 0, $actionDataOverride = "", $id = "", $rotate = false, $lifeCounters = 0, $defCounters = 0, $atkCounters = 0, $from = "", $controller = 0)
+function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $overlay = 0, $borderColor = 0, $counters = 0, $actionDataOverride = "", $id = "", $rotate = false, $lifeCounters = 0, $defCounters = 0, $atkCounters = 0, $from = "", $controller = 0, $subcardNum = 0)
 {
   global $playerID, $darkMode;
   $LanguageJP = ((IsLanguageJP($playerID) && TranslationExist("JP", $cardNumber)) ? true : false);
@@ -173,10 +173,11 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
   }
   $actionData = $actionDataOverride != "" ? $actionDataOverride : $cardNumber;
   //Enforce 375x523 aspect ratio as exported (.71)
-  $margin = "margin:0px;";
+  //$margin = "margin:0px;";
+  $margin = "margin-bottom:" . (6 + $subcardNum * 16) . "px; top: " . ($subcardNum * 16) . "px;";
   $border = "";
-  if ($borderColor != -1) $margin = $borderColor > 0 ? "margin:0px;" : "margin:1px;";
-  if ($borderColor != -1 && $from == "HASSUBCARD") $margin = "margin-bottom:22px; top: 16px;";
+  if ($borderColor > 0) $margin = "margin-bottom:" . (7 + $subcardNum * 16) . "px; top: " . (1 + $subcardNum * 16) . "px;";
+  if ($borderColor != -1 && $from == "HASSUBCARD") $margin = "margin-bottom:" . (6 + $subcardNum * 16) . "px; top: " . ($subcardNum * 16) . "px;";
   if ($folder == "crops") $margin = "0px;";
   if ($from == "SUBCARD") {
     $rv = "<a style='" . $margin . " position:absolute; display:inline-block;" . ($action > 0 ? "cursor:pointer;" : "") . "'" . ($showHover > 0 ? " onmouseover='ShowCardDetail(event, this)' onmouseout='HideCardDetail()'" : "") . ($action > 0 ? " onclick='SubmitInput(\"" . $action . "\", \"&cardID=" . $actionData . "\");'" : "") . ">";
