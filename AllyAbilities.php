@@ -653,25 +653,25 @@ function AllyLevelModifiers($player)
   return $levelModifier;
 }
 
-function AllyEndTurnAbilities()
+function AllyEndTurnAbilities($player)
 {
-  global $mainPlayer;
-  $allies = &GetAllies($mainPlayer);
+  $allies = &GetAllies($player);
   for($i = count($allies) - AllyPieces(); $i >= 0; $i -= AllyPieces()) {
     switch($allies[$i]) {
       case "1785627279"://Millennium Falcon
-        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Do you want to pay 1 to keep Millennium Falcon running?");
-        AddDecisionQueue("YESNO", $mainPlayer, "-", 0, 1);
-        AddDecisionQueue("NOPASS", $mainPlayer, "-");
-        AddDecisionQueue("PASSPARAMETER", $mainPlayer, "1", 1);
-        AddDecisionQueue("PAYRESOURCES", $mainPlayer, "<-", 1);
-        AddDecisionQueue("ELSE", $mainPlayer, "-");
-        AddDecisionQueue("PASSPARAMETER", $mainPlayer, "MYALLY-" . $i, 1);
-        AddDecisionQueue("MZOP", $mainPlayer, "BOUNCE", 1);
+        AddDecisionQueue("SETDQCONTEXT", $player, "Do you want to pay 1 to keep Millennium Falcon running?");
+        AddDecisionQueue("YESNO", $player, "-", 0, 1);
+        AddDecisionQueue("NOPASS", $player, "-");
+        AddDecisionQueue("PASSPARAMETER", $player, "1", 1);
+        AddDecisionQueue("PAYRESOURCES", $player, "<-", 1);
+        AddDecisionQueue("ELSE", $player, "-");
+        AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $i, 1);
+        AddDecisionQueue("MZOP", $player, "BOUNCE", 1);
         break;
       case "d1a7b76ae7"://Chirrut Imwe
-        $ally = new Ally("MYALLY-" . $i, $mainPlayer);
-        if($ally->Health() <= 0) DestroyAlly($mainPlayer, $i);
+        WriteLog("Here");
+        $ally = new Ally("MYALLY-" . $i, $player);
+        if($ally->Health() <= 0) DestroyAlly($player, $i);
         break;
       default: break;
     }

@@ -997,7 +997,8 @@ function BeginRoundPass()
   ResetClassState(1);
   ResetClassState(2);
   AllyBeginEndTurnEffects();
-  AllyEndTurnAbilities();
+  AllyEndTurnAbilities(1);
+  AllyEndTurnAbilities(2);
   LogEndTurnStats($mainPlayer);
   CurrentEffectEndTurnAbilities();
   ResetCharacter(1);
