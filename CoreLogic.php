@@ -2145,6 +2145,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         RevertGamestate();
       }
       PlayAlly(LeaderUnit($cardID), $currentPlayer);
+      PlayAbility(LeaderUnit($cardID), "CHAR", 0, "-", "-");
       //On Deploy ability
       switch($cardID) {
         case "5784497124"://Emperor Palpatine
