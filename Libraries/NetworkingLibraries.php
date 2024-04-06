@@ -545,11 +545,11 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
       if($isSimulation) return;
       $bugCount = 0;
       $folderName = "./BugReports/" . $gameName . "-" . $bugCount;
-      while ($bugCount < 5 && file_exists($folderName)) {
+      while ($bugCount < 10 && file_exists($folderName)) {
         ++$bugCount;
         $folderName = "./BugReports/" . $gameName . "-" . $bugCount;
       }
-      if ($bugCount == 5) {
+      if ($bugCount == 10) {
         WriteLog("Bug report file is temporarily full for this game. Please use the discord to report further bugs.");
       }
       mkdir($folderName, 0700, true);
@@ -558,7 +558,7 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
       copy("./Games/$gameName/gamelog.txt", $folderName . "/gamelog.txt");
       copy("./Games/$gameName/beginTurnGamestate.txt", $folderName . "/beginTurnGamestate.txt");
       copy("./Games/$gameName/lastTurnGamestate.txt", $folderName . "/lastTurnGamestate.txt");
-      WriteLog("Thank you for reporting a bug. To describe what happened, please report it on the discord server with the game number for reference ($gameName).");
+      WriteLog("Thank you for reporting a bug. To describe what happened, please report it on the discord server with the game number for reference (" . $gameName . "-" . $bugCount . ").");
       break;
     case 100004: //Full Rematch
       if($isSimulation) return;
