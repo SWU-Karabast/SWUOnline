@@ -548,7 +548,7 @@ function GetAbilityType($cardID, $index = -1, $from="-")
   {
     case "2569134232"://Jedha City
       return "A";
-    case "1393827469"://Tarkin Town
+    case "1393827469"://Tarkintown
       return "A";
     case "2429341052"://Security Complex
       return "A";
