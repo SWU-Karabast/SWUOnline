@@ -356,9 +356,16 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           return $lastResult;
         case "CHANGEATTACKTARGET": SetAttackTarget($lastResult); return $lastResult;
         case "DEALDAMAGE":
-          $ally = new Ally($lastResult);
-          $destroyed = $ally->DealDamage($parameterArr[1]);
-          if($destroyed && $lastResult == GetAttackTarget()) CloseCombatChain();
+          $targetArr = explode("-", $lastResult);
+          $targetPlayer = ($targetArr[0] == "MYCHAR" || $targetArr[0] == "MYALLY" ? $player : ($player == 1 ? 2 : 1));
+          if($targetArr[0] == "MYALLY" || $targetArr[0] == "THEIRALLY") {
+            $ally = new Ally($lastResult);
+            $destroyed = $ally->DealDamage($parameterArr[1]);
+            if($destroyed && $lastResult == GetAttackTarget()) CloseCombatChain();
+          } else {
+            PrependDecisionQueue("TAKEDAMAGE", $targetPlayer, $parameterArr[1]);
+            PrependDecisionQueue("PASSPARAMETER", $targetPlayer, "0");
+          }
           return $lastResult;
         case "DESTROY":
           $ally = new Ally($lastResult);

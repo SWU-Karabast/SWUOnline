@@ -528,7 +528,11 @@ function SpecificAllyAttackAbilities($attackID)
       if(DefinedTypesContains($card, "Event", $defPlayer)) ExhaustResource($defPlayer);
       break;
     case "3646264648"://Sabine Wren
-      DealArcane(1, 3, "PLAYCARD", "3646264648");
+      $attackTarget = GetAttackTarget();
+      $options = $attackTarget == "THEIRCHAR-0" ? "THEIRCHAR-0" : "THEIRCHAR-0," . $attackTarget;
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose something to deal 1 damage to");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, $options, 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,1", 1);
       break;
     case "6432884726"://Steadfast Battalion
       if(HasLeader($mainPlayer)) {
