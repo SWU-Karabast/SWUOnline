@@ -491,11 +491,11 @@ function SpecificAllyAttackAbilities($attackID)
       DealArcane(1, 1, "PLAYCARD", "51e8757e4c");
       break;
     case "8395007579"://Fifth Brother
-      $ally = new Ally("MYALLY-" . $i, $mainPlayer);
-      $ally->DealDamage(1);
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 1 damage to");
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY:arena=Ground");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,1", 1);
+      AddDecisionQueue("PASSPARAMETER", $mainPlayer, "MYALLY-" . $i, 1);
       AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,1", 1);
       break;
     case "6827598372"://Grand Inquisitor
