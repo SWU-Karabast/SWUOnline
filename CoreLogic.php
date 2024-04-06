@@ -2299,7 +2299,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $ally = new Ally($target);
       $ally->Heal(3);
       if(HasLeader($currentPlayer)) {
-        DealArcane($damage, 2, "PLAYCARD", $cardID);
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 3 damage to");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,3", 1);
       }
       break;
     case "1021495802"://Cantina Bouncer
