@@ -1021,6 +1021,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       $lifeCounters = $myAllies[$i + 2];
       $enduranceCounters = $myAllies[$i + 6];
       $subcard = $myAllies[$i + 4];
+      $subcards = $subcard != "-" ? explode(",", $subcard) : [];
       if (SearchCurrentTurnEffectsForUniqueID($myAllies[$i + 5]) != -1) $attackCounters = EffectAttackModifier(SearchUniqueIDForCurrentTurnEffects($myAllies[$i + 5])) + AttackValue($myAllies[$i]);
       else $attackCounters = 0;
       $playable = IsPlayable($myAllies[$i], $turn[0], "PLAY", $i, $restriction) && $myAllies[$i + 1] == 2;
@@ -1028,8 +1029,10 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       $cardArena = CardArenas($myAllies[$i]);
       if($cardArena == "Ground") $cardText = "<div style='position:relative; float:right; display: inline-block;'>";
       else $cardText = "<div style='position:relative; display: inline-block;'>";
-      if ($subcard != "-" && $subcard != "UPR043") $cardText .= (Card($subcard, "concat", $cardSizeAura, showHover: true, from: "SUBCARD", controller: $playerID));
-      $cardText .= (Card($myAllies[$i], "concat", $cardSizeAura, $currentPlayer == $playerID && $turn[0] != "P" && $playable ? 24 : 0, 1, $myAllies[$i + 1] != 2 ? 1 : 0, $border, 0, strval($i), "", False, $lifeCounters, $enduranceCounters, $attackCounters, ($subcard != "-" && $subcard != "UPR043") ? "HASSUBCARD" : "", controller: $playerID) . "&nbsp");
+      for($j=0; $j<count($subcards); $j++) {
+        $cardText .= (Card($subcards[$j], "concat", $cardSizeAura, showHover: true, from: "SUBCARD", controller: $playerID));
+      }
+      $cardText .= (Card($myAllies[$i], "concat", $cardSizeAura, $currentPlayer == $playerID && $turn[0] != "P" && $playable ? 24 : 0, 1, $myAllies[$i + 1] != 2 ? 1 : 0, $border, 0, strval($i), "", False, $lifeCounters, $enduranceCounters, $attackCounters, (count($subcards) > 0) ? "HASSUBCARD" : "", controller: $playerID) . "&nbsp");
       if ($myAllies[$i + 3] == 1) $cardText .= ("<img title='Frozen' style='position:absolute; z-index:1001; top: " . ($subcard == "-" || $subcard == "UPR043" ? "6px" : "24px") . "; left: 6px; cursor:pointer; height:" . $cardHeight . "; width:" . $cardWidth . ";' src='./Images/frozenOverlay.png' />");
       $cardText .= ("</div>");
       if($cardArena == "Ground") $groundAllies .= $cardText;
