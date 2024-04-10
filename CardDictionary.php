@@ -828,6 +828,8 @@ function LeaderUnit($cardID) {
       return "fb475d4ea4";
     case "5784497124"://Emperor Palpatine
       return "6c5b96c7ef";
+    case "8560666697"://Director Krennic
+        return "e2c6231b35";
     //Shadows of the Galaxy
     default: return "";
   }
@@ -866,6 +868,8 @@ function LeaderUndeployed($cardID) {
       return "8600121285";
     case "6c5b96c7ef"://Emperor Palpatine
       return "5784497124";
+    case "e2c6231b35"://Director Krennic
+      return "8560666697";
     //Shadows of the Galaxy
     default: return "";
   }

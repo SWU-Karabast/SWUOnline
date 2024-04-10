@@ -2691,9 +2691,6 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddCurrentTurnEffect($cardID, $currentPlayer);
       }
       break;
-    case "8560666697"://Director Krennic
-      PlayAlly("e2c6231b35", $currentPlayer);
-      break;
     case "6458912354"://Death Trooper
       if($from != "PLAY") {
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 2 damage to");
