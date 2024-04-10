@@ -3141,6 +3141,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "8506660490"://Darth Vader
       if($from != "PLAY") {
+        global $CS_AfterPlayedBy;
         AddCurrentTurnEffect($cardID, $currentPlayer);
         $hand = &GetHand($currentPlayer);
         AddDecisionQueue("PASSPARAMETER", $currentPlayer, $cardID);
