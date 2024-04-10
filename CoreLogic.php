@@ -70,7 +70,7 @@ function EvaluateCombatChain(&$totalAttack, &$totalDefense, &$attackModifiers=[]
       else if(IsAlly($combatChain[0]))
       {
         $allies = &GetAllies($mainPlayer);
-        $attack = $allies[$combatChainState[$CCS_WeaponIndex]+7];
+        if(count($allies) > $combatChainState[$CCS_WeaponIndex]+7) $attack = $allies[$combatChainState[$CCS_WeaponIndex]+7];
       }
       if($canGainAttack || $attack < 0)
       {

@@ -97,7 +97,7 @@ class Ally {
     for($i=0; $i<count($otherAllies); $i+=AllyPieces()) {
       switch($otherAllies[$i]) {
         case "e2c6231b35"://Director Krennic
-          if($this->Health() > $this->MaxHealth()) $power += 1;
+          if($this->Health() < $this->MaxHealth()) $power += 1;
           break;
         default: break;
       }
@@ -107,7 +107,7 @@ class Ally {
     for($i=0; $i<count($myChar); $i+=CharacterPieces()) {
       switch($myChar[$i]) {
         case "8560666697"://Director Krennic
-          if($this->Health() > $this->MaxHealth()) $power += 1;
+          if($this->Health() < $this->MaxHealth()) $power += 1;
           break;
         default: break;
       }
