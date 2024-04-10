@@ -2707,7 +2707,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "7109944284"://Luke Skywalker
       global $CS_NumAlliesDestroyed;
       if($from != "PLAY") {
-        $amount = GetClassState($CS_NumAlliesDestroyed) > 0 ? 6 : 3;
+        $amount = GetClassState($currentPlayer, $CS_NumAlliesDestroyed) > 0 ? 6 : 3;
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to debuff");
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
