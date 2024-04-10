@@ -552,7 +552,7 @@ function GetAbilityType($cardID, $index = -1, $from="-")
       return "A";
     case "2429341052"://Security Complex
       return "A";
-    case "8560666697"://Director Krennig
+    case "8560666697"://Director Krennic
       return "A";
     case "7440067052"://Hera Sykulla
       return "A";
