@@ -141,6 +141,9 @@ function CurrentEffectCostModifiers($cardID, $from)
           $costModifier -= 1;
           $remove = true;
           break;
+        case "8506660490":
+          $costModifier -= 99;
+          break;
         default: break;
       }
       if($remove) RemoveCurrentTurnEffect($i);

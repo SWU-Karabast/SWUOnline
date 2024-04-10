@@ -3141,7 +3141,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "8506660490"://Darth Vader
       if($from != "PLAY") {
+        AddCurrentTurnEffect($cardID, $currentPlayer);
         $hand = &GetHand($currentPlayer);
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, $cardID);
+        AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_AfterPlayedBy);
         AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE," . 10);
         AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
         AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Imperial", 1);
@@ -3213,6 +3216,11 @@ function AfterPlayedByAbility($cardID) {
       AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $otherPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $otherPlayer, "READY", 1);
+      break;
+    case "8506660490"://Darth Vader
+      global $currentTurnEffects;
+      $index = count($currentTurnEffects) - CurrentTurnEffectPieces();
+      RemoveCurrentTurnEffect($index);
       break;
     default: break;
   }

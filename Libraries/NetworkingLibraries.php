@@ -265,7 +265,7 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
       PlayCard($cardID, "PLAY", -1, $index, $auras[$index+6]);
       break;
     case 23: //CHOOSECARD
-      if ($turn[0] == "CHOOSECARD") {
+      if ($turn[0] == "CHOOSECARD" || $turn[0] == "MAYCHOOSECARD") {
         $options = explode(",", $turn[2]);
         $found = -1;
         for ($i = 0; $i < count($options); ++$i) {
