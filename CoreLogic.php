@@ -2374,9 +2374,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         MZChooseAndDestroy($currentPlayer, "MYALLY&THEIRALLY", may:true);
       }
       break;
-    case "9097316363":
+    case "9097316363"://Emperor Palpatine
       if($from != "PLAY") {
-        for($i=0; $i<6; ++$i) DealArcane(1, 2, "PLAYCARD", $cardID);
+        for($i=0; $i<6; ++$i) {
+          AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 1 damage to", $i>0 ? 1 : 0);
+          AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY", $i>0 ? 1 : 0);
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+          AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1", 1);
+        }
       }
       break;
     case "0256267292"://Benthic 'Two Tubes'
