@@ -47,6 +47,12 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
     IncrementClassState($player, $CS_NumAlliesDestroyed);
   }
   AllyLeavesPlayAbility($player, $index);
+  $ally = new Ally("MYALLY-" . $index, $player);
+  $subcards = $ally->GetSubcards();
+  for($i=0; $i<count($subcards); ++$i) {
+    if($subcards[$i] == "8752877738" || $subcards[$i] == "2007868442") continue;
+    AddGraveyard($subcards[$i], $player, "PLAY");
+  }
   $cardID = $allies[$index];
   if(!$skipDestroy) {
     if($cardID == "8954587682") AddResources($cardID, $player, "PLAY", "DOWN");
