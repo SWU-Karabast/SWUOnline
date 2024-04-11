@@ -3091,8 +3091,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       WriteLog(CardLink($cardID, $cardID) . " is dealing " . $damage . " damage. Pass to discard the rest of the cards.");
       DealArcane($damage, 1, "PLAYCARD", "5767546527");
       if($cards != "") {
-        global $dqVars;
-        $dqVars[0] = $cards;
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, $cards);
+        AddDecisionQueue("SETDQVAR", $currentPlayer, 0);
         AddDecisionQueue("MAYCHOOSETOP", $currentPlayer, $cards);
         AddDecisionQueue("SPECIFICCARD", $currentPlayer, "FORACAUSEIBELIEVEIN");
       }
