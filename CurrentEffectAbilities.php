@@ -44,6 +44,7 @@ function EffectAttackModifier($cardID)
       return TraitContains($attacker->CardID(), "Trooper", $mainPlayer) ? 2 : 0;
     case "8297630396": return 1;//Shoot First
     case "5464125379": return -2;//Strafing Gunship
+    case "8495694166": return -2;//Jedi Lightsaber
     default: return 0;
   }
 }
@@ -420,6 +421,7 @@ function IsCombatEffectActive($cardID)
     case "9210902604": return true;//Precision Fire
     case "8297630396": return true;//Shoot First
     case "5464125379": return true;//Strafing Gunship
+    case "8495694166": return true;//Jedi Lightsaber
     default: return false;
   }
 }

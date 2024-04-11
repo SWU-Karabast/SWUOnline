@@ -452,6 +452,14 @@ function SpecificAllyAttackAbilities($attackID)
           DamagePlayerAllies($defPlayer, 1, "0160548661", "DAMAGE", arena:"Ground");
         }
         break;
+      case "8495694166"://Jedi Lightsaber
+        if(TraitContains($attackID, "Force", $mainPlayer) && IsAllyAttackTarget()) {
+          WriteLog("Jedi Lightsaber gives the defending unit -2/-2");
+          $targetCard = GetMZCard($mainPlayer, $target);
+          DealArcane(2, 1, "ONATTACK", "8495694166", resolvedTarget: $targetCard);
+          AddCurrentTurnEffect("8495694166", $defPlayer, from:"PLAY");
+        }
+        break;
       default: break;
     }
   }
