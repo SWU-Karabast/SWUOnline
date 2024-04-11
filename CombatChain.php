@@ -63,7 +63,7 @@ function AttackModifier($cardID, $from = "", $resourcesPaid = 0, $repriseActive 
     case "4619930426"://First Legion Snowtrooper
       $target = GetAttackTarget();
       if($target == "THEIRCHAR-0") break;
-      $ally = new Ally($target);
+      $ally = new Ally($target, $defPlayer);
       $modifier += $ally->IsDamaged() ? 2 : 0;
       break;
     default: break;
