@@ -644,7 +644,7 @@ function GetAbilityNames($cardID, $index = -1)
     case "5784497124"://Emperor Palpatine
       return "Deal Damage,Deploy";
     case "8117080217"://Admiral Ozzel
-      return "Play Imperial Unit,Deploy";
+      return "Play Imperial Unit,Attack";
     default: return "";
   }
 }
