@@ -453,14 +453,6 @@ function PrepareAmount($cardID)
 {
   switch($cardID)
   {
-    case "5X5W2Uda5a": return 1;//Planted Explosives
-    case "GRkBQ1Uvir": return 1;//Ignited Stab
-    case "mj3WSrghUH": return 1;//Poised Strike
-    case "XLbCBxla8K": return 1;//Thousand Refractions
-    case "uoQGe5xGDQ": return 1;//Arrow Trap
-    case "5qWWpkgQLl": return 4;//Coup de Grace
-    case "RRx0KK6g6D": return 2;//Fishing Accident
-    case "7t9m4muq2r": return 1;//Thieving Cut
     default: return 0;
   }
 }
@@ -478,6 +470,8 @@ function AbilityCost($cardID)
     case "4300219753"://Fett's Firespray
       return GetResolvedAbilityName($cardID) == "Exhaust" ? 2 : 0;
     case "5784497124"://Emperor Palpatine
+      return GetResolvedAbilityName($cardID) == "Deal Damage" ? 1 : 0;
+    case "6088773439"://Darth Vader
       return GetResolvedAbilityName($cardID) == "Deal Damage" ? 1 : 0;
     default: break;
   }
