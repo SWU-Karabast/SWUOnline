@@ -2144,6 +2144,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       if(NumResources($currentPlayer) < CardCost($cardID)) {
         WriteLog("You don't control enough resources to deploy that leader; reverting the game state.");
         RevertGamestate();
+        return "";
       }
       PlayAlly(LeaderUnit($cardID), $currentPlayer);
       PlayAbility(LeaderUnit($cardID), "CHAR", 0, "-", "-");
