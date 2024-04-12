@@ -256,11 +256,13 @@ function HasAmbush($cardID, $player, $index)
 {
   global $currentTurnEffects;
   $ally = new Ally("MYALLY-" . $index, $player);
-  for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnPieces()) {
+  for($i=count($currentTurnEffects)-CurrentTurnPieces(); $i>=0; $i-=CurrentTurnPieces()) {
     if($currentTurnEffects[$i+1] != $player) continue;
     if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
     switch($currentTurnEffects[$i]) {
-      case "8327910265": return true;//Energy Conversion Lab (ECL)
+      case "8327910265":
+        RemoveCurrentTurnEffect($i);
+        return true;//Energy Conversion Lab (ECL)
       default: break;
     }
   }

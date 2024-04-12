@@ -3005,8 +3005,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "8327910265"://Energy Conversion Lab (ECL)
-      global $CS_AfterPlayedBy;
-      SetClassState($currentPlayer, $CS_AfterPlayedBy, $cardID);
+      AddCurrentTurnEffect($cardID, $currentPlayer, "PLAY");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to put into play");
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND:definedType=Unit;maxCost=6");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
@@ -3207,9 +3206,6 @@ function AfterPlayedByAbility($cardID) {
     case "5494760041"://Galactic Ambition
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{1}", 1);
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "GALACTICAMBITION", 1);
-      break;
-    case "8327910265"://Energy Conversion Lab (ECL)
-      AddCurrentTurnEffect($cardID, $currentPlayer, "PLAY", $ally->UniqueID());
       break;
     case "3426168686"://Sneak Attack
       AddDecisionQueue("OP", $currentPlayer, "GETLASTALLYMZ");
