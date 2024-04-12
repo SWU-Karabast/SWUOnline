@@ -84,8 +84,8 @@ function SpecificCardLogic($player, $card, $lastResult)
   global $dqVars, $CS_DamageDealt;
   switch($card)
   {
-    case "FORCETHROW":
-      DealArcane(CardCost($lastResult), 2, "PLAYCARD", "1705806419", player:$player);
+    case "FORCETHROW"://Force Throw
+      DealArcane(CardCost($lastResult), 6, "PLAYCARD", "1705806419", player:$player);
       break;
     case "REINFORCEMENTWALKER":
       if($lastResult == "YES") Draw($player);
