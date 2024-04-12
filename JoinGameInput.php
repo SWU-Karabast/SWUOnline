@@ -75,43 +75,21 @@ if ($decklink != "") {
   if ($playerID == 1) $p1DeckLink = $decklink;
   else if ($playerID == 2) $p2DeckLink = $decklink;
 
-  /*
-  $curl = curl_init();
-  $isSilvie2 = false; $isSilvie = false;
-  if(str_contains($decklink, "build-v2.silvie")) $isSilvie2 = true;
-  else if(str_contains($decklink, "silvie")) $isSilvie = true;
-  if($isSilvie2) {
+  if(str_contains($decklink, "swudb.com/deck")) {
     $decklinkArr = explode("/", $decklink);
-    $uid = $decklinkArr[count($decklinkArr) - 2];
-    $slug = $decklinkArr[count($decklinkArr) - 1];
-    $apiLink = "https://api.silvie.org/api/build/v2/export/json?";//"@OotTheMonk/Ya7CqS207754CBvuLeB7
-    $apiLink .= "id=" . $slug;
-    $apiLink .= "&user=" . $uid;
+    $decklink = "https://swudb.com/Deck/GetJsonFile/" . $decklinkArr[count($decklinkArr) - 1];
+    $curl = curl_init();
+    curl_setopt($curl, CURLOPT_URL, $decklink);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+    $apiDeck = curl_exec($curl);
+    $apiInfo = curl_getinfo($curl);
+    curl_close($curl);
+    $json = $apiDeck;
+    echo($json);
   }
-  else if($isSilvie) {
-    $decklinkArr = explode("/", $decklink);
-    $uid = $decklinkArr[count($decklinkArr) - 2];
-    $slug = $decklinkArr[count($decklinkArr) - 1];
-    $apiLink = "https://api.silvie.org/api/build/tts?format=json&";//"@OotTheMonk/Ya7CqS207754CBvuLeB7
-    $apiLink .= "id=" . $slug;
-    $apiLink .= "&user=" . $uid;
-  }
+  else $json = $decklink;
 
-  curl_setopt($curl, CURLOPT_URL, $apiLink);
-  curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-  $apiDeck = curl_exec($curl);
-  $apiInfo = curl_getinfo($curl);
-  curl_close($curl);
-
-  if ($apiDeck === FALSE) {
-    if(is_array($decklink)) echo  '<b>' . "⚠️ Deckbuilder API for this deck returns no data: " . implode("/", $decklink) . '</b>';
-    else echo  '<b>' . "⚠️ Deckbuilder API for this deck returns no data: " . $decklink . '</b>';
-    WriteGameFile();
-    exit;
-  }
-  */
-
-  $deckObj = json_decode($decklink);
+  $deckObj = json_decode($json);
   $leader = UUIDLookup($deckObj->leader->id);
   $base = UUIDLookup($deckObj->base->id);
   $deck = $deckObj->deck;
