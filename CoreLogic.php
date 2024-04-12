@@ -632,7 +632,7 @@ function PlayerLoseHealth($player, $amount)
   $char = &GetPlayerCharacter($player);
   if(count($char) == 0) return;
   $health += $amount;
-  if($health >= CardHP($char[0]))
+  if(PlayerRemainingHealth($player) <= 0)
   {
     PlayerWon(($player == 1 ? 2 : 1));
   }
@@ -641,6 +641,7 @@ function PlayerLoseHealth($player, $amount)
 function PlayerRemainingHealth($player) {
   $health = &GetHealth($player);
   $char = &GetPlayerCharacter($player);
+  if($char[0] == "DUMMY") return 1000 - $health;
   return CardHP($char[0]) - $health;
 }
 
