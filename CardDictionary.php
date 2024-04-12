@@ -719,7 +719,7 @@ function GoesWhereAfterResolving($cardID, $from = null, $player = "", $playedFro
   if(DefinedTypesContains($cardID, "Upgrade", $currentPlayer)) return "ATTACHTARGET"; 
   if(IsAlly($cardID)) return "ALLY";
   switch($cardID) {
-    case "2703877689": return "RESOURCE";
+    case "2703877689": return "RESOURCE";//Resupply
     default: return "GY";
   }
 }
