@@ -64,6 +64,37 @@ function ModalAbilities($player, $card, $lastResult)
         }
       }
       return 1;
+    case "COMMAND":
+      $params = explode(",", $lastResult);
+      for($i = 0; $i < count($params); ++$i) {
+        switch($params[$i]) {
+          case "Experience":
+            AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
+            AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to give two experience");
+            AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+            AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
+            break;
+          case "Deal_Damage":
+            AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
+            AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal damage equal to it's power");
+            AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+            AddDecisionQueue("MZOP", $player, "POWER", 1);
+            AddDecisionQueue("PREPENDLASTRESULT", $player, "DEALDAMAGE,", 1);
+            AddDecisionQueue("SETDQVAR", $player, "0", 1);
+            AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY");
+            AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to damage");
+            AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+            AddDecisionQueue("MZOP", $player, "{0}", 1);
+            break;
+          case "Resource"://Handled Elsewhere
+            break;
+          case "Return_Unit":
+            MZMoveCard($player, "MYDISCARD:definedType=Unit", "MYHAND", may:false);
+            break;
+          default: break;
+        }
+      }
+      return 1;
     default: return "";
   }
 }

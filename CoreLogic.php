@@ -3168,6 +3168,18 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, $additionalCosts, 1);
       AddDecisionQueue("MODAL", $currentPlayer, "VIGILANCE", 1);
       break;
+    case "0073206444"://Command
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, $additionalCosts, 1);
+      AddDecisionQueue("MODAL", $currentPlayer, "COMMAND", 1);
+      break;
+    case "3736081333"://Aggression
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, $additionalCosts, 1);
+      AddDecisionQueue("MODAL", $currentPlayer, "AGGRESSION", 1);
+      break;
+    case "3789633661"://Cunning
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, $additionalCosts, 1);
+      AddDecisionQueue("MODAL", $currentPlayer, "CUNNING", 1);
+      break;
     default: break;
   }
 }
