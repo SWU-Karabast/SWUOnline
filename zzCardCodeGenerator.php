@@ -48,7 +48,7 @@
       AddToTries($cardID, $card->cardUid);
 
       $imageUrl = $card->artFront->data->attributes->formats->card->url;
-      CheckImage($card->cardUid, $imageUrl);
+      //CheckImage($card->cardUid, $imageUrl);
       if($card->artBack->data != null) {
         $imageUrl = $card->artBack->data->attributes->formats->card->url;
         $arr = explode("_", $imageUrl);
@@ -121,6 +121,11 @@
     {
       if($aspects != "") $aspects .= ",";
       $aspects .= $card->aspects->data[$j]->attributes->name;
+    }
+    for($j = 0; $j < count($card->aspectDuplicates->data); ++$j)
+    {
+      if($aspects != "") $aspects .= ",";
+      $aspects .= $card->aspectDuplicates->data[$j]->attributes->name;
     }
     AddToTrie($aspectsTrie, $uuid, 0, $aspects);
 
