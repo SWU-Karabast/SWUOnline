@@ -2379,8 +2379,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "9097316363"://Emperor Palpatine
       if($from != "PLAY") {
         for($i=0; $i<6; ++$i) {
-          AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 1 damage to", $i>0 ? 1 : 0);
           AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY", $i>0 ? 1 : 0);
+          AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 1 damage to", $i>0 ? 1 : 0);
           AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
           AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1", 1);
         }
@@ -2388,8 +2388,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "0256267292"://Benthic 'Two Tubes'
       if($from == "PLAY") {
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to give Raid 2");
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:aspect=Aggression");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to give Raid 2");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
         AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "0256267292,HAND", 1);
