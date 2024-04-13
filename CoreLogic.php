@@ -2839,7 +2839,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "3974134277"://Prepare for Takeoff
-      AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE," . 5);
+      AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE," . 8);
       AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
       AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Vehicle", 1);
       AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
