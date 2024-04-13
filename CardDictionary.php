@@ -562,6 +562,7 @@ function GetAbilityType($cardID, $index = -1, $from="-")
 
 function GetAbilityTypes($cardID)
 {
+  global $currentPlayer;
   switch($cardID) {
     case "2554951775"://Bail Organa
       return "A,AA";
@@ -598,6 +599,8 @@ function GetAbilityTypes($cardID)
     case "7870435409"://Bib Fortuna
       return "A,AA";
     case "5784497124"://Emperor Palpatine
+      $allies = &GetAllies($currentPlayer);
+      if(count($allies) == 0) return "A";
       return "A,A";
     case "8117080217"://Admiral Ozzel
       return "A,AA";
@@ -644,6 +647,8 @@ function GetAbilityNames($cardID, $index = -1)
     case "7870435409"://Bib Fortuna
       return "Play Event,Attack";
     case "5784497124"://Emperor Palpatine
+      $allies = &GetAllies($currentPlayer);
+      if(count($allies) == 0) return "Deploy";
       return "Deal Damage,Deploy";
     case "8117080217"://Admiral Ozzel
       return "Play Imperial Unit,Attack";
@@ -747,7 +752,6 @@ function IsPlayRestricted($cardID, &$restriction, $from = "", $index = -1, $play
   if($player == "") $player = $currentPlayer;
   $otherPlayer = ($currentPlayer == 1 ? 2 : 1);
   switch($cardID) {
-    case "ENLIGHTEN": return CountAura("ENLIGHTEN", $player) < 3;
     default: return false;
   }
 }
