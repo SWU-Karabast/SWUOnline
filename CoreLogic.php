@@ -1865,14 +1865,17 @@ function SelfCostModifier($cardID)
   //Aspect Penalty
   if(!TraitContains($cardID, "Spectre", $currentPlayer) || (HeroCard($currentPlayer) != "7440067052" && SearchAlliesForCard($currentPlayer, "80df3928eb") == "")) {
     $penalty = 0;
-    $aspectArr = explode(",", CardAspects($cardID));
-    $playerAspects = PlayerAspects($currentPlayer);
-    for($i=0; $i<count($aspectArr); ++$i)
-    {
-      --$playerAspects[$aspectArr[$i]];
-      if($playerAspects[$aspectArr[$i]] < 0) ++$penalty;
+    $cardAspects = CardAspects($cardID);
+    if($cardAspects != "") {
+      $aspectArr = explode(",", $cardAspects);
+      $playerAspects = PlayerAspects($currentPlayer);
+      for($i=0; $i<count($aspectArr); ++$i)
+      {
+        --$playerAspects[$aspectArr[$i]];
+        if($playerAspects[$aspectArr[$i]] < 0) ++$penalty;
+      }
+      $modifier += $penalty * 2;
     }
-    $modifier += $penalty * 2;
   }
   //Self Cost Modifier
   switch($cardID) {
