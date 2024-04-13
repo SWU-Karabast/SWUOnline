@@ -2565,9 +2565,16 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $ally->PlayerID(), "2569134232,HAND");
       break;
     case "1349057156"://Strike True
-      $ally = new Ally($target);
-      $damage = $ally->CurrentPower();
-      DealArcane($damage, 2, "PLAYCARD", $ally->CardID());
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal damage equal to it's power");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "POWER", 1);
+      AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "DEALDAMAGE,", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to damage");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "{0}", 1);
       break;
     case "1393827469"://Tarkintown
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 3 damage to");
@@ -3401,7 +3408,6 @@ function PlayRequiresTarget($cardID)
     case "2587711125": return 6;//Disarm
     case "2569134232": return 6;//Jedha City
     case "6515891401": return 6;//Karabast
-    case "1349057156": return 6;//Strike True
     case "2651321164": return 6;//Tactical Advantage
     case "1900571801": return 6;//Overwhelming Barrage
     case "7861932582": return 6;//The Force is With Me
