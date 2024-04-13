@@ -146,6 +146,7 @@ class Ally {
   }
 
   function GetSubcards() {
+    if($this->allies[$this->index + 4] == "-") return [];
     return explode(",", $this->allies[$this->index + 4]);
   }
 
