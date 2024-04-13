@@ -3180,6 +3180,18 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, $additionalCosts, 1);
       AddDecisionQueue("MODAL", $currentPlayer, "CUNNING", 1);
       break;
+    case "2471223947"://Frontline Shuttle
+      $abilityName = GetResolvedAbilityName($cardID, $from);
+      if($abilityName == "Shuttle") {
+        WriteLog("This is a partially manual card. You'll need to pass priority and attack manually for it to work.");
+        $ally = new Ally("MYALLY-" . $index);
+        $ally->Destroy();
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an ally to attack with");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
+      }
+      break;
     default: break;
   }
 }

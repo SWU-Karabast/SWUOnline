@@ -604,6 +604,8 @@ function GetAbilityTypes($cardID)
       return "A,A";
     case "8117080217"://Admiral Ozzel
       return "A,AA";
+    case "2471223947"://Frontline Shuttle
+      return "A,AA";
     default: return "";
   }
 }
@@ -652,6 +654,8 @@ function GetAbilityNames($cardID, $index = -1)
       return "Deal Damage,Deploy";
     case "8117080217"://Admiral Ozzel
       return "Play Imperial Unit,Attack";
+    case "2471223947"://Frontline Shuttle
+      return "Shuttle,Attack";
     default: return "";
   }
 }
