@@ -2638,7 +2638,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         global $CS_AfterPlayedBy;
         SetClassState($currentPlayer, $CS_AfterPlayedBy, $cardID);
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to put into play");
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND:definedType=Unit&maxCost=3");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND:definedType=Unit;maxCost=3");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
       }
