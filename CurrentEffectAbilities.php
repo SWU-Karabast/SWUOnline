@@ -135,7 +135,7 @@ function CurrentEffectCostModifiers($cardID, $from)
           $remove = true;
           break;
         case "3426168686"://Sneak Attack
-          $costModifier -= 1;
+          $costModifier -= 3;
           $remove = true;
           break;
         case "7870435409"://Bib Fortuna
