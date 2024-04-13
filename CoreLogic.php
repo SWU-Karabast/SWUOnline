@@ -2174,7 +2174,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZREMOVE", $currentPlayer, "-", 1);
       break;
     case "3377409249"://Rogue Squadron Skirmisher
-      if($from != "PLAY") MZMoveCard($currentPlayer, "MYDISCARD:maxCost=2", "MYHAND", may:true);
+      if($from != "PLAY") MZMoveCard($currentPlayer, "MYDISCARD:maxCost=2;definedType=Unit", "MYHAND", may:true);
       break;
     case "5335160564":
       if($from != "PLAY" && (GetHealth(1) >= 15 || GetHealth(2) >= 15)) {
