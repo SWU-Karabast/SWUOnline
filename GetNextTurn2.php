@@ -350,11 +350,12 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   echo ("</div>");
   echo ("</div>");
 
-  //Ground Zone
-  echo ("<div style='overflow:none; position: fixed; top:20%; left:55%; width:30%; height:60%; border:1px solid darkgray; border-radius:7px; background-color: rgba(220, 220, 220, 0.55);'>");
+  //Space Arena
+  echo ("<div style='overflow:none; position: fixed; top:20%; left:8%; width:35%; height:60%; border:1px solid black; border-radius:7px; opacity:.55; background-image: url(\"./Images/star_texture.webp\");'>");
   echo("</div>");
-  //Space Zone
-  echo ("<div style='overflow:none; position: fixed; top:20%; left:8%; width:35%; height:60%; border:1px solid black; border-radius:7px; background-color: rgba(30, 30, 30, 0.55);'>");
+
+  //Ground Arena
+  echo ("<div style='overflow:none; position: fixed; top:20%; left:55%; width:30%; height:60%; border:1px solid darkgray; border-radius:7px; opacity:.55; background-image: url(\"./Images/ground_texture.webp\");'>");
   echo("</div>");
 
 
