@@ -548,14 +548,13 @@ function GetAbilityType($cardID, $index = -1, $from="-")
       return "A";
     case "2429341052"://Security Complex
       return "A";
-    case "8560666697"://Director Krennic
-      return "A";
-    case "7440067052"://Hera Sykulla
-      return "A";
-    case "4626028465"://Boba Fett
-      return "A";
     case "8327910265"://Energy Conversion Lab (ECL)
       return "A";
+    case "4626028465"://Boba Fett
+    case "7440067052"://Hera Sykulla
+    case "8560666697"://Director Krennic
+      $char = &GetPlayerCharacter($currentPlayer);
+      return $char[CharacterPieces() + 2] == 0 ? "A" : "";
     default: return "";
   }
 }
@@ -563,101 +562,159 @@ function GetAbilityType($cardID, $index = -1, $from="-")
 function GetAbilityTypes($cardID)
 {
   global $currentPlayer;
+  $abilityTypes = "";
   switch($cardID) {
     case "2554951775"://Bail Organa
-      return "A,AA";
+      $abilityTypes = "A,AA";
+      break;
     case "2756312994"://Alliance Dispatcher
-      return "A,AA";
+      $abilityTypes = "A,AA";
+      break;
     case "3572356139"://Chewbacca, Walking Carpet
-      return "A,A";
+      $abilityTypes = "A";
+      break;
     case "2579145458"://Luke Skywalker
-      return "A,A";
+      $abilityTypes = "A";
+      break;
     case "2912358777"://Grand Moff Tarkin
-      return "A,A";
+      $abilityTypes = "A";
+      break;
     case "3187874229"://Cassian Andor
-      return "A,A";
+      $abilityTypes = "A";
+      break;
     case "4841169874"://Sabine Wren
-      return "A,A";
+      $abilityTypes = "A";
+      break;
     case "2048866729"://Iden Versio
-      return "A,A";
+      $abilityTypes = "A";
+      break;
     case "6088773439"://Darth Vader
-      return "A,A";
+      $abilityTypes = "A";
+      break;
     case "4263394087"://Chirrut Imwe
-      return "A,A";
+      $abilityTypes = "A";
+      break;
     case "4300219753"://Fett's Firespray
-      return "A,AA";
+      $abilityTypes = "A,AA";
+      break;
     case "7911083239"://Grand Inquisitor
-      return "A,A";
+      $abilityTypes = "A";
+      break;
     case "5954056864"://Han Solo
-      return "A,A";
+      $abilityTypes = "A";
+      break;
     case "6514927936"://Leia Organa
-      return "A,A";
+      $abilityTypes = "A";
+      break;
     case "8244682354"://Jyn Erso
-      return "A,A";
+      $abilityTypes = "A";
+      break;
     case "8600121285"://IG-88
-      return "A,A";
+      $abilityTypes = "A";
+      break;
     case "7870435409"://Bib Fortuna
-      return "A,AA";
+      $abilityTypes = "A,AA";
+      break;
     case "5784497124"://Emperor Palpatine
       $allies = &GetAllies($currentPlayer);
-      if(count($allies) == 0) return "A";
-      return "A,A";
+      if(count($allies) == 0) break;
+      $abilityTypes = "A";
+      break;
     case "8117080217"://Admiral Ozzel
-      return "A,AA";
+      $abilityTypes = "A,AA";
+      break;
     case "2471223947"://Frontline Shuttle
-      return "A,AA";
-    default: return "";
+      $abilityTypes = "A,AA";
+      break;
+    default: break;
   }
+  if(DefinedTypesContains($cardID, "Leader", $currentPlayer)) {
+    $char = &GetPlayerCharacter($currentPlayer);
+    if($char[CharacterPieces() + 2] == 0) {
+      if($abilityTypes != "") $abilityTypes .= ",";
+      $abilityTypes .= "A";
+    }
+  }
+  return $abilityTypes;
 }
 
 function GetAbilityNames($cardID, $index = -1)
 {
   global $currentPlayer;
+  $abilityNames = "";
   switch ($cardID) {
     case "2554951775"://Bail Organa
-      return "Give Experience,Attack";
+      $abilityNames = "Give Experience,Attack";
+      break;
     case "2756312994"://Alliance Dispatcher
-      return "Play Unit,Attack";
+      $abilityNames = "Play Unit,Attack";
+      break;
     case "3572356139"://Chewbacca, Walking Carpet
-      return "Play Taunt,Deploy";
+      $abilityNames = "Play Taunt";
+      break;
     case "2579145458"://Luke Skywalker
-      return "Give Shield,Deploy";
+      $abilityNames = "Give Shield";
+      break;
     case "2912358777"://Grand Moff Tarkin
-      return "Give Experience,Deploy";
+      $abilityNames = "Give Experience";
+      break;
     case "3187874229"://Cassian Andor
-      return "Draw Card,Deploy";
+      $abilityNames = "Draw Card";
+      break;
     case "4841169874"://Sabine Wren
-      return "Deal Damage,Deploy";
+      $abilityNames = "Deal Damage";
+      break;
     case "2048866729"://Iden Versio
-      return "Heal,Deploy";
+      $abilityNames = "Heal";
+      break;
     case "6088773439"://Darth Vader
-      return "Deal Damage,Deploy";
+      $abilityNames = "Deal Damage";
+      break;
     case "4263394087"://Chirrut Imwe
-      return "Buff Defense,Deploy";
+      $abilityNames = "Buff Defense";
+      break;
     case "4300219753"://Fett's Firespray
-      return "Exhaust,Attack";
+      $abilityNames = "Exhaust,Attack";
+      break;
     case "7911083239"://Grand Inquisitor
-      return "Deal Damage,Deploy";
+      $abilityNames = "Deal Damage";
+      break;
     case "5954056864"://Han Solo
-      return "Play Resource,Deploy";
+      $abilityNames = "Play Resource";
+      break;
     case "6514927936"://Leia Organa
-      return "Attack,Deploy";
+      $abilityNames = "Attack";
+      break;
     case "8244682354"://Jyn Erso
-      return "Attack,Deploy";
+      $abilityNames = "Attack";
+      break;
     case "8600121285"://IG-88
-      return "Attack,Deploy";
+      $abilityNames = "Attack";
+      break;
     case "7870435409"://Bib Fortuna
-      return "Play Event,Attack";
+      $abilityNames = "Play Event,Attack";
+      break;
     case "5784497124"://Emperor Palpatine
       $allies = &GetAllies($currentPlayer);
-      if(count($allies) == 0) return "Deploy";
-      return "Deal Damage,Deploy";
+      if(count($allies) == 0) break;
+      $abilityNames = "Deal Damage";
+      break;
     case "8117080217"://Admiral Ozzel
-      return "Play Imperial Unit,Attack";
+      $abilityNames = "Play Imperial Unit,Attack";
+      break;
     case "2471223947"://Frontline Shuttle
-      return "Shuttle,Attack";
-    default: return "";
+      $abilityNames = "Shuttle,Attack";
+      break;
+    default: break;
   }
+  if(DefinedTypesContains($cardID, "Leader", $currentPlayer)) {
+    $char = &GetPlayerCharacter($currentPlayer);
+    if($char[CharacterPieces() + 2] == 0) {
+      if($abilityNames != "") $abilityNames .= ",";
+      $abilityNames .= "Deploy";
+    }
+  }
+  return $abilityNames;
 }
 
 function GetAbilityIndex($cardID, $index, $abilityName)
