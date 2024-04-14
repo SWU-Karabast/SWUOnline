@@ -18,11 +18,11 @@ function CheckImage($cardID, $url, $definedType, $isBack=false)
     curl_exec($ch);
     curl_close($ch);
     //if(filesize($filename) < 10000) { unlink($filename); return; }
-    echo(filesize($filename));
     if(file_exists($filename)) echo("Image for " . $cardID . " successfully retrieved.<BR>");
     if(file_exists($filename))
     {
       echo("Normalizing file size for " . $cardID . ".<BR>");
+      echo("Defined Type: " . $definedType . "<BR>");
       $image = imagecreatefrompng($filename);
       //$image = imagecreatefromjpeg($filename);
       if($definedType == "Base" || $definedType == "Leader") {
