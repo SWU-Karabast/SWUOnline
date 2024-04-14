@@ -47,14 +47,15 @@
       $cardID = "SOR_" . $cardNumber;
       AddToTries($cardID, $card->cardUid);
 
+      $definedType = $card->type->data->attributes->name;
       $imageUrl = $card->artFront->data->attributes->formats->card->url;
-      //CheckImage($card->cardUid, $imageUrl);
+      CheckImage($card->cardUid, $imageUrl, $definedType);
       if($card->artBack->data != null) {
         $imageUrl = $card->artBack->data->attributes->formats->card->url;
         $arr = explode("_", $imageUrl);
         $arr = explode(".", $arr[count($arr)-1]);
         $uuid = $arr[0];
-        CheckImage($uuid, $imageUrl, isBack:true);
+        CheckImage($uuid, $imageUrl, $definedType, isBack:true);
         AddToTries($cardID, $uuid);
       }
     }

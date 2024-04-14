@@ -1,6 +1,6 @@
 <?php
 
-function CheckImage($cardID, $url, $isBack=false)
+function CheckImage($cardID, $url, $definedType, $isBack=false)
 {
   $filename = "./WebpImages/" . $cardID . ".webp";
   $filenameNew = "./New Cards/" . $cardID . ".webp";
@@ -47,12 +47,24 @@ function CheckImage($cardID, $url, $isBack=false)
       echo("Attempting to convert image for " . $cardID . " to concat.<BR>");
       $image = imagecreatefromwebp($filename);
       //$image = imagecreatefrompng($filename);
-      $imageTop = imagecrop($image, ['x' => 0, 'y' => 0, 'width' => 450, 'height' => 372]);
-      $imageBottom = imagecrop($image, ['x' => 0, 'y' => 570, 'width' => 450, 'height' => 628]);
 
-      $dest = imagecreatetruecolor(450, 450);
-      imagecopy($dest, $imageTop, 0, 0, 0, 0, 450, 372);
-      imagecopy($dest, $imageBottom, 0, 373, 0, 0, 450, 78);
+      
+      if($definedType == "Event") {
+        $imageTop = imagecrop($image, ['x' => 0, 'y' => 0, 'width' => 450, 'height' => 78]);
+        $imageBottom = imagecrop($image, ['x' => 0, 'y' => 256, 'width' => 450, 'height' => 628]);
+  
+        $dest = imagecreatetruecolor(450, 450);
+        imagecopy($dest, $imageTop, 0, 0, 0, 0, 450, 78);
+        imagecopy($dest, $imageBottom, 0, 79, 0, 0, 450, 372);
+      }
+      else {
+        $imageTop = imagecrop($image, ['x' => 0, 'y' => 0, 'width' => 450, 'height' => 372]);
+        $imageBottom = imagecrop($image, ['x' => 0, 'y' => 570, 'width' => 450, 'height' => 628]);
+  
+        $dest = imagecreatetruecolor(450, 450);
+        imagecopy($dest, $imageTop, 0, 0, 0, 0, 450, 372);
+        imagecopy($dest, $imageBottom, 0, 373, 0, 0, 450, 78);
+      }
 
       imagewebp($dest, $concatFilename);
       // Free up memory
@@ -71,7 +83,8 @@ function CheckImage($cardID, $url, $isBack=false)
       echo("Attempting to convert image for " . $cardID . " to crops.<BR>");
       $image = imagecreatefromwebp($filename);
       //$image = imagecreatefrompng($filename);
-      $image = imagecrop($image, ['x' => 50, 'y' => 100, 'width' => 350, 'height' => 270]);
+      if($definedType == "Event") $image = imagecrop($image, ['x' => 50, 'y' => 326, 'width' => 350, 'height' => 270]);
+      else $image = imagecrop($image, ['x' => 50, 'y' => 100, 'width' => 350, 'height' => 270]);
       imagepng($image, $cropFilename);
       imagedestroy($image);
       if(file_exists($cropFilename)) echo("Image for " . $cardID . " successfully converted to crops.<BR>");
