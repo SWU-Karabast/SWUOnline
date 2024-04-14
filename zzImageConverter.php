@@ -25,8 +25,8 @@ function CheckImage($cardID, $url, $definedType, $isBack=false)
       echo("Normalizing file size for " . $cardID . ".<BR>");
       $image = imagecreatefrompng($filename);
       //$image = imagecreatefromjpeg($filename);
-      $image = imagescale($image, 450, 628);
-      if($definedType == "Base") $image = imagerotate($image, -90, 0);
+      if($definedType == "Base") $image = imagescale($image, 628, 450);//$image = imagerotate($image, -90, 0);
+      else $image = imagescale($image, 450, 628);
       imagewebp($image, $filename);
       // Free up memory
       imagedestroy($image);
