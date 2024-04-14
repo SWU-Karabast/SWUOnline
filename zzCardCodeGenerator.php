@@ -40,7 +40,7 @@
       $card = $card->attributes;
 
       if($card->variantOf->data != null) continue;
-      if($card->expansion->data->attributes->name != "Spark of Rebellion") continue;
+      //if($card->expansion->data->attributes->name != "Spark of Rebellion") continue;
 
       $cardNumber = $card->cardNumber;
       if($cardNumber < 10) $cardNumber = "00" . $cardNumber;
