@@ -32,7 +32,7 @@ function CheckImage($cardID, $url, $definedType, $isBack=false)
     }
     $isNew = true;
   }
-  if($isNew && !file_exists($filenameNew)) {
+  if(false && $isNew && !file_exists($filenameNew)) {
     echo("Converting image for " . $cardID . " to new format.<BR>");
     $image = imagecreatefromwebp($filename);
     //$image = imagecreatefrompng($filename);
