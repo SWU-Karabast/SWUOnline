@@ -95,6 +95,9 @@ function ModalAbilities($player, $card, $lastResult)
         }
       }
       return 1;
+    case "CUNNING":
+
+      return 1;
     default: return "";
   }
 }
