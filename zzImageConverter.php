@@ -37,7 +37,7 @@ function CheckImage($cardID, $url, $definedType, $isBack=false)
     echo("Converting image for " . $cardID . " to new format.<BR>");
     try {
       $image = imagecreatefromwebp($filename);
-    } catch {
+    } catch(Exception $e) {
       $image = imagecreatefrompng($filename);
     }
     imagewebp($image, $filenameNew);
@@ -51,7 +51,7 @@ function CheckImage($cardID, $url, $definedType, $isBack=false)
       echo("Attempting to convert image for " . $cardID . " to concat.<BR>");
       try {
         $image = imagecreatefromwebp($filename);
-      } catch {
+      } catch(Exception $e) {
         $image = imagecreatefrompng($filename);
       }
       
@@ -89,7 +89,7 @@ function CheckImage($cardID, $url, $definedType, $isBack=false)
       echo("Attempting to convert image for " . $cardID . " to crops.<BR>");
       try {
         $image = imagecreatefromwebp($filename);
-      } catch {
+      } catch(Exception $e) {
         $image = imagecreatefrompng($filename);
       }
       //$image = imagecreatefrompng($filename);
