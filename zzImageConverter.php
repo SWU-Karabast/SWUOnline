@@ -83,7 +83,7 @@ function CheckImage($cardID, $url, $definedType, $isBack=false)
       echo("Attempting to convert image for " . $cardID . " to crops.<BR>");
       $image = imagecreatefromwebp($filename);
       //$image = imagecreatefrompng($filename);
-      if($definedType == "Event") $image = imagecrop($image, ['x' => 50, 'y' => 326, 'width' => 350, 'height' => 270]);
+      if($definedType == "Event") $image = imagecrop($image, ['x' => 50, 'y' => 326, 'width' => 350, 'height' => 246]);
       else $image = imagecrop($image, ['x' => 50, 'y' => 100, 'width' => 350, 'height' => 270]);
       imagepng($image, $cropFilename);
       imagedestroy($image);
