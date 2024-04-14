@@ -50,12 +50,12 @@ function CheckImage($cardID, $url, $definedType, $isBack=false)
 
       
       if($definedType == "Event") {
-        $imageTop = imagecrop($image, ['x' => 0, 'y' => 0, 'width' => 450, 'height' => 78]);
-        $imageBottom = imagecrop($image, ['x' => 0, 'y' => 256, 'width' => 450, 'height' => 628]);
+        $imageTop = imagecrop($image, ['x' => 0, 'y' => 0, 'width' => 450, 'height' => 110]);
+        $imageBottom = imagecrop($image, ['x' => 0, 'y' => 320, 'width' => 450, 'height' => 628]);
   
         $dest = imagecreatetruecolor(450, 450);
-        imagecopy($dest, $imageTop, 0, 0, 0, 0, 450, 78);
-        imagecopy($dest, $imageBottom, 0, 79, 0, 0, 450, 372);
+        imagecopy($dest, $imageTop, 0, 0, 0, 0, 450, 110);
+        imagecopy($dest, $imageBottom, 0, 111, 0, 0, 450, 404);
       }
       else {
         $imageTop = imagecrop($image, ['x' => 0, 'y' => 0, 'width' => 450, 'height' => 372]);
