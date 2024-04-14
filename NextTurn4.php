@@ -372,10 +372,8 @@
 
       function GetCharacterLeft(cardType, cardSubType) {
         switch (cardType) {
-          case "C":
-            return "calc(50% - " + ((cardSize * 1.29) / 2 + 20) + "px)";
-          case "W":
-            return "calc(50% - " + ((cardSize * 1.29) / 2 + 20) + "px)";
+          case "C": case "W":
+            return "calc(46.5% - " + ((cardSize * 1.29) / 2) + "px)";
           default:
             break;
         }

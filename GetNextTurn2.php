@@ -341,6 +341,9 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     else $opponentEffects .= $effect;
   }
 
+  $groundLeft = "53%";
+  $arenaWidth = "32%";
+
   echo ("<div style='position:fixed; height:100%; width:100px; left:0px; top:0px;'>");
   echo ("<div style='font-weight: bold; text-align:center; padding-bottom:4px; border-bottom: 4px solid " . $borderColor . "; font-size:18px; font-weight: 600; color: " . $fontColor . "; text-shadow: 2px 0 0 " . $borderColor . ", 0 -2px 0 " . $borderColor . ", 0 2px 0 " . $borderColor . ", -2px 0 0 " . $borderColor . "; user-select: none;'>Opponent<br>Effects</div>");
   echo ($opponentEffects);
@@ -351,11 +354,11 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   echo ("</div>");
 
   //Space Arena
-  echo ("<div style='overflow:none; position: fixed; top:20%; left:8%; width:35%; height:60%; border:1px solid black; border-radius:7px; opacity:.55; background-image: url(\"./Images/star_texture.webp\");'>");
+  echo ("<div style='overflow:none; position: fixed; top:20%; left:8%; width:" . $arenaWidth . "; height:60%; border:1px solid black; border-radius:7px; opacity:.55; background-image: url(\"./Images/star_texture.webp\");'>");
   echo("</div>");
 
   //Ground Arena
-  echo ("<div style='overflow:none; position: fixed; top:20%; left:55%; width:30%; height:60%; border:1px solid darkgray; border-radius:7px; opacity:.55; background-image: url(\"./Images/ground_texture.webp\");'>");
+  echo ("<div style='overflow:none; position: fixed; top:20%; left:" . $groundLeft . "; width:" . $arenaWidth . "; height:60%; border:1px solid darkgray; border-radius:7px; opacity:.55; background-image: url(\"./Images/ground_texture.webp\");'>");
   echo("</div>");
 
 
@@ -934,12 +937,12 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   echo ("</div>");
 
   //Their Space Allies
-  echo ("<div style='overflow-y:auto; position: fixed; top:20%; left:8%; width:35%; max-height:" . $permHeight . "px;'>");
+  echo ("<div style='overflow-y:auto; position: fixed; top:20%; left:8%; width:" . $arenaWidth . "; max-height:" . $permHeight . "px;'>");
   echo($spaceAllies);
   echo("</div>");
 
   //Their Ground Allies
-  echo ("<div style='overflow-y:auto; position: fixed; top:20%; left:55%; width:30%; max-height:" . $permHeight . "px;'>");
+  echo ("<div style='overflow-y:auto; position: fixed; top:20%; left:" . $groundLeft . "; width:" . $arenaWidth . "; max-height:" . $permHeight . "px;'>");
   echo($groundAllies);
   echo("</div>");
 
@@ -952,7 +955,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     ++$total;
     if($theirArsenal[$i + 4] != 1) ++$numReady;
   }
-  echo ("<div title='Opponent resources' style='color:white; position:fixed; width:200px; left: calc(50% - " . (intval($cardWidth / 2 + 20)) . "px); top:" . (intval(GetCharacterBottom("C", "")) - $cardSize / 2) . "px; border-radius:5%; cursor:default; font-size: 36px;'><img style='width:45px; height:45px;' src='./Images/Resource.webp' /><span style='position:relative; left:6px; bottom:10px;'>" . $numReady . "/" . $total . "</span></div>");
+  echo ("<div title='Opponent resources' style='color:white; position:fixed; width:200px; left: calc(46.5% - 45px); top:" . (intval(GetCharacterBottom("C", "")) - $cardSize / 2) . "px; border-radius:5%; cursor:default; font-size: 36px;'><img style='width:45px; height:45px;' src='./Images/Resource.webp' /><span style='position:relative; left:6px; bottom:10px;'>" . $numReady . "/" . $total . "</span></div>");
 
   echo ("</div>");
   echo ("</div>");
@@ -1055,12 +1058,12 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   echo ("</div>");
   
   //Space allies
-  echo ("<div style='overflow-y:auto; position: fixed; bottom:20%; left:8%; width:35%; max-height:" . $permHeight . "px;'>");
+  echo ("<div style='overflow-y:auto; position: fixed; bottom:20%; left:8%; width:" . $arenaWidth . "; max-height:" . $permHeight . "px;'>");
   echo($spaceAllies);
   echo("</div>");
 
   //Ground allies
-  echo ("<div style='overflow-y:auto; position: fixed; bottom:20%; left:55%; width:30%; max-height:" . $permHeight . "px;'>");
+  echo ("<div style='overflow-y:auto; position: fixed; bottom:20%; left:" . $groundLeft . "; width:" . $arenaWidth . "; max-height:" . $permHeight . "px;'>");
   echo($groundAllies);
   echo("</div>");
   
@@ -1111,7 +1114,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     ++$total;
     if($myArsenal[$i + 4] != 1) ++$numReady;
   }
-  echo ("<div title='Click to see your resources.' style='color:white; position:fixed; width:auto; left: calc(50% - " . (intval($cardWidth / 2 + 20)) . "px); bottom:" . (intval(GetCharacterBottom("C", "")) - $cardSize / 2) . "px; border-radius:5%; cursor:pointer; font-size: 36px;' onclick='ShowPopup(\"myResourcePopup\");'><img style='width:45px; height:45px;' src='./Images/Resource.webp' /><span style='position:relative; left:6px; bottom:10px;'>" . $numReady . "/" . $total . "</span></div>");
+  echo ("<div title='Click to see your resources.' style='color:white; position:fixed; width:auto; left: calc(46.5% - 45px); bottom:" . (intval(GetCharacterBottom("C", "")) - $cardSize / 2) . "px; border-radius:5%; cursor:pointer; font-size: 36px;' onclick='ShowPopup(\"myResourcePopup\");'><img style='width:45px; height:45px;' src='./Images/Resource.webp' /><span style='position:relative; left:6px; bottom:10px;'>" . $numReady . "/" . $total . "</span></div>");
   echo ("</div>"); //End arsenal div
 
   //Show deck, discard, pitch, banish
@@ -1236,10 +1239,8 @@ function GetCharacterLeft($cardType, $cardSubType)
 {
   global $cardWidth;
   switch ($cardType) {
-    case "C":
-      return "calc(50% - " . ($cardWidth / 2 + 5) . "px)";
-    case "W":
-      return "calc(50% - " . ($cardWidth / 2 + $cardWidth + 25) . "px)";
+    case "C": case "W":
+      return "calc(46.5% - " . ($cardWidth * 1.29 / 2) . "px)";
     default:
       break;
   }
