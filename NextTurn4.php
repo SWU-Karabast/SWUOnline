@@ -92,7 +92,7 @@
       }
 
       //Rotate is deprecated
-      function Card(cardNumber, folder, maxHeight, action = 0, showHover = 0, overlay = 0, borderColor = 0, counters = 0, actionDataOverride = "", id = "", rotate = false, lifeCounters = 0, defCounters = 0, atkCounters = 0, controller = 0, restriction = "", isBroken = 0, onChain = 0, isFrozen = 0, gem = 0) {
+      function Card(cardNumber, folder, maxHeight, action = 0, showHover = 0, overlay = 0, borderColor = 0, counters = 0, actionDataOverride = "", id = "", rotate = 0, lifeCounters = 0, defCounters = 0, atkCounters = 0, controller = 0, restriction = "", isBroken = 0, onChain = 0, isFrozen = 0, gem = 0) {
         if (folder == "crops") {
           cardNumber += "_cropped";
         }
@@ -133,7 +133,11 @@
           border = "border: 1px solid transparent;";
         }
 
-        if (folder == "crops") {
+        if(rotate == 1) {
+          height = (maxHeight);
+          width = (maxHeight * 1.29);
+        }
+        else if (folder == "crops") {
           height = maxHeight;
           width = (height * 1.29);
         } else if (folder == "concat") {
@@ -359,7 +363,7 @@
           var restriction = cardArr[12];
           if(typeof restriction != "string") restriction = "";
           restriction = restriction.replace(/_/g, ' ');
-          newHTML += Card(cardArr[0], folder, size, cardArr[1], 1, cardArr[2], cardArr[3], cardArr[4], cardArr[5], "", false, cardArr[6], cardArr[7], cardArr[8], cardArr[9], restriction, cardArr[13], cardArr[14], cardArr[15], cardArr[16]);
+          newHTML += Card(cardArr[0], folder, size, cardArr[1], 1, cardArr[2], cardArr[3], cardArr[4], cardArr[5], "", cardArr[17], cardArr[6], cardArr[7], cardArr[8], cardArr[9], restriction, cardArr[13], cardArr[14], cardArr[15], cardArr[16]);
           newHTML += "</span>";
         }
         zoneEl.innerHTML = newHTML;
@@ -369,9 +373,9 @@
       function GetCharacterLeft(cardType, cardSubType) {
         switch (cardType) {
           case "C":
-            return "calc(50% - " + (cardSize / 2) + "px)";
+            return "calc(50% - " + ((cardSize * 1.29) / 2 + 20) + "px)";
           case "W":
-            return "calc(50% - " + (cardSize / 2) + "px)";
+            return "calc(50% - " + ((cardSize * 1.29) / 2 + 20) + "px)";
           default:
             break;
         }

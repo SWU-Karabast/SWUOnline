@@ -925,7 +925,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     else $counters = GetClassState($otherPlayer, $CS_PreparationCounters);
     $counters = $theirCharacter[$i + 1] != 0 ? $counters : 0;
     if ($characterContents != "") $characterContents .= "|";
-    $characterContents .= ClientRenderedCard(cardNumber: $theirCharacter[$i], overlay: ($theirCharacter[$i + 1] != 2 ? 1 : 0), counters: $counters, defCounters: $theirCharacter[$i + 4], atkCounters: $atkCounters, controller: $otherPlayer, type: $type, sType: $sType, isFrozen: ($theirCharacter[$i + 8] == 1), onChain: ($theirCharacter[$i + 6] == 1), isBroken: ($theirCharacter[$i + 1] == 0));
+    $characterContents .= ClientRenderedCard(cardNumber: $theirCharacter[$i], overlay: ($theirCharacter[$i + 1] != 2 ? 1 : 0), counters: $counters, defCounters: $theirCharacter[$i + 4], atkCounters: $atkCounters, controller: $otherPlayer, type: $type, sType: $sType, isFrozen: ($theirCharacter[$i + 8] == 1), onChain: ($theirCharacter[$i + 6] == 1), isBroken: ($theirCharacter[$i + 1] == 0), rotate:1);
 
   }
   echo ($characterContents);
@@ -951,7 +951,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     ++$total;
     if($theirArsenal[$i + 4] != 1) ++$numReady;
   }
-  echo ("<div title='Opponent resources' style='color:white; position:fixed; width:200px; left: calc(50% - " . (intval($cardWidth / 2)) . "px); top:" . (intval(GetCharacterBottom("C", "")) - $cardSize / 2) . "px; border-radius:5%; cursor:default; font-size: 36px;'><img style='width:45px; height:45px;' src='./Images/Resource.webp' /><span style='position:relative; left:6px; bottom:10px;'>" . $numReady . "/" . $total . "</span></div>");
+  echo ("<div title='Opponent resources' style='color:white; position:fixed; width:200px; left: calc(50% - " . (intval($cardWidth / 2 + 20)) . "px); top:" . (intval(GetCharacterBottom("C", "")) - $cardSize / 2) . "px; border-radius:5%; cursor:default; font-size: 36px;'><img style='width:45px; height:45px;' src='./Images/Resource.webp' /><span style='position:relative; left:6px; bottom:10px;'>" . $numReady . "/" . $total . "</span></div>");
 
   echo ("</div>");
   echo ("</div>");
@@ -1094,7 +1094,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       $gem = ($myCharacter[$i + 9] == 1 ? 1 : 2);
     }
     $restriction = implode("_", explode(" ", $restriction));
-    $myCharData .= ClientRenderedCard($myCharacter[$i], $currentPlayer == $playerID && $playable ? 3 : 0, $myCharacter[$i + 1] != 2 ? 1 : 0, $border, $myCharacter[$i + 1] != 0 ? $counters : 0, strval($i), 0, $myCharacter[$i + 4], $atkCounters, $playerID, $type, $sType, $restriction, $myCharacter[$i + 1] == 0, $myCharacter[$i + 6] == 1, $myCharacter[$i + 8] == 1, $gem);
+    $myCharData .= ClientRenderedCard($myCharacter[$i], $currentPlayer == $playerID && $playable ? 3 : 0, $myCharacter[$i + 1] != 2 ? 1 : 0, $border, $myCharacter[$i + 1] != 0 ? $counters : 0, strval($i), 0, $myCharacter[$i + 4], $atkCounters, $playerID, $type, $sType, $restriction, $myCharacter[$i + 1] == 0, $myCharacter[$i + 6] == 1, $myCharacter[$i + 8] == 1, $gem, 1);
   }
   echo ("<div id='myChar' style='display:none;'>");
   echo ($myCharData);
@@ -1110,7 +1110,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     ++$total;
     if($myArsenal[$i + 4] != 1) ++$numReady;
   }
-  echo ("<div title='Click to see your resources.' style='color:white; position:fixed; width:auto; left: calc(50% - " . (intval($cardWidth / 2)) . "px); bottom:" . (intval(GetCharacterBottom("C", "")) - $cardSize / 2) . "px; border-radius:5%; cursor:pointer; font-size: 36px;' onclick='ShowPopup(\"myResourcePopup\");'><img style='width:45px; height:45px;' src='./Images/Resource.webp' /><span style='position:relative; left:6px; bottom:10px;'>" . $numReady . "/" . $total . "</span></div>");
+  echo ("<div title='Click to see your resources.' style='color:white; position:fixed; width:auto; left: calc(50% - " . (intval($cardWidth / 2 + 20)) . "px); bottom:" . (intval(GetCharacterBottom("C", "")) - $cardSize / 2) . "px; border-radius:5%; cursor:pointer; font-size: 36px;' onclick='ShowPopup(\"myResourcePopup\");'><img style='width:45px; height:45px;' src='./Images/Resource.webp' /><span style='position:relative; left:6px; bottom:10px;'>" . $numReady . "/" . $total . "</span></div>");
   echo ("</div>"); //End arsenal div
 
   //Show deck, discard, pitch, banish
