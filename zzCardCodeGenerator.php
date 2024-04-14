@@ -49,6 +49,8 @@
       AddToTries($cardID, $card->cardUid);
 
       $definedType = $card->type->data->attributes->name;
+      $type2 = $card->type2->data->attributes->name;
+      if($type2 == "Leader Unit") $definedType = "Unit";
       $imageUrl = $card->artFront->data->attributes->formats->card->url;
       CheckImage($card->cardUid, $imageUrl, $definedType);
       if($card->artBack->data != null) {

@@ -26,7 +26,7 @@ function CheckImage($cardID, $url, $definedType, $isBack=false)
       $image = imagecreatefrompng($filename);
       //$image = imagecreatefromjpeg($filename);
       if($definedType == "Base" || $definedType == "Leader") {
-        if(!$isBack && imagesy($image) > imagesx($image)) $image = imagerotate($image, -90, 0);
+        if(imagesy($image) > imagesx($image)) $image = imagerotate($image, -90, 0);
         $image = imagescale($image, 628, 450);
       }
       else $image = imagescale($image, 450, 628);
