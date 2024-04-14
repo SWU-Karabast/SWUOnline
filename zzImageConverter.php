@@ -26,6 +26,7 @@ function CheckImage($cardID, $url, $definedType, $isBack=false)
       $image = imagecreatefrompng($filename);
       //$image = imagecreatefromjpeg($filename);
       $image = imagescale($image, 450, 628);
+      if($definedType == "Base") $image = imagerotate($image, -90, 0);
       imagewebp($image, $filename);
       // Free up memory
       imagedestroy($image);
@@ -34,8 +35,11 @@ function CheckImage($cardID, $url, $definedType, $isBack=false)
   }
   if(false && $isNew && !file_exists($filenameNew)) {
     echo("Converting image for " . $cardID . " to new format.<BR>");
-    $image = imagecreatefromwebp($filename);
-    //$image = imagecreatefrompng($filename);
+    try {
+      $image = imagecreatefromwebp($filename);
+    } catch {
+      $image = imagecreatefrompng($filename);
+    }
     imagewebp($image, $filenameNew);
     imagedestroy($image);
   }
@@ -45,9 +49,11 @@ function CheckImage($cardID, $url, $definedType, $isBack=false)
     if(file_exists($filename))
     {
       echo("Attempting to convert image for " . $cardID . " to concat.<BR>");
-      $image = imagecreatefromwebp($filename);
-      //$image = imagecreatefrompng($filename);
-
+      try {
+        $image = imagecreatefromwebp($filename);
+      } catch {
+        $image = imagecreatefrompng($filename);
+      }
       
       if($definedType == "Event") {
         $imageTop = imagecrop($image, ['x' => 0, 'y' => 0, 'width' => 450, 'height' => 110]);
@@ -81,7 +87,11 @@ function CheckImage($cardID, $url, $definedType, $isBack=false)
     if(file_exists($filename))
     {
       echo("Attempting to convert image for " . $cardID . " to crops.<BR>");
-      $image = imagecreatefromwebp($filename);
+      try {
+        $image = imagecreatefromwebp($filename);
+      } catch {
+        $image = imagecreatefrompng($filename);
+      }
       //$image = imagecreatefrompng($filename);
       if($definedType == "Event") $image = imagecrop($image, ['x' => 50, 'y' => 326, 'width' => 350, 'height' => 246]);
       else $image = imagecrop($image, ['x' => 50, 'y' => 100, 'width' => 350, 'height' => 270]);
