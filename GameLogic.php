@@ -1093,6 +1093,9 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $character[$lastResult+4] = intval($character[$lastResult+4]) + $parameter;
       if($parameter < 0) WriteLog(CardLink($character[$lastResult], $character[$lastResult]) . " got a negative defense counter");
       return $lastResult;
+    case "AFTERRESOURCE":
+      LogPlayCardStats($player, $lastResult, $parameter, type:"RESOURCED");
+      return $lastResult;
     case "REMOVECOUNTER":
       $character = &GetPlayerCharacter($player);
       $character[$lastResult+2] -= 1;

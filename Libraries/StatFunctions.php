@@ -11,8 +11,8 @@ function TurnStatPieces()
 }
 
 $CardStats_TimesPlayed = 1;
-$CardStats_TimesBlocked = 2;
-$CardStats_TimesPitched = 3;
+$CardStats_TimesActivated = 2;
+$CardStats_TimesResourced = 3;
 
 $TurnStats_DamageThreatened = 0;
 $TurnStats_DamageDealt = 1;
@@ -26,10 +26,11 @@ $TurnStats_CardsLeft = 8;
 $TurnStats_DamageBlocked = 9;
 $TurnStats_Overblock = 10;
 
-function LogPlayCardStats($player, $cardID, $from)
+function LogPlayCardStats($player, $cardID, $from, $type="")
 {
-  global $turn, $currentTurn, $CardStats_TimesPlayed, $CardStats_TimesBlocked, $CardStats_TimesPitched, $TurnStats_CardsPlayedOffense, $TurnStats_CardsPlayedDefense;
+  global $turn, $currentTurn, $CardStats_TimesPlayed, $CardStats_TimesActivated, $CardStats_TimesResourced, $TurnStats_CardsPlayedOffense, $TurnStats_CardsPlayedDefense;
   global $TurnStats_CardsPitched, $TurnStats_CardsBlocked, $mainPlayer;
+  if($type == "") $type = $turn[0];
   $cardStats = &GetCardStats($player);
   $turnStats = &GetTurnStats($player);
   $baseIndex = ($currentTurn-1) * TurnStatPieces();
@@ -40,16 +41,18 @@ function LogPlayCardStats($player, $cardID, $from)
     if($cardStats[$i] == $cardID) { $found = 1; $i -= CardStatPieces(); }
   }
   if(!$found) array_push($cardStats, $cardID, 0, 0, 0);
-  switch($turn[0])
+  switch($type)
   {
-    case "P": ++$cardStats[$i + $CardStats_TimesPitched]; ++$turnStats[$baseIndex + $TurnStats_CardsPitched]; break;
-    case "B": ++$cardStats[$i + $CardStats_TimesBlocked]; if($from != "PLAY" && $from != "EQUIP") ++$turnStats[$baseIndex + $TurnStats_CardsBlocked]; break;
+    case "P": ++$cardStats[$i + $CardStats_TimesResourced]; ++$turnStats[$baseIndex + $TurnStats_CardsPitched]; break;
+    case "B": if($from != "PLAY" && $from != "EQUIP") ++$turnStats[$baseIndex + $TurnStats_CardsBlocked]; break;
+    case "RESOURCED": ++$cardStats[$i + $CardStats_TimesResourced]; break;
     default:
       if ($from != "PLAY")
       {
         // From "PLAY" means it was already played, don't account for it a second time.
         ++$cardStats[$i + $CardStats_TimesPlayed];
       }
+      else ++$cardStats[$i + $CardStats_TimesActivated];
       if($from != "PLAY" && $from != "EQUIP")
       {
         if($player == $mainPlayer) ++$turnStats[$baseIndex + $TurnStats_CardsPlayedOffense];

@@ -536,7 +536,7 @@ function CardStatsUI($player)
 
 function CardStats($player)
 {
-  global $CardStats_TimesPlayed, $CardStats_TimesBlocked, $CardStats_TimesPitched;
+  global $CardStats_TimesPlayed, $CardStats_TimesActivated, $CardStats_TimesResourced;
   global $TurnStats_DamageThreatened, $TurnStats_DamageDealt, $TurnStats_CardsPlayedOffense, $TurnStats_CardsPlayedDefense, $TurnStats_CardsPitched, $TurnStats_CardsBlocked, $firstPlayer;
   global $TurnStats_ResourcesUsed, $TurnStats_CardsLeft, $TurnStats_DamageBlocked, $darkMode;
   if (AreStatsDisabled($player)) return "";
@@ -547,8 +547,8 @@ function CardStats($player)
   $rv .= "<table style='text-align:center; margin-left:10px; margin-top:10px; width:100%; border-spacing: 0; border-collapse: collapse; font-size: 1em; line-height: 24px;'><tr>";
   $rv .= "<td style='border-bottom: 1px solid black; border-top: 1px solid black;'>Card ID</td>";
   $rv .= "<td style='border-bottom: 1px solid black; border-top: 1px solid black;'>Times<br>Played</td> ";
-  //$rv .= "<td style='border-bottom: 1px solid black; border-top: 1px solid black;'>Times<br>Blocked</td>";
-  $rv .= "<td style='border-bottom: 1px solid black; border-top: 1px solid black;'>Times<br>Reserved</td>";
+  $rv .= "<td style='border-bottom: 1px solid black; border-top: 1px solid black;'>Times<br>Activated</td>";
+  $rv .= "<td style='border-bottom: 1px solid black; border-top: 1px solid black;'>Times<br>Resourced</td>";
   $rv .= "</tr>";
   $BackgroundColor = "";
   if ($darkMode) {
@@ -562,13 +562,13 @@ function CardStats($player)
     $BackgroundColor = ($BackgroundColor == $lighterColor ? $darkerColor : $lighterColor);
     $style = "font-weight: bold; color:gray;";
     $timesPlayed = $cardStats[$i + $CardStats_TimesPlayed];
-    $timesPitched = $cardStats[$i + $CardStats_TimesPitched];
-    //$timesBlocked = $cardStats[$i + $CardStats_TimesBlocked];
+    $timesResourced = $cardStats[$i + $CardStats_TimesResourced];
+    $timesActivated = $cardStats[$i + $CardStats_TimesActivated];
     $rv .= "<tr style='background-color:" . $BackgroundColor . ";'>";
     $rv .= "<td>" . CardLink($cardStats[$i], $cardStats[$i]) . "</td>";
     $rv .= "<td>" . $timesPlayed . "</td>";
-    //$rv .= "<td>" . $timesBlocked . "</td>";
-    $rv .= "<td>" . $timesPitched . "</td>";
+    $rv .= "<td>" . $timesActivated . "</td>";
+    $rv .= "<td>" . $timesResourced . "</td>";
     $rv .= "</tr>";
   }
   $rv .= "</table>";
