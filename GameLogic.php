@@ -473,6 +473,12 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         if($passFilter) array_push($output, $inputArr[1]);
       }
       return (count($output) > 0 ? implode(",", $output) : "PASS");
+    case "MZFILTER":
+      $arr = explode(",", $lastResult);
+      for($i=0; $i<count($arr); ++$i) {
+        if($arr[$i] == $parameter) unset($arr[$i]);
+      }
+      return implode(",", $arr);
     case "PASSPARAMETER":
       return $parameter;
     case "DISCARDCARD":

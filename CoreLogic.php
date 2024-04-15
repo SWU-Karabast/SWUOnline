@@ -3060,6 +3060,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         WriteLog("This is a partially manual card. Do the extra attack by passing priority manually.");
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to attack with");
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "MYALLY-" . $playAlly->Index());
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZALLCARDTRAITORPASS", $currentPlayer, "Imperial", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
