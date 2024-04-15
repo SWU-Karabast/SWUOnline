@@ -628,7 +628,7 @@ function GetAbilityTypes($cardID)
       break;
     default: break;
   }
-  if(DefinedTypesContains($cardID, "Leader", $currentPlayer)) {
+  if(DefinedTypesContains($cardID, "Leader", $currentPlayer) && !DefinedTypesContains($cardID, "Unit", $currentPlayer)) {
     $char = &GetPlayerCharacter($currentPlayer);
     if($char[CharacterPieces() + 2] == 0) {
       if($abilityTypes != "") $abilityTypes .= ",";
@@ -707,7 +707,7 @@ function GetAbilityNames($cardID, $index = -1)
       break;
     default: break;
   }
-  if(DefinedTypesContains($cardID, "Leader", $currentPlayer)) {
+  if(DefinedTypesContains($cardID, "Leader", $currentPlayer) && !DefinedTypesContains($cardID, "Unit", $currentPlayer)) {
     $char = &GetPlayerCharacter($currentPlayer);
     if($char[CharacterPieces() + 2] == 0) {
       if($abilityNames != "") $abilityNames .= ",";
