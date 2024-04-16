@@ -1220,6 +1220,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
     case "TRANSFORMAURA":
       return "AURA-" . ResolveTransformAura($player, $lastResult, $parameter);
     case "STARTGAME":
+      global $initiativePlayer;
+      $secondPlayer = ($initiativePlayer == 1 ? 2 : 1);
       $inGameStatus = "1";
       $MakeStartTurnBackup = true;
       $MakeStartGameBackup = true;
@@ -1235,14 +1237,14 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       AddDecisionQueue("YESNO", 2, "-");
       AddDecisionQueue("NOPASS", 2, "-");
       AddDecisionQueue("MULLIGAN", 2, "-", 1);
-      MZMoveCard(1, "MYHAND", "MYRESOURCES", may:false, context:"Choose a card to resource", silent:true);
-      AddDecisionQueue("AFTERRESOURCE", 1, "HAND", 1);
-      MZMoveCard(1, "MYHAND", "MYRESOURCES", may:false, context:"Choose a card to resource", silent:true);
-      AddDecisionQueue("AFTERRESOURCE", 1, "HAND", 1);
-      MZMoveCard(2, "MYHAND", "MYRESOURCES", may:false, context:"Choose a card to resource", silent:true);
-      AddDecisionQueue("AFTERRESOURCE", 2, "HAND", 1);
-      MZMoveCard(2, "MYHAND", "MYRESOURCES", may:false, context:"Choose a card to resource", silent:true);
-      AddDecisionQueue("AFTERRESOURCE", 2, "HAND", 1);
+      MZMoveCard($initiativePlayer, "MYHAND", "MYRESOURCES", may:false, context:"Choose a card to resource", silent:true);
+      AddDecisionQueue("AFTERRESOURCE", $initiativePlayer, "HAND", 1);
+      MZMoveCard($initiativePlayer, "MYHAND", "MYRESOURCES", may:false, context:"Choose a card to resource", silent:true);
+      AddDecisionQueue("AFTERRESOURCE", $initiativePlayer, "HAND", 1);
+      MZMoveCard($secondPlayer, "MYHAND", "MYRESOURCES", may:false, context:"Choose a card to resource", silent:true);
+      AddDecisionQueue("AFTERRESOURCE", $secondPlayer, "HAND", 1);
+      MZMoveCard($secondPlayer, "MYHAND", "MYRESOURCES", may:false, context:"Choose a card to resource", silent:true);
+      AddDecisionQueue("AFTERRESOURCE", $secondPlayer, "HAND", 1);
       return 0;
     case "MULLIGAN":
       $hand = &GetHand($player);
