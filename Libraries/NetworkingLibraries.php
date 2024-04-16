@@ -993,6 +993,7 @@ function CleanUpCombatEffects($weaponSwap=false)
 function BeginRoundPass()
 {
   global $initiativeTaken, $mainPlayer, $currentTurnEffects, $nextTurnEffects, $initiativePlayer;
+  global $MakeStartTurnBackup;
   WriteLog("Both players have passed; ending the round.");
   ResetClassState(1);
   ResetClassState(2);
@@ -1014,6 +1015,7 @@ function BeginRoundPass()
   AllyBeginRoundAbilities(2);
   CurrentEffectStartTurnAbilities();
   ProcessDecisionQueue();
+  $MakeStartTurnBackup = true;
 }
 
 function BeginTurnPass()
@@ -1079,7 +1081,6 @@ function FinalizeTurn()
   global $currentPlayer, $currentTurn, $playerID, $turn, $combatChain, $actionPoints, $mainPlayer, $defPlayer, $currentTurnEffects, $nextTurnEffects;
   global $mainHand, $defHand, $mainDeck, $mainItems, $defItems, $defDeck, $mainCharacter, $defCharacter, $mainResources, $defResources;
   global $mainAuras, $firstPlayer, $lastPlayed, $layerPriority, $EffectContext;
-  global $MakeStartTurnBackup;
 
   $EffectContext = "-";
 
@@ -1138,8 +1139,6 @@ function FinalizeTurn()
   if ($mainPlayer == 1) StatsStartTurn();
   ItemBeginTurnEffects($mainPlayer);
   StartTurnAbilities();
-  
-  $MakeStartTurnBackup = true;
 
   $layerPriority[0] = ShouldHoldPriority(1);
   $layerPriority[1] = ShouldHoldPriority(2);
