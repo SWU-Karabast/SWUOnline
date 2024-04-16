@@ -3184,6 +3184,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MAYCHOOSECARD", $currentPlayer, "<-", 1);
         AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
         AddDecisionQueue("OP", $currentPlayer, "REMOVECARD", 1);
+        AddDecisionQueue("ALLRANDOMBOTTOM", $currentPlayer, "DECK");
         AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYHAND-" . count($hand), 1);
         AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
       }
