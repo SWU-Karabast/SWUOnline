@@ -2297,7 +2297,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       if($from != "PLAY") {
         $targetCard = GetMZCard($currentPlayer, $target);
         $damage = SearchCount(SearchAllies($currentPlayer, arena:CardArenas($targetCard)));
-        DealArcane($damage, 1, "PLAYCARD", $cardID, resolvedTarget: $target);
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, $target);
+        AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE," . $damage, 1);
+        //DealArcane($damage, 1, "PLAYCARD", $cardID, resolvedTarget: $target);
       }
       break;
     case "0867878280"://It Binds All Things
