@@ -1077,11 +1077,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     if (CardType($myCharacter[$i]) == "W") $atkCounters = $myCharacter[$i + 3];
     if ($myCharacter[$i + 2] > 0) $counters = $myCharacter[$i + 2];
     else $counters = GetClassState($playerID, $CS_PreparationCounters);
-    if ($turn[0] == "B") {
-      $playable = $playerID == $currentPlayer && $myCharacter[$i + 1] != 0 && IsPlayable($myCharacter[$i], $turn[0], "CHAR", $i, $restriction);
-    } else {
-      $playable = $playerID == $currentPlayer && IsPlayable($myCharacter[$i], $turn[0], "CHAR", $i, $restriction);
-    }
+    $playable = $playerID == $currentPlayer && IsPlayable($myCharacter[$i], $turn[0], "CHAR", $i, $restriction);
     $border = CardBorderColor($myCharacter[$i], "CHAR", $playable);
     $type = CardType($myCharacter[$i]);
     $sType = CardSubType($myCharacter[$i]);
