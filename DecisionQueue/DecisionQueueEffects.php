@@ -156,6 +156,11 @@ function SpecificCardLogic($player, $card, $lastResult)
         AddGraveyard($cardArr[$i], $player, "DECK");
       }
       break;
+    case "FORCECHOKE":
+      $mzArr = explode("-", $lastResult);
+      if($mzArr[0] == "MYALLY") Draw($player);
+      else Draw($player == 1 ? 2 : 1);
+      break;
     default: return "";
   }
 }

@@ -2403,9 +2403,16 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddCurrentTurnEffect($cardID, $currentPlayer);
       break;
     case "1446471743"://Force Choke
-      DealArcane(5, 2, "PLAYCARD", $cardID);
-      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
-      Draw($otherPlayer);
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 5 damage to");
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,5", 1);
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "FORCECHOKE", 1);
+
+
+      //DealArcane(5, 2, "PLAYCARD", $cardID);
+      //$otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      //Draw($otherPlayer);
       break;
     case "1047592361"://Ruthless Raider
       if($from != "PLAY") {
@@ -3208,6 +3215,22 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
       }
+      break;
+    case "8968669390"://U-Wing Reinforcement
+      $hand = &GetHand($currentPlayer);
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "0");
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "1");//Counter for number of resources spent
+      AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE," . 10);
+      for($i=0; $i<3; ++$i) {
+        AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+        AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-definedType-Unit", 1);
+        AddDecisionQueue("MAYCHOOSECARD", $currentPlayer, "<-", 1);
+        AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
+        AddDecisionQueue("OP", $currentPlayer, "REMOVECARD", 1);
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYHAND-" . count($hand), 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
+      }
+      AddDecisionQueue("ALLRANDOMBOTTOM", $currentPlayer, "DECK");
       break;
     default: break;
   }
