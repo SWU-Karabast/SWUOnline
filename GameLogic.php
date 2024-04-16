@@ -1339,6 +1339,13 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $dqState[6] = $damage;
       if($damage > 0) AddDamagePreventionSelection($player, $damage, $params[1]);
       return $damage;
+    case "ALLRANDOMBOTTOM":
+      $cards = explode(",", $lastResult);
+      $discard = &GetDiscard($player);
+      for($i=0; $i<count($cards); ++$i) {
+        AddBottomDeck($cards[$i], $player, $parameter);
+      }
+      return "";
     case "EQUIPCARD":
       EquipCard($player, $parameter);
       return "";
