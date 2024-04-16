@@ -531,7 +531,7 @@ function SpecificAllyAttackAbilities($attackID)
     case "4156799805"://Boba Fett
       if(IsAllyAttackTarget()) {
         $target = GetAttackTarget();
-        $ally = new Ally($target, $mainPlayer);
+        $ally = new Ally($target, $defPlayer);
         if($ally->IsExhausted()) {
           AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Did the unit enter play this turn?");
           AddDecisionQueue("YESNO", $mainPlayer, "-");
