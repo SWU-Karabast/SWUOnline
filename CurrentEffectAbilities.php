@@ -145,6 +145,9 @@ function CurrentEffectCostModifiers($cardID, $from)
         case "8506660490":
           $costModifier -= 99;
           break;
+        case "8968669390"://U-Wing Reinforcement
+          $costModifier -= 7;
+          break;
         default: break;
       }
       if($remove) RemoveCurrentTurnEffect($i);

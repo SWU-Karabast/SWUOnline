@@ -617,6 +617,10 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       AddCurrentTurnEffect($parameter, $player);
       UpdateLinkAttack();
       return "1";
+    case "REMOVECURRENTEFFECT":
+      SearchCurrentTurnEffects($parameter, $player, true);
+      UpdateLinkAttack();
+      return $lastResult;
     case "ADDCURRENTANDNEXTTURNEFFECT":
       AddCurrentTurnEffect($parameter, $player);
       UpdateLinkAttack();
@@ -943,31 +947,6 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       WriteLog($message);
       if($numAA == 1 && $numNAA == 1) DealArcane(2, 0, "PLAYCARD", "MON158", true, $player);
       return $lastResult;
-    case "ROUSETHEANCIENTS":
-      $cards = (is_array($lastResult) ? $lastResult : explode(",", $lastResult));
-      $totalAV = 0;
-      for($i = 0; $i < count($cards); ++$i) {
-        $totalAV += AttackValue($cards[$i]);
-      }
-      if($totalAV >= 13) {
-        AddCurrentTurnEffect("MON247", $player);
-        WriteLog(CardLink("MON247", "MON247") . " got +7 and go again");
-      }
-      return $lastResult;
-    case "CROWNOFDICHOTOMY":
-      $lastType = CardType($lastResult);
-      $indicesParam = ($lastType == "A" ? "GYCLASSAA,RUNEBLADE" : "GYCLASSNAA,RUNEBLADE");
-      PrependDecisionQueue("REVEALCARDS", $player, "-", 1);
-      PrependDecisionQueue("DECKCARDS", $player, "0", 1);
-      PrependDecisionQueue("MULTIADDTOPDECK", $player, "-", 1);
-      PrependDecisionQueue("MULTIREMOVEDISCARD", $player, "-", 1);
-      PrependDecisionQueue("CHOOSEDISCARD", $player, "<-", 1);
-      PrependDecisionQueue("FINDINDICES", $player, $indicesParam);
-      return 1;
-    case "GENESIS":
-      if(TalentContains($lastResult, "LIGHT", $player)) Draw($player, false);
-      if(ClassContains($lastResult, "ILLUSIONIST", $player)) PlayAura("MON104", $player);
-      return 1;
     case "GIVEACTIONGOAGAIN":
       if($parameter == "A") SetClassState($player, $CS_NextNAACardGoAgain, 1);
       else if($parameter == "AA") GiveAttackGoAgain();
@@ -1083,14 +1062,6 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         RevertGamestate();
         return "PASS";
       }
-      return $lastResult;
-    case "SOULHARVEST":
-      $numBD = 0;
-      $discard = GetDiscard($player);
-      for($i = 0; $i < count($lastResult); ++$i) {
-        if(HasBloodDebt($discard[$lastResult[$i]])) ++$numBD;
-      }
-      if($numBD > 0) AddCurrentTurnEffect("MON198," . $numBD, $player);
       return $lastResult;
     case "ADDATTACKCOUNTERS":
       $lastResultArr = explode("-", $lastResult);

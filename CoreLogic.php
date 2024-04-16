@@ -3218,19 +3218,16 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "8968669390"://U-Wing Reinforcement
-      $hand = &GetHand($currentPlayer);
+      global $CS_AfterPlayedBy;
+      AddCurrentTurnEffect($cardID, $currentPlayer);
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, $cardID);
+      AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_AfterPlayedBy);
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "0");
       AddDecisionQueue("SETDQVAR", $currentPlayer, "1");//Counter for number of resources spent
-      AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE," . 10);
-      for($i=0; $i<3; ++$i) {
-        AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
-        AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-definedType-Unit", 1);
-        AddDecisionQueue("MAYCHOOSECARD", $currentPlayer, "<-", 1);
-        AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
-        AddDecisionQueue("OP", $currentPlayer, "REMOVECARD", 1);
-        AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYHAND-" . count($hand), 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
-      }
+      AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE,10");
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "0");//List of cards
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "UWINGREINFORCEMENT");
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}");
       AddDecisionQueue("ALLRANDOMBOTTOM", $currentPlayer, "DECK");
       break;
     default: break;
@@ -3292,6 +3289,12 @@ function AfterPlayedByAbility($cardID) {
       global $currentTurnEffects;
       $index = count($currentTurnEffects) - CurrentTurnEffectPieces();
       RemoveCurrentTurnEffect($index);
+      break;
+    case "8968669390"://U-Wing Reinforcement
+      if(SearchCurrentTurnEffects($cardID, $currentPlayer)) {
+        PrependDecisionQueue("SPECIFICCARD", $currentPlayer, "UWINGREINFORCEMENT", 1);
+        SetClassState($currentPlayer, $CS_AfterPlayedBy, $cardID);
+      }
       break;
     default: break;
   }

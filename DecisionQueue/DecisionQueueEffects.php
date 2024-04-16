@@ -161,6 +161,19 @@ function SpecificCardLogic($player, $card, $lastResult)
       if($mzArr[0] == "MYALLY") Draw($player);
       else Draw($player == 1 ? 2 : 1);
       break;
+    case "UWINGREINFORCEMENT":
+      $hand = &GetHand($player);
+      PrependDecisionQueue("REMOVECURRENTEFFECT", $player, "8968669390", 1);
+      PrependDecisionQueue("ELSE", $player, "-");
+      PrependDecisionQueue("MZOP", $player, "PLAYCARD", 1);
+      PrependDecisionQueue("PASSPARAMETER", $player, "MYHAND-" . count($hand), 1);
+      PrependDecisionQueue("SETDQVAR", $player, "0", 1);
+      PrependDecisionQueue("OP", $player, "REMOVECARD", 1);
+      PrependDecisionQueue("ADDHAND", $player, "-", 1);
+      PrependDecisionQueue("MAYCHOOSECARD", $player, "<-", 1);
+      PrependDecisionQueue("FILTER", $player, "LastResult-include-definedType-Unit", 1);
+      PrependDecisionQueue("PASSPARAMETER", $player, "{0}");
+      break;
     default: return "";
   }
 }
