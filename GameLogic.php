@@ -359,9 +359,10 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $targetArr = explode("-", $lastResult);
           $targetPlayer = ($targetArr[0] == "MYCHAR" || $targetArr[0] == "MYALLY" ? $player : ($player == 1 ? 2 : 1));
           if($targetArr[0] == "MYALLY" || $targetArr[0] == "THEIRALLY") {
+            $isAttackTarget = GetAttackTarget() == $lastResult;
             $ally = new Ally($lastResult);
             $destroyed = $ally->DealDamage($parameterArr[1]);
-            if($destroyed && $lastResult == GetAttackTarget()) CloseCombatChain();
+            if($destroyed && $isAttackTarget) CloseCombatChain();
           } else {
             PrependDecisionQueue("TAKEDAMAGE", $targetPlayer, $parameterArr[1]);
             PrependDecisionQueue("PASSPARAMETER", $targetPlayer, "0");
