@@ -86,6 +86,15 @@ class Ally {
     return false;
   }
 
+  function TempReduceHealth($amount) {
+    $this->allies[$this->index+2] -= $amount;
+    if($this->Health() <= 0) {
+      DestroyAlly($this->playerID, $this->index);
+      return true;
+    }
+    return false;
+  }
+
   function CurrentPower() {
     global $currentTurnEffects;
     $power = AttackValue($this->CardID()) + $this->allies[$this->index+7];
