@@ -212,6 +212,8 @@ function HasSentinel($cardID, $player, $index)
       return !$ally->IsDamaged();
     case "5879557998"://Baze Melbus
       return $initiativePlayer == $player;
+    case "1780978508"://Emperor's Royal Guard
+      return SearchCount(SearchAllies($player, trait:"Official")) > 0;
     default: return false;
   }
 }
