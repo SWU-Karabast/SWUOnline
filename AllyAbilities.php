@@ -431,7 +431,7 @@ function IsAlly($cardID, $player="")
 {
   global $currentPlayer;
   if($player == "") $player = $currentPlayer;
-  return DefinedTypesContains($cardID, "Unit", $player);
+  return DefinedTypesContains($cardID, "Unit", $player) && LeaderUnit($cardID) == "";
 }
 
 //NOTE: This is for the actual attack abilities that allies have
