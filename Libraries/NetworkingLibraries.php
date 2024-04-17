@@ -1368,20 +1368,30 @@ function GetLayerTarget($cardID)
     default:
       break;
   }
-  $targetType = PlayRequiresTarget($cardID);
-  if($targetType != -1)
+  if(DefinedTypesContains($cardID, "Upgrade", $currentPlayer)) 
   {
+    $upgradeFilter = UpgradeFilter($cardID);
     AddDecisionQueue("PASSPARAMETER", $currentPlayer, $cardID);
     AddDecisionQueue("SETDQVAR", $currentPlayer, "0");
-    AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a target for <0>");
-    AddDecisionQueue("FINDINDICES", $currentPlayer, "ARCANETARGET," . $targetType);
-    AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a target for <0>");
-    //TODO - Below two lines for may effects like Singe - too complicated for now but here it is for later
-    //if($mayAbility) { AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1); }
-    //else { AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1); }
+    AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+    if($upgradeFilter != "") AddDecisionQueue("MZFILTER", $currentPlayer, $upgradeFilter);
+    AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to attach <0>");
     AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
     AddDecisionQueue("SETLAYERTARGET", $currentPlayer, $cardID, 1);
     AddDecisionQueue("SHOWSELECTEDTARGET", $currentPlayer, "-", 1);
+  } else {
+    $targetType = PlayRequiresTarget($cardID);
+    if($targetType != -1)
+    {
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, $cardID);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "0");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a target for <0>");
+      AddDecisionQueue("FINDINDICES", $currentPlayer, "ARCANETARGET," . $targetType);
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a target for <0>");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("SETLAYERTARGET", $currentPlayer, $cardID, 1);
+      AddDecisionQueue("SHOWSELECTEDTARGET", $currentPlayer, "-", 1);
+    }
   }
 }
 

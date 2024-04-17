@@ -796,6 +796,16 @@ function GoesWhereAfterResolving($cardID, $from = null, $player = "", $playedFro
   }
 }
 
+
+function UpgradeFilter($cardID)
+{
+  switch($cardID) {
+    case "8495694166"://Jedi Lightsaber
+      return "trait=Vehicle";
+    default: return "";
+  }
+}
+
 function CanPlayInstant($phase)
 {
   if($phase == "M") return true;

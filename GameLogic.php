@@ -481,9 +481,14 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       }
       return (count($output) > 0 ? implode(",", $output) : "PASS");
     case "MZFILTER":
+      $params = explode("=", $parameter);
       $arr = explode(",", $lastResult);
       for($i=0; $i<count($arr); ++$i) {
-        if($arr[$i] == $parameter) unset($arr[$i]);
+        switch($params[0]) {
+          case "index": if($arr[$i] == $params[1]) unset($arr[$i]); break;
+          case "trait": if(TraitContains(GetMZCard($player, $arr[$i]), $params[1], $player)) unset($arr[$i]); break;
+          default: break;
+        }
       }
       return implode(",", $arr);
     case "PASSPARAMETER":

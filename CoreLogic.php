@@ -3070,7 +3070,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         WriteLog("This is a partially manual card. Do the extra attack by passing priority manually.");
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to attack with");
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
-        AddDecisionQueue("MZFILTER", $currentPlayer, "MYALLY-" . $playAlly->Index());
+        AddDecisionQueue("MZFILTER", $currentPlayer, "index=MYALLY-" . $playAlly->Index());
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZALLCARDTRAITORPASS", $currentPlayer, "Imperial", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
@@ -3430,7 +3430,6 @@ function Recover($player, $amount)
 function PlayRequiresTarget($cardID)
 {
   global $currentPlayer;
-  if(DefinedTypesContains($cardID, "Upgrade", $currentPlayer)) return 6;
   switch($cardID)
   {
     case "8679831560": return 2;//Repair
