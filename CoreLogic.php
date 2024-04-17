@@ -2179,10 +2179,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "3377409249"://Rogue Squadron Skirmisher
       if($from != "PLAY") MZMoveCard($currentPlayer, "MYDISCARD:maxCost=2;definedType=Unit", "MYHAND", may:true);
       break;
-    case "5335160564":
+    case "5335160564"://Geurilla Attack Pod
       if($from != "PLAY" && (GetHealth(1) >= 15 || GetHealth(2) >= 15)) {
-        $ally = new Ally("MYALLY-" . $index);
-        $ally->Ready();
+        $playAlly->Ready();
       }
       break;
     case "7262314209"://Mission Briefing
