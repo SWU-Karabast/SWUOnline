@@ -2202,7 +2202,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       for($i=0; $i<(count($hand)/HandPieces())-2; ++$i) PummelHit(2);
       break;
     case "8148673131"://Open Fire
-      DealArcane(ArcaneDamage($cardID), 1, "PLAYCARD", $cardID, resolvedTarget: $target);
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 4 damage to");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,4", 1);
       break;
     case "8429598559"://Black One
       if($from != "PLAY") BlackOne($currentPlayer);
@@ -3434,7 +3437,6 @@ function PlayRequiresTarget($cardID)
   switch($cardID)
   {
     case "8679831560": return 2;//Repair
-    case "8148673131": return 6;//Open Fire
     case "8981523525": return 6;//Moment of Peace
     case "7202133736": return 6;//Waylay
     case "0827076106": return 6;//Admiral Ackbar
@@ -3455,8 +3457,7 @@ function PlayRequiresTarget($cardID)
     global $currentPlayer;
     switch($cardID)
     {
-      case "8148673131": return 4;//Open Fire
-      return 0;
+      default: return 0;
     }
   }
 
