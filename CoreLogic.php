@@ -2413,11 +2413,6 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,5", 1);
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "FORCECHOKE", 1);
-
-
-      //DealArcane(5, 2, "PLAYCARD", $cardID);
-      //$otherPlayer = $currentPlayer == 1 ? 2 : 1;
-      //Draw($otherPlayer);
       break;
     case "1047592361"://Ruthless Raider
       if($from != "PLAY") {
