@@ -2486,7 +2486,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "6515891401"://Karabast
       $ally = new Ally($target);
       $damage = $ally->MaxHealth() - $ally->Health() + 1;
-      DealArcane($damage, 2, "PLAYCARD", $ally->CardID());
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal " . $damage . " damage to");
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE," . $damage, 1);
       break;
     case "7929181061"://General Tagge
       if($from != "PLAY") {
