@@ -52,7 +52,7 @@ function ModalAbilities($player, $card, $lastResult)
             Restore(5, $player);
             break;
           case "Defeat":
-            MZChooseAndDestroy($player, "THEIRALLY", may:true);
+            MZChooseAndDestroy($player, "THEIRALLY:maxHealth=3", may:true);
             break;
           case "Shield":
             AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to give a shield");
