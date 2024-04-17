@@ -490,7 +490,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           default: break;
         }
       }
-      return implode(",", $arr);
+      $rv = implode(",", $arr);
+      return ($rv == "" ? "PASS" : $rv);
     case "PASSPARAMETER":
       return $parameter;
     case "DISCARDCARD":
