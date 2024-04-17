@@ -2345,7 +2345,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "6472095064"://Vanquish
-      MZChooseAndDestroy($currentPlayer, "THEIRALLY");
+      MZChooseAndDestroy($currentPlayer, "THEIRALLY", filter:"definedType=Leader");
       break;
     case "6663619377"://AT-AT Suppressor
       ExhaustAllAllies("Ground", 1);

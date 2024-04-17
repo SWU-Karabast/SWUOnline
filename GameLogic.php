@@ -487,6 +487,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         switch($params[0]) {
           case "index": if($arr[$i] == $params[1]) unset($arr[$i]); break;
           case "trait": if(TraitContains(GetMZCard($player, $arr[$i]), $params[1], $player)) unset($arr[$i]); break;
+          case "definedType": if(DefinedTypesContains(GetMZCard($player, $arr[$i]), $params[1], $player)) unset($arr[$i]); break;
           default: break;
         }
       }
