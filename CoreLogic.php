@@ -2500,7 +2500,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "8240629990"://Avenger
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
-      MZChooseAndDestroy($otherPlayer, "MYALLY");
+      MZChooseAndDestroy($otherPlayer, "MYALLY", filter:"definedType=Leader");
       break;
     case "8294130780"://Gladiator Star Destroyer
       if($from != "PLAY") {
