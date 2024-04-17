@@ -800,7 +800,10 @@ function GoesWhereAfterResolving($cardID, $from = null, $player = "", $playedFro
 function UpgradeFilter($cardID)
 {
   switch($cardID) {
+    case "0160548661"://Fallen Lightsaber
     case "8495694166"://Jedi Lightsaber
+    case "0705773109"://Vader's Lightsaber
+    case "6903722220"://Luke's Lightsaber
       return "trait=Vehicle";
     default: return "";
   }
