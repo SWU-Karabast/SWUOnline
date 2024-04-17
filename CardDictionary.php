@@ -804,6 +804,7 @@ function UpgradeFilter($cardID)
     case "8495694166"://Jedi Lightsaber
     case "0705773109"://Vader's Lightsaber
     case "6903722220"://Luke's Lightsaber
+    case "1323728003"://Electrostaff
       return "trait=Vehicle";
     default: return "";
   }
