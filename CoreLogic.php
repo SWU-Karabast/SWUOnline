@@ -3184,7 +3184,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_AfterPlayedBy);
         AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE," . 10);
         AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
-        AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Imperial", 1);
+        AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-aspect-Villainy", 1);
         AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-maxCost-3", 1);
         AddDecisionQueue("MAYCHOOSECARD", $currentPlayer, "<-", 1);
         AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
