@@ -605,7 +605,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       $lifeCounters = 0;
       $enduranceCounters = 0;
       $atkCounters = 0;
-
+      /*
       if (($option[0] == "MYALLY" || $option[0] == "THEIRALLY" || $option[0] == "THEIRAURAS") && $option[1] == $combatChainState[$CCS_WeaponIndex]) {
         $counters = "Attacker";
       }
@@ -628,7 +628,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       }
 
       if ($option[0] == "MYARS") $counters = "Arsenal";
-
+      */
       $index = intval($option[1]);
       $card = $source[$index];
       if ($option[0] == "LAYER" && $card == "TRIGGER") $card = $source[$index + 2];
