@@ -1437,7 +1437,7 @@ function GetTargetOfAttack($attackID)
   $attackerUpgrades = $attacker->GetSubcards();
   for($i=0; $i<count($attackerUpgrades); ++$i)
   {
-    if($attackerUpgrades[$i] == "3099663280") $targets = "";
+    if($attackerUpgrades[$i] == "3099663280") $targets = "";//Entrenched
   }
   $allies = &GetAllies($defPlayer);
   for($i = 0; $i < count($allies); $i += AllyPieces()) {
@@ -1454,6 +1454,9 @@ function GetTargetOfAttack($attackID)
     PrependDecisionQueue("PROCESSATTACKTARGET", $mainPlayer, "-");
     PrependDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, $targets);
     PrependDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a target for the attack");
+  } else if($targets == "") {
+    WriteLog("There are no valid targets for this attack. Reverting gamestate.");
+    RevertGamestate();
   } else {
     $combatChainState[$CCS_AttackTarget] = $targets;
   }
