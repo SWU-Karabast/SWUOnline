@@ -1220,7 +1220,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
     case "TRANSFORMAURA":
       return "AURA-" . ResolveTransformAura($player, $lastResult, $parameter);
     case "STARTGAME":
-      global $initiativePlayer;
+      global $initiativePlayer, $turn, $currentPlayer;
       $secondPlayer = ($initiativePlayer == 1 ? 2 : 1);
       $inGameStatus = "1";
       $MakeStartTurnBackup = true;
@@ -1229,14 +1229,14 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         Draw(1);
         Draw(2);
       }
-      AddDecisionQueue("SETDQCONTEXT", 1, "Would you like to mulligan?");
-      AddDecisionQueue("YESNO", 1, "-");
-      AddDecisionQueue("NOPASS", 1, "-");
-      AddDecisionQueue("MULLIGAN", 1, "-", 1);
-      AddDecisionQueue("SETDQCONTEXT", 2, "Would you like to mulligan?");
-      AddDecisionQueue("YESNO", 2, "-");
-      AddDecisionQueue("NOPASS", 2, "-");
-      AddDecisionQueue("MULLIGAN", 2, "-", 1);
+      AddDecisionQueue("SETDQCONTEXT", $initiativePlayer, "Would you like to mulligan?");
+      AddDecisionQueue("YESNO", $initiativePlayer, "-");
+      AddDecisionQueue("NOPASS", $initiativePlayer, "-");
+      AddDecisionQueue("MULLIGAN", $initiativePlayer, "-", 1);
+      AddDecisionQueue("SETDQCONTEXT", $secondPlayer, "Would you like to mulligan?");
+      AddDecisionQueue("YESNO", $secondPlayer, "-");
+      AddDecisionQueue("NOPASS", $secondPlayer, "-");
+      AddDecisionQueue("MULLIGAN", $secondPlayer, "-", 1);
       MZMoveCard($initiativePlayer, "MYHAND", "MYRESOURCES", may:false, context:"Choose a card to resource", silent:true);
       AddDecisionQueue("AFTERRESOURCE", $initiativePlayer, "HAND", 1);
       MZMoveCard($initiativePlayer, "MYHAND", "MYRESOURCES", may:false, context:"Choose a card to resource", silent:true);
@@ -1245,6 +1245,16 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       AddDecisionQueue("AFTERRESOURCE", $secondPlayer, "HAND", 1);
       MZMoveCard($secondPlayer, "MYHAND", "MYRESOURCES", may:false, context:"Choose a card to resource", silent:true);
       AddDecisionQueue("AFTERRESOURCE", $secondPlayer, "HAND", 1);
+      AddDecisionQueue("STARTFIRSTTURN", $initiativePlayer, "-");
+      return 0;
+    case "STARTFIRSTTURN":
+      global $turn, $currentPlayer;
+      CloseDecisionQueue();
+      if($player == 2) {
+        PassTurn();
+        ProcessDecisionQueue();
+      }
+      else StartTurnAbilities();
       return 0;
     case "MULLIGAN":
       $hand = &GetHand($player);

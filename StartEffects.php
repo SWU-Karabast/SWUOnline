@@ -37,8 +37,7 @@ $intiativeTaken = 0;
 
 AddDecisionQueue("SHUFFLEDECK", 1, "SKIPSEED");
 AddDecisionQueue("SHUFFLEDECK", 2, "SKIPSEED");
-AddDecisionQueue("STARTGAME", $mainPlayer, "-");
-AddDecisionQueue("STARTTURNABILITIES", $mainPlayer, "-");
+AddDecisionQueue("STARTGAME", $initiativePlayer, "-");
 
 ProcessDecisionQueue();
 
