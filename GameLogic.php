@@ -1245,16 +1245,12 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       AddDecisionQueue("AFTERRESOURCE", $secondPlayer, "HAND", 1);
       MZMoveCard($secondPlayer, "MYHAND", "MYRESOURCES", may:false, context:"Choose a card to resource", silent:true);
       AddDecisionQueue("AFTERRESOURCE", $secondPlayer, "HAND", 1);
-      AddDecisionQueue("STARTFIRSTTURN", $initiativePlayer, "-");
+      AddDecisionQueue("STARTTURNABILITIES", $initiativePlayer, "-");
+      AddDecisionQueue("SWAPFIRSTTURN", 1, "-");
       return 0;
-    case "STARTFIRSTTURN":
-      global $turn, $currentPlayer;
-      CloseDecisionQueue();
-      if($player == 2) {
-        PassTurn();
-        ProcessDecisionQueue();
-      }
-      else StartTurnAbilities();
+    case "SWAPFIRSTTURN":
+      global $isPass;
+      $isPass = true;
       return 0;
     case "MULLIGAN":
       $hand = &GetHand($player);
