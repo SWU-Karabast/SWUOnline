@@ -2380,7 +2380,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "9624333142"://Count Dooku
       if($from != "PLAY") {
-        MZChooseAndDestroy($currentPlayer, "MYALLY&THEIRALLY", may:true);
+        MZChooseAndDestroy($currentPlayer, "MYALLY:maxHealth=4&THEIRALLY:maxHealth=4", may:true, filter:"index=MYALLY-" . $playAlly->Index());
       }
       break;
     case "9097316363"://Emperor Palpatine
