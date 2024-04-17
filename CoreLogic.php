@@ -3056,8 +3056,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "3426168686"://Sneak Attack
       global $CS_AfterPlayedBy;
-      SetClassState($currentPlayer, $CS_AfterPlayedBy, $cardID);
       AddCurrentTurnEffect($cardID, $currentPlayer);
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, $cardID);
+      AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_AfterPlayedBy);
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to put into play");
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND:definedType=Unit");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
