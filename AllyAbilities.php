@@ -31,6 +31,7 @@ function AllyHasStaticHealthModifier($cardID)
   {
     case "1557302740"://General Veers
     case "9799982630"://General Dodonna
+    case "4339330745"://Wedge Antilles
       return true;
     default: return false;
   }
@@ -45,6 +46,9 @@ function AllyStaticHealthModifier($cardID, $index, $player, $myCardID, $myIndex)
       break;
     case "9799982630"://General Dodonna
       if($index != $myIndex && TraitContains($cardID, "Rebel", $player)) return 1;
+      break;
+    case "4339330745"://Wedge Antilles
+      if($index != $myIndex && TraitContains($cardID, "Vehicle", $player)) return 1;
       break;
     default: break;
   }
