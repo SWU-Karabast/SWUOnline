@@ -3019,7 +3019,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $abilityName = GetResolvedAbilityName($cardID, $from);
       if($abilityName == "Play Resource") {
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to resource");
-        MZMoveCard($currentPlayer, "MYHAND", "MYRESOURCES", may:false);
+        MZMoveCard($currentPlayer, "MYHAND", "MYRESOURCES", may:false, silent:true);
         AddCurrentTurnEffect($cardID, $currentPlayer);
       }
       break;
