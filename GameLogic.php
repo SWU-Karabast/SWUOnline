@@ -995,7 +995,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $banish[$lastResult + 1] = $parameter;
       return $lastResult;
     case "SETLAYERTARGET":
-      global $layers;
+      global $layers, $CS_LayerTarget;
       $target = $lastResult;
       $targetArr = explode("-", $target);
       if($targetArr[0] == "LAYER") $target = "LAYERUID-" . $layers[intval($targetArr[1]) + 6];
@@ -1006,6 +1006,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $layers[$i+3] = $target;
         }
       }
+      SetClassState($player, $CS_LayerTarget, $target);
       return $lastResult;
     case "SHOWSELECTEDTARGET":
       if(substr($lastResult, 0, 5) == "THEIR") {
