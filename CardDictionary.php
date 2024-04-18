@@ -177,7 +177,7 @@ function HasSentinel($cardID, $player, $index)
     switch($currentTurnEffects[$i]) {
       case "8294130780": return true;//Gladiator Star Destroyer
       case "3572356139": return true;//Chewbacca, Walking Carpet
-      case "9070397522": return false;//Rebel Trooper
+      case "9070397522": return false;//SpecForce Soldier
       default: break;
     }
   }
