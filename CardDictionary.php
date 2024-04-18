@@ -633,7 +633,7 @@ function GetAbilityTypes($cardID)
       break;
     default: break;
   }
-  if(DefinedTypesContains($cardID, "Leader", $currentPlayer) && !DefinedTypesContains($cardID, "Unit", $currentPlayer)) {
+  if(DefinedTypesContains($cardID, "Leader", $currentPlayer) && !IsAlly($cardID, $currentPlayer)) {
     $char = &GetPlayerCharacter($currentPlayer);
     if($char[CharacterPieces() + 2] == 0) {
       if($abilityTypes != "") $abilityTypes .= ",";
