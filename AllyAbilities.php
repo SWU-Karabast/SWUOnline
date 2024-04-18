@@ -735,7 +735,6 @@ function AllyEndTurnAbilities($player)
         AddDecisionQueue("MZOP", $player, "BOUNCE", 1);
         break;
       case "d1a7b76ae7"://Chirrut Imwe
-        WriteLog("Here");
         $ally = new Ally("MYALLY-" . $i, $player);
         if($ally->Health() <= 0) DestroyAlly($player, $i);
         break;
