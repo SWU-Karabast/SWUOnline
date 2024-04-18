@@ -111,6 +111,9 @@ class Ally {
         case "1557302740"://General Veers
           if(TraitContains($this->CardID(), "Imperial", $this->PlayerID())) $power += 1;
           break;
+        case "9799982630"://General Dodonna
+          if(TraitContains($this->CardID(), "Rebel", $this->PlayerID())) $power += 1;
+          break;
         default: break;
       }
     }

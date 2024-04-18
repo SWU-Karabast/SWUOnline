@@ -30,6 +30,7 @@ function AllyHasStaticHealthModifier($cardID)
   switch($cardID)
   {
     case "1557302740"://General Veers
+    case "9799982630"://General Dodonna
       return true;
     default: return false;
   }
@@ -41,6 +42,9 @@ function AllyStaticHealthModifier($cardID, $index, $player, $myCardID, $myIndex)
   {
     case "1557302740"://General Veers
       if($index != $myIndex && TraitContains($cardID, "Imperial", $player)) return 1;
+      break;
+    case "9799982630"://General Dodonna
+      if($index != $myIndex && TraitContains($cardID, "Rebel", $player)) return 1;
       break;
     default: break;
   }
