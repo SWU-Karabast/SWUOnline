@@ -108,6 +108,9 @@ class Ally {
         case "e2c6231b35"://Director Krennic
           if($this->Health() < $this->MaxHealth()) $power += 1;
           break;
+        case "1557302740"://General Veers
+          if(TraitContains($this->CardID(), "Imperial", $this->PlayerID())) $power += 1;
+          break;
         default: break;
       }
     }

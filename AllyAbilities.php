@@ -17,7 +17,34 @@ function PlayAlly($cardID, $player, $subCards = "-", $from="-")
   $index = count($allies) - AllyPieces();
   CurrentEffectAllyEntersPlay($player, $index);
   AllyEntersPlayAbilities($player);
+  if(AllyHasStaticHealthModifier($cardID)) {
+    for($i = 0; $i < count($allies); $i += AllyPieces()) {
+      $allies[$i+2] += AllyStaticHealthModifier($allies[$i], $i, $player, $cardID, $index);
+    }
+  }
   return $index;
+}
+
+function AllyHasStaticHealthModifier($cardID)
+{
+  switch($cardID)
+  {
+    case "1557302740"://General Veers
+      return true;
+    default: return false;
+  }
+}
+
+function AllyStaticHealthModifier($cardID, $index, $player, $myCardID, $myIndex)
+{
+  switch($myCardID)
+  {
+    case "1557302740"://General Veers
+      if($index != $myIndex && TraitContains($cardID, "Imperial", $player)) return 1;
+      break;
+    default: break;
+  }
+  return 0;
 }
 
 function DealAllyDamage($targetPlayer, $index, $damage, $type="")
@@ -61,6 +88,12 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
   }
   for($j = $index + AllyPieces() - 1; $j >= $index; --$j) unset($allies[$j]);
   $allies = array_values($allies);
+  if(AllyHasStaticHealthModifier($cardID)) {
+    for($i = count($allies)-AllyPieces(); $i >= 0; $i -= AllyPieces()) {
+      $allies[$i+2] -= AllyStaticHealthModifier($allies[$i], $i, $player, $cardID, $index);
+      if($allies[$i+2] <= 0) DestroyAlly($player, $i);
+    }
+  }
   return $cardID;
 }
 
