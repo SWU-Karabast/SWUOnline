@@ -24,6 +24,17 @@ function PummelHit($player = -1, $passable = false, $fromDQ = false)
   }
 }
 
+function DefeatUpgrade($player) {
+  AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
+  AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to defeat an upgrade from");
+  AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
+  AddDecisionQueue("SETDQVAR", $player, 0, 1);
+  AddDecisionQueue("MZOP", $player, "GETSUBCARDS", 1);
+  AddDecisionQueue("CHOOSECARD", $player, "<-", 1);
+  AddDecisionQueue("WRITELOG", $player, "<-", 1);
+
+}
+
 function HandToTopDeck($player)
 {
   AddDecisionQueue("FINDINDICES", $player, "HAND");

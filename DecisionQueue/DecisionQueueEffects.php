@@ -131,6 +131,33 @@ function ModalAbilities($player, $card, $lastResult)
         }
       }
       return 1;
+    case "AGGRESSION":
+      $params = explode(",", $lastResult);
+      for($i = 0; $i < count($params); ++$i) {
+        switch($params[$i]) {
+          case "Draw":
+            Draw($player);
+            break;
+          case "Defeat_Upgrades":
+            DefeatUpgrade($player);
+            DefeatUpgrade($player);
+            break;
+          case "Ready_Unit":
+            AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:maxAttack=3&THEIRALLY:maxAttack=3");
+            AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to ready");
+            AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
+            AddDecisionQueue("MZOP", $player, "READY", 1);
+            break;
+          case "Deal_Damage":
+            AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
+            AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal 4 damage to");
+            AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+            AddDecisionQueue("MZOP", $player, "DEALDAMAGE,4", 1);
+            break;
+          default: break;
+        }
+      }
+      return 1;
     default: return "";
   }
 }
