@@ -657,6 +657,26 @@ function SpecificAllyAttackAbilities($attackID)
   }
 }
 
+function AllyHitEffects() {
+  global $mainPlayer;
+  $allies = &GetAllies($mainPlayer);
+  for($i=0; $i<count($allies); $i+=AllyPieces()) {
+    switch($allies[$i]) {
+      case "3c60596a7a"://Cassian Andor
+        $ally = new Ally("MYALLY-" . $i, $mainPlayer);
+        if($ally->NumUses() > 0) {
+          $targetArr = explode("-", GetAttackTarget());
+          if($targetArr[0] == "THEIRCHAR") {
+            $ally->ModifyUses(-1);
+            Draw($mainPlayer);
+          }
+        }
+        break;
+      default: break;
+    }
+  }
+}
+
 function AllyDamageTakenAbilities($player, $i)
 {
   $allies = &GetAllies($player);

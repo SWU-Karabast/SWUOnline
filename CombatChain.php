@@ -32,19 +32,12 @@ function ProcessHitEffect($cardID)
     case "87e8807695"://Leia Organa
       WriteLog("This is a partially manual card. Manually pass priority to attack with an additional unit");
       break;
-    case "3c60596a7a"://Cassian Andor
-      $ally = new Ally(AttackerMZID($mainPlayer), $mainPlayer);
-      if($ally->NumUses() > 0) {
-        $ally->ModifyUses(-1);
-        Draw($mainPlayer);
-      }
-      break;
     case "0e65f012f5"://Boba Fett
       if(GetClassState($defPlayer, $CS_NumAlliesDestroyed) > 0) ReadyResource($mainPlayer, 2);
       break;
     default: break;
   }
-
+  AllyHitEffects();
 }
 
 function AttackModifier($cardID, $from = "", $resourcesPaid = 0, $repriseActive = -1)
