@@ -168,6 +168,18 @@ class Ally {
     return explode(",", $this->allies[$this->index + 4]);
   }
 
+  function DefeatUpgrade($upgradeID) {
+    $subcards = $this->GetSubcards();
+    for($i=0; $i<count($subcards); ++$i) {
+      if($subcards[$i] == $upgradeID) {
+        unset($subcards[$i]);
+        $subcards = array_values($subcards);
+        $this->allies[$this->index + 4] = count($subcards) > 0 ? implode(",", $subcards) : "-";
+        return;
+      } 
+    }
+  }
+
   function NumUses() {
     return $this->allies[$this->index + 8];
   }

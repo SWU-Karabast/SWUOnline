@@ -446,6 +446,12 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         case "GETATTACK": return AttackValue($lastResult);
         case "DISCARDHAND": DiscardHand($player); return $lastResult;
         case "MILL": return Mill($player, $lastResult);
+        case "DEFEATUPGRADE":
+          $mzArr = explode("-", $dqVars[0]);
+          $allyPlayer = $mzArr[0] == "MYALLY" ? $player : ($player == 1 ? 2 : 1);
+          $ally = new Ally($dqVars[0], $allyPlayer);
+          $ally->DefeatUpgrade($lastResult);
+          return $lastResult;
         default: return $lastResult;
       }
     case "FILTER":

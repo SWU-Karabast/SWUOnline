@@ -31,7 +31,7 @@ function DefeatUpgrade($player) {
   AddDecisionQueue("SETDQVAR", $player, 0, 1);
   AddDecisionQueue("MZOP", $player, "GETSUBCARDS", 1);
   AddDecisionQueue("CHOOSECARD", $player, "<-", 1);
-  AddDecisionQueue("WRITELOG", $player, "<-", 1);
+  AddDecisionQueue("OP", $player, "DEFEATUPGRADE", 1);
 
 }
 
