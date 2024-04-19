@@ -234,6 +234,12 @@ function SpecificCardLogic($player, $card, $lastResult)
       PrependDecisionQueue("FILTER", $player, "LastResult-include-definedType-Unit", 1);
       PrependDecisionQueue("PASSPARAMETER", $player, "{0}");
       break;
+    case "POWERFAILURE":
+      PrependDecisionQueue("OP", $player, "DEFEATUPGRADE", 1);
+      PrependDecisionQueue("CHOOSECARD", $player, "<-", 1);
+      PrependDecisionQueue("MZOP", $player, "GETSUBCARDS", 1);
+      PrependDecisionQueue("PASSPARAMETER", $player, "{0}", 1);
+      break;
     default: return "";
   }
 }

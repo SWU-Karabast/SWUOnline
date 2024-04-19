@@ -3252,6 +3252,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "2668056720"://Disabling Fang Fighter
       if($from != "PLAY") DefeatUpgrade($currentPlayer);
       break;
+    case "4323691274"://Power Failure
+      DefeatUpgrade($currentPlayer);
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "POWERFAILURE", 1);
+      break;
     default: break;
   }
 }
