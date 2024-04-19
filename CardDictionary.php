@@ -555,7 +555,7 @@ function GetAbilityType($cardID, $index = -1, $from="-")
     case "8327910265"://Energy Conversion Lab (ECL)
       return "A";
     case "4626028465"://Boba Fett
-    case "7440067052"://Hera Sykulla
+    case "7440067052"://Hera Syndulla
     case "8560666697"://Director Krennic
       $char = &GetPlayerCharacter($currentPlayer);
       return $char[CharacterPieces() + 2] == 0 ? "A" : "";
@@ -919,7 +919,9 @@ function LeaderUnit($cardID) {
     case "5784497124"://Emperor Palpatine
       return "6c5b96c7ef";
     case "8560666697"://Director Krennic
-        return "e2c6231b35";
+      return "e2c6231b35";
+    case "7440067052"://Hera Syndulla
+      return "80df3928eb";
     //Shadows of the Galaxy
     default: return "";
   }
@@ -960,6 +962,8 @@ function LeaderUndeployed($cardID) {
       return "5784497124";
     case "e2c6231b35"://Director Krennic
       return "8560666697";
+    case "80df3928eb"://Hera Syndulla
+      return "7440067052";
     //Shadows of the Galaxy
     default: return "";
   }

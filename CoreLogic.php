@@ -2784,9 +2784,6 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "ADDSHIELD", 1);
       break;
-    case "7440067052"://Hera Sykulla
-      PlayAlly("80df3928eb", $currentPlayer);
-      break;
     case "0705773109"://Vader's Lightsaber
       if(CardTitle(GetMZCard($currentPlayer, $target)) == "Darth Vader") {
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 4 damage to");
