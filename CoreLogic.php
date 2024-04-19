@@ -1890,6 +1890,18 @@ function SelfCostModifier($cardID)
   //Target cost modifier
   $targetID = GetMZCard($currentPlayer, GetClassState($currentPlayer, $CS_LayerTarget));
   if(DefinedTypesContains($cardID, "Upgrade", $currentPlayer) && $targetID == "4166047484") $modifier -= 1;
+  //My ally cost modifier
+  $allies = &GetAllies($currentPlayer);
+  for($i=0; $i<count($allies); $i+=AllyPieces())
+  {
+    if($allies[$i+1] == 0) continue;
+    switch($allies[$i]) {
+      case "5035052619"://Jabba the Hutt
+        if(DefinedTypesContains($cardID, "Event", $currentPlayer) && TraitContains($cardID, "Trick", $currentPlayer)) $modifier -= 1;
+        break;
+      default: break;
+    }
+  }
   //Opponent ally cost modifier
   $otherPlayer = $currentPlayer == 1 ? 2 : 1;
   $allies = &GetAllies($otherPlayer);
@@ -3261,6 +3273,17 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "4-");
       AddDecisionQueue("MULTICHOOSEDISCARD", $currentPlayer, "<-");
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "RESTOCK", 1);
+      break;
+    case "5035052619"://Jabba the Hutt
+      if($from != "PLAY") {
+        AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE," . 8);
+        AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+        AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Trick", 1);
+        AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
+        AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
+        AddDecisionQueue("OP", $currentPlayer, "REMOVECARD", 1);
+        AddDecisionQueue("ALLRANDOMBOTTOM", $currentPlayer, "DECK");
+      }
       break;
     default: break;
   }
