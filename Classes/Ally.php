@@ -194,7 +194,7 @@ class Ally {
 
   function LostAbilities() {
     global $currentTurnEffects;
-    for($i=0; $i<count($currentTurnEffects); $i+=CurrentEffectPieces()) {
+    for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnEffectPieces()) {
       if($currentTurnEffects[$i+1] != $this->PlayerID()) continue;
       if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $this->UniqueID()) continue;
       if($currentTurnEffects[$i] == "2639435822") return true;
