@@ -1860,7 +1860,7 @@ function SameWeaponEquippedTwice()
 
 function SelfCostModifier($cardID)
 {
-  global $currentPlayer, $CS_NumAttacks, $CS_LastAttack, $CS_LayerTarget;
+  global $currentPlayer, $CS_NumAttacks, $CS_LastAttack, $CS_LayerTarget, $layers;
   $modifier = 0;
   //Aspect Penalty
   if(!TraitContains($cardID, "Spectre", $currentPlayer) || (HeroCard($currentPlayer) != "7440067052" && SearchAlliesForCard($currentPlayer, "80df3928eb") == "")) {
@@ -1888,7 +1888,12 @@ function SelfCostModifier($cardID)
     default: break;
   }
   //Target cost modifier
-  $targetID = GetMZCard($currentPlayer, GetClassState($currentPlayer, $CS_LayerTarget));
+  if(count($layers) > 0) {
+    $targetID = GetMZCard($currentPlayer, GetClassState($currentPlayer, $CS_LayerTarget));
+  } else {
+    if(SearchAlliesForCard($currentPlayer, "4166047484")) $targetID = "4166047484";
+    else $targetID = "";
+  }
   if(DefinedTypesContains($cardID, "Upgrade", $currentPlayer) && $targetID == "4166047484") $modifier -= 1;
   //My ally cost modifier
   $allies = &GetAllies($currentPlayer);
