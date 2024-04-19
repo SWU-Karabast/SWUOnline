@@ -2366,12 +2366,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       ExhaustAllAllies("Ground", 2);
       break;
     case "6931439330"://The Ghost
-      $ally = new Ally("MYALLY-" . $index, $currentPlayer);
-      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Spectre");
-      AddDecisionQueue("MZFILTER", $currentPlayer, "index=MYALLY-" . $ally->Index());
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to give a shield");
-      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-      AddDecisionQueue("MZOP", $currentPlayer, "ADDSHIELD", 1);
+      if($from != "PLAY") {
+        $ally = new Ally("MYALLY-" . $index, $currentPlayer);
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Spectre");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "index=MYALLY-" . $ally->Index());
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to give a shield");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "ADDSHIELD", 1);
+      }
       break;
     case "8691800148"://Reinforcement Walker
       AddDecisionQueue("FINDINDICES", $currentPlayer, "TOPDECK");
@@ -3286,11 +3288,21 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "9644107128"://Bamboozle
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to exhaust");
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to exhaust");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "BAMBOOZLE", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
+      break;
+    case "2639435822"://Force Lightning
+      $damage = 2 * (intval($resourcesPaid) - 1);
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to lose abilities and deal " . $damage . " damage");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE," . $damage, 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $otherPlayer, "2639435822,PLAY", 1);
       break;
     default: break;
   }

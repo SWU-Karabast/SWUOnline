@@ -526,9 +526,17 @@ function SpecificAllyAttackAbilities($attackID)
       default: break;
     }
   }
+  if($attackerAlly->LostAbilities()) return;
   $allies = &GetAllies($mainPlayer);
   $i = $combatChainState[$CCS_WeaponIndex];
   switch($allies[$i]) {
+    case "6931439330"://The Ghost
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:trait=Spectre");
+      AddDecisionQueue("MZFILTER", $mainPlayer, "index=MYALLY-" . $attackerAlly->Index());
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to give a shield");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "ADDSHIELD", 1);
+      break;
     case "1662196707"://Kanan Jarrus
       $amount = SearchCount(SearchAllies($mainPlayer, trait:"Spectre"));
       $cardsMilled = Mill($defPlayer, $amount);

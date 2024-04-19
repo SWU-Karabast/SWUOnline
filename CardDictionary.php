@@ -114,6 +114,7 @@ function RestoreAmount($cardID, $player, $index)
     case "7109944284": $amount += 3; break;
     default: break;
   }
+  if($amount > 0 && $ally->LostAbilities()) return 0;
   return $amount;
 }
 
@@ -164,6 +165,7 @@ function RaidAmount($cardID, $player, $index)
     case "6208347478": $amount += SearchCount(SearchAllies($player, trait:"Spectre")) > 1 ? 1 : 0; break;//Chopper
     default: break;
   }
+  if($amount > 0 && $ally->LostAbilities()) return 0;
   return $amount;
 }
 
@@ -171,6 +173,7 @@ function HasSentinel($cardID, $player, $index)
 {
   global $initiativePlayer, $currentTurnEffects;
   $ally = new Ally("MYALLY-" . $index, $player);
+  if($ally->LostAbilities()) return false;
   for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnPieces()) {
     if($currentTurnEffects[$i+1] != $player) continue;
     if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
@@ -220,6 +223,8 @@ function HasSentinel($cardID, $player, $index)
 
 function HasGrit($cardID, $player, $index)
 {
+  $ally = new Ally("MYALLY-" . $index, $player);
+  if($ally->LostAbilities()) return false;
   switch($cardID)
   {
     case "5335160564":
@@ -235,6 +240,8 @@ function HasGrit($cardID, $player, $index)
 
 function HasOverwhelm($cardID, $player, $index)
 {
+  $ally = new Ally("MYALLY-" . $index, $player);
+  if($ally->LostAbilities()) return false;
   switch($cardID)
   {
     case "6072239164":
@@ -327,6 +334,7 @@ function HasSaboteur($cardID, $player, $index)
 {
   global $currentTurnEffects;
   $ally = new Ally("MYALLY-" . $index, $player);
+  if($ally->LostAbilities()) return false;
   for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnPieces()) {
     if($currentTurnEffects[$i+1] != $player) continue;
     if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
@@ -366,18 +374,8 @@ function HasCleave($cardID)
 
 function HasVigor($cardID, $player, $index)
 {
-  $isAlly = IsAlly($cardID);
-  if($isAlly && SearchCurrentTurnEffects("rxxwQT054x", $player)) return true;
   switch($cardID)
   {
-    case "JEOxGQppTE"://Windrider Vanguard
-      return IsClassBonusActive($player, "WARRIOR") || IsClassBonusActive($player, "GUARDIAN");
-    case "3TfIePpuZO": return true;//Trained Hawk
-    case "7NMFSRR5V3": return IsClassBonusActive($player, "TAMER");
-    case "m4o98vn1vo": return IsClassBonusActive($player, "RANGER");//Winbless Arbalest
-    case "mnu1xhs5jw"://Awakened Frostguard
-      $allies = &GetAllies($player);
-      return $allies[$index+10] == 2;
     default: return false;
   }
 }
@@ -490,8 +488,9 @@ function DynamicCost($cardID)
 {
   global $currentPlayer;
   switch($cardID) {
-    case "P9Y1Q5cQ0F":
-      return "0,2";
+    case "2639435822"://Force Lightning
+      if(SearchCount(SearchAllies($currentPlayer, trait:"Force")) > 0) return "1,2,3,4,5,6,7,8,9,10";
+      return "1";
     default: return "";
   }
 }

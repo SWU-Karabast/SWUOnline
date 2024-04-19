@@ -192,6 +192,16 @@ class Ally {
     $this->allies[$this->index + 8] += $amount;
   }
 
+  function LostAbilities() {
+    global $currentTurnEffects;
+    for($i=0; $i<count($currentTurnEffects); $i+=CurrentEffectPieces()) {
+      if($currentTurnEffects[$i+1] != $this->PlayerID()) continue;
+      if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $this->UniqueID()) continue;
+      if($currentTurnEffects[$i] == "2639435822") return true;
+    }
+    return false;
+  }
+
 }
 
 function LastAllyIndex($player) {
