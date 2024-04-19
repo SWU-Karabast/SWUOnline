@@ -192,6 +192,10 @@ function AllyLeavesPlayAbility($player, $index)
   }
   switch($cardID)
   {
+    case "3401690666"://Relentless
+      $otherPlayer = ($player == 1 ? 2 : 1);
+      SearchCurrentTurnEffects("3401690666", $otherPlayer, remove:true);
+      break;
     default: break;
   }
   //Opponent character abilities
