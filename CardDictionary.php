@@ -822,6 +822,15 @@ function CanPlayInstant($phase)
   return false;
 }
 
+function IsToken($cardID)
+{
+  switch($cardID) {
+    case "8752877738": return true;
+    case "2007868442": return true;
+    default: return false;
+  }
+}
+
 function IsPitchRestricted($cardID, &$restriction, $from = "", $index = -1)
 {
   global $playerID;

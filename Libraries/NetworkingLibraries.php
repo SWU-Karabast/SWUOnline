@@ -1408,14 +1408,16 @@ function AddPrePitchDecisionQueue($cardID, $from, $index = -1)
     }
   }
   switch ($cardID) {
-    case "wPKxvzTmqq"://Ensnaring Fumes
-      if(GetClassState($currentPlayer, $CS_PreparationCounters) >= 3)
-      {
-        AddDecisionQueue("YESNO", $currentPlayer, "if you want to pay 3 preparation counters");
+    case "9644107128"://Bamboozle
+      if(SearchCount(SearchHand($currentPlayer, aspect:"Cunning")) > 0) {
+        AddDecisionQueue("YESNO", $currentPlayer, "if_you_want_to_discard_a_Cunning_card", 1);
         AddDecisionQueue("NOPASS", $currentPlayer, "-", 1);
-        AddDecisionQueue("PASSPARAMETER", $currentPlayer, "3", 1);
-        AddDecisionQueue("OP", $currentPlayer, "REMOVEPREPARATION", 1);
-        AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, "wPKxvzTmqq", 1);
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND:aspect=Cunning", 1);
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZREMOVE", $currentPlayer, "-", 1);
+        AddDecisionQueue("ADDDISCARD", $currentPlayer, "HAND", 1);
+        AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, "9644107128", 1);
+        AddDecisionQueue("WRITELOG", $currentPlayer, CardLink("9644107128", "9644107128") . "_alternative_cost_was_paid.", 1);
       }
       break;
     default:

@@ -1954,7 +1954,7 @@ function IsAlternativeCostPaid($cardID, $from)
     $remove = false;
     if($currentTurnEffects[$i + 1] == $currentPlayer) {
       switch($currentTurnEffects[$i]) {
-        case "ARC185": case "CRU188": case "MON199": case "MON257": case "EVR161":
+        case "9644107128"://Bamboozle
           $isAlternativeCostPaid = true;
           $remove = true;
           break;
@@ -3284,6 +3284,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("OP", $currentPlayer, "REMOVECARD", 1);
         AddDecisionQueue("ALLRANDOMBOTTOM", $currentPlayer, "DECK");
       }
+      break;
+    case "9644107128"://Bamboozle
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to exhaust");
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "BAMBOOZLE", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
       break;
     default: break;
   }

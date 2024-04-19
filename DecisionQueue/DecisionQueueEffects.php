@@ -253,6 +253,15 @@ function SpecificCardLogic($player, $card, $lastResult)
         }
       }
       break;
+    case "BAMBOOZLE":
+      $owner = MZPlayerID($player, $lastResult);
+      $ally = new Ally($lastResult, $owner);
+      $subcards = $ally->GetSubcards();
+      for($i=0; $i<count($subcards); ++$i) {
+        if(!IsToken($subcards[$i])) AddHand($owner, $subcards[$i]);
+      }
+      $ally->ClearSubcards();
+      return $lastResult;
     default: return "";
   }
 }
