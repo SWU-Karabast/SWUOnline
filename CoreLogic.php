@@ -3244,6 +3244,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}");
       AddDecisionQueue("ALLRANDOMBOTTOM", $currentPlayer, "DECK");
       break;
+    case "5950125325"://Confiscate
+      DefeatUpgrade($currentPlayer);
+      break;
     default: break;
   }
 }
