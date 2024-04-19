@@ -17,9 +17,16 @@ function PlayAlly($cardID, $player, $subCards = "-", $from="-")
   $index = count($allies) - AllyPieces();
   CurrentEffectAllyEntersPlay($player, $index);
   AllyEntersPlayAbilities($player);
+  //Health modifiers this has that applies to other units
   if(AllyHasStaticHealthModifier($cardID)) {
     for($i = 0; $i < count($allies); $i += AllyPieces()) {
       $allies[$i+2] += AllyStaticHealthModifier($allies[$i], $i, $player, $cardID, $index);
+    }
+  }
+  //Health modifiers other units have that apply to this
+  for($i=count($allies)-AllyPieces(); $i>=0; $i-=AllyPieces()) {
+    if(AllyHasStaticHealthModifier($allies[$i])) {
+      $allies[$index+2] += AllyStaticHealthModifier($cardID, $index, $player, $allies[$i], $i);
     }
   }
   return $index;
@@ -32,6 +39,7 @@ function AllyHasStaticHealthModifier($cardID)
     case "1557302740"://General Veers
     case "9799982630"://General Dodonna
     case "4339330745"://Wedge Antilles
+    case "9097316363"://Emperor Palpatine
       return true;
     default: return false;
   }
@@ -49,6 +57,9 @@ function AllyStaticHealthModifier($cardID, $index, $player, $myCardID, $myIndex)
       break;
     case "4339330745"://Wedge Antilles
       if($index != $myIndex && TraitContains($cardID, "Vehicle", $player)) return 1;
+      break;
+    case "9097316363"://Emperor Palpatine
+      if($cardID == "1780978508") return 1;//Royal Guard
       break;
     default: break;
   }
