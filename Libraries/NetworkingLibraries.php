@@ -1652,7 +1652,12 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
     }
     $EffectContext = $cardID;
     $playText = "";
-    if(!$chainClosed && (!DefinedTypesContains($cardID, "Event", $currentPlayer) || !SearchCurrentTurnEffects("3401690666", $currentPlayer, remove:true))) $playText = PlayAbility($cardID, $from, $resourcesPaid, $target, $additionalCosts);
+    if(!$chainClosed) {
+      if(DefinedTypesContains($cardID, "Event", $currentPlayer) && SearchCurrentTurnEffects("3401690666", $currentPlayer, remove:true)) {
+        //Relentless
+        WriteLog("<span style='color:red;'>The event does nothing because of Relentless.</span>");
+      } else $playText = PlayAbility($cardID, $from, $resourcesPaid, $target, $additionalCosts);
+    }
     if($from != "EQUIP" && $from != "PLAY") {
       WriteLog("Resolving play ability of " . CardLink($cardID, $cardID) . ($playText != "" ? ": " : ".") . $playText);
       if(GetClassState($currentPlayer, $CS_AfterPlayedBy) != "-") AfterPlayedByAbility(GetClassState($currentPlayer, $CS_AfterPlayedBy));
