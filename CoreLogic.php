@@ -3256,6 +3256,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       DefeatUpgrade($currentPlayer);
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "POWERFAILURE", 1);
       break;
+    case "6087834273"://Restock
+      AddDecisionQueue("FINDINDICES", $currentPlayer, "GY");
+      AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "4-");
+      AddDecisionQueue("MULTICHOOSEDISCARD", $currentPlayer, "<-");
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "RESTOCK", 1);
+      break;
     default: break;
   }
 }

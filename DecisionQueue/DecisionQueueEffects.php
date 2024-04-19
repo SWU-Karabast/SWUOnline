@@ -240,6 +240,19 @@ function SpecificCardLogic($player, $card, $lastResult)
       PrependDecisionQueue("MZOP", $player, "GETSUBCARDS", 1);
       PrependDecisionQueue("PASSPARAMETER", $player, "{0}", 1);
       break;
+    case "RESTOCK":
+      $arr = [];
+      for($i = count($lastResult) - DiscardPieces(); $i >= 0; $i -= DiscardPieces()) {
+        array_push($arr, RemoveGraveyard($player, $i));
+      }
+      if(count($arr) > 0) {
+        RandomizeArray($arr);
+        $deck = new Deck($player);
+        for($i=0; $i<count($arr); ++$i) {
+          $deck->Add($arr[$i]);
+        }
+      }
+      break;
     default: return "";
   }
 }

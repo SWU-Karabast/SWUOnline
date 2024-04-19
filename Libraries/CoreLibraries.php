@@ -9,6 +9,17 @@ function DelimStringContains($str, $find)
   return false;
 }
 
+function RandomizeArray(&$arr)
+{
+  for($i=0; $i<count($arr); ++$i)
+  {
+    $rand = GetRandom(0, count($arr)-1);
+    $temp = $arr[$i];
+    $arr[$i] = $arr[$rand];
+    $arr[$rand] = $temp;
+  }
+}
+
 function GetRandom($low=-1, $high=-1)
 {
   global $randomSeeded;

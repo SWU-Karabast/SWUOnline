@@ -58,6 +58,10 @@ class Deck {
     return $rv;
   }
 
+  function Add($cardID) {
+    array_push($this->deck, $cardID);
+  }
+
   function Banish() {
     // Code to banish x number of cards from the top of the deck
   }
