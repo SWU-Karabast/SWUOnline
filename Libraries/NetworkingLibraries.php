@@ -825,13 +825,14 @@ function ResolveChainLink()
     $attackerMZ = AttackerMZID($mainPlayer);
     $attackerArr = explode("-", $attackerMZ);
     $attacker = new Ally($attackerMZ, $mainPlayer);
+    $attackerID = $attacker->CardID();
     if($attackerArr[0] == "MYALLY" && (!$destroyed || ($combatChain[0] != "9500514827" && !SearchCurrentTurnEffects("8297630396", $mainPlayer)))) { //Han Solo shoots first
       $attacker->DealDamage($defenderPower);
     }
     if(HasOverwhelm($attacker->CardID(), $mainPlayer, $attacker->Index())) {
       DealArcane($excess, 1, "OVERWHELM", $attacker->CardID(), player:$mainPlayer);
     }
-    else if($attacker->CardID() == "3830969722") { //Blizzard Assault AT-AT
+    else if($attackerID == "3830969722") { //Blizzard Assault AT-AT
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal " . $excess . " damage to");
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
