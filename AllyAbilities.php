@@ -363,6 +363,12 @@ function AllyBeginRoundAbilities($player)
         $otherPlayer = ($player == 1 ? 2 : 1);
         AddCurrentTurnEffect("3401690666", $otherPlayer, from:"PLAY");
         break;
+      case "02199f9f1e"://Grand Admiral Thrawn
+        $myDeck = &GetDeck($player);
+        $theirDeck = &GetDeck($player == 1 ? 2 : 1);
+        AddDecisionQueue("SETDQCONTEXT", $player, "The top of your deck is " . CardLink($myDeck[0], $myDeck[0]) . " and the top of their deck is " . CardLink($theirDeck[0], $theirDeck[0]));
+        AddDecisionQueue("OK", $player, "-");
+        break;
       default: break;
     }
   }
