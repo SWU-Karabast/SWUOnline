@@ -3328,6 +3328,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "1939951561-" . $i . ",PLAY", 1);
       }
       break;
+    case "7648077180"://97th Legion
+      $ally = new Ally("MYALLY-" . $index);
+      $ally->AddHealth(NumResources($currentPlayer));
+      break;
     default: break;
   }
 }

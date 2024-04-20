@@ -59,6 +59,9 @@ function AttackModifier($cardID, $from = "", $resourcesPaid = 0, $repriseActive 
       $ally = new Ally($target, $defPlayer);
       $modifier += $ally->IsDamaged() ? 2 : 0;
       break;
+    case "7648077180"://97th Legion
+      $modifier += NumResources($mainPlayer);
+      break;
     default: break;
   }
   return $modifier;
