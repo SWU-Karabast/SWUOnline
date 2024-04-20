@@ -540,16 +540,11 @@ function FinalizeAction()
       $turn[2] = "";
       $makeBlockBackup = 1;
     } else {
-      if($actionPoints > 0 || ShouldHoldPriority($mainPlayer)) {
-        $turn[0] = "M";
-        $currentPlayer = $mainPlayer;
-        $turn[2] = "";
-        if(!$isPass || $inputMode == 99) SwapTurn();
-        $isPass = false;
-      } else {
-        $currentPlayer = $mainPlayer;
-        BeginTurnPass();
-      }
+      $turn[0] = "M";
+      $currentPlayer = $mainPlayer;
+      $turn[2] = "";
+      if(!$isPass || $inputMode == 99) SwapTurn();
+      $isPass = false;
     }
   } else if($turn[0] == "A") {
     $currentPlayer = $mainPlayer;
