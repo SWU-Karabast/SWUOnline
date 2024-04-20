@@ -2364,7 +2364,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "6472095064"://Vanquish
-      MZChooseAndDestroy($currentPlayer, "THEIRALLY", filter:"definedType=Leader");
+      MZChooseAndDestroy($currentPlayer, "MYALLY&THEIRALLY", filter:"definedType=Leader");
       break;
     case "6663619377"://AT-AT Suppressor
       ExhaustAllAllies("Ground", 1);
@@ -2546,8 +2546,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
       }
       break;
-    case "4849184191"://Take Down
-      MZChooseAndDestroy($currentPlayer, "THEIRALLY");
+    case "4849184191"://Takedown
+      MZChooseAndDestroy($currentPlayer, "MYALLY:maxHealth=5&THEIRALLY:maxHealth=5");
       break;
     case "4631297392"://Devastator
       if($from != "PLAY") {
@@ -3314,6 +3314,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("BUTTONINPUT", $currentPlayer, "Yourself,Opponent");
         AddDecisionQueue("SPECIFICCARD", $currentPlayer, "GRANDADMIRALTHRAWN", 1);
       }
+      break;
+    case "9785616387"://The Emperor's Legion
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "THEEMPERORSLEGION");
       break;
     default: break;
   }

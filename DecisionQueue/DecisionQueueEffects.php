@@ -232,6 +232,10 @@ function SpecificCardLogic($player, $card, $lastResult)
         AddDecisionQueue("MZOP", $player, "REST", 1);
       }
       break;
+    case "THEEMPERORSLEGION":
+      MZMoveCard($player, "MYDISCARD:definedType=Unit", "MYHAND", may:true, context:"Choose all unit units defeated this phase then pass");
+      AddDecisionQueue("SPECIFICCARD", $player, "THEEMPERORSLEGION", 1);
+      break;
     case "UWINGREINFORCEMENT":
       $hand = &GetHand($player);
       PrependDecisionQueue("REMOVECURRENTEFFECT", $player, "8968669390", 1);
