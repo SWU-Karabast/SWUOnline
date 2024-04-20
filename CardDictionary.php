@@ -478,6 +478,8 @@ function AbilityCost($cardID)
       return GetResolvedAbilityName($cardID) == "Deal Damage" ? 1 : 0;
     case "6088773439"://Darth Vader
       return GetResolvedAbilityName($cardID) == "Deal Damage" ? 1 : 0;
+    case "1951911851"://Grand Admiral Thrawn
+      return GetResolvedAbilityName($cardID) == "Exhaust" ? 1 : 0;
     default: break;
   }
   if(IsAlly($cardID)) return 0;
@@ -630,6 +632,9 @@ function GetAbilityTypes($cardID)
     case "2471223947"://Frontline Shuttle
       $abilityTypes = "A,AA";
       break;
+    case "1951911851"://Grand Admiral Thrawn
+      $abilityTypes = "A";
+      break;
     default: break;
   }
   if(DefinedTypesContains($cardID, "Leader", $currentPlayer) && !IsAlly($cardID, $currentPlayer)) {
@@ -708,6 +713,9 @@ function GetAbilityNames($cardID, $index = -1)
       break;
     case "2471223947"://Frontline Shuttle
       $abilityNames = "Shuttle,Attack";
+      break;
+    case "1951911851"://Grand Admiral Thrawn
+      $abilityNames = "Exhaust";
       break;
     default: break;
   }
@@ -922,6 +930,8 @@ function LeaderUnit($cardID) {
       return "e2c6231b35";
     case "7440067052"://Hera Syndulla
       return "80df3928eb";
+    case "1951911851"://Grand Admiral Thrawn
+      return "02199f9f1e";
     //Shadows of the Galaxy
     default: return "";
   }
@@ -964,6 +974,8 @@ function LeaderUndeployed($cardID) {
       return "8560666697";
     case "80df3928eb"://Hera Syndulla
       return "7440067052";
+    case "02199f9f1e"://Grand Admiral Thrawn
+      return "1951911851";
     //Shadows of the Galaxy
     default: return "";
   }

@@ -1012,6 +1012,8 @@ function BeginRoundPass()
   EndTurnProcedure($initiativePlayer);
   EndTurnProcedure($initiativePlayer == 1 ? 2 : 1);
   AllyBeginTurnEffects();
+  CharacterStartTurnAbility(1);
+  CharacterStartTurnAbility(2);
   AllyBeginRoundAbilities(1);
   AllyBeginRoundAbilities(2);
   CurrentEffectStartTurnAbilities();

@@ -221,6 +221,17 @@ function SpecificCardLogic($player, $card, $lastResult)
       if($mzArr[0] == "MYALLY") Draw($player);
       else Draw($player == 1 ? 2 : 1);
       break;
+    case "GRANDADMIRALTHRAWN":
+      $targetPlayer = ($lastResult == "Yourself" ? $player : ($player == 1 ? 2 : 1));
+      $deck = new Deck($targetPlayer);
+      if($deck->Reveal()) {
+        $cardCost = CardCost($deck->Top());
+        AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:maxCost=" . $cardCost . "&THEIRALLY:maxCost=" . $cardCost);
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose a card to exhaust");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+        AddDecisionQueue("MZOP", $player, "REST", 1);
+      }
+      break;
     case "UWINGREINFORCEMENT":
       $hand = &GetHand($player);
       PrependDecisionQueue("REMOVECURRENTEFFECT", $player, "8968669390", 1);

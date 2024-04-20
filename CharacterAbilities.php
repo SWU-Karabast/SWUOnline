@@ -109,15 +109,21 @@ function CharacterTakeDamageAbility($player, $index, $damage, $preventable)
   return $damage;
 }
 
-function CharacterStartTurnAbility($index)
+function CharacterStartTurnAbility($player)
 {
-  global $mainPlayer, $defPlayer;
-  $otherPlayer = $mainPlayer == 1 ? 2 : 1;
-  $char = new Character($mainPlayer, $index);
-  if($char->status == 0 && !CharacterTriggerInGraveyard($char->cardID)) return;
-  if($char->status == 1) return;
-  switch($char->cardID) {
-    default: break;
+  $character = &GetPlayerCharacter($player);
+  for($i = 0; $i < count($character); $i += CharacterPieces()) {
+    if($character[$i + 1] == 0 || $character[$i + 1] == 1) continue; //Do not process ability if it is destroyed
+    switch($character[$i]) {
+      case "1951911851"://Grand Admiral Thrawn
+        $myDeck = &GetDeck($player);
+        $theirDeck = &GetDeck($player == 1 ? 2 : 1);
+        AddDecisionQueue("SETDQCONTEXT", $player, "The top of your deck is " . CardLink($myDeck[0], $myDeck[0]) . " and the top of their deck is " . CardLink($theirDeck[0], $theirDeck[0]));
+        AddDecisionQueue("OK", $player, "-");
+        break;
+      default:
+        break;
+    }
   }
 }
 

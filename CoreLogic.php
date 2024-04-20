@@ -2447,8 +2447,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "1862616109"://Snowspeeder
       if($from == "PLAY") {
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to exhaust");
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:trait=Vehicle");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to exhaust");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
       }
@@ -3306,6 +3306,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE," . $damage, 1);
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $otherPlayer, "2639435822,PLAY", 1);
+      break;
+    case "1951911851"://Grand Admiral Thrawn
+      $abilityName = GetResolvedAbilityName($cardID, $from);
+      if($abilityName == "Exhaust") {
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose player to reveal top of deck");
+        AddDecisionQueue("BUTTONINPUT", $currentPlayer, "Yourself,Opponent");
+        AddDecisionQueue("SPECIFICCARD", $currentPlayer, "GRANDADMIRALTHRAWN", 1);
+      }
       break;
     default: break;
   }
