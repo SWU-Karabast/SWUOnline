@@ -3318,6 +3318,16 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "9785616387"://The Emperor's Legion
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "THEEMPERORSLEGION");
       break;
+    case "1939951561"://Attack Pattern Delta
+      for($i=3; $i>0; --$i) {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to give +" . $i . "/+" . $i);
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "ADDHEALTH," . $i, 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "1939951561-" . $i . ",PLAY", 1);
+      }
+      break;
     default: break;
   }
 }

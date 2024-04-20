@@ -46,6 +46,7 @@ function EffectAttackModifier($cardID)
     case "5464125379": return -2;//Strafing Gunship
     case "8495694166": return -2;//Jedi Lightsaber
     case "3789633661": return 4;//Cunning
+    case "1939951561": return $subparam;//Attack Pattern Delta
     default: return 0;
   }
 }
@@ -350,11 +351,13 @@ function CurrentEffectEndTurnAbilities()
   global $currentTurnEffects, $mainPlayer;
   for($i = count($currentTurnEffects) - CurrentTurnPieces(); $i >= 0; $i -= CurrentTurnPieces()) {
     $remove = false;
-    $cardID = substr($currentTurnEffects[$i], 0, 6);
+    $params = explode("-", $currentTurnEffects[$i]);
+    $cardID = $params[0];
+    if(count($params) > 1) $subparam = $params[1];
     if(SearchCurrentTurnEffects($cardID . "-UNDER", $currentTurnEffects[$i + 1])) {
       AddNextTurnEffect($currentTurnEffects[$i], $currentTurnEffects[$i + 1]);
     }
-    switch($currentTurnEffects[$i]) {
+    switch($cardID) {
       case "5954056864": case "5e90bd91b0"://Han Solo
         MZChooseAndDestroy($currentTurnEffects[$i+1], "MYRESOURCES");
         break;
@@ -377,6 +380,10 @@ function CurrentEffectEndTurnAbilities()
       case "3426168686"://Sneak Attack
         $ally = new Ally("MYALLY-" . SearchAlliesForUniqueID($currentTurnEffects[$i+2], $currentTurnEffects[$i+1]), $currentTurnEffects[$i+1]);
         $ally->Destroy();
+        break;
+      case "1939951561"://Attack Pattern Delta
+        $ally = new Ally("MYALLY-" . SearchAlliesForUniqueID($currentTurnEffects[$i+2], $currentTurnEffects[$i+1]), $currentTurnEffects[$i+1]);
+        $ally->DealDamage($subparam);
         break;
       default: break;
     }
@@ -535,109 +542,6 @@ function CurrentEffectAllyEntersPlay($player, $index)
     if($remove) RemoveCurrentTurnEffect($i);
   }
   $currentTurnEffects = array_values($currentTurnEffects);
-}
-
-function CurrentEffectLevelModifier($player)
-{
-  global $currentTurnEffects;
-  $levelModifier = 0;
-  for($i = count($currentTurnEffects) - CurrentTurnPieces(); $i >= 0; $i -= CurrentTurnPieces()) {
-    $remove = false;
-    if($currentTurnEffects[$i + 1] == $player) {
-      $arr = explode("-", $currentTurnEffects[$i]);
-      $subparam = count($arr) > 1 ? $arr[1] : 0;
-      switch($arr[0]) {
-        case "MECS7RHRZ8": $levelModifier += 1; break;
-        case "XLrHaYV9VB": $levelModifier += 1; break;
-        case "9GWxrTMfBz": $levelModifier += 1; break;
-        case "gvXQa57cxe": $levelModifier += 1; break;
-        case "PLljzdiMmq": $levelModifier += 3; break;
-        case "zpkcFs72Ah": $levelModifier += 1; break;
-        case "aKgdkLSBza": $levelModifier += 1; break;//Wilderness Harpist
-        case "dmfoA7jOjy": $levelModifier += 2; break;//Crystal of Empowerment
-        case "Kc5Bktw0yK": $levelModifier += 2; break;//Empowering Harmony
-        case "raG5r85ieO": $levelModifier += 1; break;//Piper's Lullaby
-        case "j5iQQPd2m5": $levelModifier += $subparam; break;//Crystal of Argus
-        case "ybdj1Db9jz": $levelModifier += 2; break;//Seed of Nature
-        case "dBAdWMoPEz": $levelModifier += 1; break;//Erupting Rhapsody
-        case "AnEPyfFfHj": $levelModifier += $subparam;//Power Overwhelming
-        case "i0a5uhjxhk": $levelModifier += 1; break;//Blightroot (1)
-        case "5joh300z2s": $levelModifier += 1; break;//Mana Root (2)
-        case "wzh973fdt8": $levelModifier += 1;//Develop Mana
-        default:
-          break;
-      }
-    }
-    if($remove) RemoveCurrentTurnEffect($i);
-  }
-  $currentTurnEffects = array_values($currentTurnEffects);
-  return $levelModifier;
-}
-
-function CurrentEffectGrantsAllStealth($player)
-{
-  global $currentTurnEffects;
-  $stealthActive = false;
-  for($i = count($currentTurnEffects) - CurrentTurnPieces(); $i >= 0; $i -= CurrentTurnPieces()) {
-    $remove = false;
-    if($currentTurnEffects[$i + 1] == $player) {
-      $arr = explode("-", $currentTurnEffects[$i]);
-      $subparam = count($arr) > 1 ? $arr[1] : 0;
-      switch($arr[0]) {
-        case "8nbmykyXcw": $stealthActive = true; break;//Conceal
-        case "DBJ4DuLABr": $stealthActive = true; break;//Shroud in Mist
-        default:
-          break;
-      }
-    }
-    if($remove) RemoveCurrentTurnEffect($i);
-  }
-  $currentTurnEffects = array_values($currentTurnEffects);
-  return $stealthActive;
-}
-
-
-function CurrentEffectGrantsStealth($player, $uniqueID="")
-{
-  global $currentTurnEffects;
-  $grantsStealth = false;
-  for($i = count($currentTurnEffects) - CurrentTurnPieces(); $i >= 0; $i -= CurrentTurnPieces()) {
-    $remove = false;
-    if($currentTurnEffects[$i + 1] == $player) {
-      $arr = explode("-", $currentTurnEffects[$i]);
-      $subparam = count($arr) > 1 ? $arr[1] : 0;
-      switch($arr[0]) {
-        case "ScGcOmkoQt": if($uniqueID != "" && $currentTurnEffects[$i + 2] == $uniqueID) $grantsStealth = true; break;//Smoke Bombs
-        default:
-          break;
-      }
-    }
-    if($remove) RemoveCurrentTurnEffect($i);
-  }
-  $currentTurnEffects = array_values($currentTurnEffects);
-  return $grantsStealth;
-}
-
-function CurrentEffectGrantsTrueSight($player, $uniqueID="")
-{
-  global $currentTurnEffects;
-  $grantsTrueSight = false;
-  for($i = count($currentTurnEffects) - CurrentTurnPieces(); $i >= 0; $i -= CurrentTurnPieces()) {
-    $remove = false;
-    if($currentTurnEffects[$i + 1] == $player) {
-      $arr = explode("-", $currentTurnEffects[$i]);
-      $subparam = count($arr) > 1 ? $arr[1] : 0;
-      switch($arr[0]) {
-        case "iiZtKTulPg": if($uniqueID != "" && $currentTurnEffects[$i + 2] == $uniqueID) $grantsTrueSight = true; break;//Eye of Argus
-        case "F1t18omUlx": if($uniqueID != "" && $currentTurnEffects[$i + 2] == $uniqueID) $grantsTrueSight = true; break;//Beastbond Paws
-        default:
-          break;
-      }
-    }
-    if($remove) RemoveCurrentTurnEffect($i);
-  }
-  $currentTurnEffects = array_values($currentTurnEffects);
-  return $grantsTrueSight;
 }
 
 ?>

@@ -426,7 +426,6 @@ function CriticalAmount($cardID)
 function HasStealth($cardID, $player, $index)
 {
   $allies = &GetAllies($player);
-  if(CurrentEffectGrantsStealth($player, $allies[$index+5])) return true;
   switch($cardID)
   {
 
