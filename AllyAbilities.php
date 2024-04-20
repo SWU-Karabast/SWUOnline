@@ -537,6 +537,11 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "ADDSHIELD", 1);
       break;
+    case "02199f9f1e"://Grand Admiral Thrawn
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose player to reveal top of deck");
+      AddDecisionQueue("BUTTONINPUT", $mainPlayer, "Yourself,Opponent");
+      AddDecisionQueue("SPECIFICCARD", $mainPlayer, "GRANDADMIRALTHRAWN", 1);
+      break;
     case "1662196707"://Kanan Jarrus
       $amount = SearchCount(SearchAllies($mainPlayer, trait:"Spectre"));
       $cardsMilled = Mill($defPlayer, $amount);
