@@ -11,6 +11,10 @@ function EffectHitEffect($cardID)
       $ally = new Ally(AttackerMZID($mainPlayer), $mainPlayer);
       WriteLog("Heroic Sacrifice defeated " . CardLink($ally->CardID(), $ally->CardID()));
       $ally->Destroy();
+      break;
+    case "8988732248-1"://Rebel Assault
+      AddCurrentTurnEffect("8988732248-2", $mainPlayer);
+      break;
     default:
       break;
   }
@@ -47,6 +51,7 @@ function EffectAttackModifier($cardID)
     case "8495694166": return -2;//Jedi Lightsaber
     case "3789633661": return 4;//Cunning
     case "1939951561": return $subparam;//Attack Pattern Delta
+    case "8988732248": return 1;//Rebel Assault
     default: return 0;
   }
 }
@@ -436,6 +441,7 @@ function IsCombatEffectActive($cardID)
     case "5464125379": return true;//Strafing Gunship
     case "8495694166": return true;//Jedi Lightsaber
     case "3789633661": return true;//Cunning
+    case "8988732248": return true;//Rebel Assault
     default: return false;
   }
 }

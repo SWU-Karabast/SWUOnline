@@ -3355,6 +3355,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $otherPlayer, "BOUNCE", 1);
       AddDecisionQueue("OP", $otherPlayer, "REMOVECARD", 1);
       AddDecisionQueue("MZOP", $otherPlayer, "SINK", 1);
+      break;
+    case "8988732248"://Rebel Assault
+      WriteLog("This is a partially manual card. You'll need to pass priority and attack manually for it to work.");
+      AddCurrentTurnEffect($cardID . "-1", $currentPlayer);
+      break;
     default: break;
   }
 }
