@@ -3360,6 +3360,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       WriteLog("This is a partially manual card. You'll need to pass priority and attack manually for it to work.");
       AddCurrentTurnEffect($cardID . "-1", $currentPlayer);
       break;
+    case "8142386948"://Razor Crest
+      MZMoveCard($currentPlayer, "MYDISCARD:definedType=Upgrade", "MYHAND", may:true);
+      break;
     default: break;
   }
 }

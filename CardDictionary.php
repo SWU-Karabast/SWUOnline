@@ -112,6 +112,7 @@ function RestoreAmount($cardID, $player, $index)
     case "9412277544": $amount += 1; break;
     case "e2c6231b35": $amount += 2; break;
     case "7109944284": $amount += 3; break;
+    case "8142386948": $amount += 2; break;//Razor Crest
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
