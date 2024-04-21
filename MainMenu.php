@@ -147,6 +147,7 @@ if ($canSeeQueue) {
   <h1>News</h1>
   <div style="position: relative;">
     <div style='vertical-align:middle; text-align:center;'>
+    All set 1 cards now live!
     </div>
   </div>
   <?php
