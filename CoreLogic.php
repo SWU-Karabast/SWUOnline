@@ -3332,6 +3332,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $ally = new Ally("MYALLY-" . $index);
       $ally->AddHealth(NumResources($currentPlayer));
       break;
+    case "2202839291"://Don't Get Cocky
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, $target);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, 0);
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, 0);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, 1);
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "DONTGETCOCKY");
+      break;
     default: break;
   }
 }
@@ -3546,6 +3553,7 @@ function PlayRequiresTarget($cardID)
     case "1900571801": return 6;//Overwhelming Barrage
     case "7861932582": return 6;//The Force is With Me
     case "2758597010": return 6;//Maximum Firepower
+    case "2202839291": return 6;//Don't Get Cocky
     default: return -1;
   }
 }

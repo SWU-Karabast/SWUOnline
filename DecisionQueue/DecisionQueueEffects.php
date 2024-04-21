@@ -277,6 +277,24 @@ function SpecificCardLogic($player, $card, $lastResult)
       }
       $ally->ClearSubcards();
       return $lastResult;
+    case "DONTGETCOCKY":
+      $deck = new Deck($player);
+      $deck->Reveal();
+      $card = $deck->Remove(0);
+      $dqVars[1] += CardCost($card);
+      $deck->Add($card);
+      if($dqVars[1] > 7) {
+        WriteLog("<span style='color:goldenrod;'>Great Kid, Don't Get Cocky...</span>");
+        return "";
+      }
+      PrependDecisionQueue("MZOP", $player, "DEALDAMAGE," . $dqVars[1], 1);
+      PrependDecisionQueue("PASSPARAMETER", $player, $dqVars[0], 1);
+      PrependDecisionQueue("ELSE", $player, "-");
+      PrependDecisionQueue("SPECIFICCARD", $player, "DONTGETCOCKY", 1);
+      PrependDecisionQueue("NOPASS", $player, "-");
+      PrependDecisionQueue("YESNO", $player, "-");
+      PrependDecisionQueue("SETDQCONTEXT", $player, "Do you want to continue? (Damage: " . $dqVars[1] . ")");
+      return $lastResult;
     default: return "";
   }
 }
