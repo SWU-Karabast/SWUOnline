@@ -29,6 +29,7 @@ function PlayAlly($cardID, $player, $subCards = "-", $from="-")
       $allies[$index+2] += AllyStaticHealthModifier($cardID, $index, $player, $allies[$i], $i);
     }
   }
+  $allies[$index+2] += CharacterStaticHealthModifiers($cardID, $index, $player);
   return $index;
 }
 

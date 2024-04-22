@@ -141,6 +141,22 @@ function DefCharacterStartTurnAbilities()
   }
 }
 
+function CharacterStaticHealthModifiers($cardID, $index, $player)
+{
+  $modifier = 0;
+  $char = &GetPlayerCharacter($player);
+  for($i=0; $i<count($char); $i+=CharacterPieces()) {
+    switch($char[$i])
+    {
+      case "5784497124"://Emperor Palpatine
+        if($cardID == "1780978508") $modifier += 1;//Royal Guard
+        break;
+      default: break;
+    }
+  }
+  return $modifier;
+}
+
 function CharacterDestroyEffect($cardID, $player)
 {
   switch($cardID) {
