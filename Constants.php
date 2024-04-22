@@ -537,6 +537,12 @@ function GetAttackTarget()
   return $mzArr[0] . "-" . $index;
 }
 
+function ClearAttackTarget() {
+  global $combatChainState, $CCS_AttackTarget, $CCS_AttackTargetUID;
+  $combatChainState[$CCS_AttackTarget] = "NA";
+  $combatChainState[$CCS_AttackTargetUID] = "-";
+}
+
 function GetDamagePrevention($player)
 {
   global $CS_DamagePrevention;

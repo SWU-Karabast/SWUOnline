@@ -822,6 +822,7 @@ function ResolveChainLink()
     if($defenderPower < 0) $defenderPower = 0;
     $excess = $totalAttack - $defender->Health();
     $destroyed = $defender->DealDamage($totalAttack);
+    if($destroyed) ClearAttackTarget();
     $attackerMZ = AttackerMZID($mainPlayer);
     $attackerArr = explode("-", $attackerMZ);
     $attacker = new Ally($attackerMZ, $mainPlayer);
