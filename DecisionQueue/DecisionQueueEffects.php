@@ -179,7 +179,11 @@ function SpecificCardLogic($player, $card, $lastResult)
   switch($card)
   {
     case "FORCETHROW"://Force Throw
-      DealArcane(CardCost($lastResult), 6, "PLAYCARD", "1705806419", player:$player);
+      $damage = CardCost($lastResult);
+      AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal " . $damage . " damage to");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+      AddDecisionQueue("MZOP", $player, "DEALDAMAGE," . $damage, 1);
       break;
     case "REINFORCEMENTWALKER":
       if($lastResult == "YES") Draw($player);
