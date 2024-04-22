@@ -363,9 +363,6 @@ function CurrentEffectEndTurnAbilities()
       AddNextTurnEffect($currentTurnEffects[$i], $currentTurnEffects[$i + 1]);
     }
     switch($cardID) {
-      case "5954056864": case "5e90bd91b0"://Han Solo
-        MZChooseAndDestroy($currentTurnEffects[$i+1], "MYRESOURCES");
-        break;
       case "2651321164"://Tactical Advantage
         $ally = new Ally("MYALLY-" . SearchAlliesForUniqueID($currentTurnEffects[$i+2], $currentTurnEffects[$i+1]), $currentTurnEffects[$i+1]);
         $ally->DealDamage(2);
@@ -406,6 +403,9 @@ function CurrentEffectStartTurnAbilities()
       AddNextTurnEffect($currentTurnEffects[$i], $currentTurnEffects[$i + 1]);
     }
     switch($currentTurnEffects[$i]) {
+      case "5954056864": case "5e90bd91b0"://Han Solo
+        MZChooseAndDestroy($currentTurnEffects[$i+1], "MYRESOURCES", context:"Choose a resource to destroy");
+        break;
       case "8800836530"://No Good To Me Dead
         $ally = new Ally("MYALLY-" . SearchAlliesForUniqueID($currentTurnEffects[$i+2], $currentTurnEffects[$i+1]), $currentTurnEffects[$i+1]);
         $ally->Exhaust();

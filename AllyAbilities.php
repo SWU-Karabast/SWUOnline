@@ -645,7 +645,7 @@ function SpecificAllyAttackAbilities($attackID)
       $deck = new Deck($mainPlayer);
       $card = $deck->Top(remove:true);
       AddResources($card, $mainPlayer, "DECK", "DOWN");
-      AddCurrentTurnEffect("5e90bd91b0", $mainPlayer);
+      AddNextTurnEffect("5e90bd91b0", $mainPlayer);
       break;
     case "6c5b96c7ef"://Emperor Palpatine
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose an ally to destroy");
