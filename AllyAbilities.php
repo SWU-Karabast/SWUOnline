@@ -242,8 +242,8 @@ function AllyDestroyedAbility($player, $index)
       BlackOne($player);
       break;
     case "9996676854"://Admiral Motti
-      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to ready");
       AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:aspect=Villainy");
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to ready");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
       AddDecisionQueue("MZOP", $player, "READY", 1);
       break;
