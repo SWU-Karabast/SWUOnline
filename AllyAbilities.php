@@ -570,6 +570,8 @@ function SpecificAllyAttackAbilities($attackID)
       break;
     case "0dcb77795c"://Luke Skywalker
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
+      AddDecisionQueue("MZFILTER", $mainPlayer, "index=MYALLY-" . $attackerAlly->Index());
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to give a shield");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "ADDSHIELD", 1);
       break;
