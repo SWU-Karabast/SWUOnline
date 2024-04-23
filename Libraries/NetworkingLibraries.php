@@ -1401,7 +1401,7 @@ function GetLayerTarget($cardID)
 
 function AddPrePitchDecisionQueue($cardID, $from, $index = -1)
 {
-  global $currentPlayer, $CS_PreparationCounters;
+  global $currentPlayer, $CS_AdditionalCosts;
   if (IsStaticType(CardType($cardID), $from, $cardID)) {
     $names = GetAbilityNames($cardID, $index);
     if ($names != "") {
@@ -1422,6 +1422,11 @@ function AddPrePitchDecisionQueue($cardID, $from, $index = -1)
         AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, "9644107128", 1);
         AddDecisionQueue("WRITELOG", $currentPlayer, CardLink("9644107128", "9644107128") . "_alternative_cost_was_paid.", 1);
       }
+      break;
+    case "1705806419"://Force Throw
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose player to discard a card");
+      AddDecisionQueue("BUTTONINPUT", $currentPlayer, "Yourself,Opponent");
+      AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_AdditionalCosts);
       break;
     default:
       break;

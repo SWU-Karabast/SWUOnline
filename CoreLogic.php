@@ -2346,7 +2346,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "1705806419"://Force Throw
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
-      PummelHit($otherPlayer);
+      if($additionalCosts == "Yourself") PummelHit($currentPlayer);
+      else PummelHit($otherPlayer);
       if(SearchCount(SearchAllies($currentPlayer, trait:"Force")) > 0) {
         AddDecisionQueue("SPECIFICCARD", $currentPlayer, "FORCETHROW", 1);
       }
