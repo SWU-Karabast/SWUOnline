@@ -3499,7 +3499,8 @@ function DamageAllAllies($amount, $source, $alsoRest=false, $alsoFreeze=false, $
     if(!ArenaContains($theirAllies[$i], $arena, $otherPlayer)) continue;
     if($alsoRest) $theirAllies[$i+1] = 1;
     if($alsoFreeze) $theirAllies[$i+3] = 1;
-    DealArcane($amount, source:$source, resolvedTarget:"THEIRALLY-$i");
+    $ally = new Ally("THEIRALLY-$i");
+    $ally->DealDamage($amount);
   }
   $allies = &GetAllies($currentPlayer);
   for($i=count($allies) - AllyPieces(); $i>=0; $i-=AllyPieces())
@@ -3507,7 +3508,8 @@ function DamageAllAllies($amount, $source, $alsoRest=false, $alsoFreeze=false, $
     if(!ArenaContains($allies[$i], $arena, $currentPlayer)) continue;
     if($alsoRest) $allies[$i+1] = 1;
     if($alsoFreeze) $allies[$i+3] = 1;
-    DealArcane($amount, source:$source, resolvedTarget:"MYALLY-$i");
+    $ally = new Ally("MYALLY-$i");
+    $ally->DealDamage($amount);
   }
 }
 
