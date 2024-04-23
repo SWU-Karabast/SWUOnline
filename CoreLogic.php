@@ -2174,7 +2174,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       //On Deploy ability
       switch($cardID) {
         case "5784497124"://Emperor Palpatine
-          AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
+          AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:damagedOnly=true");
+          AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a damaged unit to take control of", 1);
           AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
           AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL", 1);
           break;
