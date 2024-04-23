@@ -635,8 +635,8 @@ function SpecificAllyAttackAbilities($attackID)
       break;
     case "6432884726"://Steadfast Battalion
       if(HasLeader($mainPlayer)) {
-        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to give +2/+2");
         AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to give +2/+2");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $mainPlayer, "ADDHEALTH,2", 1);
         AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
