@@ -3216,6 +3216,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
         AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-aspect-Villainy", 1);
         AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-maxCost-3", 1);
+        AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-definedType-Unit", 1);
         AddDecisionQueue("MAYCHOOSECARD", $currentPlayer, "<-", 1);
         AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
         AddDecisionQueue("OP", $currentPlayer, "REMOVECARD", 1);
