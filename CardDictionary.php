@@ -774,7 +774,7 @@ function IsPlayable($cardID, $phase, $from, $index = -1, &$restriction = null, $
     $char = &GetPlayerCharacter($player);
     if($char[1] != 2) return false;//Can't attack if rested
   }
-  if($from == "HAND" && ((CardCost($cardID) + SelfCostModifier($cardID)) > NumResourcesAvailable($currentPlayer))) return false;
+  if($from == "HAND" && ((CardCost($cardID) + SelfCostModifier($cardID)) > NumResourcesAvailable($currentPlayer)) && !HasAlternativeCost($cardID)) return false;
   if($phase == "M" && $from == "HAND") return true;
   $isStaticType = IsStaticType($cardType, $from, $cardID);
   if($isStaticType) {
@@ -789,6 +789,14 @@ function IsPlayable($cardID, $phase, $from, $index = -1, &$restriction = null, $
   if($cardType == "I" && ($phase == "INSTANT" || $phase == "A" || $phase == "D")) return true;
   return false;
 
+}
+
+function HasAlternativeCost($cardID) {
+  switch($cardID) {
+    case "9644107128"://Command
+      return true;
+    default: return false;
+  }
 }
 
 //Preserve
