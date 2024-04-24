@@ -74,6 +74,7 @@ if ($matchup == "" && $playerID == 2 && $gameStatus >= $MGS_Player2Joined) {
 if ($decklink != "") {
   if ($playerID == 1) $p1DeckLink = $decklink;
   else if ($playerID == 2) $p2DeckLink = $decklink;
+  $originalLink = $decklink;
 
   if(str_contains($decklink, "swudb.com/deck")) {
     $decklinkArr = explode("/", $decklink);
@@ -169,7 +170,7 @@ if ($decklink != "") {
     //Save deck
     include_once './includes/functions.inc.php';
     include_once "./includes/dbh.inc.php";
-    addFavoriteDeck($_SESSION["userid"], $decklink, $deckName, $character, $deckFormat);
+    addFavoriteDeck($_SESSION["userid"], $originalLink, $deckName, $character, $deckFormat);
   }
 } else {
   $deckFile = $deck;
