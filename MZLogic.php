@@ -162,6 +162,17 @@ function MZPlayCard($player, $mzIndex) {
   return $cardID;
 }
 
+function MZAttack($player, $mzIndex)
+{
+  global $CS_CharacterIndex, $CS_PlayIndex, $currentPlayer;
+  $currentPlayer = $player;
+  $ally = new Ally($mzIndex, $player);
+  $ally->Exhaust();
+  SetClassState($player, $CS_CharacterIndex, $ally->Index());
+  SetClassState($player, $CS_PlayIndex, $ally->Index());
+  PlayCard($ally->CardID(), "PLAY", -1, $ally->Index(), $ally->UniqueID());
+}
+
 function MZUndestroy($player, $parameter, $lastResult)
 {
   $lastResultArr = explode(",", $lastResult);
