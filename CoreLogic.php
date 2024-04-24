@@ -2922,10 +2922,15 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       if(TraitContains($ally->CardID(), "Force", $currentPlayer)) {
         $ally->Attach("8752877738");//Shield Token
       }
-      WriteLog("This is a partially manual card. Do the extra attack by passing priority manually.");
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, $target);
+      AddDecisionQueue("MZOP", $currentPlayer, "ATTACK");
       break;
     case "9985638644"://Snapshot Reflexes
-      WriteLog("This is a partially manual card. Do the extra attack by passing priority manually.");
+      $mzArr = explode("-", $target);
+      if($mzArr[0] == "MYALLY") {
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, $target);
+        AddDecisionQueue("MZOP", $currentPlayer, "ATTACK");
+      }
       break;
     case "7728042035"://Chimaera
       if($from != "PLAY") {
@@ -2941,12 +2946,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "3809048641"://Surprise Strike
-      WriteLog("This is a partially manual card. Do the extra attack by passing priority manually.");
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to attack and give +3");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "3809048641,HAND", 1);
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
       break;
     case "3038238423"://Fleet Lieutenant
       if($from != "PLAY") {
