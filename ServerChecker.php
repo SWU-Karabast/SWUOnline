@@ -44,12 +44,12 @@ if ($handle = opendir($path)) {
       $lastGamestateUpdate = intval(GetCachePiece($gameToken, 6));
       if ($currentTime - $lastGamestateUpdate < 30000) {
         $p1Hero = GetCachePiece($gameToken, 7);
-        //$p2Hero = GetCachePiece($gameToken, 8);
+        $p2Hero = GetCachePiece($gameToken, 8);
         //if($p2Hero != "") $gameInProgressCount += 1;
         $gameInProgressCount += 1;
         $visibility = GetCachePiece($gameToken, 9);
-        //if ($p2Hero != "" && $visibility == "1") {
-        if ($visibility == "1") {
+        if ($p2Hero != "" && $visibility == "1") {
+        //if ($visibility == "1") {
           $spectateLinks .= "<form style='text-align:center;' action='" . $reactFE . "'>";
           $spectateLinks .= "<center><table><tr><td style='vertical-align:middle; padding-left:8px; width:50px; height: 40px;'>";
           if ($p1Hero == "") {
