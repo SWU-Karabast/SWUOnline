@@ -3328,7 +3328,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "ADDHEALTH," . $i, 1);
         AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
-        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "1939951561-" . $i . ",PLAY", 1);
+        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "1939951561_" . $i . ",PLAY", 1);
       }
       break;
     case "7648077180"://97th Legion
@@ -3411,7 +3411,7 @@ function AfterPlayedByAbility($cardID) {
       AddDecisionQueue("OP", $currentPlayer, "GETLASTALLYMZ");
       AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
-      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "3426168686,PLAY", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "3426168686-2,PLAY", 1);
       break;
     case "8117080217"://Admiral Ozzel
       $ally->Ready();

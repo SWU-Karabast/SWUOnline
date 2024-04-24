@@ -356,7 +356,7 @@ function CurrentEffectEndTurnAbilities()
   global $currentTurnEffects, $mainPlayer;
   for($i = count($currentTurnEffects) - CurrentTurnPieces(); $i >= 0; $i -= CurrentTurnPieces()) {
     $remove = false;
-    $params = explode("-", $currentTurnEffects[$i]);
+    $params = explode("_", $currentTurnEffects[$i]);
     $cardID = $params[0];
     if(count($params) > 1) $subparam = $params[1];
     if(SearchCurrentTurnEffects($cardID . "-UNDER", $currentTurnEffects[$i + 1])) {
@@ -379,7 +379,7 @@ function CurrentEffectEndTurnAbilities()
         $ally = new Ally("MYALLY-" . SearchAlliesForUniqueID($currentTurnEffects[$i+2], $currentTurnEffects[$i+1]), $currentTurnEffects[$i+1]);
         $ally->DealDamage(2);
         break;
-      case "3426168686"://Sneak Attack
+      case "3426168686-2"://Sneak Attack
         $ally = new Ally("MYALLY-" . SearchAlliesForUniqueID($currentTurnEffects[$i+2], $currentTurnEffects[$i+1]), $currentTurnEffects[$i+1]);
         $ally->Destroy();
         break;
