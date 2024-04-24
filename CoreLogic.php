@@ -3067,7 +3067,6 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "8244682354"://Jyn Erso
       $abilityName = GetResolvedAbilityName($cardID, $from);
       if($abilityName == "Attack") {
-        WriteLog("This is a partially manual card. Do the extra attacks by passing priority manually.");
         $otherPlayer = $currentPlayer == 1 ? 2 : 1;
         AddCurrentTurnEffect($cardID, $otherPlayer);
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
