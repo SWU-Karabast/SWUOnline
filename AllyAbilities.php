@@ -464,7 +464,7 @@ function AllyPlayCardAbility($cardID, $player="")
         }
         break;
       case "0961039929"://Colonel Yularen
-        if(AspectContains($cardID, "Command", $player)) {
+        if(DefinedTypesContains($cardID, "Unit", $player) && AspectContains($cardID, "Command", $player)) {
           Restore(1, $player);
         }
         break;
