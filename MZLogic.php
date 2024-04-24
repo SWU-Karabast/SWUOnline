@@ -164,8 +164,10 @@ function MZPlayCard($player, $mzIndex) {
 
 function MZAttack($player, $mzIndex)
 {
-  global $CS_CharacterIndex, $CS_PlayIndex, $currentPlayer;
+  global $CS_CharacterIndex, $CS_PlayIndex, $currentPlayer, $mainPlayer, $defPlayer;
   $currentPlayer = $player;
+  $mainPlayer = $player;
+  $defPlayer = ($player == 1 ? 2 : 1);
   $ally = new Ally($mzIndex, $player);
   $ally->Exhaust();
   SetClassState($player, $CS_CharacterIndex, $ally->Index());

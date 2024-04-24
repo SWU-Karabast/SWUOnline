@@ -3135,12 +3135,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "9210902604"://Precision Fire
-      WriteLog("This is a partially manual card. Do the extra attack by passing priority manually.");
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to attack with");
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to attack with");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "9210902604", 1);
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
       break;
     case "7870435409"://Bib Fortuna
       $abilityName = GetResolvedAbilityName($cardID, $from);
@@ -3153,12 +3155,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "8297630396"://Shoot First
-      WriteLog("This is a partially manual card. Do the extra attack by passing priority manually.");
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to attack with");
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to attack with");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "8297630396", 1);
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
       break;
     case "5767546527"://For a Cause I Believe In
       $deck = new Deck($currentPlayer);
@@ -3266,13 +3270,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "2471223947"://Frontline Shuttle
       $abilityName = GetResolvedAbilityName($cardID, $from);
       if($abilityName == "Shuttle") {
-        WriteLog("This is a partially manual card. You'll need to pass priority and attack manually for it to work.");
         $ally = new Ally("MYALLY-" . $index);
         $ally->Destroy();
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an ally to attack with");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
       }
       break;
     case "8968669390"://U-Wing Reinforcement
@@ -3382,8 +3386,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $otherPlayer, "SINK", 1);
       break;
     case "8988732248"://Rebel Assault
-      WriteLog("This is a partially manual card. You'll need to pass priority and attack manually for it to work.");
       AddCurrentTurnEffect($cardID . "-1", $currentPlayer);
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to attack with");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
       break;
     case "8142386948"://Razor Crest
       MZMoveCard($currentPlayer, "MYDISCARD:definedType=Upgrade", "MYHAND", may:true);

@@ -965,6 +965,7 @@ function FinalizeChainLink($chainClosed = false)
   //Clean up combat effects that were used and are one-time
   CleanUpCombatEffects();
   CopyCurrentTurnEffectsFromCombat();
+  $hasChainedAction = FinalizeChainLinkEffects();
 
   //Don't change state until the end, in case it changes what effects are active
   SetClassState($mainPlayer, $CS_LastAttack, $combatChain[0]);
@@ -977,6 +978,8 @@ function FinalizeChainLink($chainClosed = false)
   } else {
     ResetChainLinkState();
   }
+  
+  if($hasChainedAction) ProcessDecisionQueue();
 }
 
 function CleanUpCombatEffects($weaponSwap=false)

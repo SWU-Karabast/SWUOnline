@@ -21,6 +21,24 @@ function EffectHitEffect($cardID)
   return 0;
 }
 
+//Return true if there's a chained action
+function FinalizeChainLinkEffects()
+{
+  global $mainPlayer, $currentTurnEffects;
+  for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnPieces()) {
+    switch($currentTurnEffects[$i]) {
+      case "8988732248-2"://Rebel Assault
+        PrependDecisionQueue("MZOP", $mainPlayer, "ATTACK", 1);
+        PrependDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        PrependDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to attack with");
+        PrependDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
+        return true;
+      default: break;
+    }
+  }
+  return false;
+}
+
 function EffectAttackModifier($cardID)
 {
   global $mainPlayer;
