@@ -90,7 +90,10 @@ if ($decklink != "") {
   else $json = $decklink;
 
   $deckObj = json_decode($json);
+  $deckName = $deckObj->metadata->{"name"};
   $leader = UUIDLookup($deckObj->leader->id);
+  $character = $leader;//TODO: Change to leader name
+  $deckFormat = 1;
   $base = UUIDLookup($deckObj->base->id);
   $deck = $deckObj->deck;
   $cards = "";
