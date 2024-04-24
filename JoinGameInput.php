@@ -78,7 +78,7 @@ if ($decklink != "") {
 
   if(str_contains($decklink, "swudb.com/deck")) {
     $decklinkArr = explode("/", $decklink);
-    $decklink = "https://swudb.com/Deck/GetJsonFile/" . $decklinkArr[count($decklinkArr) - 1];
+    $decklink = "https://swudb.com/deck/view/" . $decklinkArr[count($decklinkArr) - 1] . "?handler=JsonFile";
     $curl = curl_init();
     curl_setopt($curl, CURLOPT_URL, $decklink);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
