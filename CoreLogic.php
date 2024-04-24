@@ -3070,6 +3070,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         WriteLog("This is a partially manual card. Do the extra attacks by passing priority manually.");
         $otherPlayer = $currentPlayer == 1 ? 2 : 1;
         AddCurrentTurnEffect($cardID, $otherPlayer);
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to attack with");
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
       }
       break;
     case "8327910265"://Energy Conversion Lab (ECL)
@@ -3082,14 +3086,20 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "8600121285"://IG-88
       $abilityName = GetResolvedAbilityName($cardID, $from);
       if($abilityName == "Attack") {
-        WriteLog("This is a partially manual card. Do the extra attacks by passing priority manually.");
         if(HasMoreUnits($currentPlayer)) AddCurrentTurnEffect($cardID, $currentPlayer);
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to attack with");
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
       }
       break;
     case "6954704048"://Heroic Sacrifice
       Draw($currentPlayer);
-      WriteLog("This is a partially manual card. Do the extra attacks by passing priority manually.");
       AddCurrentTurnEffect($cardID, $currentPlayer);
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to attack with");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
       break;
     case "3426168686"://Sneak Attack
       global $CS_AfterPlayedBy;
@@ -3112,14 +3122,16 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "9097690846"://Snowtrooper Lieutenant
       if($from != "PLAY") {
-        WriteLog("This is a partially manual card. Do the extra attack by passing priority manually.");
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to attack with");
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
         AddDecisionQueue("MZFILTER", $currentPlayer, "index=MYALLY-" . $playAlly->Index());
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to attack with");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
         AddDecisionQueue("MZALLCARDTRAITORPASS", $currentPlayer, "Imperial", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
         AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "9097690846", 1);
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
       }
       break;
     case "9210902604"://Precision Fire
