@@ -50,7 +50,8 @@ if ($handle = opendir($path)) {
         $visibility = GetCachePiece($gameToken, 9);
         if ($p2Hero != "" && $visibility == "1") {
         //if ($visibility == "1") {
-          $spectateLinks .= "<form style='text-align:center;' action='" . $reactFE . "'>";
+          //$spectateLinks .= "<form style='text-align:center;' action='" . $reactFE . "'>";
+          $spectateLinks .= "<form style='text-align:center;' action='https://karabast.net/SWUOnline/NextTurn4.php?gameName=$gameToken&playerID=3'>";
           $spectateLinks .= "<center><table><tr><td style='vertical-align:middle; padding-left:8px; width:50px; height: 40px;'>";
           if ($p1Hero == "") {
             $spectateLinks .= "<label for='joinGame' style='font-weight:500;'>Last Update " . intval(($currentTime - $lastGamestateUpdate) / 1000) . " seconds ago </label>";
