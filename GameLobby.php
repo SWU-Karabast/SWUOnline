@@ -150,8 +150,8 @@ $isMobile = IsMobile();
 
     echo ("<center>");
     echo ("<div style='position:relative; display: inline-block;'>");
-    $overlayURL = ($contentCreator != null ? $contentCreator->HeroOverlayURL($material[0]) : "");
-    echo (Card($material[0], "concat", ($isMobile ? 100 : 250), 0, 1));
+    $overlayURL = ($contentCreator != null ? $contentCreator->HeroOverlayURL($material[1]) : "");
+    echo (Card($material[1], "concat", ($isMobile ? 100 : 250), 0, 1));
     if ($overlayURL != "") echo ("<img title='Portrait' style='position:absolute; z-index:1001; top: 27px; left: 0px; cursor:pointer; height:" . ($isMobile ? 100 : 250) . "; width:" . ($isMobile ? 100 : 250) . ";' src='" . $overlayURL . "' />");
     echo ("</div>");
     echo ("</center>");

@@ -133,7 +133,7 @@ if ($lastUpdate != 0 && $cacheVal < $lastUpdate) {
   if (file_exists($deckFile)) {
     $handler = fopen($deckFile, "r");
     $otherCharacter = GetArray($handler);
-    $otherHero = $otherCharacter[0];
+    $otherHero = $otherCharacter[1];
     fclose($handler);
   }
 
