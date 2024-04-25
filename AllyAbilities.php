@@ -790,6 +790,7 @@ function AllyEndTurnAbilities($player)
         AddDecisionQueue("ELSE", $player, "-");
         AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $i, 1);
         AddDecisionQueue("MZOP", $player, "BOUNCE", 1);
+        AddDecisionQueue("WRITELOG", $player, "Millennium Falcon bounced back to hand", 1);
         break;
       case "d1a7b76ae7"://Chirrut Imwe
         $ally = new Ally("MYALLY-" . $i, $player);
