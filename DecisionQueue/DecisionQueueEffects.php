@@ -278,6 +278,7 @@ function SpecificCardLogic($player, $card, $lastResult)
       $subcards = $ally->GetSubcards();
       for($i=0; $i<count($subcards); ++$i) {
         if(!IsToken($subcards[$i])) AddHand($owner, $subcards[$i]);
+        $ally->DealDamage(CardHP($subcards[$i]));
       }
       $ally->ClearSubcards();
       return $lastResult;
