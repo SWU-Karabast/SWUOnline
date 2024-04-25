@@ -295,6 +295,7 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
       $top = "68%";
     } else {
       $left = "45%";
+      $top = 0;
     }
     $rv .= "<div style=' position:absolute; margin: auto; top: " . $top . "; left:" . $left . "; right: 0; bottom: 0; width:" . $imgCounterHeight . "px; height:" . $imgCounterHeight . "px;
     display: flex; justify-content: center; z-index: 5; text-align: center; vertical-align: middle; line-height:" . $imgCounterHeight . "px;
