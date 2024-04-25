@@ -15,6 +15,9 @@ function EffectHitEffect($cardID)
     case "8988732248-1"://Rebel Assault
       AddCurrentTurnEffect("8988732248-2", $mainPlayer);
       break;
+    case "6514927936-1"://Leia Organa
+      AddCurrentTurnEffectFromCombat("6514927936-2", $mainPlayer);
+      break;
     default:
       break;
   }
@@ -28,6 +31,12 @@ function FinalizeChainLinkEffects()
   for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnPieces()) {
     switch($currentTurnEffects[$i]) {
       case "8988732248-2"://Rebel Assault
+        PrependDecisionQueue("MZOP", $mainPlayer, "ATTACK", 1);
+        PrependDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        PrependDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to attack with");
+        PrependDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
+        return true;
+      case "6514927936-2"://Leia Organa
         PrependDecisionQueue("MZOP", $mainPlayer, "ATTACK", 1);
         PrependDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
         PrependDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to attack with");
@@ -460,6 +469,7 @@ function IsCombatEffectActive($cardID)
     case "8495694166": return true;//Jedi Lightsaber
     case "3789633661": return true;//Cunning
     case "8988732248": return true;//Rebel Assault
+    case "6514927936": return true;//Leia Organa
     default: return false;
   }
 }
