@@ -2857,7 +2857,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "6903722220"://Luke's Lightsaber
       if(CardTitle(GetMZCard($currentPlayer, $target)) == "Luke Skywalker") {
-        $ally = new Ally(GetMZCard($currentPlayer, $target), $currentPlayer);
+        $ally = new Ally($target, $currentPlayer);
         $ally->Heal($ally->MaxHealth()-$ally->Health());
         $ally->Attach("8752877738");//Shield Token
       }
