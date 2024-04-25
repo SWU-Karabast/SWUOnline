@@ -25,7 +25,7 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
             BanishCardForPlayer($cardID, $currentPlayer, "EQUIP", "NA");
           } else $character[$index + 6] = 1; //Else just put it on the combat chain
         } else {
-          EquipPayAdditionalCosts($index, "EQUIP");
+
         }
         PlayCard($cardID, "EQUIP", -1, $index);
       }
@@ -1675,7 +1675,10 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
         WriteLog("<span style='color:red;'>The event does nothing because of Relentless.</span>");
       } else $playText = PlayAbility($cardID, $from, $resourcesPaid, $target, $additionalCosts);
     }
-    if($from != "EQUIP" && $from != "PLAY") {
+    if($from == "EQUIP") {
+      EquipPayAdditionalCosts(FindCharacterIndex($currentPlayer, $cardID), "EQUIP");
+    }
+    else if($from != "PLAY") {
       WriteLog("Resolving play ability of " . CardLink($cardID, $cardID) . ($playText != "" ? ": " : ".") . $playText);
       if(GetClassState($currentPlayer, $CS_AfterPlayedBy) != "-") AfterPlayedByAbility(GetClassState($currentPlayer, $CS_AfterPlayedBy));
       $index = LastAllyIndex($currentPlayer);

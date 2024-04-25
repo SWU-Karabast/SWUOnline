@@ -331,7 +331,6 @@ function EquipPayAdditionalCosts($cardIndex, $from)
   global $currentPlayer;
   $character = &GetPlayerCharacter($currentPlayer);
   $cardID = $character[$cardIndex];
-
   switch($cardID) {
     case "1393827469"://Tarkintown
     case "2569134232"://Jedha City

@@ -639,6 +639,7 @@ function GetAbilityTypes($cardID)
   }
   if(DefinedTypesContains($cardID, "Leader", $currentPlayer) && !IsAlly($cardID, $currentPlayer)) {
     $char = &GetPlayerCharacter($currentPlayer);
+    if($char[CharacterPieces() + 1] == 1) $abilityTypes = "";
     if($char[CharacterPieces() + 2] == 0) {
       if($abilityTypes != "") $abilityTypes .= ",";
       $abilityTypes .= "A";
@@ -721,6 +722,7 @@ function GetAbilityNames($cardID, $index = -1)
   }
   if(DefinedTypesContains($cardID, "Leader", $currentPlayer) && !IsAlly($cardID, $currentPlayer)) {
     $char = &GetPlayerCharacter($currentPlayer);
+    if($char[CharacterPieces() + 1] == 1) $abilityNames = "";
     if($char[CharacterPieces() + 2] == 0) {
       if($abilityNames != "") $abilityNames .= ",";
       $abilityNames .= "Deploy";
