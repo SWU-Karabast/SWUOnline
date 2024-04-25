@@ -2257,11 +2257,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "7257556541"://Bodhi Rook
       if($from != "PLAY") {
         $otherPlayer = $currentPlayer == 1 ? 2 : 1;
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an opponent card to discard");
         AddDecisionQueue("FINDINDICES", $otherPlayer, "HAND");
-        AddDecisionQueue("CHOOSETHEIRHAND", $currentPlayer, "<-", 1);
-        AddDecisionQueue("MULTIREMOVEHAND", $otherPlayer, "-", 1);
-        AddDecisionQueue("ADDDISCARD", $otherPlayer, "HAND", 1);
+        AddDecisionQueue("REVEALHANDCARDS", $otherPlayer, "-");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRHAND");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Unit");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to discard");
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZDESTROY", $currentPlayer, "-", 1);
       }
       break;
     case "6028207223"://Pirated Starfighter
