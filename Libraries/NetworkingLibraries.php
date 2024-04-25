@@ -816,17 +816,19 @@ function ResolveChainLink()
   $target = GetAttackTarget();
   $targetArr = explode("-", $target);
   if ($targetArr[0] == "THEIRALLY") {
+    //Construct the combatants
     $index = $targetArr[1];
     $defender = new Ally($target, $defPlayer);
-    $defenderPower = $defender->CurrentPower();
-    if($defenderPower < 0) $defenderPower = 0;
-    $excess = $totalAttack - $defender->Health();
-    $destroyed = $defender->DealDamage($totalAttack);
-    if($destroyed) ClearAttackTarget();
     $attackerMZ = AttackerMZID($mainPlayer);
     $attackerArr = explode("-", $attackerMZ);
     $attacker = new Ally($attackerMZ, $mainPlayer);
     $attackerID = $attacker->CardID();
+    //Resolve the combat
+    $defenderPower = $defender->CurrentPower();
+    if($defenderPower < 0) $defenderPower = 0;
+    $excess = $totalAttack - $defender->Health();
+    $destroyed = $defender->DealDamage($totalAttack, bypassShield:HasSaboteur($attackerID, $mainPlayer, $attacker->Index()));
+    if($destroyed) ClearAttackTarget();
     if($attackerArr[0] == "MYALLY" && (!$destroyed || ($combatChain[0] != "9500514827" && !SearchCurrentTurnEffects("8297630396", $mainPlayer)))) { //Han Solo shoots first
       $attacker->DealDamage($defenderPower);
     }
