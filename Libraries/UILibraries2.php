@@ -291,8 +291,6 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
   //Health Counters style
   if ($lifeCounters != 0) {
     if ($defCounters == 0 && $atkCounters == 0) {
-      //$left = "0px";
-      //$top = "0px";
       $left = "70%";
       $top = "70%";
     } else {
