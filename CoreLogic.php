@@ -2557,7 +2557,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       if($from != "PLAY") {
         $resourceCards = &GetResourceCards($currentPlayer);
         $numResources = count($resourceCards)/ResourcePieces();
-        DealArcane($numResources, 2, "PLAYCARD", "4631297392");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal " . $numResources . " damage");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE," . $numResources, 1);
       }
       break;
     case "4599464590"://Rugged Survivors
