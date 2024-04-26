@@ -363,7 +363,10 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             $isAttackTarget = GetAttackTarget() == $lastResult;
             $ally = new Ally($lastResult);
             $destroyed = $ally->DealDamage($parameterArr[1]);
-            if($destroyed && $isAttackTarget) CloseCombatChain();
+            if($destroyed) {
+              if($isAttackTarget) CloseCombatChain();
+              return "";
+            }
           } else {
             PrependDecisionQueue("TAKEDAMAGE", $targetPlayer, $parameterArr[1]);
             PrependDecisionQueue("PASSPARAMETER", $targetPlayer, "0");
