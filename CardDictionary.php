@@ -128,8 +128,8 @@ function RaidAmount($cardID, $player, $index)
   {
     switch($allies[$i])
     {
-      case "8995892693"://Red One
-        if($index != $i && AspectContains($cardID, "Aggression", $player)) $amount += 1;
+      case "8995892693"://Red Three
+        if($index != $i && AspectContains($cardID, "Heroism", $player)) $amount += 1;
         break;
       case "fb475d4ea4"://IG-88
         if($index != $i) $amount += 1;
