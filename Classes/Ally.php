@@ -13,8 +13,13 @@ class Ally {
     global $currentPlayer;
     $mzArr = explode("-", $MZIndex);
     if($player == "") $player = ($mzArr[0] == "MYALLY" ? $currentPlayer : ($currentPlayer == 1 ? 2 : 1));
-    $this->index = intval($mzArr[1]);
-    $this->allies = &GetAllies($player);
+    if($mzArr[1] == "") {
+      for($i=0; $i<AllyPieces(); ++$i) array_push($this->allies, 9999);
+      $this->index = -1;
+    } else {
+      $this->index = intval($mzArr[1]);
+      $this->allies = &GetAllies($player);
+    }
     $this->playerID = $player;
   }
 
@@ -64,11 +69,13 @@ class Ally {
   }
 
   function Destroy() {
+    if($this->index == -1) return;
     DestroyAlly($this->playerID, $this->index);
   }
 
   //Returns true if the ally is destroyed
   function DealDamage($amount, $bypassShield = false) {
+    if($this->index == -1) return false;
     $subcards = $this->GetSubcards();
     for($i=0; $i<count($subcards); ++$i) {
       if($subcards[$i] == "8752877738") {
@@ -87,6 +94,7 @@ class Ally {
   }
 
   function TempReduceHealth($amount) {
+    if($this->index == -1) return;
     $this->allies[$this->index+2] -= $amount;
     if($this->Health() <= 0) {
       DestroyAlly($this->playerID, $this->index);
@@ -144,6 +152,7 @@ class Ally {
   }
   
   function Exhaust() {
+    if($this->index == -1) return;
     $this->allies[$this->index+1] = 1;
   }
 
@@ -173,6 +182,7 @@ class Ally {
   }
 
   function DefeatUpgrade($upgradeID) {
+    if($this->index == -1) return;
     $subcards = $this->GetSubcards();
     for($i=0; $i<count($subcards); ++$i) {
       if($subcards[$i] == $upgradeID) {
