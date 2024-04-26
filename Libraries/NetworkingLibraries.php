@@ -823,6 +823,7 @@ function ResolveChainLink()
     $attackerArr = explode("-", $attackerMZ);
     $attacker = new Ally($attackerMZ, $mainPlayer);
     $attackerID = $attacker->CardID();
+    $hasOverwhelm = HasOverwhelm($attacker->CardID(), $mainPlayer, $attacker->Index());
     //Resolve the combat
     $defenderPower = $defender->CurrentPower();
     if($defenderPower < 0) $defenderPower = 0;
@@ -832,9 +833,7 @@ function ResolveChainLink()
     if($attackerArr[0] == "MYALLY" && (!$destroyed || ($combatChain[0] != "9500514827" && !SearchCurrentTurnEffects("8297630396", $mainPlayer)))) { //Han Solo shoots first
       $attacker->DealDamage($defenderPower);
     }
-    if(HasOverwhelm($attacker->CardID(), $mainPlayer, $attacker->Index())) {
-      DealArcane($excess, 1, "OVERWHELM", $attacker->CardID(), player:$mainPlayer);
-    }
+    if($hasOverwhelm) DealDamageAsync($defPlayer, $excess, "TRIGGER", $attackerID);
     else if($attackerID == "3830969722") { //Blizzard Assault AT-AT
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal " . $excess . " damage to");
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY");
