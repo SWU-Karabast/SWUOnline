@@ -381,7 +381,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     if ($attackTarget != "NA" && ($attackTarget != "THEIRCHAR-0" && $attackTarget != "THEIRCHAR--1") && ($turn[0] == "A" || $turn[0] == "D")) echo ("<div style='font-size:18px; font-weight:650; color: " . $fontColor . "; text-shadow: 2px 0 0 " . $borderColor . ", 0 -2px 0 " . $borderColor . ", 0 2px 0 " . $borderColor . ", -2px 0 0 " . $borderColor . ";'>Attack Target: " . GetMZCardLink($defPlayer, $attackTarget) . "</div>");
     echo ("<table><tr>");
     echo ("<td style='font-size:28px; font-weight:650; color: " . $fontColor . "; text-shadow: 2px 0 0 " . $borderColor . ", 0 -2px 0 " . $borderColor . ", 0 2px 0 " . $borderColor . ", -2px 0 0 " . $borderColor . ";'>$totalAttack</td>");
-    echo ("<td><img onclick='ShowPopup(\"attackModifierPopup\");' style='cursor:pointer; height:30px; width:30px; display:inline-block;' src='./Images/Attack.png' /></td>");
+    echo ("<td><img onclick='ShowPopup(\"attackModifierPopup\");' style='cursor:pointer; height:30px; width:30px; display:inline-block;' src='./Images/AttackIcon.png' /></td>");
     echo ("<td><img style='height:30px; width:30px; display:inline-block;' src='./Images/Defense.png' /></td>");
     echo ("<td style='font-size:28px; font-weight:700; color: " . $fontColor . "; text-shadow: 2px 0 0 " . $borderColor . ", 0 -2px 0 " . $borderColor . ", 0 2px 0 " . $borderColor . ", -2px 0 0 " . $borderColor . ";'>$totalDefense</td>");
     $damagePrevention = GetDamagePrevention($defPlayer);
@@ -643,26 +643,31 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
 
       if ($option[0] == "THEIRARS" && $theirArsenal[$index + 1] == "DOWN") $card = $TheirCardBack;
 
-      //Show Life and Def counters on allies in the popups
+      $overlay = 0;
+      $attackCounters = 0;
+      //NRA TODO
+      //Show attack and hp counters on allies in the popups
       if ($option[0] == "THEIRALLY") {
-        $lifeCounters = $theirAllies[$index + 2];
+        $ally = new Ally("MYALLY-" . $index, $otherPlayer);
+        $lifeCounters = $ally->Health();
         $enduranceCounters = $theirAllies[$index + 6];
-        if (SearchCurrentTurnEffectsForUniqueID($theirAllies[$index + 5]) != -1) $attackCounters = EffectAttackModifier(SearchUniqueIDForCurrentTurnEffects($theirAllies[$index + 5])) + AttackValue($theirAllies[$index]);
-        else $attackCounters = 0;
+        $attackCounters = $ally->CurrentPower();
+        if($ally->IsExhausted()) $overlay = 1;
       } elseif ($option[0] == "MYALLY") {
-        $lifeCounters = $myAllies[$index + 2];
+        $ally = new Ally("MYALLY-" . $index, $playerID);
+        $lifeCounters = $ally->Health();
         $enduranceCounters = $myAllies[$index + 6];
-        if (SearchCurrentTurnEffectsForUniqueID($myAllies[$index + 5]) != -1) $attackCounters = EffectAttackModifier(SearchUniqueIDForCurrentTurnEffects($myAllies[$index + 5])) + AttackValue($myAllies[$index]);
-        else $attackCounters = 0;
+        $attackCounters = $ally->CurrentPower();
+        if($ally->IsExhausted()) $overlay = 1;
       }
 
       //Show Atk counters on Auras in the popups
       if ($option[0] == "THEIRAURAS") {
-        $atkCounters = $theirAuras[$index + 3];
+        $attackCounters = $theirAuras[$index + 3];
       } elseif ($option[0] == "MYAURAS") {
-        $atkCounters = $myAuras[$index + 3];
+        $attackCounters = $myAuras[$index + 3];
       }
-      $content .= Card($card, "concat", $cardSize, 16, 1, 0, $playerBorderColor, $counters, $options[$i], "", false, $lifeCounters, $enduranceCounters, $atkCounters, controller: $playerBorderColor);
+      $content .= Card($card, "concat", $cardSize, 16, 1, $overlay, $playerBorderColor, $counters, $options[$i], "", false, $lifeCounters, $enduranceCounters, $attackCounters, controller: $playerBorderColor);
     }
     $content .= "</div>";
     echo CreatePopup("CHOOSEMULTIZONE", [], 0, 1, GetPhaseHelptext(), 1, $content);
@@ -878,12 +883,12 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   $groundAllies = "";
   if (count($theirAllies) > 0) {
     for ($i = 0; $i+AllyPieces()-1 < count($theirAllies); $i += AllyPieces()) {
-      $lifeCounters = $theirAllies[$i + 2];
+      $ally = new Ally("MYALLY-" . $i, $otherPlayer);
+      $lifeCounters = $ally->Health();
       $enduranceCounters = $theirAllies[$i + 6];
       $subcard = $theirAllies[$i + 4];
       $subcards = $subcard != "-" ? explode(",", $subcard) : [];
-      if (SearchCurrentTurnEffectsForUniqueID($theirAllies[$i + 5]) != -1) $attackCounters = EffectAttackModifier(SearchUniqueIDForCurrentTurnEffects($theirAllies[$i + 5])) + AttackValue($theirAllies[$i]);
-      else $attackCounters = 0;
+      $attackCounters = $ally->CurrentPower();
       $cardArena = CardArenas($theirAllies[$i]);
       if($cardArena == "Ground") $cardText = "<div style='position:relative; display: inline-block;'>";
       else $cardText = "<div style='position:relative; float:right; display: inline-block;'>";
@@ -1025,12 +1030,12 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   $groundAllies = "";
   if (count($myAllies) > 0) {
     for ($i = 0; $i < count($myAllies); $i += AllyPieces()) {
-      $lifeCounters = $myAllies[$i + 2];
+      $ally = new Ally("MYALLY-" . $i, $playerID);
+      $lifeCounters = $ally->Health();
       $enduranceCounters = $myAllies[$i + 6];
       $subcard = $myAllies[$i + 4];
       $subcards = $subcard != "-" ? explode(",", $subcard) : [];
-      if (SearchCurrentTurnEffectsForUniqueID($myAllies[$i + 5]) != -1) $attackCounters = EffectAttackModifier(SearchUniqueIDForCurrentTurnEffects($myAllies[$i + 5])) + AttackValue($myAllies[$i]);
-      else $attackCounters = 0;
+      $attackCounters = $ally->CurrentPower();
       $playable = IsPlayable($myAllies[$i], $turn[0], "PLAY", $i, $restriction) && $myAllies[$i + 1] == 2;
       $border = CardBorderColor($myAllies[$i], "PLAY", $playable);
       $cardArena = CardArenas($myAllies[$i]);
