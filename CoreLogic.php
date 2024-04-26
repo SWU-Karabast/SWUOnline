@@ -3776,7 +3776,11 @@ function Draw($player, $mainPhase = true, $fromCardEffect = true)
   $otherPlayer = ($player == 1 ? 2 : 1);
   $deck = &GetDeck($player);
   $hand = &GetHand($player);
-  if(count($deck) == 0) return -1;
+  if(count($deck) == 0) {
+    WriteLog("Player " . $player . " took 3 damage for having no cards left in their deck.");
+    DealDamageAsync($player, 3, "TRIGGER", "DRAW");
+    return -1;
+  }
   if(CurrentEffectPreventsDraw($player, $mainPhase)) return -1;
   array_push($hand, array_shift($deck));
   PermanentDrawCardAbilities($player);
