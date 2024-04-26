@@ -583,7 +583,7 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MZOP", $mainPlayer, "ADDEXPERIENCE", 1);
       break;
     case "51e8757e4c"://Sabine Wren
-      DealArcane(1, 1, "PLAYCARD", "51e8757e4c");
+      DealDamageAsync($defPlayer, 1, "TRIGGER", "51e8757e4c");
       break;
     case "8395007579"://Fifth Brother
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Do you want to deal 1 damage to Fifth Brother?");

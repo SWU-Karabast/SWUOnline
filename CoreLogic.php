@@ -2723,8 +2723,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "4841169874"://Sabine Wren
       $abilityName = GetResolvedAbilityName($cardID, $from);
       if($abilityName == "Deal Damage") {
-        DealArcane(1, 1, "PLAYCARD", "4841169874");
-        DealArcane(1, 4, "PLAYCARD", "4841169874");
+        DealDamageAsync(1, 1, "TRIGGER", $cardID);
+        DealDamageAsync(2, 1, "TRIGGER", $cardID);
       }
       break;
     case "5871074103"://Forced Surrender
