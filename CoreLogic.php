@@ -3043,7 +3043,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $abilityName = GetResolvedAbilityName($cardID, $from);
       if($abilityName == "Deal Damage") {
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 2 damage and ready");
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:maxPower=3");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:maxAttack=3");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,2", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);

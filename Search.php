@@ -113,6 +113,10 @@ function SearchInner(&$array, $player, $zone, $count, $type, $definedType, $maxC
         && ($maxAttack == -1 || AttackValue($cardID) <= $maxAttack)
         && ($minAttack == -1 || AttackValue($cardID) >= $minAttack)
       ) {
+        if($maxAttack > -1 && $zone == "ALLY") {
+          $ally = new Ally("MYALLY-" . $i, $player);
+          if($ally->CurrentPower() > $maxAttack) continue;
+        }
         if($maxHealth > -1 && $zone == "ALLY") {
           $ally = new Ally("MYALLY-" . $i, $player);
           if($ally->Health() > $maxHealth) continue;
