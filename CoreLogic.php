@@ -2963,7 +2963,6 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "3038238423"://Fleet Lieutenant
       if($from != "PLAY") {
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
-        AddDecisionQueue("MZFILTER", $currentPlayer, "index=MYALLY-" . $playAlly->Index());
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to attack and give +2");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZALLCARDTRAITORPASS", $currentPlayer, "Rebel", 1);
