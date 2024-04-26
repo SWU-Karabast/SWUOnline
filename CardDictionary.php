@@ -681,7 +681,7 @@ function GetAbilityNames($cardID, $index = -1)
       $abilityNames = "Deal Damage";
       break;
     case "4263394087"://Chirrut Imwe
-      $abilityNames = "Buff Defense";
+      $abilityNames = "Buff HP";
       break;
     case "4300219753"://Fett's Firespray
       $abilityNames = "Exhaust,Attack";

@@ -2997,7 +2997,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "4263394087"://Chirrut Imwe
       $abilityName = GetResolvedAbilityName($cardID, $from);
-      if($abilityName == "Buff Defense") {
+      if($abilityName == "Buff HP") {
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to give +2 hp");
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
