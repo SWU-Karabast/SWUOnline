@@ -200,7 +200,7 @@ function AllyLeavesPlayAbility($player, $index)
   $cardID = $allies[$index];
   $leaderUndeployed = LeaderUndeployed($cardID);
   if($leaderUndeployed != "") {
-    AddCharacter($leaderUndeployed, $player, counters:1);
+    AddCharacter($leaderUndeployed, $player, counters:1, status:1);
   }
   switch($cardID)
   {

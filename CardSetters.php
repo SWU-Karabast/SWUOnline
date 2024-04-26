@@ -89,11 +89,11 @@ function RemovePitch($player, $index)
   return $cardID;
 }
 
-function AddCharacter($cardID, $player, $counters=0)
+function AddCharacter($cardID, $player, $counters=0, $status=2)
 {
   $char = &GetPlayerCharacter($player);
   array_push($char, $cardID);
-  array_push($char, 2);
+  array_push($char, $status);
   array_push($char, $counters);
   array_push($char, 0);
   array_push($char, 0);
