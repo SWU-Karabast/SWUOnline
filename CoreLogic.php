@@ -2436,17 +2436,21 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddCurrentTurnEffect($cardID, $currentPlayer);
       break;
     case "1446471743"://Force Choke
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 5 damage to");
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
       AddDecisionQueue("MZFILTER", $currentPlayer, "trait=Vehicle");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 5 damage to");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,5", 1);
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "FORCECHOKE", 1);
       break;
     case "1047592361"://Ruthless Raider
       if($from != "PLAY") {
-        DealArcane(2, 1, "PLAYCARD", $cardID);
-        DealArcane(2, 2, "PLAYCARD", $cardID);
+        $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+        DealDamageAsync($otherPlayer, 2, "TRIGGER", "1047592361");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 2 damage to");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,2", 1);
       }
       break;
     case "1862616109"://Snowspeeder
