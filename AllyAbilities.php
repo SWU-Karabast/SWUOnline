@@ -114,6 +114,7 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
       if($allies[$i+2] <= 0) DestroyAlly($player, $i);
     }
   }
+  UpdateAttackTarget();
   return $cardID;
 }
 

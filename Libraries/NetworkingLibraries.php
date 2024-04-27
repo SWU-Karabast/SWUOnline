@@ -1474,7 +1474,7 @@ function GetTargetOfAttack($attackID)
     WriteLog("There are no valid targets for this attack. Reverting gamestate.");
     RevertGamestate();
   } else {
-    $combatChainState[$CCS_AttackTarget] = $targets;
+    SetAttackTarget($targets);
   }
 }
 

@@ -310,7 +310,7 @@ function ResetCombatChainState()
   global $CCS_LinkTotalAttack, $CCS_LinkBaseAttack, $CCS_BaseAttackDefenseMax, $CCS_ResourceCostDefenseMin, $CCS_CardTypeDefenseRequirement;
   global $CCS_CachedTotalAttack, $CCS_CachedTotalBlock, $CCS_CombatDamageReplaced, $CCS_AttackUniqueID, $CCS_RequiredEquipmentBlock;
   global $mainPlayer, $defPlayer, $CCS_CachedDominateActive, $CCS_CachedNumBlockedFromHand, $CCS_IsBoosted, $CCS_AttackTargetUID, $CCS_CachedOverpowerActive, $CSS_CachedNumActionBlocked;
-  global $chainLinks, $chainLinkSummary, $CCS_CachedNumDefendedFromHand, $CCS_HitThisLink, $CCS_HasAimCounter;
+  global $layers, $chainLinks, $chainLinkSummary, $CCS_CachedNumDefendedFromHand, $CCS_HitThisLink, $CCS_HasAimCounter;
   if (count($chainLinks) > 0) WriteLog("The combat chain was closed.");
   $combatChainState[$CCS_CurrentAttackGainedGoAgain] = 0;
   $combatChainState[$CCS_WeaponIndex] = -1;
@@ -521,10 +521,18 @@ function ResetCharacterEffects()
 function SetAttackTarget($mzTarget)
 {
   global $combatChainState, $CCS_AttackTarget, $CCS_AttackTargetUID, $defPlayer, $combatChain;
-  if(count($combatChain) == 0 || $mzTarget == "") return;
+  if($mzTarget == "") return;
   $mzArr = explode("-", $mzTarget);
-  $combatChainState[$CCS_AttackTarget] = "THEIRALLY-" . $mzTarget[1];
+  $combatChainState[$CCS_AttackTarget] = $mzTarget;
   $combatChainState[$CCS_AttackTargetUID] = MZGetUniqueID($mzTarget, $defPlayer);
+}
+
+function UpdateAttackTarget() {
+  global $combatChainState, $CCS_AttackTarget, $CCS_AttackTargetUID, $defPlayer;
+  $mzArr = explode("-", $combatChainState[$CCS_AttackTarget]);
+  $index = SearchAlliesForUniqueID($combatChainState[$CCS_AttackTargetUID], $defPlayer);
+  $combatChainState[$CCS_AttackTarget] = $index == -1 ? "NA" : $mzArr[0] . "-" . $index;
+  if($index == -1) CloseCombatChain(true);
 }
 
 function GetAttackTarget()
