@@ -139,7 +139,7 @@ class Ally {
       }
     }
     //Current effect buffs
-    for($i=0; $i<count($currentTurnEffects); ++$i) {
+    for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnEffectPieces()) {
       if($currentTurnEffects[$i+1] != $this->playerID) continue;
       if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $this->UniqueID()) continue;
       $power += EffectAttackModifier($currentTurnEffects[$i]);
