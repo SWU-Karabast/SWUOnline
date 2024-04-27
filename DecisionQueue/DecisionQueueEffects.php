@@ -242,6 +242,8 @@ function SpecificCardLogic($player, $card, $lastResult)
       break;
     case "UWINGREINFORCEMENT":
       $hand = &GetHand($player);
+      PrependDecisionQueue("ALLRANDOMBOTTOM", $player, "DECK");
+      PrependDecisionQueue("PASSPARAMETER", $player, "{0}");
       PrependDecisionQueue("REMOVECURRENTEFFECT", $player, "8968669390", 1);
       PrependDecisionQueue("ELSE", $player, "-");
       PrependDecisionQueue("MZOP", $player, "PLAYCARD", 1);

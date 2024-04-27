@@ -3306,8 +3306,6 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE,10");
       AddDecisionQueue("SETDQVAR", $currentPlayer, "0");//List of cards
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "UWINGREINFORCEMENT");
-      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}");
-      AddDecisionQueue("ALLRANDOMBOTTOM", $currentPlayer, "DECK");
       break;
     case "5950125325"://Confiscate
       DefeatUpgrade($currentPlayer);
