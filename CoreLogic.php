@@ -1894,6 +1894,7 @@ function SelfCostModifier($cardID)
     if(SearchAlliesForCard($currentPlayer, "4166047484")) $targetID = "4166047484";
     else $targetID = "";
   }
+  //Guardian of the Whills
   if(DefinedTypesContains($cardID, "Upgrade", $currentPlayer) && $targetID == "4166047484") $modifier -= 1;
   //My ally cost modifier
   $allies = &GetAllies($currentPlayer);
@@ -3224,9 +3225,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "1626462639"://Change of Heart
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "1626462639", 1);
       break;
     case "2855740390"://Lieutenant Childsen
       if($from != "PLAY") {

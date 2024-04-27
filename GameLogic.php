@@ -414,11 +414,12 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $myAllies = &GetAllies($player);
           $theirAllies = &GetAllies($otherPlayer);
           $mzArr = explode("-", $lastResult);
+          $uniqueID = $theirAllies[$mzArr[1]+5];
           for($i=$mzArr[1]; $i<$mzArr[1]+AllyPieces(); ++$i) {
             array_push($myAllies, $theirAllies[$i]);
           }
           RemoveAlly($otherPlayer, $mzArr[1]);
-          return $lastResult;
+          return $uniqueID;
         default: break;
       }
       return $lastResult;
