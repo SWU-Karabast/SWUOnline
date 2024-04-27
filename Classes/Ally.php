@@ -106,6 +106,7 @@ class Ally {
   function CurrentPower() {
     global $currentTurnEffects;
     $power = AttackValue($this->CardID()) + $this->allies[$this->index+7];
+    $power += AttackModifier($this->CardID());
     $subcards = $this->GetSubcards();
     for($i=0; $i<count($subcards); ++$i) if($subcards[$i] != "-") $power += AttackValue($subcards[$i]);
     if(HasGrit($this->CardID(), $this->playerID, $this->index)) $power += $this->MaxHealth() - $this->Health();

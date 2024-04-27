@@ -40,7 +40,7 @@ function ProcessHitEffect($cardID)
   AllyHitEffects();
 }
 
-function AttackModifier($cardID, $from = "", $resourcesPaid = 0, $repriseActive = -1)
+function AttackModifier($cardID)
 {
   global $mainPlayer, $defPlayer, $initiativePlayer, $combatChain, $combatChainState, $CS_NumLeveledUp;
   $attacker = AttackerMZID($mainPlayer);

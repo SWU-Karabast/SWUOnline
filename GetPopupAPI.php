@@ -187,10 +187,6 @@ function ChainLinkObject($link)
     {
       $attackValue = AttackValue($chainLinks[$link][$i]) + $chainLinks[$link][$i + 4];
     }
-    elseif ($chainLinks[$link][$i + 1] == $mainPlayer && (CardType($chainLinks[$link][$i]) == "AR" || CardType($chainLinks[$link][$i]) == "I"))
-    {
-      $attackValue = AttackModifier($chainLinks[$link][$i]);
-    }
     else $attackValue = 0;
 
     if ($chainLinks[$link][$i + 1] == $defPlayer) $blockValue = BlockValue($chainLinks[$link][$i]) + $chainLinks[$link][$i + 5];

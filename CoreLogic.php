@@ -28,13 +28,6 @@ function EvaluateCombatChain(&$totalAttack, &$totalDefense, &$attackModifiers=[]
           if($i == 1) $totalAttack += $attack;
           else AddAttack($totalAttack, $attack);
         }
-        $attack = AttackModifier($combatChain[$i-1], $combatChain[$i+1], $combatChain[$i+2], $combatChain[$i+3]) + $combatChain[$i + 4];
-        if(($canGainAttack && !$snagActive) || $attack < 0)
-        {
-          array_push($attackModifiers, $combatChain[$i-1]);
-          array_push($attackModifiers, $attack);
-          AddAttack($totalAttack, $attack);
-        }
       }
       else
       {
