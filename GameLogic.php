@@ -490,7 +490,6 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             case "trait": if(TraitContains($inputArr[0], $compareArr[$j], $player)) $passFilter = !$passFilter; break;
             case "player": if($inputArr[0] == $compareArr[$j]) $passFilter = !$passFilter; break;
             case "definedType":
-              WriteLog($inputArr[0] . " " . $compareArr[$j] . " " . $player);
               if(DefinedTypesContains($inputArr[0], $compareArr[$j], $player)) $passFilter = !$passFilter; break;
             case "aspect": if(AspectContains($inputArr[0], $compareArr[$j], $player)) $passFilter = !$passFilter; break;
             case "maxCost": if(CardCost($inputArr[0]) <= $compareArr[$j]) $passFilter = !$passFilter; break;
