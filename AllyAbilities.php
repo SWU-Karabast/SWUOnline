@@ -110,10 +110,11 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
     AddGraveyard($subcards[$i], $player, "PLAY");
   }
   $cardID = $allies[$index];
+  $owner = $allies[$index+11];
   if(!$skipDestroy) {
     if(DefinedTypesContains($cardID, "Leader", $player)) ;//If it's a leader it doesn't go in the discard
     else if($cardID == "8954587682") AddResources($cardID, $player, "PLAY", "DOWN");
-    else AddGraveyard($cardID, $player, "PLAY");
+    else AddGraveyard($cardID, $owner, "PLAY");
   }
   for($j = $index + AllyPieces() - 1; $j >= $index; --$j) unset($allies[$j]);
   $allies = array_values($allies);
