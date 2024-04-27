@@ -402,7 +402,7 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
       $isPass = true;
       $otherPlayer = ($playerID == 1 ? 2 : 1);
       $roundPass = $initiativeTaken == ($otherPlayer + 2);
-      if($initiativeTaken != 1 && !$roundPass) $initiativeTaken = $currentPlayer + 2;
+      if($turn[0] == "M" && $initiativeTaken != 1 && !$roundPass) $initiativeTaken = $currentPlayer + 2;
       if(CanPassPhase($turn[0])) {
         PassInput(false);
       }
