@@ -125,9 +125,11 @@ function ResourcePieces() { return ArsenalPieces(); }
 //8 - Ability/effect Uses
 //9 - Position (0 = normal, 1 = distant)
 //10 - Fostered (0 = no, 1 = dealt damage, 2 = yes)
+//11 - Owner
+//12 - Turns in play
 function AllyPieces()
 {
-  return 11;
+  return 13;
 }
 
 //Card ID
