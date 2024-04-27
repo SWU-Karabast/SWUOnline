@@ -534,7 +534,6 @@ function UpdateAttackTarget() {
   $mzArr = explode("-", $combatChainState[$CCS_AttackTarget]);
   $index = SearchAlliesForUniqueID($combatChainState[$CCS_AttackTargetUID], $defPlayer);
   $combatChainState[$CCS_AttackTarget] = $index == -1 ? "NA" : $mzArr[0] . "-" . $index;
-  if($index == -1) CloseCombatChain(true);
 }
 
 function GetAttackTarget()
