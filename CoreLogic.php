@@ -2302,10 +2302,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "7202133736"://Waylay
-      if($target != "-") {
-        AddDecisionQueue("PASSPARAMETER", $currentPlayer, $target);
-        AddDecisionQueue("MZOP", $currentPlayer, "BOUNCE", 1);
-      }
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to return to hand");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "BOUNCE", 1);
       break;
     case "7485151088"://Search your feelings
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYDECK");
@@ -3616,7 +3616,6 @@ function PlayRequiresTarget($cardID)
   {
     case "8679831560": return 2;//Repair
     case "8981523525": return 6;//Moment of Peace
-    case "7202133736": return 6;//Waylay
     case "0827076106": return 6;//Admiral Ackbar
     case "0867878280": return 6;//It Binds All Things
     case "2587711125": return 6;//Disarm
