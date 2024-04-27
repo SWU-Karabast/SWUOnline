@@ -40,12 +40,16 @@ function ProcessHitEffect($cardID)
   AllyHitEffects();
 }
 
-function AttackModifier($cardID)
+function AttackModifier($cardID, $player, $index)
 {
   global $mainPlayer, $defPlayer, $initiativePlayer, $combatChain, $combatChainState, $CS_NumLeveledUp;
-  $attacker = AttackerMZID($mainPlayer);
-  $mzArr = explode("-", $attacker);
-  $modifier = RaidAmount($cardID, $mainPlayer, $mzArr[1]);
+  $modifier = 0;
+  if($player == $mainPlayer) {
+    //Raid is only for attackers
+    $attacker = AttackerMZID($mainPlayer);
+    $mzArr = explode("-", $attacker);
+    $modifier = RaidAmount($cardID, $mainPlayer, $mzArr[1]);
+  }
   switch($cardID) {
     case "3988315236"://Seasoned Shoretrooper
       $modifier += NumResources($mainPlayer) >= 6 ? 2 : 0;
