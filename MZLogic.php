@@ -303,8 +303,10 @@ function MZBounce($player, $target)
   $zone = &GetMZZone($player, $pieces[0]);
   switch($pieces[0]) {
     case "THEIRALLY": case "MYALLY":
+      $allies = &GetAllies($player);
+      $owner = $allies[$pieces[1]+11];
       $cardID = RemoveAlly($player, $pieces[1]);
-      AddHand($player, $cardID);
+      AddHand($owner, $cardID);
       break;
     case "MYRESOURCES": case "THEIRRESOURCES":
       $cardID = RemoveResource($player, $pieces[1]);
