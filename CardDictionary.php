@@ -121,7 +121,8 @@ function RestoreAmount($cardID, $player, $index)
 
 function RaidAmount($cardID, $player, $index)
 {
-  global $currentTurnEffects;
+  global $currentTurnEffects, $combatChain;
+  if(count($combatChain) == 0) return 0;
   $amount = 0;
   $allies = &GetAllies($player);
   for($i=0; $i<count($allies); $i+=AllyPieces())
