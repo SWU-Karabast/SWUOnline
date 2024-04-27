@@ -391,12 +391,18 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
       global $initiativeTaken, $initiativePlayer, $isPass;
       WriteLog("Player " . $playerID . " claimed initiative.");
       $initiativePlayer = $currentPlayer;
+      $otherPlayer = ($playerID == 1 ? 2 : 1);
+      $roundPass = $initiativeTaken == ($otherPlayer + 2);
       $initiativeTaken = 1;
       $isPass = true;
+      if($roundPass) BeginRoundPass();
       break;
     case 99: //Pass
-      global $isPass;
+      global $isPass, $initiativeTaken;
       $isPass = true;
+      $otherPlayer = ($playerID == 1 ? 2 : 1);
+      $roundPass = $initiativeTaken == ($otherPlayer + 2);
+      if(!$roundPass) $initiativeTaken = $currentPlayer + 2;
       if(CanPassPhase($turn[0])) {
         PassInput(false);
       }
@@ -726,7 +732,8 @@ function PassInput($autopass = true)
     if(Pass($turn, $currentPlayer, $currentPlayer)) {
       if($turn[0] == "M")
       {
-        if($initiativeTaken == 1 && $initiativePlayer != $currentPlayer) {
+        $otherPlayer = ($currentPlayer == 1 ? 2 : 1);
+        if($initiativeTaken == 1 && $initiativePlayer != $currentPlayer || $initiativeTaken == ($otherPlayer + 2)) {
           BeginRoundPass();
         } else {
           SkipHoldingPriorityNow($currentPlayer);
