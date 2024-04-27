@@ -131,9 +131,11 @@ if ($canSeeQueue) {
 <label for="private">
   <input type="radio" class='SelectDeckInput' id="private" name="visibility" value="private" <?php if ($defaultVisibility == 0) echo 'checked="checked"'; ?> />
   Private</label>
+  <!--
 <label for="deckTestMode">
   <input class='SelectDeckInput' type="checkbox" id="deckTestMode" name="deckTestMode" value="deckTestMode">
   Single Player</label>
+-->
 <div style=' text-align:center;'>
   <input type="submit" style="font-size:28px;" value="<?php echo ($createGameText); ?>">
 </div>
