@@ -90,6 +90,12 @@ if ($decklink != "") {
   }
   else $json = $decklink;
 
+  if($json == "") {
+    echo "Failed to retrieve deck from API. Check to make sure you have a valid deckbuilder link. If it's a SWUDB link, make sure it's not a private deck.<BR>";
+    echo "Your link: " . $originalLink . "<BR>";
+    exit;
+  }
+
   $deckObj = json_decode($json);
   $deckName = $deckObj->metadata->{"name"};
   $leader = UUIDLookup($deckObj->leader->id);
