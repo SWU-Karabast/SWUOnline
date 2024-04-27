@@ -113,6 +113,7 @@ if ((IsPatron(1) || IsPatron(2)) && !IsReplay()) {
   fclose($commandFile);
 }
 
+if($initiativeTaken > 2 && $mode != 99 && !IsModeAsync($mode)) $initiativeTaken = 0;
 //Now we can process the command
 ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkInput, false, $inputText);
 
