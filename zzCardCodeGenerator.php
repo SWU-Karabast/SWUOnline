@@ -16,6 +16,7 @@
   $uuidLookupTrie = [];
   $typeTrie = [];
   $type2Trie = [];
+  $uniqueTrie = [];
   while ($hasMoreData)
   {
     $jsonUrl = "https://admin.starwarsunlimited.com/api/cards?pagination[page]=" . $page;
@@ -88,6 +89,7 @@
   GenerateFunction($arenasTrie, $handler, "CardArenas", true, "");
   GenerateFunction($typeTrie, $handler, "DefinedCardType", true, "");
   GenerateFunction($type2Trie, $handler, "DefinedCardType2", true, "");
+  GenerateFunction($uniqueTrie, $handler, "CardIsUnique", false, 0);
 
   GenerateFunction($uuidLookupTrie, $handler, "UUIDLookup", true, "");
 
@@ -104,7 +106,7 @@
 
   function AddToTries($cardID, $uuid)
   {
-    global $uuidLookupTrie, $titleTrie, $subtitleTrie, $costTrie, $hpTrie, $powerTrie, $typeTrie, $type2Trie, $card;
+    global $uuidLookupTrie, $titleTrie, $subtitleTrie, $costTrie, $hpTrie, $powerTrie, $typeTrie, $type2Trie, $uniqueTrie, $card;
     global $aspectsTrie, $traitsTrie, $arenasTrie;
     AddToTrie($uuidLookupTrie, $cardID, 0, $uuid);
     AddToTrie($titleTrie, $uuid, 0, str_replace('"', "'", $card->title));
@@ -118,6 +120,7 @@
       if($type2 == "Leader Unit") $type2 = "Unit";
       AddToTrie($type2Trie, $uuid, 0, $type2);
     }
+    AddToTrie($uniqueTrie, $uuid, 0, $card->unique == "true" ? 1 : 0);
     
     $aspects = "";
     for($j = 0; $j < count($card->aspects->data); ++$j)
