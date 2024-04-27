@@ -51,7 +51,7 @@ function FinalizeChainLinkEffects()
 function EffectAttackModifier($cardID)
 {
   global $mainPlayer;
-  $params = explode("-", $cardID);
+  $params = explode("_", $cardID);
   $cardID = $params[0];
   if(count($params) > 1) $subparam = $params[1];
   switch($cardID)
