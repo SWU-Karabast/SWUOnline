@@ -3188,6 +3188,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       if($cards != "") {
         AddDecisionQueue("PASSPARAMETER", $currentPlayer, $cards);
         AddDecisionQueue("SETDQVAR", $currentPlayer, 0);
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Push pass (or Space) to discard the rest of the cards");
         AddDecisionQueue("MAYCHOOSETOP", $currentPlayer, $cards);
         AddDecisionQueue("SPECIFICCARD", $currentPlayer, "FORACAUSEIBELIEVEIN");
       }

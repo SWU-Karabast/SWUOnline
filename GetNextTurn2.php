@@ -520,7 +520,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       $content .= "</td>";
     }
     $content .= "</tr></table>";
-    echo CreatePopup("OPT", [], 0, 1, "Choose " . TypeToPlay($turn[0]), 1, $content);
+    echo CreatePopup("OPT", [], 0, 1, GetPhaseHelptext(), 1, $content);
   }
 
   if (($turn[0] == "CHOOSETOPOPPONENT") && $turn[1] == $playerID) { //Use when you have to reorder the top of your opponent library e.g. Righteous Cleansing
