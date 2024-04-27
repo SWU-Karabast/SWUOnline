@@ -656,7 +656,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       return "1";
     case "ADDLIMITEDCURRENTEFFECT":
       $params = explode(",", $parameter);
-      AddCurrentTurnEffect($params[0], $player, $params[1], $lastResult);
+      AddCurrentTurnEffect($params[0], UnitUniqueIDController($uniqueID), $params[1], $lastResult);
       UpdateLinkAttack();
       return $lastResult;
     case "ADDLIMITEDNEXTTURNEFFECT":

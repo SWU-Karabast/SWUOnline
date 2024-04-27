@@ -589,6 +589,13 @@ function SearchItemsForUniqueID($uniqueID, $player)
   return -1;
 }
 
+function UnitUniqueIDController($uniqueID) {
+  if(SearchAlliesForUniqueID($uniqueID, 1) > -1) return 1;
+  if(SearchAlliesForUniqueID($uniqueID, 2) > -1) return 2;
+  //TODO: This is an error; handle more gracefully?
+  return 1;
+}
+
 function SearchAlliesForUniqueID($uniqueID, $player)
 {
   $allies = &GetAllies($player);
