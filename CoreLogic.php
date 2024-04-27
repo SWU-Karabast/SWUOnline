@@ -3777,7 +3777,8 @@ function Draw($player, $mainPhase = true, $fromCardEffect = true)
   $deck = &GetDeck($player);
   $hand = &GetHand($player);
   if(count($deck) == 0) {
-    WriteLog("Player " . $player . " took 3 damage for having no cards left in their deck.");
+    $char = &GetPlayerCharacter($player);
+    if($char[CharacterPieces()] != "DUMMY") WriteLog("Player " . $player . " took 3 damage for having no cards left in their deck.");
     DealDamageAsync($player, 3, "TRIGGER", "DRAW");
     return -1;
   }

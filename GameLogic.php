@@ -1257,14 +1257,18 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         Draw(1);
         Draw(2);
       }
-      AddDecisionQueue("SETDQCONTEXT", $initiativePlayer, "Would you like to mulligan?");
-      AddDecisionQueue("YESNO", $initiativePlayer, "-");
-      AddDecisionQueue("NOPASS", $initiativePlayer, "-");
-      AddDecisionQueue("MULLIGAN", $initiativePlayer, "-", 1);
-      AddDecisionQueue("SETDQCONTEXT", $secondPlayer, "Would you like to mulligan?");
-      AddDecisionQueue("YESNO", $secondPlayer, "-");
-      AddDecisionQueue("NOPASS", $secondPlayer, "-");
-      AddDecisionQueue("MULLIGAN", $secondPlayer, "-", 1);
+      if(!IsPlayerAI($initiativePlayer)) {
+        AddDecisionQueue("SETDQCONTEXT", $initiativePlayer, "Would you like to mulligan?");
+        AddDecisionQueue("YESNO", $initiativePlayer, "-");
+        AddDecisionQueue("NOPASS", $initiativePlayer, "-");
+        AddDecisionQueue("MULLIGAN", $initiativePlayer, "-", 1);
+      }
+      if(!IsPlayerAI($secondPlayer)) {
+        AddDecisionQueue("SETDQCONTEXT", $secondPlayer, "Would you like to mulligan?");
+        AddDecisionQueue("YESNO", $secondPlayer, "-");
+        AddDecisionQueue("NOPASS", $secondPlayer, "-");
+        AddDecisionQueue("MULLIGAN", $secondPlayer, "-", 1);
+      }
       MZMoveCard($initiativePlayer, "MYHAND", "MYRESOURCES", may:false, context:"Choose a card to resource", silent:true);
       AddDecisionQueue("AFTERRESOURCE", $initiativePlayer, "HAND", 1);
       MZMoveCard($initiativePlayer, "MYHAND", "MYRESOURCES", may:false, context:"Choose a card to resource", silent:true);
