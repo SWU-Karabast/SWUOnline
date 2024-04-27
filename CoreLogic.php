@@ -2757,12 +2757,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "9070397522"://SpecForce Soldier
       if($from != "PLAY") {
-        $otherPlayer = $currentPlayer == 1 ? 2 : 1;
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to lose sentinel");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
-        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $otherPlayer, "9070397522,HAND", 1);
+        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "9070397522,HAND", 1);
       }
       break;
     case "6458912354"://Death Trooper
