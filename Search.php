@@ -849,11 +849,17 @@ function SearchMultizone($player, $searches)
             $cards = explode(",", $condition[1]);
             switch($zone)
             {
+              case "MYALLY":
+                if(count($cards) == 1) $searchResult = SearchAlliesForCard($player, $cards[0]);
+                else if(count($cards) == 2) $searchResult = SearchAlliesForCard($player, $cards[0], $cards[1]);
+                else if(count($cards) == 3) $searchResult = SearchAlliesForCard($player, $cards[0], $cards[1], $cards[2]);
+                else WriteLog("Ally multizone search only supports 3 cards -- report bug.");
+                break;
               case "MYDECK":
                 if(count($cards) == 1) $searchResult = SearchDeckForCard($player, $cards[0]);
                 else if(count($cards) == 2) $searchResult = SearchDeckForCard($player, $cards[0], $cards[1]);
                 else if(count($cards) == 3) $searchResult = SearchDeckForCard($player, $cards[0], $cards[1], $cards[2]);
-                else WriteLog("Discard multizone search only supports 3 cards -- report bug.");
+                else WriteLog("Deck multizone search only supports 3 cards -- report bug.");
                 break;
               case "MYDISCARD":
                 if(count($cards) == 1) $searchResult = SearchDiscardForCard($player, $cards[0]);
@@ -871,7 +877,7 @@ function SearchMultizone($player, $searches)
                 if (count($cards) == 1) $searchResult = SearchItemsForCardMulti($player, $cards[0]);
                 else if (count($cards) == 2) $searchResult = SearchItemsForCardMulti($player, $cards[0], $cards[1]);
                 else if (count($cards) == 3) $searchResult = SearchItemsForCardMulti($player, $cards[0], $cards[1], $cards[2]);
-                else WriteLog("Discard multizone search only supports 3 cards -- report bug.");
+                else WriteLog("Item multizone search only supports 3 cards -- report bug.");
                 break;
               default: break;
             }

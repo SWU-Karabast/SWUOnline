@@ -32,6 +32,13 @@ function PlayAlly($cardID, $player, $subCards = "-", $from="-")
     }
   }
   $allies[$index+2] += CharacterStaticHealthModifiers($cardID, $index, $player);
+  if(CardIsUnique($cardID) && SearchCount(SearchAlliesForCard($player, $cardID)) > 1) {
+    PrependDecisionQueue("MZDESTROY", $player, "-", 1);
+    PrependDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
+    PrependDecisionQueue("SETDQCONTEXT", $player, "You have two of this unique unit; choose one to destroy");
+    //PrependDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
+    PrependDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:cardID=" . $cardID);
+  }
   return $index;
 }
 
