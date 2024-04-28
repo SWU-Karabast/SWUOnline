@@ -2385,8 +2385,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "8691800148"://Reinforcement Walker
       AddDecisionQueue("FINDINDICES", $currentPlayer, "TOPDECK");
       AddDecisionQueue("DECKCARDS", $currentPlayer, "<-", 1);
-      AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
-      AddDecisionQueue("YESNO", $currentPlayer, "if you want to draw", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose if you want to draw <0>", 1);
+      AddDecisionQueue("YESNO", $currentPlayer, "-", 1);
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "REINFORCEMENTWALKER", 1);
       break;
     case "9002021213"://Imperial Interceptor
@@ -2487,8 +2488,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "4092697474"://TIE Advanced
       if($from != "PLAY") {
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to give experience");
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Imperial");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "index=MYALLY-" . $playAlly->Index());
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to give experience");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "ADDEXPERIENCE", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "ADDEXPERIENCE", 1);
