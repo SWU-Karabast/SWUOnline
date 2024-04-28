@@ -2606,9 +2606,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "2569134232"://Jedha City
-      $ally = new Ally($target);
-      AddDecisionQueue("PASSPARAMETER", $currentPlayer, $ally->UniqueID());
-      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $ally->PlayerID(), "2569134232,HAND");
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "2569134232,HAND");
       break;
     case "1349057156"://Strike True
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
@@ -3621,7 +3623,6 @@ function PlayRequiresTarget($cardID)
     case "0827076106": return 6;//Admiral Ackbar
     case "0867878280": return 6;//It Binds All Things
     case "2587711125": return 6;//Disarm
-    case "2569134232": return 6;//Jedha City
     case "6515891401": return 6;//Karabast
     case "2651321164": return 6;//Tactical Advantage
     case "1900571801": return 6;//Overwhelming Barrage
