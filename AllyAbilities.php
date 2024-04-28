@@ -662,13 +662,14 @@ function SpecificAllyAttackAbilities($attackID)
       AddNextTurnEffect("5e90bd91b0", $mainPlayer);
       break;
     case "6c5b96c7ef"://Emperor Palpatine
-      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose an ally to destroy");
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
+      AddDecisionQueue("MZFILTER", $mainPlayer, "index=MYALLY-" . $attackerAlly->Index());
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose an ally to destroy");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "DESTROY", 1);
       AddDecisionQueue("DRAW", $mainPlayer, "-", 1);
-      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose an ally to deal 1 damage");
-      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose an ally to deal 1 damage", 1);
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY", 1);
       AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,1", 1);
       break;
