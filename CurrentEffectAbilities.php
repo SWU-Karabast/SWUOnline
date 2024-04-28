@@ -418,13 +418,12 @@ function CurrentEffectEndTurnAbilities()
         $ally->DealDamage($subparam);
         break;
       case "1626462639"://Change of Heart
-        $otherPlayer = $currentTurnEffects[$i+1] == 1 ? 2 : 1;
-        //AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
-        //AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-        AddDecisionQueue("PASSPARAMETER", $otherPlayer, "THEIRALLY-" . SearchAlliesForUniqueID($currentTurnEffects[$i+2], $currentTurnEffects[$i+1]), 1);
-        AddDecisionQueue("MZOP", $otherPlayer, "TAKECONTROL", 1);
-        //AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
-        //AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "1626462639", 1);
+        $index = SearchAlliesForUniqueID($currentTurnEffects[$i+2], $currentTurnEffects[$i+1]);
+        if($index > -1) {
+          $otherPlayer = $currentTurnEffects[$i+1] == 1 ? 2 : 1;
+          AddDecisionQueue("PASSPARAMETER", $otherPlayer, "THEIRALLY-" . $index, 1);
+          AddDecisionQueue("MZOP", $otherPlayer, "TAKECONTROL", 1);
+        }
         break;
       default: break;
     }
