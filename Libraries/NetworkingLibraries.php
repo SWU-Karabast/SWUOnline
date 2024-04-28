@@ -812,15 +812,19 @@ function ResolveChainLink()
   UpdateGameState($currentPlayer);
   BuildMainPlayerGameState();
 
+  $target = GetAttackTarget();
+  if($target == "THEIRALLY--1") {
+    CloseCombatChain(true);
+    ProcessDecisionQueue();
+    return;//Means the target was already destroyed
+  }
+
   $totalAttack = 0;
   $totalDefense = 0;
   EvaluateCombatChain($totalAttack, $totalDefense);
-
   $combatChainState[$CCS_LinkTotalAttack] = $totalAttack;
-
   LogCombatResolutionStats($totalAttack, $totalDefense);
 
-  $target = GetAttackTarget();
   $targetArr = explode("-", $target);
   if ($targetArr[0] == "THEIRALLY") {
     //Construct the combatants
