@@ -523,7 +523,6 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             $mzArr = explode("-", $arr[$i]);
             if($mzArr[0] == "MYALLY" || $mzArr[0] == "THEIRALLY") {
               $ally = new Ally($arr[$i]);
-              WriteLog($ally->CardID());
               $isLeader = DefinedTypesContains($ally->CardID(), "Leader", $player);
               if($params[1] == 1 && $isLeader) unset($arr[$i]);
               else if($params[1] == 0 && !$isLeader) unset($arr[$i]);
