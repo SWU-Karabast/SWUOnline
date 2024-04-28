@@ -2370,9 +2370,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "6931439330"://The Ghost
       if($from != "PLAY") {
-        $ally = new Ally("MYALLY-" . $index, $currentPlayer);
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Spectre");
-        AddDecisionQueue("MZFILTER", $currentPlayer, "index=MYALLY-" . $ally->Index());
+        AddDecisionQueue("MZFILTER", $currentPlayer, "index=MYALLY-" . $playAlly->Index());
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to give a shield");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "ADDSHIELD", 1);
