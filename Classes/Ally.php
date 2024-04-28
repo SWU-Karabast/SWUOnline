@@ -109,7 +109,10 @@ class Ally {
     $power += AttackModifier($this->CardID(), $this->playerID, $this->index);
     $subcards = $this->GetSubcards();
     for($i=0; $i<count($subcards); ++$i) if($subcards[$i] != "-") $power += AttackValue($subcards[$i]);
-    if(HasGrit($this->CardID(), $this->playerID, $this->index)) $power += $this->MaxHealth() - $this->Health();
+    if(HasGrit($this->CardID(), $this->playerID, $this->index)) {
+      $damage = $this->MaxHealth() - $this->Health();
+      if($damage > 0) $power += $damage;
+    }
     //Other ally buffs
     $otherAllies = &GetAllies($this->playerID);
     for($i=0; $i<count($otherAllies); $i+=AllyPieces()) {
