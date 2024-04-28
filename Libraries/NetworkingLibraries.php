@@ -838,7 +838,8 @@ function ResolveChainLink()
     $destroyed = $defender->DealDamage($totalAttack, bypassShield:HasSaboteur($attackerID, $mainPlayer, $attacker->Index()));
     if($destroyed) ClearAttackTarget();
     if($attackerArr[0] == "MYALLY" && (!$destroyed || ($combatChain[0] != "9500514827" && !SearchCurrentTurnEffects("8297630396", $mainPlayer)))) { //Han Solo shoots first
-      $attacker->DealDamage($defenderPower);
+      $destroyed = $attacker->DealDamage($defenderPower);
+      if($destroyed) ClearAttacker();
     }
     if($hasOverwhelm) DealDamageAsync($defPlayer, $excess, "TRIGGER", $attackerID);
     else if($attackerID == "3830969722") { //Blizzard Assault AT-AT

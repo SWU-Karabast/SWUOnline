@@ -1715,6 +1715,11 @@ function NumEquipBlock()
     else return "THEIRALLY-" . $combatChainState[$CCS_WeaponIndex];
   }
 
+  function ClearAttacker() {
+    global $combatChainState, $CCS_WeaponIndex;
+    $combatChainState[$CCS_WeaponIndex] = -1;
+  }
+
 function IsSpecificAuraAttacking($player, $index)
 {
   global $combatChain, $combatChainState, $CCS_WeaponIndex, $mainPlayer;
