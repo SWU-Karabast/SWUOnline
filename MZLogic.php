@@ -85,7 +85,7 @@ function MZGetUniqueID($mzIndex, $player)
   switch($mzArr[0]) {
     case "ALLY": case "MYALLY": case "THEIRALLY": return $zone[$mzArr[1] + 5];
     case "BANISH": case "MYBANISH": case "THEIRBANISH": return $zone[$mzArr[1] + 2];
-    default: return "-1";
+    default: return "-";
   }
 }
 
