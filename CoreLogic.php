@@ -2495,10 +2495,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "4536594859"://Medal Ceremony
-      WriteLog("Make sure you manually enforce the restriction for Medal Ceremony");
       for($i=0; $i<3; ++$i) {
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to give experience");
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose only a card that attacked to give experience (or click the PASS button if done)");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "ADDEXPERIENCE", 1);
       }
