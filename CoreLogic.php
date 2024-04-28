@@ -2675,6 +2675,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Rebel", 1);
         AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
         AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
+        AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
         AddDecisionQueue("OP", $currentPlayer, "REMOVECARD");
         AddDecisionQueue("CHOOSEBOTTOM", $currentPlayer, "<-");
       }
