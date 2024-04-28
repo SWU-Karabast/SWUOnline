@@ -4,7 +4,7 @@
 function ProcessHitEffect($cardID)
 {
   WriteLog("Processing hit effect for " . CardLink($cardID, $cardID));
-  global $mainPlayer, $combatChainState, $CCS_GoesWhereAfterLinkResolves, $defPlayer, $CCS_AttackTarget, $CS_NumAlliesDestroyed;
+  global $mainPlayer, $combatChainState, $CS_NumLeftPlay, $CCS_GoesWhereAfterLinkResolves, $defPlayer, $CCS_AttackTarget, $CS_NumAlliesDestroyed;
   if(HitEffectsArePrevented()) return;
   switch($cardID)
   {
@@ -33,7 +33,7 @@ function ProcessHitEffect($cardID)
       WriteLog("This is a partially manual card. Manually pass priority to attack with an additional unit");
       break;
     case "0e65f012f5"://Boba Fett
-      if(GetClassState($defPlayer, $CS_NumAlliesDestroyed) > 0) ReadyResource($mainPlayer, 2);
+      if(GetClassState($defPlayer, $CS_NumLeftPlay) > 0) ReadyResource($mainPlayer, 2);
       break;
     default: break;
   }
@@ -42,7 +42,7 @@ function ProcessHitEffect($cardID)
 
 function AttackModifier($cardID, $player, $index)
 {
-  global $mainPlayer, $defPlayer, $initiativePlayer, $combatChain, $combatChainState, $CS_NumLeveledUp;
+  global $mainPlayer, $defPlayer, $initiativePlayer, $combatChain, $combatChainState, $CS_NumLeftPlay;
   $modifier = 0;
   if($player == $mainPlayer) {
     //Raid is only for attackers

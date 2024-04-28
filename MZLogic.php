@@ -298,6 +298,7 @@ function MZWakeUp($player, $target)
 
 function MZBounce($player, $target)
 {
+  global $CS_NumLeftPlay;
   $pieces = explode("-", $target);
   $player = (substr($pieces[0], 0, 2) == "MY" ? $player : ($player == 1 ? 2 : 1));
   $zone = &GetMZZone($player, $pieces[0]);
@@ -307,6 +308,7 @@ function MZBounce($player, $target)
       $owner = $allies[$pieces[1]+11];
       $cardID = RemoveAlly($player, $pieces[1]);
       AddHand($owner, $cardID);
+      IncrementClassState($player, $CS_NumLeftPlay);
       break;
     case "MYRESOURCES": case "THEIRRESOURCES":
       $cardID = RemoveResource($player, $pieces[1]);

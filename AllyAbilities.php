@@ -96,12 +96,13 @@ function RemoveAlly($player, $index)
 
 function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
 {
-  global $combatChain, $mainPlayer, $CS_NumAlliesDestroyed;
+  global $combatChain, $mainPlayer, $CS_NumAlliesDestroyed, $CS_NumLeftPlay;
   $allies = &GetAllies($player);
   if(!$skipDestroy) {
     AllyDestroyedAbility($player, $index);
     IncrementClassState($player, $CS_NumAlliesDestroyed);
   }
+  IncrementClassState($player, $CS_NumLeftPlay);
   AllyLeavesPlayAbility($player, $index);
   $ally = new Ally("MYALLY-" . $index, $player);
   $subcards = $ally->GetSubcards();
