@@ -521,6 +521,12 @@ function ProcessTrigger($player, $parameter, $uniqueID, $target="-")
       AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $index, 1);
       AddDecisionQueue("MZOP", $player, "ATTACK", 1);
       break;
+    case "87e8807695":
+      AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to attack with");
+      AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
+      AddDecisionQueue("MZOP", $player, "ATTACK", 1);
+      break;
     default: break;
   }
 }
@@ -651,8 +657,6 @@ function DiscardRandom($player = "", $source = "")
 
 function DiscardedAtRandomEffects($player, $discarded, $source) {
   switch($discarded) {
-    case "DYN008": AddLayer("TRIGGER", $player, $discarded); break;
-    case "DYN010": case "DYN011": case "DYN012": AddLayer("TRIGGER", $player, $discarded); break;
     default: break;
   }
 }

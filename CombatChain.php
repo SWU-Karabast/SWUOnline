@@ -30,7 +30,7 @@ function ProcessHitEffect($cardID)
       }
       break;
     case "87e8807695"://Leia Organa
-      WriteLog("This is a partially manual card. Manually pass priority to attack with an additional unit");
+      AddLayer("TRIGGER", $mainPlayer, "87e8807695", "-", "-", "-");
       break;
     case "0e65f012f5"://Boba Fett
       if(GetClassState($defPlayer, $CS_NumLeftPlay) > 0) ReadyResource($mainPlayer, 2);
@@ -142,10 +142,6 @@ function OnBlockResolveEffects()
       default:
         break;
     }
-  }
-  if($blockedFromHand > 0 && SearchCharacterActive($mainPlayer, "ELE174", true) && (TalentContains($combatChain[0], "LIGHTNING", $mainPlayer) || TalentContains($combatChain[0], "ELEMENTAL", $mainPlayer)))
-  {
-    AddLayer("TRIGGER", $mainPlayer, "ELE174");
   }
   for($i = count($currentTurnEffects) - CurrentTurnPieces(); $i >= 0; $i -= CurrentTurnPieces()) {
     $remove = false;
