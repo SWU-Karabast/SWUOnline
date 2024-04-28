@@ -827,7 +827,7 @@ function UpgradeFilter($cardID)
     case "6903722220"://Luke's Lightsaber
     case "1323728003"://Electrostaff
       return "trait=Vehicle";
-    case "8055390529":
+    case "8055390529"://Traitorous
       return "maxCost=3";
     default: return "";
   }

@@ -30,6 +30,18 @@ function PlayAura($cardID, $player, $number = 1, $isToken = false, $rogueHeronSp
   else if($cardID != "ELE111") IncrementClassState($player, $CS_NumAuras, $number);
 }
 
+function UpgradeDefeated($cardID, $player, $index) {
+  switch($cardID) {
+    case "8055390529"://Traitorous
+      $allies = &GetAllies($player);
+      $owner = $allies[$index + 11];
+      AddDecisionQueue("PASSPARAMETER", $owner, "THEIRALLY-" . $index);
+      AddDecisionQueue("MZOP", $owner, "TAKECONTROL");
+      break;
+    default: break;
+  }
+}
+
 function AuraEntersPlayState($cardID)
 {
   switch($cardID)
