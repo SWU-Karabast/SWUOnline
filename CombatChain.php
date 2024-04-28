@@ -23,7 +23,7 @@ function ProcessHitEffect($cardID)
       break;
     case "3280523224"://Rukh
       if(IsAllyAttackTarget()) {
-        $ally = new Ally(GetAttackTarget(), $mainPlayer);
+        $ally = new Ally(GetAttackTarget(), $defPlayer);
         if(!DefinedTypesContains($ally->CardID(), "Leader", $defPlayer)) {
           DestroyAlly($defPlayer, $ally->Index());
         }
