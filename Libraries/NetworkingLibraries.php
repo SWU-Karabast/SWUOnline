@@ -1008,7 +1008,7 @@ function BeginRoundPass()
 {
   global $initiativeTaken, $mainPlayer, $currentTurnEffects, $nextTurnEffects, $initiativePlayer;
   global $MakeStartTurnBackup;
-  WriteLog("Both players have passed; ending the round.");
+  WriteLog("Both players have passed; ending the phase.");
   ResetClassState(1);
   ResetClassState(2);
   AllyBeginEndTurnEffects();
@@ -1024,6 +1024,7 @@ function BeginRoundPass()
   $initiativeTaken = 0;
   EndTurnProcedure($initiativePlayer);
   EndTurnProcedure($initiativePlayer == 1 ? 2 : 1);
+  WriteLog("<span style='color:blue;'>A new phase has begun</span>");
   AllyBeginTurnEffects();
   CharacterStartTurnAbility(1);
   CharacterStartTurnAbility(2);
