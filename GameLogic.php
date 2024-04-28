@@ -508,6 +508,14 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           case "trait": if(TraitContains(GetMZCard($player, $arr[$i]), $params[1], $player)) unset($arr[$i]); break;
           case "definedType": if(DefinedTypesContains(GetMZCard($player, $arr[$i]), $params[1], $player)) unset($arr[$i]); break;
           case "maxCost": if(CardCost(GetMZCard($player, $arr[$i])) > $params[1]) unset($arr[$i]); break;
+          case "status":
+            $mzArr = explode("-", $arr[$i]);
+            if($mzArr[0] == "MYALLY" || $mzArr[0] == "THEIRALLY") {
+              $ally = new Ally($arr[$i]);
+              if($params[1] == 1 && $ally->IsExhausted()) unset($arr[$i]);
+              else if($params[1] == 0 && !$ally->IsExhausted()) unset($arr[$i]);
+            }
+            break;
           default: break;
         }
       }
