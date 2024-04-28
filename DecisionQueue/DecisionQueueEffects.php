@@ -266,8 +266,9 @@ function SpecificCardLogic($player, $card, $lastResult)
     case "RESTOCK":
       $arr = [];
       for($i = count($lastResult) - DiscardPieces(); $i >= 0; $i -= DiscardPieces()) {
-        array_push($arr, RemoveGraveyard($player, $i));
+        array_push($arr, RemoveGraveyard($player, $lastResult[$i]));
       }
+      RevealCards(implode(",", $arr), $player);
       if(count($arr) > 0) {
         RandomizeArray($arr);
         $deck = new Deck($player);
