@@ -209,6 +209,7 @@ function SpecificCardLogic($player, $card, $lastResult)
         AddDecisionQueue("YESNO", $player, "-");
         AddDecisionQueue("NOPASS", $player, "-");
         AddDecisionQueue("DRAW", $player, "-", 1);
+        AddDecisionQueue("REVEALCARDS", $player, "-", 1);
       }
       else {
         AddDecisionQueue("SETDQCONTEXT", $player, "The top card of your deck is <0>");
