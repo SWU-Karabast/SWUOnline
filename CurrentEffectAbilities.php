@@ -34,12 +34,14 @@ function FinalizeChainLinkEffects()
         PrependDecisionQueue("MZOP", $mainPlayer, "ATTACK", 1);
         PrependDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
         PrependDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to attack with");
+        PrependDecisionQueue("MZFILTER", $mainPlayer, "status=1");
         PrependDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
         return true;
       case "6514927936-2"://Leia Organa
         PrependDecisionQueue("MZOP", $mainPlayer, "ATTACK", 1);
         PrependDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
         PrependDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to attack with");
+        PrependDecisionQueue("MZFILTER", $mainPlayer, "status=1");
         PrependDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
         return true;
       default: break;
