@@ -2328,7 +2328,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "0867878280"://It Binds All Things
       $ally = new Ally($target);
       $ally->Heal(3);
-      if(HasLeader($currentPlayer)) {
+      if(SearchCount(SearchAllies($currentPlayer, trait:"Force")) > 0) {
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 3 damage to");
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
