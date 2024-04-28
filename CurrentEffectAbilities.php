@@ -52,6 +52,9 @@ function EffectAttackModifier($cardID)
 {
   global $mainPlayer;
   $params = explode("_", $cardID);
+  if(count($params) == 1) {
+    $params = explode("-", $cardID);
+  }
   $cardID = $params[0];
   if(count($params) > 1) $subparam = $params[1];
   switch($cardID)
