@@ -273,8 +273,12 @@ function AllyDestroyedAbility($player, $index)
       PlayerOpt($player, 2);
       break;
     case "1047592361"://Ruthless Raider
-      DealArcane(2, 1, "PLAYCARD", $cardID, player:$player);
-      DealArcane(2, 2, "PLAYCARD", $cardID, player:$player);
+      $otherPlayer = $player == 1 ? 2 : 1;
+      DealDamageAsync($otherPlayer, 2, "TRIGGER", "1047592361");
+      AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal 2 damage to");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+      AddDecisionQueue("MZOP", $player, "DEALDAMAGE,2", 1);
       break;
     case "0949648290"://Greedo
       AddDecisionQueue("SETDQCONTEXT", $player, "Choose if you want to discard a card to Greedo");
