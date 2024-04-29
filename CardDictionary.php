@@ -796,7 +796,7 @@ function IsPlayable($cardID, $phase, $from, $index = -1, &$restriction = null, $
 
 function HasAlternativeCost($cardID) {
   switch($cardID) {
-    case "9644107128"://Command
+    case "9644107128"://Bamboozle
       return true;
     default: return false;
   }
