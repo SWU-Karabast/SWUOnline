@@ -471,22 +471,20 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
       }
       break;
     case 10005:
-      WriteLog("Player " . $playerID ." manually subtracted 1 health point from themselves.", highlight: true);
-      LoseHealth(1, $playerID);
+      WriteLog("Player " . $playerID ." manually subtracted 1 damage from themselves.", highlight: true);
+      Restore(1, $playerID);
       break;
     case 10006:
-      WriteLog("Player " . $playerID ." manually added 1 health point to themselves.", highlight: true);
-      $health = &GetHealth($playerID);
-      $health += 1;
+      WriteLog("Player " . $playerID ." manually added 1 damage point to themselves.", highlight: true);
+      LoseHealth(1, $playerID);
       break;
     case 10007:
-      WriteLog("Player " . $playerID ." manually added 1 health point to themselves.", highlight: true);
-      LoseHealth(1, ($playerID == 1 ? 2 : 1));
+      WriteLog("Player " . $playerID ." manually subtracted 1 damage from their opponent.", highlight: true);
+      Restore(1, ($playerID == 1 ? 2 : 1));
       break;
     case 10008:
-      WriteLog("Player " . $playerID ." manually added 1 health point their opponent.", highlight: true);
-      $health = &GetHealth($playerID == 1 ? 2 : 1);
-      $health += 1;
+      WriteLog("Player " . $playerID ." manually added 1 damage to themselves.", highlight: true);
+      LoseHealth(1, ($playerID == 1 ? 2 : 1));
       break;
     case 10009:
       WriteLog("Player " . $playerID ." manually drew a card for themselves.", highlight: true);
