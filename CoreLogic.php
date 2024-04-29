@@ -2338,7 +2338,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "1021495802"://Cantina Bouncer
       if($from != "PLAY") {
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY&MYALLY");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "BOUNCE", 1);
       }
