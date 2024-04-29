@@ -126,6 +126,8 @@ echo ("</select>");
 if ($canSeeQueue) {
   echo '<label for="public"><input class="SelectDeckInput" type="radio" id="public" name="visibility" value="public" ' . ($defaultVisibility == 1 ? 'checked="checked"' : "") . '>';
   echo (' Public</label>');
+} else {
+  echo '&#10071;Log in to be able to create public games.';
 }
 ?>
 <label for="private">
