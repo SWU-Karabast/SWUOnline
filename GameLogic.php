@@ -420,6 +420,10 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           }
           RemoveAlly($otherPlayer, $mzArr[1]);
           return $uniqueID;
+        case "WRITECHOICE":
+          $ally = new Ally($lastResult);
+          WriteLog(CardLink($ally->CardID(), $ally->CardID()) . " was chosen");
+          return $lastResult;
         default: break;
       }
       return $lastResult;

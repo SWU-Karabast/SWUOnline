@@ -2541,6 +2541,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to give Sentinel");
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "WRITECHOICE", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
         AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "8294130780,HAND", 1);
       }
