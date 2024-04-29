@@ -2320,10 +2320,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "0827076106"://Admiral Ackbar
       if($from != "PLAY") {
-        $targetCard = GetMZCard($currentPlayer, $target);
-        $damage = SearchCount(SearchAllies($currentPlayer, arena:CardArenas($targetCard)));
-        AddDecisionQueue("PASSPARAMETER", $currentPlayer, $target);
-        AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE," . $damage, 1);
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to damage");
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("SPECIFICCARD", $currentPlayer, "ADMIRALACKBAR", 1);
       }
       break;
     case "0867878280"://It Binds All Things
@@ -3630,7 +3630,6 @@ function PlayRequiresTarget($cardID)
   {
     case "8679831560": return 2;//Repair
     case "8981523525": return 6;//Moment of Peace
-    case "0827076106": return 6;//Admiral Ackbar
     case "0867878280": return 6;//It Binds All Things
     case "2587711125": return 6;//Disarm
     case "6515891401": return 6;//Karabast
