@@ -2653,7 +2653,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       global $CS_NumCardsPlayed;
       if($from != "PLAY") {
         $ally = new Ally("MYALLY-" . LastAllyIndex($currentPlayer));
-        for($i=0; $i<GetClassState($currentPlayer, $CS_NumCardsPlayed); ++$i) {
+        for($i=0; $i<(GetClassState($currentPlayer, $CS_NumCardsPlayed)-1); ++$i) {
           $ally->Attach("2007868442");//Experience token
         }
       }
