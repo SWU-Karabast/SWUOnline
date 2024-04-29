@@ -481,6 +481,12 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         case "CombatChain":
           $lastResultArr = explode(",", $lastResult);
           for($i=0; $i<count($lastResultArr); ++$i) array_push($input, $combatChain[$lastResultArr[$i]+CCOffset($type)] . "-" . $lastResultArr[$i]);
+          break;
+        case "Deck":
+          $lastResultArr = explode(",", $lastResult);
+          $deck = &GetDeck($player);
+          for($i=0; $i<count($lastResultArr); ++$i) array_push($input, $deck[$lastResultArr[$i]*DeckPieces()] . "-" . $lastResultArr[$i]);
+          break;
         default: break;
       }
       $output = [];

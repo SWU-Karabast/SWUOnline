@@ -3315,14 +3315,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "8968669390"://U-Wing Reinforcement
-      global $CS_AfterPlayedBy;
       AddCurrentTurnEffect($cardID, $currentPlayer);
-      AddDecisionQueue("PASSPARAMETER", $currentPlayer, $cardID);
-      AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_AfterPlayedBy);
-      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "0");
-      AddDecisionQueue("SETDQVAR", $currentPlayer, "1");//Counter for number of resources spent
-      AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE,10");
-      AddDecisionQueue("SETDQVAR", $currentPlayer, "0");//List of cards
+      AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXINDICES,10");
+      AddDecisionQueue("FILTER", $currentPlayer, "Deck-include-definedType-Unit", 1);
+      AddDecisionQueue("FILTER", $currentPlayer, "Deck-include-maxCost-7", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "0");
+      AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "3-");
+      AddDecisionQueue("MULTICHOOSEDECK", $currentPlayer, "<-", 1, 1);
+      AddDecisionQueue("MULTIREMOVEDECK", $currentPlayer, "-", 1);
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "UWINGREINFORCEMENT");
       break;
     case "5950125325"://Confiscate
@@ -3489,12 +3489,6 @@ function AfterPlayedByAbility($cardID) {
       global $currentTurnEffects;
       $index = count($currentTurnEffects) - CurrentTurnEffectPieces();
       RemoveCurrentTurnEffect($index);
-      break;
-    case "8968669390"://U-Wing Reinforcement
-      if(SearchCurrentTurnEffects($cardID, $currentPlayer)) {
-        PrependDecisionQueue("SPECIFICCARD", $currentPlayer, "UWINGREINFORCEMENT", 1);
-        SetClassState($currentPlayer, $CS_AfterPlayedBy, $cardID);
-      }
       break;
     default: break;
   }

@@ -243,19 +243,18 @@ function SpecificCardLogic($player, $card, $lastResult)
       AddDecisionQueue("SPECIFICCARD", $player, "THEEMPERORSLEGION", 1);
       break;
     case "UWINGREINFORCEMENT":
-      $hand = &GetHand($player);
-      PrependDecisionQueue("ALLRANDOMBOTTOM", $player, "DECK");
-      PrependDecisionQueue("PASSPARAMETER", $player, "{0}");
-      PrependDecisionQueue("REMOVECURRENTEFFECT", $player, "8968669390", 1);
-      PrependDecisionQueue("ELSE", $player, "-");
-      PrependDecisionQueue("MZOP", $player, "PLAYCARD", 1);
-      PrependDecisionQueue("PASSPARAMETER", $player, "MYHAND-" . count($hand), 1);
-      PrependDecisionQueue("SETDQVAR", $player, "0", 1);
-      PrependDecisionQueue("OP", $player, "REMOVECARD", 1);
-      PrependDecisionQueue("ADDHAND", $player, "-", 1);
-      PrependDecisionQueue("MAYCHOOSECARD", $player, "<-", 1);
-      PrependDecisionQueue("FILTER", $player, "LastResult-include-definedType-Unit", 1);
-      PrependDecisionQueue("PASSPARAMETER", $player, "{0}");
+      $totalCost = 0;
+      $cardArr = explode(",", $lastResult);
+      for($i=0; $i<count($cardArr); ++$i) {
+        PlayCard($cardArr[$i], "DECK");
+        $totalCost += CardCost($cardArr[$i]);
+      }
+      if($totalCost > 7) {
+        WriteLog("<span style='color:red;'>Too many units played. Let's just say we'd like to avoid any Imperial entanglements. Reverting gamestate.</span>");
+        RevertGamestate();
+        return "";
+      }
+      SearchCurrentTurnEffects("8968669390", $player, remove:true);
       break;
     case "POWERFAILURE":
       PrependDecisionQueue("OP", $player, "DEFEATUPGRADE", 1);
