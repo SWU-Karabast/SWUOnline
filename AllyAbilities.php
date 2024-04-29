@@ -622,6 +622,8 @@ function SpecificAllyAttackAbilities($attackID)
       break;
     case "80df3928eb"://Hera Syndulla
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
+      AddDecisionQueue("MZFILTER", $mainPlayer, "index=MYALLY-" . $attackerAlly->Index());
+      AddDecisionQueue("MZFILTER", $mainPlayer, "unique=0");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "ADDEXPERIENCE", 1);
       break;
