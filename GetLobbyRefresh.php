@@ -128,12 +128,14 @@ if ($lastUpdate != 0 && $cacheVal < $lastUpdate) {
   echo ("<div id='playAudio' style='display:none;'>" . ($playerID == 1 && $gameStatus == $MGS_ChooseFirstPlayer ? 1 : 0) . "</div>");
 
   $otherHero = "CardBack";
+  $otherBase = "Cardback";
   $otherPlayer = $playerID == 1 ? 2 : 1;
   $deckFile = "./Games/" . $gameName . "/p" . $otherPlayer . "Deck.txt";
   if (file_exists($deckFile)) {
     $handler = fopen($deckFile, "r");
     $otherCharacter = GetArray($handler);
     $otherHero = $otherCharacter[1];
+    $otherBase = $otherCharacter[0];
     fclose($handler);
   }
 
@@ -145,7 +147,8 @@ if ($lastUpdate != 0 && $cacheVal < $lastUpdate) {
   if($isMobile) echo ("<h3>$theirDisplayName</h3>");
   else echo ("<h2>$theirDisplayName</h2>");
   $overlayURL = ($contentCreator != null ? $contentCreator->HeroOverlayURL($otherHero) : "");
-  echo (Card($otherHero, "concat", ($isMobile ? 100 : 250) , 0, 1));
+  echo (Card($otherHero, "CardImages", ($isMobile ? 100 : 250), 0, 1, 0, 0, 0, "", "", true));
+  echo (Card($otherBase, "CardImages", ($isMobile ? 100 : 250), 0, 1, 0, 0, 0, "", "", true));
   $channelLink = ($contentCreator != null ? $contentCreator->ChannelLink() : "");
   if($channelLink != "") echo("<a href='" . $channelLink . "' target='_blank'>");
   if($overlayURL != "") echo ("<img title='Portrait' style='position:absolute; z-index:1001; top: 87px; left: 18px; cursor:pointer; height:" . ($isMobile ? 100 : 250) . "; width:" . ($isMobile ? 100 : 250) . ";' src='" . $overlayURL . "' />");

@@ -208,7 +208,7 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
 
   if ($controller != 0 && IsPatron($controller) && CardHasAltArt($cardNumber)) $folderPath = "PatreonImages/" . $folderPath;
 
-  $rv .= "<img " . ($id != "" ? "id='" . $id . "-img' " : "") . "style='" . $border . " height:" . $height . "; width:" . $width . "px; position:relative;' src='" . $folderPath . "/" . $cardNumber . $fileExt . "' />";
+  $rv .= "<img " . ($id != "" ? "id='" . $id . "-img' " : "") . "data-orientation='" . ($rotate ? "landscape' " : "portrait' ") . "style='" . $border . " height:" . $height . "; width:" . $width . "px; position:relative;' src='" . $folderPath . "/" . $cardNumber . $fileExt . "' />";
   $rv .= "<div " . ($id != "" ? "id='" . $id . "-ovr' " : "") . "style='visibility:" . ($overlay == 1 ? "visible" : "hidden") . "; width:100%; height:100%; top:0px; left:0px; border-radius:10px; position:absolute; background: rgba(0, 0, 0, 0.5); z-index: 1;'></div>";
 
   // Counters Style

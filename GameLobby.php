@@ -121,14 +121,15 @@ $isMobile = IsMobile();
   <center>
     <?php
     if ($isMobile) echo '<div id="oppHero" style="position:absolute; z-index:1; top:2%; left:2%; width:50%; height:25%; background-color:rgba(74, 74, 74, 0.9); border: 2px solid #1a1a1a; border-radius: 5px;">';
-    else echo '<div id="oppHero" style="position:absolute; z-index:1; top:20px; left:20px; width:290px; height:351px; background-color:rgba(74, 74, 74, 0.9); border: 2px solid #1a1a1a; border-radius: 5px;">';
+    else echo '<div id="oppHero" style="position:absolute; z-index:1; top:20px; left:20px; width:290px; height:485px; background-color:rgba(74, 74, 74, 0.9); border: 2px solid #1a1a1a; border-radius: 5px;">';
     $theirDisplayName = ($theirName != "-" ? $theirName : "Player " . ($playerID == 1 ? 2 : 1));
     if ($isMobile) echo ("<h3>$theirDisplayName</h3>");
     else echo ("<h2>$theirDisplayName</h2>");
 
     $otherHero = "CardBack";
     echo ("<div>");
-    echo (Card($otherHero, "concat", ($isMobile ? 100 : 250), 0, 0));
+    echo (Card($otherHero, "CardImages", ($isMobile ? 100 : 250), 0, 1, 0, 0, 0, "", "", true));
+    echo (Card($otherHero, "CardImages", ($isMobile ? 100 : 250), 0, 1, 0, 0, 0, "", "", true));
     echo ("</div>");
     ?>
     </div>
@@ -136,10 +137,10 @@ $isMobile = IsMobile();
 
   <?php
   if ($isMobile) echo '<div style="position:absolute; z-index:1; top:29%; left:2%; width:50%; height:25%; background-color:rgba(74, 74, 74, 0.9); border: 2px solid #1a1a1a; border-radius: 5px;">';
-  else echo '<div style="position:absolute; z-index:1; top:20px; left:330px; width:290px; height:351px; background-color:rgba(74, 74, 74, 0.9); border: 2px solid #1a1a1a; border-radius: 5px;">';
+  else echo '<div style="position:absolute; z-index:1; top:20px; left:330px; width:290px; height:485px; background-color:rgba(74, 74, 74, 0.9); border: 2px solid #1a1a1a; border-radius: 5px;">';
   $contentCreator = ContentCreators::tryFrom(($playerID == 1 ? $p1ContentCreatorID : $p2ContentCreatorID));
   $nameColor = ($contentCreator != null ? $contentCreator->NameColor() : "");
-  $displayName = "<span style='color:" . $nameColor . "'>" . ($yourName != "-" ? $yourName : "Player " . $playerID) . "</span>";
+  $displayName = "<span style='color:" . $nameColor . "'>" . ($yourName != "-" ? $yourName : "Playerssssss " . $playerID) . "</span>";
   if ($isMobile) echo ("<h3>$displayName</h3>");
   else echo ("<h2>$displayName</h2>");
 
@@ -151,7 +152,15 @@ $isMobile = IsMobile();
     echo ("<center>");
     echo ("<div style='position:relative; display: inline-block;'>");
     $overlayURL = ($contentCreator != null ? $contentCreator->HeroOverlayURL($material[1]) : "");
-    echo (Card($material[1], "concat", ($isMobile ? 100 : 250), 0, 1));
+    echo (Card($material[1], "CardImages", ($isMobile ? 100 : 250), 0, 1, 0, 0, 0, "", "", true));
+    if ($overlayURL != "") echo ("<img title='Portrait' style='position:absolute; z-index:1001; top: 27px; left: 0px; cursor:pointer; height:" . ($isMobile ? 100 : 250) . "; width:" . ($isMobile ? 100 : 250) . ";' src='" . $overlayURL . "' />");
+    echo ("</div>");
+    echo ("</center>");
+
+    echo ("<center>");
+    echo ("<div style='position:relative; display: inline-block;'>");
+    $overlayURL = ($contentCreator != null ? $contentCreator->HeroOverlayURL($material[0]) : "");
+    echo (Card($material[0], "CardImages", ($isMobile ? 100 : 250), 0, 1, 0, 0, 0, "", "", true));
     if ($overlayURL != "") echo ("<img title='Portrait' style='position:absolute; z-index:1001; top: 27px; left: 0px; cursor:pointer; height:" . ($isMobile ? 100 : 250) . "; width:" . ($isMobile ? 100 : 250) . ";' src='" . $overlayURL . "' />");
     echo ("</div>");
     echo ("</center>");
@@ -272,7 +281,7 @@ $isMobile = IsMobile();
     </div>
     <?php
     if ($isMobile) echo '<div style="position:absolute; z-index:1; top:56%; left:2%; width:600px; max-width: 96%; bottom:3%; font-weight:500; font-size:18px; background-color:rgba(74, 74, 74, 0.9); border: 2px solid #1a1a1a;border-radius: 5px;">';
-    else echo '<div style="position:absolute; z-index:1; top:390px; left:20px; width:600px; bottom:3%; font-weight:500; font-size:18px; background-color:rgba(74, 74, 74, 0.9); border: 2px solid #1a1a1a;border-radius: 5px;">';
+    else echo '<div style="position:absolute; z-index:1; top:525px; left:20px; width:600px; bottom:3%; font-weight:500; font-size:18px; background-color:rgba(74, 74, 74, 0.9); border: 2px solid #1a1a1a;border-radius: 5px;">';
     ?>
 
     <h1>Game Lobby</h1>
