@@ -129,6 +129,7 @@ $isMobile = IsMobile();
     $otherHero = "CardBack";
     echo ("<div>");
     echo (Card($otherHero, "CardImages", ($isMobile ? 100 : 250), 0, 1, 0, 0, 0, "", "", true));
+    echo (Card($otherHero, "CardImages", ($isMobile ? 100 : 250), 0, 1, 0, 0, 0, "", "", true));
     echo ("</div>");
     ?>
     </div>
