@@ -777,7 +777,9 @@ function IsPlayable($cardID, $phase, $from, $index = -1, &$restriction = null, $
     $char = &GetPlayerCharacter($player);
     if($char[1] != 2) return false;//Can't attack if rested
   }
+  $otherPlayer = ($player == 1 ? 2 : 1);
   if($from == "HAND" && ((CardCost($cardID) + SelfCostModifier($cardID)) > NumResourcesAvailable($currentPlayer)) && !HasAlternativeCost($cardID)) return false;
+  if(DefinedTypesContains($cardID, "Upgrade", $player) && SearchCount(SearchAllies($player)) == 0 && SearchCount(SearchAllies($otherPlayer)) == 0) return false;
   if($phase == "M" && $from == "HAND") return true;
   $isStaticType = IsStaticType($cardType, $from, $cardID);
   if($isStaticType) {
