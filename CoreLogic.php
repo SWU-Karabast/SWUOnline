@@ -2944,8 +2944,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "9985638644"://Snapshot Reflexes
       $mzArr = explode("-", $target);
       if($mzArr[0] == "MYALLY") {
-        AddDecisionQueue("PASSPARAMETER", $currentPlayer, $target);
-        AddDecisionQueue("MZOP", $currentPlayer, "ATTACK");
+        $ally = new Ally($target);
+        if(!$ally->IsExhausted()) {
+          AddDecisionQueue("PASSPARAMETER", $currentPlayer, $target);
+          AddDecisionQueue("MZOP", $currentPlayer, "ATTACK");
+        }
       }
       break;
     case "7728042035"://Chimaera
