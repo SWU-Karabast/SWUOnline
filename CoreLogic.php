@@ -2946,8 +2946,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       if(SearchCount(SearchAllies($currentPlayer, trait:"Force")) > 0) {
         $ally->Attach("8752877738");//Shield Token
       }
-      AddDecisionQueue("PASSPARAMETER", $currentPlayer, $target);
-      AddDecisionQueue("MZOP", $currentPlayer, "ATTACK");
+      if(!$ally->IsExhausted()) {
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, $target);
+        AddDecisionQueue("MZOP", $currentPlayer, "ATTACK");
+      }
       break;
     case "9985638644"://Snapshot Reflexes
       $mzArr = explode("-", $target);
