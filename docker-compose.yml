@@ -21,7 +21,7 @@ services:
       REDIS_HOST: "app_redis"
       REDIS_ENABLED: true
       DOMAIN: "localhost"
-    user: "1000:1000"
+    user: "${DOCKER_USER}"
 
   mysql-server:
     image: mysql:latest
