@@ -52,7 +52,7 @@ function AttackModifier($cardID, $player, $index)
   }
   switch($cardID) {
     case "3988315236"://Seasoned Shoretrooper
-      $modifier += NumResources($mainPlayer) >= 6 ? 2 : 0;
+      $modifier += NumResources($player) >= 6 ? 2 : 0;
       break;
     case "6348804504"://Ardent Sympathizer
       $modifier += $initiativePlayer == $mainPlayer ? 2 : 0;

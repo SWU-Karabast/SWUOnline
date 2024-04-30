@@ -17,7 +17,8 @@ function ShowDetail(e, imgSource) {
   imgSource = imgSource.replace("/concat/", "/WebpImages/");
   imgSource = imgSource.replace(".png", ".webp");
   var el = document.getElementById("cardDetail");
-  el.innerHTML =
+  el.innerHTML = e.target.getAttribute("data-orientation") == "landscape" ?
+    "<img style='height:375px; width:523px;' src='" + imgSource + "' />":
     "<img style='height:523px; width:375px;' src='" + imgSource + "' />";
   el.style.left =
     e.clientX < window.innerWidth / 2 ? e.clientX + 30 : e.clientX - 400;

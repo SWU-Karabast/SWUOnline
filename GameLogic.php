@@ -538,6 +538,15 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
               else if($params[1] == 0 && !$isLeader) unset($arr[$i]);
             }
             break;
+          case "unique":
+            $mzArr = explode("-", $arr[$i]);
+            if($mzArr[0] == "MYALLY" || $mzArr[0] == "THEIRALLY") {
+              $ally = new Ally($arr[$i]);
+              $isUnique = CardIsUnique($ally->CardID());
+              if($params[1] == 1 && $isUnique) unset($arr[$i]);
+              else if($params[1] == 0 && !$isUnique) unset($arr[$i]);
+            }
+            break;
           default: break;
         }
       }

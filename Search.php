@@ -234,6 +234,19 @@ function SearchAlliesForCard($player, $card1, $card2 = "", $card3 = "")
   return $cardList;
 }
 
+function SearchAlliesForTitle($player, $title)
+{
+  $allies = &GetAllies($player);
+  $cardList = "";
+  for ($i = 0; $i < count($allies); $i += AllyPieces()) {
+    if (CardTitle($allies[$i]) == $title) {
+      if ($cardList != "") $cardList = $cardList . ",";
+      $cardList = $cardList . $i;
+    }
+  }
+  return $cardList;
+}
+
 function SearchAlliesActive($player, $card1, $card2 = "", $card3 = "")
 {
   $allies = &GetAllies($player);

@@ -121,7 +121,8 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
   $allies = array_values($allies);
   if(AllyHasStaticHealthModifier($cardID)) {
     for($i = count($allies)-AllyPieces(); $i >= 0; $i -= AllyPieces()) {
-      $allies[$i+2] -= AllyStaticHealthModifier($allies[$i], $i, $player, $cardID, $index);
+      //myIndex is -1 because the unit is destroyed
+      $allies[$i+2] -= AllyStaticHealthModifier($allies[$i], $i, $player, $cardID, -1);
       if($allies[$i+2] <= 0) DestroyAlly($player, $i);
     }
   }
@@ -154,7 +155,10 @@ function AllyEntersPlayState($cardID, $player, $from="-")
   {
     case "1785627279": return 2;//Millennium Falcon
     case "4300219753"://Fett's Firespray
-      return 2;
+      $char = &GetPlayerCharacter($player);
+      if(CardTitle($char[CharacterPieces()]) == "Boba Fett" || CardTitle($char[CharacterPieces()]) == "Jango Fett") return 2;
+      if(SearchCount(SearchAlliesForTitle($player, "Boba Fett")) > 0 || SearchCount(SearchAlliesForTitle($player, "Jango Fett")) > 0) return 2;
+      return 1;
     default: return 1;
   }
 }
@@ -230,7 +234,7 @@ function AllyLeavesPlayAbility($player, $index)
     switch($char[$i])
     {
       case "4626028465"://Boba Fett
-        if($char[$i+1] == 2) {
+        if($char[$i+1] == 2 && NumResourcesAvailable($otherPlayer) < NumResources($otherPlayer)) {
           $char[$i+1] = 1;
           ReadyResource($otherPlayer);
         }
@@ -264,8 +268,8 @@ function AllyDestroyedAbility($player, $index)
       if($player == $initiativePlayer) { Draw($player); Draw($player); }
       break;
     case "5575681343"://Vanguard Infantry
-      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to add an experience");
       AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to add an experience");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
       AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
       break;
@@ -541,6 +545,7 @@ function SpecificAllyAttackAbilities($attackID)
       case "8495694166"://Jedi Lightsaber
         if(TraitContains($attackID, "Force", $mainPlayer) && IsAllyAttackTarget()) {
           WriteLog("Jedi Lightsaber gives the defending unit -2/-2");
+          $target = GetAttackTarget();
           $ally = new Ally($target);
           $ally->DealDamage(2);
           AddCurrentTurnEffect("8495694166", $defPlayer, from:"PLAY");
@@ -622,6 +627,8 @@ function SpecificAllyAttackAbilities($attackID)
       break;
     case "80df3928eb"://Hera Syndulla
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
+      AddDecisionQueue("MZFILTER", $mainPlayer, "index=MYALLY-" . $attackerAlly->Index());
+      AddDecisionQueue("MZFILTER", $mainPlayer, "unique=0");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "ADDEXPERIENCE", 1);
       break;
