@@ -69,12 +69,15 @@
       <title>Karabast</title>
       <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
       <link rel="stylesheet" href="css/gamestyle.css">
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     </head>
 
     <script>
       var IsDynamicScalingEnabled = <?php echo (IsDynamicScalingEnabled($playerID) ? "true" : "false"); ?>;
-      var cardSize = IsDynamicScalingEnabled == 1 ? window.innerWidth / 13 : 96;
-      //var cardSize = 96;
+      var cardSize = IsDynamicScalingEnabled == 1 ? window.innerWidth / 13 : 100;
+      //Note: 100 = Card Size
 
       function Hotkeys(event) {
         if (event.keyCode === 32) { if(document.getElementById("passConfirm").innerText == "false" || confirm("Do you want to skip arsenal?")) SubmitInput(99, ""); } //Space = pass
@@ -215,7 +218,8 @@
 
         if (gem != 0) {
           var playerID = <?php echo ($playerID); ?>;
-          var cardWidth = 96;
+           //Note: 100 = Card Size
+          var cardWidth = 100;
           gemImg = (gem == 1 ? "hexagonRedGem.png" : "hexagonGrayGem.png");
           if (gem == 1) rv += "<img " + ProcessInputLink(playerID, 102, actionDataOverride) + " title='Effect Active' style='position:absolute; z-index:1001; bottom:3px; left:" + (cardWidth / 2 - 18) + "px; width:40px; height:40px; cursor:pointer;' src='./Images/" + gemImg + "' />";
           else if (gem == 2) rv += "<img " + ProcessInputLink(playerID, 102, actionDataOverride) + " title='Effect Inactive' style='position:absolute; z-index:1001; bottom:3px; left:" + (cardWidth / 2 - 18) + "px; width:40px; height:40px; cursor:pointer;' src='./Images/" + gemImg + "' />";
@@ -303,7 +307,8 @@
         }
       }
 
-      function PopulateZone(zone, size = 96, folder = "concat") {
+      //Note: 100 = Card Size
+      function PopulateZone(zone, size = 100, folder = "concat") {
         var zoneEl = document.getElementById(zone);
         var zoneData = zoneEl.innerHTML;
         if (zoneData == "") return;
@@ -373,7 +378,7 @@
       function GetCharacterLeft(cardType, cardSubType) {
         switch (cardType) {
           case "C": case "W":
-            return "calc(46.5% - " + ((cardSize * 1.29) / 2) + "px)";
+            return "calc(50% - 172px)";
           default:
             break;
         }
@@ -394,9 +399,9 @@
       function GetCharacterBottom(cardType, cardSubType) {
         switch (cardType) {
           case "C":
-            return (cardSize * 2 + 25) + "px";
+            return "calc(200px + 60px)";
           case "W":
-            return (cardSize * 3 + 40) + "px";
+            return "calc(200px + 166px)";
           default:
             break;
         }
@@ -417,9 +422,9 @@
       function GetCharacterTop(cardType, cardSubType) {
         switch (cardType) {
           case "C":
-            return (cardSize * 2 + 25) + "px";
+            return "calc(140px + 60px)";
           case "W":
-            return (cardSize * 3 + 40) + "px";
+            return "calc(140px + 166px)";
           default:
             break;
         }
@@ -461,7 +466,7 @@
 
       div,
       span {
-        font-family: helvetica;
+        font-family: "Barlow", sans-serif;
       }
 
       td {
