@@ -73,7 +73,7 @@ if (isset($_SESSION["userid"])) {
   */
 
   ?>
-  <label for="fabdb">Deck Link (use the json export from <u><a style='color:lightblue;' href='https://www.swudb.com/' target='_blank'>SWUDB</a></u>):</label>
+  <label for="fabdb">Deck Link (use the url or "Deck Link" button from <u><a style='color:lightblue;' href='https://www.swudb.com/' target='_blank'>SWUDB</a></u>):</label>
   <input type="text" id="fabdb" name="fabdb">
   <br>
   <?php
