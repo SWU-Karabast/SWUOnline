@@ -267,8 +267,8 @@ function AllyDestroyedAbility($player, $index)
       if($player == $initiativePlayer) { Draw($player); Draw($player); }
       break;
     case "5575681343"://Vanguard Infantry
-      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to add an experience");
       AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to add an experience");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
       AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
       break;
