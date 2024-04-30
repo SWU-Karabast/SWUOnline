@@ -226,7 +226,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     echo ("<div class='container;' style='position:absolute; z-index:-100; left:0px; top:0px; width:100%; height:100%;
     -webkit-filter: grayscale(1); -webkit-filter: grayscale(15%); -moz-filter: grayscale(15%); filter: gray;filter: grayscale(15%);
     filter: url(data:image/svg+xml;utf8,<svg version='1.1' xmlns='http://www.w3.org/2000/svg' height='0'><filter id='greyscale'><feColorMatrix type='matrix' values='0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0'/></filter></svg>
-    <img style='object-fit: cover; height:100%; width:100%;' src='./Images/star-wars-background.jpg'/></div>");
+    <img style='object-fit: cover; height:100%; width:100%;' src='./Images/gamebg.jpg'/></div>");
 
   echo ("<div style='position:absolute; right:" . intval($rightSideWidth * 1.05) . "px; top:calc(50% - 100px); height:200px; z-index:100;'>
       <span style='position:absolute; text-align:center; width:100%; font-weight: 550; font-size: 140%; top:152px; user-select: none;'>$myHealth</span>"); //Master pass button div
@@ -354,11 +354,11 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   echo ("</div>");
 
   //Space Arena
-  echo ("<div style='overflow:none; position: fixed; top:20%; left:8%; width:" . $arenaWidth . "; height:60%; border:1px solid black; border-radius:7px; opacity:.55; background-image: url(\"./Images/star_texture.webp\");'>");
+  echo ("<div style='overflow:none; position: fixed; top:20%; left:8%; width:" . $arenaWidth . "; height:60%; opacity:.55; border-radius:7px; background-size: cover; background-position: center; background-image: url(\"./Images/spacebg.jpg\");'>");
   echo("</div>");
 
   //Ground Arena
-  echo ("<div style='overflow:none; position: fixed; top:20%; left:" . $groundLeft . "; width:" . $arenaWidth . "; height:60%; border:1px solid darkgray; border-radius:7px; opacity:.55; background-image: url(\"./Images/ground_texture.webp\");'>");
+  echo ("<div style='overflow:none; position: fixed; top:20%; left:" . $groundLeft . "; width:" . $arenaWidth . "; height:60%; opacity:.55; border-radius:7px; background-size: cover; background-position: center; background-image: url(\"./Images/groundbg.jpg\");'>");
   echo("</div>");
 
 
