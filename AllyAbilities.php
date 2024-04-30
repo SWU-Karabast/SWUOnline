@@ -545,6 +545,7 @@ function SpecificAllyAttackAbilities($attackID)
       case "8495694166"://Jedi Lightsaber
         if(TraitContains($attackID, "Force", $mainPlayer) && IsAllyAttackTarget()) {
           WriteLog("Jedi Lightsaber gives the defending unit -2/-2");
+          $target = GetAttackTarget();
           $ally = new Ally($target);
           $ally->DealDamage(2);
           AddCurrentTurnEffect("8495694166", $defPlayer, from:"PLAY");
