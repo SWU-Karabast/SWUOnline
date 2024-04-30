@@ -587,7 +587,7 @@ function SpecificAllyAttackAbilities($attackID)
       Restore(count($aspectArr), $mainPlayer);
       break;
     case "0ca1902a46"://Darth Vader
-      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY");
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,2", 1);
       break;
