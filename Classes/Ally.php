@@ -197,6 +197,11 @@ class Ally {
         unset($subcards[$i]);
         $subcards = array_values($subcards);
         $this->allies[$this->index + 4] = count($subcards) > 0 ? implode(",", $subcards) : "-";
+        $this->allies[$this->index+2] -= CardHP($upgradeID);
+        if($this->Health() <= 0) {
+          DestroyAlly($this->playerID, $this->index);
+          return true;
+        }
         return;
       } 
     }
