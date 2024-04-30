@@ -121,7 +121,8 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
   $allies = array_values($allies);
   if(AllyHasStaticHealthModifier($cardID)) {
     for($i = count($allies)-AllyPieces(); $i >= 0; $i -= AllyPieces()) {
-      $allies[$i+2] -= AllyStaticHealthModifier($allies[$i], $i, $player, $cardID, $index);
+      //myIndex is -1 because the unit is destroyed
+      $allies[$i+2] -= AllyStaticHealthModifier($allies[$i], $i, $player, $cardID, -1);
       if($allies[$i+2] <= 0) DestroyAlly($player, $i);
     }
   }
