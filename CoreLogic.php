@@ -2211,7 +2211,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "6253392993"://Bright Hope
       if($from != "PLAY") {
-        MZMoveCard($currentPlayer, "MYALLY:arena=Ground", "MYHAND", may:true);
+        MZMoveCard($currentPlayer, "MYALLY:arena=Ground", "MYHAND", may:true, filter:"leader=1");
         AddDecisionQueue("DRAW", $currentPlayer, "-", 1);
       }
       break;
