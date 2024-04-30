@@ -164,7 +164,7 @@ function MZPlayCard($player, $mzIndex) {
 
 function MZAttack($player, $mzIndex)
 {
-  global $CS_CharacterIndex, $CS_PlayIndex, $currentPlayer, $mainPlayer, $defPlayer;
+  global $CS_CharacterIndex, $CS_PlayIndex, $CS_AbilityIndex, $currentPlayer, $mainPlayer, $defPlayer;
   $currentPlayer = $player;
   $mainPlayer = $player;
   $defPlayer = ($player == 1 ? 2 : 1);
@@ -172,7 +172,9 @@ function MZAttack($player, $mzIndex)
   $ally->Exhaust();
   SetClassState($player, $CS_CharacterIndex, $ally->Index());
   SetClassState($player, $CS_PlayIndex, $ally->Index());
-  PlayCard($ally->CardID(), "PLAY", -1, $ally->Index(), $ally->UniqueID());
+  $abilityIndex = GetAbilityIndex($ally->CardID(), $ally->Index(), "Attack");
+  SetClassState($player, $CS_AbilityIndex, $abilityIndex);
+  PlayCard($ally->CardID(), "PLAY", -1, $ally->Index(), $ally->UniqueID(), skipAbilityType:true);
 }
 
 function MZUndestroy($player, $parameter, $lastResult)

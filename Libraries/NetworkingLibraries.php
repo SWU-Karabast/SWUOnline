@@ -1180,12 +1180,12 @@ function SwapTurn() {
   BuildMainPlayerGameState();
 }
 
-function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID = -1)
+function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID = -1, $skipAbilityType = false)
 {
   global $playerID, $turn, $currentPlayer, $actionPoints, $layers;
   global $CS_NumActionsPlayed, $CS_NumNonAttackCards, $CS_NumPlayedFromBanish, $CS_DynCostResolved;
   global $CS_NumAttackCards, $CS_NumBloodDebtPlayed, $layerPriority, $CS_NumWizardNonAttack, $lastPlayed, $CS_PlayIndex;
-  global $decisionQueue, $CS_AbilityIndex, $CS_NumRedPlayed, $CS_PlayUniqueID, $CS_LayerPlayIndex, $CS_LastDynCost, $CS_NumCardsPlayed, $CS_NamesOfCardsPlayed;
+  global $decisionQueue, $CS_PlayIndex, $CS_NumRedPlayed, $CS_PlayUniqueID, $CS_LayerPlayIndex, $CS_LastDynCost, $CS_NumCardsPlayed, $CS_NamesOfCardsPlayed;
   global $CS_PlayedAsInstant, $mainPlayer, $CS_DynCostResolved, $CS_NumMelodyPlayed;
   $resources = &GetResources($currentPlayer);
   $pitch = &GetPitch($currentPlayer);
@@ -1197,7 +1197,7 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
     //CR 5.1.1 Play a Card (CR 2.0) - Layer Created
     if($playingCard)
     {
-      SetClassState($currentPlayer, $CS_AbilityIndex, $index);
+      SetClassState($currentPlayer, $CS_PlayIndex, $index);
       $layerIndex = AddLayer($cardID, $currentPlayer, $from, "-", "-");
       SetClassState($currentPlayer, $CS_LayerPlayIndex, $layerIndex);
     }
@@ -1242,7 +1242,7 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
       $resources[1] = 0;
       if($playingCard) $dynCost = DynamicCost($cardID); //CR 5.1.3a Declare variable cost (CR 2.0)
       else $dynCost = "";
-      if($playingCard) AddPrePitchDecisionQueue($cardID, $from, $index); //CR 5.1.3b,c Declare additional/optional costs (CR 2.0)
+      if($playingCard) AddPrePitchDecisionQueue($cardID, $from, $index, $skipAbilityType); //CR 5.1.3b,c Declare additional/optional costs (CR 2.0)
       if($dynCost != "") {
         AddDecisionQueue("DYNPITCH", $currentPlayer, $dynCost);
         AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_LastDynCost);
@@ -1358,7 +1358,7 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
     AuraPlayAbilities($cardID, $from);
     PermanentPlayAbilities($cardID, $from);
   }
-  AddDecisionQueue("RESUMEPLAY", $currentPlayer, $cardID . "|" . $from . "|" . $resourcesPaid . "|" . GetClassState($currentPlayer, $CS_AbilityIndex) . "|" . GetClassState($currentPlayer, $CS_PlayUniqueID));
+  AddDecisionQueue("RESUMEPLAY", $currentPlayer, $cardID . "|" . $from . "|" . $resourcesPaid . "|" . GetClassState($currentPlayer, $CS_PlayIndex) . "|" . GetClassState($currentPlayer, $CS_PlayUniqueID));
   ProcessDecisionQueue();
 }
 
@@ -1415,10 +1415,10 @@ function GetLayerTarget($cardID)
   }
 }
 
-function AddPrePitchDecisionQueue($cardID, $from, $index = -1)
+function AddPrePitchDecisionQueue($cardID, $from, $index = -1, $skipAbilityType = false)
 {
   global $currentPlayer, $CS_AdditionalCosts;
-  if (IsStaticType(CardType($cardID), $from, $cardID)) {
+  if (!$skipAbilityType && IsStaticType(CardType($cardID), $from, $cardID)) {
     $names = GetAbilityNames($cardID, $index);
     if ($names != "") {
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose which ability to activate");
