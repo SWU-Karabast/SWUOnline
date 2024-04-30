@@ -230,7 +230,7 @@ function AllyLeavesPlayAbility($player, $index)
     switch($char[$i])
     {
       case "4626028465"://Boba Fett
-        if($char[$i+1] == 2) {
+        if($char[$i+1] == 2 && NumResourcesAvailable($otherPlayer) < NumResources($otherPlayer)) {
           $char[$i+1] = 1;
           ReadyResource($otherPlayer);
         }
