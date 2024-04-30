@@ -2681,11 +2681,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE," . 5);
         AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
         AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Rebel", 1);
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a rebel to draw", 1);
         AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
         AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
         AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
         AddDecisionQueue("OP", $currentPlayer, "REMOVECARD");
-        AddDecisionQueue("CHOOSEBOTTOM", $currentPlayer, "<-");
+        AddDecisionQueue("ALLRANDOMBOTTOM", $currentPlayer, "DECK");
       }
       break;
     case "3509161777"://You're My Only Hope
