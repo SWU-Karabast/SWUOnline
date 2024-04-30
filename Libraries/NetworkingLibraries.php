@@ -837,10 +837,10 @@ function ResolveChainLink()
     $defenderPower = $defender->CurrentPower();
     if($defenderPower < 0) $defenderPower = 0;
     $excess = $totalAttack - $defender->Health();
-    $destroyed = $defender->DealDamage($totalAttack, bypassShield:HasSaboteur($attackerID, $mainPlayer, $attacker->Index()));
+    $destroyed = $defender->DealDamage($totalAttack, bypassShield:HasSaboteur($attackerID, $mainPlayer, $attacker->Index()), fromCombat:true);
     if($destroyed) ClearAttackTarget();
     if($attackerArr[0] == "MYALLY" && (!$destroyed || ($combatChain[0] != "9500514827" && !SearchCurrentTurnEffects("8297630396", $mainPlayer)))) { //Han Solo shoots first
-      $destroyed = $attacker->DealDamage($defenderPower);
+      $destroyed = $attacker->DealDamage($defenderPower, fromCombat:true);
       if($destroyed) ClearAttacker();
     }
     if($hasOverwhelm) DealDamageAsync($defPlayer, $excess, "TRIGGER", $attackerID);

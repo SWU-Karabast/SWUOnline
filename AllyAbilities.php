@@ -99,7 +99,7 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
   global $combatChain, $mainPlayer, $CS_NumAlliesDestroyed, $CS_NumLeftPlay;
   $allies = &GetAllies($player);
   if(!$skipDestroy) {
-    AllyDestroyedAbility($player, $index);
+    AllyDestroyedAbility($player, $index, $fromCombat);
     IncrementClassState($player, $CS_NumAlliesDestroyed);
   }
   IncrementClassState($player, $CS_NumLeftPlay);
@@ -244,12 +244,12 @@ function AllyLeavesPlayAbility($player, $index)
   }
 }
 
-function AllyDestroyedAbility($player, $index)
+function AllyDestroyedAbility($player, $index, $fromCombat)
 {
   global $mainPlayer, $initiativePlayer;
   $allies = &GetAllies($player);
   $cardID = $allies[$index];
-  OnKillAbility();
+  OnKillAbility($fromCombat);
   switch($cardID) {
     case "4405415770"://Yoda, Old Master
       WriteLog("Player $player drew a card from Yoda, Old Master");
@@ -354,7 +354,7 @@ function AllyDestroyedAbility($player, $index)
   }
 }
 
-function OnKillAbility()
+function OnKillAbility($fromCombat)
 {
   global $combatChain, $mainPlayer;
   if(count($combatChain) == 0) return;
@@ -365,10 +365,12 @@ function OnKillAbility()
       $ally->Ready();
       break;
     case "9647945674"://Zeb Orrelios
-      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 4 damage to");
-      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY:arena=Ground");
-      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
-      AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,4", 1);
+      if($fromCombat) {
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 4 damage to");
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY:arena=Ground");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,4", 1);
+      }
       break;
     default: break;
   }
