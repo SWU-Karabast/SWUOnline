@@ -819,18 +819,18 @@ function ResolveChainLink()
 
   $totalAttack = 0;
   $totalDefense = 0;
-  EvaluateCombatChain($totalAttack, $totalDefense);
+  $attackerMZ = AttackerMZID($mainPlayer);
+  $attackerArr = explode("-", $attackerMZ);
+  $attacker = new Ally($attackerMZ, $mainPlayer);
+  $totalAttack = $attacker->CurrentPower();
   $combatChainState[$CCS_LinkTotalAttack] = $totalAttack;
-  LogCombatResolutionStats($totalAttack, $totalDefense);
+  LogCombatResolutionStats($totalAttack, 0);
 
   $targetArr = explode("-", $target);
   if ($targetArr[0] == "THEIRALLY") {
     //Construct the combatants
     $index = $targetArr[1];
     $defender = new Ally($target, $defPlayer);
-    $attackerMZ = AttackerMZID($mainPlayer);
-    $attackerArr = explode("-", $attackerMZ);
-    $attacker = new Ally($attackerMZ, $mainPlayer);
     $attackerID = $attacker->CardID();
     $hasOverwhelm = HasOverwhelm($attacker->CardID(), $mainPlayer, $attacker->Index());
     //Resolve the combat
