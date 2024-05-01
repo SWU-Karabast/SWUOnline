@@ -33,7 +33,6 @@ services:
       MYSQL_SERVER_USER_NAME: "root"
       MYSQL_DATABASE: "swuonline"
     volumes:
-      - ./mysql-data:/var/lib/mysql
       - ./Database:/docker-entrypoint-initdb.d
   phpmyadmin:
     image: phpmyadmin:latest
