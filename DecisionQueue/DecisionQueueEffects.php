@@ -56,7 +56,7 @@ function ModalAbilities($player, $card, $lastResult)
             break;
           case "Shield":
             AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to give a shield");
-            AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
+            AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
             AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
             AddDecisionQueue("MZOP", $player, "ADDSHIELD", 1);
             break;
