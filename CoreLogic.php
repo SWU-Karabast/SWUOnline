@@ -2848,8 +2848,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MODAL", $currentPlayer, "BOMBINGRUN", 1);
       break;
     case "6088773439"://Darth Vader
+      global $CS_NumVillainyPlayed;
       $abilityName = GetResolvedAbilityName($cardID, $from);
-      if($abilityName == "Deal Damage") {
+      if($abilityName == "Deal Damage" && GetClassState($currentPlayer, $CS_NumVillainyPlayed) > 0) {
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 1 damage to");
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
