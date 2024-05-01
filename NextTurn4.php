@@ -467,6 +467,7 @@
       div,
       span {
         font-family: "Barlow", sans-serif;
+        color: white;
       }
 
       td {
@@ -474,14 +475,12 @@
       }
 
       .passButton {
-        background: url("./Images/passActive.png") no-repeat;
-        background-size: contain;
+        background-color: #292929;
         transition: 150ms ease-in-out;
       }
 
       .passButton:hover {
-        background: url("./Images/passHover.png") no-repeat;
-        background-size: contain;
+        background-color: #292929;
         -webkit-transform: scale(1.1);
         -ms-transform: scale(1.1);
         transform: scale(1.1);
@@ -493,7 +492,7 @@
       }
 
       .passInactive {
-        background: url("./Images/passInactive.png") no-repeat;
+        background-color: #292929;
         background-size: contain;
       }
 
