@@ -22,3 +22,8 @@ Run the following command to start the environment
 ### Stopping environment
 run the following command to stop the environment
 ```bash docker compose down```
+
+### Accessing the application
+
+open in your browser the address
+```http://localhost:8080/SWUOnline/MainMenu.php```
