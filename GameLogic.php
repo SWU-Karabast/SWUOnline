@@ -559,6 +559,14 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
               else if($params[1] == 0 && !$isUnique) unset($arr[$i]);
             }
             break;
+          case "turns":
+            $mzArr = explode("-", $arr[$i]);
+            $paramsArr = explode(">", $params[1]);
+            if($mzArr[0] == "MYALLY" || $mzArr[0] == "THEIRALLY") {
+              $ally = new Ally($arr[$i]);
+              if($ally->TurnsInPlay() > $paramsArr[1]) unset($arr[$i]);
+            }
+            break;
           default: break;
         }
       }

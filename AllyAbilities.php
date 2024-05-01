@@ -767,6 +767,7 @@ function AllyBeginEndTurnEffects()
       $mainAllies[$i+3] = 0;
       $mainAllies[$i+8] = 1;
       $mainAllies[$i+9] = 0;//Reset distant -> normal
+      ++$mainAllies[$i+12];//Increase number of turns in play
       if($mainAllies[$i+10] == 1) $mainAllies[$i+10] = 0;//Reset damage taken for foster mechanic
     }
     switch($mainAllies[$i])
@@ -779,6 +780,7 @@ function AllyBeginEndTurnEffects()
   for($i = 0; $i < count($defAllies); $i += AllyPieces()) {
     if($defAllies[$i+1] != 0) {
       $defAllies[$i+8] = 1;
+      ++$mainAllies[$i+12];//Increase number of turns in play
     }
   }
 }

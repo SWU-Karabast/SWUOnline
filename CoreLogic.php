@@ -2715,7 +2715,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "2579145458"://Luke Skywalker
       $abilityName = GetResolvedAbilityName($cardID, $from);
       if($abilityName == "Give Shield") {
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:aspect=Heroism");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "turns=>0");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "ADDSHIELD", 1);
       }

@@ -48,6 +48,10 @@ class Ally {
     return $this->allies[$this->index+11];
   }
 
+  function TurnsInPlay() {
+    return $this->allies[$this->index+12];
+  }
+
   function AddHealth($amount) {
     $this->allies[$this->index+2] += $amount;
   }
