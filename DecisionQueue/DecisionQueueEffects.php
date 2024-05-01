@@ -255,7 +255,7 @@ function SpecificCardLogic($player, $card, $lastResult)
         RevertGamestate();
         return "";
       }
-      SearchCurrentTurnEffects("8968669390", $player, remove:true);
+      AddDecisionQueue("REMOVECURRENTEFFECT", $player, "8968669390");
       break;
     case "POWERFAILURE":
       PrependDecisionQueue("OP", $player, "DEFEATUPGRADE", 1);
