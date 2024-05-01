@@ -217,7 +217,7 @@ function CachedNumActionBlocked()
 
 function StartTurnAbilities()
 {
-  global $mainPlayer, $defPlayer;
+  global $initiativePlayer;
   MZStartTurnMayAbilities();
   AuraStartTurnAbilities();
   ItemStartTurnAbilities();
@@ -1587,7 +1587,7 @@ function NumEquipBlock()
       case "CHOOSEARSENAL": return 0;
       case "CHOOSEDISCARD": return 0;
       case "MULTICHOOSEHAND": return 0;
-      case "MULTICHOOSEMATERIAL": return 0;
+      case "MULTICHOOSEUNIT": return 0;
       case "CHOOSEMULTIZONE": return 0;
       case "CHOOSEBANISH": return 0;
       case "BUTTONINPUTNOPASS": return 0;
@@ -2211,7 +2211,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "6253392993"://Bright Hope
       if($from != "PLAY") {
-        MZMoveCard($currentPlayer, "MYALLY:arena=Ground", "MYHAND", may:true);
+        MZMoveCard($currentPlayer, "MYALLY:arena=Ground", "MYHAND", may:true, filter:"leader=1");
         AddDecisionQueue("DRAW", $currentPlayer, "-", 1);
       }
       break;
@@ -2240,11 +2240,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Imperial", 1);
         AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
         AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
+        AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
         AddDecisionQueue("OP", $currentPlayer, "REMOVECARD", 1);
         AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
         AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Imperial", 1);
         AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
         AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
+        AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
         AddDecisionQueue("OP", $currentPlayer, "REMOVECARD", 1);
         AddDecisionQueue("ALLRANDOMBOTTOM", $currentPlayer, "DECK");
       }
@@ -2500,12 +2502,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "4536594859"://Medal Ceremony
-      for($i=0; $i<3; ++$i) {
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose only a card that attacked to give experience (or click the PASS button if done)");
-        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "ADDEXPERIENCE", 1);
-      }
+      AddDecisionQueue("FINDINDICES", $currentPlayer, "UNITS");
+      AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "3-");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose up to 3 units that have attacked", 1);
+      AddDecisionQueue("MULTICHOOSEUNIT", $currentPlayer, "<-", 1, 1);
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "MEDALCEREMONY");
       break;
     case "5449704164"://2-1B Surgical Droid
       if($from == "PLAY") {
@@ -2705,8 +2706,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       if($abilityName == "Play Taunt") {
         global $CS_AfterPlayedBy;
         SetClassState($currentPlayer, $CS_AfterPlayedBy, $cardID);
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to put into play");
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND:definedType=Unit;maxCost=3");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to put into play");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
       }
@@ -2714,7 +2715,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "2579145458"://Luke Skywalker
       $abilityName = GetResolvedAbilityName($cardID, $from);
       if($abilityName == "Give Shield") {
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:aspect=Heroism");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "turns=>0");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "ADDSHIELD", 1);
       }
@@ -2847,8 +2849,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MODAL", $currentPlayer, "BOMBINGRUN", 1);
       break;
     case "6088773439"://Darth Vader
+      global $CS_NumVillainyPlayed;
       $abilityName = GetResolvedAbilityName($cardID, $from);
-      if($abilityName == "Deal Damage") {
+      if($abilityName == "Deal Damage" && GetClassState($currentPlayer, $CS_NumVillainyPlayed) > 0) {
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 1 damage to");
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
@@ -2918,20 +2921,24 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Vehicle", 1);
       AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
       AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
-      AddDecisionQueue("OP", $currentPlayer, "REMOVECARD");
+      AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
+      AddDecisionQueue("OP", $currentPlayer, "REMOVECARD", 1);
       AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
       AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Vehicle", 1);
       AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
       AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
-      AddDecisionQueue("OP", $currentPlayer, "REMOVECARD");
-      AddDecisionQueue("CHOOSEBOTTOM", $currentPlayer, "<-");
+      AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
+      AddDecisionQueue("OP", $currentPlayer, "REMOVECARD", 1);
+      AddDecisionQueue("ALLRANDOMBOTTOM", $currentPlayer, "DECK");
       break;
     case "3896582249"://Redemption
       if($from != "PLAY") {
         $ally = new Ally("MYALLY-" . LastAllyIndex($currentPlayer));
         for($i=0; $i<8; ++$i) {
-          AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to restore 1", $i == 0 ? 0 : 1);
-          AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYCHAR&MYALLY", $i == 0 ? 0 : 1);
+          AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY", $i == 0 ? 0 : 1);
+          AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "MYCHAR-0,", $i == 0 ? 0 : 1);
+          AddDecisionQueue("MZFILTER", $currentPlayer, "index=MYALLY-" . $playAlly->Index());
+          AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to restore 1 (Remaining: " . (8-$i) . ")", $i == 0 ? 0 : 1);
           AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
           AddDecisionQueue("MZOP", $currentPlayer, "RESTORE,1", 1);
           AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYALLY-" . LastAllyIndex($currentPlayer), 1);
@@ -2962,7 +2969,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "7728042035"://Chimaera
-      if($from != "PLAY") {
+      if($from == "PLAY") {
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Name the card in chat");
         AddDecisionQueue("OK", $currentPlayer, "-");
         AddDecisionQueue("PASSPARAMETER", $currentPlayer, "1");
@@ -3422,7 +3429,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit", 1);
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "{0},", 1);
-      AddDecisionQueue("SETDQVAR", $currentPlayer, 0, 1);
+      AddDecisionQueue("OP", $otherPlayer, "SWAPDQPERSPECTIVE", 1);
       AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a unit to return to hand");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $otherPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $otherPlayer, "BOUNCE", 1);

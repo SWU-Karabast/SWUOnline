@@ -123,6 +123,10 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $discard = &GetDiscard($player);
           $rv = GetIndices(count($discard));
           break;
+        case "UNITS":
+          $allies = &GetAllies($player);
+          $rv = GetIndices(count($allies), 0 , AllyPieces());
+          break;
         case "GYTYPE": $rv = SearchDiscard($player, $subparam); break;
         case "GYAA": $rv = SearchDiscard($player, "AA"); break;
         case "GYNAA": $rv = SearchDiscard($player, "A"); break;
@@ -461,11 +465,19 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $allyPlayer = $mzArr[0] == "MYALLY" ? $player : ($player == 1 ? 2 : 1);
           $ally = new Ally($dqVars[0], $allyPlayer);
           $ally->DefeatUpgrade($upgradeID);
-          $destroyed = $ally->DealDamage(CardHP($upgradeID));
           if(!$destroyed) {
             UpgradeDefeated($upgradeID, $allyPlayer, $mzArr[1]);
           }
           return $lastResult;
+        case "SWAPDQPERSPECTIVE":
+          $arr = explode(",", $lastResult);
+          $output = "";
+          for($i=0; $i<count($arr); ++$i) {
+            if($output != "") $output .= ",";
+            $mzArr = explode("-", $arr[$i]);
+            $output .= ($mzArr[0] == "MYALLY" ? "THEIRALLY" : "MYALLY") . "-" . $mzArr[1];
+          }
+          return $output;
         default: return $lastResult;
       }
     case "FILTER":
@@ -545,6 +557,14 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
               $isUnique = CardIsUnique($ally->CardID());
               if($params[1] == 1 && $isUnique) unset($arr[$i]);
               else if($params[1] == 0 && !$isUnique) unset($arr[$i]);
+            }
+            break;
+          case "turns":
+            $mzArr = explode("-", $arr[$i]);
+            $paramsArr = explode(">", $params[1]);
+            if($mzArr[0] == "MYALLY" || $mzArr[0] == "THEIRALLY") {
+              $ally = new Ally($arr[$i]);
+              if($ally->TurnsInPlay() > $paramsArr[1]) unset($arr[$i]);
             }
             break;
           default: break;
@@ -1309,6 +1329,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         AddDecisionQueue("NOPASS", $secondPlayer, "-");
         AddDecisionQueue("MULLIGAN", $secondPlayer, "-", 1);
       }
+      CharacterStartTurnAbility($initiativePlayer);
+      CharacterStartTurnAbility($secondPlayer);
       MZMoveCard($initiativePlayer, "MYHAND", "MYRESOURCES", may:false, context:"Choose a card to resource", silent:true);
       AddDecisionQueue("AFTERRESOURCE", $initiativePlayer, "HAND", 1);
       MZMoveCard($initiativePlayer, "MYHAND", "MYRESOURCES", may:false, context:"Choose a card to resource", silent:true);
@@ -1323,6 +1345,9 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
     case "SWAPFIRSTTURN":
       global $isPass;
       $isPass = true;
+      return 0;
+    case "SWAPTURN":
+      PassTurn();
       return 0;
     case "MULLIGAN":
       $hand = &GetHand($player);

@@ -31,15 +31,29 @@ function FinalizeChainLinkEffects()
   for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnPieces()) {
     switch($currentTurnEffects[$i]) {
       case "8988732248-2"://Rebel Assault
+        PrependDecisionQueue("SWAPTURN", $mainPlayer, "-");
+        PrependDecisionQueue("ELSE", $mainPlayer, "-");
         PrependDecisionQueue("MZOP", $mainPlayer, "ATTACK", 1);
-        PrependDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        PrependDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
         PrependDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to attack with");
         PrependDecisionQueue("MZFILTER", $mainPlayer, "status=1");
         PrependDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
         return true;
       case "6514927936-2"://Leia Organa
+        PrependDecisionQueue("SWAPTURN", $mainPlayer, "-");
+        PrependDecisionQueue("ELSE", $mainPlayer, "-");
         PrependDecisionQueue("MZOP", $mainPlayer, "ATTACK", 1);
-        PrependDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        PrependDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        PrependDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to attack with");
+        PrependDecisionQueue("MZFILTER", $mainPlayer, "status=1");
+        PrependDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
+        return true;
+      case "87e8807695"://Leia Organa - Leader Unit
+        SearchCurrentTurnEffects("87e8807695", $mainPlayer, remove:true);
+        PrependDecisionQueue("SWAPTURN", $mainPlayer, "-");
+        PrependDecisionQueue("ELSE", $mainPlayer, "-");
+        PrependDecisionQueue("MZOP", $mainPlayer, "ATTACK", 1);
+        PrependDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
         PrependDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to attack with");
         PrependDecisionQueue("MZFILTER", $mainPlayer, "status=1");
         PrependDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");

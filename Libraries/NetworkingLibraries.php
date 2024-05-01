@@ -819,28 +819,28 @@ function ResolveChainLink()
 
   $totalAttack = 0;
   $totalDefense = 0;
-  EvaluateCombatChain($totalAttack, $totalDefense);
+  $attackerMZ = AttackerMZID($mainPlayer);
+  $attackerArr = explode("-", $attackerMZ);
+  $attacker = new Ally($attackerMZ, $mainPlayer);
+  $totalAttack = $attacker->CurrentPower();
   $combatChainState[$CCS_LinkTotalAttack] = $totalAttack;
-  LogCombatResolutionStats($totalAttack, $totalDefense);
+  LogCombatResolutionStats($totalAttack, 0);
 
   $targetArr = explode("-", $target);
   if ($targetArr[0] == "THEIRALLY") {
     //Construct the combatants
     $index = $targetArr[1];
     $defender = new Ally($target, $defPlayer);
-    $attackerMZ = AttackerMZID($mainPlayer);
-    $attackerArr = explode("-", $attackerMZ);
-    $attacker = new Ally($attackerMZ, $mainPlayer);
     $attackerID = $attacker->CardID();
     $hasOverwhelm = HasOverwhelm($attacker->CardID(), $mainPlayer, $attacker->Index());
     //Resolve the combat
     $defenderPower = $defender->CurrentPower();
     if($defenderPower < 0) $defenderPower = 0;
     $excess = $totalAttack - $defender->Health();
-    $destroyed = $defender->DealDamage($totalAttack, bypassShield:HasSaboteur($attackerID, $mainPlayer, $attacker->Index()));
+    $destroyed = $defender->DealDamage($totalAttack, bypassShield:HasSaboteur($attackerID, $mainPlayer, $attacker->Index()), fromCombat:true);
     if($destroyed) ClearAttackTarget();
     if($attackerArr[0] == "MYALLY" && (!$destroyed || ($combatChain[0] != "9500514827" && !SearchCurrentTurnEffects("8297630396", $mainPlayer)))) { //Han Solo shoots first
-      $destroyed = $attacker->DealDamage($defenderPower);
+      $destroyed = $attacker->DealDamage($defenderPower, fromCombat:true);
       if($destroyed) ClearAttacker();
     }
     if($hasOverwhelm) DealDamageAsync($defPlayer, $excess, "TRIGGER", $attackerID);
@@ -1180,24 +1180,28 @@ function SwapTurn() {
   BuildMainPlayerGameState();
 }
 
-function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID = -1)
+function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID = -1, $skipAbilityType = false)
 {
   global $playerID, $turn, $currentPlayer, $actionPoints, $layers;
   global $CS_NumActionsPlayed, $CS_NumNonAttackCards, $CS_NumPlayedFromBanish, $CS_DynCostResolved;
   global $CS_NumAttackCards, $CS_NumBloodDebtPlayed, $layerPriority, $CS_NumWizardNonAttack, $lastPlayed, $CS_PlayIndex;
-  global $decisionQueue, $CS_AbilityIndex, $CS_NumRedPlayed, $CS_PlayUniqueID, $CS_LayerPlayIndex, $CS_LastDynCost, $CS_NumCardsPlayed, $CS_NamesOfCardsPlayed;
-  global $CS_PlayedAsInstant, $mainPlayer, $CS_DynCostResolved, $CS_NumMelodyPlayed;
+  global $decisionQueue, $CS_PlayIndex, $CS_NumRedPlayed, $CS_PlayUniqueID, $CS_LayerPlayIndex, $CS_LastDynCost, $CS_NumCardsPlayed, $CS_NamesOfCardsPlayed;
+  global $CS_PlayedAsInstant, $mainPlayer, $CS_DynCostResolved, $CS_NumMelodyPlayed, $CS_NumVillainyPlayed;
   $resources = &GetResources($currentPlayer);
   $pitch = &GetPitch($currentPlayer);
   $dynCostResolved = intval($dynCostResolved);
   $layerPriority[0] = ShouldHoldPriority(1);
   $layerPriority[1] = ShouldHoldPriority(2);
   $playingCard = $turn[0] != "P" && ($turn[0] != "B" || count($layers) > 0);
+  if($uniqueID > 0) {
+    $uniqueIndex = SearchAlliesForUniqueID($uniqueID, $currentPlayer);
+    if($uniqueIndex != -1) $index = $uniqueIndex;
+  }
   if($dynCostResolved == -1) {
     //CR 5.1.1 Play a Card (CR 2.0) - Layer Created
     if($playingCard)
     {
-      SetClassState($currentPlayer, $CS_AbilityIndex, $index);
+      SetClassState($currentPlayer, $CS_PlayIndex, $index);
       $layerIndex = AddLayer($cardID, $currentPlayer, $from, "-", "-");
       SetClassState($currentPlayer, $CS_LayerPlayIndex, $layerIndex);
     }
@@ -1242,7 +1246,7 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
       $resources[1] = 0;
       if($playingCard) $dynCost = DynamicCost($cardID); //CR 5.1.3a Declare variable cost (CR 2.0)
       else $dynCost = "";
-      if($playingCard) AddPrePitchDecisionQueue($cardID, $from, $index); //CR 5.1.3b,c Declare additional/optional costs (CR 2.0)
+      if($playingCard) AddPrePitchDecisionQueue($cardID, $from, $index, $skipAbilityType); //CR 5.1.3b,c Declare additional/optional costs (CR 2.0)
       if($dynCost != "") {
         AddDecisionQueue("DYNPITCH", $currentPlayer, $dynCost);
         AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_LastDynCost);
@@ -1259,7 +1263,6 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
       //CR 5.1.4a Declare targets for resolution abilities
       if($from != "PLAY" && ($turn[0] != "B" || (count($layers) > 0 && $layers[0] != ""))) GetLayerTarget($cardID);
       //CR 5.1.4b Declare target of attack
-      if($turn[0] == "MZOP") AddDecisionQueue("GETTARGETOFATTACK", $currentPlayer, $cardID . "," . $from);
       AddDecisionQueue("GETTARGETOFATTACK", $currentPlayer, $cardID . "," . $from);
 
       if($dynCost == "") AddDecisionQueue("PASSPARAMETER", $currentPlayer, "0");
@@ -1329,6 +1332,7 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
       CombatChainPlayAbility($cardID);
       ItemPlayAbilities($cardID, $from);
       AllyPlayCardAbility($cardID);
+      if(AspectContains($cardID, "Villainy", $currentPlayer)) IncrementClassState($currentPlayer, $CS_NumVillainyPlayed);
       IncrementClassState($currentPlayer, $CS_NumCardsPlayed);
     }
     if ($playType == "A" || $playType == "AA") {
@@ -1358,7 +1362,7 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
     AuraPlayAbilities($cardID, $from);
     PermanentPlayAbilities($cardID, $from);
   }
-  AddDecisionQueue("RESUMEPLAY", $currentPlayer, $cardID . "|" . $from . "|" . $resourcesPaid . "|" . GetClassState($currentPlayer, $CS_AbilityIndex) . "|" . GetClassState($currentPlayer, $CS_PlayUniqueID));
+  AddDecisionQueue("RESUMEPLAY", $currentPlayer, $cardID . "|" . $from . "|" . $resourcesPaid . "|" . GetClassState($currentPlayer, $CS_PlayIndex) . "|" . GetClassState($currentPlayer, $CS_PlayUniqueID));
   ProcessDecisionQueue();
 }
 
@@ -1415,10 +1419,10 @@ function GetLayerTarget($cardID)
   }
 }
 
-function AddPrePitchDecisionQueue($cardID, $from, $index = -1)
+function AddPrePitchDecisionQueue($cardID, $from, $index = -1, $skipAbilityType = false)
 {
   global $currentPlayer, $CS_AdditionalCosts;
-  if (IsStaticType(CardType($cardID), $from, $cardID)) {
+  if (!$skipAbilityType && IsStaticType(CardType($cardID), $from, $cardID)) {
     $names = GetAbilityNames($cardID, $index);
     if ($names != "") {
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose which ability to activate");

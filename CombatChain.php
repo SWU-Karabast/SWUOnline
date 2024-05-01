@@ -30,7 +30,7 @@ function ProcessHitEffect($cardID)
       }
       break;
     case "87e8807695"://Leia Organa
-      AddLayer("TRIGGER", $mainPlayer, "87e8807695", "-", "-", "-");
+      AddCurrentTurnEffect("87e8807695", $mainPlayer);
       break;
     case "0e65f012f5"://Boba Fett
       if(GetClassState($defPlayer, $CS_NumLeftPlay) > 0) ReadyResource($mainPlayer, 2);

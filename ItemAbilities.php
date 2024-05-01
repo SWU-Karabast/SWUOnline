@@ -55,76 +55,7 @@ function PayItemAbilityAdditionalCosts($cardID, $from)
   global $currentPlayer, $CS_PlayIndex, $combatChain;
   $index = GetClassState($currentPlayer, $CS_PlayIndex);
   switch($cardID) {
-    case "LROrzTmh55"://Fire Resonance Bauble
-    case "2gv7DC0KID"://Grand Crusader's Ring
-    case "bHGUNMFLg9"://Wind Resonance Bauble
-    case "dSSRtNnPtw"://Water Resonance Bauble
-    case "Z9TCpaMJTc"://Bauble of Abundance
-    case "yDARN8eV6B"://Tome of Knowledge
-    case "UiohpiTtgs"://Chalice of Blood
-    case "P7hHZBVScB"://Orb of Glitter
-    case "6e7lRnczfL"://Horn of Beastcalling
-    case "BY0E8si926"://Orb of Regret
-    case "dmfoA7jOjy"://Crystal of Empowerment
-    case "IC3OU6vCnF"://Mana Limiter
-    case "hLHpI5rHIK"://Bauble of Mending
-    case "WAFNy2lY5t"://Melodious Flute
-    case "AKA19OwaCh"://Jewel of Englightenment
-    case "j5iQQPd2m5"://Crystal of Argus
-    case "ybdj1Db9jz"://Seed of Nature
-    case "EBWWwvSxr3"://Channeling Stone
-    case "kk46Whz7CJ"://Surveillance Stone
-    case "1XegCUjBnY"://Life Essence Amulet
-    case "OofVX5hX8X"://Poisoned Coating Oil
-    case "Tx6iJQNSA6"://Majestic Spirit's Crest
-    case "qYH9PJP7uM"://Blinding Orb
-    case "iiZtKTulPg"://Eye of Argus
-    case "llQe0cg4xJ"://Orb of Choking Fumes
-    case "ScGcOmkoQt"://Smoke Bombs
-    case "F1t18omUlx"://Beastbond Paws
-    case "2bzajcZZRD"://Map of Hidden Passage
-    case "usb5FgKvZX"://Sharpening Stone
-    case "xjuCkODVRx"://Beastbond Boots
-    case "yj2rJBREH8"://Safeguard Amulet
-    case "s23UHXgcZq"://Luxera's Map
-    case "EQZZsiUDyl"://Storm Tyrant's Eye
-    case "1bqry41lw9"://Explosive Rune
-    case "fp66pv4n1n"://Rusted Warshield
-    case "73fdt8ptrz"://Windwalker Boots
-    case "af098kmoi0"://Orb of Hubris
-    case "jxhkurfp66"://Charged Manaplate
-    case "lq2kkvoqk1"://Necklace of Foresight
-    case "ettczb14m4"://Alchemist's Kit
-    case "isxy5lh23q"://Flash Grenade
-    case "96659ytyj2"://Crimson Protective Trinket
-    case "m3pal7cpvn"://Azure Protective Trinket
-    case "n0wpbhigka"://Wand of Frost
-    case "ojwk0pw0y6"://Crest of the Alliance
-    case "porhlq2kkv"://Wayfinder's Map
-      DestroyItemForPlayer($currentPlayer, $index, true);
-      BanishCardForPlayer($cardID, $currentPlayer, $from, "-", $currentPlayer);
-      break;
-    case "i0a5uhjxhk"://Blightroot (1)
-    case "5joh300z2s"://Mana Root (2)
-    case "bd7ozuj68m"://Silvershine (3)
-    case "soporhlq2k"://Fraysia (4)
-    case "jnltv5klry"://Razorvine (5)
-    case "69iq4d5vet"://Springleaf (6)
-      DestroyItemForPlayer($currentPlayer, $index);
-      break;
-    case "0z2snsdwmx"://Scale of Souls
-    case "2ha4dk88zq"://Cloak of Stillwater
-    case "xy5lh23qu7"://Obelisk of Fabrication
-    case "d6soporhlq"://Obelisk of Protection
-    case "wk0pw0y6is"://Obelisk of Armaments
-    case "j68m69iq4d"://Sentinel Fabricator
-    case "8c9htu9agw"://Prototype Staff
-    case "h23qu7d6so"://Temporal Spectrometer
-    case "pv4n1n3gyg"://Cleric's Robe
-    case "u7d6soporh"://Ingredient Pouch
-      $items = &GetItems($currentPlayer);
-      $items[$index+2] = 1;
-      break;
+
     default: break;
   }
 }

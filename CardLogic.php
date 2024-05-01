@@ -284,8 +284,8 @@ function ProcessDecisionQueue()
     $dqState[5] = "-"; //Decision queue multizone indices
     $dqState[6] = "0"; //Damage dealt
     $dqState[7] = "0"; //Target
+    ContinueDecisionQueue("");
   }
-  ContinueDecisionQueue("");
 }
 
 function CloseDecisionQueue()
@@ -340,7 +340,7 @@ function IsGamePhase($phase)
 function ContinueDecisionQueue($lastResult = "")
 {
   global $decisionQueue, $turn, $currentPlayer, $mainPlayerGamestateStillBuilt, $makeCheckpoint, $otherPlayer;
-  global $layers, $layerPriority, $dqVars, $dqState, $CS_AbilityIndex, $CS_AdditionalCosts, $mainPlayer, $CS_LayerPlayIndex;
+  global $layers, $layerPriority, $dqVars, $dqState, $CS_PlayIndex, $CS_AdditionalCosts, $mainPlayer, $CS_LayerPlayIndex;
   global $CS_ResolvingLayerUniqueID;
   if(count($decisionQueue) == 0 || IsGamePhase($decisionQueue[0])) {
     if($mainPlayerGamestateStillBuilt) UpdateMainPlayerGameState();
@@ -409,7 +409,7 @@ function ContinueDecisionQueue($lastResult = "")
           ProcessTrigger($player, $parameter, $uniqueID, $target);
           ProcessDecisionQueue();
         } else {
-          SetClassState($player, $CS_AbilityIndex, $params[2]); //This is like a parameter to PlayCardEffect and other functions
+          SetClassState($player, $CS_PlayIndex, $params[2]); //This is like a parameter to PlayCardEffect and other functions
           PlayCardEffect($cardID, $params[0], $params[1], $target, $additionalCosts, $params[3], $params[2]);
           ClearDieRoll($player);
         }
@@ -519,13 +519,6 @@ function ProcessTrigger($player, $parameter, $uniqueID, $target="-")
       AddDecisionQueue("YESNO", $player, "if_you_want_to_resolve_the_ambush_attack");
       AddDecisionQueue("NOPASS", $player, "-");
       AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $index, 1);
-      AddDecisionQueue("MZOP", $player, "ATTACK", 1);
-      break;
-    case "87e8807695"://Leia Organa
-      AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
-      AddDecisionQueue("MZFILTER", $player, "status=1");
-      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to attack with");
-      AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
       AddDecisionQueue("MZOP", $player, "ATTACK", 1);
       break;
     default: break;

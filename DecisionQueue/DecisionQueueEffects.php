@@ -56,7 +56,7 @@ function ModalAbilities($player, $card, $lastResult)
             break;
           case "Shield":
             AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to give a shield");
-            AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
+            AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
             AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
             AddDecisionQueue("MZOP", $player, "ADDSHIELD", 1);
             break;
@@ -255,7 +255,7 @@ function SpecificCardLogic($player, $card, $lastResult)
         RevertGamestate();
         return "";
       }
-      SearchCurrentTurnEffects("8968669390", $player, remove:true);
+      AddDecisionQueue("REMOVECURRENTEFFECT", $player, "8968669390");
       break;
     case "POWERFAILURE":
       PrependDecisionQueue("OP", $player, "DEFEATUPGRADE", 1);
@@ -310,6 +310,12 @@ function SpecificCardLogic($player, $card, $lastResult)
       $damage = SearchCount(SearchAllies($player, arena:CardArenas($targetCard)));
       AddDecisionQueue("PASSPARAMETER", $player, $lastResult);
       AddDecisionQueue("MZOP", $player, "DEALDAMAGE," . $damage, 1);
+      return $lastResult;
+    case "MEDALCEREMONY":
+      for($i=0; $i<count($lastResult); ++$i) {
+        $ally = new Ally("MYALLY-" . $lastResult[$i], $player);
+        $ally->Attach("2007868442");//Experience token
+      }
       return $lastResult;
     default: return "";
   }
