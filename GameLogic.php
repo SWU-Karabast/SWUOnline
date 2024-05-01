@@ -465,7 +465,6 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $allyPlayer = $mzArr[0] == "MYALLY" ? $player : ($player == 1 ? 2 : 1);
           $ally = new Ally($dqVars[0], $allyPlayer);
           $ally->DefeatUpgrade($upgradeID);
-          $destroyed = $ally->DealDamage(CardHP($upgradeID));
           if(!$destroyed) {
             UpgradeDefeated($upgradeID, $allyPlayer, $mzArr[1]);
           }
