@@ -3428,7 +3428,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit", 1);
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "{0},", 1);
-      AddDecisionQueue("SETDQVAR", $currentPlayer, 0, 1);
+      AddDecisionQueue("OP", $otherPlayer, "SWAPDQPERSPECTIVE", 1);
       AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a unit to return to hand");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $otherPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $otherPlayer, "BOUNCE", 1);

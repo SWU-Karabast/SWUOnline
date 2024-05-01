@@ -469,6 +469,15 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             UpgradeDefeated($upgradeID, $allyPlayer, $mzArr[1]);
           }
           return $lastResult;
+        case "SWAPDQPERSPECTIVE":
+          $arr = explode(",", $lastResult);
+          $output = "";
+          for($i=0; $i<count($arr); ++$i) {
+            if($output != "") $output .= ",";
+            $mzArr = explode("-", $arr[$i]);
+            $output .= ($mzArr[0] == "MYALLY" ? "THEIRALLY" : "MYALLY") . "-" . $mzArr[1];
+          }
+          return $output;
         default: return $lastResult;
       }
     case "FILTER":
