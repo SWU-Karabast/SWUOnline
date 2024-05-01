@@ -123,6 +123,10 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $discard = &GetDiscard($player);
           $rv = GetIndices(count($discard));
           break;
+        case "UNITS":
+          $allies = &GetAllies($player);
+          $rv = GetIndices(count($allies), 0 , AllyPieces());
+          break;
         case "GYTYPE": $rv = SearchDiscard($player, $subparam); break;
         case "GYAA": $rv = SearchDiscard($player, "AA"); break;
         case "GYNAA": $rv = SearchDiscard($player, "A"); break;

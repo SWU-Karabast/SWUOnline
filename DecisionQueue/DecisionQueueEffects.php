@@ -311,6 +311,12 @@ function SpecificCardLogic($player, $card, $lastResult)
       AddDecisionQueue("PASSPARAMETER", $player, $lastResult);
       AddDecisionQueue("MZOP", $player, "DEALDAMAGE," . $damage, 1);
       return $lastResult;
+    case "MEDALCEREMONY":
+      for($i=0; $i<count($lastResult); ++$i) {
+        $ally = new Ally("MYALLY-" . $lastResult[$i], $player);
+        $ally->Attach("2007868442");//Experience token
+      }
+      return $lastResult;
     default: return "";
   }
 }

@@ -1587,7 +1587,7 @@ function NumEquipBlock()
       case "CHOOSEARSENAL": return 0;
       case "CHOOSEDISCARD": return 0;
       case "MULTICHOOSEHAND": return 0;
-      case "MULTICHOOSEMATERIAL": return 0;
+      case "MULTICHOOSEUNIT": return 0;
       case "CHOOSEMULTIZONE": return 0;
       case "CHOOSEBANISH": return 0;
       case "BUTTONINPUTNOPASS": return 0;
@@ -2502,12 +2502,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "4536594859"://Medal Ceremony
-      for($i=0; $i<3; ++$i) {
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose only a card that attacked to give experience (or click the PASS button if done)");
-        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "ADDEXPERIENCE", 1);
-      }
+      AddDecisionQueue("FINDINDICES", $currentPlayer, "UNITS");
+      AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "3-");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose up to 3 units that have attacked", 1);
+      AddDecisionQueue("MULTICHOOSEUNIT", $currentPlayer, "<-", 1, 1);
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "MEDALCEREMONY");
       break;
     case "5449704164"://2-1B Surgical Droid
       if($from == "PLAY") {
@@ -2707,8 +2706,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       if($abilityName == "Play Taunt") {
         global $CS_AfterPlayedBy;
         SetClassState($currentPlayer, $CS_AfterPlayedBy, $cardID);
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to put into play");
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND:definedType=Unit;maxCost=3");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to put into play");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
       }
