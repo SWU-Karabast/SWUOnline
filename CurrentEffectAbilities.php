@@ -44,6 +44,13 @@ function FinalizeChainLinkEffects()
         PrependDecisionQueue("MZFILTER", $mainPlayer, "status=1");
         PrependDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
         return true;
+      case "87e8807695":
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
+        AddDecisionQueue("MZFILTER", $mainPlayer, "status=1");
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to attack with");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "ATTACK", 1);
+        return true;
       default: break;
     }
   }

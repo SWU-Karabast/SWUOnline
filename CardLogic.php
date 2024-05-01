@@ -521,13 +521,6 @@ function ProcessTrigger($player, $parameter, $uniqueID, $target="-")
       AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $index, 1);
       AddDecisionQueue("MZOP", $player, "ATTACK", 1);
       break;
-    case "87e8807695"://Leia Organa
-      AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
-      AddDecisionQueue("MZFILTER", $player, "status=1");
-      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to attack with");
-      AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
-      AddDecisionQueue("MZOP", $player, "ATTACK", 1);
-      break;
     default: break;
   }
 }
