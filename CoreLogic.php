@@ -217,7 +217,7 @@ function CachedNumActionBlocked()
 
 function StartTurnAbilities()
 {
-  global $mainPlayer, $defPlayer;
+  global $initiativePlayer;
   MZStartTurnMayAbilities();
   AuraStartTurnAbilities();
   ItemStartTurnAbilities();

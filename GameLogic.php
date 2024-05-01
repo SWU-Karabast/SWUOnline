@@ -1309,6 +1309,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         AddDecisionQueue("NOPASS", $secondPlayer, "-");
         AddDecisionQueue("MULLIGAN", $secondPlayer, "-", 1);
       }
+      CharacterStartTurnAbility($initiativePlayer);
+      CharacterStartTurnAbility($secondPlayer);
       MZMoveCard($initiativePlayer, "MYHAND", "MYRESOURCES", may:false, context:"Choose a card to resource", silent:true);
       AddDecisionQueue("AFTERRESOURCE", $initiativePlayer, "HAND", 1);
       MZMoveCard($initiativePlayer, "MYHAND", "MYRESOURCES", may:false, context:"Choose a card to resource", silent:true);
