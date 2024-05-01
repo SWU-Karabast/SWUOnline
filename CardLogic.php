@@ -284,8 +284,8 @@ function ProcessDecisionQueue()
     $dqState[5] = "-"; //Decision queue multizone indices
     $dqState[6] = "0"; //Damage dealt
     $dqState[7] = "0"; //Target
+    ContinueDecisionQueue("");
   }
-  ContinueDecisionQueue("");
 }
 
 function CloseDecisionQueue()

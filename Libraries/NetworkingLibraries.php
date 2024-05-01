@@ -1259,7 +1259,6 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
       //CR 5.1.4a Declare targets for resolution abilities
       if($from != "PLAY" && ($turn[0] != "B" || (count($layers) > 0 && $layers[0] != ""))) GetLayerTarget($cardID);
       //CR 5.1.4b Declare target of attack
-      if($turn[0] == "MZOP") AddDecisionQueue("GETTARGETOFATTACK", $currentPlayer, $cardID . "," . $from);
       AddDecisionQueue("GETTARGETOFATTACK", $currentPlayer, $cardID . "," . $from);
 
       if($dynCost == "") AddDecisionQueue("PASSPARAMETER", $currentPlayer, "0");
