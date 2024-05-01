@@ -266,6 +266,12 @@ $CS_AnotherWeaponGainedGoAgain = 63;
 $CS_NumContractsCompleted = 64;
 $CS_HitsWithSword = 65;
 
+function SetAfterPlayedBy($player, $cardID)
+{
+  global $CS_AfterPlayedBy;
+  SetClassState($player, $CS_AfterPlayedBy, $cardID);
+}
+
 
 //Combat Chain State (State for the current combat chain)
 $CCS_CurrentAttackGainedGoAgain = 0;

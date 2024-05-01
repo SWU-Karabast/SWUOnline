@@ -3476,6 +3476,7 @@ function ExhaustResource($player, $amount=1) {
 
 function AfterPlayedByAbility($cardID) {
   global $currentPlayer, $CS_AfterPlayedBy;
+  WriteLog($cardID);
   SetClassState($currentPlayer, $CS_AfterPlayedBy, "-");
   $index = LastAllyIndex($currentPlayer);
   $ally = new Ally("MYALLY-" . $index, $currentPlayer);
@@ -3507,6 +3508,9 @@ function AfterPlayedByAbility($cardID) {
       global $currentTurnEffects;
       $index = count($currentTurnEffects) - CurrentTurnEffectPieces();
       RemoveCurrentTurnEffect($index);
+      break;
+    case "8968669390"://U-Wing Reinforcement
+      SearchCurrentTurnEffects("8968669390", $currentPlayer, remove:true);
       break;
     default: break;
   }

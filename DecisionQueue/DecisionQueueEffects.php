@@ -248,6 +248,7 @@ function SpecificCardLogic($player, $card, $lastResult)
       $cardArr = explode(",", $lastResult);
       for($i=0; $i<count($cardArr); ++$i) {
         PlayCard($cardArr[$i], "DECK");
+        if($i == count($cardArr)-1) SetAfterPlayedBy($player, "8968669390");
         $totalCost += CardCost($cardArr[$i]);
       }
       if($totalCost > 7) {
@@ -255,7 +256,6 @@ function SpecificCardLogic($player, $card, $lastResult)
         RevertGamestate();
         return "";
       }
-      AddDecisionQueue("REMOVECURRENTEFFECT", $player, "8968669390");
       break;
     case "POWERFAILURE":
       PrependDecisionQueue("OP", $player, "DEFEATUPGRADE", 1);
