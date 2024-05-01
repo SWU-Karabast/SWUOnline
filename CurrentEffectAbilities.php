@@ -44,7 +44,8 @@ function FinalizeChainLinkEffects()
         PrependDecisionQueue("MZFILTER", $mainPlayer, "status=1");
         PrependDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
         return true;
-      case "87e8807695":
+      case "87e8807695"://Leia Organa - Leader Unit
+        SearchCurrentTurnEffects("87e8807695", $mainPlayer, remove:true);
         AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
         AddDecisionQueue("MZFILTER", $mainPlayer, "status=1");
         AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to attack with");
