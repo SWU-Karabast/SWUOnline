@@ -482,7 +482,10 @@ function AllyPlayCardAbility($cardID, $player="")
     {
       case "0052542605"://Bossk
         if(DefinedTypesContains($cardID, "Event", $player)) {
-          DealArcane(2, 2, "TRIGGER", "0052542605", player:$player);
+          AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
+          AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal 2 damage to");
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+          AddDecisionQueue("MZOP", $player, "DEALDAMAGE,2", 1);
         }
         break;
       case "0961039929"://Colonel Yularen
