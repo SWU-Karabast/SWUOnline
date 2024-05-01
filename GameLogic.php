@@ -1346,6 +1346,9 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       global $isPass;
       $isPass = true;
       return 0;
+    case "SWAPTURN":
+      PassTurn();
+      return 0;
     case "MULLIGAN":
       $hand = &GetHand($player);
       $deck = &GetDeck($player);
