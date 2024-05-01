@@ -1193,6 +1193,10 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
   $layerPriority[0] = ShouldHoldPriority(1);
   $layerPriority[1] = ShouldHoldPriority(2);
   $playingCard = $turn[0] != "P" && ($turn[0] != "B" || count($layers) > 0);
+  if($uniqueID > 0) {
+    $uniqueIndex = SearchAlliesForUniqueID($uniqueID, $currentPlayer);
+    if($uniqueIndex != -1) $index = $uniqueIndex;
+  }
   if($dynCostResolved == -1) {
     //CR 5.1.1 Play a Card (CR 2.0) - Layer Created
     if($playingCard)
