@@ -2934,8 +2934,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       if($from != "PLAY") {
         $ally = new Ally("MYALLY-" . LastAllyIndex($currentPlayer));
         for($i=0; $i<8; ++$i) {
-          AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to restore 1", $i == 0 ? 0 : 1);
-          AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYCHAR&MYALLY", $i == 0 ? 0 : 1);
+          AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY", $i == 0 ? 0 : 1);
+          AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "MYCHAR-0,", $i == 0 ? 0 : 1);
+          AddDecisionQueue("MZFILTER", $currentPlayer, "index=MYALLY-" . $playAlly->Index());
+          AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to restore 1 (Remaining: " . (8-$i) . ")", $i == 0 ? 0 : 1);
           AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
           AddDecisionQueue("MZOP", $currentPlayer, "RESTORE,1", 1);
           AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYALLY-" . LastAllyIndex($currentPlayer), 1);
