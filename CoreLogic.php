@@ -2968,7 +2968,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "7728042035"://Chimaera
-      if($from != "PLAY") {
+      if($from == "PLAY") {
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Name the card in chat");
         AddDecisionQueue("OK", $currentPlayer, "-");
         AddDecisionQueue("PASSPARAMETER", $currentPlayer, "1");
