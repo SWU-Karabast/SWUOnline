@@ -837,7 +837,8 @@ function ResolveChainLink()
     $defenderPower = $defender->CurrentPower();
     if($defenderPower < 0) $defenderPower = 0;
     $excess = $totalAttack - $defender->Health();
-    $destroyed = $defender->DealDamage($totalAttack, bypassShield:HasSaboteur($attackerID, $mainPlayer, $attacker->Index()), fromCombat:true);
+    $damageDealt = 0;
+    $destroyed = $defender->DealDamage($totalAttack, bypassShield:HasSaboteur($attackerID, $mainPlayer, $attacker->Index()), fromCombat:true, damageDealt:$combatChainState[$CCS_DamageDealt]);
     if($destroyed) ClearAttackTarget();
     if($attackerArr[0] == "MYALLY" && (!$destroyed || ($combatChain[0] != "9500514827" && !SearchCurrentTurnEffects("8297630396", $mainPlayer)))) { //Han Solo shoots first
       $destroyed = $attacker->DealDamage($defenderPower, fromCombat:true);
@@ -877,7 +878,7 @@ function ResolveCombatDamage($damageDone)
 
   if($wasHit)
   {
-    $combatChainState[$CCS_DamageDealt] = $damageDone;
+    if(!IsAllyAttackTarget()) $combatChainState[$CCS_DamageDealt] = $damageDone;
     if(CardType($combatChain[0]) == "W") {
       ++$combatChainState[$CCS_HitsWithWeapon];
       IncrementClassState($mainPlayer, $CS_HitsWithWeapon);

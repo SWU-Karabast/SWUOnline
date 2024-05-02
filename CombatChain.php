@@ -4,7 +4,7 @@
 function ProcessHitEffect($cardID)
 {
   WriteLog("Processing hit effect for " . CardLink($cardID, $cardID));
-  global $mainPlayer, $combatChainState, $CS_NumLeftPlay, $CCS_GoesWhereAfterLinkResolves, $defPlayer, $CCS_AttackTarget, $CS_NumAlliesDestroyed;
+  global $mainPlayer, $combatChainState, $CCS_DamageDealt, $CS_NumLeftPlay, $CCS_GoesWhereAfterLinkResolves, $defPlayer, $CCS_AttackTarget, $CS_NumAlliesDestroyed;
   if(HitEffectsArePrevented()) return;
   switch($cardID)
   {
@@ -22,7 +22,7 @@ function ProcessHitEffect($cardID)
       AddDecisionQueue("MODAL", $mainPlayer, "EZRABRIDGER", 1);
       break;
     case "3280523224"://Rukh
-      if(IsAllyAttackTarget()) {
+      if(IsAllyAttackTarget() && $combatChainState[$CCS_DamageDealt] > 0) {
         $ally = new Ally(GetAttackTarget(), $defPlayer);
         if(!DefinedTypesContains($ally->CardID(), "Leader", $defPlayer)) {
           DestroyAlly($defPlayer, $ally->Index());

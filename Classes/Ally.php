@@ -82,7 +82,7 @@ class Ally {
   }
 
   //Returns true if the ally is destroyed
-  function DealDamage($amount, $bypassShield = false, $fromCombat = false) {
+  function DealDamage($amount, $bypassShield = false, $fromCombat = false, &$damageDealt = NULL) {
     if($this->index == -1) return false;
     $subcards = $this->GetSubcards();
     for($i=0; $i<count($subcards); ++$i) {
@@ -93,6 +93,7 @@ class Ally {
         if(!$bypassShield) return false;//Cancel the damage if shield prevented it
       }
     }
+    if($damageDealt != NULL) $damageDealt = $amount;
     $this->allies[$this->index+2] -= $amount;
     if($this->Health() <= 0 && $this->CardID() != "d1a7b76ae7") {
       DestroyAlly($this->playerID, $this->index, fromCombat:$fromCombat);
