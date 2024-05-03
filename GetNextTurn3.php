@@ -708,7 +708,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   $response->amIActivePlayer = ($turn[1] == $playerID) ? true : false;
 
   //Turn number
-  $response->turnNo = $currentTurn;
+  $response->turnNo = $currentRound;
 
   $playerPrompt = new StdClass();
   $promptButtons = array();

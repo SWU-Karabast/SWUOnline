@@ -646,7 +646,7 @@ function IsGameOver()
 
 function PlayerWon($playerID)
 {
-  global $winner, $turn, $gameName, $p1id, $p2id, $p1uid, $p2uid, $p1IsChallengeActive, $p2IsChallengeActive, $conceded, $currentTurn;
+  global $winner, $turn, $gameName, $p1id, $p2id, $p1uid, $p2uid, $p1IsChallengeActive, $p2IsChallengeActive, $conceded, $currentRound;
   global $p1DeckLink, $p2DeckLink, $inGameStatus, $GameStatus_Over, $firstPlayer, $p1deckbuilderID, $p2deckbuilderID;
   if($turn[0] == "OVER") return;
   include_once "./MenuFiles/ParseGamefile.php";
@@ -664,7 +664,7 @@ function PlayerWon($playerID)
 
   }
 
-  if(!$conceded || $currentTurn >= 3) {
+  if(!$conceded || $currentRound>= 3) {
     //If this happens, they left a game in progress -- add disconnect logging?
   }
 }

@@ -234,7 +234,7 @@ function LoadFavoriteDecks($userID)
 //Challenge ID 3 = Moon Wish
 function logCompletedGameStats()
 {
-	global $winner, $currentTurn, $gameName; //gameName is assumed by ParseGamefile.php
+	global $winner, $currentRound, $gameName; //gameName is assumed by ParseGamefile.php
 	global $p1id, $p2id, $p1IsChallengeActive, $p2IsChallengeActive, $p1DeckLink, $p2DeckLink, $firstPlayer;
 	global $p1deckbuilderID, $p2deckbuilderID;
 	$loser = ($winner == 1 ? 2 : 1);
@@ -260,7 +260,7 @@ function logCompletedGameStats()
 	$stmt = mysqli_stmt_init($conn);
 	$gameResultID = 0;
 	if (mysqli_stmt_prepare($stmt, $sql)) {
-		mysqli_stmt_bind_param($stmt, "sssssss", $winHero[0], $loseHero[0], $currentTurn, $winnerDeck, $loserDeck, GetHealth($winner), $firstPlayer);
+		mysqli_stmt_bind_param($stmt, "sssssss", $winHero[0], $loseHero[0], $currentRound, $winnerDeck, $loserDeck, GetHealth($winner), $firstPlayer);
 		mysqli_stmt_execute($stmt);
 		$gameResultID = mysqli_insert_id($conn);
 		mysqli_stmt_close($stmt);
@@ -353,7 +353,7 @@ function SendFullFabraryResults($gameID, $p1Decklink, $p1Deck, $p1Hero, $p1deckb
 
 function SerializeGameResult($player, $DeckLink, $deckAfterSB, $gameID = "", $opposingHero = "", $gameName = "", $deckbuilderID = "")
 {
-	global $winner, $currentTurn, $CardStats_TimesPlayed, $CardStats_TimesActivated, $CardStats_TimesResourced, $firstPlayer;
+	global $winner, $currentRound, $CardStats_TimesPlayed, $CardStats_TimesActivated, $CardStats_TimesResourced, $firstPlayer;
 	global $TurnStats_DamageThreatened, $TurnStats_DamageDealt, $TurnStats_CardsPlayedOffense, $TurnStats_CardsPlayedDefense, $TurnStats_CardsPitched, $TurnStats_CardsBlocked;
 	global $TurnStats_ResourcesUsed, $TurnStats_CardsLeft, $TurnStats_DamageBlocked, $TurnStats_ResourcesLeft;
 	$DeckLink = explode("/", $DeckLink);
@@ -365,7 +365,7 @@ function SerializeGameResult($player, $DeckLink, $deckAfterSB, $gameID = "", $op
 	if ($gameID != "") $deck["gameId"] = $gameID;
 	if ($gameName != "") $deck["gameName"] = $gameName;
 	$deck["deckId"] = $DeckLink;
-	$deck["turns"] = intval($currentTurn);
+	$deck["turns"] = intval($currentRound);
 	$deck["result"] = ($player == $winner ? 1 : 0);
 	$deck["firstPlayer"] = ($player == $firstPlayer ? 1 : 0);
 	if ($opposingHero != "") $deck["opposingHero"] = $opposingHero;

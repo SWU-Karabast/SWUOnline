@@ -200,10 +200,10 @@ function PermanentStartTurnAbilities()
         $resources[0] += ((count($deck) + count($discard) + count($hand)) - (count($deck) + count($discard) + count($hand))%10)/10;
         break;
       case "ROGUE526":
-        global $currentTurn;
+        global $currentRound;
         $deckOne = &GetDeck($mainPlayer);
         $deckTwo = &GetDeck($defPlayer);
-        if($currentTurn == 10) $deckOne = $deckTwo = [];
+        if($currentRound== 10) $deckOne = $deckTwo = [];
         break;
       case "ROGUE527":
         $trinkets = array(
