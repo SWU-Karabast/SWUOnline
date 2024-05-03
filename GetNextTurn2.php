@@ -659,6 +659,8 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         $enduranceCounters = $myAllies[$index + 6];
         $attackCounters = $ally->CurrentPower();
         if($ally->IsExhausted()) $overlay = 1;
+      } elseif($option[0] == "MYRESOURCES") {
+        if($myArsenal[$index + 4] == 1) $overlay = 1;
       }
 
       //Show Atk counters on Auras in the popups
