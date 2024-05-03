@@ -400,7 +400,6 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       $action = $currentPlayer == $playerID && $turn[0] != "P" && $currentPlayer == $combatChain[$i + 1] && AbilityPlayableFromCombatChain($combatChain[$i]) && IsPlayable($combatChain[$i], $turn[0], "PLAY", $i) ? 21 : 0;
       $actionDisabled = 0;
       $aimCounters = 0;
-      if($i == 0 && HasAimCounter()) $aimCounters = 1;
       echo (Card($combatChain[$i], "concat", $cardSize, $action, 1, $actionDisabled, $combatChain[$i + 1] == $playerID ? 1 : 2, 0, strval($i), atkCounters: $aimCounters, controller: $combatChain[$i + 1]));
     }
   }
@@ -662,6 +661,8 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         $enduranceCounters = $myAllies[$index + 6];
         $attackCounters = $ally->CurrentPower();
         if($ally->IsExhausted()) $overlay = 1;
+      } elseif($option[0] == "MYRESOURCES") {
+        if($myArsenal[$index + 4] == 1) $overlay = 1;
       }
 
       //Show Atk counters on Auras in the popups

@@ -84,6 +84,9 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $hand = &GetHand($player);
           $rv = GetIndices(count($hand));
           break;
+        case "HANDASPECT":
+          $rv = SearchHand($player, aspect:$subparam);
+          break;
         case "MATERIAL":
           $material = &GetMaterial($player);
           $rv = GetIndices(count($material));

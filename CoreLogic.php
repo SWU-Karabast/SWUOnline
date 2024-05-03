@@ -1319,6 +1319,7 @@ function TalentContains($cardID, $talent, $player="")
   return DelimStringContains($cardTalent, $talent);
 }
 
+//parameters: (comma delimited list of card ids, , )
 function RevealCards($cards, $player="", $from="HAND")
 {
   global $currentPlayer;
@@ -2675,7 +2676,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
       AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
       AddDecisionQueue("OP", $currentPlayer, "REMOVECARD");
-      AddDecisionQueue("CHOOSEBOTTOM", $currentPlayer, "<-");
+      AddDecisionQueue("ALLRANDOMBOTTOM", $currentPlayer, "DECK");
       break;
     case "3498814896"://Mon Mothma
       if($from != "PLAY") {
@@ -3268,19 +3269,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "2855740390"://Lieutenant Childsen
       if($from != "PLAY") {
-        $hand = &GetHand($currentPlayer);
-        $ally = new Ally("MYALLY-" . LastAllyIndex($currentPlayer), $currentPlayer);
-        $toReveal = "";
-        $amount = 0;
-        for($i=0; $i<count($hand); $i+=HandPieces()) {
-          if($amount < 4 && AspectContains($hand[$i], "Vigilance", $currentPlayer)) {
-            $ally->Attach("2007868442");//Experience token
-            if($toReveal != "") $toReveal .= ",";
-            $toReveal .= $hand[$i];
-            ++$amount;
-          }
-        }
-        RevealCards($toReveal, $currentPlayer, "HAND");
+        AddDecisionQueue("FINDINDICES", $currentPlayer, "HANDASPECT,Vigilance");
+        AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "4-");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose up to 4 cards to reveal");
+        AddDecisionQueue("MULTICHOOSEHAND", $currentPlayer, "<-", 1);
+        AddDecisionQueue("SPECIFICCARD", $currentPlayer, "LTCHILDSEN");
       }
       break;
     case "8506660490"://Darth Vader
@@ -3476,6 +3469,7 @@ function ExhaustResource($player, $amount=1) {
 
 function AfterPlayedByAbility($cardID) {
   global $currentPlayer, $CS_AfterPlayedBy;
+  WriteLog($cardID);
   SetClassState($currentPlayer, $CS_AfterPlayedBy, "-");
   $index = LastAllyIndex($currentPlayer);
   $ally = new Ally("MYALLY-" . $index, $currentPlayer);
@@ -3507,6 +3501,9 @@ function AfterPlayedByAbility($cardID) {
       global $currentTurnEffects;
       $index = count($currentTurnEffects) - CurrentTurnEffectPieces();
       RemoveCurrentTurnEffect($index);
+      break;
+    case "8968669390"://U-Wing Reinforcement
+      SearchCurrentTurnEffects("8968669390", $currentPlayer, remove:true);
       break;
     default: break;
   }

@@ -3,7 +3,7 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
 {
   global $gameName, $currentPlayer, $mainPlayer, $dqVars, $turn, $CS_CharacterIndex, $CS_PlayIndex, $decisionQueue, $CS_NextNAAInstant, $skipWriteGamestate, $combatChain, $landmarks;
   global $SET_PassDRStep, $actionPoints, $currentPlayerActivity, $redirectPath, $CS_PlayedAsInstant;
-  global $dqState, $layers, $CS_ArsenalFacing, $CCS_HasAimCounter, $combatChainState;
+  global $dqState, $layers, $CS_ArsenalFacing, $combatChainState;
   global $roguelikeGameID;
   switch ($mode) {
     case 0: break; //Deprecated
@@ -59,7 +59,6 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
         if (!IsPlayable($cardToPlay, $turn[0], "ARS", $index)) break;
         $uniqueID = $arsenal[$index + 5];
         SetClassState($playerID, $CS_ArsenalFacing, $arsenal[$index+1]);
-        if($arsenal[$index + 3] > 0 && CardSubType($cardToPlay) == "Arrow") $combatChainState[$CCS_HasAimCounter] = 1;
         RemoveArsenal($playerID, $index);
         PlayCard($cardToPlay, "ARS", -1, -1, $uniqueID);
       }
@@ -837,7 +836,8 @@ function ResolveChainLink()
     $defenderPower = $defender->CurrentPower();
     if($defenderPower < 0) $defenderPower = 0;
     $excess = $totalAttack - $defender->Health();
-    $destroyed = $defender->DealDamage($totalAttack, bypassShield:HasSaboteur($attackerID, $mainPlayer, $attacker->Index()), fromCombat:true);
+    $damageDealt = 0;
+    $destroyed = $defender->DealDamage($totalAttack, bypassShield:HasSaboteur($attackerID, $mainPlayer, $attacker->Index()), fromCombat:true, damageDealt:$combatChainState[$CCS_DamageDealt]);
     if($destroyed) ClearAttackTarget();
     if($attackerArr[0] == "MYALLY" && (!$destroyed || ($combatChain[0] != "9500514827" && !SearchCurrentTurnEffects("8297630396", $mainPlayer)))) { //Han Solo shoots first
       $destroyed = $attacker->DealDamage($defenderPower, fromCombat:true);
@@ -877,7 +877,7 @@ function ResolveCombatDamage($damageDone)
 
   if($wasHit)
   {
-    $combatChainState[$CCS_DamageDealt] = $damageDone;
+    if(!IsAllyAttackTarget()) $combatChainState[$CCS_DamageDealt] = $damageDone;
     if(CardType($combatChain[0]) == "W") {
       ++$combatChainState[$CCS_HitsWithWeapon];
       IncrementClassState($mainPlayer, $CS_HitsWithWeapon);
@@ -1453,9 +1453,10 @@ function AddPrePitchDecisionQueue($cardID, $from, $index = -1, $skipAbilityType 
   }
 }
 
+//Find the legal targets for an attack
 function GetTargetOfAttack($attackID)
 {
-  global $mainPlayer, $combatChainState, $CCS_AttackTarget;
+  global $mainPlayer, $combatChainState, $CCS_AttackTarget, $CCS_IsAmbush;
   $defPlayer = $mainPlayer == 1 ? 2 : 1;
   if(HasCleave($attackID))
   {
@@ -1463,7 +1464,7 @@ function GetTargetOfAttack($attackID)
     return;
   }
   $sentinelTargets = "";
-  $targets = "THEIRCHAR-0";
+  if($combatChainState[$CCS_IsAmbush] != 1) $targets = "THEIRCHAR-0";
   $attacker = new Ally(AttackerMZID($mainPlayer));
   $attackerUpgrades = $attacker->GetSubcards();
   for($i=0; $i<count($attackerUpgrades); ++$i)

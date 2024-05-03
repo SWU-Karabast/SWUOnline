@@ -248,6 +248,7 @@ function SpecificCardLogic($player, $card, $lastResult)
       $cardArr = explode(",", $lastResult);
       for($i=0; $i<count($cardArr); ++$i) {
         PlayCard($cardArr[$i], "DECK");
+        if($i == count($cardArr)-1) SetAfterPlayedBy($player, "8968669390");
         $totalCost += CardCost($cardArr[$i]);
       }
       if($totalCost > 7) {
@@ -255,7 +256,6 @@ function SpecificCardLogic($player, $card, $lastResult)
         RevertGamestate();
         return "";
       }
-      AddDecisionQueue("REMOVECURRENTEFFECT", $player, "8968669390");
       break;
     case "POWERFAILURE":
       PrependDecisionQueue("OP", $player, "DEFEATUPGRADE", 1);
@@ -316,6 +316,20 @@ function SpecificCardLogic($player, $card, $lastResult)
         $ally = new Ally("MYALLY-" . $lastResult[$i], $player);
         $ally->Attach("2007868442");//Experience token
       }
+      return $lastResult;
+    case "LTCHILDSEN":
+      if ($lastResult == []) {
+        return $lastResult;
+      }
+      $hand = &GetHand($player);
+      $reveal = "";
+      for($i=0; $i<count($lastResult); ++$i) {
+        $ally = new Ally("MYALLY-" . LastAllyIndex($player), $player);
+        $ally->Attach("2007868442");//Experience token
+        $reveal .= $hand[$lastResult[$i]] . ",";
+      }
+      $reveal = rtrim($reveal, ",");
+      RevealCards($reveal, $player);
       return $lastResult;
     default: return "";
   }

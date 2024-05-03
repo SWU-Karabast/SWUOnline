@@ -4,3 +4,4 @@ HostFiles
 HostFiles/GameIDCounter.txt
 HostFiles/GameIDCounter.txt
 .DS_Store
+.env
