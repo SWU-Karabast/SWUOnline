@@ -2675,7 +2675,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
       AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
       AddDecisionQueue("OP", $currentPlayer, "REMOVECARD");
-      AddDecisionQueue("CHOOSEBOTTOM", $currentPlayer, "<-");
+      AddDecisionQueue("ALLRANDOMBOTTOM", $currentPlayer, "DECK");
       break;
     case "3498814896"://Mon Mothma
       if($from != "PLAY") {
