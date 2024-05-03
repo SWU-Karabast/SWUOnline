@@ -516,7 +516,6 @@ function ProcessTrigger($player, $parameter, $uniqueID, $target="-")
     case "AMBUSH":
       $index = SearchAlliesForUniqueID($uniqueID, $player);
       AddDecisionQueue("YESNO", $player, "if_you_want_to_resolve_the_ambush_attack");
-      AddDecisionQueue("YESNO", $player, "if_you_want_to_resolve_the_ambush_attack");
       AddDecisionQueue("NOPASS", $player, "-");
       AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $index, 1);
       AddDecisionQueue("MZOP", $player, "ATTACK", 1);
