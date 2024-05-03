@@ -309,8 +309,8 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
       AddDecisionQueue("MZOP", $player, "ADDSHIELD", 1);
       break;
     case "4786320542"://Obi-Wan Kenobi
-      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to add an experience");
       AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to add two experience");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
       AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
       AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
