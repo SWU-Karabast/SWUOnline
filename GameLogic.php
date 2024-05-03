@@ -15,7 +15,8 @@ include "Classes/Ally.php";
 include "DecisionQueue/DecisionQueueEffects.php";
 include "CurrentEffectAbilities.php";
 include "CombatChain.php";
-include "GameMechanics.php";
+include_once "WriteLog.php";
+
 
 function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
 {
