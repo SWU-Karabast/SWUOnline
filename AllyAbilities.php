@@ -98,11 +98,12 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
 {
   global $combatChain, $mainPlayer, $CS_NumAlliesDestroyed, $CS_NumLeftPlay;
   $allies = &GetAllies($player);
+  $cardID = $allies[$index];
   if(!$skipDestroy) {
     AllyDestroyedAbility($player, $index, $fromCombat);
     IncrementClassState($player, $CS_NumAlliesDestroyed);
   }
-  IncrementClassState($player, $CS_NumLeftPlay);
+  if(!IsLeader($cardID, $player)) IncrementClassState($player, $CS_NumLeftPlay);
   AllyLeavesPlayAbility($player, $index);
   $ally = new Ally("MYALLY-" . $index, $player);
   $subcards = $ally->GetSubcards();
@@ -110,7 +111,6 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
     if($subcards[$i] == "8752877738" || $subcards[$i] == "2007868442") continue;
     AddGraveyard($subcards[$i], $player, "PLAY");
   }
-  $cardID = $allies[$index];
   $owner = $allies[$index+11];
   if(!$skipDestroy) {
     if(DefinedTypesContains($cardID, "Leader", $player)) ;//If it's a leader it doesn't go in the discard

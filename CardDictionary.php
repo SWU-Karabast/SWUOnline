@@ -649,6 +649,10 @@ function GetAbilityTypes($cardID)
   return $abilityTypes;
 }
 
+function IsLeader($cardID, $playerID) {
+  return DefinedTypesContains($cardID, "Leader", $playerID);
+}
+
 function GetAbilityNames($cardID, $index = -1)
 {
   global $currentPlayer;
