@@ -317,6 +317,20 @@ function SpecificCardLogic($player, $card, $lastResult)
         $ally->Attach("2007868442");//Experience token
       }
       return $lastResult;
+    case "LTCHILDSEN":
+      if ($lastResult == []) {
+        return $lastResult;
+      }
+      $hand = &GetHand($player);
+      $reveal = "";
+      for($i=0; $i<count($lastResult); ++$i) {
+        $ally = new Ally("MYALLY-" . LastAllyIndex($player), $player);
+        $ally->Attach("2007868442");//Experience token
+        $reveal .= $hand[$lastResult[$i]] . ",";
+      }
+      $reveal = rtrim($reveal, ",");
+      RevealCards($reveal, $player);
+      return $lastResult;
     default: return "";
   }
 }
