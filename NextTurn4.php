@@ -95,7 +95,7 @@
       }
 
       //Rotate is deprecated
-      function Card(cardNumber, folder, maxHeight, action = 0, showHover = 0, overlay = 0, borderColor = 0, counters = 0, actionDataOverride = "", id = "", rotate = 0, lifeCounters = 0, defCounters = 0, atkCounters = 0, controller = 0, restriction = "", isBroken = 0, onChain = 0, isFrozen = 0, gem = 0) {
+      function Card(cardNumber, folder, maxHeight, action = 0, showHover = 0, overlay = 0, borderColor = 0, counters = 0, actionDataOverride = "", id = "", rotate = 0, lifeCounters = 0, defCounters = 0, atkCounters = 0, controller = 0, restriction = "", isBroken = 0, onChain = 0, isFrozen = 0, gem = 0, landscape = 0) {
         if (folder == "crops") {
           cardNumber += "_cropped";
         }
@@ -125,9 +125,9 @@
         border = "";
         if (borderColor != -1) margin = borderColor > 0 ? "margin:0px;" : "margin:1px;";
         if (folder == "crops") margin = "0px;";
-
+        
         var rv = "<a style='" + margin + " position:relative; display:inline-block;" + (action > 0 ? "cursor:pointer;" : "") + "'" + (showHover > 0 ? " onmouseover='ShowCardDetail(event, this)' onmouseout='HideCardDetail()'" : "") + (action > 0 ? " onclick='SubmitInput(\"" + action + "\", \"&cardID=" + actionData + "\");'" : "") + ">";
-
+        
         if (borderColor > 0) {
           border = "border-radius:8px; border:2px solid " + BorderColorMap(borderColor) + ";";
         } else if (folder == "concat") {
@@ -135,8 +135,9 @@
         } else {
           border = "border: 1px solid transparent;";
         }
-
-        if(rotate == 1) {
+        
+        var orientation = landscape == 1 ? "data-orientation='landscape'" : "";
+        if(rotate == 1 || landscape == 1) {
           height = (maxHeight);
           width = (maxHeight * 1.29);
         }
@@ -156,7 +157,7 @@
         if (IsPatron(2)) echo ("if(controller == 2 && CardHasAltArt(cardNumber)) folderPath = 'PatreonImages/' + folderPath;");
         ?>
 
-        rv += "<img " + (id != "" ? "id='" + id + "-img' " : "") + "style='" + border + " height:" + height + "; width:" + width + "px; position:relative;' src='./" + folderPath + "/" + cardNumber + fileExt + "' />";
+        rv += "<img " + (id != "" ? "id='" + id + "-img' " : "") + orientation + "style='" + border + " height:" + height + "; width:" + width + "px; position:relative;' src='./" + folderPath + "/" + cardNumber + fileExt + "' />";
         rv += "<div " + (id != "" ? "id='" + id + "-ovr' " : "") + "style='visibility:" + (overlay == 1 ? "visible" : "hidden") + "; width:100%; height:100%; top:0px; left:0px; border-radius:10px; position:absolute; background: rgba(0, 0, 0, 0.5); z-index: 1;'></div>";
 
         //TODO: Steam counters missing
@@ -320,6 +321,7 @@
           var type = cardArr[10];
           var substype = cardArr[11];
           if (type != "") {
+            folder = "concat";
             if (zone == "myChar") {
               var charLeft = GetCharacterLeft(type, substype);
               var charBottom = GetCharacterBottom(type, substype);
@@ -332,6 +334,7 @@
           }
           newHTML += "<span style='position:" + positionStyle + "; margin:1px;'>";
           if (type == "C") {
+            folder = "WebpImages";
             var mySoulCountEl = document.getElementById("mySoulCount");
             if (!!mySoulCountEl && zone == "myChar") {
               var fontColor = "#DDD";
@@ -371,7 +374,7 @@
           var restriction = cardArr[12];
           if(typeof restriction != "string") restriction = "";
           restriction = restriction.replace(/_/g, ' ');
-          newHTML += Card(cardArr[0], folder, size, cardArr[1], 1, cardArr[2], cardArr[3], cardArr[4], cardArr[5], "", cardArr[17], cardArr[6], cardArr[7], cardArr[8], cardArr[9], restriction, cardArr[13], cardArr[14], cardArr[15], cardArr[16]);
+          newHTML += Card(cardArr[0], folder, size, cardArr[1], 1, cardArr[2], cardArr[3], cardArr[4], cardArr[5], "", cardArr[17], cardArr[6], cardArr[7], cardArr[8], cardArr[9], restriction, cardArr[13], cardArr[14], cardArr[15], cardArr[16], cardArr[18]);
           newHTML += "</span>";
         }
         zoneEl.innerHTML = newHTML;
