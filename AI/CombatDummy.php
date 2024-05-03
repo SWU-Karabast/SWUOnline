@@ -3,6 +3,7 @@
 function CombatDummyAI()
 {
   global $currentPlayer, $p2CharEquip, $decisionQueue, $turn, $mainPlayer;
+  return;
   $currentPlayerIsAI = ($currentPlayer == 2 && $p2CharEquip[CharacterPieces()] == "DUMMY") ? true : false;
   $canceled = false;
   if(!IsGameOver() && $currentPlayerIsAI)
