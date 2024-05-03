@@ -236,7 +236,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   echo ("<span style='position:absolute; text-align:center; width:100%; font-size: 26px; font-weight: 550; top:20px; user-select: none;'>$theirHealth</span>");
   echo (($manualMode ? "<span style='position:absolute; top:0px; left:65px;'>" . CreateButton($playerID, "+1", 10008, 0, "20px") . CreateButton($playerID, "-1", 10007, 0, "20px") . "</span>" : ""));
   if (IsDarkMode($playerID)) echo ("<img style='height:165px;' src='./Images/DuoLifeDark.png' />");
-  else echo ("<img style='height:165px;' src='./Images/DuoLife.png' />");
+  else echo ("<img style='height:165px;' src='./Images/LifeBackground.png' />");
   echo ("<div style='position:absolute; top:37px; left:-130px; z-index:-5;'></div>");
   if ($turn[0] == "PDECK" || $turn[0] == "ARS" || (count($layers) > 0 && $layers[0] == "ENDTURN")) {
     $passLabel = "End Turn";

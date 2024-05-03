@@ -96,7 +96,7 @@ function RemoveAlly($player, $index)
 
 function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
 {
-  global $combatChain, $mainPlayer, $CS_NumAlliesDestroyed, $CS_NumLeftPlay;
+  global $combatChain, $mainPlayer, $defPlayer, $CS_NumAlliesDestroyed, $CS_NumLeftPlay;
   $allies = &GetAllies($player);
   $cardID = $allies[$index];
   if(!$skipDestroy) {
@@ -126,7 +126,8 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
       if($allies[$i+2] <= 0) DestroyAlly($player, $i);
     }
   }
-  UpdateAttackTarget();
+  if($player == $mainPlayer) UpdateAttacker();
+  else UpdateAttackTarget();
   return $cardID;
 }
 
@@ -308,8 +309,8 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
       AddDecisionQueue("MZOP", $player, "ADDSHIELD", 1);
       break;
     case "4786320542"://Obi-Wan Kenobi
-      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to add an experience");
       AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to add two experience");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
       AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
       AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
@@ -624,9 +625,9 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,1", 1);
       break;
     case "6827598372"://Grand Inquisitor
-      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 1 damage to");
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:maxAttack=3");
       AddDecisionQueue("MZFILTER", $mainPlayer, "index=MYALLY-" . $attackerAlly->Index());
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 1 damage to");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,1", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "READY", 1);
