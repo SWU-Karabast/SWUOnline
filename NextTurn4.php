@@ -703,7 +703,7 @@
       echo ("<button title='Disable Chat' " . ProcessInputLink($playerID, 26, $SET_MuteChat . "-1", fullRefresh:true) . "style='display:inline-block; border: 1px solid #454545; color: #1a1a1a; padding: 0;  font: inherit; cursor: pointer; outline: inherit; box-shadow: none; bottom: 10px; right: 10px; position: fixed;'> <img style='height:16px; width:16px; float:left; margin: 7px;' src='./Images/disable.png' /></button>");
     }
     else {
-      echo ("<button title='Re-enable Chat' " . ProcessInputLink($playerID, 26, $SET_MuteChat . "-0", fullRefresh:true) . "style='display:inline; border: 1px solid #454545; width:210px; color: #1a1a1a; padding: 0 0 4px 0; height: 32px; font: inherit; color: white; cursor: pointer; outline: inherit; box-shadow: none;'>⌨️ Re-enable Chat</button>");
+      echo ("<button title='Re-enable Chat' " . ProcessInputLink($playerID, 26, $SET_MuteChat . "-0", fullRefresh:true) . "style='display:inline; border: 1px solid #454545; width:210px; padding: 0 0 4px 0; height: 32px; font: inherit; color: white; cursor: pointer; outline: inherit; background: #292929; box-shadow: none;'>⌨️ Re-enable Chat</button>");
     }
     echo ("</div>");
     echo ("<input type='hidden' id='gameName' value='" . $gameName . "'>");
