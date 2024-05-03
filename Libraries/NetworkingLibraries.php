@@ -521,6 +521,9 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
     case 100000: //Quick Rematch
       if($isSimulation) return;
       if($turn[0] != "OVER") break;
+      CloseDecisionQueue();
+      global $decisionQueue;
+      $decisionQueue = [];
       $otherPlayer = ($playerID == 1 ? 2 : 1);
       $char = &GetPlayerCharacter($otherPlayer);
       if ($char[0] != "DUMMY") {
