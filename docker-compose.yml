@@ -6,8 +6,8 @@ services:
       context: .
     restart: always
     volumes:
-      - "./:/var/www/html/GrandArchiveOnline"
-    command: bash "/var/www/html/GrandArchiveOnline/docker-entrypoint.sh"
+      - "./:/var/www/html/SWUOnline"
+    command: bash "/var/www/html/SWUOnline/docker-entrypoint.sh"
     ports:
       - "8080:80"
     depends_on:
@@ -21,6 +21,8 @@ services:
       REDIS_HOST: "app_redis"
       REDIS_ENABLED: true
       DOMAIN: "localhost"
+    user: "${DOCKER_USER}"
+
   mysql-server:
     image: mysql:latest
     restart: always
@@ -29,9 +31,8 @@ services:
       MYSQL_ROOT_PASSWORD: "secret"
       MYSQL_SERVER_NAME: "mysql-server"
       MYSQL_SERVER_USER_NAME: "root"
-      MYSQL_DATABASE: "grandarchive"
+      MYSQL_DATABASE: "swuonline"
     volumes:
-      - ./mysql-data:/var/lib/mysql
       - ./Database:/docker-entrypoint-initdb.d
   phpmyadmin:
     image: phpmyadmin:latest
