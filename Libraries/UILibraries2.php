@@ -462,7 +462,7 @@ function CreatePopup($id, $fromArr, $canClose, $defaultState = 0, $title = "", $
   $style = "";
   $overCC = 1000;
   $darkMode = IsDarkMode($playerID);
-  $top = "54%";
+  $top = "40%";
   $left = "calc(25% - 129px)";
   $width = "50%";
   $height = "30%";
