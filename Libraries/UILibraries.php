@@ -44,7 +44,7 @@
       case 3: return "yellow";
       case 4: return "Gray";
       case 5: return "Tan";
-      case 6: return "chartreuse";
+      case 6: return "#00FF66";
     }
   }
 
@@ -272,7 +272,7 @@
     //$file = "'./" . "CardImages" . "/" . $cardNumber . ".png'";
     $name = CardName($cardNumber);
     if($name == "") return "";
-      $color = "DimGray";
+      $color = "Gray";
     //$file = "'./" . "BigCardImages" . "/" . $cardNumber . ".png'";
     $file = "'./" . "WebpImages" . "/" . $cardNumber . ".webp'";
     return "<b><span style='color:" . $color . "; cursor:default;' onmouseover=\"ShowDetail(event," . $file . ")\" onmouseout='HideCardDetail()'>" . $name . "</span></b>";

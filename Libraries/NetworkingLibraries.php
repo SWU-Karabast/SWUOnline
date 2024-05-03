@@ -1026,7 +1026,7 @@ function BeginRoundPass()
   $initiativeTaken = 0;
   EndTurnProcedure($initiativePlayer);
   EndTurnProcedure($initiativePlayer == 1 ? 2 : 1);
-  WriteLog("<span style='color:blue;'>A new phase has begun</span>");
+  WriteLog("<span style='color:#6E6DFF;'>A new phase has begun</span>");
   AllyBeginTurnEffects();
   CharacterStartTurnAbility(1);
   CharacterStartTurnAbility(2);

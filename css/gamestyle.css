@@ -87,7 +87,7 @@ h4 {
   display: inline-block;
   line-height: 40px;
   vertical-align: middle;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 /* Checkbox when unchecked */
@@ -98,8 +98,8 @@ h4 {
   top: 15;
   width: 16px;
   height: 16px;
-  outline: 3px solid #1a1a1a;
   background: #fff;
+  border-radius: 3px;
 }
 
 /* Apply to the checkbox when checked */
@@ -177,9 +177,9 @@ h4 {
 
 .text {
   white-space: nowrap;
-  font: Helvetica;
+  font: barlow;
   color: white;
-  font-size: 20px;
+  font-size: 16px;
   font-weight: bold;
   position: absolute;
   overflow: hidden;
@@ -187,7 +187,6 @@ h4 {
   left: 50%;
   transform: translate(-50%, -50%);
   -ms-transform: translate(-50%, -50%);
-  text-shadow: 2px 0 0 #1a1a1a, 0 -2px 0 #1a1a1a, 0 2px 0 #1a1a1a, -2px 0 0 #1a1a1a;
   width: 100%;
   pointer-events: none;
 }
@@ -273,38 +272,31 @@ h4 {
 button {
   cursor: pointer;
   font-size: 18px;
-  color: #1a1a1a;
-  background: #EDEDED;
-  border: 1px solid #1a1a1a;
-  box-shadow: 1px 1px 0 #1a1a1a,
-    -1px -1px 0 #1a1a1a,
-    -1px 1px 0 #1a1a1a,
-    1px -1px 0 #1a1a1a;
+  color: white;
+  background: #292929;
+  border: 0;
+  box-shadow: inset 0px 0px 0px 1px #454545;
   transition: 150ms ease-in-out;
-  margin: 5px;
-  padding-left: 10px;
-  padding-right: 10px;
-  border-radius: 3px;
+  font-family: 'barlow';
+  font-weight: 600;
+  padding: 8px 20px 10px;
+  border-radius: 5px;
+  margin: 0 5px;
 }
 
 input[type="button"] {
-  position: absolute;
-  top: 3px;
-  left: 5px;
   cursor: pointer;
   font-size: 18px;
-  color: #1a1a1a;
-  background: #EDEDED;
-  border: 1px solid #1a1a1a;
-  box-shadow: 1px 1px 0 #1a1a1a,
-    -1px -1px 0 #1a1a1a,
-    -1px 1px 0 #1a1a1a,
-    1px -1px 0 #1a1a1a;
-  transition: 500ms ease-in-out;
-  margin: 5px;
-  padding-left: 10px;
-  padding-right: 10px;
-  border-radius: 3px;
+  color: white;
+  background: #292929;
+  border: 0;
+  box-shadow: inset 0px 0px 0px 1px #454545;
+  transition: 150ms ease-in-out;
+  font-family: 'barlow';
+  font-weight: 600;
+  padding: 8px 20px 10px;
+  border-radius: 5px;
+  margin: 0 5px;
 }
 
 button:hover,

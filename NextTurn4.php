@@ -69,12 +69,15 @@
       <title>Karabast</title>
       <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
       <link rel="stylesheet" href="css/gamestyle.css">
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     </head>
 
     <script>
       var IsDynamicScalingEnabled = <?php echo (IsDynamicScalingEnabled($playerID) ? "true" : "false"); ?>;
       var cardSize = IsDynamicScalingEnabled == 1 ? window.innerWidth / 13 : 96;
-      //var cardSize = 96;
+      //Note: 96 = Card Size
 
       function Hotkeys(event) {
         if (event.keyCode === 32) { if(document.getElementById("passConfirm").innerText == "false" || confirm("Do you want to skip arsenal?")) SubmitInput(99, ""); } //Space = pass
@@ -126,9 +129,9 @@
         var rv = "<a style='" + margin + " position:relative; display:inline-block;" + (action > 0 ? "cursor:pointer;" : "") + "'" + (showHover > 0 ? " onmouseover='ShowCardDetail(event, this)' onmouseout='HideCardDetail()'" : "") + (action > 0 ? " onclick='SubmitInput(\"" + action + "\", \"&cardID=" + actionData + "\");'" : "") + ">";
 
         if (borderColor > 0) {
-          border = "border-radius:8px; border:2.5px solid " + BorderColorMap(borderColor) + ";";
+          border = "border-radius:8px; border:2px solid " + BorderColorMap(borderColor) + ";";
         } else if (folder == "concat") {
-          border = "border-radius:8px; border:1.5px solid transparent;";
+          border = "border-radius:8px; border:1px solid transparent;";
         } else {
           border = "border: 1px solid transparent;";
         }
@@ -215,6 +218,7 @@
 
         if (gem != 0) {
           var playerID = <?php echo ($playerID); ?>;
+           //Note: 96 = Card Size
           var cardWidth = 96;
           gemImg = (gem == 1 ? "hexagonRedGem.png" : "hexagonGrayGem.png");
           if (gem == 1) rv += "<img " + ProcessInputLink(playerID, 102, actionDataOverride) + " title='Effect Active' style='position:absolute; z-index:1001; bottom:3px; left:" + (cardWidth / 2 - 18) + "px; width:40px; height:40px; cursor:pointer;' src='./Images/" + gemImg + "' />";
@@ -295,7 +299,7 @@
           case 5:
             return "Tan";
           case 6:
-            return "chartreuse";
+            return "#00FF66";
           case 7:
             return "Orchid";
           default:
@@ -303,6 +307,7 @@
         }
       }
 
+      //Note: 96 = Card Size
       function PopulateZone(zone, size = 96, folder = "concat") {
         var zoneEl = document.getElementById(zone);
         var zoneData = zoneEl.innerHTML;
@@ -345,18 +350,21 @@
             echo ("var p1uid = '" . ($p1uid == "-" ? "Player 1" : $p1uid) . "';");
             echo ("var p2uid = '" . ($p2uid == "-" ? "Player 2" : $p2uid) . "';");
             ?>
+
+            // User Tags
+
             if (zone == "myChar") {
               var fontColor = "#DDD";
               var borderColor = "#1a1a1a";
               var backgroundColor = "#DDD";
               //var myName = document.getElementById("myUsername").innerHTML;
-              newHTML += "<div style='cursor:default; margin: 0px; top: 85%; left: 50%; margin-right: -50%; border-radius: 8px; width: 81px; text-align: center; line-height: 14px; height: 12px; padding: 5px; border: 3px solid " + borderColor + "; transform: translate(-50%, -50%); position: absolute; z-index: 10; background: " + backgroundColor + "; font-size: 16px; font-weight: 650; color: " + fontColor + "; text-shadow: 2px 0 0 " + borderColor + ", 0 -2px 0 " + borderColor + ", 0 2px 0 " + borderColor + ", -2px 0 0 " + borderColor + "; user-select: none;'>" + <?php echo ($playerID == 1 ? "p1uid" : "p2uid"); ?> + "</div>";
+              newHTML += "<div style='cursor:default; margin: 0px; top: 85%; left: 50%; margin-right: -50%; border-radius: 5px 5px 0 0; width: 75px; text-align: center; line-height: 12px; height: 15px; padding: 5px 0; transform: translate(-50%, -50%); position: absolute; z-index: 10; background:black; font-size: 16px; font-weight: 500; color:white; user-select: none;'>" + <?php echo ($playerID == 1 ? "p1uid" : "p2uid"); ?> + "</div>";
             } else if (zone == "theirChar") {
               var fontColor = "#DDD";
               var borderColor = "#1a1a1a";
               var backgroundColor = "#DDD";
               //var theirName = document.getElementById("theirUsername").innerHTML;
-              newHTML += "<div style='cursor:default; margin: 0px; top: 85%; left: 50%; margin-right: -50%; border-radius: 8px; width: 81px; text-align: center; line-height: 14px; height: 12px; padding: 5px; border: 3px solid " + borderColor + "; transform: translate(-50%, -50%); position: absolute; z-index: 10; background: " + backgroundColor + "; font-size: 16px; font-weight: 650; color: " + fontColor + "; text-shadow: 2px 0 0 " + borderColor + ", 0 -2px 0 " + borderColor + ", 0 2px 0 " + borderColor + ", -2px 0 0 " + borderColor + "; user-select: none;'>" + <?php echo ($playerID == 1 ? "p2uid" : "p1uid"); ?> + "</div>";
+              newHTML += "<div style='cursor:default; margin: 0px; top: 85%; left: 50%; margin-right: -50%; border-radius: 5px 5px 0 0; width: 75px; text-align: center; line-height: 12px; height: 15px; padding: 5px 0; transform: translate(-50%, -50%); position: absolute; z-index: 10; background:black; font-size: 16px; font-weight: 500; color:white; user-select: none;'>" + <?php echo ($playerID == 1 ? "p2uid" : "p1uid"); ?> + "</div>";
             }
 
           }
@@ -373,7 +381,7 @@
       function GetCharacterLeft(cardType, cardSubType) {
         switch (cardType) {
           case "C": case "W":
-            return "calc(46.5% - " + ((cardSize * 1.29) / 2) + "px)";
+            return "calc(50% - 183px)";
           default:
             break;
         }
@@ -394,9 +402,9 @@
       function GetCharacterBottom(cardType, cardSubType) {
         switch (cardType) {
           case "C":
-            return (cardSize * 2 + 25) + "px";
+            return (cardSize * 2 + 54) + "px";
           case "W":
-            return (cardSize * 3 + 40) + "px";
+            return (cardSize * 3 + 66) + "px";
           default:
             break;
         }
@@ -417,9 +425,9 @@
       function GetCharacterTop(cardType, cardSubType) {
         switch (cardType) {
           case "C":
-            return (cardSize * 2 + 25) + "px";
+            return (cardSize * 2 - 6) + "px";
           case "W":
-            return (cardSize * 3 + 40) + "px";
+            return (cardSize * 3 + 4) + "px";
           default:
             break;
         }
@@ -461,7 +469,8 @@
 
       div,
       span {
-        font-family: helvetica;
+        font-family: "Barlow", sans-serif;
+        color: white;
       }
 
       td {
@@ -469,26 +478,24 @@
       }
 
       .passButton {
-        background: url("./Images/passActive.png") no-repeat;
-        background-size: contain;
+        background-color: #292929;
         transition: 150ms ease-in-out;
       }
 
       .passButton:hover {
-        background: url("./Images/passHover.png") no-repeat;
-        background-size: contain;
+        background-color: #292929;
         -webkit-transform: scale(1.1);
         -ms-transform: scale(1.1);
         transform: scale(1.1);
       }
 
       .passButton:active {
-        background: url("./Images/passPress.png") no-repeat;
+        background-color: #292929;
         background-size: contain;
       }
 
       .passInactive {
-        background: url("./Images/passInactive.png") no-repeat;
+        background-color: #292929;
         background-size: contain;
       }
 
@@ -685,17 +692,18 @@
 
     <?php
     //Display hidden elements
+    //Chat UI
     echo ("<div id='popupContainer'></div>");
     echo ("<div id=\"cardDetail\" style=\"z-index:100000; display:none; position:fixed;\"></div>");
     echo ("<div id='mainDiv' style='position:fixed; z-index:20; left:0px; top:0px; width:100%;height:100%;'></div>");
-    echo ("<div id='chatbox' style='z-index:40; position:fixed; bottom:0px; right:18px; width:200px; height: 32px;'>");
+    echo ("<div id='chatbox' style='z-index:40; position:fixed; bottom:10px; right:18px;'>");
     if ($playerID != 3 && !IsChatMuted()) {
-      echo ("<input id='chatText' style='margin-left: 4px; margin-right: 1px; width:110px; display:inline; border: 2px solid " . $borderColor . "; border-radius: 3px; font-weight: 500;' type='text' id='chatText' name='chatText' value='' autocomplete='off' onkeypress='ChatKey(event)'>");
-      echo ("<button style='display:inline; border: 2px solid " . $borderColor . "; width:45px; color: #1a1a1a; border:" . $backgroundColor . "; padding: 0; font: inherit; cursor: pointer; outline: inherit; box-shadow: none;' onclick='SubmitChat()'>Chat</button>");
-      echo ("<button title='Disable Chat' " . ProcessInputLink($playerID, 26, $SET_MuteChat . "-1", fullRefresh:true) . "style='display:inline; border: 2px solid " . $borderColor . "; width:20px; color: #1a1a1a; border:" . $backgroundColor . "; padding: 0; font: inherit; cursor: pointer; outline: inherit; box-shadow: none;'>&#128681;</button>");
+      echo ("<input id='chatText' style='background: black; color: white; font-size:16px; font-family:barlow; margin-left: 8px; margin-right: 0; height: 32px; border: 1px solid #454545; border-radius: 5px 0 0 5px;' type='text' id='chatText' name='chatText' value='' autocomplete='off' onkeypress='ChatKey(event)'>");
+      echo ("<button style='border: 1px solid #454545; border-radius: 0 5px 5px 0; width:55px; height:32px; color: white; margin: 0 0 0 -1px; padding: 0; font-size:16px; font-weight:600; cursor: pointer; outline: inherit; box-shadow: none;' onclick='SubmitChat()'>Chat</button>");
+      echo ("<button title='Disable Chat' " . ProcessInputLink($playerID, 26, $SET_MuteChat . "-1", fullRefresh:true) . "style='display:inline-block; border: 1px solid #454545; color: #1a1a1a; padding: 0;  font: inherit; cursor: pointer; outline: inherit; box-shadow: none; bottom: 10px; right: 10px; position: fixed;'> <img style='height:16px; width:16px; float:left; margin: 7px;' src='./Images/disable.png' /></button>");
     }
     else {
-      echo ("<button title='Re-enable Chat' " . ProcessInputLink($playerID, 26, $SET_MuteChat . "-0", fullRefresh:true) . "style='display:inline; border: 2px solid " . $borderColor . "; width:210px; color: #1a1a1a; border:" . $backgroundColor . "; padding: 0; font: inherit; cursor: pointer; outline: inherit; box-shadow: none;'>⌨️ Re-enable Chat</button>");
+      echo ("<button title='Re-enable Chat' " . ProcessInputLink($playerID, 26, $SET_MuteChat . "-0", fullRefresh:true) . "style='display:inline; border: 1px solid #454545; width:210px; color: #1a1a1a; padding: 0 0 4px 0; height: 32px; font: inherit; color: white; cursor: pointer; outline: inherit; box-shadow: none;'>⌨️ Re-enable Chat</button>");
     }
     echo ("</div>");
     echo ("<input type='hidden' id='gameName' value='" . $gameName . "'>");

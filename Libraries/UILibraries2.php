@@ -185,9 +185,9 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
     $rv = "<a style='" . $margin . " position:relative; display:inline-block;" . ($action > 0 ? "cursor:pointer;" : "") . "'" . ($showHover > 0 ? " onmouseover='ShowCardDetail(event, this)' onmouseout='HideCardDetail()'" : "") . ($action > 0 ? " onclick='SubmitInput(\"" . $action . "\", \"&cardID=" . $actionData . "\");'" : "") . ">";
   }
   if ($borderColor > 0) {
-    $border = "border-radius:10px; border:2.5px solid " . BorderColorMap($borderColor) . ";";
+    $border = "border-radius:10px; border:2px solid " . BorderColorMap($borderColor) . ";";
   } else if ($folder == "concat" || $folder == "./concat" || $folder == "../concat") {
-    $border = "border-radius:8px; border:1.5px solid transparent;";
+    $border = "border-radius:8px; border:1px solid transparent;";
   } else {
     $border = "border: 1px solid transparent;";
   }
@@ -250,7 +250,7 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
    <img style='position:absolute; top: -2px; width:" . $imgCounterHeight . "px; height:" . $imgCounterHeight . "px; opacity: 0.9; z-index:-1; user-select: none;' src='./Images/aimCounters.png'></div>";
   }
 
-  //Equipments, Hero and default counters style
+  //Default Counters Style (Deck, Discard, Hero, Equipment)
   elseif ($counters != 0) {
     if ($lifeCounters == 0 && $defCounters == 0 && $atkCounters == 0) {
       $left = "50%";
@@ -263,15 +263,15 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
     border-radius: 50%;
     width:" . $counterHeight . "px;
     height:" . $counterHeight . "px;
-    padding: 6px;
-    border: 3px solid #1a1a1a;
+    padding: 8px;
     text-align: center;
     transform: translate(-50%, -50%);
     position:absolute; z-index: 10;
-    background: rgba(235, 235, 235, 0.9);
+    background: rgba(0, 0, 0, 0.8);
     line-height: 1.2;
-    font-family: Helvetica; font-size:" . ($counterHeight - 2) . "px; font-weight:550; color: #EDEDED;
-    text-shadow: 2px 0 0 #1a1a1a, 0 -2px 0 #1a1a1a, 0 2px 0 #1a1a1a, -2px 0 0 #1a1a1a;
+    font-size: 24px; 
+    font-weight:700; 
+    color: #fff;
     user-select: none;'>" . $counters . "</div>";
   }
 
@@ -330,7 +330,7 @@ function BorderColorMap($code)
     case 5:
       return "Tan";
     case 6:
-      return "chartreuse";
+      return "#00FF66";
     case 7:
       return "Orchid";
   }
@@ -463,12 +463,12 @@ function CreatePopup($id, $fromArr, $canClose, $defaultState = 0, $title = "", $
   $overCC = 1000;
   $darkMode = IsDarkMode($playerID);
   $top = "54%";
-  $left = "25%";
+  $left = "calc(25% - 129px)";
   $width = "50%";
   $height = "30%";
   if ($size == 2) {
     $top = "10%";
-    $left = "25%";
+    $left = "calc(25% - 129px)";
     $width = "50%";
     $height = "80%";
     $overCC = 1001;
@@ -482,22 +482,23 @@ function CreatePopup($id, $fromArr, $canClose, $defaultState = 0, $title = "", $
   }
   if ($overCombatChain) {
     $top = "220px";
-    $left = "305px";
+    $left = "calc(25% - 129px)";
     $width = "auto";
     $height = "auto";
     $overCC = 100;
   }
 
-  $rv = "<div id='" . $id . "' style='overflow-y: auto; background-color:" . BackgroundColor($darkMode) . "; border: 3px solid " . PopupBorderColor($darkMode) . "; border-radius: 7px; z-index:" . $overCC . "; position: absolute; top:" . $top . "; left:" . $left . "; width:" . $width . "; height:" . $height . ";"  . ($defaultState == 0 ? " display:none;" : "") . "'>";
+  // Modals
+  $rv = "<div id='" . $id . "' style='overflow-y: auto; background-color:rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); border-radius: 10px; padding: 10px; font-weight: 500; scrollbar-color: #888888 rgba(0, 0, 0, 0); scrollbar-width: thin; z-index:" . $overCC . "; position: absolute; top:" . $top . "; left:" . $left . "; width:" . $width . "; height:" . $height . ";"  . ($defaultState == 0 ? " display:none;" : "") . "'>";
 
-  if ($title != "") $rv .= "<h" . ($big ? "1" : "3") . " style='margin-left: 10px; margin-top: 5px; margin-bottom: 10px; text-align: center; user-select: none;'>" . $title . "</h" . ($big ? "1" : "3") . ">";
+  if ($title != "") $rv .= "<h" . ($big ? "1" : "3") . " style=' font-weight: 500; margin-left: 10px; margin-top: 5px; margin-bottom: 15px; text-align: center; user-select: none;'>" . $title . "</h" . ($big ? "1" : "3") . ">";
   if ($canClose == 1) $rv .= "<div style='position:absolute; top:0px; right:45px;'><div title='Click to close' style='position: fixed; cursor:pointer; font-size:50px;' onclick='(function(){ document.getElementById(\"" . $id . "\").style.display = \"none\";})();'>&#10006;</div></div>";
-  if ($additionalComments != "") $rv .= "<h" . ($big ? "3" : "4") . " style='margin-left: 10px; margin-top: 5px; margin-bottom: 10px; text-align: center;'>" . $additionalComments . "</h" . ($big ? "3" : "4") . ">";
+  if ($additionalComments != "") $rv .= "<h" . ($big ? "3" : "4") . " style='font-weight: 500; margin-left: 10px; margin-top: 5px; margin-bottom: 10px; text-align: center;'>" . $additionalComments . "</h" . ($big ? "3" : "4") . ">";
   for ($i = 0; $i < count($fromArr); $i += $arrElements) {
     $rv .= Card($fromArr[$i], $path . "concat", $cardSize, 0, 1);
   }
   if (IsGameOver()) $style = "text-align: center;";
-  else $style = "font-size: 18px; margin-left: 10px; line-height: 22px; align-items: center;";
+  else $style = "font-size: 18px; font-weight: 500; margin-left: 10px; line-height: 22px; align-items: center;";
   $rv .= "<div style='" . $style . "'>" . $customInput . "</div>";
   $rv .= "</div>";
   return $rv;
@@ -545,23 +546,23 @@ function CardStats($player)
   $cardStats = &GetCardStats($player);
   $rv = "<div style='float:left; width:49%; height:85%;'>";
   $rv .= "<h2 style='text-align:center'>Card Play Stats</h2>";
-  $rv .= "<table style='text-align:center; margin-left:10px; margin-top:10px; width:100%; border-spacing: 0; border-collapse: collapse; font-size: 1em; line-height: 24px;'><tr>";
-  $rv .= "<td style='border-bottom: 1px solid black; border-top: 1px solid black;'>Card ID</td>";
-  $rv .= "<td style='border-bottom: 1px solid black; border-top: 1px solid black;'>Times<br>Played</td> ";
-  $rv .= "<td style='border-bottom: 1px solid black; border-top: 1px solid black;'>Times<br>Activated</td>";
-  $rv .= "<td style='border-bottom: 1px solid black; border-top: 1px solid black;'>Times<br>Resourced</td>";
+  $rv .= "<table style='text-align:center; margin-left:10px; margin-top:10px; width:100%; border-spacing: 0; border-collapse: collapse; font-size: 16px; color: white; line-height: 24px;'><tr>";
+  $rv .= "<td style='border-bottom: 1px solid white; border-top: 1px solid white;'>Card ID</td>";
+  $rv .= "<td style='border-bottom: 1px solid white; border-top: 1px solid white;'>Times<br>Played</td> ";
+  $rv .= "<td style='border-bottom: 1px solid white; border-top: 1px solid white;'>Times<br>Activated</td>";
+  $rv .= "<td style='border-bottom: 1px solid white; border-top: 1px solid white;'>Times<br>Resourced</td>";
   $rv .= "</tr>";
   $BackgroundColor = "";
   if ($darkMode) {
     $lighterColor = "rgba(94, 94, 94, 0.95)";
     $darkerColor = "rgba(74, 74, 74, 0.95)";;
   } else {
-    $lighterColor = "rgba(215, 215, 215, 0.95)";
-    $darkerColor = "rgba(235, 235, 235, 0.95)";
+    $lighterColor = "rgba(255, 255, 255, 0.1)";
+    $darkerColor = "rgba(255, 255, 255, 0)";
   }
   for ($i = 0; $i < count($cardStats); $i += CardStatPieces()) {
     $BackgroundColor = ($BackgroundColor == $lighterColor ? $darkerColor : $lighterColor);
-    $style = "font-weight: bold; color:gray;";
+    $style = "font-weight: 400; color:white;";
     $timesPlayed = $cardStats[$i + $CardStats_TimesPlayed];
     $timesResourced = $cardStats[$i + $CardStats_TimesResourced];
     $timesActivated = $cardStats[$i + $CardStats_TimesActivated];
@@ -609,15 +610,15 @@ function CardStats($player)
     //$rv .= "Average Value per turn (Damage threatened + block): " . round(($totalDamageThreatened + $totalBlocked) / $numTurns, 2) . "<br>";
 
     //Cards per turn stats
-    $rv .= "<table style='text-align:center; margin-right:10px; width: 100%; margin-top:10px; border-spacing: 0; border-collapse: collapse; font-size: 1em; line-height: 24px; font-weight:'><tr>";
-    $rv .= "<td style='border-bottom: 1px solid black; border-top: 1px solid black;'>Turn<br>Number</td>";
-    $rv .= "<td style='border-bottom: 1px solid black; border-top: 1px solid black;'>Cards<br>Played</td>";
+    $rv .= "<table style='text-align:center; margin-right:10px; width: 100%; margin-top:10px; border-spacing: 0; border-collapse: collapse; font-size: 1em; color: white; line-height: 24px;'><tr>";
+    $rv .= "<td style='border-bottom: 1px solid white; border-top: 1px solid white;'>Turn<br>Number</td>";
+    $rv .= "<td style='border-bottom: 1px solid white; border-top: 1px solid white;'>Cards<br>Played</td>";
     //$rv .= "<td style='border-bottom: 1px solid black; border-top: 1px solid black;'>Cards<br>Blocked</td>";
-    $rv .= "<td style='border-bottom: 1px solid black; border-top: 1px solid black;'>Cards<br>Reserved</td>";
+    $rv .= "<td style='border-bottom: 1px solid white; border-top: 1px solid white;'>Cards<br>Reserved</td>";
     //$rv .= "<td style='border-bottom: 1px solid black; border-top: 1px solid black;'>Resources<br>Used</td>";
     //$rv .= "<td style='border-bottom: 1px solid black; border-top: 1px solid black;'>Cards<br>Left</td>";
-    $rv .= "<td style='border-bottom: 1px solid black; border-top: 1px solid black;'>Damage<br>Dealt</td>";
-    $rv .= "<td style='border-bottom: 1px solid black; border-top: 1px solid black;'>Damage<br>Taken</td>";
+    $rv .= "<td style='border-bottom: 1px solid white; border-top: 1px solid white;'>Damage<br>Dealt</td>";
+    $rv .= "<td style='border-bottom: 1px solid white; border-top: 1px solid white;'>Damage<br>Taken</td>";
     $rv .= "</tr>";
 
     for ($i = 0; $i < count($turnStats); $i += TurnStatPieces()) {
@@ -778,7 +779,7 @@ function CardLink($caption, $cardNumber, $recordMenu = false)
         }
         */
   //$element = CardElement($cardNumber);
-  $color = "#AAA";
+  $color = "white";
   /*
   switch($element)
   {
