@@ -1319,6 +1319,7 @@ function TalentContains($cardID, $talent, $player="")
   return DelimStringContains($cardTalent, $talent);
 }
 
+//parameters: (comma delimited list of card ids, , )
 function RevealCards($cards, $player="", $from="HAND")
 {
   global $currentPlayer;
@@ -3268,19 +3269,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "2855740390"://Lieutenant Childsen
       if($from != "PLAY") {
-        $hand = &GetHand($currentPlayer);
-        $ally = new Ally("MYALLY-" . LastAllyIndex($currentPlayer), $currentPlayer);
-        $toReveal = "";
-        $amount = 0;
-        for($i=0; $i<count($hand); $i+=HandPieces()) {
-          if($amount < 4 && AspectContains($hand[$i], "Vigilance", $currentPlayer)) {
-            $ally->Attach("2007868442");//Experience token
-            if($toReveal != "") $toReveal .= ",";
-            $toReveal .= $hand[$i];
-            ++$amount;
-          }
-        }
-        RevealCards($toReveal, $currentPlayer, "HAND");
+        AddDecisionQueue("FINDINDICES", $currentPlayer, "HANDASPECT,Vigilance");
+        AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "4-");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose up to 4 cards to reveal");
+        AddDecisionQueue("MULTICHOOSEHAND", $currentPlayer, "<-", 1);
+        AddDecisionQueue("SPECIFICCARD", $currentPlayer, "LTCHILDSEN");
       }
       break;
     case "8506660490"://Darth Vader
