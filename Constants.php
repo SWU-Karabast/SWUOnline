@@ -276,7 +276,7 @@ function SetAfterPlayedBy($player, $cardID)
 //Combat Chain State (State for the current combat chain)
 $CCS_CurrentAttackGainedGoAgain = 0;
 $CCS_WeaponIndex = 1;
-$CCS_HasAimCounter = 2;
+$CCS_IsAmbush = 2;
 $CCS_NumHits = 3;//Deprecated -- use HitsInCombatChain() or NumAttacksHit() instead
 $CCS_DamageDealt = 4;
 $CCS_HitsInRow = 5;//Deprecated -- use HitsInRow() instead
@@ -318,11 +318,11 @@ function ResetCombatChainState()
   global $CCS_LinkTotalAttack, $CCS_LinkBaseAttack, $CCS_BaseAttackDefenseMax, $CCS_ResourceCostDefenseMin, $CCS_CardTypeDefenseRequirement;
   global $CCS_CachedTotalAttack, $CCS_CachedTotalBlock, $CCS_CombatDamageReplaced, $CCS_AttackUniqueID, $CCS_RequiredEquipmentBlock;
   global $mainPlayer, $defPlayer, $CCS_CachedDominateActive, $CCS_CachedNumBlockedFromHand, $CCS_IsBoosted, $CCS_AttackTargetUID, $CCS_CachedOverpowerActive, $CSS_CachedNumActionBlocked;
-  global $layers, $chainLinks, $chainLinkSummary, $CCS_CachedNumDefendedFromHand, $CCS_HitThisLink, $CCS_HasAimCounter;
+  global $layers, $chainLinks, $chainLinkSummary, $CCS_CachedNumDefendedFromHand, $CCS_HitThisLink, $CCS_IsAmbush;
   if (count($chainLinks) > 0) WriteLog("The combat chain was closed.");
   $combatChainState[$CCS_CurrentAttackGainedGoAgain] = 0;
   $combatChainState[$CCS_WeaponIndex] = -1;
-  $combatChainState[$CCS_HasAimCounter] = 0;
+  $combatChainState[$CCS_IsAmbush] = 0;
   $combatChainState[$CCS_DamageDealt] = 0;
   $combatChainState[$CCS_HitsWithWeapon] = 0;
   $combatChainState[$CCS_GoesWhereAfterLinkResolves] = "GY";
@@ -400,7 +400,7 @@ function AttackReplaced()
 
 function ResetChainLinkState()
 {
-  global $combatChainState, $CCS_CurrentAttackGainedGoAgain, $CCS_WeaponIndex, $CCS_HasAimCounter, $CCS_DamageDealt, $CCS_GoesWhereAfterLinkResolves;
+  global $combatChainState, $CCS_CurrentAttackGainedGoAgain, $CCS_WeaponIndex, $CCS_IsAmbush, $CCS_DamageDealt, $CCS_GoesWhereAfterLinkResolves;
   global $CCS_AttackPlayedFrom, $CCS_ChainLinkHitEffectsPrevented, $CCS_AttackFused, $CCS_AttackTotalDamage, $CCS_AttackTarget;
   global $CCS_LinkTotalAttack, $CCS_LinkBaseAttack, $CCS_BaseAttackDefenseMax, $CCS_ResourceCostDefenseMin, $CCS_CardTypeDefenseRequirement;
   global $CCS_CachedTotalAttack, $CCS_CachedTotalBlock, $CCS_CombatDamageReplaced, $CCS_AttackUniqueID, $CCS_RequiredEquipmentBlock;
@@ -409,7 +409,7 @@ function ResetChainLinkState()
   WriteLog("The chain link was closed.");
   $combatChainState[$CCS_CurrentAttackGainedGoAgain] = 0;
   $combatChainState[$CCS_WeaponIndex] = -1;
-  $combatChainState[$CCS_HasAimCounter] = 0;
+  $combatChainState[$CCS_IsAmbush] = 0;
   $combatChainState[$CCS_DamageDealt] = 0;
   $combatChainState[$CCS_GoesWhereAfterLinkResolves] = "GY";
   $combatChainState[$CCS_AttackPlayedFrom] = "NA";
@@ -569,12 +569,6 @@ function AttackPlayedFrom()
 {
   global $CCS_AttackPlayedFrom, $combatChainState;
   return $combatChainState[$CCS_AttackPlayedFrom];
-}
-
-function HasAimCounter()
-{
-  global $combatChainState, $CCS_HasAimCounter;
-  return $combatChainState[$CCS_HasAimCounter];
 }
 
 function CCOffset($piece)

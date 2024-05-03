@@ -506,7 +506,7 @@ function ProcessLayer($player, $parameter)
 function ProcessTrigger($player, $parameter, $uniqueID, $target="-")
 {
   global $combatChain, $CS_NumNonAttackCards, $CS_ArcaneDamageDealt, $CS_NumRedPlayed, $CS_DamageTaken, $EffectContext;
-  global $CID_BloodRotPox, $CID_Inertia, $CID_Frailty;
+  global $CID_BloodRotPox, $CID_Inertia, $CID_Frailty, $combatChainState, $CCS_IsAmbush;
   $items = &GetItems($player);
   $character = &GetPlayerCharacter($player);
   $auras = &GetAuras($player);
@@ -514,6 +514,7 @@ function ProcessTrigger($player, $parameter, $uniqueID, $target="-")
   $EffectContext = $parameter;
   switch ($parameter) {
     case "AMBUSH":
+      $combatChainState[$CCS_IsAmbush] = 1;
       $index = SearchAlliesForUniqueID($uniqueID, $player);
       AddDecisionQueue("YESNO", $player, "if_you_want_to_resolve_the_ambush_attack");
       AddDecisionQueue("NOPASS", $player, "-");
