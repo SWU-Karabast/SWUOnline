@@ -11,8 +11,8 @@ START TRANSACTION;
 SET time_zone = "+00:00";
 CREATE TABLE `completedgame` (
   `CompletionTime` timestamp NOT NULL DEFAULT current_timestamp(),
-  `WinningHero` char(6) NOT NULL,
-  `LosingHero` char(6) NOT NULL,
+  `WinningHero` char(15) NOT NULL,
+  `LosingHero` char(15) NOT NULL,
   `WinningPID` int(11) DEFAULT NULL,
   `LosingPID` int(11) DEFAULT NULL,
   `WinnerHealth` int(11) DEFAULT NULL,
@@ -33,7 +33,7 @@ CREATE TABLE `favoritedeck` (
   `decklink` varchar(128) NOT NULL,
   `usersId` int(11) NOT NULL,
   `name` varchar(128) NOT NULL,
-  `hero` varchar(8) NOT NULL,
+  `hero` varchar(15) NOT NULL,
   `format` varchar(32) DEFAULT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 -- --------------------------------------------------------
