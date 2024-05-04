@@ -1368,7 +1368,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       SetCachePiece($gameName, 3, $currentTime);
       ClearGameFiles($gameName);
       include "MenuFiles/ParseGamefile.php";
-      header("Location: " . $redirectPath . "/Start.php?gameName=$gameName&playerID=$playerID");
+      $authKey = $playerID == 1 ? $p1Key : $p2Key;
+      header("Location: " . $redirectPath . "/Start.php?gameName=$gameName&playerID=$playerID&authKey=$authKey");
       exit;
     case "REMATCH":
       global $GameStatus_Rematch, $inGameStatus;

@@ -22,6 +22,7 @@ if (!IsGameNameValid($gameName)) {
   exit;
 }
 $playerID = $_GET["playerID"];
+if(!isset($authKey)) $authKey = TryGet("authKey", "");
 
 if (!file_exists("./Games/" . $gameName . "/GameFile.txt")) exit;
 
