@@ -760,7 +760,7 @@ function GetResolvedAbilityType($cardID, $from="-")
 function GetResolvedAbilityName($cardID, $from="-")
 {
   global $currentPlayer, $CS_AbilityIndex;
-  if($from != "PLAY" && $from != "EQUIP") return "";
+  if($from != "PLAY" && $from != "EQUIP" && $from != "-") return "";
   $abilityIndex = GetClassState($currentPlayer, $CS_AbilityIndex);
   $abilityNames = GetAbilityNames($cardID);
   if($abilityNames == "" || $abilityIndex == "-") return "";
