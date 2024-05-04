@@ -319,7 +319,7 @@ function ResetCombatChainState()
   global $CCS_CachedTotalAttack, $CCS_CachedTotalBlock, $CCS_CombatDamageReplaced, $CCS_AttackUniqueID, $CCS_RequiredEquipmentBlock;
   global $mainPlayer, $defPlayer, $CCS_CachedDominateActive, $CCS_CachedNumBlockedFromHand, $CCS_IsBoosted, $CCS_AttackTargetUID, $CCS_CachedOverpowerActive, $CSS_CachedNumActionBlocked;
   global $layers, $chainLinks, $chainLinkSummary, $CCS_CachedNumDefendedFromHand, $CCS_HitThisLink, $CCS_IsAmbush;
-  if (count($chainLinks) > 0) WriteLog("The combat chain was closed.");
+
   $combatChainState[$CCS_CurrentAttackGainedGoAgain] = 0;
   $combatChainState[$CCS_WeaponIndex] = -1;
   $combatChainState[$CCS_IsAmbush] = 0;
