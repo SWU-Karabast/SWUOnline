@@ -133,8 +133,8 @@ function ResolvePriorityArray($priorityArray, $range, $destinationPrime, $destin
 
 function FirstTurnResolution($priorityArray, $character)
 {
-  global $currentTurn;
-  if($currentTurn == 1 && EncounterBlocksFirstTurn($character[0]))
+  global $currentRound;
+  if($currentRound== 1 && EncounterBlocksFirstTurn($character[0]))
   {
     for($i = 0; $i < count($priorityArray); ++$i)
     {

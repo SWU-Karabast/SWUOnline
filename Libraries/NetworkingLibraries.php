@@ -1005,7 +1005,7 @@ function CleanUpCombatEffects($weaponSwap=false)
 
 function BeginRoundPass()
 {
-  global $initiativeTaken, $mainPlayer, $currentTurnEffects, $nextTurnEffects, $initiativePlayer;
+  global $initiativeTaken, $mainPlayer, $currentRound, $currentTurnEffects, $nextTurnEffects, $initiativePlayer;
   global $MakeStartTurnBackup;
   WriteLog("Both players have passed; ending the phase.");
   ResetClassState(1);
@@ -1023,7 +1023,8 @@ function BeginRoundPass()
   $initiativeTaken = 0;
   EndTurnProcedure($initiativePlayer);
   EndTurnProcedure($initiativePlayer == 1 ? 2 : 1);
-  WriteLog("<span style='color:#6E6DFF;'>A new phase has begun</span>");
+  $currentRound+= 1;
+  WriteLog("<span style='color:#6E6DFF;'>A new round has begun</span>");
   AllyBeginTurnEffects();
   CharacterStartTurnAbility(1);
   CharacterStartTurnAbility(2);
@@ -1093,7 +1094,7 @@ function PassTurn()
 function FinalizeTurn()
 {
   //4.4.1. Players do not get priority during the End Phase.
-  global $currentPlayer, $currentTurn, $playerID, $turn, $combatChain, $actionPoints, $mainPlayer, $defPlayer, $currentTurnEffects, $nextTurnEffects;
+  global $currentPlayer, $currentRound, $playerID, $turn, $combatChain, $actionPoints, $mainPlayer, $defPlayer, $currentTurnEffects, $nextTurnEffects;
   global $mainHand, $defHand, $mainDeck, $mainItems, $defItems, $defDeck, $mainCharacter, $defCharacter, $mainResources, $defResources;
   global $mainAuras, $firstPlayer, $lastPlayed, $layerPriority, $EffectContext;
 
@@ -1132,7 +1133,7 @@ function FinalizeTurn()
 
   //Update all the player neutral stuff
   if ($mainPlayer == 2) {
-    $currentTurn += 1;
+    $currentRound+= 1;
   }
   $turn[0] = "M";
   //$turn[1] = $mainPlayer == 2 ? $turn[1] + 1 : $turn[1];
@@ -1738,7 +1739,7 @@ function WriteGamestate()
   global $p1ClassState, $p1CharacterEffects, $p1Soul, $p1CardStats, $p1TurnStats, $p1Allies, $p1Permanents, $p1Settings;
   global $p2Hand, $p2Deck, $p2CharEquip, $p2Resources, $p2Arsenal, $p2Items, $p2Auras, $p2Discard, $p2Pitch, $p2Banish;
   global $p2ClassState, $p2CharacterEffects, $p2Soul, $p2CardStats, $p2TurnStats, $p2Allies, $p2Permanents, $p2Settings;
-  global $landmarks, $winner, $firstPlayer, $currentPlayer, $currentTurn, $turn, $actionPoints, $combatChain, $combatChainState;
+  global $landmarks, $winner, $firstPlayer, $currentPlayer, $currentRound, $turn, $actionPoints, $combatChain, $combatChainState;
   global $currentTurnEffects, $currentTurnEffectsFromCombat, $nextTurnEffects, $decisionQueue, $dqVars, $dqState;
   global $layers, $layerPriority, $mainPlayer, $lastPlayed, $chainLinks, $chainLinkSummary, $p1Key, $p2Key;
   global $permanentUniqueIDCounter, $inGameStatus, $animations, $currentPlayerActivity;
@@ -1800,7 +1801,7 @@ function WriteGamestate()
   fwrite($handler, $winner . "\r\n");
   fwrite($handler, $firstPlayer . "\r\n");
   fwrite($handler, $currentPlayer . "\r\n");
-  fwrite($handler, $currentTurn . "\r\n");
+  fwrite($handler, $currentRound. "\r\n");
   fwrite($handler, implode(" ", $turn) . "\r\n");
   fwrite($handler, $actionPoints . "\r\n");
   fwrite($handler, implode(" ", $combatChain) . "\r\n");

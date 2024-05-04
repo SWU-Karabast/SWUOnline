@@ -33,7 +33,7 @@ function ParseGamestate($useRedis = false)
   global $p1ClassState, $p1CharacterEffects, $p1Material, $p1CardStats, $p1TurnStats, $p1Allies, $p1Permanents, $p1Settings;
   global $p2Hand, $p2Deck, $p2CharEquip, $p2Resources, $p2Arsenal, $p2Items, $p2Auras, $p2Discard, $p2Pitch, $p2Banish;
   global $p2ClassState, $p2CharacterEffects, $p2Material, $p2CardStats, $p2TurnStats, $p2Allies, $p2Permanents, $p2Settings;
-  global $landmarks, $winner, $firstPlayer, $currentPlayer, $currentTurn, $turn, $actionPoints, $combatChain, $combatChainState;
+  global $landmarks, $winner, $firstPlayer, $currentPlayer, $currentRound, $turn, $actionPoints, $combatChain, $combatChainState;
   global $currentTurnEffects, $currentTurnEffectsFromCombat, $nextTurnEffects, $decisionQueue, $dqVars, $dqState;
   global $layers, $layerPriority, $mainPlayer, $defPlayer, $lastPlayed, $chainLinks, $chainLinkSummary, $p1Key, $p2Key;
   global $permanentUniqueIDCounter, $inGameStatus, $animations, $currentPlayerActivity;
@@ -126,7 +126,7 @@ function ParseGamestate($useRedis = false)
   $winner = trim($gamestateContent[38]);
   $firstPlayer = trim($gamestateContent[39]);
   $currentPlayer = trim($gamestateContent[40]);
-  $currentTurn = trim($gamestateContent[41]);
+  $currentRound= trim($gamestateContent[41]);
   $turn = GetStringArray($gamestateContent[42]);
   $actionPoints = trim($gamestateContent[43]);
   $combatChain = GetStringArray($gamestateContent[44]);
@@ -437,13 +437,13 @@ function RevertGamestate($filename = "gamestateBackup.txt")
 
 function MakeStartTurnBackup()
 {
-  global $mainPlayer, $currentTurn, $filepath;
+  global $mainPlayer, $currentRound, $filepath;
   $lastTurnFN = $filepath . "lastTurnGamestate.txt";
   $thisTurnFN = $filepath . "beginTurnGamestate.txt";
   if (file_exists($thisTurnFN)) copy($thisTurnFN, $lastTurnFN);
   copy($filepath . "gamestate.txt", $thisTurnFN);
   $startGameFN = $filepath . "startGamestate.txt";
-  if ((IsPatron(1) || IsPatron(2)) && $currentTurn == 1 && !file_exists($startGameFN)) {
+  if ((IsPatron(1) || IsPatron(2)) && $currentRound== 1 && !file_exists($startGameFN)) {
     copy($filepath . "gamestate.txt", $startGameFN);
   }
 }
