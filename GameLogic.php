@@ -1367,6 +1367,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       SetCachePiece($gameName, 2, $currentTime);
       SetCachePiece($gameName, 3, $currentTime);
       ClearGameFiles($gameName);
+      include "MenuFiles/ParseGamefile.php";
       header("Location: " . $redirectPath . "/Start.php?gameName=$gameName&playerID=$playerID");
       exit;
     case "REMATCH":
