@@ -1081,14 +1081,13 @@ function FinishTurnPass()
 
 function PassTurn()
 {
-  WriteLog("do we use this?");
-  // global $playerID, $currentPlayer, $turn, $mainPlayer, $mainPlayerGamestateStillBuilt;
-  // if (!$mainPlayerGamestateStillBuilt) {
-  //   UpdateGameState($currentPlayer);
-  //   BuildMainPlayerGameState();
-  // }
+  global $playerID, $currentPlayer, $turn, $mainPlayer, $mainPlayerGamestateStillBuilt;
+  if (!$mainPlayerGamestateStillBuilt) {
+    UpdateGameState($currentPlayer);
+    BuildMainPlayerGameState();
+  }
 
-  // FinalizeTurn();
+  FinalizeTurn();
 }
 
 function FinalizeTurn()
