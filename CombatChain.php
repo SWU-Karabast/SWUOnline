@@ -65,7 +65,7 @@ function AttackModifier($cardID, $player, $index)
       $modifier += $ally->IsDamaged() ? 2 : 0;
       break;
     case "7648077180"://97th Legion
-      $modifier += NumResources($mainPlayer);
+      $modifier += NumResources($player);
       break;
     default: break;
   }
@@ -123,37 +123,8 @@ function OnDefenseReactionResolveEffects()
 
 function OnBlockResolveEffects()
 {
-  global $combatChain, $CS_DamageTaken, $defPlayer, $mainPlayer, $currentTurnEffects;
-  //This is when blocking fully resolves, so everything on the chain from here is a blocking card except the first
-  for($i = CombatChainPieces(); $i < count($combatChain); $i += CombatChainPieces()) {
-    if(SearchCurrentTurnEffects("ARC160-1", $defPlayer) && CardType($combatChain[$i]) == "AA") CombatChainPowerModifier($i, 1);
-    if(SearchCurrentTurnEffects("ROGUE802", $defPlayer) && CardType($combatChain[$i]) == "AA") CombatChainPowerModifier($i, 1);
-    if(SearchAurasForCard("ELE117", $defPlayer) && CardType($combatChain[$i]) == "AA") CombatChainPowerModifier($i, 3);
-    ProcessPhantasmOnBlock($i);
-  }
-  switch($combatChain[0]) {
 
-    default: break;
-  }
-  $blockedFromHand = 0;
-  for($i = CombatChainPieces(); $i < count($combatChain); $i += CombatChainPieces()) {
-    if($combatChain[$i+2] == "HAND") ++$blockedFromHand;
-    switch($combatChain[$i]) {
-
-      default:
-        break;
-    }
-  }
-  for($i = count($currentTurnEffects) - CurrentTurnPieces(); $i >= 0; $i -= CurrentTurnPieces()) {
-    $remove = false;
-    if($currentTurnEffects[$i + 1] == $defPlayer) {
-      switch($currentTurnEffects[$i]) {
-
-        default: break;
-      }
-    }
-    if($remove) RemoveCurrentTurnEffect($i);
-  }
+  
 }
 
 function BeginningReactionStepEffects()

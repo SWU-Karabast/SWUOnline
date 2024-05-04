@@ -3402,8 +3402,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "7648077180"://97th Legion
-      $ally = new Ally("MYALLY-" . $index);
-      $ally->AddHealth(NumResources($currentPlayer));
+      if($from != "PLAY") {
+        $playAlly->AddHealth(NumResources($currentPlayer));
+      }
       break;
     case "2202839291"://Don't Get Cocky
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, $target);
