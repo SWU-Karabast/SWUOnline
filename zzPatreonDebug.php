@@ -8,20 +8,23 @@ require_once './Assets/patreon-php-master/src/PatreonLibraries.php';
 include_once './Assets/patreon-php-master/src/PatreonDictionary.php';
 include_once './includes/functions.inc.php';
 include_once "./includes/dbh.inc.php";
+include_once "./Libraries/HTTPLibraries.php";
 
 if (!isset($_SESSION["useruid"])) {
   echo ("Please login to view this page.");
   exit;
 }
+$debugMode = false;
 $useruid = $_SESSION["useruid"];
-if ($useruid != "OotTheMonk" && $useruid != "Launch" && $useruid != "Tower") {
-  echo ("You must log in to use this page.");
-  exit;
+if ($useruid == "OotTheMonk") {
+  $userName = TryGet("userName", "");
+  if($userName == "") $userName = $_SESSION["useruid"];
+  else $debugMode = true;
+} else {
+  $userName = $_SESSION["useruid"];
 }
 
-$userName = $_GET["userName"];
-
-
+$conn = GetDBConnection();
 $sql = "SELECT * FROM users where usersUid='$userName'";
 $stmt = mysqli_stmt_init($conn);
 if (!mysqli_stmt_prepare($stmt, $sql)) {
@@ -34,5 +37,5 @@ $row = mysqli_fetch_assoc($result);
 $access_token = $row["patreonAccessToken"];
 
 try {
-  PatreonLogin($access_token, false, true);
+  PatreonLogin($access_token, false, $debugMode);
 } catch (\Exception $e) { }

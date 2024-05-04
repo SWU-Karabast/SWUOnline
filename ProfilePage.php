@@ -80,6 +80,8 @@ if (isset($_SESSION["isPatron"])) {
       echo '<a class="containerPatreon" href="' . $href . '">';
       echo ("<img class='imgPatreon' src='./Assets/patreon-php-master/assets/images/login_with_patreon.png' alt='Login via Patreon'>");
       echo '</a>';
+    } else {
+      include './zzPatreonDebug.php';
     }
   }
   ?>
