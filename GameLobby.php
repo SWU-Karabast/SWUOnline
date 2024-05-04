@@ -170,7 +170,7 @@ $isMobile = IsMobile();
     echo ("</div>");
 
     $deck = GetArray($handler);
-    $deckSB = [];
+    $deckSB = GetArray($handler);
 
     fclose($handler);
   }
@@ -237,9 +237,8 @@ $isMobile = IsMobile();
           $count = 0;
           sort($material);
           for ($i = 0; $i < count($material); ++$i) {
-            $id = "DECK-" . $count;
-            echo ("<span style='cursor:pointer; padding-bottom:5px; padding-left:3px;' onclick='CardClick(\"" . $id . "\")'>" . Card($material[$i], "concat", $cardSize, 0, 1, 0, 0, 0, "", $id) . "</span>");
-
+            $id = "CHAR-" . $count;
+            echo(Card($material[$i], "concat", $cardSize, 0, 1, 0, 0, 0, "", $id));
             ++$count;
           }
         }
@@ -267,7 +266,7 @@ $isMobile = IsMobile();
         sort($deck);
         for ($i = 0; $i < count($deck); ++$i) {
           $id = "DECK-" . $count;
-          echo (Card($deck[$i], "concat", $cardSize, 0, 1, 0, 0, 0, "", $id));
+          echo ("<span style='cursor:pointer; padding-bottom:5px; padding-left:3px;' onclick='CardClick(\"" . $id . "\")'>" . Card($deck[$i], "concat", $cardSize, 0, 1, 0, 0, 0, "", $id) . "</span>");
           ++$count;
         }
         for ($i = 0; $i < count($deckSB); ++$i) {
@@ -396,28 +395,8 @@ $isMobile = IsMobile();
 
       function GetCharacterCards() {
         var types = ["WEAPONS", "OFFHAND", "QUIVER", "HEAD", "CHEST", "ARMS", "LEGS"];
-        var returnValue = "<?php echo(isset($character) ? $character[0] : ""); ?>";
-        for (var i = 0; i < types.length; ++i) {
-          var selected = GetSelectedEquipType(types[i]);
-          if (selected != "") returnValue += "," + selected;
-        }
+        var returnValue = "<?php echo(isset($material) ? implode(",", $material) : ""); ?>";
         return returnValue;
-      }
-
-      function GetSelectedEquipType(type) {
-        var count = 0;
-        var overlay = document.getElementById(type + "-" + count + "-ovr");
-        var rv = "";
-        while (!!overlay) {
-          if (overlay.style.visibility == "hidden") {
-            var imageSrc = document.getElementById(type + "-" + count + "-img").src;
-            if (rv != "") rv += ",";
-            rv += imageSrc.substring(imageSrc.length - 11).split(".")[0];
-          }
-          ++count;
-          var overlay = document.getElementById(type + "-" + count + "-ovr");
-        }
-        return rv;
       }
 
       function GetDeckCards() {

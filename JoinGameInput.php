@@ -110,6 +110,14 @@ if ($decklink != "") {
       $cards .= UUIDLookup($deck[$i]->id);
     }
   }
+  $sideboard = $deckObj->sideboard;
+  $sideboardCards = "";
+  for($i=0; $i<count($sideboard); ++$i) {
+    for($j=0; $j<$sideboard[$i]->count; ++$j) {
+      if($sideboardCards != "") $sideboardCards .= " ";
+      $sideboardCards .= UUIDLookup($sideboard[$i]->id);
+    }
+  }
 
   /*
   // if has message forbidden error out.
@@ -157,6 +165,7 @@ if ($decklink != "") {
   $deckFile = fopen($filename, "w");
   fwrite($deckFile, $base . " " . $leader . "\r\n");
   fwrite($deckFile, $cards . "\r\n");
+  fwrite($deckFile, $sideboardCards . "\r\n");
   fclose($deckFile);
   copy($filename, "./Games/" . $gameName . "/p" . $playerID . "DeckOrig.txt");
 
