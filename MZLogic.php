@@ -35,7 +35,6 @@ function MZDestroy($player, $lastResult)
       case "THEIRITEMS": $lastResult = DestroyItemForPlayer($otherPlayer, $mzIndex[1]); break;
       case "MYARS": case "MYRESOURCES": $lastResult = DestroyArsenal($player, $mzIndex[1]); break;
       case "THEIRARS": $lastResult = DestroyArsenal($otherPlayer, $mzIndex[1]); break;
-      case "LANDMARK": $lastResult = DestroyLandmark($mzIndex[1]); break;
       default: break;
     }
   }

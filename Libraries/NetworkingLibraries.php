@@ -6,10 +6,6 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
   global $dqState, $layers, $CS_ArsenalFacing, $combatChainState;
   global $roguelikeGameID;
   switch ($mode) {
-    case 0: break; //Deprecated
-    case 1: break; //Deprecated
-    case 2: //Play card from hand - DEPRECATED
-      break;
     case 3: //Play equipment ability
       $index = $cardID;
       $found = -1;
@@ -187,8 +183,7 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
       if(CanPlayAsInstant($cardID, $index, "BANISH")) SetClassState($currentPlayer, $CS_PlayedAsInstant, "1");
       PlayCard($cardID, "BANISH", -1, $index, $banish[$index + 2]);
       break;
-    case 15: //Unused
-      break;
+
     case 16: case 18: //Decision Queue (15 and 18 deprecated)
       if(count($decisionQueue) > 0)
       {
@@ -324,7 +319,6 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
         PlayCard($cardID, "HAND");
       }
       break;
-    case 28: break; //Deprecated
     case 29: //CHOOSETOPOPPONENT
       if($turn[0] == "CHOOSETOPOPPONENT") {
         $otherPlayer = ($playerID == 1 ? 2 : 1);
@@ -1079,7 +1073,6 @@ function FinishTurnPass()
   ResetCombatChainState();
   ItemEndTurnAbilities();
   AuraBeginEndPhaseAbilities();
-  LandmarkBeginEndPhaseAbilities();
   BeginEndPhaseEffects();
   PermanentBeginEndPhaseEffects();
   AddDecisionQueue("PASSTURN", $mainPlayer, "-");
@@ -1088,13 +1081,14 @@ function FinishTurnPass()
 
 function PassTurn()
 {
-  global $playerID, $currentPlayer, $turn, $mainPlayer, $mainPlayerGamestateStillBuilt;
-  if (!$mainPlayerGamestateStillBuilt) {
-    UpdateGameState($currentPlayer);
-    BuildMainPlayerGameState();
-  }
+  WriteLog("do we use this?");
+  // global $playerID, $currentPlayer, $turn, $mainPlayer, $mainPlayerGamestateStillBuilt;
+  // if (!$mainPlayerGamestateStillBuilt) {
+  //   UpdateGameState($currentPlayer);
+  //   BuildMainPlayerGameState();
+  // }
 
-  FinalizeTurn();
+  // FinalizeTurn();
 }
 
 function FinalizeTurn()
