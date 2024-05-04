@@ -514,10 +514,11 @@ function ProcessTrigger($player, $parameter, $uniqueID, $target="-")
   $EffectContext = $parameter;
   switch ($parameter) {
     case "AMBUSH":
-      $combatChainState[$CCS_IsAmbush] = 1;
       $index = SearchAlliesForUniqueID($uniqueID, $player);
       AddDecisionQueue("YESNO", $player, "if_you_want_to_resolve_the_ambush_attack");
       AddDecisionQueue("NOPASS", $player, "-");
+      AddDecisionQueue("PASSPARAMETER", $player, 1, 1);
+      AddDecisionQueue("SETCOMBATCHAINSTATE", $player, $CCS_IsAmbush, 1);
       AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $index, 1);
       AddDecisionQueue("MZOP", $player, "ATTACK", 1);
       break;
