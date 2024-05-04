@@ -31,6 +31,13 @@ if ($playerCharacter != "" && $playerDeck != "") //If they submitted before load
   $char = explode(",", $playerCharacter);
   $playerDeck = explode(",", $playerDeck);
   $deckCount = count($playerDeck);
+
+  $base = "";
+  $leader = "";
+  for($i = 0; $i < count($char); $i++) {
+    if(DefinedCardType($char[$i]) == "Base") $base = $char[$i];
+    else if(DefinedCardType($char[$i]) == "Leader") $leader = $char[$i];
+  }
   /*
   if ($deckCount < 60 && ($format == "cc" || $format == "compcc")) {
     WriteLog("Unable to submit player " . $playerID . "'s deck. " . $deckCount . " cards selected is under the legal minimum.");
@@ -51,7 +58,7 @@ if ($playerCharacter != "" && $playerDeck != "") //If they submitted before load
   */
   $filename = "./Games/" . $gameName . "/p" . $playerID . "Deck.txt";
   $deckFile = fopen($filename, "w");
-  fwrite($deckFile, implode(" ", $char) . "\r\n");
+  fwrite($deckFile, $base . " " . $leader . "\r\n");
   fwrite($deckFile, implode(" ", $playerDeck));
   fclose($deckFile);
 }
