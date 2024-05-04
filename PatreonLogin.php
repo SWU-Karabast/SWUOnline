@@ -32,6 +32,7 @@ include_once "./APIKeys/APIKeys.php";
 
     	// Here, you should save the access and refresh tokens for this user somewhere. Conceptually this is the point either you link an existing user of your app with his/her Patreon account, or, if the user is a new user, create an account for him or her in your app, log him/her in, and then link this new account with the Patreon account. More or less a social login logic applies here.
       SavePatreonTokens($access_token, $refresh_token);
+      echo("Patreon login successful!");
     }
 
   }
