@@ -134,8 +134,11 @@ if ($handle = opendir($path)) {
   closedir($handle);
 }
 if ($canSeeQueue) {
-  echo ("<h3 style='width:100%; text-align:center; color:RGB(240,240,240);'>Standard Constructed</h3>");
+  echo ("<h3 style='width:100%; text-align:center; color:RGB(240,240,240);'>Premier</h3>");
   echo ($ccLinks);
+  echo ("<h4 style='text-align:center;'>______________________</h4>");
+  echo ("<h3 style='width:100%; text-align:center; color:RGB(240,240,240);'>Request-Undo Premier</h3>");
+  echo ($compCCLinks);
   echo ("<h4 style='text-align:center;'>______________________</h4>");
   echo ("<h3 style='width:100%; text-align:center; color:RGB(240,240,240);'>Other Formats</h3>");
   echo ($otherFormatsLinks);
