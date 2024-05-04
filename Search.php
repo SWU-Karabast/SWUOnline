@@ -565,6 +565,15 @@ function SearchZoneForUniqueID($uniqueID, $player, $zone)
   }
 }
 
+function SearchUniqueMultizone($uniqueID, $player) {
+  $index = SearchAlliesForUniqueID($uniqueID, $player);
+  if($index >= 0) return "MYALLY-" . $index;
+  $otherPlayer = $player == 1 ? 2 : 1;
+  $index = SearchAlliesForUniqueID($uniqueID, $otherPlayer);
+  if($index >= 0) return "THEIRALLY-" . $index;
+  return "";
+}
+
 function SearchForUniqueID($uniqueID, $player)
 {
   $index = SearchAurasForUniqueID($uniqueID, $player);

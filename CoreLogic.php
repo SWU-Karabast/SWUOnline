@@ -2942,7 +2942,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
           AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to restore 1 (Remaining: " . (8-$i) . ")", $i == 0 ? 0 : 1);
           AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
           AddDecisionQueue("MZOP", $currentPlayer, "RESTORE,1", 1);
-          AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYALLY-" . LastAllyIndex($currentPlayer), 1);
+          AddDecisionQueue("UNIQUETOMZ", $currentPlayer, $ally->UniqueID(), 1);
           AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1", 1);
         }
       }

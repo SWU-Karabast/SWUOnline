@@ -1379,6 +1379,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         ClearGameFiles($gameName);
       }
       return 0;
+    case "UNIQUETOMZ":
+      return SearchUniqueMultizone($parameter, $player);
     case "PLAYERTARGETEDABILITY":
       PlayerTargetedAbility($player, $parameter, $lastResult);
       return "";
