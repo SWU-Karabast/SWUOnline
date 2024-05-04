@@ -3060,7 +3060,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
     case "4300219753"://Fett's Firespray
       $abilityName = GetResolvedAbilityName($cardID, $from);
-      if($abilityName == "Exhaust") {
+      if($from == "PLAY" && $abilityName == "Exhaust") {
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
         AddDecisionQueue("MZFILTER", $currentPlayer, "unique=1");
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to exhaust");
