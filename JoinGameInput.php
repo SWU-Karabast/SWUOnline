@@ -110,7 +110,7 @@ if ($decklink != "") {
       $cards .= UUIDLookup($deck[$i]->id);
     }
   }
-  $sideboard = $deckObj->sideboard;
+  $sideboard = isset($deckObj->sideboard) ? $deckObj->sideboard : [];
   $sideboardCards = "";
   for($i=0; $i<count($sideboard); ++$i) {
     for($j=0; $j<$sideboard[$i]->count; ++$j) {
