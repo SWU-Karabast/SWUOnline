@@ -771,7 +771,6 @@ function AllyBeginEndTurnEffects()
       if(HasVigor($mainAllies[$i], $mainPlayer, $i)) $mainAllies[$i+1] = 2;
       $mainAllies[$i+3] = 0;
       $mainAllies[$i+8] = 1;
-      $mainAllies[$i+9] = 0;//Reset distant -> normal
       ++$mainAllies[$i+12];//Increase number of turns in play
       if($mainAllies[$i+10] == 1) $mainAllies[$i+10] = 0;//Reset damage taken for foster mechanic
     }
@@ -814,6 +813,7 @@ function AllyEndTurnAbilities($player)
 {
   $allies = &GetAllies($player);
   for($i = count($allies) - AllyPieces(); $i >= 0; $i -= AllyPieces()) {
+    $ally = new Ally("MYALLY-" . $i, $player);
     switch($allies[$i]) {
       case "1785627279"://Millennium Falcon
         AddDecisionQueue("SETDQCONTEXT", $player, "Do you want to pay 1 to keep Millennium Falcon running?");
@@ -827,11 +827,11 @@ function AllyEndTurnAbilities($player)
         AddDecisionQueue("WRITELOG", $player, "Millennium Falcon bounced back to hand", 1);
         break;
       case "d1a7b76ae7"://Chirrut Imwe
-        $ally = new Ally("MYALLY-" . $i, $player);
         if($ally->Health() <= 0) DestroyAlly($player, $i);
         break;
       default: break;
     }
+    $ally->EndRound();
   }
 }
 

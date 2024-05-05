@@ -171,6 +171,18 @@ class Ally {
     return $power;
   }
 
+  //All the things that should happen at the end of a round
+  function EndRound() {
+    if($this->index == -1) return;
+    $this->allies[$this->index+2] -= $this->allies[$this->index+9];
+    $this->allies[$this->index+9] = 0;
+    if($this->Health() <= 0) {
+      DestroyAlly($this->playerID, $this->index);
+      return true;
+    }
+    return false;
+  }
+
   function Ready() {
     $this->allies[$this->index+1] = 2;
   }

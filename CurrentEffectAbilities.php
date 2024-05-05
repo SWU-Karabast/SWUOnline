@@ -414,10 +414,6 @@ function CurrentEffectEndTurnAbilities()
         $ally = new Ally("MYALLY-" . SearchAlliesForUniqueID($currentTurnEffects[$i+2], $currentTurnEffects[$i+1]), $currentTurnEffects[$i+1]);
         $ally->DealDamage(2);
         break;
-      case "1900571801"://Overwhelming Barrage
-        $ally = new Ally("MYALLY-" . SearchAlliesForUniqueID($currentTurnEffects[$i+2], $currentTurnEffects[$i+1]), $currentTurnEffects[$i+1]);
-        $ally->DealDamage(2);
-        break;
       case "4263394087"://Chirrut Imwe
         $ally = new Ally("MYALLY-" . SearchAlliesForUniqueID($currentTurnEffects[$i+2], $currentTurnEffects[$i+1]), $currentTurnEffects[$i+1]);
         $ally->DealDamage(2);
