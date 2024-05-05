@@ -65,6 +65,7 @@ class Ally {
     $max = CardHP($this->CardID());
     $subcards = $this->GetSubcards();
     for($i=0; $i<count($subcards); ++$i) if($subcards[$i] != "-") $max += CardHP($subcards[$i]);
+    $max += $this->allies[$this->index+9];
     return $max;
   }
 
