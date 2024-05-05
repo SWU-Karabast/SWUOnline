@@ -185,7 +185,9 @@ if ($decklink != "") {
     //Save deck
     include_once './includes/functions.inc.php';
     include_once "./includes/dbh.inc.php";
-    addFavoriteDeck($_SESSION["userid"], $originalLink, $deckName, $character, $deckFormat);
+    $saveLink = explode("https://", $originalLink);
+    $saveLink = count($saveLink) > 1 ? $saveLink[1] : $originalLink;
+    addFavoriteDeck($_SESSION["userid"], $saveLink, $deckName, $character, $deckFormat);
   }
 } else {
   $deckFile = $deck;
