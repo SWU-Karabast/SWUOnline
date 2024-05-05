@@ -235,7 +235,7 @@ function MZHealAlly($player, $target, $amount)
 function MZAddHealth($player, $target, $amount=1)
 {
   $ally = new Ally($target, $player);
-  $ally->AddHealth($amount);
+  $ally->AddRoundHealthModifier($amount);
 }
 
 function MZFreeze($target)
