@@ -384,11 +384,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           }
           return $lastResult;
         case "REDUCEHEALTH":
-          $isAttackTarget = GetAttackTarget() == $lastResult;
-          $ally = new Ally($lastResult);
-          $destroyed = $ally->TempReduceHealth($parameterArr[1]);
-          if($destroyed && $isAttackTarget) CloseCombatChain();
-          return $lastResult;
+          MZAddHealth($player, $lastResult, count($parameterArr) > 1 ? -1 * $parameterArr[1] : 1); return $lastResult;
         case "DESTROY":
           $ally = new Ally($lastResult);
           $ally->Destroy();

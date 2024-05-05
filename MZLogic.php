@@ -234,7 +234,9 @@ function MZHealAlly($player, $target, $amount)
 
 function MZAddHealth($player, $target, $amount=1)
 {
-  $ally = new Ally($target, $player);
+  $mzArr = explode("-", $target);
+  if($mzArr[0] == "MYALLY") $ally = new Ally($target, $player);
+  else $ally = new Ally($target, $player == 1 ? 2 : 1);
   $ally->AddRoundHealthModifier($amount);
 }
 
