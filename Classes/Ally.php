@@ -83,7 +83,7 @@ class Ally {
 
   //Returns true if the ally is destroyed
   function DealDamage($amount, $bypassShield = false, $fromCombat = false, &$damageDealt = NULL) {
-    if($this->index == -1) return false;
+    if($this->index == -1 || $amount <= 0) return false;
     $subcards = $this->GetSubcards();
     for($i=0; $i<count($subcards); ++$i) {
       if($subcards[$i] == "8752877738") {
