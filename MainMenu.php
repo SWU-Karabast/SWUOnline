@@ -63,7 +63,7 @@ if (IsMobile()) echo ("<div class='ContentWindow' style='top:240px; left:32%; wi
 else echo ("<div class='ContentWindow' style='top:225px; left:32%; width:36%; bottom: 30px; overflow-y:auto'>");
 
 ?>
-<h5>Karabast is an open-source, fan-made platform. It's still a work in progress so let us know if you find any bugs :)</h5>
+<h5>Karabast is an open-source, fan-made platform. It is an educational tool only, meant to facilitate researching decks and strategies that is supportive of in-person play. As such, direct competition through the form of automated tournaments or rankings will not be added. This tool is free to use and is published non-commercially. Payment is not required to access any functionality.</h5>
 
 <h1><?php echo ($createNewGameText); ?></h1>
 
