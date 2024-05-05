@@ -2903,7 +2903,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "2651321164"://Tactical Advantage
       $ally = new Ally($target);
-      $ally->AddHealth(2);
+      $ally->AddRoundHealthModifier(2);
       AddCurrentTurnEffect($cardID, $currentPlayer, "PLAY", $ally->UniqueID());
       break;
     case "1900571801"://Overwhelming Barrage
