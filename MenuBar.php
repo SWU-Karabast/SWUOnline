@@ -143,7 +143,7 @@ $isMobile = IsMobile();
           if (!$isMobile) echo '<li><a target="_blank" href="https://discord.gg/hKRaqHND4v">Discord</a></li>';
           echo '<li><a target="_blank" href="https://github.com/OotTheMonk/SWUOnline">Github</a></li>';
         ?>
-        <!--<li><a target="_blank" href="https://www.patreon.com/talishar_online">Support Us</a></li>-->
+        <li><a target="_blank" href="https://www.patreon.com/OotTheMonk">Support</a></li>
       </ul>
 
       <ul class='rightnav'>
