@@ -123,7 +123,7 @@ function ResourcePieces() { return ArsenalPieces(); }
 //6 - Counters
 //7 - Buff Counters
 //8 - Ability/effect Uses
-//9 - Position (0 = normal, 1 = distant)
+//9 - Round health modifier
 //10 - Fostered (0 = no, 1 = dealt damage, 2 = yes)
 //11 - Owner
 //12 - Turns in play

@@ -102,6 +102,17 @@ class Ally {
     return false;
   }
 
+  function AddRoundHealthModifier($amount) {
+    if($this->index == -1) return;
+    $this->allies[$this->index+2] += $amount;
+    $this->allies[$this->index+9] += $amount;
+    if($this->Health() <= 0) {
+      DestroyAlly($this->playerID, $this->index);
+      return true;
+    }
+    return false;
+  }
+
   function TempReduceHealth($amount) {
     if($this->index == -1) return;
     $this->allies[$this->index+2] -= $amount;

@@ -1589,6 +1589,7 @@ function NumEquipBlock()
       case "CHOOSEDISCARD": return 0;
       case "MULTICHOOSEHAND": return 0;
       case "MULTICHOOSEUNIT": return 0;
+      case "MULTICHOOSETHEIRUNIT": return 0;
       case "CHOOSEMULTIZONE": return 0;
       case "CHOOSEBANISH": return 0;
       case "BUTTONINPUTNOPASS": return 0;
@@ -2907,14 +2908,23 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "1900571801"://Overwhelming Barrage
       $ally = new Ally($target);
-      $ally->AddHealth(2);
+      $ally->AddRoundHealthModifier(2);
       AddCurrentTurnEffect($cardID, $currentPlayer, "PLAY", $ally->UniqueID());
+
+      
+      AddDecisionQueue("FINDINDICES", $currentPlayer, "ALLTHEIRUNITSMULTI");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose units to damage", 1);
+      AddDecisionQueue("MULTICHOOSETHEIRUNIT", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MULTIDISTRIBUTEDAMAGE", $currentPlayer, $ally->CurrentPower(), 1);
+
+      /*
       for($i=0; $i<$ally->CurrentPower(); ++$i) {
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 1 damage to (or push PASS to simulate excess damage)");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1", 1);
       }
+      */
       break;
     case "3974134277"://Prepare for Takeoff
       AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE," . 8);

@@ -130,6 +130,10 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $allies = &GetAllies($player);
           $rv = GetIndices(count($allies), 0 , AllyPieces());
           break;
+        case "ALLTHEIRUNITSMULTI":
+          $allies = &GetAllies($player == 1 ? 2 : 1);
+          $rv = count($allies) . "-" . GetIndices(count($allies), 0 , AllyPieces());
+          break;
         case "GYTYPE": $rv = SearchDiscard($player, $subparam); break;
         case "GYAA": $rv = SearchDiscard($player, "AA"); break;
         case "GYNAA": $rv = SearchDiscard($player, "A"); break;
@@ -1461,6 +1465,27 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
     case "DRAWINTOMEMORY":
       DrawIntoMemory($player);
       return "";
+    case "MULTIDISTRIBUTEDAMAGE":
+      if(!is_array($lastResult)) $lastResult = explode(",", $lastResult);
+      if($parameter == "-") {
+        $dqVars[0] = $dqVars[0] - $dqVars[1];
+        $parameter = $dqVars[0];
+      }
+      else $dqVars[0] = $parameter;
+      $theirAllies = &GetAllies($player == 1 ? 2 : 1);
+      $index = $lastResult[count($lastResult) - 1];
+      unset($lastResult[count($lastResult) - 1]);
+      $lastResult = array_values($lastResult);
+      if(count($lastResult) > 0) {
+        PrependDecisionQueue("MULTIDISTRIBUTEDAMAGE", $player, "-");
+        PrependDecisionQueue("PASSPARAMETER", $player, implode(",", $lastResult));
+      }
+      PrependDecisionQueue("MZOP", $player, "DEALDAMAGE,{1}");
+      PrependDecisionQueue("PASSPARAMETER", $player, "THEIRALLY-" . $index);
+      PrependDecisionQueue("SETDQVAR", $player, "1");
+      PrependDecisionQueue("BUTTONINPUT", $player, GetIndices($parameter + 1));
+      PrependDecisionQueue("SETDQCONTEXT", $player, "Choose an amount of damage to deal to " . CardLink($theirAllies[$index], $theirAllies[$index]));
+      return $lastResult;
     default:
       return "NOTSTATIC";
   }
