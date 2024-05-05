@@ -2419,12 +2419,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "9097316363"://Emperor Palpatine
       if($from != "PLAY") {
-        for($i=0; $i<6; ++$i) {
-          AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY", $i>0 ? 1 : 0);
-          AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 1 damage to", $i>0 ? 1 : 0);
-          AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-          AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1", 1);
-        }
+        AddDecisionQueue("FINDINDICES", $currentPlayer, "ALLTHEIRUNITSMULTI");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose units to damage", 1);
+        AddDecisionQueue("MULTICHOOSETHEIRUNIT", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MULTIDISTRIBUTEDAMAGE", $currentPlayer, 6, 1);
       }
       break;
     case "0256267292"://Benthic 'Two Tubes'
