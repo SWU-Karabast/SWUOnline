@@ -2553,7 +2553,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       if($from != "PLAY") {
         AddCurrentTurnEffect($cardID, $currentPlayer);//Cost discount
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to play");
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYDISCARD:Aspect=Heroism");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYDISCARD:definedType=Unit&Aspect=Heroism");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
       }
