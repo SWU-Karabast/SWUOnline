@@ -12,7 +12,7 @@ function CardIdFromName($cardName):string{
 }
 
 function CardName($cardID) {
-  if(!$cardID || $cardID == "") return "";
+  if(!$cardID || $cardID == "" || strlen($cardID) < 3) return "";
   return CardTitle($cardID) . " " . CardSubtitle($cardID);
 }
 
