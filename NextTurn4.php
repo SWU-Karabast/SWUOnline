@@ -5,7 +5,7 @@
     include 'Libraries/HTTPLibraries.php';
 
     //We should always have a player ID as a URL parameter
-    $gameName = $_GET["gameName"];
+    $gameName = TryGet("gameName", "");
     if (!IsGameNameValid($gameName)) {
       echo ("Invalid game name.");
       exit;
