@@ -83,6 +83,7 @@ function ModalAbilities($player, $card, $lastResult)
             AddDecisionQueue("PREPENDLASTRESULT", $player, "DEALDAMAGE,", 1);
             AddDecisionQueue("SETDQVAR", $player, "0", 1);
             AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY");
+            AddDecisionQueue("MZFILTER", $player, "unique=1");
             AddDecisionQueue("MZFILTER", $player, "definedType=Leader");
             AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to damage");
             AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
