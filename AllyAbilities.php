@@ -131,6 +131,18 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
   return $cardID;
 }
 
+function AllyTakeControl($player, $index) {
+  $otherPlayer = $player == 1 ? 2 : 1;
+  $myAllies = &GetAllies($player);
+  $theirAllies = &GetAllies($otherPlayer);
+  $uniqueID = $theirAllies[$index+5];
+  for($i=$index; $i<$index+AllyPieces(); ++$i) {
+    array_push($myAllies, $theirAllies[$i]);
+  }
+  RemoveAlly($otherPlayer, $index);
+  return $uniqueID;
+}
+
 function AllyAddGraveyard($player, $cardID, $subtype)
 {
   if(CardType($cardID) != "T") {

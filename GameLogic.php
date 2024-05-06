@@ -417,15 +417,9 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $zone = &GetMZZone($player, $mzArr[0]);
           return MemoryCost($zone[$mzArr[1]], $player);
         case "TAKECONTROL":
-          $otherPlayer = $player == 1 ? 2 : 1;
-          $myAllies = &GetAllies($player);
-          $theirAllies = &GetAllies($otherPlayer);
           $mzArr = explode("-", $lastResult);
-          $uniqueID = $theirAllies[$mzArr[1]+5];
-          for($i=$mzArr[1]; $i<$mzArr[1]+AllyPieces(); ++$i) {
-            array_push($myAllies, $theirAllies[$i]);
-          }
-          RemoveAlly($otherPlayer, $mzArr[1]);
+          $index = $mzArr[1];
+          $uniqueID = AllyTakeControl($player, $index);
           return $uniqueID;
         case "WRITECHOICE":
           $ally = new Ally($lastResult);
@@ -469,7 +463,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $ally = new Ally($dqVars[0], $allyPlayer);
           $ally->DefeatUpgrade($upgradeID);
           if(!$destroyed) {
-            UpgradeDefeated($upgradeID, $allyPlayer, $mzArr[1]);
+            UpgradeLeftPlay($upgradeID, $allyPlayer, $mzArr[1]);
           }
           return $lastResult;
         case "SWAPDQPERSPECTIVE":

@@ -281,14 +281,20 @@ function SpecificCardLogic($player, $card, $lastResult)
       }
       break;
     case "BAMBOOZLE":
+      $upgrades = [];
       $owner = MZPlayerID($player, $lastResult);
       $ally = new Ally($lastResult, $owner);
       $subcards = $ally->GetSubcards();
       for($i=0; $i<count($subcards); ++$i) {
         if(!IsToken($subcards[$i])) AddHand($owner, $subcards[$i]);
         $ally->DealDamage(CardHP($subcards[$i]));
+        array_push($upgrades, $subcards[$i]);
       }
       $ally->ClearSubcards();
+      for($i=0; $i<count($upgrades); ++$i) {
+        WriteLog($upgrades[$i] . " " . $player . " " . $ally->Index());
+        UpgradeLeftPlay($upgrades[$i], $player, $ally->Index());
+      }
       return $lastResult;
     case "DONTGETCOCKY":
       $deck = new Deck($player);
