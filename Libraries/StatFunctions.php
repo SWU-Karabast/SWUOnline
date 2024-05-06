@@ -28,7 +28,7 @@ $TurnStats_Overblock = 10;
 
 function LogPlayCardStats($player, $cardID, $from, $type="")
 {
-  global $turn, $currentRound, $CardStats_TimesPlayed, $CardStats_TimesActivated, $CardStats_TimesResourced, $TurnStats_CardsPlayedOffense, $TurnStats_CardsPlayedDefense;
+  global $turn, $currentRound, $CardStats_TimesPlayed, $CardStats_TimesActivated, $CardStats_TimesResourced;
   global $TurnStats_CardsPitched, $TurnStats_CardsBlocked, $mainPlayer;
   if($type == "") $type = $turn[0];
   $cardStats = &GetCardStats($player);
@@ -53,11 +53,6 @@ function LogPlayCardStats($player, $cardID, $from, $type="")
         ++$cardStats[$i + $CardStats_TimesPlayed];
       }
       else ++$cardStats[$i + $CardStats_TimesActivated];
-      if($from != "PLAY" && $from != "EQUIP")
-      {
-        if($player == $mainPlayer) ++$turnStats[$baseIndex + $TurnStats_CardsPlayedOffense];
-        else ++$turnStats[$baseIndex + $TurnStats_CardsPlayedDefense];
-      }
       break;
   }
 }
