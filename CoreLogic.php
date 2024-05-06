@@ -3351,13 +3351,22 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "5035052619"://Jabba the Hutt
       if($from != "PLAY") {
-        AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE," . 8);
-        AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
-        AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Trick", 1);
-        AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
-        AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
-        AddDecisionQueue("OP", $currentPlayer, "REMOVECARD", 1);
-        AddDecisionQueue("ALLRANDOMBOTTOM", $currentPlayer, "DECK");
+        $deck = &GetDeck($currentPlayer);
+        $numTricks = 0;
+        for($i=0; $i<8 && $i<count($deck); ++$i) {
+          if(TraitContains($deck[$i], "Trick", $currentPlayer)) ++$numTricks;
+        }
+        if($numTricks == 0) {
+          WriteLog("There are no tricks.");
+        } else {
+          AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE," . 8);
+          AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+          AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Trick", 1);
+          AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
+          AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
+          AddDecisionQueue("OP", $currentPlayer, "REMOVECARD", 1);
+          AddDecisionQueue("ALLRANDOMBOTTOM", $currentPlayer, "DECK");
+        }
       }
       break;
     case "9644107128"://Bamboozle

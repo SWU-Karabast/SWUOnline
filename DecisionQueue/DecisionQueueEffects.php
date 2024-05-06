@@ -259,8 +259,10 @@ function SpecificCardLogic($player, $card, $lastResult)
       }
       break;
     case "POWERFAILURE":
+      PrependDecisionQueue("SPECIFICCARD", $player, "POWERFAILURE", 1);
       PrependDecisionQueue("OP", $player, "DEFEATUPGRADE", 1);
-      PrependDecisionQueue("CHOOSECARD", $player, "<-", 1);
+      PrependDecisionQueue("MAYCHOOSECARD", $player, "<-", 1);
+      PrependDecisionQueue("SETDQCONTEXT", $player, "Choose an upgrade to defeat", 1);
       PrependDecisionQueue("MZOP", $player, "GETSUBCARDS", 1);
       PrependDecisionQueue("PASSPARAMETER", $player, "{0}", 1);
       break;

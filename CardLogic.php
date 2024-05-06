@@ -30,6 +30,7 @@ function DefeatUpgrade($player) {
   AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
   AddDecisionQueue("SETDQVAR", $player, 0, 1);
   AddDecisionQueue("MZOP", $player, "GETSUBCARDS", 1);
+  AddDecisionQueue("SETDQCONTEXT", $player, "Choose an upgrade to defeat");
   AddDecisionQueue("CHOOSECARD", $player, "<-", 1);
   AddDecisionQueue("OP", $player, "DEFEATUPGRADE", 1);
 
