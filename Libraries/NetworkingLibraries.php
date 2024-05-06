@@ -1460,6 +1460,7 @@ function GetTargetOfAttack($attackID)
     $combatChainState[$CCS_AttackTarget] = "THEIRCHAR-0";
     return;
   }
+  $targets = "";
   $sentinelTargets = "";
   if($combatChainState[$CCS_IsAmbush] != 1) $targets = "THEIRCHAR-0";
   $attacker = new Ally(AttackerMZID($mainPlayer));
