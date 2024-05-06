@@ -115,7 +115,7 @@ echo ("<label for='format' class='SelectDeckInput'>Format: </label>");
 echo ("<select name='format' id='format'>");
 if ($canSeeQueue) {
   echo ("<option value='cc' " . ($defaultFormat == 0 ? " selected" : "") . ">Premier</option>");
-  echo ("<option value='compcc' " . ($defaultFormat == 0 ? " selected" : "") . ">Request-Undo Premier</option>");
+  echo ("<option value='compcc' " . ($defaultFormat == 1 ? " selected" : "") . ">Request-Undo Premier</option>");
 }
 echo ("<option value='livinglegendscc'" . ($defaultFormat == 4 ? " selected" : "") . ">Open Format</option>");
 echo ("</select>");
