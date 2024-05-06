@@ -48,6 +48,7 @@ function CombatDummyAI()
 
 function IsPlayerAI($playerID)
 {
+  return false;//AI TODO: Fix this
   $char = &GetPlayerCharacter($playerID);
   if($char[CharacterPieces()] == "DUMMY") return true;
   return false;
