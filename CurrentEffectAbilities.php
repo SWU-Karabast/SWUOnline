@@ -202,7 +202,7 @@ function CurrentEffectCostModifiers($cardID, $from)
           $costModifier -= 99;
           break;
         case "8968669390"://U-Wing Reinforcement
-          $costModifier -= 7;
+          $costModifier -= 99;
           break;
         default: break;
       }
