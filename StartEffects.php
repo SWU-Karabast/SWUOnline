@@ -27,7 +27,7 @@ if(count($p2Material) == 1 && $p2Material[0] == "DUMMY")
   AddCharacter($p2Material[MaterialPieces()], 2);
 }
 
-if($p2Char[0] == "DUMMY") {
+if($p2CharEquip[0] == "DUMMY") {
   SetCachePiece($gameName, 3, "99999999999999");
 }
 
