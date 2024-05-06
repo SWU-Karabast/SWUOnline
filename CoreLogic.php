@@ -2333,12 +2333,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "0867878280"://It Binds All Things
       $ally = new Ally($target);
-      $ally->Heal(3);
+      $amountHealed = $ally->Heal(3);
       if(SearchCount(SearchAllies($currentPlayer, trait:"Force")) > 0) {
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 3 damage to");
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal " . $amountHealed . " damage to");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,3", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE," . $amountHealed, 1);
       }
       break;
     case "1021495802"://Cantina Bouncer

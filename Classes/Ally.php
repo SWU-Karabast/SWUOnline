@@ -57,8 +57,13 @@ class Ally {
   }
 
   function Heal($amount) {
+    $healed = $amount;
     $this->AddHealth($amount);
-    if($this->Health() > $this->MaxHealth()) $this->allies[$this->index+2] = $this->MaxHealth();
+    if($this->Health() > $this->MaxHealth()) {
+      $healed = $amount - ($this->Health() - $this->MaxHealth());
+      $this->allies[$this->index+2] = $this->MaxHealth();
+    }
+    return $healed;
   }
 
   function MaxHealth() {
