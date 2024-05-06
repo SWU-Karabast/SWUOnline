@@ -27,9 +27,12 @@ if(count($p2Material) == 1 && $p2Material[0] == "DUMMY")
   AddCharacter($p2Material[MaterialPieces()], 2);
 }
 
+/*
+AI TODO: Set this if it's an AI
 if($p2CharEquip[0] == "DUMMY") {
   SetCachePiece($gameName, 3, "99999999999999");
 }
+*/
 
 //Start of game effects go here
 $initiativePlayer = $firstPlayer;
