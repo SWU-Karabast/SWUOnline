@@ -1473,7 +1473,7 @@ function GetTargetOfAttack($attackID)
     if($attacker->CardID() != "5464125379" && CardArenas($attacker->CardID()) != CardArenas($allies[$i])) continue;//Strafing Gunship
     if($targets != "") $targets .= ",";
     $targets .= "THEIRALLY-" . $i;
-    if(HasSentinel($allies[$i], $defPlayer, $i)) {
+    if(HasSentinel($allies[$i], $defPlayer, $i) && CardArenas($attacker->CardID()) == CardArenas($allies[$i])) {
       if($sentinelTargets != "") $sentinelTargets .= ",";
       $sentinelTargets .= "THEIRALLY-" . $i;
     }
