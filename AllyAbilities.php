@@ -50,6 +50,7 @@ function AllyHasStaticHealthModifier($cardID)
     case "9799982630"://General Dodonna
     case "4339330745"://Wedge Antilles
     case "9097316363"://Emperor Palpatine
+    case "6c5b96c7ef"://Emperor Palpatine
       return true;
     default: return false;
   }
@@ -69,6 +70,7 @@ function AllyStaticHealthModifier($cardID, $index, $player, $myCardID, $myIndex)
       if($index != $myIndex && TraitContains($cardID, "Vehicle", $player)) return 1;
       break;
     case "9097316363"://Emperor Palpatine
+    case "6c5b96c7ef"://Emperor Palpatine
       if($cardID == "1780978508") return 1;//Royal Guard
       break;
     default: break;
