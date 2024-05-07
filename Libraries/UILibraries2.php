@@ -290,28 +290,24 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
 
   //Health Counters style
   if ($lifeCounters != 0) {
-    $left = "68%";
+    $bgImage = "./Images/Life.png";
+    $left = "72%";
     $top = "68%";
-    $rv .= "<div style=' position:absolute; margin: auto; top: " . $top . "; left:" . $left . "; right: 0; bottom: 0; width:" . $imgCounterHeight . "px; height:" . $imgCounterHeight . "px;
-    display: flex; justify-content: center; z-index: 5; text-align: center; vertical-align: middle; line-height:" . $imgCounterHeight . "px;
-    font-size:" . $imgCounterFontSize . "px; font-weight: 600;  color: #EEE; text-shadow: 2px 0 0 #000, 0 -2px 0 #000, 0 2px 0 #000, -2px 0 0 #000; user-select: none;'>" . $lifeCounters . "
-    <img style='position:absolute; top: -2px; width:" . $imgCounterHeight . "px; height:" . $imgCounterHeight . "px; opacity: 0.9; z-index:-1;' src='./Images/Life.png'></div>";
+    $lineHeight = 30;
+    $rv .= "<div style=' position:absolute; top: " . $top . "; left:" . $left . "; width:" . $imgCounterHeight . "px; height:" . $imgCounterHeight . "px; line-height:" . $lineHeight . "px; 
+    z-index: 5; text-align: center; font-size:" . $imgCounterFontSize . "px; font-weight: 600;  color: #EEE; text-shadow: 0px 2px 0px rgba(0, 0, 0, 0.52); -webkit-text-stroke: 1px rgba(0, 0, 0, 0.52); text-stroke: 1px rgba(0, 0, 0, 0.52); 
+    user-select: none; background: url($bgImage) no-repeat; background-size: 35px 35px;'>" . $lifeCounters . "</div>";
   }
 
   //Attack Counters style
   if ($atkCounters != 0 && CardSubType($cardNumber) != "Arrow") {
-    if ($lifeCounters == 0 && $counters == 0) {
-      $left = "0px";
-    } else {
-      $left = "-45%";
-    }
-    $left = "-68%";
+    $bgImage = "./Images/AttackIcon.png";
+    $left = "-5%";
     $top = "68%";
-    $rv .= "<div style=' position:absolute; margin: auto; top: " . $top . "; left:" . $left . "; right: 0; bottom: 0; width:" . $imgCounterHeight . "px; height:" . $imgCounterHeight . "px;
-    display: flex; justify-content: center; z-index: 5; text-align: center; vertical-align: middle; line-height:" . $imgCounterHeight . "px;
-    font-size:" . $imgCounterFontSize . "px; font-weight: 600;  color: #EEE; text-shadow: 2px 0 0 #000, 0 -2px 0 #000, 0 2px 0 #000, -2px 0 0 #000; user-select: none;'>" . $atkCounters . "
-    <img style='position:absolute; top: -2px; width:" . $imgCounterHeight . "px; height:" . $imgCounterHeight . "px; opacity: 0.9; z-index:-1;' src='./Images/AttackIcon.png'></div>";
-  }
+    $lineHeight = 30;
+    $rv .= "<div style=' position:absolute; top: " . $top . "; left:" . $left . "; width:" . $imgCounterHeight . "px; height:" . $imgCounterHeight . "px; line-height:" . $lineHeight . "px; 
+    z-index: 5; text-align: center; font-size:" . $imgCounterFontSize . "px; font-weight: 600;  color: #EEE; text-shadow: 0px 2px 0px rgba(0, 0, 0, 0.52); -webkit-text-stroke: 1px rgba(0, 0, 0, 0.52); text-stroke: 1px rgba(0, 0, 0, 0.52); 
+    user-select: none; background: url($bgImage) no-repeat; background-size: 35px 35px;'>" . $atkCounters . "</div>";  }
   $rv .= "</a>";
   return $rv;
 }

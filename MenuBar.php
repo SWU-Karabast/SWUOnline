@@ -38,14 +38,14 @@ $isMobile = IsMobile();
     }
 
     li {
-      display: inline;
-      padding: 8px;
+      display: flex;
     }
 
     ul {
-      display: inline;
-      padding: 0px;
+      display: flex;
       margin: 0px;
+      column-gap: 15px;
+      align-items: center;
     }
 
     a {
@@ -74,11 +74,13 @@ $isMobile = IsMobile();
       width: 100%;
       z-index: 100;
       background-color: rgba(40, 5, 5, .8);
+      display: flex;
+      justify-content: space-between;
     }
 
-    .rightnav {
-      position: absolute;
-      right: 0px;
+    .NavBarDiv img {
+      width: 25px;
+      height: 25px;
     }
 
     h1,
@@ -140,10 +142,10 @@ $isMobile = IsMobile();
     <nav class='NavBarDiv'>
       <ul>
         <?php
-          if (!$isMobile) echo '<li><a target="_blank" href="https://discord.gg/hKRaqHND4v">Discord</a></li>';
-          echo '<li><a target="_blank" href="https://github.com/OotTheMonk/SWUOnline">Github</a></li>';
+          if (!$isMobile) echo '<li><a target="_blank" href="https://discord.gg/hKRaqHND4v"><img src="./Images/icons/discord.svg"></img></a></li>';
+          echo '<li><a target="_blank" href="https://github.com/OotTheMonk/SWUOnline"><img src="./Images/icons/github.svg"></img></a></li>';
         ?>
-        <li><a target="_blank" href="https://www.patreon.com/OotTheMonk">Support</a></li>
+        <li><a target="_blank" href="https://www.patreon.com/OotTheMonk"><img src="./Images/icons/patreon.svg"></img></a></li>
       </ul>
 
       <ul class='rightnav'>
