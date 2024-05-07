@@ -15,6 +15,7 @@ CREATE TABLE `completedgame` (
   `LosingHero` char(15) NOT NULL,
   `WinningPID` int(11) DEFAULT NULL,
   `LosingPID` int(11) DEFAULT NULL,
+  `WinningPlayer` tinyint(4) DEFAULT NULL,
   `WinnerHealth` int(11) DEFAULT NULL,
   `FirstPlayer` tinyint(4) DEFAULT NULL,
   `NumTurns` int(11) NOT NULL,
