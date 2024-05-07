@@ -3160,15 +3160,15 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "9097690846"://Snowtrooper Lieutenant
       if($from != "PLAY") {
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Imperial");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
         AddDecisionQueue("MZFILTER", $currentPlayer, "status=1");
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to attack with");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-        AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+        AddDecisionQueue("SETDQVAR", $currentPlayer, "0");
         AddDecisionQueue("MZALLCARDTRAITORPASS", $currentPlayer, "Imperial", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
         AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "9097690846", 1);
-        AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}");
         AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
       }
       break;
