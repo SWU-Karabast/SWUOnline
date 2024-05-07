@@ -290,28 +290,24 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
 
   //Health Counters style
   if ($lifeCounters != 0) {
-    $left = "68%";
+    $bgImage = "./Images/Life.png";
+    $left = "72%";
     $top = "68%";
-    $rv .= "<div style=' position:absolute; margin: auto; top: " . $top . "; left:" . $left . "; right: 0; bottom: 0; width:" . $imgCounterHeight . "px; height:" . $imgCounterHeight . "px;
-    display: flex; justify-content: center; z-index: 5; text-align: center; vertical-align: middle; line-height:" . $imgCounterHeight . "px;
-    font-size:" . $imgCounterFontSize . "px; font-weight: 600;  color: #EEE; text-shadow: 2px 0 0 #000, 0 -2px 0 #000, 0 2px 0 #000, -2px 0 0 #000; user-select: none;'>" . $lifeCounters . "
-    <img style='position:absolute; top: -2px; width:" . $imgCounterHeight . "px; height:" . $imgCounterHeight . "px; opacity: 0.9; z-index:-1;' src='./Images/Life.png'></div>";
+    $lineHeight = 30;
+    $rv .= "<div style=' position:absolute; top: " . $top . "; left:" . $left . "; width:" . $imgCounterHeight . "px; height:" . $imgCounterHeight . "px; line-height:" . $lineHeight . "px; 
+    z-index: 5; text-align: center; font-size:" . $imgCounterFontSize . "px; font-weight: 600;  color: #EEE; text-shadow: 2px 0 0 #000, 0 -2px 0 #000, 0 2px 0 #000, -2px 0 0 #000; user-select: none; 
+    background: url($bgImage) no-repeat; background-size: 35px 35px;'>" . $lifeCounters . "</div>";
   }
 
   //Attack Counters style
   if ($atkCounters != 0 && CardSubType($cardNumber) != "Arrow") {
-    if ($lifeCounters == 0 && $counters == 0) {
-      $left = "0px";
-    } else {
-      $left = "-45%";
-    }
-    $left = "-68%";
+    $bgImage = "./Images/AttackIcon.png";
+    $left = "-5%";
     $top = "68%";
-    $rv .= "<div style=' position:absolute; margin: auto; top: " . $top . "; left:" . $left . "; right: 0; bottom: 0; width:" . $imgCounterHeight . "px; height:" . $imgCounterHeight . "px;
-    display: flex; justify-content: center; z-index: 5; text-align: center; vertical-align: middle; line-height:" . $imgCounterHeight . "px;
-    font-size:" . $imgCounterFontSize . "px; font-weight: 600;  color: #EEE; text-shadow: 2px 0 0 #000, 0 -2px 0 #000, 0 2px 0 #000, -2px 0 0 #000; user-select: none;'>" . $atkCounters . "
-    <img style='position:absolute; top: -2px; width:" . $imgCounterHeight . "px; height:" . $imgCounterHeight . "px; opacity: 0.9; z-index:-1;' src='./Images/AttackIcon.png'></div>";
-  }
+    $lineHeight = 30;
+    $rv .= "<div style=' position:absolute; top: " . $top . "; left:" . $left . "; width:" . $imgCounterHeight . "px; height:" . $imgCounterHeight . "px; line-height:" . $lineHeight . "px; 
+    z-index: 5; text-align: center; font-size:" . $imgCounterFontSize . "px; font-weight: 600;  color: #EEE; text-shadow: 2px 0 0 #000, 0 -2px 0 #000, 0 2px 0 #000, -2px 0 0 #000; user-select: none; 
+    background: url($bgImage) no-repeat; background-size: 35px 35px;'>" . $atkCounters . "</div>";  }
   $rv .= "</a>";
   return $rv;
 }
@@ -592,12 +588,10 @@ function CardStats($player)
   for ($i = $start; $i < count($turnStats); $i += TurnStatPieces()) {
     $totalDamageThreatened += $turnStats[$i + $TurnStats_DamageThreatened];
     $totalDamageDealt += $turnStats[$i + $TurnStats_DamageDealt];
-    /*
     $totalResourcesUsed += $turnStats[$i + $TurnStats_ResourcesUsed];
     $totalCardsLeft += $turnStats[$i + $TurnStats_CardsLeft];
     $totalDefensiveCards += ($turnStats[$i + $TurnStats_CardsPlayedDefense] + $turnStats[$i + $TurnStats_CardsBlocked]); //TODO: Separate out pitch for offense and defense
     $totalBlocked += $turnStats[$i + $TurnStats_DamageBlocked];
-    */
     ++$numTurns;
   }
   if ($numTurns > 0) {
@@ -616,7 +610,7 @@ function CardStats($player)
     $rv .= "<td style='border-bottom: 1px solid white; border-top: 1px solid white;'>Turn<br>Number</td>";
     $rv .= "<td style='border-bottom: 1px solid white; border-top: 1px solid white;'>Cards<br>Played</td>";
     //$rv .= "<td style='border-bottom: 1px solid black; border-top: 1px solid black;'>Cards<br>Blocked</td>";
-    //$rv .= "<td style='border-bottom: 1px solid white; border-top: 1px solid white;'>Cards<br>Reserved</td>";
+    $rv .= "<td style='border-bottom: 1px solid white; border-top: 1px solid white;'>Cards<br>Reserved</td>";
     //$rv .= "<td style='border-bottom: 1px solid black; border-top: 1px solid black;'>Resources<br>Used</td>";
     //$rv .= "<td style='border-bottom: 1px solid black; border-top: 1px solid black;'>Cards<br>Left</td>";
     $rv .= "<td style='border-bottom: 1px solid white; border-top: 1px solid white;'>Damage<br>Dealt</td>";
@@ -627,13 +621,13 @@ function CardStats($player)
       $BackgroundColor = ($BackgroundColor == $lighterColor ? $darkerColor : $lighterColor);
       $rv .= "<tr style='background-color:" . $BackgroundColor . ";'>";
       $rv .= "<td>" . (($i / TurnStatPieces()) + 1) . "</td>";
-      //$rv .= "<td>" . ($turnStats[$i + $TurnStats_CardsPlayedOffense] + $turnStats[$i + $TurnStats_CardsPlayedDefense]) . "</td>";
+      $rv .= "<td>" . ($turnStats[$i + $TurnStats_CardsPlayedOffense] + $turnStats[$i + $TurnStats_CardsPlayedDefense]) . "</td>";
       //$rv .= "<td>" . $turnStats[$i + $TurnStats_CardsBlocked] . "</td>";
-      //$rv .= "<td>" . $turnStats[$i + $TurnStats_CardsPitched] . "</td>";
+      $rv .= "<td>" . $turnStats[$i + $TurnStats_CardsPitched] . "</td>";
       //$rv .= "<td>" . $turnStats[$i + $TurnStats_ResourcesUsed] . "</td>";
       //$rv .= "<td>" . $turnStats[$i + $TurnStats_CardsLeft] . "</td>";
       $rv .= "<td>" . $turnStats[$i + $TurnStats_DamageDealt] . "</td>";
-      //$rv .= "<td>" . $otherPlayerTurnStats[$i + $TurnStats_DamageDealt] . "</td>";
+      $rv .= "<td>" . $otherPlayerTurnStats[$i + $TurnStats_DamageDealt] . "</td>";
       $rv .= "</tr>";
     }
     $rv .= "</table>";
