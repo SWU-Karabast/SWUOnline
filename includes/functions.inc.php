@@ -269,15 +269,6 @@ function logCompletedGameStats()
 	if ($p1IsChallengeActive == "1" && $p1id != "-") LogChallengeResult($conn, $gameResultID, $p1id, ($winner == 1 ? 1 : 0));
 	if ($p2IsChallengeActive == "1" && $p2id != "-") LogChallengeResult($conn, $gameResultID, $p2id, ($winner == 2 ? 1 : 0));
 
-	$p1Deck = ($winner == 1 ? $winnerDeck : $loserDeck);
-	$p2Deck = ($winner == 2 ? $winnerDeck : $loserDeck);
-	$p1Hero = ($winner == 1 ? $winHero[0] : $loseHero[0]);
-	$p2Hero = ($winner == 2 ? $winHero[0] : $loseHero[0]);
-
-	if (!AreStatsDisabled(1)) SendFabDBResults(1, $p1DeckLink, $p1Deck, $gameResultID, $p2Hero);
-	if (!AreStatsDisabled(2)) SendFabDBResults(2, $p2DeckLink, $p2Deck, $gameResultID, $p1Hero);
-	if (!AreStatsDisabled(1) && !AreStatsDisabled(2)) SendFullFabraryResults($gameResultID, $p1DeckLink, $p1Deck, $p1Hero, $p1deckbuilderID, $p2DeckLink, $p2Deck, $p2Hero, $p2deckbuilderID);
-
 	mysqli_close($conn);
 }
 
@@ -292,63 +283,6 @@ function LogChallengeResult($conn, $gameResultID, $playerID, $result)
 		mysqli_stmt_execute($stmt);
 		mysqli_stmt_close($stmt);
 	}
-}
-
-
-function SendFabDBResults($player, $decklink, $deck, $gameID, $opposingHero)
-{
-	global $fabDBToken, $fabDBSecret, $gameName, $p1deckbuilderID, $p2deckbuilderID;
-	if (!str_contains($decklink, "fabdb.net")) return;
-
-	$linkArr = explode("/", $decklink);
-	$slug = array_pop($linkArr);
-
-	$url = "https://api.fabdb.net/game/results/" . $slug;
-	$ch = curl_init($url);
-	$payload = SerializeGameResult($player, $decklink, $deck, $gameID, $opposingHero, $gameName);
-	$payloadArr = json_decode($payload, true);
-	$payloadArr["time"] = microtime();
-	$payloadArr["hash"] = hash("sha512", $fabDBSecret . $payloadArr["time"]);
-	$payloadArr["player"] = $player;
-	$payloadArr["user"] = ($player == 1 ? $p1deckbuilderID : $p2deckbuilderID);
-	curl_setopt($ch, CURLOPT_POST, 1);
-	curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($payloadArr));
-	curl_setopt($ch, CURLOPT_HEADER, 0);
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, false);
-
-	$headers = array(
-		"Authorization: Bearer " . $fabDBToken,
-	);
-
-	curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-	curl_setopt($ch, CURLINFO_HEADER_OUT, true);
-	$result = curl_exec($ch);
-	$information = curl_getinfo($ch);
-	curl_close($ch);
-}
-
-function SendFullFabraryResults($gameID, $p1Decklink, $p1Deck, $p1Hero, $p1deckbuilderID, $p2Decklink, $p2Deck, $p2Hero, $p2deckbuilderID)
-{
-	global $FaBraryKey, $gameName;
-	$url = "https://5zvy977nw7.execute-api.us-east-2.amazonaws.com/prod/results";
-	$ch = curl_init($url);
-	$payloadArr = [];
-	$payloadArr['gameID'] = $gameID;
-	$payloadArr['gameName'] = $gameName;
-	$payloadArr['deck1'] = json_decode(SerializeGameResult(1, $p1Decklink, $p1Deck, $gameID, $p2Hero, $gameName, $p1deckbuilderID));
-	$payloadArr['deck2'] = json_decode(SerializeGameResult(2, $p2Decklink, $p2Deck, $gameID, $p1Hero, $gameName, $p2deckbuilderID));
-	curl_setopt($ch, CURLOPT_POST, true);
-	curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payloadArr));
-	curl_setopt($ch, CURLOPT_HEADER, 0);
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, false);
-	$headers = array(
-		"x-api-key: " . $FaBraryKey,
-		"Content-Type: application/json",
-	);
-	curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-
-	$result = curl_exec($ch);
-	curl_close($ch);
 }
 
 function SerializeGameResult($player, $DeckLink, $deckAfterSB, $gameID = "", $opposingHero = "", $gameName = "", $deckbuilderID = "")
