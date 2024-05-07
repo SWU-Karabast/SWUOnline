@@ -3166,7 +3166,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "9097690846"://Snowtrooper Lieutenant
       if($from != "PLAY") {
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Imperial");
         AddDecisionQueue("MZFILTER", $currentPlayer, "status=1");
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to attack with");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
