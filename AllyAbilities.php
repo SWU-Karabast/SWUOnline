@@ -567,7 +567,7 @@ function SpecificAllyAttackAbilities($attackID)
           WriteLog("Jedi Lightsaber gives the defending unit -2/-2");
           $target = GetAttackTarget();
           $ally = new Ally($target);
-          $ally->DealDamage(2);
+          $ally->AddRoundHealthModifier(-2);
           AddCurrentTurnEffect("8495694166", $defPlayer, from:"PLAY");
         }
         break;
