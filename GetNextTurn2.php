@@ -1043,6 +1043,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   $groundAllies = "";
   if (count($myAllies) > 0) {
     for ($i = 0; $i < count($myAllies); $i += AllyPieces()) {
+      if($i > count($myAllies) - AllyPieces()) break;
       $ally = new Ally("MYALLY-" . $i, $playerID);
       $lifeCounters = $ally->Health();
       $enduranceCounters = $myAllies[$i + 6];
