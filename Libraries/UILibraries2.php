@@ -800,11 +800,9 @@ function MainMenuUI()
 {
   global $playerID, $gameName, $redirectPath, $authKey;
   // TODO: Have as a global variable.
-  $reactFE = "https://fe.talishar.net/game/play";
   $rv = "<table class='table-MainMenu'><tr><td class='table-td-MainMenu'>";
   $rv .= GetSettingsUI($playerID) . "<BR>";
   $rv .= "</td><td style='width:45%;  margin-top: 10px; vertical-align:top;'>";
-  $rv .= "<div style='font-size:24px;'><a href='" . $reactFE . "?gameName=$gameName&playerID=$playerID'>Play in Beta UI</a></div><br>";
   $rv .= CreateButton($playerID, "Home Page", 100001, 0, "24px", "", "", false, true) . "<BR>";
   $rv .= CreateButton($playerID, "Concede", 100002, 0, "24px", prompt: "⚠️ Do you really want to concede ?") . "<BR><BR>";
   $rv .= CreateButton($playerID, "Report Bug", 100003, 0, "24px") . "<BR>";
