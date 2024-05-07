@@ -202,3 +202,25 @@ CREATE TABLE `savedsettings` (
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 ALTER TABLE `savedsettings`
 ADD PRIMARY KEY (`playerId`, `settingNumber`);
+
+
+--
+-- Table structure for table `blocklist`
+--
+
+CREATE TABLE `blocklist` (
+  `blockingPlayer` int(11) NOT NULL,
+  `blockedPlayer` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `blocklist`
+--
+ALTER TABLE `blocklist`
+  ADD PRIMARY KEY (`blockingPlayer`,`blockedPlayer`),
+  ADD KEY `blockingPlayer` (`blockingPlayer`);
+COMMIT;
