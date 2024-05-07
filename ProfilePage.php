@@ -66,7 +66,10 @@ if (isset($_SESSION["isPatron"])) {
 
 <div class='ContentWindow' style='left:60%; right:20px; top:60px; height:90%;'>
 <h2>Block List</h2>
-
+  <form class="form-resetpwd" action="includes/BlockUser.php" method="post">
+    <input type="text" name="userToBlock" placeholder="User to block">
+    <button type="submit" name="block-user-submit">Block</button>
+  </form>
 </div>
 
 <?php
