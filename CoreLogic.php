@@ -3373,8 +3373,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to exhaust");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "BAMBOOZLE", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "BAMBOOZLE", 1);
       break;
     case "2639435822"://Force Lightning
       $damage = 2 * (intval($resourcesPaid) - 1);

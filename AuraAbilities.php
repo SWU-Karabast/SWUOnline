@@ -30,12 +30,12 @@ function PlayAura($cardID, $player, $number = 1, $isToken = false, $rogueHeronSp
   else if($cardID != "ELE111") IncrementClassState($player, $CS_NumAuras, $number);
 }
 
-function UpgradeLeftPlay($cardID, $player, $index, $fromDQ=false) {
+function UpgradeLeftPlay($cardID, $player, $index) {
   switch($cardID) {
     case "8055390529"://Traitorous
       $allies = &GetAllies($player);
       $owner = $allies[$index + 11];
-      if($player != $owner) AllyTakeControl($player, $index);
+      if($player != $owner) AllyTakeControl($owner, $index);
       break;
     default: break;
   }

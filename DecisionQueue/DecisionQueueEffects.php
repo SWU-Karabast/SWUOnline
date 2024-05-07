@@ -292,8 +292,7 @@ function SpecificCardLogic($player, $card, $lastResult)
       }
       $ally->ClearSubcards();
       for($i=0; $i<count($upgrades); ++$i) {
-        WriteLog($upgrades[$i] . " " . $player . " " . $ally->Index());
-        UpgradeLeftPlay($upgrades[$i], $player, $ally->Index());
+        UpgradeLeftPlay($upgrades[$i], $ally->PlayerID(), $ally->Index());
       }
       return $lastResult;
     case "DONTGETCOCKY":
