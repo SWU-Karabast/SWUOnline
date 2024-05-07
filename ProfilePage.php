@@ -10,7 +10,7 @@ include_once "CardDictionary.php";
 include_once "./Libraries/UILibraries2.php";
 include_once "./APIKeys/APIKeys.php";
 
-if (isset($_SESSION['userid'])) {
+  /*
   $badges = LoadBadges($_SESSION['userid']);
   echo ("<div class='ContentWindow' style='position:relative; width:50%; left:20px; top:20px; height:200px;'>");
   echo ("<h1>Your Badges</h1>");
@@ -23,8 +23,8 @@ if (isset($_SESSION['userid'])) {
     if ($badges[$i + 6] != "") echo ("</a>");
   }
   echo ("</div>");
-}
-
+  */
+/*
 if (isset($_SESSION["isPatron"])) {
   echo ("<div class='ContentWindow' style='width: 50%; left:20px; height: calc(90% - 220px); bottom:20px; overflow-y: scroll;'>");
   echo ("<h1>Your Record</h1>");
@@ -32,16 +32,17 @@ if (isset($_SESSION["isPatron"])) {
   include_once "zzGameStats.php";
   echo ("</div>");
 }
+*/
 
 ?>
 
 <script src="./jsInclude.js"></script>
 <div id="cardDetail" style="z-index:100000; display:none; position:fixed;"></div>
 
-<div class='ContentWindow' style='left:60%; right:20px; top:60px; height:90%;'>
-  <h2>Welcome <?php echo $_SESSION['useruid'] ?>!</h2>
+<div class='ContentWindow' style='left:20px; width:35%; top:60px; height:90%;'>
+<h2>Welcome <?php echo $_SESSION['useruid'] ?>!</h2>
 
-  <?php
+<?php
 
   DisplayPatreon();
 
@@ -60,33 +61,42 @@ if (isset($_SESSION["isPatron"])) {
     echo ("</table>");
   }
 
-  function DisplayPatreon()
-  {
-    global $patreonClientID, $patreonClientSecret;
-    $client_id = $patreonClientID;
-    $client_secret = $patreonClientSecret;
+?>
+</div>
 
-    $redirect_uri = "https://www.karabast.net/SWUOnline/PatreonLogin.php";
-    $href = 'https://www.patreon.com/oauth2/authorize?response_type=code&client_id=' . $client_id . '&redirect_uri=' . urlencode($redirect_uri);
-    $state = array();
-    $state['final_page'] = 'http://karabast.net/SWUOnline/MainMenu.php';
-    $state_parameters = '&state=' . urlencode(base64_encode(json_encode($state)));
-    $href .= $state_parameters;
-    $scope_parameters = '&scope=identity%20identity.memberships';
-    $href .= $scope_parameters;
-    if (!isset($_SESSION["patreonAuthenticated"])) {
-      echo ("<BR>");
-      echo ("<BR>");
-      echo '<a class="containerPatreon" href="' . $href . '">';
-      echo ("<img class='imgPatreon' src='./Assets/patreon-php-master/assets/images/login_with_patreon.png' alt='Login via Patreon'>");
-      echo '</a>';
-    } else {
-      include './zzPatreonDebug.php';
-    }
-  }
-  ?>
+<div class='ContentWindow' style='left:60%; right:20px; top:60px; height:90%;'>
+<h2>Block List</h2>
+
 </div>
 
 <?php
+
+
+function DisplayPatreon()
+{
+  global $patreonClientID, $patreonClientSecret;
+  $client_id = $patreonClientID;
+  $client_secret = $patreonClientSecret;
+
+  $redirect_uri = "https://www.karabast.net/SWUOnline/PatreonLogin.php";
+  $href = 'https://www.patreon.com/oauth2/authorize?response_type=code&client_id=' . $client_id . '&redirect_uri=' . urlencode($redirect_uri);
+  $state = array();
+  $state['final_page'] = 'http://karabast.net/SWUOnline/MainMenu.php';
+  $state_parameters = '&state=' . urlencode(base64_encode(json_encode($state)));
+  $href .= $state_parameters;
+  $scope_parameters = '&scope=identity%20identity.memberships';
+  $href .= $scope_parameters;
+  if (!isset($_SESSION["patreonAuthenticated"])) {
+    echo ("<BR>");
+    echo '<center><a class="containerPatreon" href="' . $href . '">';
+    echo ("<img class='imgPatreon' src='./Assets/patreon-php-master/assets/images/login_with_patreon.png' alt='Login via Patreon'>");
+    echo '</a></center>';
+    echo ("<BR>");
+  } else {
+    include './zzPatreonDebug.php';
+  }
+}
+
+
 require "Disclaimer.php";
 ?>
