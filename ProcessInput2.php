@@ -1,6 +1,7 @@
 <?php
 
 error_reporting(E_ALL);
+ob_start();
 
 include "WriteLog.php";
 include "GameLogic.php";
