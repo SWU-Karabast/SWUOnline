@@ -310,7 +310,6 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
     background: url($bgImage) no-repeat; background-size: 35px 35px;'>" . $atkCounters . "</div>";  }
   $rv .= "</a>";
   return $rv;
-}
 
 function BorderColorMap($code)
 {
@@ -588,10 +587,12 @@ function CardStats($player)
   for ($i = $start; $i < count($turnStats); $i += TurnStatPieces()) {
     $totalDamageThreatened += $turnStats[$i + $TurnStats_DamageThreatened];
     $totalDamageDealt += $turnStats[$i + $TurnStats_DamageDealt];
+    /*
     $totalResourcesUsed += $turnStats[$i + $TurnStats_ResourcesUsed];
     $totalCardsLeft += $turnStats[$i + $TurnStats_CardsLeft];
     $totalDefensiveCards += ($turnStats[$i + $TurnStats_CardsPlayedDefense] + $turnStats[$i + $TurnStats_CardsBlocked]); //TODO: Separate out pitch for offense and defense
     $totalBlocked += $turnStats[$i + $TurnStats_DamageBlocked];
+    */
     ++$numTurns;
   }
   if ($numTurns > 0) {
@@ -610,7 +611,7 @@ function CardStats($player)
     $rv .= "<td style='border-bottom: 1px solid white; border-top: 1px solid white;'>Turn<br>Number</td>";
     $rv .= "<td style='border-bottom: 1px solid white; border-top: 1px solid white;'>Cards<br>Played</td>";
     //$rv .= "<td style='border-bottom: 1px solid black; border-top: 1px solid black;'>Cards<br>Blocked</td>";
-    $rv .= "<td style='border-bottom: 1px solid white; border-top: 1px solid white;'>Cards<br>Reserved</td>";
+    //$rv .= "<td style='border-bottom: 1px solid white; border-top: 1px solid white;'>Cards<br>Reserved</td>";
     //$rv .= "<td style='border-bottom: 1px solid black; border-top: 1px solid black;'>Resources<br>Used</td>";
     //$rv .= "<td style='border-bottom: 1px solid black; border-top: 1px solid black;'>Cards<br>Left</td>";
     $rv .= "<td style='border-bottom: 1px solid white; border-top: 1px solid white;'>Damage<br>Dealt</td>";
@@ -621,13 +622,13 @@ function CardStats($player)
       $BackgroundColor = ($BackgroundColor == $lighterColor ? $darkerColor : $lighterColor);
       $rv .= "<tr style='background-color:" . $BackgroundColor . ";'>";
       $rv .= "<td>" . (($i / TurnStatPieces()) + 1) . "</td>";
-      $rv .= "<td>" . ($turnStats[$i + $TurnStats_CardsPlayedOffense] + $turnStats[$i + $TurnStats_CardsPlayedDefense]) . "</td>";
+      //$rv .= "<td>" . ($turnStats[$i + $TurnStats_CardsPlayedOffense] + $turnStats[$i + $TurnStats_CardsPlayedDefense]) . "</td>";
       //$rv .= "<td>" . $turnStats[$i + $TurnStats_CardsBlocked] . "</td>";
-      $rv .= "<td>" . $turnStats[$i + $TurnStats_CardsPitched] . "</td>";
+      //$rv .= "<td>" . $turnStats[$i + $TurnStats_CardsPitched] . "</td>";
       //$rv .= "<td>" . $turnStats[$i + $TurnStats_ResourcesUsed] . "</td>";
       //$rv .= "<td>" . $turnStats[$i + $TurnStats_CardsLeft] . "</td>";
       $rv .= "<td>" . $turnStats[$i + $TurnStats_DamageDealt] . "</td>";
-      $rv .= "<td>" . $otherPlayerTurnStats[$i + $TurnStats_DamageDealt] . "</td>";
+      //$rv .= "<td>" . $otherPlayerTurnStats[$i + $TurnStats_DamageDealt] . "</td>";
       $rv .= "</tr>";
     }
     $rv .= "</table>";
