@@ -223,4 +223,3 @@ CREATE TABLE `blocklist` (
 ALTER TABLE `blocklist`
   ADD PRIMARY KEY (`blockingPlayer`,`blockedPlayer`),
   ADD KEY `blockingPlayer` (`blockingPlayer`);
-COMMIT;
