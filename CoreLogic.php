@@ -1508,24 +1508,18 @@ function RemoveCombatChain($index)
   $combatChain = array_values($combatChain);
 }
 
-function RemoveArsenalEffects($player, $cardToReturn){
-  SearchCurrentTurnEffects("EVR087", $player, true);
-  SearchCurrentTurnEffects("ARC042", $player, true);
-  if($cardToReturn == "ARC057" ){SearchCurrentTurnEffects("ARC057", $player, true);}
-  if($cardToReturn == "ARC058" ){SearchCurrentTurnEffects("ARC058", $player, true);}
-  if($cardToReturn == "ARC059" ){SearchCurrentTurnEffects("ARC059", $player, true);}
-}
-
 function LookAtHand($player)
 {
   $hand = &GetHand($player);
-  $cards = "";
+  $otherPlayer = ($player == 1 ? 2 : 1);
+  $caption = "Their hand is: ";
   for($i=0; $i<count($hand); $i+=HandPieces())
   {
-    if($cards != "") $cards .= ",";
-    $cards .= $hand[$i];
+    if($i > 0) $caption .= ", ";
+    $caption .= CardLink($hand[$i], $hand[$i]);
   }
-  RevealCards($cards, $player);
+  AddDecisionQueue("SETDQCONTEXT", $otherPlayer, $caption);
+  AddDecisionQueue("OK", $otherPlayer, "-");
 }
 
 function GainActionPoints($amount=1, $player=0)

@@ -252,7 +252,6 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $index = $lastResult;
       $arsenal = &GetArsenal($player);
       $cardToReturn = $arsenal[$index];
-      RemoveArsenalEffects($player, $cardToReturn);
       for($i = $index + ArsenalPieces() - 1; $i >= $index; --$i) {
         unset($arsenal[$i]);
       }
