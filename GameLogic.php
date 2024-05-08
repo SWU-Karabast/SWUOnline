@@ -1009,6 +1009,15 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       return $lastResult;
     case "SUBPITCHVALUE":
       return $parameter - 1;
+    case "BUFFARCANE":
+      AddCurrentTurnEffect($parameter . "-" . $lastResult, $player);
+      return $lastResult;
+    case "BUFFARCANEPREVLAYER":
+      global $layers;
+      $index = 0;
+      for($index=0; $index<count($layers) && $layers[$index] == "TRIGGER"; $index+=LayerPieces());
+      AddCurrentTurnEffect("CRU161", $player, "PLAY", $layers[$index+6]);
+      return $lastResult;
     case "LASTARSENALADDEFFECT":
       $params = explode(",", $parameter);
       $arsenal = &GetArsenal($player);

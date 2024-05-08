@@ -420,12 +420,12 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     $nbTiles = 0;
     for ($i = count($layers) - LayerPieces(); $i >= 0; $i -= LayerPieces()) {
       $content .= "<div style='display:inline; max-width:" . $cardSize . "px;'>";
-      $layerName = ($layers[$i] == "LAYER" || $layers[$i] == "TRIGGER" || $layers[$i] == "PLAYABILITY" ? $layers[$i + 2] : $layers[$i]);
+      $layerName = ($layers[$i] == "LAYER" || $layers[$i] == "TRIGGER" ? $layers[$i + 2] : $layers[$i]);
       $layersColor = $layers[$i + 1] == $playerID ? 1 : 2;
       if ($playerID == 3) $layersColor = $layers[$i + 1] == $otherPlayer ? 2 : 1;
       if (IsTileable($layerName) && $nbTiles == 0) {
         for ($j = 0; $j < count($layers); $j += LayerPieces()) {
-          $tilesName = ($layers[$j] == "LAYER" || $layers[$j] == "TRIGGER" || $layers[$j] == "PLAYABILITY" ? $layers[$j + 2] : $layers[$j]);
+          $tilesName = ($layers[$j] == "LAYER" || $layers[$j] == "TRIGGER" ? $layers[$j + 2] : $layers[$j]);
           if ($tilesName == $layerName) ++$nbTiles;
         }
         $content .= Card($layerName, "concat", $cardSize, 0, 1, 0, $layersColor, ($nbTiles == 1 ? 0 : $nbTiles), controller: $layers[$i + 1]);
@@ -433,7 +433,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         $nbTiles = 0;
         $content .= Card($layerName, "concat", $cardSize, 0, 1, 0, $layersColor, controller: $layers[$i + 1]);
       }
-      if(($layers[$i] == "TRIGGER"  || $layers[$i] == "PLAYABILITY" )&& $dqState[8] >= $i && $playerID == $mainPlayer)
+      if($layers[$i] == "TRIGGER" && $dqState[8] >= $i && $playerID == $mainPlayer)
       {
         if($i < $dqState[8]) $content .= "<span style='position:relative; left:-110px; top:-20px; z-index:10000;'>" . CreateButton($playerID, "<", 31, $i, "18px", useInput:true) . "</span>";
         if($i > 0) $content .= "<span style='position:relative; left:-65px; top:-20px; z-index:10000;'>" . CreateButton($playerID, ">", 32, $i, "18px", useInput:true) . "</span>";
@@ -633,7 +633,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       */
       $index = intval($option[1]);
       $card = $source[$index];
-      if ($option[0] == "LAYER" && ($card == "TRIGGER" || $card == "PLAYABILITY")) $card = $source[$index + 2];
+      if ($option[0] == "LAYER" && $card == "TRIGGER") $card = $source[$index + 2];
       $playerBorderColor = 0;
 
       if (substr($option[0], 0, 2) == "MY") $playerBorderColor = 1;
