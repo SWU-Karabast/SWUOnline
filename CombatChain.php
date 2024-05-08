@@ -48,7 +48,7 @@ function AttackModifier($cardID, $player, $index)
     //Raid is only for attackers
     $attacker = AttackerMZID($mainPlayer);
     $mzArr = explode("-", $attacker);
-    $modifier = RaidAmount($cardID, $mainPlayer, $mzArr[1]);
+    if($mzArr[1] == $index) $modifier = RaidAmount($cardID, $mainPlayer, $mzArr[1]);
   }
   switch($cardID) {
     case "3988315236"://Seasoned Shoretrooper
