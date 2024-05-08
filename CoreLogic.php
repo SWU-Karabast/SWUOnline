@@ -2832,12 +2832,16 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "0523973552"://I Am Your Father
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
-      AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Do you want your opponent to deal 7 damage?");
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY", 1);
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 7 damage to", 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETCARDID", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "1", 1);
+      AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Do you want your opponent to deal 7 damage to <1>?");
       AddDecisionQueue("YESNO", $otherPlayer, "-");
       AddDecisionQueue("NOPASS", $otherPlayer, "-", 1);
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 7 damage to", 1);
-      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY", 1);
-      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,7", 1);
       AddDecisionQueue("ELSE", $otherPlayer, "-");
       AddDecisionQueue("DRAW", $currentPlayer, "-", 1);
