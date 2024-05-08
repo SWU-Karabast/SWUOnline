@@ -24,6 +24,7 @@ function ModalAbilities($player, $card, $lastResult)
         case "Discard": Mill($player, 1); break;
         default: break;
       }
+      PrependDecisionQueue("SWAPTURN", $mainPlayer, "-");
       return 1;
     case "LEIAORGANA":
       switch($lastResult[0]) {
