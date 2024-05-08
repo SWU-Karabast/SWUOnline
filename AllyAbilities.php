@@ -3,6 +3,7 @@
 function PlayAlly($cardID, $player, $subCards = "-", $from="-")
 {
   $allies = &GetAllies($player);
+  if(count($allies) < AllyPieces()) $allies = [];
   array_push($allies, $cardID);
   array_push($allies, AllyEntersPlayState($cardID, $player, $from));
   array_push($allies, AllyHealth($cardID, $player));
