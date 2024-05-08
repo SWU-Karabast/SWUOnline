@@ -981,6 +981,7 @@ function FinalizeChainLink($chainClosed = false)
   CleanUpCombatEffects();
   CopyCurrentTurnEffectsFromCombat();
   $hasChainedAction = FinalizeChainLinkEffects();
+  ProcessAfterCombatLayer();
 
   //Don't change state until the end, in case it changes what effects are active
   SetClassState($mainPlayer, $CS_LastAttack, $combatChain[0]);
@@ -1590,7 +1591,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
   global $SET_PassDRStep;
 
   if($layerIndex > -1) SetClassState($currentPlayer, $CS_PlayIndex, $layerIndex);
-  $index = SearchForUniqueID($uniqueID, $currentPlayer);
+  if(intval($uniqueID) != -1) $index = SearchForUniqueID($uniqueID, $currentPlayer);
   if($cardID == "ARC003" || $cardID == "CRU101") $index = FindCharacterIndex($currentPlayer, $cardID); //TODO: Fix this. This is an issue with the entire "multiple abilities" framework
   if ($index > -1) SetClassState($currentPlayer, $CS_PlayIndex, $index);
 
@@ -1689,19 +1690,20 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
       CharacterPlayCardAbilities($cardID, $from);
     }
     $EffectContext = $cardID;
-    $playText = "";
+    //$playText = "";
     if(!$chainClosed) {
       if(GetClassState($currentPlayer, $CS_AfterPlayedBy) != "-") AfterPlayedByAbility(GetClassState($currentPlayer, $CS_AfterPlayedBy));
       if(DefinedTypesContains($cardID, "Event", $currentPlayer) && SearchCurrentTurnEffects("3401690666", $currentPlayer, remove:true)) {
         //Relentless
         WriteLog("<span style='color:red;'>The event does nothing because of Relentless.</span>");
-      } else $playText = PlayAbility($cardID, $from, $resourcesPaid, $target, $additionalCosts);
+      }// else $playText = PlayAbility($cardID, $from, $resourcesPaid, $target, $additionalCosts);
+      else AddLayer("PLAYABILITY", $currentPlayer, $cardID, $from . "-" . $resourcesPaid . "-" . $target . "-" . $additionalCosts, "-", $uniqueID);
     }
     if($from == "EQUIP") {
       EquipPayAdditionalCosts(FindCharacterIndex($currentPlayer, $cardID), "EQUIP");
     }
     else if($from != "PLAY") {
-      WriteLog("Resolving play ability of " . CardLink($cardID, $cardID) . ($playText != "" ? ": " : ".") . $playText);
+      //WriteLog("Resolving play ability of " . CardLink($cardID, $cardID) . ($playText != "" ? ": " : ".") . $playText);
       $index = LastAllyIndex($currentPlayer);
       if(HasAmbush($cardID, $currentPlayer, $index)) {
         $allies = &GetAllies($currentPlayer);

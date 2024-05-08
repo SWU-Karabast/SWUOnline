@@ -771,7 +771,7 @@ function GetResolvedAbilityName($cardID, $from="-")
 function IsPlayable($cardID, $phase, $from, $index = -1, &$restriction = null, $player = "")
 {
   global $currentPlayer, $CS_NumActionsPlayed, $combatChainState, $CCS_BaseAttackDefenseMax, $CS_NumNonAttackCards, $CS_NumAttackCards;
-  global $CCS_ResourceCostDefenseMin, $CCS_CardTypeDefenseRequirement, $actionPoints, $mainPlayer, $defPlayer;
+  global $CCS_ResourceCostDefenseMin, $actionPoints, $mainPlayer, $defPlayer;
   global $combatChain;
   if($from == "ARS" || $from == "BANISH") return false;
   if($player == "") $player = $currentPlayer;
