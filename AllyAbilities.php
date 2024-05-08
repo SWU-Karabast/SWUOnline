@@ -511,7 +511,8 @@ function AllyPlayCardAbility($cardID, $player="")
         break;
       case "5907868016"://Fighters for Freedom
         if(AspectContains($cardID, "Aggression", $player)) {
-          DealArcane(1, 1, "TRIGGER", "5907868016", player:$player);
+          $otherPlayer = ($player == 1 ? 2 : 1);
+          DealDamageAsync($otherPlayer, 1, "DAMAGE", "5907868016");
         }
         break;
       default: break;
@@ -524,7 +525,7 @@ function AllyPlayCardAbility($cardID, $player="")
     switch($allies[$i])
     {
       case "5555846790"://Saw Gerrera
-        if(DefinedTypesContains($cardID, "Event", $player)) DealArcane(2, 1, "TRIGGER", "5555846790", player:$otherPlayer);
+        if(DefinedTypesContains($cardID, "Event", $player)) DealDamageAsync($otherPlayer, 2, "DAMAGE", "5555846790");
         break;
       default: break;
     }
@@ -626,7 +627,7 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MZOP", $mainPlayer, "ADDEXPERIENCE", 1);
       break;
     case "51e8757e4c"://Sabine Wren
-      DealDamageAsync($defPlayer, 1, "TRIGGER", "51e8757e4c");
+      DealDamageAsync($defPlayer, 1, "DAMAGE", "51e8757e4c");
       break;
     case "8395007579"://Fifth Brother
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Do you want to deal 1 damage to Fifth Brother?");
