@@ -708,7 +708,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
     case "ADDCURRENTEFFECT":
       AddCurrentTurnEffect($parameter, $player);
       UpdateLinkAttack();
-      return "1";
+      return $lastResult;
     case "REMOVECURRENTEFFECT":
       SearchCurrentTurnEffects($parameter, $player, true);
       UpdateLinkAttack();
