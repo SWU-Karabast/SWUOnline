@@ -57,7 +57,7 @@ function AttackModifier($cardID, $player, $index)
       $modifier += NumResources($player) >= 6 ? 2 : 0;
       break;
     case "6348804504"://Ardent Sympathizer
-      $modifier += $initiativePlayer == $mainPlayer ? 2 : 0;
+      $modifier += $initiativePlayer == $player ? 2 : 0;
       break;
     case "4619930426"://First Legion Snowtrooper
       if(count($combatChain) == 0 || $player == $defPlayer) break;
