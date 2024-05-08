@@ -152,7 +152,7 @@ if ($canSeeQueue) {
   <h1>News</h1>
   <div style="position: relative;">
     <div style='vertical-align:middle; text-align:center;'>
-    All set 1 cards now live!
+    <a style='width:100%' href='https://www.patreon.com/ktod' target='_blank'>Want to get a sweet KTOD card back to show off on Karabast? Join the KTOD patreon to get access to that and other exclusive content on their discord!<br><img src='./Images/didyouknow/KTODad.webp' style='width:100%;'></a>
     </div>
   </div>
   <?php
