@@ -35,9 +35,7 @@ $SET_Playmat = 23; //Did this player enable caster mode
 
 function HoldPrioritySetting($player)
 {
-  global $SET_AlwaysHoldPriority;
-  $settings = GetSettings($player);
-  return $settings[$SET_AlwaysHoldPriority];
+  return 4;
 }
 
 function UseNewUI($player)
