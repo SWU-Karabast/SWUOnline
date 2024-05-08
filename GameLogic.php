@@ -474,6 +474,16 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             $output .= ($mzArr[0] == "MYALLY" ? "THEIRALLY" : "MYALLY") . "-" . $mzArr[1];
           }
           return $output;
+        case "MZTONORMALINDICES":
+          $arr = explode(",", $lastResult);
+          $output = "";
+          for($i=0; $i<count($arr); ++$i) {
+            if($output != "") $output .= ",";
+            $mzArr = explode("-", $arr[$i]);
+            $output .= $mzArr[1];
+          }
+          if($output == "") $output = "PASS";
+          return $output;
         default: return $lastResult;
       }
     case "FILTER":
