@@ -907,7 +907,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       }
       $cardText .= (Card($theirAllies[$i], "concat", $cardSizeAura, 0, 1, $theirAllies[$i + 1] != 2 ? 1 : 0, 0, 0, "", "", False, $lifeCounters, $enduranceCounters, $attackCounters, ($subcard != "-" && $subcard != "UPR043") ? "HASSUBCARD" : "", controller: $otherPlayer, subcardNum:count($subcards)) . "&nbsp");
       
-      if (HasSentinel($theirAllies[$i], $otherPlayer, $i)) $cardText .= ("<img title='Frozen' style='position:absolute; z-index:1001; top: " . ($subcard == "-" || $subcard == "UPR043" ? "6px" : "24px") . "; left: 6px; cursor:pointer; height:" . $cardHeight . "; width:" . $cardWidth . ";' src='./Images/Sentinel_Overlay.png' />");
+      if (HasSentinel($theirAllies[$i], $otherPlayer, $i)) $cardText .= ("<img title='Sentinel' style='pointer-events: none; position:absolute; z-index:1001; top: " . ($subcard == "-" || $subcard == "UPR043" ? "6px" : "24px") . "; left: 6px; cursor:pointer; height:" . $cardHeight . "; width:" . $cardWidth . ";' src='./Images/Sentinel_Overlay.png' />");
       if ($theirAllies[$i + 3] == 1) $cardText .= ("<img title='Frozen' style='position:absolute; z-index:1001; top: " . ($subcard == "-" || $subcard == "UPR043" ? "6px" : "24px") . "; left: 7px; cursor:pointer; height:" . $cardHeight . "; width:" . $cardWidth . ";' src='./Images/frozenOverlay.png' />");
       $cardText .= ("</div>");
       if($cardArena == "Ground") $groundAllies .= $cardText;
@@ -1062,7 +1062,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         $cardText .= (Card($subcards[$j], "concat", $cardSizeAura, showHover: true, from: "SUBCARD", controller: $playerID, subcardNum:$j));
       }
       $cardText .= (Card($myAllies[$i], "concat", $cardSizeAura, $currentPlayer == $playerID && $turn[0] != "P" && $playable ? 24 : 0, 1, $myAllies[$i + 1] != 2 ? 1 : 0, $border, 0, strval($i), "", False, $lifeCounters, $enduranceCounters, $attackCounters, (count($subcards) > 0) ? "HASSUBCARD" : "", controller: $playerID, subcardNum:count($subcards)) . "&nbsp");
-      if (HasSentinel($myAllies[$i], $playerID, $i)) $cardText .= ("<img title='Frozen' style='position:absolute; z-index:1001; top: " . ($subcard == "-" || $subcard == "UPR043" ? "6px" : "24px") . "; left: 6px; cursor:pointer; height:" . $cardHeight . "; width:" . $cardWidth . ";' src='./Images/Sentinel_Overlay.png' />");
+      if (HasSentinel($myAllies[$i], $playerID, $i)) $cardText .= ("<img title='Sentinel' style='pointer-events: none; position:absolute; z-index:1001; top: " . ($subcard == "-" || $subcard == "UPR043" ? "6px" : "24px") . "; left: 6px; cursor:pointer; height:" . $cardHeight . "; width:" . $cardWidth . ";' src='./Images/Sentinel_Overlay.png' />");
       if ($myAllies[$i + 3] == 1) $cardText .= ("<img title='Frozen' style='position:absolute; z-index:1001; top: " . ($subcard == "-" || $subcard == "UPR043" ? "6px" : "24px") . "; left: 6px; cursor:pointer; height:" . $cardHeight . "; width:" . $cardWidth . ";' src='./Images/frozenOverlay.png' />");
       $cardText .= ("</div>");
       if($cardArena == "Ground") $groundAllies .= $cardText;
