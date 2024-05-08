@@ -201,32 +201,12 @@ function ItemBeginRecollectionAbilities() {
   $mainItems = &GetItems($mainPlayer);
   for($i=0; $i<count($mainItems); $i+=ItemPieces()) {
     switch($mainItems[$i]) {
-      case "6gvnta6qse"://Fatal Timepiece
-        if(GetClassState($mainPlayer, $CS_NumMaterializations) == 0) {
-          WriteLog("Fatal Timepiece deals 2 damage to player " . $mainPlayer . " for not having any materializations");
-          DealDamageAsync($mainPlayer, 2, "TRIGGER", $mainItems[$i]);
-        }
-        break;
-      case "0z2snsdwmx"://Scale of Souls
-        $hand = &GetHand($mainPlayer);
-        $memory = &GetMemory($mainPlayer);
-        if(count($hand)/HandPieces() == count($memory)/MemoryPieces()) {
-          WriteLog("Scale of Souls recovers 2 health for player " . $mainPlayer);
-          Recover($mainPlayer, 2);
-        }
-        break;
       default: break;
     }
   }
   $defItems = &GetItems($defPlayer);
   for($i=0; $i<count($defItems); $i+=ItemPieces()) {
     switch($defItems[$i]) {
-      case "6gvnta6qse"://Fatal Timepiece
-        if(GetClassState($mainPlayer, $CS_NumMaterializations) == 0) {
-          WriteLog("Fatal Timepiece deals 2 damage to player " . $mainPlayer . " for not having any materializations");
-          DealDamageAsync($mainPlayer, 2, "TRIGGER", $defItems[$i]);
-        }
-        break;
       default: break;
     }
   }

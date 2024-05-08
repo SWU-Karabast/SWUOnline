@@ -1344,36 +1344,6 @@ function OnRevealEffect($player, $cardID, $from, $index)
 {
   switch($cardID)
   {
-    case "uwnHTLG3fL"://Luxem Sight
-      if($from != "MEMORY") break;
-      WriteLog("Player $player recovered 3 from revealing Luxem Sight");
-      Recover($player, 3);
-      break;
-    case "zxB4tzy9iy"://Lightweaver's Assault
-      if($from != "MEMORY") break;
-      if(IsClassBonusActive($player, "ASSASSIN")) DealArcane(2, 2, "TRIGGER", $cardID, fromQueue:true, player:$player);
-      break;
-    case "qufoIF014c"://Gleaming Cut
-      if($from != "MEMORY" || !IsClassBonusActive($player, "ASSASSIN")) break;
-      AddDecisionQueue("YESNO", $player, "if you want to banish gleaming cut");
-      AddDecisionQueue("NOPASS", $player, "-");
-      AddDecisionQueue("PASSPARAMETER", $player, "MYMEMORY-" . ($index * MemoryPieces()), 1);
-      AddDecisionQueue("MZBANISH", $player, "MEMORY,-," . $player, 1);
-      AddDecisionQueue("MZREMOVE", $player, "-", 1);
-      AddDecisionQueue("DRAW", $player, "-", 1);
-      AddDecisionQueue("DRAW", $player, "-", 1);
-      break;
-    case "VAFTR5taNG"://Corhazi Infiltrator
-      if($from != "MEMORY" || !IsClassBonusActive($player, "ASSASSIN")) break;
-      AddDecisionQueue("YESNO", $player, "if you want to put Corhazi Infiltrator into play");
-      AddDecisionQueue("NOPASS", $player, "-");
-      AddDecisionQueue("PASSPARAMETER", $player, "MYMEMORY-" . ($index * MemoryPieces()), 1);
-      AddDecisionQueue("SETDQVAR", $player, "0", 1);
-      AddDecisionQueue("MZOP", $player, "GETCARDID", 1);
-      AddDecisionQueue("PUTPLAY", $player, "-", 1);
-      AddDecisionQueue("PASSPARAMETER", $player, "{0}", 1);
-      AddDecisionQueue("MZREMOVE", $player, "-", 1);
-      break;
     default: break;
   }
 }
@@ -2444,7 +2414,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "1047592361"://Ruthless Raider
       if($from != "PLAY") {
         $otherPlayer = $currentPlayer == 1 ? 2 : 1;
-        DealDamageAsync($otherPlayer, 2, "TRIGGER", "1047592361");
+        DealDamageAsync($otherPlayer, 2, "DAMAGE", "1047592361");
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 2 damage to");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
@@ -2736,8 +2706,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "4841169874"://Sabine Wren
       $abilityName = GetResolvedAbilityName($cardID, $from);
       if($abilityName == "Deal Damage") {
-        DealDamageAsync(1, 1, "TRIGGER", $cardID);
-        DealDamageAsync(2, 1, "TRIGGER", $cardID);
+        DealDamageAsync(1, 1, "DAMAGE", $cardID);
+        DealDamageAsync(2, 1, "DAMAGE", $cardID);
       }
       break;
     case "5871074103"://Forced Surrender
@@ -3815,7 +3785,7 @@ function Draw($player, $mainPhase = true, $fromCardEffect = true)
   if(count($deck) == 0) {
     $char = &GetPlayerCharacter($player);
     if($char[CharacterPieces()] != "DUMMY") WriteLog("Player " . $player . " took 3 damage for having no cards left in their deck.");
-    DealDamageAsync($player, 3, "TRIGGER", "DRAW");
+    DealDamageAsync($player, 3, "DAMAGE", "DRAW");
     return -1;
   }
   if(CurrentEffectPreventsDraw($player, $mainPhase)) return -1;

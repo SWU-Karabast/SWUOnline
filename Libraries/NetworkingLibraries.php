@@ -844,7 +844,7 @@ function ResolveChainLink()
         $attackerSurvived = 0;
       }
     }
-    if($hasOverwhelm) DealDamageAsync($defPlayer, $excess, "TRIGGER", $attackerID);
+    if($hasOverwhelm) DealDamageAsync($defPlayer, $excess, "OVERWHELM", $attackerID);
     else if($attackerID == "3830969722") { //Blizzard Assault AT-AT
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal " . $excess . " damage to");
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY");
