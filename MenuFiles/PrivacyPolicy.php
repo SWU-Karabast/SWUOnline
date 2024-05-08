@@ -19,3 +19,4 @@ Users may opt out of personalized advertising by visiting <a href='https://www.g
 
 <h1>Sources</h1>
 <a href="https://unpkg.com/browse/get-css@4.0.3/license">unpkg CSS styles license</a>
+<a href="https://www.freepik.com/author/frozenegg/icons">Icon by lutfix</a>
