@@ -224,11 +224,13 @@ function AddLayer($cardID, $player, $parameter, $target = "-", $additionalCosts 
   array_unshift($layers, $parameter);
   array_unshift($layers, $player);
   array_unshift($layers, $cardID);
-  if($cardID == "TRIGGER")
+  if($cardID == "TRIGGER" || $cardID == "PLAYABILITY")
   {
+    /* TODO: Fix layer reordering
     $orderableIndex = intval($dqState[8]);
     if($orderableIndex == -1) $dqState[8] = 0;
     else $dqState[8] += LayerPieces();
+    */
   }
   else $dqState[8] = -1;//If it's not a trigger, it's not orderable
   return count($layers);//How far it is from the end
@@ -373,6 +375,7 @@ function ContinueDecisionQueue($lastResult = "")
           $layerPriority[0] = 0;
         }
       }
+      global $combatChain;
       if($priorityHeld) {
         ContinueDecisionQueue("");
       } else {
@@ -409,7 +412,25 @@ function ContinueDecisionQueue($lastResult = "")
         else if($cardID == "TRIGGER") {
           ProcessTrigger($player, $parameter, $uniqueID, $target);
           ProcessDecisionQueue();
-        } else {
+        } 
+        else if($cardID == "PLAYABILITY") {
+          if(count($combatChain) > 0) {
+            AddAfterCombatLayer($cardID, $player, $parameter, $target, $additionalCosts, $uniqueID);
+            //AddLayer($cardID, $player, $parameter, $target, $additionalCosts, $uniqueID);
+            ProcessDecisionQueue();
+          } else {
+            $cardID = $parameter;
+            $subparamArr = explode("-", $target);
+            $from = $subparamArr[0];
+            $resourcesPaid = $subparamArr[1];
+            $target = $subparamArr[2];
+            $additionalCosts = $subparamArr[3];
+            $playText = PlayAbility($cardID, $from, $resourcesPaid, $target, $additionalCosts);
+            WriteLog("Resolving play ability of " . CardLink($cardID, $cardID) . ($playText != "" ? ": " : ".") . $playText);
+            ProcessDecisionQueue();
+          }
+        }
+        else {
           SetClassState($player, $CS_PlayIndex, $params[2]); //This is like a parameter to PlayCardEffect and other functions
           PlayCardEffect($cardID, $params[0], $params[1], $target, $additionalCosts, $params[3], $params[2]);
           ClearDieRoll($player);
@@ -491,6 +512,23 @@ function ContinueDecisionQueue($lastResult = "")
     ContinueDecisionQueue($return);
   } else {
     if($mainPlayerGamestateStillBuilt) UpdateMainPlayerGameState();
+  }
+}
+
+function AddAfterCombatLayer($cardID, $player, $parameter, $target = "-", $additionalCosts = "-", $uniqueID = "-") {
+  global $combatChainState, $CCS_AfterLinkLayers;
+  if($combatChainState[$CCS_AfterLinkLayers] == "NA") $combatChainState[$CCS_AfterLinkLayers] = $cardID . "-" . $player . "-" . $parameter . "-" . $target . "-" . $additionalCosts . "-" . $uniqueID;
+  else $combatChainState[$CCS_AfterLinkLayers] .= "|" . $cardID . "-" . $player . "-" . $parameter . "-" . $target . "-" . $additionalCosts . "-" . $uniqueID;
+}
+
+function ProcessAfterCombatLayer() {
+  global $combatChainState, $CCS_AfterLinkLayers;
+  if($combatChainState[$CCS_AfterLinkLayers] == "NA") return;
+  $layers = explode("|", $combatChainState[$CCS_AfterLinkLayers]);
+  $combatChainState[$CCS_AfterLinkLayers] = "NA";
+  for($i = 0; $i < count($layers); $i++) {
+    $layer = explode("-", $layers[$i]);
+    AddLayer($layer[0], $layer[1], $layer[2], $layer[3], $layer[4], $layer[5]);
   }
 }
 
