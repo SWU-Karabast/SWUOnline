@@ -2483,7 +2483,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "3684950815"://Bounty Hunter Crew
-      if($from != "PLAY") MZMoveCard($currentPlayer, "MYDISCARD:definedType=Event", "MYHAND", may:true);
+      if($from != "PLAY") MZMoveCard($currentPlayer, "MYDISCARD:definedType=Event", "MYHAND", may:true, context:"Choose an event to return with " . CardLink("3684950815", "3684950815"));
       break;
     case "4092697474"://TIE Advanced
       if($from != "PLAY") {
