@@ -818,6 +818,8 @@ function ResolveChainLink()
   $attackerMZ = AttackerMZID($mainPlayer);
   $attackerArr = explode("-", $attackerMZ);
   $attacker = new Ally($attackerMZ, $mainPlayer);
+  $attackerID = $attacker->CardID();
+  $attackerSurvived = 1;
   $totalAttack = $attacker->CurrentPower();
   $combatChainState[$CCS_LinkTotalAttack] = $totalAttack;
   LogCombatResolutionStats($totalAttack, 0);
@@ -827,7 +829,6 @@ function ResolveChainLink()
     //Construct the combatants
     $index = $targetArr[1];
     $defender = new Ally($target, $defPlayer);
-    $attackerID = $attacker->CardID();
     $hasOverwhelm = HasOverwhelm($attacker->CardID(), $mainPlayer, $attacker->Index());
     //Resolve the combat
     $defenderPower = $defender->CurrentPower();
@@ -838,7 +839,10 @@ function ResolveChainLink()
     if($destroyed) ClearAttackTarget();
     if($attackerArr[0] == "MYALLY" && (!$destroyed || ($combatChain[0] != "9500514827" && !SearchCurrentTurnEffects("8297630396", $mainPlayer)))) { //Han Solo shoots first
       $destroyed = $attacker->DealDamage($defenderPower, fromCombat:true);
-      if($destroyed) ClearAttacker();
+      if($destroyed) {
+        ClearAttacker();
+        $attackerSurvived = 0;
+      }
     }
     if($hasOverwhelm) DealDamageAsync($defPlayer, $excess, "TRIGGER", $attackerID);
     else if($attackerID == "3830969722") { //Blizzard Assault AT-AT
@@ -853,6 +857,9 @@ function ResolveChainLink()
     else $damage = $totalAttack - $totalDefense;
     DamageTrigger($defPlayer, $damage, "COMBAT", $combatChain[0]); //Include prevention
     AddDecisionQueue("RESOLVECOMBATDAMAGE", $mainPlayer, "-");
+  }
+  if($attackerSurvived) {
+    CompletesAttackEffect($attackerID);
   }
   ProcessDecisionQueue();
 }

@@ -1,10 +1,10 @@
 <?php
 
-//Completes attack
+
 function ProcessHitEffect($cardID)
 {
   WriteLog("Processing hit effect for " . CardLink($cardID, $cardID));
-  global $mainPlayer, $combatChainState, $CCS_DamageDealt, $CS_NumLeftPlay, $CCS_GoesWhereAfterLinkResolves, $defPlayer, $CCS_AttackTarget, $CS_NumAlliesDestroyed;
+  global $mainPlayer, $combatChainState, $CCS_DamageDealt, $defPlayer;
   if(HitEffectsArePrevented()) return;
   switch($cardID)
   {
@@ -12,14 +12,6 @@ function ProcessHitEffect($cardID)
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY:arena=Ground");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,3", 1);
-      break;
-    case "9560139036"://Ezra Bridger
-      AddDecisionQueue("DECKCARDS", $mainPlayer, "0");
-      AddDecisionQueue("SETDQVAR", $mainPlayer, "0");
-      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "The top card is <0>; Choose a mode for Ezra Bridger");
-      AddDecisionQueue("MULTICHOOSETEXT", $mainPlayer, "1-Leave,Play,Discard-1");
-      AddDecisionQueue("SHOWMODES", $mainPlayer, $cardID, 1);
-      AddDecisionQueue("MODAL", $mainPlayer, "EZRABRIDGER", 1);
       break;
     case "3280523224"://Rukh
       if(IsAllyAttackTarget() && $combatChainState[$CCS_DamageDealt] > 0) {
@@ -32,12 +24,27 @@ function ProcessHitEffect($cardID)
     case "87e8807695"://Leia Organa
       AddCurrentTurnEffect("87e8807695", $mainPlayer);
       break;
-    case "0e65f012f5"://Boba Fett
-      if(GetClassState($defPlayer, $CS_NumLeftPlay) > 0) ReadyResource($mainPlayer, 2);
-      break;
     default: break;
   }
   AllyHitEffects();
+}
+
+function CompletesAttackEffect($cardID) {
+  global $mainPlayer, $defPlayer, $CS_NumLeftPlay;
+  switch($cardID)
+  {
+    case "9560139036"://Ezra Bridger
+      AddDecisionQueue("DECKCARDS", $mainPlayer, "0");
+      AddDecisionQueue("SETDQVAR", $mainPlayer, "0");
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "The top card is <0>; Choose a mode for Ezra Bridger");
+      AddDecisionQueue("MULTICHOOSETEXT", $mainPlayer, "1-Leave,Play,Discard-1");
+      AddDecisionQueue("SHOWMODES", $mainPlayer, $cardID, 1);
+      AddDecisionQueue("MODAL", $mainPlayer, "EZRABRIDGER", 1);
+      break;
+    case "0e65f012f5"://Boba Fett
+      if(GetClassState($defPlayer, $CS_NumLeftPlay) > 0) ReadyResource($mainPlayer, 2);
+      break;
+  }
 }
 
 function AttackModifier($cardID, $player, $index)
