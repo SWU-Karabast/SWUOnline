@@ -34,12 +34,7 @@ function CompletesAttackEffect($cardID) {
   switch($cardID)
   {
     case "9560139036"://Ezra Bridger
-      AddDecisionQueue("DECKCARDS", $mainPlayer, "0");
-      AddDecisionQueue("SETDQVAR", $mainPlayer, "0");
-      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "The top card is <0>; Choose a mode for Ezra Bridger");
-      AddDecisionQueue("MULTICHOOSETEXT", $mainPlayer, "1-Leave,Play,Discard-1");
-      AddDecisionQueue("SHOWMODES", $mainPlayer, $cardID, 1);
-      AddDecisionQueue("MODAL", $mainPlayer, "EZRABRIDGER", 1);
+      AddCurrentTurnEffect("9560139036", $mainPlayer);
       break;
     case "0e65f012f5"://Boba Fett
       if(GetClassState($defPlayer, $CS_NumLeftPlay) > 0) ReadyResource($mainPlayer, 2);
