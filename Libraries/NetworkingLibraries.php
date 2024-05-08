@@ -1605,6 +1605,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
       else if(IsAllyAttacking()) {
         $ally = new Ally("MYALLY-" . GetClassState($currentPlayer, $CS_PlayIndex), $currentPlayer);
         $attackValue = $ally->CurrentPower();
+        $ally->IncrementTimesAttacked();
       }
       else $attackValue = ($baseAttackSet != -1 ? $baseAttackSet : AttackValue($cardID));
       $combatChainState[$CCS_LinkBaseAttack] = BaseAttackModifiers($attackValue);

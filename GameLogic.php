@@ -573,6 +573,13 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
               if($ally->TurnsInPlay() > $paramsArr[1]) unset($arr[$i]);
             }
             break;
+          case "numAttacks":
+            $mzArr = explode("-", $arr[$i]);
+            if($mzArr[0] == "MYALLY" || $mzArr[0] == "THEIRALLY") {
+              $ally = new Ally($arr[$i]);
+              if($ally->NumAttacks() == $params[1]) unset($arr[$i]);
+            }
+            break;
           default: break;
         }
       }

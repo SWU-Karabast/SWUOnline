@@ -124,7 +124,7 @@ function ResourcePieces() { return ArsenalPieces(); }
 //7 - Buff Counters
 //8 - Ability/effect Uses
 //9 - Round health modifier
-//10 - Fostered (0 = no, 1 = dealt damage, 2 = yes)
+//10 - Times Attacked
 //11 - Owner
 //12 - Turns in play
 function AllyPieces()

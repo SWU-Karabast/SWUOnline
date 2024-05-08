@@ -13,8 +13,8 @@ function PlayAlly($cardID, $player, $subCards = "-", $from="-")
   array_push($allies, AllyEnduranceCounters($cardID)); //Endurance Counters
   array_push($allies, 0); //Buff Counters
   array_push($allies, 1); //Ability/effect uses
-  array_push($allies, 0); //Position
-  array_push($allies, 0); //Fostered
+  array_push($allies, 0); //Round health modifier
+  array_push($allies, 0); //Times attacked
   array_push($allies, $player); //Owner
   array_push($allies, 0); //Turns in play
   $index = count($allies) - AllyPieces();
@@ -786,8 +786,8 @@ function AllyBeginEndTurnEffects()
       if(HasVigor($mainAllies[$i], $mainPlayer, $i)) $mainAllies[$i+1] = 2;
       $mainAllies[$i+3] = 0;
       $mainAllies[$i+8] = 1;
+      $mainAllies[$i+10] = 0;//Reset times attacked
       ++$mainAllies[$i+12];//Increase number of turns in play
-      if($mainAllies[$i+10] == 1) $mainAllies[$i+10] = 0;//Reset damage taken for foster mechanic
     }
     switch($mainAllies[$i])
     {
@@ -799,6 +799,7 @@ function AllyBeginEndTurnEffects()
   for($i = 0; $i < count($defAllies); $i += AllyPieces()) {
     if($defAllies[$i+1] != 0) {
       $defAllies[$i+8] = 1;
+      $defAllies[$i+10] = 0;//Reset times attacked
       ++$defAllies[$i+12];//Increase number of turns in play
     }
   }

@@ -2496,9 +2496,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "4536594859"://Medal Ceremony
-      AddDecisionQueue("FINDINDICES", $currentPlayer, "UNITS");
-      AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "3-");
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose up to 3 units that have attacked", 1);
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "numAttacks=0");
+      AddDecisionQueue("OP", $currentPlayer, "MZTONORMALINDICES");
+      AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "3-", 1);
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose up to 3 units that have attacked to give experience", 1);
       AddDecisionQueue("MULTICHOOSEUNIT", $currentPlayer, "<-", 1, 1);
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "MEDALCEREMONY");
       break;

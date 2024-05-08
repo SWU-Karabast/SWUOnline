@@ -129,6 +129,14 @@ class Ally {
     return false;
   }
 
+  function NumAttacks() {
+    return $this->allies[$this->index+10];
+  }
+
+  function IncrementTimesAttacked() {
+    ++$this->allies[$this->index+10];
+  }
+
   function CurrentPower() {
     global $currentTurnEffects;
     $power = AttackValue($this->CardID()) + $this->allies[$this->index+7];
