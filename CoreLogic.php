@@ -2946,8 +2946,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         $ally->Attach("8752877738");//Shield Token
       }
       if(!$ally->IsExhausted()) {
-        AddDecisionQueue("PASSPARAMETER", $currentPlayer, $target);
-        AddDecisionQueue("MZOP", $currentPlayer, "ATTACK");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Do you want to attack with the unit?");
+        AddDecisionQueue("YESNO", $currentPlayer, "-");
+        AddDecisionQueue("NOPASS", $currentPlayer, "-");
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, $target, 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
       }
       break;
     case "9985638644"://Snapshot Reflexes
