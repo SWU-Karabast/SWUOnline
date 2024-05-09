@@ -2,11 +2,12 @@
 function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkInput, $isSimulation=false, $inputText="")
 {
   global $gameName, $currentPlayer, $mainPlayer, $dqVars, $turn, $CS_CharacterIndex, $CS_PlayIndex, $decisionQueue, $CS_NextNAAInstant, $skipWriteGamestate, $combatChain, $landmarks;
-  global $SET_PassDRStep, $actionPoints, $currentPlayerActivity, $redirectPath, $CS_PlayedAsInstant;
+  global $SET_PassDRStep, $actionPoints, $currentPlayerActivity, $redirectPath;
   global $dqState, $layers, $CS_ArsenalFacing, $combatChainState;
   global $roguelikeGameID;
   switch ($mode) {
     case 3: //Play equipment ability
+      MakeGamestateBackup();
       $index = $cardID;
       $found = -1;
       $character = &GetPlayerCharacter($playerID);
@@ -180,7 +181,6 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
       if($banish[$index + 1] == "INST") SetClassState($currentPlayer, $CS_NextNAAInstant, 1);
       if($banish[$index + 1] == "MON212" && TalentContains($theirChar[0], "LIGHT", $currentPlayer)) AddCurrentTurnEffect("MON212", $currentPlayer);
       SetClassState($currentPlayer, $CS_PlayIndex, $index);
-      if(CanPlayAsInstant($cardID, $index, "BANISH")) SetClassState($currentPlayer, $CS_PlayedAsInstant, "1");
       PlayCard($cardID, "BANISH", -1, $index, $banish[$index + 2]);
       break;
 
@@ -275,6 +275,7 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
       }
       break;
     case 24: //Ally Ability
+      MakeGamestateBackup();
       $allies = &GetAllies($currentPlayer);
       $index = $cardID; //Overridden to be index instead
       if ($index >= count($allies)) break; //Ally doesn't exist
@@ -306,6 +307,7 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
       ChangeSetting($playerID, $params[0], $params[1], $userID);
       break;
     case 27: //Play card from hand by index
+      MakeGamestateBackup();
       $found = $cardID;
       if ($found >= 0) {
         //Player actually has the card, now do the effect
@@ -981,6 +983,7 @@ function FinalizeChainLink($chainClosed = false)
   CleanUpCombatEffects();
   CopyCurrentTurnEffectsFromCombat();
   $hasChainedAction = FinalizeChainLinkEffects();
+  ProcessAfterCombatLayer();
 
   //Don't change state until the end, in case it changes what effects are active
   SetClassState($mainPlayer, $CS_LastAttack, $combatChain[0]);
@@ -989,7 +992,7 @@ function FinalizeChainLink($chainClosed = false)
   if ($chainClosed) {
     ResetCombatChainState();
     $turn[0] = "M";
-    FinalizeAction();
+    PassInput();
   } else {
     ResetChainLinkState();
   }
@@ -1187,10 +1190,9 @@ function SwapTurn() {
 function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID = -1, $skipAbilityType = false)
 {
   global $playerID, $turn, $currentPlayer, $actionPoints, $layers;
-  global $CS_NumActionsPlayed, $CS_NumNonAttackCards, $CS_NumPlayedFromBanish, $CS_DynCostResolved;
-  global $CS_NumAttackCards, $CS_NumBloodDebtPlayed, $layerPriority, $CS_NumWizardNonAttack, $lastPlayed, $CS_PlayIndex;
-  global $decisionQueue, $CS_PlayIndex, $CS_NumRedPlayed, $CS_PlayUniqueID, $CS_LayerPlayIndex, $CS_LastDynCost, $CS_NumCardsPlayed, $CS_NamesOfCardsPlayed;
-  global $CS_PlayedAsInstant, $mainPlayer, $CS_DynCostResolved, $CS_NumMelodyPlayed, $CS_NumVillainyPlayed, $CS_NumEventsPlayed;
+  global $layerPriority, $lastPlayed;
+  global $decisionQueue, $CS_PlayIndex, $CS_PlayUniqueID, $CS_LayerPlayIndex, $CS_LastDynCost, $CS_NumCardsPlayed;
+  global $mainPlayer, $CS_DynCostResolved, $CS_NumVillainyPlayed, $CS_NumEventsPlayed;
   $resources = &GetResources($currentPlayer);
   $pitch = &GetPitch($currentPlayer);
   $dynCostResolved = intval($dynCostResolved);
@@ -1215,7 +1217,6 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
     LogPlayCardStats($currentPlayer, $cardID, $from);
     if($playingCard) {
       ClearAdditionalCosts($currentPlayer);
-      MakeGamestateBackup();
       $lastPlayed = [];
       $lastPlayed[0] = $cardID;
       $lastPlayed[1] = $currentPlayer;
@@ -1322,7 +1323,6 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
   //We've paid resources, now pay action points if applicable
   if($playingCard) {
     $canPlayAsInstant = CanPlayAsInstant($cardID, $index, $from);
-    SetClassState($currentPlayer, $CS_PlayedAsInstant, "0");
     if(IsStaticType($cardType, $from, $cardID)) {
       $playType = GetResolvedAbilityType($cardID, $from);
       $abilityType = $playType;
@@ -1343,16 +1343,10 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
     if ($playType == "A" || $playType == "AA") {
       if (!$canPlayAsInstant) --$actionPoints;
       if ($cardType == "A" && $abilityType == "") {
-        //IncrementClassState($currentPlayer, $CS_NumNonAttackCards);
-        //if (ClassContains($cardID, "WIZARD", $currentPlayer)) {
-        //  IncrementClassState($currentPlayer, $CS_NumWizardNonAttack);
-        //}
       }
-      //IncrementClassState($currentPlayer, $CS_NumActionsPlayed);
     }
     PayAdditionalCosts($cardID, $from);
   }
-  if($cardType == "AA") IncrementClassState($currentPlayer, $CS_NumAttackCards); //Played or blocked
   if($from == "BANISH") {
     $index = GetClassState($currentPlayer, $CS_PlayIndex);
     $banish = &GetBanish($currentPlayer);
@@ -1588,10 +1582,10 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
   global $CS_CharacterIndex, $CS_NumNonAttackCards, $CS_PlayCCIndex, $CS_NumAttacks, $CCS_LinkBaseAttack;
   global $CCS_WeaponIndex, $EffectContext, $CCS_AttackUniqueID, $CS_NumEventsPlayed, $CS_AfterPlayedBy, $layers;
   global $CS_NumDragonAttacks, $CS_NumIllusionistAttacks, $CS_NumIllusionistActionCardAttacks, $CCS_IsBoosted;
-  global $SET_PassDRStep;
+  global $SET_PassDRStep, $CS_AbilityIndex;
 
   if($layerIndex > -1) SetClassState($currentPlayer, $CS_PlayIndex, $layerIndex);
-  $index = SearchForUniqueID($uniqueID, $currentPlayer);
+  if(intval($uniqueID) != -1) $index = SearchForUniqueID($uniqueID, $currentPlayer);
   if($cardID == "ARC003" || $cardID == "CRU101") $index = FindCharacterIndex($currentPlayer, $cardID); //TODO: Fix this. This is an issue with the entire "multiple abilities" framework
   if ($index > -1) SetClassState($currentPlayer, $CS_PlayIndex, $index);
 
@@ -1689,19 +1683,20 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
       CharacterPlayCardAbilities($cardID, $from);
     }
     $EffectContext = $cardID;
-    $playText = "";
+    //$playText = "";
     if(!$chainClosed) {
       if(GetClassState($currentPlayer, $CS_AfterPlayedBy) != "-") AfterPlayedByAbility(GetClassState($currentPlayer, $CS_AfterPlayedBy));
       if(DefinedTypesContains($cardID, "Event", $currentPlayer) && SearchCurrentTurnEffects("3401690666", $currentPlayer, remove:true)) {
         //Relentless
         WriteLog("<span style='color:red;'>The event does nothing because of Relentless.</span>");
-      } else $playText = PlayAbility($cardID, $from, $resourcesPaid, $target, $additionalCosts);
+      }// else $playText = PlayAbility($cardID, $from, $resourcesPaid, $target, $additionalCosts);
+      else {
+        $abilityIndex = GetClassState($currentPlayer, $CS_AbilityIndex);
+        AddLayer("PLAYABILITY", $currentPlayer, $cardID, $from . "!" . $resourcesPaid . "!" . $target . "!" . $additionalCosts . "!" . $abilityIndex, "-", $uniqueID);
+      }
     }
-    if($from == "EQUIP") {
-      EquipPayAdditionalCosts(FindCharacterIndex($currentPlayer, $cardID), "EQUIP");
-    }
-    else if($from != "PLAY") {
-      WriteLog("Resolving play ability of " . CardLink($cardID, $cardID) . ($playText != "" ? ": " : ".") . $playText);
+    if($from != "PLAY") {
+      //WriteLog("Resolving play ability of " . CardLink($cardID, $cardID) . ($playText != "" ? ": " : ".") . $playText);
       $index = LastAllyIndex($currentPlayer);
       if(HasAmbush($cardID, $currentPlayer, $index)) {
         $allies = &GetAllies($currentPlayer);
