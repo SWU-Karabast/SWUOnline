@@ -416,17 +416,23 @@ function ContinueDecisionQueue($lastResult = "")
         else if($cardID == "PLAYABILITY") {
           if(count($combatChain) > 0) {
             AddAfterCombatLayer($cardID, $player, $parameter, $target, $additionalCosts, $uniqueID);
-            //AddLayer($cardID, $player, $parameter, $target, $additionalCosts, $uniqueID);
             ProcessDecisionQueue();
           } else {
+            global $CS_AbilityIndex;
             $cardID = $parameter;
-            $subparamArr = explode("-", $target);
+            $subparamArr = explode("!", $target);
             $from = $subparamArr[0];
             $resourcesPaid = $subparamArr[1];
             $target = $subparamArr[2];
             $additionalCosts = $subparamArr[3];
+            $abilityIndex = $subparamArr[4];
+            SetClassState($player, $CS_AbilityIndex, $abilityIndex);
             $playText = PlayAbility($cardID, $from, $resourcesPaid, $target, $additionalCosts);
             WriteLog("Resolving play ability of " . CardLink($cardID, $cardID) . ($playText != "" ? ": " : ".") . $playText);
+            
+            if($from == "EQUIP") {
+              EquipPayAdditionalCosts(FindCharacterIndex($player, $cardID), "EQUIP");
+            }
             ProcessDecisionQueue();
           }
         }

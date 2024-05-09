@@ -3455,7 +3455,6 @@ function ExhaustResource($player, $amount=1) {
 
 function AfterPlayedByAbility($cardID) {
   global $currentPlayer, $CS_AfterPlayedBy;
-  WriteLog($cardID);
   SetClassState($currentPlayer, $CS_AfterPlayedBy, "-");
   $index = LastAllyIndex($currentPlayer);
   $ally = new Ally("MYALLY-" . $index, $currentPlayer);
