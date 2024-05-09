@@ -3340,6 +3340,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
           AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Trick", 1);
           AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
           AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
+          AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
           AddDecisionQueue("OP", $currentPlayer, "REMOVECARD", 1);
           AddDecisionQueue("ALLRANDOMBOTTOM", $currentPlayer, "DECK");
         }
