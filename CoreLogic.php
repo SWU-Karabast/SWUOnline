@@ -329,7 +329,7 @@ function ArsenalHitEffects()
 
 function CharacterPlayCardAbilities($cardID, $from)
 {
-  global $currentPlayer, $CS_NumLess3PowAAPlayed, $CS_NumAttacks;
+  global $currentPlayer, $CS_NumAttacks;
   $character = &GetPlayerCharacter($currentPlayer);
   for($i=0; $i<count($character); $i+=CharacterPieces())
   {
@@ -2629,8 +2629,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "3401690666"://Relentless
       if($from != "PLAY") {
+        global $CS_NumEventsPlayed;
         $otherPlayer = ($currentPlayer == 1 ? 2 : 1);
-        AddCurrentTurnEffect("3401690666", $otherPlayer, from:"PLAY");
+        if(GetClassState($otherPlayer, $CS_NumEventsPlayed) == 0) {
+          AddCurrentTurnEffect("3401690666", $otherPlayer, from:"PLAY");
+        }
       }
       break;
     case "3407775126"://Recruit
