@@ -531,7 +531,7 @@ function AllyPlayCardAbility($cardID, $player="")
     switch($allies[$i])
     {
       case "5555846790"://Saw Gerrera
-        if(DefinedTypesContains($cardID, "Event", $player)) DealDamageAsync($otherPlayer, 2, "DAMAGE", "5555846790");
+        if(DefinedTypesContains($cardID, "Event", $player)) DealDamageAsync($player, 2, "DAMAGE", "5555846790");
         break;
       default: break;
     }
