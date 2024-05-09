@@ -303,15 +303,18 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
         AddDecisionQueue("MZOP", $player, "DEALDAMAGE,2", 1);
         break;
       case "0949648290"://Greedo
-        AddDecisionQueue("SETDQCONTEXT", $player, "Choose if you want to discard a card to Greedo");
-        AddDecisionQueue("YESNO", $player, "-", 1);
-        AddDecisionQueue("NOPASS", $player, "-");
-        AddDecisionQueue("PASSPARAMETER", $player, "1", 1);
-        AddDecisionQueue("OP", $player, "MILL", 1);
-        AddDecisionQueue("NONECARDDEFINEDTYPEORPASS", $player, "Unit", 1);
-        AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:arena=Ground", 1);
-        AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-        AddDecisionQueue("MZOP", $player, "DEALDAMAGE,2", 1);
+        $deck = &GetDeck($player);
+        if(count($deck) > 0) {
+          AddDecisionQueue("SETDQCONTEXT", $player, "Choose if you want to discard a card to Greedo");
+          AddDecisionQueue("YESNO", $player, "-", 1);
+          AddDecisionQueue("NOPASS", $player, "-");
+          AddDecisionQueue("PASSPARAMETER", $player, "1", 1);
+          AddDecisionQueue("OP", $player, "MILL", 1);
+          AddDecisionQueue("NONECARDDEFINEDTYPEORPASS", $player, "Unit", 1);
+          AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:arena=Ground", 1);
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+          AddDecisionQueue("MZOP", $player, "DEALDAMAGE,2", 1);
+        }
         break;
       case "3232845719"://K-2SO
         AddDecisionQueue("SETDQCONTEXT", $player, "Choose a mode for K-2SO");
