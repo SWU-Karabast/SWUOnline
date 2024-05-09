@@ -242,8 +242,8 @@ function logCompletedGameStats()
 	$values = "?, ?, ?, ?, ?, ?, ?, ?";
 	$winnerDeck = file_get_contents("./Games/" . $gameName . "/p" . $winner . "Deck.txt");
 	$loserDeck = file_get_contents("./Games/" . $gameName . "/p" . $loser . "Deck.txt");
-	$winHero = &GetPlayerCharacter($winner);
-	$loseHero = &GetPlayerCharacter($loser);
+	$winHero = GetCachePiece($gameName, ($winner == 1 ? 7 : 8));
+	$loseHero = GetCachePiece($gameName, ($winner == 1 ? 8 : 7));
 
 	$conn = GetDBConnection();
 
@@ -260,7 +260,7 @@ function logCompletedGameStats()
 	$stmt = mysqli_stmt_init($conn);
 	$gameResultID = 0;
 	if (mysqli_stmt_prepare($stmt, $sql)) {
-		mysqli_stmt_bind_param($stmt, "ssssssss", $winHero[0], $loseHero[0], $currentRound, $winnerDeck, $loserDeck, GetHealth($winner), $firstPlayer, $winner);
+		mysqli_stmt_bind_param($stmt, "ssssssss", $winHero, $loseHero, $currentRound, $winnerDeck, $loserDeck, GetHealth($winner), $firstPlayer, $winner);
 		mysqli_stmt_execute($stmt);
 		$gameResultID = mysqli_insert_id($conn);
 		mysqli_stmt_close($stmt);

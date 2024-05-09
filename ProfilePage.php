@@ -24,15 +24,6 @@ include_once "./APIKeys/APIKeys.php";
   }
   echo ("</div>");
   */
-/*
-if (isset($_SESSION["isPatron"])) {
-  echo ("<div class='ContentWindow' style='width: 50%; left:20px; height: calc(90% - 220px); bottom:20px; overflow-y: scroll;'>");
-  echo ("<h1>Your Record</h1>");
-  $forIndividual = true;
-  include_once "zzGameStats.php";
-  echo ("</div>");
-}
-*/
 
 ?>
 
@@ -60,16 +51,20 @@ if (isset($_SESSION["isPatron"])) {
     }
     echo ("</table>");
   }
-
 ?>
+  <h2>Block List</h2>
+    <form class="form-resetpwd" action="includes/BlockUser.php" method="post">
+      <input type="text" name="userToBlock" placeholder="User to block">
+      <button type="submit" name="block-user-submit">Block</button>
+    </form>
 </div>
 
-<div class='ContentWindow' style='left:60%; right:20px; top:60px; height:90%;'>
-<h2>Block List</h2>
-  <form class="form-resetpwd" action="includes/BlockUser.php" method="post">
-    <input type="text" name="userToBlock" placeholder="User to block">
-    <button type="submit" name="block-user-submit">Block</button>
-  </form>
+<div class='ContentWindow' style='left:60%; right:20px; top:60px; height:90%; overflow-y: scroll;'>
+  <?php
+  echo ("<h1>Your Record</h1>");
+  $forIndividual = true;
+  include_once "zzGameStats.php";
+  ?>
 </div>
 
 <?php

@@ -15,11 +15,12 @@ $forIndividual = ($forIndividual ? true : false);//If it evaluates to true, expl
 $useruid = $_SESSION["useruid"];
 $userID = $_SESSION["userid"];
 if (!$forIndividual) exit;
-
+/*
 if ($forIndividual && !isset($_SESSION["isPatron"])) {
   echo ("Please subscribe to our Patreon to access this page.");
   exit;
 }
+*/
 
 $numDays = TryGet("numDays", 365);
 
@@ -117,8 +118,7 @@ while ($row = mysqli_fetch_array($playData, MYSQLI_NUM)) {
   $index = count($gameData) - 1;
   $gameData[$index][0] = $row[0];
   $gameData[$index][1] = $row[1];
-  if (CharacterHealth($row[0]) > 25) $ccPlays += $row[1];
-  else $blitzPlays += $row[1];
+  $ccPlays += $row[1];
 }
 
 while ($row = mysqli_fetch_array($winData, MYSQLI_NUM)) {
@@ -136,10 +136,9 @@ echo ("<tr><td>Hero</td><td>Num Wins</td><td>Num Plays</td><td>Win %</td><td>Pla
 echo ("<h2>CC Heroes</h2>");
 foreach ($gameData as $row) {
   //while ($row = mysqli_fetch_array($playData, MYSQLI_NUM)) {
-  if (CharacterHealth($row[0]) <= 25) continue; //Filter out blitz heroes for now
-  if (CardType($row[0]) != "C") continue;
-  //if(CharacterHealth($row[0]) > 25) continue;//Filter out cc heroes for now
-  $formatDenominator = (CharacterHealth($row[0]) > 25 ? $ccPlays : $blitzPlays);
+  if(strlen($row[0]) < 8) continue;
+  //if (CardType($row[0]) != "C") continue;
+  $formatDenominator = $ccPlays;
   $winPercent = (((count($row) > 2 ? $row[2] : 0) / $row[1]) * 100);
   $playPercent = ($row[1] / $formatDenominator * 100);
   echo ("<tr>");
@@ -155,28 +154,7 @@ foreach ($gameData as $row) {
 echo ("</table>");
 
 echo ("<BR>");
-echo ("<h2>Young Heroes</h2>");
-echo ("<table>");
-echo ("<tr><td>Hero</td><td>Num Wins</td><td>Num Plays</td><td>Win %</td><td>Played %</td></tr>");
-
-foreach ($gameData as $row) {
-  //while ($row = mysqli_fetch_array($playData, MYSQLI_NUM)) {
-  if (CharacterHealth($row[0]) > 25) continue; //Filter out cc heroes for now
-  if (CardType($row[0]) != "C") continue;
-  $formatDenominator = (CharacterHealth($row[0]) > 25 ? $ccPlays : $blitzPlays);
-  $winPercent = (((count($row) > 2 ? $row[2] : 0) / $row[1]) * 100);
-  $playPercent = ($row[1] / $formatDenominator * 100);
-  echo ("<tr>");
-  if($forIndividual) echo ("<td><a href='./zzPlayerHeroStats.php?heroID=$row[0]'>" . CardName($row[0]) . "</a></td>");
-  else echo ("<td><a href='./zzHeroStats.php?heroID=$row[0]'>" . CardName($row[0]) . "</a></td>");
-  //echo ("<td>" . CardLink($row[0], $row[0], true) . "</td>");
-  echo ("<td>" . (count($row) > 2 ? $row[2] : 0) . "</td>");
-  echo ("<td>" . $row[1] . "</td>");
-  echo ("<td>" . number_format($winPercent, 2, ".", "") . "% </td>");
-  echo ("<td>" . number_format($playPercent, 2, ".", "") . "% </td>");
-  echo ("</tr>");
-}
-echo ("</table><div>");
+echo ("<div>");
 if(!$forIndividual) echo ("</section>");
 echo ("</div>");
 echo ("</div>");
