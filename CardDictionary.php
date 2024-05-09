@@ -177,16 +177,18 @@ function HasSentinel($cardID, $player, $index)
   global $initiativePlayer, $currentTurnEffects;
   $ally = new Ally("MYALLY-" . $index, $player);
   if($ally->LostAbilities()) return false;
+  $hasSentinel = false;
   for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnPieces()) {
     if($currentTurnEffects[$i+1] != $player) continue;
     if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
     switch($currentTurnEffects[$i]) {
-      case "8294130780": return true;//Gladiator Star Destroyer
-      case "3572356139": return true;//Chewbacca, Walking Carpet
+      case "8294130780": $hasSentinel = true; break;//Gladiator Star Destroyer
+      case "3572356139": $hasSentinel = true; break;//Chewbacca, Walking Carpet
       case "9070397522": return false;//SpecForce Soldier
       default: break;
     }
   }
+  if($hasSentinel) return true;
   $subcards = $ally->GetSubcards();
   for($i=0; $i<count($subcards); ++$i)
   {

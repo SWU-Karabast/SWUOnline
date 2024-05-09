@@ -247,7 +247,7 @@ $CS_AdditionalCosts = 44;
 $CS_NumRedPlayed = 45;
 $CS_PlayUniqueID = 46;
 $CS_NumPhantasmAADestroyed = 47;
-$CS_NumLess3PowAAPlayed = 48;
+$CS_NumEventsPlayed = 48;
 $CS_AlluvionUsed = 49;
 $CS_MaxQuellUsed = 50;
 $CS_DamageDealt = 51; //Only includes damage dealt by the hero. CR 2.1 8.2.8f If an ally deals damage, the controlling player and their hero are not considered to have dealt damage.
@@ -448,7 +448,7 @@ function ResetClassState($player)
   global $CS_NumAttacks, $CS_DieRoll, $CS_NumBloodDebtPlayed, $CS_NumWizardNonAttack, $CS_LayerTarget, $CS_NumSwordAttacks;
   global $CS_HitsWithWeapon, $CS_ArcaneDamagePrevention, $CS_DynCostResolved, $CS_CardsEnteredGY;
   global $CS_HighestRoll, $CS_NumAuras, $CS_AbilityIndex, $CS_AdditionalCosts, $CS_NumRedPlayed, $CS_PlayUniqueID, $CS_AlluvionUsed;
-  global $CS_NumPhantasmAADestroyed, $CS_NumLess3PowAAPlayed, $CS_MaxQuellUsed, $CS_DamageDealt, $CS_ArcaneTargetsSelected, $CS_NumDragonAttacks, $CS_NumIllusionistAttacks;
+  global $CS_NumPhantasmAADestroyed, $CS_NumEventsPlayed, $CS_MaxQuellUsed, $CS_DamageDealt, $CS_ArcaneTargetsSelected, $CS_NumDragonAttacks, $CS_NumIllusionistAttacks;
   global $CS_LastDynCost, $CS_NumIllusionistActionCardAttacks, $CS_ArcaneDamageDealt, $CS_LayerPlayIndex, $CS_NumCardsPlayed, $CS_NamesOfCardsPlayed, $CS_NumBoostPlayed;
   global $CS_PlayedAsInstant, $CS_AnotherWeaponGainedGoAgain, $CS_NumContractsCompleted, $CS_HitsWithSword, $CS_NumMelodyPlayed;
 
@@ -499,7 +499,7 @@ function ResetClassState($player)
   $classState[$CS_NumRedPlayed] = 0;
   $classState[$CS_PlayUniqueID] = -1;
   $classState[$CS_NumPhantasmAADestroyed] = 0;
-  $classState[$CS_NumLess3PowAAPlayed] = 0;
+  $classState[$CS_NumEventsPlayed] = 0;
   $classState[$CS_AlluvionUsed] = 0;
   $classState[$CS_MaxQuellUsed] = 0;
   $classState[$CS_DamageDealt] = 0;
