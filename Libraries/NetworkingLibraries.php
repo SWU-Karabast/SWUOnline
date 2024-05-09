@@ -992,7 +992,7 @@ function FinalizeChainLink($chainClosed = false)
   if ($chainClosed) {
     ResetCombatChainState();
     $turn[0] = "M";
-    FinalizeAction();
+    PassInput();
   } else {
     ResetChainLinkState();
   }
