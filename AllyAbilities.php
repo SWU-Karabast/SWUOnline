@@ -660,10 +660,8 @@ function SpecificAllyAttackAbilities($attackID)
       if(IsAllyAttackTarget()) {
         $target = GetAttackTarget();
         $ally = new Ally($target, $defPlayer);
-        if($ally->IsExhausted()) {
-          AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Did the unit enter play this turn?");
-          AddDecisionQueue("YESNO", $mainPlayer, "-");
-          AddDecisionQueue("YESPASS", $mainPlayer, "-");
+        WriteLog($ally->TurnsInPlay());
+        if($ally->IsExhausted() && $ally->TurnsInPlay() > 0) {
           AddDecisionQueue("PASSPARAMETER", $mainPlayer, $target, 1);
           AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,3", 1);
         }
