@@ -266,72 +266,75 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
   $allies = &GetAllies($player);
   $cardID = $allies[$index];
   OnKillAbility($fromCombat);
-  switch($cardID) {
-    case "4405415770"://Yoda, Old Master
-      WriteLog("Player $player drew a card from Yoda, Old Master");
-      Draw($player);
-      break;
-    case "8429598559"://Black One
-      BlackOne($player);
-      break;
-    case "9996676854"://Admiral Motti
-      AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:aspect=Villainy");
-      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to ready");
-      AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-      AddDecisionQueue("MZOP", $player, "READY", 1);
-      break;
-    case "7517208605"://Star Wing Scout
-      if($player == $initiativePlayer) { Draw($player); Draw($player); }
-      break;
-    case "5575681343"://Vanguard Infantry
-      AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
-      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to add an experience");
-      AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-      AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
-      break;
-    case "9133080458"://Inferno Four
-      PlayerOpt($player, 2);
-      break;
-    case "1047592361"://Ruthless Raider
-      $otherPlayer = $player == 1 ? 2 : 1;
-      DealDamageAsync($otherPlayer, 2, "DAMAGE", "1047592361");
-      AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY");
-      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal 2 damage to");
-      AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-      AddDecisionQueue("MZOP", $player, "DEALDAMAGE,2", 1);
-      break;
-    case "0949648290"://Greedo
-      AddDecisionQueue("SETDQCONTEXT", $player, "Choose if you want to discard a card to Greedo");
-      AddDecisionQueue("YESNO", $player, "-", 1);
-      AddDecisionQueue("NOPASS", $player, "-");
-      AddDecisionQueue("PASSPARAMETER", $player, "1", 1);
-      AddDecisionQueue("OP", $player, "MILL", 1);
-      AddDecisionQueue("NONECARDDEFINEDTYPEORPASS", $player, "Unit", 1);
-      AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:arena=Ground", 1);
-      AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-      AddDecisionQueue("MZOP", $player, "DEALDAMAGE,2", 1);
-      break;
-    case "3232845719"://K-2SO
-      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a mode for K-2SO");
-      AddDecisionQueue("MULTICHOOSETEXT", $player, "1-Deal 3 damage,Discard-1");
-      AddDecisionQueue("SHOWMODES", $player, $cardID, 1);
-      AddDecisionQueue("MODAL", $player, "K2SO", 1);
-      break;
-    case "8333567388"://Distant Patroller
-      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to give a shield");
-      AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:aspect=Vigilance");
-      AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-      AddDecisionQueue("MZOP", $player, "ADDSHIELD", 1);
-      break;
-    case "4786320542"://Obi-Wan Kenobi
-      AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
-      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to add two experience");
-      AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-      AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
-      AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
-      AddDecisionQueue("SPECIFICCARD", $player, "OBIWANKENOBI", 1);
-      break;
-    default: break;
+  $destroyedAlly = new Ally("MYALLY-" . $index, $player);
+  if(!$destroyedAlly->LostAbilities()) {
+    switch($cardID) {
+      case "4405415770"://Yoda, Old Master
+        WriteLog("Player $player drew a card from Yoda, Old Master");
+        Draw($player);
+        break;
+      case "8429598559"://Black One
+        BlackOne($player);
+        break;
+      case "9996676854"://Admiral Motti
+        AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:aspect=Villainy");
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to ready");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+        AddDecisionQueue("MZOP", $player, "READY", 1);
+        break;
+      case "7517208605"://Star Wing Scout
+        if($player == $initiativePlayer) { Draw($player); Draw($player); }
+        break;
+      case "5575681343"://Vanguard Infantry
+        AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to add an experience");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+        AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
+        break;
+      case "9133080458"://Inferno Four
+        PlayerOpt($player, 2);
+        break;
+      case "1047592361"://Ruthless Raider
+        $otherPlayer = $player == 1 ? 2 : 1;
+        DealDamageAsync($otherPlayer, 2, "DAMAGE", "1047592361");
+        AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY");
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal 2 damage to");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+        AddDecisionQueue("MZOP", $player, "DEALDAMAGE,2", 1);
+        break;
+      case "0949648290"://Greedo
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose if you want to discard a card to Greedo");
+        AddDecisionQueue("YESNO", $player, "-", 1);
+        AddDecisionQueue("NOPASS", $player, "-");
+        AddDecisionQueue("PASSPARAMETER", $player, "1", 1);
+        AddDecisionQueue("OP", $player, "MILL", 1);
+        AddDecisionQueue("NONECARDDEFINEDTYPEORPASS", $player, "Unit", 1);
+        AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:arena=Ground", 1);
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+        AddDecisionQueue("MZOP", $player, "DEALDAMAGE,2", 1);
+        break;
+      case "3232845719"://K-2SO
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose a mode for K-2SO");
+        AddDecisionQueue("MULTICHOOSETEXT", $player, "1-Deal 3 damage,Discard-1");
+        AddDecisionQueue("SHOWMODES", $player, $cardID, 1);
+        AddDecisionQueue("MODAL", $player, "K2SO", 1);
+        break;
+      case "8333567388"://Distant Patroller
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to give a shield");
+        AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:aspect=Vigilance");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+        AddDecisionQueue("MZOP", $player, "ADDSHIELD", 1);
+        break;
+      case "4786320542"://Obi-Wan Kenobi
+        AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to add two experience");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+        AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
+        AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
+        AddDecisionQueue("SPECIFICCARD", $player, "OBIWANKENOBI", 1);
+        break;
+      default: break;
+    }
   }
   //Abilities that trigger when a different ally is destroyed
   $allies = &GetAllies($player);
