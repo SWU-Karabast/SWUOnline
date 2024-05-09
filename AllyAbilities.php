@@ -135,10 +135,16 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
 }
 
 function AllyTakeControl($player, $index) {
+  global $currentTurnEffects;
   $otherPlayer = $player == 1 ? 2 : 1;
   $myAllies = &GetAllies($player);
   $theirAllies = &GetAllies($otherPlayer);
   $uniqueID = $theirAllies[$index+5];
+  for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnEffectPieces()) {
+    if($currentTurnEffects[$i+1] != $otherPlayer) continue;
+    if($currentTurnEffects[$i+2] == -1 || $currentTurnEffects[$i+2] != $uniqueID) continue;
+    $currentTurnEffects[$i+1] = $player;
+  }
   for($i=$index; $i<$index+AllyPieces(); ++$i) {
     array_push($myAllies, $theirAllies[$i]);
   }
