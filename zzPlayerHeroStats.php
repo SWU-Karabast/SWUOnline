@@ -17,11 +17,12 @@ if (!isset($_SESSION["useruid"])) {
   exit;
 }
 $useruid = $_SESSION["useruid"];
-
+/*
 if (!isset($_SESSION["isPatron"])) {
   echo ("Please subscribe to our Patreon to access this page.");
   exit;
 }
+*/
 
 $detailHeroID = $_GET["heroID"];
 
@@ -239,9 +240,9 @@ echo ("<div class='game-stats-div'>");
 echo ("<table>");
 echo ("<tr><td>Card</td><td>Num Plays</td><td>Win Rate</td><td>Relative Win Rate</td></tr>");
 foreach ($sortedCardData as $key => $card) {
-  if ($card[1] < 3) continue;
+  //if ($card[1] < 3) continue;
   echo ("<tr>");
-  echo ("<td>" . CardLink($key, $key) . "</td>");
+  echo ("<td>" . CardLink(strval($key), strval($key)) . "</td>");
   echo ("<td>" . $card[1] . "</td>");
   echo ("<td>" . number_format($card[0] / $card[1], 2, ".", "") . "</td>");
   echo ("<td>" . number_format((($card[0] / $card[1]) - $totalWinrate) * 100, 2, ".", "") . "%</td>");
