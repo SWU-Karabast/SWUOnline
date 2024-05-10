@@ -50,6 +50,10 @@
 
       $definedType = $card->type->data->attributes->name;
       $imageUrl = $card->artFront->data->attributes->formats->card->url;
+
+      $set = $card->expansion->data->attributes->code;
+      //$imageUrl = "https://swudb.com/cards/" . $set . "/" . $cardNumber . ".png";
+
       CheckImage($card->cardUid, $imageUrl, $definedType);
       if($card->artBack->data != null) {
         $type2 = $card->type2->data == null ? "" : $card->type2->data->attributes->name;
