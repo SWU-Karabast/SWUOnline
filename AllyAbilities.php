@@ -531,6 +531,7 @@ function AllyPlayCardAbility($cardID, $player="")
         if(AspectContains($cardID, "Aggression", $player)) {
           $otherPlayer = ($player == 1 ? 2 : 1);
           DealDamageAsync($otherPlayer, 1, "DAMAGE", "5907868016");
+          WriteLog(CardLink("5907868016", "5907868016") . " is dealing 1 damage.");
         }
         break;
       default: break;
