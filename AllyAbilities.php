@@ -72,7 +72,17 @@ function AllyStaticHealthModifier($cardID, $index, $player, $myCardID, $myIndex)
       break;
     case "9097316363"://Emperor Palpatine
     case "6c5b96c7ef"://Emperor Palpatine
-      if($cardID == "1780978508") return 1;//Royal Guard
+      if($cardID == "1780978508") { //Royal Guard
+        $isEmperorPalpatineLeader = false;
+        $character = &GetPlayerCharacter($player);
+        for($i=0; $i<count($character); $i+=CharacterPieces()) {
+          if($character[$i] == "5784497124") { //Emperor Palpatine
+            $isEmperorPalpatineLeader = true;
+            break;
+          }
+        }
+        return $isEmperorPalpatineLeader ? 0 : 1;
+      }
       break;
     default: break;
   }
