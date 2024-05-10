@@ -711,10 +711,14 @@ function SpecificAllyAttackAbilities($attackID)
       AddResources($card, $mainPlayer, "DECK", "DOWN");
       AddNextTurnEffect("5e90bd91b0", $mainPlayer);
       break;
+    case "8240629990"://Avenger
+      $otherPlayer = $mainPlayer == 1 ? 2 : 1;
+      MZChooseAndDestroy($otherPlayer, "MYALLY", filter:"definedType=Leader", context:"Choose a unit to destroy");
+      break;
     case "6c5b96c7ef"://Emperor Palpatine
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
       AddDecisionQueue("MZFILTER", $mainPlayer, "index=MYALLY-" . $attackerAlly->Index());
-      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose an ally to destroy");
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to destroy");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "DESTROY", 1);
       AddDecisionQueue("DRAW", $mainPlayer, "-", 1);

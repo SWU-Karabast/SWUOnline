@@ -2504,8 +2504,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "8240629990"://Avenger
-      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
-      MZChooseAndDestroy($otherPlayer, "MYALLY", filter:"definedType=Leader");
+      if($from != "PLAY") {
+        $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+        MZChooseAndDestroy($otherPlayer, "MYALLY", filter:"definedType=Leader", context:"Choose a unit to destroy");
+      }
       break;
     case "8294130780"://Gladiator Star Destroyer
       if($from != "PLAY") {
