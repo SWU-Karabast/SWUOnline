@@ -1277,7 +1277,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $lastPlayed[2] = $lastResult;
       $index = GetAbilityIndex($parameter, GetClassState($player, $CS_PlayIndex), $lastResult);
       SetClassState($player, $CS_AbilityIndex, $index);
-      if(AllyDoesAbilityExhaust($parameter, $index)) {
+      if(IsAlly($parameter, $player) && AllyDoesAbilityExhaust($parameter, $index)) {
         $allies = &GetAllies($player);
         $allies[GetClassState($player, $CS_PlayIndex)+1] = 1;
       }
