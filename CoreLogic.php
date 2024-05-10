@@ -1618,8 +1618,10 @@ function NumEquipBlock()
 
   function IsAllyAttackTarget()
   {
-    $target = explode("-", GetAttackTarget());
-    return $target[0] == "THEIRALLY";
+    $target = GetAttackTarget();
+    if($target == "NA") return false;
+    $targetArr = explode("-", $target);
+    return $targetArr[0] == "THEIRALLY";
   }
 
   function AttackIndex()

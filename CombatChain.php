@@ -9,9 +9,12 @@ function ProcessHitEffect($cardID)
   switch($cardID)
   {
     case "0828695133"://Seventh Sister
-      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY:arena=Ground");
-      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
-      AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,3", 1);
+      if(GetAttackTarget() == "THEIRCHAR-0") {
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY:arena=Ground");
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to deal 3 damage", 1);
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,3", 1);
+      }
       break;
     case "3280523224"://Rukh
       if(IsAllyAttackTarget() && $combatChainState[$CCS_DamageDealt] > 0) {
