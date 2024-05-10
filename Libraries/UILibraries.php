@@ -17,7 +17,7 @@
     }
     else if(mb_strpos($folder, "CardImages") !== false)
     {
-      $folder = str_replace("CardImages", "WebpImages", $folder);
+      $folder = str_replace("CardImages", "WebpImages2", $folder);
       $fileExt = ".webp";
     }
     $actionData = $actionDataOverride != "" ? $actionDataOverride : $cardNumber;
@@ -274,7 +274,7 @@
     if($name == "") return "";
       $color = "Gray";
     //$file = "'./" . "BigCardImages" . "/" . $cardNumber . ".png'";
-    $file = "'./" . "WebpImages" . "/" . $cardNumber . ".webp'";
+    $file = "'./" . "WebpImages2" . "/" . $cardNumber . ".webp'";
     return "<b><span style='color:" . $color . "; cursor:default;' onmouseover=\"ShowDetail(event," . $file . ")\" onmouseout='HideCardDetail()'>" . $name . "</span></b>";
   }
 

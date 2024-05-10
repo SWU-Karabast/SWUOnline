@@ -161,11 +161,11 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
   } else if ($folder == "concat" && $LanguageJP) { // Japanese
     $folderPath = "concat/JP";
     $fileExt = ".webp";
-  } else if ($folder == "WebpImages" && $LanguageJP) { // Japanese
+  } else if ($folder == "WebpImages2" && $LanguageJP) { // Japanese
     $folderPath = "WebpImages/JP";
     $fileExt = ".webp";
   } else if (mb_strpos($folder, "CardImages") !== false) {
-    $folderPath = str_replace("CardImages", "WebpImages", $folder);
+    $folderPath = str_replace("CardImages", "WebpImages2", $folder);
     $fileExt = ".webp";
   } else if ($folder == "concat" || $folder == "./concat" || $folder == "../concat") {
     //if (DelimStringContains(CardSubType($cardNumber), "Landmark")) $rotate = true;
@@ -792,7 +792,7 @@ function CardLink($caption, $cardNumber, $recordMenu = false)
   }
   */
   //if (function_exists("IsColorblindMode") && !IsColorblindMode($playerID)) $pitchText = "";
-  $file = "'./" . "WebpImages" . "/" . $cardNumber . ".webp'";
+  $file = "'./" . "WebpImages2" . "/" . $cardNumber . ".webp'";
   return "<b><span style='color:" . $color . "; cursor:default;' onmouseover=\"ShowDetail(event," . $file . ")\" onmouseout='HideCardDetail()'>" . $name . "</span></b>";
 }
 

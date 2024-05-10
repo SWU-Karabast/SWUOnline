@@ -111,12 +111,12 @@
         } else if (folder == "concat" && LanguageJP) { // Japanese
           folderPath = "concat/JP";
           fileExt = ".webp";
-        } else if (folder == "WebpImages" && LanguageJP) { // Japanese
+        } else if (folder == "WebpImages2" && LanguageJP) { // Japanese
           folderPath = "WebpImages/JP";
           fileExt = ".webp";
         } else if (folder == "concat") {
           fileExt = ".webp";
-        } else if (folder == "WebpImages") {
+        } else if (folder == "WebpImages2") {
           fileExt = ".webp";
         }
         var actionData = actionDataOverride != "" ? actionDataOverride : cardNumber;
@@ -333,7 +333,7 @@
           }
           newHTML += "<span style='position:" + positionStyle + "; margin:1px;'>";
           if (type == "C") {
-            folder = "WebpImages";
+            folder = "WebpImages2";
             var mySoulCountEl = document.getElementById("mySoulCount");
             if (!!mySoulCountEl && zone == "myChar") {
               var fontColor = "#DDD";

@@ -3,7 +3,7 @@
 function CheckImage($cardID, $url, $definedType, $isBack=false)
 {
   $filename = "./WebpImages/" . $cardID . ".webp";
-  //$filename = "./WebpImages2/" . $cardID . ".webp";
+  $filename = "./WebpImages2/" . $cardID . ".webp";
   $filenameNew = "./New Cards/" . $cardID . ".webp";
   $concatFilename = "./concat/" . $cardID . ".webp";
   $cropFilename = "./crops/" . $cardID . "_cropped.png";
@@ -37,6 +37,7 @@ function CheckImage($cardID, $url, $definedType, $isBack=false)
     }
     $isNew = true;
   }
+  $isNew = false;
   if($isNew && !file_exists($filenameNew)) {
     echo("Converting image for " . $cardID . " to new format.<BR>");
     try {

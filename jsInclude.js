@@ -12,9 +12,9 @@ function ShowCardDetail(e, that) {
 
 function ShowDetail(e, imgSource) {
   imgSource = imgSource.replace("_cropped", "");
-  imgSource = imgSource.replace("/crops/", "/WebpImages/");
+  imgSource = imgSource.replace("/crops/", "/WebpImages2/");
   imgSource = imgSource.replace("_concat", "");
-  imgSource = imgSource.replace("/concat/", "/WebpImages/");
+  imgSource = imgSource.replace("/concat/", "/WebpImages2/");
   imgSource = imgSource.replace(".png", ".webp");
   var el = document.getElementById("cardDetail");
   el.innerHTML = e.target.getAttribute("data-orientation") == "landscape" ?
