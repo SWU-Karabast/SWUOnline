@@ -2341,8 +2341,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       MZChooseAndDestroy($currentPlayer, "MYALLY&THEIRALLY", filter:"definedType=Leader");
       break;
     case "6663619377"://AT-AT Suppressor
+      if(!from "PLAY"){
       ExhaustAllAllies("Ground", 1);
       ExhaustAllAllies("Ground", 2);
+      }
       break;
     case "6931439330"://The Ghost
       if($from != "PLAY") {
@@ -2553,8 +2555,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "3802299538"://Cartel Spacer
       if($from != "PLAY" && SearchCount(SearchAllies($currentPlayer, aspect:"Cunning")) > 1) {
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to exhaust");
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:maxCost=4");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to exhaust");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
       }
