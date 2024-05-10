@@ -647,7 +647,7 @@ function EndTurnProcedure($player) {
   }
   Draw($player);
   Draw($player);
-  MZMoveCard($player, "MYHAND", "MYRESOURCES", may:true, context:"Choose a card to resource (or push Pass)", silent:true);
+  MZMoveCard($player, "MYHAND", "MYRESOURCES", may:true, context:"Choose a card to resource (Current: " . NumResources($player) . ")", silent:true);
   AddDecisionQueue("AFTERRESOURCE", $player, "HAND", 1);
 }
 
