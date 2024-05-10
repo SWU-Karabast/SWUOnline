@@ -357,6 +357,30 @@ function MZSuppress($player, $target)
   }
 }
 
+function MZSort($mzIndices)
+{
+  $output = "";
+  $mzArr = explode(",", $mzIndices);
+  $lowest = -1;
+  $lowestIndex = 0;
+  while(count($mzArr) > 0) {
+    for($i=0; $i<count($mzArr); ++$i) {
+      $mzIndex = explode("-", $mzArr[$i]);
+      if($lowest == -1 || $mzIndex[1] < $lowest) {
+        $lowest = $mzIndex[1];
+        $lowestIndex = $i;
+      }
+    }
+    if($output != "") $output .= ",";
+    $output .= $mzArr[$lowestIndex];
+    unset($mzArr[$lowestIndex]);
+    $mzArr = array_values($mzArr);
+    $lowest = -1;
+    $lowestIndex = 0;
+  }
+  return $output;
+}
+
 function MZEndCombat($player, $mzIndex)
 {
   global $mainPlayer;

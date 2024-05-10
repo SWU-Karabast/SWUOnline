@@ -347,7 +347,7 @@ function SpecificCardLogic($player, $card, $lastResult)
       }
       return $lastResult;
     case "IHADNOCHOICE":
-      $cards = explode(",", $dqVars[0]);
+      $cards = explode(",", MZSort($dqVars[0]));
       for($i=count($cards)-1; $i>=0; --$i) {
         if($cards[$i] == $lastResult) {
           MZBounce($player, $cards[$i]);
