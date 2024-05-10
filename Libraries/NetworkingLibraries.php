@@ -922,7 +922,7 @@ function FinalizeChainLink($chainClosed = false)
 {
   global $turn, $actionPoints, $combatChain, $mainPlayer, $currentTurnEffects, $currentPlayer, $combatChainState, $actionPoints, $CCS_DamageDealt;
   global $mainClassState, $CS_AtksWWeapon, $CCS_GoesWhereAfterLinkResolves, $CS_LastAttack, $CCS_LinkTotalAttack, $CS_NumSwordAttacks, $chainLinks, $chainLinkSummary;
-  global $CS_AnotherWeaponGainedGoAgain, $CCS_HitThisLink;
+  global $CS_AnotherWeaponGainedGoAgain, $CCS_HitThisLink, $initiativeTaken;
   $chainClosed = true;
   UpdateGameState($currentPlayer);
   BuildMainPlayerGameState();
@@ -992,7 +992,8 @@ function FinalizeChainLink($chainClosed = false)
   if ($chainClosed) {
     ResetCombatChainState();
     $turn[0] = "M";
-    PassInput();
+    if($initiativeTaken == 1) FinalizeAction();
+    else PassInput();
   } else {
     ResetChainLinkState();
   }
