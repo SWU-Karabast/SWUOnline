@@ -39,6 +39,12 @@ function CompletesAttackEffect($cardID) {
     case "0e65f012f5"://Boba Fett
       if(GetClassState($defPlayer, $CS_NumLeftPlay) > 0) ReadyResource($mainPlayer, 2);
       break;
+    case "9647945674"://Zeb Orrelios
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 4 damage to");
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY:arena=Ground");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,4", 1);
+      break;
   }
 }
 
