@@ -2391,17 +2391,6 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MULTIDISTRIBUTEDAMAGE", $currentPlayer, 6, 1);
       }
       break;
-    case "0256267292"://Benthic 'Two Tubes'
-      if($from == "PLAY") {
-        $ally = new Ally("MYALLY-" . $index, $currentPlayer);
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:aspect=Aggression");
-        AddDecisionQueue("MZFILTER", $currentPlayer, "index=MYALLY-" . $ally->Index());
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to give Raid 2");
-        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
-        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "0256267292,HAND", 1);
-      }
-      break;
     case "1208707254"://Rallying Cry
       AddCurrentTurnEffect($cardID, $currentPlayer);
       break;

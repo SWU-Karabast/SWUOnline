@@ -605,6 +605,15 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "ADDSHIELD", 1);
       break;
+    case "0256267292"://Benthic 'Two Tubes'
+      $ally = new Ally("MYALLY-" . $i, $mainPlayer);
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:aspect=Aggression");
+      AddDecisionQueue("MZFILTER", $mainPlayer, "index=MYALLY-" . $i);
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to give Raid 2");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "0256267292,HAND", 1);
+      break;
     case "02199f9f1e"://Grand Admiral Thrawn
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose player to reveal top of deck");
       AddDecisionQueue("BUTTONINPUT", $mainPlayer, "Yourself,Opponent");
