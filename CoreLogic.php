@@ -2342,8 +2342,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "6663619377"://AT-AT Suppressor
       if(!from "PLAY"){
-      ExhaustAllAllies("Ground", 1);
-      ExhaustAllAllies("Ground", 2);
+        ExhaustAllAllies("Ground", 1);
+        ExhaustAllAllies("Ground", 2);
       }
       break;
     case "6931439330"://The Ghost
