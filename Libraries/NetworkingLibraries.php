@@ -1588,8 +1588,8 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
 
   if($layerIndex > -1) SetClassState($currentPlayer, $CS_PlayIndex, $layerIndex);
   if(intval($uniqueID) != -1) $index = SearchForUniqueID($uniqueID, $currentPlayer);
-  if($cardID == "ARC003" || $cardID == "CRU101") $index = FindCharacterIndex($currentPlayer, $cardID); //TODO: Fix this. This is an issue with the entire "multiple abilities" framework
-  if ($index > -1) SetClassState($currentPlayer, $CS_PlayIndex, $index);
+  if(!isset($index)) $index = GetClassState($currentPlayer, $CS_PlayIndex);
+  if($index > -1) SetClassState($currentPlayer, $CS_PlayIndex, $index);
 
   $definedCardType = CardType($cardID);
   //Figure out where it goes
@@ -1685,13 +1685,12 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
       CharacterPlayCardAbilities($cardID, $from);
     }
     $EffectContext = $cardID;
-    //$playText = "";
     if(!$chainClosed) {
       if(GetClassState($currentPlayer, $CS_AfterPlayedBy) != "-") AfterPlayedByAbility(GetClassState($currentPlayer, $CS_AfterPlayedBy));
       if(DefinedTypesContains($cardID, "Event", $currentPlayer) && SearchCurrentTurnEffects("3401690666", $currentPlayer, remove:true)) {
         //Relentless
         WriteLog("<span style='color:red;'>The event does nothing because of Relentless.</span>");
-      }// else $playText = PlayAbility($cardID, $from, $resourcesPaid, $target, $additionalCosts);
+      }
       else {
         $abilityIndex = GetClassState($currentPlayer, $CS_AbilityIndex);
         $playIndex = GetClassState($currentPlayer, $CS_PlayIndex);
@@ -1699,14 +1698,12 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
       }
     }
     if($from != "PLAY") {
-      //WriteLog("Resolving play ability of " . CardLink($cardID, $cardID) . ($playText != "" ? ": " : ".") . $playText);
       $index = LastAllyIndex($currentPlayer);
       if(HasAmbush($cardID, $currentPlayer, $index)) {
         $allies = &GetAllies($currentPlayer);
         AddLayer("TRIGGER", $currentPlayer, "AMBUSH", "-", "-", $allies[$index + 5]);
       }
     }
-    else if($from == "EQUIP" || $from == "PLAY") WriteLog("Resolving activated ability of " . CardLink($cardID, $cardID) . ($playText != "" ? ": " : ".") . $playText);
     if (!$openedChain) ResolveGoAgain($cardID, $currentPlayer, $from);
     CopyCurrentTurnEffectsFromAfterResolveEffects();
   }
