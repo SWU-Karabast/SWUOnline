@@ -3276,7 +3276,6 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         $ally = new Ally("MYALLY-" . $index);
         $ally->Destroy();
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
-        AddDecisionQueue("MZFILTER", $currentPlayer, "status=1");
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an ally to attack with");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
