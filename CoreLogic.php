@@ -1235,6 +1235,7 @@ function NameOverride($cardID, $player="")
 
 function DefinedTypesContains($cardID, $type, $player="")
 {
+  if(!$cardID || $cardID == "" || strlen($cardID) < 3) return "";
   $cardTypes = DefinedCardType($cardID);
   $cardTypes2 = DefinedCardType2($cardID);
   return DelimStringContains($cardTypes, $type) || DelimStringContains($cardTypes2, $type);
