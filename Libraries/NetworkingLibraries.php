@@ -281,7 +281,8 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
       if ($index >= count($allies)) break; //Ally doesn't exist
       $cardID = $allies[$index];
       if (!IsPlayable($cardID, $turn[0], "PLAY", $index)) break; //Ally not playable
-      $allies[$index + 1] = 1;
+      $abilityNames = GetAbilityNames($allies[$index], $index);
+      if($abilityNames == "" || SearchCount($abilityNames) == 1) $allies[$index + 1] = 1;
       SetClassState($playerID, $CS_PlayIndex, $index);
       PlayCard($cardID, "PLAY", -1, $index, $allies[$index+5]);
       break;

@@ -192,33 +192,29 @@ function AllyEntersPlayAbilities($player)
   {
     switch($allies[$i])
     {
-      case "cVRIUJdTW5"://Meadowbloom Dryad
-        AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
-        AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-        AddDecisionQueue("MZOP", $player, "BUFFALLY", 1);
-        break;
+      
       default: break;
     }
   }
 }
 
-function AllyPride($cardID)
-{
-  switch($cardID)
-  {
-    case "hJ2xh9lNMR": return 2;//Gray Wolf
-    case "GXeEa0pe3B": return 3;//Rebellious Bull
-    case "MmbQQdsRhi": return 5;//Enraged Boars
-    case "1Sl4Gq2OuV": return 4;//Blue Slime
-    case "gKVMTAeLXQ": return 5;//Blazing Direwolf
-    case "dZ960Hnkzv": return 10;//Vertus, Gaia's Roar
-    case "HWFWO0TB8l": return 5;//Tempest Silverback
-    case "krgjMyVHRd": return 6;//Lakeside Serpent
-    case "075L8pLihO": return 5;//Arima, Gaia's Wings
-    case "wFH1kBLrWh": return 7;//Arcane Elemental
-    case "p3nq0ymvdd": return 2;//Ordinary Bear
-    case "mttsvbgl6f": return 3;//Red Slime
-    default: return -1;
+function AllyPlayableExhausted($cardID) {
+  switch($cardID) {
+    case "4300219753"://Fett's Firespray
+    case "2471223947"://Frontline Shuttle
+      return true;
+    default: return false;
+  }
+}
+
+function AllyDoesAbilityExhaust($cardID, $abilityIndex) {
+  WriteLog($abilityIndex);
+  switch($cardID) {
+    case "4300219753"://Fett's Firespray
+      return $abilityIndex == 1;
+    case "2471223947"://Frontline Shuttle
+      return $abilityIndex == 1;
+    default: return false;
   }
 }
 

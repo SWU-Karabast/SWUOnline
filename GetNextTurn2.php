@@ -1052,7 +1052,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       $subcard = $myAllies[$i + 4];
       $subcards = $subcard != "-" ? explode(",", $subcard) : [];
       $attackCounters = $ally->CurrentPower();
-      $playable = IsPlayable($myAllies[$i], $turn[0], "PLAY", $i, $restriction) && $myAllies[$i + 1] == 2;
+      $playable = IsPlayable($myAllies[$i], $turn[0], "PLAY", $i, $restriction) && ($myAllies[$i + 1] == 2 || AllyPlayableExhausted($myAllies[$i]));
       $border = CardBorderColor($myAllies[$i], "PLAY", $playable);
       $cardArena = CardArenas($myAllies[$i]);
       //My Unit Spacing

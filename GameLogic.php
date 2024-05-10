@@ -1273,10 +1273,15 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       DealArcane($parameter, 0, "PLAYCARD", "EVR124", true, $player, resolvedTarget: ($player == 1 ? 2 : 1));
       return "";
     case "SETABILITYTYPE":
+      global $CS_PlayIndex;
       $lastPlayed[2] = $lastResult;
-      $index = GetAbilityIndex($parameter, GetClassState($player, $CS_CharacterIndex), $lastResult);
+      $index = GetAbilityIndex($parameter, GetClassState($player, $CS_PlayIndex), $lastResult);
       SetClassState($player, $CS_AbilityIndex, $index);
-      $names = explode(",", GetAbilityNames($parameter, GetClassState($player, $CS_CharacterIndex)));
+      if(AllyDoesAbilityExhaust($parameter, $index)) {
+        $allies = &GetAllies($player);
+        $allies[GetClassState($player, $CS_PlayIndex)+1] = 1;
+      }
+      $names = explode(",", GetAbilityNames($parameter, GetClassState($player, $CS_PlayIndex)));
       WriteLog(implode(" ", explode("_", $names[$index])) . " ability was chosen.");
       return $lastResult;
     case "MZSTARTTURNABILITY":

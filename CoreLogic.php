@@ -3039,8 +3039,6 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to exhaust");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
-        $ally = new Ally("MYALLY-" . $index, $currentPlayer);
-        $ally->Ready();
       }
       break;
     case "8009713136"://C-3PO
