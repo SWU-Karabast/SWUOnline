@@ -142,7 +142,6 @@ if ($decklink != "") {
   $sideboardCards = "";
   $materialCards = "";
   $totalCards = 0;
-  //TODO: Sideboard
   foreach($deckObj->{'cards'}->{'main'} as $key => $value) {
     $cardID = $value->{'uuid'};
     $quantity = $value->{'quantity'};

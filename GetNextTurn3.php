@@ -263,7 +263,6 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   $activeChainLink->dominate = CachedDominateActive();
   $activeChainLink->overpower = CachedOverpowerActive();
   if ($combatChainState[$CCS_RequiredEquipmentBlock] > NumEquipBlock()) $activeChainLink->numRequiredEquipBlock = $combatChainState[$CCS_RequiredEquipmentBlock];
-  // TODO: How to find out if a card has been fused?
   $activeChainLink->fused = false;
 
   // current chain link attack
@@ -384,7 +383,6 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   }
   $response->playerHand = $myHandContents;
 
-  // TODO: Need to fudge for banish UI stuff (or should this be done on the FE?)
   // if ($playerID != 3)
   // {
   //   $banishUI = BanishUIMinimal("HAND");
@@ -556,7 +554,6 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   //my allies
   $myAlliesOutput = array();
   $myAllies = GetAllies($playerID == 1 ? 1 : 2);
-  //TODO: remove magic numbers
   for ($i = 0; $i + AllyPieces() - 1 < count($myAllies); $i += AllyPieces()) {
     $type = CardType($myAllies[$i]);
     $sType = CardSubType($myAllies[$i]);
@@ -631,7 +628,6 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   //my permanents
   $myPermanentsOutput = array();
   $myPermanents = GetPermanents($playerID == 1 ? 1 : 2);
-  // TODO: If other permanents can be interacted with, add interaction.
   for ($i = 0; $i + PermanentPieces() - 1 < count($myPermanents); $i += PermanentPieces()) {
     $type = CardType($myPermanents[$i]);
     $sType = CardSubType($myPermanents[$i]);
@@ -649,7 +645,6 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   $response->landmarks = $landmarksOutput;
 
   // Chat Log
-  // TODO: Not have as HTML, have custom string so cards can be parsed the other end safely.
   $response->chatLog = JSONLog($gameName, $playerID);
 
   // Deduplicate current turn effects
@@ -676,7 +671,6 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   }
   $response->newEvents = $newEvents;
 
-  // TODO: determine the turnPhase and what corresponds to what.
   // Phase of the turn (for the tracker widget)
   $turnPhase = new stdClass();
   $turnPhase->turnPhase = $turn[0];
@@ -1027,7 +1021,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     $options = explode(",", $params[1]);
 
     $title = "Choose up to " . $params[0] . " card" . ($params[0] > 1 ? "s." : ".");
-    if (GetDQHelpText() != "-") $caption = implode(" ", explode("_", GetDQHelpText())); //TODO: What does this line do?
+    if (GetDQHelpText() != "-") $caption = implode(" ", explode("_", GetDQHelpText()));
 
     $formOptions->playerID = $playerID;
     $formOptions->caption = "Submit";
@@ -1104,9 +1098,9 @@ function GetCharacterLeft($cardType, $cardSubType)
   switch ($cardType) {
     case "C":
       return "calc(50% - " . ($cardWidth / 2 + 5) . "px)";
-      //case "W": return "calc(50% " . ($cardSubType == "" ? "- " : "+ ") . ($cardWidth/2 + $cardWidth + 10) . "px)";//TODO: Second weapon
+      //case "W": return "calc(50% " . ($cardSubType == "" ? "- " : "+ ") . ($cardWidth/2 + $cardWidth + 10) . "px)";
     case "W":
-      return "calc(50% - " . ($cardWidth / 2 + $cardWidth + 25) . "px)"; //TODO: Second weapon
+      return "calc(50% - " . ($cardWidth / 2 + $cardWidth + 25) . "px)";
     default:
       break;
   }
@@ -1131,7 +1125,7 @@ function GetCharacterBottom($cardType, $cardSubType)
     case "C":
       return ($cardSize * 2 - 25) . "px";
     case "W":
-      return ($cardSize * 2 - 25) . "px"; //TODO: Second weapon
+      return ($cardSize * 2 - 25) . "px";
     default:
       break;
   }
@@ -1156,9 +1150,9 @@ function GetCharacterTop($cardType, $cardSubType)
     case "C":
       return "52px";
     case "W":
-      return "52px"; //TODO: Second weapon
+      return "52px";
       //case "C": return ($cardSize + 20) . "px";
-      //case "W": return ($cardSize + 20) . "px";//TODO: Second weapon
+      //case "W": return ($cardSize + 20) . "px";
     default:
       break;
   }
