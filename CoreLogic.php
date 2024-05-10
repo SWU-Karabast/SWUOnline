@@ -2341,7 +2341,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       MZChooseAndDestroy($currentPlayer, "MYALLY&THEIRALLY", filter:"definedType=Leader");
       break;
     case "6663619377"://AT-AT Suppressor
-      if(!from "PLAY"){
+      if(from != "PLAY"){
         ExhaustAllAllies("Ground", 1);
         ExhaustAllAllies("Ground", 2);
       }
