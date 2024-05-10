@@ -3385,19 +3385,21 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "2715652707"://I Had No Choice
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("OP", $otherPlayer, "SWAPDQPERSPECTIVE", 1);
       AddDecisionQueue("SETDQVAR", $currentPlayer, 0, 1);
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY", 1);
+      AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1", 1);
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit", 1);
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-      AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "{0},", 1);
       AddDecisionQueue("OP", $otherPlayer, "SWAPDQPERSPECTIVE", 1);
+      AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "{0},", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, 0, 1);
       AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a unit to return to hand");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $otherPlayer, "<-", 1);
-      AddDecisionQueue("MZOP", $otherPlayer, "BOUNCE", 1);
-      AddDecisionQueue("OP", $otherPlayer, "REMOVECARD", 1);
-      AddDecisionQueue("MZOP", $otherPlayer, "SINK", 1);
+      AddDecisionQueue("SPECIFICCARD", $otherPlayer, "IHADNOCHOICE", 1);
       break;
     case "8988732248"://Rebel Assault
       AddCurrentTurnEffect($cardID . "-1", $currentPlayer);

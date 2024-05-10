@@ -346,6 +346,16 @@ function SpecificCardLogic($player, $card, $lastResult)
         $ally->Attach("2007868442");//Experience token
       }
       return $lastResult;
+    case "IHADNOCHOICE":
+      $cards = explode(",", $dqVars[0]);
+      for($i=count($cards)-1; $i>=0; --$i) {
+        if($cards[$i] == $lastResult) {
+          MZBounce($player, $cards[$i]);
+        } else {
+          MZSink($player, $cards[$i]);
+        }
+      }
+      return $lastResult;
     default: return "";
   }
 }
