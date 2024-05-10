@@ -245,6 +245,7 @@ function HasGrit($cardID, $player, $index)
 
 function HasOverwhelm($cardID, $player, $index)
 {
+  global $defPlayer;
   $ally = new Ally("MYALLY-" . $index, $player);
   if($ally->LostAbilities()) return false;
   switch($cardID)
@@ -260,7 +261,7 @@ function HasOverwhelm($cardID, $player, $index)
     case "4619930426"://First Legion Snowtrooper
       $target = GetAttackTarget();
       if($target == "THEIRCHAR-0") return false;
-      $ally = new Ally($target);
+      $ally = new Ally($target, $defPlayer);
       return $ally->IsDamaged();
     default: return false;
   }

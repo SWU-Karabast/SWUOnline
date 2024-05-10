@@ -821,6 +821,7 @@ function ResolveChainLink()
   $attackerMZ = AttackerMZID($mainPlayer);
   $attackerArr = explode("-", $attackerMZ);
   $attacker = new Ally($attackerMZ, $mainPlayer);
+  $hasOverwhelm = HasOverwhelm($attacker->CardID(), $mainPlayer, $attacker->Index());
   $attackerID = $attacker->CardID();
   $attackerSurvived = 1;
   $totalAttack = $attacker->CurrentPower();
@@ -832,7 +833,6 @@ function ResolveChainLink()
     //Construct the combatants
     $index = $targetArr[1];
     $defender = new Ally($target, $defPlayer);
-    $hasOverwhelm = HasOverwhelm($attacker->CardID(), $mainPlayer, $attacker->Index());
     //Resolve the combat
     $defenderPower = $defender->CurrentPower();
     if($defenderPower < 0) $defenderPower = 0;

@@ -208,7 +208,6 @@ function AllyPlayableExhausted($cardID) {
 }
 
 function AllyDoesAbilityExhaust($cardID, $abilityIndex) {
-  WriteLog($abilityIndex);
   switch($cardID) {
     case "4300219753"://Fett's Firespray
       return $abilityIndex == 1;
