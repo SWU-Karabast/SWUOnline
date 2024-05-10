@@ -1400,6 +1400,7 @@ function GetLayerTarget($cardID)
     AddDecisionQueue("SETDQVAR", $currentPlayer, "0");
     AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
     if($upgradeFilter != "") AddDecisionQueue("MZFILTER", $currentPlayer, $upgradeFilter);
+    AddDecisionQueue("PASSREVERT", $currentPlayer, "-");
     AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to attach <0>");
     AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
     AddDecisionQueue("SETLAYERTARGET", $currentPlayer, $cardID, 1);

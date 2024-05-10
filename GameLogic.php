@@ -1415,6 +1415,12 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
     case "HITEFFECT":
       ProcessHitEffect($parameter);
       return $parameter;
+    case "PASSREVERT":
+      if($lastResult == "PASS") {
+        WriteLog("That is not a valid action; reverting gamestate.");
+        RevertGamestate();
+      }
+      return $lastResult;
     case "PROCESSDAMAGEPREVENTION":
       $mzIndex = explode("-", $lastResult);
       $params =  explode("-", $parameter);

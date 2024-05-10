@@ -3065,8 +3065,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "8055390529"://Traitorous
-      AddDecisionQueue("PASSPARAMETER", $currentPlayer, $target);
-      AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL");
+      $mzArr = explode("-", $target);
+      if($mzArr[0] == "THEIRALLY") {
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, $target);
+        AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL");
+      }
       break;
     case "8244682354"://Jyn Erso
       $abilityName = GetResolvedAbilityName($cardID, $from);
