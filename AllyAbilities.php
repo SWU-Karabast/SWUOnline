@@ -312,7 +312,8 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
           AddDecisionQueue("PASSPARAMETER", $player, "1", 1);
           AddDecisionQueue("OP", $player, "MILL", 1);
           AddDecisionQueue("NONECARDDEFINEDTYPEORPASS", $player, "Unit", 1);
-          AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:arena=Ground", 1);
+          AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:arena=Ground&THEIRALLY:arena=Ground", 1);
+          AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal 2 damage");
           AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
           AddDecisionQueue("MZOP", $player, "DEALDAMAGE,2", 1);
         }
