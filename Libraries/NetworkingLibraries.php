@@ -1693,7 +1693,8 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
       }// else $playText = PlayAbility($cardID, $from, $resourcesPaid, $target, $additionalCosts);
       else {
         $abilityIndex = GetClassState($currentPlayer, $CS_AbilityIndex);
-        AddLayer("PLAYABILITY", $currentPlayer, $cardID, $from . "!" . $resourcesPaid . "!" . $target . "!" . $additionalCosts . "!" . $abilityIndex, "-", $uniqueID);
+        $playIndex = GetClassState($currentPlayer, $CS_PlayIndex);
+        AddLayer("PLAYABILITY", $currentPlayer, $cardID, $from . "!" . $resourcesPaid . "!" . $target . "!" . $additionalCosts . "!" . $abilityIndex . "!" . $playIndex, "-", $uniqueID);
       }
     }
     if($from != "PLAY") {

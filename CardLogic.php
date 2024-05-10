@@ -426,10 +426,11 @@ function ContinueDecisionQueue($lastResult = "")
             $target = $subparamArr[2];
             $additionalCosts = $subparamArr[3];
             $abilityIndex = $subparamArr[4];
+            $playIndex = $subparamArr[5];
             SetClassState($player, $CS_AbilityIndex, $abilityIndex);
+            SetClassState($player, $CS_PlayIndex, $playIndex);
             $playText = PlayAbility($cardID, $from, $resourcesPaid, $target, $additionalCosts);
             WriteLog("Resolving play ability of " . CardLink($cardID, $cardID) . ($playText != "" ? ": " : ".") . $playText);
-            
             if($from == "EQUIP") {
               EquipPayAdditionalCosts(FindCharacterIndex($player, $cardID), "EQUIP");
             }
