@@ -213,7 +213,7 @@ function AllyDoesAbilityExhaust($cardID, $abilityIndex) {
       return $abilityIndex == 1;
     case "2471223947"://Frontline Shuttle
       return $abilityIndex == 1;
-    default: return false;
+    default: return true;
   }
 }
 
