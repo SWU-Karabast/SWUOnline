@@ -3,6 +3,8 @@
 use JetBrains\PhpStorm\Language;
 
 require_once("CoreLibraries.php");
+ini_set('log_errors', '1');
+error_reporting(E_ALL);
 
 $isReactFE = false;
 
@@ -146,6 +148,12 @@ function JSONRenderedCard(
 function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $overlay = 0, $borderColor = 0, $counters = 0, $actionDataOverride = "", $id = "", $rotate = false, $lifeCounters = 0, $defCounters = 0, $atkCounters = 0, $from = "", $controller = 0, $subcardNum = 0)
 {
   global $playerID, $darkMode;
+  if (is_array($action)) {
+    $opts = $action;
+    $action = 0;
+    $showHover = 1;
+  }
+
   $LanguageJP = ((IsLanguageJP($playerID) && TranslationExist("JP", $cardNumber)) ? true : false);
   if ($darkMode == null) $darkMode = false;
   if ($folder == "crops") {
@@ -179,11 +187,8 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
   if ($borderColor > 0) $margin = "margin-bottom:" . (7 + $subcardNum * 16) . "px; top: " . (1 + $subcardNum * 16) . "px;";
   if ($borderColor != -1 && $from == "HASSUBCARD") $margin = "margin-bottom:" . (6 + $subcardNum * 16) . "px; top: " . ($subcardNum * 16) . "px;";
   if ($folder == "crops") $margin = "0px;";
-  if ($from == "SUBCARD") {
-    $rv = "<a style='" . $margin . " position:absolute; display:inline-block;" . ($action > 0 ? "cursor:pointer;" : "") . "'" . ($showHover > 0 ? " onmouseover='ShowCardDetail(event, this)' onmouseout='HideCardDetail()'" : "") . ($action > 0 ? " onclick='SubmitInput(\"" . $action . "\", \"&cardID=" . $actionData . "\");'" : "") . ">";
-  } else {
-    $rv = "<a style='" . $margin . " position:relative; display:inline-block;" . ($action > 0 ? "cursor:pointer;" : "") . "'" . ($showHover > 0 ? " onmouseover='ShowCardDetail(event, this)' onmouseout='HideCardDetail()'" : "") . ($action > 0 ? " onclick='SubmitInput(\"" . $action . "\", \"&cardID=" . $actionData . "\");'" : "") . ">";
-  }
+  $rv = "<a style='" . $margin . " position:relative; display:inline-block;" . ($action > 0 ? "cursor:pointer;" : "") . "'" . ($showHover > 0 ? " onmouseover='ShowCardDetail(event, this)' onmouseout='HideCardDetail()'" : "") . ($action > 0 ? " onclick='SubmitInput(\"" . $action . "\", \"&cardID=" . $actionData . "\");'" : "") . ">";
+
   if ($borderColor > 0) {
     $border = "border-radius:10px; border:2px solid " . BorderColorMap($borderColor) . ";";
   } else if ($folder == "concat" || $folder == "./concat" || $folder == "../concat") {
@@ -214,6 +219,8 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
   // Counters Style
   $dynamicScaling = (function_exists("IsDynamicScalingEnabled") ? IsDynamicScalingEnabled($playerID) : false);
   $counterHeight = $dynamicScaling ? intval($maxHeight / 3.3) : 28;
+  // Icon Size
+  $iconSize = 15;
   //$imgCounterHeight = $dynamicScaling ? intval($maxHeight / 2) : 44;
   $imgCounterHeight = $dynamicScaling ? intval($maxHeight / 2) : 35;
   $imgCounterFontSize = 28;
@@ -223,31 +230,6 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
     margin-right: -50%; border-radius: 7px; width: fit-content; text-align: center; line-height: 16px; height: 16px; padding: 5px; border: 3px solid " . PopupBorderColor($darkMode) . ";
     transform: translate(-50%, -50%); position:absolute; z-index: 10; background:" . BackgroundColor($darkMode) . ";
     font-size:20px; font-weight:800; color:" . PopupBorderColor($darkMode) . "; user-select: none;'>" . $counters . "</div>";
-  }
-  //Steam Counters style
-  elseif ($counters != 0 && ($from == "ITEMS" || $from == "CHARACTER") && ClassContains($cardNumber, "MECHANOLOGIST")) {
-    if ($lifeCounters == 0 && $defCounters == 0 && $atkCounters == 0) {
-      $left = "0px";
-    } else {
-      $left = "-45%";
-    }
-    $rv .= "<div style=' position:absolute; margin: auto; top: 0; left:" . $left . "; right: 0; bottom: 0; width:" . $imgCounterHeight . "px; height:" . $imgCounterHeight . "px;
-   display: flex; justify-content: center; z-index: 100; text-align: center; vertical-align: middle; line-height:" . $imgCounterHeight . "px;
-   font-size:" . $imgCounterFontSize . "px; font-weight: 600;  color: #EEE; text-shadow: 2px 0 0 #000, 0 -2px 0 #000, 0 2px 0 #000, -2px 0 0 #000; user-select: none;'>" . $counters . "
-   <img style='position:absolute; top: -2px; width:" . $imgCounterHeight . "px; height:" . $imgCounterHeight . "px; opacity: 0.9; z-index:-1; user-select: none;' src='./Images/SteamCounters.png'></div>";
-  }
-
-  //Aim Counters style
-  elseif ((($counters != 0 && $from == "ARS") || $atkCounters != 0) && CardSubType($cardNumber) == "Arrow") {
-    if ($lifeCounters == 0 && $defCounters == 0) {
-      $left = "0px";
-    } else {
-      $left = "-45%";
-    }
-    $rv .= "<div style=' position:absolute; margin: auto; top: 0; left:" . $left . "; right: 0; bottom: 0; width:" . $imgCounterHeight . "px; height:" . $imgCounterHeight . "px;
-   display: flex; justify-content: center; z-index: 5; text-align: center; vertical-align: middle; line-height:" . $imgCounterHeight . "px;
-   font-size:" . $imgCounterFontSize . "px; font-weight: 600;  color: #EEE; text-shadow: 2px 0 0 #000, 0 -2px 0 #000, 0 2px 0 #000, -2px 0 0 #000; user-select: none;'>
-   <img style='position:absolute; top: -2px; width:" . $imgCounterHeight . "px; height:" . $imgCounterHeight . "px; opacity: 0.9; z-index:-1; user-select: none;' src='./Images/aimCounters.png'></div>";
   }
 
   //Default Counters Style (Deck, Discard, Hero, Equipment)
@@ -275,39 +257,124 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
     user-select: none;'>" . $counters . "</div>";
   }
 
-  //-1 Defense & Endurance Counters style
-  if ($defCounters != 0) {
-    if ($lifeCounters == 0 && $counters == 0) {
-      $left = "0px";
-    } else {
-      $left = "-45%";
+  // Shield Icon Style
+  $shieldCount = is_array($opts['subcards']) ? (array_count_values($opts['subcards'])['8752877738'] ?? 0) : 0;
+  if ($shieldCount > 0) {
+    for ($i = 0; $i < $shieldCount; $i++) {
+      $rv .= "<div style='margin: 0px;
+      top: 0%; 
+      left: " . 100 - ($i * 30) . "%;
+      margin-right: -50%;
+      border-radius: 0%;
+      width:" . $iconSize . "px;
+      height:" . $iconSize . "px;
+      padding: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform: translate(-50%, -50%);
+      position:absolute; z-index: 10;
+      background: rgba(0, 0, 255, 0.8);
+      line-height: 1.2;
+      font-size: 24px; 
+      font-weight:700; 
+      color: #fff;
+      user-select: none;'>" . $shieldCount . "</div>";
     }
-    $rv .= "<div style=' position:absolute; margin: auto; top: 0; left:" . $left . "; right: 0; bottom: 0; width:" . $imgCounterHeight . "px; height:" . $imgCounterHeight . "px;
-    display: flex;justify-content: center; z-index: 5; text-align: center;vertical-align: middle; line-height:" . $imgCounterHeight . "px;
-    font-size:" . $imgCounterFontSize . "px; font-weight: 600; color: #EEE; text-shadow: 2px 0 0 #000, 0 -2px 0 #000, 0 2px 0 #000, -2px 0 0 #000; user-select: none;'>" . $defCounters . "
-    <img style='position:absolute; top: -2px; width:" . $imgCounterHeight . "px; height:" . $imgCounterHeight . "px; opacity: 0.9; z-index:-1; user-select: none;' src='./Images/Defense.png'></div>";
   }
 
-  //Health Counters style
-  if ($lifeCounters != 0) {
+  // Sentinel Icon Style
+  if ($opts['hasSentinel']) {
+    $rv .= "<div style='margin: 0px;
+    top: 52%; 
+    left: 90%;
+    margin-right: -50%;
+    border-radius: 0%;
+    width:" . $iconSize . "px;
+    height:" . $iconSize . "px;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translate(-50%, -50%);
+    position:absolute; z-index: 10;
+    background: rgba(255, 0, 255, 0.8);
+    line-height: 1.2;
+    font-size: 24px; 
+    font-weight:700; 
+    color: #fff;
+    user-select: none;'>" . "0" . "</div>";
+
+  }
+  // Damage Counter Style
+  $damaged = $opts['currentHP'] < $opts['maxHP']; 
+  if ($damaged) {
+    $rv .= "<div style='margin: 0px;
+    top: 52%; 
+    left: 10%;
+    margin-right: -50%;
+    border-radius: 0%;
+    width:" . $iconSize . "px;
+    height:" . $iconSize . "px;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translate(-50%, -50%);
+    position:absolute; z-index: 10;
+    background: rgba(255, 0, 0, 0.8);
+    line-height: 1.2;
+    font-size: 24px; 
+    font-weight:700; 
+    color: #fff;
+    user-select: none;'>" . ($opts['maxHP'] - $opts['currentHP']) . "</div>";
+  }
+
+
+  //Card HP Style
+  if ($opts['currentHP'] != 0) {
     $bgImage = "./Images/Life.png";
     $left = "72%";
     $top = "68%";
     $lineHeight = 30;
     $rv .= "<div style=' position:absolute; top: " . $top . "; left:" . $left . "; width:" . $imgCounterHeight . "px; height:" . $imgCounterHeight . "px; line-height:" . $lineHeight . "px; 
     z-index: 5; text-align: center; font-size:" . $imgCounterFontSize . "px; font-weight: 600;  color: #EEE; text-shadow: 0px 2px 0px rgba(0, 0, 0, 0.52); -webkit-text-stroke: 1px rgba(0, 0, 0, 0.52); text-stroke: 1px rgba(0, 0, 0, 0.52); 
-    user-select: none; background: url($bgImage) no-repeat; background-size: 35px 35px;'>" . $lifeCounters . "</div>";
+    user-select: none; background: url($bgImage) no-repeat; background-size: 35px 35px;'>" . $opts['currentHP'] . "</div>";
   }
 
-  //Attack Counters style
-  if ($atkCounters != 0 && CardSubType($cardNumber) != "Arrow") {
+  //Card Power style
+  if ($opts['currentPower'] != 0) {
     $bgImage = "./Images/AttackIcon.png";
     $left = "-5%";
     $top = "68%";
     $lineHeight = 30;
     $rv .= "<div style=' position:absolute; top: " . $top . "; left:" . $left . "; width:" . $imgCounterHeight . "px; height:" . $imgCounterHeight . "px; line-height:" . $lineHeight . "px; 
     z-index: 5; text-align: center; font-size:" . $imgCounterFontSize . "px; font-weight: 600;  color: #EEE; text-shadow: 0px 2px 0px rgba(0, 0, 0, 0.52); -webkit-text-stroke: 1px rgba(0, 0, 0, 0.52); text-stroke: 1px rgba(0, 0, 0, 0.52); 
-    user-select: none; background: url($bgImage) no-repeat; background-size: 35px 35px;'>" . $atkCounters . "</div>";  }
+    user-select: none; background: url($bgImage) no-repeat; background-size: 35px 35px;'>" . $opts['currentPower'] . "</div>";  }
+
+  // Subcards style
+  if (isset($opts['subcards']) && count($opts['subcards']) > 0) {
+    for ($i = 0; $i < count($opts['subcards']); $i++) {
+      $rv .= "<div style='margin: 0px;
+      top: calc(100% + " . ($i * 20) . "px); 
+      left: 0%;
+      border-radius: 0%;
+      width: 96px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position:absolute; z-index: 10;
+      background: rgba(0, 0, 0, 0.8);
+      line-height: 1.2;
+      font-size: 10px; 
+      font-weight:700; 
+      color: #fff;
+      user-select: none;'
+      onmouseover='ShowCardDetailByID(event, " . $opts['subcards'][$i] . ")' onmouseout='HideCardDetail()'>" . "CARDNAME" . "</div>";
+    }
+    
+  }
   $rv .= "</a>";
   return $rv;
 }

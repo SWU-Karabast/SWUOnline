@@ -10,12 +10,17 @@ function ShowCardDetail(e, that) {
   ShowDetail(e, that.getElementsByTagName("IMG")[0].src);
 }
 
+function ShowCardDetailByID(e, cardID) {
+  ShowDetail(e, `${window.location.origin}/SWUOnline/WebpImages/${cardID}.webp`);
+}
+
 function ShowDetail(e, imgSource) {
   imgSource = imgSource.replace("_cropped", "");
   imgSource = imgSource.replace("/crops/", "/WebpImages2/");
   imgSource = imgSource.replace("_concat", "");
   imgSource = imgSource.replace("/concat/", "/WebpImages2/");
   imgSource = imgSource.replace(".png", ".webp");
+  console.log(imgSource)
   var el = document.getElementById("cardDetail");
   el.innerHTML = e.target.getAttribute("data-orientation") == "landscape" ?
     "<img style='height:375px; width:523px;' src='" + imgSource + "' />":

@@ -893,22 +893,28 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   if (count($theirAllies) > 0) {
     for ($i = 0; $i+AllyPieces()-1 < count($theirAllies); $i += AllyPieces()) {
       $ally = new Ally("MYALLY-" . $i, $otherPlayer);
-      $lifeCounters = $ally->Health();
-      $enduranceCounters = $theirAllies[$i + 6];
-      $subcard = $theirAllies[$i + 4];
-      $subcards = $subcard != "-" ? explode(",", $subcard) : [];
-      $attackCounters = $ally->CurrentPower();
+      $opts = array(
+        'currentHP' => $ally->Health(),
+        'maxHP' => $ally->MaxHealth(),
+        'enduranceCounters' => $theirAllies[$i + 6],
+        'subcard' => $theirAllies[$i + 4],
+        'subcards' => $theirAllies[$i + 4] != "-" ? explode(",", $theirAllies[$i + 4]) : [],
+        'currentPower' => $ally->CurrentPower(),
+        'hasSentinel' => HasSentinel($theirAllies[$i], $otherPlayer, $i),
+      );
       $cardArena = CardArenas($theirAllies[$i]);
       //Their Unit Spacing
       if($cardArena == "Ground") $cardText = "<div style='position:relative; display: inline-block; margin: 0 5px;'>";
       else $cardText = "<div style='position:relative; float:right; display: inline-block; margin: 0 5px;'>";
-      for($j=0; $j<count($subcards); $j++) {
-        $cardText .= (Card($subcards[$j], "concat", $cardSizeAura, showHover: true, from: "SUBCARD", controller: $playerID, subcardNum:$j));
-      }
-      $cardText .= (Card($theirAllies[$i], "concat", $cardSizeAura, 0, 1, $theirAllies[$i + 1] != 2 ? 1 : 0, 0, 0, "", "", False, $lifeCounters, $enduranceCounters, $attackCounters, ($subcard != "-" && $subcard != "UPR043") ? "HASSUBCARD" : "", controller: $otherPlayer, subcardNum:count($subcards)) . "&nbsp");
+      //card render their units
+      $cardText .= (Card($theirAllies[$i], "concat", $cardSizeAura, $opts));
+      // for($j=0; $j<count($subcards); $j++) {
+      //   $cardText .= (Card($subcards[$j], "concat", $cardSizeAura, showHover: true, from: "SUBCARD", controller: $playerID, subcardNum:$j));
+      // }
+      // $cardText .= (Card($theirAllies[$i], "concat", $cardSizeAura, 0, 1, $theirAllies[$i + 1] != 2 ? 1 : 0, 0, 0, "", "", False, $hp, $enduranceCounters, $attackCounters, ($subcard != "-" && $subcard != "UPR043") ? "HASSUBCARD" : "", controller: $otherPlayer, subcardNum:count($subcards)) . "&nbsp");
       
-      if (HasSentinel($theirAllies[$i], $otherPlayer, $i)) $cardText .= ("<img title='Sentinel' style='pointer-events: none; position:absolute; z-index:1001; top: " . ($subcard == "-" || $subcard == "UPR043" ? "6px" : "24px") . "; left: 6px; cursor:pointer; height:" . $cardHeight . "; width:" . $cardWidth . ";' src='./Images/Sentinel_Overlay.png' />");
-      if ($theirAllies[$i + 3] == 1) $cardText .= ("<img title='Frozen' style='position:absolute; z-index:1001; top: " . ($subcard == "-" || $subcard == "UPR043" ? "6px" : "24px") . "; left: 7px; cursor:pointer; height:" . $cardHeight . "; width:" . $cardWidth . ";' src='./Images/frozenOverlay.png' />");
+      // if (HasSentinel($theirAllies[$i], $otherPlayer, $i)) $cardText .= ("<img title='Sentinel' style='pointer-events: none; position:absolute; z-index:1001; top: " . ($subcard == "-" || $subcard == "UPR043" ? "6px" : "24px") . "; left: 6px; cursor:pointer; height:" . $cardHeight . "; width:" . $cardWidth . ";' src='./Images/Sentinel_Overlay.png' />");
+      // if ($theirAllies[$i + 3] == 1) $cardText .= ("<img title='Frozen' style='position:absolute; z-index:1001; top: " . ($subcard == "-" || $subcard == "UPR043" ? "6px" : "24px") . "; left: 7px; cursor:pointer; height:" . $cardHeight . "; width:" . $cardWidth . ";' src='./Images/frozenOverlay.png' />");
       $cardText .= ("</div>");
       if($cardArena == "Ground") $groundAllies .= $cardText;
       else $spaceAllies .= $cardText;
@@ -959,7 +965,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   echo("</div>");
 
   //Their Ground Allies
-  echo ("<div style='overflow-y:auto; margin: 20px 15px 0 15px; position: fixed; top:140px; right:288px; width: calc(50% - 294px); max-height:" . $permHeight . "px;'>");
+  echo ("<div style='margin: 20px 15px 0 15px; position: fixed; top:140px; right:288px; width: calc(50% - 294px); max-height:" . $permHeight . "px;'>");
   echo($groundAllies);
   echo("</div>");
 
