@@ -20,11 +20,13 @@ function ModalAbilities($player, $card, $lastResult)
     case "EZRABRIDGER":
       switch($lastResult[0]) {
         case "Leave": break;
-        case "Play": MZPlayCard($player, "MYDECK-0"); break;
+        case "Play":
+          PrependDecisionQueue("SWAPTURN", $mainPlayer, "-");
+          MZPlayCard($player, "MYDECK-0");
+          break;
         case "Discard": Mill($player, 1); break;
         default: break;
       }
-      PrependDecisionQueue("SWAPTURN", $mainPlayer, "-");
       return 1;
     case "LEIAORGANA":
       switch($lastResult[0]) {
