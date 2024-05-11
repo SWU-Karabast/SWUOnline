@@ -39,6 +39,33 @@ if ($matchup == "" && GetCachePiece($gameName, $playerID + 6) != "") {
   header("Location: MainMenu.php");
   die();
 }
+
+include "HostFiles/Redirector.php";
+include "CardDictionary.php";
+include "MenuFiles/ParseGamefile.php";
+include "MenuFiles/WriteGamefile.php";
+if($playerID == 2 && isset($_SESSION["userid"])) {
+  $isBlocked = false;
+  $blockedPlayers = LoadBlockedPlayers($_SESSION["userid"]);
+  for($i=0; $i<count($blockedPlayers); ++$i) {
+    if($blockedPlayers[$i] == $p1id) {
+      $isBlocked = true;
+      break;
+    }
+  }
+  if ($isBlocked) {
+    $_SESSION['error'] = '⚠️ Another player has already joined the game.';
+    header("Location: MainMenu.php");
+    die();
+  }
+
+  if ($matchup == "" && GetCachePiece($gameName, $playerID + 6) != "") {
+    $_SESSION['error'] = '⚠️ Another player has already joined the game.';
+    header("Location: MainMenu.php");
+    die();
+  }
+}
+
 if ($decklink == "" && $deck == "" && $favoriteDeckLink == "0") {
   $starterDeck = true;
   switch($decksToTry) {
@@ -55,11 +82,6 @@ if ($deck == "" && !IsDeckLinkValid($decklink)) {
   echo '<b>' . "⚠️ Deck URL is not valid: " . $decklink . '</b>';
   exit;
 }
-
-include "HostFiles/Redirector.php";
-include "CardDictionary.php";
-include "MenuFiles/ParseGamefile.php";
-include "MenuFiles/WriteGamefile.php";
 
 if ($matchup == "" && $playerID == 2 && $gameStatus >= $MGS_Player2Joined) {
   if ($gameStatus >= $MGS_GameStarted) {

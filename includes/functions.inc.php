@@ -476,6 +476,26 @@ function LoadSavedSettings($playerId)
 	return $output;
 }
 
+function LoadBlockedPlayers($playerId)
+{
+	if ($playerId == "") return [];
+	$output = [];
+	$conn = GetDBConnection();
+	$sql = "select blockedPlayer from `blocklist` where blockingPlayer=(?)";
+	$stmt = mysqli_stmt_init($conn);
+	if (mysqli_stmt_prepare($stmt, $sql)) {
+		mysqli_stmt_bind_param($stmt, "s", $playerId);
+		mysqli_stmt_execute($stmt);
+		$data = mysqli_stmt_get_result($stmt);
+		while ($row = mysqli_fetch_array($data, MYSQLI_NUM)) {
+			array_push($output, $row[0]);
+		}
+		mysqli_stmt_close($stmt);
+	}
+	mysqli_close($conn);
+	return $output;
+}
+
 function SendEmail($userEmail, $url)
 {
 	include "../APIKeys/APIKeys.php";
