@@ -261,6 +261,20 @@ function SpecificCardLogic($player, $card, $lastResult)
         return "";
       }
       break;
+    case "DARTHVADER":
+      $totalCost = 0;
+      $cardArr = explode(",", $lastResult);
+      for($i=0; $i<count($cardArr); ++$i) {
+        PlayCard($cardArr[$i], "DECK");
+        if($i == count($cardArr)-1) SetAfterPlayedBy($player, "8506660490");
+        $totalCost += CardCost($cardArr[$i]);
+      }
+      if($totalCost > 3) {
+        WriteLog("<span style='color:red;'>Too many units played. I find your lack of faith disturbing. Reverting gamestate.</span>");
+        RevertGamestate();
+        return "";
+      }
+      break;
     case "POWERFAILURE":
       PrependDecisionQueue("SPECIFICCARD", $player, "POWERFAILURE", 1);
       PrependDecisionQueue("OP", $player, "DEFEATUPGRADE", 1);

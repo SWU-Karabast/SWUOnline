@@ -3246,17 +3246,15 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         $hand = &GetHand($currentPlayer);
         AddDecisionQueue("PASSPARAMETER", $currentPlayer, $cardID);
         AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_AfterPlayedBy);
-        AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE," . 10);
+        AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXINDICES,10");
+        AddDecisionQueue("FILTER", $currentPlayer, "Deck-include-aspect-Villainy", 1);
+        AddDecisionQueue("FILTER", $currentPlayer, "Deck-include-maxCost-3", 1);
+        AddDecisionQueue("FILTER", $currentPlayer, "Deck-include-definedType-Unit", 1);
         AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
-        AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-aspect-Villainy", 1);
-        AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-maxCost-3", 1);
-        AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-definedType-Unit", 1);
-        AddDecisionQueue("MAYCHOOSECARD", $currentPlayer, "<-", 1);
-        AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
-        AddDecisionQueue("OP", $currentPlayer, "REMOVECARD", 1);
-        AddDecisionQueue("ALLRANDOMBOTTOM", $currentPlayer, "DECK");
-        AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYHAND-" . count($hand), 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
+        AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "10-", 1);
+        AddDecisionQueue("MULTICHOOSEDECK", $currentPlayer, "<-", 1, 1);
+        AddDecisionQueue("MULTIREMOVEDECK", $currentPlayer, "-", 1);
+        AddDecisionQueue("SPECIFICCARD", $currentPlayer, "DARTHVADER");
       }
       break;
     case "8615772965"://Vigilance
