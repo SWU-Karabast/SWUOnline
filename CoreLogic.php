@@ -3252,7 +3252,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("FILTER", $currentPlayer, "Deck-include-definedType-Unit", 1);
         AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
         AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "10-", 1);
-        AddDecisionQueue("MULTICHOOSEDECK", $currentPlayer, "<-", 1, 1);
+        AddDecisionQueue("MULTICHOOSEDECK", $currentPlayer, "<-", 1);
         AddDecisionQueue("MULTIREMOVEDECK", $currentPlayer, "-", 1);
         AddDecisionQueue("SPECIFICCARD", $currentPlayer, "DARTHVADER");
       }
