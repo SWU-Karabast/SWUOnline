@@ -78,9 +78,26 @@ $isMobile = IsMobile();
       justify-content: space-between;
     }
 
+    .NavBarDiv ul {
+      padding-left: 2rem;
+      padding-right: 2rem;
+      column-gap: 10px;
+    }
+
     .NavBarDiv img {
       width: 25px;
       height: 25px;
+    }
+
+    .NavBarItem {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .NavBarItemDivider {
+      font-size: 14px;
+      font-weight: 600;
+      height: 27px;
     }
 
     h1,
@@ -89,14 +106,14 @@ $isMobile = IsMobile();
     h4,
     h5 {
       text-align: center;
-      margin-top:12px;
-      margin-bottom:12px;
+      margin-top: 12px;
+      margin-bottom: 12px;
     }
 
     td {
       color: white;
-      padding-top:2px;
-      padding-bottom:2px;
+      padding-top: 2px;
+      padding-bottom: 2px;
     }
 
     span {
@@ -104,35 +121,30 @@ $isMobile = IsMobile();
     }
 
     table {
-      margin-bottom:0px;
+      margin-bottom: 0px;
     }
 
     form {
-      margin-bottom:4px;
+      margin-bottom: 4px;
     }
 
 
-    div::-webkit-scrollbar-track
-    {
-    	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-    	border-radius: 10px;
-    	background-color: #F5F5F5;
+    div::-webkit-scrollbar-track {
+      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+      background-color: #F5F5F5;
     }
 
-    div::-webkit-scrollbar
-    {
-    	width: 12px;
-    	background-color: #F5F5F5;
+    div::-webkit-scrollbar {
+      width: 12px;
+      background-color: #F5F5F5;
     }
 
-    div::-webkit-scrollbar-thumb
-    {
-    	border-radius: 10px;
-    	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
-    	background-color: #555;
+    div::-webkit-scrollbar-thumb {
+      border-radius: 10px;
+      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+      background-color: #555;
     }
-
-
   </style>
 </head>
 
@@ -142,24 +154,28 @@ $isMobile = IsMobile();
     <nav class='NavBarDiv'>
       <ul>
         <?php
-          if (!$isMobile) echo '<li><a target="_blank" href="https://discord.gg/hKRaqHND4v"><img src="./Images/icons/discord.svg"></img></a></li>';
-          echo '<li><a target="_blank" href="https://github.com/OotTheMonk/SWUOnline"><img src="./Images/icons/github.svg"></img></a></li>';
+        if (!$isMobile)
+          echo '<li><a target="_blank" href="https://discord.gg/hKRaqHND4v"><img src="./Images/icons/discord.svg"></img></a></li>';
+        echo '<li><a target="_blank" href="https://github.com/OotTheMonk/SWUOnline"><img src="./Images/icons/github.svg"></img></a></li>';
         ?>
-        <li><a target="_blank" href="https://www.patreon.com/OotTheMonk"><img src="./Images/icons/patreon.svg"></img></a></li>
+        <li><a target="_blank" href="https://www.patreon.com/OotTheMonk"><img
+              src="./Images/icons/patreon.svg"></img></a></li>
       </ul>
 
       <ul class='rightnav'>
-        <li></li>
-        <li><a href="MainMenu.php">Home Page</a></li>
+        <li><a href="MainMenu.php" class="NavBarItem">Home Page</a></li>
+        <span class="NavBarItemDivider">⟡</span>
         <?php //if($isPatron) echo "<li><a href='Replays.php'>Replays[BETA]</a></li>";
         ?>
         <?php
         if (isset($_SESSION["useruid"])) {
-          echo "<li><a href='ProfilePage.php'>Profile</a></li>";
-          echo "<li><a href='./AccountFiles/LogoutUser.php'>Logout</a></li>";
+          echo "<li><a href='ProfilePage.php' class='NavBarItem'>Profile</a></li>";
+          echo "<span class='NavBarItemDivider'>⟡</span>";
+          echo "<li><a href='./AccountFiles/LogoutUser.php' class='NavBarItem'>Logout</a></li>";
         } else {
-          echo "<li><a href='Signup.php'>Sign up</a></li>";
-          echo "<li><a href='./LoginPage.php'>Log in</a></li>";
+          echo "<li><a href='Signup.php' class='NavBarItem'>Sign up</a></li>";
+          echo "<span class='NavBarItemDivider'>⟡</span>";
+          echo "<li><a href='./LoginPage.php' class='NavBarItem'>Log in</a></li>";
         }
         ?>
       </ul>
