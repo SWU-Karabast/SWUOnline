@@ -3612,6 +3612,7 @@ function Recover($player, $amount)
 // 3: Their Hero + Their Allies
 // 4: My Hero only (For afflictions)
 // 6: Any unit
+// 7: Friendly unit
 function PlayRequiresTarget($cardID)
 {
   global $currentPlayer;
@@ -3623,7 +3624,7 @@ function PlayRequiresTarget($cardID)
     case "2587711125": return 6;//Disarm
     case "6515891401": return 6;//Karabast
     case "2651321164": return 6;//Tactical Advantage
-    case "1900571801": return 6;//Overwhelming Barrage
+    case "1900571801": return 7;//Overwhelming Barrage
     case "7861932582": return 6;//The Force is With Me
     case "2758597010": return 6;//Maximum Firepower
     case "2202839291": return 6;//Don't Get Cocky
@@ -3711,12 +3712,13 @@ function PlayRequiresTarget($cardID)
   // 3: Their Allies
   // 4: My Hero only (For afflictions)
   // 6: Any ally
+  // 7: Friendly ally
   function GetArcaneTargetIndices($player, $target)
   {
     global $CS_ArcaneTargetsSelected;
     $otherPlayer = ($player == 1 ? 2 : 1);
     if ($target == 4) return "MYCHAR-0";
-    if($target != 3 && $target != 6) $rv = "THEIRCHAR-0";
+    if($target != 3 && $target != 6 && $target != 7) $rv = "THEIRCHAR-0";
     else $rv = "";
     if(($target == 0 && !ShouldAutotargetOpponent($player)) || $target == 2)
     {
@@ -3744,6 +3746,13 @@ function PlayRequiresTarget($cardID)
       {
         if($rv != "") $rv .= ",";
         $rv .= "THEIRALLY-" . $i;
+      }
+    } else if($target == 7) {
+      $myAllies = &GetAllies($player);
+      for($i=0; $i<count($myAllies); $i+=AllyPieces())
+      {
+        if($rv != "") $rv .= ",";
+        $rv .= "MYALLY-" . $i;
       }
     }
     $targets = explode(",", $rv);
