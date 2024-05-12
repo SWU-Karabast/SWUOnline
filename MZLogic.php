@@ -279,6 +279,9 @@ function MZRest($player, $target)
     case "MYAURAS": case "THEIRAURAS":
       $zone[$pieces[1]+1] = 1;
       break;
+    case "MYRESOURCES": case "THEIRRESOURCES":
+      $zone[$pieces[1]+4] = 1;
+      break;
     default: break;
   }
 }
