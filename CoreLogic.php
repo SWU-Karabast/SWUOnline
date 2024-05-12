@@ -2123,7 +2123,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         RevertGamestate();
         return "";
       }
-      PlayAlly(LeaderUnit($cardID), $currentPlayer);
+      $playIndex = PlayAlly(LeaderUnit($cardID), $currentPlayer);
+      if(HasShielded(LeaderUnit($cardID), $currentPlayer, $playIndex)) {
+        $allies = &GetAllies($currentPlayer);
+        AddLayer("TRIGGER", $currentPlayer, "SHIELDED", "-", "-", $allies[$playIndex + 5]);
+      }
       PlayAbility(LeaderUnit($cardID), "CHAR", 0, "-", "-");
       //On Deploy ability
       switch($cardID) {
