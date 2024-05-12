@@ -874,6 +874,9 @@ function IsPlayRestricted($cardID, &$restriction, $from = "", $index = -1, $play
   if($player == "") $player = $currentPlayer;
   $otherPlayer = ($currentPlayer == 1 ? 2 : 1);
   switch($cardID) {
+    case "0523973552"://I Am Your Father
+      $theirAllies = &GetAllies($otherPlayer);
+      return count($theirAllies) == 0;
     default: return false;
   }
 }
