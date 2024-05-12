@@ -563,6 +563,11 @@ function ProcessTrigger($player, $parameter, $uniqueID, $target="-")
       AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $index, 1);
       AddDecisionQueue("MZOP", $player, "ATTACK", 1);
       break;
+    case "SHIELDED":
+      $index = SearchAlliesForUniqueID($uniqueID, $player);
+      $ally = new Ally("MYALLY-" . $index, $player);
+      $ally->Attach("8752877738");//Shield Token
+      break;
     default: break;
   }
 }
