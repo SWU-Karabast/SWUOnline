@@ -317,7 +317,7 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
         $deck = &GetDeck($player);
         if(count($deck) > 0) {
           AddDecisionQueue("SETDQCONTEXT", $player, "Choose if you want to discard a card to Greedo");
-          AddDecisionQueue("YESNO", $player, "-", 1);
+          AddDecisionQueue("YESNO", $player, "-");
           AddDecisionQueue("NOPASS", $player, "-");
           AddDecisionQueue("PASSPARAMETER", $player, "1", 1);
           AddDecisionQueue("OP", $player, "MILL", 1);
