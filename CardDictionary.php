@@ -323,8 +323,8 @@ function HasShielded($cardID, $player, $index)
   {
     case "0700214503":
     case "5264521057":
-    case "9950828238":
-    case "9459170449":
+    case "9950828238"://Seventh Fleet Defender
+    case "9459170449"://Cargo Juggernaut
     case "6931439330":
     case "9624333142":
     case "b0dbca5c05":

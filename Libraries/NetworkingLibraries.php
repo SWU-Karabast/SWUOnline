@@ -1696,6 +1696,9 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
         $abilityIndex = GetClassState($currentPlayer, $CS_AbilityIndex);
         $playIndex = GetClassState($currentPlayer, $CS_PlayIndex);
         AddLayer("PLAYABILITY", $currentPlayer, $cardID, $from . "!" . $resourcesPaid . "!" . $target . "!" . $additionalCosts . "!" . $abilityIndex . "!" . $playIndex, "-", $uniqueID);
+        //TODO: Shielding should be it's own layer
+        $playAlly = new Ally("MYALLY-" . $playIndex);
+        if(HasShielded($cardID, $currentPlayer, $playAlly->Index())) $playAlly->Attach("8752877738");//Shield Token
       }
     }
     if($from != "PLAY") {
