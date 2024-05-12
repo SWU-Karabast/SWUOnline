@@ -182,12 +182,12 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
   $actionData = $actionDataOverride != "" ? $actionDataOverride : $cardNumber;
   //Enforce 375x523 aspect ratio as exported (.71)
   //$margin = "margin:0px;";
-  $margin = "margin-bottom:" . (6 + $subcardNum * 16) . "px; top: " . ($subcardNum * 16) . "px;";
+  $margin = "margin-bottom:" . (8 + $subcardNum * 16) . "px; top: " . ($subcardNum * 16) . "px;";
   $border = "";
   if ($borderColor > 0)
-    $margin = "margin-bottom:" . (7 + $subcardNum * 16) . "px; top: " . (1 + $subcardNum * 16) . "px;";
+    $margin = "margin-bottom:" . (8 + $subcardNum * 16) . "px; top: " . (1 + $subcardNum * 16) . "px;";
   if ($borderColor != -1 && $from == "HASSUBCARD")
-    $margin = "margin-bottom:" . (6 + $subcardNum * 16) . "px; top: " . ($subcardNum * 16) . "px;";
+    $margin = "margin-bottom:" . (8 + $subcardNum * 16) . "px; top: " . ($subcardNum * 16) . "px;";
   if ($folder == "crops")
     $margin = "0px;";
   if ($from == "SUBCARD") {
