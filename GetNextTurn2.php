@@ -814,29 +814,6 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   }
   echo (($manualMode ? "<span style='position:absolute; left:50%; -ms-transform: translateX(-50%); transform: translateX(-50%);  bottom:0px; z-index:1000;'>" . CreateButton($playerID, "Draw", 10010, 0, "20px") . "</span>" : ""));
   echo ("</div>");
-
-  //Display Their Banish
-  if (count($theirBanish) > 0) {
-    echo ("<div style='position:fixed; right:" . GetZoneRight("BANISH") . "; top:" . GetZoneTop("THEIRBANISH") . ";'>");
-    $mod = $theirBanish[count($theirBanish) - BanishPieces() + 1];
-    $card = $mod == "INT" || $mod == "UZURI" ? $TheirCardBack : $theirBanish[count($theirBanish) - BanishPieces()];
-    echo (Card($card, "concat", $cardSizeAura, 0, 0, 0, 0, controller: $otherPlayer));
-
-    $theirBloodDeptCount = 0;
-    for ($i = 0; $i < count($theirBanish); $i += BanishPieces()) {
-      if (HasBloodDebt($theirBanish[$i]) && $theirBanish[$i + 1] != "INT") ++$theirBloodDeptCount;
-    }
-
-    echo ("<span title='Click to see your opponent Banish Zone.' onclick='ShowPopup(\"theirBanishPopup\");' style='left:" . $cardIconLeft . "px; top:" . $cardIconTop + 2 . "px; cursor:pointer; position:absolute; display:inline-block;'>
-      <img style=' opacity:0.9; height:" . $cardIconSize . "; width:" . $cardIconSize . "; display: block; margin-left: auto; margin-right: auto;' src='./Images/banish.png'>
-      <div style='text-align:center; margin: 0; top: 50%; left: 50%; margin-right: -50%; width: 30px; height: 30px; padding: 3px; transform: translate(-50%, -50%); line-height: 1.2;
-      position:absolute; z-index: 5; font-size:26px; font-weight: 600; color: #EEE; text-shadow: 3px 0 0 #000, 0 -2px 0 #000, 0 2px 0 #000, -2px 0 0 #000;'>" . count($theirBanish) / BanishPieces());
-    echo ("</img></div></span>");
-  } else {
-    //Empty Banish div
-    //echo ("<div style='position:fixed; right:" . GetZoneRight("BANISH") . "; top:" . GetZoneTop("THEIRBANISH") . "; border-radius:5%; padding:" . $cardSizeAura / 2 . "px; background-color: rgba(0, 0, 0, 0.4);'>");
-    //echo ("<div style='position:absolute; margin: 0; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: " . $bordelessFontColor . "; user-select:none;'>Banish</div>");
-  }
   echo ("</div>");
 
   echo (($manualMode ? "<span style='position:absolute; top:2%; left:1%;'>" . CreateButton($playerID, "+1", 10013, 0, "20px") . "<br><br>" . CreateButton($playerID, "-1", 10014, 0, "20px") . "</span>" : ""));
@@ -901,6 +878,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         'subcards' => $theirAllies[$i + 4] != "-" ? explode(",", $theirAllies[$i + 4]) : [],
         'currentPower' => $ally->CurrentPower(),
         'hasSentinel' => HasSentinel($theirAllies[$i], $otherPlayer, $i),
+        'overlay' => $theirAllies[$i + 1] != 2 ? 1 : 0
       );
       $cardArena = CardArenas($theirAllies[$i]);
       //Their Unit Spacing
@@ -908,13 +886,6 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       else $cardText = "<div style='position:relative; float:right; display: inline-block; margin: 0 5px;'>";
       //card render their units
       $cardText .= (Card($theirAllies[$i], "concat", $cardSizeAura, $opts));
-      // for($j=0; $j<count($subcards); $j++) {
-      //   $cardText .= (Card($subcards[$j], "concat", $cardSizeAura, showHover: true, from: "SUBCARD", controller: $playerID, subcardNum:$j));
-      // }
-      // $cardText .= (Card($theirAllies[$i], "concat", $cardSizeAura, 0, 1, $theirAllies[$i + 1] != 2 ? 1 : 0, 0, 0, "", "", False, $hp, $enduranceCounters, $attackCounters, ($subcard != "-" && $subcard != "UPR043") ? "HASSUBCARD" : "", controller: $otherPlayer, subcardNum:count($subcards)) . "&nbsp");
-      
-      // if (HasSentinel($theirAllies[$i], $otherPlayer, $i)) $cardText .= ("<img title='Sentinel' style='pointer-events: none; position:absolute; z-index:1001; top: " . ($subcard == "-" || $subcard == "UPR043" ? "6px" : "24px") . "; left: 6px; cursor:pointer; height:" . $cardHeight . "; width:" . $cardWidth . ";' src='./Images/Sentinel_Overlay.png' />");
-      // if ($theirAllies[$i + 3] == 1) $cardText .= ("<img title='Frozen' style='position:absolute; z-index:1001; top: " . ($subcard == "-" || $subcard == "UPR043" ? "6px" : "24px") . "; left: 7px; cursor:pointer; height:" . $cardHeight . "; width:" . $cardWidth . ";' src='./Images/frozenOverlay.png' />");
       $cardText .= ("</div>");
       if($cardArena == "Ground") $groundAllies .= $cardText;
       else $spaceAllies .= $cardText;
@@ -1053,23 +1024,25 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     for ($i = 0; $i < count($myAllies); $i += AllyPieces()) {
       if($i > count($myAllies) - AllyPieces()) break;
       $ally = new Ally("MYALLY-" . $i, $playerID);
-      $lifeCounters = $ally->Health();
-      $enduranceCounters = $myAllies[$i + 6];
-      $subcard = $myAllies[$i + 4];
-      $subcards = $subcard != "-" ? explode(",", $subcard) : [];
-      $attackCounters = $ally->CurrentPower();
       $playable = IsPlayable($myAllies[$i], $turn[0], "PLAY", $i, $restriction) && ($myAllies[$i + 1] == 2 || AllyPlayableExhausted($myAllies[$i]));
-      $border = CardBorderColor($myAllies[$i], "PLAY", $playable);
+      $opts = array(
+        'currentHP' => $ally->Health(),
+        'maxHP' => $ally->MaxHealth(),
+        'enduranceCounters' => $myAllies[$i + 6],
+        'subcard' => $myAllies[$i + 4],
+        'subcards' => $myAllies[$i + 4] != "-" ? explode(",", $myAllies[$i + 4]) : [],
+        'currentPower' => $ally->CurrentPower(),
+        'hasSentinel' => HasSentinel($myAllies[$i], $playerID, $i),
+        'action' => $currentPlayer == $playerID && $turn[0] != "P" && $playable ? 24 : 0,
+        'actionOverride' => strval($i),
+        'border' => CardBorderColor($myAllies[$i], "PLAY", $playable),
+        'overlay' => $myAllies[$i + 1] != 2 ? 1 : 0
+      );
       $cardArena = CardArenas($myAllies[$i]);
       //My Unit Spacing
       if($cardArena == "Ground") $cardText = "<div style='position:relative; display: inline-block; margin: 0 5px;'>";
       else $cardText = "<div style='position:relative; float:right; display: inline-block; margin: 0 5px;'>";
-      for($j=0; $j<count($subcards); $j++) {
-        $cardText .= (Card($subcards[$j], "concat", $cardSizeAura, showHover: true, from: "SUBCARD", controller: $playerID, subcardNum:$j));
-      }
-      $cardText .= (Card($myAllies[$i], "concat", $cardSizeAura, $currentPlayer == $playerID && $turn[0] != "P" && $playable ? 24 : 0, 1, $myAllies[$i + 1] != 2 ? 1 : 0, $border, 0, strval($i), "", False, $lifeCounters, $enduranceCounters, $attackCounters, (count($subcards) > 0) ? "HASSUBCARD" : "", controller: $playerID, subcardNum:count($subcards)) . "&nbsp");
-      if (HasSentinel($myAllies[$i], $playerID, $i)) $cardText .= ("<img title='Sentinel' style='pointer-events: none; position:absolute; z-index:1001; top: " . ($subcard == "-" || $subcard == "UPR043" ? "6px" : "24px") . "; left: 6px; cursor:pointer; height:" . $cardHeight . "; width:" . $cardWidth . ";' src='./Images/Sentinel_Overlay.png' />");
-      if ($myAllies[$i + 3] == 1) $cardText .= ("<img title='Frozen' style='position:absolute; z-index:1001; top: " . ($subcard == "-" || $subcard == "UPR043" ? "6px" : "24px") . "; left: 6px; cursor:pointer; height:" . $cardHeight . "; width:" . $cardWidth . ";' src='./Images/frozenOverlay.png' />");
+      $cardText .= (Card($myAllies[$i], "concat", $cardSizeAura, $opts));
       $cardText .= ("</div>");
       if($cardArena == "Ground") $groundAllies .= $cardText;
       else $spaceAllies .= $cardText;
@@ -1144,7 +1117,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   echo ("</div>");
   echo ("</div>"); //End arsenal div
 
-  //Show deck, discard, pitch, banish
+  //Show deck, discard
   //Display My Discard
   if (count($myDiscard) > 0) {
     echo ("<div title='Click to view the cards in your Graveyard.' style='cursor:pointer; position:fixed; right:257px; bottom:4px;' onclick='ShowPopup(\"myDiscardPopup\");'>");
@@ -1169,26 +1142,6 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   }
   echo (($manualMode ? "<span style='position:absolute; left:50%; -ms-transform: translateX(-50%); transform: translateX(-50%); bottom:0px; z-index:1000;'>" . CreateButton($playerID, "Draw", 10009, 0, "20px") . "</span>" : ""));
   echo ("</div>");
-
-  //Display My Banish
-  if (count($myBanish) > 0) {
-    echo ("<div style='position:fixed; right:" . GetZoneRight("BANISH") . "; bottom:" . GetZoneBottom("MYBANISH") . ";'>");
-    $mod = $myBanish[count($myBanish) - BanishPieces() + 1];
-    if ($playerID == 3) $card = ($mod == "INT" || $mod == "UZURI" ? $MyCardBack : $myBanish[count($myBanish) - BanishPieces()]);
-    else $card = $myBanish[count($myBanish) - BanishPieces()];
-    echo (Card($card, "concat", $cardSizeAura, 0, 0, 0, 0, controller: $playerID));
-    echo ("<span title='Click to see your Banish Zone.' onclick='ShowPopup(\"myBanishPopup\");' style='left:" . $cardIconLeft . "px; top:" . $cardIconTop . "px; cursor:pointer;
-      position:absolute; display:inline-block;'><img style='opacity:0.9; height:" . $cardIconSize . "; width:" . $cardIconSize . ";' src='./Images/banish.png'>
-      <div style='margin: 0; top: 50%; left: 50%; margin-right: -50%; height:" . $counterHeight . "; padding: 3px;
-      text-align: center; transform: translate(-50%, -50%); line-height: 1.2;
-      position:absolute; z-index: 5; font-size:26px; font-weight: 600; color: #EEE; text-shadow: 3px 0 0 #000, 0 -2px 0 #000, 0 2px 0 #000, -2px 0 0 #000;'>" . count($myBanish) / BanishPieces());
-    echo ("</img></div></span>");
-  } else {
-    //Empty Banish div
-    //echo ("<div style='position:fixed; right:" . GetZoneRight("BANISH") . "; bottom:" . GetZoneBottom("MYBANISH") . "; border-radius:5%; padding:" . $cardSizeAura / 2 . "px; background-color: rgba(0, 0, 0, 0.4);'>");
-    //echo ("<div style='position:absolute; margin: 0; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: " . $bordelessFontColor . "; user-select:none;'>Banish</div>");
-  }
-
   echo ("</div>");
 
 

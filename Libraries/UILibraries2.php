@@ -3,8 +3,7 @@
 use JetBrains\PhpStorm\Language;
 
 require_once("CoreLibraries.php");
-ini_set('log_errors', '1');
-error_reporting(E_ALL);
+include "../CardDictionary.php";
 
 $isReactFE = false;
 
@@ -150,8 +149,11 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
   global $playerID, $darkMode;
   if (is_array($action)) {
     $opts = $action;
-    $action = 0;
+    $action = $opts['action'] ?? 0;
     $showHover = 1;
+    $borderColor = $opts['border'] ?? 0;
+    $actionDataOverride = $opts['actionOverride'] ?? "";
+    $overlay = $opts['overlay'] ?? 0;
   }
 
   $LanguageJP = ((IsLanguageJP($playerID) && TranslationExist("JP", $cardNumber)) ? true : false);
@@ -371,12 +373,12 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
       font-weight:700; 
       color: #fff;
       user-select: none;'
-      onmouseover='ShowCardDetailByID(event, " . $opts['subcards'][$i] . ")' onmouseout='HideCardDetail()'>" . "CARDNAME" . "</div>";
+      data-subcard-id='" . $opts['subcards'][$i] . "'>" . CardName($opts['subcards'][$i]) . "</div>";
     }
     
   }
   $rv .= "</a>";
-  return $rv;
+  return str_replace(array("\r", "\n", "\r\n"), '', $rv);
 }
 
 function BorderColorMap($code)
