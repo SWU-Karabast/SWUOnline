@@ -3044,13 +3044,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddNextTurnEffect($cardID, $currentPlayer);
       }
       break;
-    case "6514927936"://Leia Organa
+    case "6514927936"://Leia Organa Leader
       $abilityName = GetResolvedAbilityName($cardID, $from);
       if($abilityName == "Attack") {
         AddCurrentTurnEffect($cardID . "-1", $currentPlayer);
         AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
-        AddDecisionQueue("MZFILTER", $currentPlayer, "status=1");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Rebel");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "status=1", 1);
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to attack with");
         AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
