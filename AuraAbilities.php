@@ -98,11 +98,6 @@ function AuraDestroyed($player, $cardID, $isToken = false)
     }
   }
   $goesWhere = GoesWhereAfterResolving($cardID);
-  for($i = 0; $i < SearchCount(SearchAurasForCard("MON012", $player)); ++$i) {
-    if(TalentContains($cardID, "LIGHT", $player)) $goesWhere = "SOUL";
-    if(CardType($cardID) != "T" && $isToken) WriteLog("<span style='color:red;'>The card is not put in your soul from Merciful Retribution because it is a token copy.</span>");
-    DealArcane(1, 0, "STATIC", "MON012", false, $player);
-  }
 
   if(HasWard($cardID) && SearchCharacterActive($player, "DYN213") && !$isToken) {
     $char = &GetPlayerCharacter($player);

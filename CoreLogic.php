@@ -2804,7 +2804,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1", 1);
-        DealArcane(1, 1, "PLAYCARD", "6088773439");
+        $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+        DealDamageAsync($otherPlayer, 1, "DAMAGE", "6088773439");
       }
       break;
     case "3503494534"://Regional Governor
