@@ -369,10 +369,11 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
     $bgImage = "./Images/AttackIcon.png";
     $left = "-5%";
     $top = "68%";
-    $lineHeight = 30;
-    $rv .= "<div style=' position:absolute; top: " . $top . "; left:" . $left . "; width:" . $imgCounterHeight . "px; height:" . $imgCounterHeight . "px; line-height:" . $lineHeight . "px; 
-    z-index: 5; text-align: center; font-size:" . $imgCounterFontSize . "px; font-weight: 600;  color: #EEE; text-shadow: 0px 2px 0px rgba(0, 0, 0, 0.52); -webkit-text-stroke: 1px rgba(0, 0, 0, 0.52); text-stroke: 1px rgba(0, 0, 0, 0.52); 
-    user-select: none; background: url($bgImage) no-repeat; background-size: 35px 35px;'>" . $opts['currentPower'] . "</div>";  }
+    $lineHeight = 38;
+    $rv .= "<div style='position:absolute; top: " . $top . "; left:" . $left . "; width:" . $imgCounterHeight . "px; height:" . $imgCounterHeight . "px; line-height:" . $lineHeight . "px; 
+    z-index: 5; text-align: center; font-size:" . $imgCounterFontSize . "px; font-weight: 700; font-family: Teko, sans-serif; color: #EEE; text-shadow: 0px 0px 3px rgba(0, 0, 0, 1); 
+    user-select: none; background: url($bgImage) no-repeat; background-size: 35px 35px;'>" . $opts['currentPower'] . "</div>";
+  }
 
   // Subcards style
   if (isset($opts['subcards']) && count($opts['subcards']) > 0) {
