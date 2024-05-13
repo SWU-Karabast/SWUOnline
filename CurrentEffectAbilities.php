@@ -37,7 +37,7 @@ function FinalizeChainLinkEffects()
         PrependDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
         PrependDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to attack with");
         PrependDecisionQueue("MZFILTER", $mainPlayer, "status=1");
-        PrependDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
+        PrependDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:trait=Rebel");
         return true;
       case "6514927936-2"://Leia Organa
         PrependDecisionQueue("SWAPTURN", $mainPlayer, "-");
