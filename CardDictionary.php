@@ -693,7 +693,8 @@ function GetAbilityNames($cardID, $index = -1)
       $abilityNames = "Buff HP";
       break;
     case "4300219753"://Fett's Firespray
-      $abilityNames = "Exhaust,Attack";
+      $ally = new Ally("MYALLY-" . $index, $currentPlayer);
+      $abilityNames = $ally->IsExhausted() ? "Exhaust" : "Exhaust,Attack";
       break;
     case "7911083239"://Grand Inquisitor
       $abilityNames = "Deal Damage";
