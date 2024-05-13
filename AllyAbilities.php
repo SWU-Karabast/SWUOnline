@@ -662,9 +662,9 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("NOPASS", $mainPlayer, "-");
       AddDecisionQueue("PASSPARAMETER", $mainPlayer, "MYALLY-" . $i, 1);
       AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,1", 1);
-      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 1 damage to", 1);
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:arena=Ground&THEIRALLY:arena=Ground", 1);
       AddDecisionQueue("MZFILTER", $mainPlayer, "index=MYALLY-" . $attackerAlly->Index());
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 1 damage to", 1);
       AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,1", 1);
       break;
