@@ -509,19 +509,6 @@ function FinalizeDamage($player, $damage, $damageThreatened, $type, $source)
   return $damage;
 }
 
-function DoQuell($targetPlayer, $damage)
-{
-  $quellChoices = QuellChoices($targetPlayer, $damage);
-  if ($quellChoices != "0") {
-    PrependDecisionQueue("PAYRESOURCES", $targetPlayer, "<-", 1);
-    PrependDecisionQueue("AFTERQUELL", $targetPlayer, "-", 1);
-    PrependDecisionQueue("BUTTONINPUT", $targetPlayer, $quellChoices);
-    PrependDecisionQueue("SETDQCONTEXT", $targetPlayer, "Choose an amount to pay for Quell");
-  } else {
-    PrependDecisionQueue("PASSPARAMETER", $targetPlayer, "0"); //If no quell, we need to discard the previous last result
-  }
-}
-
 function ProcessDealDamageEffect($cardID)
 {
   $set = CardSet($cardID);
@@ -1858,7 +1845,7 @@ function SelfCostModifier($cardID)
   if(count($layers) > 0) {
     $targetID = GetMZCard($currentPlayer, GetClassState($currentPlayer, $CS_LayerTarget));
   } else {
-    if(SearchAlliesForCard($currentPlayer, "4166047484")) $targetID = "4166047484";
+    if(SearchAlliesForCard($currentPlayer, "4166047484") != "") $targetID = "4166047484";
     else $targetID = "";
   }
   //Guardian of the Whills
@@ -2127,7 +2114,6 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
   }
   if($from != "PLAY" && IsAlly($cardID, $currentPlayer)) {
     $playAlly = new Ally("MYALLY-" . LastAllyIndex($currentPlayer));
-    if(HasShielded($cardID, $currentPlayer, $playAlly->Index())) $playAlly->Attach("8752877738");//Shield Token
   }
   if($from == "EQUIP" && DefinedTypesContains($cardID, "Leader", $currentPlayer)) {
     $abilityName = GetResolvedAbilityName($cardID, $from);
@@ -2137,7 +2123,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         RevertGamestate();
         return "";
       }
-      PlayAlly(LeaderUnit($cardID), $currentPlayer);
+      $playIndex = PlayAlly(LeaderUnit($cardID), $currentPlayer);
+      if(HasShielded(LeaderUnit($cardID), $currentPlayer, $playIndex)) {
+        $allies = &GetAllies($currentPlayer);
+        AddLayer("TRIGGER", $currentPlayer, "SHIELDED", "-", "-", $allies[$playIndex + 5]);
+      }
       PlayAbility(LeaderUnit($cardID), "CHAR", 0, "-", "-");
       //On Deploy ability
       switch($cardID) {
@@ -2533,9 +2523,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "4299027717"://Mining Guild Tie Fighter
       if($from == "PLAY" && NumResourcesAvailable($currentPlayer) >= 2) {
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Do you want to pay 2 to draw a card?");
-        AddDecisionQueue("YESNO", $currentPlayer, "-", 0, 1);
+        AddDecisionQueue("YESNO", $currentPlayer, "-");
         AddDecisionQueue("NOPASS", $currentPlayer, "", 1);
-        AddDecisionQueue("PAYRESOURCES", $currentPlayer, "2", 1);
+        AddDecisionQueue("PAYRESOURCES", $currentPlayer, "2,1", 1);
         AddDecisionQueue("DRAW", $currentPlayer, "-", 1);
       }
       break;
@@ -2601,8 +2591,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "2429341052"://Security Complex
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to give a shield");
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to give a shield");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "ADDSHIELD", 1);
       break;
@@ -2813,7 +2804,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1", 1);
-        DealArcane(1, 1, "PLAYCARD", "6088773439");
+        $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+        DealDamageAsync($otherPlayer, 1, "DAMAGE", "6088773439");
       }
       break;
     case "3503494534"://Regional Governor
@@ -3052,13 +3044,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddNextTurnEffect($cardID, $currentPlayer);
       }
       break;
-    case "6514927936"://Leia Organa
+    case "6514927936"://Leia Organa Leader
       $abilityName = GetResolvedAbilityName($cardID, $from);
       if($abilityName == "Attack") {
         AddCurrentTurnEffect($cardID . "-1", $currentPlayer);
         AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
-        AddDecisionQueue("MZFILTER", $currentPlayer, "status=1");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Rebel");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "status=1", 1);
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to attack with");
         AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
@@ -3407,7 +3399,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "8988732248"://Rebel Assault
       AddCurrentTurnEffect($cardID . "-1", $currentPlayer);
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
-      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Rebel");
       AddDecisionQueue("MZFILTER", $currentPlayer, "status=1");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to attack with");
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);

@@ -37,7 +37,7 @@ function FinalizeChainLinkEffects()
         PrependDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
         PrependDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to attack with");
         PrependDecisionQueue("MZFILTER", $mainPlayer, "status=1");
-        PrependDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
+        PrependDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:trait=Rebel");
         return true;
       case "6514927936-2"://Leia Organa
         PrependDecisionQueue("SWAPTURN", $mainPlayer, "-");
@@ -46,7 +46,7 @@ function FinalizeChainLinkEffects()
         PrependDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
         PrependDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to attack with");
         PrependDecisionQueue("MZFILTER", $mainPlayer, "status=1");
-        PrependDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
+        PrependDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:trait=Rebel");
         return true;
       case "87e8807695"://Leia Organa - Leader Unit
         SearchCurrentTurnEffects("87e8807695", $mainPlayer, remove:true);
@@ -56,7 +56,7 @@ function FinalizeChainLinkEffects()
         PrependDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
         PrependDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to attack with");
         PrependDecisionQueue("MZFILTER", $mainPlayer, "status=1");
-        PrependDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
+        PrependDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:trait=Rebel");
         return true;
       case "9560139036"://Ezra Bridger
         SearchCurrentTurnEffects("9560139036", $mainPlayer, remove:true);

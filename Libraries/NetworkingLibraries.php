@@ -1700,6 +1700,10 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
     }
     if($from != "PLAY") {
       $index = LastAllyIndex($currentPlayer);
+      if(HasShielded($cardID, $currentPlayer, $index)) {
+        $allies = &GetAllies($currentPlayer);
+        AddLayer("TRIGGER", $currentPlayer, "SHIELDED", "-", "-", $allies[$index + 5]);
+      }
       if(HasAmbush($cardID, $currentPlayer, $index)) {
         $allies = &GetAllies($currentPlayer);
         AddLayer("TRIGGER", $currentPlayer, "AMBUSH", "-", "-", $allies[$index + 5]);

@@ -32,8 +32,8 @@ function ModalAbilities($player, $card, $lastResult)
       switch($lastResult[0]) {
         case "Ready_Resource": ReadyResource($player); break;
         case "Exhaust_Unit":
-          AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to exhaust");
           AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
+          AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to exhaust");
           AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
           AddDecisionQueue("MZOP", $player, "REST", 1);
           break;

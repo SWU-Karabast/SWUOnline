@@ -24,8 +24,10 @@ $livingLegendsCCLinks = "";
 $reactFE = "https://fe.talishar.net/game/play";
 
 $isShadowBanned = false;
-if(isset($_SESSION["isBanned"])) $isShadowBanned = (intval($_SESSION["isBanned"]) == 1 ? true : false);
-else if(isset($_SESSION["useruid"])) $isShadowBanned = IsBanned($_SESSION["useruid"]);
+if (isset($_SESSION["isBanned"]))
+  $isShadowBanned = (intval($_SESSION["isBanned"]) == 1 ? true : false);
+else if (isset($_SESSION["useruid"]))
+  $isShadowBanned = IsBanned($_SESSION["useruid"]);
 
 $canSeeQueue = isset($_SESSION["useruid"]);
 
@@ -34,8 +36,10 @@ echo ("<h1 style='width:100%; text-align:center; color:rgb(240, 240, 240);'>Publ
 $gameInProgressCount = 0;
 if ($handle = opendir($path)) {
   while (false !== ($folder = readdir($handle))) {
-    if ('.' === $folder) continue;
-    if ('..' === $folder) continue;
+    if ('.' === $folder)
+      continue;
+    if ('..' === $folder)
+      continue;
     $gameToken = $folder;
     $folder = $path . "/" . $folder . "/";
     $gs = $folder . "gamestate.txt";
@@ -48,26 +52,63 @@ if ($handle = opendir($path)) {
         //if($p2Hero != "") $gameInProgressCount += 1;
         $gameInProgressCount += 1;
         $visibility = GetCachePiece($gameToken, 9);
+
+
         if ($p2Hero != "" && $visibility == "1") {
-        //if ($visibility == "1") {
-          //$spectateLinks .= "<form style='text-align:center;' action='" . $reactFE . "'>";
-          $spectateLinks .= "<form style='text-align:center;' action='https://karabast.net/SWUOnline/NextTurn4.php?gameName=$gameToken&playerID=3'>";
-          $spectateLinks .= "<center><table><tr><td style='vertical-align:middle; padding-left:8px; width:50px; height: 40px;'>";
+          $spectateLinks .= <<<HTML
+            <style>
+            .spectate-container {
+              display: flex;
+              justify-content: space-between;
+            }
+
+            .hero-container {
+              display: flex;
+              align-items: center;
+              column-gap: 10px
+            }
+
+            .hero-image {
+              height: 50px;
+              max-width: inherit;
+            }
+
+            .last-update-label {
+              font-weight: 500;
+            }
+
+            .versus {
+              font-weight: 600;
+            }
+
+            .spectate-button {
+              font-size: 16px;
+            }
+            </style>
+            
+            <form class='spectate-form' action='https://karabast.net/SWUOnline/NextTurn4.php?gameName=$gameToken&playerID=3'>
+                <div class='spectate-container'>
+                    <div class='hero-container'>
+          HTML;
+
           if ($p1Hero == "") {
-            $spectateLinks .= "<label for='joinGame' style='font-weight:500;'>Last Update " . intval(($currentTime - $lastGamestateUpdate) / 1000) . " seconds ago </label>";
+            $spectateLinks .= "<label for='joinGame' class='last-update-label'>Last Update " . intval(($currentTime - $lastGamestateUpdate) / 1000) . " seconds ago </label>";
           } else {
-            $spectateLinks .= "<img height='40px;' style='max-width:50px;' src='./crops/" . $p1Hero . "_cropped.png' />";
-            $spectateLinks .= "</td><td style='vertical-align:middle;'>";
-            $spectateLinks .= "vs";
-            $spectateLinks .= "</td><td style='width:50px; height: 40px; vertical-align:middle; padding-left:8px;'>";
-            $spectateLinks .= "<img height='40px;' style='max-width:50px;' src='./crops/" . $p2Hero . "_cropped.png' />";
-            $spectateLinks .= "</td><td style='vertical-align:middle;'>";
+            $spectateLinks .= <<<HTML
+              <img class='hero-image' src='./WebpImages2/$p1Hero.webp' alt='Player 1 Hero Image' />
+              <span class='versus'>vs</span>
+              <img class='hero-image' src='./WebpImages2/$p2Hero.webp' alt='Player 2 Hero Image' />
+            HTML;
           }
-          $spectateLinks .= "<input class='ServerChecker_Button' type='submit' style='font-size:16px;' id='joinGame' value='Spectate' />";
-          $spectateLinks .= "</td></tr></table></center>";
-          $spectateLinks .= "<input type='hidden' name='gameName' value='$gameToken' />";
-          $spectateLinks .= "<input type='hidden' name='playerID' value='3' />";
-          $spectateLinks .= "</form>";
+
+          $spectateLinks .= <<<HTML
+                    </div>
+                    <input class='spectate-button' type='submit' id='joinGame' value='Spectate' />
+                    <input type='hidden' name='gameName' value='$gameToken' />
+                    <input type='hidden' name='playerID' value='3' />
+                </div>
+            </form>
+          HTML;
         }
       } else if ($currentTime - $lastGamestateUpdate > 900000) //~1 hour
       {
@@ -99,13 +140,17 @@ if ($handle = opendir($path)) {
     if ($status == 0 && $visibility == "public" && intval(GetCachePiece($gameName, 11)) < 3) {
       $p1Hero = GetCachePiece($gameName, 7);
       $formatName = "";
-      if ($format == "commoner") $formatName = "Commoner ";
-      else if ($format == "livinglegendscc") $formatName = "Open Format ";
-      else if ($format == "clash") $formatName = "Clash";
+      if ($format == "commoner")
+        $formatName = "Commoner ";
+      else if ($format == "livinglegendscc")
+        $formatName = "Open Format ";
+      else if ($format == "clash")
+        $formatName = "Clash";
 
       $link = "<form style='text-align:center;' action='" . $redirectPath . "/JoinGame.php'>";
       $link .= "<center><table style='left:40%;'><tr><td style='vertical-align:middle;'>";
-      if ($formatName != "") $link .= $formatName . "&nbsp;</td><td>";
+      if ($formatName != "")
+        $link .= $formatName . "&nbsp;</td><td>";
       $link .= "</td><td style='vertical-align:middle;'>";
       $description = ($gameDescription == "" ? "Game #" . $gameName : $gameDescription);
       $link .= "<span style='font-weight:500; pointer:default;'> &nbsp;" . $description . " </span>";
@@ -114,20 +159,30 @@ if ($handle = opendir($path)) {
       $link .= "<input type='hidden' name='gameName' value='$gameToken' />";
       $link .= "<input type='hidden' name='playerID' value='2' />";
       $link .= "</form>";
-      if(!$isShadowBanned) {
-        switch($format) {
-          case "blitz": $blitzLinks .= $link; break;
-          case "compblitz": $compBlitzLinks .= $link; break;
-          case "cc": $ccLinks .= $link; break;
-          case "compcc": $compCCLinks .= $link; break;
+      if (!$isShadowBanned) {
+        switch ($format) {
+          case "blitz":
+            $blitzLinks .= $link;
+            break;
+          case "compblitz":
+            $compBlitzLinks .= $link;
+            break;
+          case "cc":
+            $ccLinks .= $link;
+            break;
+          case "compcc":
+            $compCCLinks .= $link;
+            break;
           default:
-            if($format != "shadowblitz" && $format != "shadowcc") $otherFormatsLinks .= $link;
+            if ($format != "shadowblitz" && $format != "shadowcc")
+              $otherFormatsLinks .= $link;
             break;
         }
-      }
-      else {
-        if($format == "shadowblitz") $blitzLinks .= $link;
-        else if($format == "shadowcc") $ccLinks .= $link;
+      } else {
+        if ($format == "shadowblitz")
+          $blitzLinks .= $link;
+        else if ($format == "shadowcc")
+          $ccLinks .= $link;
       }
     }
   }
@@ -150,7 +205,7 @@ if (!$canSeeQueue) {
 echo ("<h4 style='text-align:center;'>______________________</h4>");
 echo ("<h3 style='width:100%; text-align:center; color:RGB(240,240,240);'>Games In Progress ($gameInProgressCount)</h3>");
 //if (!IsMobile()) {
-  echo ($spectateLinks);
+echo ($spectateLinks);
 //}
 echo ("</div>");
 

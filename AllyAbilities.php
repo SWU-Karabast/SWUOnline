@@ -317,7 +317,7 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
         $deck = &GetDeck($player);
         if(count($deck) > 0) {
           AddDecisionQueue("SETDQCONTEXT", $player, "Choose if you want to discard a card to Greedo");
-          AddDecisionQueue("YESNO", $player, "-", 1);
+          AddDecisionQueue("YESNO", $player, "-");
           AddDecisionQueue("NOPASS", $player, "-");
           AddDecisionQueue("PASSPARAMETER", $player, "1", 1);
           AddDecisionQueue("OP", $player, "MILL", 1);
@@ -662,9 +662,9 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("NOPASS", $mainPlayer, "-");
       AddDecisionQueue("PASSPARAMETER", $mainPlayer, "MYALLY-" . $i, 1);
       AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,1", 1);
-      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 1 damage to", 1);
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:arena=Ground&THEIRALLY:arena=Ground", 1);
       AddDecisionQueue("MZFILTER", $mainPlayer, "index=MYALLY-" . $attackerAlly->Index());
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 1 damage to", 1);
       AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,1", 1);
       break;

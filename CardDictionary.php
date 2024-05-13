@@ -323,8 +323,8 @@ function HasShielded($cardID, $player, $index)
   {
     case "0700214503":
     case "5264521057":
-    case "9950828238":
-    case "9459170449":
+    case "9950828238"://Seventh Fleet Defender
+    case "9459170449"://Cargo Juggernaut
     case "6931439330":
     case "9624333142":
     case "b0dbca5c05":
@@ -693,7 +693,8 @@ function GetAbilityNames($cardID, $index = -1)
       $abilityNames = "Buff HP";
       break;
     case "4300219753"://Fett's Firespray
-      $abilityNames = "Exhaust,Attack";
+      $ally = new Ally("MYALLY-" . $index, $currentPlayer);
+      $abilityNames = $ally->IsExhausted() ? "Exhaust" : "Exhaust,Attack";
       break;
     case "7911083239"://Grand Inquisitor
       $abilityNames = "Deal Damage";
@@ -874,6 +875,9 @@ function IsPlayRestricted($cardID, &$restriction, $from = "", $index = -1, $play
   if($player == "") $player = $currentPlayer;
   $otherPlayer = ($currentPlayer == 1 ? 2 : 1);
   switch($cardID) {
+    case "0523973552"://I Am Your Father
+      $theirAllies = &GetAllies($otherPlayer);
+      return count($theirAllies) == 0;
     default: return false;
   }
 }
