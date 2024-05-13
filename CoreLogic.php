@@ -1845,7 +1845,7 @@ function SelfCostModifier($cardID)
   if(count($layers) > 0) {
     $targetID = GetMZCard($currentPlayer, GetClassState($currentPlayer, $CS_LayerTarget));
   } else {
-    if(SearchAlliesForCard($currentPlayer, "4166047484")) $targetID = "4166047484";
+    if(SearchAlliesForCard($currentPlayer, "4166047484") != "") $targetID = "4166047484";
     else $targetID = "";
   }
   //Guardian of the Whills
