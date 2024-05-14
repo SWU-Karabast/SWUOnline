@@ -37,7 +37,6 @@ function ProcessMacros()
           {
             $subtype = CardSubType($layers[2]);
             if(DelimStringContains($subtype, "Aura") && GetAuraGemState($layers[1], $layers[2]) == 0) { $somethingChanged = true; PassInput(); }
-            if(DelimStringContains($subtype, "Item") && GetItemGemState($layers[1], $layers[2]) == 0) { $somethingChanged = true; PassInput(); }
           }
         }
       }

@@ -31,8 +31,6 @@ function MZDestroy($player, $lastResult)
       case "THEIRALLY": $lastResult = DestroyAlly($otherPlayer, $mzIndex[1]); break;
       case "MYAURAS": $lastResult = DestroyAura($player, $mzIndex[1]); break;
       case "THEIRAURAS": $lastResult = DestroyAura($otherPlayer, $mzIndex[1]); break;
-      case "MYITEMS": $lastResult = DestroyItemForPlayer($player, $mzIndex[1]); break;
-      case "THEIRITEMS": $lastResult = DestroyItemForPlayer($otherPlayer, $mzIndex[1]); break;
       case "MYARS": case "MYRESOURCES": $lastResult = DestroyArsenal($player, $mzIndex[1]); break;
       case "THEIRARS": $lastResult = DestroyArsenal($otherPlayer, $mzIndex[1]); break;
       default: break;
@@ -50,10 +48,8 @@ function MZRemove($player, $lastResult)
     $mzIndex = explode("-", $lastResultArr[$i]);
     switch($mzIndex[0]) {
       case "MYCHAR": $lastResult = RemoveCharacter($player, $mzIndex[1]); break;
-      case "MYITEMS": $lastResult = DestroyItemForPlayer($player, $mzIndex[1], true); break;
       case "MYDISCARD": $lastResult = RemoveGraveyard($player, $mzIndex[1]); break;
       case "THEIRDISCARD": $lastResult = RemoveGraveyard($otherPlayer, $mzIndex[1]); break;
-      case "THEIRITEMS": $lastResult = DestroyItemForPlayer($otherPlayer, $mzIndex[1], true); break;
       case "MYBANISH": RemoveBanish($player, $mzIndex[1]); break;
       case "THEIRBANISH": RemoveBanish($otherPlayer, $mzIndex[1]); break;
       case "MYALLY": $lastResult = RemoveAlly($player, $mzIndex[1]); break;
@@ -213,7 +209,6 @@ function MZGainControl($player, $target)
   $targetArr = explode("-", $target);
   switch($targetArr[0])
   {
-    case "MYITEMS": case "THEIRITEMS": StealItem(($player == 1 ? 2 : 1), $targetArr[1], $player); break;
     default: break;
   }
 }
@@ -346,10 +341,6 @@ function MZSuppress($player, $target)
   switch($pieces[0]) {
     case "THEIRALLY": case "MYALLY":
       $cardID = RemoveAlly($player, $pieces[1]);
-      BanishCardForPlayer($cardID, $player, "PLAY", "SUPPRESS", $player);
-      break;
-    case "THEIRITEMS": case "MYITEMS":
-      $cardID = DestroyItemForPlayer($player, $pieces[1], true);
       BanishCardForPlayer($cardID, $player, "PLAY", "SUPPRESS", $player);
       break;
     case "THEIRCHAR": case "MYCHAR":

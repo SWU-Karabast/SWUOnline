@@ -911,7 +911,6 @@ function ResolveCombatDamage($damageDone)
       MainCharacterHitEffects();
       ArsenalHitEffects();
       AuraHitEffects($combatChain[0]);
-      ItemHitEffects($combatChain[0]);
       AttackDamageAbilities(GetClassState($mainPlayer, $CS_DamageDealt));
     }
   }
@@ -1061,7 +1060,6 @@ function PlayerSuppress($player)
     if($banish[$i + 1] == "SUPPRESS") {
       $cardID = $banish[$i];
       if(IsAlly($cardID)) PlayAlly($cardID, $player);
-      else if(CardTypeContains($cardID, "ITEM")) PutItemIntoPlayForPlayer($cardID, $player);
       else if(CardTypeContains($cardID, "WEAPON")) AddCharacter($cardID, $player);
       RemoveBanish($player, $i);
     }
@@ -1084,7 +1082,6 @@ function FinishTurnPass()
   global $mainPlayer;
   ClearLog();
   ResetCombatChainState();
-  ItemEndTurnAbilities();
   AuraBeginEndPhaseAbilities();
   BeginEndPhaseEffects();
   PermanentBeginEndPhaseEffects();
@@ -1165,7 +1162,6 @@ function FinalizeTurn()
 
   //Start of turn effects
   if ($mainPlayer == 1) StatsStartTurn();
-  ItemBeginTurnEffects($mainPlayer);
   StartTurnAbilities();
 
   $layerPriority[0] = ShouldHoldPriority(1);
@@ -1241,7 +1237,7 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
           $baseCost = 0;
           AddAdditionalCost($currentPlayer, "ALTERNATIVECOST");
         }
-        $resources[1] += ($dynCostResolved > 0 ? $dynCostResolved : $baseCost) + CurrentEffectCostModifiers($cardID, $from) + $frostbitesPaid + CharacterCostModifier($cardID, $from) + BanishCostModifier($from, $index) + ItemCostModifiers($cardID);
+        $resources[1] += ($dynCostResolved > 0 ? $dynCostResolved : $baseCost) + CurrentEffectCostModifiers($cardID, $from) + $frostbitesPaid + CharacterCostModifier($cardID, $from) + BanishCostModifier($from, $index);
         if($isAlternativeCostPaid && $resources[1] > 0) WriteLog("<span style='color:red;'>Alternative costs do not offset additional costs.</span>");
       }
       if($resources[1] < 0) $resources[1] = 0;
@@ -1336,7 +1332,6 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
         ResetCombatChainState();
       }
       CombatChainPlayAbility($cardID);
-      ItemPlayAbilities($cardID, $from);
       AllyPlayCardAbility($cardID);
       if(AspectContains($cardID, "Villainy", $currentPlayer)) IncrementClassState($currentPlayer, $CS_NumVillainyPlayed);
       IncrementClassState($currentPlayer, $CS_NumCardsPlayed);

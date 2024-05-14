@@ -153,15 +153,10 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       return ($rv == "" ? "PASS" : $rv);
     case "PUTPLAY":
       $subtype = CardSubType($lastResult);
-      if($subtype == "Item") {
-        PutItemIntoPlayForPlayer($lastResult, $player, ($parameter != "-" ? $parameter : 0));
-      }
-      else if(IsAlly($lastResult))
-      {
+      if (IsAlly($lastResult)){
         PlayAlly($lastResult, $player);
         PlayAbility($lastResult, "-", 0);
-      }
-      else {
+      } else {
         PlayAura($lastResult, $player);
       }
       return $lastResult;
@@ -1128,15 +1123,6 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       return $lastResult;
     case "COUNTITEM":
       return CountItem($parameter, $player);
-    case "FINDANDDESTROYITEM":
-      $mzArr = explode("-", $parameter);
-      $cardID = $mzArr[0];
-      $number = $mzArr[1];
-      for($i = 0; $i < $number; ++$i) {
-        $index = GetItemIndex($cardID, $player);
-        if($index != -1) DestroyItemForPlayer($player, $index);
-      }
-      return $lastResult;
     case "COUNTPARAM":
       $array = explode(",", $parameter);
       return count($array) . "-" . $parameter;
@@ -1276,10 +1262,6 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
     case "PICKACARD":
       $hand = &GetHand(($player == 1 ? 2 : 1));
       $rand = GetRandom(0, count($hand) - 1);
-      if(RevealCards($hand[$rand], $player) && CardName($hand[$dqVars[0]]) == CardName($hand[$rand])) {
-        WriteLog("Bingo! Your opponent tossed you a silver.");
-        PutItemIntoPlayForPlayer("EVR195", $player);
-      }
       return $lastResult;
     case "MODAL":
       return ModalAbilities($player, $parameter, $lastResult);

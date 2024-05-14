@@ -220,7 +220,6 @@ function StartTurnAbilities()
   global $initiativePlayer;
   MZStartTurnMayAbilities();
   AuraStartTurnAbilities();
-  ItemStartTurnAbilities();
 }
 
 function MZStartTurnMayAbilities()
@@ -461,7 +460,6 @@ function DealDamageAsync($player, $damage, $type="DAMAGE", $source="NA")
   $damage = CurrentEffectDamagePrevention($player, $type, $damage, $source, $preventable);
   $damage = AuraTakeDamageAbilities($player, $damage, $type);
   $damage = PermanentTakeDamageAbilities($player, $damage, $type);
-  $damage = ItemTakeDamageAbilities($player, $damage, $type);
   if($damage == 1 && $preventable && SearchItemsForCard("EVR069", $player) != "") $damage = 0;//Must be last
   $dqVars[0] = $damage;
   if($type == "COMBAT") $dqState[6] = $damage;
@@ -496,7 +494,6 @@ function FinalizeDamage($player, $damage, $damageThreatened, $type, $source)
     }
 
     AuraDamageTakenAbilities($player, $damage);
-    ItemDamageTakenAbilities($player, $damage);
     CharacterDamageTakenAbilities($player, $damage);
     CharacterDealDamageAbilities($otherPlayer, $damage);
     $classState[$CS_DamageTaken] += $damage;
@@ -535,7 +532,6 @@ function ArcaneDamagePrevented($player, $cardMZIndex)
   if($spellVoidAmount > 0)
   {
     if($zone == "MYCHAR") DestroyCharacter($player, $index);
-    else if($zone == "MYITEMS") DestroyItemForPlayer($player, $index);
     else if($zone == "MYAURAS") DestroyAura($player, $index);
     $prevented += $spellVoidAmount;
     WriteLog(CardLink($cardID, $cardID) . " was destroyed and prevented " . $spellVoidAmount . " arcane damage.");

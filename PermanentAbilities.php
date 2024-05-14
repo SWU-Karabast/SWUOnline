@@ -242,7 +242,6 @@ function PermanentStartTurnAbilities()
         $items = &GetItems($mainPlayer);
         $found = false;
         for($j = 0; $j < count($items)-1; ++$j) { if($items[$j] == "DYN243") $found = true; continue; }
-        if(!$found) PutItemIntoPlay("DYN243");
         break;
       case "ROGUE610":
         AddDecisionQueue("FINDINDICES", $mainPlayer, "HAND");
