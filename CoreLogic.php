@@ -2450,7 +2450,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "4536594859"://Medal Ceremony
-      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Rebel");
       AddDecisionQueue("MZFILTER", $currentPlayer, "numAttacks=0");
       AddDecisionQueue("OP", $currentPlayer, "MZTONORMALINDICES");
       AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "3-", 1);

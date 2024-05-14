@@ -657,7 +657,7 @@ function IsLeader($cardID, $playerID) {
   return DefinedTypesContains($cardID, "Leader", $playerID);
 }
 
-function GetAbilityNames($cardID, $index = -1)
+function GetAbilityNames($cardID, $index = -1, $validate=false)
 {
   global $currentPlayer;
   $abilityNames = "";
@@ -694,7 +694,8 @@ function GetAbilityNames($cardID, $index = -1)
       break;
     case "4300219753"://Fett's Firespray
       $ally = new Ally("MYALLY-" . $index, $currentPlayer);
-      $abilityNames = $ally->IsExhausted() ? "Exhaust" : "Exhaust,Attack";
+      if($validate) $abilityNames = $ally->IsExhausted() ? "Exhaust" : "Exhaust,Attack";
+      else $abilityNames = "Exhaust,Attack";
       break;
     case "7911083239"://Grand Inquisitor
       $abilityNames = "Deal Damage";

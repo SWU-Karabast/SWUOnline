@@ -190,18 +190,6 @@ if ($decklink != "") {
   fclose($deckFile);
   copy($filename, "./Games/" . $gameName . "/p" . $playerID . "DeckOrig.txt");
 
-  if (isset($_SESSION["userid"])) {
-    include_once './includes/functions.inc.php';
-    include_once "./includes/dbh.inc.php";
-    /*
-    $deckbuilderID = GetDeckBuilderId($_SESSION["userid"], $decklink);
-    if ($deckbuilderID != "") {
-      if ($playerID == 1) $p1deckbuilderID = $deckbuilderID;
-      else $p2deckbuilderID = $deckbuilderID;
-    }
-    */
-  }
-
   if ($favoriteDeck == "on" && isset($_SESSION["userid"])) {
     //Save deck
     include_once './includes/functions.inc.php';

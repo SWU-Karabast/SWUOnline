@@ -1425,7 +1425,7 @@ function AddPrePitchDecisionQueue($cardID, $from, $index = -1, $skipAbilityType 
 {
   global $currentPlayer, $CS_AdditionalCosts;
   if (!$skipAbilityType && IsStaticType(CardType($cardID), $from, $cardID)) {
-    $names = GetAbilityNames($cardID, $index);
+    $names = GetAbilityNames($cardID, $index, validate:true);
     if ($names != "") {
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose which ability to activate");
       AddDecisionQueue("BUTTONINPUT", $currentPlayer, $names);
