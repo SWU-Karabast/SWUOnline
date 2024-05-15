@@ -3365,11 +3365,6 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "1939951561_" . $i . ",PLAY", 1);
       }
       break;
-    case "7648077180"://97th Legion
-      if($from != "PLAY") {
-        $playAlly->AddHealth(NumResources($currentPlayer));
-      }
-      break;
     case "2202839291"://Don't Get Cocky
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, $target);
       AddDecisionQueue("SETDQVAR", $currentPlayer, 0);
