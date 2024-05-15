@@ -15,14 +15,18 @@ session_start();
 $authKey = "";
 $gameName = $_GET["gameName"];
 $playerID = $_GET["playerID"];
-if ($playerID == 1 && isset($_SESSION["p1AuthKey"])) $authKey = $_SESSION["p1AuthKey"];
-else if ($playerID == 2 && isset($_SESSION["p2AuthKey"])) $authKey = $_SESSION["p2AuthKey"];
-else if (isset($_GET["authKey"])) $authKey = $_GET["authKey"];
+if ($playerID == 1 && isset($_SESSION["p1AuthKey"]))
+  $authKey = $_SESSION["p1AuthKey"];
+else if ($playerID == 2 && isset($_SESSION["p2AuthKey"]))
+  $authKey = $_SESSION["p2AuthKey"];
+else if (isset($_GET["authKey"]))
+  $authKey = $_GET["authKey"];
 
 session_write_close();
 
 if (($playerID == 1 || $playerID == 2) && $authKey == "") {
-  if (isset($_COOKIE["lastAuthKey"])) $authKey = $_COOKIE["lastAuthKey"];
+  if (isset($_COOKIE["lastAuthKey"]))
+    $authKey = $_COOKIE["lastAuthKey"];
 }
 
 if (!file_exists("./Games/" . $gameName . "/GameFile.txt")) {
@@ -45,16 +49,21 @@ $theirName = ($playerID == 1 ? $p2uid : $p1uid);
 
 if ($gameStatus == $MGS_GameStarted) {
   $authKey = ($playerID == 1 ? $p1Key : $p2Key);
-  if(isset($gameUIPath)) header("Location: " . $gameUIPath . "?gameName=$gameName&playerID=$playerID");
-  else header("Location: " . $redirectPath . "/NextTurn4.php?gameName=$gameName&playerID=$playerID");
+  if (isset($gameUIPath))
+    header("Location: " . $gameUIPath . "?gameName=$gameName&playerID=$playerID");
+  else
+    header("Location: " . $redirectPath . "/NextTurn4.php?gameName=$gameName&playerID=$playerID");
   exit;
 }
 
 $icon = "ready.png";
 
-if ($gameStatus == $MGS_ChooseFirstPlayer) $icon = $playerID == $firstPlayerChooser ? "ready.png" : "notReady.png";
-else if ($playerID == 1 && $gameStatus < $MGS_ReadyToStart) $icon = "notReady.png";
-else if ($playerID == 2 && $gameStatus >= $MGS_ReadyToStart) $icon = "notReady.png";
+if ($gameStatus == $MGS_ChooseFirstPlayer)
+  $icon = $playerID == $firstPlayerChooser ? "ready.png" : "notReady.png";
+else if ($playerID == 1 && $gameStatus < $MGS_ReadyToStart)
+  $icon = "notReady.png";
+else if ($playerID == 2 && $gameStatus >= $MGS_ReadyToStart)
+  $icon = "notReady.png";
 
 echo '<title>Game Lobby</title> <meta http-equiv="content-type" content="text/html; charset=utf-8" > <meta name="viewport" content="width=device-width, initial-scale=1.0">';
 echo '<link id="icon" rel="shortcut icon" type="image/png" href="./Images/' . $icon . '"/>';
@@ -120,11 +129,15 @@ $isMobile = IsMobile();
 
   <center>
     <?php
-    if ($isMobile) echo '<div id="oppHero" style="position:absolute; z-index:1; top:2%; left:2%; width:50%; height:25%; background-color:rgba(74, 74, 74, 0.9); border: 2px solid #1a1a1a; border-radius: 5px;">';
-    else echo '<div id="oppHero" style="position:absolute; z-index:1; top:20px; left:20px; width:290px; height:485px; background-color:rgba(74, 74, 74, 0.9); border: 2px solid #1a1a1a; border-radius: 5px;">';
+    if ($isMobile)
+      echo '<div id="oppHero" style="position:absolute; z-index:1; top:2%; left:2%; width:50%; height:25%; background-color:rgba(74, 74, 74, 0.9); border-radius: 5px;">';
+    else
+      echo '<div id="oppHero" style="position:absolute; z-index:1; top:20px; left:20px; width:290px; height:485px; background-color:rgba(74, 74, 74, 0.9); border-radius: 5px;">';
     $theirDisplayName = ($theirName != "-" ? $theirName : "Player " . ($playerID == 1 ? 2 : 1));
-    if ($isMobile) echo ("<h3>$theirDisplayName</h3>");
-    else echo ("<h2>$theirDisplayName</h2>");
+    if ($isMobile)
+      echo ("<h3>$theirDisplayName</h3>");
+    else
+      echo ("<h2>$theirDisplayName</h2>");
 
     $otherHero = "CardBack";
     echo ("<div>");
@@ -136,13 +149,17 @@ $isMobile = IsMobile();
   </center>
 
   <?php
-  if ($isMobile) echo '<div style="position:absolute; z-index:1; top:29%; left:2%; width:50%; height:25%; background-color:rgba(74, 74, 74, 0.9); border: 2px solid #1a1a1a; border-radius: 5px;">';
-  else echo '<div style="position:absolute; z-index:1; top:20px; left:330px; width:290px; height:485px; background-color:rgba(74, 74, 74, 0.9); border: 2px solid #1a1a1a; border-radius: 5px;">';
+  if ($isMobile)
+    echo '<div style="position:absolute; z-index:1; top:29%; left:2%; width:50%; height:25%; background-color:rgba(74, 74, 74, 0.9); border-radius: 5px;">';
+  else
+    echo '<div style="position:absolute; z-index:1; top:20px; left:330px; width:290px; height:485px; background-color:rgba(74, 74, 74, 0.9); border-radius: 5px;">';
   $contentCreator = ContentCreators::tryFrom(($playerID == 1 ? $p1ContentCreatorID : $p2ContentCreatorID));
   $nameColor = ($contentCreator != null ? $contentCreator->NameColor() : "");
   $displayName = "<span style='color:" . $nameColor . "'>" . ($yourName != "-" ? $yourName : "Playerssssss " . $playerID) . "</span>";
-  if ($isMobile) echo ("<h3>$displayName</h3>");
-  else echo ("<h2>$displayName</h2>");
+  if ($isMobile)
+    echo ("<h3>$displayName</h3>");
+  else
+    echo ("<h2>$displayName</h2>");
 
   $deckFile = "./Games/" . $gameName . "/p" . $playerID . "Deck.txt";
   $handler = fopen($deckFile, "r");
@@ -153,7 +170,8 @@ $isMobile = IsMobile();
     echo ("<div style='position:relative; display: inline-block;'>");
     $overlayURL = ($contentCreator != null ? $contentCreator->HeroOverlayURL($material[1]) : "");
     echo (Card($material[1], "CardImages", ($isMobile ? 100 : 250), 0, 1, 0, 0, 0, "", "", true));
-    if ($overlayURL != "") echo ("<img title='Portrait' style='position:absolute; z-index:1001; top: 27px; left: 0px; cursor:pointer; height:" . ($isMobile ? 100 : 250) . "; width:" . ($isMobile ? 100 : 250) . ";' src='" . $overlayURL . "' />");
+    if ($overlayURL != "")
+      echo ("<img title='Portrait' style='position:absolute; z-index:1001; top: 27px; left: 0px; cursor:pointer; height:" . ($isMobile ? 100 : 250) . "; width:" . ($isMobile ? 100 : 250) . ";' src='" . $overlayURL . "' />");
     echo ("</div>");
     echo ("</center>");
 
@@ -161,7 +179,8 @@ $isMobile = IsMobile();
     echo ("<div style='position:relative; display: inline-block;'>");
     $overlayURL = ($contentCreator != null ? $contentCreator->HeroOverlayURL($material[0]) : "");
     echo (Card($material[0], "CardImages", ($isMobile ? 100 : 250), 0, 1, 0, 0, 0, "", "", true));
-    if ($overlayURL != "") echo ("<img title='Portrait' style='position:absolute; z-index:1001; top: 27px; left: 0px; cursor:pointer; height:" . ($isMobile ? 100 : 250) . "; width:" . ($isMobile ? 100 : 250) . ";' src='" . $overlayURL . "' />");
+    if ($overlayURL != "")
+      echo ("<img title='Portrait' style='position:absolute; z-index:1001; top: 27px; left: 0px; cursor:pointer; height:" . ($isMobile ? 100 : 250) . "; width:" . ($isMobile ? 100 : 250) . ";' src='" . $overlayURL . "' />");
     echo ("</div>");
     echo ("</center>");
 
@@ -178,10 +197,13 @@ $isMobile = IsMobile();
   ?>
   </div>
 
-  <div id="matchupTab" style="position:absolute; z-index:1; top:2%; right:10px; width:160px; height:8%; background-color:rgba(74, 74, 74, 0.9); border: 2px solid #1a1a1a; border-radius: 5px;">
+  <div id="matchupTab"
+    style="position:absolute; z-index:1; top:2%; right:10px; width:160px; height:8%; background-color:rgba(74, 74, 74, 0.9); border-radius: 5px;">
     <h1>Matchups</h1>
   </div>
-  <div id="matchups" style="position:absolute; text-align: center; z-index:1; top:10%; margin-top:3px; right:10px; bottom:3%; width:160px; <?php if ($isMobile) echo ('height:43.5%; '); ?> background-color:rgba(74, 74, 74, 0.9); border: 2px solid #1a1a1a; border-radius: 5px; overflow-y: auto;">
+  <div id="matchups"
+    style="position:absolute; text-align: center; z-index:1; top:10%; margin-top:3px; right:10px; bottom:3%; width:160px; <?php if ($isMobile)
+      echo ('height:43.5%; '); ?> background-color:rgba(74, 74, 74, 0.9); border-radius: 5px; overflow-y: auto;">
 
     <?php
 
@@ -193,7 +215,7 @@ $isMobile = IsMobile();
 
       return $a->name < $b->name ? -1 : 1;
     }
-    echo("Matchups are not yet supported!");
+    echo ("Matchups are not yet supported!");
     /*
     $decklink = ($playerID == 1 ? $p1DeckLink : $p2DeckLink);
     $matchups = ($playerID == 1 ? $p1Matchups : $p2Matchups);
@@ -219,45 +241,24 @@ $isMobile = IsMobile();
 
   </div>
 
-  <div<?php if ($isMobile) echo (" style='display:none;'"); ?>>
-    <div id="equipTab" style="position:absolute; z-index:1; cursor:pointer; top:20px; left:640px; width:280px; height:73px; background-color:rgba(175, 175, 175, 0.8); border: 2px solid #1a1a1a; border-radius: 5px;" onclick="TabClick('EQUIP');">
-
-      <h1>Your Leader</h1>
-    </div>
-
-    <div id="equipDisplay" style="position:absolute; z-index:1; top:95px; left:640px; right:180px; bottom:3%; background-color:rgba(74, 74, 74, 0.9); border: 2px solid #1a1a1a; border-radius: 5px;">
-
-      <div style='margin:3px; margin-top: 10px; margin-left: 10px; width:100%; text-align: left; font-family:Roboto; font-style: italic; font-weight: bold; font-size:18px; text-shadow: 2px 0 0 #1a1a1a, 0 -2px 0 #1a1a1a, 0 2px 0 #1a1a1a, -2px 0 0 #1a1a1a;'>Click Cards to Select/Unselect</div>
-
-      <table>
-        <?php
-
-        if (isset($material)) {
-          $cardSize = 110;
-          $count = 0;
-          sort($material);
-          for ($i = 0; $i < count($material); ++$i) {
-            $id = "CHAR-" . $count;
-            echo(Card($material[$i], "concat", $cardSize, 0, 1, 0, 0, 0, "", $id));
-            ++$count;
-          }
-        }
-
-
-        ?>
-      </table>
-    </div>
-
-    <div id="deckTab" style="position:absolute; z-index:1; cursor:pointer; top:20px; left:922px; width:280px; height:73px; background-color:rgba(74, 74, 74, 0.9); border: 2px solid #1a1a1a; border-radius: 5px;" onclick="TabClick('DECK');">
+  <div<?php if ($isMobile)
+    echo (" style='display:none;'"); ?>>
+    <div id="deckTab"
+      style="position:absolute; z-index:1; cursor:pointer; top:20px; left:640px; width:531px; height:73px; background-color:rgba(74, 74, 74, 0.9); border-radius: 5px;"
+      onclick="TabClick('DECK');">
 
       <?php
-      if (isset($deck)) echo ("<h1>Your Deck (<span id='mbCount'>" . count($deck) . "</span>/<span>" . (count($deck) + count($deckSB)) . "</span>)</h1>");
+      if (isset($deck))
+        echo ("<h1>Your Deck (<span id='mbCount'>" . count($deck) . "</span>/<span>" . (count($deck) + count($deckSB)) . "</span>)</h1>");
       ?>
     </div>
 
-    <div id="deckDisplay" style="display:none; position:absolute; z-index:1; top:95px; left:640px; right:180px; bottom:3%; background-color:rgba(74, 74, 74, 0.9); border: 2px solid #1a1a1a; border-radius: 5px; overflow-y:scroll; overflow-x:hidden;">
+    <div id="deckDisplay"
+      style="display:block; position:absolute; z-index:1; top:95px; left:640px; right:180px; bottom:3%; background-color:rgba(74, 74, 74, 0.9); border-radius: 5px; overflow-y:scroll; overflow-x:hidden;">
 
-      <div style='margin:3px; margin-top: 10px; margin-left: 10px; width:100%; text-align: left; font-family:Roboto; font-style: italic; font-weight: bold; font-size:18px; text-shadow: 2px 0 0 #1a1a1a, 0 -2px 0 #1a1a1a, 0 2px 0 #1a1a1a, -2px 0 0 #1a1a1a;'>Click Cards to Select/Unselect</div>
+      <div
+        style='margin:3px; margin-top: 10px; margin-left: 10px; width:100%; text-align: left; font-family:Roboto; font-style: italic; font-weight: bold; font-size:18px; text-shadow: 2px 0 0 #1a1a1a, 0 -2px 0 #1a1a1a, 0 2px 0 #1a1a1a, -2px 0 0 #1a1a1a;'>
+        Click Cards to Select/Unselect</div>
 
       <?php
       if (isset($deck)) {
@@ -279,8 +280,10 @@ $isMobile = IsMobile();
     </div>
     </div>
     <?php
-    if ($isMobile) echo '<div style="position:absolute; z-index:1; top:56%; left:2%; width:600px; max-width: 96%; bottom:3%; font-weight:500; font-size:18px; background-color:rgba(74, 74, 74, 0.9); border: 2px solid #1a1a1a;border-radius: 5px;">';
-    else echo '<div style="position:absolute; z-index:1; top:525px; left:20px; width:600px; bottom:3%; font-weight:500; font-size:18px; background-color:rgba(74, 74, 74, 0.9); border: 2px solid #1a1a1a;border-radius: 5px;">';
+    if ($isMobile)
+      echo '<div style="position:absolute; z-index:1; top:56%; left:2%; width:600px; max-width: 96%; bottom:3%; font-weight:500; font-size:18px; background-color:rgba(74, 74, 74, 0.9);border-radius: 5px;">';
+    else
+      echo '<div style="position:absolute; z-index:1; top:525px; left:20px; width:600px; bottom:3%; font-weight:500; font-size:18px; background-color:rgba(74, 74, 74, 0.9);border-radius: 5px;">';
     ?>
 
     <h1>Game Lobby</h1>
@@ -339,17 +342,6 @@ $isMobile = IsMobile();
         if (!!playerDeck) playerDeck.value = GetDeckCards();
       }
 
-      function TabClick(tab) {
-        var equipTab = document.getElementById("equipTab");
-        var equipDisplay = document.getElementById("equipDisplay");
-        var deckTab = document.getElementById("deckTab");
-        var deckDisplay = document.getElementById("deckDisplay");
-        equipDisplay.style.display = tab == "EQUIP" ? "block" : "none";
-        deckDisplay.style.display = tab == "DECK" ? "block" : "none";
-        equipTab.style.backgroundColor = tab == "EQUIP" ? "rgba(175, 175, 175, 0.8)" : "rgba(74, 74, 74, 0.8)";
-        deckTab.style.backgroundColor = tab == "DECK" ? "rgba(175, 175, 175, 0.8)" : "rgba(74, 74, 74, 0.8)";
-      }
-
       function CardClick(id) {
         var idArr = id.split("-");
         if (IsEquipType(idArr[0])) {
@@ -395,7 +387,7 @@ $isMobile = IsMobile();
 
       function GetCharacterCards() {
         var types = ["WEAPONS", "OFFHAND", "QUIVER", "HEAD", "CHEST", "ARMS", "LEGS"];
-        var returnValue = "<?php echo(isset($material) ? implode(",", $material) : ""); ?>";
+        var returnValue = "<?php echo (isset($material) ? implode(",", $material) : ""); ?>";
         return returnValue;
       }
 
@@ -404,7 +396,7 @@ $isMobile = IsMobile();
         var returnValue = "";
         var overlay = document.getElementById("DECK-" + count + "-ovr");
         while (!!overlay) {
-          if (overlay.style.visibility == "hidden") {
+            if (overlay.style.visibility == "hidden") {
             var imageSrc = document.getElementById("DECK-" + count + "-img").src;
             if (returnValue != "") returnValue += ",";
             var splitArr = imageSrc.split("/");
@@ -416,7 +408,7 @@ $isMobile = IsMobile();
         return returnValue;
       }
 
-      var audioPlayed = false;
+       var audioPlayed = false;
 
       function CheckReloadNeeded(lastUpdate) {
         var xmlhttp = new XMLHttpRequest();
@@ -448,8 +440,8 @@ $isMobile = IsMobile();
         xmlhttp.send();
       }
 
-      function SubmitFirstPlayer(action) {
-        if (action == 1) action = "Go First";
+       function SubmitFirstPlayer(action) {
+         if (action == 1) action = "Go First";
         else action = "Go Second";
         var xmlhttp = new XMLHttpRequest();
         xmlhttp.onreadystatechange = function() {
@@ -459,7 +451,7 @@ $isMobile = IsMobile();
         ajaxLink += "&playerID=" + <?php echo ($playerID); ?>;
         ajaxLink += "&action=" + action;
         ajaxLink += <?php echo ("\"&authKey=" . $authKey . "\""); ?>;
-        xmlhttp.open("GET", ajaxLink, true);
+          xmlhttp.open("GET", ajaxLink, true);
         xmlhttp.send();
       }
     </script>
@@ -470,7 +462,8 @@ $isMobile = IsMobile();
   {
     $cardSize = 110;
     $count = 0;
-    if ($equip != "" || count($equipSB) > 0) echo ("<tr><td>");
+    if ($equip != "" || count($equipSB) > 0)
+      echo ("<tr><td>");
     if ($equip != "") {
       $id = $name . "-" . $count;
       echo ("<div style='display:inline; width:" . $cardSize . ";' onclick='CardClick(\"" . $id . "\")'>");
@@ -486,14 +479,16 @@ $isMobile = IsMobile();
       ++$count;
     }
 
-    if ($equip != "" || count($equipSB) > 0) echo ("</td></tr>");
+    if ($equip != "" || count($equipSB) > 0)
+      echo ("</td></tr>");
   }
 
   function DisplayWeaponRow($weapon1, $weapon2, $weaponSB, $name)
   {
     $cardSize = 110;
     $count = 0;
-    if ($weapon1 != "" || $weapon2 != "" || count($weaponSB) > 0) echo ("<tr><td>");
+    if ($weapon1 != "" || $weapon2 != "" || count($weaponSB) > 0)
+      echo ("<tr><td>");
     if ($weapon1 != "") {
       $id = $name . "-" . $count;
       echo ("<div style='display:inline; width:" . $cardSize . ";' onclick='CardClick(\"" . $id . "\")'>");
@@ -524,16 +519,26 @@ $isMobile = IsMobile();
       ++$count;
     }
 
-    if ($weapon1 != "" || $weapon2 != "" || count($weaponSB) > 0) echo ("</td></tr>");
+    if ($weapon1 != "" || $weapon2 != "" || count($weaponSB) > 0)
+      echo ("</td></tr>");
   }
 
   function HasReverseArt($cardID)
   {
     switch ($cardID) {
-      case "WTR078": return true;
-      case "CRU004": case "CRU051": case "CRU079": return true;
-      case "DYN069": case "DYN115": return true;
-      case "OUT005": case "OUT007": case "OUT009": return true;
+      case "WTR078":
+        return true;
+      case "CRU004":
+      case "CRU051":
+      case "CRU079":
+        return true;
+      case "DYN069":
+      case "DYN115":
+        return true;
+      case "OUT005":
+      case "OUT007":
+      case "OUT009":
+        return true;
       default:
         return false;
         break;
@@ -543,15 +548,24 @@ $isMobile = IsMobile();
   function ReverseArt($cardID)
   {
     switch ($cardID) {
-      case "WTR078": return "CRU049";
-      case "CRU004": return "CRU005";
-      case "CRU051": return "CRU052";
-      case "CRU079": return "CRU080";
-      case "DYN069": return "DYN070";
-      case "DYN115": return "DYN116";
-      case "OUT005": return "OUT006";
-      case "OUT007": return "OUT008";
-      case "OUT009": return "OUT010";
+      case "WTR078":
+        return "CRU049";
+      case "CRU004":
+        return "CRU005";
+      case "CRU051":
+        return "CRU052";
+      case "CRU079":
+        return "CRU080";
+      case "DYN069":
+        return "DYN070";
+      case "DYN115":
+        return "DYN116";
+      case "OUT005":
+        return "OUT006";
+      case "OUT007":
+        return "OUT008";
+      case "OUT009":
+        return "OUT010";
       default:
         break;
     }
@@ -560,4 +574,4 @@ $isMobile = IsMobile();
 
   <?php
   include_once 'Disclaimer.php'
-  ?>
+    ?>
