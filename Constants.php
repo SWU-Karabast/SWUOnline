@@ -127,9 +127,10 @@ function ResourcePieces() { return ArsenalPieces(); }
 //10 - Times Attacked
 //11 - Owner
 //12 - Turns in play
+//13 - Controller
 function AllyPieces()
 {
-  return 13;
+  return 14;
 }
 
 //Card ID

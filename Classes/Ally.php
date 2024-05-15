@@ -48,6 +48,10 @@ class Ally {
     return $this->allies[$this->index+11];
   }
 
+  function Controller() {
+    return $this->allies[$this->index+13];
+  }
+
   function TurnsInPlay() {
     global $currentRound;
     if(IsLeader($this->CardID(), $this->PlayerID())) return $currentRound - 1;

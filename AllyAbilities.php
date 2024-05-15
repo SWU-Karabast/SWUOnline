@@ -17,6 +17,7 @@ function PlayAlly($cardID, $player, $subCards = "-", $from="-")
   array_push($allies, 0); //Times attacked
   array_push($allies, $player); //Owner
   array_push($allies, 0); //Turns in play
+  array_push($allies, $player); //Controller
   $index = count($allies) - AllyPieces();
   CurrentEffectAllyEntersPlay($player, $index);
   AllyEntersPlayAbilities($player);
@@ -232,6 +233,9 @@ function AllyHealth($cardID, $playerID="")
   $health = CardHP($cardID);
   switch($cardID)
   {
+    case "7648077180"://97th Legion
+      $health += NumResources($playerID);
+      break;
     default: break;
   }
   return $health;
