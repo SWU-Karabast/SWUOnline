@@ -32,6 +32,7 @@ class Ally {
     return $this->allies[$this->index+5];
   }
 
+  //Controller
   function PlayerID() {
     return $this->playerID;
   }
@@ -46,10 +47,6 @@ class Ally {
 
   function Owner() {
     return $this->allies[$this->index+11];
-  }
-
-  function Controller() {
-    return $this->allies[$this->index+13];
   }
 
   function TurnsInPlay() {
