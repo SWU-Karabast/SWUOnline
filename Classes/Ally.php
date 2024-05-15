@@ -48,6 +48,7 @@ class Ally {
     return $this->allies[$this->index+11];
   }
 
+  function Controller() {
     return $this->allies[$this->index+13];
   }
 
