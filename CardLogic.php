@@ -387,6 +387,7 @@ function ContinueDecisionQueue($lastResult = "")
         $additionalCosts = array_shift($layers);
         $uniqueID = array_shift($layers);
         $layerUniqueID = array_shift($layers);
+        //WriteLog("CardID:" . $cardID . " Player:" . $player . " Param:" . $parameter . " UniqueID:" . $uniqueID);//Uncomment this to visualize layer execution
         SetClassState($player, $CS_ResolvingLayerUniqueID, $layerUniqueID);
         $params = explode("|", $parameter);
         if($currentPlayer != $player) {
