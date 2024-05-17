@@ -2319,7 +2319,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "1746195484"://Jedha Agitator
       if($from == "PLAY" && HasLeader($currentPlayer)){
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRCHAR:definedType=Base&MYALLY&THEIRALLY");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRCHAR:definedType=Base&MYALLY:arena=Ground&THEIRALLY:arena=Ground");
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose something to deal 2 damage", 1);
         AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,2", 1);
