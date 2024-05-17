@@ -2318,7 +2318,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "1746195484"://Jedha Agitator
-      if($from == "PLAY" && HasLeader($currentPlayer)) DealArcane(2, 2, "PLAYCARD", $cardID); 
+      if($from == "PLAY" && HasLeader($currentPlayer)){
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRCHAR:definedType=Base&MYALLY:arena=Ground&THEIRALLY:arena=Ground");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose something to deal 2 damage", 1);
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,2", 1);
+      }
       break;
     case "2587711125"://Disarm
       $ally = new Ally($target);
@@ -3363,11 +3368,6 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "ADDHEALTH," . $i, 1);
         AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
         AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "1939951561_" . $i . ",PLAY", 1);
-      }
-      break;
-    case "7648077180"://97th Legion
-      if($from != "PLAY") {
-        $playAlly->AddHealth(NumResources($currentPlayer));
       }
       break;
     case "2202839291"://Don't Get Cocky

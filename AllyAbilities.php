@@ -232,6 +232,9 @@ function AllyHealth($cardID, $playerID="")
   $health = CardHP($cardID);
   switch($cardID)
   {
+    case "7648077180"://97th Legion
+      $health += NumResources($playerID);
+      break;
     default: break;
   }
   return $health;
