@@ -39,6 +39,7 @@ if (IsUserLoggedIn()) {
 
 <div class="ContentWindow" style='width:30%; height:40%; top:200px; left:35%;'>
   <h2>Login</h2>
+  <h4> Enter your username, not your email </h4>
   <form action="./AccountFiles/AttemptPasswordLogin.php" method="post" class="LoginForm">
     <input type="text" name="userID" placeholder="Username">
     <input type="password" name="password" placeholder="Password">
@@ -49,7 +50,7 @@ if (IsUserLoggedIn()) {
     <button type="submit" name="submit">Submit</button>
   </form>
   <form action="ResetPassword.php" method="post" style='text-align:center;'>
-    <button type="submit" name="reset-password">Forgot Password?</button>
+    <!-- <button type="submit" name="reset-password">Forgot Password?</button> -->
   </form>
 </div>
 
