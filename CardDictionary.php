@@ -211,7 +211,7 @@ function HasSentinel($cardID, $player, $index)
     case "4786320542":
     case "3896582249":
     case "2855740390":
-    case "2969011922":
+    case "2969011922"://Pyke Sentinel
       return true;
     case "2739464284"://Gamorrean Guards
       return SearchCount(SearchAllies($player, aspect:"Cunning")) > 1;

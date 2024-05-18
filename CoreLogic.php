@@ -3612,6 +3612,14 @@ function Recover($player, $amount)
   else $health -= $amount;
 }
 
+function AddTopDeckAsResource($player)
+{
+  $deck = &GetDeck($player);
+  if(count($deck) > 0) {
+    $card = array_shift($deck);
+    AddResources($card, $player, "DECK", "DOWN", isExhausted:1);
+  }
+}
 
 //target type return values
 //-1: no target

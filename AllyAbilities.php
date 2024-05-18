@@ -114,6 +114,7 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
   $cardID = $allies[$index];
   if(!$skipDestroy) {
     AllyDestroyedAbility($player, $index, $fromCombat);
+    CollectBounties($player, $index);
     IncrementClassState($player, $CS_NumAlliesDestroyed);
   }
   if(!IsLeader($cardID, $player)) IncrementClassState($player, $CS_NumLeftPlay);
@@ -380,6 +381,21 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
           --$allies[$i+8];
           Draw($otherPlayer);
         }
+        break;
+      default: break;
+    }
+  }
+}
+
+function CollectBounties($player, $index) {
+  $ally = new Ally("MYALLY-" . $index, $player);
+  $opponent = $player == 1 ? 2 : 1;
+  $subcards = $ally->GetSubcards();
+  for($i=0; $i<count($subcards); ++$i)
+  {
+    switch($subcards[$i]) {
+      case "2178538979"://Price on Your Head
+        AddTopDeckAsResource($opponent);
         break;
       default: break;
     }
