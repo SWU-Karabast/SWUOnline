@@ -115,6 +115,7 @@ function RestoreAmount($cardID, $player, $index)
     case "7109944284": $amount += 3; break;
     case "8142386948": $amount += 2; break;//Razor Crest
     case "4327133297": $amount += 2; break;//Moisture Farmer
+    case "5977238053": $amount += 2; break;//Sundari Peacekeeper
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
@@ -168,6 +169,7 @@ function RaidAmount($cardID, $player, $index)
     case "8395007579": $amount += $ally->MaxHealth() - $ally->Health(); break;//Fifth Brother
     case "6208347478": $amount += SearchCount(SearchAllies($player, trait:"Spectre")) > 1 ? 1 : 0; break;//Chopper
     case "3487311898": $amount += 3; break;//Clan Challengers
+    case "5977238053": $amount += 2; break;//Sundari Peacekeeper
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
