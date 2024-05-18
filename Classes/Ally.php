@@ -270,6 +270,10 @@ class Ally {
     return false;
   }
 
+  function IsUpgraded() {
+    return $this->allies[$this->index + 4] != "-";
+  }
+
 }
 
 function LastAllyIndex($player) {

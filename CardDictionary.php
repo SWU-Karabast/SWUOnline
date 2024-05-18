@@ -167,6 +167,7 @@ function RaidAmount($cardID, $player, $index)
     case "87e8807695": $amount += 1; break;
     case "8395007579": $amount += $ally->MaxHealth() - $ally->Health(); break;//Fifth Brother
     case "6208347478": $amount += SearchCount(SearchAllies($player, trait:"Spectre")) > 1 ? 1 : 0; break;//Chopper
+    case "3487311898": $amount += 3; break;//Clan Challengers
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
@@ -267,6 +268,8 @@ function HasOverwhelm($cardID, $player, $index)
       if($target == "THEIRCHAR-0") return false;
       $ally = new Ally($target, $defPlayer);
       return $ally->IsDamaged();
+    case "3487311898"://Clan Challengers
+      return $ally->IsUpgraded();
     default: return false;
   }
 }
