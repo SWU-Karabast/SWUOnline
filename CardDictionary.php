@@ -340,6 +340,7 @@ function HasShielded($cardID, $player, $index)
     case "3280523224":
     case "7728042035":
     case "7870435409":
+    case "6135081953"://Doctor Evazan
       return true;
     default: return false;
   }

@@ -412,6 +412,14 @@ function CollectBounties($player, $index) {
       default: break;
     }
   }
+  switch($ally->CardID()) {
+    case "6135081953"://Doctor Evazan
+      for($i=0; $i<12; ++$i) {
+        ReadyResource($opponent);
+      }
+      break;
+    default: break;
+  }
 }
 
 function OnKillAbility($fromCombat)
