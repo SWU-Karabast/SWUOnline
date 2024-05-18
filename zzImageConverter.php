@@ -1,6 +1,6 @@
 <?php
 
-function CheckImage($cardID, $url, $definedType, $isBack=false)
+function CheckImage($cardID, $url, $definedType, $isBack=false, $set="SOR")
 {
   $filename = "./WebpImages/" . $cardID . ".webp";
   $filename = "./WebpImages2/" . $cardID . ".webp";
@@ -37,7 +37,6 @@ function CheckImage($cardID, $url, $definedType, $isBack=false)
     }
     $isNew = true;
   }
-  $isNew = false;
   if($isNew && !file_exists($filenameNew)) {
     echo("Converting image for " . $cardID . " to new format.<BR>");
     try {

@@ -54,7 +54,7 @@
       $set = $card->expansion->data->attributes->code;
       //$imageUrl = "https://swudb.com/cards/" . $set . "/" . $cardNumber . ".png";
 
-      CheckImage($card->cardUid, $imageUrl, $definedType);
+      CheckImage($card->cardUid, $imageUrl, $definedType, set:$set);
       if($card->artBack->data != null) {
         $type2 = $card->type2->data == null ? "" : $card->type2->data->attributes->name;
         if($type2 == "Leader Unit") $definedType = "Unit";
@@ -62,7 +62,7 @@
         $arr = explode("_", $imageUrl);
         $arr = explode(".", $arr[count($arr)-1]);
         $uuid = $arr[0];
-        CheckImage($uuid, $imageUrl, $definedType, isBack:true);
+        CheckImage($uuid, $imageUrl, $definedType, isBack:true, set:$set);
         AddToTries($cardID, $uuid);
       }
     }
