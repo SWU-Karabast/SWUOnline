@@ -405,6 +405,10 @@ function CollectBounties($player, $index) {
         ReadyResource($opponent);
         ReadyResource($opponent);
         break;
+      case "4282425335"://Top Target
+        $amount = CardIsUnique($ally->CardID()) ? 6 : 4;
+        Restore($amount, $opponent);
+        break;
       default: break;
     }
   }
