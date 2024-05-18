@@ -418,6 +418,9 @@ function CollectBounties($player, $index) {
         ReadyResource($opponent);
       }
       break;
+    case "6878039039"://Hylobon Enforcer
+      Draw($opponent);
+      break;
     default: break;
   }
 }

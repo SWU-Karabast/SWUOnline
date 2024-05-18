@@ -244,6 +244,7 @@ function HasGrit($cardID, $player, $index)
     case "4599464590":
     case "8301e8d7ef":
     case "5557494276"://Death Watch Loyalist
+    case "6878039039"://Hylobon Enforcer
       return true;
     default: return false;
   }
