@@ -397,6 +397,10 @@ function CollectBounties($player, $index) {
       case "2178538979"://Price on Your Head
         AddTopDeckAsResource($opponent);
         break;
+      case "2740761445"://Guild Target
+        $damage = CardIsUnique($ally->CardID()) ? 3 : 2;
+        DealDamageAsync($player, $damage, "DAMAGE", "2740761445");
+        break;
       default: break;
     }
   }
