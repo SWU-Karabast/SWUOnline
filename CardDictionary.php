@@ -240,6 +240,7 @@ function HasGrit($cardID, $player, $index)
     case "5879557998":
     case "4599464590":
     case "8301e8d7ef":
+    case "5557494276"://Death Watch Loyalist
       return true;
     default: return false;
   }
@@ -259,6 +260,7 @@ function HasOverwhelm($cardID, $player, $index)
     case "3232845719":
     case "4631297392":
     case "6432884726":
+    case "5557494276"://Death Watch Loyalist
       return true;
     case "4619930426"://First Legion Snowtrooper
       $target = GetAttackTarget();
