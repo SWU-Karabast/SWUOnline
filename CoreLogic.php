@@ -3418,6 +3418,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "8142386948"://Razor Crest
       MZMoveCard($currentPlayer, "MYDISCARD:definedType=Upgrade", "MYHAND", may:true);
       break;
+    case "3228620062"://Cripple Authority
+      Draw($currentPlayer);
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      if(NumResources($otherPlayer) > NumResources($currentPlayer)) {
+        PummelHit($otherPlayer);
+      }
+      break;
     default: break;
   }
 }
