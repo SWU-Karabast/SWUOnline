@@ -394,10 +394,11 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
       if($roundPass) BeginRoundPass();
       break;
     case 99: //Pass
-      global $isPass, $initiativeTaken;
+      global $isPass, $initiativeTaken, $dqState;
       $isPass = true;
       $otherPlayer = ($playerID == 1 ? 2 : 1);
       $roundPass = $initiativeTaken == ($otherPlayer + 2);
+      $dqState[8] = -1;
       if($turn[0] == "M" && $initiativeTaken != 1 && !$roundPass) $initiativeTaken = $currentPlayer + 2;
       if(CanPassPhase($turn[0])) {
         PassInput(false);

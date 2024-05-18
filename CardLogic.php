@@ -213,10 +213,20 @@ function PrependLayer($cardID, $player, $parameter, $target = "-", $additionalCo
     return count($layers);//How far it is from the end
 }
 
-function AddLayer($cardID, $player, $parameter, $target = "-", $additionalCosts = "-", $uniqueID = "-")
+function AddLayer($cardID, $player, $parameter, $target = "-", $additionalCosts = "-", $uniqueID = "-", $append = false)
 {
   global $layers, $dqState;
   //Layers are on a stack, so you need to push things on in reverse order
+  if($append) {
+    array_push($layers, $cardID);
+    array_push($layers, $player);
+    array_push($layers, $parameter);
+    array_push($layers, $target);
+    array_push($layers, $additionalCosts);
+    array_push($layers, $uniqueID);
+    array_push($layers, GetUniqueId());
+    return LayerPieces();
+  }
   array_unshift($layers, GetUniqueId());
   array_unshift($layers, $uniqueID);
   array_unshift($layers, $additionalCosts);
@@ -226,11 +236,9 @@ function AddLayer($cardID, $player, $parameter, $target = "-", $additionalCosts 
   array_unshift($layers, $cardID);
   if($cardID == "TRIGGER" || $cardID == "PLAYABILITY")
   {
-    /* TODO: Fix layer reordering
     $orderableIndex = intval($dqState[8]);
     if($orderableIndex == -1) $dqState[8] = 0;
     else $dqState[8] += LayerPieces();
-    */
   }
   else $dqState[8] = -1;//If it's not a trigger, it's not orderable
   return count($layers);//How far it is from the end
@@ -312,12 +320,9 @@ function CloseDecisionQueue()
 
 function ShouldHoldPriorityNow($player)
 {
-  global $layerPriority, $layers;
-  if($layerPriority[$player - 1] != "1") return false;
-  $currentLayer = $layers[count($layers) - LayerPieces()];
-  $layerType = CardType($currentLayer);
-  if(HoldPrioritySetting($player) == 3 && $layerType != "AA" && $layerType != "W") return false;
-  return true;
+  global $layerPriority, $layers, $currentPlayer, $dqState;
+  if($player != $currentPlayer) return false;
+  return $dqState[8] > 0;
 }
 
 function SkipHoldingPriorityNow($player)
@@ -531,7 +536,7 @@ function ProcessAfterCombatLayer() {
   $combatChainState[$CCS_AfterLinkLayers] = "NA";
   for($i = 0; $i < count($layers); $i++) {
     $layer = explode("-", $layers[$i]);
-    AddLayer($layer[0], $layer[1], $layer[2], $layer[3], $layer[4], $layer[5]);
+    AddLayer($layer[0], $layer[1], $layer[2], $layer[3], $layer[4], $layer[5], append:true);
   }
 }
 

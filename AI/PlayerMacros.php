@@ -46,7 +46,7 @@ function ProcessMacros()
         ContinueDecisionQueue($turn[2]);
       }
       else if($turn[0] == "M" && count($layers) > 0) {
-        $somethingChanged = true; PassInput();//TODO: Fix layer reordering
+        //$somethingChanged = true; PassInput();//TODO: Fix layer reordering
       }
       if($turn[0] == "B" || $turn[0] == "D")
       {
