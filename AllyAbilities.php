@@ -421,6 +421,9 @@ function CollectBounties($player, $index) {
     case "6878039039"://Hylobon Enforcer
       Draw($opponent);
       break;
+    case "9503028597"://Clone Deserter
+      Draw($opponent);
+      break;
     default: break;
   }
 }

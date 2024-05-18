@@ -116,6 +116,7 @@ function RestoreAmount($cardID, $player, $index)
     case "8142386948": $amount += 2; break;//Razor Crest
     case "4327133297": $amount += 2; break;//Moisture Farmer
     case "5977238053": $amount += 2; break;//Sundari Peacekeeper
+    case "9503028597": $amount += 1; break;//Clone Deserter
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
