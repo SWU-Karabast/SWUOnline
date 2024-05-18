@@ -408,14 +408,14 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
 
   if (count($layers) > 0) {
     $content = "";
-    $content .= "<div style='font-size:24px; margin-left:5px; margin-bottom:5px; margin-top:5px;'><b>Layers</b>&nbsp;<i style='font-size:16px; margin-right: 5px;'>(Priority settings can be adjusted in the menu)</i></div>";
+    $content .= "<div style='font-size:24px; margin-left:5px; margin-bottom:5px; margin-top:5px;'><b>Triggers</b>&nbsp;<i style='font-size:16px; margin-right: 5px;'>(Use the arrows to reorder simultaneous triggers)</i></div>";
     if (CardType($layers[0]) == "AA" || IsWeapon($layers[0])) {
       $attackTarget = GetAttackTarget();
       if ($attackTarget != "NA") {
         $content .= "&nbsp;Attack Target: " . GetMZCardLink($defPlayer, $attackTarget);
       }
     }
-    if($dqState[8] != -1) $content .= "<div style='margin-left:5px;'><i style='font-size:16px;'>For more info about trigger ordering, see rule 1.10.2c of the <a href='http://fabjud.ge/cr' target='_blank'>comprehensive rulebook</a>.</i></div>";
+    if($dqState[8] != -1) $content .= "<div style='margin-left:5px;'><i style='font-size:16px;'>Triggers on the right resolve first.</i></div>";
     $content .= "<div style='margin-left:1px; margin-top:3px; margin-bottom:5px' display:inline;'>";
     $nbTiles = 0;
     for ($i = count($layers) - LayerPieces(); $i >= 0; $i -= LayerPieces()) {
