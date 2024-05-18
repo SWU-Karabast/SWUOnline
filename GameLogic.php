@@ -346,6 +346,10 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           }
         case "BUFFALLY": MZBuffAlly($player, $lastResult); return $lastResult;
         case "BOUNCE": MZBounce($player, $lastResult); return $lastResult;
+        case "COLLECTBOUNTIES":
+          $mzArr = explode("-", $lastResult);
+          CollectBounties($mzArr[0] == "MYALLY" ? $player : ($player == 1 ? 2 : 1), $mzArr[1]);
+          return $lastResult;
         case "SINK": MZSink($player, $lastResult); return $lastResult;
         case "SUPPRESS": MZSuppress($player, $lastResult); return $lastResult;
         case "REST": MZRest($player, $lastResult); return $lastResult;

@@ -2269,6 +2269,16 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "BOUNCE", 1);
       break;
+    case "5283722046"://Spare the Target
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to return to hand");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "1", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "COLLECTBOUNTIES", 1);
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{1}", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "BOUNCE", 1);
+      break;
     case "7485151088"://Search your feelings
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYDECK");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
