@@ -114,6 +114,7 @@ function RestoreAmount($cardID, $player, $index)
     case "e2c6231b35": $amount += 2; break;
     case "7109944284": $amount += 3; break;
     case "8142386948": $amount += 2; break;//Razor Crest
+    case "4327133297": $amount += 2; break;//Moisture Farmer
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
