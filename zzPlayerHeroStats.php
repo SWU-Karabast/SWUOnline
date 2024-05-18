@@ -179,11 +179,11 @@ while ($row = mysqli_fetch_array($loseCardData, MYSQLI_NUM)) {
     ++$cardData[$card][1];
   }
 }
-echo ("<div id='wrapper' style='text-align: center;'>");
+echo ("<div id='wrapper' style='position:fixed; top:60px; height:calc(100% - 100px); background-color:rgba(0,0,0,.8); text-align: center; overflow-y:scroll'>");
 
-echo ("<section class='game-stats' style='overflow-y:hidden;'>");
+//echo ("<section>");
 echo ("<h3>Stats for " . CardLink($detailHeroID, $detailHeroID, true) . "</h3>");
-echo ("<div class='game-stats-div'>");
+echo ("<div>");
 echo ("<table>");
 echo ("<tr><td>Opposing Hero</td><td>Num Wins</td><td>Num Losses</td><td>Win %</td></tr>");
 
@@ -209,7 +209,7 @@ foreach ($gameData as $row) {
 echo ("</table>");
 echo ("</div>");
 
-echo ("</section>");
+//echo ("</section>");
 
 
 if ($totalGames == 0) exit;
@@ -234,9 +234,9 @@ while (count($cardData) > 0) {
   unset($cardData[$bestKey]);
 }
 
-echo ("<section class='game-stats' style='overflow-y:hidden;'>");
+//echo ("<section>");
 echo ("<h3>Cards Details</h3>");
-echo ("<div class='game-stats-div'>");
+echo ("<div>");
 echo ("<table>");
 echo ("<tr><td>Card</td><td>Num Plays</td><td>Win Rate</td><td>Relative Win Rate</td></tr>");
 foreach ($sortedCardData as $key => $card) {
@@ -251,7 +251,7 @@ foreach ($sortedCardData as $key => $card) {
 echo ("</table>");
 echo ("</div>");
 
-echo ("</section>");
+//echo ("</section>");
 echo ("</div>");
 
 
