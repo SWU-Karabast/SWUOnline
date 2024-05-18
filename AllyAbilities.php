@@ -186,11 +186,6 @@ function AllyEntersPlayState($cardID, $player, $from="-")
   switch($cardID)
   {
     case "1785627279": return 2;//Millennium Falcon
-    case "4300219753"://Fett's Firespray
-      $char = &GetPlayerCharacter($player);
-      if(count($char) > CharacterPieces() && (CardTitle($char[CharacterPieces()]) == "Boba Fett" || CardTitle($char[CharacterPieces()]) == "Jango Fett")) return 2;
-      if(SearchCount(SearchAlliesForTitle($player, "Boba Fett")) > 0 || SearchCount(SearchAlliesForTitle($player, "Jango Fett")) > 0) return 2;
-      return 1;
     default: return 1;
   }
 }

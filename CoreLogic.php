@@ -3017,13 +3017,23 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         Restore(1, $currentPlayer);
       }
     case "4300219753"://Fett's Firespray
-      $abilityName = GetResolvedAbilityName($cardID, $from);
-      if($abilityName == "Exhaust") {
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
-        AddDecisionQueue("MZFILTER", $currentPlayer, "unique=1");
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to exhaust");
-        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
+      if($from != "PLAY") {
+        $ready = false;
+        $char = &GetPlayerCharacter($currentPlayer);
+        if(count($char) > CharacterPieces() && (CardTitle($char[CharacterPieces()]) == "Boba Fett" || CardTitle($char[CharacterPieces()]) == "Jango Fett")) $ready = true;
+        if(SearchCount(SearchAlliesForTitle($currentPlayer, "Boba Fett")) > 0 || SearchCount(SearchAlliesForTitle($currentPlayer, "Jango Fett")) > 0) $ready = true;
+        if($ready) {
+          $playAlly->Ready();
+        }
+      } else {
+        $abilityName = GetResolvedAbilityName($cardID, $from);
+        if($abilityName == "Exhaust") {
+          AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+          AddDecisionQueue("MZFILTER", $currentPlayer, "unique=1");
+          AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to exhaust");
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+          AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
+        }
       }
       break;
     case "8009713136"://C-3PO
