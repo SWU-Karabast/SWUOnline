@@ -646,7 +646,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       if ($option[0] == "THEIRARS" && $theirArsenal[$index + 1] == "DOWN") $card = $TheirCardBack;
 
       $overlay = 0;
-      $attackCounters = 0;
+      $attackCounters = -1;
       //NRA TODO
       //Show attack and hp counters on allies in the popups
       if ($option[0] == "THEIRALLY") {
