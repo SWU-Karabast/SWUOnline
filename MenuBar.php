@@ -62,7 +62,6 @@ $isMobile = IsMobile();
       color: white;
       position: absolute;
       border-radius: 8px;
-      border: 2px solid rgb(255, 87, 51);
     }
 
     .NavBarDiv {

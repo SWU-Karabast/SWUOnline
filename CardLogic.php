@@ -387,6 +387,7 @@ function ContinueDecisionQueue($lastResult = "")
         $additionalCosts = array_shift($layers);
         $uniqueID = array_shift($layers);
         $layerUniqueID = array_shift($layers);
+        //WriteLog("CardID:" . $cardID . " Player:" . $player . " Param:" . $parameter . " UniqueID:" . $uniqueID);//Uncomment this to visualize layer execution
         SetClassState($player, $CS_ResolvingLayerUniqueID, $layerUniqueID);
         $params = explode("|", $parameter);
         if($currentPlayer != $player) {
@@ -492,7 +493,7 @@ function ContinueDecisionQueue($lastResult = "")
   $phase = array_shift($decisionQueue);
   $player = array_shift($decisionQueue);
   $parameter = array_shift($decisionQueue);
-  //WriteLog($currentPlayer . " " . $phase . " " . $player . " " . $parameter . " " . $lastResult);//Uncomment this to visualize decision queue execution
+  //WriteLog($phase . " " . $player . " Param:" . $parameter . " LR:" . $lastResult);//Uncomment this to visualize decision queue execution
   $parameter = str_replace("{I}", $dqState[5], $parameter);
   if(count($dqVars) > 0) {
     if(str_contains($parameter, "{0}")) $parameter = str_replace("{0}", $dqVars[0], $parameter);

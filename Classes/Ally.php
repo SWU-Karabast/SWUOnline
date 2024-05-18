@@ -32,6 +32,7 @@ class Ally {
     return $this->allies[$this->index+5];
   }
 
+  //Controller
   function PlayerID() {
     return $this->playerID;
   }
