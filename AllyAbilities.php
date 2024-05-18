@@ -401,6 +401,10 @@ function CollectBounties($player, $index) {
         $damage = CardIsUnique($ally->CardID()) ? 3 : 2;
         DealDamageAsync($player, $damage, "DAMAGE", "2740761445");
         break;
+      case "4117365450"://Wanted
+        ReadyResource($opponent);
+        ReadyResource($opponent);
+        break;
       default: break;
     }
   }
