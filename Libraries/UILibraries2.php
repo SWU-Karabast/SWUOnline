@@ -404,7 +404,7 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
       align-items: center;
       justify-content: center;
       position:absolute; z-index: 0;
-      background: url(./Images/upgradebg.png) no-repeat;
+      background: url(./Images/upgrade-grey.png) no-repeat;
       background-size: contain;
       line-height: 1.2;
       font-size: 6px; 
