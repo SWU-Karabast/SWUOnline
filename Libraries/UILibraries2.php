@@ -242,10 +242,10 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
   $dynamicScaling = (function_exists("IsDynamicScalingEnabled") ? IsDynamicScalingEnabled($playerID) : false);
   $counterHeight = $dynamicScaling ? intval($maxHeight / 3.3) : 28;
   // Icon Size
-  $iconSize = 15;
+  $iconSize = 26;
   //$imgCounterHeight = $dynamicScaling ? intval($maxHeight / 2) : 44;
   $imgCounterHeight = $dynamicScaling ? intval($maxHeight / 2) : 35;
-  $imgCounterFontSize = 28;
+  $imgCounterFontSize = 24;
   //Attacker Label Style
   if ($counters == "Attacker" || $counters == "Arsenal") {
     $rv .= "<div style='margin: 0px; top: 80%; left: 50%;
@@ -284,23 +284,23 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
   if ($shieldCount > 0) {
     for ($i = 0; $i < $shieldCount; $i++) {
       $rv .= "<div style='margin: 0px;
-      top: 0%; 
-      left: " . 100 - ($i * 30) . "%;
-      margin-right: -50%;
+      top: 11px; 
+      right: calc(" . ($i * 31) . "px - 15px); 
       border-radius: 0%;
       width:" . $iconSize . "px;
       height:" . $iconSize . "px;
-      padding: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
       transform: translate(-50%, -50%);
       position:absolute; z-index: 10;
-      background: rgba(0, 0, 255, 0.8);
+      background: url(./Images/ShieldToken.png) no-repeat;
+      background-size: contain;
       line-height: 1.2;
-      font-size: 24px; 
+      font-size: 1px;
       font-weight:700; 
       color: #fff;
+      filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.50));
       user-select: none;'>" . $shieldCount . "</div>";
     }
   }
@@ -308,23 +308,24 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
   // Sentinel Icon Style
   if ($opts['hasSentinel']) {
     $rv .= "<div style='margin: 0px;
-    top: 52%; 
-    left: 90%;
+    top: 42px; 
+    left: 87px;
     margin-right: -50%;
     border-radius: 0%;
     width:" . $iconSize . "px;
     height:" . $iconSize . "px;
-    padding: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
     transform: translate(-50%, -50%);
     position:absolute; z-index: 10;
-    background: rgba(255, 0, 255, 0.8);
+    background: url(./Images/SentinelToken.png) no-repeat;
+    background-size: contain;
     line-height: 1.2;
-    font-size: 24px; 
+    font-size: 1px; 
     font-weight:700; 
     color: #fff;
+    filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.40));
     user-select: none;'>" . "0" . "</div>";
 
   }
@@ -332,20 +333,22 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
   $damaged = $opts['currentHP'] < $opts['maxHP']; 
   if ($damaged) {
     $rv .= "<div style='margin: 0px;
-    top: 52%; 
-    left: 10%;
+    bottom: -11px; 
+    right: 45px;
     margin-right: -50%;
     border-radius: 0%;
-    width:" . $iconSize . "px;
-    height:" . $iconSize . "px;
-    padding: 8px;
+    width:38px;
+    height:26px;
     display: flex;
     align-items: center;
     justify-content: center;
     transform: translate(-50%, -50%);
-    position:absolute; z-index: 10;
-    background: rgba(255, 0, 0, 0.8);
+    position:absolute; 
+    z-index: 1;
+    background: linear-gradient(90deg, rgba(255, 0, 0, 0.00) 0%, rgba(255, 0, 0, 0.90) 50%, #F00 100%), linear-gradient(270deg, rgba(0, 0, 0, 0.90) 0%, rgba(0, 0, 0, 0.90) 45%, rgba(0, 0, 0, 0.00) 100%);
     line-height: 1.2;
+    text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.60);
+    padding: 0 0 1px 0;
     font-size: 24px; 
     font-weight:700; 
     color: #fff;
@@ -355,44 +358,58 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
 
   //Card HP Style
   if ($opts['currentHP'] != 0) {
-    $bgImage = "./Images/Life.png";
-    $left = "72%";
-    $top = "68%";
-    $lineHeight = 38;
-    $rv .= "<div style='position:absolute; top: " . $top . "; left:" . $left . "; width:" . $imgCounterHeight . "px; height:" . $imgCounterHeight . "px; line-height:" . $lineHeight . "px; 
-    z-index: 5; text-align: center; font-size:" . $imgCounterFontSize . "px; font-weight: 700; font-family: Teko, sans-serif; color: #EEE; text-shadow: 0px 0px 3px rgba(0, 0, 0, 1); 
-    user-select: none; background: url($bgImage) no-repeat; background-size: 35px 35px;'>" . $opts['currentHP'] . "</div>";
+    $bgImage = "./Images/life_v2.png";
+    $right = "-2px";
+    $top = "67px";
+    $lineHeight = 30;
+    $rv .= "<div style='position:absolute; top: " . $top . "; right:" . $right . "; width:" . $iconSize . "px; height:32px; line-height:" . $lineHeight . "px; 
+    z-index: 5; text-align: center; font-size:" . $imgCounterFontSize . "px; font-weight: 700; font-family: Barlow, Gemunu Libre, sans-serif; color: #fff;   text-shadow:
+      1px 1px 0 #176395,
+      -1px 1px 0 #176395,
+      -1px -1px 0 #176395,
+      1px -1px 0 #176395,
+      2px 2px 1px rgba(0, 0, 0, 0.30);
+    user-select: none; background: url($bgImage) no-repeat; background-size: 26px 32px;'>" . $opts['currentHP'] . "</div>";
   }
 
   //Card Power style
   if ($opts['currentPower'] != 0) {
-    $bgImage = "./Images/AttackIcon.png";
-    $left = "-5%";
-    $top = "68%";
-    $lineHeight = 38;
-    $rv .= "<div style='position:absolute; top: " . $top . "; left:" . $left . "; width:" . $imgCounterHeight . "px; height:" . $imgCounterHeight . "px; line-height:" . $lineHeight . "px; 
-    z-index: 5; text-align: center; font-size:" . $imgCounterFontSize . "px; font-weight: 700; font-family: Teko, sans-serif; color: #EEE; text-shadow: 0px 0px 3px rgba(0, 0, 0, 1); 
-    user-select: none; background: url($bgImage) no-repeat; background-size: 35px 35px;'>" . $opts['currentPower'] . "</div>";
+    $bgImage = "./Images/attack_v2.png";
+    $left = "-2px";
+    $top = "67px";
+    $lineHeight = 30;
+    $rv .= "<div style='position:absolute; top: " . $top . "; left:" . $left . "; width:" . $iconSize . "px; height:32px; line-height:" . $lineHeight . "px; 
+    z-index: 5; text-align: center; font-size:" . $imgCounterFontSize . "px; font-weight: 700; font-family: Barlow, Gemunu Libre, sans-serif; color: #fff; text-shadow:
+      1px 1px 0 #760F12,
+      -1px 1px 0 #760F12,
+      -1px -1px 0 #760F12,
+      1px -1px 0 #760F12,
+      2px 2px 1px rgba(0, 0, 0, 0.30);
+    user-select: none; background: url($bgImage) no-repeat; background-size: 26px 32px;'>" . $opts['currentPower'] . "</div>";
   }
 
   // Subcards style
   if (isset($opts['subcards']) && count($opts['subcards']) > 0) {
     for ($i = 0; $i < count($opts['subcards']); $i++) {
       $rv .= "<div style='margin: 0px;
-      top: calc(100% + " . ($i * 20) . "px); 
-      left: 0%;
+      top: calc(100% - 6px + " . ($i * 15) . "px); 
+      left: 1px;
       border-radius: 0%;
       width: 96px;
       height: 20px;
+      padding-top: 1px;
       display: flex;
       align-items: center;
       justify-content: center;
-      position:absolute; z-index: 10;
-      background: rgba(0, 0, 0, 0.8);
+      position:absolute; z-index: 0;
+      background: url(./Images/upgradebg.png) no-repeat;
+      background-size: contain;
       line-height: 1.2;
-      font-size: 10px; 
-      font-weight:700; 
-      color: #fff;
+      font-size: 6px; 
+      font-family: Barlow, sans-serif;
+      font-weight:800; 
+      text-transform: uppercase;
+      color: #1D1D1D;
       user-select: none;'
       data-subcard-id='" . $opts['subcards'][$i] . "'>" . CardName($opts['subcards'][$i]) . "</div>";
     }
