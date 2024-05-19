@@ -215,6 +215,7 @@ function HasSentinel($cardID, $player, $index)
     case "4786320542":
     case "3896582249":
     case "2855740390":
+    case "6585115122"://The Mandalorian
     case "2969011922"://Pyke Sentinel
       return true;
     case "2739464284"://Gamorrean Guards

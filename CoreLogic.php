@@ -3454,6 +3454,16 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
       }
       break;
+    case "6585115122"://The Mandalorian
+      if($from != "PLAY") {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:maxCost=2&THEIRALLY:maxCost=2");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to heal and shield");
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "RESTORE,999", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "ADDSHIELD", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "ADDSHIELD", 1);
+      }
+      break;
     default: break;
   }
 }
