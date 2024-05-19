@@ -171,6 +171,7 @@ function RaidAmount($cardID, $player, $index)
     case "6208347478": $amount += SearchCount(SearchAllies($player, trait:"Spectre")) > 1 ? 1 : 0; break;//Chopper
     case "3487311898": $amount += 3; break;//Clan Challengers
     case "5977238053": $amount += 2; break;//Sundari Peacekeeper
+    case "1805986989": $amount += 2; break;//Modded Cohort
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
@@ -323,6 +324,7 @@ function HasAmbush($cardID, $player, $index)
     case "3684950815":
     case "9500514827":
     case "8506660490":
+    case "1805986989"://Modded Cohort
       return true;
     case "2027289177"://Escort Skiff
       return SearchCount(SearchAllies($player, aspect:"Command")) > 1;
