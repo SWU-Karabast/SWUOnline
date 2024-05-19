@@ -356,7 +356,7 @@ function SpecificCardLogic($player, $card, $lastResult)
       $reveal = rtrim($reveal, ",");
       RevealCards($reveal, $player);
       return $lastResult;
-    case "GENERALTAGGE":
+    case "MULTIGIVEEXPERIENCE":
       for($i=0; $i<count($lastResult); ++$i) {
         $ally = new Ally("MYALLY-" . $lastResult[$i], $player);
         $ally->Attach("2007868442");//Experience token

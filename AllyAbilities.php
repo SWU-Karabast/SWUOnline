@@ -409,6 +409,14 @@ function CollectBounties($player, $index) {
         $amount = CardIsUnique($ally->CardID()) ? 6 : 4;
         Restore($amount, $opponent);
         break;
+      case "3074091930"://Rich Reward
+        AddDecisionQueue("MULTIZONEINDICES", $opponent, "MYALLY");
+        AddDecisionQueue("OP", $opponent, "MZTONORMALINDICES");
+        AddDecisionQueue("PREPENDLASTRESULT", $opponent, "3-", 1);
+        AddDecisionQueue("SETDQCONTEXT", $opponent, "Choose up to 2 units to give experience");
+        AddDecisionQueue("MULTICHOOSEUNIT", $opponent, "<-", 1);
+        AddDecisionQueue("SPECIFICCARD", $opponent, "MULTIGIVEEXPERIENCE", 1);
+        break;
       default: break;
     }
   }
