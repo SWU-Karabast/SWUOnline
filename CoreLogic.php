@@ -3483,6 +3483,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "ADDEXPERIENCE", 1);
       break;
+    case "0866321455"://Smuggler's Aid
+      Restore(3, $currentPlayer);
+      break;
     default: break;
   }
 }
