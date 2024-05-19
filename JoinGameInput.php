@@ -19,6 +19,15 @@ include_once 'LZCompressor/LZUtil16.php';
 use LZCompressor\LZString as LZString;
 
 session_start();
+if (!isset($_SESSION["userid"])) {
+  if (isset($_COOKIE["rememberMeToken"])) {
+    include_once './Assets/patreon-php-master/src/PatreonLibraries.php';
+    include_once './Assets/patreon-php-master/src/API.php';
+    include_once './Assets/patreon-php-master/src/PatreonDictionary.php';
+    loginFromCookie();
+  }
+}
+
 $gameName = $_GET["gameName"];
 if (!IsGameNameValid($gameName)) {
   echo ("Invalid game name.");
