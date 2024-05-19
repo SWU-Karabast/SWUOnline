@@ -655,6 +655,9 @@ function GetAbilityTypes($cardID)
     case "1951911851"://Grand Admiral Thrawn
       $abilityTypes = "A";
       break;
+    case "6722700037"://Doctor Pershing
+      $abilityTypes = "A,AA";
+      break;
     default: break;
   }
   if(DefinedTypesContains($cardID, "Leader", $currentPlayer) && !IsAlly($cardID, $currentPlayer)) {
@@ -743,6 +746,9 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       break;
     case "1951911851"://Grand Admiral Thrawn
       $abilityNames = "Exhaust";
+      break;
+    case "6722700037"://Doctor Pershing
+      $abilityNames = "Draw,Attack";
       break;
     default: break;
   }

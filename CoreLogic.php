@@ -3435,6 +3435,16 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         PummelHit($otherPlayer);
       }
       break;
+    case "6722700037"://Doctor Pershing
+      $abilityName = GetResolvedAbilityName($cardID, $from);
+      if($abilityName == "Draw") {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 1 damage");
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1", 1);
+        AddDecisionQueue("DRAW", $currentPlayer, "-", 1);
+      }
+      break;
     default: break;
   }
 }
