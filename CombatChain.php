@@ -3,7 +3,6 @@
 
 function ProcessHitEffect($cardID)
 {
-  WriteLog("Processing hit effect for " . CardLink($cardID, $cardID));
   global $mainPlayer, $combatChainState, $CCS_DamageDealt, $defPlayer;
   if(HitEffectsArePrevented()) return;
   switch($cardID)
