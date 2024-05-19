@@ -424,6 +424,9 @@ function CollectBounties($player, $index) {
     case "9503028597"://Clone Deserter
       Draw($opponent);
       break;
+    case "9108611319"://Cartel Turncoat
+      Draw($opponent);
+      break;
     default: break;
   }
 }
