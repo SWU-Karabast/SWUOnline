@@ -3471,6 +3471,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "3329959260"://Fell the Dragon
       MZChooseAndDestroy($currentPlayer, "MYALLY:minAttack=5&THEIRALLY:minAttack=5", filter:"leader=1");
       break;
+    case "0282219568"://Clan Wren Rescuer
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to add experience");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "ADDEXPERIENCE", 1);
+      break;
     default: break;
   }
 }
