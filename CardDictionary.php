@@ -228,6 +228,9 @@ function HasSentinel($cardID, $player, $index)
       return $initiativePlayer == $player;
     case "1780978508"://Emperor's Royal Guard
       return SearchCount(SearchAllies($player, trait:"Official")) > 0;
+    case "9405733493"://Protector of the Throne
+      $ally = new Ally("MYALLY-" . $index, $player);
+      return $ally->IsUpgraded();
     default: return false;
   }
 }
