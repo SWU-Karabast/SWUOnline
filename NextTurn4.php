@@ -321,7 +321,7 @@
           var type = cardArr[10];
           var substype = cardArr[11];
           if (type != "") {
-            folder = "concat";
+            folder = "WebpImages2";
             if (zone == "myChar") {
               var charLeft = GetCharacterLeft(type, substype);
               var charBottom = GetCharacterBottom(type, substype);
