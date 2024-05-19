@@ -229,14 +229,26 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     <img style='object-fit: cover; height:100%; width:100%;' src='./Images/gamebg.jpg'/></div>");
   
     //Base Damage Numbers
-  echo ("<div style='position:absolute; right:258px; top:calc(50% - 113px); height:165px; z-index:100;'>
-      <span style='position:absolute; text-align:center; width:100%; font-weight: 550; font-size: 26px; top:112px; user-select: none;'>$myHealth</span>"); 
-      //Master pass button div
+  echo ("<div style='position:absolute; z-index:1; left: calc(50% - 169px); width: 100px;'><div style='display: flex; justify-content: center;'>
+      <span 
+      style='position:fixed; bottom:389px;
+      height: 30px;
+      padding: 0 10px; 
+      background: url(./Images/dmgbg-l.png) left no-repeat, url(./Images/dmgbg-r.png) right no-repeat; background-size: contain;
+      filter: drop-shadow(1px 2px 1px rgba(0, 0, 0, 0.40));
+      font-weight: 700; font-size: 24px; text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.30);  
+      user-select: none;'>$myHealth</span>"); 
   echo (($manualMode ? "<span style='position:absolute; top:120px; left:65px;'>" . CreateButton($playerID, "+1", 10006, 0, "20px") . CreateButton($playerID, "-1", 10005, 0, "20px") . "</span>" : ""));
-  echo ("<span style='position:absolute; text-align:center; width:100%; font-size: 26px; font-weight: 550; top:20px; user-select: none;'>$theirHealth</span>");
+  echo ("<span 
+      style='position:fixed; top:328px;
+      height: 30px;
+      padding: 0 10px; 
+      background: url(./Images/dmgbg-l.png) left no-repeat, url(./Images/dmgbg-r.png) right no-repeat; background-size: contain;
+      filter: drop-shadow(1px 2px 1px rgba(0, 0, 0, 0.40));
+      font-weight: 700; font-size: 24px; text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.30);  
+      user-select: none;'>$theirHealth</span>");
   echo (($manualMode ? "<span style='position:absolute; top:0px; left:65px;'>" . CreateButton($playerID, "+1", 10008, 0, "20px") . CreateButton($playerID, "-1", 10007, 0, "20px") . "</span>" : ""));
-  if (IsDarkMode($playerID)) echo ("<img style='height:165px;' src='./Images/DuoLifeDark.png' />");
-  else echo ("<img style='height:165px;' src='./Images/LifeBackground.png' />");
+  echo ("</div></div>");
   echo ("<div style='position:absolute; top:37px; left:-130px; z-index:-5;'></div>");
   if ($turn[0] == "PDECK" || $turn[0] == "ARS" || (count($layers) > 0 && $layers[0] == "ENDTURN")) {
     $passLabel = "End Turn";
@@ -263,13 +275,13 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       $prompt = "Do you want to skip arsenal?";
     }
 
+    // Pass Button - Active then Inactive (which is hidden) 
 ?>
-    <div title='Space is the shortcut to pass.' <?= ProcessInputLink($playerID, 99, 0, prompt: $prompt) ?> class='passButton' style='position:absolute; top:50px; left:-137px; z-index:-1; cursor:pointer; height:65px; width:143px; box-shadow:inset 0px 0px 0px 1px #454545; border-radius: 5px;'>
-    <img style='height:16px; width:16px; float:left; margin: 25px 20px 24px 20px;' src='./Images/ready.png' />
-    <span style='position:relative; display:block; text-align:left; top:3px; color:white; font-size:30px; font-weight: 600; user-select: none;'>
+    <div title='Space is the shortcut to pass.' <?= ProcessInputLink($playerID, 99, 0, prompt: $prompt) ?> class='passButton' style='position:absolute; z-index: 20; bottom:10px; right: 374px; cursor:pointer; padding:8px 20px 10px; box-shadow:inset 0px 0px 0px 1px #454545; border-radius: 5px;'>
+    <span style='margin: 0 1px 0 0; color:white; font-size:18px; font-weight: 600; user-select: none;'>
         <?= $passLabel ?>
       </span>
-      <span style='position:relative; display:block; text-align:left; bottom:-2px; left: 1px; font-size:14px; color:#BDBDBD; user-select: none;'>
+      <span style='bottom:2px; font-size:12px; color:#BDBDBD; user-select: none;'>
         [Space]
       </span>
     </div>
@@ -278,12 +290,12 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   } else {
   ?>
 
-    <div title='Space is the shortcut to pass.' class='passInactive' style='position:absolute; top:50px; left:-137px; z-index:-1; cursor:pointer; height:65px; width:143px; box-shadow:inset 0px 0px 0px 1px #454545; border-radius: 5px;'>
-    <img style='height:16px; width:16px; float:left; margin: 25px 20px 24px 20px;' src='./Images/notReady.png' />
-    <span style='position:relative; display:block; text-align:left; top:3px; color:grey; font-size:30px; font-weight: 600; user-select: none;'>
+    <div title='Space is the shortcut to pass.' class='passInactive' 
+    style='display:none; position:absolute; z-index: 20; bottom:10px; right: 374px; cursor:pointer; padding:8px 20px 10px; box-shadow:inset 0px 0px 0px 1px #454545; border-radius: 5px;'>
+    <span style='margin: 0 1px 0 0; color:grey; font-size:18px; font-weight: 600; user-select: none;'>
         <?= $passLabel ?>
       </span>
-      <span style='position:relative; display:block; text-align:left; bottom:-2px; left: 1px; font-size:14px; color:#BDBDBD; user-select: none;'>
+      <span style='bottom:2px; font-size:12px; color:#BDBDBD; user-select: none;'>
         [Space]
       </span>
     </div>
@@ -292,13 +304,13 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   }
 
   if($initiativePlayer == $playerID || ($playerID == 3 && $initiativePlayer == 2)) {
-    echo ("<div style='position:absolute; top:115px; left:-100px; z-index:-4; background: #00BAFF; border-radius: 0 0 0 10px; height: 30px; width: 120px;'><span style='position:relative; margin: 4px 0 0 20px; text-align: left; display:block; z-index:10; font-size: 16px; font-weight:600; color:black; user-select: none;'>Initiative</span>");
+    echo ("<div style='position:absolute; bottom:225px; right:258px; background: #00BAFF; border-radius: 20px; height: 30px; width: 96px;'><span style='position:relative; margin: 5px auto 0; text-align: center; display:block; z-index:10; font-size: 16px; font-weight:600; color:black; user-select: none;'>Initiative</span>");
     echo (($manualMode ? "<span style='position:absolute; top:97%; right:0; display: inline-block;'>" . CreateButton($playerID, "+1", 10002, 0, "20px") . CreateButton($playerID, "-1", 10004, 0, "20px") . "</span>" : ""));
   } else {
-    echo ("<div style='position:absolute; top:20px; left:-100px; z-index:-4; background: #FB0007; border-radius: 10px 0 0 0; height: 30px; width: 120px;'><span style='position:relative; margin: 6px 0 0 20px; text-align: left; display:block; z-index:10; font-size: 16px; font-weight:600; color:black; user-select: none;'>Initiative</span>");
+    echo ("<div style='position:absolute; top:225px; right:258px; background: #FB0007; border-radius: 20px; height: 30px; width: 96px;'><span style='position:relative; margin: 5px auto 0; text-align: center; display:block; z-index:10; font-size: 16px; font-weight:600; color:black; user-select: none;'>Initiative</span>");
     echo (($manualMode ? "<span style='position:absolute; top:-60%; right:0; display: inline-block;'>" . CreateButton($playerID, "+1", 10002, 0, "20px") . CreateButton($playerID, "-1", 10004, 0, "20px") . "</span>" : ""));
   }
-  echo ("</div></div>");
+  echo ("</div>");
 
   //Now display the screen for this turn
   echo ("<span style='position:fixed;  bottom:0px; left:0; right:238px; bottom:10px; z-index:10; display:inline-block; justity-content: center; font-size:30px; text-align:center;'>");
