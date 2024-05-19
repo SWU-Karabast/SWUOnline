@@ -417,6 +417,12 @@ function CollectBounties($player, $index) {
         AddDecisionQueue("MULTICHOOSEUNIT", $opponent, "<-", 1);
         AddDecisionQueue("SPECIFICCARD", $opponent, "MULTIGIVEEXPERIENCE", 1);
         break;
+      case "1780014071"://Public Enemy
+        AddDecisionQueue("MULTIZONEINDICES", $opponent, "MYALLY&THEIRALLY");
+        AddDecisionQueue("SETDQCONTEXT", $opponent, "Choose a unit to give a shield");
+        AddDecisionQueue("CHOOSEMULTIZONE", $opponent, "<-", 1);
+        AddDecisionQueue("MZOP", $opponent, "ADDSHIELD", 1);
+        break;
       default: break;
     }
   }
