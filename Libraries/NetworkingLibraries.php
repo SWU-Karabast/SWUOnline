@@ -1698,7 +1698,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
       else {
         $abilityIndex = GetClassState($currentPlayer, $CS_AbilityIndex);
         $playIndex = GetClassState($currentPlayer, $CS_PlayIndex);
-        if($from == "PLAY" || $from == "EQUIP" || HasWhenPlayed($cardID) || DefinedTypesContains($cardID, "Event", $currentPlayer)) AddLayer("PLAYABILITY", $currentPlayer, $cardID, $from . "!" . $resourcesPaid . "!" . $target . "!" . $additionalCosts . "!" . $abilityIndex . "!" . $playIndex, "-", $uniqueID);
+        if($from == "PLAY" || $from == "EQUIP" || HasWhenPlayed($cardID) || DefinedTypesContains($cardID, "Event", $currentPlayer) || DefinedTypesContains($cardID, "Upgrade", $currentPlayer)) AddLayer("PLAYABILITY", $currentPlayer, $cardID, $from . "!" . $resourcesPaid . "!" . $target . "!" . $additionalCosts . "!" . $abilityIndex . "!" . $playIndex, "-", $uniqueID);
       }
     }
     if($from != "PLAY") {
