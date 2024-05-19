@@ -2871,6 +2871,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $ally->AddRoundHealthModifier(2);
       AddCurrentTurnEffect($cardID, $currentPlayer, "PLAY", $ally->UniqueID());
       break;
+    case "1701265931"://Moment of Glory
+      $ally = new Ally($target);
+      $ally->AddRoundHealthModifier(4);
+      AddCurrentTurnEffect($cardID, $currentPlayer, "PLAY", $ally->UniqueID());
+      break;
     case "1900571801"://Overwhelming Barrage
       $ally = new Ally($target);
       $ally->AddRoundHealthModifier(2);
@@ -3683,6 +3688,7 @@ function PlayRequiresTarget($cardID)
     case "7861932582": return 6;//The Force is With Me
     case "2758597010": return 6;//Maximum Firepower
     case "2202839291": return 6;//Don't Get Cocky
+    case "1701265931": return 6;//Moment of Glory
     default: return -1;
   }
 }
