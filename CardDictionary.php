@@ -216,6 +216,7 @@ function HasSentinel($cardID, $player, $index)
     case "4786320542":
     case "3896582249":
     case "2855740390":
+    case "1747533523"://Village Protectors
     case "6585115122"://The Mandalorian
     case "2969011922"://Pyke Sentinel
       return true;
@@ -349,6 +350,7 @@ function HasShielded($cardID, $player, $index)
     case "7728042035":
     case "7870435409":
     case "6135081953"://Doctor Evazan
+    case "1747533523"://Village Protectors
       return true;
     default: return false;
   }
