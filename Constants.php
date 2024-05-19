@@ -105,7 +105,7 @@ function CharacterEffectPieces()
 //1 - Face up/down
 //2 - ?
 //3 - Counters
-//4 - Frozen: 0 = no, 1 = yes
+//4 - Exhausted: 0 = no, 1 = yes
 //5 - Unique ID
 function ArsenalPieces()
 {
@@ -207,7 +207,7 @@ $CS_DamagePrevention = 4;
 $CS_CardsBanished = 5;
 $CS_DamageTaken = 6;
 $CS_NumActionsPlayed = 7;
-$CS_ArsenalFacing = 8;
+$CS_ArsenalFacing = 8;//Deprecated
 $CS_CharacterIndex = 9;
 $CS_PlayIndex = 10;
 $CS_NumNonAttackCards = 11;

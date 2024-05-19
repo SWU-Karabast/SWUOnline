@@ -3658,12 +3658,12 @@ function Recover($player, $amount)
   else $health -= $amount;
 }
 
-function AddTopDeckAsResource($player)
+function AddTopDeckAsResource($player, $isExhausted=true)
 {
   $deck = &GetDeck($player);
   if(count($deck) > 0) {
     $card = array_shift($deck);
-    AddResources($card, $player, "DECK", "DOWN", isExhausted:1);
+    AddResources($card, $player, "DECK", "DOWN", isExhausted:($isExhausted ? 1 : 0));
   }
 }
 

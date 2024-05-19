@@ -3,7 +3,7 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
 {
   global $gameName, $currentPlayer, $mainPlayer, $dqVars, $turn, $CS_CharacterIndex, $CS_PlayIndex, $decisionQueue, $CS_NextNAAInstant, $skipWriteGamestate, $combatChain, $landmarks;
   global $SET_PassDRStep, $actionPoints, $currentPlayerActivity, $redirectPath;
-  global $dqState, $layers, $CS_ArsenalFacing, $combatChainState;
+  global $dqState, $layers, $combatChainState;
   global $roguelikeGameID;
   switch ($mode) {
     case 3: //Play equipment ability
@@ -48,16 +48,17 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
         return false;
       }
       break;
-    case 5: //Card Played from Arsenal
+    case 5: //Card Played from resources
       $index = $cardID;
       $arsenal = &GetArsenal($playerID);
       if ($index < count($arsenal)) {
         $cardToPlay = $arsenal[$index];
-        if (!IsPlayable($cardToPlay, $turn[0], "ARS", $index)) break;
+        if (!IsPlayable($cardToPlay, $turn[0], "RESOURCES", $index)) break;
+        $isExhausted = $arsenal[$index + 4] == 1;
         $uniqueID = $arsenal[$index + 5];
-        SetClassState($playerID, $CS_ArsenalFacing, $arsenal[$index+1]);
         RemoveArsenal($playerID, $index);
-        PlayCard($cardToPlay, "ARS", -1, -1, $uniqueID);
+        AddTopDeckAsResource($playerID, isExhausted:$isExhausted);
+        PlayCard($cardToPlay, "RESOURCES", -1, -1, $uniqueID);
       }
       else
       {
@@ -1232,7 +1233,8 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
   if($turn[0] != "P") {
     if($dynCostResolved >= 0) {
       SetClassState($currentPlayer, $CS_DynCostResolved, $dynCostResolved);
-      $baseCost = ($from == "PLAY" || $from == "EQUIP" ? AbilityCost($cardID) : (CardCost($cardID) + SelfCostModifier($cardID)));
+      if($from == "RESOURCES") $baseCost = SmuggleCost($cardID, $currentPlayer, $index);
+      else $baseCost = ($from == "PLAY" || $from == "EQUIP" ? AbilityCost($cardID) : (CardCost($cardID) + SelfCostModifier($cardID)));
       if(!$playingCard) $resources[1] += $dynCostResolved;
       else {
         $frostbitesPaid = AuraCostModifier($cardID);

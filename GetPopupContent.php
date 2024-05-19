@@ -36,7 +36,8 @@ switch ($popupType) {
     echo (CreatePopup("myPitchPopup", $myPitch, 1, 0, "Your Pitch"));
     break;
   case "myResourcePopup":
-    echo (CreatePopup("myResourcePopup", $myArsenal, 1, 0, "Your Resources", ArsenalPieces()));
+    if($playerID == 3) echo (CreatePopup("myResourcePopup", $myArsenal, 1, 0, "Your Resources", ResourcePieces()));
+    else echo (CreatePopup("myResourcePopup", [], 1, 0, "Your Resources", 1, ResourceUI()));
     break;
   case "myDiscardPopup":
     echo (CreatePopup("myDiscardPopup", $myDiscard, 1, 0, "Your Discard"));

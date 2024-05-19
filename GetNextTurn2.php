@@ -822,11 +822,6 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     $card = $mod == "INT" || $mod == "UZURI" ? $TheirCardBack : $theirBanish[count($theirBanish) - BanishPieces()];
     echo (Card($card, "concat", $cardSizeAura, 0, 0, 0, 0, controller: $otherPlayer));
 
-    $theirBloodDeptCount = 0;
-    for ($i = 0; $i < count($theirBanish); $i += BanishPieces()) {
-      if (HasBloodDebt($theirBanish[$i]) && $theirBanish[$i + 1] != "INT") ++$theirBloodDeptCount;
-    }
-
     echo ("<span title='Click to see your opponent Banish Zone.' onclick='ShowPopup(\"theirBanishPopup\");' style='left:" . $cardIconLeft . "px; top:" . $cardIconTop + 2 . "px; cursor:pointer; position:absolute; display:inline-block;'>
       <img style=' opacity:0.9; height:" . $cardIconSize . "; width:" . $cardIconSize . "; display: block; margin-left: auto; margin-right: auto;' src='./Images/banish.png'>
       <div style='text-align:center; margin: 0; top: 50%; left: 50%; margin-right: -50%; width: 30px; height: 30px; padding: 3px; transform: translate(-50%, -50%); line-height: 1.2;

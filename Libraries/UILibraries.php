@@ -254,9 +254,6 @@
     if($from == "BANISH")
     {
       if($isPlayable || PlayableFromBanish($cardID)) return 4;
-      if(HasBloodDebt($cardID)) return 2;
-      if($isPlayable && HasReprise($cardID) && RepriseActive()) return 5;
-      if($isPlayable && ComboActive($cardID)) return 5;
       return 0;
     }
     if($isPlayable && ComboActive($cardID)) return 3;

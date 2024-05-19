@@ -695,6 +695,23 @@ function PitchColor($pitch)
   }
 }
 
+function ResourceUI()
+{
+  global $turn, $currentPlayer, $playerID, $cardSize;
+  $rv = "";
+  $size = 120;
+  $resources = GetResourceCards($playerID);
+  for ($i = 0; $i < count($resources); $i += ResourcePieces()) {
+    $action = $currentPlayer == $playerID && IsPlayable($resources[$i], $turn[0], "RESOURCES", $i) ? 5 : 0;
+    $border = CardBorderColor($resources[$i], "RESOURCES", $action > 0);
+    if($action > 0)
+      $rv .= Card($resources[$i], "concat", $size, $action, 1, 0, $border, 0, strval($i));
+    else
+      $rv .= Card($resources[$i], "concat", $size, 0, 1, 0, $border);
+  }
+  return $rv;
+}
+
 function BanishUI($from = "")
 {
   global $turn, $currentPlayer, $playerID, $cardSize, $cardSizeAura;
@@ -785,15 +802,8 @@ function CardBorderColor($cardID, $from, $isPlayable, $mod = "-")
   if ($from == "BANISH") {
     if ($isPlayable || PlayableFromBanish($cardID, $mod))
       return 7;
-    //if (HasBloodDebt($cardID)) return 2;
-    //if ($isPlayable && HasReprise($cardID) && RepriseActive()) return 5;
-    //if ($isPlayable && ComboActive($cardID)) return 5;
-    //if ($isPlayable && HasRupture($cardID) && RuptureActive(true)) return 5;
     return 0;
   }
-  //if ($isPlayable && ComboActive($cardID)) return 3;
-  //if ($isPlayable && HasReprise($cardID) && RepriseActive()) return 3;
-  //if ($isPlayable && HasRupture($cardID) && RuptureActive(true, (CardType($cardID) != "AA"))) return 3;
   else if ($isPlayable)
     return 6;
   return 0;

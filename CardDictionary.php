@@ -106,7 +106,7 @@ function RestoreAmount($cardID, $player, $index)
   {
     case "0074718689": $amount += 1; break;
     case "1081012039": $amount += 2; break;
-    case "1611702639": $amount += $initiativePlayer == $player ? 2 : 0; break;
+    case "1611702639": $amount += $initiativePlayer == $player ? 2 : 0; break;//Consortium Starviper
     case "4405415770": $amount += 2; break;
     case "0827076106": $amount += 1; break;
     case "4919000710": $amount += 2; break;
@@ -216,6 +216,7 @@ function HasSentinel($cardID, $player, $index)
     case "4786320542":
     case "3896582249":
     case "2855740390":
+    case "1982478444"://Vigilant Pursuit Craft
     case "1747533523"://Village Protectors
     case "6585115122"://The Mandalorian
     case "2969011922"://Pyke Sentinel
@@ -822,6 +823,10 @@ function IsPlayable($cardID, $phase, $from, $index = -1, &$restriction = null, $
   }
   $otherPlayer = ($player == 1 ? 2 : 1);
   if($from == "HAND" && ((CardCost($cardID) + SelfCostModifier($cardID)) > NumResourcesAvailable($currentPlayer)) && !HasAlternativeCost($cardID)) return false;
+  if($from == "RESOURCES") {
+    if(!PlayableFromResources($cardID, index:$index)) return false;
+    if((SmuggleCost($cardID, index:$index) + SelfCostModifier($cardID)) > NumResourcesAvailable($currentPlayer) && !HasAlternativeCost($cardID)) return false;
+  }
   if(DefinedTypesContains($cardID, "Upgrade", $player) && SearchCount(SearchAllies($player)) == 0 && SearchCount(SearchAllies($otherPlayer)) == 0) return false;
   if($phase == "M" && $from == "HAND") return true;
   $isStaticType = IsStaticType($cardType, $from, $cardID);
@@ -1199,10 +1204,14 @@ function ComboActive($cardID = "")
   return false;
 }
 
-function HasBloodDebt($cardID)
+function SmuggleCost($cardID, $player="", $index="")
 {
-  switch ($cardID) {
-    default: return false;
+  global $currentPlayer;
+  if($player == "") $player = $currentPlayer;
+  switch($cardID) {
+    case "1982478444": return 7;//Vigilant Pursuit Craft
+    case "0866321455": return 3;//Smuggler's Aid
+    default: return -1;
   }
 }
 
@@ -1213,6 +1222,15 @@ function PlayableFromBanish($cardID, $mod="")
   if($mod == "TCL" || $mod == "TT" || $mod == "TCC" || $mod == "NT" || $mod == "INST") return true;
   switch($cardID) {
 
+    default: return false;
+  }
+}
+
+function PlayableFromResources($cardID, $player="", $index="") {
+  global $currentPlayer;
+  if($player == "") $player = $currentPlayer;
+  if(SmuggleCost($cardID, $player, $index) > 0) return true;
+  switch($cardID) {
     default: return false;
   }
 }
