@@ -3445,6 +3445,15 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("DRAW", $currentPlayer, "-", 1);
       }
       break;
+    case "6536128825"://Grogu
+      $abilityName = GetResolvedAbilityName($cardID, $from);
+      if($abilityName == "Exhaust") {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to exhaust");
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
+      }
+      break;
     default: break;
   }
 }
