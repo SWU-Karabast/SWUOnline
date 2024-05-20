@@ -212,6 +212,21 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   $TheirCardBack = GetCardBack($playerID == 1 ? 2 : 1);
   $otherPlayer = ($playerID == 1 ? 2 : 1);
 
+  echo '<style>
+    button[title="claimInitiativeButton"] {
+      background: #FF0000;
+    }
+
+    button[title="claimVictoryButton"] {
+      background: #FF0000;
+    }
+
+    #theirHand span a {
+      border: 1px solid rgb(69, 69, 69);
+      border-radius: 8px;
+    }
+  </style>';
+
   //Display background
   if (IsDarkPlainMode($playerID))
     echo ("<div class='container;' style='position:absolute; z-index:-100; left:0px; top:0px; width:100%; height:100%;'><img style='object-fit: cover; height:100%; width:100%;' src='./Images/darkplain.jpg'/>
@@ -263,32 +278,38 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       $prompt = "Do you want to skip arsenal?";
     }
 
-?>
-    <div title='Space is the shortcut to pass.' <?= ProcessInputLink($playerID, 99, 0, prompt: $prompt) ?> class='passButton' style='position:absolute; top:50px; left:-137px; z-index:-1; cursor:pointer; height:65px; width:143px; box-shadow:inset 0px 0px 0px 1px #454545; border-radius: 5px;'>
-    <img style='height:16px; width:16px; float:left; margin: 25px 20px 24px 20px;' src='./Images/ready.png' />
-    <span style='position:relative; display:block; text-align:left; top:3px; color:white; font-size:30px; font-weight: 600; user-select: none;'>
+    ?>
+    <div title='Space is the shortcut to pass.' <?= ProcessInputLink($playerID, 99, 0, prompt: $prompt) ?> class='passButton'
+      style='position:absolute; top:50px; left:-137px; z-index:-1; cursor:pointer; height:65px; width:143px; box-shadow:inset 0px 0px 0px 1px #454545; border-radius: 5px;'>
+      <img style='height:16px; width:16px; float:left; margin: 25px 20px 24px 20px;' src='./Images/ready.png' />
+      <span
+        style='position:relative; display:block; text-align:left; top:3px; color:white; font-size:30px; font-weight: 600; user-select: none;'>
         <?= $passLabel ?>
       </span>
-      <span style='position:relative; display:block; text-align:left; bottom:-2px; left: 1px; font-size:14px; color:#BDBDBD; user-select: none;'>
+      <span
+        style='position:relative; display:block; text-align:left; bottom:-2px; left: 1px; font-size:14px; color:#BDBDBD; user-select: none;'>
         [Space]
       </span>
     </div>
 
-  <?php
+    <?php
   } else {
-  ?>
+    ?>
 
-    <div title='Space is the shortcut to pass.' class='passInactive' style='position:absolute; top:50px; left:-137px; z-index:-1; cursor:pointer; height:65px; width:143px; box-shadow:inset 0px 0px 0px 1px #454545; border-radius: 5px;'>
-    <img style='height:16px; width:16px; float:left; margin: 25px 20px 24px 20px;' src='./Images/notReady.png' />
-    <span style='position:relative; display:block; text-align:left; top:3px; color:grey; font-size:30px; font-weight: 600; user-select: none;'>
+    <div title='Space is the shortcut to pass.' class='passInactive'
+      style='position:absolute; top:50px; left:-137px; z-index:-1; cursor:pointer; height:65px; width:143px; box-shadow:inset 0px 0px 0px 1px #454545; border-radius: 5px;'>
+      <img style='height:16px; width:16px; float:left; margin: 25px 20px 24px 20px;' src='./Images/notReady.png' />
+      <span
+        style='position:relative; display:block; text-align:left; top:3px; color:grey; font-size:30px; font-weight: 600; user-select: none;'>
         <?= $passLabel ?>
       </span>
-      <span style='position:relative; display:block; text-align:left; bottom:-2px; left: 1px; font-size:14px; color:#BDBDBD; user-select: none;'>
+      <span
+        style='position:relative; display:block; text-align:left; bottom:-2px; left: 1px; font-size:14px; color:#BDBDBD; user-select: none;'>
         [Space]
       </span>
     </div>
 
-<?php
+    <?php
   }
 
   if($initiativePlayer == $playerID || ($playerID == 3 && $initiativePlayer == 2)) {
@@ -301,7 +322,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   echo ("</div></div>");
 
   //Now display the screen for this turn
-  echo ("<span style='position:fixed;  bottom:0px; left:0; right:238px; bottom:10px; z-index:10; display:inline-block; justity-content: center; font-size:30px; text-align:center;'>");
+  echo ("<span style='position:fixed;  bottom:0px; left:0; z-index:10; justify-content: center; display: flex; width: calc(100% - 208px); margin-bottom: 10px; align-items: center'>");
 
 
   echo (($manualMode ? "<span style='position:relative; top: 5px; z-index:10; color: " . $fontColor . "; font-family:Helvetica; font-size:18px; font-weight: 550;text-shadow: 2px 0 0 " . $borderColor . ", 0 -2px 0 " . $borderColor . ", 0 2px 0 " . $borderColor . ", -2px 0 0 " . $borderColor . ";'>Add to hand: </span><input style='width: 100px;' id='manualAddCardToHand' type='text' /><input type='button' style='position:relative; font-size: 14px; top:0; left:0; bottom: 5px; box-shadow: none;' value='Add' onclick='AddCardToHand()' />&nbsp;" : ""));
@@ -310,21 +331,24 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   if ($turn[0] != "OVER") {
     $helpText = ($currentPlayer != $playerID ? " Waiting for other player to choose " . TypeToPlay($turn[0]) . "&nbsp" : " " . GetPhaseHelptext() . "&nbsp;");
 
-    echo ("<span style='display:inline-block; background-color: " . $backgroundColor . "; border: 2px solid " . $borderColor . "; border-radius: 5px; font-size:18px;'><img height='16px;' style='margin-right:5px; vertical-align: -2px; user-select: none;' title='" . $readyText . "' src='./Images/" . $icon . "'/>" . $helpText);
+    echo ("<span style='font-size:18px;'><img height='16px;' style='margin-right:5px; vertical-align: -2px; user-select: none;' title='" . $readyText . "' src='./Images/" . $icon . "'/>" . $helpText);
     if ($currentPlayer == $playerID) {
       if ($turn[0] == "P" || $turn[0] == "CHOOSEHANDCANCEL" || $turn[0] == "CHOOSEDISCARDCANCEL") echo ("(" . ($turn[0] == "P" ? $myResources[0] . " of " . $myResources[1] . " " : "") . "or " . CreateButton($playerID, "Cancel", 10000, 0, "18px") . ")");
       if (CanPassPhase($turn[0])) {
         if ($turn[0] == "B") echo (CreateButton($playerID, "Undo Block", 10001, 0, "18px") . " " . CreateButton($playerID, "Pass", 99, 0, "18px") . " " . CreateButton($playerID, "Pass Block and Reactions", 101, 0, "16px", "", "Reactions will not be skipped if the opponent reacts"));
       }
     } else {
-      if ($currentPlayerActivity == 2 && $playerID != 3) echo ("— Opponent is inactive " . CreateButton($playerID, "Claim Victory", 100007, 0, "18px"));
+      if ($currentPlayerActivity == 2 && $playerID != 3)
+        echo ("— Opponent is inactive " . CreateButton($playerID, "Claim Victory", 100007, 0, "18px", "", "claimVictoryButton"));
     }
     echo ("</span>");
   }
-  if (IsManualMode($playerID)) echo ("&nbsp;" . CreateButton($playerID, "Turn Off Manual Mode", 26, $SET_ManualMode . "-0", "18px", "", "", true));
-  
-  if($turn[0] == "M" && $initiativeTaken != 1 && $currentPlayer == $playerID) echo ("&nbsp;" . CreateButton($playerID, "Claim Initiative", 34, "-", "18px"));
-  
+  if (IsManualMode($playerID))
+    echo ("&nbsp;" . CreateButton($playerID, "Turn Off Manual Mode", 26, $SET_ManualMode . "-0", "18px", "", "", true));
+
+  if ($turn[0] == "M" && $initiativeTaken != 1 && $currentPlayer == $playerID)
+    echo ("&nbsp;" . CreateButton($playerID, "Claim Initiative", 34, "-", "18px", "", "claimInitiativeButton"));
+
   echo ("</span>");
 
   //Deduplicate current turn effects
@@ -348,21 +372,21 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
 
   //Effects UI
   echo ("<div style='position:absolute; width:90px; left:20px; top:20px;'>");
-  echo ("<div style='text-align:center; padding-bottom:10px; border-bottom: 1px solid transparent; border-image: linear-gradient(0.25turn, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255), rgba(255, 255, 255, 0.00) 100%); border-image-slice: 1; font-size:16px; font-weight: 600; color: white; user-select: none;'>Opponent<br>Effects</div>");
+  echo ("<div style='text-align:center; padding-bottom:10px; border-bottom: 1px solid transparent; border-image: linear-gradient(0.25turn, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255), rgba(255, 255, 255, 0.00) 100%); border-image-slice: 1; font-size:16px; font-weight: 600; color: white; user-select: none;'>Opponent\nEffects</div>");
   echo ($opponentEffects);
   echo ("<div style='position:fixed; width:90px; left:20px; bottom:20px;'>");
   echo ($friendlyEffects);
-  echo ("<div style='text-align:center; padding-top:10px; border-top: 1px solid transparent; border-image: linear-gradient(0.25turn, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255), rgba(255, 255, 255, 0.00) 100%); border-image-slice: 1; font-size:16px; font-weight: 600; color: white; user-select: none;'>Your<br>Effects</div>");
+  echo ("<div style='text-align:center; padding-top:10px; border-top: 1px solid transparent; border-image: linear-gradient(0.25turn, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255), rgba(255, 255, 255, 0.00) 100%); border-image-slice: 1; font-size:16px; font-weight: 600; color: white; user-select: none; white-space: break-spaces;'>Your\nEffects</div>");
   echo ("</div>");
   echo ("</div>");
 
   //Space Arena
   echo ("<div style='position: absolute; z-index: -5; top:140px; left:51px; width:calc(50% - 264px); height:calc(100% - 340px); opacity:.55; border-radius:7px; background-size: cover; background-position: center; background-image: url(\"./Images/spacebg.jpg\");'>");
-  echo("</div>");
+  echo ("</div>");
 
   //Ground Arena
   echo ("<div style='position: absolute; z-index: -5; top:140px; right:288px; width:calc(50% - 264px); height:calc(100% - 340px); opacity:.55; border-radius:7px; background-size: cover; background-position: center; background-image: url(\"./Images/groundbg.jpg\");'>");
-  echo("</div>");
+  echo ("</div>");
 
 
   $displayCombatChain = count($combatChain) > 0;
@@ -775,9 +799,9 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
 
   //Opponent hand
   $handContents = "";
-  $handLeft = "calc(50% - " . ((count($theirHand) * ($cardWidth + 15)) / 2) . "px - 119px)";
-  echo ("<div style='position: fixed; top: 10px; left:" . $handLeft . "; height: 50px; display:inline;'>");
-  echo ("<div id='theirHand' style='display:inline;'>");
+  $chatboxWidth = "208px";
+  echo ("<div style='display: flex; justify-content: center; width: calc(100% - $chatboxWidth);'>");
+  echo ("<div id='theirHand'>");
   for ($i = 0; $i < count($theirHand); ++$i) {
     if ($handContents != "") $handContents .= "|";
     if ($playerID == 3 && IsCasterMode()) $handContents .= ClientRenderedCard(cardNumber: $theirHand[$i], controller: ($playerID == 1 ? 2 : 1));
@@ -788,7 +812,6 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   if ($handContents != "" && $banishUI != "") echo ("|");
   echo ($banishUI);
   echo ("</div>");
-
   echo ("</div>");
 
   //Show deck, discard, pitch, banish
@@ -950,13 +973,13 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
 
   //Their Space Allies
   echo ("<div style='overflow-y:auto; margin: 20px 15px 0 15px; position: fixed; top:140px; left:51px; width: calc(50% - 294px); max-height:" . $permHeight . "px;'>");
-  echo($spaceAllies);
-  echo("</div>");
+  echo ($spaceAllies);
+  echo ("</div>");
 
   //Their Ground Allies
   echo ("<div style='overflow-y:auto; margin: 20px 15px 0 15px; position: fixed; top:140px; right:288px; width: calc(50% - 294px); max-height:" . $permHeight . "px;'>");
-  echo($groundAllies);
-  echo("</div>");
+  echo ($groundAllies);
+  echo ("</div>");
 
 
   //Now display their resources
@@ -1074,17 +1097,17 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     }
   }
   echo ("</div>");
-  
+
   //Space allies
   echo ("<div style='overflow-y:auto; margin: 0 15px 14px 15px; position: fixed; bottom:200px; left:51px; width: calc(50% - 294px); max-height:" . $permHeight . "px;'>");
-  echo($spaceAllies);
-  echo("</div>");
+  echo ($spaceAllies);
+  echo ("</div>");
 
   //Ground allies
   echo ("<div style='overflow-y:auto; margin: 0 15px 14px 15px; position: fixed; bottom:200px; right:288px; width: calc(50% - 294px); max-height:" . $permHeight . "px;'>");
-  echo($groundAllies);
-  echo("</div>");
-  
+  echo ($groundAllies);
+  echo ("</div>");
+
   //Now display my Leader and Base
   $numWeapons = 0;
   $myCharData = "";
