@@ -694,24 +694,40 @@
     </script>
 
     <?php
-    //Display hidden elements
-    //Chat UI
-    echo ("<div id='popupContainer'></div>");
-    echo ("<div id=\"cardDetail\" style=\"z-index:100000; display:none; position:fixed;\"></div>");
-    echo ("<div id='mainDiv' style='position:fixed; z-index:20; left:0px; top:0px; width:100%;height:100%;'></div>");
-    echo ("<div id='chatbox' style='z-index:40; position:fixed; bottom:10px; right:18px;'>");
-    if ($playerID != 3 && !IsChatMuted()) {
-      echo ("<input id='chatText' style='background: black; color: white; font-size:16px; font-family:barlow; margin-left: 8px; margin-right: 0; height: 32px; border: 1px solid #454545; border-radius: 5px 0 0 5px;' type='text' id='chatText' name='chatText' value='' autocomplete='off' onkeypress='ChatKey(event)'>");
-      echo ("<button style='border: 1px solid #454545; border-radius: 0 5px 5px 0; width:55px; height:32px; color: white; margin: 0 0 0 -1px; padding: 0; font-size:16px; font-weight:600; cursor: pointer; outline: inherit; box-shadow: none;' onclick='SubmitChat()'>Chat</button>");
-      echo ("<button title='Disable Chat' " . ProcessInputLink($playerID, 26, $SET_MuteChat . "-1", fullRefresh:true) . "style='display:inline-block; border: 1px solid #454545; color: #1a1a1a; padding: 0;  font: inherit; cursor: pointer; outline: inherit; box-shadow: none; bottom: 10px; right: 10px; position: fixed;'> <img style='height:16px; width:16px; float:left; margin: 7px;' src='./Images/disable.png' /></button>");
-    }
-    else {
-      echo ("<button title='Re-enable Chat' " . ProcessInputLink($playerID, 26, $SET_MuteChat . "-0", fullRefresh:true) . "style='display:inline; border: 1px solid #454545; width:210px; padding: 0 0 4px 0; height: 32px; font: inherit; color: white; cursor: pointer; outline: inherit; background: #292929; box-shadow: none;'>⌨️ Re-enable Chat</button>");
-    }
-    echo ("</div>");
-    echo ("<input type='hidden' id='gameName' value='" . $gameName . "'>");
-    echo ("<input type='hidden' id='playerID' value='" . $playerID . "'>");
-    echo ("<input type='hidden' id='authKey' value='" . $authKey . "'>");
+    // Display hidden elements and Chat UI
     ?>
+    <div id='popupContainer'></div>
+    <div id="cardDetail" style="z-index:100000; display:none; position:fixed;"></div>
+    <div id='mainDiv' style='position:fixed; z-index:20; left:0px; top:0px; width:100%; height:100%;'></div>
+    <div id='chatbox' style='z-index:40; position:fixed; bottom:10px; right:18px; display:flex;'>
+        <?php if ($playerID != 3 && !IsChatMuted()): ?>
+            <input id='chatText' 
+                  style='background: black; color: white; font-size:16px; font-family:barlow; margin-left: 8px; height: 32px; border: 1px solid #454545; border-radius: 5px 0 0 5px;' 
+                  type='text' 
+                  name='chatText' 
+                  value='' 
+                  autocomplete='off' 
+                  onkeypress='ChatKey(event)'>
+            <button style='border: 1px solid #454545; border-radius: 0 5px 5px 0; width:55px; height:32px; color: white; margin: 0 0 0 -1px; padding: 0 5px; font-size:16px; font-weight:600; box-shadow: none;' 
+                    onclick='SubmitChat()'>Chat
+            </button>
+            <button title='Disable Chat' 
+                    <?= ProcessInputLink($playerID, 26, $SET_MuteChat . "-1", fullRefresh:true); ?> 
+                    style='border: 1px solid #454545; color: #1a1a1a; padding: 0; box-shadow: none;'>
+                <img style='height:16px; width:16px; float:left; margin: 7px;' src='./Images/disable.png' />
+            </button>
+        <?php else: ?>
+            <button title='Re-enable Chat' 
+                    <?= ProcessInputLink($playerID, 26, $SET_MuteChat . "-0", fullRefresh:true); ?> 
+                    style='border: 1px solid #454545; width: 100%; padding: 0 0 4px 0; height: 32px; font: inherit; box-shadow: none;'>
+                ⌨️ Re-enable Chat
+            </button>
+        <?php endif; ?>
+    </div>
+
+    <input type='hidden' id='gameName' value='<?= htmlspecialchars($gameName, ENT_QUOTES, 'UTF-8'); ?>'>
+    <input type='hidden' id='playerID' value='<?= htmlspecialchars($playerID, ENT_QUOTES, 'UTF-8'); ?>'>
+    <input type='hidden' id='authKey' value='<?= htmlspecialchars($authKey, ENT_QUOTES, 'UTF-8'); ?>'>
+
 
   </body>
