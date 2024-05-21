@@ -3254,10 +3254,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "2855740390"://Lieutenant Childsen
       if($from != "PLAY") {
         AddDecisionQueue("FINDINDICES", $currentPlayer, "HANDASPECT,Vigilance");
-        AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "4-");
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose up to 4 cards to reveal");
+        AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "4-", 1);
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose up to 4 cards to reveal", 1);
         AddDecisionQueue("MULTICHOOSEHAND", $currentPlayer, "<-", 1);
-        AddDecisionQueue("SPECIFICCARD", $currentPlayer, "LTCHILDSEN");
+        AddDecisionQueue("SPECIFICCARD", $currentPlayer, "LTCHILDSEN", 1);
       }
       break;
     case "8506660490"://Darth Vader
