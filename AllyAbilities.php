@@ -480,6 +480,26 @@ function AllyBeginRoundAbilities($player)
   }
 }
 
+function AllyCanBeAttackTarget($player, $index, $cardID)
+{
+  switch($cardID)
+  {
+    case "3646264648"://Sabine Wren
+      $allies = &GetAllies($player);
+      $aspectArr = [];
+      for($i=0; $i<count($allies); $i+=AllyPieces())
+      {
+        if($i == $index) continue;
+        $aspects = explode(",", CardAspects($allies[$i]));
+        for($j=0; $j<count($aspects); ++$j) {
+          $aspectArr[$aspects[$j]] = 1;
+        }
+      }
+      return count($aspectArr) < 3;
+    default: return true;
+  }
+}
+
 function BuffAlly($player, $index, $amount=1)
 {
   $allies = &GetAllies($player);
