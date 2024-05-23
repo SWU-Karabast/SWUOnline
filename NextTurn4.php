@@ -502,7 +502,7 @@
       }
 
       .claimButton {
-        border: 2px solid #DB141D;
+        background: linear-gradient(180deg, #292929 0%, #19637F 100%);
       }
 
       .breakChain {
