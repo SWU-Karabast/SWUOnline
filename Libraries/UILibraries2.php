@@ -323,12 +323,8 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
     position:absolute; z-index: 10;
     background: url(./Images/SentinelToken.png) no-repeat;
     background-size: contain;
-    line-height: 1.2;
-    font-size: 1px; 
-    font-weight:700; 
-    color: #fff;
     filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.40));
-    user-select: none;'>" . "0" . "</div>";
+    user-select: none;'></div>";
 
   }
   // Damage Counter Style
@@ -393,32 +389,56 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
   // Subcards style
   if (isset($opts['subcards']) && count($opts['subcards']) > 0) {
     for ($i = 0; $i < count($opts['subcards']); $i++) {
-      $rv .= "<div style='margin: 0px;
-      top: calc(100% - 6px + " . ($i * 15) . "px); 
-      left: 1px;
-      border-radius: 0%;
-      width: 96px;
-      height: 20px;
-      padding-top: 1px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position:absolute; z-index: 0;
-      background: url(./Images/upgrade-grey.png) no-repeat;
-      background-size: contain;
-      line-height: 1.2;
-      font-size: 6px; 
-      font-family: Barlow, sans-serif;
-      font-weight:800; 
-      text-transform: uppercase;
-      color: #1D1D1D;
-      user-select: none;'
-      data-subcard-id='" . $opts['subcards'][$i] . "'>" . CardName($opts['subcards'][$i]) . "</div>";
+      // Don't render shield subcard
+      if ($opts['subcards'][$i] != "8752877738") {
+        $rv .= "<div style='margin: 0px;
+        top: calc(100% - 6px + " . ($i * 15) . "px); 
+        left: 1px;
+        border-radius: 0%;
+        width: 96px;
+        height: 20px;
+        padding-top: 1px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position:absolute; z-index: 0;
+        background: url(./Images/upgrade-" . getSubcardAspect($opts['subcards'][$i]) . ".png) no-repeat;
+        background-size: contain;
+        line-height: 1.2;
+        font-size: 6px; 
+        font-family: Barlow, sans-serif;
+        font-weight:800; 
+        text-transform: uppercase;
+        color: #1D1D1D;
+        user-select: none;'
+        data-subcard-id='" . $opts['subcards'][$i] . "'>" . CardName($opts['subcards'][$i]) . "</div>";
+      }
     }
-    
   }
   $rv .= "</a>";
   return str_replace(array("\r", "\n", "\r\n"), '', $rv);
+}
+
+function getSubcardAspect($subcardID)
+{
+  $aspectList = explode(",", CardAspects($subcardID))[0];
+  
+  switch ($aspectList) {
+    case "Aggression":
+      return "red";
+    case "Command":
+      return "green";
+    case "Cunning":
+      return "yellow";
+    case "Vigilance":
+      return "blue";
+    case "Heroism":
+      return "white";
+    case "Villany":
+      return "black";
+    default:
+      return "grey";
+  }
 }
 
 function BorderColorMap($code)
