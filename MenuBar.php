@@ -23,131 +23,18 @@ $isMobile = IsMobile();
 ?>
 
 <head>
+  <meta charset="utf-8">
   <title>Karabast</title>
   <link rel="shortcut icon" type="image/png" href="Images/karabastTiny.png" />
-  <link rel="stylesheet" href="./css/menuStyles2.css">
-  <style>
-    body {
-      background-image: url('Images/UnderDevBackground.webp');
-      background-position: top center;
-      background-repeat: no-repeat;
-      background-size: cover;
-      overflow: hidden;
-      height: 100vh;
-      height: 100dvh;
-    }
-
-    li {
-      display: flex;
-    }
-
-    ul {
-      display: flex;
-      margin: 0px;
-      column-gap: 15px;
-      align-items: center;
-    }
-
-    a {
-      color: white;
-      background-color: transparent;
-      text-decoration: none;
-      font-family: helvetica;
-    }
-
-    .ContentWindow {
-      padding: 0 1em;
-      background-color: rgba(70, 20, 20, .7);
-      font-family: helvetica;
-      color: white;
-      position: absolute;
-      border-radius: 8px;
-    }
-
-    .NavBarDiv {
-      font-size: 1.5rem;
-      position: fixed;
-      left: 0px;
-      top: 0px;
-      height: 45px;
-      width: 100%;
-      z-index: 100;
-      background-color: rgba(40, 5, 5, .8);
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .NavBarDiv ul {
-      padding-left: 2rem;
-      padding-right: 2rem;
-      column-gap: 10px;
-    }
-
-    .NavBarDiv img {
-      width: 25px;
-      height: 25px;
-    }
-
-    .NavBarItem {
-      font-size: 18px;
-      font-weight: 600;
-    }
-
-    .NavBarItemDivider {
-      font-size: 14px;
-      font-weight: 600;
-      height: 27px;
-    }
-
-    h1,
-    h2,
-    h3,
-    h4,
-    h5 {
-      text-align: center;
-      margin-top: 12px;
-      margin-bottom: 12px;
-    }
-
-    td {
-      color: white;
-      padding-top: 2px;
-      padding-bottom: 2px;
-    }
-
-    span {
-      color: white;
-    }
-
-    table {
-      margin-bottom: 0px;
-    }
-
-    form {
-      margin-bottom: 4px;
-    }
-
-
-    div::-webkit-scrollbar-track {
-      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-      border-radius: 10px;
-      background-color: #F5F5F5;
-    }
-
-    div::-webkit-scrollbar {
-      width: 12px;
-      background-color: #F5F5F5;
-    }
-
-    div::-webkit-scrollbar-thumb {
-      border-radius: 10px;
-      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
-      background-color: #555;
-    }
-  </style>
+  <link rel="stylesheet" href="./css/karabast.css">
+  <!-- <link rel="stylesheet" href="./css/menuStyles2.css"> -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Teko:wght@700&display=swap" rel="stylesheet">
 </head>
 
-<body style="background-image: url('./Images/UnderDevBackground.webp');">
+<body>
 
   <div style='width: 100%'>
     <nav class='NavBarDiv'>

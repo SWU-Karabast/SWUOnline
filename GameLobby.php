@@ -75,7 +75,12 @@ $isMobile = IsMobile();
 <head>
   <meta charset="utf-8">
   <title>Karabast</title>
-  <link rel="stylesheet" href="./css/menuStyles2.css">
+  <link rel="stylesheet" href="./css/karabast.css">
+  <!-- <link rel="stylesheet" href="./css/menuStyles2.css"> -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Teko:wght@700&display=swap" rel="stylesheet">
 </head>
 
 <script>
@@ -89,34 +94,8 @@ $isMobile = IsMobile();
   }
 </script>
 
-<style>
-  body {
-    margin: 0px;
-    color: rgb(240, 240, 240);
-    overflow-y: hidden;
-    color: #DDD;
-    background-image: url('Images/LobbyBackground.webp');
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    overflow: hidden;
-  }
-
-  h1 {
-    margin-top: 10px;
-    text-align: center;
-    width: 100%;
-    text-shadow: 2px 0 0 #1a1a1a, 0 -2px 0 #1a1a1a, 0 2px 0 #1a1a1a, -2px 0 0 #1a1a1a;
-  }
-
-  h2 {
-    margin-top: 10px;
-    text-align: center;
-    width: 100%;
-    text-shadow: 2px 0 0 #1a1a1a, 0 -2px 0 #1a1a1a, 0 2px 0 #1a1a1a, -2px 0 0 #1a1a1a;
-  }
-</style>
 <script src="./jsInclude.js"></script>
+
 </head>
 
 <body onload='OnLoadCallback(<?php echo (filemtime("./Games/" . $gameName . "/gamelog.txt")); ?>)'>
@@ -127,65 +106,87 @@ $isMobile = IsMobile();
 
   <div id="cardDetail" style="display:none; position:absolute;"></div>
 
-  <center>
-    <?php
-    if ($isMobile)
-      echo '<div id="oppHero" style="position:absolute; z-index:1; top:2%; left:2%; width:50%; height:25%; background-color:rgba(74, 74, 74, 0.9); border-radius: 5px;">';
-    else
-      echo '<div id="oppHero" style="position:absolute; z-index:1; top:20px; left:20px; width:290px; height:485px; background-color:rgba(74, 74, 74, 0.9); border-radius: 5px;">';
-    $theirDisplayName = ($theirName != "-" ? $theirName : "Player " . ($playerID == 1 ? 2 : 1));
-    if ($isMobile)
-      echo ("<h3>$theirDisplayName</h3>");
-    else
-      echo ("<h2>$theirDisplayName</h2>");
+<div class="lobby-header">
+  <h1>Game Lobby</h1>
+  <a href='MainMenu.php'>Leave Lobby</a>
+</div>
 
-    $otherHero = "CardBack";
-    echo ("<div>");
-    echo (Card($otherHero, "CardImages", ($isMobile ? 100 : 250), 0, 1, 0, 0, 0, "", "", true));
-    echo (Card($otherHero, "CardImages", ($isMobile ? 100 : 250), 0, 1, 0, 0, 0, "", "", true));
-    echo ("</div>");
-    ?>
-    </div>
-  </center>
+<div class="lobby-wrapper">
+<?php
+  if ($isMobile)
+    echo '<div class="game-lobby">';
+  else
+    echo '<div class="game-lobby">';
+  ?>
+
+  <h2>Set Up</h2>
+  <?php
+
+  echo ("<div id='submitForm' style='display:none; width:100%; text-align: center;'>");
+  echo ("<form action='./SubmitSideboard.php'>");
+  echo ("<input type='hidden' id='gameName' name='gameName' value='$gameName'>");
+  echo ("<input type='hidden' id='playerID' name='playerID' value='$playerID'>");
+  echo ("<input type='hidden' id='playerCharacter' name='playerCharacter' value=''>");
+  echo ("<input type='hidden' id='playerDeck' name='playerDeck' value=''>");
+  echo ("<input type='hidden' id='authKey' name='authKey' value='$authKey'>");
+  echo ("<input class='GameLobby_Button' type='submit' value='" . ($playerID == 1 ? "Start" : "Ready") . "'>");
+  echo ("</form>");
+  echo ("</div>");
+
+  echo ("<div id='mainPanel' style='text-align:center;'>");
+  echo ("</div>");
+
+  echo ("<div id='chatbox'>");
+  //echo ("<div id='chatbox' style='position:relative; left:3%; width:97%; margin-top:4px;'>");
+  echo ("<input class='GameLobby_Input' style='display:inline;' type='text' id='chatText' name='chatText' value='' autocomplete='off' onkeypress='ChatKey(event)'>");
+  echo ("<button class='GameLobby_Button' style='display:inline; margin-left:3px; cursor:pointer;' onclick='SubmitChat()'>Chat</button>");
+  echo ("<input type='hidden' id='gameName' value='" . $gameName . "'>");
+  echo ("<input type='hidden' id='playerID' value='" . $playerID . "'>");
+  echo ("</div>");
+
+  echo ("<script>");
+  echo ("var prevGameState = " . $gameStatus . ";");
+  echo ("function reload() { setInterval(function(){loadGamestate();}, 500); }");
+
+  echo ("</script>");
+
+?>
+</div>
+
+<div class="player-info">
+  
+  <h2>Players</h2>
 
   <?php
   if ($isMobile)
-    echo '<div style="position:absolute; z-index:1; top:29%; left:2%; width:50%; height:25%; background-color:rgba(74, 74, 74, 0.9); border-radius: 5px;">';
+    echo '<div id="your-info">';
   else
-    echo '<div style="position:absolute; z-index:1; top:20px; left:330px; width:290px; height:485px; background-color:rgba(74, 74, 74, 0.9); border-radius: 5px;">';
+    echo '<div id="your-info">';
   $contentCreator = ContentCreators::tryFrom(($playerID == 1 ? $p1ContentCreatorID : $p2ContentCreatorID));
   $nameColor = ($contentCreator != null ? $contentCreator->NameColor() : "");
   $displayName = "<span style='color:" . $nameColor . "'>" . ($yourName != "-" ? $yourName : "Playerssssss " . $playerID) . "</span>";
   if ($isMobile)
     echo ("<h3>$displayName</h3>");
   else
-    echo ("<h2>$displayName</h2>");
+    echo ("<h3>$displayName</h3>");
 
   $deckFile = "./Games/" . $gameName . "/p" . $playerID . "Deck.txt";
   $handler = fopen($deckFile, "r");
   if ($handler) {
     $material = GetArray($handler);
 
-    echo ("<center>");
     echo ("<div style='position:relative; display: inline-block;'>");
     $overlayURL = ($contentCreator != null ? $contentCreator->HeroOverlayURL($material[1]) : "");
     echo (Card($material[1], "CardImages", ($isMobile ? 100 : 250), 0, 1, 0, 0, 0, "", "", true));
     if ($overlayURL != "")
-      echo ("<img title='Portrait' style='position:absolute; z-index:1001; top: 27px; left: 0px; cursor:pointer; height:" . ($isMobile ? 100 : 250) . "; width:" . ($isMobile ? 100 : 250) . ";' src='" . $overlayURL . "' />");
+      echo ("<img title='Portrait' style='position:absolute; z-index:1001; top: 27px; left: 0px; cursor:pointer; height:" . ($isMobile ? 100 : 250) . "; width:100%;' src='" . $overlayURL . "' />");
     echo ("</div>");
-    echo ("</center>");
 
-    echo ("<center>");
     echo ("<div style='position:relative; display: inline-block;'>");
     $overlayURL = ($contentCreator != null ? $contentCreator->HeroOverlayURL($material[0]) : "");
     echo (Card($material[0], "CardImages", ($isMobile ? 100 : 250), 0, 1, 0, 0, 0, "", "", true));
     if ($overlayURL != "")
       echo ("<img title='Portrait' style='position:absolute; z-index:1001; top: 27px; left: 0px; cursor:pointer; height:" . ($isMobile ? 100 : 250) . "; width:" . ($isMobile ? 100 : 250) . ";' src='" . $overlayURL . "' />");
-    echo ("</div>");
-    echo ("</center>");
-
-    echo ("<div style='text-align:center; margin-top: 2px;'>");
-    echo ("<a href='MainMenu.php'><button class='GameLobby_Button' style='display:inline; cursor:pointer;'>Leave Lobby</button></a>");
     echo ("</div>");
 
     $deck = GetArray($handler);
@@ -195,70 +196,44 @@ $isMobile = IsMobile();
   }
 
   ?>
-  </div>
-
-  <div id="matchupTab"
-    style="position:absolute; z-index:1; top:2%; right:10px; width:160px; height:8%; background-color:rgba(74, 74, 74, 0.9); border-radius: 5px;">
-    <h1>Matchups</h1>
-  </div>
-  <div id="matchups"
-    style="position:absolute; text-align: center; z-index:1; top:10%; margin-top:3px; right:10px; bottom:3%; width:160px; <?php if ($isMobile)
-      echo ('height:43.5%; '); ?> background-color:rgba(74, 74, 74, 0.9); border-radius: 5px; overflow-y: auto;">
-
     <?php
+    if ($isMobile)
+      echo '<div id="opponent-info">';
+    else
+      echo '<div id="opponent-info">';
+    $theirDisplayName = ($theirName != "-" ? $theirName : "Player " . ($playerID == 1 ? 2 : 1));
+    if ($isMobile)
+      echo ("<h3>$theirDisplayName</h3>");
+    else
+      echo ("<h3>$theirDisplayName</h3>");
 
-    function sortMatchupsAlphabetically($a, $b)
-    {
-      if ($a->name == $b->name) {
-        return 0;
-      }
-
-      return $a->name < $b->name ? -1 : 1;
-    }
-    echo ("Matchups are not yet supported!");
-    /*
-    $decklink = ($playerID == 1 ? $p1DeckLink : $p2DeckLink);
-    $matchups = ($playerID == 1 ? $p1Matchups : $p2Matchups);
-    if ($matchups != NULL) {
-      usort($matchups, "sortMatchupsAlphabetically");
-      for ($i = 0; $i < count($matchups); ++$i) {
-        echo ("<div style='cursor:pointer; padding:5px; font-size:24px;'>");
-        $matchuplink = $redirectPath . "/JoinGameInput.php?gameName=" . $gameName . "&playerID=" . $playerID . "&fabdb=" . $decklink . "&matchup=" . $matchups[$i]->{"matchupId"};
-        echo ("<a href='" . $matchuplink . "'>");
-        echo ("<input type='button' value='" . $matchups[$i]->{"name"} . "' />");
-        echo ("</a>");
-        echo ("</div>");
-      }
-      if ($isMobile && count($matchups) == 0) {
-        echo ("Sideboarding is limited on mobile; we recommend defining matchups in your decklist for mobile sideboarding.");
-      }
-    } else {
-      echo ("<BR>The following deckbuilder sites support matchups:<BR>");
-      echo ("<a href='https://fabrary.net' target='_blank'>Fabrary</a>");
-    }
-    */
+    $otherHero = "CardBack";
+    echo ("<div>");
+    echo (Card($otherHero, "CardImages", ($isMobile ? 100 : 250), 0, 1, 0, 0, 0, "", "", true));
+    echo (Card($otherHero, "CardImages", ($isMobile ? 100 : 250), 0, 1, 0, 0, 0, "", "", true));
+    echo ("</div>");
     ?>
+    </div>
 
   </div>
 
-  <div<?php if ($isMobile)
-    echo (" style='display:none;'"); ?>>
+</div>
+
+  <div class="deck-info">
     <div id="deckTab"
-      style="position:absolute; z-index:1; cursor:pointer; top:20px; left:640px; width:531px; height:73px; background-color:rgba(74, 74, 74, 0.9); border-radius: 5px;"
+      style="cursor:pointer;"
       onclick="TabClick('DECK');">
 
       <?php
       if (isset($deck))
-        echo ("<h1>Your Deck (<span id='mbCount'>" . count($deck) . "</span>/<span>" . (count($deck) + count($deckSB)) . "</span>)</h1>");
+        echo ("<h2 class='deck-title'>Your Deck</h2>");
+        echo ("<h2 class='deck-count'>" . count($deck) . "/" . (count($deck) + count($deckSB)) . "</h2>");
       ?>
     </div>
 
-    <div id="deckDisplay"
-      style="display:block; position:absolute; z-index:1; top:95px; left:640px; right:180px; bottom:3%; background-color:rgba(74, 74, 74, 0.9); border-radius: 5px; overflow-y:scroll; overflow-x:hidden;">
+    <div class="deck-display">
 
-      <div
-        style='margin:3px; margin-top: 10px; margin-left: 10px; width:100%; text-align: left; font-family:Roboto; font-style: italic; font-weight: bold; font-size:18px; text-shadow: 2px 0 0 #1a1a1a, 0 -2px 0 #1a1a1a, 0 2px 0 #1a1a1a, -2px 0 0 #1a1a1a;'>
-        Click Cards to Select/Unselect</div>
+      <h4>Click Cards to Select/Unselect</h4>
 
       <?php
       if (isset($deck)) {
@@ -279,46 +254,11 @@ $isMobile = IsMobile();
       ?>
     </div>
     </div>
-    <?php
-    if ($isMobile)
-      echo '<div style="position:absolute; z-index:1; top:56%; left:2%; width:600px; max-width: 96%; bottom:3%; font-weight:500; font-size:18px; background-color:rgba(74, 74, 74, 0.9);border-radius: 5px;">';
-    else
-      echo '<div style="position:absolute; z-index:1; top:525px; left:20px; width:600px; bottom:3%; font-weight:500; font-size:18px; background-color:rgba(74, 74, 74, 0.9);border-radius: 5px;">';
-    ?>
 
-    <h1>Game Lobby</h1>
-    <?php
+    </div>
 
-    echo ("<div id='submitForm' style='display:none; width:100%; text-align: center;'>");
-    echo ("<form action='./SubmitSideboard.php'>");
-    echo ("<input type='hidden' id='gameName' name='gameName' value='$gameName'>");
-    echo ("<input type='hidden' id='playerID' name='playerID' value='$playerID'>");
-    echo ("<input type='hidden' id='playerCharacter' name='playerCharacter' value=''>");
-    echo ("<input type='hidden' id='playerDeck' name='playerDeck' value=''>");
-    echo ("<input type='hidden' id='authKey' name='authKey' value='$authKey'>");
-    echo ("<input class='GameLobby_Button' type='submit' value='" . ($playerID == 1 ? "Start" : "Ready") . "'>");
-    echo ("</form>");
-    echo ("</div>");
-
-    echo ("<div id='mainPanel' style='text-align:center;'>");
-
-    echo ("</div>");
-
-    echo ("<div id='chatbox' style='position:absolute; bottom:3%; left:3%; width:97%;'>");
-    //echo ("<div id='chatbox' style='position:relative; left:3%; width:97%; margin-top:4px;'>");
-    echo ("<input class='GameLobby_Input' style='width:82%; display:inline;' type='text' id='chatText' name='chatText' value='' autocomplete='off' onkeypress='ChatKey(event)'>");
-    echo ("<button class='GameLobby_Button' style='display:inline; width:11.5%; margin-left:3px; cursor:pointer;' onclick='SubmitChat()'>Chat</button>");
-    echo ("<input type='hidden' id='gameName' value='" . $gameName . "'>");
-    echo ("<input type='hidden' id='playerID' value='" . $playerID . "'>");
-    echo ("</div>");
-
-    echo ("<script>");
-    echo ("var prevGameState = " . $gameStatus . ";");
-    echo ("function reload() { setInterval(function(){loadGamestate();}, 500); }");
-
-    echo ("</script>");
-
-    ?>
+    <div class="disclaimer">
+    <p>Karabast is in no way affiliated with Disney or Fantasy Flight Games. Star Wars characters, cards, logos, and art are property of Disney and/or Fantasy Flight Games.</p>
     </div>
 
     <script>
@@ -571,7 +511,3 @@ $isMobile = IsMobile();
     }
   }
   ?>
-
-  <?php
-  include_once 'Disclaimer.php'
-    ?>

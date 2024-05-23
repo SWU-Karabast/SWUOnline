@@ -63,7 +63,6 @@ if (IsMobile()) echo ("<div class='ContentWindow' style='top:240px; left:32%; wi
 else echo ("<div class='ContentWindow' style='top:225px; left:32%; width:36%; bottom: 30px; overflow-y:auto'>");
 
 ?>
-<h5>Karabast is an open-source, fan-made platform. It is an educational tool only, meant to facilitate researching decks and strategies that is supportive of in-person play. As such, direct competition through the form of automated tournaments or rankings will not be added. This tool is free to use and is published non-commercially. Payment is not required to access any functionality.</h5>
 
 <h1><?php echo ($createNewGameText); ?></h1>
 
@@ -146,6 +145,11 @@ if ($canSeeQueue) {
 </form>
 
 </div>
+</div>
+
+<div class="overview-box" >
+  <h5>Karabast is an open-source, fan-made platform.</h5>
+  <p>It is an educational tool only, meant to facilitate researching decks and strategies that is supportive of in-person play. As such, direct competition through the form of automated tournaments or rankings will not be added. This tool is free to use and is published non-commercially. Payment is not required to access any functionality.</p>
 </div>
 
 <div class="ContentWindow" style='right:20px; top:60px; bottom:30px; width:27%; <?php if (IsMobile()) echo ("display:none; "); ?>'>

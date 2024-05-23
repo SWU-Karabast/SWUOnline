@@ -32,7 +32,7 @@ else if (isset($_SESSION["useruid"]))
 $canSeeQueue = isset($_SESSION["useruid"]);
 
 echo ("<div class='SpectatorContainer'>");
-echo ("<h1 style='width:100%; text-align:center; color:rgb(240, 240, 240);'>Public Games</h1>");
+echo ("<h1 style='width:100%; text-align:center;'>Public Games</h1>");
 $gameInProgressCount = 0;
 if ($handle = opendir($path)) {
   while (false !== ($folder = readdir($handle))) {
@@ -73,17 +73,6 @@ if ($handle = opendir($path)) {
               max-width: inherit;
             }
 
-            .last-update-label {
-              font-weight: 500;
-            }
-
-            .versus {
-              font-weight: 600;
-            }
-
-            .spectate-button {
-              font-size: 16px;
-            }
             </style>
             
             <form class='spectate-form' action='https://karabast.net/SWUOnline/NextTurn4.php?gameName=$gameToken&playerID=3'>

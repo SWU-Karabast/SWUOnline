@@ -1,0 +1,246 @@
+/* GLOBAL */
+
+/* Core Styles */
+
+body {
+  background-size: cover; 
+  background-position: center; 
+  background-image: url('../Images/gamebg.jpg');
+  max-width: 100% !important;
+  padding: 0 !important;
+  margin: 0px;
+}
+
+h1, h2, h3, h4, h5, h6, p, a, b, ul, ol, dl, dd, form, details, blockquote, table, button, input, label, select, textarea {
+  font-family: barlow;
+  color: white;
+  margin: 0;
+}
+
+button, input, select, textarea {
+  margin: 0;
+  padding: 10px 15px;
+  background: #3b4252;
+  border: 0;
+  border-radius: 5px;
+  line-height: 1.125;
+  font-size: 16px;
+  color: #fff;
+  
+}
+
+button, .GameLobby_Button {
+  display: inline-block;
+  text-align: center;
+  white-space: nowrap;
+  background: #292929;
+  border: 0;
+  cursor: pointer;
+  transition: opacity .25s;
+  
+  font-weight: 600;
+}
+
+#mainpanel {
+  font-family: barlow !important;
+  color: white !important;
+}
+
+#gamelog {
+  position: static !important;
+  width: 100% !important;
+  font-weight: 400 !important;
+  height: 300px;
+}
+
+h1 {
+font-size: 28px;
+font-weight: 800;
+text-transform: uppercase;
+margin-top: 3px;
+}
+
+h2 {
+font-size: 24px;
+font-weight: 700;
+margin-bottom: 20px;
+}
+
+h3 {
+font-size: 18px;
+font-weight: 700;
+margin-bottom: 15px;
+}
+
+h4 {
+font-size: 16px;
+font-weight: 400;
+margin-bottom: 15px;
+}
+
+/* Disclaimer */
+
+.disclaimer {
+  position: absolute;
+  bottom: 15px;
+  width: 100%;
+}
+
+.disclaimer p {
+  font-size: 12px;
+  font-weight: 300;
+  text-align: center;
+}
+
+
+
+/* HOME */
+
+/* Legacy */
+
+li {
+  display: flex;
+}
+
+ul {
+  display: flex;
+  margin: 0px;
+  column-gap: 15px;
+  align-items: center;
+}
+
+.ContentWindow {
+  background-color: rgb(0, 0, 0, 40%);
+  backdrop-filter: blur(20px);
+  border-radius: 10px;
+  padding: 20px;
+  position: absolute;
+}
+
+.NavBarDiv {
+  font-size: 1.5rem;
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  height: 45px;
+  width: 100%;
+  z-index: 100;
+  background-color: rgb(0, 0, 0, 40%);
+  backdrop-filter: blur(20px);
+  display: flex;
+  justify-content: space-between;
+}
+
+.NavBarDiv ul {
+  padding-left: 2rem;
+  padding-right: 2rem;
+  column-gap: 10px;
+}
+
+.NavBarDiv img {
+  width: 25px;
+  height: 25px;
+}
+
+.NavBarItem {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.NavBarItemDivider {
+  font-size: 14px;
+  font-weight: 600;
+  height: 27px;
+}
+
+/* GAME LOBBY */
+
+/* Header */
+
+.lobby-header {
+  height: 40px;
+  padding: 20px;
+}
+
+.lobby-header h1 {
+  float: left;
+  padding-left: 20px;
+}
+
+.lobby-header a {
+  float: right;
+  margin: 15px 0 0 0;
+  padding: 0 20px 0 0;
+}
+
+/* Sizing Wrapper */
+
+.lobby-wrapper {
+  height: calc(100% - 170px);
+}
+
+/* Game Set Up */
+
+.game-lobby, .deck-info, .player-info {
+  display: block;
+  float: left;
+  background-color: rgb(0, 0, 0, 40%);
+  backdrop-filter: blur(20px);
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.game-lobby { 
+  width: calc(33% - 60px);
+  margin-left: 20px;
+}
+
+#chatbox .GameLobby_Input {
+  margin-top: 10px;
+}
+
+#chatbox .GameLobby_Input {
+  width: calc(100% - 66px);
+}
+
+/* Players */
+
+.player-info {
+  width: calc(24% - 80px); 
+  height: 100%;
+  margin: 0 20px;
+}
+
+#opponent-info {
+  margin-top: 10px
+}
+
+/* Deck */
+
+.deck-info {
+  width: calc(43% - 60px);
+  height: 100%; 
+  margin-right: 20px;
+}
+
+#deckTab {
+  overflow: auto;
+}
+
+.deck-title {
+  float: left;
+}
+
+.deck-count{
+  float: right;
+  font-weight: 400;
+}
+
+.deck-display {
+  display: block; 
+  height: calc(100% - 49px); 
+  overflow-y: scroll; 
+  overflow-x: hidden;
+  scrollbar-color: #888888 rgba(0, 0, 0, 0); 
+  scrollbar-width: thin;
+}
