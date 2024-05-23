@@ -213,14 +213,6 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   $otherPlayer = ($playerID == 1 ? 2 : 1);
 
   echo '<style>
-    button[title="claimInitiativeButton"] {
-      background: #FF0000;
-    }
-
-    button[title="claimVictoryButton"] {
-      background: #FF0000;
-    }
-
     #theirHand span a {
       border: 1px solid rgb(69, 69, 69);
       border-radius: 8px;
