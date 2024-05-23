@@ -331,7 +331,7 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
   $damaged = $opts['currentHP'] < $opts['maxHP']; 
   if ($damaged) {
     $rv .= "<div style='margin: 0px;
-    bottom: -11px; 
+    top: 82px;
     right: 45px;
     margin-right: -50%;
     border-radius: 0%;
@@ -367,7 +367,7 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
       -1px -1px 0 #176395,
       1px -1px 0 #176395,
       2px 2px 1px rgba(0, 0, 0, 0.30);
-    user-select: none; background: url($bgImage) no-repeat; background-size: 26px 32px;'>" . $opts['currentHP'] . "</div>";
+    user-select: none; background: url($bgImage) no-repeat; background-size: 26px 32px;'>" . $opts['maxHP'] . "</div>";
   }
 
   //Card Power style
@@ -391,21 +391,19 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
     for ($i = 0; $i < count($opts['subcards']); $i++) {
       // Don't render shield subcard
       if ($opts['subcards'][$i] != "8752877738") {
-        $rv .= "<div style='margin: 0px;
-        top: calc(100% - 6px + " . ($i * 15) . "px); 
-        left: 1px;
+        $rv .= "<div style='margin-top: -6px;
+        padding-top: 1px;
         border-radius: 0%;
         width: 96px;
         height: 20px;
-        padding-top: 1px;
         display: flex;
         align-items: center;
         justify-content: center;
-        position:absolute; z-index: 0;
+        position:relative; z-index: 0;
         background: url(./Images/upgrade-" . getSubcardAspect($opts['subcards'][$i]) . ".png) no-repeat;
         background-size: contain;
         line-height: 1.2;
-        font-size: 6px; 
+        font-size: 7px; 
         font-family: Barlow, sans-serif;
         font-weight:800; 
         text-transform: uppercase;
