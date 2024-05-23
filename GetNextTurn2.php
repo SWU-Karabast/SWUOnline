@@ -268,41 +268,6 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     $top = 15;
   }
 
-  if ((CanPassPhase($turn[0]) && $currentPlayer == $playerID) || (IsReplay() && $playerID == 3)) {
-    $prompt = "";
-    if ($turn[0] == "ARS" && count($myHand) > 0 && !ArsenalFull($playerID) && !IsReplay()) {
-      // Prompt the player if they want to skip arsenal with cards in hand.
-      $prompt = "Do you want to skip arsenal?";
-    }
-
-    // Pass Button - Active then Inactive (which is hidden) 
-?>
-    <div title='Space is the shortcut to pass.' <?= ProcessInputLink($playerID, 99, 0, prompt: $prompt) ?> class='passButton' style='position:absolute; z-index: 20; bottom:10px; right: 374px; cursor:pointer; padding:8px 20px 10px; box-shadow:inset 0px 0px 0px 1px #454545; border-radius: 5px;'>
-    <span style='margin: 0 1px 0 0; color:white; font-size:18px; font-weight: 600; user-select: none;'>
-        <?= $passLabel ?>
-      </span>
-      <span style='bottom:2px; font-size:12px; color:#BDBDBD; user-select: none;'>
-        [Space]
-      </span>
-    </div>
-
-  <?php
-  } else {
-  ?>
-
-    <div title='Space is the shortcut to pass.' class='passInactive' 
-    style='display:none; position:absolute; z-index: 20; bottom:10px; right: 374px; cursor:pointer; padding:8px 20px 10px; box-shadow:inset 0px 0px 0px 1px #454545; border-radius: 5px;'>
-    <span style='margin: 0 1px 0 0; color:grey; font-size:18px; font-weight: 600; user-select: none;'>
-        <?= $passLabel ?>
-      </span>
-      <span style='bottom:2px; font-size:12px; color:#BDBDBD; user-select: none;'>
-        [Space]
-      </span>
-    </div>
-
-<?php
-  }
-
   if($initiativePlayer == $playerID || ($playerID == 3 && $initiativePlayer == 2)) {
     echo ("<div style='position:absolute; bottom:225px; right:258px; background: #00BAFF; border-radius: 20px; height: 30px; width: 96px;'><span style='position:relative; margin: 5px auto 0; text-align: center; display:block; z-index:10; font-size: 16px; font-weight:600; color:black; user-select: none;'>Initiative</span>");
     echo (($manualMode ? "<span style='position:absolute; top:97%; right:0; display: inline-block;'>" . CreateButton($playerID, "+1", 10002, 0, "20px") . CreateButton($playerID, "-1", 10004, 0, "20px") . "</span>" : ""));
@@ -313,7 +278,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   echo ("</div>");
 
   //Now display the screen for this turn
-  echo ("<span style='position:fixed;  bottom:0px; left:0; right:238px; bottom:10px; z-index:10; display:inline-block; justity-content: center; font-size:30px; text-align:center;'>");
+  echo ("<span style='position:fixed; left:0; right:238px; bottom:13px; z-index:10; display:inline-block; font-size:30px; text-align:center;'>");
 
 
   echo (($manualMode ? "<span style='position:relative; top: 5px; z-index:10; color: " . $fontColor . "; font-family:Helvetica; font-size:18px; font-weight: 550;text-shadow: 2px 0 0 " . $borderColor . ", 0 -2px 0 " . $borderColor . ", 0 2px 0 " . $borderColor . ", -2px 0 0 " . $borderColor . ";'>Add to hand: </span><input style='width: 100px;' id='manualAddCardToHand' type='text' /><input type='button' style='position:relative; font-size: 14px; top:0; left:0; bottom: 5px; box-shadow: none;' value='Add' onclick='AddCardToHand()' />&nbsp;" : ""));
@@ -334,6 +299,22 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     echo ("</span>");
   }
   if (IsManualMode($playerID)) echo ("&nbsp;" . CreateButton($playerID, "Turn Off Manual Mode", 26, $SET_ManualMode . "-0", "18px", "", "", true));
+
+  if ((CanPassPhase($turn[0]) && $currentPlayer == $playerID) || (IsReplay() && $playerID == 3)) {
+    $prompt = "";
+    // Pass Button - Active then Inactive (which is hidden) 
+?>
+    <div title='Space is the shortcut to pass.' <?= ProcessInputLink($playerID, 99, 0, prompt: $prompt) ?> class='passButton' style='display: inline-block; z-index: 20; cursor:pointer; padding:8px 20px 10px; box-shadow:inset 0px 0px 0px 1px #454545; border-radius: 5px;'>
+    <span style='margin: 0 1px 0 0; color:white; font-size:18px; font-weight: 600; user-select: none;'>
+        <?= $passLabel ?>
+      </span>
+      <span style='bottom:2px; font-size:12px; color:#BDBDBD; user-select: none;'>
+        [Space]
+      </span>
+    </div>
+
+  <?php
+  }
   
   if($turn[0] == "M" && $initiativeTaken != 1 && $currentPlayer == $playerID) echo ("&nbsp;" . CreateButton($playerID, "Claim Initiative", 34, "-", "18px"));
   

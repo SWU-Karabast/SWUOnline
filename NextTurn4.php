@@ -501,6 +501,10 @@
         background-size: contain;
       }
 
+      .claimButton {
+        border: 2px solid #DB141D;
+      }
+
       .breakChain {
         background: url("./Images/chainLinkRight.png") no-repeat;
         background-size: contain;

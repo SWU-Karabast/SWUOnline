@@ -473,12 +473,18 @@ function CreateButton($playerID, $caption, $mode, $input, $size = "", $image = "
   if ($prompt != "")
     $onClick = "if (confirm(\"" . $prompt . "\")) { " . $onClick . " }";
 
+  if ($mode == 34) {
+    $classes = "claimButton";
+  } else {
+    $classes = "";
+  }
+
   if ($image != "")
     $rv = "<img style='cursor:pointer;' src='" . $image . "' onclick='" . $onClick . "'>";
   else if ($useInput)
     $rv = "<input type='button' value='$caption' title='$tooltip' " . ($size != "" ? "style='font-size:$size;' " : "") . " onclick='" . $onClick . "'></input>";
   else
-    $rv = "<button class='button' title='$tooltip' " . ($size != "" ? "style='font-size:$size;' " : "") . " onclick='" . $onClick . "'>" . $caption . "</button>";
+    $rv = "<button class='button " . $classes . "' title='$tooltip' " . ($size != "" ? "style='font-size:$size;' " : "") . " onclick='" . $onClick . "'>" . $caption . "</button>";
 
   return $rv;
 }
