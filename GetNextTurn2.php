@@ -217,6 +217,40 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       border: 1px solid rgb(69, 69, 69);
       border-radius: 8px;
     }
+
+    .spaceAlliesContainer, .groundAlliesContainer,
+    .spaceEnemiesContainer, .groundEnemiesContainer {
+      display: flex;
+      flex-wrap: wrap;
+      column-gap: 15px;
+    }
+
+    .spaceAlliesContainer, .spaceEnemiesContainer {
+      flex-direction: row-reverse;
+      align-items: flex-start;
+    }
+
+    .groundAlliesContainer, .groundEnemiesContainer {
+      flex-wrap: wrap-reverse;
+      align-items: flex-end;
+    }
+
+    .spaceAlliesContainer .cardContainer, .groundAlliesContainer .cardContainer,
+    .spaceEnemiesContainer .cardContainer, .groundEnemiesContainer .cardContainer  {
+      position: relative;
+      display: flex;
+    }
+
+    .spaceAlliesContainer .cardImage, .groundAlliesContainer .cardImage,
+    .spaceEnemiesContainer .cardImage, .groundEnemiesContainer .cardImage {
+      box-shadow: 0 10px 15px 0px rgb(0, 0, 0, 0.5);
+      border: none;
+    }
+
+    .cardContainer.exhausted {
+      transform: rotate(5deg);
+    }
+
   </style>';
 
   //Display background
@@ -910,14 +944,14 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       $attackCounters = $ally->CurrentPower();
       $cardArena = CardArenas($theirAllies[$i]);
       //Their Unit Spacing
-      if($cardArena == "Ground") $cardText = "<div style='position:relative; display: inline-block; margin: 0 5px;'>";
-      else $cardText = "<div style='position:relative; float:right; display: inline-block; margin: 0 5px;'>";
+      if($cardArena == "Ground") $cardText = '<div class="cardContainer ' . ($theirAllies[$i + 1] != 2 ? 'exhausted' : '') . '">';
+      else $cardText = '<div class="cardContainer ' . ($theirAllies[$i + 1] != 2 ? 'exhausted' : '') . '">';
       for($j=0; $j<count($subcards); $j++) {
         $cardText .= (Card($subcards[$j], "concat", $cardSizeAura, showHover: true, from: "SUBCARD", controller: $playerID, subcardNum:$j));
       }
       $cardText .= (Card($theirAllies[$i], "concat", $cardSizeAura, 0, 1, $theirAllies[$i + 1] != 2 ? 1 : 0, 0, 0, "", "", False, $lifeCounters, $enduranceCounters, $attackCounters, ($subcard != "-" && $subcard != "UPR043") ? "HASSUBCARD" : "", controller: $otherPlayer, subcardNum:count($subcards)) . "&nbsp");
       
-      if (HasSentinel($theirAllies[$i], $otherPlayer, $i)) $cardText .= ("<img title='Sentinel' style='pointer-events: none; position:absolute; z-index:1001; top: " . ($subcard == "-" || $subcard == "UPR043" ? "6px" : "24px") . "; left: 6px; cursor:pointer; height:" . $cardHeight . "; width:" . $cardWidth . ";' src='./Images/Sentinel_Overlay.png' />");
+      if (HasSentinel($theirAllies[$i], $otherPlayer, $i)) $cardText .= ("<img class='sentinelIcon' title='Sentinel' style='pointer-events: none; position:absolute; z-index:1001; top: 50%; left: 50%; transform: translate(-50%, -50%); cursor:pointer; height:" . $cardHeight . "; width:" . $cardWidth . ";' src='./Images/Sentinel_Overlay.png' />");
       if ($theirAllies[$i + 3] == 1) $cardText .= ("<img title='Frozen' style='position:absolute; z-index:1001; top: " . ($subcard == "-" || $subcard == "UPR043" ? "6px" : "24px") . "; left: 7px; cursor:pointer; height:" . $cardHeight . "; width:" . $cardWidth . ";' src='./Images/frozenOverlay.png' />");
       $cardText .= ("</div>");
       if($cardArena == "Ground") $groundAllies .= $cardText;
@@ -964,12 +998,12 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   echo ("</div>");
 
   //Their Space Allies
-  echo ("<div style='overflow-y:auto; margin: 20px 15px 0 15px; position: fixed; top:140px; left:51px; width: calc(50% - 294px); max-height:" . $permHeight . "px;'>");
+  echo ("<div class='spaceEnemiesContainer' style='overflow-y:auto; padding: 20px 15px 15px 15px; position: fixed; top:140px; left:51px; width: calc(50% - 294px); max-height:" . $permHeight . "px;'>");
   echo ($spaceAllies);
   echo ("</div>");
 
   //Their Ground Allies
-  echo ("<div style='overflow-y:auto; margin: 20px 15px 0 15px; position: fixed; top:140px; right:288px; width: calc(50% - 294px); max-height:" . $permHeight . "px;'>");
+  echo ("<div class='groundEnemiesContainer' style='overflow-y:auto; padding: 20px 15px 15px 15px; position: fixed; top:140px; right:288px; width: calc(50% - 294px); max-height:" . $permHeight . "px;'>");
   echo ($groundAllies);
   echo ("</div>");
 
@@ -1066,13 +1100,13 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       $border = CardBorderColor($myAllies[$i], "PLAY", $playable);
       $cardArena = CardArenas($myAllies[$i]);
       //My Unit Spacing
-      if($cardArena == "Ground") $cardText = "<div style='position:relative; display: inline-block; margin: 0 5px;'>";
-      else $cardText = "<div style='position:relative; float:right; display: inline-block; margin: 0 5px;'>";
+      if($cardArena == "Ground") $cardText = '<div class="cardContainer ' . ($myAllies[$i + 1] != 2 ? 'exhausted' : '') . '">';
+      else $cardText = '<div class="cardContainer ' . ($myAllies[$i + 1] != 2 ? 'exhausted' : '') . '">';
       for($j=0; $j<count($subcards); $j++) {
         $cardText .= (Card($subcards[$j], "concat", $cardSizeAura, showHover: true, from: "SUBCARD", controller: $playerID, subcardNum:$j));
       }
       $cardText .= (Card($myAllies[$i], "concat", $cardSizeAura, $currentPlayer == $playerID && $turn[0] != "P" && $playable ? 24 : 0, 1, $myAllies[$i + 1] != 2 ? 1 : 0, $border, 0, strval($i), "", False, $lifeCounters, $enduranceCounters, $attackCounters, (count($subcards) > 0) ? "HASSUBCARD" : "", controller: $playerID, subcardNum:count($subcards)) . "&nbsp");
-      if (HasSentinel($myAllies[$i], $playerID, $i)) $cardText .= ("<img title='Sentinel' style='pointer-events: none; position:absolute; z-index:1001; top: " . ($subcard == "-" || $subcard == "UPR043" ? "6px" : "24px") . "; left: 6px; cursor:pointer; height:" . $cardHeight . "; width:" . $cardWidth . ";' src='./Images/Sentinel_Overlay.png' />");
+      if (HasSentinel($myAllies[$i], $playerID, $i)) $cardText .= ("<img class='sentinelIcon' title='Sentinel' style='pointer-events: none; position:absolute; z-index:1001; top: 50%; left: 50%; transform: translate(-50%, -50%); cursor:pointer; height:" . $cardHeight . "; width:" . $cardWidth . ";' src='./Images/Sentinel_Overlay.png' />");
       if ($myAllies[$i + 3] == 1) $cardText .= ("<img title='Frozen' style='position:absolute; z-index:1001; top: " . ($subcard == "-" || $subcard == "UPR043" ? "6px" : "24px") . "; left: 6px; cursor:pointer; height:" . $cardHeight . "; width:" . $cardWidth . ";' src='./Images/frozenOverlay.png' />");
       $cardText .= ("</div>");
       if($cardArena == "Ground") $groundAllies .= $cardText;
@@ -1091,12 +1125,12 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   echo ("</div>");
 
   //Space allies
-  echo ("<div style='overflow-y:auto; margin: 0 15px 14px 15px; position: fixed; bottom:200px; left:51px; width: calc(50% - 294px); max-height:" . $permHeight . "px;'>");
+  echo ("<div class='spaceAlliesContainer' style='overflow-y:auto; padding: 5px 15px 14px 15px; position: fixed; bottom:200px; left:51px; width: calc(50% - 294px); max-height:" . $permHeight . "px;'>");
   echo ($spaceAllies);
   echo ("</div>");
 
   //Ground allies
-  echo ("<div style='overflow-y:auto; margin: 0 15px 14px 15px; position: fixed; bottom:200px; right:288px; width: calc(50% - 294px); max-height:" . $permHeight . "px;'>");
+  echo ("<div class='groundAlliesContainer' style='overflow-y:auto; padding: 5px 15px 14px 15px; position: fixed; bottom:200px; right:288px; width: calc(50% - 294px); max-height:" . $permHeight . "px;'>");
   echo ($groundAllies);
   echo ("</div>");
 
