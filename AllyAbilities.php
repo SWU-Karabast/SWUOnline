@@ -114,6 +114,7 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
   $cardID = $allies[$index];
   if(!$skipDestroy) {
     AllyDestroyedAbility($player, $index, $fromCombat);
+    CollectBounties($player, $index);
     IncrementClassState($player, $CS_NumAlliesDestroyed);
   }
   if(!IsLeader($cardID, $player)) IncrementClassState($player, $CS_NumLeftPlay);
@@ -186,11 +187,6 @@ function AllyEntersPlayState($cardID, $player, $from="-")
   switch($cardID)
   {
     case "1785627279": return 2;//Millennium Falcon
-    case "4300219753"://Fett's Firespray
-      $char = &GetPlayerCharacter($player);
-      if(count($char) > CharacterPieces() && (CardTitle($char[CharacterPieces()]) == "Boba Fett" || CardTitle($char[CharacterPieces()]) == "Jango Fett")) return 2;
-      if(SearchCount(SearchAlliesForTitle($player, "Boba Fett")) > 0 || SearchCount(SearchAlliesForTitle($player, "Jango Fett")) > 0) return 2;
-      return 1;
     default: return 1;
   }
 }
@@ -391,6 +387,64 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
   }
 }
 
+function CollectBounties($player, $index) {
+  $ally = new Ally("MYALLY-" . $index, $player);
+  $opponent = $player == 1 ? 2 : 1;
+  $subcards = $ally->GetSubcards();
+  for($i=0; $i<count($subcards); ++$i)
+  {
+    switch($subcards[$i]) {
+      case "2178538979"://Price on Your Head
+        AddTopDeckAsResource($opponent);
+        break;
+      case "2740761445"://Guild Target
+        $damage = CardIsUnique($ally->CardID()) ? 3 : 2;
+        DealDamageAsync($player, $damage, "DAMAGE", "2740761445");
+        break;
+      case "4117365450"://Wanted
+        ReadyResource($opponent);
+        ReadyResource($opponent);
+        break;
+      case "4282425335"://Top Target
+        $amount = CardIsUnique($ally->CardID()) ? 6 : 4;
+        Restore($amount, $opponent);
+        break;
+      case "3074091930"://Rich Reward
+        AddDecisionQueue("MULTIZONEINDICES", $opponent, "MYALLY");
+        AddDecisionQueue("OP", $opponent, "MZTONORMALINDICES");
+        AddDecisionQueue("PREPENDLASTRESULT", $opponent, "3-", 1);
+        AddDecisionQueue("SETDQCONTEXT", $opponent, "Choose up to 2 units to give experience");
+        AddDecisionQueue("MULTICHOOSEUNIT", $opponent, "<-", 1);
+        AddDecisionQueue("SPECIFICCARD", $opponent, "MULTIGIVEEXPERIENCE", 1);
+        break;
+      case "1780014071"://Public Enemy
+        AddDecisionQueue("MULTIZONEINDICES", $opponent, "MYALLY&THEIRALLY");
+        AddDecisionQueue("SETDQCONTEXT", $opponent, "Choose a unit to give a shield");
+        AddDecisionQueue("CHOOSEMULTIZONE", $opponent, "<-", 1);
+        AddDecisionQueue("MZOP", $opponent, "ADDSHIELD", 1);
+        break;
+      default: break;
+    }
+  }
+  switch($ally->CardID()) {
+    case "6135081953"://Doctor Evazan
+      for($i=0; $i<12; ++$i) {
+        ReadyResource($opponent);
+      }
+      break;
+    case "6878039039"://Hylobon Enforcer
+      Draw($opponent);
+      break;
+    case "9503028597"://Clone Deserter
+      Draw($opponent);
+      break;
+    case "9108611319"://Cartel Turncoat
+      Draw($opponent);
+      break;
+    default: break;
+  }
+}
+
 function OnKillAbility($fromCombat)
 {
   global $combatChain, $mainPlayer;
@@ -423,6 +477,26 @@ function AllyBeginRoundAbilities($player)
         break;
       default: break;
     }
+  }
+}
+
+function AllyCanBeAttackTarget($player, $index, $cardID)
+{
+  switch($cardID)
+  {
+    case "3646264648"://Sabine Wren
+      $allies = &GetAllies($player);
+      $aspectArr = [];
+      for($i=0; $i<count($allies); $i+=AllyPieces())
+      {
+        if($i == $index) continue;
+        $aspects = explode(",", CardAspects($allies[$i]));
+        for($j=0; $j<count($aspects); ++$j) {
+          $aspectArr[$aspects[$j]] = 1;
+        }
+      }
+      return count($aspectArr) < 3;
+    default: return true;
   }
 }
 

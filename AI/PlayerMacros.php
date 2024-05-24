@@ -6,38 +6,38 @@ function ProcessMacros()
   $somethingChanged = true;
   for($i=0; $i<$numPass; ++$i)
   {
-    PassInput();
+    PassInput(true);
   }
   if(!IsGameOver())
   {
     for($i=0; $i<10 && $somethingChanged; ++$i)
     {
       $somethingChanged = false;
-      if($turn[0] == "A" && ShouldSkipARs($currentPlayer)) { $somethingChanged = true; PassInput(); }
-      else if($turn[0] == "D" && ShouldSkipDRs($currentPlayer)) { $somethingChanged = true; PassInput(); }
-      else if($turn[0] == "B") { $somethingChanged = true; PassInput(); }
-      else if($turn[0] == "A") { $somethingChanged = true; PassInput(); }
-      else if($turn[0] == "D") { $somethingChanged = true; PassInput(); }
-      else if($turn[0] == "M" && $initiativeTaken == 1 && $initiativePlayer == $currentPlayer) { $somethingChanged = true; PassInput(); }
+      if($turn[0] == "A" && ShouldSkipARs($currentPlayer)) { $somethingChanged = true; PassInput(true); }
+      else if($turn[0] == "D" && ShouldSkipDRs($currentPlayer)) { $somethingChanged = true; PassInput(true); }
+      else if($turn[0] == "B") { $somethingChanged = true; PassInput(true); }
+      else if($turn[0] == "A") { $somethingChanged = true; PassInput(true); }
+      else if($turn[0] == "D") { $somethingChanged = true; PassInput(true); }
+      else if($turn[0] == "M" && $initiativeTaken == 1 && $initiativePlayer == $currentPlayer) { $somethingChanged = true; PassInput(true); }
       else if($turn[0] == "CHOOSEARCANE" && $turn[2] == "0") { $somethingChanged = true; ContinueDecisionQueue("0"); }
       else if($turn[0] == "CHOOSEARSENAL" && $turn[2] == "0") { $somethingChanged = true; ContinueDecisionQueue($turn[2]); }
-      else if((count($decisionQueue) == 0 || $decisionQueue[0] == "INSTANT") && count($layers) > 0 && $layers[count($layers)-LayerPieces()] == "ENDSTEP" && count($layers) < (LayerPieces() * 3)) { $somethingChanged = true; PassInput(); }
+      else if((count($decisionQueue) == 0 || $decisionQueue[0] == "INSTANT") && count($layers) > 0 && $layers[count($layers)-LayerPieces()] == "ENDSTEP" && count($layers) < (LayerPieces() * 3)) { $somethingChanged = true; PassInput(true); }
       else if($turn[0] == "INSTANT" || ($turn[0] == "M" && ($actionPoints == 0 || $currentPlayer != $mainPlayer)))
       {
         if(HoldPrioritySetting($currentPlayer) == 0 && !HasPlayableCard($currentPlayer, $turn[0]))
         {
           $somethingChanged = true;
-          PassInput();
+          PassInput(true);
         }
         if($turn[0] == "INSTANT" && count($layers) > 0)
         {
-          if($layers[0] == "FINALIZECHAINLINK" && HoldPrioritySetting($currentPlayer) != "1") { $somethingChanged = true; PassInput(); }
-          else if($layers[0] == "DEFENDSTEP" && HoldPrioritySetting($currentPlayer) != "1") { $somethingChanged = true; PassInput(); }
+          if($layers[0] == "FINALIZECHAINLINK" && HoldPrioritySetting($currentPlayer) != "1") { $somethingChanged = true; PassInput(true); }
+          else if($layers[0] == "DEFENDSTEP" && HoldPrioritySetting($currentPlayer) != "1") { $somethingChanged = true; PassInput(true); }
           else if($layers[5] != "-")//Means there is a unique ID
           {
             $subtype = CardSubType($layers[2]);
-            if(DelimStringContains($subtype, "Aura") && GetAuraGemState($layers[1], $layers[2]) == 0) { $somethingChanged = true; PassInput(); }
-            if(DelimStringContains($subtype, "Item") && GetItemGemState($layers[1], $layers[2]) == 0) { $somethingChanged = true; PassInput(); }
+            if(DelimStringContains($subtype, "Aura") && GetAuraGemState($layers[1], $layers[2]) == 0) { $somethingChanged = true; PassInput(true); }
+            if(DelimStringContains($subtype, "Item") && GetItemGemState($layers[1], $layers[2]) == 0) { $somethingChanged = true; PassInput(true); }
           }
         }
       }
@@ -45,17 +45,14 @@ function ProcessMacros()
         $somethingChanged = true;
         ContinueDecisionQueue($turn[2]);
       }
-      else if($turn[0] == "M" && count($layers) > 0) {
-        $somethingChanged = true; PassInput();//TODO: Fix layer reordering
-      }
       if($turn[0] == "B" || $turn[0] == "D")
       {
         $threshold = ShortcutAttackThreshold($currentPlayer);
-        if($threshold == "99") { $somethingChanged = true; PassInput(); }
+        if($threshold == "99") { $somethingChanged = true; PassInput(true); }
         else if($threshold == "1")
         {
           CacheCombatResult();
-          if(CachedTotalAttack() <= 1) { $somethingChanged = true; PassInput(); }
+          if(CachedTotalAttack() <= 1) { $somethingChanged = true; PassInput(true); }
         }
       }
     }

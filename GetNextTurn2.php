@@ -212,6 +212,13 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   $TheirCardBack = GetCardBack($playerID == 1 ? 2 : 1);
   $otherPlayer = ($playerID == 1 ? 2 : 1);
 
+  echo '<style>
+    #theirHand span a {
+      border: 1px solid rgb(69, 69, 69);
+      border-radius: 8px;
+    }
+  </style>';
+
   //Display background
   if (IsDarkPlainMode($playerID))
     echo ("<div class='container;' style='position:absolute; z-index:-100; left:0px; top:0px; width:100%; height:100%;'><img style='object-fit: cover; height:100%; width:100%;' src='./Images/darkplain.jpg'/>
@@ -287,14 +294,15 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   if ($turn[0] != "OVER") {
     $helpText = ($currentPlayer != $playerID ? " Waiting for other player to choose " . TypeToPlay($turn[0]) . "&nbsp" : " " . GetPhaseHelptext() . "&nbsp;");
 
-    echo ("<span style='display:inline-block; background-color: " . $backgroundColor . "; border: 2px solid " . $borderColor . "; border-radius: 5px; font-size:18px;'><img height='16px;' style='margin-right:5px; vertical-align: -2px; user-select: none;' title='" . $readyText . "' src='./Images/" . $icon . "'/>" . $helpText);
+    echo ("<span style='font-size:18px;'><img height='16px;' style='margin-right:5px; vertical-align: -2px; user-select: none;' title='" . $readyText . "' src='./Images/" . $icon . "'/>" . $helpText);
     if ($currentPlayer == $playerID) {
       if ($turn[0] == "P" || $turn[0] == "CHOOSEHANDCANCEL" || $turn[0] == "CHOOSEDISCARDCANCEL") echo ("(" . ($turn[0] == "P" ? $myResources[0] . " of " . $myResources[1] . " " : "") . "or " . CreateButton($playerID, "Cancel", 10000, 0, "18px") . ")");
       if (CanPassPhase($turn[0])) {
         if ($turn[0] == "B") echo (CreateButton($playerID, "Undo Block", 10001, 0, "18px") . " " . CreateButton($playerID, "Pass", 99, 0, "18px") . " " . CreateButton($playerID, "Pass Block and Reactions", 101, 0, "16px", "", "Reactions will not be skipped if the opponent reacts"));
       }
     } else {
-      if ($currentPlayerActivity == 2 && $playerID != 3) echo ("— Opponent is inactive " . CreateButton($playerID, "Claim Victory", 100007, 0, "18px"));
+      if ($currentPlayerActivity == 2 && $playerID != 3)
+        echo ("— Opponent is inactive " . CreateButton($playerID, "Claim Victory", 100007, 0, "18px", "", "claimVictoryButton"));
     }
     echo ("</span>");
   }
@@ -341,21 +349,21 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
 
   //Effects UI
   echo ("<div style='position:absolute; width:90px; left:20px; top:20px;'>");
-  echo ("<div style='text-align:center; padding-bottom:10px; border-bottom: 1px solid transparent; border-image: linear-gradient(0.25turn, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255), rgba(255, 255, 255, 0.00) 100%); border-image-slice: 1; font-size:16px; font-weight: 600; color: white; user-select: none;'>Opponent<br>Effects</div>");
+  echo ("<div style='text-align:center; padding-bottom:10px; border-bottom: 1px solid transparent; border-image: linear-gradient(0.25turn, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255), rgba(255, 255, 255, 0.00) 100%); border-image-slice: 1; font-size:16px; font-weight: 600; color: white; user-select: none;'>Opponent\nEffects</div>");
   echo ($opponentEffects);
   echo ("<div style='position:fixed; width:90px; left:20px; bottom:20px;'>");
   echo ($friendlyEffects);
-  echo ("<div style='text-align:center; padding-top:10px; border-top: 1px solid transparent; border-image: linear-gradient(0.25turn, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255), rgba(255, 255, 255, 0.00) 100%); border-image-slice: 1; font-size:16px; font-weight: 600; color: white; user-select: none;'>Your<br>Effects</div>");
+  echo ("<div style='text-align:center; padding-top:10px; border-top: 1px solid transparent; border-image: linear-gradient(0.25turn, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255), rgba(255, 255, 255, 0.00) 100%); border-image-slice: 1; font-size:16px; font-weight: 600; color: white; user-select: none; white-space: break-spaces;'>Your\nEffects</div>");
   echo ("</div>");
   echo ("</div>");
 
   //Space Arena
   echo ("<div style='position: absolute; z-index: -5; top:140px; left:51px; width:calc(50% - 264px); height:calc(100% - 340px); opacity:.55; border-radius:7px; background-size: cover; background-position: center; background-image: url(\"./Images/spacebg.jpg\");'>");
-  echo("</div>");
+  echo ("</div>");
 
   //Ground Arena
   echo ("<div style='position: absolute; z-index: -5; top:140px; right:288px; width:calc(50% - 264px); height:calc(100% - 340px); opacity:.55; border-radius:7px; background-size: cover; background-position: center; background-image: url(\"./Images/groundbg.jpg\");'>");
-  echo("</div>");
+  echo ("</div>");
 
 
   $displayCombatChain = count($combatChain) > 0;
@@ -401,14 +409,14 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
 
   if (count($layers) > 0) {
     $content = "";
-    $content .= "<div style='font-size:24px; margin-left:5px; margin-bottom:5px; margin-top:5px;'><b>Layers</b>&nbsp;<i style='font-size:16px; margin-right: 5px;'>(Priority settings can be adjusted in the menu)</i></div>";
+    $content .= "<div style='font-size:24px; margin-left:5px; margin-bottom:5px; margin-top:5px;'><b>Triggers</b>&nbsp;<i style='font-size:16px; margin-right: 5px;'>(Use the arrows to reorder simultaneous triggers)</i></div>";
     if (CardType($layers[0]) == "AA" || IsWeapon($layers[0])) {
       $attackTarget = GetAttackTarget();
       if ($attackTarget != "NA") {
         $content .= "&nbsp;Attack Target: " . GetMZCardLink($defPlayer, $attackTarget);
       }
     }
-    if($dqState[8] != -1) $content .= "<div style='margin-left:5px;'><i style='font-size:16px;'>For more info about trigger ordering, see rule 1.10.2c of the <a href='http://fabjud.ge/cr' target='_blank'>comprehensive rulebook</a>.</i></div>";
+    if($dqState[8] != -1) $content .= "<div style='margin-left:5px;'><i style='font-size:16px;'>Triggers on the right resolve first. Click the pass button to begin resolving.</i></div>";
     $content .= "<div style='margin-left:1px; margin-top:3px; margin-bottom:5px' display:inline;'>";
     $nbTiles = 0;
     for ($i = count($layers) - LayerPieces(); $i >= 0; $i -= LayerPieces()) {
@@ -639,7 +647,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       if ($option[0] == "THEIRARS" && $theirArsenal[$index + 1] == "DOWN") $card = $TheirCardBack;
 
       $overlay = 0;
-      $attackCounters = 0;
+      $attackCounters = -1;
       //NRA TODO
       //Show attack and hp counters on allies in the popups
       if ($option[0] == "THEIRALLY") {
@@ -768,9 +776,9 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
 
   //Opponent hand
   $handContents = "";
-  $handLeft = "calc(50% - " . ((count($theirHand) * ($cardWidth + 15)) / 2) . "px - 119px)";
-  echo ("<div style='position: fixed; top: 10px; left:" . $handLeft . "; height: 50px; display:inline;'>");
-  echo ("<div id='theirHand' style='display:inline;'>");
+  $chatboxWidth = "208px";
+  echo ("<div style='display: flex; justify-content: center; width: calc(100% - $chatboxWidth);'>");
+  echo ("<div id='theirHand'>");
   for ($i = 0; $i < count($theirHand); ++$i) {
     if ($handContents != "") $handContents .= "|";
     if ($playerID == 3 && IsCasterMode()) $handContents .= ClientRenderedCard(cardNumber: $theirHand[$i], controller: ($playerID == 1 ? 2 : 1));
@@ -781,7 +789,6 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   if ($handContents != "" && $banishUI != "") echo ("|");
   echo ($banishUI);
   echo ("</div>");
-
   echo ("</div>");
 
   //Show deck, discard, pitch, banish
@@ -1051,7 +1058,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     }
   }
   echo ("</div>");
-  
+
   //Space allies
   echo ("<div style='overflow-y:auto; padding: 2px; margin: 0 15px 14px 15px; position: fixed; bottom:200px; left:51px; width: calc(50% - 294px); max-height:" . $permHeight . "px;'>");
   echo($spaceAllies);

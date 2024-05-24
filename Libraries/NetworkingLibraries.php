@@ -3,7 +3,7 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
 {
   global $gameName, $currentPlayer, $mainPlayer, $dqVars, $turn, $CS_CharacterIndex, $CS_PlayIndex, $decisionQueue, $CS_NextNAAInstant, $skipWriteGamestate, $combatChain, $landmarks;
   global $SET_PassDRStep, $actionPoints, $currentPlayerActivity, $redirectPath;
-  global $dqState, $layers, $CS_ArsenalFacing, $combatChainState;
+  global $dqState, $layers, $combatChainState;
   global $roguelikeGameID;
   switch ($mode) {
     case 3: //Play equipment ability
@@ -48,16 +48,17 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
         return false;
       }
       break;
-    case 5: //Card Played from Arsenal
+    case 5: //Card Played from resources
       $index = $cardID;
       $arsenal = &GetArsenal($playerID);
       if ($index < count($arsenal)) {
         $cardToPlay = $arsenal[$index];
-        if (!IsPlayable($cardToPlay, $turn[0], "ARS", $index)) break;
+        if (!IsPlayable($cardToPlay, $turn[0], "RESOURCES", $index)) break;
+        $isExhausted = $arsenal[$index + 4] == 1;
         $uniqueID = $arsenal[$index + 5];
-        SetClassState($playerID, $CS_ArsenalFacing, $arsenal[$index+1]);
         RemoveArsenal($playerID, $index);
-        PlayCard($cardToPlay, "ARS", -1, -1, $uniqueID);
+        AddTopDeckAsResource($playerID, isExhausted:$isExhausted);
+        PlayCard($cardToPlay, "RESOURCES", -1, -1, $uniqueID);
       }
       else
       {
@@ -394,10 +395,11 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
       if($roundPass) BeginRoundPass();
       break;
     case 99: //Pass
-      global $isPass, $initiativeTaken;
+      global $isPass, $initiativeTaken, $dqState;
       $isPass = true;
       $otherPlayer = ($playerID == 1 ? 2 : 1);
       $roundPass = $initiativeTaken == ($otherPlayer + 2);
+      $dqState[8] = -1;
       if($turn[0] == "M" && $initiativeTaken != 1 && !$roundPass) $initiativeTaken = $currentPlayer + 2;
       if(CanPassPhase($turn[0])) {
         PassInput(false);
@@ -724,7 +726,7 @@ function PassInput($autopass = false)
   if($turn[0] == "END" || $turn[0] == "MAYMULTICHOOSETEXT" || $turn[0] == "MAYCHOOSECOMBATCHAIN" || $turn[0] == "MAYCHOOSEMULTIZONE" || $turn[0] == "MAYMULTICHOOSEAURAS" ||$turn[0] == "MAYMULTICHOOSEHAND" || $turn[0] == "MAYCHOOSEHAND" || $turn[0] == "MAYCHOOSEDISCARD" || $turn[0] == "MAYCHOOSEARSENAL" || $turn[0] == "MAYCHOOSEPERMANENT" || $turn[0] == "MAYCHOOSEDECK" || $turn[0] == "MAYCHOOSEMYSOUL" || $turn[0] == "MAYCHOOSETOP" || $turn[0] == "MAYCHOOSECARD" || $turn[0] == "INSTANT" || $turn[0] == "OK") {
     ContinueDecisionQueue("PASS");
   } else {
-    if($autopass == true) WriteLog("Player " . $currentPlayer . " auto-passed.");
+    if($autopass == true);
     else WriteLog("Player " . $currentPlayer . " passed.");
     if(Pass($turn, $currentPlayer, $currentPlayer)) {
       if($turn[0] == "M")
@@ -840,7 +842,7 @@ function ResolveChainLink()
     $damageDealt = 0;
     $destroyed = $defender->DealDamage($totalAttack, bypassShield:HasSaboteur($attackerID, $mainPlayer, $attacker->Index()), fromCombat:true, damageDealt:$combatChainState[$CCS_DamageDealt]);
     if($destroyed) ClearAttackTarget();
-    if($attackerArr[0] == "MYALLY" && (!$destroyed || ($combatChain[0] != "9500514827" && !SearchCurrentTurnEffects("8297630396", $mainPlayer)))) { //Han Solo shoots first
+    if($attackerArr[0] == "MYALLY" && (!$destroyed || ($combatChain[0] != "9500514827" && $combatChain[0] != "4328408486" && !SearchCurrentTurnEffects("8297630396", $mainPlayer)))) { //Han Solo shoots first; also Incinerator Trooper
       $destroyed = $attacker->DealDamage($defenderPower, fromCombat:true);
       if($destroyed) {
         ClearAttacker();
@@ -876,7 +878,7 @@ function ResolveCombatDamage($damageDone)
 
   PrependLayer("FINALIZECHAINLINK", $mainPlayer, "0");
 
-  WriteLog("Combat resolved with " . ($wasHit ? "a hit for $damageDone damage" : "no hit"));
+  WriteLog("Combat resulted in <span style='color:Crimson;'>$damageDone damage</span>");
 
   if(!DelimStringContains(CardSubtype($combatChain[0]), "Ally")) {
     SetClassState($mainPlayer, $CS_DamageDealt, GetClassState($mainPlayer, $CS_DamageDealt) + $damageDone);
@@ -994,7 +996,7 @@ function FinalizeChainLink($chainClosed = false)
     ResetCombatChainState();
     $turn[0] = "M";
     if($initiativeTaken == 1) FinalizeAction();
-    else PassInput();
+    else PassInput(true);
   } else {
     ResetChainLinkState();
   }
@@ -1231,7 +1233,8 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
   if($turn[0] != "P") {
     if($dynCostResolved >= 0) {
       SetClassState($currentPlayer, $CS_DynCostResolved, $dynCostResolved);
-      $baseCost = ($from == "PLAY" || $from == "EQUIP" ? AbilityCost($cardID) : (CardCost($cardID) + SelfCostModifier($cardID)));
+      if($from == "RESOURCES") $baseCost = SmuggleCost($cardID, $currentPlayer, $index);
+      else $baseCost = ($from == "PLAY" || $from == "EQUIP" ? AbilityCost($cardID) : (CardCost($cardID) + SelfCostModifier($cardID)));
       if(!$playingCard) $resources[1] += $dynCostResolved;
       else {
         $frostbitesPaid = AuraCostModifier($cardID);
@@ -1477,6 +1480,7 @@ function GetTargetOfAttack($attackID)
   $allies = &GetAllies($defPlayer);
   for($i = 0; $i < count($allies); $i += AllyPieces()) {
     if($attacker->CardID() != "5464125379" && CardArenas($attacker->CardID()) != CardArenas($allies[$i])) continue;//Strafing Gunship
+    if(!AllyCanBeAttackTarget($defPlayer, $i, $allies[$i])) continue;
     if($targets != "") $targets .= ",";
     $targets .= "THEIRALLY-" . $i;
     if(HasSentinel($allies[$i], $defPlayer, $i) && CardArenas($attacker->CardID()) == CardArenas($allies[$i])) {
@@ -1695,7 +1699,8 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
       else {
         $abilityIndex = GetClassState($currentPlayer, $CS_AbilityIndex);
         $playIndex = GetClassState($currentPlayer, $CS_PlayIndex);
-        AddLayer("PLAYABILITY", $currentPlayer, $cardID, $from . "!" . $resourcesPaid . "!" . $target . "!" . $additionalCosts . "!" . $abilityIndex . "!" . $playIndex, "-", $uniqueID);
+        //TODO: Fix this colonel yularen + Relentless hack
+        if($from == "PLAY" || $from == "EQUIP" || HasWhenPlayed($cardID) || $cardID == "0961039929" || $cardID == "3401690666" || DefinedTypesContains($cardID, "Event", $currentPlayer) || DefinedTypesContains($cardID, "Upgrade", $currentPlayer)) AddLayer("PLAYABILITY", $currentPlayer, $cardID, $from . "!" . $resourcesPaid . "!" . $target . "!" . $additionalCosts . "!" . $abilityIndex . "!" . $playIndex, "-", $uniqueID);
       }
     }
     if($from != "PLAY") {

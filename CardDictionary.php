@@ -106,7 +106,7 @@ function RestoreAmount($cardID, $player, $index)
   {
     case "0074718689": $amount += 1; break;
     case "1081012039": $amount += 2; break;
-    case "1611702639": $amount += $initiativePlayer == $player ? 2 : 0; break;
+    case "1611702639": $amount += $initiativePlayer == $player ? 2 : 0; break;//Consortium Starviper
     case "4405415770": $amount += 2; break;
     case "0827076106": $amount += 1; break;
     case "4919000710": $amount += 2; break;
@@ -114,6 +114,9 @@ function RestoreAmount($cardID, $player, $index)
     case "e2c6231b35": $amount += 2; break;
     case "7109944284": $amount += 3; break;
     case "8142386948": $amount += 2; break;//Razor Crest
+    case "4327133297": $amount += 2; break;//Moisture Farmer
+    case "5977238053": $amount += 2; break;//Sundari Peacekeeper
+    case "9503028597": $amount += 1; break;//Clone Deserter
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
@@ -166,6 +169,9 @@ function RaidAmount($cardID, $player, $index)
     case "87e8807695": $amount += 1; break;
     case "8395007579": $amount += $ally->MaxHealth() - $ally->Health(); break;//Fifth Brother
     case "6208347478": $amount += SearchCount(SearchAllies($player, trait:"Spectre")) > 1 ? 1 : 0; break;//Chopper
+    case "3487311898": $amount += 3; break;//Clan Challengers
+    case "5977238053": $amount += 2; break;//Sundari Peacekeeper
+    case "1805986989": $amount += 2; break;//Modded Cohort
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
@@ -210,6 +216,10 @@ function HasSentinel($cardID, $player, $index)
     case "4786320542":
     case "3896582249":
     case "2855740390":
+    case "1982478444"://Vigilant Pursuit Craft
+    case "1747533523"://Village Protectors
+    case "6585115122"://The Mandalorian
+    case "2969011922"://Pyke Sentinel
       return true;
     case "2739464284"://Gamorrean Guards
       return SearchCount(SearchAllies($player, aspect:"Cunning")) > 1;
@@ -222,6 +232,9 @@ function HasSentinel($cardID, $player, $index)
       return $initiativePlayer == $player;
     case "1780978508"://Emperor's Royal Guard
       return SearchCount(SearchAllies($player, trait:"Official")) > 0;
+    case "9405733493"://Protector of the Throne
+      $ally = new Ally("MYALLY-" . $index, $player);
+      return $ally->IsUpgraded();
     default: return false;
   }
 }
@@ -238,6 +251,8 @@ function HasGrit($cardID, $player, $index)
     case "5879557998":
     case "4599464590":
     case "8301e8d7ef":
+    case "5557494276"://Death Watch Loyalist
+    case "6878039039"://Hylobon Enforcer
       return true;
     default: return false;
   }
@@ -257,12 +272,15 @@ function HasOverwhelm($cardID, $player, $index)
     case "3232845719":
     case "4631297392":
     case "6432884726":
+    case "5557494276"://Death Watch Loyalist
       return true;
     case "4619930426"://First Legion Snowtrooper
       $target = GetAttackTarget();
       if($target == "THEIRCHAR-0") return false;
       $ally = new Ally($target, $defPlayer);
       return $ally->IsDamaged();
+    case "3487311898"://Clan Challengers
+      return $ally->IsUpgraded();
     default: return false;
   }
 }
@@ -308,6 +326,7 @@ function HasAmbush($cardID, $player, $index)
     case "3684950815":
     case "9500514827":
     case "8506660490":
+    case "1805986989"://Modded Cohort
       return true;
     case "2027289177"://Escort Skiff
       return SearchCount(SearchAllies($player, aspect:"Command")) > 1;
@@ -331,6 +350,8 @@ function HasShielded($cardID, $player, $index)
     case "3280523224":
     case "7728042035":
     case "7870435409":
+    case "6135081953"://Doctor Evazan
+    case "1747533523"://Village Protectors
       return true;
     default: return false;
   }
@@ -640,6 +661,12 @@ function GetAbilityTypes($cardID)
     case "1951911851"://Grand Admiral Thrawn
       $abilityTypes = "A";
       break;
+    case "6722700037"://Doctor Pershing
+      $abilityTypes = "A,AA";
+      break;
+    case "6536128825"://Grogu
+      $abilityTypes = "A,AA";
+      break;
     default: break;
   }
   if(DefinedTypesContains($cardID, "Leader", $currentPlayer) && !IsAlly($cardID, $currentPlayer)) {
@@ -729,6 +756,12 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
     case "1951911851"://Grand Admiral Thrawn
       $abilityNames = "Exhaust";
       break;
+    case "6722700037"://Doctor Pershing
+      $abilityNames = "Draw,Attack";
+      break;
+    case "6536128825"://Grogu
+      $abilityNames = "Exhaust,Attack";
+      break;
     default: break;
   }
   if(DefinedTypesContains($cardID, "Leader", $currentPlayer) && !IsAlly($cardID, $currentPlayer)) {
@@ -790,6 +823,10 @@ function IsPlayable($cardID, $phase, $from, $index = -1, &$restriction = null, $
   }
   $otherPlayer = ($player == 1 ? 2 : 1);
   if($from == "HAND" && ((CardCost($cardID) + SelfCostModifier($cardID)) > NumResourcesAvailable($currentPlayer)) && !HasAlternativeCost($cardID)) return false;
+  if($from == "RESOURCES") {
+    if(!PlayableFromResources($cardID, index:$index)) return false;
+    if((SmuggleCost($cardID, index:$index) + SelfCostModifier($cardID)) > NumResourcesAvailable($currentPlayer) && !HasAlternativeCost($cardID)) return false;
+  }
   if(DefinedTypesContains($cardID, "Upgrade", $player) && SearchCount(SearchAllies($player)) == 0 && SearchCount(SearchAllies($otherPlayer)) == 0) return false;
   if($phase == "M" && $from == "HAND") return true;
   $isStaticType = IsStaticType($cardType, $from, $cardID);
@@ -1167,10 +1204,15 @@ function ComboActive($cardID = "")
   return false;
 }
 
-function HasBloodDebt($cardID)
+function SmuggleCost($cardID, $player="", $index="")
 {
-  switch ($cardID) {
-    default: return false;
+  global $currentPlayer;
+  if($player == "") $player = $currentPlayer;
+  switch($cardID) {
+    case "1982478444": return 7;//Vigilant Pursuit Craft
+    case "0866321455": return 3;//Smuggler's Aid
+    case "6037778228": return 5;//Night Owl Skirmisher
+    default: return -1;
   }
 }
 
@@ -1181,6 +1223,15 @@ function PlayableFromBanish($cardID, $mod="")
   if($mod == "TCL" || $mod == "TT" || $mod == "TCC" || $mod == "NT" || $mod == "INST") return true;
   switch($cardID) {
 
+    default: return false;
+  }
+}
+
+function PlayableFromResources($cardID, $player="", $index="") {
+  global $currentPlayer;
+  if($player == "") $player = $currentPlayer;
+  if(SmuggleCost($cardID, $player, $index) > 0) return true;
+  switch($cardID) {
     default: return false;
   }
 }

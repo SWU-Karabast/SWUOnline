@@ -151,7 +151,7 @@ function JSONRenderedCard(
 }
 
 //Rotate is deprecated
-function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $overlay = 0, $borderColor = 0, $counters = 0, $actionDataOverride = "", $id = "", $rotate = false, $lifeCounters = 0, $defCounters = 0, $atkCounters = 0, $from = "", $controller = 0, $subcardNum = 0)
+function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $overlay = 0, $borderColor = 0, $counters = 0, $actionDataOverride = "", $id = "", $rotate = false, $lifeCounters = 0, $defCounters = 0, $atkCounters = -1, $from = "", $controller = 0, $subcardNum = 0)
 {
   global $playerID, $darkMode;
   if (is_array($action)) {
@@ -813,6 +813,23 @@ function PitchColor($pitch)
   }
 }
 
+function ResourceUI()
+{
+  global $turn, $currentPlayer, $playerID, $cardSize;
+  $rv = "";
+  $size = 120;
+  $resources = GetResourceCards($playerID);
+  for ($i = 0; $i < count($resources); $i += ResourcePieces()) {
+    $action = $currentPlayer == $playerID && IsPlayable($resources[$i], $turn[0], "RESOURCES", $i) ? 5 : 0;
+    $border = CardBorderColor($resources[$i], "RESOURCES", $action > 0);
+    if($action > 0)
+      $rv .= Card($resources[$i], "concat", $size, $action, 1, 0, $border, 0, strval($i));
+    else
+      $rv .= Card($resources[$i], "concat", $size, 0, 1, 0, $border);
+  }
+  return $rv;
+}
+
 function BanishUI($from = "")
 {
   global $turn, $currentPlayer, $playerID, $cardSize, $cardSizeAura;
@@ -903,15 +920,8 @@ function CardBorderColor($cardID, $from, $isPlayable, $mod = "-")
   if ($from == "BANISH") {
     if ($isPlayable || PlayableFromBanish($cardID, $mod))
       return 7;
-    //if (HasBloodDebt($cardID)) return 2;
-    //if ($isPlayable && HasReprise($cardID) && RepriseActive()) return 5;
-    //if ($isPlayable && ComboActive($cardID)) return 5;
-    //if ($isPlayable && HasRupture($cardID) && RuptureActive(true)) return 5;
     return 0;
   }
-  //if ($isPlayable && ComboActive($cardID)) return 3;
-  //if ($isPlayable && HasReprise($cardID) && RepriseActive()) return 3;
-  //if ($isPlayable && HasRupture($cardID) && RuptureActive(true, (CardType($cardID) != "AA"))) return 3;
   else if ($isPlayable)
     return 6;
   return 0;
