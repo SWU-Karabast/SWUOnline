@@ -924,12 +924,12 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   echo ("</div>");
 
   //Their Space Allies
-  echo ("<div style='overflow-y:auto; margin: 20px 15px 0 15px; position: fixed; top:140px; left:51px; width: calc(50% - 294px); max-height:" . $permHeight . "px;'>");
+  echo ("<div style='overflow-y:auto; padding-top: 2px; margin: 20px 15px 0 15px; position: fixed; top:140px; left:51px; width: calc(50% - 294px); max-height:" . $permHeight . "px;'>");
   echo($spaceAllies);
   echo("</div>");
 
   //Their Ground Allies
-  echo ("<div style='margin: 20px 15px 0 15px; position: fixed; top:140px; right:288px; width: calc(50% - 294px); max-height:" . $permHeight . "px;'>");
+  echo ("<div style='overflow-y:auto; padding-top: 2px; margin: 20px 15px 0 15px; position: fixed; top:140px; right:288px; width: calc(50% - 294px); max-height:" . $permHeight . "px;'>");
   echo($groundAllies);
   echo("</div>");
 
