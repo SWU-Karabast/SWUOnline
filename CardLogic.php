@@ -225,6 +225,11 @@ function AddLayer($cardID, $player, $parameter, $target = "-", $additionalCosts 
     array_push($layers, $additionalCosts);
     array_push($layers, $uniqueID);
     array_push($layers, GetUniqueId());
+    if($cardID == "TRIGGER" || $cardID == "PLAYABILITY")
+    {
+      $orderableIndex = intval($dqState[8]);
+      if($orderableIndex == -1) $dqState[8] = LayerPieces();
+    }
     return LayerPieces();
   }
   array_unshift($layers, GetUniqueId());
@@ -322,6 +327,7 @@ function ShouldHoldPriorityNow($player)
 {
   global $layerPriority, $layers, $currentPlayer, $dqState;
   if($player != $currentPlayer) return false;
+  if(count($layers) == LayerPieces()) return false;
   return $dqState[8] > 0;
 }
 

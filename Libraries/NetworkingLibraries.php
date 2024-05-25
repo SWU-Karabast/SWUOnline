@@ -1700,18 +1700,18 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
         $abilityIndex = GetClassState($currentPlayer, $CS_AbilityIndex);
         $playIndex = GetClassState($currentPlayer, $CS_PlayIndex);
         //TODO: Fix this colonel yularen + Relentless hack
-        if($from == "PLAY" || $from == "EQUIP" || HasWhenPlayed($cardID) || $cardID == "0961039929" || $cardID == "3401690666" || DefinedTypesContains($cardID, "Event", $currentPlayer) || DefinedTypesContains($cardID, "Upgrade", $currentPlayer)) AddLayer("PLAYABILITY", $currentPlayer, $cardID, $from . "!" . $resourcesPaid . "!" . $target . "!" . $additionalCosts . "!" . $abilityIndex . "!" . $playIndex, "-", $uniqueID);
+        if($from == "PLAY" || $from == "EQUIP" || HasWhenPlayed($cardID) || $cardID == "0961039929" || $cardID == "3401690666" || DefinedTypesContains($cardID, "Event", $currentPlayer) || DefinedTypesContains($cardID, "Upgrade", $currentPlayer)) AddLayer("PLAYABILITY", $currentPlayer, $cardID, $from . "!" . $resourcesPaid . "!" . $target . "!" . $additionalCosts . "!" . $abilityIndex . "!" . $playIndex, "-", $uniqueID, append:true);
       }
     }
     if($from != "PLAY") {
       $index = LastAllyIndex($currentPlayer);
       if(HasShielded($cardID, $currentPlayer, $index)) {
         $allies = &GetAllies($currentPlayer);
-        AddLayer("TRIGGER", $currentPlayer, "SHIELDED", "-", "-", $allies[$index + 5]);
+        AddLayer("TRIGGER", $currentPlayer, "SHIELDED", "-", "-", $allies[$index + 5], append:true);
       }
       if(HasAmbush($cardID, $currentPlayer, $index)) {
         $allies = &GetAllies($currentPlayer);
-        AddLayer("TRIGGER", $currentPlayer, "AMBUSH", "-", "-", $allies[$index + 5]);
+        AddLayer("TRIGGER", $currentPlayer, "AMBUSH", "-", "-", $allies[$index + 5], append:true);
       }
     }
     if (!$openedChain) ResolveGoAgain($cardID, $currentPlayer, $from);
