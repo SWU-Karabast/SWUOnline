@@ -232,11 +232,11 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
   $imgCounterHeight = $dynamicScaling ? intval($maxHeight / 2) : 35;
   $imgCounterFontSize = 28;
   //Attacker Label Style
-  if ($counters == "Attacker" || $counters == "Arsenal") {
+  if ($counters == "Attacker" || $counters == "Arsenal" || $counters == "When Played") {
     $rv .= "<div style='margin: 0px; top: 80%; left: 50%;
     margin-right: -50%; border-radius: 7px; width: fit-content; text-align: center; line-height: 16px; height: 16px; padding: 5px; border: 3px solid " . PopupBorderColor($darkMode) . ";
     transform: translate(-50%, -50%); position:absolute; z-index: 10; background:" . BackgroundColor($darkMode) . ";
-    font-size:20px; font-weight:800; color:" . PopupBorderColor($darkMode) . "; user-select: none;'>" . $counters . "</div>";
+    font-size:14px; font-weight:800; color:" . PopupBorderColor($darkMode) . "; user-select: none;'>" . $counters . "</div>";
   }
   //Steam Counters style
   elseif ($counters != 0 && ($from == "ITEMS" || $from == "CHARACTER") && ClassContains($cardNumber, "MECHANOLOGIST")) {

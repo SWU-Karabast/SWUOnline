@@ -438,6 +438,11 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       $content .= "<div style='display:inline; max-width:" . $cardSize . "px;'>";
       $layerName = ($layers[$i] == "LAYER" || $layers[$i] == "TRIGGER" || $layers[$i] == "PLAYABILITY" ? $layers[$i + 2] : $layers[$i]);
       $layersColor = $layers[$i + 1] == $playerID ? 1 : 2;
+      $caption = "";
+      switch($layers[$i]) {
+        case "PLAYABILITY": $caption = "When Played"; break;
+        default: $caption = 0; break;
+      }
       if ($playerID == 3) $layersColor = $layers[$i + 1] == $otherPlayer ? 2 : 1;
       if (IsTileable($layerName) && $nbTiles == 0) {
         for ($j = 0; $j < count($layers); $j += LayerPieces()) {
@@ -447,12 +452,12 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         $content .= Card($layerName, "concat", $cardSize, 0, 1, 0, $layersColor, ($nbTiles == 1 ? 0 : $nbTiles), controller: $layers[$i + 1]);
       } elseif (!IsTileable($layerName)) {
         $nbTiles = 0;
-        $content .= Card($layerName, "concat", $cardSize, 0, 1, 0, $layersColor, controller: $layers[$i + 1]);
+        $content .= Card($layerName, "concat", $cardSize, 0, 1, 0, $layersColor, counters:$caption, controller: $layers[$i + 1]);
       }
       if(($layers[$i] == "TRIGGER"  || $layers[$i] == "PLAYABILITY" )&& $dqState[8] >= $i && $playerID == $mainPlayer)
       {
-        if($i < $dqState[8]) $content .= "<span style='position:relative; left:-110px; top:-20px; z-index:10000;'>" . CreateButton($playerID, "<", 31, $i, "18px", useInput:true) . "</span>";
-        if($i > 0) $content .= "<span style='position:relative; left:-65px; top:-20px; z-index:10000;'>" . CreateButton($playerID, ">", 32, $i, "18px", useInput:true) . "</span>";
+        if($i < $dqState[8]) $content .= "<span style='position:relative; left:-115px; top:10px; z-index:10000;'>" . CreateButton($playerID, "<", 31, $i, "18px", useInput:true) . "</span>";
+        if($i > 0) $content .= "<span style='position:relative; left:-65px; top:10px; z-index:10000;'>" . CreateButton($playerID, ">", 32, $i, "18px", useInput:true) . "</span>";
       }
       $content .= "</div>";
     }
