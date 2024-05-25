@@ -272,14 +272,13 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
       $left = "30%";
     }
     $rv .= "<div style='margin: 0px;
-    top: 52%; left:" . $left . ";
+    top: calc(50% - 8px - (" . $counterHeight . "px / 2)); left:calc(50% - 8px - (" . $counterHeight . "px / 2));
     margin-right: -50%;
     border-radius: 50%;
     width:" . $counterHeight . "px;
     height:" . $counterHeight . "px;
     padding: 8px;
     text-align: center;
-    transform: translate(-50%, -50%);
     position:absolute; z-index: 10;
     background: rgba(0, 0, 0, 0.8);
     line-height: 1.2;
