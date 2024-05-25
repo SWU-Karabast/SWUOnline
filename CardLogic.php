@@ -421,32 +421,34 @@ function ContinueDecisionQueue($lastResult = "")
         else if($cardID == "LAYER") ProcessLayer($player, $parameter);
         else if($cardID == "FINALIZECHAINLINK") FinalizeChainLink($parameter);
         else if($cardID == "DEFENDSTEP") { $turn[0] = "A"; $currentPlayer = $mainPlayer; }
-        else if($cardID == "TRIGGER") {
-          ProcessTrigger($player, $parameter, $uniqueID, $target);
-          ProcessDecisionQueue();
-        } 
         else if(IsAbilityLayer($cardID)) {
           if(count($combatChain) > 0) {
             AddAfterCombatLayer($cardID, $player, $parameter, $target, $additionalCosts, $uniqueID);
             ProcessDecisionQueue();
           } else {
             global $CS_AbilityIndex;
-            $cardID = $parameter;
-            $subparamArr = explode("!", $target);
-            $from = $subparamArr[0];
-            $resourcesPaid = $subparamArr[1];
-            $target = count($subparamArr) > 2 ? $subparamArr[2] : "-";
-            $additionalCosts = count($subparamArr) > 3 ? $subparamArr[3] : "-";
-            $abilityIndex = count($subparamArr) > 4 ? $subparamArr[4] : -1;
-            $playIndex = count($subparamArr) > 5 ? $subparamArr[5] : -1;
-            SetClassState($player, $CS_AbilityIndex, $abilityIndex);
-            SetClassState($player, $CS_PlayIndex, $playIndex);
-            $playText = PlayAbility($cardID, $from, $resourcesPaid, $target, $additionalCosts);
-            if($from != "PLAY") WriteLog("Resolving play ability of " . CardLink($cardID, $cardID) . ($playText != "" ? ": " : ".") . $playText);
-            if($from == "EQUIP") {
-              EquipPayAdditionalCosts(FindCharacterIndex($player, $cardID), "EQUIP");
+            if($cardID == "TRIGGER") {
+              ProcessTrigger($player, $parameter, $uniqueID, $target);
+              ProcessDecisionQueue();
             }
-            ProcessDecisionQueue();
+            else {
+              $cardID = $parameter;
+              $subparamArr = explode("!", $target);
+              $from = $subparamArr[0];
+              $resourcesPaid = $subparamArr[1];
+              $target = count($subparamArr) > 2 ? $subparamArr[2] : "-";
+              $additionalCosts = count($subparamArr) > 3 ? $subparamArr[3] : "-";
+              $abilityIndex = count($subparamArr) > 4 ? $subparamArr[4] : -1;
+              $playIndex = count($subparamArr) > 5 ? $subparamArr[5] : -1;
+                SetClassState($player, $CS_AbilityIndex, $abilityIndex);
+                SetClassState($player, $CS_PlayIndex, $playIndex);
+                $playText = PlayAbility($cardID, $from, $resourcesPaid, $target, $additionalCosts);
+                if($from != "PLAY") WriteLog("Resolving play ability of " . CardLink($cardID, $cardID) . ($playText != "" ? ": " : ".") . $playText);
+                if($from == "EQUIP") {
+                  EquipPayAdditionalCosts(FindCharacterIndex($player, $cardID), "EQUIP");
+                }
+                ProcessDecisionQueue();
+            }
           }
         }
         else {
@@ -536,8 +538,8 @@ function ContinueDecisionQueue($lastResult = "")
 
 function AddAfterCombatLayer($cardID, $player, $parameter, $target = "-", $additionalCosts = "-", $uniqueID = "-") {
   global $combatChainState, $CCS_AfterLinkLayers;
-  if($combatChainState[$CCS_AfterLinkLayers] == "NA") $combatChainState[$CCS_AfterLinkLayers] = $cardID . "-" . $player . "-" . $parameter . "-" . $target . "-" . $additionalCosts . "-" . $uniqueID;
-  else $combatChainState[$CCS_AfterLinkLayers] .= "|" . $cardID . "-" . $player . "-" . $parameter . "-" . $target . "-" . $additionalCosts . "-" . $uniqueID;
+  if($combatChainState[$CCS_AfterLinkLayers] == "NA") $combatChainState[$CCS_AfterLinkLayers] = $cardID . "~" . $player . "~" . $parameter . "~" . $target . "~" . $additionalCosts . "~" . $uniqueID;
+  else $combatChainState[$CCS_AfterLinkLayers] .= "|" . $cardID . "~" . $player . "~" . $parameter . "~" . $target . "~" . $additionalCosts . "~" . $uniqueID;
 }
 
 function ProcessAfterCombatLayer() {
@@ -546,7 +548,7 @@ function ProcessAfterCombatLayer() {
   $layers = explode("|", $combatChainState[$CCS_AfterLinkLayers]);
   $combatChainState[$CCS_AfterLinkLayers] = "NA";
   for($i = 0; $i < count($layers); $i++) {
-    $layer = explode("-", $layers[$i]);
+    $layer = explode("~", $layers[$i]);
     AddLayer($layer[0], $layer[1], $layer[2], $layer[3], $layer[4], $layer[5], append:true);
   }
 }
