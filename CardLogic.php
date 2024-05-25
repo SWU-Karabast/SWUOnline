@@ -215,7 +215,7 @@ function PrependLayer($cardID, $player, $parameter, $target = "-", $additionalCo
 
 function IsAbilityLayer($cardID)
 {
-  return $cardID == "TRIGGER" || $cardID == "PLAYABILITY" || $cardID == "ATTACKABILITY" || $cardID == "ACTIVATEDABILITY";
+  return $cardID == "TRIGGER" || $cardID == "PLAYABILITY" || $cardID == "ATTACKABILITY" || $cardID == "ACTIVATEDABILITY" || $cardID == "AFTERPLAYABILITY";
 }
 
 function AddLayer($cardID, $player, $parameter, $target = "-", $additionalCosts = "-", $uniqueID = "-", $append = false)
@@ -586,6 +586,9 @@ function ProcessTrigger($player, $parameter, $uniqueID, $target="-")
       $index = SearchAlliesForUniqueID($uniqueID, $player);
       $ally = new Ally("MYALLY-" . $index, $player);
       $ally->Attach("8752877738");//Shield Token
+      break;
+    case "AFTERPLAYABILITY":
+      AllyPlayCardAbility($target, $player);
       break;
     default: break;
   }

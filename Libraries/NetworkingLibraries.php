@@ -1340,7 +1340,6 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
       }
       CombatChainPlayAbility($cardID);
       ItemPlayAbilities($cardID, $from);
-      AllyPlayCardAbility($cardID);
       if(AspectContains($cardID, "Villainy", $currentPlayer)) IncrementClassState($currentPlayer, $CS_NumVillainyPlayed);
       IncrementClassState($currentPlayer, $CS_NumCardsPlayed);
       if(DefinedTypesContains($cardID, "Event", $currentPlayer)) IncrementClassState($currentPlayer, $CS_NumEventsPlayed);
