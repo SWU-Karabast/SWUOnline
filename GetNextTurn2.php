@@ -422,7 +422,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
 
   echo ("</div>"); //Combat chain div
 
-  if (count($layers) > 0) {
+  if ($turn[0] == "INSTANT" && count($layers) > 0) {
     $content = "";
     $content .= "<div style='font-size:24px; margin-left:5px; margin-bottom:5px; margin-top:5px;'><b>Triggers</b>&nbsp;<i style='font-size:16px; margin-right: 5px;'>(Use the arrows to reorder simultaneous triggers)</i></div>";
     if (CardType($layers[0]) == "AA" || IsWeapon($layers[0])) {
