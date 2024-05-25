@@ -1047,6 +1047,24 @@ function LeaderUndeployed($cardID) {
   }
 }
 
+function HasAttackAbility($cardID) {
+  switch($cardID) {
+    case "1746195484"://Jedha Agitator
+    case "5707383130"://Bendu
+    case "1862616109"://Snowspeeder
+    case "3613174521"://Outer Rim Headhunter
+    case "4599464590"://Rugged Survivors
+    case "4299027717"://Mining Guild Tie Fighter
+    case "7728042035"://Chimaera
+    case "8691800148"://Reinforcement Walker
+    case "9568000754"://R2-D2
+    case "8009713136"://C-3PO
+    case "7533529264"://Wolffe
+      return true;
+    default: return false;
+  }
+}
+
 function HasBladeBreak($cardID)
 {
   global $defPlayer;

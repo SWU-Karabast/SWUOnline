@@ -215,7 +215,7 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
   if ($borderColor > 0) {
     $border = "border-radius:10px; border:2px solid " . BorderColorMap($borderColor) . ";";
   } else if ($folder == "concat" || $folder == "./concat" || $folder == "../concat") {
-    $border = "border-radius:8px; border:1px solid transparent;";
+    $border = "border-radius:8px;";
   } else {
     $border = "border: 1px solid transparent;";
   }
@@ -237,8 +237,8 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
   if ($controller != 0 && IsPatron($controller) && CardHasAltArt($cardNumber))
     $folderPath = "PatreonImages/" . $folderPath;
 
-  $rv .= "<img " . ($id != "" ? "id='" . $id . "-img' " : "") . "data-orientation='" . ($rotate ? "landscape' " : "portrait' ") . "style='" . $border . " height:" . "$height" . "; width:" . $width . "px; position:relative; border-radius:10px;' src='" . $folderPath . "/" . $cardNumber . $fileExt . "' />";
-  $rv .= "<div " . ($id != "" ? "id='" . $id . "-ovr' " : "") . "style='visibility:" . ($overlay == 1 ? "visible" : "hidden") . "; width:100%; height:100%; top:0px; left:0px; position:absolute; background: rgba(0, 0, 0, 0.5); z-index: 1;'></div>";
+  $rv .= "<img " . ($id != "" ? "id='" . $id . "-img' " : "") . "data-orientation='" . ($rotate ? "landscape' " : "portrait' ") . "class='cardImage'" . "style='{$border} height: {$height}; width: {$width}px; position:relative; border-radius:10px;' src='{$folderPath}/{$cardNumber}{$fileExt}' />";
+  $rv .= "<div " . ($id != "" ? "id='" . $id . "-ovr' " : "") . "class='overlay'" . "style='visibility:" . ($overlay == 1 ? "visible" : "hidden") . "; height: {$height}; width: {$width}px; top:0px; left:0px; position:absolute; background: rgba(0, 0, 0, 0.5); z-index: 1; border-radius: 8px;'></div>";
 
   // Counters Style
   $dynamicScaling = (function_exists("IsDynamicScalingEnabled") ? IsDynamicScalingEnabled($playerID) : false);
@@ -249,11 +249,11 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
   $imgCounterHeight = $dynamicScaling ? intval($maxHeight / 2) : 35;
   $imgCounterFontSize = 24;
   //Attacker Label Style
-  if ($counters == "Attacker" || $counters == "Arsenal") {
+  if (!is_numeric($counters)) {
     $rv .= "<div style='margin: 0px; top: 80%; left: 50%;
     margin-right: -50%; border-radius: 7px; width: fit-content; text-align: center; line-height: 16px; height: 16px; padding: 5px; border: 3px solid " . PopupBorderColor($darkMode) . ";
     transform: translate(-50%, -50%); position:absolute; z-index: 10; background:" . BackgroundColor($darkMode) . ";
-    font-size:20px; font-weight:800; color:" . PopupBorderColor($darkMode) . "; user-select: none;'>" . $counters . "</div>";
+    font-size:14px; font-weight:800; color:" . PopupBorderColor($darkMode) . "; user-select: none;'>" . $counters . "</div>";
   }
 
   //Default Counters Style (Deck, Discard, Hero, Equipment)
@@ -264,14 +264,13 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
       $left = "30%";
     }
     $rv .= "<div style='margin: 0px;
-    top: 52%; left:" . $left . ";
+    top: calc(50% - 8px - (" . $counterHeight . "px / 2)); left:calc(50% - 8px - (" . $counterHeight . "px / 2));
     margin-right: -50%;
     border-radius: 50%;
     width:" . $counterHeight . "px;
     height:" . $counterHeight . "px;
     padding: 8px;
     text-align: center;
-    transform: translate(-50%, -50%);
     position:absolute; z-index: 10;
     background: rgba(0, 0, 0, 0.8);
     line-height: 1.2;

@@ -217,6 +217,40 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       border: 1px solid rgb(69, 69, 69);
       border-radius: 8px;
     }
+
+    .spaceAlliesContainer, .groundAlliesContainer,
+    .spaceEnemiesContainer, .groundEnemiesContainer {
+      display: flex;
+      flex-wrap: wrap;
+      column-gap: 15px;
+    }
+
+    .spaceAlliesContainer, .spaceEnemiesContainer {
+      flex-direction: row-reverse;
+      align-items: flex-start;
+    }
+
+    .groundAlliesContainer, .groundEnemiesContainer {
+      flex-wrap: wrap-reverse;
+      align-items: flex-end;
+    }
+
+    .spaceAlliesContainer .cardContainer, .groundAlliesContainer .cardContainer,
+    .spaceEnemiesContainer .cardContainer, .groundEnemiesContainer .cardContainer  {
+      position: relative;
+      display: flex;
+    }
+
+    .spaceAlliesContainer .cardImage, .groundAlliesContainer .cardImage,
+    .spaceEnemiesContainer .cardImage, .groundEnemiesContainer .cardImage {
+      box-shadow: 0 10px 15px 0px rgb(0, 0, 0, 0.5);
+      border: none;
+    }
+
+    .cardContainer.exhausted {
+      transform: rotate(5deg);
+    }
+
   </style>';
 
   //Display background
@@ -407,7 +441,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
 
   echo ("</div>"); //Combat chain div
 
-  if (count($layers) > 0) {
+  if ($turn[0] == "INSTANT" && count($layers) > 0) {
     $content = "";
     $content .= "<div style='font-size:24px; margin-left:5px; margin-bottom:5px; margin-top:5px;'><b>Triggers</b>&nbsp;<i style='font-size:16px; margin-right: 5px;'>(Use the arrows to reorder simultaneous triggers)</i></div>";
     if (CardType($layers[0]) == "AA" || IsWeapon($layers[0])) {
@@ -421,23 +455,30 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     $nbTiles = 0;
     for ($i = count($layers) - LayerPieces(); $i >= 0; $i -= LayerPieces()) {
       $content .= "<div style='display:inline; max-width:" . $cardSize . "px;'>";
-      $layerName = ($layers[$i] == "LAYER" || $layers[$i] == "TRIGGER" || $layers[$i] == "PLAYABILITY" ? $layers[$i + 2] : $layers[$i]);
+      $layerName = (IsAbilityLayer($layers[$i]) ? $layers[$i + 2] : $layers[$i]);
       $layersColor = $layers[$i + 1] == $playerID ? 1 : 2;
+      $caption = "";
+      switch($layers[$i]) {
+        case "PLAYABILITY": $caption = "When Played"; break;
+        case "ATTACKABILITY": $caption = "On Attack"; break;
+        case "ACTIVATEDABILITY": $caption = "Ability"; break;
+        default: $caption = 0; break;
+      }
       if ($playerID == 3) $layersColor = $layers[$i + 1] == $otherPlayer ? 2 : 1;
       if (IsTileable($layerName) && $nbTiles == 0) {
         for ($j = 0; $j < count($layers); $j += LayerPieces()) {
-          $tilesName = ($layers[$j] == "LAYER" || $layers[$j] == "TRIGGER" || $layers[$j] == "PLAYABILITY" ? $layers[$j + 2] : $layers[$j]);
+          $tilesName = ($layers[$j] == "LAYER" || IsAbilityLayer($layers[$j]) ? $layers[$j + 2] : $layers[$j]);
           if ($tilesName == $layerName) ++$nbTiles;
         }
         $content .= Card($layerName, "concat", $cardSize, 0, 1, 0, $layersColor, ($nbTiles == 1 ? 0 : $nbTiles), controller: $layers[$i + 1]);
       } elseif (!IsTileable($layerName)) {
         $nbTiles = 0;
-        $content .= Card($layerName, "concat", $cardSize, 0, 1, 0, $layersColor, controller: $layers[$i + 1]);
+        $content .= Card($layerName, "concat", $cardSize, 0, 1, 0, $layersColor, counters:$caption, controller: $layers[$i + 1]);
       }
-      if(($layers[$i] == "TRIGGER"  || $layers[$i] == "PLAYABILITY" )&& $dqState[8] >= $i && $playerID == $mainPlayer)
+      if((IsAbilityLayer($layers[$i]))&& $dqState[8] >= $i && $playerID == $mainPlayer)
       {
-        if($i < $dqState[8]) $content .= "<span style='position:relative; left:-110px; top:-20px; z-index:10000;'>" . CreateButton($playerID, "<", 31, $i, "18px", useInput:true) . "</span>";
-        if($i > 0) $content .= "<span style='position:relative; left:-65px; top:-20px; z-index:10000;'>" . CreateButton($playerID, ">", 32, $i, "18px", useInput:true) . "</span>";
+        if($i < $dqState[8]) $content .= "<span style='position:relative; left:-115px; top:10px; z-index:10000;'>" . CreateButton($playerID, "<", 31, $i, "18px", useInput:true) . "</span>";
+        if($i > 0) $content .= "<span style='position:relative; left:-65px; top:10px; z-index:10000;'>" . CreateButton($playerID, ">", 32, $i, "18px", useInput:true) . "</span>";
       }
       $content .= "</div>";
     }
@@ -634,7 +675,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       */
       $index = intval($option[1]);
       $card = $source[$index];
-      if ($option[0] == "LAYER" && ($card == "TRIGGER" || $card == "PLAYABILITY")) $card = $source[$index + 2];
+      if ($option[0] == "LAYER" && (IsAbilityLayer($card))) $card = $source[$index + 2];
       $playerBorderColor = 0;
 
       if (substr($option[0], 0, 2) == "MY") $playerBorderColor = 1;
@@ -882,8 +923,8 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       );
       $cardArena = CardArenas($theirAllies[$i]);
       //Their Unit Spacing
-      if($cardArena == "Ground") $cardText = "<div style='position:relative; display: inline-block; margin: 0 5px;'>";
-      else $cardText = "<div style='position:relative; float:right; display: inline-block; margin: 0 5px;'>";
+      if($cardArena == "Ground") $cardText = '<div class="cardContainer ' . ($theirAllies[$i + 1] != 2 ? 'exhausted' : '') . '">';
+      else $cardText = '<div class="cardContainer ' . ($theirAllies[$i + 1] != 2 ? 'exhausted' : '') . '">';
       //card render their units
       $cardText .= (Card($theirAllies[$i], "concat", $cardSizeAura, $opts));
       $cardText .= ("</div>");
@@ -931,14 +972,14 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   echo ("</div>");
 
   //Their Space Allies
-  echo ("<div style='overflow-y:auto; padding-top: 2px; margin: 20px 15px 0 15px; position: fixed; top:140px; left:51px; width: calc(50% - 294px); max-height:" . $permHeight . "px;'>");
-  echo($spaceAllies);
-  echo("</div>");
+  echo ("<div class='spaceEnemiesContainer' style='overflow-y:auto; padding: 20px 15px 15px 15px; position: fixed; top:140px; left:51px; width: calc(50% - 294px); max-height:" . $permHeight . "px;'>");
+  echo ($spaceAllies);
+  echo ("</div>");
 
   //Their Ground Allies
-  echo ("<div style='overflow-y:auto; padding-top: 2px; margin: 20px 15px 0 15px; position: fixed; top:140px; right:288px; width: calc(50% - 294px); max-height:" . $permHeight . "px;'>");
-  echo($groundAllies);
-  echo("</div>");
+  echo ("<div class='groundEnemiesContainer' style='overflow-y:auto; padding: 20px 15px 15px 15px; position: fixed; top:140px; right:288px; width: calc(50% - 294px); max-height:" . $permHeight . "px;'>");
+  echo ($groundAllies);
+  echo ("</div>");
 
 
   //Now display their resources
@@ -1040,8 +1081,8 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       );
       $cardArena = CardArenas($myAllies[$i]);
       //My Unit Spacing
-      if($cardArena == "Ground") $cardText = "<div style='position:relative; display: inline-block; margin: 0 5px;'>";
-      else $cardText = "<div style='position:relative; float:right; display: inline-block; margin: 0 5px;'>";
+      if($cardArena == "Ground") $cardText = '<div class="cardContainer ' . ($myAllies[$i + 1] != 2 ? 'exhausted' : '') . '">';
+      else $cardText = '<div class="cardContainer ' . ($myAllies[$i + 1] != 2 ? 'exhausted' : '') . '">';
       $cardText .= (Card($myAllies[$i], "concat", $cardSizeAura, $opts));
       $cardText .= ("</div>");
       if($cardArena == "Ground") $groundAllies .= $cardText;
@@ -1060,15 +1101,15 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   echo ("</div>");
 
   //Space allies
-  echo ("<div style='overflow-y:auto; padding: 2px; margin: 0 15px 14px 15px; position: fixed; bottom:200px; left:51px; width: calc(50% - 294px); max-height:" . $permHeight . "px;'>");
-  echo($spaceAllies);
-  echo("</div>");
+  echo ("<div class='spaceAlliesContainer' style='overflow-y:auto; padding: 5px 15px 14px 15px; position: fixed; bottom:200px; left:51px; width: calc(50% - 294px); max-height:" . $permHeight . "px;'>");
+  echo ($spaceAllies);
+  echo ("</div>");
 
   //Ground allies
-  echo ("<div style='overflow-y:auto; padding: 2px; margin: 0 15px 14px 15px; position: fixed; bottom:200px; right:288px; width: calc(50% - 294px); max-height:" . $permHeight . "px;'>");
-  echo($groundAllies);
-  echo("</div>");
-  
+  echo ("<div class='groundAlliesContainer' style='overflow-y:auto; padding: 5px 15px 14px 15px; position: fixed; bottom:200px; right:288px; width: calc(50% - 294px); max-height:" . $permHeight . "px;'>");
+  echo ($groundAllies);
+  echo ("</div>");
+
   //Now display my Leader and Base
   $numWeapons = 0;
   $myCharData = "";
