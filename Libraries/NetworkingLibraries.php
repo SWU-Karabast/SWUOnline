@@ -1699,8 +1699,13 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
       else {
         $abilityIndex = GetClassState($currentPlayer, $CS_AbilityIndex);
         $playIndex = GetClassState($currentPlayer, $CS_PlayIndex);
+        $layerName = "PLAYABILITY";
+        if($from == "PLAY" || $from == "EQUIP") {
+          if(GetResolvedAbilityType($cardID) == "A") $layerName = "ACTIVATEDABILITY";
+          else $layerName = "ATTACKABILITY";
+        }
         //TODO: Fix this colonel yularen + Relentless hack
-        if($from == "PLAY" || $from == "EQUIP" || HasWhenPlayed($cardID) || $cardID == "0961039929" || $cardID == "3401690666" || DefinedTypesContains($cardID, "Event", $currentPlayer) || DefinedTypesContains($cardID, "Upgrade", $currentPlayer)) AddLayer("PLAYABILITY", $currentPlayer, $cardID, $from . "!" . $resourcesPaid . "!" . $target . "!" . $additionalCosts . "!" . $abilityIndex . "!" . $playIndex, "-", $uniqueID, append:true);
+        if($from == "PLAY" || $from == "EQUIP" || HasWhenPlayed($cardID) || $cardID == "0961039929" || $cardID == "3401690666" || DefinedTypesContains($cardID, "Event", $currentPlayer) || DefinedTypesContains($cardID, "Upgrade", $currentPlayer)) AddLayer($layerName, $currentPlayer, $cardID, $from . "!" . $resourcesPaid . "!" . $target . "!" . $additionalCosts . "!" . $abilityIndex . "!" . $playIndex, "-", $uniqueID, append:true);
       }
     }
     if($from != "PLAY") {

@@ -213,6 +213,11 @@ function PrependLayer($cardID, $player, $parameter, $target = "-", $additionalCo
     return count($layers);//How far it is from the end
 }
 
+function IsAbilityLayer($cardID)
+{
+  return $cardID == "TRIGGER" || $cardID == "PLAYABILITY" || $cardID == "ATTACKABILITY" || $cardID == "ACTIVATEDABILITY";
+}
+
 function AddLayer($cardID, $player, $parameter, $target = "-", $additionalCosts = "-", $uniqueID = "-", $append = false)
 {
   global $layers, $dqState;
@@ -225,7 +230,7 @@ function AddLayer($cardID, $player, $parameter, $target = "-", $additionalCosts 
     array_push($layers, $additionalCosts);
     array_push($layers, $uniqueID);
     array_push($layers, GetUniqueId());
-    if($cardID == "TRIGGER" || $cardID == "PLAYABILITY")
+    if(IsAbilityLayer($cardID))
     {
       $orderableIndex = intval($dqState[8]);
       if($orderableIndex == -1) $dqState[8] = LayerPieces();
@@ -239,7 +244,7 @@ function AddLayer($cardID, $player, $parameter, $target = "-", $additionalCosts 
   array_unshift($layers, $parameter);
   array_unshift($layers, $player);
   array_unshift($layers, $cardID);
-  if($cardID == "TRIGGER" || $cardID == "PLAYABILITY")
+  if(IsAbilityLayer($cardID))
   {
     $orderableIndex = intval($dqState[8]);
     if($orderableIndex == -1) $dqState[8] = 0;
@@ -420,7 +425,7 @@ function ContinueDecisionQueue($lastResult = "")
           ProcessTrigger($player, $parameter, $uniqueID, $target);
           ProcessDecisionQueue();
         } 
-        else if($cardID == "PLAYABILITY") {
+        else if(IsAbilityLayer($cardID)) {
           if(count($combatChain) > 0) {
             AddAfterCombatLayer($cardID, $player, $parameter, $target, $additionalCosts, $uniqueID);
             ProcessDecisionQueue();

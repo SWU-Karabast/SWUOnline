@@ -283,14 +283,14 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   $layerObject = new stdClass;
   $layerContents = array();
   for ($i = count($layers) - LayerPieces(); $i >= 0; $i -= LayerPieces()) {
-    $layerName = ($layers[$i] == "LAYER" || $layers[$i] == "TRIGGER" || $layers[$i] == "PLAYABILITY" ? $layers[$i + 2] : $layers[$i]);
+    $layerName = ($layers[$i] == "LAYER" || IsAbilityLayer($layers[$i]) ? $layers[$i + 2] : $layers[$i]);
     array_push($layerContents, JSONRenderedCard(cardNumber: $layerName, controller: $layers[$i + 1]));
   }
   $reorderableLayers = array();
   $numReorderable = 0;
   for ($i = count($layers) - LayerPieces(); $i >= 0; $i -= LayerPieces()) {
     $layer = new stdClass();
-    $layerName = ($layers[$i] == "LAYER" || $layers[$i] == "TRIGGER" || $layers[$i] == "PLAYABILITY" ? $layers[$i + 2] : $layers[$i]);
+    $layerName = ($layers[$i] == "LAYER" || IsAbilityLayer($layers[$i]) ? $layers[$i + 2] : $layers[$i]);
     $layer->card = JSONRenderedCard(cardNumber: $layerName, controller: $layers[$i + 1]);
     $layer->layerID = $i;
     $layer->isReorderable = $playerID == $mainPlayer && $i <= $dqState[8] && ($i > 0 || $numReorderable > 0);
@@ -916,7 +916,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
 
       $index = intval($option[1]);
       $card = $source[$index];
-      if ($option[0] == "LAYER" && ($card == "TRIGGER" || $card == "PLAYABILITY")) $card = $source[$index + 2];
+      if ($option[0] == "LAYER" && (IsAbilityLayer($card))) $card = $source[$index + 2];
       $playerBorderColor = 0;
 
       if (substr($option[0], 0, 2) == "MY") $playerBorderColor = 1;
