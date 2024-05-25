@@ -2113,7 +2113,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     $target = count($targetArr) > 1 ? $targetArr[0] . "-" . $targetArr[1] : "-";
   }
   if($from != "PLAY" && $from != "EQUIP") {
-    AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $target, $additionalCosts);
+    if(AllyPlayCardAbility($cardID, $currentPlayer, reportMode:true)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $target, $additionalCosts);
   }
   if($from != "PLAY" && IsAlly($cardID, $currentPlayer)) {
     $playAlly = new Ally("MYALLY-" . LastAllyIndex($currentPlayer));

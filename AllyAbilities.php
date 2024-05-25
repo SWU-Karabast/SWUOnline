@@ -579,7 +579,7 @@ function AllyAttackedAbility($attackTarget, $index) {
   }
 }
 
-function AllyPlayCardAbility($cardID, $player="")
+function AllyPlayCardAbility($cardID, $player="", $reportMode=false)
 {
   global $currentPlayer;
   if($player == "") $player = $currentPlayer;
@@ -590,6 +590,7 @@ function AllyPlayCardAbility($cardID, $player="")
     {
       case "0052542605"://Bossk
         if(DefinedTypesContains($cardID, "Event", $player)) {
+          if($reportMode) return true;
           AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
           AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal 2 damage to");
           AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
@@ -598,11 +599,13 @@ function AllyPlayCardAbility($cardID, $player="")
         break;
       case "0961039929"://Colonel Yularen
         if(DefinedTypesContains($cardID, "Unit", $player) && AspectContains($cardID, "Command", $player)) {
+          if($reportMode) return true;
           Restore(1, $player);
         }
         break;
       case "5907868016"://Fighters for Freedom
         if(AspectContains($cardID, "Aggression", $player)) {
+          if($reportMode) return true;
           $otherPlayer = ($player == 1 ? 2 : 1);
           DealDamageAsync($otherPlayer, 1, "DAMAGE", "5907868016");
           WriteLog(CardLink("5907868016", "5907868016") . " is dealing 1 damage.");
@@ -618,7 +621,10 @@ function AllyPlayCardAbility($cardID, $player="")
     switch($allies[$i])
     {
       case "5555846790"://Saw Gerrera
-        if(DefinedTypesContains($cardID, "Event", $player)) DealDamageAsync($player, 2, "DAMAGE", "5555846790");
+        if(DefinedTypesContains($cardID, "Event", $player)) {
+          if($reportMode) return true;
+          DealDamageAsync($player, 2, "DAMAGE", "5555846790");
+        }
         break;
       default: break;
     }
