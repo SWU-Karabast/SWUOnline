@@ -33,14 +33,17 @@ function PlayAlly($cardID, $player, $subCards = "-", $from="-")
     }
   }
   $allies[$index+2] += CharacterStaticHealthModifiers($cardID, $index, $player);
+  CheckUnique($cardID, $player);
+  return $index;
+}
+
+function CheckUnique($cardID, $player) {
   if(CardIsUnique($cardID) && SearchCount(SearchAlliesForCard($player, $cardID)) > 1) {
     PrependDecisionQueue("MZDESTROY", $player, "-", 1);
     PrependDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
     PrependDecisionQueue("SETDQCONTEXT", $player, "You have two of this unique unit; choose one to destroy");
-    //PrependDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
     PrependDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:cardID=" . $cardID);
   }
-  return $index;
 }
 
 function AllyHasStaticHealthModifier($cardID)
@@ -150,6 +153,7 @@ function AllyTakeControl($player, $index) {
   $otherPlayer = $player == 1 ? 2 : 1;
   $myAllies = &GetAllies($player);
   $theirAllies = &GetAllies($otherPlayer);
+  $cardID = $theirAllies[$index];
   $uniqueID = $theirAllies[$index+5];
   for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnEffectPieces()) {
     if($currentTurnEffects[$i+1] != $otherPlayer) continue;
@@ -160,6 +164,7 @@ function AllyTakeControl($player, $index) {
     array_push($myAllies, $theirAllies[$i]);
   }
   RemoveAlly($otherPlayer, $index);
+  CheckUnique($cardID, $player);
   return $uniqueID;
 }
 
