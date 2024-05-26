@@ -2983,7 +2983,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "3208391441"://Make an Opening
-      Recover($currentPlayer, 2);
+      Restore(2, $currentPlayer);
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to attack and give -2/-2");
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
@@ -3667,13 +3667,6 @@ function Mill($player, $amount)
     AddGraveyard($card, $player, "DECK");
   }
   return $cards;
-}
-
-function Recover($player, $amount)
-{
-  $health = &GetHealth($player);
-  if($amount > $health) $health = 0;
-  else $health -= $amount;
 }
 
 function AddTopDeckAsResource($player, $isExhausted=true)
