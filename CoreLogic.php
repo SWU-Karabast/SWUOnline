@@ -3029,10 +3029,6 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1", 1);
       }
       break;
-    case "0961039929"://Colonel Yularen
-      if($from != "PLAY") {
-        Restore(1, $currentPlayer);
-      }
     case "4300219753"://Fett's Firespray
       if($from != "PLAY") {
         $ready = false;
