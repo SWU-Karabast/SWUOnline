@@ -393,8 +393,21 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
 }
 
 function CollectBounties($player, $index) {
+  global $currentTurnEffects;
   $ally = new Ally("MYALLY-" . $index, $player);
   $opponent = $player == 1 ? 2 : 1;
+  //Current turn effect bounties
+  for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnEffectPieces()) {
+    if($currentTurnEffects[$i+1] != $player) continue;
+    if($currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
+    switch($currentTurnEffects[$i]) {
+      case "1090660242"://The Client
+        Restore(5, $opponent);
+        break;
+      default: break;
+    }
+  }
+  //Subcard bounties
   $subcards = $ally->GetSubcards();
   for($i=0; $i<count($subcards); ++$i)
   {

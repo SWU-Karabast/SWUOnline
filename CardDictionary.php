@@ -352,6 +352,7 @@ function HasShielded($cardID, $player, $index)
     case "7870435409":
     case "6135081953"://Doctor Evazan
     case "1747533523"://Village Protectors
+    case "1090660242"://The Client
       return true;
     default: return false;
   }
@@ -667,6 +668,9 @@ function GetAbilityTypes($cardID)
     case "6536128825"://Grogu
       $abilityTypes = "A,AA";
       break;
+    case "1090660242"://The Client
+      $abilityTypes = "A,AA";
+      break;
     default: break;
   }
   if(DefinedTypesContains($cardID, "Leader", $currentPlayer) && !IsAlly($cardID, $currentPlayer)) {
@@ -761,6 +765,9 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       break;
     case "6536128825"://Grogu
       $abilityNames = "Exhaust,Attack";
+      break;
+    case "1090660242"://The Client
+      $abilityNames = "Bounty,Attack";
       break;
     default: break;
   }
