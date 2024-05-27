@@ -7,8 +7,14 @@ function OnLoadCallback(lastUpdate) {
 }
 
 function ShowCardDetail(e, that) {
-  ShowDetail(e, that.getElementsByTagName("IMG")[0].src);
+  if (e.target.hasAttribute("data-subcard-id")) {
+    var subCardID = e.target.getAttribute("data-subcard-id");
+    ShowDetail(e, `${window.location.origin}/SWUOnline/WebpImages2/${subCardID}.webp`);
+  } else {
+    ShowDetail(e, that.getElementsByTagName("IMG")[0].src);
+  }
 }
+
 
 function ShowDetail(e, imgSource) {
   imgSource = imgSource.replace("_cropped", "");
