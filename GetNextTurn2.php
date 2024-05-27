@@ -218,6 +218,24 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       border-radius: 8px;
     }
 
+    .base-my-dmg {
+      bottom: 389px;
+    } 
+
+    .base-their-dmg{
+      top: 328px;
+    } 
+
+    @media only screen and (max-height: 780px) {
+      .base-my-dmg {
+        bottom: calc(50% - 2px);
+      } 
+
+      .base-their-dmg{
+        top: calc(50% - 62px);
+      } 
+    }
+    
     .spaceAlliesContainer, .groundAlliesContainer,
     .spaceEnemiesContainer, .groundEnemiesContainer {
       display: flex;
@@ -271,8 +289,8 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   
     //Base Damage Numbers
   echo ("<div style='position:absolute; z-index:1; left: calc(50% - 169px); width: 100px;'><div style='display: flex; justify-content: center;'>
-      <span 
-      style='position:fixed; bottom:389px;
+      <span class='base-my-dmg' 
+      style='position:fixed;
       height: 30px;
       padding: 0 10px; 
       background: url(./Images/dmgbg-l.png) left no-repeat, url(./Images/dmgbg-r.png) right no-repeat; background-size: contain;
@@ -280,8 +298,8 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       font-weight: 700; font-size: 24px; text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.30);  
       user-select: none;'>$myHealth</span>"); 
   echo (($manualMode ? "<span style='position:absolute; top:120px; left:65px;'>" . CreateButton($playerID, "+1", 10006, 0, "20px") . CreateButton($playerID, "-1", 10005, 0, "20px") . "</span>" : ""));
-  echo ("<span 
-      style='position:fixed; top:328px;
+  echo ("<span class='base-their-dmg' 
+      style='position:fixed;
       height: 30px;
       padding: 0 10px; 
       background: url(./Images/dmgbg-l.png) left no-repeat, url(./Images/dmgbg-r.png) right no-repeat; background-size: contain;
