@@ -220,6 +220,7 @@ function HasSentinel($cardID, $player, $index)
     case "1747533523"://Village Protectors
     case "6585115122"://The Mandalorian
     case "2969011922"://Pyke Sentinel
+    case "8552719712"://Pirate Battle Tank
       return true;
     case "2739464284"://Gamorrean Guards
       return SearchCount(SearchAllies($player, aspect:"Cunning")) > 1;
@@ -1253,6 +1254,7 @@ function SmuggleCost($cardID, $player="", $index="")
     case "6037778228": return 5;//Night Owl Skirmisher
     case "2288926269": return 6;//Privateer Crew
     case "5752414373": return 6;//Millennium Falcon
+    case "8552719712": return 7;//Pirate Battle Tank
     default: return -1;
   }
 }
