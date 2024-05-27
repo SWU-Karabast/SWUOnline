@@ -3495,6 +3495,18 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "1090660242,PLAY", 1);
       }
       break;
+    case "1565760222"://Remnant Reserves
+      AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE," . 5);
+      for($i=0; $i<3; ++$i) {
+        AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+        AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-definedType-Unit", 1);
+        AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
+        AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
+        AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
+        AddDecisionQueue("OP", $currentPlayer, "REMOVECARD", 1);
+      }
+      AddDecisionQueue("ALLRANDOMBOTTOM", $currentPlayer, "DECK");
+      break;
     default: break;
   }
 }
