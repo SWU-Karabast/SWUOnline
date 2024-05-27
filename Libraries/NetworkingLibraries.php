@@ -1717,7 +1717,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
         $allies = &GetAllies($currentPlayer);
         AddLayer("TRIGGER", $currentPlayer, "SHIELDED", "-", "-", $allies[$index + 5], append:true);
       }
-      if(HasAmbush($cardID, $currentPlayer, $index)) {
+      if(HasAmbush($cardID, $currentPlayer, $index, $from)) {
         $allies = &GetAllies($currentPlayer);
         AddLayer("TRIGGER", $currentPlayer, "AMBUSH", "-", "-", $allies[$index + 5], append:true);
       }

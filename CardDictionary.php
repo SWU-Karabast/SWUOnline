@@ -286,7 +286,7 @@ function HasOverwhelm($cardID, $player, $index)
   }
 }
 
-function HasAmbush($cardID, $player, $index)
+function HasAmbush($cardID, $player, $index, $from)
 {
   global $currentTurnEffects;
   $ally = new Ally("MYALLY-" . $index, $player);
@@ -333,6 +333,8 @@ function HasAmbush($cardID, $player, $index)
       return SearchCount(SearchAllies($player, aspect:"Command")) > 1;
     case "4685993945"://Frontier AT-RT
       return SearchCount(SearchAllies($player, trait:"Vehicle")) > 1;
+    case "5752414373"://Millennium Falcon
+      return $from == "HAND";
     default: return false;
   }
 }
@@ -1249,6 +1251,7 @@ function SmuggleCost($cardID, $player="", $index="")
     case "0866321455": return 3;//Smuggler's Aid
     case "6037778228": return 5;//Night Owl Skirmisher
     case "2288926269": return 6;//Privateer Crew
+    case "5752414373": return 6;//Millennium Falcon
     default: return -1;
   }
 }
