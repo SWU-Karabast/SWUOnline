@@ -604,7 +604,7 @@ function AllyPlayCardAbility($cardID, $player="", $reportMode=false)
         }
         break;
       case "5907868016"://Fighters for Freedom
-        if(AspectContains($cardID, "Aggression", $player)) {
+        if($i != LastAllyIndex($player) && AspectContains($cardID, "Aggression", $player)) {
           if($reportMode) return true;
           $otherPlayer = ($player == 1 ? 2 : 1);
           DealDamageAsync($otherPlayer, 1, "DAMAGE", "5907868016");
