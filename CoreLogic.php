@@ -3533,6 +3533,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE," . $currentPower, 1);
       }
       break;
+    case "3514010297"://Mandalorian Armor
+      if(TraitContains(GetMZCard($currentPlayer, $target), "Mandalorian", $currentPlayer)) {
+        $ally = new Ally($target, $currentPlayer);
+        $ally->Attach("8752877738");//Shield Token
+      }
+      break;
     default: break;
   }
 }
