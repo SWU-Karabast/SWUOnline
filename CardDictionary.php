@@ -893,6 +893,7 @@ function UpgradeFilter($cardID)
     case "6903722220"://Luke's Lightsaber
     case "1323728003"://Electrostaff
     case "3514010297"://Mandalorian Armor
+    case "3525325147"://Vambrace Grappleshot
       return "trait=Vehicle";
     case "8055390529"://Traitorous
       return "maxCost=3";

@@ -688,6 +688,14 @@ function SpecificAllyAttackAbilities($attackID)
           AddCurrentTurnEffect("8495694166", $defPlayer, from:"PLAY");
         }
         break;
+      case "3525325147"://Vambrace Grappleshot
+        if(IsAllyAttackTarget()) {
+          WriteLog("Vambrace Grappleshot exhausts the defender");
+          $target = GetAttackTarget();
+          $ally = new Ally($target);
+          $ally->Exhaust();
+        }
+        break;
       default: break;
     }
   }
