@@ -508,6 +508,8 @@ function AbilityCost($cardID)
       return GetResolvedAbilityName($cardID) == "Deal Damage" ? 1 : 0;
     case "1951911851"://Grand Admiral Thrawn
       return GetResolvedAbilityName($cardID) == "Exhaust" ? 1 : 0;
+    case "1885628519"://Crosshair
+      return GetResolvedAbilityName($cardID) == "Buff" ? 2 : 0;
     default: break;
   }
   if(IsAlly($cardID)) return 0;
@@ -672,6 +674,9 @@ function GetAbilityTypes($cardID)
     case "1090660242"://The Client
       $abilityTypes = "A,AA";
       break;
+    case "1885628519"://Crosshair
+      $abilityTypes = "A,A,AA";
+      break;
     default: break;
   }
   if(DefinedTypesContains($cardID, "Leader", $currentPlayer) && !IsAlly($cardID, $currentPlayer)) {
@@ -769,6 +774,9 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       break;
     case "1090660242"://The Client
       $abilityNames = "Bounty,Attack";
+      break;
+    case "1885628519"://Crosshair
+      $abilityNames = "Buff,Snipe,Attack";
       break;
     default: break;
   }

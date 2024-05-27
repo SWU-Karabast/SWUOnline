@@ -213,6 +213,7 @@ function AllyPlayableExhausted($cardID) {
   switch($cardID) {
     case "4300219753"://Fett's Firespray
     case "2471223947"://Frontline Shuttle
+    case "1885628519"://Crosshair
       return true;
     default: return false;
   }
@@ -224,6 +225,8 @@ function AllyDoesAbilityExhaust($cardID, $abilityIndex) {
       return $abilityIndex == 1;
     case "2471223947"://Frontline Shuttle
       return $abilityIndex == 1;
+    case "1885628519"://Crosshair
+      return $abilityIndex == 1 || $abilityIndex == 2;
     default: return true;
   }
 }

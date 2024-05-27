@@ -3519,6 +3519,20 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,5", 1);
       break;
+    case "1885628519"://Crosshair
+      if($from != "PLAY") break;
+      $ally = new Ally("MYALLY-" . $index);
+      $abilityName = GetResolvedAbilityName($cardID, $from);
+      if($abilityName == "Buff") {
+        AddCurrentTurnEffect("1885628519", $currentPlayer, $from, $ally->UniqueID());
+      } else if($abilityName == "Snipe") {
+        $currentPower = $ally->CurrentPower();
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:arena=Ground", 1);
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a ground unit to deal " . $currentPower . " damage to", 1);
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE," . $currentPower, 1);
+      }
+      break;
     default: break;
   }
 }

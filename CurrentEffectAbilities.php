@@ -109,6 +109,7 @@ function EffectAttackModifier($cardID)
     case "1939951561": return $subparam;//Attack Pattern Delta
     case "8988732248": return 1;//Rebel Assault
     case "7109944284": return -1* $subparam;//Luke Skywalker
+    case "1885628519": return 1;//Crosshair
     default: return 0;
   }
 }
