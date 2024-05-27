@@ -855,6 +855,14 @@ function SpecificAllyAttackAbilities($attackID)
         AddCurrentTurnEffect("5464125379", $defPlayer, from:"PLAY");
       }
       break;
+    case "8190373087"://Gentle Giant
+      $power = $attackerAlly->CurrentPower();
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
+      AddDecisionQueue("MZFILTER", $mainPlayer, "index=MYALLY-" . $attackerAlly->Index());
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to heal " . $power);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "HEALALLY," . $power, 1);
+      break;
     default: break;
   }
 }
