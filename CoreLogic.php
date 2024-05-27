@@ -3507,6 +3507,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       AddDecisionQueue("ALLRANDOMBOTTOM", $currentPlayer, "DECK");
       break;
+    case "2288926269"://Privateer Crew
+      if($from == "RESOURCES") {
+        for($i=0; $i<3; ++$i) $playAlly->Attach("2007868442");//Experience token
+      }
+      break;
     default: break;
   }
 }

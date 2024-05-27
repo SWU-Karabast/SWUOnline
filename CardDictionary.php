@@ -1237,6 +1237,7 @@ function SmuggleCost($cardID, $player="", $index="")
     case "1982478444": return 7;//Vigilant Pursuit Craft
     case "0866321455": return 3;//Smuggler's Aid
     case "6037778228": return 5;//Night Owl Skirmisher
+    case "2288926269": return 6;//Privateer Crew
     default: return -1;
   }
 }
