@@ -273,6 +273,7 @@ function HasOverwhelm($cardID, $player, $index)
     case "4631297392":
     case "6432884726":
     case "5557494276"://Death Watch Loyalist
+    case "2470093702"://Wrecker
       return true;
     case "4619930426"://First Legion Snowtrooper
       $target = GetAttackTarget();

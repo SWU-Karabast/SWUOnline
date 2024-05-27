@@ -3512,6 +3512,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         for($i=0; $i<3; ++$i) $playAlly->Attach("2007868442");//Experience token
       }
       break;
+    case "2470093702"://Wrecker
+      MZChooseAndDestroy($currentPlayer, "MYRESOURCES", may:true, context:"Choose a resource to destroy");
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:arena=Ground&THEIRALLY:arena=Ground", 1);
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a ground unit to deal 5 damage to", 1);
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,5", 1);
+      break;
     default: break;
   }
 }
