@@ -624,39 +624,31 @@
               location.replace('GameLobby.php?gameName=<?php echo ($gameName); ?>&playerID=<?php echo ($playerID); ?>&authKey=<?php echo ($authKey); ?>');
             } else if (parseInt(this.responseText) != 0) {
               HideCardDetail();
-              var responseArr = this.responseText.split("ENDTIMESTAMP");
-              document.getElementById("mainDiv").innerHTML = responseArr[1];
+              var responseArr = this.responseText.split("GSDELIM");
               var update = parseInt(responseArr[0]);
               if (update != "NaN") CheckReloadNeeded(update);
               if(update < _lastUpdate) return;
+              //An update was received, begin processing it
               _lastUpdate = update;
 
-              var readyIcon = document.getElementById("iconHolder").innerText;
-              document.getElementById("icon").href = "./Images/" + readyIcon;
-              var log = document.getElementById('gamelog');
-              if (log !== null) log.scrollTop = log.scrollHeight;
-              if (readyIcon == "ready.png") {
-                try {
-                  var audio = document.getElementById('yourTurnSound');
-                  <?php if (!IsMuted($playerID)) echo ("audio.play();");
-                  ?>
-                } catch (e) {
-
+              //Handle events; they may need a delay in the card rendering
+              var events = responseArr[1];
+              var eventsArr = events.split("~");
+              if(eventsArr.length > 0) {
+                var popup = document.getElementById("CHOOSEMULTIZONE");
+                if(!popup) popup = document.getElementById("MAYCHOOSEMULTIZONE");
+                if(popup) popup.style.display = "none";
+                setTimeout(RenderUpdate, 500, responseArr[2]);
+                for(var i=0; i<eventsArr.length; i+=2) {
+                  var eventType = eventsArr[i];//DAMAGE
+                  var eventArr = eventsArr[i+1].split("!");
+                  //Now do the animation
+                  var element = document.getElementById("unique-" + eventArr[0]);
+                  element.innerHTML += "<div style='position:absolute; font-size:36px; top:0px; left:0px; width:100%; height:100%; background-color:rgba(255,0,0,0.5); z-index:1000;'>-" + eventArr[1] + "</div>";
+                  
                 }
               }
-              PopulateZone("myHand", cardSize);
-              PopulateZone("theirHand", cardSize);
-              PopulateZone("myChar", cardSize);
-              PopulateZone("theirChar", cardSize);
-              var sidebarWrapper = document.getElementById("sidebarWrapper");
-              if(sidebarWrapper)
-              {
-                var sidebarWrapperWidth = sidebarWrapper.style.width;
-                var chatbox = document.getElementById("chatbox");
-                if(chatbox) chatbox.style.width = (parseInt(sidebarWrapperWidth)-10) + "px";
-                var chatText = document.getElementById("chatText");
-                if(chatText) chatText.style.width = (parseInt(sidebarWrapperWidth)-100) + "px";
-              }
+              else RenderUpdate(responseArr[2]);
             } else {
               CheckReloadNeeded(lastUpdate);
             }
@@ -668,6 +660,41 @@
         if (lastUpdate == "NaN") window.location.replace("https://www.karabast.net/game/MainMenu.php");
         else xmlhttp.open("GET", "GetNextTurn2.php?gameName=<?php echo ($gameName); ?>&playerID=<?php echo ($playerID); ?>&lastUpdate=" + lastUpdate + lastCurrentPlayer + "&authKey=<?php echo ($authKey); ?>" + dimensions, true);
         xmlhttp.send();
+      }
+
+      function RenderUpdate(updatedHTML) {
+        //Update the main div
+        document.getElementById("mainDiv").innerHTML = updatedHTML;
+
+        //Update the icon, game log, and play ready sound if needed
+        var readyIcon = document.getElementById("iconHolder").innerText;
+        document.getElementById("icon").href = "./Images/" + readyIcon;
+        var log = document.getElementById('gamelog');
+        if(log !== null) log.scrollTop = log.scrollHeight;
+        if(readyIcon == "ready.png") {
+          try {
+            var audio = document.getElementById('yourTurnSound');
+            <?php if (!IsMuted($playerID)) echo ("audio.play();");
+             ?>
+          } catch (e) {
+
+          }
+        }
+
+        //Now begin populating the cards
+        PopulateZone("myHand", cardSize);
+        PopulateZone("theirHand", cardSize);
+        PopulateZone("myChar", cardSize);
+        PopulateZone("theirChar", cardSize);
+        var sidebarWrapper = document.getElementById("sidebarWrapper");
+        if(sidebarWrapper)
+        {
+          var sidebarWrapperWidth = sidebarWrapper.style.width;
+          var chatbox = document.getElementById("chatbox");
+          if(chatbox) chatbox.style.width = (parseInt(sidebarWrapperWidth)-10) + "px";
+          var chatText = document.getElementById("chatText");
+          if(chatText) chatText.style.width = (parseInt(sidebarWrapperWidth)-100) + "px";
+        }
       }
 
       function chkSubmit(mode, count) {
