@@ -633,19 +633,23 @@
 
               //Handle events; they may need a delay in the card rendering
               var events = responseArr[1];
-              var eventsArr = events.split("~");
-              if(eventsArr.length > 0) {
-                var popup = document.getElementById("CHOOSEMULTIZONE");
-                if(!popup) popup = document.getElementById("MAYCHOOSEMULTIZONE");
-                if(popup) popup.style.display = "none";
-                setTimeout(RenderUpdate, 500, responseArr[2]);
-                for(var i=0; i<eventsArr.length; i+=2) {
-                  var eventType = eventsArr[i];//DAMAGE
-                  var eventArr = eventsArr[i+1].split("!");
-                  //Now do the animation
-                  var element = document.getElementById("unique-" + eventArr[0]);
-                  element.innerHTML += "<div style='position:absolute; text-align:center; font-size:36px; top:0px; left:0px; width:100%; height:100%; background-color:rgba(255,0,0,0.5); z-index:1000;'><div style='padding: 25px 0; width:100%; height:100%:'>-" + eventArr[1] + "</div></div>";
-                  
+              if(<?php echo(AreAnimationsDisabled($playerID) ? 'false' : 'events != ""'); ?>) {
+                var eventsArr = events.split("~");
+                if(eventsArr.length > 0) {
+                  var popup = document.getElementById("CHOOSEMULTIZONE");
+                  if(!popup) popup = document.getElementById("MAYCHOOSEMULTIZONE");
+                  if(popup) popup.style.display = "none";
+                  setTimeout(RenderUpdate, 500, responseArr[2]);
+                  for(var i=0; i<eventsArr.length; i+=2) {
+                    var eventType = eventsArr[i];//DAMAGE
+                    if(eventType == "DAMAGE") {
+                      var eventArr = eventsArr[i+1].split("!");
+                      //Now do the animation
+                      var element = document.getElementById("unique-" + eventArr[0]);
+                      element.innerHTML += "<div style='position:absolute; text-align:center; font-size:36px; top:0px; left:0px; width:100%; height:100%; background-color:rgba(255,0,0,0.5); z-index:1000;'><div style='padding: 25px 0; width:100%; height:100%:'>-" + eventArr[1] + "</div></div>";
+                    }
+                    
+                  }
                 }
               }
               else RenderUpdate(responseArr[2]);
