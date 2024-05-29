@@ -968,21 +968,18 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     if ($i > 0 && $inGameStatus == "0") continue;
     $atkCounters = 0;
     $counters = 0;
+    $epicActionUsed = 0;
+    $overlay = $theirCharacter[$i + 1] != 2 ? 1 : 0;
     $type = CardType($theirCharacter[$i]);
     $sType = CardSubType($theirCharacter[$i]);
-    if ($type == "W") {
-      ++$numWeapons;
-      if ($numWeapons > 1) {
-        $type = "E";
-        $sType = "Off-Hand";
-      }
+    if ($type == "W") { //Base
+      $epicActionUsed = $theirCharacter[$i + 1] == 0 ? 1 : 0;
+      $overlay = 0;
+    } else if ($type == "C") {
+      $epicActionUsed = $theirCharacter[$i + 2] > 0 ? 1 : 0;
     }
-    if (CardType($theirCharacter[$i]) == "W") $atkCounters = $theirCharacter[$i + 3];
-    if ($theirCharacter[$i + 2] > 0) $counters = $theirCharacter[$i + 2];
-    else $counters = GetClassState($otherPlayer, $CS_PreparationCounters);
-    $counters = $theirCharacter[$i + 1] != 0 ? $counters : 0;
     if ($characterContents != "") $characterContents .= "|";
-    $characterContents .= ClientRenderedCard(cardNumber: $theirCharacter[$i], overlay: ($theirCharacter[$i + 1] != 2 ? 1 : 0), counters: $counters, defCounters: 0, atkCounters: $atkCounters, controller: $otherPlayer, type: $type, sType: $sType, isFrozen: ($theirCharacter[$i + 8] == 1), onChain: ($theirCharacter[$i + 6] == 1), isBroken: ($theirCharacter[$i + 1] == 0), rotate:0, landscape:1);
+    $characterContents .= ClientRenderedCard(cardNumber: $theirCharacter[$i], overlay: $overlay, counters: $counters, defCounters: 0, atkCounters: $atkCounters, controller: $otherPlayer, type: $type, sType: $sType, isFrozen: ($theirCharacter[$i + 8] == 1), onChain: ($theirCharacter[$i + 6] == 1), isBroken: ($theirCharacter[$i + 1] == 0), rotate:0, landscape:1, epicActionUsed: $epicActionUsed);
 
   }
   echo ($characterContents);
@@ -1135,27 +1132,21 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     $restriction = "";
     $counters = 0;
     $atkCounters = 0;
-    if (CardType($myCharacter[$i]) == "W") $atkCounters = $myCharacter[$i + 3];
-    if ($myCharacter[$i + 2] > 0) $counters = $myCharacter[$i + 2];
-    else $counters = GetClassState($playerID, $CS_PreparationCounters);
-    $playable = $playerID == $currentPlayer && IsPlayable($myCharacter[$i], $turn[0], "CHAR", $i, $restriction);
+    $epicActionUsed = 0;
+    $overlay = $myCharacter[$i + 1] != 2 ? 1 : 0;
+    $playable = $playerID == $currentPlayer && IsPlayable($myCharacter[$i], $turn[0], "CHAR", $i, $restriction) && $myCharacter[$i + 1] == 2;
     $border = CardBorderColor($myCharacter[$i], "CHAR", $playable);
     $type = CardType($myCharacter[$i]);
     $sType = CardSubType($myCharacter[$i]);
-    if ($type == "W") {
-      ++$numWeapons;
-      if ($numWeapons > 1) {
-        $type = "E";
-        $sType = "Off-Hand";
-      }
+    if ($type == "W") { //Base
+      $epicActionUsed = $myCharacter[$i + 1] == 0 ? 1 : 0;
+      $overlay = 0;
+    } else if ($type == "C") {
+      $epicActionUsed = $myCharacter[$i + 2] > 0 ? 1 : 0;
     }
     if ($myCharData != "") $myCharData .= "|";
-    $gem = 0;
-    if ($myCharacter[$i + 9] != 2 && $myCharacter[$i + 1] != 0 && $playerID != 3) {
-      $gem = ($myCharacter[$i + 9] == 1 ? 1 : 2);
-    }
     $restriction = implode("_", explode(" ", $restriction));
-    $myCharData .= ClientRenderedCard($myCharacter[$i], $currentPlayer == $playerID && $playable ? 3 : 0, $myCharacter[$i + 1] != 2 ? 1 : 0, $border, $myCharacter[$i + 1] != 0 ? $counters : 0, strval($i), 0, 0, $atkCounters, $playerID, $type, $sType, $restriction, $myCharacter[$i + 1] == 0, $myCharacter[$i + 6] == 1, $myCharacter[$i + 8] == 1, $gem, rotate:0, landscape:1);
+    $myCharData .= ClientRenderedCard($myCharacter[$i], $currentPlayer == $playerID && $playable ? 3 : 0, $overlay, $border, $myCharacter[$i + 1] != 0 ? $counters : 0, strval($i), 0, 0, $atkCounters, $playerID, $type, $sType, $restriction, $myCharacter[$i + 1] == 0, $myCharacter[$i + 6] == 1, $myCharacter[$i + 8] == 1, 0, rotate:0, landscape:1, epicActionUsed:$epicActionUsed);
   }
   echo ("<div id='myChar' style='display:none;'>");
   echo ($myCharData);
