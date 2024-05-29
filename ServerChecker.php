@@ -32,7 +32,7 @@ else if (isset($_SESSION["useruid"]))
 $canSeeQueue = isset($_SESSION["useruid"]);
 
 echo ("<div class='SpectatorContainer'>");
-echo ("<h1 style='width:100%; text-align:center;'>Public Games</h1>");
+echo ("<h2>Public Games</h2>");
 $gameInProgressCount = 0;
 if ($handle = opendir($path)) {
   while (false !== ($folder = readdir($handle))) {

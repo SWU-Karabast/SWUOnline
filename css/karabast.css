@@ -7,6 +7,7 @@ body {
   background-position: center; 
   background-image: url('../Images/gamebg.jpg');
   max-width: 100% !important;
+  height: 100%;
   padding: 0 !important;
   margin: 0px;
 }
@@ -18,15 +19,13 @@ h1, h2, h3, h4, h5, h6, p, a, b, ul, ol, dl, dd, form, details, blockquote, tabl
 }
 
 button, input, select, textarea {
-  margin: 0;
   padding: 10px 15px;
   background: #3b4252;
   border: 0;
   border-radius: 5px;
   line-height: 1.125;
   font-size: 16px;
-  color: #fff;
-  
+  width: 100%;
 }
 
 button, .GameLobby_Button {
@@ -37,45 +36,58 @@ button, .GameLobby_Button {
   border: 0;
   cursor: pointer;
   transition: opacity .25s;
-  
   font-weight: 600;
 }
 
-#mainpanel {
-  font-family: barlow !important;
-  color: white !important;
-}
-
-#gamelog {
-  position: static !important;
-  width: 100% !important;
-  font-weight: 400 !important;
-  height: 300px;
+input, select {
+  margin-top: 10px;
 }
 
 h1 {
-font-size: 28px;
-font-weight: 800;
-text-transform: uppercase;
-margin-top: 3px;
+  font-size: 28px;
+  font-weight: 800;
+  text-transform: uppercase;
 }
 
 h2 {
-font-size: 24px;
-font-weight: 700;
-margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 20px;
 }
 
 h3 {
-font-size: 18px;
-font-weight: 700;
-margin-bottom: 15px;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 15px;
 }
 
 h4 {
-font-size: 16px;
-font-weight: 400;
-margin-bottom: 15px;
+  font-size: 16px;
+  font-weight: 400;
+  margin-bottom: 15px;
+}
+
+p {
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 130%;
+  margin-bottom: 15px;
+}
+
+p:last-child { 
+  margin-bottom: 0; 
+}
+
+b {
+  font-weight: 600;
+}
+
+.section-box{
+  display: block;
+  background-color: rgb(0, 0, 0, 40%);
+  backdrop-filter: blur(20px);
+  border-radius: 10px;
+  padding: 20px;
 }
 
 /* Disclaimer */
@@ -92,68 +104,193 @@ margin-bottom: 15px;
   text-align: center;
 }
 
-
-
 /* HOME */
 
-/* Legacy */
+/* Header */
 
-li {
+.home-header {
+  height: 276px;
+  padding: 20px 0 20px 40px;
+  position: relative;
+}
+
+.home-header h1 {
+  font-size: 50px;
+  font-weight: 400;
+  margin-bottom: 5px;
+}
+
+.home-header h3 {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 130%;
+}
+
+.home-wrapper {
+  margin-top: -136px;
+  height: calc(100% - 270px);
+  display: flex;
+  flex-direction: column;
+}
+
+.home-banner {
+  width: calc(100% - 240px);
+  min-width: 400px;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: -1;
+  mask: linear-gradient(to bottom, 
+      rgba(0,0,0, 1) 0,   rgba(0,0,0, 1) 50%, 
+      rgba(0,0,0, 0) 100%, rgba(0,0,0, 0) 0
+  ) 100% 50% / 100% 100% repeat-x;
+  display: flex;
+  flex-direction: row;
+}
+
+.banner {
+  background-size: cover;
+  background-position: center;
+  clip-path: polygon(150px 0, 100% 0, calc(100% - 276px) 500px, 0% 276px);
+  flex: 1;
+}
+
+.block-1 {
+  background-image: url('../Images/leia-sor.jpg');
+  margin-right: -152px;
+}
+
+.block-2 {
+  background-image: url('../Images/boba-shd.jpg');
+}
+
+.block-3 {
+  background-image: url('../Images/kylo-sor.jpg');
+  margin-left: -152px;
+}
+
+.block-4 {
+  background-image: url('../Images/luke-sor.jpg');
+  margin-left: -152px;
+}
+
+@media screen and (max-width: 1600px) { .block-4 { display: none; } }
+@media screen and (max-width: 1200px) { .block-3 { display: none; } .block-2 { margin-left: -2px; } }
+@media screen and (max-width: 800px)  { .block-2 { display: none; } .block-1 { margin-right: 0 !important; } }
+
+/* Nav Bar */
+
+ul, li, .nav-bar {
   display: flex;
 }
 
 ul {
-  display: flex;
-  margin: 0px;
+  margin: 0;
   column-gap: 15px;
-  align-items: center;
+  padding: 0;
 }
 
-.ContentWindow {
-  background-color: rgb(0, 0, 0, 40%);
-  backdrop-filter: blur(20px);
-  border-radius: 10px;
-  padding: 20px;
+.nav-bar {
   position: absolute;
+  right: 0px;
+  top: 10px;  
+  font-size: 18px;
+  font-weight: 600;
+  z-index: 20;
 }
 
-.NavBarDiv {
-  font-size: 1.5rem;
-  position: fixed;
-  left: 0px;
-  top: 0px;
-  height: 45px;
-  width: 100%;
-  z-index: 100;
+.nav-bar a {
+  text-decoration: none; 
+}
+
+.nav-bar-user, .nav-bar-links {
   background-color: rgb(0, 0, 0, 40%);
   backdrop-filter: blur(20px);
-  display: flex;
-  justify-content: space-between;
+  padding: 10px 20px;
+  
 }
 
-.NavBarDiv ul {
-  padding-left: 2rem;
-  padding-right: 2rem;
-  column-gap: 10px;
+.nav-bar-links {
+  border-radius: 50px 0 0 50px;
 }
 
-.NavBarDiv img {
+.nav-bar-user {
+margin: 0 20px 0 0;
+border-radius: 50px;
+}
+
+.nav-bar img {
   width: 25px;
   height: 25px;
 }
 
-.NavBarItem {
-  font-size: 18px;
-  font-weight: 600;
+/* Game Browser */
+
+.home-wrapper {
+  margin-top: -136px;
+  height: calc(100% - 230px);
+  display: flex;
+  flex-direction: row;
+  flex: 1;
 }
 
-.NavBarItemDivider {
-  font-size: 14px;
-  font-weight: 600;
-  height: 27px;
+.game-browser { 
+  margin-left: 20px;
+  flex: 1;
 }
+
+.karabast-column {
+  position: relative;
+  height: 100%;
+  margin: 0 20px;
+  float: left;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.karabast-overview { 
+  background: rgba(24, 50, 81, 0.60);
+}
+
+.karabast-news { 
+  height: 100%;
+  margin-top: 20px;
+}
+
+/* Create Game */
+
+.create-game-wrapper { 
+  margin-left: 20px;
+  flex: 1;
+}
+
+.SelectDeckInput { 
+  width: auto;
+  margin: 0 5px 20px 0;
+}
+
+.login-message {
+  margin: 25px 0 10px;
+  font-size: 16px;
+}
+
 
 /* GAME LOBBY */
+
+#mainpanel {
+  font-family: barlow !important;
+  color: white !important;
+}
+
+#gamelog {
+  position: static !important;
+  width: 100% !important;
+  font-weight: 400 !important;
+  height: 300px;
+}
 
 /* Header */
 
@@ -165,6 +302,7 @@ ul {
 .lobby-header h1 {
   float: left;
   padding-left: 20px;
+  margin-top: 3px;
 }
 
 .lobby-header a {

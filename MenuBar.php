@@ -36,34 +36,34 @@ $isMobile = IsMobile();
 
 <body>
 
-  <div style='width: 100%'>
-    <nav class='NavBarDiv'>
-      <ul>
-        <?php
-        if (!$isMobile)
-          echo '<li><a target="_blank" href="https://discord.gg/hKRaqHND4v"><img src="./Images/icons/discord.svg"></img></a></li>';
-        echo '<li><a target="_blank" href="https://github.com/OotTheMonk/SWUOnline"><img src="./Images/icons/github.svg"></img></a></li>';
-        ?>
-        <li><a target="_blank" href="https://www.patreon.com/OotTheMonk"><img
-              src="./Images/icons/patreon.svg"></img></a></li>
-      </ul>
-
+  <div class='nav-bar'>
+    
+    <div class='nav-bar-user'>
       <ul class='rightnav'>
-        <li><a href="MainMenu.php" class="NavBarItem">Home Page</a></li>
-        <span class="NavBarItemDivider">⟡</span>
         <?php //if($isPatron) echo "<li><a href='Replays.php'>Replays[BETA]</a></li>";
         ?>
         <?php
         if (isset($_SESSION["useruid"])) {
           echo "<li><a href='ProfilePage.php' class='NavBarItem'>Profile</a></li>";
-          echo "<span class='NavBarItemDivider'>⟡</span>";
-          echo "<li><a href='./AccountFiles/LogoutUser.php' class='NavBarItem'>Logout</a></li>";
+          echo "<li><a href='./AccountFiles/LogoutUser.php' class='NavBarItem'>Log Out</a></li>";
         } else {
-          echo "<li><a href='Signup.php' class='NavBarItem'>Sign up</a></li>";
-          echo "<span class='NavBarItemDivider'>⟡</span>";
-          echo "<li><a href='./LoginPage.php' class='NavBarItem'>Log in</a></li>";
+          echo "<li><a href='Signup.php' class='NavBarItem'>Sign Up</a></li>";
+          echo "<li><a href='./LoginPage.php' class='NavBarItem'>Log In</a></li>";
         }
         ?>
       </ul>
-    </nav>
+    </div>
+    
+    <div class='nav-bar-links'>
+      <ul>
+          <?php
+          if (!$isMobile)
+            echo '<li><a target="_blank" href="https://discord.gg/hKRaqHND4v"><img src="./Images/icons/discord.svg"></img></a></li>';
+          echo '<li><a target="_blank" href="https://github.com/OotTheMonk/SWUOnline"><img src="./Images/icons/github.svg"></img></a></li>';
+          ?>
+          <li><a target="_blank" href="https://www.patreon.com/OotTheMonk"><img
+                src="./Images/icons/patreon.svg"></img></a></li>
+      </ul>
+    </div>
+
   </div>
