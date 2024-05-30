@@ -214,8 +214,11 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
 
   echo '<style>
     #theirHand span a {
-      border: 1px solid rgb(69, 69, 69);
       border-radius: 8px;
+    }
+
+    #theirHand {
+      margin-top: 10px;
     }
 
     .base-my-dmg {
@@ -261,8 +264,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
 
     .spaceAlliesContainer .cardImage, .groundAlliesContainer .cardImage,
     .spaceEnemiesContainer .cardImage, .groundEnemiesContainer .cardImage {
-      box-shadow: 0 10px 15px 0px rgb(0, 0, 0, 0.5);
-      border: none;
+      filter: drop-shadow(2px 2px 6px rgb(0, 0, 0, 0.3));
     }
 
     .cardContainer.exhausted {
