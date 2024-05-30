@@ -1,5 +1,12 @@
   <head>
 
+    <style>
+      @keyframes move {
+        from {margin-top: 0px;}
+        to {margin-top: -50px;}
+      }
+    </style>
+
     <?php
 
     include 'Libraries/HTTPLibraries.php';
@@ -316,6 +323,7 @@
         var newHTML = "";
         for (var i = 0; i < zoneArr.length; ++i) {
           cardArr = zoneArr[i].split(" ");
+          var id = "-";
           var positionStyle = "relative";
           var type = cardArr[10];
           var substype = cardArr[11];
@@ -325,13 +333,16 @@
               var charLeft = GetCharacterLeft(type, substype);
               var charBottom = GetCharacterBottom(type, substype);
               positionStyle = "fixed; left:" + charLeft + "; bottom:" + charBottom;
+              var id = type == "W" ? "P<?php echo ($playerID); ?>BASE" : "P<?php echo ($playerID); ?>LEADER";
             } else if (zone == "theirChar") {
               var charLeft = GetCharacterLeft(type, substype);
               var charTop = GetCharacterTop(type, substype);
               positionStyle = "fixed; left:" + charLeft + "; top:" + charTop;
+              var id = type == "W" ? "P<?php echo ($playerID == 1 ? 2 : 1); ?>BASE" : "P<?php echo ($playerID == 1 ? 2 : 1); ?>LEADER";
             }
           }
-          newHTML += "<span style='position:" + positionStyle + "; margin:1px;'>";
+          if(id != "-") newHTML += "<span id='" + id + "' style='position:" + positionStyle + "; margin:1px;'>";
+          else newHTML += "<span style='position:" + positionStyle + "; margin:1px;'>";
           if (type == "C") {
             folder = "WebpImages2";
             var mySoulCountEl = document.getElementById("mySoulCount");
@@ -645,8 +656,10 @@
                     if(eventType == "DAMAGE") {
                       var eventArr = eventsArr[i+1].split("!");
                       //Now do the animation
-                      var element = document.getElementById("unique-" + eventArr[0]);
-                      element.innerHTML += "<div style='position:absolute; text-align:center; font-size:36px; top:0px; left:0px; width:100%; height:100%; background-color:rgba(255,0,0,0.5); z-index:1000;'><div style='padding: 25px 0; width:100%; height:100%:'>-" + eventArr[1] + "</div></div>";
+                      if(eventArr[0] == "P1BASE" || eventArr[0] == "P2BASE") var element = document.getElementById(eventArr[0]);
+                      else var element = document.getElementById("unique-" + eventArr[0]);
+                      element.innerHTML += "<div style='position:absolute; text-align:center; font-size:36px; top:0px; left:0px; width:100%; height:100%; background-color:rgba(255,0,0,0.5); z-index:1000;'><div style='padding: 25px 0; width:100%; height:100%:'></div></div>";
+                      element.innerHTML += "<div style='position:absolute; text-align:center; animation-name: move; animation-duration: 0.6s; font-size:36px; top:0px; left:0px; width:100%; height:100%; background-color:rgba(0,0,0,0); z-index:1000;'><div style='padding: 25px 0; width:100%; height:100%:'>-" + eventArr[1] + "</div></div>";
                     }
                     
                   }

@@ -612,6 +612,7 @@ function PlayerLoseHealth($player, $amount)
   $char = &GetPlayerCharacter($player);
   if(count($char) == 0) return;
   $health += $amount;
+  AddEvent("DAMAGE", "P" . $player . "BASE!" . $amount);
   if(PlayerRemainingHealth($player) <= 0)
   {
     PlayerWon(($player == 1 ? 2 : 1));
@@ -1319,7 +1320,7 @@ function RevealCards($cards, $player="", $from="HAND")
   {
     if($string != "") $string .= ", ";
     $string .= CardLink($cardArray[$i], $cardArray[$i]);
-    AddEvent("REVEAL", $cardArray[$i]);
+    //AddEvent("REVEAL", $cardArray[$i]);
     OnRevealEffect($player, $cardArray[$i], $from, $i);
   }
   $string .= (count($cardArray) == 1 ? " is" : " are");
