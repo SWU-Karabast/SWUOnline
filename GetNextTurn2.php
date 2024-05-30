@@ -2,15 +2,17 @@
 
 include 'Libraries/HTTPLibraries.php';
 
+$returnDelim = "GSDELIM";
+
 //We should always have a player ID as a URL parameter
 $gameName = $_GET["gameName"];
 if (!IsGameNameValid($gameName)) {
-  echo ("NaNENDTIMESTAMP");
+  echo ("NaN" . $returnDelim);
   exit;
 }
 $playerID = TryGet("playerID", 3);
 if (!is_numeric($playerID)) {
-  echo ("NaNENDTIMESTAMP");
+  echo ("NaN" . $returnDelim);
   exit;
 }
 
@@ -154,12 +156,13 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
 
   $targetAuth = ($playerID == 1 ? $p1Key : $p2Key);
   if ($playerID != 3 && $authKey != $targetAuth) {
-    echo ("999999ENDTIMESTAMP");
+    echo ("999999" . $returnDelim);
     exit;
   }
 
-  echo ($cacheVal . "ENDTIMESTAMP");
-
+  echo($cacheVal . $returnDelim);
+  echo(implode("~", $events) . $returnDelim);
+  
   if ($currentPlayer == $playerID) {
     $icon = "ready.png";
     $readyText = "You are the player with priority.";
@@ -941,8 +944,8 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       );
       $cardArena = CardArenas($theirAllies[$i]);
       //Their Unit Spacing
-      if($cardArena == "Ground") $cardText = '<div class="cardContainer ' . ($theirAllies[$i + 1] != 2 ? 'exhausted' : '') . '">';
-      else $cardText = '<div class="cardContainer ' . ($theirAllies[$i + 1] != 2 ? 'exhausted' : '') . '">';
+      if($cardArena == "Ground") $cardText = '<div id="unique-' . $theirAllies[$i+5] . '" class="cardContainer ' . ($theirAllies[$i + 1] != 2 ? 'exhausted' : '') . '">';
+      else $cardText = '<div id="unique-' . $theirAllies[$i+5] . '" class="cardContainer ' . ($theirAllies[$i + 1] != 2 ? 'exhausted' : '') . '">';
       //card render their units
       $cardText .= (Card($theirAllies[$i], "concat", $cardSizeAura, $opts));
       $cardText .= ("</div>");
@@ -1099,8 +1102,8 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       );
       $cardArena = CardArenas($myAllies[$i]);
       //My Unit Spacing
-      if($cardArena == "Ground") $cardText = '<div class="cardContainer ' . ($myAllies[$i + 1] != 2 ? 'exhausted' : '') . '">';
-      else $cardText = '<div class="cardContainer ' . ($myAllies[$i + 1] != 2 ? 'exhausted' : '') . '">';
+      if($cardArena == "Ground") $cardText = '<div id="unique-' . $myAllies[$i+5] . '" class="cardContainer ' . ($myAllies[$i + 1] != 2 ? 'exhausted' : '') . '">';
+      else $cardText = '<div id="unique-' . $myAllies[$i+5] . '" class="cardContainer ' . ($myAllies[$i + 1] != 2 ? 'exhausted' : '') . '">';
       $cardText .= (Card($myAllies[$i], "concat", $cardSizeAura, $opts));
       $cardText .= ("</div>");
       if($cardArena == "Ground") $groundAllies .= $cardText;

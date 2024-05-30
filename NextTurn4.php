@@ -1,5 +1,12 @@
   <head>
 
+    <style>
+      @keyframes move {
+        from {margin-top: 0px;}
+        to {margin-top: -50px;}
+      }
+    </style>
+
     <?php
 
     include 'Libraries/HTTPLibraries.php';
@@ -316,6 +323,7 @@
         var newHTML = "";
         for (var i = 0; i < zoneArr.length; ++i) {
           cardArr = zoneArr[i].split(" ");
+          var id = "-";
           var positionStyle = "relative";
           var type = cardArr[10];
           var substype = cardArr[11];
@@ -325,13 +333,16 @@
               var charLeft = GetCharacterLeft(type, substype);
               var charBottom = GetCharacterBottom(type, substype);
               positionStyle = "fixed; left:" + charLeft + "; bottom:" + charBottom;
+              var id = type == "W" ? "P<?php echo ($playerID); ?>BASE" : "P<?php echo ($playerID); ?>LEADER";
             } else if (zone == "theirChar") {
               var charLeft = GetCharacterLeft(type, substype);
               var charTop = GetCharacterTop(type, substype);
               positionStyle = "fixed; left:" + charLeft + "; top:" + charTop;
+              var id = type == "W" ? "P<?php echo ($playerID == 1 ? 2 : 1); ?>BASE" : "P<?php echo ($playerID == 1 ? 2 : 1); ?>LEADER";
             }
           }
-          newHTML += "<span style='position:" + positionStyle + "; margin:1px;'>";
+          if(id != "-") newHTML += "<span id='" + id + "' style='position:" + positionStyle + "; margin:1px;'>";
+          else newHTML += "<span style='position:" + positionStyle + "; margin:1px;'>";
           if (type == "C") {
             folder = "WebpImages2";
             var mySoulCountEl = document.getElementById("mySoulCount");
@@ -624,39 +635,37 @@
               location.replace('GameLobby.php?gameName=<?php echo ($gameName); ?>&playerID=<?php echo ($playerID); ?>&authKey=<?php echo ($authKey); ?>');
             } else if (parseInt(this.responseText) != 0) {
               HideCardDetail();
-              var responseArr = this.responseText.split("ENDTIMESTAMP");
-              document.getElementById("mainDiv").innerHTML = responseArr[1];
+              var responseArr = this.responseText.split("GSDELIM");
               var update = parseInt(responseArr[0]);
               if (update != "NaN") CheckReloadNeeded(update);
               if(update < _lastUpdate) return;
+              //An update was received, begin processing it
               _lastUpdate = update;
 
-              var readyIcon = document.getElementById("iconHolder").innerText;
-              document.getElementById("icon").href = "./Images/" + readyIcon;
-              var log = document.getElementById('gamelog');
-              if (log !== null) log.scrollTop = log.scrollHeight;
-              if (readyIcon == "ready.png") {
-                try {
-                  var audio = document.getElementById('yourTurnSound');
-                  <?php if (!IsMuted($playerID)) echo ("audio.play();");
-                  ?>
-                } catch (e) {
-
+              //Handle events; they may need a delay in the card rendering
+              var events = responseArr[1];
+              if(<?php echo(AreAnimationsDisabled($playerID) ? 'false' : 'events != ""'); ?>) {
+                var eventsArr = events.split("~");
+                if(eventsArr.length > 0) {
+                  var popup = document.getElementById("CHOOSEMULTIZONE");
+                  if(!popup) popup = document.getElementById("MAYCHOOSEMULTIZONE");
+                  if(popup) popup.style.display = "none";
+                  setTimeout(RenderUpdate, 500, responseArr[2]);
+                  for(var i=0; i<eventsArr.length; i+=2) {
+                    var eventType = eventsArr[i];//DAMAGE
+                    if(eventType == "DAMAGE") {
+                      var eventArr = eventsArr[i+1].split("!");
+                      //Now do the animation
+                      if(eventArr[0] == "P1BASE" || eventArr[0] == "P2BASE") var element = document.getElementById(eventArr[0]);
+                      else var element = document.getElementById("unique-" + eventArr[0]);
+                      element.innerHTML += "<div style='position:absolute; text-align:center; font-size:36px; top:0px; left:0px; width:100%; height:100%; background-color:rgba(255,0,0,0.5); z-index:1000;'><div style='padding: 25px 0; width:100%; height:100%:'></div></div>";
+                      element.innerHTML += "<div style='position:absolute; text-align:center; animation-name: move; animation-duration: 0.6s; font-size:36px; top:0px; left:0px; width:100%; height:100%; background-color:rgba(0,0,0,0); z-index:1000;'><div style='padding: 25px 0; width:100%; height:100%:'>-" + eventArr[1] + "</div></div>";
+                    }
+                    
+                  }
                 }
               }
-              PopulateZone("myHand", cardSize);
-              PopulateZone("theirHand", cardSize);
-              PopulateZone("myChar", cardSize);
-              PopulateZone("theirChar", cardSize);
-              var sidebarWrapper = document.getElementById("sidebarWrapper");
-              if(sidebarWrapper)
-              {
-                var sidebarWrapperWidth = sidebarWrapper.style.width;
-                var chatbox = document.getElementById("chatbox");
-                if(chatbox) chatbox.style.width = (parseInt(sidebarWrapperWidth)-10) + "px";
-                var chatText = document.getElementById("chatText");
-                if(chatText) chatText.style.width = (parseInt(sidebarWrapperWidth)-100) + "px";
-              }
+              else RenderUpdate(responseArr[2]);
             } else {
               CheckReloadNeeded(lastUpdate);
             }
@@ -668,6 +677,41 @@
         if (lastUpdate == "NaN") window.location.replace("https://www.karabast.net/game/MainMenu.php");
         else xmlhttp.open("GET", "GetNextTurn2.php?gameName=<?php echo ($gameName); ?>&playerID=<?php echo ($playerID); ?>&lastUpdate=" + lastUpdate + lastCurrentPlayer + "&authKey=<?php echo ($authKey); ?>" + dimensions, true);
         xmlhttp.send();
+      }
+
+      function RenderUpdate(updatedHTML) {
+        //Update the main div
+        document.getElementById("mainDiv").innerHTML = updatedHTML;
+
+        //Update the icon, game log, and play ready sound if needed
+        var readyIcon = document.getElementById("iconHolder").innerText;
+        document.getElementById("icon").href = "./Images/" + readyIcon;
+        var log = document.getElementById('gamelog');
+        if(log !== null) log.scrollTop = log.scrollHeight;
+        if(readyIcon == "ready.png") {
+          try {
+            var audio = document.getElementById('yourTurnSound');
+            <?php if (!IsMuted($playerID)) echo ("audio.play();");
+             ?>
+          } catch (e) {
+
+          }
+        }
+
+        //Now begin populating the cards
+        PopulateZone("myHand", cardSize);
+        PopulateZone("theirHand", cardSize);
+        PopulateZone("myChar", cardSize);
+        PopulateZone("theirChar", cardSize);
+        var sidebarWrapper = document.getElementById("sidebarWrapper");
+        if(sidebarWrapper)
+        {
+          var sidebarWrapperWidth = sidebarWrapper.style.width;
+          var chatbox = document.getElementById("chatbox");
+          if(chatbox) chatbox.style.width = (parseInt(sidebarWrapperWidth)-10) + "px";
+          var chatText = document.getElementById("chatText");
+          if(chatText) chatText.style.width = (parseInt(sidebarWrapperWidth)-100) + "px";
+        }
       }
 
       function chkSubmit(mode, count) {
