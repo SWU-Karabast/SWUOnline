@@ -1175,7 +1175,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     }
     if ($myCharData != "") $myCharData .= "|";
     $restriction = implode("_", explode(" ", $restriction));
-    $myCharData .= ClientRenderedCard($myCharacter[$i], $action, $myCharacter[$i + 1] != 2 ? 1 : 0, $border, $myCharacter[$i + 1] != 0 ? $counters : 0, $actionDataOverride, 0, 0, $atkCounters, $playerID, $type, $sType, $restriction, $myCharacter[$i + 1] == 0, $myCharacter[$i + 6] == 1, $myCharacter[$i + 8] == 1, $gem, rotate:0, landscape:1, epicActionUsed:$epicActionUsed);
+    $myCharData .= ClientRenderedCard($myCharacter[$i], $action, $myCharacter[$i + 1] != 2 ? 1 : 0, $border, $myCharacter[$i + 1] != 0 ? $counters : 0, $actionDataOverride, 0, 0, $atkCounters, $playerID, $type, $sType, $restriction, $myCharacter[$i + 1] == 0, $myCharacter[$i + 6] == 1, $myCharacter[$i + 8] == 1, gem:0, rotate:0, landscape:1, epicActionUsed:$epicActionUsed);
   }
   echo ("<div id='myChar' style='display:none;'>");
   echo ($myCharData);
