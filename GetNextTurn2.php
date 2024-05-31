@@ -626,14 +626,18 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     echo CreatePopup("HANDTOPBOTTOM", [], 0, 1, "Choose " . TypeToPlay($turn[0]), 1, $content);
   }
 
+  $mzChooseFromPlay = false;
+  $optionsIndex = [];
   if(($turn[0] == "MAYCHOOSEMULTIZONE" || $turn[0] == "CHOOSEMULTIZONE") && $turn[1] == $playerID) {
     $content = "";
     $content .= "<div display:inline;'>";
     $options = explode(",", $turn[2]);
+    $mzChooseFromPlay = true;
     $otherPlayer = $playerID == 2 ? 1 : 2;
     $theirAllies = &GetAllies($otherPlayer);
     $myAllies = &GetAllies($playerID);
     for ($i = 0; $i < count($options); ++$i) {
+      array_push($optionsIndex, $options[$i]);
       $option = explode("-", $options[$i]);
       if ($option[0] == "MYAURAS") $source = $myAuras;
       else if ($option[0] == "THEIRAURAS") $source = $theirAuras;
@@ -666,34 +670,13 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       else if ($option[0] == "CC") $source = $combatChain;
       else if ($option[0] == "COMBATCHAINLINK") $source = $combatChain;
 
+      if($option[0] != "MYCHAR" && $option[0] != "THEIRCHAR" && $option[0] != "MYALLY" && $option[0] != "THEIRALLY") $mzChooseFromPlay = false;
+
       $counters = 0;
       $lifeCounters = 0;
       $enduranceCounters = 0;
       $atkCounters = 0;
-      /*
-      if (($option[0] == "MYALLY" || $option[0] == "THEIRALLY" || $option[0] == "THEIRAURAS") && $option[1] == $combatChainState[$CCS_WeaponIndex]) {
-        $counters = "Attacker";
-      }
 
-      if (count($layers) > 0) {
-        if ($option[0] == "THEIRALLY" && $layers[0] != "" && $mainPlayer != $currentPlayer) {
-          $index = SearchLayer($otherPlayer, subtype: "Ally");
-          if ($index != "") {
-            $params = explode("|", $layers[$index + 2]);
-            if ($option[1] == $params[2]) $counters = "Attacker";
-          }
-        }
-        if ($option[0] == "THEIRAURAS" && $layers[0] != "" && $mainPlayer != $currentPlayer) {
-          $index = SearchLayer($otherPlayer, subtype: "Aura");
-          if ($index != "") {
-            $params = explode("|", $layers[$index + 2]);
-            if ($option[1] == $params[2]) $counters = "Attacker";
-          }
-        }
-      }
-
-      if ($option[0] == "MYARS") $counters = "Arsenal";
-      */
       $index = intval($option[1]);
       $card = $source[$index];
       if ($option[0] == "LAYER" && (IsAbilityLayer($card))) $card = $source[$index + 2];
@@ -737,7 +720,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       $content .= Card($card, "concat", $cardSize, 16, 1, $overlay, $playerBorderColor, $counters, $options[$i], "", false, $lifeCounters, $enduranceCounters, $attackCounters, controller: $playerBorderColor);
     }
     $content .= "</div>";
-    echo CreatePopup("CHOOSEMULTIZONE", [], 0, 1, GetPhaseHelptext(), 1, $content);
+    if(!$mzChooseFromPlay) echo CreatePopup("CHOOSEMULTIZONE", [], 0, 1, GetPhaseHelptext(), 1, $content);
   }
 
   if (($turn[0] == "MAYCHOOSEDECK" || $turn[0] == "CHOOSEDECK") && $turn[1] == $playerID) {
@@ -931,8 +914,17 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   $groundAllies = "";
   if (count($theirAllies) > 0) {
     for ($i = 0; $i+AllyPieces()-1 < count($theirAllies); $i += AllyPieces()) {
-      $ally = new Ally("MYALLY-" . $i, $otherPlayer);
+      $mzIndex = "THEIRALLY-" . $i;
+      $inOptions = in_array($mzIndex, $optionsIndex);
+      $action = $mzChooseFromPlay && $inOptions ? 16 : 0;
+      $actionDataOverride = $mzChooseFromPlay && $inOptions ? $mzIndex : 0;
+      $border = CardBorderColor($theirAllies[$i], "ALLY", $action == 16 ? true : false);
+
+      $ally = new Ally($mzIndex, $otherPlayer);
       $opts = array(
+        'action' => $action,
+        'actionOverride' => $actionDataOverride,
+        'border' => $border,
         'currentHP' => $ally->Health(),
         'maxHP' => $ally->MaxHealth(),
         'enduranceCounters' => $theirAllies[$i + 6],
@@ -969,6 +961,11 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   $characterContents = "";
   for ($i = 0; $i < count($theirCharacter); $i += CharacterPieces()) {
     if ($i > 0 && $inGameStatus == "0") continue;
+    $mzIndex = "THEIRCHAR-" . $i;
+    $inOptions = in_array($mzIndex, $optionsIndex);
+    $action = $mzChooseFromPlay && $inOptions ? 16 : 0;
+    $actionDataOverride = $mzChooseFromPlay && $inOptions ? $mzIndex : 0;
+    $border = CardBorderColor($theirCharacter[$i], "CHAR", $action == 16 ? true : false);
     $atkCounters = 0;
     $counters = 0;
     $type = CardType($theirCharacter[$i]);
@@ -985,8 +982,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     else $counters = GetClassState($otherPlayer, $CS_PreparationCounters);
     $counters = $theirCharacter[$i + 1] != 0 ? $counters : 0;
     if ($characterContents != "") $characterContents .= "|";
-    $characterContents .= ClientRenderedCard(cardNumber: $theirCharacter[$i], overlay: ($theirCharacter[$i + 1] != 2 ? 1 : 0), counters: $counters, defCounters: 0, atkCounters: $atkCounters, controller: $otherPlayer, type: $type, sType: $sType, isFrozen: ($theirCharacter[$i + 8] == 1), onChain: ($theirCharacter[$i + 6] == 1), isBroken: ($theirCharacter[$i + 1] == 0), rotate:0, landscape:1);
-
+    $characterContents .= ClientRenderedCard(cardNumber: $theirCharacter[$i], action:$action, actionDataOverride:$actionDataOverride, borderColor:$border, overlay: ($theirCharacter[$i + 1] != 2 ? 1 : 0), counters: $counters, defCounters: 0, atkCounters: $atkCounters, controller: $otherPlayer, type: $type, sType: $sType, isFrozen: ($theirCharacter[$i + 8] == 1), onChain: ($theirCharacter[$i + 6] == 1), isBroken: ($theirCharacter[$i + 1] == 0), rotate:0, landscape:1);
   }
   echo ($characterContents);
 
@@ -1086,7 +1082,20 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     for ($i = 0; $i < count($myAllies); $i += AllyPieces()) {
       if($i > count($myAllies) - AllyPieces()) break;
       $ally = new Ally("MYALLY-" . $i, $playerID);
-      $playable = IsPlayable($myAllies[$i], $turn[0], "PLAY", $i, $restriction) && ($myAllies[$i + 1] == 2 || AllyPlayableExhausted($myAllies[$i]));
+
+      if($mzChooseFromPlay) {
+        $mzIndex = "MYALLY-" . $i;
+        $inOptions = in_array($mzIndex, $optionsIndex);
+        $action = $inOptions ? 16 : 0;
+        $actionDataOverride = $inOptions ? $mzIndex : 0;
+        $border = CardBorderColor($myAllies[$i], "PLAY", $action == 16 ? true : false);
+      } else {
+        $playable = IsPlayable($myAllies[$i], $turn[0], "PLAY", $i, $restriction) && ($myAllies[$i + 1] == 2 || AllyPlayableExhausted($myAllies[$i]));
+        $border = CardBorderColor($myAllies[$i], "PLAY", $playable);
+        $action = $currentPlayer == $playerID && $turn[0] != "P" && $playable ? 24 : 0;
+        $actionDataOverride = strval($i);
+      }
+      
       $opts = array(
         'currentHP' => $ally->Health(),
         'maxHP' => $ally->MaxHealth(),
@@ -1095,9 +1104,9 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         'subcards' => $myAllies[$i + 4] != "-" ? explode(",", $myAllies[$i + 4]) : [],
         'currentPower' => $ally->CurrentPower(),
         'hasSentinel' => HasSentinel($myAllies[$i], $playerID, $i),
-        'action' => $currentPlayer == $playerID && $turn[0] != "P" && $playable ? 24 : 0,
-        'actionOverride' => strval($i),
-        'border' => CardBorderColor($myAllies[$i], "PLAY", $playable),
+        'action' => $action,
+        'actionOverride' => $actionDataOverride,
+        'border' => $border,
         'overlay' => $myAllies[$i + 1] != 2 ? 1 : 0
       );
       $cardArena = CardArenas($myAllies[$i]);
@@ -1141,8 +1150,20 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     if (CardType($myCharacter[$i]) == "W") $atkCounters = $myCharacter[$i + 3];
     if ($myCharacter[$i + 2] > 0) $counters = $myCharacter[$i + 2];
     else $counters = GetClassState($playerID, $CS_PreparationCounters);
-    $playable = $playerID == $currentPlayer && IsPlayable($myCharacter[$i], $turn[0], "CHAR", $i, $restriction);
-    $border = CardBorderColor($myCharacter[$i], "CHAR", $playable);
+
+    if($mzChooseFromPlay) {
+      $mzIndex = "MYCHAR-" . $i;
+      $inOptions = in_array($mzIndex, $optionsIndex);
+      $action = $inOptions ? 16 : 0;
+      $actionDataOverride = $inOptions ? $mzIndex : 0;
+      $border = CardBorderColor($myCharacter[$i], "CHAR", $action == 16 ? true : false);
+    } else {
+      $playable = $playerID == $currentPlayer && IsPlayable($myCharacter[$i], $turn[0], "CHAR", $i, $restriction);
+      $border = CardBorderColor($myCharacter[$i], "CHAR", $playable);
+      $action = $currentPlayer == $playerID && $playable ? 3 : 0;
+      $actionDataOverride = strval($i);
+    }
+
     $type = CardType($myCharacter[$i]);
     $sType = CardSubType($myCharacter[$i]);
     if ($type == "W") {
@@ -1158,7 +1179,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       $gem = ($myCharacter[$i + 9] == 1 ? 1 : 2);
     }
     $restriction = implode("_", explode(" ", $restriction));
-    $myCharData .= ClientRenderedCard($myCharacter[$i], $currentPlayer == $playerID && $playable ? 3 : 0, $myCharacter[$i + 1] != 2 ? 1 : 0, $border, $myCharacter[$i + 1] != 0 ? $counters : 0, strval($i), 0, 0, $atkCounters, $playerID, $type, $sType, $restriction, $myCharacter[$i + 1] == 0, $myCharacter[$i + 6] == 1, $myCharacter[$i + 8] == 1, $gem, rotate:0, landscape:1);
+    $myCharData .= ClientRenderedCard($myCharacter[$i], $action, $myCharacter[$i + 1] != 2 ? 1 : 0, $border, $myCharacter[$i + 1] != 0 ? $counters : 0, $actionDataOverride, 0, 0, $atkCounters, $playerID, $type, $sType, $restriction, $myCharacter[$i + 1] == 0, $myCharacter[$i + 6] == 1, $myCharacter[$i + 8] == 1, $gem, rotate:0, landscape:1);
   }
   echo ("<div id='myChar' style='display:none;'>");
   echo ($myCharData);
