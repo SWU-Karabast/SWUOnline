@@ -48,10 +48,10 @@ function TextCounterColor($darkMode)
 //14 onChain = 1 if card is on combat chain (mostly for equipment)
 //15 isFrozen = 1 if frozen
 //16 shows gem = (0, 1, 2) (0 off, 1 active, 2 inactive)
-function ClientRenderedCard($cardNumber, $action = 0, $overlay = 0, $borderColor = 0, $counters = 0, $actionDataOverride = "-", $lifeCounters = 0, $defCounters = 0, $atkCounters = 0, $controller = 0, $type = "", $sType = "", $restriction = "", $isBroken = 0, $onChain = 0, $isFrozen = 0, $gem = 0, $rotate = 0, $landscape = 0)
+function ClientRenderedCard($cardNumber, $action = 0, $overlay = 0, $borderColor = 0, $counters = 0, $actionDataOverride = "-", $lifeCounters = 0, $defCounters = 0, $atkCounters = 0, $controller = 0, $type = "", $sType = "", $restriction = "", $isBroken = 0, $onChain = 0, $isFrozen = 0, $gem = 0, $rotate = 0, $landscape = 0, $epicActionUsed = 0)
 {
   $rv = $cardNumber . " " . $action . " " . $overlay . " " . $borderColor . " " . $counters . " " . $actionDataOverride . " " . $lifeCounters . " " . $defCounters . " " . $atkCounters . " ";
-  $rv .= $controller . " " . $type . " " . $sType . " " . $restriction . " " . $isBroken . " " . $onChain . " " . $isFrozen . " " . $gem . " " . $rotate . " " . $landscape;
+  $rv .= $controller . " " . $type . " " . $sType . " " . $restriction . " " . $isBroken . " " . $onChain . " " . $isFrozen . " " . $gem . " " . $rotate . " " . $landscape . " " . $epicActionUsed;
   return $rv;
 }
 
@@ -208,7 +208,7 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
   } else {
     $rv = "<a style='" . $margin . " position:relative; display:inline-block;" . ($action > 0 ? "cursor:pointer;" : "") . "'" . ($showHover > 0 ? " onmouseover='ShowCardDetail(event, this)' onmouseout='HideCardDetail()'" : "") . ($action > 0 ? " onclick='SubmitInput(\"" . $action . "\", \"&cardID=" . $actionData . "\");'" : "") . ">";
   }
-  if ($borderColor > 0) $margin = "margin-bottom:" . (7 + $subcardNum * 16) . "px; top: " . (1 + $subcardNum * 16) . "px;";
+  if ($borderColor > 0) $margin = "margin-bottom:" . (8 + $subcardNum * 16) . "px; top: " . (0 + $subcardNum * 16) . "px;";
   if ($borderColor != -1 && $from == "HASSUBCARD") $margin = "margin-bottom:" . (6 + $subcardNum * 16) . "px; top: " . ($subcardNum * 16) . "px;";
   if ($folder == "crops") $margin = "0px;";
   $rv = "<a style='" . $margin . " position:relative; display:inline-block;" . ($action > 0 ? "cursor:pointer;" : "") . "'" . ($showHover > 0 ? " onmouseover='ShowCardDetail(event, this)' onmouseout='HideCardDetail()'" : "") . ($action > 0 ? " onclick='SubmitInput(\"" . $action . "\", \"&cardID=" . $actionData . "\");'" : "") . ">";
@@ -216,7 +216,7 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
   if ($borderColor > 0) {
     $border = "border-radius:10px; border:2px solid " . BorderColorMap($borderColor) . ";";
   } else if ($folder == "concat" || $folder == "./concat" || $folder == "../concat") {
-    $border = "border-radius:8px;";
+    $border = "border-radius:10px; border:2px solid transparent;";
   } else {
     $border = "border: 1px solid transparent;";
   }
@@ -238,8 +238,8 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
   if ($controller != 0 && IsPatron($controller) && CardHasAltArt($cardNumber))
     $folderPath = "PatreonImages/" . $folderPath;
 
-  $rv .= "<img " . ($id != "" ? "id='" . $id . "-img' " : "") . "data-orientation='" . ($rotate ? "landscape' " : "portrait' ") . "class='cardImage'" . "style='{$border} height: {$height}; width: {$width}px; position:relative; border-radius:10px;' src='{$folderPath}/{$cardNumber}{$fileExt}' />";
-  $rv .= "<div " . ($id != "" ? "id='" . $id . "-ovr' " : "") . "class='overlay'" . "style='visibility:" . ($overlay == 1 ? "visible" : "hidden") . "; height: {$height}; width: {$width}px; top:0px; left:0px; position:absolute; background: rgba(0, 0, 0, 0.5); z-index: 1; border-radius: 8px;'></div>";
+  $rv .= "<img " . ($id != "" ? "id='" . $id . "-img' " : "") . "data-orientation='" . ($rotate ? "landscape' " : "portrait' ") . "class='cardImage'" . "style='{$border} height: {$height}px; width: {$width}px; position:relative; border-radius:10px;' src='{$folderPath}/{$cardNumber}{$fileExt}' />";
+  $rv .= "<div " . ($id != "" ? "id='" . $id . "-ovr' " : "") . "class='overlay'" . "style='visibility:" . ($overlay == 1 ? "visible" : "hidden") . "; height: {$height}px; width: {$width}px; top:2px; left:2px; position:absolute; background: rgba(0, 0, 0, 0.5); z-index: 1; border-radius: 8px;'></div>";
 
   // Counters Style
   $dynamicScaling = (function_exists("IsDynamicScalingEnabled") ? IsDynamicScalingEnabled($playerID) : false);
@@ -311,7 +311,7 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
   if (isset($opts) && isset($opts['hasSentinel']) && $opts['hasSentinel']) {
     $rv .= "<div style='margin: 0px;
     top: 42px; 
-    left: 87px;
+    left: 89px;
     margin-right: -50%;
     border-radius: 0%;
     width:" . $iconSize . "px;
@@ -344,9 +344,9 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
     position:absolute; 
     z-index: 1;
     background: linear-gradient(90deg, rgba(255, 0, 0, 0.00) 0%, rgba(255, 0, 0, 0.90) 50%, #F00 100%), linear-gradient(270deg, rgba(0, 0, 0, 0.90) 0%, rgba(0, 0, 0, 0.90) 45%, rgba(0, 0, 0, 0.00) 100%);
-    line-height: 1.2;
+    line-height: 30px;
     text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.60);
-    padding: 0 0 1px 0;
+    padding: 0 0 1px 4px;
     font-size: 24px; 
     font-weight:700; 
     color: #fff;
@@ -391,7 +391,8 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
     for ($i = 0; $i < count($opts['subcards']); $i++) {
       // Don't render shield subcard
       if ($opts['subcards'][$i] != "8752877738") {
-        $rv .= "<div style='margin-top: -6px;
+        $rv .= "<div style='
+        margin: -6px 0 0 2px;
         padding-top: 1px;
         border-radius: 0%;
         width: 96px;
