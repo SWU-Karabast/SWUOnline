@@ -247,7 +247,7 @@ function AuraStartTurnAbilities()
         AddDecisionQueue("PUTPLAY", $mainPlayer, "-", 1);
         break;
       case "ao8bls6g7x"://Healing Aura
-        Recover($mainPlayer, 1);
+        Restore(1, $mainPlayer);
         break;
       case "c7wklzjmwu"://Palatial Concourse
         Opt($mainPlayer, 1);

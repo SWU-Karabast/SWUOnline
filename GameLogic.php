@@ -544,6 +544,10 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           case "trait": if(TraitContains(GetMZCard($player, $arr[$i]), $params[1], $player)) unset($arr[$i]); break;
           case "definedType": if(DefinedTypesContains(GetMZCard($player, $arr[$i]), $params[1], $player)) unset($arr[$i]); break;
           case "maxCost": if(CardCost(GetMZCard($player, $arr[$i])) > $params[1]) unset($arr[$i]); break;
+          case "dqVar":
+            $mzArr = explode(",", $dqVars[$params[1]]);
+            for($j=0; $j<count($mzArr); ++$j) if($mzArr[$j] == $arr[$i]) { unset($arr[$i]); }
+            break;
           case "status":
             $mzArr = explode("-", $arr[$i]);
             if($mzArr[0] == "MYALLY" || $mzArr[0] == "THEIRALLY") {
@@ -1208,6 +1212,10 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         $dqState[6] = $damage;
       }
       return FinalizeDamage($player, $damage, $damageThreatened, $params[1], $params[2]);
+    case "APPENDDQVAR":
+      if($dqVars[$parameter] == "-") $dqVars[$parameter] = $lastResult;
+      else $dqVars[$parameter] .= "," . $lastResult;
+      return $lastResult;
     case "SETDQVAR":
       $dqVars[$parameter] = $lastResult;
       return $lastResult;

@@ -22,6 +22,7 @@ $SET_MuteChat = 14; //Did this player mute chat
 
 $SET_DisableStats = 15; //Did this player disable stats
 $SET_CasterMode = 16; //Did this player enable caster mode
+$SET_DisableAnimations = 17; //Did this player disable animations
 
 //Menu settings
 $SET_Language = 17; //What language is this player using?
@@ -176,6 +177,13 @@ function AreStatsDisabled($player)
   return $settings[$SET_DisableStats] == "1";
 }
 
+function AreAnimationsDisabled($player) {
+  global $SET_DisableAnimations;
+  $settings = GetSettings($player);
+  if ($settings == null) return false;
+  return $settings[$SET_DisableAnimations] == "1";
+}
+
 function IsCasterMode()
 {
   global $SET_CasterMode;
@@ -242,7 +250,7 @@ function GetSettingsUI($player)
 {
   global $SET_AlwaysHoldPriority, $SET_DarkMode, $SET_ManualMode, $SET_SkipARs, $SET_SkipDRs, $SET_AutotargetArcane, $SET_ColorblindMode;
   global $SET_ShortcutAttackThreshold, $SET_EnableDynamicScaling, $SET_Mute, $SET_Cardback, $SET_MuteChat, $SET_DisableStats;
-  global $SET_CasterMode, $SET_StreamerMode;
+  global $SET_CasterMode, $SET_StreamerMode, $SET_DisableAnimations;
   $rv = "";
   $settings = GetSettings($player);
   //if ($settings[$SET_AutotargetArcane] == 0) $rv .= CreateCheckbox($SET_AutotargetArcane . "-1", "Arcane Manual Targetting", 26, true, "Manual Targetting");
@@ -290,9 +298,13 @@ function GetSettingsUI($player)
   if($settings[$SET_MuteChat] == 0) $rv .= CreateCheckbox($SET_MuteChat . "-1", "Disable Chat", 26, false, "Disable Chat", true);
   else $rv .= CreateCheckbox($SET_MuteChat . "-0", "Disable Chat", 26, true, "Disable Chat", true);
   $rv .= "<BR>";
-
+  
   if($settings[$SET_DisableStats] == 0) $rv .= CreateCheckbox($SET_DisableStats . "-1", "Disable Stats", 26, false, "Disable Stats", true);
   else $rv .= CreateCheckbox($SET_DisableStats . "-0", "Disable Stats", 26, true, "Disable Stats", true);
+  $rv .= "<BR>";
+  
+  if($settings[$SET_DisableAnimations] == 0) $rv .= CreateCheckbox($SET_DisableAnimations . "-1", "Disable Animations", 26, false, "Disable Animations", true);
+  else $rv .= CreateCheckbox($SET_DisableAnimations . "-0", "Disable Animations", 26, true, "Disable Animations", true);
   $rv .= "<BR>";
 
   if($settings[$SET_CasterMode] == 0) $rv .= CreateCheckbox($SET_CasterMode . "-1", "Caster Mode", 26, false, "Caster Mode", true);
@@ -310,7 +322,7 @@ function SaveSettingInDatabase($setting)
 {
   global $SET_DarkMode, $SET_ColorblindMode, $SET_Mute, $SET_Cardback, $SET_DisableStats, $SET_Language;
   global $SET_Format, $SET_FavoriteDeckIndex, $SET_GameVisibility, $SET_AlwaysHoldPriority, $SET_ManualMode;
-  global $SET_StreamerMode, $SET_AutotargetArcane, $SET_Playmat;
+  global $SET_StreamerMode, $SET_AutotargetArcane, $SET_Playmat, $SET_DisableAnimations;
   switch($setting) {
     case $SET_DarkMode:
     case $SET_ColorblindMode:
@@ -326,6 +338,7 @@ function SaveSettingInDatabase($setting)
     case $SET_StreamerMode:
     case $SET_AutotargetArcane:
     case $SET_Playmat:
+    case $SET_DisableAnimations:
       return true;
     default: return false;
   }

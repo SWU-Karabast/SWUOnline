@@ -1340,7 +1340,6 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
       }
       CombatChainPlayAbility($cardID);
       ItemPlayAbilities($cardID, $from);
-      AllyPlayCardAbility($cardID);
       if(AspectContains($cardID, "Villainy", $currentPlayer)) IncrementClassState($currentPlayer, $CS_NumVillainyPlayed);
       IncrementClassState($currentPlayer, $CS_NumCardsPlayed);
       if(DefinedTypesContains($cardID, "Event", $currentPlayer)) IncrementClassState($currentPlayer, $CS_NumEventsPlayed);
@@ -1699,19 +1698,28 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
       else {
         $abilityIndex = GetClassState($currentPlayer, $CS_AbilityIndex);
         $playIndex = GetClassState($currentPlayer, $CS_PlayIndex);
-        //TODO: Fix this colonel yularen + Relentless hack
-        if($from == "PLAY" || $from == "EQUIP" || HasWhenPlayed($cardID) || $cardID == "0961039929" || $cardID == "3401690666" || DefinedTypesContains($cardID, "Event", $currentPlayer) || DefinedTypesContains($cardID, "Upgrade", $currentPlayer)) AddLayer("PLAYABILITY", $currentPlayer, $cardID, $from . "!" . $resourcesPaid . "!" . $target . "!" . $additionalCosts . "!" . $abilityIndex . "!" . $playIndex, "-", $uniqueID);
+        $layerName = "PLAYABILITY";
+        if($from == "PLAY" || $from == "EQUIP") {
+          if(GetResolvedAbilityType($cardID) == "A") $layerName = "ACTIVATEDABILITY";
+          else $layerName = "ATTACKABILITY";
+        }
+        if($layerName == "ATTACKABILITY") { if(HasAttackAbility($cardID)) AddLayer($layerName, $currentPlayer, $cardID, $from . "!" . $resourcesPaid . "!" . $target . "!" . $additionalCosts . "!" . $abilityIndex . "!" . $playIndex, "-", $uniqueID, append:true); }
+        //TODO: Fix this Relentless hack
+        else if($from == "PLAY" || $from == "EQUIP" || HasWhenPlayed($cardID) || $cardID == "3401690666" || DefinedTypesContains($cardID, "Event", $currentPlayer) || DefinedTypesContains($cardID, "Upgrade", $currentPlayer)) AddLayer($layerName, $currentPlayer, $cardID, $from . "!" . $resourcesPaid . "!" . $target . "!" . $additionalCosts . "!" . $abilityIndex . "!" . $playIndex, "-", $uniqueID, append:true);
+        else if($from != "PLAY" && $from != "EQUIP") {
+          if(AllyPlayCardAbility($cardID, $currentPlayer, reportMode:true)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $target, $additionalCosts);
+        }
       }
     }
     if($from != "PLAY") {
       $index = LastAllyIndex($currentPlayer);
       if(HasShielded($cardID, $currentPlayer, $index)) {
         $allies = &GetAllies($currentPlayer);
-        AddLayer("TRIGGER", $currentPlayer, "SHIELDED", "-", "-", $allies[$index + 5]);
+        AddLayer("TRIGGER", $currentPlayer, "SHIELDED", "-", "-", $allies[$index + 5], append:true);
       }
-      if(HasAmbush($cardID, $currentPlayer, $index)) {
+      if(HasAmbush($cardID, $currentPlayer, $index, $from)) {
         $allies = &GetAllies($currentPlayer);
-        AddLayer("TRIGGER", $currentPlayer, "AMBUSH", "-", "-", $allies[$index + 5]);
+        AddLayer("TRIGGER", $currentPlayer, "AMBUSH", "-", "-", $allies[$index + 5], append:true);
       }
     }
     if (!$openedChain) ResolveGoAgain($cardID, $currentPlayer, $from);

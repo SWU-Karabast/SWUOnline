@@ -115,6 +115,7 @@ if ($decklink != "") {
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
     $apiDeck = curl_exec($curl);
     $apiInfo = curl_getinfo($curl);
+    $errorMessage = curl_error($curl);
     curl_close($curl);
     $json = $apiDeck;
     echo($json);
@@ -124,6 +125,7 @@ if ($decklink != "") {
   if($json == "") {
     echo "Failed to retrieve deck from API. Check to make sure you have a valid deckbuilder link. If it's a SWUDB link, make sure it's not a private deck.<BR>";
     echo "Your link: " . $originalLink . "<BR>";
+    echo "Error Message: " . $errorMessage . "<BR>";
     exit;
   }
 

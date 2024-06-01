@@ -15,6 +15,9 @@ function EffectHitEffect($cardID)
     case "8988732248-1"://Rebel Assault
       AddCurrentTurnEffect("8988732248-2", $mainPlayer);
       break;
+    case "0802973415"://Outflank
+      AddCurrentTurnEffect("0802973415-1", $mainPlayer);
+      break;
     case "6514927936-1"://Leia Organa
       AddCurrentTurnEffectFromCombat("6514927936-2", $mainPlayer);
       break;
@@ -38,6 +41,15 @@ function FinalizeChainLinkEffects()
         PrependDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to attack with");
         PrependDecisionQueue("MZFILTER", $mainPlayer, "status=1");
         PrependDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:trait=Rebel");
+        return true;
+      case "0802973415-1"://Outflank
+        PrependDecisionQueue("SWAPTURN", $mainPlayer, "-");
+        PrependDecisionQueue("ELSE", $mainPlayer, "-");
+        PrependDecisionQueue("MZOP", $mainPlayer, "ATTACK", 1);
+        PrependDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        PrependDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to attack with");
+        PrependDecisionQueue("MZFILTER", $mainPlayer, "status=1");
+        PrependDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
         return true;
       case "6514927936-2"://Leia Organa
         PrependDecisionQueue("SWAPTURN", $mainPlayer, "-");
@@ -109,6 +121,7 @@ function EffectAttackModifier($cardID)
     case "1939951561": return $subparam;//Attack Pattern Delta
     case "8988732248": return 1;//Rebel Assault
     case "7109944284": return -1* $subparam;//Luke Skywalker
+    case "1885628519": return 1;//Crosshair
     default: return 0;
   }
 }
@@ -490,6 +503,7 @@ function IsCombatEffectActive($cardID)
     case "3789633661": return true;//Cunning
     case "8988732248": return true;//Rebel Assault
     case "6514927936": return true;//Leia Organa
+    case "0802973415": return true;//Outflank
     default: return false;
   }
 }
