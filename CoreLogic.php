@@ -3441,6 +3441,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
       break;
+    case "0802973415"://Outflank
+      AddCurrentTurnEffect($cardID, $currentPlayer);
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "status=1");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to attack with");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
+      break;
     case "8142386948"://Razor Crest
       MZMoveCard($currentPlayer, "MYDISCARD:definedType=Upgrade", "MYHAND", may:true);
       break;
