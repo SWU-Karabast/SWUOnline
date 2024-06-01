@@ -582,7 +582,12 @@ function AttackValue($cardID)
 {
   global $combatChainState, $CCS_NumBoosted, $mainPlayer, $currentPlayer;
   if(!$cardID) return "";
-  return CardPower($cardID);
+  switch($cardID)
+  {
+    case "4897501399"://Ruthlessness
+      return 2;
+    default: return CardPower($cardID);
+  }
 }
 
 function HasGoAgain($cardID)

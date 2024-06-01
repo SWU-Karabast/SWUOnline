@@ -468,13 +468,23 @@ function CollectBounties($player, $index) {
 
 function OnKillAbility($fromCombat)
 {
-  global $combatChain, $mainPlayer;
+  global $combatChain, $mainPlayer, $defPlayer;
   if(count($combatChain) == 0) return;
+  $attackerAlly = new Ally(AttackerMZID($mainPlayer), $mainPlayer);
+  $subcards = $attackerAlly->GetSubcards();
+  for($i=0; $i<count($subcards); ++$i) {
+    switch($subcards[$i]) {
+      case "4897501399"://Ruthlessness
+        WriteLog("Ruthlessness deals 2 damage to the defender's base");
+        DealDamageAsync($defPlayer, 2, "DAMAGE", $attackerAlly->CardID());
+        break;
+      default: break;
+    }
+  }
   switch($combatChain[0])
   {
     case "5230572435"://Mace Windu, Party Crasher
-      $ally = new Ally(AttackerMZID($mainPlayer), $mainPlayer);
-      $ally->Ready();
+      $attackerAlly->Ready();
       break;
     default: break;
   }
