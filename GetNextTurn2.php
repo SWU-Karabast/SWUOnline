@@ -1148,20 +1148,6 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     $atkCounters = 0;
     $epicActionUsed = 0;
     $overlay = $myCharacter[$i + 1] != 2 ? 1 : 0;
-
-    if($mzChooseFromPlay) {
-      $mzIndex = "MYCHAR-" . $i;
-      $inOptions = in_array($mzIndex, $optionsIndex);
-      $action = $inOptions ? 16 : 0;
-      $actionDataOverride = $inOptions ? $mzIndex : 0;
-      $border = CardBorderColor($myCharacter[$i], "CHAR", $action == 16 ? true : false);
-    } else {
-      $playable = $playerID == $currentPlayer && IsPlayable($myCharacter[$i], $turn[0], "CHAR", $i, $restriction) && $myCharacter[$i + 1] == 2;
-      $border = CardBorderColor($myCharacter[$i], "CHAR", $playable);
-      $action = $currentPlayer == $playerID && $playable ? 3 : 0;
-      $actionDataOverride = strval($i);
-    }
-
     $type = CardType($myCharacter[$i]);
     $sType = CardSubType($myCharacter[$i]);
     if ($type == "W") { //Base
@@ -1170,6 +1156,20 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     } else if ($type == "C") { // Leader
       $epicActionUsed = $myCharacter[$i + 2] > 0 ? 1 : 0;
     }
+
+    if($mzChooseFromPlay) {
+      $mzIndex = "MYCHAR-" . $i;
+      $inOptions = in_array($mzIndex, $optionsIndex);
+      $action = $inOptions ? 16 : 0;
+      $actionDataOverride = $inOptions ? $mzIndex : 0;
+      $border = CardBorderColor($myCharacter[$i], "CHAR", $action == 16 ? true : false);
+    } else {
+      $playable = $playerID == $currentPlayer && IsPlayable($myCharacter[$i], $turn[0], "CHAR", $i, $restriction) && ($myCharacter[$i + 1] == 2 || $epicActionUsed == 0);
+      $border = CardBorderColor($myCharacter[$i], "CHAR", $playable);
+      $action = $currentPlayer == $playerID && $playable ? 3 : 0;
+      $actionDataOverride = strval($i);
+    }
+
     if ($myCharData != "") $myCharData .= "|";
     $restriction = implode("_", explode(" ", $restriction));
     $myCharData .= ClientRenderedCard($myCharacter[$i], $action, $myCharacter[$i + 1] != 2 ? 1 : 0, $border, $myCharacter[$i + 1] != 0 ? $counters : 0, $actionDataOverride, 0, 0, $atkCounters, $playerID, $type, $sType, $restriction, $myCharacter[$i + 1] == 0, $myCharacter[$i + 6] == 1, $myCharacter[$i + 8] == 1, gem:0, rotate:0, landscape:1, epicActionUsed:$epicActionUsed);
