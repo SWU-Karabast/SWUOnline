@@ -1225,7 +1225,7 @@ function DefinedTypesContains($cardID, $type, $player="")
 {
   if(!$cardID || $cardID == "" || strlen($cardID) < 3) return "";
   $cardTypes = DefinedCardType($cardID);
-  $cardTypes2 = DefinedCardType2($cardID);
+  $cardTypes2 = DefinedCardType2Wrapper($cardID);
   return DelimStringContains($cardTypes, $type) || DelimStringContains($cardTypes2, $type);
 }
 
@@ -3559,6 +3559,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         $ally = new Ally($target, $currentPlayer);
         $ally->Attach("8752877738");//Shield Token
       }
+      break;
+    case "1480894253"://Kylo Ren
+      PummelHit($currentPlayer);
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to give +2 power", 1);
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "1480894253,PLAY", 1);
       break;
     default: break;
   }

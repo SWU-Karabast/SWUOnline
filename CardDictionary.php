@@ -634,6 +634,9 @@ function GetAbilityTypes($cardID)
     case "4263394087"://Chirrut Imwe
       $abilityTypes = "A";
       break;
+    case "1480894253"://Kylo Ren
+      $abilityTypes = "A";
+      break;
     case "4300219753"://Fett's Firespray
       $abilityTypes = "A,AA";
       break;
@@ -732,6 +735,9 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       break;
     case "4263394087"://Chirrut Imwe
       $abilityNames = "Buff HP";
+      break;
+    case "1480894253"://Kylo Ren
+      $abilityNames = "Buff Attack";
       break;
     case "4300219753"://Fett's Firespray
       $ally = new Ally("MYALLY-" . $index, $currentPlayer);
@@ -1021,6 +1027,8 @@ function LeaderUnit($cardID) {
     case "1951911851"://Grand Admiral Thrawn
       return "02199f9f1e";
     //Shadows of the Galaxy
+    case "1480894253"://Kylo Ren
+      return "8def61a58e";
     default: return "";
   }
 }
@@ -1065,6 +1073,8 @@ function LeaderUndeployed($cardID) {
     case "02199f9f1e"://Grand Admiral Thrawn
       return "1951911851";
     //Shadows of the Galaxy
+    case "8def61a58e"://Kylo Ren
+      return "1480894253";
     default: return "";
   }
 }
@@ -1358,6 +1368,17 @@ function HasWard($cardID)
   switch ($cardID) {
 
     default: return false;
+  }
+}
+
+//Used to correct inconsistencies from the data set
+function DefinedCardType2Wrapper($cardID)
+{
+  switch($cardID)
+  {
+    case "1480894253"://Kylo Ren
+      return "";
+    default: return DefinedCardType2($cardID);
   }
 }
 

@@ -122,6 +122,7 @@ function EffectAttackModifier($cardID)
     case "8988732248": return 1;//Rebel Assault
     case "7109944284": return -1* $subparam;//Luke Skywalker
     case "1885628519": return 1;//Crosshair
+    case "1480894253": return 2;//Kylo Ren
     default: return 0;
   }
 }
@@ -504,6 +505,7 @@ function IsCombatEffectActive($cardID)
     case "8988732248": return true;//Rebel Assault
     case "6514927936": return true;//Leia Organa
     case "0802973415": return true;//Outflank
+    case "1480894253": return true;//Kylo Ren
     default: return false;
   }
 }
@@ -516,6 +518,7 @@ function IsCombatEffectPersistent($cardID)
     case "2587711125": return true;//Disarm
     case "2569134232": return true;//Jedha City
     case "3789633661": return true;//Cunning
+    case "1480894253": return true;//Kylo Ren
     default:
       return false;
   }
