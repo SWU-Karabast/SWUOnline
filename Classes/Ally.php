@@ -186,6 +186,7 @@ class Ally {
       if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $this->UniqueID()) continue;
       $power += EffectAttackModifier($currentTurnEffects[$i]);
     }
+    if($power < 0) $power = 0;
     return $power;
   }
 
