@@ -221,6 +221,7 @@ function HasSentinel($cardID, $player, $index)
     case "6585115122"://The Mandalorian
     case "2969011922"://Pyke Sentinel
     case "8552719712"://Pirate Battle Tank
+    case "4843225228"://Phase-III Dark Trooper
       return true;
     case "2739464284"://Gamorrean Guards
       return SearchCount(SearchAllies($player, aspect:"Cunning")) > 1;

@@ -109,6 +109,13 @@ class Ally {
       DestroyAlly($this->playerID, $this->index, fromCombat:$fromCombat);
       return true;
     }
+    switch($this->CardID())
+    {
+      case "4843225228"://Phase-III Dark Trooper
+        if($fromCombat) $this->Attach("2007868442");//Experience token
+        break;
+      default: break;
+    }
     return false;
   }
 
