@@ -924,7 +924,7 @@ function CardBorderColor($cardID, $from, $isPlayable, $mod = "-")
     return 0;
   }
   else if ($isPlayable)
-    return 6;
+    return $mod == "THEIRS" ? 2 : 6; // red border for opponent's cards
   return 0;
 }
 

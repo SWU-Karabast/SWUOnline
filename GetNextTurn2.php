@@ -920,7 +920,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       $inOptions = in_array($mzIndex, $optionsIndex);
       $action = $mzChooseFromPlay && $inOptions ? 16 : 0;
       $actionDataOverride = $mzChooseFromPlay && $inOptions ? $mzIndex : 0;
-      $border = CardBorderColor($theirAllies[$i], "ALLY", $action == 16 ? true : false);
+      $border = CardBorderColor($theirAllies[$i], "ALLY", $action == 16 ? true : false, "THEIRS");
 
       $ally = new Ally($mzIndex, $otherPlayer);
       $opts = array(
@@ -967,7 +967,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     $inOptions = in_array($mzIndex, $optionsIndex);
     $action = $mzChooseFromPlay && $inOptions ? 16 : 0;
     $actionDataOverride = $mzChooseFromPlay && $inOptions ? $mzIndex : 0;
-    $border = CardBorderColor($theirCharacter[$i], "CHAR", $action == 16 ? true : false);
+    $border = CardBorderColor($theirCharacter[$i], "CHAR", $action == 16 ? true : false, "THEIRS");
     $atkCounters = 0;
     $counters = 0;
     $epicActionUsed = 0;
@@ -981,7 +981,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       $epicActionUsed = $theirCharacter[$i + 2] > 0 ? 1 : 0;
     }
     if ($characterContents != "") $characterContents .= "|";
-    $characterContents .= ClientRenderedCard(cardNumber: $theirCharacter[$i], action:$action, actionDataOverride:$actionDataOverride, borderColor:$border, overlay: ($theirCharacter[$i + 1] != 2 ? 1 : 0), counters: $counters, defCounters: 0, atkCounters: $atkCounters, controller: $otherPlayer, type: $type, sType: $sType, isFrozen: ($theirCharacter[$i + 8] == 1), onChain: ($theirCharacter[$i + 6] == 1), isBroken: ($theirCharacter[$i + 1] == 0), rotate:0, landscape:1, epicActionUsed: $epicActionUsed);
+    $characterContents .= ClientRenderedCard(cardNumber: $theirCharacter[$i], action:$action, actionDataOverride:$actionDataOverride, borderColor:$border, overlay: $overlay, counters: $counters, defCounters: 0, atkCounters: $atkCounters, controller: $otherPlayer, type: $type, sType: $sType, isFrozen: ($theirCharacter[$i + 8] == 1), onChain: ($theirCharacter[$i + 6] == 1), isBroken: ($theirCharacter[$i + 1] == 0), rotate:0, landscape:1, epicActionUsed: $epicActionUsed);
   }
   echo ($characterContents);
 
@@ -1148,9 +1148,6 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     $atkCounters = 0;
     $epicActionUsed = 0;
     $overlay = $myCharacter[$i + 1] != 2 ? 1 : 0;
-    if (CardType($myCharacter[$i]) == "W") $atkCounters = $myCharacter[$i + 3];
-    if ($myCharacter[$i + 2] > 0) $counters = $myCharacter[$i + 2];
-    else $counters = GetClassState($playerID, $CS_PreparationCounters);
 
     if($mzChooseFromPlay) {
       $mzIndex = "MYCHAR-" . $i;
@@ -1159,7 +1156,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       $actionDataOverride = $inOptions ? $mzIndex : 0;
       $border = CardBorderColor($myCharacter[$i], "CHAR", $action == 16 ? true : false);
     } else {
-      $playable = $playerID == $currentPlayer && IsPlayable($myCharacter[$i], $turn[0], "CHAR", $i, $restriction);
+      $playable = $playerID == $currentPlayer && IsPlayable($myCharacter[$i], $turn[0], "CHAR", $i, $restriction) && $myCharacter[$i + 1] == 2;
       $border = CardBorderColor($myCharacter[$i], "CHAR", $playable);
       $action = $currentPlayer == $playerID && $playable ? 3 : 0;
       $actionDataOverride = strval($i);
@@ -1170,7 +1167,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     if ($type == "W") { //Base
       $epicActionUsed = $myCharacter[$i + 1] == 0 ? 1 : 0;
       $overlay = 0;
-    } else if ($type == "C") {
+    } else if ($type == "C") { // Leader
       $epicActionUsed = $myCharacter[$i + 2] > 0 ? 1 : 0;
     }
     if ($myCharData != "") $myCharData .= "|";
