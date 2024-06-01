@@ -123,6 +123,7 @@ function EffectAttackModifier($cardID)
     case "7109944284": return -1* $subparam;//Luke Skywalker
     case "1885628519": return 1;//Crosshair
     case "1480894253": return 2;//Kylo Ren
+    case "2503039837": return IsAllyAttackTarget() ? 1 : 0;//Moff Gideon Leader
     default: return 0;
   }
 }
@@ -528,6 +529,7 @@ function IsCombatEffectActive($cardID)
     case "6514927936": return true;//Leia Organa
     case "0802973415": return true;//Outflank
     case "1480894253": return true;//Kylo Ren
+    case "2503039837": return true;//Moff Gideon Leader
     default: return false;
   }
 }

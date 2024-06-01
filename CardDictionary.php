@@ -684,6 +684,9 @@ function GetAbilityTypes($cardID)
     case "1885628519"://Crosshair
       $abilityTypes = "A,A,AA";
       break;
+    case "2503039837"://Moff Gideon
+      $abilityTypes = "A";
+      break;
     default: break;
   }
   if(DefinedTypesContains($cardID, "Leader", $currentPlayer) && !IsAlly($cardID, $currentPlayer)) {
@@ -787,6 +790,9 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       break;
     case "1885628519"://Crosshair
       $abilityNames = "Buff,Snipe,Attack";
+      break;
+    case "2503039837"://Moff Gideon
+      $abilityNames = "Attack";
       break;
     default: break;
   }
@@ -1029,6 +1035,8 @@ function LeaderUnit($cardID) {
     //Shadows of the Galaxy
     case "1480894253"://Kylo Ren
       return "8def61a58e";
+    case "2503039837"://Moff Gideon Leader
+      return "4484318969";
     default: return "";
   }
 }
@@ -1075,6 +1083,8 @@ function LeaderUndeployed($cardID) {
     //Shadows of the Galaxy
     case "8def61a58e"://Kylo Ren
       return "1480894253";
+    case "4484318969"://Moff Gideon Leader
+      return "2503039837";
     default: return "";
   }
 }
@@ -1378,6 +1388,7 @@ function DefinedCardType2Wrapper($cardID)
   switch($cardID)
   {
     case "1480894253"://Kylo Ren
+    case "2503039837"://Moff Gideon
       return "";
     default: return DefinedCardType2($cardID);
   }
