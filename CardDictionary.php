@@ -265,6 +265,17 @@ function HasOverwhelm($cardID, $player, $index)
   global $defPlayer;
   $ally = new Ally("MYALLY-" . $index, $player);
   if($ally->LostAbilities()) return false;
+  $allies = &GetAllies($player);
+  for($i=0; $i<count($allies); $i+=AllyPieces())
+  {
+    switch($allies[$i])
+    {
+      case "4484318969"://Moff Gideon Leader
+        if(CardCost($cardID) <= 3 && IsAllyAttackTarget()) return true;
+        break;
+      default: break;
+    }
+  }
   switch($cardID)
   {
     case "6072239164":
@@ -276,6 +287,7 @@ function HasOverwhelm($cardID, $player, $index)
     case "6432884726":
     case "5557494276"://Death Watch Loyalist
     case "2470093702"://Wrecker
+    case "4484318969"://Moff Gideon Leader
       return true;
     case "4619930426"://First Legion Snowtrooper
       $target = GetAttackTarget();
