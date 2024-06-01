@@ -94,7 +94,7 @@ if ($lastUpdate != 0 && $cacheVal < $lastUpdate) {
   echo (GetCachePiece($gameName, 1) . "ENDTIMESTAMP");
   if ($gameStatus == $MGS_ChooseFirstPlayer) {
     if ($playerID == $firstPlayerChooser) {
-      echo ("<input class='GameLobby_Button' type='button' name='action' value='Go First' onclick='SubmitFirstPlayer(1)' style='margin-left:15px; margin-right:5px; text-align:center;'>");
+      echo ("<input class='GameLobby_Button' type='button' name='action' value='Go First' onclick='SubmitFirstPlayer(1)' style='margin-left:15px; margin-right:20px; text-align:center;'>");
       echo ("<input class='GameLobby_Button' type='button' name='action' value='Go Second' onclick='SubmitFirstPlayer(2)' style='text-align:center;'><br>");
     } else {
       echo ("<div style='text-shadow: 2px 0 0 #1a1a1a, 0 -2px 0 #1a1a1a, 0 2px 0 #1a1a1a, -2px 0 0 #1a1a1a; color:#EDEDED'>Waiting for other player to choose who will go first.</div>");
@@ -112,14 +112,14 @@ if ($lastUpdate != 0 && $cacheVal < $lastUpdate) {
         echo("<div>&#10071;This is a private lobby. You will need to invite an opponent.</div><br>");
       }
     }
-    echo ("<div><input class='GameLobby_Input' onclick='copyText()' style='width:40%;' type='text' id='gameLink' value='" . $redirectPath . "/JoinGame.php?gameName=$gameName&playerID=2'><button class='GameLobby_Button' style='margin-left:3px;' onclick='copyText()'>Copy Invite Link</button></div>");
+    echo ("<div><h3>Game Link</h3>
+    <input class='GameLobby_Input invite-link' onclick='copyText()' type='text' id='gameLink' value='" . $redirectPath . "/JoinGame.php?gameName=$gameName&playerID=2'><button class='GameLobby_Button' style='margin-left:3px;' onclick='copyText()'>Copy Invite Link</button></div>");
   }
 
   $isMobile = IsMobile();
   // Chat Log
-  echo ("<br>");
-  if($isMobile) echo ("<div id='gamelog' style='text-align:left; position:absolute; color: white; background-color: rgba(20,20,20,0.8); top:80px; left:3%; width:94%; bottom:15%; font-weight:550; overflow-y: auto;'>");
-  else echo ("<div id='gamelog' style='text-align:left; position:absolute; color: white; background-color: rgba(20,20,20,0.8); top:160px; left:3%; width:94%; bottom:15%; font-weight:550; overflow-y: auto;'>");
+  if($isMobile) echo ("<h3>Chat</h3><div id='gamelog'>");
+  else echo ("<h3>Chat</h3><div id='gamelog'>");
   //if(!IsMobile()) echo("<BR>");
   //echo ("<div id='gamelog' style='text-align:left; position:relative; text-shadow: 2px 0 0 #1a1a1a, 0 -2px 0 #1a1a1a, 0 2px 0 #1a1a1a, -2px 0 0 #1a1a1a; color: #EDEDED; background-color: rgba(20,20,20,0.8); margin-top:6px; height:63%; left:3%; width:94%; bottom:10%; font-weight:550; overflow-y: auto;'>");
   EchoLog($gameName, $playerID);

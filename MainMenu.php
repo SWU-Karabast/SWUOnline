@@ -57,13 +57,15 @@ $canSeeQueue = isset($_SESSION["useruid"]);
 
 <div class="home-wrapper">
 
-  <div class="game-browser section-box" style='overflow-y:auto;'>
-    <?php
-    try {
-      include "ServerChecker.php";
-    } catch (\Exception $e) {
-    }
-    ?>
+  <div class="game-browser-wrapper">
+    <div class="game-browser section-box" style='overflow-y:auto;'>
+      <?php
+      try {
+        include "ServerChecker.php";
+      } catch (\Exception $e) {
+      }
+      ?>
+    </div>
   </div>
 
   <div class='create-game-wrapper'>
@@ -86,7 +88,7 @@ $canSeeQueue = isset($_SESSION["useruid"]);
       $selIndex = -1;
       if (isset($settingArray[$SET_FavoriteDeckIndex])) $selIndex = $settingArray[$SET_FavoriteDeckIndex];
       echo ("<div class='SelectDeckInput'>Favorite Decks: ");
-      echo ("<select style='height:34px; width:60%;' name='favoriteDecks' id='favoriteDecks'>");
+      echo ("<select name='favoriteDecks' id='favoriteDecks'>");
       for ($i = 0; $i < count($favoriteDecks); $i += 4) {
         echo ("<option value='" . $i . "<fav>" . $favoriteDecks[$i] . "'" . ($i == $selIndex ? " selected " : "") . ">" . $favoriteDecks[$i + 1] . "</option>");
       }
@@ -107,16 +109,14 @@ $canSeeQueue = isset($_SESSION["useruid"]);
   <input type="text" id="fabdb" name="fabdb">
   <?php
   if (isset($_SESSION["userid"])) {
-    echo ("<span style='display:inline;'>");
+    echo ("<span>");
     echo ("<labelfor='favoriteDeck'><input class='inputFavoriteDeck' type='checkbox' id='favoriteDeck' name='favoriteDeck' />");
-    echo ("Save deck to ❤️ favorites</label>");
+    echo ("Save to Favorite Decks</label>");
     echo ("</span>");
   }
-  echo ("<br>");
   ?>
-  <br>
-  <label for="gameDescription" class='SelectDeckInput'>Game Name:</label>
-  <input type="text" id="gameDescription" name="gameDescription" placeholder="Game #"><br><br>
+  <label for="gameDescription" class='game-name-label'>Game Name:</label>
+  <input type="text" id="gameDescription" name="gameDescription" placeholder="Game #">
 
   <?php
   echo ("<label for='format' class='SelectDeckInput'>Format: </label>");
@@ -131,24 +131,22 @@ $canSeeQueue = isset($_SESSION["useruid"]);
 
   <?php
   if ($canSeeQueue) {
-    echo '<label for="public"><input class="SelectDeckInput" type="radio" id="public" name="visibility" value="public" ' . ($defaultVisibility == 1 ? 'checked="checked"' : "") . '>';
-    echo (' Public</label>');
+    echo '<label for="public" class="privacy-label"><input class="privacy-input" type="radio" id="public" name="visibility" value="public" ' . ($defaultVisibility == 1 ? 'checked="checked"' : "") . '>';
+    echo ('Public</label>');
   } else {
     echo '<p class="login-message">&#10071;Log in to be able to create public games.</p>';
   }
   ?>
-  <label for="private">
-    <input type="radio" class='SelectDeckInput' id="private" name="visibility" value="private" <?php if ($defaultVisibility == 0) echo 'checked="checked"'; ?> />
-    Private</label>
+  <label for="private" class='privacy-label'>
+    <input type="radio" class='privacy-input' id="private" name="visibility" value="private" <?php if ($defaultVisibility == 0) echo 'checked="checked"'; ?> />Private</label>
     <!--
   <label for="deckTestMode">
     <input class='SelectDeckInput' type="checkbox" id="deckTestMode" name="deckTestMode" value="deckTestMode">
     Single Player</label>
   -->
   <div style=' text-align:center;'>
-    <input type="submit" style="font-size:28px;" value="<?php echo ($createGameText); ?>">
+    <input type="submit" class="create-game-button" value="<?php echo ($createGameText); ?>">
   </div>
-  <BR>
   </form>
 
   </div>
@@ -189,7 +187,6 @@ $canSeeQueue = isset($_SESSION["useruid"]);
     }
     */
     ?>
-    <BR>
   </div>
 
   </div>

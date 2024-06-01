@@ -178,21 +178,24 @@ if ($handle = opendir($path)) {
   closedir($handle);
 }
 if ($canSeeQueue) {
-  echo ("<h3 style='width:100%; text-align:center; color:RGB(240,240,240);'>Premier</h3>");
+  echo ("<h3>Premier</h3>");
   echo ($ccLinks);
-  echo ("<h4 style='text-align:center;'>______________________</h4>");
-  echo ("<h3 style='width:100%; text-align:center; color:RGB(240,240,240);'>Request-Undo Premier</h3>");
+  echo ("<hr/>");
+  echo ("<h3>Request-Undo Premier</h3>");
   echo ($compCCLinks);
-  echo ("<h4 style='text-align:center;'>______________________</h4>");
-  echo ("<h3 style='width:100%; text-align:center; color:RGB(240,240,240);'>Other Formats</h3>");
+  echo ("<hr/>");
+  echo ("<h3>Other Formats</h3>");
   echo ($otherFormatsLinks);
 }
 if (!$canSeeQueue) {
-  echo ("<BR>");
   echo ("<div><b>&#10071;Log in to use matchmaking and see open matches</b></div><br>");
 }
-echo ("<h4 style='text-align:center;'>______________________</h4>");
-echo ("<h3 style='width:100%; text-align:center; color:RGB(240,240,240);'>Games In Progress ($gameInProgressCount)</h3>");
+echo ("<hr/>");
+echo ("<div class='progress-title-wrapper'>");
+echo ("<h3 class='progress-header'>Games In Progress</h3>");
+echo ("<h3 class='progress-count'>$gameInProgressCount</h3>");
+echo ("</div>");
+echo ("<hr/>");
 //if (!IsMobile()) {
 echo ($spectateLinks);
 //}

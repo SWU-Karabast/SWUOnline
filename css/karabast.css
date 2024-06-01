@@ -1,4 +1,4 @@
-/* GLOBAL */
+/* GLOBAL ---------------------------------------------------------------------------------------------- */
 
 /* Core Styles */
 
@@ -12,7 +12,7 @@ body {
   margin: 0px;
 }
 
-h1, h2, h3, h4, h5, h6, p, a, b, ul, ol, dl, dd, form, details, blockquote, table, button, input, label, select, textarea {
+h1, h2, h3, h4, h5, h6, p, a, b, ul, ol, dl, dd, form, details, blockquote, table, button, input, label, select, textarea, #gamelog {
   font-family: barlow;
   color: white;
   margin: 0;
@@ -25,10 +25,9 @@ button, input, select, textarea {
   border-radius: 5px;
   line-height: 1.125;
   font-size: 16px;
-  width: 100%;
 }
 
-button, .GameLobby_Button {
+button, .GameLobby_Button, .create-game-button {
   display: inline-block;
   text-align: center;
   white-space: nowrap;
@@ -40,7 +39,7 @@ button, .GameLobby_Button {
 }
 
 input, select {
-  margin-top: 10px;
+  margin: 10px 0 20px 0;
 }
 
 h1 {
@@ -57,7 +56,7 @@ h2 {
 
 h3 {
   font-size: 18px;
-  font-weight: 700;
+  font-weight: 600;
   margin-bottom: 15px;
 }
 
@@ -82,6 +81,13 @@ b {
   font-weight: 600;
 }
 
+hr {
+width: 100%;
+height: 1px;
+background: #353739;
+border: 0;
+}
+
 .section-box{
   display: block;
   background-color: rgb(0, 0, 0, 40%);
@@ -104,7 +110,7 @@ b {
   text-align: center;
 }
 
-/* HOME */
+/* HOME ---------------------------------------------------------------------------------------------- */
 
 /* Header */
 
@@ -124,13 +130,6 @@ b {
   font-size: 16px;
   font-weight: 400;
   line-height: 130%;
-}
-
-.home-wrapper {
-  margin-top: -136px;
-  height: calc(100% - 270px);
-  display: flex;
-  flex-direction: column;
 }
 
 .home-banner {
@@ -235,10 +234,78 @@ border-radius: 50px;
   flex: 1;
 }
 
-.game-browser { 
+.game-browser-wrapper { 
   margin-left: 20px;
   flex: 1;
 }
+
+.game-browser {
+  height: calc(100% - 40px);
+}
+
+.game-browser h3 { 
+  margin-bottom: 0;
+}
+
+.game-browser hr { 
+  margin-bottom: 20px;
+}
+
+.progress-title-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.progress-count {
+  font-weight: 400;
+}
+
+/* Create Game */
+
+.create-game-wrapper { 
+  margin-left: 20px;
+  flex: 1;
+}
+
+.create-game-wrapper input, .create-game-wrapper select {
+  width: 100%;
+}
+
+.privacy-input, .inputFavoriteDeck { 
+  width: auto !important;
+  margin: 0 5px 0 0;
+}
+
+.login-message {
+  margin: 25px 0 10px;
+  font-size: 16px;
+}
+
+#fabdb {
+  margin-bottom: 10px;
+}
+
+#format {
+  margin-bottom: 20px;
+}
+
+.game-name-label {
+  display: block;
+  margin-top: 20px;
+}
+
+.privacy-label {
+  margin-right: 10px;
+  margin-top: 10px;
+}
+
+.create-game-button {
+  margin: 20px 0 0 0;
+  width: auto !important;
+}
+
+/* Karabast Info */
 
 .karabast-column {
   position: relative;
@@ -260,37 +327,7 @@ border-radius: 50px;
   margin-top: 20px;
 }
 
-/* Create Game */
-
-.create-game-wrapper { 
-  margin-left: 20px;
-  flex: 1;
-}
-
-.SelectDeckInput { 
-  width: auto;
-  margin: 0 5px 20px 0;
-}
-
-.login-message {
-  margin: 25px 0 10px;
-  font-size: 16px;
-}
-
-
-/* GAME LOBBY */
-
-#mainpanel {
-  font-family: barlow !important;
-  color: white !important;
-}
-
-#gamelog {
-  position: static !important;
-  width: 100% !important;
-  font-weight: 400 !important;
-  height: 300px;
-}
+/* GAME LOBBY ---------------------------------------------------------------------------------------------- */
 
 /* Header */
 
@@ -315,13 +352,16 @@ border-radius: 50px;
 
 .lobby-wrapper {
   height: calc(100% - 170px);
-}
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  }
 
 /* Game Set Up */
 
 .game-lobby, .deck-info, .player-info {
   display: block;
-  float: left;
+  flex: 1;
   background-color: rgb(0, 0, 0, 40%);
   backdrop-filter: blur(20px);
   border-radius: 10px;
@@ -329,8 +369,25 @@ border-radius: 50px;
 }
 
 .game-lobby { 
-  width: calc(33% - 60px);
   margin-left: 20px;
+  flex-basis: calc(33% - 60px);
+  flex-grow: 0;
+  height: fit-content;
+  padding-bottom: 0;
+}
+
+.game-lobby h3 { 
+  text-align: left;
+}
+
+#gamelog {
+  width: calc(100% - 40px);
+  font-weight: 400;
+  height: 300px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 5px;
+  padding: 20px;
+  text-align: left;
 }
 
 #chatbox .GameLobby_Input {
@@ -341,24 +398,52 @@ border-radius: 50px;
   width: calc(100% - 66px);
 }
 
-/* Players */
-
-.player-info {
-  width: calc(24% - 80px); 
-  height: 100%;
-  margin: 0 20px;
+.invite-link {
+  width: calc(100% - 145px);
+  margin-top: 0;
 }
 
+/* Players */
+
+.player-info { 
+  margin: 0 0 0 20px;
+  flex-grow: 0;
+  max-height: 100%;
+  height: fit-content;
+  width: fit-content;
+}
+
+.player-info img { 
+  height: 177px !important;
+  max-width: 250px !important;
+  width: auto !important;
+  aspect-ratio: 16 / 11.4;
+  object-fit:contain;
+  background-color: black;
+}
+
+@media screen and (max-height: 1085px) { .player-info img { height: 16vh !important; } }
+@media screen and (max-height: 1000px) { .player-info img { height: 15vh !important; } }
+@media screen and (max-height: 920px)  { .player-info img { height: 13vh !important; } }
+@media screen and (max-height: 840px)  { .player-info img { height: 110px !important; }
+  .player-info { 
+  flex: 0;
+  flex-basis: 157px;
+  overflow-y: scroll;
+  scrollbar-color: #888888 rgba(0, 0, 0, 0); 
+  scrollbar-width: thin;
+  } }
+
 #opponent-info {
-  margin-top: 10px
+  margin: 10px 0 -8px 0;
 }
 
 /* Deck */
 
 .deck-info {
-  width: calc(43% - 60px);
   height: 100%; 
-  margin-right: 20px;
+  margin: 0 20px;
+  flex-grow: 3;
 }
 
 #deckTab {
