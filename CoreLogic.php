@@ -2986,8 +2986,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "3208391441"://Make an Opening
       Restore(2, $currentPlayer);
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to attack and give -2/-2");
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to attack and give -2/-2", 1);
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("SETDQVAR", $currentPlayer, 0, 1);
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
@@ -2996,14 +2996,18 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, "REDUCEHEALTH,2", 1);
       break;
     case "2758597010"://Maximum Firepower
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "-", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, 0, 1);
       for($i=0; $i<2; ++$i) {
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to deal damage");
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Imperial");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "dqVar=0", 1);
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to deal damage", 1);
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("APPENDDQVAR", $currentPlayer, 0, 1);
         AddDecisionQueue("MZOP", $currentPlayer, "POWER", 1);
-        AddDecisionQueue("SETDQVAR", $currentPlayer, 0, 1);
+        AddDecisionQueue("SETDQVAR", $currentPlayer, 1, 1);
         AddDecisionQueue("PASSPARAMETER", $currentPlayer, $target, 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,{0}", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,{1}", 1);
       }
       break;
     case "4263394087"://Chirrut Imwe
