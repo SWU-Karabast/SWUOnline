@@ -124,6 +124,7 @@ function EffectAttackModifier($cardID)
     case "1885628519": return 1;//Crosshair
     case "1480894253": return 2;//Kylo Ren
     case "2503039837": return IsAllyAttackTarget() ? 1 : 0;//Moff Gideon Leader
+    case "4534554684": return 2;//Freetown Backup
     default: return 0;
   }
 }

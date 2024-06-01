@@ -1288,6 +1288,7 @@ function SmuggleCost($cardID, $player="", $index="")
     case "5752414373": return 6;//Millennium Falcon
     case "8552719712": return 7;//Pirate Battle Tank
     case "2522489681": return 6;//Zorii Bliss
+    case "4534554684": return 4;//Freetown Backup
     default: return -1;
   }
 }

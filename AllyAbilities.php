@@ -867,6 +867,14 @@ function SpecificAllyAttackAbilities($attackID)
       Draw($mainPlayer);
       AddCurrentTurnEffect("2522489681", $mainPlayer, from:"PLAY");
       break;
+    case "4534554684"://Freetown Backup
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to give +2/+2", 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "ADDHEALTH,2", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "4534554684,PLAY", 1);
+      break;
     default: break;
   }
 }
