@@ -379,6 +379,12 @@ function ArsenalHasFaceUpArrowCard($player)
   return false;
 }
 
+function GetPlayerBase($player)
+{
+  $character = &GetPlayerCharacter($player);
+  return $character[0];
+}
+
 function ArsenalFull($player)
 {
   $arsenal = &GetArsenal($player);

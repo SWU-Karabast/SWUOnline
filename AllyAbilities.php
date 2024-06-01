@@ -902,6 +902,15 @@ function SpecificAllyAttackAbilities($attackID)
         AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,2", 1);
       }
       break;
+    case "5511838014"://Kuil
+      $card = Mill($mainPlayer, 1);
+      if(SharesAspect($card, GetPlayerBase($mainPlayer))) {
+        WriteLog("Kuil returns " . CardLink($card, $card) . " to hand");
+        $discard = &GetDiscard($mainPlayer);
+        RemoveDiscard($mainPlayer, count($discard) - DiscardPieces());
+        AddHand($mainPlayer, $card);
+      }
+      break;
     default: break;
   }
 }
