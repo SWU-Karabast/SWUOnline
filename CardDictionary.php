@@ -1296,6 +1296,7 @@ function SmuggleCost($cardID, $player="", $index="")
     case "8552719712": return 7;//Pirate Battle Tank
     case "2522489681": return 6;//Zorii Bliss
     case "4534554684": return 4;//Freetown Backup
+    case "9690731982": return 3;//Reckless Gunslinger
     default: return -1;
   }
 }

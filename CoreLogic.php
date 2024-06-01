@@ -3597,6 +3597,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
       }
       break;
+    case "9690731982"://Reckless Gunslinger
+      DealDamageAsync(1, 1, "DAMAGE", $cardID);
+      DealDamageAsync(2, 1, "DAMAGE", $cardID);
+      break;
     default: break;
   }
 }
