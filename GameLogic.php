@@ -1214,7 +1214,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       return FinalizeDamage($player, $damage, $damageThreatened, $params[1], $params[2]);
     case "APPENDDQVAR":
       if($dqVars[$parameter] == "-") $dqVars[$parameter] = $lastResult;
-      else $dqVars[$parameter] .= $lastResult;
+      else $dqVars[$parameter] .= "," . $lastResult;
       return $lastResult;
     case "SETDQVAR":
       $dqVars[$parameter] = $lastResult;
