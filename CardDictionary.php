@@ -1265,6 +1265,7 @@ function SmuggleCost($cardID, $player="", $index="")
     case "2288926269": return 6;//Privateer Crew
     case "5752414373": return 6;//Millennium Falcon
     case "8552719712": return 7;//Pirate Battle Tank
+    case "2522489681": return 6;//Zorii Bliss
     default: return -1;
   }
 }

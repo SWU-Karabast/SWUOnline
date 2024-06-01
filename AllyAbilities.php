@@ -863,6 +863,10 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "HEALALLY," . $power, 1);
       break;
+    case "2522489681"://Zorii Bliss
+      Draw($mainPlayer);
+      AddCurrentTurnEffect("2522489681", $mainPlayer, from:"PLAY");
+      break;
     default: break;
   }
 }

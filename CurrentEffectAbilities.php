@@ -454,6 +454,28 @@ function CurrentEffectEndTurnAbilities()
   }
 }
 
+
+function CurrentEffectStartRegroupAbilities()
+{
+  global $currentTurnEffects, $mainPlayer;
+  for($i = count($currentTurnEffects) - CurrentTurnPieces(); $i >= 0; $i -= CurrentTurnPieces()) {
+    $remove = false;
+    $params = explode("_", $currentTurnEffects[$i]);
+    $cardID = $params[0];
+    if(count($params) > 1) $subparam = $params[1];
+    if(SearchCurrentTurnEffects($cardID . "-UNDER", $currentTurnEffects[$i + 1])) {
+      AddNextTurnEffect($currentTurnEffects[$i], $currentTurnEffects[$i + 1]);
+    }
+    switch($cardID) {
+      case "2522489681"://Zorii Bliss
+        PummelHit($currentTurnEffects[$i+1]);
+        break;
+      default: break;
+    }
+    if($remove) RemoveCurrentTurnEffect($i);
+  }
+}
+
 function CurrentEffectStartTurnAbilities()
 {
   global $currentTurnEffects, $mainPlayer;
