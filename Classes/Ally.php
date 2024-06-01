@@ -276,6 +276,11 @@ class Ally {
     return $this->allies[$this->index + 4] != "-";
   }
 
+  function NumUpgrades() {
+    $subcards = $this->GetSubcards();
+    return count($subcards);
+  }
+
 }
 
 function LastAllyIndex($player) {
