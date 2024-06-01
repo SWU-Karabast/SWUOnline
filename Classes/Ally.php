@@ -225,6 +225,9 @@ class Ally {
     if($this->allies[$this->index + 4] == "-") $this->allies[$this->index + 4] = $cardID;
     else $this->allies[$this->index + 4] = $this->allies[$this->index + 4] . "," . $cardID;
     $this->AddHealth(CardHP($cardID));
+    if (CardIsUnique($cardID)) {
+      $this->CheckUniqueUpgrade($cardID);
+    }
   }
 
   function GetSubcards() {
@@ -234,6 +237,30 @@ class Ally {
 
   function ClearSubcards() {
     $this->allies[$this->index + 4] = "-";
+  }
+
+  function CheckUniqueUpgrade($cardID) {
+    $firstCopy = "";
+    $secondCopy = "";
+    for($i=0; $i<count($this->allies); $i+=AllyPieces()) {
+      $subcards = explode(",", $this->allies[$i + 4]);
+      for($j=0; $j<count($subcards); ++$j) {
+        if($subcards[$j] == $cardID) {
+          if($firstCopy == "") $firstCopy = $i;
+          else $secondCopy = $i;
+        }
+      }
+    }
+
+    if($firstCopy != "" && $firstCopy == $secondCopy && $this->index == $firstCopy) {
+      $this->DefeatUpgrade($cardID);
+      WriteLog("Existing copy of upgrade defeated due to unique rule.");
+    } elseif ($firstCopy != "" && $secondCopy != "" && $firstCopy != $secondCopy) {
+      $otherindex = $this->index == $firstCopy ? $secondCopy : $firstCopy;
+      $otherAlly = new Ally("MYALLY-" . $otherindex);
+      $otherAlly->DefeatUpgrade($cardID);
+      WriteLog("Existing copy of upgrade defeated due to unique rule.");
+    }
   }
 
   function DefeatUpgrade($upgradeID) {
