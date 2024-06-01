@@ -125,6 +125,7 @@ function EffectAttackModifier($cardID)
     case "1480894253": return 2;//Kylo Ren
     case "2503039837": return IsAllyAttackTarget() ? 1 : 0;//Moff Gideon Leader
     case "4534554684": return 2;//Freetown Backup
+    case "4721657243": return 3;//Kihraxz Heavy Fighter
     default: return 0;
   }
 }
@@ -531,6 +532,7 @@ function IsCombatEffectActive($cardID)
     case "0802973415": return true;//Outflank
     case "1480894253": return true;//Kylo Ren
     case "2503039837": return true;//Moff Gideon Leader
+    case "4721657243": return true;//Kihraxz Heavy Fighter
     default: return false;
   }
 }
