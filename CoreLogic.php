@@ -2174,7 +2174,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "6253392993"://Bright Hope
       if($from != "PLAY") {
-        MZMoveCard($currentPlayer, "MYALLY:arena=Ground", "MYHAND", may:true, filter:"leader=1");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:arena=Ground");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to bounce");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "BOUNCE", 1);
         AddDecisionQueue("DRAW", $currentPlayer, "-", 1);
       }
       break;
@@ -3231,7 +3234,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "DESTROY", 1);
         AddDecisionQueue("DRAW", $currentPlayer, "-", 1);
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an ally to deal 1 damage");
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
         AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1", 1);
       }
@@ -3250,7 +3253,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "1626462639"://Change of Heart
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
-      AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1", 1);
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to take control of", 1);
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "1626462639", 1);
