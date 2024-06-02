@@ -83,6 +83,9 @@ function AttackModifier($cardID, $player, $index)
       $hand = &GetHand($player);
       $modifier -= count($hand)/HandPieces();
       break;
+    case "7486516061"://Concord Dawn Interceptors
+      if($player == $defPlayer && GetAttackTarget() == "THEIRALLY-" . $index) $modifier += 2;
+      break;
     default: break;
   }
   return $modifier;
