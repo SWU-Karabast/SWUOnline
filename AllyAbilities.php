@@ -977,6 +977,12 @@ function SpecificAllyAttackAbilities($attackID)
         }
       }
       break;
+    case "1304452249"://Covetous Rivals
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:hasBountyOnly=true&THEIRALLY:hasBountyOnly=true");
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit with bounty to deal 2 damage to");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,2", 1);
+      break;
     default: break;
   }
 }
