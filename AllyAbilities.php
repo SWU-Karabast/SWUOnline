@@ -943,6 +943,18 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("CHOOSEMULTIZONE", $defPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $defPlayer, "DEALDAMAGE,2", 1);
       break;
+    case "7291903225"://Rickety Quadjumper
+      $deck = &GetDeck($mainPlayer);
+      if(count($deck) > 0 && RevealCards($deck[0])) {
+        AddDecisionQueue("PASSPARAMETER", $mainPlayer, $deck[0], 1);
+        AddDecisionQueue("NONECARDDEFINEDTYPEORPASS", $mainPlayer, "Unit", 1);
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY", 1);
+        AddDecisionQueue("MZFILTER", $mainPlayer, "index=MYALLY-" . $attackerAlly->Index());
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to give an experience");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "ADDEXPERIENCE", 1);
+      }
+      break;
     default: break;
   }
 }
