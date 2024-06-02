@@ -395,8 +395,9 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
   }
 }
 
-function CollectBounty($player, $index, $cardID, $reportMode=false) {
+function CollectBounty($player, $index, $cardID, $reportMode=false, $bountyUnitOverride="-") {
   $ally = new Ally("MYALLY-" . $index, $player);
+  $bountyUnit = $bountyUnitOverride == "-" ? $ally->CardID() : $bountyUnitOverride;
   $opponent = $player == 1 ? 2 : 1;
   $numBounties = 0;
   switch($cardID) {
@@ -413,7 +414,7 @@ function CollectBounty($player, $index, $cardID, $reportMode=false) {
     case "2740761445"://Guild Target
       ++$numBounties;
       if($reportMode) break;
-      $damage = CardIsUnique($ally->CardID()) ? 3 : 2;
+      $damage = CardIsUnique($bountyUnit) ? 3 : 2;
       DealDamageAsync($player, $damage, "DAMAGE", "2740761445");
       break;
     case "4117365450"://Wanted
@@ -425,7 +426,7 @@ function CollectBounty($player, $index, $cardID, $reportMode=false) {
     case "4282425335"://Top Target
       ++$numBounties;
       if($reportMode) break;
-      $amount = CardIsUnique($ally->CardID()) ? 6 : 4;
+      $amount = CardIsUnique($bountyUnit) ? 6 : 4;
       Restore($amount, $opponent);
       break;
     case "3074091930"://Rich Reward
@@ -469,6 +470,22 @@ function CollectBounty($player, $index, $cardID, $reportMode=false) {
       Draw($opponent);
       break;
     default: break;
+  }
+  if($numBounties > 0 && !$reportMode) {
+    $bosskIndex = SearchAlliesForCard($opponent, "d2bbda6982"); 
+    if($bosskIndex != "") {
+      $bossk = new Ally("MYALLY-" . $bosskIndex, $opponent);
+      if($bossk->NumUses() > 0) {
+        AddDecisionQueue("PASSPARAMETER", $opponent, $cardID);
+        AddDecisionQueue("SETDQVAR", $opponent, $cardID);
+        AddDecisionQueue("SETDQCONTEXT", $opponent, "Do you want to collect the bounty for <0> again with Bossk?");
+        AddDecisionQueue("YESNO", $opponent, "-");
+        AddDecisionQueue("NOPASS", $opponent, "-", 1);
+        AddDecisionQueue("PASSPARAMETER", $opponent, "MYALLY-" . $bosskIndex, 1);
+        AddDecisionQueue("ADDMZUSES", $opponent, "-1", 1);
+        AddDecisionQueue("COLLECTBOUNTY", $player, $cardID . "," . $bountyUnit, 1);
+      }
+    }
   }
   return $numBounties;
 }
