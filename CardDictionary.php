@@ -930,6 +930,7 @@ function UpgradeFilter($cardID)
     case "1323728003"://Electrostaff
     case "3514010297"://Mandalorian Armor
     case "3525325147"://Vambrace Grappleshot
+    case "5874342508"://Hotshot DL-44 Blaster
       return "trait=Vehicle";
     case "8055390529"://Traitorous
       return "maxCost=3";
@@ -1298,6 +1299,7 @@ function SmuggleCost($cardID, $player="", $index="")
     case "2522489681": return 6;//Zorii Bliss
     case "4534554684": return 4;//Freetown Backup
     case "9690731982": return 3;//Reckless Gunslinger
+    case "5874342508": return 3;//Hotshot DL-44 Blaster
     default: return -1;
   }
 }
