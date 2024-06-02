@@ -117,6 +117,7 @@ function RestoreAmount($cardID, $player, $index)
     case "4327133297": $amount += 2; break;//Moisture Farmer
     case "5977238053": $amount += 2; break;//Sundari Peacekeeper
     case "9503028597": $amount += 1; break;//Clone Deserter
+    case "5511838014": $amount += 1; break;//Kuil
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
@@ -221,6 +222,8 @@ function HasSentinel($cardID, $player, $index)
     case "6585115122"://The Mandalorian
     case "2969011922"://Pyke Sentinel
     case "8552719712"://Pirate Battle Tank
+    case "4843225228"://Phase-III Dark Trooper
+    case "7486516061"://Concord Dawn Interceptors
       return true;
     case "2739464284"://Gamorrean Guards
       return SearchCount(SearchAllies($player, aspect:"Cunning")) > 1;
@@ -265,6 +268,17 @@ function HasOverwhelm($cardID, $player, $index)
   global $defPlayer;
   $ally = new Ally("MYALLY-" . $index, $player);
   if($ally->LostAbilities()) return false;
+  $allies = &GetAllies($player);
+  for($i=0; $i<count($allies); $i+=AllyPieces())
+  {
+    switch($allies[$i])
+    {
+      case "4484318969"://Moff Gideon Leader
+        if(CardCost($cardID) <= 3 && IsAllyAttackTarget()) return true;
+        break;
+      default: break;
+    }
+  }
   switch($cardID)
   {
     case "6072239164":
@@ -276,6 +290,8 @@ function HasOverwhelm($cardID, $player, $index)
     case "6432884726":
     case "5557494276"://Death Watch Loyalist
     case "2470093702"://Wrecker
+    case "4484318969"://Moff Gideon Leader
+    case "4721657243"://Kihraxz Heavy Fighter
       return true;
     case "4619930426"://First Legion Snowtrooper
       $target = GetAttackTarget();
@@ -568,7 +584,12 @@ function AttackValue($cardID)
 {
   global $combatChainState, $CCS_NumBoosted, $mainPlayer, $currentPlayer;
   if(!$cardID) return "";
-  return CardPower($cardID);
+  switch($cardID)
+  {
+    case "4897501399"://Ruthlessness
+      return 2;
+    default: return CardPower($cardID);
+  }
 }
 
 function HasGoAgain($cardID)
@@ -634,6 +655,9 @@ function GetAbilityTypes($cardID)
     case "4263394087"://Chirrut Imwe
       $abilityTypes = "A";
       break;
+    case "1480894253"://Kylo Ren
+      $abilityTypes = "A";
+      break;
     case "4300219753"://Fett's Firespray
       $abilityTypes = "A,AA";
       break;
@@ -680,6 +704,9 @@ function GetAbilityTypes($cardID)
       break;
     case "1885628519"://Crosshair
       $abilityTypes = "A,A,AA";
+      break;
+    case "2503039837"://Moff Gideon
+      $abilityTypes = "A";
       break;
     default: break;
   }
@@ -733,6 +760,9 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
     case "4263394087"://Chirrut Imwe
       $abilityNames = "Buff HP";
       break;
+    case "1480894253"://Kylo Ren
+      $abilityNames = "Buff Attack";
+      break;
     case "4300219753"://Fett's Firespray
       $ally = new Ally("MYALLY-" . $index, $currentPlayer);
       if($validate) $abilityNames = $ally->IsExhausted() ? "Exhaust" : "Exhaust,Attack";
@@ -781,6 +811,9 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       break;
     case "1885628519"://Crosshair
       $abilityNames = "Buff,Snipe,Attack";
+      break;
+    case "2503039837"://Moff Gideon
+      $abilityNames = "Attack";
       break;
     default: break;
   }
@@ -898,6 +931,7 @@ function UpgradeFilter($cardID)
     case "1323728003"://Electrostaff
     case "3514010297"://Mandalorian Armor
     case "3525325147"://Vambrace Grappleshot
+    case "5874342508"://Hotshot DL-44 Blaster
       return "trait=Vehicle";
     case "8055390529"://Traitorous
       return "maxCost=3";
@@ -1021,6 +1055,10 @@ function LeaderUnit($cardID) {
     case "1951911851"://Grand Admiral Thrawn
       return "02199f9f1e";
     //Shadows of the Galaxy
+    case "1480894253"://Kylo Ren
+      return "8def61a58e";
+    case "2503039837"://Moff Gideon Leader
+      return "4484318969";
     default: return "";
   }
 }
@@ -1065,6 +1103,10 @@ function LeaderUndeployed($cardID) {
     case "02199f9f1e"://Grand Admiral Thrawn
       return "1951911851";
     //Shadows of the Galaxy
+    case "8def61a58e"://Kylo Ren
+      return "1480894253";
+    case "4484318969"://Moff Gideon Leader
+      return "2503039837";
     default: return "";
   }
 }
@@ -1255,6 +1297,10 @@ function SmuggleCost($cardID, $player="", $index="")
     case "2288926269": return 6;//Privateer Crew
     case "5752414373": return 6;//Millennium Falcon
     case "8552719712": return 7;//Pirate Battle Tank
+    case "2522489681": return 6;//Zorii Bliss
+    case "4534554684": return 4;//Freetown Backup
+    case "9690731982": return 3;//Reckless Gunslinger
+    case "5874342508": return 3;//Hotshot DL-44 Blaster
     default: return -1;
   }
 }
@@ -1358,6 +1404,18 @@ function HasWard($cardID)
   switch ($cardID) {
 
     default: return false;
+  }
+}
+
+//Used to correct inconsistencies from the data set
+function DefinedCardType2Wrapper($cardID)
+{
+  switch($cardID)
+  {
+    case "1480894253"://Kylo Ren
+    case "2503039837"://Moff Gideon
+      return "";
+    default: return DefinedCardType2($cardID);
   }
 }
 

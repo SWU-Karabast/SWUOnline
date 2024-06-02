@@ -79,6 +79,13 @@ function AttackModifier($cardID, $player, $index)
     case "7648077180"://97th Legion
       $modifier += NumResources($player);
       break;
+    case "8def61a58e"://Kylo Ren
+      $hand = &GetHand($player);
+      $modifier -= count($hand)/HandPieces();
+      break;
+    case "7486516061"://Concord Dawn Interceptors
+      if($player == $defPlayer && GetAttackTarget() == "THEIRALLY-" . $index) $modifier += 2;
+      break;
     default: break;
   }
   return $modifier;

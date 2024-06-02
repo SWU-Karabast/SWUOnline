@@ -109,6 +109,13 @@ class Ally {
       DestroyAlly($this->playerID, $this->index, fromCombat:$fromCombat);
       return true;
     }
+    switch($this->CardID())
+    {
+      case "4843225228"://Phase-III Dark Trooper
+        if($fromCombat) $this->Attach("2007868442");//Experience token
+        break;
+      default: break;
+    }
     return false;
   }
 
@@ -167,6 +174,9 @@ class Ally {
         case "4339330745"://Wedge Antilles
           if(TraitContains($this->CardID(), "Vehicle", $this->PlayerID())) $power += 1;
           break;
+        case "4484318969"://Moff Gideon Leader
+          if(CardCost($this->CardID()) <= 3 && IsAllyAttackTarget()) $power += 1;
+          break;
         default: break;
       }
     }
@@ -186,6 +196,7 @@ class Ally {
       if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $this->UniqueID()) continue;
       $power += EffectAttackModifier($currentTurnEffects[$i]);
     }
+    if($power < 0) $power = 0;
     return $power;
   }
 
@@ -224,6 +235,9 @@ class Ally {
     if($this->allies[$this->index + 4] == "-") $this->allies[$this->index + 4] = $cardID;
     else $this->allies[$this->index + 4] = $this->allies[$this->index + 4] . "," . $cardID;
     $this->AddHealth(CardHP($cardID));
+    if (CardIsUnique($cardID)) {
+      $this->CheckUniqueUpgrade($cardID);
+    }
   }
 
   function GetSubcards() {
@@ -233,6 +247,30 @@ class Ally {
 
   function ClearSubcards() {
     $this->allies[$this->index + 4] = "-";
+  }
+
+  function CheckUniqueUpgrade($cardID) {
+    $firstCopy = "";
+    $secondCopy = "";
+    for($i=0; $i<count($this->allies); $i+=AllyPieces()) {
+      $subcards = explode(",", $this->allies[$i + 4]);
+      for($j=0; $j<count($subcards); ++$j) {
+        if($subcards[$j] == $cardID) {
+          if($firstCopy == "") $firstCopy = $i;
+          else $secondCopy = $i;
+        }
+      }
+    }
+
+    if($firstCopy != "" && $firstCopy == $secondCopy && $this->index == $firstCopy) {
+      $this->DefeatUpgrade($cardID);
+      WriteLog("Existing copy of upgrade defeated due to unique rule.");
+    } elseif ($firstCopy != "" && $secondCopy != "" && $firstCopy != $secondCopy) {
+      $otherindex = $this->index == $firstCopy ? $secondCopy : $firstCopy;
+      $otherAlly = new Ally("MYALLY-" . $otherindex);
+      $otherAlly->DefeatUpgrade($cardID);
+      WriteLog("Existing copy of upgrade defeated due to unique rule.");
+    }
   }
 
   function DefeatUpgrade($upgradeID) {
@@ -273,6 +311,15 @@ class Ally {
 
   function IsUpgraded() {
     return $this->allies[$this->index + 4] != "-";
+  }
+
+  function NumUpgrades() {
+    $subcards = $this->GetSubcards();
+    return count($subcards);
+  }
+
+  function HasBounty() {
+    return CollectBounties($this->PlayerID(), $this->Index(), reportMode:true) > 0;
   }
 
 }

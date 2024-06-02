@@ -1091,6 +1091,9 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         array_push($hand, array_shift($deck));
       }
       return 1;
+    case "RESUMEROUNDPASS":
+      ResumeRoundPass();
+      return 1;
     case "ROLLDIE":
       $roll = RollDie($player, true, $parameter == "1");
       return $roll;

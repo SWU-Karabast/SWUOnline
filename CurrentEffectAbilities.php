@@ -122,6 +122,10 @@ function EffectAttackModifier($cardID)
     case "8988732248": return 1;//Rebel Assault
     case "7109944284": return -1* $subparam;//Luke Skywalker
     case "1885628519": return 1;//Crosshair
+    case "1480894253": return 2;//Kylo Ren
+    case "2503039837": return IsAllyAttackTarget() ? 1 : 0;//Moff Gideon Leader
+    case "4534554684": return 2;//Freetown Backup
+    case "4721657243": return 3;//Kihraxz Heavy Fighter
     default: return 0;
   }
 }
@@ -453,6 +457,28 @@ function CurrentEffectEndTurnAbilities()
   }
 }
 
+
+function CurrentEffectStartRegroupAbilities()
+{
+  global $currentTurnEffects, $mainPlayer;
+  for($i = count($currentTurnEffects) - CurrentTurnPieces(); $i >= 0; $i -= CurrentTurnPieces()) {
+    $remove = false;
+    $params = explode("_", $currentTurnEffects[$i]);
+    $cardID = $params[0];
+    if(count($params) > 1) $subparam = $params[1];
+    if(SearchCurrentTurnEffects($cardID . "-UNDER", $currentTurnEffects[$i + 1])) {
+      AddNextTurnEffect($currentTurnEffects[$i], $currentTurnEffects[$i + 1]);
+    }
+    switch($cardID) {
+      case "2522489681"://Zorii Bliss
+        PummelHit($currentTurnEffects[$i+1]);
+        break;
+      default: break;
+    }
+    if($remove) RemoveCurrentTurnEffect($i);
+  }
+}
+
 function CurrentEffectStartTurnAbilities()
 {
   global $currentTurnEffects, $mainPlayer;
@@ -504,6 +530,9 @@ function IsCombatEffectActive($cardID)
     case "8988732248": return true;//Rebel Assault
     case "6514927936": return true;//Leia Organa
     case "0802973415": return true;//Outflank
+    case "1480894253": return true;//Kylo Ren
+    case "2503039837": return true;//Moff Gideon Leader
+    case "4721657243": return true;//Kihraxz Heavy Fighter
     default: return false;
   }
 }
@@ -516,6 +545,7 @@ function IsCombatEffectPersistent($cardID)
     case "2587711125": return true;//Disarm
     case "2569134232": return true;//Jedha City
     case "3789633661": return true;//Cunning
+    case "1480894253": return true;//Kylo Ren
     default:
       return false;
   }

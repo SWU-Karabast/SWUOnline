@@ -409,6 +409,11 @@ function AddGraveyard($cardID, $player, $from)
   }
 }
 
+function RemoveDiscard($player, $index)
+{
+  return RemoveGraveyard($player, $index);
+}
+
 function RemoveGraveyard($player, $index)
 {
   $discard = &GetDiscard($player);
