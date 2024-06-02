@@ -363,11 +363,13 @@ function MainCharacterPlayCardAbilities($cardID, $from)
     if($character[$i+1] != 2) continue;
     switch($character[$i]) {
       case "3045538805"://Hondo Ohnaka
-        $char[$i+1] = 1;
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to give an experience token", 1);
-        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "ADDEXPERIENCE", 1);
+        if($from == "RESOURCES") {
+          $char[$i+1] = 1;
+          AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+          AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to give an experience token", 1);
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+          AddDecisionQueue("MZOP", $currentPlayer, "ADDEXPERIENCE", 1);
+        }
         break;
       default:
         break;
@@ -2124,7 +2126,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     $target = count($targetArr) > 1 ? $targetArr[0] . "-" . $targetArr[1] : "-";
   }
   if($from != "PLAY" && $from != "EQUIP" && $from != "CHAR") {
-    if(AllyPlayCardAbility($cardID, $currentPlayer, reportMode:true)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $target, $additionalCosts);
+    if(AllyPlayCardAbility($cardID, $currentPlayer, reportMode:true, from:$from)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $target, $additionalCosts);
   }
   if($from != "PLAY" && IsAlly($cardID, $currentPlayer)) {
     $playAlly = new Ally("MYALLY-" . LastAllyIndex($currentPlayer));

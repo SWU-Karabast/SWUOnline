@@ -633,7 +633,7 @@ function AllyAttackedAbility($attackTarget, $index) {
   }
 }
 
-function AllyPlayCardAbility($cardID, $player="", $reportMode=false)
+function AllyPlayCardAbility($cardID, $player="", $reportMode=false, $from="-")
 {
   global $currentPlayer;
   if($player == "") $player = $currentPlayer;
@@ -642,6 +642,15 @@ function AllyPlayCardAbility($cardID, $player="", $reportMode=false)
   {
     switch($allies[$i])
     {
+      case "415bde775d"://Hondo Ohnaka
+        if($from == "RESOURCES") {
+          if($reportMode) return true;
+          AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
+          AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to give an experience token", 1);
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+          AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
+        }
+        break;
       case "0052542605"://Bossk
         if(DefinedTypesContains($cardID, "Event", $player)) {
           if($reportMode) return true;
