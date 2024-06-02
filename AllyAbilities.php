@@ -955,6 +955,16 @@ function SpecificAllyAttackAbilities($attackID)
         AddDecisionQueue("MZOP", $mainPlayer, "ADDEXPERIENCE", 1);
       }
       break;
+    case "7171636330"://Chain Code Collector
+      if(IsAllyAttackTarget()) {
+        $target = GetAttackTarget();
+        $ally = new Ally($target, $defPlayer);
+        if($ally->HasBounty()) {
+          AddCurrentTurnEffect("7171636330", $defPlayer, "PLAY", $ally->UniqueID());
+          UpdateLinkAttack();
+        }
+      }
+      break;
     default: break;
   }
 }
