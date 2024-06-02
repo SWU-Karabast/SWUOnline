@@ -33,14 +33,17 @@ function PlayAlly($cardID, $player, $subCards = "-", $from="-")
     }
   }
   $allies[$index+2] += CharacterStaticHealthModifiers($cardID, $index, $player);
+  CheckUnique($cardID, $player);
+  return $index;
+}
+
+function CheckUnique($cardID, $player) {
   if(CardIsUnique($cardID) && SearchCount(SearchAlliesForCard($player, $cardID)) > 1) {
     PrependDecisionQueue("MZDESTROY", $player, "-", 1);
     PrependDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
     PrependDecisionQueue("SETDQCONTEXT", $player, "You have two of this unique unit; choose one to destroy");
-    //PrependDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
     PrependDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:cardID=" . $cardID);
   }
-  return $index;
 }
 
 function AllyHasStaticHealthModifier($cardID)
@@ -150,6 +153,7 @@ function AllyTakeControl($player, $index) {
   $otherPlayer = $player == 1 ? 2 : 1;
   $myAllies = &GetAllies($player);
   $theirAllies = &GetAllies($otherPlayer);
+  $cardID = $theirAllies[$index];
   $uniqueID = $theirAllies[$index+5];
   for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnEffectPieces()) {
     if($currentTurnEffects[$i+1] != $otherPlayer) continue;
@@ -160,6 +164,7 @@ function AllyTakeControl($player, $index) {
     array_push($myAllies, $theirAllies[$i]);
   }
   RemoveAlly($otherPlayer, $index);
+  CheckUnique($cardID, $player);
   return $uniqueID;
 }
 
@@ -208,6 +213,7 @@ function AllyPlayableExhausted($cardID) {
   switch($cardID) {
     case "4300219753"://Fett's Firespray
     case "2471223947"://Frontline Shuttle
+    case "1885628519"://Crosshair
       return true;
     default: return false;
   }
@@ -219,6 +225,8 @@ function AllyDoesAbilityExhaust($cardID, $abilityIndex) {
       return $abilityIndex == 1;
     case "2471223947"://Frontline Shuttle
       return $abilityIndex == 1;
+    case "1885628519"://Crosshair
+      return $abilityIndex == 1 || $abilityIndex == 2;
     default: return true;
   }
 }
@@ -388,8 +396,21 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
 }
 
 function CollectBounties($player, $index) {
+  global $currentTurnEffects;
   $ally = new Ally("MYALLY-" . $index, $player);
   $opponent = $player == 1 ? 2 : 1;
+  //Current turn effect bounties
+  for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnEffectPieces()) {
+    if($currentTurnEffects[$i+1] != $player) continue;
+    if($currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
+    switch($currentTurnEffects[$i]) {
+      case "1090660242"://The Client
+        Restore(5, $opponent);
+        break;
+      default: break;
+    }
+  }
+  //Subcard bounties
   $subcards = $ally->GetSubcards();
   for($i=0; $i<count($subcards); ++$i)
   {
@@ -574,7 +595,7 @@ function AllyAttackedAbility($attackTarget, $index) {
   }
 }
 
-function AllyPlayCardAbility($cardID, $player="")
+function AllyPlayCardAbility($cardID, $player="", $reportMode=false)
 {
   global $currentPlayer;
   if($player == "") $player = $currentPlayer;
@@ -585,6 +606,7 @@ function AllyPlayCardAbility($cardID, $player="")
     {
       case "0052542605"://Bossk
         if(DefinedTypesContains($cardID, "Event", $player)) {
+          if($reportMode) return true;
           AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
           AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal 2 damage to");
           AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
@@ -593,11 +615,13 @@ function AllyPlayCardAbility($cardID, $player="")
         break;
       case "0961039929"://Colonel Yularen
         if(DefinedTypesContains($cardID, "Unit", $player) && AspectContains($cardID, "Command", $player)) {
+          if($reportMode) return true;
           Restore(1, $player);
         }
         break;
       case "5907868016"://Fighters for Freedom
-        if(AspectContains($cardID, "Aggression", $player)) {
+        if($i != LastAllyIndex($player) && AspectContains($cardID, "Aggression", $player)) {
+          if($reportMode) return true;
           $otherPlayer = ($player == 1 ? 2 : 1);
           DealDamageAsync($otherPlayer, 1, "DAMAGE", "5907868016");
           WriteLog(CardLink("5907868016", "5907868016") . " is dealing 1 damage.");
@@ -613,7 +637,10 @@ function AllyPlayCardAbility($cardID, $player="")
     switch($allies[$i])
     {
       case "5555846790"://Saw Gerrera
-        if(DefinedTypesContains($cardID, "Event", $player)) DealDamageAsync($player, 2, "DAMAGE", "5555846790");
+        if(DefinedTypesContains($cardID, "Event", $player)) {
+          if($reportMode) return true;
+          DealDamageAsync($player, 2, "DAMAGE", "5555846790");
+        }
         break;
       default: break;
     }
@@ -659,6 +686,14 @@ function SpecificAllyAttackAbilities($attackID)
           $ally = new Ally($target);
           $ally->AddRoundHealthModifier(-2);
           AddCurrentTurnEffect("8495694166", $defPlayer, from:"PLAY");
+        }
+        break;
+      case "3525325147"://Vambrace Grappleshot
+        if(IsAllyAttackTarget()) {
+          WriteLog("Vambrace Grappleshot exhausts the defender");
+          $target = GetAttackTarget();
+          $ally = new Ally($target);
+          $ally->Exhaust();
         }
         break;
       default: break;
@@ -819,6 +854,14 @@ function SpecificAllyAttackAbilities($attackID)
       if(CardArenas($ally->CardID()) == "Ground") {
         AddCurrentTurnEffect("5464125379", $defPlayer, from:"PLAY");
       }
+      break;
+    case "8190373087"://Gentle Giant
+      $power = $attackerAlly->CurrentPower();
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
+      AddDecisionQueue("MZFILTER", $mainPlayer, "index=MYALLY-" . $attackerAlly->Index());
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to heal " . $power);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "HEALALLY," . $power, 1);
       break;
     default: break;
   }

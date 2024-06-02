@@ -220,6 +220,7 @@ function HasSentinel($cardID, $player, $index)
     case "1747533523"://Village Protectors
     case "6585115122"://The Mandalorian
     case "2969011922"://Pyke Sentinel
+    case "8552719712"://Pirate Battle Tank
       return true;
     case "2739464284"://Gamorrean Guards
       return SearchCount(SearchAllies($player, aspect:"Cunning")) > 1;
@@ -253,6 +254,7 @@ function HasGrit($cardID, $player, $index)
     case "8301e8d7ef":
     case "5557494276"://Death Watch Loyalist
     case "6878039039"://Hylobon Enforcer
+    case "8190373087"://Gentle Giant
       return true;
     default: return false;
   }
@@ -273,6 +275,7 @@ function HasOverwhelm($cardID, $player, $index)
     case "4631297392":
     case "6432884726":
     case "5557494276"://Death Watch Loyalist
+    case "2470093702"://Wrecker
       return true;
     case "4619930426"://First Legion Snowtrooper
       $target = GetAttackTarget();
@@ -285,7 +288,7 @@ function HasOverwhelm($cardID, $player, $index)
   }
 }
 
-function HasAmbush($cardID, $player, $index)
+function HasAmbush($cardID, $player, $index, $from)
 {
   global $currentTurnEffects;
   $ally = new Ally("MYALLY-" . $index, $player);
@@ -332,6 +335,8 @@ function HasAmbush($cardID, $player, $index)
       return SearchCount(SearchAllies($player, aspect:"Command")) > 1;
     case "4685993945"://Frontier AT-RT
       return SearchCount(SearchAllies($player, trait:"Vehicle")) > 1;
+    case "5752414373"://Millennium Falcon
+      return $from == "HAND";
     default: return false;
   }
 }
@@ -352,6 +357,7 @@ function HasShielded($cardID, $player, $index)
     case "7870435409":
     case "6135081953"://Doctor Evazan
     case "1747533523"://Village Protectors
+    case "1090660242"://The Client
       return true;
     default: return false;
   }
@@ -506,6 +512,8 @@ function AbilityCost($cardID)
       return GetResolvedAbilityName($cardID) == "Deal Damage" ? 1 : 0;
     case "1951911851"://Grand Admiral Thrawn
       return GetResolvedAbilityName($cardID) == "Exhaust" ? 1 : 0;
+    case "1885628519"://Crosshair
+      return GetResolvedAbilityName($cardID) == "Buff" ? 2 : 0;
     default: break;
   }
   if(IsAlly($cardID)) return 0;
@@ -667,6 +675,12 @@ function GetAbilityTypes($cardID)
     case "6536128825"://Grogu
       $abilityTypes = "A,AA";
       break;
+    case "1090660242"://The Client
+      $abilityTypes = "A,AA";
+      break;
+    case "1885628519"://Crosshair
+      $abilityTypes = "A,A,AA";
+      break;
     default: break;
   }
   if(DefinedTypesContains($cardID, "Leader", $currentPlayer) && !IsAlly($cardID, $currentPlayer)) {
@@ -761,6 +775,12 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       break;
     case "6536128825"://Grogu
       $abilityNames = "Exhaust,Attack";
+      break;
+    case "1090660242"://The Client
+      $abilityNames = "Bounty,Attack";
+      break;
+    case "1885628519"://Crosshair
+      $abilityNames = "Buff,Snipe,Attack";
       break;
     default: break;
   }
@@ -876,6 +896,8 @@ function UpgradeFilter($cardID)
     case "0705773109"://Vader's Lightsaber
     case "6903722220"://Luke's Lightsaber
     case "1323728003"://Electrostaff
+    case "3514010297"://Mandalorian Armor
+    case "3525325147"://Vambrace Grappleshot
       return "trait=Vehicle";
     case "8055390529"://Traitorous
       return "maxCost=3";
@@ -1047,6 +1069,24 @@ function LeaderUndeployed($cardID) {
   }
 }
 
+function HasAttackAbility($cardID) {
+  switch($cardID) {
+    case "1746195484"://Jedha Agitator
+    case "5707383130"://Bendu
+    case "1862616109"://Snowspeeder
+    case "3613174521"://Outer Rim Headhunter
+    case "4599464590"://Rugged Survivors
+    case "4299027717"://Mining Guild Tie Fighter
+    case "7728042035"://Chimaera
+    case "8691800148"://Reinforcement Walker
+    case "9568000754"://R2-D2
+    case "8009713136"://C-3PO
+    case "7533529264"://Wolffe
+      return true;
+    default: return false;
+  }
+}
+
 function HasBladeBreak($cardID)
 {
   global $defPlayer;
@@ -1212,6 +1252,9 @@ function SmuggleCost($cardID, $player="", $index="")
     case "1982478444": return 7;//Vigilant Pursuit Craft
     case "0866321455": return 3;//Smuggler's Aid
     case "6037778228": return 5;//Night Owl Skirmisher
+    case "2288926269": return 6;//Privateer Crew
+    case "5752414373": return 6;//Millennium Falcon
+    case "8552719712": return 7;//Pirate Battle Tank
     default: return -1;
   }
 }

@@ -104,7 +104,8 @@ class Ally {
     }
     if($damageDealt != NULL) $damageDealt = $amount;
     $this->allies[$this->index+2] -= $amount;
-    if($this->Health() <= 0 && $this->CardID() != "d1a7b76ae7") {
+    AddEvent("DAMAGE", $this->UniqueID() . "!" . $amount);
+    if($this->Health() <= 0 && ($this->CardID() != "d1a7b76ae7" || $this->LostAbilities())) { //Chirrut Imwe
       DestroyAlly($this->playerID, $this->index, fromCombat:$fromCombat);
       return true;
     }
