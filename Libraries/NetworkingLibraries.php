@@ -1019,9 +1019,17 @@ function CleanUpCombatEffects($weaponSwap=false)
 
 function BeginRoundPass()
 {
+  global $mainPlayer;
+  WriteLog("Both players have passed; ending the phase.");
+  CurrentEffectStartRegroupAbilities();
+  AddDecisionQueue("RESUMEROUNDPASS", $mainPlayer, "-");
+  ProcessDecisionQueue();
+}
+
+function ResumeRoundPass()
+{
   global $initiativeTaken, $mainPlayer, $currentRound, $currentTurnEffects, $nextTurnEffects, $initiativePlayer;
   global $MakeStartTurnBackup;
-  WriteLog("Both players have passed; ending the phase.");
   ResetClassState(1);
   ResetClassState(2);
   AllyBeginEndTurnEffects();

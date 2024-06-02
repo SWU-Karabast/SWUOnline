@@ -372,6 +372,18 @@ function SpecificCardLogic($player, $card, $lastResult)
         }
       }
       return $lastResult;
+    case "CALCULATEDLETHALITY":
+      $owner = MZPlayerID($player, $lastResult);
+      $target = new Ally($lastResult, $owner);
+      $numUpgrades = $target->NumUpgrades();
+      $target->Destroy();
+      if($numUpgrades > 0) {
+        for($i=0; $i<$numUpgrades; ++$i) PrependDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
+        PrependDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
+        PrependDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to give " . $numUpgrades . " experience");
+        PrependDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
+      }
+      return $lastResult;
     default: return "";
   }
 }

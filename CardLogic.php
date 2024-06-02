@@ -770,6 +770,18 @@ function HasEnergyCounters($array, $index)
   }
 }
 
+function SharesAspect($card1, $card2)
+{
+  $c1Aspects = explode(",", CardAspects($card1));
+  $c2Aspects = explode(",", CardAspects($card1));
+  for($i=0; $i<count($c1Aspects); $i++) {
+    for($j=0; $j<count($c2Aspects); $j++) {
+      if($c1Aspects[$i] == $c2Aspects[$j]) return true;
+    }
+  }
+  return false;
+}
+
 function BlackOne($player) {
   AddDecisionQueue("SETDQCONTEXT", $player, "Do you want to discard your hand to draw 3?");
   AddDecisionQueue("YESNO", $player, "-");

@@ -301,7 +301,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       background: url(./Images/dmgbg-l.png) left no-repeat, url(./Images/dmgbg-r.png) right no-repeat; background-size: contain;
       filter: drop-shadow(1px 2px 1px rgba(0, 0, 0, 0.40));
       font-weight: 700; font-size: 24px; text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.30);  
-      user-select: none;'>$myHealth</span>"); 
+      user-select: none;pointer-events:none;'>$myHealth</span>"); 
   echo (($manualMode ? "<span style='position:absolute; top:120px; left:65px;'>" . CreateButton($playerID, "+1", 10006, 0, "20px") . CreateButton($playerID, "-1", 10005, 0, "20px") . "</span>" : ""));
   echo ("<span class='base-their-dmg' 
       style='position:fixed;
@@ -310,7 +310,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       background: url(./Images/dmgbg-l.png) left no-repeat, url(./Images/dmgbg-r.png) right no-repeat; background-size: contain;
       filter: drop-shadow(1px 2px 1px rgba(0, 0, 0, 0.40));
       font-weight: 700; font-size: 24px; text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.30);  
-      user-select: none;'>$theirHealth</span>");
+      user-select: none;pointer-events:none;'>$theirHealth</span>");
   echo (($manualMode ? "<span style='position:absolute; top:0px; left:65px;'>" . CreateButton($playerID, "+1", 10008, 0, "20px") . CreateButton($playerID, "-1", 10007, 0, "20px") . "</span>" : ""));
   echo ("</div></div>");
   echo ("<div style='position:absolute; top:37px; left:-130px; z-index:-5;'></div>");
