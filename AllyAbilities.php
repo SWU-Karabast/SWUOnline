@@ -936,6 +936,13 @@ function SpecificAllyAttackAbilities($attackID)
         AddHand($mainPlayer, $card);
       }
       break;
+    case "9472541076"://Grey Squadron Y-Wing
+      AddDecisionQueue("MULTIZONEINDICES", $defPlayer, "MYALLY");
+      AddDecisionQueue("PREPENDLASTRESULT", $defPlayer, "MYCHAR-0,");
+      AddDecisionQueue("SETDQCONTEXT", $defPlayer, "Choose something to deal 2 damage to");
+      AddDecisionQueue("CHOOSEMULTIZONE", $defPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $defPlayer, "DEALDAMAGE,2", 1);
+      break;
     default: break;
   }
 }
