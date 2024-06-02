@@ -511,6 +511,9 @@ function OnKillAbility($fromCombat)
     case "5230572435"://Mace Windu, Party Crasher
       $attackerAlly->Ready();
       break;
+    case "6769342445"://Jango Fett
+      Draw($mainPlayer);
+      break;
     default: break;
   }
 }

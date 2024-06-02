@@ -296,10 +296,16 @@ function HasOverwhelm($cardID, $player, $index)
     case "4619930426"://First Legion Snowtrooper
       $target = GetAttackTarget();
       if($target == "THEIRCHAR-0") return false;
-      $ally = new Ally($target, $defPlayer);
-      return $ally->IsDamaged();
+      $targetAlly = new Ally($target, $defPlayer);
+      return $targetAlly->IsDamaged();
     case "3487311898"://Clan Challengers
       return $ally->IsUpgraded();
+    case "6769342445"://Jango Fett
+      if(IsAllyAttackTarget()) {
+        $targetAlly = new Ally(GetAttackTarget(), $defPlayer);
+        if($targetAlly->HasBounty()) return true;
+      }
+      return false;
     default: return false;
   }
 }
