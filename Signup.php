@@ -2,8 +2,31 @@
 include_once 'MenuBar.php';
 ?>
 
+
+
+<div class="home-header">
+  
+  <h1>Karabast</h1>
+  <h3>The Fan-Made, Open-Source <br>
+  Star Wars Unlimited Simulator</h3>
+
+  <div class="home-banner">
+    <div class="banner block-1"></div>
+    <div class="banner block-2"></div>
+    <div class="banner block-3"></div>
+    <div class="banner block-4"></div>
+  </div>
+
+</div>
+
+<div class="home-wrapper">
+<div class="flex-wrapper"></div>
+
+<div class="flex-wrapper">
+<div class='game-invite container bg-black'>
+
 <section class="signup-form">
-  <h2>SIGN UP</h2>
+  <h2>Sign Up</h2>
   <div class="signup-form-form">
     <form action="includes/signup.inc.php" method="post">
       <label for="uid">Username
@@ -21,7 +44,7 @@ include_once 'MenuBar.php';
       <button type="submit" name="submit">SIGN UP</button>
     </form>
   </div>
-  <br>
+
   <?php
   // Error messages
   if (isset($_GET["error"])) {
@@ -43,6 +66,12 @@ include_once 'MenuBar.php';
   }
   ?>
 </section>
+
+</div>
+</div>
+
+<div class="flex-wrapper"></div>
+</div>
 
 <?php
 include_once 'Disclaimer.php';

@@ -119,7 +119,6 @@ $isMobile = IsMobile();
     echo '<div class="game-lobby">';
   ?>
 
-  <h2>Set Up</h2>
   <?php
 
   echo ("<div id='submitForm' style='display:none; width:100%; text-align: center;'>");
@@ -134,14 +133,6 @@ $isMobile = IsMobile();
   echo ("</div>");
 
   echo ("<div id='mainPanel' style='text-align:center;'>");
-  echo ("</div>");
-
-  echo ("<div id='chatbox'>");
-  //echo ("<div id='chatbox' style='position:relative; left:3%; width:97%; margin-top:4px;'>");
-  echo ("<input class='GameLobby_Input' style='display:inline;' type='text' id='chatText' name='chatText' value='' autocomplete='off' onkeypress='ChatKey(event)'>");
-  echo ("<button class='GameLobby_Button' style='display:inline; margin-left:3px; cursor:pointer;' onclick='SubmitChat()'>Chat</button>");
-  echo ("<input type='hidden' id='gameName' value='" . $gameName . "'>");
-  echo ("<input type='hidden' id='playerID' value='" . $playerID . "'>");
   echo ("</div>");
 
   echo ("<script>");

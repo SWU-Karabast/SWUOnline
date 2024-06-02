@@ -1,45 +1,11 @@
 /* GLOBAL ---------------------------------------------------------------------------------------------- */
 
-/* Core Styles */
+/* Fonts */
 
-body {
-  background-size: cover; 
-  background-position: center; 
-  background-image: url('../Images/gamebg.jpg');
-  max-width: 100% !important;
-  height: 100%;
-  padding: 0 !important;
-  margin: 0px;
-}
-
-h1, h2, h3, h4, h5, h6, p, a, b, ul, ol, dl, dd, form, details, blockquote, table, button, input, label, select, textarea, #gamelog {
+h1, h2, h3, h4, h5, h6, p, a, b, ul, ol, dl, dd, form, details, blockquote, table, button, input, label, select, textarea, #gamelog, #mainpanel {
   font-family: barlow;
   color: white;
   margin: 0;
-}
-
-button, input, select, textarea {
-  padding: 10px 15px;
-  background: #3b4252;
-  border: 0;
-  border-radius: 5px;
-  line-height: 1.125;
-  font-size: 16px;
-}
-
-button, .GameLobby_Button, .create-game-button {
-  display: inline-block;
-  text-align: center;
-  white-space: nowrap;
-  background: #292929;
-  border: 0;
-  cursor: pointer;
-  transition: opacity .25s;
-  font-weight: 600;
-}
-
-input, select {
-  margin: 10px 0 20px 0;
 }
 
 h1 {
@@ -88,12 +54,67 @@ background: #353739;
 border: 0;
 }
 
-.section-box{
-  display: block;
-  background-color: rgb(0, 0, 0, 40%);
+ul, li, .nav-bar {
+  display: flex;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  column-gap: 15px;
+}
+
+/* Core Styles */
+
+body {
+  background-size: cover; 
+  background-position: center; 
+  background-image: url('../Images/gamebg.jpg');
+  max-width: 100%;
+  height: 100%;
+  margin: 0px;
+}
+
+button, input, select, textarea {
+  padding: 10px 15px;
+  background: #394452;
+  border: 0;
+  border-radius: 5px;
+  line-height: 1.125;
+  font-size: 16px;
+}
+
+button, .GameLobby_Button, .create-game-button {
+  display: inline-block;
+  text-align: center;
+  white-space: nowrap;
+  background: #292929;
+  border: 0;
+  cursor: pointer;
+  transition: opacity .25s;
+  font-weight: 600;
+}
+
+input, select {
+  margin: 10px 0 20px 0;
+}
+
+.container{
   backdrop-filter: blur(20px);
   border-radius: 10px;
   padding: 20px;
+}
+
+.bg-blue { 
+  background: rgba(24, 50, 81, 0.60);
+}
+
+.bg-black {
+  background-color: rgb(0, 0, 0, 0.60);
+}
+
+.flex-wrapper {
+  flex: 1;
 }
 
 /* Disclaimer */
@@ -110,9 +131,7 @@ border: 0;
   text-align: center;
 }
 
-/* HOME ---------------------------------------------------------------------------------------------- */
-
-/* Header */
+/* HEADER ---------------------------------------------------------------------------------------------- */
 
 .home-header {
   height: 276px;
@@ -155,40 +174,16 @@ border: 0;
   flex: 1;
 }
 
-.block-1 {
-  background-image: url('../Images/leia-sor.jpg');
-  margin-right: -152px;
-}
-
-.block-2 {
-  background-image: url('../Images/boba-shd.jpg');
-}
-
-.block-3 {
-  background-image: url('../Images/kylo-sor.jpg');
-  margin-left: -152px;
-}
-
-.block-4 {
-  background-image: url('../Images/luke-sor.jpg');
-  margin-left: -152px;
-}
+.block-1 { background-image: url('../Images/leia-sor.jpg'); margin-right: -152px; }
+.block-2 { background-image: url('../Images/boba-shd.jpg'); }
+.block-3 { background-image: url('../Images/kylo-sor.jpg'); margin-left: -152px; }
+.block-4 { background-image: url('../Images/luke-sor.jpg'); margin-left: -152px; }
 
 @media screen and (max-width: 1600px) { .block-4 { display: none; } }
 @media screen and (max-width: 1200px) { .block-3 { display: none; } .block-2 { margin-left: -2px; } }
-@media screen and (max-width: 800px)  { .block-2 { display: none; } .block-1 { margin-right: 0 !important; } }
+@media screen and (max-width: 800px)  { .block-2 { display: none; } .block-1 { margin-right: 0; } }
 
-/* Nav Bar */
-
-ul, li, .nav-bar {
-  display: flex;
-}
-
-ul {
-  margin: 0;
-  column-gap: 15px;
-  padding: 0;
-}
+/* NAV BAR ---------------------------------------------------------------------------------------------- */
 
 .nav-bar {
   position: absolute;
@@ -207,7 +202,6 @@ ul {
   background-color: rgb(0, 0, 0, 40%);
   backdrop-filter: blur(20px);
   padding: 10px 20px;
-  
 }
 
 .nav-bar-links {
@@ -215,14 +209,16 @@ ul {
 }
 
 .nav-bar-user {
-margin: 0 20px 0 0;
-border-radius: 50px;
+  margin: 0 20px 0 0;
+  border-radius: 50px;
 }
 
 .nav-bar img {
   width: 25px;
   height: 25px;
 }
+
+/* HOME ---------------------------------------------------------------------------------------------- */
 
 /* Game Browser */
 
@@ -231,7 +227,6 @@ border-radius: 50px;
   height: calc(100% - 230px);
   display: flex;
   flex-direction: row;
-  flex: 1;
 }
 
 .game-browser-wrapper { 
@@ -308,23 +303,21 @@ border-radius: 50px;
 /* Karabast Info */
 
 .karabast-column {
-  position: relative;
-  height: 100%;
   margin: 0 20px;
-  float: left;
-  height: 100%;
   display: flex;
   flex-direction: column;
   flex: 1;
 }
 
-.karabast-overview { 
-  background: rgba(24, 50, 81, 0.60);
-}
-
 .karabast-news { 
   height: 100%;
   margin-top: 20px;
+}
+
+/* GAME INVITE ---------------------------------------------------------------------------------------------- */
+
+.game-invite {
+  margin: 0 0 20px 0;
 }
 
 /* GAME LOBBY ---------------------------------------------------------------------------------------------- */
@@ -359,13 +352,21 @@ border-radius: 50px;
 
 /* Game Set Up */
 
-.game-lobby, .deck-info, .player-info {
+.chat-log, .deck-info, .player-info {
   display: block;
   flex: 1;
-  background-color: rgb(0, 0, 0, 40%);
   backdrop-filter: blur(20px);
   border-radius: 10px;
   padding: 20px;
+}
+
+.game-set-up {
+  display: block;
+  flex: 1;
+  backdrop-filter: blur(20px);
+  border-radius: 10px;
+  padding: 20px 20px 20px 20px;
+  margin-bottom: 20px;
 }
 
 .game-lobby { 
@@ -376,22 +377,27 @@ border-radius: 50px;
   padding-bottom: 0;
 }
 
-.game-lobby h3 { 
+.game-lobby h2 { 
   text-align: left;
+}
+
+.game-set-up p {
+  margin: 0 0 10px;
 }
 
 #gamelog {
   width: calc(100% - 40px);
   font-weight: 400;
   height: 300px;
-  background: rgba(0, 0, 0, 0.5);
-  border-radius: 5px;
-  padding: 20px;
   text-align: left;
 }
 
+.game-set-up input {
+  margin-bottom: 0;
+}
+
 #chatbox .GameLobby_Input {
-  margin-top: 10px;
+  margin: 10px 0 -20px 0;
 }
 
 #chatbox .GameLobby_Input {
@@ -408,9 +414,7 @@ border-radius: 50px;
 .player-info { 
   margin: 0 0 0 20px;
   flex-grow: 0;
-  max-height: 100%;
-  height: fit-content;
-  width: fit-content;
+  height: 100%;
 }
 
 .player-info img { 

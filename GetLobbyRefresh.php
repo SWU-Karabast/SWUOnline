@@ -94,10 +94,11 @@ if ($lastUpdate != 0 && $cacheVal < $lastUpdate) {
   echo (GetCachePiece($gameName, 1) . "ENDTIMESTAMP");
   if ($gameStatus == $MGS_ChooseFirstPlayer) {
     if ($playerID == $firstPlayerChooser) {
-      echo ("<input class='GameLobby_Button' type='button' name='action' value='Go First' onclick='SubmitFirstPlayer(1)' style='margin-left:15px; margin-right:20px; text-align:center;'>");
-      echo ("<input class='GameLobby_Button' type='button' name='action' value='Go Second' onclick='SubmitFirstPlayer(2)' style='text-align:center;'><br>");
+      echo ("<div class='game-set-up'><h2> Set Up</h2><p>You won the initiative choice</p><input class='GameLobby_Button' type='button' name='action' value='Go First' onclick='SubmitFirstPlayer(1)' style='margin-left:15px; margin-right:20px; text-align:center;'>");
+      echo ("<input class='GameLobby_Button' type='button' name='action' value='Go Second' onclick='SubmitFirstPlayer(2)' style='text-align:center;'>");
     } else {
-      echo ("<div style='text-shadow: 2px 0 0 #1a1a1a, 0 -2px 0 #1a1a1a, 0 2px 0 #1a1a1a, -2px 0 0 #1a1a1a; color:#EDEDED'>Waiting for other player to choose who will go first.</div>");
+      echo ("<div class='game-set-up'><h2> Set Up</h2><p>Waiting for other player to choose who goes first</p><input type='button' value='-' style='visibility: hidden;'>");
+      
     }
   }
 
@@ -112,14 +113,17 @@ if ($lastUpdate != 0 && $cacheVal < $lastUpdate) {
         echo("<div>&#10071;This is a private lobby. You will need to invite an opponent.</div><br>");
       }
     }
-    echo ("<div><h3>Game Link</h3>
-    <input class='GameLobby_Input invite-link' onclick='copyText()' type='text' id='gameLink' value='" . $redirectPath . "/JoinGame.php?gameName=$gameName&playerID=2'><button class='GameLobby_Button' style='margin-left:3px;' onclick='copyText()'>Copy Invite Link</button></div>");
+    echo ("<div class='game-set-up'><h2> Set Up</h2><p>Waiting for another player to join</p>
+    <input class='GameLobby_Input invite-link' onclick='copyText()' type='text' id='gameLink' value='" . $redirectPath . "/JoinGame.php?gameName=$gameName&playerID=2'><button class='GameLobby_Button' style='margin-left:3px;' onclick='copyText()'>Copy Invite Link</button>");
   }
+
+    echo ("</div>");
 
   $isMobile = IsMobile();
   // Chat Log
+  echo ("<div class='chat-log'>");
   if($isMobile) echo ("<h3>Chat</h3><div id='gamelog'>");
-  else echo ("<h3>Chat</h3><div id='gamelog'>");
+  else echo ("<h2>Chat</h2><div id='gamelog'>");
   //if(!IsMobile()) echo("<BR>");
   //echo ("<div id='gamelog' style='text-align:left; position:relative; text-shadow: 2px 0 0 #1a1a1a, 0 -2px 0 #1a1a1a, 0 2px 0 #1a1a1a, -2px 0 0 #1a1a1a; color: #EDEDED; background-color: rgba(20,20,20,0.8); margin-top:6px; height:63%; left:3%; width:94%; bottom:10%; font-weight:550; overflow-y: auto;'>");
   EchoLog($gameName, $playerID);
@@ -163,4 +167,14 @@ if ($lastUpdate != 0 && $cacheVal < $lastUpdate) {
   else if ($playerID == 1 && $gameStatus < $MGS_ReadyToStart) $icon = "notReady.png";
   else if ($playerID == 2 && $gameStatus >= $MGS_ReadyToStart) $icon = "notReady.png";
   echo ("<div id='iconHolder' style='display:none;'>" . $icon . "</div>");
+
+  echo ("<div id='chatbox'>");
+  //echo ("<div id='chatbox' style='position:relative; left:3%; width:97%; margin-top:4px;'>");
+  echo ("<input class='GameLobby_Input' style='display:inline;' type='text' id='chatText' name='chatText' value='' autocomplete='off' onkeypress='ChatKey(event)'>");
+  echo ("<button class='GameLobby_Button' style='display:inline; margin-left:3px; cursor:pointer;' onclick='SubmitChat()'>Chat</button>");
+  echo ("<input type='hidden' id='gameName' value='" . $gameName . "'>");
+  echo ("<input type='hidden' id='playerID' value='" . $playerID . "'>");
+  echo ("</div>");
+
+  echo ("</div>");
 }

@@ -58,7 +58,7 @@ $canSeeQueue = isset($_SESSION["useruid"]);
 <div class="home-wrapper">
 
   <div class="game-browser-wrapper">
-    <div class="game-browser section-box" style='overflow-y:auto;'>
+    <div class="game-browser container bg-black" style='overflow-y:auto;'>
       <?php
       try {
         include "ServerChecker.php";
@@ -71,8 +71,8 @@ $canSeeQueue = isset($_SESSION["useruid"]);
   <div class='create-game-wrapper'>
   <?php
 
-  if (IsMobile()) echo ("<div class='create-game section-box' style='overflow-y:visible'>");
-  else echo ("<div class='create-game section-box' style='overflow-y:auto'>");
+  if (IsMobile()) echo ("<div class='create-game container bg-black' style='overflow-y:visible'>");
+  else echo ("<div class='create-game container bg-black' style='overflow-y:auto'>");
 
   ?>
 
@@ -154,13 +154,13 @@ $canSeeQueue = isset($_SESSION["useruid"]);
 
 
 <div class="karabast-column" >
-  <div class="karabast-overview section-box" >
+  <div class="karabast-overview container bg-blue" >
     <p><b>Karabast is an open-source, fan-made platform.</b></p>
     <p>It is an educational tool only, meant to facilitate researching decks and strategies that is supportive of in-person play. As such, direct competition through the form of automated tournaments or rankings will not be added.</p>
     <p>This tool is free to use and is published non-commercially. Payment is not required to access any functionality.</p>
   </div>
 
-  <div class="karabast-news section-box" style='<?php if (IsMobile()) echo ("display:none; "); ?>'>
+  <div class="karabast-news container bg-black" style='<?php if (IsMobile()) echo ("display:none; "); ?>'>
     <h2>News</h2>
     <div style="position: relative;">
       <div style='vertical-align:middle; text-align:center;'>
