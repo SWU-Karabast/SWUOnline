@@ -395,75 +395,57 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
   }
 }
 
-//Bounty abilities
-function CollectBounties($player, $index, $reportMode=false) {
-  global $currentTurnEffects;
+function CollectBounty($player, $index, $cardID, $reportMode=false) {
   $ally = new Ally("MYALLY-" . $index, $player);
   $opponent = $player == 1 ? 2 : 1;
   $numBounties = 0;
-  //Current turn effect bounties
-  for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnEffectPieces()) {
-    if($currentTurnEffects[$i+1] != $player) continue;
-    if($currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
-    switch($currentTurnEffects[$i]) {
-      case "1090660242"://The Client
-        ++$numBounties;
-        if($reportMode) break;
-        Restore(5, $opponent);
-        break;
-      default: break;
-    }
-  }
-  //Subcard bounties
-  $subcards = $ally->GetSubcards();
-  for($i=0; $i<count($subcards); ++$i)
-  {
-    switch($subcards[$i]) {
-      case "2178538979"://Price on Your Head
-        ++$numBounties;
-        if($reportMode) break;
-        AddTopDeckAsResource($opponent);
-        break;
-      case "2740761445"://Guild Target
-        ++$numBounties;
-        if($reportMode) break;
-        $damage = CardIsUnique($ally->CardID()) ? 3 : 2;
-        DealDamageAsync($player, $damage, "DAMAGE", "2740761445");
-        break;
-      case "4117365450"://Wanted
-        ++$numBounties;
-        if($reportMode) break;
-        ReadyResource($opponent);
-        ReadyResource($opponent);
-        break;
-      case "4282425335"://Top Target
-        ++$numBounties;
-        if($reportMode) break;
-        $amount = CardIsUnique($ally->CardID()) ? 6 : 4;
-        Restore($amount, $opponent);
-        break;
-      case "3074091930"://Rich Reward
-        ++$numBounties;
-        if($reportMode) break;
-        AddDecisionQueue("MULTIZONEINDICES", $opponent, "MYALLY");
-        AddDecisionQueue("OP", $opponent, "MZTONORMALINDICES");
-        AddDecisionQueue("PREPENDLASTRESULT", $opponent, "3-", 1);
-        AddDecisionQueue("SETDQCONTEXT", $opponent, "Choose up to 2 units to give experience");
-        AddDecisionQueue("MULTICHOOSEUNIT", $opponent, "<-", 1);
-        AddDecisionQueue("SPECIFICCARD", $opponent, "MULTIGIVEEXPERIENCE", 1);
-        break;
-      case "1780014071"://Public Enemy
-        ++$numBounties;
-        if($reportMode) break;
-        AddDecisionQueue("MULTIZONEINDICES", $opponent, "MYALLY&THEIRALLY");
-        AddDecisionQueue("SETDQCONTEXT", $opponent, "Choose a unit to give a shield");
-        AddDecisionQueue("CHOOSEMULTIZONE", $opponent, "<-", 1);
-        AddDecisionQueue("MZOP", $opponent, "ADDSHIELD", 1);
-        break;
-      default: break;
-    }
-  }
-  switch($ally->CardID()) {
+  switch($cardID) {
+    case "1090660242"://The Client
+      ++$numBounties;
+      if($reportMode) break;
+      Restore(5, $opponent);
+      break;
+    case "2178538979"://Price on Your Head
+      ++$numBounties;
+      if($reportMode) break;
+      AddTopDeckAsResource($opponent);
+      break;
+    case "2740761445"://Guild Target
+      ++$numBounties;
+      if($reportMode) break;
+      $damage = CardIsUnique($ally->CardID()) ? 3 : 2;
+      DealDamageAsync($player, $damage, "DAMAGE", "2740761445");
+      break;
+    case "4117365450"://Wanted
+      ++$numBounties;
+      if($reportMode) break;
+      ReadyResource($opponent);
+      ReadyResource($opponent);
+      break;
+    case "4282425335"://Top Target
+      ++$numBounties;
+      if($reportMode) break;
+      $amount = CardIsUnique($ally->CardID()) ? 6 : 4;
+      Restore($amount, $opponent);
+      break;
+    case "3074091930"://Rich Reward
+      ++$numBounties;
+      if($reportMode) break;
+      AddDecisionQueue("MULTIZONEINDICES", $opponent, "MYALLY");
+      AddDecisionQueue("OP", $opponent, "MZTONORMALINDICES");
+      AddDecisionQueue("PREPENDLASTRESULT", $opponent, "3-", 1);
+      AddDecisionQueue("SETDQCONTEXT", $opponent, "Choose up to 2 units to give experience");
+      AddDecisionQueue("MULTICHOOSEUNIT", $opponent, "<-", 1);
+      AddDecisionQueue("SPECIFICCARD", $opponent, "MULTIGIVEEXPERIENCE", 1);
+      break;
+    case "1780014071"://Public Enemy
+      ++$numBounties;
+      if($reportMode) break;
+      AddDecisionQueue("MULTIZONEINDICES", $opponent, "MYALLY&THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $opponent, "Choose a unit to give a shield");
+      AddDecisionQueue("CHOOSEMULTIZONE", $opponent, "<-", 1);
+      AddDecisionQueue("MZOP", $opponent, "ADDSHIELD", 1);
+      break;
     case "6135081953"://Doctor Evazan
       ++$numBounties;
       if($reportMode) break;
@@ -488,6 +470,28 @@ function CollectBounties($player, $index, $reportMode=false) {
       break;
     default: break;
   }
+  return $numBounties;
+}
+
+//Bounty abilities
+function CollectBounties($player, $index, $reportMode=false) {
+  global $currentTurnEffects;
+  $ally = new Ally("MYALLY-" . $index, $player);
+  $opponent = $player == 1 ? 2 : 1;
+  $numBounties = 0;
+  //Current turn effect bounties
+  for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnEffectPieces()) {
+    if($currentTurnEffects[$i+1] != $player) continue;
+    if($currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
+    $numBounties += CollectBounty($player, $index, $currentTurnEffects[$i], $reportMode);
+  }
+  //Subcard bounties
+  $subcards = $ally->GetSubcards();
+  for($i=0; $i<count($subcards); ++$i)
+  {
+    $numBounties += CollectBounty($player, $index, $subcards[$i], $reportMode);
+  }
+  $numBounties += CollectBounty($player, $index, $ally->CardID(), $reportMode);
   return $numBounties;
 }
 
