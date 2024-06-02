@@ -1840,6 +1840,16 @@ function SelfCostModifier($cardID)
     case "4111616117"://Volunteer Soldier
       if(SearchCount(SearchAllies($currentPlayer, trait:"Trooper")) > 0) $modifier -= 1;
       break;
+    case "6905327595"://Reputable Hunter
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      $theirAllies = &GetAllies($otherPlayer);
+      $hasBounty = false;
+      for($i=0; $i<count($theirAllies) && !$hasBounty; $i+=AllyPieces())
+      {
+        $theirAlly = new Ally("MYALLY-" . $i, $otherPlayer);
+        if($theirAlly->HasBounty()) { $hasBounty = true; $modifier -= 1; }
+      }
+      break;
     default: break;
   }
   //Target cost modifier

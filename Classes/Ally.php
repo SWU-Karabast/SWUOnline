@@ -318,6 +318,10 @@ class Ally {
     return count($subcards);
   }
 
+  function HasBounty() {
+    return CollectBounties($this->PlayerID(), $this->Index(), reportMode:true) > 0;
+  }
+
 }
 
 function LastAllyIndex($player) {
