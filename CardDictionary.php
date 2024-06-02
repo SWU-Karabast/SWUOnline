@@ -1066,6 +1066,8 @@ function LeaderUnit($cardID) {
       return "8def61a58e";
     case "2503039837"://Moff Gideon Leader
       return "4484318969";
+    case "3045538805"://Hondo Ohnaka
+      return "415bde775d";
     default: return "";
   }
 }
@@ -1114,6 +1116,8 @@ function LeaderUndeployed($cardID) {
       return "1480894253";
     case "4484318969"://Moff Gideon Leader
       return "2503039837";
+    case "415bde775d"://Hondo Ohnaka
+      return "3045538805";
     default: return "";
   }
 }
@@ -1421,6 +1425,7 @@ function DefinedCardType2Wrapper($cardID)
   {
     case "1480894253"://Kylo Ren
     case "2503039837"://Moff Gideon
+    case "3045538805"://Hondo Ohnaka
       return "";
     default: return DefinedCardType2($cardID);
   }

@@ -362,12 +362,12 @@ function MainCharacterPlayCardAbilities($cardID, $from)
   for($i = 0; $i < count($character); $i += CharacterPieces()) {
     if($character[$i+1] != 2) continue;
     switch($character[$i]) {
-      case "zdIhSL5RhK": case "g92bHLtTNl": case "6ILtLfjQEe":
-        if(ClassContains($cardID, "MAGE"))
-        {
-          PlayAura("ENLIGHTEN", $currentPlayer);
-          $character[$i+1] = 1;
-        }
+      case "3045538805"://Hondo Ohnaka
+        $char[$i+1] = 1;
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to give an experience token", 1);
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "ADDEXPERIENCE", 1);
         break;
       default:
         break;
