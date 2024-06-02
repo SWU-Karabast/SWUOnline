@@ -52,6 +52,7 @@ width: 100%;
 height: 1px;
 background: #353739;
 border: 0;
+margin-bottom: 20px;
 }
 
 ul, li, .nav-bar {
@@ -99,10 +100,11 @@ input, select {
   margin: 10px 0 20px 0;
 }
 
-.container{
-  backdrop-filter: blur(20px);
+.container {
+  flex: 1;
   border-radius: 10px;
   padding: 20px;
+  backdrop-filter: blur(20px);
 }
 
 .bg-blue { 
@@ -117,19 +119,18 @@ input, select {
   flex: 1;
 }
 
-/* Disclaimer */
-
-.disclaimer {
-  position: absolute;
-  bottom: 15px;
-  width: 100%;
+.flex-padder {
+  flex: 1;
+  margin: 0 20px;
 }
 
-.disclaimer p {
-  font-size: 12px;
-  font-weight: 300;
-  text-align: center;
+.core-wrapper {
+  margin-top: -136px;
+  height: calc(100% - 230px);
+  display: flex;
+  flex-direction: row;
 }
+
 
 /* HEADER ---------------------------------------------------------------------------------------------- */
 
@@ -137,6 +138,10 @@ input, select {
   height: 276px;
   padding: 20px 0 20px 40px;
   position: relative;
+}
+
+.title {
+  text-decoration: none;
 }
 
 .home-header h1 {
@@ -149,6 +154,7 @@ input, select {
   font-size: 16px;
   font-weight: 400;
   line-height: 130%;
+  text-align: left;
 }
 
 .home-banner {
@@ -159,10 +165,7 @@ input, select {
   top: 0;
   right: 0;
   z-index: -1;
-  mask: linear-gradient(to bottom, 
-      rgba(0,0,0, 1) 0,   rgba(0,0,0, 1) 50%, 
-      rgba(0,0,0, 0) 100%, rgba(0,0,0, 0) 0
-  ) 100% 50% / 100% 100% repeat-x;
+  mask: linear-gradient(to bottom, rgba(0,0,0, 1) 0, rgba(0,0,0, 1) 50%, rgba(0,0,0, 0) 100%, rgba(0,0,0, 0) 0) 100% 50% / 100% 100% repeat-x;
   display: flex;
   flex-direction: row;
 }
@@ -222,13 +225,6 @@ input, select {
 
 /* Game Browser */
 
-.home-wrapper {
-  margin-top: -136px;
-  height: calc(100% - 230px);
-  display: flex;
-  flex-direction: row;
-}
-
 .game-browser-wrapper { 
   margin-left: 20px;
   flex: 1;
@@ -240,10 +236,6 @@ input, select {
 
 .game-browser h3 { 
   margin-bottom: 0;
-}
-
-.game-browser hr { 
-  margin-bottom: 20px;
 }
 
 .progress-title-wrapper {
@@ -309,6 +301,10 @@ input, select {
   flex: 1;
 }
 
+.karabast-overview { 
+  flex:0;
+}
+
 .karabast-news { 
   height: 100%;
   margin-top: 20px;
@@ -318,6 +314,31 @@ input, select {
 
 .game-invite {
   margin: 0 0 20px 0;
+}
+
+/* PROFILE ---------------------------------------------------------------------------------------------- */
+
+.fav-decks {
+  margin: 0 20px;
+}
+
+.stats {
+ margin: 0 20px 0 0;
+}
+
+.imgPatreon {
+  display: block;
+  margin-bottom: 20px;
+  border-radius: 5px;
+}
+
+.fav-decks table, .stats table {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.fav-decks tr, .stats tr, .fav-decks td, .stats td {
+  border-bottom: 1px solid #353739;
 }
 
 /* GAME LOBBY ---------------------------------------------------------------------------------------------- */
@@ -352,23 +373,6 @@ input, select {
 
 /* Game Set Up */
 
-.chat-log, .deck-info, .player-info {
-  display: block;
-  flex: 1;
-  backdrop-filter: blur(20px);
-  border-radius: 10px;
-  padding: 20px;
-}
-
-.game-set-up {
-  display: block;
-  flex: 1;
-  backdrop-filter: blur(20px);
-  border-radius: 10px;
-  padding: 20px 20px 20px 20px;
-  margin-bottom: 20px;
-}
-
 .game-lobby { 
   margin-left: 20px;
   flex-basis: calc(33% - 60px);
@@ -381,8 +385,16 @@ input, select {
   text-align: left;
 }
 
+.game-set-up {
+  margin-bottom: 20px;
+}
+
 .game-set-up p {
   margin: 0 0 10px;
+}
+
+.game-set-up input {
+  margin-bottom: 0;
 }
 
 #gamelog {
@@ -390,10 +402,6 @@ input, select {
   font-weight: 400;
   height: 300px;
   text-align: left;
-}
-
-.game-set-up input {
-  margin-bottom: 0;
 }
 
 #chatbox .GameLobby_Input {
@@ -417,6 +425,10 @@ input, select {
   height: 100%;
 }
 
+#opponent-info {
+  margin: 10px 0 0 0;
+}
+
 .player-info img { 
   height: 177px !important;
   max-width: 250px !important;
@@ -437,10 +449,6 @@ input, select {
   scrollbar-color: #888888 rgba(0, 0, 0, 0); 
   scrollbar-width: thin;
   } }
-
-#opponent-info {
-  margin: 10px 0 -8px 0;
-}
 
 /* Deck */
 
@@ -470,4 +478,18 @@ input, select {
   overflow-x: hidden;
   scrollbar-color: #888888 rgba(0, 0, 0, 0); 
   scrollbar-width: thin;
+}
+
+/* DISCLAIMER ---------------------------------------------------------------------------------------------- */
+
+.disclaimer {
+  position: absolute;
+  bottom: 15px;
+  width: 100%;
+}
+
+.disclaimer p {
+  font-size: 12px;
+  font-weight: 300;
+  text-align: center;
 }

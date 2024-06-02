@@ -94,10 +94,10 @@ if ($lastUpdate != 0 && $cacheVal < $lastUpdate) {
   echo (GetCachePiece($gameName, 1) . "ENDTIMESTAMP");
   if ($gameStatus == $MGS_ChooseFirstPlayer) {
     if ($playerID == $firstPlayerChooser) {
-      echo ("<div class='game-set-up'><h2> Set Up</h2><p>You won the initiative choice</p><input class='GameLobby_Button' type='button' name='action' value='Go First' onclick='SubmitFirstPlayer(1)' style='margin-left:15px; margin-right:20px; text-align:center;'>");
+      echo ("<div class='game-set-up container bg-blue'><h2> Set Up</h2><p>You won the initiative choice</p><input class='GameLobby_Button' type='button' name='action' value='Go First' onclick='SubmitFirstPlayer(1)' style='margin-left:15px; margin-right:20px; text-align:center;'>");
       echo ("<input class='GameLobby_Button' type='button' name='action' value='Go Second' onclick='SubmitFirstPlayer(2)' style='text-align:center;'>");
     } else {
-      echo ("<div class='game-set-up'><h2> Set Up</h2><p>Waiting for other player to choose who goes first</p><input type='button' value='-' style='visibility: hidden;'>");
+      echo ("<div class='game-set-up container bg-blue'><h2> Set Up</h2><p>Waiting for other player to choose who goes first</p><input type='button' value='-' style='visibility: hidden;'>");
       
     }
   }
@@ -113,7 +113,7 @@ if ($lastUpdate != 0 && $cacheVal < $lastUpdate) {
         echo("<div>&#10071;This is a private lobby. You will need to invite an opponent.</div><br>");
       }
     }
-    echo ("<div class='game-set-up'><h2> Set Up</h2><p>Waiting for another player to join</p>
+    echo ("<div class='game-set-up container bg-blue'><h2> Set Up</h2><p>Waiting for another player to join</p>
     <input class='GameLobby_Input invite-link' onclick='copyText()' type='text' id='gameLink' value='" . $redirectPath . "/JoinGame.php?gameName=$gameName&playerID=2'><button class='GameLobby_Button' style='margin-left:3px;' onclick='copyText()'>Copy Invite Link</button>");
   }
 
@@ -121,7 +121,7 @@ if ($lastUpdate != 0 && $cacheVal < $lastUpdate) {
 
   $isMobile = IsMobile();
   // Chat Log
-  echo ("<div class='chat-log'>");
+  echo ("<div class='chat-log container bg-black'>");
   if($isMobile) echo ("<h3>Chat</h3><div id='gamelog'>");
   else echo ("<h2>Chat</h2><div id='gamelog'>");
   //if(!IsMobile()) echo("<BR>");

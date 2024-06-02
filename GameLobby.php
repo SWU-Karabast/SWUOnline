@@ -144,7 +144,7 @@ $isMobile = IsMobile();
 ?>
 </div>
 
-<div class="player-info">
+<div class="player-info container bg-black">
   
   <h2>Players</h2>
 
@@ -210,7 +210,7 @@ $isMobile = IsMobile();
 
 </div>
 
-  <div class="deck-info">
+  <div class="deck-info container bg-black">
     <div id="deckTab"
       style="cursor:pointer;"
       onclick="TabClick('DECK');">

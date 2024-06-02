@@ -25,23 +25,12 @@ if (isset($_SESSION["userid"])) {
 
 ?>
 
-<div class="home-header">
-  
-  <h1>Karabast</h1>
-  <h3>The Fan-Made, Open-Source <br>
-  Star Wars Unlimited Simulator</h3>
+<?php
+include_once 'Header.php';
+?>
 
-  <div class="home-banner">
-    <div class="banner block-1"></div>
-    <div class="banner block-2"></div>
-    <div class="banner block-3"></div>
-    <div class="banner block-4"></div>
-  </div>
-
-</div>
-
-<div class="home-wrapper">
-<div class="flex-wrapper"></div>
+<div class="core-wrapper">
+<div class="flex-padder"></div>
 <div class="flex-wrapper">
   <div class='game-invite container bg-black'>
     <h2>Join Game</h2>
@@ -98,7 +87,7 @@ if (isset($_SESSION["userid"])) {
       <p>Have Fun!</p>
   </div>
 </div>
-<div class="flex-wrapper"></div>
+<div class="flex-padder"></div>
 </div>
 
 <?php
