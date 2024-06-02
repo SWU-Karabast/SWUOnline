@@ -127,6 +127,7 @@ function EffectAttackModifier($cardID)
     case "4534554684": return 2;//Freetown Backup
     case "4721657243": return 3;//Kihraxz Heavy Fighter
     case "7171636330": return -4;//Chain Code Collector
+    case "2526288781": return 1;//Bossk
     default: return 0;
   }
 }

@@ -717,6 +717,9 @@ function GetAbilityTypes($cardID)
     case "2503039837"://Moff Gideon
       $abilityTypes = "A";
       break;
+    case "2526288781"://Bossk
+      $abilityTypes = "A";
+      break;
     default: break;
   }
   if(DefinedTypesContains($cardID, "Leader", $currentPlayer) && !IsAlly($cardID, $currentPlayer)) {
@@ -823,6 +826,9 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       break;
     case "2503039837"://Moff Gideon
       $abilityNames = "Attack";
+      break;
+    case "2526288781"://Bossk
+      $abilityNames = "Deal Damage/Buff";
       break;
     default: break;
   }
@@ -1070,6 +1076,8 @@ function LeaderUnit($cardID) {
       return "4484318969";
     case "3045538805"://Hondo Ohnaka
       return "415bde775d";
+    case "2526288781"://Bossk
+      return "d2bbda6982";
     default: return "";
   }
 }
@@ -1120,6 +1128,8 @@ function LeaderUndeployed($cardID) {
       return "2503039837";
     case "415bde775d"://Hondo Ohnaka
       return "3045538805";
+    case "d2bbda6982"://Bossk
+      return "2526288781";
     default: return "";
   }
 }
@@ -1428,6 +1438,7 @@ function DefinedCardType2Wrapper($cardID)
     case "1480894253"://Kylo Ren
     case "2503039837"://Moff Gideon
     case "3045538805"://Hondo Ohnaka
+    case "2526288781"://Bossk
       return "";
     default: return DefinedCardType2($cardID);
   }
