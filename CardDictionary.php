@@ -1324,19 +1324,33 @@ function SmuggleCost($cardID, $player="", $index="")
 {
   global $currentPlayer;
   if($player == "") $player = $currentPlayer;
+  $minCost = -1;
   switch($cardID) {
-    case "1982478444": return 7;//Vigilant Pursuit Craft
-    case "0866321455": return 3;//Smuggler's Aid
-    case "6037778228": return 5;//Night Owl Skirmisher
-    case "2288926269": return 6;//Privateer Crew
-    case "5752414373": return 6;//Millennium Falcon
-    case "8552719712": return 7;//Pirate Battle Tank
-    case "2522489681": return 6;//Zorii Bliss
-    case "4534554684": return 4;//Freetown Backup
-    case "9690731982": return 3;//Reckless Gunslinger
-    case "5874342508": return 3;//Hotshot DL-44 Blaster
-    default: return -1;
+    case "1982478444": $minCost = 7; break;//Vigilant Pursuit Craft
+    case "0866321455": $minCost = 3; break;//Smuggler's Aid
+    case "6037778228": $minCost = 5; break;//Night Owl Skirmisher
+    case "2288926269": $minCost = 6; break;//Privateer Crew
+    case "5752414373": $minCost = 6; break;//Millennium Falcon
+    case "8552719712": $minCost = 7; break;//Pirate Battle Tank
+    case "2522489681": $minCost = 6; break;//Zorii Bliss
+    case "4534554684": $minCost = 4; break;//Freetown Backup
+    case "9690731982": $minCost = 3; break;//Reckless Gunslinger
+    case "5874342508": $minCost = 3; break;//Hotshot DL-44 Blaster
+    case "3881257511": $minCost = 4; break;//Tech
+    default: break;
   }
+  $allies = &GetAllies($player);
+  for($i=0; $i<count($allies); $i+=AllyPieces())
+  {
+    switch($allies[$i]) {
+      case "3881257511"://Tech
+        $cost = CardCost($cardID) + 2;
+        if($minCost == -1 || $minCost > $cost) $minCost = $cost;
+        break;
+      default: break;
+    }
+  }
+  return $minCost;
 }
 
 function PlayableFromBanish($cardID, $mod="")
