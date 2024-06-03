@@ -153,12 +153,10 @@ $isMobile = IsMobile();
     <nav class='NavBarDiv'>
       <ul>
         <?php
-        if (!$isMobile)
           echo '<li><a target="_blank" href="https://discord.gg/hKRaqHND4v"><img src="./Images/icons/discord.svg"></img></a></li>';
-        echo '<li><a target="_blank" href="https://github.com/OotTheMonk/SWUOnline"><img src="./Images/icons/github.svg"></img></a></li>';
+          echo '<li><a target="_blank" href="https://github.com/OotTheMonk/SWUOnline"><img src="./Images/icons/github.svg"></img></a></li>';
         ?>
-        <li><a target="_blank" href="https://www.patreon.com/OotTheMonk"><img
-              src="./Images/icons/patreon.svg"></img></a></li>
+
       </ul>
 
       <ul class='rightnav'>
