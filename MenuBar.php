@@ -34,6 +34,8 @@ $isMobile = IsMobile();
   <link href="https://fonts.googleapis.com/css2?family=Teko:wght@700&display=swap" rel="stylesheet">
 </head>
 
+<body>
+
   <div class='nav-bar'>
     
     <div class='nav-bar-user'>
