@@ -362,6 +362,12 @@ function SpecificCardLogic($player, $card, $lastResult)
         $ally->Attach("2007868442");//Experience token
       }
       return $lastResult;
+    case "MULTIGIVESHIELD":
+      for($i=0; $i<count($lastResult); ++$i) {
+        $ally = new Ally("MYALLY-" . $lastResult[$i], $player);
+        $ally->Attach("8752877738");//Shield Token
+      }
+      return $lastResult;
     case "IHADNOCHOICE":
       $cards = explode(",", MZSort($dqVars[0]));
       for($i=count($cards)-1; $i>=0; --$i) {
