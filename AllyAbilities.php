@@ -1024,6 +1024,23 @@ function SpecificAllyAttackAbilities($attackID)
         AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,1", 1);
       }
       break;
+    case "7982524453"://Fennec Shand
+      if(IsAllyAttackTarget()) {
+        $discard = &GetDiscard($mainPlayer);
+        $numDistinct = 0;
+        $costMap = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+        for($i=0; $i<count($discard); $i+=DiscardPieces()) {
+          $cost = CardCost($discard[$i]);
+          if($cost == "") continue;
+          ++$costMap[$cost];
+          if($costMap[$cost] == 1) ++$numDistinct;
+        }
+        if($numDistinct > 0) {
+          $defender = new Ally(GetAttackTarget(), $defPlayer);
+          $defender->DealDamage($numDistinct);
+        }
+      }
+      break;
     default: break;
   }
 }
