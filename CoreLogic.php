@@ -3680,6 +3680,26 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1", 1);
       }
       break;
+    case "0505904136"://Scanning Officer
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      $resources = &GetResourceCards($otherPlayer);
+      $numDestroyed = 0;
+      $cards = "";
+      for($i = 0; $i < 3 && count($resources) > 0; $i++) {
+        $index = (GetRandom() % (count($resources)/ResourcePieces())) * ResourcePieces();
+        if($cards != "") $cards .= ",";
+        $cards .= $resources[$index];
+        if(SmuggleCost($resources[$index], $otherPlayer, $index) >= 0) {
+          for($j=$i; $j<$i+ResourcePieces(); ++$j) unset($resources[$j]);
+          $resources = array_values($resources);
+          ++$numDestroyed;
+        }
+      }
+      for($i=0; $i<$numDestroyed; ++$i) {
+        AddTopDeckAsResource($otherPlayer);
+      }
+      RevealCards($cards);
+      break;
     default: break;
   }
 }
