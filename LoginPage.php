@@ -16,24 +16,31 @@ include_once 'Header.php';
 
 <div class="flex-wrapper">
   <div class="login container bg-black">
-    <h2>Login</h2>
-    <h4> Enter your username, not your email </h4>
+    <h2>Log In</h2>
+    <p class="login-message">Make sure to use your username, not your email!</i></p>
+    
     <form action="./AccountFiles/AttemptPasswordLogin.php" method="post" class="LoginForm">
-      <input type="text" name="userID" placeholder="Username">
-      <input type="password" name="password" placeholder="Password">
-      <div class="RemberMeContainer">
-        <label for="rememberMe">Remember Me</label>
-        <input type="checkbox" checked='checked' id="rememberMe" name="rememberMe" value="rememberMe">
+      <label>Username</label>
+      <input class="username" type="text" name="userID">
+      <label>Password</label>
+      <input class="password" type="password" name="password">
+      <div class="remember-me">
+      <input type="checkbox" checked='checked' id="rememberMe" name="rememberMe" value="rememberMe">
+      <label for="rememberMe">Remember Me</label> 
       </div>
       <button type="submit" name="submit">Submit</button>
     </form>
     <form action="ResetPassword.php" method="post" style='text-align:center;'>
       <!-- <button type="submit" name="reset-password">Forgot Password?</button> -->
     </form>
-    <p>By using the Remember Me function, you consent to a cookie being stored in your browser for purpose of identifying
+  </div>
+
+  <div class="container bg-blue">
+    <p>By using the Remember Me function, you consent to a cookie being stored in your browser for the purpose of identifying
       your account on future visits.</p>
     <a href='./MenuFiles/PrivacyPolicy.php'>Privacy Policy</a>
   </div>
+    
 </div>
 
 <div class="flex-padder"></div>

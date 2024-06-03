@@ -76,7 +76,7 @@ include_once 'Header.php';
     if (count($favoriteDecks) > 0) {
       $selIndex = -1;
       if (isset($settingArray[$SET_FavoriteDeckIndex])) $selIndex = $settingArray[$SET_FavoriteDeckIndex];
-      echo ("<div class='SelectDeckInput'>Favorite Decks: ");
+      echo ("<div class='SelectDeckInput'>Favorite Decks");
       echo ("<select name='favoriteDecks' id='favoriteDecks'>");
       for ($i = 0; $i < count($favoriteDecks); $i += 4) {
         echo ("<option value='" . $i . "<fav>" . $favoriteDecks[$i] . "'" . ($i == $selIndex ? " selected " : "") . ">" . $favoriteDecks[$i + 1] . "</option>");
@@ -94,7 +94,7 @@ include_once 'Header.php';
   */
 
   ?>
-  <label for="fabdb"><u><a style='color:lightblue;' href='https://www.swudb.com/' target='_blank'>SWUDB</a></u> Deck Link (use the url or 'Deck Link' button):</label>
+  <label for="fabdb"><u><a style='color:lightblue;' href='https://www.swudb.com/' target='_blank'>SWUDB</a></u> Deck Link <span class="secondary">(use the url or 'Deck Link' button)</span></label>
   <input type="text" id="fabdb" name="fabdb">
   <?php
   if (isset($_SESSION["userid"])) {
@@ -104,11 +104,11 @@ include_once 'Header.php';
     echo ("</span>");
   }
   ?>
-  <label for="gameDescription" class='game-name-label'>Game Name:</label>
+  <label for="gameDescription" class='game-name-label'>Game Name</label>
   <input type="text" id="gameDescription" name="gameDescription" placeholder="Game #">
 
   <?php
-  echo ("<label for='format' class='SelectDeckInput'>Format: </label>");
+  echo ("<label for='format' class='SelectDeckInput'>Format</label>");
   echo ("<select name='format' id='format'>");
   if ($canSeeQueue) {
     echo ("<option value='cc' " . ($defaultFormat == 0 ? " selected" : "") . ">Premier</option>");
@@ -123,7 +123,7 @@ include_once 'Header.php';
     echo '<label for="public" class="privacy-label"><input class="privacy-input" type="radio" id="public" name="visibility" value="public" ' . ($defaultVisibility == 1 ? 'checked="checked"' : "") . '>';
     echo ('Public</label>');
   } else {
-    echo '<p class="login-message">&#10071;Log in to be able to create public games.</p>';
+    echo '<p class="login-notice">&#10071;Log in to be able to create public games.</p>';
   }
   ?>
   <label for="private" class='privacy-label'>

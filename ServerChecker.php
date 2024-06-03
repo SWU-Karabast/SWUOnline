@@ -179,18 +179,18 @@ if ($handle = opendir($path)) {
 }
 if ($canSeeQueue) {
   echo ("<h3>Premier</h3>");
+  echo ("<hr/>");
   echo ($ccLinks);
-  echo ("<hr/>");
   echo ("<h3>Request-Undo Premier</h3>");
-  echo ($compCCLinks);
   echo ("<hr/>");
+  echo ($compCCLinks);
   echo ("<h3>Other Formats</h3>");
+  echo ("<hr/>");
   echo ($otherFormatsLinks);
 }
 if (!$canSeeQueue) {
-  echo ("<div><b>&#10071;Log in to use matchmaking and see open matches</b></div><br>");
+  echo ("<p class='login-notice'>&#10071;<a href='./LoginPage.php'>Log In</a> to use matchmaking and see open matches</p>");
 }
-echo ("<hr/>");
 echo ("<div class='progress-title-wrapper'>");
 echo ("<h3 class='progress-header'>Games In Progress</h3>");
 echo ("<h3 class='progress-count'>$gameInProgressCount</h3>");

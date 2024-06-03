@@ -32,11 +32,22 @@ h4 {
   margin-bottom: 15px;
 }
 
-p {
-  font-size: 15px;
+p, label {
+  font-size: 16px;
   font-weight: 400;
+}
+
+p {
   line-height: 130%;
   margin-bottom: 15px;
+}
+
+.p-small {
+  font-size: 12px;
+}
+
+p a{
+  color: lightblue;
 }
 
 p:last-child { 
@@ -142,6 +153,7 @@ input, select {
 
 .title {
   text-decoration: none;
+  margin-top: 10px;
 }
 
 .home-header h1 {
@@ -150,10 +162,7 @@ input, select {
   margin-bottom: 5px;
 }
 
-.home-header h3 {
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 130%;
+.home-header p {
   text-align: left;
 }
 
@@ -238,6 +247,10 @@ input, select {
   margin-bottom: 0;
 }
 
+.login-notice {
+  margin-bottom: 20px;
+}
+
 .progress-title-wrapper {
   display: flex;
   flex-direction: row;
@@ -264,11 +277,6 @@ input, select {
   margin: 0 5px 0 0;
 }
 
-.login-message {
-  margin: 25px 0 10px;
-  font-size: 16px;
-}
-
 #fabdb {
   margin-bottom: 10px;
 }
@@ -279,7 +287,7 @@ input, select {
 
 .game-name-label {
   display: block;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 .privacy-label {
@@ -316,7 +324,34 @@ input, select {
   margin: 0 0 20px 0;
 }
 
-/* PROFILE ---------------------------------------------------------------------------------------------- */
+/* LOG IN --------------------------------------------------------------------------------------------------- */
+
+.username, .password {
+  width: 100%;
+}
+
+.login, .login-message {
+  margin-bottom: 20px;
+}
+
+.remember-me input {
+  margin: 0 5px 22px 0;
+}
+
+
+
+/* SIGN UP -------------------------------------------------------------------------------------------------- */
+
+.signup-form input {
+  width: 100%;
+}
+
+.signup-form-form {
+  margin-bottom: 20px;
+}
+
+
+/* PROFILE ------------------------------------------------------------------------------------------------- */
 
 .fav-decks {
   margin: 0 20px;

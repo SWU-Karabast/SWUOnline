@@ -16,19 +16,16 @@ include_once 'Header.php';
   <h2>Sign Up</h2>
   <div class="signup-form-form">
     <form action="includes/signup.inc.php" method="post">
-      <label for="uid">Username
+      <label for="uid">Username</label>
         <input type="text" name="uid">
-      </label>
-      <label for="email">Email
+      <label for="email">Email</label>
         <input type="text" name="email" placeholder="name@example.com">
-      </label>
-      <label for="pwd">Password
-        <input type="password" name="pwd" placeholder="Password...">
-      </label>
-      <label for="pwdrepeat">Repeat password...
-        <input type="password" name="pwdrepeat" placeholder="Repeat password...">
-      </label>
-      <button type="submit" name="submit">SIGN UP</button>
+      <label for="pwd">Password</label>
+        <input type="password" name="pwd">
+      <label for="pwdrepeat">Repeat Password</label>
+        <input type="password" name="pwdrepeat">
+
+      <button type="submit" name="submit">Sign Up</button>
     </form>
   </div>
 

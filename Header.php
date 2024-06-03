@@ -4,8 +4,8 @@
     <a href="./MainMenu.php" class="title"> 
         <div class="title">
             <h1>Karabast</h1>
-            <h3>The Fan-Made, Open-Source <br>
-            Star Wars Unlimited Simulator</h3>
+            <p>The Fan-Made, Open-Source <br>
+            Star Wars Unlimited Simulator</p>
         </div>
     </a>
 
