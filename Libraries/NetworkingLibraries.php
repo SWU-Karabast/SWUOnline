@@ -1595,7 +1595,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
   global $CS_CharacterIndex, $CS_NumNonAttackCards, $CS_PlayCCIndex, $CS_NumAttacks, $CCS_LinkBaseAttack;
   global $CCS_WeaponIndex, $EffectContext, $CCS_AttackUniqueID, $CS_NumEventsPlayed, $CS_AfterPlayedBy, $layers;
   global $CS_NumDragonAttacks, $CS_NumIllusionistAttacks, $CS_NumIllusionistActionCardAttacks, $CCS_IsBoosted;
-  global $SET_PassDRStep, $CS_AbilityIndex;
+  global $SET_PassDRStep, $CS_AbilityIndex, $CS_NumMandalorianAttacks;
 
   if($layerIndex > -1) SetClassState($currentPlayer, $CS_PlayIndex, $layerIndex);
   if(intval($uniqueID) != -1) $index = SearchForUniqueID($uniqueID, $currentPlayer);
@@ -1634,6 +1634,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
       // If you attacked an aura with Spectra
       if (!$chainClosed && ($definedCardType == "AA" || $definedCardType == "W")) {
         IncrementClassState($currentPlayer, $CS_NumAttacks);
+        if(TraitContains($cardID, "Mandalorian", $currentPlayer)) IncrementClassState($currentPlayer, $CS_NumMandalorianAttacks);
         ArsenalAttackAbilities();
         OnAttackEffects($cardID);
       }

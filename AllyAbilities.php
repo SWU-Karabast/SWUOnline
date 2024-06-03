@@ -1015,6 +1015,15 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,2", 1);
       break;
+    case "a579b400c0"://Bo-Katan Kryze
+      $number = GetClassState($mainPlayer, $CS_NumMandalorianAttacks) ? 2 : 1;
+      for($i=0; $i<$number; ++$i) {
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY");
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 1 damage to");
+        AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,1", 1);
+      }
+      break;
     default: break;
   }
 }
