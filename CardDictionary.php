@@ -173,6 +173,7 @@ function RaidAmount($cardID, $player, $index)
     case "3487311898": $amount += 3; break;//Clan Challengers
     case "5977238053": $amount += 2; break;//Sundari Peacekeeper
     case "1805986989": $amount += 2; break;//Modded Cohort
+    case "415bde775d": $amount += 1; break;//Hondo Ohnaka
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
@@ -258,6 +259,7 @@ function HasGrit($cardID, $player, $index)
     case "5557494276"://Death Watch Loyalist
     case "6878039039"://Hylobon Enforcer
     case "8190373087"://Gentle Giant
+    case "1304452249"://Covetous Rivals
       return true;
     default: return false;
   }
@@ -296,10 +298,16 @@ function HasOverwhelm($cardID, $player, $index)
     case "4619930426"://First Legion Snowtrooper
       $target = GetAttackTarget();
       if($target == "THEIRCHAR-0") return false;
-      $ally = new Ally($target, $defPlayer);
-      return $ally->IsDamaged();
+      $targetAlly = new Ally($target, $defPlayer);
+      return $targetAlly->IsDamaged();
     case "3487311898"://Clan Challengers
       return $ally->IsUpgraded();
+    case "6769342445"://Jango Fett
+      if(IsAllyAttackTarget()) {
+        $targetAlly = new Ally(GetAttackTarget(), $defPlayer);
+        if($targetAlly->HasBounty()) return true;
+      }
+      return false;
     default: return false;
   }
 }
@@ -346,6 +354,7 @@ function HasAmbush($cardID, $player, $index, $from)
     case "9500514827":
     case "8506660490":
     case "1805986989"://Modded Cohort
+    case "7171636330"://Chain Code Collector
       return true;
     case "2027289177"://Escort Skiff
       return SearchCount(SearchAllies($player, aspect:"Command")) > 1;
@@ -708,6 +717,9 @@ function GetAbilityTypes($cardID)
     case "2503039837"://Moff Gideon
       $abilityTypes = "A";
       break;
+    case "2526288781"://Bossk
+      $abilityTypes = "A";
+      break;
     default: break;
   }
   if(DefinedTypesContains($cardID, "Leader", $currentPlayer) && !IsAlly($cardID, $currentPlayer)) {
@@ -814,6 +826,9 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       break;
     case "2503039837"://Moff Gideon
       $abilityNames = "Attack";
+      break;
+    case "2526288781"://Bossk
+      $abilityNames = "Deal Damage/Buff";
       break;
     default: break;
   }
@@ -1059,6 +1074,10 @@ function LeaderUnit($cardID) {
       return "8def61a58e";
     case "2503039837"://Moff Gideon Leader
       return "4484318969";
+    case "3045538805"://Hondo Ohnaka
+      return "415bde775d";
+    case "2526288781"://Bossk
+      return "d2bbda6982";
     default: return "";
   }
 }
@@ -1107,6 +1126,10 @@ function LeaderUndeployed($cardID) {
       return "1480894253";
     case "4484318969"://Moff Gideon Leader
       return "2503039837";
+    case "415bde775d"://Hondo Ohnaka
+      return "3045538805";
+    case "d2bbda6982"://Bossk
+      return "2526288781";
     default: return "";
   }
 }
@@ -1414,6 +1437,8 @@ function DefinedCardType2Wrapper($cardID)
   {
     case "1480894253"://Kylo Ren
     case "2503039837"://Moff Gideon
+    case "3045538805"://Hondo Ohnaka
+    case "2526288781"://Bossk
       return "";
     default: return DefinedCardType2($cardID);
   }

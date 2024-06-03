@@ -1006,11 +1006,10 @@ function FinalizeChainLink($chainClosed = false)
 
 function CleanUpCombatEffects($weaponSwap=false)
 {
-  global $currentTurnEffects;
+  global $currentTurnEffects, $mainPlayer;
   for ($i = count($currentTurnEffects) - CurrentTurnPieces(); $i >= 0; $i -= CurrentTurnPieces()) {
     $effectArr = explode(",", $currentTurnEffects[$i]);
-    if (IsCombatEffectActive($effectArr[0]) && !IsCombatEffectLimited($i) && !IsCombatEffectPersistent($effectArr[0])) {
-      if($weaponSwap && EffectHasBlockModifier($effectArr[0])) continue;
+    if (IsCombatEffectActive($effectArr[0]) && (!IsCombatEffectLimited($i) || $currentTurnEffects[$i+1] != $mainPlayer) && !IsCombatEffectPersistent($effectArr[0])) {
       --$currentTurnEffects[$i + 3];
       if ($currentTurnEffects[$i + 3] == 0) RemoveCurrentTurnEffect($i);
     }
@@ -1715,7 +1714,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
         //TODO: Fix this Relentless hack
         else if($from == "PLAY" || $from == "EQUIP" || HasWhenPlayed($cardID) || $cardID == "3401690666" || DefinedTypesContains($cardID, "Event", $currentPlayer) || DefinedTypesContains($cardID, "Upgrade", $currentPlayer)) AddLayer($layerName, $currentPlayer, $cardID, $from . "!" . $resourcesPaid . "!" . $target . "!" . $additionalCosts . "!" . $abilityIndex . "!" . $playIndex, "-", $uniqueID, append:true);
         else if($from != "PLAY" && $from != "EQUIP") {
-          if(AllyPlayCardAbility($cardID, $currentPlayer, reportMode:true)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $target, $additionalCosts);
+          if(AllyPlayCardAbility($cardID, $currentPlayer, reportMode:true, from:$from)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $target, $additionalCosts);
         }
       }
     }

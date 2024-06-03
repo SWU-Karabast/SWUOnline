@@ -311,6 +311,10 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $lrArr = explode("-", $lastResult);
       switch($lrArr[0]) {
         case "MYCHAR": case "THEIRCHAR": AddCharacterUses($player, $lrArr[1], $parameter); break;
+        case "MYALLY": case "THEIRALLY":
+          $ally = new Ally($lastResult, $player);
+          $ally->ModifyUses($parameter);
+          break;
         default: break;
       }
       return $lastResult;
@@ -920,6 +924,12 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       return $prevented;
     case "THREATENARCANE":
       DealArcane(1, 2, "ABILITY", $parameter, true);
+      return $lastResult;
+    case "COLLECTBOUNTY":
+      $paramArr = explode(",", $parameter);
+      $bounty = $paramArr[0];
+      $bountyUnit = $paramArr[1];
+      CollectBounty($player, -1, $bounty, reportMode:false, bountyUnitOverride:$bountyUnit);
       return $lastResult;
     case "DEALARCANE":
       $dqState[7] = $lastResult;

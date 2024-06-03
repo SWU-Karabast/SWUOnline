@@ -511,7 +511,7 @@ function ContinueDecisionQueue($lastResult = "")
   $phase = array_shift($decisionQueue);
   $player = array_shift($decisionQueue);
   $parameter = array_shift($decisionQueue);
-  //WriteLog($phase . " " . $player . " Param:" . $parameter . " LR:" . $lastResult);//Uncomment this to visualize decision queue execution
+  // WriteLog("->" . $phase . " " . $player . " Param:" . $parameter . " LR:" . $lastResult);//Uncomment this to visualize decision queue execution
   $parameter = str_replace("{I}", $dqState[5], $parameter);
   if(count($dqVars) > 0) {
     if(str_contains($parameter, "{0}")) $parameter = str_replace("{0}", $dqVars[0], $parameter);

@@ -362,11 +362,13 @@ function MainCharacterPlayCardAbilities($cardID, $from)
   for($i = 0; $i < count($character); $i += CharacterPieces()) {
     if($character[$i+1] != 2) continue;
     switch($character[$i]) {
-      case "zdIhSL5RhK": case "g92bHLtTNl": case "6ILtLfjQEe":
-        if(ClassContains($cardID, "MAGE"))
-        {
-          PlayAura("ENLIGHTEN", $currentPlayer);
-          $character[$i+1] = 1;
+      case "3045538805"://Hondo Ohnaka
+        if($from == "RESOURCES") {
+          $char[$i+1] = 1;
+          AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+          AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to give an experience token", 1);
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+          AddDecisionQueue("MZOP", $currentPlayer, "ADDEXPERIENCE", 1);
         }
         break;
       default:
@@ -2124,7 +2126,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     $target = count($targetArr) > 1 ? $targetArr[0] . "-" . $targetArr[1] : "-";
   }
   if($from != "PLAY" && $from != "EQUIP" && $from != "CHAR") {
-    if(AllyPlayCardAbility($cardID, $currentPlayer, reportMode:true)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $target, $additionalCosts);
+    if(AllyPlayCardAbility($cardID, $currentPlayer, reportMode:true, from:$from)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $target, $additionalCosts);
   }
   if($from != "PLAY" && IsAlly($cardID, $currentPlayer)) {
     $playAlly = new Ally("MYALLY-" . LastAllyIndex($currentPlayer));
@@ -2831,9 +2833,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       global $CS_NumVillainyPlayed;
       $abilityName = GetResolvedAbilityName($cardID, $from);
       if($abilityName == "Deal Damage" && GetClassState($currentPlayer, $CS_NumVillainyPlayed) > 0) {
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 1 damage to");
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
-        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY", 1);
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 1 damage to", 1);
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1", 1);
         $otherPlayer = $currentPlayer == 1 ? 2 : 1;
         DealDamageAsync($otherPlayer, 1, "DAMAGE", "6088773439");
@@ -2992,7 +2994,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZALLCARDTRAITORPASS", $currentPlayer, "Rebel", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
         AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "3038238423,HAND", 1);
-        AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}");
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
       }
       break;
@@ -3633,15 +3635,40 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "6884078296"://Greef Karga
-      AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE," . 5);
-      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
-      AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-definedType-Upgrade", 1);
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an upgrade to draw", 1);
-      AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
-      AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
-      AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
-      AddDecisionQueue("OP", $currentPlayer, "REMOVECARD");
-      AddDecisionQueue("ALLRANDOMBOTTOM", $currentPlayer, "DECK");
+      if($from != "PLAY") {
+        AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE," . 5);
+        AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+        AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-definedType-Upgrade", 1);
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an upgrade to draw", 1);
+        AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
+        AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
+        AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
+        AddDecisionQueue("OP", $currentPlayer, "REMOVECARD");
+        AddDecisionQueue("ALLRANDOMBOTTOM", $currentPlayer, "DECK");
+      }
+      break;
+    case "1304452249"://Covetous Rivals
+      if($from != "PLAY") {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:hasBountyOnly=true&THEIRALLY:hasBountyOnly=true");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit with bounty to deal 2 damage to");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,2", 1);
+      }
+      break;
+    case "2526288781"://Bossk
+      $abilityName = GetResolvedAbilityName($cardID, $from);
+      if($abilityName == "Deal Damage/Buff") {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:hasBountyOnly=true&THEIRALLY:hasBountyOnly=true");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit with bounty to deal 1 damage to");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+        AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+        AddDecisionQueue("YESNO", $currentPlayer, "if you want to give the unit +1 power", 1);
+        AddDecisionQueue("NOPASS", $currentPlayer, "-", 1);
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
+        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "2526288781", 1);
+      }
       break;
     default: break;
   }

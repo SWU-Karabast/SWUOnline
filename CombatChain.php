@@ -86,6 +86,12 @@ function AttackModifier($cardID, $player, $index)
     case "7486516061"://Concord Dawn Interceptors
       if($player == $defPlayer && GetAttackTarget() == "THEIRALLY-" . $index) $modifier += 2;
       break;
+    case "6769342445"://Jango Fett
+      if(IsAllyAttackTarget()) {
+        $ally = new Ally(GetAttackTarget(), $defPlayer);
+        if($ally->HasBounty()) $modifier += 3;
+      }
+      break;
     default: break;
   }
   return $modifier;
