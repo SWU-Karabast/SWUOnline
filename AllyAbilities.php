@@ -695,6 +695,17 @@ function AllyPlayCardAbility($cardID, $player="", $reportMode=false, $from="-")
           WriteLog(CardLink("5907868016", "5907868016") . " is dealing 1 damage.");
         }
         break;
+      case "8031540027"://Dengar
+        if(DefinedTypesContains($cardID, "Upgrade", $player)) {
+          if($reportMode) return true;
+          global $CS_LayerTarget;
+          $target = GetClassState($player, $CS_LayerTarget);
+          AddDecisionQueue("YESNO", $player, "Do you want to deal 1 damage from " . CardLink($allies[$i], $allies[$i]) . "?");
+          AddDecisionQueue("NOPASS", $player, "-");
+          AddDecisionQueue("PASSPARAMETER", $player, $target, 1);
+          AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1", 1);
+        }
+        break;
       default: break;
     }
   }
