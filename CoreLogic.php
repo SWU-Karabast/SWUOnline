@@ -3740,6 +3740,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "CAPTURE," . $targetAlly->UniqueID(), 1);
       break;
+    case "5303936245"://Rival's Fall
+      MZChooseAndDestroy($currentPlayer, "MYALLY&THEIRALLY");
+      break;
     default: break;
   }
 }
