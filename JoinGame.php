@@ -50,7 +50,7 @@ include_once 'Header.php';
         $selIndex = -1;
         if (isset($settingArray[$SET_FavoriteDeckIndex])) $selIndex = $settingArray[$SET_FavoriteDeckIndex];
         echo ("<label for='favoriteDecks'>Favorite Decks");
-        echo ("<select style='height:34px; width:60%;' name='favoriteDecks' id='favoriteDecks'>");
+        echo ("<select name='favoriteDecks' id='favoriteDecks'>");
         for ($i = 0; $i < count($favoriteDecks); $i += 4) {
           echo ("<option value='" . $favoriteDecks[$i] . "'" . ($i == $selIndex ? " selected " : "") . ">" . $favoriteDecks[$i + 1] . "</option>");
         }
@@ -67,7 +67,7 @@ include_once 'Header.php';
     */
 
     ?>
-    <label for="fabdb">Deck Link (use the url or "Deck Link" button from <u><a style='color:lightblue;' href='https://www.swudb.com/' target='_blank'>SWUDB</a></u>):</label>
+    <label for="fabdb"><u><a style='color:lightblue;' href='https://www.swudb.com/' target='_blank'>SWUDB</a></u> Deck Link <span class="secondary">(use the url or 'Deck Link' button)</span></label>
     <input type="text" id="fabdb" name="fabdb">
     <?php
     if (isset($_SESSION["userid"])) {

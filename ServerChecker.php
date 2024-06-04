@@ -137,14 +137,14 @@ if ($handle = opendir($path)) {
         $formatName = "Clash";
 
       $link = "<form style='text-align:center;' action='" . $redirectPath . "/JoinGame.php'>";
-      $link .= "<center><table style='left:40%;'><tr><td style='vertical-align:middle;'>";
+      $link .= "<table class='game-item' cellspacing='0'><tr>";
       if ($formatName != "")
-        $link .= $formatName . "&nbsp;</td><td>";
-      $link .= "</td><td style='vertical-align:middle;'>";
+        $link .= $formatName . "&nbsp;<td>";
+      $link .= "<td class='game-name'>";
       $description = ($gameDescription == "" ? "Game #" . $gameName : $gameDescription);
-      $link .= "<span style='font-weight:500; pointer:default;'> &nbsp;" . $description . " </span>";
-      $link .= "<input class='ServerChecker_Button' type='submit' style='font-size:16px;' id='joinGame' value='Join Game' />";
-      $link .= "</td></tr></table></center>";
+      $link .= "<p>". $description . "</p></td>";
+      $link .= "<td><input class='ServerChecker_Button' type='submit' id='joinGame' value='Join Game' />";
+      $link .= "</td></tr></table>";
       $link .= "<input type='hidden' name='gameName' value='$gameToken' />";
       $link .= "<input type='hidden' name='playerID' value='2' />";
       $link .= "</form>";

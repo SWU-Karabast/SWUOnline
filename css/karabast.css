@@ -182,7 +182,7 @@ input, select {
 .banner {
   background-size: cover;
   background-position: center;
-  clip-path: polygon(150px 0, 100% 0, calc(100% - 276px) 500px, 0% 276px);
+  clip-path: polygon(150px 0, 100% 0, calc(100% - 150px) 326px, 0% 326px);
   flex: 1;
 }
 
@@ -247,6 +247,28 @@ input, select {
   margin-bottom: 0;
 }
 
+.game-browser table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.game-browser .game-name {
+  width: 100%;
+}
+
+.game-browser input {
+  margin: 0;
+}
+
+.game-browser .spectate-button {
+  height: 38px;
+  margin-top: 5px;
+}
+
+.game-item {
+  margin-bottom: 20px;
+}
+
 .login-notice {
   margin-bottom: 20px;
 }
@@ -290,6 +312,11 @@ input, select {
   margin-top: 10px;
 }
 
+.save-deck {
+  margin-bottom: 20px;
+  display: block;
+}
+
 .privacy-label {
   margin-right: 10px;
   margin-top: 10px;
@@ -322,6 +349,11 @@ input, select {
 
 .game-invite {
   margin: 0 0 20px 0;
+  padding-bottom: 0;
+}
+
+.game-invite #fabdb, .game-invite #favoriteDecks {
+  width: 100%;
 }
 
 /* LOG IN --------------------------------------------------------------------------------------------------- */
@@ -338,18 +370,11 @@ input, select {
   margin: 0 5px 22px 0;
 }
 
-
-
 /* SIGN UP -------------------------------------------------------------------------------------------------- */
 
 .signup-form input {
   width: 100%;
 }
-
-.signup-form-form {
-  margin-bottom: 20px;
-}
-
 
 /* PROFILE ------------------------------------------------------------------------------------------------- */
 
@@ -374,6 +399,10 @@ input, select {
 
 .fav-decks tr, .stats tr, .fav-decks td, .stats td {
   border-bottom: 1px solid #353739;
+}
+
+.block-input {
+  margin-top: 0px;
 }
 
 /* GAME LOBBY ---------------------------------------------------------------------------------------------- */
@@ -473,14 +502,14 @@ input, select {
   background-color: black;
 }
 
-@media screen and (max-height: 1085px) { .player-info img { height: 16vh !important; } }
-@media screen and (max-height: 1000px) { .player-info img { height: 15vh !important; } }
-@media screen and (max-height: 920px)  { .player-info img { height: 13vh !important; } }
+@media screen and (max-height: 1050px) { .player-info img { height: 16vh !important; } }
+@media screen and (max-height: 950px)  { .player-info img { height: 15vh !important; } }
 @media screen and (max-height: 840px)  { .player-info img { height: 110px !important; }
   .player-info { 
   flex: 0;
   flex-basis: 157px;
   overflow-y: scroll;
+  overflow-x: hidden;
   scrollbar-color: #888888 rgba(0, 0, 0, 0); 
   scrollbar-width: thin;
   } }

@@ -35,7 +35,6 @@ include_once 'Header.php';
 
 <div class="core-wrapper">
 
-<div class="flex-wrapper">
 <div class='fav-decks container bg-black'>
 <h2>Welcome <?php echo $_SESSION['useruid'] ?>!</h2>
 
@@ -60,10 +59,9 @@ include_once 'Header.php';
 ?>
   <h2>Block List</h2>
     <form class="form-resetpwd" action="includes/BlockUser.php" method="post">
-      <input type="text" name="userToBlock" placeholder="User to block">
+      <input class="block-input" type="text" name="userToBlock" placeholder="User to block">
       <button type="submit" name="block-user-submit">Block</button>
     </form>
-</div>
 </div>
 
 <div class='stats container bg-black'>

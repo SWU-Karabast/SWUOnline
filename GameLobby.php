@@ -121,7 +121,7 @@ $isMobile = IsMobile();
 
   <?php
 
-  echo ("<div id='submitForm' style='display:none; width:100%; text-align: center;'>");
+  echo ("<div id='submitForm' style='width:100%; text-align: center;'>");
   echo ("<form action='./SubmitSideboard.php'>");
   echo ("<input type='hidden' id='gameName' name='gameName' value='$gameName'>");
   echo ("<input type='hidden' id='playerID' name='playerID' value='$playerID'>");
