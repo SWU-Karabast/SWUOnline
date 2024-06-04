@@ -3743,6 +3743,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "5303936245"://Rival's Fall
       MZChooseAndDestroy($currentPlayer, "MYALLY&THEIRALLY");
       break;
+    case "8818201543"://Midnight Repairs
+      for($i=0; $i<8; ++$i) {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY", $i == 0 ? 0 : 1);
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to restore 1 (Remaining: " . (8-$i) . ")", $i == 0 ? 0 : 1);
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "RESTORE,1", 1);
+      }
+      break;
     default: break;
   }
 }
