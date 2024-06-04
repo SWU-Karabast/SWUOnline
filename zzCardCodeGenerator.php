@@ -87,7 +87,7 @@
   GenerateFunction($titleTrie, $handler, "CardTitle", true, "");
   GenerateFunction($subtitleTrie, $handler, "CardSubtitle", true, "");
   GenerateFunction($costTrie, $handler, "CardCost", false, -1);
-  GenerateFunction($hpTrie, $handler, "CardHP", false, -1);
+  GenerateFunction($hpTrie, $handler, "CardHPDictionary", false, -1);
   GenerateFunction($powerTrie, $handler, "CardPower", false, -1);
   GenerateFunction($aspectsTrie, $handler, "CardAspects", true, "");
   GenerateFunction($traitsTrie, $handler, "CardTraits", true, "");

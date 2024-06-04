@@ -1163,6 +1163,14 @@ function HasAttackAbility($cardID) {
   }
 }
 
+function CardHP($cardID) {
+  switch($cardID)
+  {
+    case "8877249477": return 2;
+    default: return CardHPDictionary($cardID);
+  }
+}
+
 function HasBladeBreak($cardID)
 {
   global $defPlayer;

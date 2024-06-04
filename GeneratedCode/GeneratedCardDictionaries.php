@@ -39875,7 +39875,7 @@ default: return -1;
 }
 }
 
-function CardHP($cardID) {
+function CardHPDictionary($cardID) {
 switch($cardID[0]) {
 case "2":
 switch($cardID[1]) {
