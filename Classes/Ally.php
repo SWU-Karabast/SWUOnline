@@ -71,8 +71,8 @@ class Ally {
 
   function MaxHealth() {
     $max = CardHP($this->CardID());
-    $subcards = $this->GetSubcards();
-    for($i=0; $i<count($subcards); ++$i) if($subcards[$i] != "-") $max += CardHP($subcards[$i]);
+    $upgrades = $this->GetUpgrades();
+    for($i=0; $i<count($upgrades); ++$i) if($upgrades[$i] != "-") $max += CardHP($upgrades[$i]);
     $max += $this->allies[$this->index+9];
     for($i=count($this->allies)-AllyPieces(); $i>=0; $i-=AllyPieces()) {
       if(AllyHasStaticHealthModifier($this->allies[$i])) {
@@ -163,8 +163,8 @@ class Ally {
     global $currentTurnEffects;
     $power = AttackValue($this->CardID()) + $this->allies[$this->index+7];
     $power += AttackModifier($this->CardID(), $this->playerID, $this->index);
-    $subcards = $this->GetSubcards();
-    for($i=0; $i<count($subcards); ++$i) if($subcards[$i] != "-") $power += AttackValue($subcards[$i]);
+    $upgrades = $this->GetUpgrades();
+    for($i=0; $i<count($upgrades); ++$i) if($upgrades[$i] != "-") $power += AttackValue($upgrades[$i]);
     if(HasGrit($this->CardID(), $this->playerID, $this->index)) {
       $damage = $this->MaxHealth() - $this->Health();
       if($damage > 0) $power += $damage;
@@ -335,8 +335,8 @@ class Ally {
   }
 
   function NumUpgrades() {
-    $subcards = $this->GetSubcards();
-    return count($subcards);
+    $upgrades = $this->GetUpgrades();
+    return count($upgrades);
   }
 
   function HasBounty() {

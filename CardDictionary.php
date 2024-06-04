@@ -97,10 +97,10 @@ function RestoreAmount($cardID, $player, $index)
     }
   }
   $ally = new Ally("MYALLY-" . $index, $player);
-  $subcards = $ally->GetSubcards();
-  for($i=0; $i<count($subcards); ++$i)
+  $upgrades = $ally->GetUpgrades();
+  for($i=0; $i<count($upgrades); ++$i)
   {
-    if($subcards[$i] == "8788948272") $amount += 2;
+    if($upgrades[$i] == "8788948272") $amount += 2;
   }
   switch($cardID)
   {
@@ -197,10 +197,10 @@ function HasSentinel($cardID, $player, $index)
     }
   }
   if($hasSentinel) return true;
-  $subcards = $ally->GetSubcards();
-  for($i=0; $i<count($subcards); ++$i)
+  $upgrades = $ally->GetUpgrades();
+  for($i=0; $i<count($upgrades); ++$i)
   {
-    if($subcards[$i] == "4550121827") return true;//Protector
+    if($upgrades[$i] == "4550121827") return true;//Protector
   }
   switch($cardID)
   {
@@ -402,10 +402,10 @@ function HasSaboteur($cardID, $player, $index)
       default: break;
     }
   }
-  $subcards = $ally->GetSubcards();
-  for($i=0; $i<count($subcards); ++$i)
+  $upgrades = $ally->GetUpgrades();
+  for($i=0; $i<count($upgrades); ++$i)
   {
-    if($subcards[$i] == "0797226725") return true;//Infiltrator's Skill
+    if($upgrades[$i] == "0797226725") return true;//Infiltrator's Skill
   }
   switch($cardID)
   {

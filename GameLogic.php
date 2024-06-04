@@ -416,9 +416,9 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             case "CHAR": case "MYCHAR": case "THEIRCHAR": $zone[$mzArr[1] + 2] += $dqVars[0]; return $lastResult;
             default: return $lastResult;
           }
-        case "GETSUBCARDS":
+        case "GETUPGRADES":
           $ally = new Ally($lastResult);
-          $rv = implode(",", $ally->GetSubcards());
+          $rv = implode(",", $ally->GetUpgrades());
           return $rv == "" ? "PASS" : $rv;
         case "GETMEMORYCOST":
           $mzArr = explode("-", $lastResult);

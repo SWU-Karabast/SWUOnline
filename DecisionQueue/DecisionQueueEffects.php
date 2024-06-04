@@ -280,7 +280,7 @@ function SpecificCardLogic($player, $card, $lastResult)
       PrependDecisionQueue("OP", $player, "DEFEATUPGRADE", 1);
       PrependDecisionQueue("MAYCHOOSECARD", $player, "<-", 1);
       PrependDecisionQueue("SETDQCONTEXT", $player, "Choose an upgrade to defeat", 1);
-      PrependDecisionQueue("MZOP", $player, "GETSUBCARDS", 1);
+      PrependDecisionQueue("MZOP", $player, "GETUPGRADES", 1);
       PrependDecisionQueue("PASSPARAMETER", $player, "{0}", 1);
       break;
     case "RESTOCK":
@@ -298,18 +298,18 @@ function SpecificCardLogic($player, $card, $lastResult)
       }
       break;
     case "BAMBOOZLE":
-      $upgrades = [];
+      $upgradesReturned = [];
       $owner = MZPlayerID($player, $lastResult);
       $ally = new Ally($lastResult, $owner);
-      $subcards = $ally->GetSubcards();
-      for($i=0; $i<count($subcards); ++$i) {
-        if(!IsToken($subcards[$i])) AddHand($owner, $subcards[$i]);
-        $ally->DealDamage(CardHP($subcards[$i]));
-        array_push($upgrades, $subcards[$i]);
+      $upgrades = $ally->GetUpgrades();
+      for($i=0; $i<count($upgrades); ++$i) {
+        if(!IsToken($upgrades[$i])) AddHand($owner, $upgrades[$i]);
+        $ally->DealDamage(CardHP($upgrades[$i]));
+        array_push($upgradesReturned, $upgrades[$i]);
       }
       $ally->ClearSubcards();
-      for($i=0; $i<count($upgrades); ++$i) {
-        UpgradeLeftPlay($upgrades[$i], $ally->PlayerID(), $ally->Index());
+      for($i=0; $i<count($upgradesReturned); ++$i) {
+        UpgradeLeftPlay($upgradesReturned[$i], $ally->PlayerID(), $ally->Index());
       }
       return $lastResult;
     case "DONTGETCOCKY":

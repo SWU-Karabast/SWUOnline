@@ -1478,7 +1478,7 @@ function GetTargetOfAttack($attackID)
   $sentinelTargets = "";
   if($combatChainState[$CCS_IsAmbush] != 1) $targets = "THEIRCHAR-0";
   $attacker = new Ally(AttackerMZID($mainPlayer));
-  $attackerUpgrades = $attacker->GetSubcards();
+  $attackerUpgrades = $attacker->GetUpgrades();
   for($i=0; $i<count($attackerUpgrades); ++$i)
   {
     if($attackerUpgrades[$i] == "3099663280") $targets = "";//Entrenched

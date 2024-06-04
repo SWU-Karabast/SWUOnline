@@ -636,9 +636,9 @@ function AllyAttackAbilities($attackID)
 function AllyAttackedAbility($attackTarget, $index) {
   global $mainPlayer, $defPlayer;
   $ally = new Ally("MYALLY-" . $index, $defPlayer);
-  $subcards = $ally->GetSubcards();
-  for($i=0; $i<count($subcards); ++$i) {
-    switch($subcards[$i]) {
+  $upgrades = $ally->GetUpgrades();
+  for($i=0; $i<count($upgrades); ++$i) {
+    switch($upgrades[$i]) {
       case "1323728003"://Electrostaff
         AddCurrentTurnEffect("1323728003", $mainPlayer, from:"PLAY");
         break;
@@ -738,9 +738,9 @@ function SpecificAllyAttackAbilities($attackID)
 {
   global $mainPlayer, $defPlayer, $combatChainState, $CCS_WeaponIndex;
   $attackerAlly = new Ally(AttackerMZID($mainPlayer), $mainPlayer);
-  $subcards = $attackerAlly->GetSubcards();
-  for($i=0; $i<count($subcards); ++$i) {
-    switch($subcards[$i]) {
+  $upgrades = $attackerAlly->GetUpgrades();
+  for($i=0; $i<count($upgrades); ++$i) {
+    switch($upgrades[$i]) {
       case "7280213969"://Smuggling Compartment
         ReadyResource($mainPlayer);
         break;
