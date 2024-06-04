@@ -128,6 +128,11 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
     if($upgrades[$i] == "8752877738" || $upgrades[$i] == "2007868442") continue;
     AddGraveyard($upgrades[$i], $player, "PLAY");
   }
+  $captives = $ally->GetCaptives();
+  $otherPlayer = $player == 1 ? 2 : 1;
+  for($i=0; $i<count($captives); ++$i) {
+    PlayAlly($captives[$i], $otherPlayer, from:"CAPTIVE");
+  }
   $owner = $allies[$index+11];
   if(!$skipDestroy) {
     if(DefinedTypesContains($cardID, "Leader", $player)) ;//If it's a leader it doesn't go in the discard

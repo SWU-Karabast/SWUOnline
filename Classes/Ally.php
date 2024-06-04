@@ -271,7 +271,7 @@ class Ally {
     return $upgrades;
   }
 
-  function GetCapturedUnits() {
+  function GetCaptives() {
     if($this->allies[$this->index + 4] == "-") return [];
     $subcards = $this->GetSubcards();
     $capturedUnits = [];
