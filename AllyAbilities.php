@@ -711,6 +711,13 @@ function AllyPlayCardAbility($cardID, $player="", $reportMode=false, $from="-")
           AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1", 1);
         }
         break;
+      case "0981852103"://Lady Proxima
+        if($i < count($allies)-AllyPieces() && TraitContains($cardID, "Underworld", $player)) {
+          if($reportMode) return true;
+          $otherPlayer = $player == 1 ? 2 : 1;
+          DealDamageAsync($otherPlayer, 1, "DAMAGE", "0981852103");
+        }
+        break;
       default: break;
     }
   }
