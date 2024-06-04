@@ -429,6 +429,15 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $index = $mzArr[1];
           $uniqueID = AllyTakeControl($player, $index);
           return $uniqueID;
+        case "CAPTURE":
+          $cardID = MZRemove($player, $lastResult);
+          $uniqueID = $parameterArr[1];
+          $index = SearchAlliesForUniqueID($uniqueID, $player);
+          if($index >= 0) {
+            $ally = new Ally("MYALLY-" . $index, $player);
+            $ally->AddSubcard($cardID);
+          }
+          return $cardID;
         case "WRITECHOICE":
           $ally = new Ally($lastResult);
           WriteLog(CardLink($ally->CardID(), $ally->CardID()) . " was chosen");

@@ -242,6 +242,11 @@ class Ally {
     return $this->allies[$this->index+6];//Return the amount of that type of counter
   }
 
+  function AddSubcard($cardID) {
+    if($this->allies[$this->index + 4] == "-") $this->allies[$this->index + 4] = $cardID;
+    else $this->allies[$this->index + 4] = $this->allies[$this->index + 4] . "," . $cardID;
+  }
+
   function Attach($cardID) {
     if($this->allies[$this->index + 4] == "-") $this->allies[$this->index + 4] = $cardID;
     else $this->allies[$this->index + 4] = $this->allies[$this->index + 4] . "," . $cardID;

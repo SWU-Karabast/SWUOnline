@@ -3717,6 +3717,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         $playAlly->Ready();
       }
       break;
+    case "9765804063"://Discerning Veteran
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:arena:Ground");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to capture");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "CAPTURE," . $playAlly->UniqueID(), 1);
+      break;
     default: break;
   }
 }
