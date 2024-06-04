@@ -271,6 +271,16 @@ class Ally {
     return $upgrades;
   }
 
+  function GetCapturedUnits() {
+    if($this->allies[$this->index + 4] == "-") return [];
+    $subcards = $this->GetSubcards();
+    $capturedUnits = [];
+    for($i=0; $i<count($subcards); ++$i) {
+      if(DefinedTypesContains($subcards[$i], "Unit", $this->PlayerID())) array_push($capturedUnits, $subcards[$i]);
+    }
+    return $capturedUnits;
+  }
+
   function ClearSubcards() {
     $this->allies[$this->index + 4] = "-";
   }
