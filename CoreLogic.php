@@ -3710,6 +3710,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("SPECIFICCARD", $currentPlayer, "MULTIGIVESHIELD", 1);
       }
       break;
+    case "3622749641"://Krrsantan
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      $numBounty = SearchCount(SearchAllies($otherPlayer, hasBountyOnly:true));
+      if($numBounty > 0) {
+        $playAlly->Ready();
+      }
+      break;
     default: break;
   }
 }

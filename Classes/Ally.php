@@ -84,6 +84,10 @@ class Ally {
     return $max;
   }
 
+  function Damage() {
+    return $this->MaxHealth() - $this->Health();
+  }
+
   function IsDamaged() {
     return $this->Health() < $this->MaxHealth();
   }

@@ -1041,6 +1041,15 @@ function SpecificAllyAttackAbilities($attackID)
         }
       }
       break;
+    case "3622749641"://Krrsantan
+      $damage = $attackerAlly->Damage();
+      if($damage > 0) {
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:arena=Ground&THEIRALLY:arena=Ground");
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal " . $damage . " damage to");
+        AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE," . $damage, 1);
+      }
+      break;
     default: break;
   }
 }
