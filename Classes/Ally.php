@@ -256,6 +256,16 @@ class Ally {
     return explode(",", $this->allies[$this->index + 4]);
   }
 
+  function GetUpgrades() {
+    if($this->allies[$this->index + 4] == "-") return [];
+    $subcards = $this->GetSubcards();
+    $upgrades = [];
+    for($i=0; $i<count($subcards); ++$i) {
+      if(DefinedTypesContains($subcards[$i], "Upgrade", $this->PlayerID())) array_push($upgrades, $subcards[$i]);
+    }
+    return $upgrades;
+  }
+
   function ClearSubcards() {
     $this->allies[$this->index + 4] = "-";
   }

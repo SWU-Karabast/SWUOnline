@@ -123,10 +123,10 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
   if(!IsLeader($cardID, $player)) IncrementClassState($player, $CS_NumLeftPlay);
   AllyLeavesPlayAbility($player, $index);
   $ally = new Ally("MYALLY-" . $index, $player);
-  $subcards = $ally->GetSubcards();
-  for($i=0; $i<count($subcards); ++$i) {
-    if($subcards[$i] == "8752877738" || $subcards[$i] == "2007868442") continue;
-    AddGraveyard($subcards[$i], $player, "PLAY");
+  $upgrades = $ally->GetUpgrades();
+  for($i=0; $i<count($upgrades); ++$i) {
+    if($upgrades[$i] == "8752877738" || $upgrades[$i] == "2007868442") continue;
+    AddGraveyard($upgrades[$i], $player, "PLAY");
   }
   $owner = $allies[$index+11];
   if(!$skipDestroy) {
@@ -477,7 +477,7 @@ function CollectBounty($player, $index, $cardID, $reportMode=false, $bountyUnitO
       $bossk = new Ally("MYALLY-" . $bosskIndex, $opponent);
       if($bossk->NumUses() > 0) {
         AddDecisionQueue("PASSPARAMETER", $opponent, $cardID);
-        AddDecisionQueue("SETDQVAR", $opponent, $cardID);
+        AddDecisionQueue("SETDQVAR", $opponent, 0);
         AddDecisionQueue("SETDQCONTEXT", $opponent, "Do you want to collect the bounty for <0> again with Bossk?");
         AddDecisionQueue("YESNO", $opponent, "-");
         AddDecisionQueue("NOPASS", $opponent, "-", 1);
@@ -502,11 +502,11 @@ function CollectBounties($player, $index, $reportMode=false) {
     if($currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
     $numBounties += CollectBounty($player, $index, $currentTurnEffects[$i], $reportMode);
   }
-  //Subcard bounties
-  $subcards = $ally->GetSubcards();
-  for($i=0; $i<count($subcards); ++$i)
+  //Upgrade bounties
+  $upgrades = $ally->GetUpgrades();
+  for($i=0; $i<count($upgrades); ++$i)
   {
-    $numBounties += CollectBounty($player, $index, $subcards[$i], $reportMode);
+    $numBounties += CollectBounty($player, $index, $upgrades[$i], $reportMode);
   }
   $numBounties += CollectBounty($player, $index, $ally->CardID(), $reportMode);
   return $numBounties;
@@ -517,9 +517,9 @@ function OnKillAbility($fromCombat)
   global $combatChain, $mainPlayer, $defPlayer;
   if(count($combatChain) == 0) return;
   $attackerAlly = new Ally(AttackerMZID($mainPlayer), $mainPlayer);
-  $subcards = $attackerAlly->GetSubcards();
-  for($i=0; $i<count($subcards); ++$i) {
-    switch($subcards[$i]) {
+  $upgrades = $attackerAlly->GetUpgrades();
+  for($i=0; $i<count($upgrades); ++$i) {
+    switch($upgrades[$i]) {
       case "4897501399"://Ruthlessness
         WriteLog("Ruthlessness deals 2 damage to the defender's base");
         DealDamageAsync($defPlayer, 2, "DAMAGE", $attackerAlly->CardID());
