@@ -416,9 +416,9 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             case "CHAR": case "MYCHAR": case "THEIRCHAR": $zone[$mzArr[1] + 2] += $dqVars[0]; return $lastResult;
             default: return $lastResult;
           }
-        case "GETSUBCARDS":
+        case "GETUPGRADES":
           $ally = new Ally($lastResult);
-          $rv = implode(",", $ally->GetSubcards());
+          $rv = implode(",", $ally->GetUpgrades());
           return $rv == "" ? "PASS" : $rv;
         case "GETMEMORYCOST":
           $mzArr = explode("-", $lastResult);
@@ -429,6 +429,15 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $index = $mzArr[1];
           $uniqueID = AllyTakeControl($player, $index);
           return $uniqueID;
+        case "CAPTURE":
+          $cardID = MZRemove($player, $lastResult);
+          $uniqueID = $parameterArr[1];
+          $index = SearchAlliesForUniqueID($uniqueID, $player);
+          if($index >= 0) {
+            $ally = new Ally("MYALLY-" . $index, $player);
+            $ally->AddSubcard($cardID);
+          }
+          return $cardID;
         case "WRITECHOICE":
           $ally = new Ally($lastResult);
           WriteLog(CardLink($ally->CardID(), $ally->CardID()) . " was chosen");

@@ -71,8 +71,8 @@ class Ally {
 
   function MaxHealth() {
     $max = CardHP($this->CardID());
-    $subcards = $this->GetSubcards();
-    for($i=0; $i<count($subcards); ++$i) if($subcards[$i] != "-") $max += CardHP($subcards[$i]);
+    $upgrades = $this->GetUpgrades();
+    for($i=0; $i<count($upgrades); ++$i) if($upgrades[$i] != "-") $max += CardHP($upgrades[$i]);
     $max += $this->allies[$this->index+9];
     for($i=count($this->allies)-AllyPieces(); $i>=0; $i-=AllyPieces()) {
       if(AllyHasStaticHealthModifier($this->allies[$i])) {
@@ -82,6 +82,10 @@ class Ally {
     }
     $max += CharacterStaticHealthModifiers($this->CardID(), $this->Index(), $this->PlayerID());
     return $max;
+  }
+
+  function Damage() {
+    return $this->MaxHealth() - $this->Health();
   }
 
   function IsDamaged() {
@@ -159,8 +163,8 @@ class Ally {
     global $currentTurnEffects;
     $power = AttackValue($this->CardID()) + $this->allies[$this->index+7];
     $power += AttackModifier($this->CardID(), $this->playerID, $this->index);
-    $subcards = $this->GetSubcards();
-    for($i=0; $i<count($subcards); ++$i) if($subcards[$i] != "-") $power += AttackValue($subcards[$i]);
+    $upgrades = $this->GetUpgrades();
+    for($i=0; $i<count($upgrades); ++$i) if($upgrades[$i] != "-") $power += AttackValue($upgrades[$i]);
     if(HasGrit($this->CardID(), $this->playerID, $this->index)) {
       $damage = $this->MaxHealth() - $this->Health();
       if($damage > 0) $power += $damage;
@@ -238,6 +242,11 @@ class Ally {
     return $this->allies[$this->index+6];//Return the amount of that type of counter
   }
 
+  function AddSubcard($cardID) {
+    if($this->allies[$this->index + 4] == "-") $this->allies[$this->index + 4] = $cardID;
+    else $this->allies[$this->index + 4] = $this->allies[$this->index + 4] . "," . $cardID;
+  }
+
   function Attach($cardID) {
     if($this->allies[$this->index + 4] == "-") $this->allies[$this->index + 4] = $cardID;
     else $this->allies[$this->index + 4] = $this->allies[$this->index + 4] . "," . $cardID;
@@ -250,6 +259,26 @@ class Ally {
   function GetSubcards() {
     if($this->allies[$this->index + 4] == "-") return [];
     return explode(",", $this->allies[$this->index + 4]);
+  }
+
+  function GetUpgrades() {
+    if($this->allies[$this->index + 4] == "-") return [];
+    $subcards = $this->GetSubcards();
+    $upgrades = [];
+    for($i=0; $i<count($subcards); ++$i) {
+      if(DefinedTypesContains($subcards[$i], "Upgrade", $this->PlayerID())) array_push($upgrades, $subcards[$i]);
+    }
+    return $upgrades;
+  }
+
+  function GetCaptives() {
+    if($this->allies[$this->index + 4] == "-") return [];
+    $subcards = $this->GetSubcards();
+    $capturedUnits = [];
+    for($i=0; $i<count($subcards); ++$i) {
+      if(DefinedTypesContains($subcards[$i], "Unit", $this->PlayerID())) array_push($capturedUnits, $subcards[$i]);
+    }
+    return $capturedUnits;
   }
 
   function ClearSubcards() {
@@ -321,8 +350,8 @@ class Ally {
   }
 
   function NumUpgrades() {
-    $subcards = $this->GetSubcards();
-    return count($subcards);
+    $upgrades = $this->GetUpgrades();
+    return count($upgrades);
   }
 
   function HasBounty() {

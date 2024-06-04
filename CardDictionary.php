@@ -97,10 +97,10 @@ function RestoreAmount($cardID, $player, $index)
     }
   }
   $ally = new Ally("MYALLY-" . $index, $player);
-  $subcards = $ally->GetSubcards();
-  for($i=0; $i<count($subcards); ++$i)
+  $upgrades = $ally->GetUpgrades();
+  for($i=0; $i<count($upgrades); ++$i)
   {
-    if($subcards[$i] == "8788948272") $amount += 2;
+    if($upgrades[$i] == "8788948272") $amount += 2;
   }
   switch($cardID)
   {
@@ -197,10 +197,10 @@ function HasSentinel($cardID, $player, $index)
     }
   }
   if($hasSentinel) return true;
-  $subcards = $ally->GetSubcards();
-  for($i=0; $i<count($subcards); ++$i)
+  $upgrades = $ally->GetUpgrades();
+  for($i=0; $i<count($upgrades); ++$i)
   {
-    if($subcards[$i] == "4550121827") return true;//Protector
+    if($upgrades[$i] == "4550121827") return true;//Protector
   }
   switch($cardID)
   {
@@ -355,6 +355,7 @@ function HasAmbush($cardID, $player, $index, $from)
     case "8506660490":
     case "1805986989"://Modded Cohort
     case "7171636330"://Chain Code Collector
+    case "7982524453"://Fennec Shand
       return true;
     case "2027289177"://Escort Skiff
       return SearchCount(SearchAllies($player, aspect:"Command")) > 1;
@@ -401,10 +402,10 @@ function HasSaboteur($cardID, $player, $index)
       default: break;
     }
   }
-  $subcards = $ally->GetSubcards();
-  for($i=0; $i<count($subcards); ++$i)
+  $upgrades = $ally->GetUpgrades();
+  for($i=0; $i<count($upgrades); ++$i)
   {
-    if($subcards[$i] == "0797226725") return true;//Infiltrator's Skill
+    if($upgrades[$i] == "0797226725") return true;//Infiltrator's Skill
   }
   switch($cardID)
   {
@@ -720,6 +721,9 @@ function GetAbilityTypes($cardID)
     case "2526288781"://Bossk
       $abilityTypes = "A";
       break;
+    case "7424360283"://Bo-Katan Kryze
+      $abilityTypes = "A";
+      break;
     default: break;
   }
   if(DefinedTypesContains($cardID, "Leader", $currentPlayer) && !IsAlly($cardID, $currentPlayer)) {
@@ -829,6 +833,9 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       break;
     case "2526288781"://Bossk
       $abilityNames = "Deal Damage/Buff";
+      break;
+    case "7424360283"://Bo-Katan Kryze
+      $abilityNames = "Deal Damage";
       break;
     default: break;
   }
@@ -1078,6 +1085,8 @@ function LeaderUnit($cardID) {
       return "415bde775d";
     case "2526288781"://Bossk
       return "d2bbda6982";
+    case "7424360283"://Bo-Katan Kryze
+      return "a579b400c0";
     default: return "";
   }
 }
@@ -1130,6 +1139,8 @@ function LeaderUndeployed($cardID) {
       return "3045538805";
     case "d2bbda6982"://Bossk
       return "2526288781";
+    case "a579b400c0"://Bo-Katan Kryze
+      return "7424360283";
     default: return "";
   }
 }
@@ -1313,19 +1324,33 @@ function SmuggleCost($cardID, $player="", $index="")
 {
   global $currentPlayer;
   if($player == "") $player = $currentPlayer;
+  $minCost = -1;
   switch($cardID) {
-    case "1982478444": return 7;//Vigilant Pursuit Craft
-    case "0866321455": return 3;//Smuggler's Aid
-    case "6037778228": return 5;//Night Owl Skirmisher
-    case "2288926269": return 6;//Privateer Crew
-    case "5752414373": return 6;//Millennium Falcon
-    case "8552719712": return 7;//Pirate Battle Tank
-    case "2522489681": return 6;//Zorii Bliss
-    case "4534554684": return 4;//Freetown Backup
-    case "9690731982": return 3;//Reckless Gunslinger
-    case "5874342508": return 3;//Hotshot DL-44 Blaster
-    default: return -1;
+    case "1982478444": $minCost = 7; break;//Vigilant Pursuit Craft
+    case "0866321455": $minCost = 3; break;//Smuggler's Aid
+    case "6037778228": $minCost = 5; break;//Night Owl Skirmisher
+    case "2288926269": $minCost = 6; break;//Privateer Crew
+    case "5752414373": $minCost = 6; break;//Millennium Falcon
+    case "8552719712": $minCost = 7; break;//Pirate Battle Tank
+    case "2522489681": $minCost = 6; break;//Zorii Bliss
+    case "4534554684": $minCost = 4; break;//Freetown Backup
+    case "9690731982": $minCost = 3; break;//Reckless Gunslinger
+    case "5874342508": $minCost = 3; break;//Hotshot DL-44 Blaster
+    case "3881257511": $minCost = 4; break;//Tech
+    default: break;
   }
+  $allies = &GetAllies($player);
+  for($i=0; $i<count($allies); $i+=AllyPieces())
+  {
+    switch($allies[$i]) {
+      case "3881257511"://Tech
+        $cost = CardCost($cardID) + 2;
+        if($minCost == -1 || $minCost > $cost) $minCost = $cost;
+        break;
+      default: break;
+    }
+  }
+  return $minCost;
 }
 
 function PlayableFromBanish($cardID, $mod="")
@@ -1439,6 +1464,7 @@ function DefinedCardType2Wrapper($cardID)
     case "2503039837"://Moff Gideon
     case "3045538805"://Hondo Ohnaka
     case "2526288781"://Bossk
+    case "7424360283"://Bo-Katan Kryze
       return "";
     default: return DefinedCardType2($cardID);
   }

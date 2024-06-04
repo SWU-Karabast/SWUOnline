@@ -231,7 +231,7 @@ $CS_NumAttackCards = 28; //Played or blocked
 $CS_NumPlayedFromBanish = 29;
 $CS_NumAttacks = 30;
 $CS_DieRoll = 31;
-$CS_NumBloodDebtPlayed = 32;
+$CS_NumMandalorianAttacks = 32;
 $CS_NumWizardNonAttack = 33;
 $CS_LayerTarget = 34;
 $CS_NumSwordAttacks = 35;
@@ -445,7 +445,7 @@ function ResetClassState($player)
   global $CS_PreparationCounters, $CS_NextNAACardGoAgain, $CS_NumAlliesDestroyed, $CS_Num6PowBan, $CS_ResolvingLayerUniqueID, $CS_NextWizardNAAInstant;
   global $CS_ArcaneDamageTaken, $CS_NextNAAInstant, $CS_NextDamagePrevented, $CS_LastAttack, $CS_PlayCCIndex;
   global $CS_NumLeftPlay, $CS_NumMaterializations, $CS_NumFusedLightning, $CS_AfterPlayedBy, $CS_NumAttackCards, $CS_NumPlayedFromBanish;
-  global $CS_NumAttacks, $CS_DieRoll, $CS_NumBloodDebtPlayed, $CS_NumWizardNonAttack, $CS_LayerTarget, $CS_NumSwordAttacks;
+  global $CS_NumAttacks, $CS_DieRoll, $CS_NumMandalorianAttacks, $CS_NumWizardNonAttack, $CS_LayerTarget, $CS_NumSwordAttacks;
   global $CS_HitsWithWeapon, $CS_ArcaneDamagePrevention, $CS_DynCostResolved, $CS_CardsEnteredGY;
   global $CS_HighestRoll, $CS_NumAuras, $CS_AbilityIndex, $CS_AdditionalCosts, $CS_NumRedPlayed, $CS_PlayUniqueID, $CS_AlluvionUsed;
   global $CS_NumPhantasmAADestroyed, $CS_NumEventsPlayed, $CS_MaxQuellUsed, $CS_DamageDealt, $CS_ArcaneTargetsSelected, $CS_NumDragonAttacks, $CS_NumIllusionistAttacks;
@@ -483,7 +483,7 @@ function ResetClassState($player)
   $classState[$CS_NumPlayedFromBanish] = 0;
   $classState[$CS_NumAttacks] = 0;
   $classState[$CS_DieRoll] = 0;
-  $classState[$CS_NumBloodDebtPlayed] = 0;
+  $classState[$CS_NumMandalorianAttacks] = 0;
   $classState[$CS_NumWizardNonAttack] = 0;
   $classState[$CS_LayerTarget] = "-";
   $classState[$CS_NumSwordAttacks] = 0;
