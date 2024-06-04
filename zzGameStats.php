@@ -133,7 +133,6 @@ if(!$forIndividual) echo ("<section class='game-stats'>");
 echo ("<div><table>");
 echo ("<tr><td>Hero</td><td>Num Wins</td><td>Num Plays</td><td>Win %</td><td>Played %</td></tr>");
 
-echo ("<h2>CC Heroes</h2>");
 foreach ($gameData as $row) {
   //while ($row = mysqli_fetch_array($playData, MYSQLI_NUM)) {
   if(strlen($row[0]) < 8) continue;
