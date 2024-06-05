@@ -3766,6 +3766,15 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       LookAtHand($otherPlayer);
       WriteLog("This is a partially manual card. Name the card in chat and make sure you don't play that card if you don't have enough resources.");
       break;
+    case "5830140660"://Bazine Netal
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRHAND");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to discard");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZDESTROY", $currentPlayer, "-", 1);
+      AddDecisionQueue("DRAW", $otherPlayer, "-", 1);
+      break;
+      break;
     default: break;
   }
 }
