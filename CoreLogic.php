@@ -3774,6 +3774,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZDESTROY", $currentPlayer, "-", 1);
       AddDecisionQueue("DRAW", $otherPlayer, "-", 1);
       break;
+    case "8645125292"://Covert Strength
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to restore 2 and give a shield");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "RESTORE,2", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "ADDSHIELD", 1);
       break;
     default: break;
   }

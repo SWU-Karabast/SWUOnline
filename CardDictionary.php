@@ -1349,6 +1349,7 @@ function SmuggleCost($cardID, $player="", $index="")
     case "5874342508": $minCost = 3; break;//Hotshot DL-44 Blaster
     case "3881257511": $minCost = 4; break;//Tech
     case "5830140660": $minCost = 4; break;//Bazine Netal
+    case "8645125292": $minCost = 3; break;//Covert Strength
     default: break;
   }
   $allies = &GetAllies($player);
