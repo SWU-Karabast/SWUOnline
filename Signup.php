@@ -10,7 +10,7 @@ include_once 'Header.php';
 <div class="flex-padder"></div>
 
 <div class="flex-wrapper">
-<div class='game-invite container bg-black'>
+<div class='signup-wrapper container bg-black'>
 
 <section class="signup-form">
   <h2>Sign Up</h2>
@@ -24,8 +24,9 @@ include_once 'Header.php';
         <input type="password" name="pwd">
       <label for="pwdrepeat">Repeat Password</label>
         <input type="password" name="pwdrepeat">
-
-      <button type="submit" name="submit">Sign Up</button>
+      <div style="text-align:center;">
+        <button type="submit" name="submit">Sign Up</button>
+      </div>
     </form>
   </div>
 

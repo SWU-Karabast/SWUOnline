@@ -47,7 +47,11 @@ p {
 }
 
 p a{
-  color: lightblue;
+  color: #bddbff;
+}
+
+.secondary {
+  color: #aaaaaa;
 }
 
 p:last-child { 
@@ -96,26 +100,45 @@ button, input, select, textarea {
   font-size: 16px;
 }
 
-button, .GameLobby_Button, .create-game-button {
+button, .GameLobby_Button, .create-game-button, .ServerChecker_Button, .JoinGame_Button {
   display: inline-block;
   text-align: center;
   white-space: nowrap;
   background: #292929;
   border: 0;
   cursor: pointer;
-  transition: opacity .25s;
   font-weight: 600;
+  transition: 150ms ease-in-out;
+  box-shadow: inset 0px 0px 0px 1px #454545;
+}
+
+button:hover, .GameLobby_Button:hover, .create-game-button:hover, .ServerChecker_Button:hover, .JoinGame_Button:hover {
+  transform: scale(1.1);
 }
 
 input, select {
   margin: 10px 0 20px 0;
 }
 
+select {
+  background: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg' fill='%23eceff4'%3E%3Cpath d='M5 6l5 5 5-5 2 1-7 7-7-7 2-1z'/%3E%3C/svg%3E") no-repeat;
+  background-position: right 5px center;
+  background-color: #394452;
+  width: 100%;
+  border-radius: 5px;
+  appearance: none;
+  display: block;
+  border: none;
+  }
+
+
 .container {
   flex: 1;
   border-radius: 10px;
   padding: 20px;
   backdrop-filter: blur(20px);
+  scrollbar-color: #888888 rgba(0, 0, 0, 0); 
+  scrollbar-width: thin;
 }
 
 .bg-blue { 
@@ -128,6 +151,10 @@ input, select {
 
 .flex-wrapper {
   flex: 1;
+  overflow-y: auto;
+  scrollbar-color: #888888 rgba(0, 0, 0, 0); 
+  scrollbar-width: thin;
+  border-radius: 10px;
 }
 
 .flex-padder {
@@ -210,6 +237,10 @@ input, select {
   text-decoration: none; 
 }
 
+.nav-bar a:hover {
+  text-decoration: underline;
+}
+
 .nav-bar-user, .nav-bar-links {
   background-color: rgb(0, 0, 0, 40%);
   backdrop-filter: blur(20px);
@@ -288,7 +319,14 @@ input, select {
 .create-game-wrapper { 
   margin-left: 20px;
   flex: 1;
+  height:fit-content;
+  overflow-y: auto;
+  scrollbar-color: #888888 rgba(0, 0, 0, 0); 
+  scrollbar-width: thin;
+  border-radius: 10px;
 }
+
+@media screen and (max-height: 780px) { .create-game-wrapper { height:auto; max-height: 503px; } }
 
 .create-game-wrapper input, .create-game-wrapper select {
   width: 100%;
@@ -327,6 +365,10 @@ input, select {
   width: auto !important;
 }
 
+.create-game-wrapper .login-notice { 
+  margin-bottom: 10px;
+}
+
 /* Karabast Info */
 
 .karabast-column {
@@ -334,6 +376,10 @@ input, select {
   display: flex;
   flex-direction: column;
   flex: 1;
+  overflow-y: auto;
+  scrollbar-color: #888888 rgba(0, 0, 0, 0); 
+  scrollbar-width: thin;
+  border-radius: 10px;
 }
 
 .karabast-overview { 
@@ -356,6 +402,11 @@ input, select {
   width: 100%;
 }
 
+.game-invite .save-deck {
+  margin-bottom: 10px;
+  display: block;
+}
+
 /* LOG IN --------------------------------------------------------------------------------------------------- */
 
 .username, .password {
@@ -376,14 +427,20 @@ input, select {
   width: 100%;
 }
 
+.signup-form-form {
+  padding-bottom: 1px;
+}
+
 /* PROFILE ------------------------------------------------------------------------------------------------- */
 
 .fav-decks {
   margin: 0 20px;
+  overflow-y: auto;
 }
 
 .stats {
  margin: 0 20px 0 0;
+ overflow-y: auto;
 }
 
 .imgPatreon {
@@ -399,6 +456,7 @@ input, select {
 
 .fav-decks tr, .stats tr, .fav-decks td, .stats td {
   border-bottom: 1px solid #353739;
+  font-size: 16px;
 }
 
 .block-input {
@@ -420,10 +478,17 @@ input, select {
   margin-top: 3px;
 }
 
-.lobby-header a {
+.leave-lobby a {
   float: right;
   margin: 15px 0 0 0;
   padding: 0 20px 0 0;
+  text-decoration: none;
+  font-weight: 600;
+  color: white;
+}
+
+.leave-lobby a:hover {
+  text-decoration: underline;
 }
 
 /* Sizing Wrapper */
@@ -478,7 +543,7 @@ input, select {
 
 .invite-link {
   width: calc(100% - 145px);
-  margin-top: 0;
+  margin-top: 10px;
 }
 
 /* Players */

@@ -108,7 +108,7 @@ $isMobile = IsMobile();
 
 <div class="lobby-header">
   <h1>Game Lobby</h1>
-  <a href='MainMenu.php'>Leave Lobby</a>
+  <p class="leave-lobby"><a href='MainMenu.php'>Leave Lobby</a></p>
 </div>
 
 <div class="lobby-wrapper">
