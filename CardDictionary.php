@@ -225,6 +225,7 @@ function HasSentinel($cardID, $player, $index)
     case "8552719712"://Pirate Battle Tank
     case "4843225228"://Phase-III Dark Trooper
     case "7486516061"://Concord Dawn Interceptors
+    case "6409922374"://Niima Outpost Constables
       return true;
     case "2739464284"://Gamorrean Guards
       return SearchCount(SearchAllies($player, aspect:"Cunning")) > 1;
@@ -260,6 +261,8 @@ function HasGrit($cardID, $player, $index)
     case "6878039039"://Hylobon Enforcer
     case "8190373087"://Gentle Giant
     case "1304452249"://Covetous Rivals
+    case "4383889628"://Wroshyr Tree Tender
+    case "0252207505"://Synara San
       return true;
     default: return false;
   }
@@ -1163,6 +1166,14 @@ function HasAttackAbility($cardID) {
   }
 }
 
+function CardHP($cardID) {
+  switch($cardID)
+  {
+    case "8877249477": return 2;
+    default: return CardHPDictionary($cardID);
+  }
+}
+
 function HasBladeBreak($cardID)
 {
   global $defPlayer;
@@ -1337,6 +1348,8 @@ function SmuggleCost($cardID, $player="", $index="")
     case "9690731982": $minCost = 3; break;//Reckless Gunslinger
     case "5874342508": $minCost = 3; break;//Hotshot DL-44 Blaster
     case "3881257511": $minCost = 4; break;//Tech
+    case "5830140660": $minCost = 4; break;//Bazine Netal
+    case "8645125292": $minCost = 3; break;//Covert Strength
     default: break;
   }
   $allies = &GetAllies($player);
