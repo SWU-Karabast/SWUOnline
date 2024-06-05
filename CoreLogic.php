@@ -329,7 +329,7 @@ function ArsenalHitEffects()
 
 function CharacterPlayCardAbilities($cardID, $from)
 {
-  global $currentPlayer, $CS_NumAttacks;
+  global $currentPlayer;
   $character = &GetPlayerCharacter($currentPlayer);
   for($i=0; $i<count($character); $i+=CharacterPieces())
   {
@@ -1817,7 +1817,7 @@ function SameWeaponEquippedTwice()
 
 function SelfCostModifier($cardID)
 {
-  global $currentPlayer, $CS_NumAttacks, $CS_LastAttack, $CS_LayerTarget, $layers;
+  global $currentPlayer, $CS_LastAttack, $CS_LayerTarget, $layers;
   $modifier = 0;
   //Aspect Penalty
   if(!TraitContains($cardID, "Spectre", $currentPlayer) || (HeroCard($currentPlayer) != "7440067052" && SearchAlliesForCard($currentPlayer, "80df3928eb") == "")) {
@@ -2117,7 +2117,7 @@ function IsClassBonusActive($player, $class)
 
 function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalCosts = "-")
 {
-  global $currentPlayer, $layers, $CS_NumAttacks, $CS_PlayIndex;
+  global $currentPlayer, $layers, $CS_PlayIndex;
   $index = GetClassState($currentPlayer, $CS_PlayIndex);
   if($target != "-")
   {
@@ -3669,6 +3669,60 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
         AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "2526288781", 1);
       }
+      break;
+    case "7424360283"://Bo-Katan Kryze
+      global $CS_NumMandalorianAttacks;
+      $abilityName = GetResolvedAbilityName($cardID, $from);
+      if($abilityName == "Deal Damage" && GetClassState($currentPlayer, $CS_NumMandalorianAttacks)) {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 1 damage to");
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1", 1);
+      }
+      break;
+    case "0505904136"://Scanning Officer
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      $resources = &GetResourceCards($otherPlayer);
+      $numDestroyed = 0;
+      $cards = "";
+      for($i = 0; $i < 3 && count($resources) > 0; $i++) {
+        $index = (GetRandom() % (count($resources)/ResourcePieces())) * ResourcePieces();
+        if($cards != "") $cards .= ",";
+        $cards .= $resources[$index];
+        if(SmuggleCost($resources[$index], $otherPlayer, $index) >= 0) {
+          for($j=$i; $j<$i+ResourcePieces(); ++$j) unset($resources[$j]);
+          $resources = array_values($resources);
+          ++$numDestroyed;
+        }
+      }
+      for($i=0; $i<$numDestroyed; ++$i) {
+        AddTopDeckAsResource($otherPlayer);
+      }
+      RevealCards($cards);
+      break;
+    case "2560835268"://The Armorer
+      if($from != "PLAY") {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Mandalorian");
+        AddDecisionQueue("OP", $currentPlayer, "MZTONORMALINDICES");
+        AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "3-", 1);
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose up to 3 mandalorians to give a shield");
+        AddDecisionQueue("MULTICHOOSEUNIT", $currentPlayer, "<-", 1);
+        AddDecisionQueue("SPECIFICCARD", $currentPlayer, "MULTIGIVESHIELD", 1);
+      }
+      break;
+    case "3622749641"://Krrsantan
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      $numBounty = SearchCount(SearchAllies($otherPlayer, hasBountyOnly:true));
+      if($numBounty > 0) {
+        $playAlly->Ready();
+      }
+      break;
+    case "9765804063"://Discerning Veteran
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:arena:Ground");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to capture");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "CAPTURE," . $playAlly->UniqueID(), 1);
       break;
     default: break;
   }

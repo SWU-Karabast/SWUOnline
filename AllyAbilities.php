@@ -123,10 +123,15 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
   if(!IsLeader($cardID, $player)) IncrementClassState($player, $CS_NumLeftPlay);
   AllyLeavesPlayAbility($player, $index);
   $ally = new Ally("MYALLY-" . $index, $player);
-  $subcards = $ally->GetSubcards();
-  for($i=0; $i<count($subcards); ++$i) {
-    if($subcards[$i] == "8752877738" || $subcards[$i] == "2007868442") continue;
-    AddGraveyard($subcards[$i], $player, "PLAY");
+  $upgrades = $ally->GetUpgrades();
+  for($i=0; $i<count($upgrades); ++$i) {
+    if($upgrades[$i] == "8752877738" || $upgrades[$i] == "2007868442") continue;
+    AddGraveyard($upgrades[$i], $player, "PLAY");
+  }
+  $captives = $ally->GetCaptives();
+  $otherPlayer = $player == 1 ? 2 : 1;
+  for($i=0; $i<count($captives); ++$i) {
+    PlayAlly($captives[$i], $otherPlayer, from:"CAPTIVE");
   }
   $owner = $allies[$index+11];
   if(!$skipDestroy) {
@@ -477,7 +482,7 @@ function CollectBounty($player, $index, $cardID, $reportMode=false, $bountyUnitO
       $bossk = new Ally("MYALLY-" . $bosskIndex, $opponent);
       if($bossk->NumUses() > 0) {
         AddDecisionQueue("PASSPARAMETER", $opponent, $cardID);
-        AddDecisionQueue("SETDQVAR", $opponent, $cardID);
+        AddDecisionQueue("SETDQVAR", $opponent, 0);
         AddDecisionQueue("SETDQCONTEXT", $opponent, "Do you want to collect the bounty for <0> again with Bossk?");
         AddDecisionQueue("YESNO", $opponent, "-");
         AddDecisionQueue("NOPASS", $opponent, "-", 1);
@@ -502,11 +507,11 @@ function CollectBounties($player, $index, $reportMode=false) {
     if($currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
     $numBounties += CollectBounty($player, $index, $currentTurnEffects[$i], $reportMode);
   }
-  //Subcard bounties
-  $subcards = $ally->GetSubcards();
-  for($i=0; $i<count($subcards); ++$i)
+  //Upgrade bounties
+  $upgrades = $ally->GetUpgrades();
+  for($i=0; $i<count($upgrades); ++$i)
   {
-    $numBounties += CollectBounty($player, $index, $subcards[$i], $reportMode);
+    $numBounties += CollectBounty($player, $index, $upgrades[$i], $reportMode);
   }
   $numBounties += CollectBounty($player, $index, $ally->CardID(), $reportMode);
   return $numBounties;
@@ -517,9 +522,9 @@ function OnKillAbility($fromCombat)
   global $combatChain, $mainPlayer, $defPlayer;
   if(count($combatChain) == 0) return;
   $attackerAlly = new Ally(AttackerMZID($mainPlayer), $mainPlayer);
-  $subcards = $attackerAlly->GetSubcards();
-  for($i=0; $i<count($subcards); ++$i) {
-    switch($subcards[$i]) {
+  $upgrades = $attackerAlly->GetUpgrades();
+  for($i=0; $i<count($upgrades); ++$i) {
+    switch($upgrades[$i]) {
       case "4897501399"://Ruthlessness
         WriteLog("Ruthlessness deals 2 damage to the defender's base");
         DealDamageAsync($defPlayer, 2, "DAMAGE", $attackerAlly->CardID());
@@ -636,9 +641,9 @@ function AllyAttackAbilities($attackID)
 function AllyAttackedAbility($attackTarget, $index) {
   global $mainPlayer, $defPlayer;
   $ally = new Ally("MYALLY-" . $index, $defPlayer);
-  $subcards = $ally->GetSubcards();
-  for($i=0; $i<count($subcards); ++$i) {
-    switch($subcards[$i]) {
+  $upgrades = $ally->GetUpgrades();
+  for($i=0; $i<count($upgrades); ++$i) {
+    switch($upgrades[$i]) {
       case "1323728003"://Electrostaff
         AddCurrentTurnEffect("1323728003", $mainPlayer, from:"PLAY");
         break;
@@ -695,6 +700,17 @@ function AllyPlayCardAbility($cardID, $player="", $reportMode=false, $from="-")
           WriteLog(CardLink("5907868016", "5907868016") . " is dealing 1 damage.");
         }
         break;
+      case "8031540027"://Dengar
+        if(DefinedTypesContains($cardID, "Upgrade", $player)) {
+          if($reportMode) return true;
+          global $CS_LayerTarget;
+          $target = GetClassState($player, $CS_LayerTarget);
+          AddDecisionQueue("YESNO", $player, "Do you want to deal 1 damage from " . CardLink($allies[$i], $allies[$i]) . "?");
+          AddDecisionQueue("NOPASS", $player, "-");
+          AddDecisionQueue("PASSPARAMETER", $player, $target, 1);
+          AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1", 1);
+        }
+        break;
       default: break;
     }
   }
@@ -727,9 +743,9 @@ function SpecificAllyAttackAbilities($attackID)
 {
   global $mainPlayer, $defPlayer, $combatChainState, $CCS_WeaponIndex;
   $attackerAlly = new Ally(AttackerMZID($mainPlayer), $mainPlayer);
-  $subcards = $attackerAlly->GetSubcards();
-  for($i=0; $i<count($subcards); ++$i) {
-    switch($subcards[$i]) {
+  $upgrades = $attackerAlly->GetUpgrades();
+  for($i=0; $i<count($upgrades); ++$i) {
+    switch($upgrades[$i]) {
       case "7280213969"://Smuggling Compartment
         ReadyResource($mainPlayer);
         break;
@@ -1003,6 +1019,41 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit with bounty to deal 2 damage to");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,2", 1);
+      break;
+    case "a579b400c0"://Bo-Katan Kryze
+      $number = GetClassState($mainPlayer, $CS_NumMandalorianAttacks) ? 2 : 1;
+      for($i=0; $i<$number; ++$i) {
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY");
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 1 damage to");
+        AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,1", 1);
+      }
+      break;
+    case "7982524453"://Fennec Shand
+      if(IsAllyAttackTarget()) {
+        $discard = &GetDiscard($mainPlayer);
+        $numDistinct = 0;
+        $costMap = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+        for($i=0; $i<count($discard); $i+=DiscardPieces()) {
+          $cost = CardCost($discard[$i]);
+          if($cost == "") continue;
+          ++$costMap[$cost];
+          if($costMap[$cost] == 1) ++$numDistinct;
+        }
+        if($numDistinct > 0) {
+          $defender = new Ally(GetAttackTarget(), $defPlayer);
+          $defender->DealDamage($numDistinct);
+        }
+      }
+      break;
+    case "3622749641"://Krrsantan
+      $damage = $attackerAlly->Damage();
+      if($damage > 0) {
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:arena=Ground&THEIRALLY:arena=Ground");
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal " . $damage . " damage to");
+        AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE," . $damage, 1);
+      }
       break;
     default: break;
   }
