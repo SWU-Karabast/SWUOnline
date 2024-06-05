@@ -360,6 +360,13 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
         AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
         AddDecisionQueue("SPECIFICCARD", $player, "OBIWANKENOBI", 1);
         break;
+      case "7351946067"://Rhokai Gunship
+        AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
+        AddDecisionQueue("PREPENDLASTRESULT", $player, "MYCHAR-0,THEIRCHAR-0,");
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose something to deal 1 damage to");
+        AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
+        AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1", 1);
+        break;
       default: break;
     }
   }
