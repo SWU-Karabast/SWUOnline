@@ -3761,6 +3761,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "2090698177"://Street Gang Recruiter
       MZMoveCard($currentPlayer, "MYDISCARD:trait=Underworld", "MYHAND", may:true, context:"Choose an uncerworld card to return with " . CardLink("2090698177", "2090698177"));
       break;
+    case "7964782056"://Qi'Ra
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      LookAtHand($otherPlayer);
+      WriteLog("This is a partially manual card. Name the card in chat and make sure you don't play that card if you don't have enough resources.");
+      break;
     default: break;
   }
 }
