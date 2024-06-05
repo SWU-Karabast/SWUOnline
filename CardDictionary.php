@@ -249,6 +249,16 @@ function HasGrit($cardID, $player, $index)
 {
   $ally = new Ally("MYALLY-" . $index, $player);
   if($ally->LostAbilities()) return false;
+  $allies = &GetAllies($player);
+  for($i=0; $i<count($allies); $i+=AllyPieces())
+  {
+    switch($allies[$i])
+    {
+      case "4783554451"://First Light
+        return true;
+      default: break;
+    }
+  }
   switch($cardID)
   {
     case "5335160564":
@@ -263,6 +273,7 @@ function HasGrit($cardID, $player, $index)
     case "1304452249"://Covetous Rivals
     case "4383889628"://Wroshyr Tree Tender
     case "0252207505"://Synara San
+    case "4783554451"://First Light
       return true;
     default: return false;
   }
@@ -1350,6 +1361,7 @@ function SmuggleCost($cardID, $player="", $index="")
     case "3881257511": $minCost = 4; break;//Tech
     case "5830140660": $minCost = 4; break;//Bazine Netal
     case "8645125292": $minCost = 3; break;//Covert Strength
+    case "4783554451": $minCost = 7; break;//First Light
     default: break;
   }
   $allies = &GetAllies($player);
