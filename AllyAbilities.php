@@ -1069,6 +1069,9 @@ function SpecificAllyAttackAbilities($attackID)
         AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE," . $damage, 1);
       }
       break;
+    case "9115773123"://Coruscant Dissident
+      ReadyResource($mainPlayer);
+      break;
     default: break;
   }
 }
