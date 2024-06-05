@@ -474,6 +474,13 @@ function CollectBounty($player, $index, $cardID, $reportMode=false, $bountyUnitO
       if($reportMode) break;
       Draw($opponent);
       break;
+    case "0252207505"://Synara San
+      if($bountyUnitOverride != "-" || $ally->IsExhausted()) {
+        ++$numBounties;
+        if($reportMode) break;
+        DealDamageAsync($player, 5, "DAMAGE", "0252207505");
+      }
+      break;
     default: break;
   }
   if($numBounties > 0 && !$reportMode) {
