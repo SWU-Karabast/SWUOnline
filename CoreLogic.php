@@ -1862,6 +1862,11 @@ function SelfCostModifier($cardID)
         if($theirAlly->HasBounty()) { $hasBounty = true; $modifier -= 1; }
       }
       break;
+    case "7212445649"://Bravado
+      global $CS_NumAlliesDestroyed;
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      if(GetClassState($otherPlayer, $CS_NumAlliesDestroyed) > 0) $modifier -= 2;
+      break;
     default: break;
   }
   //Target cost modifier
@@ -3871,6 +3876,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
       }
       AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
+      break;
+    case "7212445649"://Bravado
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to ready");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
       break;
     default: break;
   }
