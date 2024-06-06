@@ -241,6 +241,10 @@ function CurrentEffectCostModifiers($cardID, $from)
           $costModifier -= 2;
           $remove = true;
           break;
+        case "4643489029"://Palpatine's Return
+          $costModifier -= TraitContains($cardID, "Force", $player) ? 8 : 6;
+          $remove = true;
+          break;
         default: break;
       }
       if($remove) RemoveCurrentTurnEffect($i);
