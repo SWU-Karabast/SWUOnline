@@ -462,6 +462,9 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             }
           }
           return implode(",", $cards);
+        case "ADDTOPDECKASRESOURCE":
+          AddTopDeckAsResource($player);
+          return $lastResult;
         case "REMOVEPREPARATION":
           global $CS_PreparationCounters;
           DecrementClassState($player, $CS_PreparationCounters, $lastResult);
