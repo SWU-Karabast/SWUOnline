@@ -349,7 +349,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             default: return "-1";
           }
         case "BUFFALLY": MZBuffAlly($player, $lastResult); return $lastResult;
-        case "BOUNCE": MZBounce($player, $lastResult); return $lastResult;
+        case "BOUNCE": return MZBounce($player, $lastResult);
         case "COLLECTBOUNTIES":
           $mzArr = explode("-", $lastResult);
           CollectBounties($mzArr[0] == "MYALLY" ? $player : ($player == 1 ? 2 : 1), $mzArr[1]);

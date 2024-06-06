@@ -305,23 +305,24 @@ function MZWakeUp($player, $target)
 function MZBounce($player, $target)
 {
   global $CS_NumLeftPlay;
-  $pieces = explode("-", $target);
-  $player = (substr($pieces[0], 0, 2) == "MY" ? $player : ($player == 1 ? 2 : 1));
-  $zone = &GetMZZone($player, $pieces[0]);
-  switch($pieces[0]) {
+  $mzArr = explode("-", $target);
+  $player = (substr($mzArr[0], 0, 2) == "MY" ? $player : ($player == 1 ? 2 : 1));
+  $zone = &GetMZZone($player, $mzArr[0]);
+  switch($mzArr[0]) {
     case "THEIRALLY": case "MYALLY":
       $allies = &GetAllies($player);
-      $owner = $allies[$pieces[1]+11];
-      $cardID = RemoveAlly($player, $pieces[1]);
-      AddHand($owner, $cardID);
+      $owner = $allies[$mzArr[1]+11];
+      $cardID = RemoveAlly($player, $mzArr[1]);
       IncrementClassState($player, $CS_NumLeftPlay);
-      break;
+      $index = AddHand($owner, $cardID);
+      return substr($mzArr[0], 0, 2) == "MY" ? "MYHAND-" . $index : "THEIRHAND-" . $index;
     case "MYRESOURCES": case "THEIRRESOURCES":
-      $cardID = RemoveResource($player, $pieces[1]);
-      AddHand($player, $cardID);
-      break;
+      $cardID = RemoveResource($player, $mzArr[1]);
+      $index = AddHand($owner, $cardID);
+      return substr($mzArr[0], 0, 2) == "MY" ? "MYHAND-" . $index : "THEIRHAND-" . $index;
     default: break;
   }
+  return -1;
 }
 
 function MZSink($player, $target)

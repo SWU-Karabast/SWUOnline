@@ -245,6 +245,10 @@ function CurrentEffectCostModifiers($cardID, $from)
           $costModifier -= TraitContains($cardID, "Force", $player) ? 8 : 6;
           $remove = true;
           break;
+        case "4717189843"://A New Adventure
+          $costModifier -= 99;
+          $remove = true;
+          break;
         default: break;
       }
       if($remove) RemoveCurrentTurnEffect($i);
