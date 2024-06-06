@@ -1118,6 +1118,8 @@ function LeaderUnit($cardID) {
       return "a579b400c0";
     case "5440730550"://Lando Calrissian
       return "040a3e81f3";
+    case "1384530409"://Cad Bane
+      return "724979d608";
     default: return "";
   }
 }
@@ -1174,6 +1176,8 @@ function LeaderUndeployed($cardID) {
       return "7424360283";
     case "040a3e81f3"://Lando Calrissian
       return "5440730550";
+    case "724979d608"://Cad Bane
+      return "1384530409";
     default: return "";
   }
 }
@@ -1511,6 +1515,7 @@ function DefinedCardType2Wrapper($cardID)
     case "2526288781"://Bossk
     case "7424360283"://Bo-Katan Kryze
     case "5440730550"://Lando Calrissian
+    case "1384530409"://Cad Bane
       return "";
     default: return DefinedCardType2($cardID);
   }
