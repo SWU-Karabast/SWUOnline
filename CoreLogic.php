@@ -3810,15 +3810,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "5440730550"://Lando Calrissian
+      global $CS_AfterPlayedBy;
+      SetClassState($currentPlayer, $CS_AfterPlayedBy, $cardID);
       AddCurrentTurnEffect($cardID, $currentPlayer);//Cost discount
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYRESOURCES");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to play");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZREMOVE", $currentPlayer, "-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
-      AddDecisionQueue("OP", $currentPlayer, "ADDTOPDECKASRESOURCE", 1);
-      
-      MZChooseAndDestroy($currentPlayer, "MYRESOURCES", context:"Choose a resource to destroy");
-
       break;
     default: break;
   }
@@ -3852,6 +3851,10 @@ function AfterPlayedByAbility($cardID) {
   $index = LastAllyIndex($currentPlayer);
   $ally = new Ally("MYALLY-" . $index, $currentPlayer);
   switch($cardID) {
+    case "5440730550"://Lando Calrissian
+      AddDecisionQueue("OP", $currentPlayer, "ADDTOPDECKASRESOURCE");
+      MZChooseAndDestroy($currentPlayer, "MYRESOURCES", context:"Choose a resource to destroy");
+      break;
     case "3572356139"://Chewbacca, Walking Carpet
       AddDecisionQueue("OP", $currentPlayer, "GETLASTALLYMZ");
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
