@@ -205,6 +205,10 @@ function CurrentEffectCostModifiers($cardID, $from)
           $costModifier -= 3;
           $remove = true;
           break;
+        case "5351496853"://Gideon's Light Cruiser
+          $costModifier -= 99;
+          $remove = true;
+          break;
         case "2756312994"://Alliance Dispatcher
           $costModifier -= 1;
           $remove = true;

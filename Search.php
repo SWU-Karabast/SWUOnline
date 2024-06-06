@@ -987,36 +987,11 @@ function SearchMultizone($player, $searches)
   return $rv;
 }
 
-function FrozenCount($player)
-{
-  $numFrozen = 0;
+function ControlsNamedCard($player, $name) {
   $char = &GetPlayerCharacter($player);
-  for ($i = 0; $i < count($char); $i += CharacterPieces())
-    if ($char[$i + 8] == "1" && $char[$i + 1] != "0")
-      ++$numFrozen;
-  $allies = &GetAllies($player);
-  for ($i = 0; $i < count($allies); $i += AllyPieces())
-    if ($allies[$i + 3] == "1")
-      ++$numFrozen;
-  $arsenal = &GetArsenal($player);
-  for ($i = 0; $i < count($arsenal); $i += ArsenalPieces())
-    if ($arsenal[$i + 4] == "1")
-      ++$numFrozen;
-  return $numFrozen;
-}
-
-function SearchSpellvoidIndices($player)
-{
-  $search = SearchArcaneReplacement($player, "MYCHAR");
-  $charIndices = SearchMultizoneFormat($search, "MYCHAR");
-  $search = SearchArcaneReplacement($player, "MYITEMS");
-  $itemsIndices = SearchMultizoneFormat($search, "MYITEMS");
-  $indices = CombineSearches($charIndices, $itemsIndices);
-  $search = SearchArcaneReplacement($player, "MYAURAS");
-  $auraIndices = SearchMultizoneFormat($search, "MYAURAS");
-  $indices = CombineSearches($indices, $auraIndices);
-
-  return $indices;
+  if(count($char) > CharacterPieces() && CardTitle($char[CharacterPieces()]) == $name) return true;
+  if(SearchCount(SearchAlliesForTitle($player, $name)) > 0) return true;
+  return false;
 }
 
 function ReservableIndices($player)
