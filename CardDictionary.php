@@ -743,6 +743,9 @@ function GetAbilityTypes($cardID)
     case "5440730550"://Lando Calrissian
       $abilityTypes = "A";
       break;
+    case "040a3e81f3"://Lando Leader Unit
+      $abilityTypes = "A,AA";
+      break;
     default: break;
   }
   if(DefinedTypesContains($cardID, "Leader", $currentPlayer) && !IsAlly($cardID, $currentPlayer)) {
@@ -858,6 +861,9 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       break;
     case "5440730550"://Lando Calrissian
       $abilityNames = "Smuggle";
+      break;
+    case "040a3e81f3"://Lando Leader Unit
+      $abilityNames = "Smuggle,Attack";
       break;
     default: break;
   }

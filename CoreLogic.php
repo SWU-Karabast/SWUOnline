@@ -3819,6 +3819,19 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZREMOVE", $currentPlayer, "-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
       break;
+    case "040a3e81f3"://Lando Calrissian Leader Unit
+      $abilityName = GetResolvedAbilityName($cardID, $from);
+      if($abilityName == "Smuggle") {
+        global $CS_AfterPlayedBy;
+        SetClassState($currentPlayer, $CS_AfterPlayedBy, $cardID);
+        AddCurrentTurnEffect($cardID, $currentPlayer);//Cost discount
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYRESOURCES");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to play");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZREMOVE", $currentPlayer, "-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
+      }
+      break;
     default: break;
   }
 }
@@ -3851,6 +3864,7 @@ function AfterPlayedByAbility($cardID) {
   $index = LastAllyIndex($currentPlayer);
   $ally = new Ally("MYALLY-" . $index, $currentPlayer);
   switch($cardID) {
+    case "040a3e81f3"://Lando Calrissian Leader Unit
     case "5440730550"://Lando Calrissian
       AddDecisionQueue("OP", $currentPlayer, "ADDTOPDECKASRESOURCE");
       MZChooseAndDestroy($currentPlayer, "MYRESOURCES", context:"Choose a resource to destroy");

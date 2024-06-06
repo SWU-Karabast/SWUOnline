@@ -219,6 +219,7 @@ function AllyPlayableExhausted($cardID) {
     case "4300219753"://Fett's Firespray
     case "2471223947"://Frontline Shuttle
     case "1885628519"://Crosshair
+    case "040a3e81f3"://Lando Leader Unit
       return true;
     default: return false;
   }
@@ -232,6 +233,8 @@ function AllyDoesAbilityExhaust($cardID, $abilityIndex) {
       return $abilityIndex == 1;
     case "1885628519"://Crosshair
       return $abilityIndex == 1 || $abilityIndex == 2;
+    case "040a3e81f3"://Lando Leader Unit
+      return $abilityIndex == 1;
     default: return true;
   }
 }
