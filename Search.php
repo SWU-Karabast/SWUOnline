@@ -109,7 +109,7 @@ function SearchInner(&$array, $player, $zone, $count, $type, $definedType, $maxC
         && ($minCost == -1 || CardCost($cardID) >= $minCost)
         && ($aspect == "" || AspectContains($cardID, $aspect, $player))
         && ($arena == "" || ArenaContains($cardID, $arena, $player))
-        && ($trait == -1 || TraitContains($cardID, $trait, $player))
+        && ($trait == -1 || TraitContains($cardID, $trait, $player, $i))
         && ($maxAttack == -1 || AttackValue($cardID) <= $maxAttack)
         && ($minAttack == -1 || AttackValue($cardID) >= $minAttack)
       ) {

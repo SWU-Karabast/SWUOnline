@@ -1249,8 +1249,18 @@ function AspectContains($cardID, $aspect, $player="")
   return DelimStringContains($cardAspect, $aspect);
 }
 
-function TraitContains($cardID, $trait, $player="")
+function TraitContains($cardID, $trait, $player="", $index=-1)
 {
+  if($index != -1) {
+    $ally = new Ally("MYALLY-" . $index, $player);
+    $upgrades = $ally->GetUpgrades();
+    for($i=0; $i<count($upgrades); ++$i) {
+      switch($upgrades[$i]) {
+        case "7687006104": if($trait == "Mandalorian") { return true; } break;
+        default: break;}
+      if(TraitContains($upgrades[$i], $trait, $player)) return true;
+    }
+  }
   $cardTrait = CardTraits($cardID);
   return DelimStringContains($cardTrait, $trait);
 }
@@ -3571,8 +3581,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "3514010297"://Mandalorian Armor
-      if(TraitContains(GetMZCard($currentPlayer, $target), "Mandalorian", $currentPlayer)) {
-        $ally = new Ally($target, $currentPlayer);
+      $ally = new Ally($target, $currentPlayer);
+      if(TraitContains(GetMZCard($currentPlayer, $target), "Mandalorian", $currentPlayer, $ally->Index())) {
         $ally->Attach("8752877738");//Shield Token
       }
       break;

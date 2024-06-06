@@ -1634,7 +1634,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
       // If you attacked an aura with Spectra
       if (!$chainClosed && ($definedCardType == "AA" || $definedCardType == "W")) {
         IncrementClassState($currentPlayer, $CS_NumAttacks);
-        if(TraitContains($cardID, "Mandalorian", $currentPlayer)) IncrementClassState($currentPlayer, $CS_NumMandalorianAttacks);
+        if(TraitContains($cardID, "Mandalorian", $currentPlayer, $index)) IncrementClassState($currentPlayer, $CS_NumMandalorianAttacks);
         ArsenalAttackAbilities();
         OnAttackEffects($cardID);
       }

@@ -612,6 +612,7 @@ function AttackValue($cardID)
   {
     case "4897501399"://Ruthlessness
       return 2;
+    case "7687006104": return 1;//Foundling
     default: return CardPower($cardID);
   }
 }
@@ -1181,6 +1182,7 @@ function CardHP($cardID) {
   switch($cardID)
   {
     case "8877249477": return 2;
+    case "7687006104": return 1;//Foundling
     default: return CardHPDictionary($cardID);
   }
 }
