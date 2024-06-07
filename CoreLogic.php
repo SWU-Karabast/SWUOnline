@@ -364,11 +364,21 @@ function MainCharacterPlayCardAbilities($cardID, $from)
     switch($character[$i]) {
       case "3045538805"://Hondo Ohnaka
         if($from == "RESOURCES") {
-          $char[$i+1] = 1;
+          $character[$i+1] = 1;
           AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
           AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to give an experience token", 1);
           AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
           AddDecisionQueue("MZOP", $currentPlayer, "ADDEXPERIENCE", 1);
+        }
+        break;
+      case "1384530409"://Cad Bane
+        if(TraitContains($cardID, "Underworld", $currentPlayer)) {
+          $character[$i+1] = 1;
+          $otherPlayer = ($currentPlayer == 1 ? 2 : 1);
+          AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY");
+          AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a unit to deal 1 damage to", 1);
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $otherPlayer, "<-", 1);
+          AddDecisionQueue("MZOP", $otherPlayer, "DEALDAMAGE,1", 1);
         }
         break;
       default:
