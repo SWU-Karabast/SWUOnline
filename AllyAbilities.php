@@ -759,6 +759,14 @@ function AllyPlayCardAbility($cardID, $player="", $reportMode=false, $from="-")
           DealDamageAsync($player, 2, "DAMAGE", "5555846790");
         }
         break;
+      case "4935319539"://Krayt Dragon
+        if($reportMode) return true;
+        $damage = CardCost($cardID);
+        AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "THEIRALLY");
+        AddDecisionQueue("PREPENDLASTRESULT", $otherPlayer, "THEIRCHAR-0,");
+        AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a card to deal " . $damage . " damage to");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $otherPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $otherPlayer, "DEALDAMAGE," . $damage, 1);
       default: break;
     }
   }

@@ -312,6 +312,7 @@ function HasOverwhelm($cardID, $player, $index)
     case "4484318969"://Moff Gideon Leader
     case "4721657243"://Kihraxz Heavy Fighter
     case "5351496853"://Gideon's Light Cruiser
+    case "4935319539"://Krayt Dragon
       return true;
     case "4619930426"://First Legion Snowtrooper
       $target = GetAttackTarget();
