@@ -341,6 +341,9 @@ function HasAmbush($cardID, $player, $index, $from)
       case "8327910265":
         RemoveCurrentTurnEffect($i);
         return true;//Energy Conversion Lab (ECL)
+      case "6847268098"://Timely Intervention
+        RemoveCurrentTurnEffect($i);
+        return true;
       default: break;
     }
   }
@@ -1413,6 +1416,7 @@ function SmuggleCost($cardID, $player="", $index="")
     case "5830140660": $minCost = 4; break;//Bazine Netal
     case "8645125292": $minCost = 3; break;//Covert Strength
     case "4783554451": $minCost = 7; break;//First Light
+    case "6847268098": $minCost = 2; break;//Timely Intervention
     default: break;
   }
   $allies = &GetAllies($player);

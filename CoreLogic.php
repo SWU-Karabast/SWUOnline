@@ -3938,6 +3938,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "CAPTURE," . $ally->UniqueID(), 1);
       break;
+    case "6847268098"://Timely Intervention
+      AddCurrentTurnEffect($cardID, $currentPlayer, "PLAY");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to put into play");
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND:definedType=Unit");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
+      break;
     default: break;
   }
 }
