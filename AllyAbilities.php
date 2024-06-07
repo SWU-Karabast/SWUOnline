@@ -1124,6 +1124,11 @@ function AllyHitEffects() {
           }
         }
         break;
+      case "4595532978"://Ketsu Onyo
+        if(GetAttackTarget() == "THEIRCHAR-0") {
+          DefeatUpgrade($mainPlayer);
+        }
+        break;
       default: break;
     }
   }

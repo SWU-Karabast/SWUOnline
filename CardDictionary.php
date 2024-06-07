@@ -440,6 +440,7 @@ function HasSaboteur($cardID, $player, $index)
     case "0828695133":
     case "9250443409":
     case "3c60596a7a":
+    case "4595532978"://Ketsu Onyo
       return true;
     default: return false;
   }
