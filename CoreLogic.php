@@ -3929,6 +3929,15 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "ADDEXPERIENCE", 1);
       }
       break;
+    case "5778949819"://Relentless Pursuit
+      $ally = new Ally($target, $currentPlayer);
+      if(TraitContains($ally->CardID(), "Bounty Hunter", $currentPlayer)) $ally->Attach("8752877738");//Shield Token
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:maxCost=" . (CardCost($ally->CardID())));
+      AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to capture");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "CAPTURE," . $ally->UniqueID(), 1);
+      break;
     default: break;
   }
 }
@@ -4149,6 +4158,7 @@ function PlayRequiresTarget($cardID)
     case "2202839291": return 6;//Don't Get Cocky
     case "1701265931": return 6;//Moment of Glory
     case "3765912000": return 7;//Take Captive
+    case "5778949819": return 7;//Relentless Pursuit
     default: return -1;
   }
 }
