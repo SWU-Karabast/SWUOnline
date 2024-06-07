@@ -3913,12 +3913,22 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "2432897157"://Qi'Ra
       $abilityName = GetResolvedAbilityName($cardID, $from);
       if($abilityName == "Shield") {
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 2 damage and give a shield");
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 2 damage and give a shield");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,2", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "ADDSHIELD", 1);
       }
+      break;
+    case "4352150438"://Rey
+      $abilityName = GetResolvedAbilityName($cardID, $from);
+      if($abilityName == "Experience") {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:maxAttack=2");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to give an experience");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "ADDEXPERIENCE", 1);
+      }
+      break;
     default: break;
   }
 }
