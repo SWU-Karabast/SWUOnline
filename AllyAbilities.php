@@ -1105,6 +1105,16 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "ADDEXPERIENCE", 1);
       break;
+    case "5632569775"://Lom Pyke
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to give a shield");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "ADDSHIELD", 1);
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY", 1);
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to give a shield", 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "ADDSHIELD", 1);
+      break;
     default: break;
   }
 }

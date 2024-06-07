@@ -1419,6 +1419,7 @@ function SmuggleCost($cardID, $player="", $index="")
     case "8645125292": $minCost = 3; break;//Covert Strength
     case "4783554451": $minCost = 7; break;//First Light
     case "6847268098": $minCost = 2; break;//Timely Intervention
+    case "5632569775": $minCost = 5; break;//Lom Pyke
     default: break;
   }
   $allies = &GetAllies($player);
