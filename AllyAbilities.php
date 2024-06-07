@@ -1091,6 +1091,12 @@ function SpecificAllyAttackAbilities($attackID)
     case "9115773123"://Coruscant Dissident
       ReadyResource($mainPlayer);
       break;
+    case "e091d2a983"://Rey
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:maxAttack=2");
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to give an experience");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "ADDEXPERIENCE", 1);
+      break;
     default: break;
   }
 }
