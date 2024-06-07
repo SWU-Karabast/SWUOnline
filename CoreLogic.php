@@ -3945,6 +3945,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
       break;
+    case "1973545191"://Unexpected Escape
+      $owner = MZPlayerID($currentPlayer, $target);
+      $ally = new Ally($target, $owner);
+      $ally->Exhaust();
+      RescueUnit($currentPlayer, $target);
+      break;
     default: break;
   }
 }
@@ -4166,6 +4172,7 @@ function PlayRequiresTarget($cardID)
     case "1701265931": return 6;//Moment of Glory
     case "3765912000": return 7;//Take Captive
     case "5778949819": return 7;//Relentless Pursuit
+    case "1973545191": return 6;//Unexpected Escape
     default: return -1;
   }
 }
