@@ -3019,7 +3019,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZALLCARDTRAITORPASS", $currentPlayer, "Rebel", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
         AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "3038238423,HAND", 1);
-        AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}");
         AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
       }
       break;
@@ -3893,6 +3893,15 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
       break;
+    case "2432897157"://Qi'Ra
+      $abilityName = GetResolvedAbilityName($cardID, $from);
+      if($abilityName == "Shield") {
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 2 damage and give a shield");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,2", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "ADDSHIELD", 1);
+      }
     default: break;
   }
 }

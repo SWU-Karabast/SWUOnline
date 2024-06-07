@@ -556,6 +556,8 @@ function AbilityCost($cardID)
       return GetResolvedAbilityName($cardID) == "Exhaust" ? 1 : 0;
     case "1885628519"://Crosshair
       return GetResolvedAbilityName($cardID) == "Buff" ? 2 : 0;
+    case "2432897157"://Qi'Ra
+      return GetResolvedAbilityName($cardID) == "Shield" ? 1 : 0;
     default: break;
   }
   if(IsAlly($cardID)) return 0;
@@ -747,6 +749,9 @@ function GetAbilityTypes($cardID)
     case "040a3e81f3"://Lando Leader Unit
       $abilityTypes = "A,AA";
       break;
+    case "2432897157"://Qi'Ra
+      $abilityTypes = "A";
+      break;
     default: break;
   }
   if(DefinedTypesContains($cardID, "Leader", $currentPlayer) && !IsAlly($cardID, $currentPlayer)) {
@@ -865,6 +870,9 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       break;
     case "040a3e81f3"://Lando Leader Unit
       $abilityNames = "Smuggle,Attack";
+      break;
+    case "2432897157"://Qi'Ra
+      $abilityNames = "Shield";
       break;
     default: break;
   }
@@ -1121,6 +1129,8 @@ function LeaderUnit($cardID) {
       return "040a3e81f3";
     case "1384530409"://Cad Bane
       return "724979d608";
+    case "2432897157"://Qi'Ra
+      return "4aa0804b2b";
     default: return "";
   }
 }
@@ -1179,6 +1189,8 @@ function LeaderUndeployed($cardID) {
       return "5440730550";
     case "724979d608"://Cad Bane
       return "1384530409";
+    case "4aa0804b2b"://Qi'Ra
+      return "2432897157";
     default: return "";
   }
 }
@@ -1517,6 +1529,7 @@ function DefinedCardType2Wrapper($cardID)
     case "7424360283"://Bo-Katan Kryze
     case "5440730550"://Lando Calrissian
     case "1384530409"://Cad Bane
+    case "2432897157"://Qi'Ra
       return "";
     default: return DefinedCardType2($cardID);
   }
