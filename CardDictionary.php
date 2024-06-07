@@ -174,6 +174,7 @@ function RaidAmount($cardID, $player, $index)
     case "5977238053": $amount += 2; break;//Sundari Peacekeeper
     case "1805986989": $amount += 2; break;//Modded Cohort
     case "415bde775d": $amount += 1; break;//Hondo Ohnaka
+    case "724979d608": $amount += 2; break;//Cad Bane
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
