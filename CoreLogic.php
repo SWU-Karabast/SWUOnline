@@ -2179,6 +2179,23 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
           AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
           AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL", 1);
           break;
+        case "2432897157"://Qi'Ra
+          $myAllies = &GetAllies($currentPlayer);
+          for($i=0; $i<count($myAllies); $i+=AllyPieces())
+          {
+            $ally = new Ally("MYALLY-" . $i, $currentPlayer);
+            $ally->Heal(9999);
+            $ally->DealDamage(floor($ally->MaxHealth()/2));
+          }
+          $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+          $theirAllies = &GetAllies($otherPlayer);
+          for($i=0; $i<count($theirAllies); $i+=AllyPieces())
+          {
+            $ally = new Ally("MYALLY-" . $i, $otherPlayer);
+            $ally->Heal(9999);
+            $ally->DealDamage(floor($ally->MaxHealth()/2));
+          }
+          break;
         default: break;
       }
       RemoveCharacter($currentPlayer, CharacterPieces());

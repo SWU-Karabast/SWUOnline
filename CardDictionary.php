@@ -275,6 +275,7 @@ function HasGrit($cardID, $player, $index)
     case "4383889628"://Wroshyr Tree Tender
     case "0252207505"://Synara San
     case "4783554451"://First Light
+    case "4aa0804b2b"://Qi'Ra
       return true;
     default: return false;
   }
