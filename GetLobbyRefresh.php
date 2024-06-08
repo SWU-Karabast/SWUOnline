@@ -30,6 +30,8 @@ $data = array();
 $currentTime = round(microtime(true) * 1000);
 SetCachePiece($gameName, $playerID + 1, $currentTime);
 
+$isMobile = IsMobile();
+
 $count = 0;
 $cacheVal = GetCachePiece($gameName, 1);
 if ($cacheVal > 10000000) {
