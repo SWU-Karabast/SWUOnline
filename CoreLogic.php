@@ -3969,6 +3969,22 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "1312599620,PLAY", 1);
       }
       break;
+    case "6853970496"://Slaver's Freighter
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      $theirAllies = &GetAllies($otherPlayer);
+      $numUpgrades = 0;
+      for($i=0; $i<count($theirAllies); $i+=AllyPieces()) {
+        $ally = new Ally("MYALLY-" . $i, $otherPlayer);
+        $numUpgrades += $ally->NumUpgrades();
+      }
+      if($numUpgrades > 0) {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:maxAttack=" . $numUpgrades . "&THEIRALLY:maxAttack=" . $numUpgrades);
+        if($index > -1) AddDecisionQueue("MZFILTER", $player, "index=MYALLY-" . $playAlly->Index());
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to ready");
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
+      }
+      break;
     default: break;
   }
 }
