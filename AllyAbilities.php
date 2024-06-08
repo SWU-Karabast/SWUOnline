@@ -360,6 +360,13 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
         AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
         AddDecisionQueue("SPECIFICCARD", $player, "OBIWANKENOBI", 1);
         break;
+      case "7351946067"://Rhokai Gunship
+        AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
+        AddDecisionQueue("PREPENDLASTRESULT", $player, "MYCHAR-0,THEIRCHAR-0,");
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose something to deal 1 damage to");
+        AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
+        AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1", 1);
+        break;
       default: break;
     }
   }
@@ -473,6 +480,13 @@ function CollectBounty($player, $index, $cardID, $reportMode=false, $bountyUnitO
       ++$numBounties;
       if($reportMode) break;
       Draw($opponent);
+      break;
+    case "0252207505"://Synara San
+      if($bountyUnitOverride != "-" || $ally->IsExhausted()) {
+        ++$numBounties;
+        if($reportMode) break;
+        DealDamageAsync($player, 5, "DAMAGE", "0252207505");
+      }
       break;
     default: break;
   }
@@ -709,6 +723,13 @@ function AllyPlayCardAbility($cardID, $player="", $reportMode=false, $from="-")
           AddDecisionQueue("NOPASS", $player, "-");
           AddDecisionQueue("PASSPARAMETER", $player, $target, 1);
           AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1", 1);
+        }
+        break;
+      case "0981852103"://Lady Proxima
+        if($i < count($allies)-AllyPieces() && TraitContains($cardID, "Underworld", $player)) {
+          if($reportMode) return true;
+          $otherPlayer = $player == 1 ? 2 : 1;
+          DealDamageAsync($otherPlayer, 1, "DAMAGE", "0981852103");
         }
         break;
       default: break;
@@ -1054,6 +1075,9 @@ function SpecificAllyAttackAbilities($attackID)
         AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE," . $damage, 1);
       }
+      break;
+    case "9115773123"://Coruscant Dissident
+      ReadyResource($mainPlayer);
       break;
     default: break;
   }

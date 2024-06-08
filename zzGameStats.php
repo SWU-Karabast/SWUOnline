@@ -34,7 +34,6 @@ table {
   border-collapse: collapse;
   font-size: 1em;
   line-height: 24px;
-  text-shadow: 2px 0 0 #1a1a1a, 0 -2px 0 #1a1a1a, 0 2px 0 #1a1a1a, -2px 0 0 #1a1a1a;
   margin-left:auto;
   margin-right:auto;
 }

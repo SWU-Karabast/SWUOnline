@@ -123,7 +123,7 @@ include_once 'Header.php';
     echo '<label for="public" class="privacy-label"><input class="privacy-input" type="radio" id="public" name="visibility" value="public" ' . ($defaultVisibility == 1 ? 'checked="checked"' : "") . '>';
     echo ('Public</label>');
   } else {
-    echo '<p class="login-notice">&#10071;Log in to be able to create public games.</p>';
+    echo '<p class="login-notice">&#10071;<a href="./LoginPage.php">Log In</a> to be able to create public games.</p>';
   }
   ?>
   <label for="private" class='privacy-label'>

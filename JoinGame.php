@@ -71,7 +71,7 @@ include_once 'Header.php';
     <input type="text" id="fabdb" name="fabdb">
     <?php
     if (isset($_SESSION["userid"])) {
-      echo ("<span style='display:inline;'>");
+      echo ("<span class='save-deck'>");
       echo ("<label for='favoriteDeck'><input title='Save deck to Favorites' class='inputFavoriteDeck' type='checkbox' id='favoriteDeck' name='favoriteDeck' />");
       echo ("Save Deck to Favorites</label>");
       echo ("</span>");
