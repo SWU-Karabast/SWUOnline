@@ -3940,8 +3940,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "6847268098"://Timely Intervention
       AddCurrentTurnEffect($cardID, $currentPlayer, "PLAY");
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to put into play");
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND:definedType=Unit");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to put into play");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
       break;
@@ -3950,6 +3950,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $ally = new Ally($target, $owner);
       $ally->Exhaust();
       RescueUnit($currentPlayer, $target);
+      break;
+    case "9552605383"://L3-37
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to rescue from (or pass for shield)");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "L337");
       break;
     default: break;
   }
