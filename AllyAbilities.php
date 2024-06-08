@@ -1161,7 +1161,8 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MZFILTER", $mainPlayer, "index=MYALLY-" . $attackerAlly->Index());
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to take the damage for Maul", 1);
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
-      AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,0", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "8862896760,HAND", 1);
       break;
     default: break;
   }

@@ -118,6 +118,20 @@ class Ally {
         default: break;
       }
     }
+    switch($this->CardID()) {
+      case "8862896760"://Maul
+        $preventUniqueID = SearchLimitedCurrentTurnEffects("8862896760", $this->PlayerID(), remove:true);
+        if($preventUniqueID != -1) {
+          $preventIndex = SearchAlliesForUniqueID($preventUniqueID, $this->PlayerID());
+          if($preventIndex > -1) {
+            $preventAlly = new Ally("MYALLY-" . $preventIndex, $this->PlayerID());
+            $preventAlly->DealDamage($amount, $bypassShield, $fromCombat, $damageDealt);
+            return false;
+          }
+        }
+        break;
+      default: break;
+    }
     if($damageDealt != NULL) $damageDealt = $amount;
     $this->allies[$this->index+2] -= $amount;
     AddEvent("DAMAGE", $this->UniqueID() . "!" . $amount);
