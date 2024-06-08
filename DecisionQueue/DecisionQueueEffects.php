@@ -390,6 +390,18 @@ function SpecificCardLogic($player, $card, $lastResult)
         PrependDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
       }
       return $lastResult;
+    case "L337":
+      $target = $lastResult;
+      if($target == "PASS") {
+        $allies = &GetAllies($player);
+        $ally = new Ally("MYALLY-" . count($allies) - AllyPieces(), $player);
+        $ally->Attach("8752877738");//Shield Token
+      } else {
+        $owner = MZPlayerID($player, $target);
+        $ally = new Ally($target, $owner);
+        RescueUnit($player, $target);
+      }
+      return $lastResult;
     default: return "";
   }
 }

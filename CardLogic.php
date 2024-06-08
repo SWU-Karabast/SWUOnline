@@ -33,7 +33,16 @@ function DefeatUpgrade($player) {
   AddDecisionQueue("SETDQCONTEXT", $player, "Choose an upgrade to defeat");
   AddDecisionQueue("CHOOSECARD", $player, "<-", 1);
   AddDecisionQueue("OP", $player, "DEFEATUPGRADE", 1);
+}
 
+function RescueUnit($player, $target="")
+{
+  AddDecisionQueue("PASSPARAMETER", $player, $target);
+  AddDecisionQueue("SETDQVAR", $player, 0);
+  AddDecisionQueue("MZOP", $player, "GETCAPTIVES");
+  AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to rescue");
+  AddDecisionQueue("CHOOSECARD", $player, "<-", 1);
+  AddDecisionQueue("OP", $player, "RESCUECAPTIVE", 1);
 }
 
 function HandToTopDeck($player)

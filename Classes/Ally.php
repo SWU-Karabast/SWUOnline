@@ -326,6 +326,21 @@ class Ally {
       } 
     }
   }
+  
+  function RescueCaptive($captiveID) {
+    if($this->index == -1) return;
+    $subcards = $this->GetSubcards();
+    for($i=0; $i<count($subcards); ++$i) {
+      if($subcards[$i] == $captiveID) {
+        unset($subcards[$i]);
+        $subcards = array_values($subcards);
+        $this->allies[$this->index + 4] = count($subcards) > 0 ? implode(",", $subcards) : "-";
+        $otherPlayer = $this->PlayerID() == 1 ? 2 : 1;
+        PlayAlly($captiveID, $otherPlayer, from:"CAPTIVE");
+        return;
+      } 
+    }
+  }
 
   function NumUses() {
     return $this->allies[$this->index + 8];

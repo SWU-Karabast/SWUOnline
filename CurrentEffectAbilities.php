@@ -104,6 +104,7 @@ function EffectAttackModifier($cardID)
     case "1900571801": return 2;//Overwhelming Barrage
     case "3809048641": return 3;//Surprise Strike
     case "3038238423": return 2;//Fleet Lieutenant
+    case "9757839764": return 2;//Adelphi Patrol Wing
     case "3208391441": return -2;//Make an Opening
     case "6432884726": return 2;//Steadfast Battalion
     case "8244682354": return -1;//Jyn Erso
@@ -205,6 +206,10 @@ function CurrentEffectCostModifiers($cardID, $from)
           $costModifier -= 3;
           $remove = true;
           break;
+        case "5351496853"://Gideon's Light Cruiser
+          $costModifier -= 99;
+          $remove = true;
+          break;
         case "2756312994"://Alliance Dispatcher
           $costModifier -= 1;
           $remove = true;
@@ -232,6 +237,18 @@ function CurrentEffectCostModifiers($cardID, $from)
           break;
         case "8968669390"://U-Wing Reinforcement
           $costModifier -= 99;
+          break;
+        case "5440730550"://Lando Calrissian
+          $costModifier -= 2;
+          $remove = true;
+          break;
+        case "4643489029"://Palpatine's Return
+          $costModifier -= TraitContains($cardID, "Force", $player) ? 8 : 6;
+          $remove = true;
+          break;
+        case "4717189843"://A New Adventure
+          $costModifier -= 99;
+          $remove = true;
           break;
         default: break;
       }
@@ -518,6 +535,7 @@ function IsCombatEffectActive($cardID)
     case "2569134232": return true;//Jedha City
     case "1323728003": return true;//Electrostaff
     case "3809048641": return true;//Surprise Strike
+    case "9757839764": return true;//Adelphi Patrol Wing
     case "3038238423": return true;//Fleet Lieutenant
     case "8244682354": return true;//Jyn Erso
     case "8600121285": return true;//IG-88

@@ -349,7 +349,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             default: return "-1";
           }
         case "BUFFALLY": MZBuffAlly($player, $lastResult); return $lastResult;
-        case "BOUNCE": MZBounce($player, $lastResult); return $lastResult;
+        case "BOUNCE": return MZBounce($player, $lastResult);
         case "COLLECTBOUNTIES":
           $mzArr = explode("-", $lastResult);
           CollectBounties($mzArr[0] == "MYALLY" ? $player : ($player == 1 ? 2 : 1), $mzArr[1]);
@@ -420,6 +420,10 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $ally = new Ally($lastResult);
           $rv = implode(",", $ally->GetUpgrades());
           return $rv == "" ? "PASS" : $rv;
+        case "GETCAPTIVES":
+          $ally = new Ally($lastResult);
+          $rv = implode(",", $ally->GetCaptives());
+          return $rv == "" ? "PASS" : $rv;
         case "GETMEMORYCOST":
           $mzArr = explode("-", $lastResult);
           $zone = &GetMZZone($player, $mzArr[0]);
@@ -462,6 +466,9 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             }
           }
           return implode(",", $cards);
+        case "ADDTOPDECKASRESOURCE":
+          AddTopDeckAsResource($player);
+          return $lastResult;
         case "REMOVEPREPARATION":
           global $CS_PreparationCounters;
           DecrementClassState($player, $CS_PreparationCounters, $lastResult);
@@ -482,6 +489,13 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           if(!$destroyed) {
             UpgradeLeftPlay($upgradeID, $allyPlayer, $mzArr[1]);
           }
+          return $lastResult;
+        case "RESCUECAPTIVE":
+          $captiveID = $lastResult;
+          $mzArr = explode("-", $dqVars[0]);
+          $allyPlayer = $mzArr[0] == "MYALLY" ? $player : ($player == 1 ? 2 : 1);
+          $ally = new Ally($dqVars[0], $allyPlayer);
+          $ally->RescueCaptive($captiveID);
           return $lastResult;
         case "SWAPDQPERSPECTIVE":
           $arr = explode(",", $lastResult);

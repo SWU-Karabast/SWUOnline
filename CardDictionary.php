@@ -118,6 +118,7 @@ function RestoreAmount($cardID, $player, $index)
     case "5977238053": $amount += 2; break;//Sundari Peacekeeper
     case "9503028597": $amount += 1; break;//Clone Deserter
     case "5511838014": $amount += 1; break;//Kuil
+    case "e091d2a983": $amount += 3; break;//Rey
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
@@ -174,6 +175,7 @@ function RaidAmount($cardID, $player, $index)
     case "5977238053": $amount += 2; break;//Sundari Peacekeeper
     case "1805986989": $amount += 2; break;//Modded Cohort
     case "415bde775d": $amount += 1; break;//Hondo Ohnaka
+    case "724979d608": $amount += 2; break;//Cad Bane
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
@@ -249,6 +251,16 @@ function HasGrit($cardID, $player, $index)
 {
   $ally = new Ally("MYALLY-" . $index, $player);
   if($ally->LostAbilities()) return false;
+  $allies = &GetAllies($player);
+  for($i=0; $i<count($allies); $i+=AllyPieces())
+  {
+    switch($allies[$i])
+    {
+      case "4783554451"://First Light
+        return true;
+      default: break;
+    }
+  }
   switch($cardID)
   {
     case "5335160564":
@@ -263,6 +275,8 @@ function HasGrit($cardID, $player, $index)
     case "1304452249"://Covetous Rivals
     case "4383889628"://Wroshyr Tree Tender
     case "0252207505"://Synara San
+    case "4783554451"://First Light
+    case "4aa0804b2b"://Qi'Ra
       return true;
     default: return false;
   }
@@ -297,6 +311,8 @@ function HasOverwhelm($cardID, $player, $index)
     case "2470093702"://Wrecker
     case "4484318969"://Moff Gideon Leader
     case "4721657243"://Kihraxz Heavy Fighter
+    case "5351496853"://Gideon's Light Cruiser
+    case "4935319539"://Krayt Dragon
       return true;
     case "4619930426"://First Legion Snowtrooper
       $target = GetAttackTarget();
@@ -326,6 +342,9 @@ function HasAmbush($cardID, $player, $index, $from)
       case "8327910265":
         RemoveCurrentTurnEffect($i);
         return true;//Energy Conversion Lab (ECL)
+      case "6847268098"://Timely Intervention
+        RemoveCurrentTurnEffect($i);
+        return true;
       default: break;
     }
   }
@@ -421,6 +440,7 @@ function HasSaboteur($cardID, $player, $index)
     case "0828695133":
     case "9250443409":
     case "3c60596a7a":
+    case "4595532978"://Ketsu Onyo
       return true;
     default: return false;
   }
@@ -543,6 +563,10 @@ function AbilityCost($cardID)
       return GetResolvedAbilityName($cardID) == "Exhaust" ? 1 : 0;
     case "1885628519"://Crosshair
       return GetResolvedAbilityName($cardID) == "Buff" ? 2 : 0;
+    case "2432897157"://Qi'Ra
+      return GetResolvedAbilityName($cardID) == "Shield" ? 1 : 0;
+    case "4352150438"://Rey
+      return GetResolvedAbilityName($cardID) == "Experience" ? 1 : 0;
     default: break;
   }
   if(IsAlly($cardID)) return 0;
@@ -601,6 +625,7 @@ function AttackValue($cardID)
   {
     case "4897501399"://Ruthlessness
       return 2;
+    case "7687006104": return 1;//Foundling
     default: return CardPower($cardID);
   }
 }
@@ -727,6 +752,18 @@ function GetAbilityTypes($cardID)
     case "7424360283"://Bo-Katan Kryze
       $abilityTypes = "A";
       break;
+    case "5440730550"://Lando Calrissian
+      $abilityTypes = "A";
+      break;
+    case "040a3e81f3"://Lando Leader Unit
+      $abilityTypes = "A,AA";
+      break;
+    case "2432897157"://Qi'Ra
+      $abilityTypes = "A";
+      break;
+    case "4352150438"://Rey
+      $abilityTypes = "A";
+      break;
     default: break;
   }
   if(DefinedTypesContains($cardID, "Leader", $currentPlayer) && !IsAlly($cardID, $currentPlayer)) {
@@ -839,6 +876,18 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       break;
     case "7424360283"://Bo-Katan Kryze
       $abilityNames = "Deal Damage";
+      break;
+    case "5440730550"://Lando Calrissian
+      $abilityNames = "Smuggle";
+      break;
+    case "040a3e81f3"://Lando Leader Unit
+      $abilityNames = "Smuggle,Attack";
+      break;
+    case "2432897157"://Qi'Ra
+      $abilityNames = "Shield";
+      break;
+    case "4352150438"://Rey
+      $abilityNames = "Experience";
       break;
     default: break;
   }
@@ -957,6 +1006,7 @@ function UpgradeFilter($cardID)
     case "3514010297"://Mandalorian Armor
     case "3525325147"://Vambrace Grappleshot
     case "5874342508"://Hotshot DL-44 Blaster
+    case "0754286363"://The Mandalorian's Rifle
       return "trait=Vehicle";
     case "8055390529"://Traitorous
       return "maxCost=3";
@@ -1090,6 +1140,14 @@ function LeaderUnit($cardID) {
       return "d2bbda6982";
     case "7424360283"://Bo-Katan Kryze
       return "a579b400c0";
+    case "5440730550"://Lando Calrissian
+      return "040a3e81f3";
+    case "1384530409"://Cad Bane
+      return "724979d608";
+    case "2432897157"://Qi'Ra
+      return "4aa0804b2b";
+    case "4352150438"://Rey
+      return "e091d2a983";
     default: return "";
   }
 }
@@ -1144,6 +1202,14 @@ function LeaderUndeployed($cardID) {
       return "2526288781";
     case "a579b400c0"://Bo-Katan Kryze
       return "7424360283";
+    case "040a3e81f3"://Lando Calrissian
+      return "5440730550";
+    case "724979d608"://Cad Bane
+      return "1384530409";
+    case "4aa0804b2b"://Qi'Ra
+      return "2432897157";
+    case "e091d2a983"://Rey
+      return "4352150438";
     default: return "";
   }
 }
@@ -1170,6 +1236,7 @@ function CardHP($cardID) {
   switch($cardID)
   {
     case "8877249477": return 2;
+    case "7687006104": return 1;//Foundling
     default: return CardHPDictionary($cardID);
   }
 }
@@ -1350,6 +1417,10 @@ function SmuggleCost($cardID, $player="", $index="")
     case "3881257511": $minCost = 4; break;//Tech
     case "5830140660": $minCost = 4; break;//Bazine Netal
     case "8645125292": $minCost = 3; break;//Covert Strength
+    case "4783554451": $minCost = 7; break;//First Light
+    case "6847268098": $minCost = 2; break;//Timely Intervention
+    case "5632569775": $minCost = 5; break;//Lom Pyke
+    case "9552605383": $minCost = 4; break;//L3-37
     default: break;
   }
   $allies = &GetAllies($player);
@@ -1478,6 +1549,10 @@ function DefinedCardType2Wrapper($cardID)
     case "3045538805"://Hondo Ohnaka
     case "2526288781"://Bossk
     case "7424360283"://Bo-Katan Kryze
+    case "5440730550"://Lando Calrissian
+    case "1384530409"://Cad Bane
+    case "2432897157"://Qi'Ra
+    case "4352150438"://Rey
       return "";
     default: return DefinedCardType2($cardID);
   }

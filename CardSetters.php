@@ -170,6 +170,7 @@ function AddHand($player, $cardID)
 {
   $hand = &GetHand($player);
   array_push($hand, $cardID);
+  return count($hand) - 1;
 }
 
 function RemoveResource($player, $index)

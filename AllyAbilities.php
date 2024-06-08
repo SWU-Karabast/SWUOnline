@@ -219,6 +219,7 @@ function AllyPlayableExhausted($cardID) {
     case "4300219753"://Fett's Firespray
     case "2471223947"://Frontline Shuttle
     case "1885628519"://Crosshair
+    case "040a3e81f3"://Lando Leader Unit
       return true;
     default: return false;
   }
@@ -232,6 +233,8 @@ function AllyDoesAbilityExhaust($cardID, $abilityIndex) {
       return $abilityIndex == 1;
     case "1885628519"://Crosshair
       return $abilityIndex == 1 || $abilityIndex == 2;
+    case "040a3e81f3"://Lando Leader Unit
+      return $abilityIndex == 1;
     default: return true;
   }
 }
@@ -732,6 +735,15 @@ function AllyPlayCardAbility($cardID, $player="", $reportMode=false, $from="-")
           DealDamageAsync($otherPlayer, 1, "DAMAGE", "0981852103");
         }
         break;
+      case "724979d608"://Cad Bane
+        if(TraitContains($cardID, "Underworld", $player)) {
+          $otherPlayer = ($player == 1 ? 2 : 1);
+          AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY");
+          AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a unit to deal 2 damage to", 1);
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $otherPlayer, "<-", 1);
+          AddDecisionQueue("MZOP", $otherPlayer, "DEALDAMAGE,2", 1);
+        }
+        break;
       default: break;
     }
   }
@@ -747,6 +759,14 @@ function AllyPlayCardAbility($cardID, $player="", $reportMode=false, $from="-")
           DealDamageAsync($player, 2, "DAMAGE", "5555846790");
         }
         break;
+      case "4935319539"://Krayt Dragon
+        if($reportMode) return true;
+        $damage = CardCost($cardID);
+        AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "THEIRALLY");
+        AddDecisionQueue("PREPENDLASTRESULT", $otherPlayer, "THEIRCHAR-0,");
+        AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a card to deal " . $damage . " damage to");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $otherPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $otherPlayer, "DEALDAMAGE," . $damage, 1);
       default: break;
     }
   }
@@ -1079,6 +1099,22 @@ function SpecificAllyAttackAbilities($attackID)
     case "9115773123"://Coruscant Dissident
       ReadyResource($mainPlayer);
       break;
+    case "e091d2a983"://Rey
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:maxAttack=2");
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to give an experience");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "ADDEXPERIENCE", 1);
+      break;
+    case "5632569775"://Lom Pyke
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to give a shield");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "ADDSHIELD", 1);
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY", 1);
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to give a shield", 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "ADDSHIELD", 1);
+      break;
     default: break;
   }
 }
@@ -1096,6 +1132,11 @@ function AllyHitEffects() {
             $ally->ModifyUses(-1);
             Draw($mainPlayer);
           }
+        }
+        break;
+      case "4595532978"://Ketsu Onyo
+        if(GetAttackTarget() == "THEIRCHAR-0") {
+          DefeatUpgrade($mainPlayer);
         }
         break;
       default: break;
