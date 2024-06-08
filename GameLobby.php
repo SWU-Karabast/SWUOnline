@@ -65,440 +65,245 @@ else if ($playerID == 1 && $gameStatus < $MGS_ReadyToStart)
 else if ($playerID == 2 && $gameStatus >= $MGS_ReadyToStart)
   $icon = "notReady.png";
 
-echo '<title>Game Lobby</title> <meta http-equiv="content-type" content="text/html; charset=utf-8" > <meta name="viewport" content="width=device-width, initial-scale=1.0">';
-echo '<link id="icon" rel="shortcut icon" type="image/png" href="./Images/' . $icon . '"/>';
-
 $isMobile = IsMobile();
-
 ?>
 
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Karabast</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" >
+  <title>Game Lobby</title>
+  <link id="icon" rel="shortcut icon" type="image/png" href="./Images/<?= $icon ?>"/>
   <link rel="stylesheet" href="./css/karabast.css">
-  <!-- <link rel="stylesheet" href="./css/menuStyles2.css"> -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Teko:wght@700&display=swap" rel="stylesheet">
 </head>
 
-<script>
-  function copyText() {
-    var gameLink = document.getElementById("gameLink");
-    gameLink.select();
-    gameLink.setSelectionRange(0, 99999);
 
-    // Copy it to clipboard
-    document.execCommand("copy");
-  }
-</script>
-
-<script src="./jsInclude.js"></script>
-
-</head>
 
 <body onload='OnLoadCallback(<?php echo (filemtime("./Games/" . $gameName . "/gamelog.txt")); ?>)'>
+  <div class="lobby-container">
+    <div id="cardDetail" style="display:none; position:absolute;"></div>
+    <div class="lobby-header">
+      <h1>Game Lobby</h1>
+      <p class="leave-lobby"><a href='MainMenu.php'>Leave Lobby</a></p>
+    </div>
+    <div class="lobby-wrapper">
+      <div class="game-lobby">
+        <div id='mainPanel' style='text-align:center;'>
+          <div class='game-set-up container bg-blue'>
+            <h2>Set Up</h2>
+            <div id="setup-content"></div>
+          </div>
+        </div>
+        <div class='chat-log container bg-black'>
+          <h2>Chat</h2>
+          <div id='gamelog' class="gamelog"></div>
+          <div id='chatbox' class="chatbox">
+            <div class="lobby-chat-input">
+              <input class='GameLobby_Input' type='text' id='chatText' name='chatText' value='' autocomplete='off' onkeypress='ChatKey(event)'>
+              <button class='GameLobby_Button' style='cursor:pointer;' onclick='SubmitChat()'>Chat</button>
+            </div>
+            <input type='hidden' id='gameName' value='<?= $gameName ?>'>
+            <input type='hidden' id='playerID' value='<?= $playerID ?>'>
+            <input type='hidden' id='authKey' name='authKey' value='<?= $authKey ?>'>
+          </div>
+        </div>
+      </div>
 
+      <div class="player-info container bg-black">
+        
+        <h2>Players</h2>
+        <div id="my-info">
+          <?php
+          $contentCreator = ContentCreators::tryFrom(($playerID == 1 ? $p1ContentCreatorID : $p2ContentCreatorID));
+          $nameColor = ($contentCreator != null ? $contentCreator->NameColor() : "");
+          $displayName = "<span style='color:" . $nameColor . "'>" . ($yourName != "-" ? $yourName : "Player " . $playerID) . "</span>";
+          $deckFile = "./Games/" . $gameName . "/p" . $playerID . "Deck.txt";
+          $handler = fopen($deckFile, "r");
+
+          echo ("<h3>$displayName</h3>");
+          if ($handler) {
+            $material = GetArray($handler);
+
+            echo ("<div style='position:relative; display: inline-block;'>");
+            $overlayURL = ($contentCreator != null ? $contentCreator->HeroOverlayURL($material[1]) : "");
+            echo (Card($material[1], "CardImages", ($isMobile ? 100 : 250), 0, 1, 0, 0, 0, "", "", true));
+            if ($overlayURL != "")
+              echo ("<img title='Portrait' style='position:absolute; z-index:1001; top: 27px; left: 0px; cursor:pointer; height:" . ($isMobile ? 100 : 250) . "; width:100%;' src='" . $overlayURL . "' />");
+            echo ("</div>");
+
+            echo ("<div style='position:relative; display: inline-block;'>");
+            $overlayURL = ($contentCreator != null ? $contentCreator->HeroOverlayURL($material[0]) : "");
+            echo (Card($material[0], "CardImages", ($isMobile ? 100 : 250), 0, 1, 0, 0, 0, "", "", true));
+            if ($overlayURL != "")
+              echo ("<img title='Portrait' style='position:absolute; z-index:1001; top: 27px; left: 0px; cursor:pointer; height:" . ($isMobile ? 100 : 250) . "; width:" . ($isMobile ? 100 : 250) . ";' src='" . $overlayURL . "' />");
+            echo ("</div>");
+
+            $deck = GetArray($handler);
+            $deckSB = GetArray($handler);
+
+            fclose($handler);
+          }
+          ?>
+        </div>
+
+        <div id="their-info">
+        </div>
+      </div>
+
+      <div class="deck-info container bg-black">
+        <div id="deckTab" class="deck-header">
+          <?php if (isset($deck)): ?>
+            <h2 class='deck-title'>Your Deck</h2>
+            <h2 class='deck-count'><span id='mbCount'><?= count($deck) ?></span>/<?= count($deck) + count($deckSB) ?></h2>
+          <?php endif; ?>
+        </div>
+
+        <h4>Click Cards to Select/Unselect</h4>
+        <div class="deck-display">
+          <?php
+          if (isset($deck)) {
+            $cardSize = 110;
+            $count = 0;
+            sort($deck);
+            for ($i = 0; $i < count($deck); ++$i) {
+              $id = "DECK-" . $count;
+              echo ("<span style='cursor:pointer; padding-bottom:5px; padding-left:3px;' onclick='CardClick(\"" . $id . "\")'>" . Card($deck[$i], "concat", $cardSize, 0, 1, 0, 0, 0, "", $id) . "</span>");
+              ++$count;
+            }
+            for ($i = 0; $i < count($deckSB); ++$i) {
+              $id = "DECK-" . $count;
+              echo ("<span style='cursor:pointer; padding-bottom:5px; padding-left:3px;' onclick='CardClick(\"" . $id . "\")'>" . Card($deckSB[$i], "concat", $cardSize, 0, 1, 1, 0, 0, "", $id) . "</span>");
+              ++$count;
+            }
+          }
+          ?>
+        </div>
+      </div>
+
+    </div>
+    <div class="lobby-footer">
+      <?php include_once 'Disclaimer.php'; ?>
+    </div>
+  </div>
   <audio id="playerJoinedAudio">
     <source src="./Assets/playerJoinedSound.mp3" type="audio/mpeg">
   </audio>
+  <script src="./jsInclude.js"></script>
+  <script>
+    function copyText() {
+      var gameLink = document.getElementById("gameLink");
+      gameLink.select();
+      gameLink.setSelectionRange(0, 99999);
 
-  <div id="cardDetail" style="display:none; position:absolute;"></div>
-
-<div class="lobby-header">
-  <h1>Game Lobby</h1>
-  <p class="leave-lobby"><a href='MainMenu.php'>Leave Lobby</a></p>
-</div>
-
-<div class="lobby-wrapper">
-<?php
-  if ($isMobile)
-    echo '<div class="game-lobby">';
-  else
-    echo '<div class="game-lobby">';
-  ?>
-
-  <?php
-
-  echo ("<div id='submitForm' style='width:100%; text-align: center;'>");
-  echo ("<form action='./SubmitSideboard.php'>");
-  echo ("<input type='hidden' id='gameName' name='gameName' value='$gameName'>");
-  echo ("<input type='hidden' id='playerID' name='playerID' value='$playerID'>");
-  echo ("<input type='hidden' id='playerCharacter' name='playerCharacter' value=''>");
-  echo ("<input type='hidden' id='playerDeck' name='playerDeck' value=''>");
-  echo ("<input type='hidden' id='authKey' name='authKey' value='$authKey'>");
-  echo ("<input class='GameLobby_Button' type='submit' value='" . ($playerID == 1 ? "Start" : "Ready") . "'>");
-  echo ("</form>");
-  echo ("</div>");
-
-  echo ("<div id='mainPanel' style='text-align:center;'>");
-  echo ("</div>");
-
-  echo ("<script>");
-  echo ("var prevGameState = " . $gameStatus . ";");
-  echo ("function reload() { setInterval(function(){loadGamestate();}, 500); }");
-
-  echo ("</script>");
-
-?>
-</div>
-
-<div class="player-info container bg-black">
-  
-  <h2>Players</h2>
-
-  <?php
-  if ($isMobile)
-    echo '<div id="your-info">';
-  else
-    echo '<div id="your-info">';
-  $contentCreator = ContentCreators::tryFrom(($playerID == 1 ? $p1ContentCreatorID : $p2ContentCreatorID));
-  $nameColor = ($contentCreator != null ? $contentCreator->NameColor() : "");
-  $displayName = "<span style='color:" . $nameColor . "'>" . ($yourName != "-" ? $yourName : "Playerssssss " . $playerID) . "</span>";
-  if ($isMobile)
-    echo ("<h3>$displayName</h3>");
-  else
-    echo ("<h3>$displayName</h3>");
-
-  $deckFile = "./Games/" . $gameName . "/p" . $playerID . "Deck.txt";
-  $handler = fopen($deckFile, "r");
-  if ($handler) {
-    $material = GetArray($handler);
-
-    echo ("<div style='position:relative; display: inline-block;'>");
-    $overlayURL = ($contentCreator != null ? $contentCreator->HeroOverlayURL($material[1]) : "");
-    echo (Card($material[1], "CardImages", ($isMobile ? 100 : 250), 0, 1, 0, 0, 0, "", "", true));
-    if ($overlayURL != "")
-      echo ("<img title='Portrait' style='position:absolute; z-index:1001; top: 27px; left: 0px; cursor:pointer; height:" . ($isMobile ? 100 : 250) . "; width:100%;' src='" . $overlayURL . "' />");
-    echo ("</div>");
-
-    echo ("<div style='position:relative; display: inline-block;'>");
-    $overlayURL = ($contentCreator != null ? $contentCreator->HeroOverlayURL($material[0]) : "");
-    echo (Card($material[0], "CardImages", ($isMobile ? 100 : 250), 0, 1, 0, 0, 0, "", "", true));
-    if ($overlayURL != "")
-      echo ("<img title='Portrait' style='position:absolute; z-index:1001; top: 27px; left: 0px; cursor:pointer; height:" . ($isMobile ? 100 : 250) . "; width:" . ($isMobile ? 100 : 250) . ";' src='" . $overlayURL . "' />");
-    echo ("</div>");
-
-    $deck = GetArray($handler);
-    $deckSB = GetArray($handler);
-
-    fclose($handler);
-  }
-
-  ?>
-    <?php
-    if ($isMobile)
-      echo '<div id="opponent-info">';
-    else
-      echo '<div id="opponent-info">';
-    $theirDisplayName = ($theirName != "-" ? $theirName : "Player " . ($playerID == 1 ? 2 : 1));
-    if ($isMobile)
-      echo ("<h3>$theirDisplayName</h3>");
-    else
-      echo ("<h3>$theirDisplayName</h3>");
-
-    $otherHero = "CardBack";
-    echo ("<div>");
-    echo (Card($otherHero, "CardImages", ($isMobile ? 100 : 250), 0, 1, 0, 0, 0, "", "", true));
-    echo (Card($otherHero, "CardImages", ($isMobile ? 100 : 250), 0, 1, 0, 0, 0, "", "", true));
-    echo ("</div>");
-    ?>
-    </div>
-
-  </div>
-
-</div>
-
-  <div class="deck-info container bg-black">
-    <div id="deckTab"
-      style="cursor:pointer;"
-      onclick="TabClick('DECK');">
-
+      // Copy it to clipboard
+      document.execCommand("copy");
+    }
+    function OnLoadCallback(lastUpdate) {
       <?php
-      if (isset($deck))
-        echo ("<h2 class='deck-title'>Your Deck</h2>");
-        echo ("<h2 class='deck-count'>" . count($deck) . "/" . (count($deck) + count($deckSB)) . "</h2>");
-      ?>
-    </div>
-
-    <div class="deck-display">
-
-      <h4>Click Cards to Select/Unselect</h4>
-
-      <?php
-      if (isset($deck)) {
-        $cardSize = 110;
-        $count = 0;
-        sort($deck);
-        for ($i = 0; $i < count($deck); ++$i) {
-          $id = "DECK-" . $count;
-          echo ("<span style='cursor:pointer; padding-bottom:5px; padding-left:3px;' onclick='CardClick(\"" . $id . "\")'>" . Card($deck[$i], "concat", $cardSize, 0, 1, 0, 0, 0, "", $id) . "</span>");
-          ++$count;
-        }
-        for ($i = 0; $i < count($deckSB); ++$i) {
-          $id = "DECK-" . $count;
-          echo ("<span style='cursor:pointer; padding-bottom:5px; padding-left:3px;' onclick='CardClick(\"" . $id . "\")'>" . Card($deckSB[$i], "concat", $cardSize, 0, 1, 1, 0, 0, "", $id) . "</span>");
-          ++$count;
-        }
+      if ($playerID == "1" && $gameStatus == $MGS_ChooseFirstPlayer) {
+        echo ("var audio = document.getElementById('playerJoinedAudio');");
+        echo ("audio.play();");
       }
       ?>
-    </div>
-    </div>
+      UpdateFormInputs();
+      var log = document.getElementById('gamelog');
+      if (log !== null) log.scrollTop = log.scrollHeight;
+      CheckReloadNeeded(0);
+    }
 
-    </div>
+    function UpdateFormInputs() {
+      var playerCharacter = document.getElementById("playerCharacter");
+      if (!!playerCharacter) playerCharacter.value = GetCharacterCards();
+      var playerDeck = document.getElementById("playerDeck");
+      if (!!playerDeck) playerDeck.value = GetDeckCards();
+    }
 
-    <script>
-      function OnLoadCallback(lastUpdate) {
-        <?php
-        if ($playerID == "1" && $gameStatus == $MGS_ChooseFirstPlayer) {
-          echo ("var audio = document.getElementById('playerJoinedAudio');");
-          echo ("audio.play();");
+    function CardClick(id) {
+      var idArr = id.split("-");
+      if (idArr[0] == "DECK") {
+        var overlay = document.getElementById(id + "-ovr");
+        overlay.style.visibility = (overlay.style.visibility == "hidden" ? "visible" : "hidden");
+        var mbCount = document.getElementById("mbCount");
+        mbCount.innerText = parseInt(mbCount.innerText) + (overlay.style.visibility == "hidden" ? 1 : -1);
+      }
+      UpdateFormInputs();
+    }
+
+    function GetCharacterCards() {
+      var types = ["WEAPONS", "OFFHAND", "QUIVER", "HEAD", "CHEST", "ARMS", "LEGS"];
+      var returnValue = "<?php echo (isset($material) ? implode(",", $material) : ""); ?>";
+      return returnValue;
+    }
+
+    function GetDeckCards() {
+      var count = 0;
+      var returnValue = "";
+      var overlay = document.getElementById("DECK-" + count + "-ovr");
+      while (!!overlay) {
+          if (overlay.style.visibility == "hidden") {
+          var imageSrc = document.getElementById("DECK-" + count + "-img").src;
+          if (returnValue != "") returnValue += ",";
+          var splitArr = imageSrc.split("/");
+          returnValue += splitArr[splitArr.length-1].split(".")[0];
         }
-        ?>
-        UpdateFormInputs();
-        var log = document.getElementById('gamelog');
-        if (log !== null) log.scrollTop = log.scrollHeight;
-        CheckReloadNeeded(0);
-      }
-
-      function UpdateFormInputs() {
-        var playerCharacter = document.getElementById("playerCharacter");
-        if (!!playerCharacter) playerCharacter.value = GetCharacterCards();
-        var playerDeck = document.getElementById("playerDeck");
-        if (!!playerDeck) playerDeck.value = GetDeckCards();
-      }
-
-      function CardClick(id) {
-        var idArr = id.split("-");
-        if (IsEquipType(idArr[0])) {
-          var count = 0;
-          var overlay = document.getElementById(idArr[0] + "-" + count + "-ovr");
-          while (!!overlay) {
-            if (count != idArr[1]) overlay.style.visibility = "visible";
-            else overlay.style.visibility = (overlay.style.visibility == "visible" ? "hidden" : "visible");
-            //overlay.style.visibility = (count != idArr[1] ? "visible" : "hidden");
-            ++count;
-            var overlay = document.getElementById(idArr[0] + "-" + count + "-ovr");
-          }
-        } else if (idArr[0] == "DECK") {
-          var overlay = document.getElementById(id + "-ovr");
-          overlay.style.visibility = (overlay.style.visibility == "hidden" ? "visible" : "hidden");
-          var mbCount = document.getElementById("mbCount");
-          mbCount.innerText = parseInt(mbCount.innerText) + (overlay.style.visibility == "hidden" ? 1 : -1);
-        } else if (idArr[0] == "WEAPONS") {
-          var overlay = document.getElementById(id + "-ovr");
-          overlay.style.visibility = (overlay.style.visibility == "hidden" ? "visible" : "hidden");
-        }
-        UpdateFormInputs();
-      }
-
-      function IsEquipType(type) {
-        switch (type) {
-          case "HEAD":
-            return true;
-          case "CHEST":
-            return true;
-          case "ARMS":
-            return true;
-          case "LEGS":
-            return true;
-          case "OFFHAND":
-            return true;
-          case "QUIVER":
-            return true;
-          default:
-            return false;
-        }
-      }
-
-      function GetCharacterCards() {
-        var types = ["WEAPONS", "OFFHAND", "QUIVER", "HEAD", "CHEST", "ARMS", "LEGS"];
-        var returnValue = "<?php echo (isset($material) ? implode(",", $material) : ""); ?>";
-        return returnValue;
-      }
-
-      function GetDeckCards() {
-        var count = 0;
-        var returnValue = "";
+        ++count;
         var overlay = document.getElementById("DECK-" + count + "-ovr");
-        while (!!overlay) {
-            if (overlay.style.visibility == "hidden") {
-            var imageSrc = document.getElementById("DECK-" + count + "-img").src;
-            if (returnValue != "") returnValue += ",";
-            var splitArr = imageSrc.split("/");
-            returnValue += splitArr[splitArr.length-1].split(".")[0];
-          }
-          ++count;
-          var overlay = document.getElementById("DECK-" + count + "-ovr");
-        }
-        return returnValue;
       }
+      return returnValue;
+    }
 
-       var audioPlayed = false;
+    var audioPlayed = false;
 
-      function CheckReloadNeeded(lastUpdate) {
-        var xmlhttp = new XMLHttpRequest();
-        xmlhttp.onreadystatechange = function() {
-          if (this.readyState == 4 && this.status == 200) {
-            if (parseInt(this.responseText) != 0) {
-              if (parseInt(this.responseText) == 1) location.reload();
-              else {
-                var responseArr = this.responseText.split("ENDTIMESTAMP");
-                document.getElementById("mainPanel").innerHTML = responseArr[1];
-                CheckReloadNeeded(parseInt(responseArr[0]));
-                var playAudio = document.getElementById("playAudio");
-                if (!!playAudio && playAudio.innerText == 1 && !audioPlayed) {
-                  var audio = document.getElementById('playerJoinedAudio');
-                  audio.play();
-                  audioPlayed = true;
-                }
-                var otherHero = document.getElementById("otherHero");
-                if (!!otherHero) document.getElementById("oppHero").innerHTML = otherHero.innerHTML;
-                document.getElementById("icon").href = "./Images/" + document.getElementById("iconHolder").innerText;
-                var log = document.getElementById('gamelog');
-                if (log !== null) log.scrollTop = log.scrollHeight;
-                document.getElementById("submitForm").style.display = document.getElementById("submitDisplay").innerHTML;
+    function CheckReloadNeeded(lastUpdate) {
+      var xmlhttp = new XMLHttpRequest();
+      xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          if (parseInt(this.responseText) != 0) {
+            if (parseInt(this.responseText) == 1) location.reload();
+            else {
+              response = JSON.parse(this.responseText);
+              document.getElementById("setup-content").innerHTML = response["setupContent"];
+              document.getElementById("gamelog").innerHTML = response["logContent"];
+              document.getElementById("their-info").innerHTML = response["theirInfo"];
+              if (response["playerJoinAudio"] === true && !audioPlayed) {
+                var audio = document.getElementById('playerJoinedAudio');
+                audio.play();
+                audioPlayed = true;
+              } else if (response["playerJoinAudio"] === false && audioPlayed) {
+                //reset audio if player left
+                audioPlayed = false;
               }
+              // document.getElementById("icon").href = "./Images/" + document.getElementById("iconHolder").innerText;
+              var log = document.getElementById('gamelog');
+              if (log !== null) log.scrollTop = log.scrollHeight;
+              CheckReloadNeeded(parseInt(response["timestamp"]));
             }
           }
-        };
-        xmlhttp.open("GET", "GetLobbyRefresh.php?gameName=<?php echo ($gameName); ?>&playerID=<?php echo ($playerID); ?>&lastUpdate=" + lastUpdate + "&authKey=<?php echo ($authKey); ?>", true);
-        xmlhttp.send();
-      }
-
-       function SubmitFirstPlayer(action) {
-         if (action == 1) action = "Go First";
-        else action = "Go Second";
-        var xmlhttp = new XMLHttpRequest();
-        xmlhttp.onreadystatechange = function() {
-          if (this.readyState == 4 && this.status == 200) {}
         }
-        var ajaxLink = "ChooseFirstPlayer.php?gameName=" + <?php echo ($gameName); ?>;
-        ajaxLink += "&playerID=" + <?php echo ($playerID); ?>;
-        ajaxLink += "&action=" + action;
-        ajaxLink += <?php echo ("\"&authKey=" . $authKey . "\""); ?>;
-          xmlhttp.open("GET", ajaxLink, true);
-        xmlhttp.send();
+      };
+      xmlhttp.open("GET", "GetLobbyRefresh.php?gameName=<?php echo ($gameName); ?>&playerID=<?php echo ($playerID); ?>&lastUpdate=" + lastUpdate + "&authKey=<?php echo ($authKey); ?>", true);
+      xmlhttp.send();
+    }
+
+    function SubmitFirstPlayer(action) {
+       if (action == 1) action = "Go First";
+      else action = "Go Second";
+      var xmlhttp = new XMLHttpRequest();
+      xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {}
       }
-    </script>
-
-  <?php
-
-  function DisplayEquipRow($equip, $equipSB, $name)
-  {
-    $cardSize = 110;
-    $count = 0;
-    if ($equip != "" || count($equipSB) > 0)
-      echo ("<tr><td>");
-    if ($equip != "") {
-      $id = $name . "-" . $count;
-      echo ("<div style='display:inline; width:" . $cardSize . ";' onclick='CardClick(\"" . $id . "\")'>");
-      echo ("<span style='cursor:pointer; padding-bottom:5px; padding-left:3px;'>" . Card($equip, "concat", $cardSize, 0, 1, 0, 0, 0, "", $id) . "</span>");
-      echo ("</div>");
-      ++$count;
+      var ajaxLink = "ChooseFirstPlayer.php?gameName=" + <?php echo ($gameName); ?>;
+      ajaxLink += "&playerID=" + <?php echo ($playerID); ?>;
+      ajaxLink += "&action=" + action;
+      ajaxLink += <?php echo ("\"&authKey=" . $authKey . "\""); ?>;
+        xmlhttp.open("GET", ajaxLink, true);
+      xmlhttp.send();
     }
-    for ($i = 0; $i < count($equipSB); ++$i) {
-      $id = $name . "-" . $count;
-      echo ("<div style='display:inline; width:" . $cardSize . ";' onclick='CardClick(\"" . $id . "\")'>");
-      echo ("<span style='cursor:pointer; padding-bottom:5px; padding-left:3px;'>" . Card($equipSB[$i], "concat", $cardSize, 0, 1, 1, 0, 0, "", $id) . "</span>");
-      echo ("</div>");
-      ++$count;
-    }
-
-    if ($equip != "" || count($equipSB) > 0)
-      echo ("</td></tr>");
-  }
-
-  function DisplayWeaponRow($weapon1, $weapon2, $weaponSB, $name)
-  {
-    $cardSize = 110;
-    $count = 0;
-    if ($weapon1 != "" || $weapon2 != "" || count($weaponSB) > 0)
-      echo ("<tr><td>");
-    if ($weapon1 != "") {
-      $id = $name . "-" . $count;
-      echo ("<div style='display:inline; width:" . $cardSize . ";' onclick='CardClick(\"" . $id . "\")'>");
-      echo ("<span style='cursor:pointer; padding-bottom:5px; padding-left:3px;'>" . Card($weapon1, "concat", $cardSize, 0, 1, 0, 0, 0, "", $id) . "</span>");
-      echo ("</div>");
-      ++$count;
-    }
-    if ($weapon2 != "") {
-      if (HasReverseArt($weapon1) && $weapon2 == $weapon1) {
-        $weapon2 = ReverseArt($weapon1);
-      }
-      $id = $name . "-" . $count;
-      echo ("<div style='display:inline; width:" . $cardSize . ";' onclick='CardClick(\"" . $id . "\")'>");
-      echo ("<span style='cursor:pointer; padding-bottom:5px; padding-left:3px;'>" . Card($weapon2, "concat", $cardSize, 0, 1, 0, 0, 0, "", $id) . "</span>");
-      echo ("</div>");
-      ++$count;
-    }
-    for ($i = 0; $i < count($weaponSB); ++$i) {
-      if (isset($weaponSB[$i + 1])) {
-        if (HasReverseArt($weaponSB[$i]) && $weaponSB[$i + 1] == $weaponSB[$i]) {
-          $weaponSB[$i + 1] = ReverseArt($weaponSB[$i]);
-        }
-      }
-      $id = $name . "-" . $count;
-      echo ("<div style='display:inline; width:" . $cardSize . ";' onclick='CardClick(\"" . $id . "\")'>");
-      echo ("<span style='cursor:pointer; padding-bottom:5px; padding-left:3px;'>" . Card($weaponSB[$i], "concat", $cardSize, 0, 1, 1, 0, 0, "", $id) . "</span>");
-      echo ("</div>");
-      ++$count;
-    }
-
-    if ($weapon1 != "" || $weapon2 != "" || count($weaponSB) > 0)
-      echo ("</td></tr>");
-  }
-
-  function HasReverseArt($cardID)
-  {
-    switch ($cardID) {
-      case "WTR078":
-        return true;
-      case "CRU004":
-      case "CRU051":
-      case "CRU079":
-        return true;
-      case "DYN069":
-      case "DYN115":
-        return true;
-      case "OUT005":
-      case "OUT007":
-      case "OUT009":
-        return true;
-      default:
-        return false;
-        break;
-    }
-  }
-
-  function ReverseArt($cardID)
-  {
-    switch ($cardID) {
-      case "WTR078":
-        return "CRU049";
-      case "CRU004":
-        return "CRU005";
-      case "CRU051":
-        return "CRU052";
-      case "CRU079":
-        return "CRU080";
-      case "DYN069":
-        return "DYN070";
-      case "DYN115":
-        return "DYN116";
-      case "OUT005":
-        return "OUT006";
-      case "OUT007":
-        return "OUT008";
-      case "OUT009":
-        return "OUT010";
-      default:
-        break;
-    }
-  }
-  ?>
-
-<?php
-include_once 'Disclaimer.php';
-?>
+  </script>
+</body>
+</html>

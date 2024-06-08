@@ -2,7 +2,7 @@
 
 /* Fonts */
 
-h1, h2, h3, h4, h5, h6, p, a, b, ul, ol, dl, dd, form, details, blockquote, table, button, input, label, select, textarea, #gamelog, #mainpanel {
+html, body, h1, h2, h3, h4, h5, h6, p, a, b, ul, ol, dl, dd, form, details, blockquote, table, button, input, label, select, textarea {
   font-family: barlow;
   color: white;
   margin: 0;
@@ -465,9 +465,20 @@ select {
 
 /* GAME LOBBY ---------------------------------------------------------------------------------------------- */
 
+.lobby-container {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas: 
+    "header"
+    "main"
+    "footer";
+  height: 100vh;
+}
+
 /* Header */
 
 .lobby-header {
+  grid-area: header;
   height: 40px;
   padding: 20px;
 }
@@ -494,10 +505,9 @@ select {
 /* Sizing Wrapper */
 
 .lobby-wrapper {
-  height: calc(100% - 170px);
+  max-height: calc(100vh - 120px);
+  grid-area: main;
   display: flex;
-  flex-direction: row;
-  flex: 1;
   }
 
 /* Game Set Up */
@@ -506,8 +516,9 @@ select {
   margin-left: 20px;
   flex-basis: calc(33% - 60px);
   flex-grow: 0;
-  height: fit-content;
   padding-bottom: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .game-lobby h2 { 
@@ -522,28 +533,47 @@ select {
   margin: 0 0 10px;
 }
 
-.game-set-up input {
-  margin-bottom: 0;
+.chat-log {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
-#gamelog {
-  width: calc(100% - 40px);
+.gamelog {
+  flex:1;
+  overflow-y: scroll;
   font-weight: 400;
-  height: 300px;
   text-align: left;
+  margin-bottom: 10px;
 }
 
-#chatbox .GameLobby_Input {
-  margin: 10px 0 -20px 0;
+.lobby-chat-input {
+  display: flex;
+  align-items: center;
 }
 
-#chatbox .GameLobby_Input {
-  width: calc(100% - 66px);
+.lobby-chat-input input {
+  margin: 0px;
+}
+
+.lobby-chat-input input[type="text"] {
+  flex: 1;
+  border-radius: 5px 0 0 5px;
+}
+.lobby-chat-input button {
+  flex: 0;
+  border-radius: 0 5px 5px 0;
 }
 
 .invite-link {
-  width: calc(100% - 145px);
-  margin-top: 10px;
+  display: block;
+  width: 100%;
+  margin-bottom: 5px;
+  margin-top: 0px;
+  box-sizing: border-box;
+}
+.invite-link-button {
+  text-align: right;
 }
 
 /* Players */
@@ -551,11 +581,6 @@ select {
 .player-info { 
   margin: 0 0 0 20px;
   flex-grow: 0;
-  height: 100%;
-}
-
-#opponent-info {
-  margin: 10px 0 0 0;
 }
 
 .player-info img { 
@@ -582,31 +607,38 @@ select {
 /* Deck */
 
 .deck-info {
-  height: 100%; 
   margin: 0 20px;
   flex-grow: 3;
+  display: flex;
+  flex-direction: column;
 }
 
-#deckTab {
-  overflow: auto;
-}
-
-.deck-title {
-  float: left;
+.deck-header {
+  display: flex;
+  justify-content: space-between;
 }
 
 .deck-count{
-  float: right;
   font-weight: 400;
 }
 
 .deck-display {
-  display: block; 
-  height: calc(100% - 49px); 
+  display: block;  
   overflow-y: scroll; 
   overflow-x: hidden;
   scrollbar-color: #888888 rgba(0, 0, 0, 0); 
   scrollbar-width: thin;
+}
+
+.lobby-footer {
+  grid-area: footer;
+  height: 40px;
+}
+
+.lobby-footer .disclaimer {
+  position: relative;
+  padding: 12px 0;
+  bottom: 0px;
 }
 
 /* DISCLAIMER ---------------------------------------------------------------------------------------------- */
