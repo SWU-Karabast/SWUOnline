@@ -143,7 +143,6 @@ if ($decklink != "") {
     $cardID = UUIDLookup($deck[$i]->id);
     if(CardSet($cardID) == $bannedSet) {
       $hasBannedCard = true;
-      break;
     }
     for($j=0; $j<$deck[$i]->count; ++$j) {
       if($cards != "") $cards .= " ";
@@ -156,15 +155,14 @@ if ($decklink != "") {
     $cardID = UUIDLookup($sideboard[$i]->id);
     if(CardSet($cardID) == $bannedSet) {
       $hasBannedCard = true;
-      break;
     }
     for($j=0; $j<$sideboard[$i]->count; ++$j) {
       if($sideboardCards != "") $sideboardCards .= " ";
       $sideboardCards .= $cardID;
     }
   }
-
-  if ($hasBannedCard) {
+  
+  if ($format != "livinglegendscc" && $hasBannedCard) {
     $_SESSION['error'] = '⚠️ Unreleased cards must be played in the open format.';
     header("Location: " . $redirectPath . "/MainMenu.php");
     WriteGameFile();
