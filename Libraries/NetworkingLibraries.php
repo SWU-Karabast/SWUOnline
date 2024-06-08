@@ -132,7 +132,6 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
       if (!IsPlayable($cardID, $turn[0], "PLAY", $index)) break; //Item not playable
       --$items[$index + 3];
       SetClassState($playerID, $CS_PlayIndex, $index);
-      $set = CardSet($cardID);
       PlayCard($cardID, "PLAY", -1, $index, $items[$index + 4]);
       break;
     case 11: //CHOOSEDECK

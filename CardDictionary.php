@@ -45,12 +45,6 @@ function CharacterIntellect($cardID)
   }
 }
 
-function CardSet($cardID)
-{
-  if(!$cardID) return "";
-  return substr($cardID, 0, 3);
-}
-
 function CardClass($cardID)
 {
   return CardClasses($cardID);
@@ -590,35 +584,12 @@ function DynamicCost($cardID)
 
 function PitchValue($cardID)
 {
-  if(!$cardID) return "";
-  $set = CardSet($cardID);
-  if($set != "ROG" && $set != "DUM") {
-    $number = intval(substr($cardID, 3));
-    if($number < 400) return GeneratedPitchValue($cardID);
-  }
-  if($set == "ROG") return ROGUEPitchValue($cardID);
+  return 0;
 }
 
 function BlockValue($cardID)
 {
-  global $defPlayer;
-  if(!$cardID) return "";
-  $set = CardSet($cardID);
-  if($cardID == "MON191") return SearchPitchForNumCosts($defPlayer) * 2;
-  else if($cardID == "EVR138") return FractalReplicationStats("Block");
-  if($set != "ROG" && $set != "DUM") {
-    $number = intval(substr($cardID, 3));
-    if($number < 400) return GeneratedBlockValue($cardID);
-  }
-  $class = CardClass($cardID);
-  if($set == "ROG") return ROGUEBlockValue($cardID);
-  switch($cardID) {
-    case "MON400": case "MON401": case "MON402": return 0;
-    case "DYN492a": return -1;
-    case "DYN492b": return 5;
-    case "DUMMYDISHONORED": return -1;
-    default: return 3;
-  }
+  return 0;
 }
 
 function AttackValue($cardID)
@@ -1580,13 +1551,5 @@ function HasDominate($cardID)
 
 function Rarity($cardID)
 {
-  $set = CardSet($cardID);
-  if($set != "ROG" && $set != "DUM")
-  {
-    $number = intval(substr($cardID, 3));
-    if($number < 400) return GeneratedRarity($cardID);
-  }
-  if ($set == "ROG") {
-    return ROGUERarity($cardID);
-  }
+  return GeneratedRarity($cardID);
 }

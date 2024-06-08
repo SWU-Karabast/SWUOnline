@@ -493,10 +493,7 @@ function FinalizeDamage($player, $damage, $damageThreatened, $type, $source)
 
 function ProcessDealDamageEffect($cardID)
 {
-  $set = CardSet($cardID);
-  if($set == "UPR") {
-    return UPRDealDamageEffect($cardID);
-  }
+
 }
 
 function ArcaneDamagePrevented($player, $cardMZIndex)

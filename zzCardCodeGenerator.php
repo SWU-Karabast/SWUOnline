@@ -18,6 +18,7 @@
   $type2Trie = [];
   $uniqueTrie = [];
   $hasPlayTrie = [];
+  $setTrie = [];
   while ($hasMoreData)
   {
     $jsonUrl = "https://admin.starwarsunlimited.com/api/cards?pagination[page]=" . $page;
@@ -97,6 +98,7 @@
   GenerateFunction($type2Trie, $handler, "DefinedCardType2", true, "");
   GenerateFunction($uniqueTrie, $handler, "CardIsUnique", false, 0);
   GenerateFunction($hasPlayTrie, $handler, "HasWhenPlayed", false, "false", 1);
+  GenerateFunction($setTrie, $handler, "CardSet", true, "");
 
   GenerateFunction($uuidLookupTrie, $handler, "UUIDLookup", true, "");
 
@@ -114,7 +116,7 @@
   function AddToTries($cardID, $uuid)
   {
     global $uuidLookupTrie, $titleTrie, $subtitleTrie, $costTrie, $hpTrie, $powerTrie, $typeTrie, $type2Trie, $uniqueTrie, $card;
-    global $aspectsTrie, $traitsTrie, $arenasTrie, $hasPlayTrie;
+    global $aspectsTrie, $traitsTrie, $arenasTrie, $hasPlayTrie, $setTrie;
     if($uuid != "8752877738" && $uuid != "2007868442") {
       AddToTrie($uuidLookupTrie, $cardID, 0, $uuid);
     }
@@ -124,6 +126,7 @@
     AddToTrie($hpTrie, $uuid, 0, $card->hp);
     AddToTrie($powerTrie, $uuid, 0, $card->power);
     AddToTrie($typeTrie, $uuid, 0, $card->type->data->attributes->name);
+    AddToTrie($setTrie, $uuid, 0, $card->expansion->data->attributes->code);
     if($card->type2->data != null) {
       $type2 = $card->type2->data->attributes->name;
       if($type2 == "Leader Unit") $type2 = "Unit";
