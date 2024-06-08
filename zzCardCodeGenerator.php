@@ -115,7 +115,9 @@
   {
     global $uuidLookupTrie, $titleTrie, $subtitleTrie, $costTrie, $hpTrie, $powerTrie, $typeTrie, $type2Trie, $uniqueTrie, $card;
     global $aspectsTrie, $traitsTrie, $arenasTrie, $hasPlayTrie;
-    AddToTrie($uuidLookupTrie, $cardID, 0, $uuid);
+    if($uuid != "8752877738" && $uuid != "2007868442") {
+      AddToTrie($uuidLookupTrie, $cardID, 0, $uuid);
+    }
     AddToTrie($titleTrie, $uuid, 0, str_replace('"', "'", $card->title));
     AddToTrie($subtitleTrie, $uuid, 0, str_replace('"', "'", $card->subtitle));
     AddToTrie($costTrie, $uuid, 0, $card->cost);
