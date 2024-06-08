@@ -129,6 +129,7 @@ function EffectAttackModifier($cardID)
     case "4721657243": return 3;//Kihraxz Heavy Fighter
     case "7171636330": return -4;//Chain Code Collector
     case "2526288781": return 1;//Bossk
+    case "1312599620": return -3;//Smuggler's Starfighter
     default: return 0;
   }
 }

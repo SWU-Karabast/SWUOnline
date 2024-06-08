@@ -45,12 +45,6 @@ function CharacterIntellect($cardID)
   }
 }
 
-function CardSet($cardID)
-{
-  if(!$cardID) return "";
-  return substr($cardID, 0, 3);
-}
-
 function CardClass($cardID)
 {
   return CardClasses($cardID);
@@ -176,6 +170,7 @@ function RaidAmount($cardID, $player, $index)
     case "1805986989": $amount += 2; break;//Modded Cohort
     case "415bde775d": $amount += 1; break;//Hondo Ohnaka
     case "724979d608": $amount += 2; break;//Cad Bane
+    case "5818136044": $amount += 2; break;//Xanadu Blood
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
@@ -313,6 +308,7 @@ function HasOverwhelm($cardID, $player, $index)
     case "4721657243"://Kihraxz Heavy Fighter
     case "5351496853"://Gideon's Light Cruiser
     case "4935319539"://Krayt Dragon
+    case "8862896760"://Maul
       return true;
     case "4619930426"://First Legion Snowtrooper
       $target = GetAttackTarget();
@@ -378,6 +374,8 @@ function HasAmbush($cardID, $player, $index, $from)
     case "1805986989"://Modded Cohort
     case "7171636330"://Chain Code Collector
     case "7982524453"://Fennec Shand
+    case "8862896760"://Maul
+    case "2143627819"://The Marauder
       return true;
     case "2027289177"://Escort Skiff
       return SearchCount(SearchAllies($player, aspect:"Command")) > 1;
@@ -586,35 +584,12 @@ function DynamicCost($cardID)
 
 function PitchValue($cardID)
 {
-  if(!$cardID) return "";
-  $set = CardSet($cardID);
-  if($set != "ROG" && $set != "DUM") {
-    $number = intval(substr($cardID, 3));
-    if($number < 400) return GeneratedPitchValue($cardID);
-  }
-  if($set == "ROG") return ROGUEPitchValue($cardID);
+  return 0;
 }
 
 function BlockValue($cardID)
 {
-  global $defPlayer;
-  if(!$cardID) return "";
-  $set = CardSet($cardID);
-  if($cardID == "MON191") return SearchPitchForNumCosts($defPlayer) * 2;
-  else if($cardID == "EVR138") return FractalReplicationStats("Block");
-  if($set != "ROG" && $set != "DUM") {
-    $number = intval(substr($cardID, 3));
-    if($number < 400) return GeneratedBlockValue($cardID);
-  }
-  $class = CardClass($cardID);
-  if($set == "ROG") return ROGUEBlockValue($cardID);
-  switch($cardID) {
-    case "MON400": case "MON401": case "MON402": return 0;
-    case "DYN492a": return -1;
-    case "DYN492b": return 5;
-    case "DUMMYDISHONORED": return -1;
-    default: return 3;
-  }
+  return 0;
 }
 
 function AttackValue($cardID)
@@ -626,6 +601,8 @@ function AttackValue($cardID)
     case "4897501399"://Ruthlessness
       return 2;
     case "7687006104": return 1;//Foundling
+    case "5738033724": return 2;//Boba Fett's Armor
+    case "3514010297": return 1;//Mandalorian Armor
     default: return CardPower($cardID);
   }
 }
@@ -1007,6 +984,7 @@ function UpgradeFilter($cardID)
     case "3525325147"://Vambrace Grappleshot
     case "5874342508"://Hotshot DL-44 Blaster
     case "0754286363"://The Mandalorian's Rifle
+    case "5738033724"://Boba Fett's Armor
       return "trait=Vehicle";
     case "8055390529"://Traitorous
       return "maxCost=3";
@@ -1235,8 +1213,10 @@ function HasAttackAbility($cardID) {
 function CardHP($cardID) {
   switch($cardID)
   {
-    case "8877249477": return 2;
+    case "5738033724": return 2;//Boba Fett's Armor
+    case "8877249477": return 2;//Legal Authority
     case "7687006104": return 1;//Foundling
+    case "3514010297": return 3;//Mandalorian Armor
     default: return CardHPDictionary($cardID);
   }
 }
@@ -1421,6 +1401,7 @@ function SmuggleCost($cardID, $player="", $index="")
     case "6847268098": $minCost = 2; break;//Timely Intervention
     case "5632569775": $minCost = 5; break;//Lom Pyke
     case "9552605383": $minCost = 4; break;//L3-37
+    case "1312599620": $minCost = 4; break;//Smuggler's Starfighter
     default: break;
   }
   $allies = &GetAllies($player);
@@ -1572,13 +1553,5 @@ function HasDominate($cardID)
 
 function Rarity($cardID)
 {
-  $set = CardSet($cardID);
-  if($set != "ROG" && $set != "DUM")
-  {
-    $number = intval(substr($cardID, 3));
-    if($number < 400) return GeneratedRarity($cardID);
-  }
-  if ($set == "ROG") {
-    return ROGUERarity($cardID);
-  }
+  return GeneratedRarity($cardID);
 }

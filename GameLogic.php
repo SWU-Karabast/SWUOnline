@@ -56,6 +56,10 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             $rv .= $i;
           }
           break;
+        case "GY":
+          $discard = &GetDiscard($player);
+          $rv = GetIndices(count($discard), pieces:DiscardPieces());
+          break;
         case "STORMTYRANTSEYE":
           $deck = &GetDeck($player);
           $toReveal = "";
@@ -79,7 +83,6 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           if($subparam == "Aura") $rv = SearchAura($player, "", $subparam);
           else $rv = SearchPermanents($player, "", $subparam);
           break;
-        case "MZSTARTTURN": $rv = MZStartTurnIndices(); break;
         case "HAND":
           $hand = &GetHand($player);
           $rv = GetIndices(count($hand));
@@ -122,10 +125,6 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $hand = &GetHand($mainPlayer);
           $rv = GetIndices(count($hand)); break;
         case "BANISHTYPE": $rv = SearchBanish($player, $subparam); break;
-        case "GY":
-          $discard = &GetDiscard($player);
-          $rv = GetIndices(count($discard));
-          break;
         case "UNITS":
           $allies = &GetAllies($player);
           $rv = GetIndices(count($allies), 0 , AllyPieces());
