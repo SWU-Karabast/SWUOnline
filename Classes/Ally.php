@@ -112,6 +112,12 @@ class Ally {
         $this->allies[$this->index+4] = count($subcards) > 0 ? implode(",", $subcards) : "-";
         if(!$bypassShield) return false;//Cancel the damage if shield prevented it
       }
+      switch($subcards[$i]) {
+        case "5738033724"://Boba Fett's Armor
+          if(CardTitle($this->CardID()) == "Boba Fett") $amount -= 2;
+          break;
+        default: break;
+      }
     }
     if($damageDealt != NULL) $damageDealt = $amount;
     $this->allies[$this->index+2] -= $amount;

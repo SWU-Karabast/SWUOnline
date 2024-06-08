@@ -627,6 +627,7 @@ function AttackValue($cardID)
     case "4897501399"://Ruthlessness
       return 2;
     case "7687006104": return 1;//Foundling
+    case "5738033724": return 2;//Boba Fett's Armor
     default: return CardPower($cardID);
   }
 }
@@ -1008,6 +1009,7 @@ function UpgradeFilter($cardID)
     case "3525325147"://Vambrace Grappleshot
     case "5874342508"://Hotshot DL-44 Blaster
     case "0754286363"://The Mandalorian's Rifle
+    case "5738033724"://Boba Fett's Armor
       return "trait=Vehicle";
     case "8055390529"://Traitorous
       return "maxCost=3";
@@ -1236,7 +1238,8 @@ function HasAttackAbility($cardID) {
 function CardHP($cardID) {
   switch($cardID)
   {
-    case "8877249477": return 2;
+    case "5738033724": return 2;//Boba Fett's Armor
+    case "8877249477": return 2;//Legal Authority
     case "7687006104": return 1;//Foundling
     default: return CardHPDictionary($cardID);
   }
