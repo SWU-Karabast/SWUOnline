@@ -137,60 +137,39 @@ if ($decklink != "") {
   $base = UUIDLookup($deckObj->base->id);
   $deck = $deckObj->deck;
   $cards = "";
+  $bannedSet = "SHD";
+  $hasBannedCard = false;
   for($i=0; $i<count($deck); ++$i) {
+    $cardID = UUIDLookup($deck[$i]->id);
+    if(CardSet($cardID) == $bannedSet) {
+      $hasBannedCard = true;
+      break;
+    }
     for($j=0; $j<$deck[$i]->count; ++$j) {
       if($cards != "") $cards .= " ";
-      $cards .= UUIDLookup($deck[$i]->id);
+      $cards .= $cardID;
     }
   }
   $sideboard = isset($deckObj->sideboard) ? $deckObj->sideboard : [];
   $sideboardCards = "";
   for($i=0; $i<count($sideboard); ++$i) {
+    $cardID = UUIDLookup($sideboard[$i]->id);
+    if(CardSet($cardID) == $bannedSet) {
+      $hasBannedCard = true;
+      break;
+    }
     for($j=0; $j<$sideboard[$i]->count; ++$j) {
       if($sideboardCards != "") $sideboardCards .= " ";
-      $sideboardCards .= UUIDLookup($sideboard[$i]->id);
+      $sideboardCards .= $cardID;
     }
   }
 
-  /*
-  // if has message forbidden error out.
-  if ($apiInfo['http_code'] == 403) {
-    $_SESSION['error'] =
-      "API FORBIDDEN! Invalid or missing token to access API: " . $apiLink . " The response from the deck hosting service was: " . $apiDeck;
-    header("Location: MainMenu.php");
-    die();
-  }
-  if($deckObj == null)
-  {
-    echo 'Deck object is null. Failed to retrieve deck from API.';
+  if ($hasBannedCard) {
+    $_SESSION['error'] = '⚠️ Unreleased cards must be played in the open format.';
+    header("Location: " . $redirectPath . "/MainMenu.php");
+    WriteGameFile();
     exit;
   }
-  if (isset($deckObj->{'matchups'})) {
-    if ($playerID == 1) $p1Matchups = $deckObj->{'matchups'};
-    else if ($playerID == 2) $p2Matchups = $deckObj->{'matchups'};
-  }
-  $deckName = $deckObj->{'name'};
-  $deckFormat = (isset($deckObj->{'format'}) ? $deckObj->{'format'} : "");
-  $deckCards = "";
-  $sideboardCards = "";
-  $materialCards = "";
-  $totalCards = 0;
-  foreach($deckObj->{'cards'}->{'main'} as $key => $value) {
-    $cardID = $value->{'uuid'};
-    $quantity = $value->{'quantity'};
-    for($i=0; $i<$quantity; ++$i)
-    {
-      if($deckCards != "") $deckCards .= " ";
-      $deckCards .= $cardID;
-    }
-  }
-
-  foreach($deckObj->{'cards'}->{'material'} as $key => $value) {
-    $cardID = $value->{'uuid'};
-    if($materialCards != "") $materialCards .= " ";
-    $materialCards .= $cardID;
-  }
-  */
 
   //We have the decklist, now write to file
   $filename = "./Games/" . $gameName . "/p" . $playerID . "Deck.txt";
