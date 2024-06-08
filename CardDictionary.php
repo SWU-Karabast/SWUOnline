@@ -314,6 +314,7 @@ function HasOverwhelm($cardID, $player, $index)
     case "4721657243"://Kihraxz Heavy Fighter
     case "5351496853"://Gideon's Light Cruiser
     case "4935319539"://Krayt Dragon
+    case "8862896760"://Maul
       return true;
     case "4619930426"://First Legion Snowtrooper
       $target = GetAttackTarget();
@@ -379,6 +380,7 @@ function HasAmbush($cardID, $player, $index, $from)
     case "1805986989"://Modded Cohort
     case "7171636330"://Chain Code Collector
     case "7982524453"://Fennec Shand
+    case "8862896760"://Maul
       return true;
     case "2027289177"://Escort Skiff
       return SearchCount(SearchAllies($player, aspect:"Command")) > 1;
