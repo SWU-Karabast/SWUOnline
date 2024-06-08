@@ -218,38 +218,8 @@ function CachedNumActionBlocked()
 function StartTurnAbilities()
 {
   global $initiativePlayer;
-  MZStartTurnMayAbilities();
   AuraStartTurnAbilities();
   ItemStartTurnAbilities();
-}
-
-function MZStartTurnMayAbilities()
-{
-  global $mainPlayer;
-  AddDecisionQueue("FINDINDICES", $mainPlayer, "MZSTARTTURN");
-  AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a start turn ability to activate (or pass)", 1);
-  AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
-  AddDecisionQueue("MZSTARTTURNABILITY", $mainPlayer, "-", 1);
-}
-
-function MZStartTurnIndices()
-{
-  global $mainPlayer;
-  $mainDiscard = &GetDiscard($mainPlayer);
-  $cards = "";
-  for($i=0; $i<count($mainDiscard); $i+=DiscardPieces())
-  {
-    switch($mainDiscard[$i])
-    {
-      case "UPR086":
-        if(ThawIndices($mainPlayer) != "")
-        {
-          $cards = CombineSearches($cards, SearchMultiZoneFormat($i, "MYDISCARD")); break;
-        }
-      default: break;
-    }
-  }
-  return $cards;
 }
 
 function ArsenalStartTurnAbilities()
