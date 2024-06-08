@@ -660,6 +660,20 @@ function AllyAttackAbilities($attackID)
       default: break;
     }
   }
+  $defAllies = &GetAllies($defPlayer);
+  for($i=0; $i<count($defAllies); $i+=AllyPieces()) {
+    switch($defAllies[$i]) {
+      case "7674544152"://Kragan Gorr
+        if(GetAttackTarget() == "THEIRCHAR-0") {
+          AddDecisionQueue("MULTIZONEINDICES", $defPlayer, "MYALLY");
+          AddDecisionQueue("SETDQCONTEXT", $defPlayer, "Choose a unit to give a shield");
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $defPlayer, "<-", 1);
+          AddDecisionQueue("MZOP", $defPlayer, "ADDSHIELD", 1);
+        }
+        break;
+      default: break;
+    }
+  }
 }
 
 function AllyAttackedAbility($attackTarget, $index) {
