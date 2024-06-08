@@ -46,13 +46,14 @@
       $cardNumber = $card->cardNumber;
       if($cardNumber < 10) $cardNumber = "00" . $cardNumber;
       else if($cardNumber < 100) $cardNumber = "0" . $cardNumber;
-      $cardID = "SOR_" . $cardNumber;
+      $set = $card->expansion->data->attributes->code;
+      $cardID= $set . "_" . $cardNumber;
+      //$cardID = "SOR_" . $cardNumber;
       AddToTries($cardID, $card->cardUid);
 
       $definedType = $card->type->data->attributes->name;
       $imageUrl = $card->artFront->data->attributes->formats->card->url;
 
-      $set = $card->expansion->data->attributes->code;
       //$imageUrl = "https://swudb.com/cards/" . $set . "/" . $cardNumber . ".png";
 
       CheckImage($card->cardUid, $imageUrl, $definedType, set:$set);
