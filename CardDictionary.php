@@ -602,6 +602,7 @@ function AttackValue($cardID)
       return 2;
     case "7687006104": return 1;//Foundling
     case "5738033724": return 2;//Boba Fett's Armor
+    case "3514010297": return 1;//Mandalorian Armor
     default: return CardPower($cardID);
   }
 }
@@ -1215,6 +1216,7 @@ function CardHP($cardID) {
     case "5738033724": return 2;//Boba Fett's Armor
     case "8877249477": return 2;//Legal Authority
     case "7687006104": return 1;//Foundling
+    case "3514010297": return 3;//Mandalorian Armor
     default: return CardHPDictionary($cardID);
   }
 }
