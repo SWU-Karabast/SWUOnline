@@ -56,6 +56,10 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             $rv .= $i;
           }
           break;
+        case "GY":
+          $discard = &GetDiscard($player);
+          $rv = GetIndices(count($discard), pieces:DiscardPieces());
+          break;
         case "STORMTYRANTSEYE":
           $deck = &GetDeck($player);
           $toReveal = "";
