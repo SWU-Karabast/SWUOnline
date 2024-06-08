@@ -3960,6 +3960,15 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "5818136044"://Xanadu Blood
       XanaduBlood($currentPlayer, $playAlly->Index());
       break;
+    case "1312599620"://Smuggler's Starfighter
+      if(SearchCount(SearchAllies($currentPlayer, trait:"Underworld")) > 0) {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to give -3 power");
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "1312599620,PLAY", 1);
+      }
+      break;
     default: break;
   }
 }
