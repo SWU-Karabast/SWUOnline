@@ -414,6 +414,9 @@ function SpecificCardLogic($player, $card, $lastResult)
         PrependDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY");
       }
       return $lastResult;
+    case "THEMARAUDER":
+      
+      return $lastResult;
     default: return "";
   }
 }

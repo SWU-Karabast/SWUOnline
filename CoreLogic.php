@@ -3955,6 +3955,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
       }
       break;
+    case "2143627819"://The Marauder
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYDISCARD");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card in your discard to resource");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "THEMARAUDER", 1);
+      break;
     default: break;
   }
 }
