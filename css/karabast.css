@@ -560,20 +560,27 @@ select {
   flex: 1;
   border-radius: 5px 0 0 5px;
 }
+
 .lobby-chat-input button {
   flex: 0;
   border-radius: 0 5px 5px 0;
 }
 
-.invite-link {
-  display: block;
-  width: 100%;
-  margin-bottom: 5px;
-  margin-top: 0px;
-  box-sizing: border-box;
+.invite-link-wrapper{
+  display: flex;
+  flex-direction: row;
+  margin-top: 20px;
 }
-.invite-link-button {
-  text-align: right;
+
+.invite-link {
+  flex: 1;
+  margin: 0;
+  border-radius: 5px 0 0 5px;
+}
+
+.invite-link-wrapper .GameLobby_Button {
+  flex: 0;
+  border-radius: 0 5px 5px 0;
 }
 
 /* Players */
