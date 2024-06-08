@@ -176,6 +176,7 @@ function RaidAmount($cardID, $player, $index)
     case "1805986989": $amount += 2; break;//Modded Cohort
     case "415bde775d": $amount += 1; break;//Hondo Ohnaka
     case "724979d608": $amount += 2; break;//Cad Bane
+    case "5818136044": $amount += 2; break;//Xanadu Blood
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;

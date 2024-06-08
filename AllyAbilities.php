@@ -1115,6 +1115,9 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "ADDSHIELD", 1);
       break;
+    case "5818136044"://Xanadu Blood
+      XanaduBlood($mainPlayer, $attackerAlly->Index());
+      break;
     default: break;
   }
 }
@@ -1211,26 +1214,6 @@ function AllyBeginEndTurnEffects()
   }
 }
 
-function AllyLevelModifiers($player)
-{
-  $allies = &GetAllies($player);
-  $levelModifier = 0;
-  for($i = count($allies) - AllyPieces(); $i >= 0; $i -= AllyPieces()) {
-    $remove = false;
-    switch($allies[$i]) {
-      case "qxbdXU7H4Z": if(SearchCount(SearchAllies($player, "", "BEAST")) + SearchCount(SearchAllies($player, "", "ANIMAL")) > 0) ++$levelModifier; break;
-      case "yDARN8eV6B": if(IsClassBonusActive($player, "MAGE")) ++$levelModifier; break;//Tome of Knowledge
-      case "izGEjxBPo9": if(SearchCount(SearchAllies($player, "", "BEAST")) + SearchCount(SearchAllies($player, "", "ANIMAL")) > 0) ++$levelModifier; break;
-      case "q2okpDFJw5": if(SearchCount(SearchAllies($player, "", "BEAST")) + SearchCount(SearchAllies($player, "", "ANIMAL")) > 0) ++$levelModifier; break; //Energetic Beastbonder
-      case "pnDhApDNvR": ++$levelModifier; break;//Magus Disciple
-      case "1i6ierdDjq": if(SearchCount(SearchAllies($player, "", "BEAST")) + SearchCount(SearchAllies($player, "", "ANIMAL")) > 0) ++$levelModifier; break;//Flamelash Subduer
-      default: break;
-    }
-    if($remove) DestroyAlly($player, $i);
-  }
-  return $levelModifier;
-}
-
 function AllyEndTurnAbilities($player)
 {
   $allies = &GetAllies($player);
@@ -1264,4 +1247,16 @@ function GiveAlliesHealthBonus($player, $amount)
   {
     $allies[$i+2] += $amount;
   }
+}
+
+function XanaduBlood($player, $index=-1) {
+  AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:trait=Underworld");
+  if($index > -1) AddDecisionQueue("MZFILTER", $player, "index=MYALLY-" . $index);
+  AddDecisionQueue("MZFILTER", $player, "leader=1");
+  AddDecisionQueue("SETDQCONTEXT", $player, "Choose an underworld unit to bounce");
+  AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+  AddDecisionQueue("MZOP", $player, "BOUNCE", 1);
+  AddDecisionQueue("SETDQCONTEXT", $player, "Choose what you want to exhaust", 1);
+  AddDecisionQueue("BUTTONINPUT", $player, "Unit,Resource", 1);
+  AddDecisionQueue("SPECIFICCARD", $player, "XANADUBLOOD", 1);
 }

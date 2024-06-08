@@ -3957,6 +3957,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "L337");
       break;
+    case "5818136044"://Xanadu Blood
+      XanaduBlood($currentPlayer, $playAlly->Index());
+      break;
     default: break;
   }
 }
