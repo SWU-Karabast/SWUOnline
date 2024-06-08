@@ -55,6 +55,7 @@ function AllyHasStaticHealthModifier($cardID)
     case "4339330745"://Wedge Antilles
     case "9097316363"://Emperor Palpatine
     case "6c5b96c7ef"://Emperor Palpatine
+    case "4511413808"://Follower of the Way
       return true;
     default: return false;
   }
@@ -85,6 +86,12 @@ function AllyStaticHealthModifier($cardID, $index, $player, $myCardID, $myIndex)
           }
         }
         return $isEmperorPalpatineLeader ? 0 : 1;
+      }
+      break;
+    case "4511413808"://Follower of the Way
+      if($index == $myIndex) {
+        $ally = new Ally("MYALLY-" . $index, $player);
+        if($ally->NumUpgrades() > 0) return 1;
       }
       break;
     default: break;

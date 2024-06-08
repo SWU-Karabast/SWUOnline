@@ -76,7 +76,6 @@ class Ally {
     $max += $this->allies[$this->index+9];
     for($i=count($this->allies)-AllyPieces(); $i>=0; $i-=AllyPieces()) {
       if(AllyHasStaticHealthModifier($this->allies[$i])) {
-        if($this->Index() == $i) continue;
         $max += AllyStaticHealthModifier($this->CardID(), $this->Index(), $this->PlayerID(), $this->allies[$i], $i);
       }
     }
