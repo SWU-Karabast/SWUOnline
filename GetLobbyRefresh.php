@@ -1,6 +1,5 @@
 <?php
 
-
 include "CardDictionary.php";
 include 'Libraries/HTTPLibraries.php';
 include_once "Libraries/PlayerSettings.php";
@@ -27,6 +26,7 @@ include "HostFiles/Redirector.php";
 include "Libraries/UILibraries2.php";
 include "Libraries/SHMOPLibraries.php";
 
+$data = array();
 $currentTime = round(microtime(true) * 1000);
 SetCachePiece($gameName, $playerID + 1, $currentTime);
 
@@ -68,6 +68,7 @@ if ($authKey != $targetAuth) {
   exit;
 }
 
+
 if ($kickPlayerTwo) {
 
   $numP2Disconnects = IncrementCachePiece($gameName, 11);
@@ -84,53 +85,58 @@ if ($kickPlayerTwo) {
 }
 
 if ($lastUpdate != 0 && $cacheVal < $lastUpdate) {
-  echo (GetCachePiece($gameName, 1) . "ENDTIMESTAMP");
+  $data["timestamp"] = GetCachePiece($gameName, 1);
   exit;
 } else if ($gameStatus == $MGS_GameStarted) {
   echo ("1");
   exit;
 } else {
+  $data["timestamp"] = GetCachePiece($gameName, 1);
 
-  echo (GetCachePiece($gameName, 1) . "ENDTIMESTAMP");
-  if ($gameStatus == $MGS_ChooseFirstPlayer) {
-    if ($playerID == $firstPlayerChooser) {
-      echo ("<div class='game-set-up container bg-blue'><h2> Set Up</h2><p>You won the initiative choice</p><input class='GameLobby_Button' type='button' name='action' value='Go First' onclick='SubmitFirstPlayer(1)' style='margin-left:15px; margin-right:20px; text-align:center;'>");
-      echo ("<input class='GameLobby_Button' type='button' name='action' value='Go Second' onclick='SubmitFirstPlayer(2)' style='text-align:center;'>");
-    } else {
-      echo ("<div class='game-set-up container bg-blue'><h2> Set Up</h2><p>Waiting for other player to choose who goes first</p><input type='button' value='-' style='visibility: hidden;'>");
-      
-    }
-  }
-
+  $setupContent = "";
   if ($playerID == 1 && $gameStatus < $MGS_Player2Joined) {
-    if($visibility == "private")
-    {
-      if($p1id == "")
-      {
-        echo("<div>&#10071;This is a private lobby. You need to log in for matchmaking.</div><br>");
+    if($visibility == "private") {
+      if($p1id == "") {
+        $setupContent .= "<p>&#10071;This is a private lobby. You need to log in for matchmaking.&#10071;</p>";
       }
       else {
-        echo("<div>&#10071;This is a private lobby. You will need to invite an opponent.</div><br>");
+        $setupContent .= "<p>&#10071;This is a private lobby. You will need to invite an opponent.&#10071;</p>";
       }
     }
-    echo ("<div class='game-set-up container bg-blue'><h2> Set Up</h2><p>Waiting for another player to join</p>
-    <input class='GameLobby_Input invite-link' onclick='copyText()' type='text' id='gameLink' value='" . $redirectPath . "/JoinGame.php?gameName=$gameName&playerID=2'><button class='GameLobby_Button' style='margin-left:3px;' onclick='copyText()'>Copy Invite Link</button>");
+    $setupContent .= "<p>Waiting for another player to join</p>";
+    $setupContent .= "<div style='margin-top: 20px; text-align: left;'><h3>Invite Link</h3></div>";
+    $setupContent .= "<input class='GameLobby_Input invite-link' onclick='copyText()' type='text' id='gameLink' value='" . $redirectPath . "/JoinGame.php?gameName=$gameName&playerID=2'>";
+    $setupContent .= "<div class='invite-link-button'><button class='GameLobby_Button' onclick='copyText()'>Copy Invite Link</button></div>";
+  } else if ($gameStatus == $MGS_ChooseFirstPlayer) {
+    if ($playerID == $firstPlayerChooser) {
+      $setupContent .= "<p>You won the initiative choice</p>";
+      $setupContent .= "<input class='GameLobby_Button' type='button' name='action' value='Go First' onclick='SubmitFirstPlayer(1)' style='margin-left:15px; margin-right:20px; text-align:center;'>";
+      $setupContent .= "<input class='GameLobby_Button' type='button' name='action' value='Go Second' onclick='SubmitFirstPlayer(2)' style='text-align:center;'>";
+    } else {
+      $setupContent .= "<p>Waiting for other player to choose who goes first</p>";
+    }
+  } else if ($gameStatus > $MGS_ChooseFirstPlayer) {
+    $setupContent .= "<div id='submitForm' style='width:100%; text-align: center;'>";
+    $setupContent .= "<form action='./SubmitSideboard.php'>";
+    $setupContent .= "<input type='hidden' name='gameName' value='$gameName'>";
+    $setupContent .= "<input type='hidden' name='playerID' value='$playerID'>";
+    $setupContent .= "<input type='hidden' id='playerCharacter' name='playerCharacter' value=''>";
+    $setupContent .= "<input type='hidden' id='playerDeck' name='playerDeck' value=''>";
+    $setupContent .= "<input type='hidden' name='authKey' value='$authKey'>";
+    $setupContent .= "<input class='GameLobby_Button' type='submit' value='" . ($playerID == 1 ? "Start" : "Ready") . "'>";
+    $setupContent .= "</form>";
+    $setupContent .= "</div>";
   }
+  $data["setupContent"] = $setupContent;
 
-    echo ("</div>");
-
-  $isMobile = IsMobile();
   // Chat Log
-  echo ("<div class='chat-log container bg-black'>");
-  if($isMobile) echo ("<h3>Chat</h3><div id='gamelog'>");
-  else echo ("<h2>Chat</h2><div id='gamelog'>");
-  //if(!IsMobile()) echo("<BR>");
-  //echo ("<div id='gamelog' style='text-align:left; position:relative; text-shadow: 2px 0 0 #1a1a1a, 0 -2px 0 #1a1a1a, 0 2px 0 #1a1a1a, -2px 0 0 #1a1a1a; color: #EDEDED; background-color: rgba(20,20,20,0.8); margin-top:6px; height:63%; left:3%; width:94%; bottom:10%; font-weight:550; overflow-y: auto;'>");
-  EchoLog($gameName, $playerID);
-  echo ("</div>");
+  $data["logContent"] = JSONLog($gameName, $playerID);
 
-  echo ("<div id='playAudio' style='display:none;'>" . ($playerID == 1 && $gameStatus == $MGS_ChooseFirstPlayer ? 1 : 0) . "</div>");
+  // Player Joined Audio
+  $data["playerJoinAudio"] = $playerID == 1 && $gameStatus == $MGS_ChooseFirstPlayer ? true : false;
 
+  // Other player info
+  $theirInfo = "";
   $otherHero = "CardBack";
   $otherBase = "CardBack";
   $otherPlayer = $playerID == 1 ? 2 : 1;
@@ -142,39 +148,27 @@ if ($lastUpdate != 0 && $cacheVal < $lastUpdate) {
     $otherBase = $otherCharacter[0];
     fclose($handler);
   }
-
   $theirName = ($playerID == 1 ? $p2uid : $p1uid);
-  echo ("<div id='otherHero' style='display:none;'>");
   $contentCreator = ContentCreators::tryFrom(($playerID == 1 ? $p2ContentCreatorID : $p1ContentCreatorID));
   $nameColor = ($contentCreator != null ? $contentCreator->NameColor() : "");
   $theirDisplayName = "<span style='color:" . $nameColor . "'>" . ($theirName != "-" ? $theirName : "Player " . ($playerID == 1 ? 2 : 1)) . "</span>";
-  if($isMobile) echo ("<h3>$theirDisplayName</h3>");
-  else echo ("<h2>$theirDisplayName</h2>");
   $overlayURL = ($contentCreator != null ? $contentCreator->HeroOverlayURL($otherHero) : "");
-  echo (Card($otherHero, "CardImages", ($isMobile ? 100 : 250), 0, 1, 0, 0, 0, "", "", true));
-  echo (Card($otherBase, "CardImages", ($isMobile ? 100 : 250), 0, 1, 0, 0, 0, "", "", true));
   $channelLink = ($contentCreator != null ? $contentCreator->ChannelLink() : "");
-  if($channelLink != "") echo("<a href='" . $channelLink . "' target='_blank'>");
-  if($overlayURL != "") echo ("<img title='Portrait' style='position:absolute; z-index:1001; top: 87px; left: 18px; cursor:pointer; height:" . ($isMobile ? 100 : 250) . "; width:" . ($isMobile ? 100 : 250) . ";' src='" . $overlayURL . "' />");
-  if($channelLink != "") echo("</a>");
-  echo ("</div>");
 
-  $needToSideboard = $gameStatus >= $MGS_P2Sideboard && ($playerID == 1 ? $p1SideboardSubmitted != "1" : $p2SideboardSubmitted != "1");
-  echo ("<div id='submitDisplay' style='display:none;'>" . ($needToSideboard ? "block" : "none") . "</div>");
+  $theirInfo .= "<h3>$theirDisplayName</h3>";
+  $theirInfo .= Card($otherHero, "CardImages", ($isMobile ? 100 : 250), 0, 1, 0, 0, 0, "", "", true);
+  $theirInfo .= Card($otherBase, "CardImages", ($isMobile ? 100 : 250), 0, 1, 0, 0, 0, "", "", true);
+  if($channelLink != "") $theirInfo .= "<a href='" . $channelLink . "' target='_blank'>";
+  if($overlayURL != "") $theirInfo .= "<img title='Portrait' style='position:absolute; z-index:1001; top: 87px; left: 18px; cursor:pointer; height:" . ($isMobile ? 100 : 250) . "; width:" . ($isMobile ? 100 : 250) . ";' src='" . $overlayURL . "' />";
+  if($channelLink != "") $theirInfo .= "</a>";
+  $theirInfo .= "</div>";
+  $data["theirInfo"] = $theirInfo;
 
-  $icon = "ready.png";
-  if ($gameStatus == $MGS_ChooseFirstPlayer) $icon = $playerID == $firstPlayerChooser ? "ready.png" : "notReady.png";
-  else if ($playerID == 1 && $gameStatus < $MGS_ReadyToStart) $icon = "notReady.png";
-  else if ($playerID == 2 && $gameStatus >= $MGS_ReadyToStart) $icon = "notReady.png";
-  echo ("<div id='iconHolder' style='display:none;'>" . $icon . "</div>");
+  // $icon = "ready.png";
+  // if ($gameStatus == $MGS_ChooseFirstPlayer) $icon = $playerID == $firstPlayerChooser ? "ready.png" : "notReady.png";
+  // else if ($playerID == 1 && $gameStatus < $MGS_ReadyToStart) $icon = "notReady.png";
+  // else if ($playerID == 2 && $gameStatus >= $MGS_ReadyToStart) $icon = "notReady.png";
+  // echo ("<div id='iconHolder' style='display:none;'>" . $icon . "</div>");
 
-  echo ("<div id='chatbox'>");
-  //echo ("<div id='chatbox' style='position:relative; left:3%; width:97%; margin-top:4px;'>");
-  echo ("<input class='GameLobby_Input' style='display:inline;' type='text' id='chatText' name='chatText' value='' autocomplete='off' onkeypress='ChatKey(event)'>");
-  echo ("<button class='GameLobby_Button' style='display:inline; margin-left:3px; cursor:pointer;' onclick='SubmitChat()'>Chat</button>");
-  echo ("<input type='hidden' id='gameName' value='" . $gameName . "'>");
-  echo ("<input type='hidden' id='playerID' value='" . $playerID . "'>");
-  echo ("</div>");
-
-  echo ("</div>");
+  echo json_encode($data);
 }
