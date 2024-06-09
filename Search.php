@@ -109,7 +109,7 @@ function SearchInner(&$array, $player, $zone, $count, $type, $definedType, $maxC
         && ($minCost == -1 || CardCost($cardID) >= $minCost)
         && ($aspect == "" || AspectContains($cardID, $aspect, $player))
         && ($arena == "" || ArenaContains($cardID, $arena, $player))
-        && ($trait == -1 || TraitContains($cardID, $trait, $player))
+        && ($trait == -1 || TraitContains($cardID, $trait, $player, $i))
         && ($maxAttack == -1 || AttackValue($cardID) <= $maxAttack)
         && ($minAttack == -1 || AttackValue($cardID) >= $minAttack)
       ) {
@@ -367,6 +367,19 @@ function SearchCurrentTurnEffects($cardID, $player, $remove = false)
     }
   }
   return false;
+}
+
+function SearchLimitedCurrentTurnEffects($cardID, $player, $remove = false)
+{
+  global $currentTurnEffects;
+  for ($i = 0; $i < count($currentTurnEffects); $i += CurrentTurnEffectPieces()) {
+    if ($currentTurnEffects[$i] == $cardID && $currentTurnEffects[$i + 1] == $player) {
+      $uniqueID = $currentTurnEffects[$i + 2];
+      if ($remove) RemoveCurrentTurnEffect($i);
+      return $uniqueID;
+    }
+  }
+  return -1;
 }
 
 function SearchCurrentTurnEffectsForCycle($card1, $card2, $card3, $player)
@@ -987,36 +1000,11 @@ function SearchMultizone($player, $searches)
   return $rv;
 }
 
-function FrozenCount($player)
-{
-  $numFrozen = 0;
+function ControlsNamedCard($player, $name) {
   $char = &GetPlayerCharacter($player);
-  for ($i = 0; $i < count($char); $i += CharacterPieces())
-    if ($char[$i + 8] == "1" && $char[$i + 1] != "0")
-      ++$numFrozen;
-  $allies = &GetAllies($player);
-  for ($i = 0; $i < count($allies); $i += AllyPieces())
-    if ($allies[$i + 3] == "1")
-      ++$numFrozen;
-  $arsenal = &GetArsenal($player);
-  for ($i = 0; $i < count($arsenal); $i += ArsenalPieces())
-    if ($arsenal[$i + 4] == "1")
-      ++$numFrozen;
-  return $numFrozen;
-}
-
-function SearchSpellvoidIndices($player)
-{
-  $search = SearchArcaneReplacement($player, "MYCHAR");
-  $charIndices = SearchMultizoneFormat($search, "MYCHAR");
-  $search = SearchArcaneReplacement($player, "MYITEMS");
-  $itemsIndices = SearchMultizoneFormat($search, "MYITEMS");
-  $indices = CombineSearches($charIndices, $itemsIndices);
-  $search = SearchArcaneReplacement($player, "MYAURAS");
-  $auraIndices = SearchMultizoneFormat($search, "MYAURAS");
-  $indices = CombineSearches($indices, $auraIndices);
-
-  return $indices;
+  if(count($char) > CharacterPieces() && CardTitle($char[CharacterPieces()]) == $name) return true;
+  if(SearchCount(SearchAlliesForTitle($player, $name)) > 0) return true;
+  return false;
 }
 
 function ReservableIndices($player)

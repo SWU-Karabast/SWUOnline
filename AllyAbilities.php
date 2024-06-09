@@ -55,6 +55,7 @@ function AllyHasStaticHealthModifier($cardID)
     case "4339330745"://Wedge Antilles
     case "9097316363"://Emperor Palpatine
     case "6c5b96c7ef"://Emperor Palpatine
+    case "4511413808"://Follower of the Way
       return true;
     default: return false;
   }
@@ -85,6 +86,12 @@ function AllyStaticHealthModifier($cardID, $index, $player, $myCardID, $myIndex)
           }
         }
         return $isEmperorPalpatineLeader ? 0 : 1;
+      }
+      break;
+    case "4511413808"://Follower of the Way
+      if($index == $myIndex) {
+        $ally = new Ally("MYALLY-" . $index, $player);
+        if($ally->NumUpgrades() > 0) return 1;
       }
       break;
     default: break;
@@ -219,6 +226,7 @@ function AllyPlayableExhausted($cardID) {
     case "4300219753"://Fett's Firespray
     case "2471223947"://Frontline Shuttle
     case "1885628519"://Crosshair
+    case "040a3e81f3"://Lando Leader Unit
       return true;
     default: return false;
   }
@@ -232,6 +240,8 @@ function AllyDoesAbilityExhaust($cardID, $abilityIndex) {
       return $abilityIndex == 1;
     case "1885628519"://Crosshair
       return $abilityIndex == 1 || $abilityIndex == 2;
+    case "040a3e81f3"://Lando Leader Unit
+      return $abilityIndex == 1;
     default: return true;
   }
 }
@@ -650,6 +660,20 @@ function AllyAttackAbilities($attackID)
       default: break;
     }
   }
+  $defAllies = &GetAllies($defPlayer);
+  for($i=0; $i<count($defAllies); $i+=AllyPieces()) {
+    switch($defAllies[$i]) {
+      case "7674544152"://Kragan Gorr
+        if(GetAttackTarget() == "THEIRCHAR-0") {
+          AddDecisionQueue("MULTIZONEINDICES", $defPlayer, "MYALLY");
+          AddDecisionQueue("SETDQCONTEXT", $defPlayer, "Choose a unit to give a shield");
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $defPlayer, "<-", 1);
+          AddDecisionQueue("MZOP", $defPlayer, "ADDSHIELD", 1);
+        }
+        break;
+      default: break;
+    }
+  }
 }
 
 function AllyAttackedAbility($attackTarget, $index) {
@@ -732,6 +756,15 @@ function AllyPlayCardAbility($cardID, $player="", $reportMode=false, $from="-")
           DealDamageAsync($otherPlayer, 1, "DAMAGE", "0981852103");
         }
         break;
+      case "724979d608"://Cad Bane
+        if(TraitContains($cardID, "Underworld", $player)) {
+          $otherPlayer = ($player == 1 ? 2 : 1);
+          AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY");
+          AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a unit to deal 2 damage to", 1);
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $otherPlayer, "<-", 1);
+          AddDecisionQueue("MZOP", $otherPlayer, "DEALDAMAGE,2", 1);
+        }
+        break;
       default: break;
     }
   }
@@ -747,6 +780,14 @@ function AllyPlayCardAbility($cardID, $player="", $reportMode=false, $from="-")
           DealDamageAsync($player, 2, "DAMAGE", "5555846790");
         }
         break;
+      case "4935319539"://Krayt Dragon
+        if($reportMode) return true;
+        $damage = CardCost($cardID);
+        AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "THEIRALLY");
+        AddDecisionQueue("PREPENDLASTRESULT", $otherPlayer, "THEIRCHAR-0,");
+        AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a card to deal " . $damage . " damage to");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $otherPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $otherPlayer, "DEALDAMAGE," . $damage, 1);
       default: break;
     }
   }
@@ -1079,6 +1120,50 @@ function SpecificAllyAttackAbilities($attackID)
     case "9115773123"://Coruscant Dissident
       ReadyResource($mainPlayer);
       break;
+    case "e091d2a983"://Rey
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:maxAttack=2");
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to give an experience");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "ADDEXPERIENCE", 1);
+      break;
+    case "5632569775"://Lom Pyke
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to give a shield");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "ADDSHIELD", 1);
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY", 1);
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to give a shield", 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "ADDSHIELD", 1);
+      break;
+    case "5818136044"://Xanadu Blood
+      XanaduBlood($mainPlayer, $attackerAlly->Index());
+      break;
+    case "4595532978"://Ketsu Onyo
+      if(GetAttackTarget() == "THEIRCHAR-0") {
+        DefeatUpgrade($mainPlayer);
+      }
+      break;
+    case "5966087637"://Poe Dameron
+      PummelHit($mainPlayer, may:true, context:"Choose a card to discard to deal damage (or pass)");
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY", 1);
+      AddDecisionQueue("PREPENDLASTRESULT", $mainPlayer, "THEIRCHAR-0,", 1);
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to deal 2 damage to", 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,2", 1);
+      PummelHit($mainPlayer, may:true, context:"Choose a card to discard to defeat an upgrade (or pass)");
+      DefeatUpgrade($mainPlayer);
+      PummelHit($mainPlayer, may:true, context:"Choose a card to discard to make opponent discard (or pass)");
+      PummelHit($defPlayer, passable:true);
+      break;
+    case "8862896760"://Maul
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:trait=Underworld");
+      AddDecisionQueue("MZFILTER", $mainPlayer, "index=MYALLY-" . $attackerAlly->Index());
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to take the damage for Maul", 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "8862896760,HAND", 1);
+      break;
     default: break;
   }
 }
@@ -1170,26 +1255,6 @@ function AllyBeginEndTurnEffects()
   }
 }
 
-function AllyLevelModifiers($player)
-{
-  $allies = &GetAllies($player);
-  $levelModifier = 0;
-  for($i = count($allies) - AllyPieces(); $i >= 0; $i -= AllyPieces()) {
-    $remove = false;
-    switch($allies[$i]) {
-      case "qxbdXU7H4Z": if(SearchCount(SearchAllies($player, "", "BEAST")) + SearchCount(SearchAllies($player, "", "ANIMAL")) > 0) ++$levelModifier; break;
-      case "yDARN8eV6B": if(IsClassBonusActive($player, "MAGE")) ++$levelModifier; break;//Tome of Knowledge
-      case "izGEjxBPo9": if(SearchCount(SearchAllies($player, "", "BEAST")) + SearchCount(SearchAllies($player, "", "ANIMAL")) > 0) ++$levelModifier; break;
-      case "q2okpDFJw5": if(SearchCount(SearchAllies($player, "", "BEAST")) + SearchCount(SearchAllies($player, "", "ANIMAL")) > 0) ++$levelModifier; break; //Energetic Beastbonder
-      case "pnDhApDNvR": ++$levelModifier; break;//Magus Disciple
-      case "1i6ierdDjq": if(SearchCount(SearchAllies($player, "", "BEAST")) + SearchCount(SearchAllies($player, "", "ANIMAL")) > 0) ++$levelModifier; break;//Flamelash Subduer
-      default: break;
-    }
-    if($remove) DestroyAlly($player, $i);
-  }
-  return $levelModifier;
-}
-
 function AllyEndTurnAbilities($player)
 {
   $allies = &GetAllies($player);
@@ -1223,4 +1288,16 @@ function GiveAlliesHealthBonus($player, $amount)
   {
     $allies[$i+2] += $amount;
   }
+}
+
+function XanaduBlood($player, $index=-1) {
+  AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:trait=Underworld");
+  if($index > -1) AddDecisionQueue("MZFILTER", $player, "index=MYALLY-" . $index);
+  AddDecisionQueue("MZFILTER", $player, "leader=1");
+  AddDecisionQueue("SETDQCONTEXT", $player, "Choose an underworld unit to bounce");
+  AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+  AddDecisionQueue("MZOP", $player, "BOUNCE", 1);
+  AddDecisionQueue("SETDQCONTEXT", $player, "Choose what you want to exhaust", 1);
+  AddDecisionQueue("BUTTONINPUT", $player, "Unit,Resource", 1);
+  AddDecisionQueue("SPECIFICCARD", $player, "XANADUBLOOD", 1);
 }

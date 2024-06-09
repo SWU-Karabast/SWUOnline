@@ -390,6 +390,33 @@ function SpecificCardLogic($player, $card, $lastResult)
         PrependDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
       }
       return $lastResult;
+    case "L337":
+      $target = $lastResult;
+      if($target == "PASS") {
+        $allies = &GetAllies($player);
+        $ally = new Ally("MYALLY-" . count($allies) - AllyPieces(), $player);
+        $ally->Attach("8752877738");//Shield Token
+      } else {
+        $owner = MZPlayerID($player, $target);
+        $ally = new Ally($target, $owner);
+        RescueUnit($player, $target);
+      }
+      return $lastResult;
+    case "XANADUBLOOD":
+      if($lastResult == "Resource") {
+        WriteLog(CardLink("5818136044", "5818136044") . " exhausts a resource");
+        ExhaustResource($player == 1 ? 2 : 1, 1);
+      } else {
+        WriteLog(CardLink("5818136044", "5818136044") . " exhausts a unit");
+        PrependDecisionQueue("MZOP", $player, "REST", 1);
+        PrependDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
+        PrependDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to exhaust");
+        PrependDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY");
+      }
+      return $lastResult;
+    case "THEMARAUDER":
+      
+      return $lastResult;
     default: return "";
   }
 }

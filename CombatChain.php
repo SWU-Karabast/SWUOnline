@@ -92,6 +92,10 @@ function AttackModifier($cardID, $player, $index)
         if($ally->HasBounty()) $modifier += 3;
       }
       break;
+    case "4511413808"://Follower of the Way
+      $ally = new Ally("MYALLY-" . $index, $player);
+      if($ally->NumUpgrades() > 0) $modifier += 1;
+      break;
     default: break;
   }
   return $modifier;

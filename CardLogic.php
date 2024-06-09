@@ -3,22 +3,25 @@
 include "CardDictionary.php";
 include "CoreLogic.php";
 
-function PummelHit($player = -1, $passable = false, $fromDQ = false)
+function PummelHit($player = -1, $passable = false, $fromDQ = false, $context="", $may=false)
 {
   global $defPlayer;
   if($player == -1) $player = $defPlayer;
+  if($context == "") $context = "Choose a card to discard";
   if($fromDQ)
   {
     PrependDecisionQueue("ADDDISCARD", $player, "HAND", 1);
     PrependDecisionQueue("MULTIREMOVEHAND", $player, "-", 1);
-    PrependDecisionQueue("CHOOSEHAND", $player, "<-", 1);
-    PrependDecisionQueue("SETDQCONTEXT", $player, "Choose a card to discard", 1);
+    if($may) PrependDecisionQueue("MAYCHOOSEHAND", $player, "<-", 1);
+    else PrependDecisionQueue("CHOOSEHAND", $player, "<-", 1);
+    PrependDecisionQueue("SETDQCONTEXT", $player, $context, 1);
     PrependDecisionQueue("FINDINDICES", $player, "HAND", ($passable ? 1 : 0));
   }
   else {
     AddDecisionQueue("FINDINDICES", $player, "HAND", ($passable ? 1 : 0));
-    AddDecisionQueue("SETDQCONTEXT", $player, "Choose a card to discard", 1);
-    AddDecisionQueue("CHOOSEHAND", $player, "<-", 1);
+    AddDecisionQueue("SETDQCONTEXT", $player, $context, 1);
+    if($may) AddDecisionQueue("MAYCHOOSEHAND", $player, "<-", 1);
+    else AddDecisionQueue("CHOOSEHAND", $player, "<-", 1);
     AddDecisionQueue("MULTIREMOVEHAND", $player, "-", 1);
     AddDecisionQueue("ADDDISCARD", $player, "HAND", 1);
   }
@@ -33,7 +36,16 @@ function DefeatUpgrade($player) {
   AddDecisionQueue("SETDQCONTEXT", $player, "Choose an upgrade to defeat");
   AddDecisionQueue("CHOOSECARD", $player, "<-", 1);
   AddDecisionQueue("OP", $player, "DEFEATUPGRADE", 1);
+}
 
+function RescueUnit($player, $target="")
+{
+  AddDecisionQueue("PASSPARAMETER", $player, $target);
+  AddDecisionQueue("SETDQVAR", $player, 0);
+  AddDecisionQueue("MZOP", $player, "GETCAPTIVES");
+  AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to rescue");
+  AddDecisionQueue("CHOOSECARD", $player, "<-", 1);
+  AddDecisionQueue("OP", $player, "RESCUECAPTIVE", 1);
 }
 
 function HandToTopDeck($player)

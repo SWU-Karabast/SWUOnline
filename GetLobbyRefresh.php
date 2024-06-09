@@ -99,23 +99,25 @@ if ($lastUpdate != 0 && $cacheVal < $lastUpdate) {
   if ($playerID == 1 && $gameStatus < $MGS_Player2Joined) {
     if($visibility == "private") {
       if($p1id == "") {
-        $setupContent .= "<p>&#10071;This is a private lobby. You need to log in for matchmaking.&#10071;</p>";
+        $setupContent .= "<p>&#10071;This is a private lobby. You need to log in for matchmaking.</p>";
       }
       else {
-        $setupContent .= "<p>&#10071;This is a private lobby. You will need to invite an opponent.&#10071;</p>";
+        $setupContent .= "<p>&#10071;This is a private lobby. You will need to invite an opponent.</p>";
       }
     }
-    $setupContent .= "<p>Waiting for another player to join</p>";
-    $setupContent .= "<div style='margin-top: 20px; text-align: left;'><h3>Invite Link</h3></div>";
+
+    $setupContent .= "<p>Waiting for another player to join.</p>";
+    $setupContent .= "<div class='invite-link-wrapper'>";
     $setupContent .= "<input class='GameLobby_Input invite-link' onclick='copyText()' type='text' id='gameLink' value='" . $redirectPath . "/JoinGame.php?gameName=$gameName&playerID=2'>";
-    $setupContent .= "<div class='invite-link-button'><button class='GameLobby_Button' onclick='copyText()'>Copy Invite Link</button></div>";
+    $setupContent .= "<button class='GameLobby_Button' onclick='copyText()'>Copy Invite Link</button>";
+    $setupContent .= "</div>";
   } else if ($gameStatus == $MGS_ChooseFirstPlayer) {
     if ($playerID == $firstPlayerChooser) {
-      $setupContent .= "<p>You won the initiative choice</p>";
-      $setupContent .= "<input class='GameLobby_Button' type='button' name='action' value='Go First' onclick='SubmitFirstPlayer(1)' style='margin-left:15px; margin-right:20px; text-align:center;'>";
+      $setupContent .= "<p>You won the initiative choice.</p>";
+      $setupContent .= "<input class='GameLobby_Button' type='button' name='action' value='Go First' onclick='SubmitFirstPlayer(1)' style='margin-right:20px; text-align:center;'>";
       $setupContent .= "<input class='GameLobby_Button' type='button' name='action' value='Go Second' onclick='SubmitFirstPlayer(2)' style='text-align:center;'>";
     } else {
-      $setupContent .= "<p>Waiting for other player to choose who goes first</p>";
+      $setupContent .= "<p>Waiting for other player to choose who goes first.</p>";
     }
   } else if ($gameStatus > $MGS_ChooseFirstPlayer) {
     $setupContent .= "<div id='submitForm' style='width:100%; text-align: center;'>";
