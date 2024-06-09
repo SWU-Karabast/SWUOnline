@@ -32,7 +32,7 @@ else if (isset($_SESSION["useruid"]))
 $canSeeQueue = isset($_SESSION["useruid"]);
 
 echo ("<div class='SpectatorContainer'>");
-echo ("<h1 style='width:100%; text-align:center; color:rgb(240, 240, 240);'>Public Games</h1>");
+echo ("<h2>Public Games</h2>");
 $gameInProgressCount = 0;
 if ($handle = opendir($path)) {
   while (false !== ($folder = readdir($handle))) {
@@ -73,17 +73,6 @@ if ($handle = opendir($path)) {
               max-width: inherit;
             }
 
-            .last-update-label {
-              font-weight: 500;
-            }
-
-            .versus {
-              font-weight: 600;
-            }
-
-            .spectate-button {
-              font-size: 16px;
-            }
             </style>
             
             <form class='spectate-form' action='https://karabast.net/SWUOnline/NextTurn4.php?gameName=$gameToken&playerID=3'>
@@ -148,14 +137,14 @@ if ($handle = opendir($path)) {
         $formatName = "Clash";
 
       $link = "<form style='text-align:center;' action='" . $redirectPath . "/JoinGame.php'>";
-      $link .= "<center><table style='left:40%;'><tr><td style='vertical-align:middle;'>";
+      $link .= "<table class='game-item' cellspacing='0'><tr>";
       if ($formatName != "")
-        $link .= $formatName . "&nbsp;</td><td>";
-      $link .= "</td><td style='vertical-align:middle;'>";
+        $link .= $formatName . "&nbsp;<td>";
+      $link .= "<td class='game-name'>";
       $description = ($gameDescription == "" ? "Game #" . $gameName : $gameDescription);
-      $link .= "<span style='font-weight:500; pointer:default;'> &nbsp;" . $description . " </span>";
-      $link .= "<input class='ServerChecker_Button' type='submit' style='font-size:16px;' id='joinGame' value='Join Game' />";
-      $link .= "</td></tr></table></center>";
+      $link .= "<p>". $description . "</p></td>";
+      $link .= "<td><input class='ServerChecker_Button' type='submit' id='joinGame' value='Join Game' />";
+      $link .= "</td></tr></table>";
       $link .= "<input type='hidden' name='gameName' value='$gameToken' />";
       $link .= "<input type='hidden' name='playerID' value='2' />";
       $link .= "</form>";
@@ -189,21 +178,24 @@ if ($handle = opendir($path)) {
   closedir($handle);
 }
 if ($canSeeQueue) {
-  echo ("<h3 style='width:100%; text-align:center; color:RGB(240,240,240);'>Premier</h3>");
+  echo ("<h3>Premier</h3>");
+  echo ("<hr/>");
   echo ($ccLinks);
-  echo ("<h4 style='text-align:center;'>______________________</h4>");
-  echo ("<h3 style='width:100%; text-align:center; color:RGB(240,240,240);'>Request-Undo Premier</h3>");
+  echo ("<h3>Request-Undo Premier</h3>");
+  echo ("<hr/>");
   echo ($compCCLinks);
-  echo ("<h4 style='text-align:center;'>______________________</h4>");
-  echo ("<h3 style='width:100%; text-align:center; color:RGB(240,240,240);'>Other Formats</h3>");
+  echo ("<h3>Other Formats</h3>");
+  echo ("<hr/>");
   echo ($otherFormatsLinks);
 }
 if (!$canSeeQueue) {
-  echo ("<BR>");
-  echo ("<div><b>&#10071;Log in to use matchmaking and see open matches</b></div><br>");
+  echo ("<p class='login-notice'>&#10071;<a href='./LoginPage.php'>Log In</a> to use matchmaking and see open matches</p>");
 }
-echo ("<h4 style='text-align:center;'>______________________</h4>");
-echo ("<h3 style='width:100%; text-align:center; color:RGB(240,240,240);'>Games In Progress ($gameInProgressCount)</h3>");
+echo ("<div class='progress-title-wrapper'>");
+echo ("<h3 class='progress-header'>Games In Progress</h3>");
+echo ("<h3 class='progress-count'>$gameInProgressCount</h3>");
+echo ("</div>");
+echo ("<hr/>");
 //if (!IsMobile()) {
 echo ($spectateLinks);
 //}

@@ -26,17 +26,23 @@ include_once "./APIKeys/APIKeys.php";
 
 ?>
 
+<?php
+include_once 'Header.php';
+?>
+
 <script src="./jsInclude.js"></script>
 <div id="cardDetail" style="z-index:100000; display:none; position:fixed;"></div>
 
-<div class='ContentWindow' style='left:20px; width:35%; top:60px; height:90%;'>
+<div class="core-wrapper">
+
+<div class='fav-decks container bg-black'>
 <h2>Welcome <?php echo $_SESSION['useruid'] ?>!</h2>
 
 <?php
 
   DisplayPatreon();
 
-  echo ("<h1>Favorite Decks</h1>");
+  echo ("<h2>Favorite Decks</h2>");
   $favoriteDecks = LoadFavoriteDecks($_SESSION["userid"]);
   if (count($favoriteDecks) > 0) {
     echo ("<table>");
@@ -53,17 +59,19 @@ include_once "./APIKeys/APIKeys.php";
 ?>
   <h2>Block List</h2>
     <form class="form-resetpwd" action="includes/BlockUser.php" method="post">
-      <input type="text" name="userToBlock" placeholder="User to block">
+      <input class="block-input" type="text" name="userToBlock" placeholder="User to block">
       <button type="submit" name="block-user-submit">Block</button>
     </form>
 </div>
 
-<div class='ContentWindow' style='left:60%; right:20px; top:60px; height:90%; overflow-y: scroll;'>
+<div class='stats container bg-black'>
   <?php
-  echo ("<h1>Your Record</h1>");
+  echo ("<h2>Your Record</h2>");
   $forIndividual = true;
   include_once "zzGameStats.php";
   ?>
+</div>
+
 </div>
 
 <?php
@@ -84,11 +92,9 @@ function DisplayPatreon()
   $scope_parameters = '&scope=identity%20identity.memberships';
   $href .= $scope_parameters;
   if (!isset($_SESSION["patreonAuthenticated"])) {
-    echo ("<BR>");
-    echo '<center><a class="containerPatreon" href="' . $href . '">';
+    echo '<a class="containerPatreon" href="' . $href . '">';
     echo ("<img class='imgPatreon' src='./Assets/patreon-php-master/assets/images/login_with_patreon.png' alt='Login via Patreon'>");
-    echo '</a></center>';
-    echo ("<BR>");
+    echo '</a>';
   } else {
     include './zzPatreonDebug.php';
   }

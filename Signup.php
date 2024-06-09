@@ -2,26 +2,34 @@
 include_once 'MenuBar.php';
 ?>
 
+<?php
+include_once 'Header.php';
+?>
+
+<div class="core-wrapper">
+<div class="flex-padder"></div>
+
+<div class="flex-wrapper">
+<div class='signup-wrapper container bg-black'>
+
 <section class="signup-form">
-  <h2>SIGN UP</h2>
+  <h2>Sign Up</h2>
   <div class="signup-form-form">
     <form action="includes/signup.inc.php" method="post">
-      <label for="uid">Username
+      <label for="uid">Username</label>
         <input type="text" name="uid">
-      </label>
-      <label for="email">Email
+      <label for="email">Email</label>
         <input type="text" name="email" placeholder="name@example.com">
-      </label>
-      <label for="pwd">Password
-        <input type="password" name="pwd" placeholder="Password...">
-      </label>
-      <label for="pwdrepeat">Repeat password...
-        <input type="password" name="pwdrepeat" placeholder="Repeat password...">
-      </label>
-      <button type="submit" name="submit">SIGN UP</button>
+      <label for="pwd">Password</label>
+        <input type="password" name="pwd">
+      <label for="pwdrepeat">Repeat Password</label>
+        <input type="password" name="pwdrepeat">
+      <div style="text-align:center;">
+        <button type="submit" name="submit">Sign Up</button>
+      </div>
     </form>
   </div>
-  <br>
+
   <?php
   // Error messages
   if (isset($_GET["error"])) {
@@ -43,6 +51,12 @@ include_once 'MenuBar.php';
   }
   ?>
 </section>
+
+</div>
+</div>
+
+<div class="flex-padder"></div>
+</div>
 
 <?php
 include_once 'Disclaimer.php';
