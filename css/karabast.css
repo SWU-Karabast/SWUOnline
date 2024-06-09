@@ -100,7 +100,7 @@ button, input, select, textarea {
   font-size: 16px;
 }
 
-button, .GameLobby_Button, .create-game-button, .ServerChecker_Button, .JoinGame_Button {
+button, .GameLobby_Button, .create-game-button, .ServerChecker_Button, .JoinGame_Button, .spectate-button {
   display: inline-block;
   text-align: center;
   white-space: nowrap;
@@ -112,7 +112,7 @@ button, .GameLobby_Button, .create-game-button, .ServerChecker_Button, .JoinGame
   box-shadow: inset 0px 0px 0px 1px #454545;
 }
 
-button:hover, .GameLobby_Button:hover, .create-game-button:hover, .ServerChecker_Button:hover, .JoinGame_Button:hover {
+button:hover, .GameLobby_Button:hover, .create-game-button:hover, .ServerChecker_Button:hover, .JoinGame_Button:hover, .spectate-button {
   transform: scale(1.1);
 }
 
@@ -291,11 +291,6 @@ select {
   margin: 0;
 }
 
-.game-browser .spectate-button {
-  height: 38px;
-  margin-top: 5px;
-}
-
 .game-item {
   margin-bottom: 20px;
 }
@@ -312,6 +307,17 @@ select {
 
 .progress-count {
   font-weight: 400;
+}
+
+.spectate-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.game-browser .spectate-button {
+  height: 38px;
+  margin-top: 5px;
 }
 
 /* Create Game */

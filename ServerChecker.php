@@ -57,10 +57,6 @@ if ($handle = opendir($path)) {
         if ($p2Hero != "" && $visibility == "1") {
           $spectateLinks .= <<<HTML
             <style>
-            .spectate-container {
-              display: flex;
-              justify-content: space-between;
-            }
 
             .hero-container {
               display: flex;
