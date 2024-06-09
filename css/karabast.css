@@ -320,6 +320,11 @@ select {
   margin-top: 5px;
 }
 
+.format-title {
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
 /* Create Game */
 
 .create-game-wrapper { 

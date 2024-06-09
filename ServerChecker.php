@@ -134,16 +134,18 @@ if ($handle = opendir($path)) {
 
       $link = "<form style='text-align:center;' action='" . $redirectPath . "/JoinGame.php'>";
       $link .= "<table class='game-item' cellspacing='0'><tr>";
-      if ($formatName != "")
-        $link .= $formatName . "&nbsp;<td>";
       $link .= "<td class='game-name'>";
+      if ($formatName != "") {
+          $link .= "<p class='format-title'>" . $formatName . "</p>";
+      }
       $description = ($gameDescription == "" ? "Game #" . $gameName : $gameDescription);
-      $link .= "<p>". $description . "</p></td>";
-      $link .= "<td><input class='ServerChecker_Button' type='submit' id='joinGame' value='Join Game' />";
-      $link .= "</td></tr></table>";
+      $link .= "<p>" . $description . "</p></td>";
+      $link .= "<td><input class='ServerChecker_Button' type='submit' id='joinGame' value='Join Game' /></td></tr>";
+      $link .= "</table>";
       $link .= "<input type='hidden' name='gameName' value='$gameToken' />";
       $link .= "<input type='hidden' name='playerID' value='2' />";
       $link .= "</form>";
+
       if (!$isShadowBanned) {
         switch ($format) {
           case "blitz":
