@@ -119,7 +119,7 @@ if ($lastUpdate != 0 && $cacheVal < $lastUpdate) {
     } else {
       $setupContent .= "<p>Waiting for other player to choose who goes first.</p>";
     }
-  } else if ($gameStatus > $MGS_ChooseFirstPlayer) {
+  } else if ($gameStatus > $MGS_ChooseFirstPlayer && ($playerID == 2 || $p1SideboardSubmitted != "1") && ($playerID == 1 || $p2SideboardSubmitted != "1")) {
     $setupContent .= "<div id='submitForm' style='width:100%; text-align: center;'>";
     $setupContent .= "<form action='./SubmitSideboard.php'>";
     $setupContent .= "<input type='hidden' name='gameName' value='$gameName'>";
