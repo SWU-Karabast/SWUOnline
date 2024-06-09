@@ -3958,6 +3958,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "THEMARAUDER", 1);
       break;
+    case "7642980906"://Stolen Landspeeder
+      if($from == "HAND") {
+        $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+        AddDecisionQueue("PASSPARAMETER", $otherPlayer, "THEIRALLY-" . $playAlly->Index(), 1);
+        AddDecisionQueue("MZOP", $otherPlayer, "TAKECONTROL", 1);
+      }
+      break;
     default: break;
   }
 }

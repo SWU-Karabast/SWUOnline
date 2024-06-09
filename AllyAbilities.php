@@ -123,6 +123,17 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
   $allies = &GetAllies($player);
   $cardID = $allies[$index];
   if(!$skipDestroy) {
+    if($cardID == "7642980906") {//Stolen Landspeeder
+      $ally = new Ally("MYALLY-" . $index, $player);
+      if($player != $ally->Owner()) {
+        $ally->Attach("2007868442");//Experience token
+        $ally->Heal(999);
+        $otherPlayer = $player == 1 ? 2 : 1;
+        AddDecisionQueue("PASSPARAMETER", $otherPlayer, "THEIRALLY-" . $ally->Index(), 1);
+        AddDecisionQueue("MZOP", $otherPlayer, "TAKECONTROL", 1);
+        return $cardID;
+      }
+    }
     AllyDestroyedAbility($player, $index, $fromCombat);
     CollectBounties($player, $index);
     IncrementClassState($player, $CS_NumAlliesDestroyed);
@@ -497,6 +508,10 @@ function CollectBounty($player, $index, $cardID, $reportMode=false, $bountyUnitO
         if($reportMode) break;
         DealDamageAsync($player, 5, "DAMAGE", "0252207505");
       }
+      break;
+    case "7642980906"://Stolen Landspeeder
+      ++$numBounties;
+      if($reportMode) break;
       break;
     default: break;
   }
