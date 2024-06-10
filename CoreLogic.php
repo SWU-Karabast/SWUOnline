@@ -4003,6 +4003,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL", 1);
       break;
+    case "0598830553"://Dryden Vos
+      PlayCaptive($currentPlayer, $target);
+      break;
     default: break;
   }
 }
@@ -4225,6 +4228,7 @@ function PlayRequiresTarget($cardID)
     case "3765912000": return 7;//Take Captive
     case "5778949819": return 7;//Relentless Pursuit
     case "1973545191": return 6;//Unexpected Escape
+    case "0598830553": return 6;//Dryden Vos
     default: return -1;
   }
 }

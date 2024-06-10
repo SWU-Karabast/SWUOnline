@@ -38,6 +38,16 @@ function DefeatUpgrade($player) {
   AddDecisionQueue("OP", $player, "DEFEATUPGRADE", 1);
 }
 
+function PlayCaptive($player, $target="")
+{
+  AddDecisionQueue("PASSPARAMETER", $player, $target);
+  AddDecisionQueue("SETDQVAR", $player, 0);
+  AddDecisionQueue("MZOP", $player, "GETCAPTIVES");
+  AddDecisionQueue("SETDQCONTEXT", $player, "Choose a captured unit to play");
+  AddDecisionQueue("CHOOSECARD", $player, "<-", 1);
+  AddDecisionQueue("OP", $player, "PLAYCAPTIVE", 1);
+}
+
 function RescueUnit($player, $target="")
 {
   AddDecisionQueue("PASSPARAMETER", $player, $target);

@@ -358,7 +358,7 @@ class Ally {
     return false;
   }
   
-  function RescueCaptive($captiveID) {
+  function RescueCaptive($captiveID, $newController=-1) {
     if($this->index == -1) return;
     $subcards = $this->GetSubcards();
     for($i=0; $i<count($subcards); ++$i) {
@@ -367,7 +367,8 @@ class Ally {
         $subcards = array_values($subcards);
         $this->allies[$this->index + 4] = count($subcards) > 0 ? implode(",", $subcards) : "-";
         $otherPlayer = $this->PlayerID() == 1 ? 2 : 1;
-        PlayAlly($captiveID, $otherPlayer, from:"CAPTIVE");
+        if($newController == -1) $newController = $otherPlayer;
+        PlayAlly($captiveID, $newController, from:"CAPTIVE");
         return;
       } 
     }
