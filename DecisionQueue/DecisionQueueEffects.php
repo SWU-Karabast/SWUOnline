@@ -285,8 +285,8 @@ function SpecificCardLogic($player, $card, $lastResult)
       break;
     case "RESTOCK":
       $arr = [];
-      for($i = count($lastResult) - DiscardPieces(); $i >= 0; $i -= DiscardPieces()) {
-        array_push($arr, RemoveGraveyard($player, $lastResult[$i]));
+      for($i = count($lastResult); $i >= 0; --$i) {
+        if($lastResult[$i] != "") array_push($arr, RemoveGraveyard($player, $lastResult[$i]));
       }
       RevealCards(implode(",", $arr), $player);
       if(count($arr) > 0) {
@@ -415,7 +415,22 @@ function SpecificCardLogic($player, $card, $lastResult)
       }
       return $lastResult;
     case "THEMARAUDER":
-      
+      $cardID = GetMZCard($player, $lastResult);
+      if(UnitCardSharesName($cardID, $player))
+      {
+        $mzArr = explode(",", $lastResult);
+        RemoveDiscard($player, $mzArr[1]);
+        AddResources($cardID, $player, "GY", "DOWN", isExhausted:1);
+      }
+      return $lastResult;
+    case "ROSETICO":
+      $ally = new Ally($lastResult, $player);
+      if($ally->HasUpgrade("8752877738"))//Shield token
+      {
+        $ally->DefeatUpgrade("8752877738");//Shield token
+        $ally->Attach("2007868442");//Experience token
+        $ally->Attach("2007868442");//Experience token
+      }
       return $lastResult;
     default: return "";
   }

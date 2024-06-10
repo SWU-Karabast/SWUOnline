@@ -749,11 +749,11 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   if (($turn[0] == "CHOOSEDISCARD" || $turn[0] == "MAYCHOOSEDISCARD" || $turn[0] == "CHOOSEDISCARDCANCEL") && $turn[1] == $playerID) {
     $caption = "Choose a card from your discard";
     if (GetDQHelpText() != "-") $caption = implode(" ", explode("_", GetDQHelpText()));
-    ChoosePopup($myDiscard, $turn[2], 16, $caption);
+    ChoosePopup($myDiscard, $turn[2], 16, $caption, zoneSize:DiscardPieces());
   }
 
   if (($turn[0] == "MAYCHOOSETHEIRDISCARD") && $turn[1] == $playerID) {
-    ChoosePopup($theirDiscard, $turn[2], 16, "Choose a card from your opponent's graveyard");
+    ChoosePopup($theirDiscard, $turn[2], 16, "Choose a card from your opponent's graveyard", zoneSize:DiscardPieces());
   }
 
   if (($turn[0] == "CHOOSECOMBATCHAIN" || $turn[0] == "MAYCHOOSECOMBATCHAIN") && $turn[1] == $playerID) {
@@ -842,7 +842,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   //Display Their Discard
   if (count($theirDiscard) > 0) {
     echo ("<div title='Click to view the cards in your opponent's Graveyard.' style='cursor:pointer; position:fixed; right:257px; top:10px;' onclick='ShowPopup(\"theirDiscardPopup\");'>");
-    echo (Card($theirDiscard[count($theirDiscard) - 1], "concat", $cardSizeAura, 0, 0, 0, 0, count($theirDiscard), controller: $otherPlayer));
+    echo (Card($theirDiscard[count($theirDiscard) - DiscardPieces()], "concat", $cardSizeAura, 0, 0, 0, 0, count($theirDiscard)/DiscardPieces(), controller: $otherPlayer));
   } else {
     //Empty Discard div
     echo ("<div style='position:fixed; right:257px; top:10px; border-radius:5%; padding:" . $cardSizeAura / 2 . "px; background-color: rgba(0, 0, 0, 0.4);'>");
@@ -1197,7 +1197,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   //Display My Discard
   if (count($myDiscard) > 0) {
     echo ("<div title='Click to view the cards in your Graveyard.' style='cursor:pointer; position:fixed; right:257px; bottom:4px;' onclick='ShowPopup(\"myDiscardPopup\");'>");
-    echo (Card($myDiscard[count($myDiscard) - 1], "concat", $cardSizeAura, 0, 0, 0, 0, count($myDiscard), controller: $playerID));
+    echo (Card($myDiscard[count($myDiscard) - DiscardPieces()], "concat", $cardSizeAura, 0, 0, 0, 0, count($myDiscard)/DiscardPieces(), controller: $playerID));
   } else {
     //Empty Discard div
     echo ("<div style='position:fixed; right:257px; bottom:10px; border-radius:5%; padding:" . $cardSizeAura / 2 . "px; background-color: rgba(0, 0, 0, 0.4);'>");

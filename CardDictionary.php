@@ -404,6 +404,7 @@ function HasShielded($cardID, $player, $index)
     case "6135081953"://Doctor Evazan
     case "1747533523"://Village Protectors
     case "1090660242"://The Client
+    case "5080989992"://Rose Tico
       return true;
     default: return false;
   }
@@ -1126,6 +1127,8 @@ function LeaderUnit($cardID) {
       return "4aa0804b2b";
     case "4352150438"://Rey
       return "e091d2a983";
+    case "9005139831"://The Mandalorian
+      return "4088c46c4d";
     default: return "";
   }
 }
@@ -1188,6 +1191,8 @@ function LeaderUndeployed($cardID) {
       return "2432897157";
     case "e091d2a983"://Rey
       return "4352150438";
+    case "4088c46c4d"://The Mandalorian
+      return "9005139831";
     default: return "";
   }
 }
@@ -1534,6 +1539,7 @@ function DefinedCardType2Wrapper($cardID)
     case "1384530409"://Cad Bane
     case "2432897157"://Qi'Ra
     case "4352150438"://Rey
+    case "9005139831"://The Mandalorian
       return "";
     default: return DefinedCardType2($cardID);
   }

@@ -170,7 +170,7 @@ function GetPriority($cardID, $heroID, $type)
       case "ROGUE017":
         switch($cardID)
         {
-          case "CRU181": $priority = array(0, ROGUE017GorgPrio(), ROGUE017GorgPrio(), 0, 0, 0, 1.9, 0); return $priority[$type];
+          case "CRU181": $priority = array(0, 0, 0, 0, 0, 0, 1.9, 0); return $priority[$type];
           case "EVR041": $priority = array(0, 0.7, 0.7, 0, 0, 0.4, 0, 0); return $priority[$type];
           case "EVR042": $priority = array(0, 0.6, 0.6, 0, 0, 1.4, 0, 0); return $priority[$type];
           case "WTR098": $priority = array(0, 0.5, 0.5, 0, 0, 0.5, 0, 0); return $priority[$type];
@@ -368,29 +368,6 @@ function EncounterBlocksFirstTurn($character) //This is a way to allow encounter
   {
     default: return true;
   }
-}
-
-function ROGUE017GorgPrio()
-{
-  global $currentPlayer;
-  $hand = &GetHand($currentPlayer);
-  $arsenal = &GetArsenal($currentPlayer);
-  $grave = &GetDiscard($currentPlayer);
-  $totalTomes = 0;
-  for($i = 0; $i < count($hand); ++$i)
-  {
-    if($hand[$i] == "CRU181") ++$totalTomes;
-  }
-  for($i = 0; $i < count($arsenal); ++$i)
-  {
-    if($arsenal[$i] == "CRU181") ++$totalTomes;
-  }
-  for($i = 0; $i < count($grave); ++$i)
-  {
-    if($grave[$i] == "CRU181") ++$totalTomes;
-  }
-  if($totalTomes >= 3) return 1.9;
-  else return 0;
 }
 
 function ROGUE023GauntletPrio()

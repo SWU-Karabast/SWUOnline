@@ -40,7 +40,7 @@ switch ($popupType) {
     else echo (CreatePopup("myResourcePopup", [], 1, 0, "Your Resources", 1, ResourceUI()));
     break;
   case "myDiscardPopup":
-    echo (CreatePopup("myDiscardPopup", $myDiscard, 1, 0, "Your Discard"));
+    echo (CreatePopup("myDiscardPopup", $myDiscard, 1, 0, "Your Discard", DiscardPieces()));
     break;
   case "myBanishPopup":
     if ($playerID == 3) {
@@ -89,7 +89,7 @@ switch ($popupType) {
     echo (CreatePopup("theirPitchPopup", $theirPitch, 1, 0, "Opponent's Pitch Zone"));
     break;
   case "theirDiscardPopup":
-    echo (CreatePopup("theirDiscardPopup", $theirDiscard, 1, 0, "Opponent's Discard Zone"));
+    echo (CreatePopup("theirDiscardPopup", $theirDiscard, 1, 0, "Opponent's Discard Zone", DiscardPieces()));
     break;
   case "theirSoulPopup":
     echo (CreatePopup("theirSoulPopup", $theirSoul, 1, 0, "Opponent's Soul"));
