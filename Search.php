@@ -195,7 +195,7 @@ function SearchDiscardByName($player, $name)
 {
   $discard = &GetDiscard($player);
   $cardList = "";
-  for ($i = 0; $i < count($discard); $i += DeckPieces()) {
+  for ($i = 0; $i < count($discard); $i += DiscardPieces()) {
     if (CardName($discard[$i]) == $name) {
       if ($cardList != "") $cardList = $cardList . ",";
       $cardList = $cardList . $i;
@@ -1024,4 +1024,15 @@ function ReservableIndices($player)
 function SearchGetLast($search) {
   $indices = explode(",", $search);
   return $indices[count($indices) - 1];
+}
+
+function UnitCardSharesName($cardID, $player)
+{
+  $title = CardTitle($cardID);
+  $allies = &GetAllies($player);
+  for($i=0; $i<count($allies); $i+=AllyPieces())
+  {
+    if($title == CardTitle($allies[$i])) return true;
+  }
+  return false;
 }

@@ -198,12 +198,6 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $index = FindCharacterIndex($player, $combatChain[$parameter]);
       $character[$index + 4] += $lastResult;
       return $lastResult;
-    case "REMOVEDISCARD":
-      $discard = &GetDiscard($player);
-      $cardID = $discard[$lastResult];
-      unset($discard[$lastResult]);
-      $discard = array_values($discard);
-      return $cardID;
     case "REMOVEMYHAND":
       $hand = &GetHand($player);
       $cardID = $hand[$lastResult];
@@ -214,19 +208,6 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $hand = &GetHand($player);
       $cardID = $hand[$lastResult];
       return $cardID;
-    case "MULTIREMOVEDISCARD":
-      $discard = &GetDiscard($player);
-      $cards = "";
-      if(!is_array($lastResult)) $lastResult = explode(",", $lastResult);
-      $cardsRemoved = "";
-      for($i = 0; $i < count($lastResult); ++$i) {
-        if($cards != "") $cards .= ",";
-        $cards .= $discard[$lastResult[$i]];
-        if($parameter == "1") WriteLog(CardLink($discard[$lastResult[$i]], $discard[$lastResult[$i]]));
-        unset($discard[$lastResult[$i]]);
-      }
-      $discard = array_values($discard);
-      return $cards;
     case "MULTIBANISHSOUL":
       if(!is_array($lastResult)) $lastResult = explode(",", $lastResult);
       for($i = count($lastResult)-1; $i >= 0; --$i) BanishFromSoul($player, $lastResult[$i]);
@@ -632,7 +613,9 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       WriteLog(CardLink($lastResult, $lastResult) . " was discarded");
       return $lastResult;
     case "ADDDISCARD":
-      AddGraveyard($lastResult, $player, $parameter);
+      $paramArr = explode(",", $parameter);
+      $modifier = count($paramArr) > 1 ? $paramArr[1] : "-";
+      AddGraveyard($lastResult, $player, $paramArr[0], $modifier);
       return $lastResult;
     case "ADDBOTDECK":
       $deck = &GetDeck($player);
@@ -1500,7 +1483,6 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       return $damage;
     case "ALLRANDOMBOTTOM":
       $cards = explode(",", $lastResult);
-      $discard = &GetDiscard($player);
       for($i=0; $i<count($cards); ++$i) {
         AddBottomDeck($cards[$i], $player, $parameter);
       }

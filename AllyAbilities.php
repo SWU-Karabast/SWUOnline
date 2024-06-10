@@ -388,6 +388,17 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
         AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
         AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1", 1);
         break;
+      case "9151673075"://Cobb Vanth
+        AddDecisionQueue("FINDINDICES", $player, "DECKTOPXREMOVE," . 10);
+        AddDecisionQueue("SETDQVAR", $player, "0", 1);
+        AddDecisionQueue("FILTER", $player, "LastResult-include-definedType-Unit", 1);
+        AddDecisionQueue("FILTER", $player, "LastResult-include-maxCost-2", 1);
+        AddDecisionQueue("CHOOSECARD", $player, "<-", 1);
+        AddDecisionQueue("ADDDISCARD", $player, "HAND,TT", 1);
+        AddDecisionQueue("REVEALCARDS", $player, "-", 1);
+        AddDecisionQueue("OP", $player, "REMOVECARD", 1);
+        AddDecisionQueue("ALLRANDOMBOTTOM", $player, "DECK");
+        break;
       default: break;
     }
   }
@@ -1178,6 +1189,12 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "8862896760,HAND", 1);
+      break;
+    case "5080989992"://Rose Tico
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to defeat a shield from (or pass)");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("SPECIFICCARD", $mainPlayer, "ROSETICO", 1);
       break;
     default: break;
   }

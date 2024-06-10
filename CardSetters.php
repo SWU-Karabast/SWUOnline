@@ -395,18 +395,18 @@ function AddCharacterEffect($player, $index, $effect)
   }
 }
 
-function AddGraveyard($cardID, $player, $from)
+function AddGraveyard($cardID, $player, $from, $modifier="-")
 {
   global $currentPlayer, $mainPlayer, $mainPlayerGamestateStillBuilt;
   global $myDiscard, $theirDiscard, $mainDiscard, $defDiscard;
   global $myStateBuiltFor, $CS_CardsEnteredGY;
   IncrementClassState($player, $CS_CardsEnteredGY);
   if ($mainPlayerGamestateStillBuilt) {
-    if ($player == $mainPlayer) AddSpecificGraveyard($cardID, $mainDiscard, $from, $player);
-    else AddSpecificGraveyard($cardID, $defDiscard, $from, $player);
+    if ($player == $mainPlayer) AddSpecificGraveyard($cardID, $mainDiscard, $from, $player, $modifier);
+    else AddSpecificGraveyard($cardID, $defDiscard, $from, $player, $modifier);
   } else {
-    if ($player == $myStateBuiltFor) AddSpecificGraveyard($cardID, $myDiscard, $from, $player);
-    else AddSpecificGraveyard($cardID, $theirDiscard, $from, $player);
+    if ($player == $myStateBuiltFor) AddSpecificGraveyard($cardID, $myDiscard, $from, $player, $modifier);
+    else AddSpecificGraveyard($cardID, $theirDiscard, $from, $player, $modifier);
   }
 }
 
@@ -417,9 +417,10 @@ function RemoveDiscard($player, $index)
 
 function RemoveGraveyard($player, $index)
 {
+  if($index == "") return "-";
   $discard = &GetDiscard($player);
   $cardID = $discard[$index];
-  unset($discard[$index]);
+  for($i=$index; $i<$index+DiscardPieces(); ++$i) { unset($discard[$i]); }
   $discard = array_values($discard);
   return $cardID;
 }
@@ -458,9 +459,10 @@ function RemoveCharacterEffects($player, $index, $effect)
   return false;
 }
 
-function AddSpecificGraveyard($cardID, &$graveyard, $from, $player)
+function AddSpecificGraveyard($cardID, &$graveyard, $from, $player, $modifier="-")
 {
   array_push($graveyard, $cardID);
+  array_push($graveyard, $modifier);
 }
 
 function NegateLayer($MZIndex, $goesWhere = "GY")

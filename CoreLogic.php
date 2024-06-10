@@ -351,6 +351,15 @@ function MainCharacterPlayCardAbilities($cardID, $from)
           AddDecisionQueue("MZOP", $otherPlayer, "DEALDAMAGE,1", 1);
         }
         break;
+      case "9005139831"://The Mandalorian
+        if(DefinedTypesContains($cardID, "Upgrade", $currentPlayer)) {
+          $character[$i+1] = 1;
+          AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:maxHealth=4");
+          AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to exhaust", 1);
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+          AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
+        }
+        break;
       default:
         break;
     }
@@ -3964,6 +3973,19 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("PASSPARAMETER", $otherPlayer, "THEIRALLY-" . $playAlly->Index(), 1);
         AddDecisionQueue("MZOP", $otherPlayer, "TAKECONTROL", 1);
       }
+      break;
+    case "2346145249"://Choose Sides
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a friendly unit to swap");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $otherPlayer, "TAKECONTROL", 1);
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY", 1);
+      AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader", 1);
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an enemy unit to swap", 1);
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL", 1);
       break;
     default: break;
   }

@@ -328,8 +328,19 @@ class Ally {
     }
   }
 
+  function HasUpgrade($upgradeID) {
+    if($this->index == -1) return false;
+    $subcards = $this->GetSubcards();
+    for($i=0; $i<count($subcards); ++$i) {
+      if($subcards[$i] == $upgradeID) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   function DefeatUpgrade($upgradeID) {
-    if($this->index == -1) return;
+    if($this->index == -1) return false;
     $subcards = $this->GetSubcards();
     for($i=0; $i<count($subcards); ++$i) {
       if($subcards[$i] == $upgradeID) {
@@ -341,9 +352,10 @@ class Ally {
           DestroyAlly($this->playerID, $this->index);
           return true;
         }
-        return;
+        return false;
       } 
     }
+    return false;
   }
   
   function RescueCaptive($captiveID) {
