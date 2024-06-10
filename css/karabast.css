@@ -137,6 +137,7 @@ select {
   border-radius: 10px;
   padding: 20px;
   backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   scrollbar-color: #888888 rgba(0, 0, 0, 0); 
   scrollbar-width: thin;
 }
