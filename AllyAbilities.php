@@ -791,6 +791,15 @@ function AllyPlayCardAbility($cardID, $player="", $reportMode=false, $from="-")
           AddDecisionQueue("MZOP", $otherPlayer, "DEALDAMAGE,2", 1);
         }
         break;
+      case "4088c46c4d"://The Mandalorian
+        if(DefinedTypesContains($cardID, "Upgrade", $player)) {
+          $character[$i+1] = 1;
+          AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:maxHealth=6");
+          AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to exhaust", 1);
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+          AddDecisionQueue("MZOP", $player, "REST", 1);
+        }
+        break;
       default: break;
     }
   }
