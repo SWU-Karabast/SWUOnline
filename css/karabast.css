@@ -112,7 +112,7 @@ button, .GameLobby_Button, .create-game-button, .ServerChecker_Button, .JoinGame
   box-shadow: inset 0px 0px 0px 1px #454545;
 }
 
-button:hover, .GameLobby_Button:hover, .create-game-button:hover, .ServerChecker_Button:hover, .JoinGame_Button:hover, .spectate-button {
+button:hover, .GameLobby_Button:hover, .create-game-button:hover, .ServerChecker_Button:hover, .JoinGame_Button:hover, .spectate-button:hover {
   transform: scale(1.1);
 }
 
