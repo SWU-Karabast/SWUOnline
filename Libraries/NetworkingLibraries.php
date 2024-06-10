@@ -393,6 +393,18 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
       $isPass = true;
       if($roundPass) BeginRoundPass();
       break;
+    case 35://Play from discard
+      MakeGamestateBackup();
+      $found = $cardID;
+      if ($found >= 0) {
+        $discard = &GetDiscard($playerID);
+        if($found >= count($discard)) break;
+        $cardID = $discard[$found];
+        if(!IsPlayable($cardID, $turn[0], "GY", $found)) break;
+        RemoveDiscard($playerID, $found);
+        PlayCard($cardID, "GY");
+      }
+      break;
     case 99: //Pass
       global $isPass, $initiativeTaken, $dqState;
       $isPass = true;
@@ -1037,6 +1049,7 @@ function ResumeRoundPass()
   CurrentEffectEndTurnAbilities();
   ResetCharacter(1);
   ResetCharacter(2);
+  UnsetTurnModifiers();
   $currentTurnEffects = $nextTurnEffects;
   $nextTurnEffects = [];
   $mainPlayer = $initiativePlayer == 1 ? 2 : 1;

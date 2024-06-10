@@ -655,6 +655,16 @@ function UnsetBanishModifier($player, $modifier, $newMod="DECK")
   }
 }
 
+function UnsetDiscardModifier($player, $modifier, $newMod="-")
+{
+  $discard = &GetDiscard($player);
+  for($i=0; $i<count($discard); $i+=DiscardPieces())
+  {
+    $cardModifier = explode("-", $discard[$i+1])[0];
+    if($cardModifier == $modifier) $discard[$i+1] = $newMod;
+  }
+}
+
 function UnsetChainLinkBanish()
 {
   UnsetBanishModifier(1, "TCL");
@@ -672,6 +682,12 @@ function UnsetCombatChainBanish()
 function ReplaceBanishModifier($player, $oldMod, $newMod)
 {
   UnsetBanishModifier($player, $oldMod, $newMod);
+}
+
+function UnsetTurnModifiers()
+{
+  UnsetDiscardModifier(1, "TT");
+  UnsetDiscardModifier(2, "TT");
 }
 
 function UnsetTurnBanish()

@@ -814,6 +814,23 @@ function PitchColor($pitch)
   }
 }
 
+function DiscardUI()
+{
+  global $turn, $currentPlayer, $playerID, $cardSize;
+  $rv = "";
+  $size = 120;
+  $discard = GetDiscard($playerID);
+  for ($i = 0; $i < count($discard); $i += DiscardPieces()) {
+    $action = $currentPlayer == $playerID && IsPlayable($discard[$i], $turn[0], "GY", $i) ? 35 : 0;
+    $border = CardBorderColor($discard[$i], "GY", $action > 0);
+    if($action > 0)
+      $rv .= Card($discard[$i], "concat", $size, $action, 1, 0, $border, 0, strval($i));
+    else
+      $rv .= Card($discard[$i], "concat", $size, 0, 1, 0, $border);
+  }
+  return $rv;
+}
+
 function ResourceUI()
 {
   global $turn, $currentPlayer, $playerID, $cardSize;

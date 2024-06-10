@@ -40,7 +40,8 @@ switch ($popupType) {
     else echo (CreatePopup("myResourcePopup", [], 1, 0, "Your Resources", 1, ResourceUI()));
     break;
   case "myDiscardPopup":
-    echo (CreatePopup("myDiscardPopup", $myDiscard, 1, 0, "Your Discard", DiscardPieces()));
+    if($playerID == 3) echo (CreatePopup("myDiscardPopup", $myDiscard, 1, 0, "Your Discard", DiscardPieces()));
+    else echo (CreatePopup("myDiscardPopup", [], 1, 0, "Your Discard", 1, DiscardUI()));
     break;
   case "myBanishPopup":
     if ($playerID == 3) {

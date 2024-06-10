@@ -934,6 +934,10 @@ function IsPlayable($cardID, $phase, $from, $index = -1, &$restriction = null, $
   }
   if(DefinedTypesContains($cardID, "Upgrade", $player) && SearchCount(SearchAllies($player)) == 0 && SearchCount(SearchAllies($otherPlayer)) == 0) return false;
   if($phase == "M" && $from == "HAND") return true;
+  if($phase == "M" && $from == "GY") {
+    $discard = &GetDiscard($player);
+    return $discard[$index+1] == "TT" ? true : false;
+  }
   $isStaticType = IsStaticType($cardType, $from, $cardID);
   if($isStaticType) {
     $cardType = GetAbilityType($cardID, $index, $from);
