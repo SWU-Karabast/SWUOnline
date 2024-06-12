@@ -223,6 +223,7 @@ function HasSentinel($cardID, $player, $index)
     case "4843225228"://Phase-III Dark Trooper
     case "7486516061"://Concord Dawn Interceptors
     case "6409922374"://Niima Outpost Constables
+    case "0315522200"://Black Sun Starfighter
       return true;
     case "2739464284"://Gamorrean Guards
       return SearchCount(SearchAllies($player, aspect:"Cunning")) > 1;
@@ -376,6 +377,7 @@ function HasAmbush($cardID, $player, $index, $from)
     case "7982524453"://Fennec Shand
     case "8862896760"://Maul
     case "2143627819"://The Marauder
+    case "2121724481"://Cloud-Rider
       return true;
     case "2027289177"://Escort Skiff
       return SearchCount(SearchAllies($player, aspect:"Command")) > 1;
