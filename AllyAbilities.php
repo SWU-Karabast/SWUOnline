@@ -524,6 +524,14 @@ function CollectBounty($player, $index, $cardID, $reportMode=false, $bountyUnitO
       ++$numBounties;
       if($reportMode) break;
       break;
+    case "9642863632"://Bounty Hunter's Quarry
+      ++$numBounties;
+      if($reportMode) break;
+      $amount = CardIsUnique($bountyUnit) ? 10 : 5;
+      $deck = &GetDeck($opponent);
+      if(count($deck)/DeckPieces() < $amount) $amount = count($deck)/DeckPieces();
+      AddLayer("TRIGGER", $opponent, "9642863632", target:$amount);
+      break;
     default: break;
   }
   if($numBounties > 0 && !$reportMode) {

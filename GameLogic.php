@@ -150,6 +150,14 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
     case "MULTIZONEINDICES":
       $rv = SearchMultizone($player, $parameter);
       return ($rv == "" ? "PASS" : $rv);
+    case "MZMYDECKTOPX":
+      $deck = &GetDeck($player);
+      $rv = "";
+      for($i=0; $i<$parameter; ++$i) {
+        if($rv != "") $rv .= ",";
+        $rv .= "MYDECK-" . $i*DeckPieces();
+      }
+      return ($rv == "" ? "PASS" : $rv);
     case "PUTPLAY":
       $subtype = CardSubType($lastResult);
       if($subtype == "Item") {

@@ -612,6 +612,12 @@ function ProcessTrigger($player, $parameter, $uniqueID, $target="-")
     case "AFTERPLAYABILITY":
       AllyPlayCardAbility($target, $player);
       break;
+    case "9642863632"://Bounty Hunter's Quarry
+      AddCurrentTurnEffect($parameter, $player);
+      AddDecisionQueue("MZMYDECKTOPX", $player, $target);
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a card to play");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+      AddDecisionQueue("MZOP", $player, "PLAYCARD", 1);
     default: break;
   }
 }
