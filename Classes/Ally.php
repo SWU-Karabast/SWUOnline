@@ -113,8 +113,13 @@ class Ally {
       }
       switch($subcards[$i]) {
         case "5738033724"://Boba Fett's Armor
-          if(CardTitle($this->CardID()) == "Boba Fett") $amount -= 2;
-          break;
+          if (CardTitle($this->CardID()) == "Boba Fett") {
+            if ($amount >= 2) {
+                $amount -= 2;
+            } else {
+                $amount = 0;
+            }
+        }
         default: break;
       }
     }
