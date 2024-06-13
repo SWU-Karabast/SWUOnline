@@ -413,9 +413,9 @@
       function GetCharacterBottom(cardType, cardSubType) {
         switch (cardType) {
           case "C":
-            return (cardSize * 2 + 54) + "px";
+            return "219px";
           case "W":
-            return (cardSize * 3 + 66) + "px";
+            return "329px";
           default:
             break;
         }
@@ -436,9 +436,9 @@
       function GetCharacterTop(cardType, cardSubType) {
         switch (cardType) {
           case "C":
-            return (cardSize * 2 - 6) + "px";
+            return "142px";
           case "W":
-            return (cardSize * 3 + 4) + "px";
+            return "252px";
           default:
             break;
         }
@@ -491,6 +491,7 @@
       .passButton {
         background-color: #292929;
         transition: 150ms ease-in-out;
+        margin: 0 3px 0 7px;
       }
 
       .passButton:hover {
@@ -510,8 +511,17 @@
         background-size: contain;
       }
 
+
       .claimButton {
-        background: linear-gradient(180deg, #292929 0%, #19637F 100%);
+        background: linear-gradient(180deg, #292929 0%, #292929 100%) padding-box,
+                    linear-gradient(180deg, #454545 0%, #394B51 40%, #0080ad 100%) border-box;
+        border-radius: 5px;
+        border: 1px solid transparent;
+        height:40px;
+        padding: 8px 19px 10px;
+        box-shadow: none;
+        position: relative;
+        bottom: -1px;
       }
 
       .breakChain {

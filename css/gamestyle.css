@@ -7,6 +7,56 @@
   --button-box-shadow: 1px 1px 0 var(--dark-color), -1px -1px 0 var(--dark-color), -1px 1px 0 var(--dark-color), 1px -1px 0 var(--dark-color);
 }
 
+@property --myColor1 {
+  syntax: '<color>';
+  initial-value: rgba(24, 53, 81, 0.60);
+  inherits: false;
+}
+
+@property --myColor2 {
+  syntax: '<color>';
+  initial-value: rgba(77, 118, 155, 0.60);
+  inherits: false;
+}
+
+.my-resources:hover {
+ --myColor2: rgba(77, 118, 155, 1);
+}
+
+.small-card img {
+  height: 76px !important;
+  width: 76px !important;
+}
+
+.small-card {
+  height: 76px;
+  width: 76px;
+  padding: 0 !important;
+}
+
+.my-resources {
+  position:fixed; 
+  width:160px; 
+  height:76px; 
+  left: 20px; 
+  bottom:20px; 
+  z-index: 200; 
+  border-radius: 5px;
+  background: linear-gradient(var(--myColor1), var(--myColor2));
+  transition: --myColor1 0.5s, --myColor2 0.5s;
+}
+
+.their-resources {
+  position:fixed; 
+  width:160px; 
+  height:76px; 
+  left: 20px; 
+  top:20px; 
+  z-index: 200; 
+  border-radius: 5px;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   ::-webkit-scrollbar {
     width: .50em;
