@@ -732,6 +732,12 @@ function AllyAttackedAbility($attackTarget, $index) {
       $ally = new Ally("MYALLY-" . $index, $defPlayer);
       $ally->Ready();
       break;
+    case "8228196561"://Clan Saxon Gauntlet
+      AddDecisionQueue("MULTIZONEINDICES", $defPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $defPlayer, "Choose a unit to give an experience token", 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $defPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $defPlayer, "ADDEXPERIENCE", 1);
+      break;
     default: break;
   }
 }

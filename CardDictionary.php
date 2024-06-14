@@ -224,6 +224,7 @@ function HasSentinel($cardID, $player, $index)
     case "7486516061"://Concord Dawn Interceptors
     case "6409922374"://Niima Outpost Constables
     case "0315522200"://Black Sun Starfighter
+    case "8228196561"://Clan Saxon Gauntlet
       return true;
     case "2739464284"://Gamorrean Guards
       return SearchCount(SearchAllies($player, aspect:"Cunning")) > 1;
