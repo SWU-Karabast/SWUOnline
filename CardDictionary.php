@@ -443,6 +443,7 @@ function HasSaboteur($cardID, $player, $index)
     case "9250443409":
     case "3c60596a7a":
     case "4595532978"://Ketsu Onyo
+    case "3786602643"://House Kast Soldier
       return true;
     default: return false;
   }
