@@ -4006,6 +4006,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "0598830553"://Dryden Vos
       PlayCaptive($currentPlayer, $target);
       break;
+    case "1477806735"://Wookiee Warrior
+      if(SearchCount(SearchAllies($currentPlayer, trait:"Wookiee")) > 1) {
+        Draw($currentPlayer);
+      }
+      break;
     default: break;
   }
 }
