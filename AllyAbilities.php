@@ -508,6 +508,11 @@ function CollectBounty($player, $index, $cardID, $reportMode=false, $bountyUnitO
       if($reportMode) break;
       Draw($opponent);
       break;
+    case "3503780024"://Outlaw Corona
+      ++$numBounties;
+      if($reportMode) break;
+      AddTopDeckAsResource($opponent);
+      break;
     case "9108611319"://Cartel Turncoat
       ++$numBounties;
       if($reportMode) break;
