@@ -97,6 +97,16 @@ $isMobile = IsMobile();
           <div class='game-set-up container bg-blue'>
             <h2>Set Up</h2>
             <div id="setup-content"></div>
+            <div id='submitForm' style='width:100%; text-align: center; display: none;'>
+              <form action='./SubmitSideboard.php'>
+                <input type='hidden' id='gameName' name='gameName' value='<?= $gameName ?>'>
+                <input type='hidden' id='playerID' name='playerID' value='<?= $playerID ?>'>
+                <input type='hidden' id='playerCharacter' name='playerCharacter' value=''>
+                <input type='hidden' id='playerDeck' name='playerDeck' value=''>
+                <input type='hidden' id='authKey' name='authKey' value='<?= $authKey ?>'>
+                <input class='GameLobby_Button' type='submit' value='<?= $playerID == 1 ? "Start" : "Ready" ?>'>
+              </form>
+            </div>
           </div>
         </div>
         <div class='chat-log container bg-black'>
@@ -107,9 +117,8 @@ $isMobile = IsMobile();
               <input class='GameLobby_Input' type='text' id='chatText' name='chatText' value='' autocomplete='off' onkeypress='ChatKey(event)'>
               <button class='GameLobby_Button' style='cursor:pointer;' onclick='SubmitChat()'>Chat</button>
             </div>
-            <input type='hidden' id='gameName' value='<?= $gameName ?>'>
-            <input type='hidden' id='playerID' value='<?= $playerID ?>'>
-            <input type='hidden' id='authKey' name='authKey' value='<?= $authKey ?>'>
+            
+            
           </div>
         </div>
       </div>
@@ -150,7 +159,7 @@ $isMobile = IsMobile();
           }
           ?>
         </div>
-
+∆
         <div id="their-info">
         </div>
       </div>
@@ -270,6 +279,7 @@ $isMobile = IsMobile();
               document.getElementById("setup-content").innerHTML = response["setupContent"];
               document.getElementById("gamelog").innerHTML = response["logContent"];
               document.getElementById("their-info").innerHTML = response["theirInfo"];
+              document.getElementById("submitForm").style.display = response["showSubmit"] ? "block" : "none";
               if (response["playerJoinAudio"] === true && !audioPlayed) {
                 var audio = document.getElementById('playerJoinedAudio');
                 audio.play();

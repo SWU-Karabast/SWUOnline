@@ -96,6 +96,7 @@ if ($lastUpdate != 0 && $cacheVal < $lastUpdate) {
   $data["timestamp"] = GetCachePiece($gameName, 1);
 
   $setupContent = "";
+  $showSubmit = false;
   if ($playerID == 1 && $gameStatus < $MGS_Player2Joined) {
     if($visibility == "private") {
       if($p1id == "") {
@@ -120,18 +121,10 @@ if ($lastUpdate != 0 && $cacheVal < $lastUpdate) {
       $setupContent .= "<p>Waiting for other player to choose who goes first.</p>";
     }
   } else if ($gameStatus > $MGS_ChooseFirstPlayer && ($playerID == 2 || $p1SideboardSubmitted != "1") && ($playerID == 1 || $p2SideboardSubmitted != "1")) {
-    $setupContent .= "<div id='submitForm' style='width:100%; text-align: center;'>";
-    $setupContent .= "<form action='./SubmitSideboard.php'>";
-    $setupContent .= "<input type='hidden' name='gameName' value='$gameName'>";
-    $setupContent .= "<input type='hidden' name='playerID' value='$playerID'>";
-    $setupContent .= "<input type='hidden' id='playerCharacter' name='playerCharacter' value=''>";
-    $setupContent .= "<input type='hidden' id='playerDeck' name='playerDeck' value=''>";
-    $setupContent .= "<input type='hidden' name='authKey' value='$authKey'>";
-    $setupContent .= "<input class='GameLobby_Button' type='submit' value='" . ($playerID == 1 ? "Start" : "Ready") . "'>";
-    $setupContent .= "</form>";
-    $setupContent .= "</div>";
+    $showSubmit = true;
   }
   $data["setupContent"] = $setupContent;
+  $data["showSubmit"] = $showSubmit;
 
   // Chat Log
   $data["logContent"] = JSONLog($gameName, $playerID);
