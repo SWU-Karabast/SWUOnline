@@ -1049,6 +1049,11 @@ function SpecificAllyAttackAbilities($attackID)
         AddCurrentTurnEffect("5464125379", $defPlayer, from:"PLAY");
       }
       break;
+    case "9725921907"://Kintan Intimidator
+      $target = GetAttackTarget();
+      $ally = new Ally($target, $defPlayer);
+      $ally->Exhaust();
+      break;
     case "8190373087"://Gentle Giant
       $power = $attackerAlly->CurrentPower();
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
