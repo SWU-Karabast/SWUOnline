@@ -147,6 +147,7 @@ class Ally {
       DestroyAlly($this->playerID, $this->index, fromCombat:$fromCombat);
       return true;
     }
+    AllyDamageTakenAbilities($this->playerID, $this->index, survived:true, damage:$amount, fromCombat:$fromCombat);
     switch($this->CardID())
     {
       case "4843225228"://Phase-III Dark Trooper

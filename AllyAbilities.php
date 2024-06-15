@@ -125,7 +125,6 @@ function DealAllyDamage($targetPlayer, $index, $damage, $type="")
     --$allies[$index+6];
   }
   $allies[$index+2] -= $damage;
-  if($damage > 0) AllyDamageTakenAbilities($targetPlayer, $index);
   if($allies[$index+2] <= 0) DestroyAlly($targetPlayer, $index, fromCombat:($type == "COMBAT" ? true : false));
 }
 
@@ -1291,10 +1290,23 @@ function AllyHitEffects() {
   }
 }
 
-function AllyDamageTakenAbilities($player, $i)
+function AllyDamageTakenAbilities($player, $index, $survived, $damage, $fromCombat=false)
 {
   $allies = &GetAllies($player);
-  switch($allies[$i]) {
+  for($i=0; $i<count($allies); $i+=AllyPieces()) {
+    switch($allies[$i]) {
+      case "7022736145"://Tarfful
+        if($survived && $fromCombat && TraitContains($allies[$index], "Wookiee", $player)) {
+          AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:arena=Ground");
+          AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal " . $damage . " damage to");
+          AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
+          AddDecisionQueue("MZOP", $player, "DEALDAMAGE," . $damage, 1);
+        }
+        break;
+      default: break;
+    }
+  }
+  switch($allies[$index]) {
     default: break;
   }
 }
