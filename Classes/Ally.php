@@ -216,6 +216,9 @@ class Ally {
         case "4484318969"://Moff Gideon Leader
           if(CardCost($this->CardID()) <= 3 && IsAllyAttackTarget()) $power += 1;
           break;
+        case "3feee05e13"://Gar Saxon
+          if($this->IsUpgraded()) $power += 1;
+          break;
         default: break;
       }
     }
@@ -232,7 +235,6 @@ class Ally {
     //Character buffs
     $myChar = &GetPlayerCharacter($this->playerID);
     for($i=0; $i<count($myChar); $i+=CharacterPieces()) {
-      WriteLog($myChar[$i]);
       switch($myChar[$i]) {
         case "8560666697"://Director Krennic
           if($this->Health() < $this->MaxHealth()) $power += 1;
