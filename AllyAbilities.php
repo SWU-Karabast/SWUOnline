@@ -530,6 +530,14 @@ function CollectBounty($player, $index, $cardID, $reportMode=false, $bountyUnitO
       if($reportMode) break;
       AddTopDeckAsResource($opponent);
       break;
+    case "6947306017"://Fugitive Wookie
+      ++$numBounties;
+      if($reportMode) break;
+      AddDecisionQueue("MULTIZONEINDICES", $opponent, "THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $opponent, "Choose a card to exhaust");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $opponent, "<-", 1);
+      AddDecisionQueue("MZOP", $opponent, "REST", 1);
+      break;
     case "9108611319"://Cartel Turncoat
       ++$numBounties;
       if($reportMode) break;
