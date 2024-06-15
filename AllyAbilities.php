@@ -868,7 +868,7 @@ function AllyPlayCardAbility($cardID, $player="", $reportMode=false, $from="-")
       case "4935319539"://Krayt Dragon
         if($reportMode) return true;
         $damage = CardCost($cardID);
-        AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "THEIRALLY");
+        AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "THEIRALLY:arena=Ground");
         AddDecisionQueue("PREPENDLASTRESULT", $otherPlayer, "THEIRCHAR-0,");
         AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a card to deal " . $damage . " damage to");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $otherPlayer, "<-", 1);
