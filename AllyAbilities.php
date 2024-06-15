@@ -775,6 +775,13 @@ function AllyPlayCardAbility($cardID, $player="", $reportMode=false, $from="-")
           Restore(1, $player);
         }
         break;
+      case "9850906885"://Maz Kanata
+        if($i != LastAllyIndex($player) && DefinedTypesContains($cardID, "Unit", $player)) {
+          if($reportMode) return true;
+          $me = new Ally("MYALLY-" . $i, $player);
+          $me->Attach("2007868442");//Experience token
+        }
+        break;
       case "5907868016"://Fighters for Freedom
         if($i != LastAllyIndex($player) && AspectContains($cardID, "Aggression", $player)) {
           if($reportMode) return true;
