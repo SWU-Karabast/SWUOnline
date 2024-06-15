@@ -24,6 +24,7 @@ function PummelHit($player = -1, $passable = false, $fromDQ = false, $context=""
     else AddDecisionQueue("CHOOSEHAND", $player, "<-", 1);
     AddDecisionQueue("MULTIREMOVEHAND", $player, "-", 1);
     AddDecisionQueue("ADDDISCARD", $player, "HAND", 1);
+    AddDecisionQueue("CARDDISCARDED", $player, "-", 1);
   }
 }
 
@@ -764,6 +765,7 @@ function DiscardCard($player, $index)
 function CardDiscarded($player, $discarded, $source = "")
 {
   global $mainPlayer;
+  AllyCardDiscarded($player, $discarded);
   AddEvent("DISCARD", $discarded);
 }
 

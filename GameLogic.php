@@ -1536,6 +1536,9 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         $auras[$lastResult[$i] + 1] = 1;
       }
       return "";
+    case "CARDDISCARDED":
+      CardDiscarded($player, $lastResult);
+      return $lastResult;
     case "NEGATE":
       NegateLayer($parameter);
       return "";

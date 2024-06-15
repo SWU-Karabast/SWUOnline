@@ -1402,6 +1402,37 @@ function AllyEndTurnAbilities($player)
   }
 }
 
+function AllyCardDiscarded($player, $discardedID) {
+  //My allies card discarded effects
+  $allies = &GetAllies($player);
+  for($i = 0; $i < count($allies); $i += AllyPieces()) {
+    switch($allies[$i]) {
+      case "6910883839"://Migs Mayfield
+        AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
+        AddDecisionQueue("PREPENDLASTRESULT", $player, "MYCHAR-0,THEIRCHAR-0,");
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose something to deal 2 damage to");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+        AddDecisionQueue("MZOP", $player, "DEALDAMAGE,2", 1);
+        break;
+      default: break;
+    }
+  }
+  $otherPlayer = $player == 1 ? 2 : 1;
+  $allies = &GetAllies($otherPlayer);
+  for($i = 0; $i < count($allies); $i += AllyPieces()) {
+    switch($allies[$i]) {
+      case "6910883839"://Migs Mayfield
+        AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY&THEIRALLY");
+        AddDecisionQueue("PREPENDLASTRESULT", $otherPlayer, "MYCHAR-0,THEIRCHAR-0,");
+        AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose something to deal 2 damage to");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $otherPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $otherPlayer, "DEALDAMAGE,2", 1);
+        break;
+      default: break;
+    }
+  }
+}
+
 function GiveAlliesHealthBonus($player, $amount)
 {
   $allies = &GetAllies($player);
