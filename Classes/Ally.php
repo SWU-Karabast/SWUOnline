@@ -232,9 +232,13 @@ class Ally {
     //Character buffs
     $myChar = &GetPlayerCharacter($this->playerID);
     for($i=0; $i<count($myChar); $i+=CharacterPieces()) {
+      WriteLog($myChar[$i]);
       switch($myChar[$i]) {
         case "8560666697"://Director Krennic
           if($this->Health() < $this->MaxHealth()) $power += 1;
+          break;
+        case "9794215464"://Gar Saxon
+          if($this->IsUpgraded()) $power += 1;
           break;
         default: break;
       }

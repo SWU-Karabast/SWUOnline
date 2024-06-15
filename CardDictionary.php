@@ -1167,6 +1167,8 @@ function LeaderUnit($cardID) {
       return "4088c46c4d";
     case "0911874487"://Fennec Shand
       return "2b13cefced";
+    case "9794215464"://Gar Saxon
+      return "3feee05e13";
     default: return "";
   }
 }
@@ -1233,6 +1235,8 @@ function LeaderUndeployed($cardID) {
       return "9005139831";
     case "2b13cefced"://Fennec Shand
       return "0911874487";
+    case "3feee05e13"://Gar Saxon
+      return "9794215464";
     default: return "";
   }
 }
@@ -1582,6 +1586,7 @@ function DefinedCardType2Wrapper($cardID)
     case "4352150438"://Rey
     case "9005139831"://The Mandalorian
     case "0911874487"://Fennec Shand
+    case "9794215464"://Gar Saxon
       return "";
     default: return DefinedCardType2($cardID);
   }
