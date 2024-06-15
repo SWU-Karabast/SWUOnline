@@ -551,6 +551,7 @@
       .MenuButtons {
         cursor: pointer;
         transition: 150ms ease-in-out;
+        margin-right: 6px;
       }
 
       .MenuButtons:hover {
