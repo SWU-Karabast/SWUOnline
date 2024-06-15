@@ -230,6 +230,10 @@ function CurrentEffectCostModifiers($cardID, $from)
             $remove = true;
           }
           break;
+        case "5696041568"://Triple Dark Raid
+          $costModifier -= 5;
+          $remove = true;
+          break;
         case "7870435409"://Bib Fortuna
           $costModifier -= 1;
           $remove = true;
@@ -471,6 +475,10 @@ function CurrentEffectEndTurnAbilities()
           AddDecisionQueue("PASSPARAMETER", $owner, "THEIRALLY-" . $index, 1);
           AddDecisionQueue("MZOP", $owner, "TAKECONTROL", 1);
         }
+        break;
+      case "5696041568"://Triple Dark Raid
+        $ally = new Ally("MYALLY-" . SearchAlliesForUniqueID($currentTurnEffects[$i+2], $currentTurnEffects[$i+1]), $currentTurnEffects[$i+1]);
+        MZBounce($currentTurnEffects[$i+1], "MYALLY-" . $ally->Index());
         break;
       default: break;
     }

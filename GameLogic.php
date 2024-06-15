@@ -448,6 +448,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       }
       return $lastResult;
     case "OP":
+      $paramArr = explode(",", $parameter);
+      $parameter = $paramArr[0];
       switch($parameter)
       {
         case "DESTROYFROZENARSENAL": DestroyFrozenArsenal($player); return "";
@@ -501,6 +503,9 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $allyPlayer = $mzArr[0] == "MYALLY" ? $player : ($player == 1 ? 2 : 1);
           $ally = new Ally($dqVars[0], $allyPlayer);
           $ally->RescueCaptive($captiveID, $player);
+          return $lastResult;
+        case "PLAYCARD":
+          PlayCard($lastResult, $paramArr[1], -1, -1);
           return $lastResult;
         case "SWAPDQPERSPECTIVE":
           $arr = explode(",", $lastResult);

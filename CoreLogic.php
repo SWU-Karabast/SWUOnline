@@ -4011,6 +4011,20 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         Draw($currentPlayer);
       }
       break;
+    case "5696041568"://Triple Dark Raid
+      global $CS_AfterPlayedBy;
+      SetClassState($currentPlayer, $CS_AfterPlayedBy, $cardID);
+      AddCurrentTurnEffect($cardID, $currentPlayer);
+      AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE," . 8);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+      AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Vehicle", 1);
+      AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "1", 1);
+      AddDecisionQueue("OP", $currentPlayer, "REMOVECARD", 1);
+      AddDecisionQueue("ALLRANDOMBOTTOM", $currentPlayer, "DECK");
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{1}", 1);
+      AddDecisionQueue("OP", $currentPlayer, "PLAYCARD,DECK", 1);
+      break;
     default: break;
   }
 }
@@ -4078,6 +4092,12 @@ function AfterPlayedByAbility($cardID) {
       break;
     case "8968669390"://U-Wing Reinforcement
       SearchCurrentTurnEffects("8968669390", $currentPlayer, remove:true);
+      break;
+    case "5696041568"://Triple Dark Raid
+      AddDecisionQueue("OP", $currentPlayer, "GETLASTALLYMZ", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "5696041568,HAND", 1);
       break;
     default: break;
   }
