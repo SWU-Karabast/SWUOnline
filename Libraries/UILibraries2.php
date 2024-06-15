@@ -1018,9 +1018,12 @@ function LeaveGameUI() {
   global $playerID;
   $rv = "<div class='leave-game-wrapper'>";
   $rv .= "<div>";
-  $rv .= "<h3>Concede game and return to main menu?</h3>";
+  $rv .= "<h3>" . (IsGameOver() ? "Leave" : "Concede") . " game and return to main menu?</h3>";
   $rv .= "<div class='leave-game-buttons'>";
-  $rv .= CreateButton($playerID, "Concede Game", 100015, 0, "24px", "", "", false, true);
+  if (IsGameOver())
+    $rv .= CreateButton($playerID, "Leave Game", 100001, 0, "24px", "", "", false, true);
+  else
+    $rv .= CreateButton($playerID, "Concede Game", 100015, 0, "24px", "", "", false, true);
   $stayAction = "document.getElementById(\"leaveGame\").style.display = \"none\";";
   $rv .= CreateButton($playerID, "Continue Playing", 100015, 0, "24px", "", "", false, false, "", false, $stayAction);
   $rv .= "</div>";
