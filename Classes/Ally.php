@@ -76,7 +76,14 @@ class Ally {
     $max += $this->allies[$this->index+9];
     for($i=count($this->allies)-AllyPieces(); $i>=0; $i-=AllyPieces()) {
       if(AllyHasStaticHealthModifier($this->allies[$i])) {
-        $max += AllyStaticHealthModifier($this->CardID(), $this->Index(), $this->PlayerID(), $this->allies[$i], $i);
+        $max += AllyStaticHealthModifier($this->CardID(), $this->Index(), $this->PlayerID(), $this->allies[$i], $i, $this->PlayerID());
+      }
+    }
+    $otherPlayer = $this->PlayerID() == 1 ? 2 : 1;
+    $theirAllies = &GetAllies($otherPlayer);
+    for($i=0; $i<count($theirAllies); $i+=AllyPieces()) {
+      if(AllyHasStaticHealthModifier($theirAllies[$i])) {
+        $max += AllyStaticHealthModifier($this->CardID(), $this->Index(), $this->PlayerID(), $theirAllies[$i], $i, $otherPlayer);
       }
     }
     $max += CharacterStaticHealthModifiers($this->CardID(), $this->Index(), $this->PlayerID());
@@ -207,6 +214,16 @@ class Ally {
           break;
         case "4484318969"://Moff Gideon Leader
           if(CardCost($this->CardID()) <= 3 && IsAllyAttackTarget()) $power += 1;
+          break;
+        default: break;
+      }
+    }
+    //Their ally modifiers
+    $theirAllies = &GetAllies($this->playerID == 1 ? 2 : 1);
+    for($i=0; $i<count($theirAllies); $i+=AllyPieces()) {
+      switch($theirAllies[$i]) {
+        case "3731235174"://Supreme Leader Snoke
+          $power -= 2;
           break;
         default: break;
       }

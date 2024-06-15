@@ -20,16 +20,30 @@ function PlayAlly($cardID, $player, $subCards = "-", $from="-")
   $index = count($allies) - AllyPieces();
   CurrentEffectAllyEntersPlay($player, $index);
   AllyEntersPlayAbilities($player);
-  //Health modifiers this has that applies to other units
+  $otherPlayer = $player == 1 ? 2 : 1;
+  $theirAllies = &GetAllies($otherPlayer);
   if(AllyHasStaticHealthModifier($cardID)) {
+    //Health modifiers this has that applies to other units
     for($i = 0; $i < count($allies); $i += AllyPieces()) {
-      $allies[$i+2] += AllyStaticHealthModifier($allies[$i], $i, $player, $cardID, $index);
+      $allies[$i+2] += AllyStaticHealthModifier($allies[$i], $i, $player, $cardID, $index, $player);
+    }
+    //Health modifiers this has that apply to other units controlled by the other player
+    for($i=count($theirAllies)-AllyPieces(); $i>=0; $i-=AllyPieces()) {
+        $theirAllies[$i+2] += AllyStaticHealthModifier($theirAllies[$i], $i, $otherPlayer, $cardID, $index, $player);
+        if($theirAllies[$i+2] <= 0) DestroyAlly($otherPlayer, $i);
     }
   }
   //Health modifiers other units have that apply to this
   for($i=count($allies)-AllyPieces(); $i>=0; $i-=AllyPieces()) {
     if(AllyHasStaticHealthModifier($allies[$i])) {
-      $allies[$index+2] += AllyStaticHealthModifier($cardID, $index, $player, $allies[$i], $i);
+      $allies[$index+2] += AllyStaticHealthModifier($cardID, $index, $player, $allies[$i], $i, $player);
+    }
+  }
+  //Health modifiers other units controlled by the other player have that apply to this
+  for($i=0; $i<count($theirAllies); $i+=AllyPieces()) {
+    if(AllyHasStaticHealthModifier($theirAllies[$i])) {
+      $allies[$index+2] += AllyStaticHealthModifier($cardID, $index, $player, $theirAllies[$i], $i, $otherPlayer);
+      if($allies[$index+2] <= 0) DestroyAlly($player, $index);
     }
   }
   $allies[$index+2] += CharacterStaticHealthModifiers($cardID, $index, $player);
@@ -56,12 +70,13 @@ function AllyHasStaticHealthModifier($cardID)
     case "9097316363"://Emperor Palpatine
     case "6c5b96c7ef"://Emperor Palpatine
     case "4511413808"://Follower of the Way
+    case "3731235174"://Supreme Leader Snoke
       return true;
     default: return false;
   }
 }
 
-function AllyStaticHealthModifier($cardID, $index, $player, $myCardID, $myIndex)
+function AllyStaticHealthModifier($cardID, $index, $player, $myCardID, $myIndex, $myPlayer)
 {
   switch($myCardID)
   {
@@ -94,6 +109,8 @@ function AllyStaticHealthModifier($cardID, $index, $player, $myCardID, $myIndex)
         if($ally->NumUpgrades() > 0) return 1;
       }
       break;
+    case "3731235174"://Supreme Leader Snoke
+      return $player != $myPlayer ? -2 : 0;
     default: break;
   }
   return 0;
@@ -162,7 +179,7 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
   if(AllyHasStaticHealthModifier($cardID)) {
     for($i = count($allies)-AllyPieces(); $i >= 0; $i -= AllyPieces()) {
       //myIndex is -1 because the unit is destroyed
-      $allies[$i+2] -= AllyStaticHealthModifier($allies[$i], $i, $player, $cardID, -1);
+      $allies[$i+2] -= AllyStaticHealthModifier($allies[$i], $i, $player, $cardID, -1, $player);
       if($allies[$i+2] <= 0) DestroyAlly($player, $i);
     }
   }
