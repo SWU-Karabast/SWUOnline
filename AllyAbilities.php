@@ -450,6 +450,12 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
           Draw($otherPlayer);
         }
         break;
+      case "8687233791"://Punishing One
+        if($destroyedAlly->IsUpgraded()) {
+          $thisAlly = new Ally("MYALLY-" . $i, $otherPlayer);
+          $thisAlly->Ready();
+        }
+        break;
       default: break;
     }
   }
