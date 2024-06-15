@@ -345,6 +345,9 @@ function HasAmbush($cardID, $player, $index, $from)
       case "6847268098"://Timely Intervention
         RemoveCurrentTurnEffect($i);
         return true;
+      case "0911874487"://Fennec Shand
+        RemoveCurrentTurnEffect($i);
+        return true;
       default: break;
     }
   }
@@ -574,6 +577,8 @@ function AbilityCost($cardID)
       return GetResolvedAbilityName($cardID) == "Shield" ? 1 : 0;
     case "4352150438"://Rey
       return GetResolvedAbilityName($cardID) == "Experience" ? 1 : 0;
+    case "0911874487"://Fennec Shand
+      return GetResolvedAbilityName($cardID) == "Ambush" ? 1 : 0;
     default: break;
   }
   if(IsAlly($cardID)) return 0;
@@ -751,6 +756,9 @@ function GetAbilityTypes($cardID)
     case "4352150438"://Rey
       $abilityTypes = "A";
       break;
+    case "0911874487"://Fennec Shand
+      $abilityTypes = "A";
+      break;
     default: break;
   }
   if(DefinedTypesContains($cardID, "Leader", $currentPlayer) && !IsAlly($cardID, $currentPlayer)) {
@@ -875,6 +883,9 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       break;
     case "4352150438"://Rey
       $abilityNames = "Experience";
+      break;
+    case "0911874487"://Fennec Shand
+      $abilityNames = "Ambush";
       break;
     default: break;
   }
@@ -1143,6 +1154,8 @@ function LeaderUnit($cardID) {
       return "e091d2a983";
     case "9005139831"://The Mandalorian
       return "4088c46c4d";
+    case "0911874487"://Fennec Shand
+      return "2b13cefced";
     default: return "";
   }
 }
@@ -1207,6 +1220,8 @@ function LeaderUndeployed($cardID) {
       return "4352150438";
     case "4088c46c4d"://The Mandalorian
       return "9005139831";
+    case "2b13cefced"://Fennec Shand
+      return "0911874487";
     default: return "";
   }
 }
@@ -1555,6 +1570,7 @@ function DefinedCardType2Wrapper($cardID)
     case "2432897157"://Qi'Ra
     case "4352150438"://Rey
     case "9005139831"://The Mandalorian
+    case "0911874487"://Fennec Shand
       return "";
     default: return DefinedCardType2($cardID);
   }
