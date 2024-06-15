@@ -1037,6 +1037,12 @@ function SpecificAllyAttackAbilities($attackID)
         }
       }
       break;
+    case "3417125055"://IG-11
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY:damagedOnly=true;arena=Ground");
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a damaged unit to deal 3 damage to", 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,3", 1);
+      break;
     case "6208347478"://Chopper
       $card = Mill($defPlayer, 1);
       if(DefinedTypesContains($card, "Event", $defPlayer)) ExhaustResource($defPlayer);

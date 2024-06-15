@@ -423,6 +423,16 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           return $uniqueID;
         case "CAPTURE":
           $cardID = MZRemove($player, $lastResult);
+          if($cardID == "3417125055")//IG-11
+          {
+            $allies = &GetAllies($player);
+            for($i=count($allies)-AllyPieces(); $i>=0; $i-=AllyPieces())
+            {
+              $ally = new Ally("MYALLY-" . $i, $player);
+              if(ArenaContains($ally->CardID(), "Ground", $player)) $ally->DealDamage(3);
+            }
+            return $cardID;
+          }
           $uniqueID = $parameterArr[1];
           $index = SearchAlliesForUniqueID($uniqueID, $player);
           if($index >= 0) {
