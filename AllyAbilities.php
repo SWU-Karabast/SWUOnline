@@ -942,6 +942,12 @@ function SpecificAllyAttackAbilities($attackID)
           $ally->Exhaust();
         }
         break;
+      case "6471336466"://Vambrace Flamethrower
+        AddDecisionQueue("FINDINDICES", $mainPlayer, "ALLTHEIRUNITSMULTI");
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose units to damage", 1);
+        AddDecisionQueue("MULTICHOOSETHEIRUNIT", $mainPlayer, "<-", 1);
+        AddDecisionQueue("MULTIDISTRIBUTEDAMAGE", $mainPlayer, 3, 1);
+        break;
       default: break;
     }
   }

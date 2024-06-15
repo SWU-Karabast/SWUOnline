@@ -1021,6 +1021,7 @@ function UpgradeFilter($cardID)
     case "5874342508"://Hotshot DL-44 Blaster
     case "0754286363"://The Mandalorian's Rifle
     case "5738033724"://Boba Fett's Armor
+    case "6471336466"://Vambrace Flamethrower
       return "trait=Vehicle";
     case "8055390529"://Traitorous
       return "maxCost=3";
