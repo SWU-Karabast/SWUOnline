@@ -3063,7 +3063,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $abilityName = GetResolvedAbilityName($cardID, $from);
       if($abilityName == "Buff HP") {
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to give +2 hp");
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "ADDHEALTH,2", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
