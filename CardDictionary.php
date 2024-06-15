@@ -348,6 +348,9 @@ function HasAmbush($cardID, $player, $index, $from)
       case "0911874487"://Fennec Shand
         RemoveCurrentTurnEffect($i);
         return true;
+      case "2b13cefced"://Fennec Shand
+        RemoveCurrentTurnEffect($i);
+        return true;
       default: break;
     }
   }
@@ -451,6 +454,7 @@ function HasSaboteur($cardID, $player, $index)
     case "3c60596a7a":
     case "4595532978"://Ketsu Onyo
     case "3786602643"://House Kast Soldier
+    case "2b13cefced"://Fennec Shand
       return true;
     default: return false;
   }
@@ -759,6 +763,9 @@ function GetAbilityTypes($cardID)
     case "0911874487"://Fennec Shand
       $abilityTypes = "A";
       break;
+    case "2b13cefced"://Fennec Shand Unit
+      $abilityTypes = "A,AA";
+      break;
     default: break;
   }
   if(DefinedTypesContains($cardID, "Leader", $currentPlayer) && !IsAlly($cardID, $currentPlayer)) {
@@ -886,6 +893,9 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       break;
     case "0911874487"://Fennec Shand
       $abilityNames = "Ambush";
+      break;
+    case "2b13cefced"://Fennec Shand Unit
+      $abilityNames = "Ambush,Attack";
       break;
     default: break;
   }

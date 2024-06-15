@@ -4035,6 +4035,16 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
       }
       break;
+    case "2b13cefced"://Fennec Shand
+      $abilityName = GetResolvedAbilityName($cardID, $from);
+      if($abilityName == "Ambush") {
+        AddCurrentTurnEffect($cardID, $currentPlayer, "PLAY");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND:definedType=Unit;maxCost=4");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to put into play");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
+      }
+      break;
     default: break;
   }
 }
