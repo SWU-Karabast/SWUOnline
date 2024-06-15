@@ -81,17 +81,17 @@ function AllyStaticHealthModifier($cardID, $index, $player, $myCardID, $myIndex,
   switch($myCardID)
   {
     case "1557302740"://General Veers
-      if($index != $myIndex && TraitContains($cardID, "Imperial", $player)) return 1;
+      if($index != $myIndex && $player == $myPlayer && TraitContains($cardID, "Imperial", $player)) return 1;
       break;
     case "9799982630"://General Dodonna
-      if($index != $myIndex && TraitContains($cardID, "Rebel", $player)) return 1;
+      if($index != $myIndex && $player == $myPlayer && TraitContains($cardID, "Rebel", $player)) return 1;
       break;
     case "4339330745"://Wedge Antilles
-      if($index != $myIndex && TraitContains($cardID, "Vehicle", $player)) return 1;
+      if($index != $myIndex && $player == $myPlayer && TraitContains($cardID, "Vehicle", $player)) return 1;
       break;
     case "9097316363"://Emperor Palpatine
     case "6c5b96c7ef"://Emperor Palpatine
-      if($cardID == "1780978508") { //Royal Guard
+      if($cardID == "1780978508" && $player == $myPlayer) { //Royal Guard
         $isEmperorPalpatineLeader = false;
         $character = &GetPlayerCharacter($player);
         for($i=0; $i<count($character); $i+=CharacterPieces()) {
@@ -104,7 +104,7 @@ function AllyStaticHealthModifier($cardID, $index, $player, $myCardID, $myIndex,
       }
       break;
     case "4511413808"://Follower of the Way
-      if($index == $myIndex) {
+      if($index == $myIndex && $player == $myPlayer) {
         $ally = new Ally("MYALLY-" . $index, $player);
         if($ally->NumUpgrades() > 0) return 1;
       }
