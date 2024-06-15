@@ -381,6 +381,7 @@ function HasAmbush($cardID, $player, $index, $from)
     case "8862896760"://Maul
     case "2143627819"://The Marauder
     case "2121724481"://Cloud-Rider
+    case "8107876051"://Enfy's Nest
       return true;
     case "2027289177"://Escort Skiff
       return SearchCount(SearchAllies($player, aspect:"Command")) > 1;

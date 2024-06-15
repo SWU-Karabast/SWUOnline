@@ -707,7 +707,7 @@ function AllyDamagePrevention($player, $index, $damage)
 //NOTE: This is for ally abilities that trigger when any ally attacks (for example miragai GRANTS an ability)
 function AllyAttackAbilities($attackID)
 {
-  global $mainPlayer, $combatChainState, $CCS_AttackUniqueID, $defPlayer;
+  global $mainPlayer, $combatChainState, $CCS_AttackUniqueID, $defPlayer, $CCS_IsAmbush;
   $index = SearchAlliesForUniqueID($combatChainState[$CCS_AttackUniqueID], $mainPlayer);
   $restoreAmount = RestoreAmount($attackID, $mainPlayer, $index);
   if($restoreAmount > 0) Restore($restoreAmount, $mainPlayer);
@@ -719,6 +719,12 @@ function AllyAttackAbilities($attackID)
     switch($allies[$i]) {
       case "20f21b4948"://Jyn Erso
         AddCurrentTurnEffect("20f21b4948", $defPlayer);
+        break;
+      case "8107876051"://Enfy's Nest
+        if($combatChainState[$CCS_IsAmbush] == 1) {
+          $target = new Ally(GetAttackTarget(), $defPlayer);
+          AddCurrentTurnEffect("8107876051", $defPlayer, "PLAY", $target->UniqueID());
+        }
         break;
       default: break;
     }

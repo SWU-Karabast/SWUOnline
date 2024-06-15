@@ -130,6 +130,7 @@ function EffectAttackModifier($cardID)
     case "7171636330": return -4;//Chain Code Collector
     case "2526288781": return 1;//Bossk
     case "1312599620": return -3;//Smuggler's Starfighter
+    case "8107876051": return -3;//Enfy's Nest
     default: return 0;
   }
 }
@@ -555,6 +556,7 @@ function IsCombatEffectActive($cardID)
     case "2503039837": return true;//Moff Gideon Leader
     case "4721657243": return true;//Kihraxz Heavy Fighter
     case "7171636330": return true;//Chain Code Collector
+    case "8107876051": return true;//Enfy's Nest
     default: return false;
   }
 }
