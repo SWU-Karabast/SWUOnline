@@ -304,7 +304,7 @@ class Ally {
     $subcards = $this->GetSubcards();
     $upgrades = [];
     for($i=0; $i<count($subcards); ++$i) {
-      if(DefinedTypesContains($subcards[$i], "Upgrade", $this->PlayerID())) array_push($upgrades, $subcards[$i]);
+      if(DefinedTypesContains($subcards[$i], "Upgrade", $this->PlayerID()) || DefinedTypesContains($subcards[$i], "Token Upgrade", $this->PlayerID())) array_push($upgrades, $subcards[$i]);
     }
     return $upgrades;
   }
