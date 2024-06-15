@@ -610,6 +610,7 @@ function AttackValue($cardID)
     case "7687006104": return 1;//Foundling
     case "5738033724": return 2;//Boba Fett's Armor
     case "3514010297": return 1;//Mandalorian Armor
+    case "4843813137": return 1;//Brutal Traditions
     default: return CardPower($cardID);
   }
 }
@@ -942,6 +943,7 @@ function IsPlayable($cardID, $phase, $from, $index = -1, &$restriction = null, $
   if($phase == "M" && $from == "HAND") return true;
   if($phase == "M" && $from == "GY") {
     $discard = &GetDiscard($player);
+    if($discard[$index] == "4843813137") return true;//Brutal Traditions
     return $discard[$index+1] == "TT" ? true : false;
   }
   $isStaticType = IsStaticType($cardType, $from, $cardID);
@@ -1232,6 +1234,7 @@ function CardHP($cardID) {
     case "8877249477": return 2;//Legal Authority
     case "7687006104": return 1;//Foundling
     case "3514010297": return 3;//Mandalorian Armor
+    case "4843813137": return 2;//Brutal Traditions
     default: return CardHPDictionary($cardID);
   }
 }
