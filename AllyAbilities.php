@@ -431,7 +431,6 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
         WriteLog("Drew a card from General Krell");
         break;
       case "3feee05e13"://Gar Saxon
-        WriteLog($destroyedAlly->NumUpgrades());
         $upgrades = $destroyedAlly->GetUpgrades();
         for($j=0; $j<count($upgrades); ++$j) {
           if(!IsToken($upgrades[$j])) {
