@@ -3574,6 +3574,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
         AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "1090660242,PLAY", 1);
+        WriteLog("This is a partially manual card. Name the card in chat that bounty was applied to");
       }
       break;
     case "1565760222"://Remnant Reserves
