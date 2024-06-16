@@ -4060,6 +4060,23 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       MZMoveCard($currentPlayer, "MYDISCARD:definedType=Unit", "MYRESOURCES", may:true);
       AddDecisionQueue("PAYRESOURCES", $currentPlayer, "1,1", 1);
       break;
+    case "9845101935"://This is the Way
+      WriteLog("This is a partially manual card. Enforce the type restriction manually.");
+      AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE," . 8);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+      //AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Vehicle", 1);
+      AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
+      AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
+      AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
+      AddDecisionQueue("OP", $currentPlayer, "REMOVECARD", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+      //AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Vehicle", 1);
+      AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
+      AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
+      AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
+      AddDecisionQueue("OP", $currentPlayer, "REMOVECARD", 1);
+      AddDecisionQueue("ALLRANDOMBOTTOM", $currentPlayer, "DECK");
+      break;
     default: break;
   }
 }
