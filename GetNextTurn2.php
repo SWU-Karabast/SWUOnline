@@ -221,25 +221,21 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       border-radius: 8px;
     }
 
-    #theirHand {
-      margin-top: 0px;
-    }
-
     .base-my-dmg {
       bottom: 365px;
     } 
 
     .base-their-dmg{
-      top: 288px;
+      top: 305px;
     } 
 
-    @media only screen and (max-height: 717px) {
+    @media only screen and (max-height: 733px) {
       .base-my-dmg {
-        bottom: calc(50% + 6px);
+        bottom: calc(50% - 2px);
       } 
 
       .base-their-dmg{
-        top: calc(50% - 70px);
+        top: calc(50% - 62px);
       } 
     }
     
@@ -334,10 +330,10 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   }
 
   if($initiativePlayer == $playerID || ($playerID == 3 && $initiativePlayer == 2)) {
-    echo ("<div style='position:absolute; bottom:203px; right:281px; background: #00BAFF; border-radius: 15px; height: 30px; width: 96px; filter: drop-shadow(1px 2px 1px rgba(0, 0, 0, 0.3));'><span style='position:relative; margin: 5px auto 0; text-align: center; display:block; z-index:10; font-size: 16px; font-weight:600; color:black; user-select: none;'>Initiative</span>");
+    echo ("<div class='my-initiative'><span>Initiative</span>");
     echo (($manualMode ? "<span style='position:absolute; top:97%; right:0; display: inline-block;'>" . CreateButton($playerID, "+1", 10002, 0, "20px") . CreateButton($playerID, "-1", 10004, 0, "20px") . "</span>" : ""));
   } else {
-    echo ("<div style='position:absolute; top:126px; right:281px; background: #FB0007; border-radius: 15px; height: 30px; width: 96px; filter: drop-shadow(1px 2px 1px rgba(0, 0, 0, 0.25));'><span style='position:relative; margin: 5px auto 0; text-align: center; display:block; z-index:10; font-size: 16px; font-weight:600; color:black; user-select: none;'>Initiative</span>");
+    echo ("<div class='their-initiative'><span>Initiative</span>");
     echo (($manualMode ? "<span style='position:absolute; top:-60%; right:0; display: inline-block;'>" . CreateButton($playerID, "+1", 10002, 0, "20px") . CreateButton($playerID, "-1", 10004, 0, "20px") . "</span>" : ""));
   }
   echo ("</div>");
@@ -414,23 +410,19 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   echo ($friendlyEffects);
   // echo ("<div style='text-align:center; padding-top:10px; font-size:14px; font-weight: 500; color: white; user-select: none; white-space: break-spaces;'>Your Effects</div>");
   echo ("</div>");
- 
-   // Arena Middle Mask
-   echo ("<div style='opacity:1; position: absolute; top:123px; left: calc(50% - 313px); width: 389px; height:calc(100% - 323px); background: url(\"./Images/arenaoverlay.png\") repeat-y; background-size: contain;'>");
-   echo ("</div>");
 
   //Space Arena
-  echo ("<div style='
-  mask: linear-gradient(90deg, rgba(0, 0, 0, 1) 0, rgba(0, 0, 0, 1) 80%, rgba(0, 0, 0, 0) 100%, rgba(0, 0, 0, 0) 0) 100% 50% / 100% 100% repeat-x;
-  position: absolute; z-index: -5; top:123px; left:41px; width:calc(50% - 98px); height:calc(100% - 323px); opacity:.6; border-radius:17px 0 0 17px; background-size: cover; background-position: 60% 50%; 
+  echo ("<div style=' position: absolute; z-index: -5; top:140px; left:41px; width:calc(50% - 251px); height:calc(100% - 340px); opacity:.6; border-radius:17px; background-size: cover; background-position: 60% 50%; 
   background-image: url(\"./Images/bg-deathstar.jpg\");'>");
   echo ("</div>");
 
   //Ground Arena
-  echo ("<div style='
-  mask: linear-gradient(270deg, rgba(0, 0, 0, 1) 0, rgba(0, 0, 0, 0.9) 80%, rgba(0, 0, 0, 0) 99%, rgba(0, 0, 0, 0) 0) 100% 50% / 101% 100% repeat-x;
-  position: absolute; z-index: -5; top:123px; right:278px; width:calc(50% - 98px); height:calc(100% - 323px); opacity:.5; border-radius:0 17px 17px 0; background-size: cover; background-position: 80% 50%; background-image: url(\"./Images/bg-echobase.jpg\");'>");
+  echo ("<div style=' position: absolute; z-index: -5; top:140px; right:278px; width:calc(50% - 251px); height:calc(100% - 340px); opacity:.4; border-radius:17px; background-size: cover; background-position: 80% 50%; background-image: url(\"./Images/bg-echobase.jpg\");'>");
   echo ("</div>");
+
+   //Ground Arena
+   echo ("<div style='position: absolute; z-index: -6; top:140px; right:278px; width:calc(50% - 251px); height:calc(100% - 340px); opacity:.6; border-radius:17px; background-size: cover; background:#131F2A;'>");
+   echo ("</div>");
 
 
   $displayCombatChain = count($combatChain) > 0;
@@ -833,7 +825,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
 
   //Opponent hand
   $handContents = "";
-  $chatboxWidth = "208px";
+  $chatboxWidth = "238px";
   echo ("<div style='display: flex; justify-content: center; width: calc(100% - $chatboxWidth);'>");
   echo ("<div id='theirHand'>");
   for ($i = 0; $i < count($theirHand); ++$i) {
@@ -851,22 +843,22 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   //Show deck, discard, pitch, banish
   //Display Their Discard
   if (count($theirDiscard) > 0) {
-    echo ("<div class= 'small-card' title='Click to view the cards in your opponent's Graveyard.' style='cursor:pointer; position:fixed; right:341px; top:22px;' onclick='ShowPopup(\"theirDiscardPopup\");'>");
+    echo ("<div class= 'their-discard' title='Click to view the cards in your opponent's Graveyard.' style='cursor:pointer;' onclick='ShowPopup(\"theirDiscardPopup\");'>");
     echo (Card($theirDiscard[count($theirDiscard) - DiscardPieces()], "concat", $cardSizeAura, 0, 0, 0, 0, count($theirDiscard)/DiscardPieces(), controller: $otherPlayer));
   } else {
     //Empty Discard div
-    echo ("<div class= 'small-card' style='position:fixed; right:341px; top:22px; border-radius:5px; padding:" . $cardSizeAura / 2 . "px; background-color: rgba(0, 0, 0, 0.8);'>");
+    echo ("<div class= 'their-discard' style='padding:" . $cardSizeAura / 2 . "px;'>");
     echo ("<div style='position:absolute; margin: 0; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: " . $bordelessFontColor . "; user-select:none;'>Discard</div>");
   }
   echo ("</div>");
 
   //Display Their Deck
   if (count($theirDeck) > 0) {
-    echo ("<div class= 'small-card' style='position:fixed; right:257px; top:19px;'>");
+    echo ("<div class= 'their-deck'>");
     echo (Card($TheirCardBack, "concat", $cardSizeAura, 0, 0, 0, 0, count($theirDeck)));
   } else {
     //Empty Deck div
-    echo ("<div class= 'small-card' style='position:fixed; right:" . GetZoneRight("DECK") . "; top:" . GetZoneTop("THEIRDECK") . "; border-radius:5%; padding:" . $cardSizeAura / 2 . "px; background-color: rgba(0, 0, 0, 0.4);'>");
+    echo ("<div class= 'their-deck empty' style='position:fixed; right:" . GetZoneRight("DECK") . "; top:" . GetZoneTop("THEIRDECK") . "; padding:" . $cardSizeAura / 2 . "px; background-color: rgba(0, 0, 0, 0.4);'>");
     echo ("<div style='position:absolute; margin: 0; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: " . $bordelessFontColor . "; user-select:none;'>Deck</div>");
   }
   echo (($manualMode ? "<span style='position:absolute; left:50%; -ms-transform: translateX(-50%); transform: translateX(-50%);  bottom:0px; z-index:1000;'>" . CreateButton($playerID, "Draw", 10010, 0, "20px") . "</span>" : ""));
@@ -1018,7 +1010,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   }
 
   echo ("<div class='their-resources'>");
-  echo ("<div title='Opponent resources' style='padding:18px 0 20px 0; display: flex; justify-content: center; cursor:default;'><img style='width:26px; height:34px; margin-top:3px;' src='./Images/Resource.png' /><span style='color:white; font-size:32px; font-weight: 700; margin: 0 0 0 10px;'>" . $numReady . "/" . $total . "</span></div>");
+  echo ("<div class='resources' title='Opponent resources' style='padding:28px 0; display: flex; justify-content: center; cursor:default;'><img style='width:26px; height:34px; margin-top:3px;' src='./Images/Resource.png' /><span style='color:white; font-size:32px; font-weight: 700; margin: 0 0 0 10px;'>" . $numReady . "/" . $total . "</span></div>");
   echo ("</div>");
 
   echo ("</div>");
@@ -1198,18 +1190,18 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     if($myArsenal[$i + 4] != 1) ++$numReady;
   }
   echo ("<div class='resource-wrapper my-resources'>");
-  echo ("<div title='Click to see your resources.' style='padding:18px 0 20px 0; display: flex; justify-content: center; cursor:pointer;' onclick='ShowPopup(\"myResourcePopup\");'><img style='width:26px; height:34px; margin-top:3px;' src='./Images/Resource.png' /><span style='color:white; font-size:32px; font-weight: 700; margin: 0 0 0 10px;'>" . $numReady . "/" . $total . "</span></div>");
+  echo ("<div class='resources' title='Click to see your resources.' style='padding:28px 0; display: flex; justify-content: center; cursor:pointer;' onclick='ShowPopup(\"myResourcePopup\");'><img style='width:26px; height:34px; margin-top:3px;' src='./Images/Resource.png' /><span style='color:white; font-size:32px; font-weight: 700; margin: 0 0 0 10px;'>" . $numReady . "/" . $total . "</span></div>");
   echo ("</div>");
   echo ("</div>"); //End arsenal div
 
   //Show deck, discard
   //Display My Discard
   if (count($myDiscard) > 0) {
-    echo ("<div title='Click to view the cards in your Graveyard.' style='cursor:pointer; position:fixed; right:257px; bottom:4px;' onclick='ShowPopup(\"myDiscardPopup\");'>");
+    echo ("<div class= 'my-discard' title='Click to view the cards in your Graveyard.' style='cursor:pointer; position:fixed; bottom:4px;' onclick='ShowPopup(\"myDiscardPopup\");'>");
     echo (Card($myDiscard[count($myDiscard) - 1], "concat", $cardSizeAura, 0, 0, 0, 0, count($myDiscard), controller: $playerID));
   } else {
     //Empty Discard div
-    echo ("<div class= 'small-card' style='position:fixed; right:344px; bottom:20px; border-radius:5px; padding:" . $cardSizeAura / 2 . "px; background-color: rgba(0, 0, 0, 0.4);'>");
+    echo ("<div class= 'my-discard' style='padding:" . $cardSizeAura / 2 . "px;'>");
     echo ("<div style='position:absolute; margin: 0; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: " . $bordelessFontColor . "; user-select:none;'>Discard</div>");
   }
   echo ("</div>");
@@ -1217,12 +1209,12 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   //Display My Deck
   if (count($myDeck) > 0) {
     $playerDeck = new Deck($playerID);
-    if ($turn[0] == "OVER") echo ("<div title='Click to view the cards in your Deck.' style='cursor:pointer; position:fixed; right:" . GetZoneRight("DECK") . "; bottom:" . GetZoneBottom("MYDECK") . "' onclick='ShowPopup(\"myDeckPopup\");'>");
-    else echo ("<div class= 'small-card' style='position:fixed; right:260px; bottom:22px;'>");
+    if ($turn[0] == "OVER") echo ("<div class= 'my-deck' title='Click to view the cards in your Deck.' style='cursor:pointer;" . GetZoneRight("DECK") . "; bottom:" . GetZoneBottom("MYDECK") . "' onclick='ShowPopup(\"myDeckPopup\");'>");
+    else echo ("<div class= 'my-deck'>");
     echo (Card($MyCardBack, "concat", $cardSizeAura, 0, 0, 0, 0, $playerDeck->RemainingCards()));
   } else {
     //Empty Deck div
-    echo ("<div class= 'small-card' style='position:fixed; right:260px; bottom:22px; border-radius:5%; padding:" . $cardSizeAura / 2 . "px; background-color: rgba(0, 0, 0, 0.4);'>");
+    echo ("<div class= 'my-deck' style='position:fixed; padding:" . $cardSizeAura / 2 . "px;'>");
     echo ("<div style='position:absolute; margin: 0; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: " . $bordelessFontColor . "; user-select:none;'>Deck</div>");
   }
   echo (($manualMode ? "<span style='position:absolute; left:50%; -ms-transform: translateX(-50%); transform: translateX(-50%); bottom:0px; z-index:1000;'>" . CreateButton($playerID, "Draw", 10009, 0, "20px") . "</span>" : ""));

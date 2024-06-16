@@ -436,9 +436,9 @@
       function GetCharacterTop(cardType, cardSubType) {
         switch (cardType) {
           case "C":
-            return "142px";
+            return "159px";
           case "W":
-            return "252px";
+            return "269px";
           default:
             break;
         }
