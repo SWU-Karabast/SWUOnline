@@ -1169,6 +1169,8 @@ function LeaderUnit($cardID) {
       return "2b13cefced";
     case "9794215464"://Gar Saxon
       return "3feee05e13";
+    case "9334480612"://Boba Fett Green Leader
+      return "919facb76d";
     default: return "";
   }
 }
@@ -1237,6 +1239,8 @@ function LeaderUndeployed($cardID) {
       return "0911874487";
     case "3feee05e13"://Gar Saxon
       return "9794215464";
+    case "919facb76d"://Boba Fett Green Leader
+      return "9334480612";
     default: return "";
   }
 }
@@ -1587,6 +1591,7 @@ function DefinedCardType2Wrapper($cardID)
     case "9005139831"://The Mandalorian
     case "0911874487"://Fennec Shand
     case "9794215464"://Gar Saxon
+    case "9334480612"://Boba Fett Green Leader
       return "";
     default: return DefinedCardType2($cardID);
   }

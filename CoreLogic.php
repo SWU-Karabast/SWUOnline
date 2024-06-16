@@ -360,6 +360,16 @@ function MainCharacterPlayCardAbilities($cardID, $from)
           AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
         }
         break;
+      case "9334480612"://Boba Fett Green Leader
+        if(DefinedTypesContains($cardID, "Unit", $currentPlayer)) {
+          $character[$i+1] = 1;
+          AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
+          AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to give +1 power");
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+          AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
+          AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "9334480612,HAND", 1);
+        }
+        break;
       default:
         break;
     }
