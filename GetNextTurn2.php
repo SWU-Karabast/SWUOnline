@@ -390,8 +390,8 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     $cardID = explode(",", $cardID)[0];
     $cardID = explode("_", $cardID)[0];
     $isFriendly = ($playerID == $currentTurnEffects[$i + 1] || $playerID == 3 && $otherPlayer != $currentTurnEffects[$i + 1]);
-    $color = ($isFriendly ? "white" : "white"); // Me : Opponent
-    $effect = "<div style='width:86px; height:66px; margin:10px 0 10px 1px; border:1px solid " . $color . "; border-radius: 5px;'>";
+    $color = ($isFriendly ? "#00BAFF" : "#FB0007"); // Me : Opponent
+    $effect = "<div class='effect-display' style='border:1px solid " . $color . ";'>";
     $effect .= Card($cardID, "crops", 65, 0, 1);
     $effect .= "</div>";
     if ($isFriendly) $friendlyEffects .= $effect;
@@ -990,12 +990,12 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   echo ("</div>");
 
   //Their Space Allies
-  echo ("<div class='spaceEnemiesContainer' style='overflow-y:auto; padding: 20px 15px 15px 15px; position: fixed; top:140px; left:51px; width: calc(50% - 294px); max-height:" . $permHeight . "px;'>");
+  echo ("<div class='spaceEnemiesContainer' style='overflow-y:auto; padding: 20px 20px 15px 20px; position: fixed; top:140px; left:41px; width: calc(50% - 291px); max-height:" . $permHeight . "px;'>");
   echo ($spaceAllies);
   echo ("</div>");
 
   //Their Ground Allies
-  echo ("<div class='groundEnemiesContainer' style='overflow-y:auto; padding: 20px 15px 15px 15px; position: fixed; top:140px; right:288px; width: calc(50% - 294px); max-height:" . $permHeight . "px;'>");
+  echo ("<div class='groundEnemiesContainer' style='overflow-y:auto; padding: 20px 20px 15px 20px; position: fixed; top:140px; right:278px; width: calc(50% - 291px); max-height:" . $permHeight . "px;'>");
   echo ($groundAllies);
   echo ("</div>");
 
@@ -1131,12 +1131,12 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   echo ("</div>");
 
   //Space allies
-  echo ("<div class='spaceAlliesContainer' style='overflow-y:auto; padding: 5px 15px 14px 15px; position: fixed; bottom:200px; left:51px; width: calc(50% - 294px); max-height:" . $permHeight . "px;'>");
+  echo ("<div class='spaceAlliesContainer' style='overflow-y:auto; padding: 5px 20px 12px 20px; position: fixed; bottom:200px; left:41px; width: calc(50% - 291px); max-height:" . $permHeight . "px;'>");
   echo ($spaceAllies);
   echo ("</div>");
 
   //Ground allies
-  echo ("<div class='groundAlliesContainer' style='overflow-y:auto; padding: 5px 15px 14px 15px; position: fixed; bottom:200px; right:288px; width: calc(50% - 294px); max-height:" . $permHeight . "px;'>");
+  echo ("<div class='groundAlliesContainer' style='overflow-y:auto; padding: 5px 20px 12px 20px; position: fixed; bottom:200px; right:278px; width: calc(50% - 291px); max-height:" . $permHeight . "px;'>");
   echo ($groundAllies);
   echo ("</div>");
 
@@ -1197,11 +1197,11 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   //Show deck, discard
   //Display My Discard
   if (count($myDiscard) > 0) {
-    echo ("<div class= 'my-discard' title='Click to view the cards in your Graveyard.' style='cursor:pointer; position:fixed; bottom:4px;' onclick='ShowPopup(\"myDiscardPopup\");'>");
-    echo (Card($myDiscard[count($myDiscard) - 1], "concat", $cardSizeAura, 0, 0, 0, 0, count($myDiscard), controller: $playerID));
+    echo ("<div class='my-discard' title='Click to view the cards in your Graveyard.' style='cursor:pointer;' onclick='ShowPopup(\"myDiscardPopup\");'>");
+    echo (Card($myDiscard[count($myDiscard) - DiscardPieces()], "concat", $cardSizeAura, 0, 0, 0, 0, count($myDiscard)/DiscardPieces(), controller: $playerID));
   } else {
     //Empty Discard div
-    echo ("<div class= 'my-discard' style='padding:" . $cardSizeAura / 2 . "px;'>");
+    echo ("<div class='my-discard' style='position:fixed; padding:" . $cardSizeAura / 2 . "px; background-color: rgba(0, 0, 0, 0.4);'>");
     echo ("<div style='position:absolute; margin: 0; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: " . $bordelessFontColor . "; user-select:none;'>Discard</div>");
   }
   echo ("</div>");

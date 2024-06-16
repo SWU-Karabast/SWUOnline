@@ -7,6 +7,20 @@
   --button-box-shadow: 1px 1px 0 var(--dark-color), -1px -1px 0 var(--dark-color), -1px 1px 0 var(--dark-color), 1px -1px 0 var(--dark-color);
 }
 
+
+.effect-display {
+  width:56px; 
+  height:36px; 
+  margin:10px 0 7px 1px; 
+  border-radius: 5px;
+}
+
+.effect-display img {
+  width:54px !important; 
+  height:34px !important; 
+  border-radius: 4px !important;
+}
+
 #theirHand {
   margin-top: 18px;
 }
@@ -71,7 +85,6 @@
   right:364px; 
   bottom:20px; 
   border-radius:5px; 
-  background-color: rgba(0, 0, 0, 0.3);
 }
 
 .my-deck {
@@ -81,8 +94,12 @@
   border-radius: 5px;
 }
 
-.my-deck a {
+.my-discard a, .my-deck a {
   margin-bottom: 0 !important;
+}
+
+.my-discard img, .their-discard img {
+  border: 0 !important;
 }
 
 .my-initiative, .their-initiative {
