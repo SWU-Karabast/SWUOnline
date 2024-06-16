@@ -219,6 +219,9 @@ class Ally {
         case "3feee05e13"://Gar Saxon
           if($this->IsUpgraded()) $power += 1;
           break;
+        case "919facb76d"://Boba Fett Green Leader
+          if($i != $this->index) $power += 1;
+          break;
         default: break;
       }
     }
