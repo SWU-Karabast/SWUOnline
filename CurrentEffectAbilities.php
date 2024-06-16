@@ -130,6 +130,8 @@ function EffectAttackModifier($cardID)
     case "7171636330": return -4;//Chain Code Collector
     case "2526288781": return 1;//Bossk
     case "1312599620": return -3;//Smuggler's Starfighter
+    case "8107876051": return -3;//Enfy's Nest
+    case "9334480612": return 1;//Boba Fett Green Leader
     default: return 0;
   }
 }
@@ -228,6 +230,10 @@ function CurrentEffectCostModifiers($cardID, $from)
             $costModifier -= 3;
             $remove = true;
           }
+          break;
+        case "5696041568"://Triple Dark Raid
+          $costModifier -= 5;
+          $remove = true;
           break;
         case "7870435409"://Bib Fortuna
           $costModifier -= 1;
@@ -471,6 +477,10 @@ function CurrentEffectEndTurnAbilities()
           AddDecisionQueue("MZOP", $owner, "TAKECONTROL", 1);
         }
         break;
+      case "5696041568"://Triple Dark Raid
+        $ally = new Ally("MYALLY-" . SearchAlliesForUniqueID($currentTurnEffects[$i+2], $currentTurnEffects[$i+1]), $currentTurnEffects[$i+1]);
+        MZBounce($currentTurnEffects[$i+1], "MYALLY-" . $ally->Index());
+        break;
       default: break;
     }
     if($remove) RemoveCurrentTurnEffect($i);
@@ -555,6 +565,7 @@ function IsCombatEffectActive($cardID)
     case "2503039837": return true;//Moff Gideon Leader
     case "4721657243": return true;//Kihraxz Heavy Fighter
     case "7171636330": return true;//Chain Code Collector
+    case "8107876051": return true;//Enfy's Nest
     default: return false;
   }
 }

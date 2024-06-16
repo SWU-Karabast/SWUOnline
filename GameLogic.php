@@ -423,6 +423,16 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           return $uniqueID;
         case "CAPTURE":
           $cardID = MZRemove($player, $lastResult);
+          if($cardID == "3417125055")//IG-11
+          {
+            $allies = &GetAllies($player);
+            for($i=count($allies)-AllyPieces(); $i>=0; $i-=AllyPieces())
+            {
+              $ally = new Ally("MYALLY-" . $i, $player);
+              if(ArenaContains($ally->CardID(), "Ground", $player)) $ally->DealDamage(3);
+            }
+            return $cardID;
+          }
           $uniqueID = $parameterArr[1];
           $index = SearchAlliesForUniqueID($uniqueID, $player);
           if($index >= 0) {
@@ -438,6 +448,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       }
       return $lastResult;
     case "OP":
+      $paramArr = explode(",", $parameter);
+      $parameter = $paramArr[0];
       switch($parameter)
       {
         case "DESTROYFROZENARSENAL": DestroyFrozenArsenal($player); return "";
@@ -491,6 +503,9 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $allyPlayer = $mzArr[0] == "MYALLY" ? $player : ($player == 1 ? 2 : 1);
           $ally = new Ally($dqVars[0], $allyPlayer);
           $ally->RescueCaptive($captiveID, $player);
+          return $lastResult;
+        case "PLAYCARD":
+          PlayCard($lastResult, $paramArr[1], -1, -1);
           return $lastResult;
         case "SWAPDQPERSPECTIVE":
           $arr = explode(",", $lastResult);
@@ -973,7 +988,6 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         $damage = CurrentEffectDamagePrevention($player, $type, $damage, $source, true, $allies[$target[1]+5]);
         if($damage < 0) $damage = 0;
         $allies[$target[1]+2] -= $damage;
-        if($damage > 0) AllyDamageTakenAbilities($targetPlayer, $target[1]);
         if($allies[$target[1]+2] <= 0) {
           DestroyAlly($targetPlayer, $target[1]);
         } else {
@@ -1527,6 +1541,9 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         $auras[$lastResult[$i] + 1] = 1;
       }
       return "";
+    case "CARDDISCARDED":
+      CardDiscarded($player, $lastResult);
+      return $lastResult;
     case "NEGATE":
       NegateLayer($parameter);
       return "";

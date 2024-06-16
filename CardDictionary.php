@@ -113,6 +113,7 @@ function RestoreAmount($cardID, $player, $index)
     case "9503028597": $amount += 1; break;//Clone Deserter
     case "5511838014": $amount += 1; break;//Kuil
     case "e091d2a983": $amount += 3; break;//Rey
+    case "7022736145": $amount += 2; break;//Tarfful
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
@@ -224,6 +225,7 @@ function HasSentinel($cardID, $player, $index)
     case "7486516061"://Concord Dawn Interceptors
     case "6409922374"://Niima Outpost Constables
     case "0315522200"://Black Sun Starfighter
+    case "8228196561"://Clan Saxon Gauntlet
       return true;
     case "2739464284"://Gamorrean Guards
       return SearchCount(SearchAllies($player, aspect:"Cunning")) > 1;
@@ -273,6 +275,7 @@ function HasGrit($cardID, $player, $index)
     case "0252207505"://Synara San
     case "4783554451"://First Light
     case "4aa0804b2b"://Qi'Ra
+    case "1477806735"://Wookiee Warrior
       return true;
     default: return false;
   }
@@ -342,6 +345,12 @@ function HasAmbush($cardID, $player, $index, $from)
       case "6847268098"://Timely Intervention
         RemoveCurrentTurnEffect($i);
         return true;
+      case "0911874487"://Fennec Shand
+        RemoveCurrentTurnEffect($i);
+        return true;
+      case "2b13cefced"://Fennec Shand
+        RemoveCurrentTurnEffect($i);
+        return true;
       default: break;
     }
   }
@@ -351,7 +360,7 @@ function HasAmbush($cardID, $player, $index, $from)
     switch($allies[$i])
     {
       case "4566580942"://Admiral Piett
-        if(CardCost($cardID) >= 6) return true;
+        if(CardCost($cardID) >= 6 && $from != "EQUIP") return true;
         break;
       case "4339330745"://Wedge Antilles
         if(TraitContains($cardID, "Vehicle", $player)) return true;
@@ -378,6 +387,7 @@ function HasAmbush($cardID, $player, $index, $from)
     case "8862896760"://Maul
     case "2143627819"://The Marauder
     case "2121724481"://Cloud-Rider
+    case "8107876051"://Enfy's Nest
       return true;
     case "2027289177"://Escort Skiff
       return SearchCount(SearchAllies($player, aspect:"Command")) > 1;
@@ -443,6 +453,8 @@ function HasSaboteur($cardID, $player, $index)
     case "9250443409":
     case "3c60596a7a":
     case "4595532978"://Ketsu Onyo
+    case "3786602643"://House Kast Soldier
+    case "2b13cefced"://Fennec Shand
       return true;
     default: return false;
   }
@@ -569,6 +581,8 @@ function AbilityCost($cardID)
       return GetResolvedAbilityName($cardID) == "Shield" ? 1 : 0;
     case "4352150438"://Rey
       return GetResolvedAbilityName($cardID) == "Experience" ? 1 : 0;
+    case "0911874487"://Fennec Shand
+      return GetResolvedAbilityName($cardID) == "Ambush" ? 1 : 0;
     default: break;
   }
   if(IsAlly($cardID)) return 0;
@@ -607,6 +621,7 @@ function AttackValue($cardID)
     case "7687006104": return 1;//Foundling
     case "5738033724": return 2;//Boba Fett's Armor
     case "3514010297": return 1;//Mandalorian Armor
+    case "4843813137": return 1;//Brutal Traditions
     default: return CardPower($cardID);
   }
 }
@@ -745,6 +760,12 @@ function GetAbilityTypes($cardID)
     case "4352150438"://Rey
       $abilityTypes = "A";
       break;
+    case "0911874487"://Fennec Shand
+      $abilityTypes = "A";
+      break;
+    case "2b13cefced"://Fennec Shand Unit
+      $abilityTypes = "A,AA";
+      break;
     default: break;
   }
   if(DefinedTypesContains($cardID, "Leader", $currentPlayer) && !IsAlly($cardID, $currentPlayer)) {
@@ -870,6 +891,12 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
     case "4352150438"://Rey
       $abilityNames = "Experience";
       break;
+    case "0911874487"://Fennec Shand
+      $abilityNames = "Ambush";
+      break;
+    case "2b13cefced"://Fennec Shand Unit
+      $abilityNames = "Ambush,Attack";
+      break;
     default: break;
   }
   if(DefinedTypesContains($cardID, "Leader", $currentPlayer) && !IsAlly($cardID, $currentPlayer)) {
@@ -939,6 +966,7 @@ function IsPlayable($cardID, $phase, $from, $index = -1, &$restriction = null, $
   if($phase == "M" && $from == "HAND") return true;
   if($phase == "M" && $from == "GY") {
     $discard = &GetDiscard($player);
+    if($discard[$index] == "4843813137") return true;//Brutal Traditions
     return $discard[$index+1] == "TT" ? true : false;
   }
   $isStaticType = IsStaticType($cardType, $from, $cardID);
@@ -993,6 +1021,7 @@ function UpgradeFilter($cardID)
     case "5874342508"://Hotshot DL-44 Blaster
     case "0754286363"://The Mandalorian's Rifle
     case "5738033724"://Boba Fett's Armor
+    case "6471336466"://Vambrace Flamethrower
       return "trait=Vehicle";
     case "8055390529"://Traitorous
       return "maxCost=3";
@@ -1136,6 +1165,12 @@ function LeaderUnit($cardID) {
       return "e091d2a983";
     case "9005139831"://The Mandalorian
       return "4088c46c4d";
+    case "0911874487"://Fennec Shand
+      return "2b13cefced";
+    case "9794215464"://Gar Saxon
+      return "3feee05e13";
+    case "9334480612"://Boba Fett Green Leader
+      return "919facb76d";
     default: return "";
   }
 }
@@ -1200,6 +1235,12 @@ function LeaderUndeployed($cardID) {
       return "4352150438";
     case "4088c46c4d"://The Mandalorian
       return "9005139831";
+    case "2b13cefced"://Fennec Shand
+      return "0911874487";
+    case "3feee05e13"://Gar Saxon
+      return "9794215464";
+    case "919facb76d"://Boba Fett Green Leader
+      return "9334480612";
     default: return "";
   }
 }
@@ -1229,6 +1270,7 @@ function CardHP($cardID) {
     case "8877249477": return 2;//Legal Authority
     case "7687006104": return 1;//Foundling
     case "3514010297": return 3;//Mandalorian Armor
+    case "4843813137": return 2;//Brutal Traditions
     default: return CardHPDictionary($cardID);
   }
 }
@@ -1547,6 +1589,9 @@ function DefinedCardType2Wrapper($cardID)
     case "2432897157"://Qi'Ra
     case "4352150438"://Rey
     case "9005139831"://The Mandalorian
+    case "0911874487"://Fennec Shand
+    case "9794215464"://Gar Saxon
+    case "9334480612"://Boba Fett Green Leader
       return "";
     default: return DefinedCardType2($cardID);
   }

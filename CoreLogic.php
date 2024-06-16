@@ -342,7 +342,7 @@ function MainCharacterPlayCardAbilities($cardID, $from)
         }
         break;
       case "1384530409"://Cad Bane
-        if(TraitContains($cardID, "Underworld", $currentPlayer)) {
+        if($from != 'PLAY' && $from != 'EQUIP' && TraitContains($cardID, "Underworld", $currentPlayer)) { 
           $character[$i+1] = 1;
           $otherPlayer = ($currentPlayer == 1 ? 2 : 1);
           AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY");
@@ -358,6 +358,16 @@ function MainCharacterPlayCardAbilities($cardID, $from)
           AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to exhaust", 1);
           AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
           AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
+        }
+        break;
+      case "9334480612"://Boba Fett Green Leader
+        if(DefinedTypesContains($cardID, "Unit", $currentPlayer)) {
+          $character[$i+1] = 1;
+          AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
+          AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to give +1 power");
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+          AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
+          AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "9334480612,HAND", 1);
         }
         break;
       default:
@@ -3063,7 +3073,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $abilityName = GetResolvedAbilityName($cardID, $from);
       if($abilityName == "Buff HP") {
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to give +2 hp");
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "ADDHEALTH,2", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
@@ -3564,6 +3574,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
         AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "1090660242,PLAY", 1);
+        WriteLog("This is a partially manual card. Name the card in chat that bounty was applied to");
       }
       break;
     case "1565760222"://Remnant Reserves
@@ -3810,10 +3821,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "8645125292"://Covert Strength
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to restore 2 and give a shield");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to restore 2 and give a experience token to");
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "RESTORE,2", 1);
-      AddDecisionQueue("MZOP", $currentPlayer, "ADDSHIELD", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "ADDEXPERIENCE", 1);
       break;
     case "4783554451"://First Light
       if($from == "RESOURCES") {
@@ -4006,6 +4017,67 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "0598830553"://Dryden Vos
       PlayCaptive($currentPlayer, $target);
       break;
+    case "1477806735"://Wookiee Warrior
+      if(SearchCount(SearchAllies($currentPlayer, trait:"Wookiee")) > 1) {
+        Draw($currentPlayer);
+      }
+      break;
+    case "5696041568"://Triple Dark Raid
+      global $CS_AfterPlayedBy;
+      SetClassState($currentPlayer, $CS_AfterPlayedBy, $cardID);
+      AddCurrentTurnEffect($cardID, $currentPlayer);
+      AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE," . 8);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+      AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Vehicle", 1);
+      AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "1", 1);
+      AddDecisionQueue("OP", $currentPlayer, "REMOVECARD", 1);
+      AddDecisionQueue("ALLRANDOMBOTTOM", $currentPlayer, "DECK");
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{1}", 1);
+      AddDecisionQueue("OP", $currentPlayer, "PLAYCARD,DECK", 1);
+      break;
+    case "0911874487"://Fennec Shand
+      $abilityName = GetResolvedAbilityName($cardID, $from);
+      if($abilityName == "Ambush") {
+        AddCurrentTurnEffect($cardID, $currentPlayer, "PLAY");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND:definedType=Unit;maxCost=4");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to put into play");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
+      }
+      break;
+    case "2b13cefced"://Fennec Shand
+      $abilityName = GetResolvedAbilityName($cardID, $from);
+      if($abilityName == "Ambush") {
+        AddCurrentTurnEffect($cardID, $currentPlayer, "PLAY");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND:definedType=Unit;maxCost=4");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to put into play");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
+      }
+      break;
+    case "9828896088":
+      WriteLog("Spark of Hope is a partially manual card. Enforce the turn restriction manually.");
+      MZMoveCard($currentPlayer, "MYDISCARD:definedType=Unit", "MYRESOURCES", may:true);
+      AddDecisionQueue("PAYRESOURCES", $currentPlayer, "1,1", 1);
+      break;
+    case "9845101935"://This is the Way
+      WriteLog("This is a partially manual card. Enforce the type restriction manually.");
+      AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE," . 8);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+      //AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Vehicle", 1);
+      AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
+      AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
+      AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
+      AddDecisionQueue("OP", $currentPlayer, "REMOVECARD", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+      //AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Vehicle", 1);
+      AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
+      AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
+      AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
+      AddDecisionQueue("OP", $currentPlayer, "REMOVECARD", 1);
+      AddDecisionQueue("ALLRANDOMBOTTOM", $currentPlayer, "DECK");
+      break;
     default: break;
   }
 }
@@ -4073,6 +4145,12 @@ function AfterPlayedByAbility($cardID) {
       break;
     case "8968669390"://U-Wing Reinforcement
       SearchCurrentTurnEffects("8968669390", $currentPlayer, remove:true);
+      break;
+    case "5696041568"://Triple Dark Raid
+      AddDecisionQueue("OP", $currentPlayer, "GETLASTALLYMZ", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "5696041568,HAND", 1);
       break;
     default: break;
   }

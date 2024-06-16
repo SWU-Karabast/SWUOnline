@@ -461,6 +461,7 @@ function RemoveCharacterEffects($player, $index, $effect)
 
 function AddSpecificGraveyard($cardID, &$graveyard, $from, $player, $modifier="-")
 {
+  if($cardID == "3991112153" && ($from == "HAND" || $from == "DECK")) $modifier = "TT";
   array_push($graveyard, $cardID);
   array_push($graveyard, $modifier);
 }
