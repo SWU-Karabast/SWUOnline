@@ -4045,6 +4045,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
       }
       break;
+    case "9828896088":
+      WriteLog("Spark of Hope is a partially manual card. Enforce the turn restriction manually.");
+      MZMoveCard($currentPlayer, "MYDISCARD:definedType=Unit", "MYRESOURCES", may:true);
+      AddDecisionQueue("PAYRESOURCES", $currentPlayer, "1,1", 1);
+      break;
     default: break;
   }
 }
