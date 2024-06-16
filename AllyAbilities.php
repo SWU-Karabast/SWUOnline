@@ -856,13 +856,18 @@ function AllyPlayCardAbility($cardID, $player="", $reportMode=false, $from="-")
           DealDamageAsync($otherPlayer, 1, "DAMAGE", "0981852103");
         }
         break;
-      case "724979d608"://Cad Bane
-        if(TraitContains($cardID, "Underworld", $player)) {
-          $otherPlayer = ($player == 1 ? 2 : 1);
-          AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY");
-          AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a unit to deal 2 damage to", 1);
-          AddDecisionQueue("MAYCHOOSEMULTIZONE", $otherPlayer, "<-", 1);
-          AddDecisionQueue("MZOP", $otherPlayer, "DEALDAMAGE,2", 1);
+      case "724979d608"://Cad Bane Leader 
+        $cadIndex = SearchAlliesForCard($opponent, "724979d608"); 
+        if($cadIndex != "") {
+          $cadbane = new Ally("MYALLY-" . $cadIndex, $opponent);
+          if($from != 'PLAY' && $cadbane->NumUses() > 0 && TraitContains($cardID, "Underworld", $currentPlayer )) { 
+            $cadbane->ModifyUses(-1);
+            $otherPlayer = ($player == 1 ? 2 : 1);
+            AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY");
+            AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a unit to deal 2 damage to", 1);
+            AddDecisionQueue("MAYCHOOSEMULTIZONE", $otherPlayer, "<-", 1);
+            AddDecisionQueue("MZOP", $otherPlayer, "DEALDAMAGE,2", 1);
+          }
         }
         break;
       case "4088c46c4d"://The Mandalorian

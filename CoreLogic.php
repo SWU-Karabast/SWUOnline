@@ -342,7 +342,7 @@ function MainCharacterPlayCardAbilities($cardID, $from)
         }
         break;
       case "1384530409"://Cad Bane
-        if(TraitContains($cardID, "Underworld", $currentPlayer)) {
+        if($from != 'PLAY' && $from != 'EQUIP' && TraitContains($cardID, "Underworld", $currentPlayer)) { 
           $character[$i+1] = 1;
           $otherPlayer = ($currentPlayer == 1 ? 2 : 1);
           AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY");
