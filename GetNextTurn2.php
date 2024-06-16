@@ -356,7 +356,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       }
     } else {
       if ($currentPlayerActivity == 2 && $playerID != 3)
-        echo ("— Opponent is inactive " . CreateButton($playerID, "Claim Victory", 100007, 0, "18px", "", "claimVictoryButton"));
+        echo ("Opponent is inactive " . CreateButton($playerID, "Claim Victory", 100007, 0, "18px", "", "claimVictoryButton"));
     }
     echo ("</span>");
   }
@@ -1252,7 +1252,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   }
   echo ("</div>");
 
-  echo ("<div id='gamelog' style='flex-grow:1; position:relative; overflow-y: scroll; margin: 0 0 27px 0; padding-right:10px; color: white; font-size: 15px; line-height: 21px; scrollbar-color: #888888 rgba(0, 0, 0, 0); scrollbar-width: thin;'>");
+  echo ("<div id='gamelog' style='flex-grow:1; position:relative; overflow-y: scroll; margin: 0 0 36px 0; padding-right:10px; color: white; font-size: 15px; line-height: 21px; scrollbar-color: #888888 rgba(0, 0, 0, 0); scrollbar-width: thin;'>");
   EchoLog($gameName, $playerID);
   echo ("</div>");
   if ($playerID != 3) {

@@ -754,7 +754,7 @@
     <div id='popupContainer'></div>
     <div id="cardDetail" style="z-index:100000; display:none; position:fixed;"></div>
     <div id='mainDiv' style='position:fixed; z-index:20; left:0px; top:0px; width:100%; height:100%;'></div>
-    <div id='chatbox' style='z-index:40; position:fixed; bottom:10px; right:18px; display:flex;'>
+    <div id='chatbox' style='z-index:40; position:fixed; bottom:20px; right:18px; display:flex;'>
         <?php if ($playerID != 3 && !IsChatMuted()): ?>
             <input id='chatText' 
                   style='background: black; color: white; font-size:16px; font-family:barlow; margin-left: 8px; height: 32px; border: 1px solid #454545; border-radius: 5px 0 0 5px;' 

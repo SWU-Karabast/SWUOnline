@@ -1,12 +1,14 @@
-:root {
-  --dark-color: #1a1a1a;
-  --light-color: #DDD;
-  --text-shadow: 2px 0 0 var(--dark-color), 0 -2px 0 var(--dark-color), 0 2px 0 var(--dark-color), -2px 0 0 var(--dark-color);
-  --grey-transparent-background: rgba(74, 74, 74, 0.9);
-  --font-family: 'Helvetica', sans-serif;
-  --button-box-shadow: 1px 1px 0 var(--dark-color), -1px -1px 0 var(--dark-color), -1px 1px 0 var(--dark-color), 1px -1px 0 var(--dark-color);
+@property --myColor1 {
+  syntax: '<color>';
+  initial-value: rgba(0, 0, 0, 0.3);
+  inherits: false;
 }
 
+@property --myColor2 {
+  syntax: '<color>';
+  initial-value: rgba(0, 0, 0, 0.3);
+  inherits: false;
+}
 
 .effect-display {
   width:56px; 
@@ -23,35 +25,6 @@
 
 #theirHand {
   margin-top: 18px;
-}
-
-@property --myColor1 {
-  syntax: '<color>';
-  initial-value: rgba(0, 0, 0, 0.3);
-  inherits: false;
-}
-
-@property --myColor2 {
-  syntax: '<color>';
-  initial-value: rgba(0, 0, 0, 0.3);
-  inherits: false;
-}
-
-.my-resources:hover {
-  --myColor1: rgba(24, 53, 81, 0.60);
-  --myColor2: rgba(77, 118, 155, 0.60);
- }
-
-.my-resources {
-  position:fixed; 
-  width:200px; 
-  height:96px; 
-  left: 20px; 
-  bottom:20px; 
-  z-index: 200; 
-  border-radius: 5px;
-  background: linear-gradient(var(--myColor1), var(--myColor2));
-  transition: --myColor1 0.2s, --myColor2 0.2s;
 }
 
 .their-resources {
@@ -85,6 +58,23 @@
   right:364px; 
   bottom:20px; 
   border-radius:5px; 
+}
+
+.my-resources:hover {
+  --myColor1: rgba(24, 53, 81, 0.60);
+  --myColor2: rgba(77, 118, 155, 0.60);
+ }
+
+.my-resources {
+  position:fixed; 
+  width:200px; 
+  height:96px; 
+  left: 20px; 
+  bottom:20px; 
+  z-index: 200; 
+  border-radius: 5px;
+  background: linear-gradient(var(--myColor1), var(--myColor2));
+  transition: --myColor1 0.2s, --myColor2 0.2s;
 }
 
 .my-deck {
@@ -131,6 +121,7 @@
   background: #FB0007; 
 }
 
+/* Less than 1200px wide */
 
 @media screen and (max-width: 1199px) {
 
@@ -177,7 +168,11 @@
     cursor: default;
     flex-direction: column;
     align-items: center;
-    padding: 10px 0 !important;
+    padding: 11px 0 9px 0 !important;
+  }
+
+  .resources img {
+    margin-bottom: 2px;
   }
 
   .resources span {
@@ -194,29 +189,40 @@
 
 }
 
-@media screen and (-webkit-min-device-pixel-ratio:0) {
-  ::-webkit-scrollbar {
-    width: .50em;
-    height: .50em;
-    border-radius: 5px;
+/* Legacy Styles */
+
+   @media screen and (-webkit-min-device-pixel-ratio:0) {
+    ::-webkit-scrollbar {
+      width: .50em;
+      height: .50em;
+      border-radius: 5px;
+    }
+  
+    ::-webkit-scrollbar-track {
+      background-color: #d9d6d6;
+      border-radius: 5px;
+    }
+  
+    ::-webkit-scrollbar-thumb:vertical {
+      height: 5em;
+      background-color: #000;
+      border-radius: 5px;
+    }
+  
+    ::-webkit-scrollbar-thumb:horizontal {
+      height: 5em;
+      background-color: #000;
+      border-radius: 5px;
+    }
   }
 
-  ::-webkit-scrollbar-track {
-    background-color: #d9d6d6;
-    border-radius: 5px;
-  }
-
-  ::-webkit-scrollbar-thumb:vertical {
-    height: 5em;
-    background-color: #000;
-    border-radius: 5px;
-  }
-
-  ::-webkit-scrollbar-thumb:horizontal {
-    height: 5em;
-    background-color: #000;
-    border-radius: 5px;
-  }
+:root {
+  --dark-color: #1a1a1a;
+  --light-color: #DDD;
+  --text-shadow: 2px 0 0 var(--dark-color), 0 -2px 0 var(--dark-color), 0 2px 0 var(--dark-color), -2px 0 0 var(--dark-color);
+  --grey-transparent-background: rgba(74, 74, 74, 0.9);
+  --font-family: 'Helvetica', sans-serif;
+  --button-box-shadow: 1px 1px 0 var(--dark-color), -1px -1px 0 var(--dark-color), -1px 1px 0 var(--dark-color), 1px -1px 0 var(--dark-color);
 }
 
 html,
