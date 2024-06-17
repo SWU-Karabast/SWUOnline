@@ -257,6 +257,10 @@ function CurrentEffectCostModifiers($cardID, $from)
           $costModifier -= 99;
           $remove = true;
           break;
+        case "9642863632"://Bounty Hunter Quary
+          $costModifier -= 3;
+          $remove = true;
+          break;
         default: break;
       }
       if($remove) RemoveCurrentTurnEffect($i);
