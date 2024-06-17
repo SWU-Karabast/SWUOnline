@@ -258,7 +258,7 @@ function CurrentEffectCostModifiers($cardID, $from)
           $remove = true;
           break;
         case "9642863632"://Bounty Hunter Quary
-          $costModifier -= 3;
+          $costModifier -= 99;
           $remove = true;
           break;
         default: break;
