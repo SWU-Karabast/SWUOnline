@@ -360,7 +360,7 @@ function HasAmbush($cardID, $player, $index, $from)
     switch($allies[$i])
     {
       case "4566580942"://Admiral Piett
-        if(CardCost($cardID) >= 6) return true;
+        if(CardCost($cardID) >= 6 && $from != "EQUIP") return true;
         break;
       case "4339330745"://Wedge Antilles
         if(TraitContains($cardID, "Vehicle", $player)) return true;
