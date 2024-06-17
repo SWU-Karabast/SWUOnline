@@ -629,7 +629,7 @@ function CreatePopup($id, $fromArr, $canClose, $defaultState = 0, $title = "", $
   if ($title != "")
     $rv .= "<h" . ($big ? "1" : "3") . " style=' font-weight: 500; margin-left: 10px; margin-top: 5px; margin-bottom: 15px; text-align: center; user-select: none;'>" . $title . "</h" . ($big ? "1" : "3") . ">";
   if ($canClose == 1)
-    $rv .= "<div style='position:absolute; top:0px; right:45px;'><div title='Click to close' style='position: fixed; cursor:pointer; font-size:50px;' onclick='(function(){ document.getElementById(\"" . $id . "\").style.display = \"none\";})();'>&#10006;</div></div>";
+    $rv .= "<div style='position:absolute; top:0px; right:54px;'><div title='Click to close' style='position: fixed; cursor:pointer; padding: 17px;' onclick='(function(){ document.getElementById(\"" . $id . "\").style.display = \"none\";})();'><img style='width: 20px; height: 20px;' src='./Images/close.png'></div></div>";
   if ($additionalComments != "")
     $rv .= "<h" . ($big ? "3" : "4") . " style='font-weight: 500; margin-left: 10px; margin-top: 5px; margin-bottom: 10px; text-align: center;'>" . $additionalComments . "</h" . ($big ? "3" : "4") . ">";
   for ($i = 0; $i < count($fromArr); $i += $arrElements) {

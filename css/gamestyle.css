@@ -1,3 +1,221 @@
+@property --myColor1 {
+  syntax: '<color>';
+  initial-value: rgba(0, 0, 0, 0.3);
+  inherits: false;
+}
+
+@property --myColor2 {
+  syntax: '<color>';
+  initial-value: rgba(0, 0, 0, 0.3);
+  inherits: false;
+}
+
+.effect-display {
+  width:56px; 
+  height:36px; 
+  margin:10px 0 7px 1px; 
+  border-radius: 5px;
+}
+
+.effect-display img {
+  width:54px !important; 
+  height:34px !important; 
+  border-radius: 4px !important;
+}
+
+#theirHand {
+  margin-top: 18px;
+}
+
+.their-resources {
+  position:fixed; 
+  width:200px; 
+  height:96px; 
+  left: 20px; 
+  top:20px; 
+  z-index: 200; 
+  border-radius: 5px;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.their-discard {
+  position:fixed; 
+  right:364px; 
+  top:21px; 
+  border-radius:5px; 
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.their-deck {
+  position:fixed; 
+  right:256px; 
+  top:19px;
+  border-radius: 5px;
+}
+
+.my-discard {
+  position:fixed; 
+  right:364px; 
+  bottom:20px; 
+  border-radius:5px; 
+}
+
+.my-resources:hover {
+  --myColor1: rgba(24, 53, 81, 0.60);
+  --myColor2: rgba(77, 118, 155, 0.60);
+ }
+
+.my-resources {
+  position:fixed; 
+  width:200px; 
+  height:96px; 
+  left: 20px; 
+  bottom:20px; 
+  z-index: 200; 
+  border-radius: 5px;
+  background: linear-gradient(var(--myColor1), var(--myColor2));
+  transition: --myColor1 0.2s, --myColor2 0.2s;
+}
+
+.my-deck {
+  position:fixed; 
+  right:256px; 
+  bottom:18px;
+  border-radius: 5px;
+}
+
+.my-discard a, .my-deck a {
+  margin-bottom: 0 !important;
+}
+
+.my-discard img, .their-discard img {
+  border: 0 !important;
+}
+
+.my-initiative, .their-initiative {
+  right:258px; 
+  position:absolute; 
+  border-radius: 15px; 
+  height: 30px; 
+  width: 96px; 
+}
+
+.my-initiative span, .their-initiative span {
+  position:relative; 
+  margin: 5px auto 0; 
+  text-align: center; 
+  display:block; 
+  z-index:10; 
+  font-size: 16px; 
+  font-weight:600; 
+  color:black; user-select: none;
+}
+
+.my-initiative {
+  bottom:127px; 
+  background: #00BAFF; 
+}
+
+.their-initiative {
+  top:127px; 
+  background: #FB0007; 
+}
+
+/* Less than 1200px wide */
+
+@media screen and (max-width: 1199px) {
+
+  .their-discard {
+    right:258px; 
+    top:20px; 
+  }
+  
+  .their-deck {
+    right:256px; 
+    top:124px;
+  }
+
+  .their-resources {
+    width:96px; 
+    height:96px; 
+    display: flex;
+    cursor: default;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .my-discard {
+    right:258px; 
+    bottom:20px; 
+  }
+
+  .my-deck {
+    right:256px; 
+    bottom:124px;
+  }
+
+  .my-resources {
+    width:96px; 
+    height:96px; 
+    display: flex;
+    cursor: default;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .resources {
+    display: flex;
+    cursor: default;
+    flex-direction: column;
+    align-items: center;
+    padding: 11px 0 9px 0 !important;
+  }
+
+  .resources img {
+    margin-bottom: 2px;
+  }
+
+  .resources span {
+    margin: 0 !important;
+  }
+  
+  .my-initiative {
+    bottom:232px; 
+  }
+  
+  .their-initiative {
+    top:232px; 
+  }
+
+}
+
+/* Legacy Styles */
+
+   @media screen and (-webkit-min-device-pixel-ratio:0) {
+    ::-webkit-scrollbar {
+      width: .50em;
+      height: .50em;
+      border-radius: 5px;
+    }
+  
+    ::-webkit-scrollbar-track {
+      background-color: #d9d6d6;
+      border-radius: 5px;
+    }
+  
+    ::-webkit-scrollbar-thumb:vertical {
+      height: 5em;
+      background-color: #000;
+      border-radius: 5px;
+    }
+  
+    ::-webkit-scrollbar-thumb:horizontal {
+      height: 5em;
+      background-color: #000;
+      border-radius: 5px;
+    }
+  }
+
 :root {
   --dark-color: #1a1a1a;
   --light-color: #DDD;
@@ -5,31 +223,6 @@
   --grey-transparent-background: rgba(74, 74, 74, 0.9);
   --font-family: 'Helvetica', sans-serif;
   --button-box-shadow: 1px 1px 0 var(--dark-color), -1px -1px 0 var(--dark-color), -1px 1px 0 var(--dark-color), 1px -1px 0 var(--dark-color);
-}
-
-@media screen and (-webkit-min-device-pixel-ratio:0) {
-  ::-webkit-scrollbar {
-    width: .50em;
-    height: .50em;
-    border-radius: 5px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background-color: #d9d6d6;
-    border-radius: 5px;
-  }
-
-  ::-webkit-scrollbar-thumb:vertical {
-    height: 5em;
-    background-color: #000;
-    border-radius: 5px;
-  }
-
-  ::-webkit-scrollbar-thumb:horizontal {
-    height: 5em;
-    background-color: #000;
-    border-radius: 5px;
-  }
 }
 
 html,

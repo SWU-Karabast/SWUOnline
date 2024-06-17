@@ -413,9 +413,9 @@
       function GetCharacterBottom(cardType, cardSubType) {
         switch (cardType) {
           case "C":
-            return (cardSize * 2 + 54) + "px";
+            return "219px";
           case "W":
-            return (cardSize * 3 + 66) + "px";
+            return "329px";
           default:
             break;
         }
@@ -436,9 +436,9 @@
       function GetCharacterTop(cardType, cardSubType) {
         switch (cardType) {
           case "C":
-            return (cardSize * 2 - 6) + "px";
+            return "159px";
           case "W":
-            return (cardSize * 3 + 4) + "px";
+            return "269px";
           default:
             break;
         }
@@ -491,6 +491,7 @@
       .passButton {
         background-color: #292929;
         transition: 150ms ease-in-out;
+        margin: 0 3px 0 7px;
       }
 
       .passButton:hover {
@@ -510,8 +511,17 @@
         background-size: contain;
       }
 
+
       .claimButton {
-        background: linear-gradient(180deg, #292929 0%, #19637F 100%);
+        background: linear-gradient(180deg, #292929 0%, #292929 100%) padding-box,
+                    linear-gradient(180deg, #454545 0%, #394B51 40%, #0080ad 100%) border-box;
+        border-radius: 5px;
+        border: 1px solid transparent;
+        height:40px;
+        padding: 8px 19px 10px;
+        box-shadow: none;
+        position: relative;
+        bottom: -1px;
       }
 
       .breakChain {
@@ -744,7 +754,7 @@
     <div id='popupContainer'></div>
     <div id="cardDetail" style="z-index:100000; display:none; position:fixed;"></div>
     <div id='mainDiv' style='position:fixed; z-index:20; left:0px; top:0px; width:100%; height:100%;'></div>
-    <div id='chatbox' style='z-index:40; position:fixed; bottom:10px; right:18px; display:flex;'>
+    <div id='chatbox' style='z-index:40; position:fixed; bottom:20px; right:18px; display:flex;'>
         <?php if ($playerID != 3 && !IsChatMuted()): ?>
             <input id='chatText' 
                   style='background: black; color: white; font-size:16px; font-family:barlow; margin-left: 8px; height: 32px; border: 1px solid #454545; border-radius: 5px 0 0 5px;' 
