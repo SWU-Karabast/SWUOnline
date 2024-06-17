@@ -1886,10 +1886,13 @@ function SelfCostModifier($cardID)
     $targetID = GetMZCard($currentPlayer, GetClassState($currentPlayer, $CS_LayerTarget));
   } else {
     if(SearchAlliesForCard($currentPlayer, "4166047484") != "") $targetID = "4166047484";
+    else if($cardID == "3141660491") $targetID = "4088c46c4d";
     else $targetID = "";
   }
-  //Guardian of the Whills
-  if(DefinedTypesContains($cardID, "Upgrade", $currentPlayer) && $targetID == "4166047484") $modifier -= 1;
+  if(DefinedTypesContains($cardID, "Upgrade", $currentPlayer)) {
+    if($targetID == "4166047484") $modifier -= 1;//Guardian of the Whills
+    if($cardID == "3141660491" && $targetID != "" && TraitContains($targetID, "Mandalorian", $currentPlayer)) $modifier -= $penalty * 2;//The Darksaber
+  }
   //My ally cost modifier
   $allies = &GetAllies($currentPlayer);
   for($i=0; $i<count($allies); $i+=AllyPieces())

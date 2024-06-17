@@ -962,6 +962,9 @@ function SpecificAllyAttackAbilities($attackID)
         AddDecisionQueue("MULTICHOOSETHEIRUNIT", $mainPlayer, "<-", 1);
         AddDecisionQueue("MULTIDISTRIBUTEDAMAGE", $mainPlayer, 3, 1);
         break;
+      case "3141660491"://The Darksaber
+
+        break;
       default: break;
     }
   }

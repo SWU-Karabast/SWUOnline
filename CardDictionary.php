@@ -622,6 +622,7 @@ function AttackValue($cardID)
     case "5738033724": return 2;//Boba Fett's Armor
     case "3514010297": return 1;//Mandalorian Armor
     case "4843813137": return 1;//Brutal Traditions
+    case "3141660491": return 4;//The Darksaber
     default: return CardPower($cardID);
   }
 }
@@ -1022,6 +1023,7 @@ function UpgradeFilter($cardID)
     case "0754286363"://The Mandalorian's Rifle
     case "5738033724"://Boba Fett's Armor
     case "6471336466"://Vambrace Flamethrower
+    case "3141660491"://The Darksaber
       return "trait=Vehicle";
     case "8055390529"://Traitorous
       return "maxCost=3";
@@ -1271,6 +1273,7 @@ function CardHP($cardID) {
     case "7687006104": return 1;//Foundling
     case "3514010297": return 3;//Mandalorian Armor
     case "4843813137": return 2;//Brutal Traditions
+    case "3141660491": return 3;//The Darksaber
     default: return CardHPDictionary($cardID);
   }
 }
