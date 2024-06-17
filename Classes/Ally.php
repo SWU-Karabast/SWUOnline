@@ -201,6 +201,12 @@ class Ally {
     $otherAllies = &GetAllies($this->playerID);
     for($i=0; $i<count($otherAllies); $i+=AllyPieces()) {
       switch($otherAllies[$i]) {
+        case "6097248635"://4-LOM
+          if(CardTitle($this->CardID()) == "Zuckuss") $power += 1;
+          break;
+        case "1690726274"://Zuckuss
+          if(CardTitle($this->CardID()) == "4-LOM") $power += 1;
+          break;
         case "e2c6231b35"://Director Krennic
           if($this->Health() < $this->MaxHealth()) $power += 1;
           break;

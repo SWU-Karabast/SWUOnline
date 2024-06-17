@@ -71,6 +71,8 @@ function AllyHasStaticHealthModifier($cardID)
     case "6c5b96c7ef"://Emperor Palpatine
     case "4511413808"://Follower of the Way
     case "3731235174"://Supreme Leader Snoke
+    case "6097248635"://4-LOM
+    case "1690726274"://Zuckuss
       return true;
     default: return false;
   }
@@ -111,6 +113,11 @@ function AllyStaticHealthModifier($cardID, $index, $player, $myCardID, $myIndex,
       break;
     case "3731235174"://Supreme Leader Snoke
       return $player != $myPlayer ? -2 : 0;
+    case "6097248635"://4-LOM
+      return CardTitle($cardID) == "Zuckuss" ? 1 : 0;
+      break;
+    case "1690726274"://Zuckuss
+      return CardTitle($cardID) == "4-LOM" ? 1 : 0;
     default: break;
   }
   return 0;

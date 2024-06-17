@@ -365,6 +365,9 @@ function HasAmbush($cardID, $player, $index, $from)
       case "4339330745"://Wedge Antilles
         if(TraitContains($cardID, "Vehicle", $player)) return true;
         break;
+      case "6097248635"://4-LOM
+        if(CardTitle($cardID) == "Zuckuss") return true;
+        break;
       default: break;
     }
   }
@@ -388,6 +391,7 @@ function HasAmbush($cardID, $player, $index, $from)
     case "2143627819"://The Marauder
     case "2121724481"://Cloud-Rider
     case "8107876051"://Enfy's Nest
+    case "6097248635"://4-LOM
       return true;
     case "2027289177"://Escort Skiff
       return SearchCount(SearchAllies($player, aspect:"Command")) > 1;
@@ -441,6 +445,17 @@ function HasSaboteur($cardID, $player, $index)
   {
     if($upgrades[$i] == "0797226725") return true;//Infiltrator's Skill
   }
+  $allies = &GetAllies($player);
+  for($i=0; $i<count($allies); $i+=AllyPieces())
+  {
+    switch($allies[$i])
+    {
+      case "1690726274"://Zuckuss
+        if(CardTitle($cardID) == "4-LOM") return true;
+        break;
+      default: break;
+    }
+  }
   switch($cardID)
   {
     case "1017822723":
@@ -452,6 +467,7 @@ function HasSaboteur($cardID, $player, $index)
     case "0828695133":
     case "9250443409":
     case "3c60596a7a":
+    case "1690726274"://Zuckuss
     case "4595532978"://Ketsu Onyo
     case "3786602643"://House Kast Soldier
     case "2b13cefced"://Fennec Shand
