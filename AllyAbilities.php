@@ -963,7 +963,12 @@ function SpecificAllyAttackAbilities($attackID)
         AddDecisionQueue("MULTIDISTRIBUTEDAMAGE", $mainPlayer, 3, 1);
         break;
       case "3141660491"://The Darksaber
-
+        $allies = &GetAllies($mainPlayer);
+        for($j=0; $j<count($allies); $j+=AllyPieces()) {
+          if($j == $attackerAlly->Index()) continue;
+          $ally = new Ally("MYALLY-" . $j, $mainPlayer);
+          if(TraitContains($ally->CardID(), "Mandalorian", $mainPlayer)) $ally->Attach("2007868442");//Experience token
+        }
         break;
       default: break;
     }
