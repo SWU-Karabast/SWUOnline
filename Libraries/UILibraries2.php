@@ -460,7 +460,7 @@ function BorderColorMap($code)
   }
 }
 
-function CreateButton($playerID, $caption, $mode, $input, $size = "", $image = "", $tooltip = "", $fullRefresh = false, $fullReload = false, $prompt = "", $useInput = false)
+function CreateButton($playerID, $caption, $mode, $input, $size = "", $image = "", $tooltip = "", $fullRefresh = false, $fullReload = false, $prompt = "", $useInput = false, $customOnClick = "")
 {
   global $gameName, $authKey;
 
@@ -469,6 +469,10 @@ function CreateButton($playerID, $caption, $mode, $input, $size = "", $image = "
     $onClick = "document.location.href = \"./ProcessInput2.php?gameName=$gameName&playerID=$playerID&authKey=$authKey&mode=$mode&buttonInput=$input\";";
   else
     $onClick = "SubmitInput(\"" . $mode . "\", \"&buttonInput=" . $input . "\", " . $fullRefresh . ");";
+
+  if ($customOnClick != "") {
+    $onClick = $customOnClick;  
+  }
 
   // If a prompt is given, surround the code with a "confirm()" call
   if ($prompt != "")
@@ -1007,6 +1011,24 @@ function MainMenuUI()
     }
   }
   $rv .= "</td></tr></table>";
+  return $rv;
+}
+
+function LeaveGameUI() {
+  global $playerID;
+  $rv = "<div class='leave-game-wrapper'>";
+  $rv .= "<div>";
+  $rv .= "<h3>" . (IsGameOver() ? "Leave" : "Concede") . " game and return to main menu?</h3>";
+  $rv .= "<div class='leave-game-buttons'>";
+  if (IsGameOver())
+    $rv .= CreateButton($playerID, "Leave Game", 100001, 0, "24px", "", "", false, true);
+  else
+    $rv .= CreateButton($playerID, "Concede Game", 100015, 0, "24px", "", "", false, true);
+  $stayAction = "document.getElementById(\"leaveGame\").style.display = \"none\";";
+  $rv .= CreateButton($playerID, "Continue Playing", 100015, 0, "24px", "", "", false, false, "", false, $stayAction);
+  $rv .= "</div>";
+  $rv .= "</div>";
+  $rv .= "</div>";
   return $rv;
 }
 
