@@ -147,6 +147,7 @@ class Ally {
       DestroyAlly($this->playerID, $this->index, fromCombat:$fromCombat);
       return true;
     }
+    AllyDamageTakenAbilities($this->playerID, $this->index, survived:true, damage:$amount, fromCombat:$fromCombat);
     switch($this->CardID())
     {
       case "4843225228"://Phase-III Dark Trooper
@@ -200,6 +201,12 @@ class Ally {
     $otherAllies = &GetAllies($this->playerID);
     for($i=0; $i<count($otherAllies); $i+=AllyPieces()) {
       switch($otherAllies[$i]) {
+        case "6097248635"://4-LOM
+          if(CardTitle($this->CardID()) == "Zuckuss") $power += 1;
+          break;
+        case "1690726274"://Zuckuss
+          if(CardTitle($this->CardID()) == "4-LOM") $power += 1;
+          break;
         case "e2c6231b35"://Director Krennic
           if($this->Health() < $this->MaxHealth()) $power += 1;
           break;
@@ -214,6 +221,12 @@ class Ally {
           break;
         case "4484318969"://Moff Gideon Leader
           if(CardCost($this->CardID()) <= 3 && IsAllyAttackTarget()) $power += 1;
+          break;
+        case "3feee05e13"://Gar Saxon
+          if($this->IsUpgraded()) $power += 1;
+          break;
+        case "919facb76d"://Boba Fett Green Leader
+          if($i != $this->index) $power += 1;
           break;
         default: break;
       }
@@ -234,6 +247,9 @@ class Ally {
       switch($myChar[$i]) {
         case "8560666697"://Director Krennic
           if($this->Health() < $this->MaxHealth()) $power += 1;
+          break;
+        case "9794215464"://Gar Saxon
+          if($this->IsUpgraded()) $power += 1;
           break;
         default: break;
       }
@@ -303,7 +319,7 @@ class Ally {
     $subcards = $this->GetSubcards();
     $upgrades = [];
     for($i=0; $i<count($subcards); ++$i) {
-      if(DefinedTypesContains($subcards[$i], "Upgrade", $this->PlayerID())) array_push($upgrades, $subcards[$i]);
+      if(DefinedTypesContains($subcards[$i], "Upgrade", $this->PlayerID()) || DefinedTypesContains($subcards[$i], "Token Upgrade", $this->PlayerID())) array_push($upgrades, $subcards[$i]);
     }
     return $upgrades;
   }
