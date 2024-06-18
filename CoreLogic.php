@@ -2263,13 +2263,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE," . 5);
         AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
         AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Imperial", 1);
-        AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MAYCHOOSECARD", $currentPlayer, "<-", 1);
         AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
         AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
         AddDecisionQueue("OP", $currentPlayer, "REMOVECARD", 1);
         AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
         AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Imperial", 1);
-        AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MAYCHOOSECARD", $currentPlayer, "<-", 1);
         AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
         AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
         AddDecisionQueue("OP", $currentPlayer, "REMOVECARD", 1);
