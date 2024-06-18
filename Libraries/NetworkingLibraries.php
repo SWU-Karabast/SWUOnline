@@ -665,7 +665,7 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
       $conceded = true;
       if(!IsGameOver()) PlayerLoseHealth($playerID, 999);
       header("Location: " . $redirectPath . "/MainMenu.php");
-      exit;
+      break;
     default: break;
   }
   return true;
