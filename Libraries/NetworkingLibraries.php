@@ -584,14 +584,19 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
       AddDecisionQueue("REMATCH", $otherPlayer, "-", 1);
       ProcessDecisionQueue();
       break;
+    case 100005: //Reserved to trigger user return from activity
+      break;
+    case 100006: // User inactive
+      $currentPlayerActivity = 2;
+      GamestateUpdated($gameName);
+      break;
     case 100007: //Claim Victory when opponent is inactive
       if($isSimulation) return;
       if($currentPlayerActivity == 2)
       {
         include_once "./includes/dbh.inc.php";
         include_once "./includes/functions.inc.php";
-        $otherPlayer = ($playerID == 1 ? 2 : 1);
-        if(!IsGameOver()) PlayerLoseHealth($otherPlayer, GetHealth($otherPlayer));
+        if(!IsGameOver()) PlayerWon(($playerID == 1 ? 1 : 2));
         WriteLog("The opponent forfeit due to inactivity.");
       }
       break;
@@ -681,6 +686,7 @@ function IsModeAsync($mode)
     case 100002: return true;
     case 100003: return true;
     case 100004: return true;
+    case 100006: return true;
     case 100007: return true;
     case 100010: return true;
     case 100012: return true;

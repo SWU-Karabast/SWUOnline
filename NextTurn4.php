@@ -578,11 +578,11 @@
 
   <body onkeypress='Hotkeys(event)' onload='OnLoadCallback(<?php echo (filemtime("./Games/" . $gameName . "/gamelog.txt")); ?>)'>
 
-    <?php echo (CreatePopup("inactivityWarningPopup", [], 0, 0, "⚠️ Inactivity Warning ⚠️", 1, "", "", true, true, "Interact with the screen in the next 40 seconds or you could be kicked for inactivity.")); ?>
+    <?php echo (CreatePopup("inactivityWarningPopup", [], 0, 0, "⚠️ Inactivity Warning ⚠️", 1, "", "", true, true, "Interact with the screen in the next 30 seconds or you could be kicked for inactivity.")); ?>
     <?php echo (CreatePopup("inactivePopup", [], 0, 0, "⚠️ You are Inactive ⚠️", 1, "", "", true, true, "You are inactive. Your opponent is able to claim victory. Interact with the screen to clear this.")); ?>
 
     <script>
-      var IDLE_TIMEOUT = 40; //seconds
+      var IDLE_TIMEOUT = 30; //seconds
       var _idleSecondsCounter = 0;
       var _idleState = 0; //0 = not idle, 1 = idle warning, 2 = idle
       var _lastUpdate = 0;
@@ -595,7 +595,7 @@
         if (inactivityPopup) inactivityPopup.style.display = "none";
         var inactivePopup = document.getElementById('inactivePopup');
         if (inactivePopup) inactivePopup.style.display = "none";
-        if (oldIdleState == 2) SubmitInput("100006", "");
+        if (oldIdleState == 2) SubmitInput("100005", "");
       };
 
       document.onclick = activityFunction;
@@ -621,7 +621,7 @@
             if (inactivityPopup) inactivityPopup.style.display = "none";
             var inactivePopup = document.getElementById('inactivePopup');
             if (inactivePopup) inactivePopup.style.display = "inline";
-            SubmitInput("100005", "");
+            SubmitInput("100006", "");
           }
         }
       }
