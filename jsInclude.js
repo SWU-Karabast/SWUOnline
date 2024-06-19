@@ -97,20 +97,24 @@ function SubmitInput(mode, params, fullRefresh = false) {
   xmlhttp.send();
 }
 
-function ShowPopup(name) {
-  var xmlhttp = new XMLHttpRequest();
-  xmlhttp.onreadystatechange = function () {
-    if (this.readyState == 4 && this.status == 200) {
-      document.getElementById("popupContainer").innerHTML = this.responseText;
-      document.getElementById(name).style.display = "inline";
-    }
-  };
-  var ajaxLink =
-    "./GetPopupContent.php?gameName=" +
-    document.getElementById("gameName").value;
-  ajaxLink += "&playerID=" + document.getElementById("playerID").value;
-  ajaxLink += "&authKey=" + document.getElementById("authKey").value;
-  ajaxLink += "&popupType=" + name;
-  xmlhttp.open("GET", ajaxLink, true);
-  xmlhttp.send();
+function TogglePopup(name) {
+  if (document.getElementById(name)?.style.display == "inline") {
+    document.getElementById(name).style.display = "none"
+  } else {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function () {
+      if (this.readyState == 4 && this.status == 200) {
+        document.getElementById("popupContainer").innerHTML = this.responseText;
+        document.getElementById(name).style.display = "inline";
+      }
+    };
+    var ajaxLink =
+      "./GetPopupContent.php?gameName=" +
+      document.getElementById("gameName").value;
+    ajaxLink += "&playerID=" + document.getElementById("playerID").value;
+    ajaxLink += "&authKey=" + document.getElementById("authKey").value;
+    ajaxLink += "&popupType=" + name;
+    xmlhttp.open("GET", ajaxLink, true);
+    xmlhttp.send();
+  }
 }
