@@ -2699,7 +2699,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE," . 5);
       AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
       AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-definedType-Unit", 1);
-      AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MAYCHOOSECARD", $currentPlayer, "<-", 1);
       AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
       AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
       AddDecisionQueue("OP", $currentPlayer, "REMOVECARD");
@@ -2711,7 +2711,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
         AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Rebel", 1);
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a rebel to draw", 1);
-        AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MAYCHOOSECARD", $currentPlayer, "<-", 1);
         AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
         AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
         AddDecisionQueue("OP", $currentPlayer, "REMOVECARD");
@@ -2955,13 +2955,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE," . 8);
       AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
       AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Vehicle", 1);
-      AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MAYCHOOSECARD", $currentPlayer, "<-", 1);
       AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
       AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
       AddDecisionQueue("OP", $currentPlayer, "REMOVECARD", 1);
       AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
       AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Vehicle", 1);
-      AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MAYCHOOSECARD", $currentPlayer, "<-", 1);
       AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
       AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
       AddDecisionQueue("OP", $currentPlayer, "REMOVECARD", 1);
@@ -3585,7 +3585,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       for($i=0; $i<3; ++$i) {
         AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
         AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-definedType-Unit", 1);
-        AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MAYCHOOSECARD", $currentPlayer, "<-", 1);
         AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
         AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
         AddDecisionQueue("OP", $currentPlayer, "REMOVECARD", 1);
@@ -3688,7 +3688,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
         AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-definedType-Upgrade", 1);
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an upgrade to draw", 1);
-        AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MAYCHOOSECARD", $currentPlayer, "<-", 1);
         AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
         AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
         AddDecisionQueue("OP", $currentPlayer, "REMOVECARD");
@@ -4069,13 +4069,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE," . 8);
       AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
       //AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Vehicle", 1);
-      AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MAYCHOOSECARD", $currentPlayer, "<-", 1);
       AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
       AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
       AddDecisionQueue("OP", $currentPlayer, "REMOVECARD", 1);
       AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
       //AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Vehicle", 1);
-      AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MAYCHOOSECARD", $currentPlayer, "<-", 1);
       AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
       AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
       AddDecisionQueue("OP", $currentPlayer, "REMOVECARD", 1);
