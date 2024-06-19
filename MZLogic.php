@@ -318,6 +318,7 @@ function MZBounce($player, $target)
       return substr($mzArr[0], 0, 2) == "MY" ? "MYHAND-" . $index : "THEIRHAND-" . $index;
     case "MYRESOURCES": case "THEIRRESOURCES":
       $cardID = RemoveResource($player, $mzArr[1]);
+      $owner = $player;
       $index = AddHand($owner, $cardID);
       return substr($mzArr[0], 0, 2) == "MY" ? "MYHAND-" . $index : "THEIRHAND-" . $index;
     default: break;
