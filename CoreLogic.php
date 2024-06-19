@@ -4068,18 +4068,26 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       WriteLog("This is a partially manual card. Enforce the type restriction manually.");
       AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE," . 8);
       AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
-      //AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Vehicle", 1);
       AddDecisionQueue("MAYCHOOSECARD", $currentPlayer, "<-", 1);
       AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
       AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
       AddDecisionQueue("OP", $currentPlayer, "REMOVECARD", 1);
       AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
-      //AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Vehicle", 1);
       AddDecisionQueue("MAYCHOOSECARD", $currentPlayer, "<-", 1);
       AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
       AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
       AddDecisionQueue("OP", $currentPlayer, "REMOVECARD", 1);
       AddDecisionQueue("ALLRANDOMBOTTOM", $currentPlayer, "DECK");
+      break;
+    case "8261033110"://Evacuate
+      $p1Allies = &GetAllies(1);
+      for($i=count($p1Allies)-AllyPieces(); $i>=0; $i-=AllyPieces()) {
+        MZBounce(1, "MYALLY-" . $i);
+      }
+      $p2Allies = &GetAllies(2);
+      for($i=count($p2Allies)-AllyPieces(); $i>=0; $i-=AllyPieces()) {
+        MZBounce(2, "MYALLY-" . $i);
+      }
       break;
     default: break;
   }
