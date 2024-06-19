@@ -90,7 +90,7 @@
         if (event.keyCode === 32) { if(document.getElementById("passConfirm").innerText == "false" || confirm("Do you want to skip arsenal?")) SubmitInput(99, ""); } //Space = pass
         if (event.keyCode === 117) SubmitInput(10000, ""); //U = undo
         if (event.keyCode === 104) SubmitInput(3, "&cardID=0"); //H = hero ability
-        if (event.keyCode === 109) ShowPopup("menuPopup"); //M = open menu
+        if (event.keyCode === 109) TogglePopup("menuPopup"); //M = open menu
         <?php
         if (count($myCharacter) > CharacterPieces() && CardType($myCharacter[CharacterPieces()]) == "W") echo ("if(event.keyCode === 108) SubmitInput(3, '&cardID=" . CharacterPieces() . "');"); //L = left weapon
         if (count($myCharacter) > (CharacterPieces() * 2) && CardType($myCharacter[CharacterPieces() * 2]) == "W") echo ("if(event.keyCode === 114) SubmitInput(3, '&cardID=" . (CharacterPieces() * 2) . "');"); //R = right weapon
@@ -347,14 +347,14 @@
             if (!!mySoulCountEl && zone == "myChar") {
               var fontColor = "#DDD";
               var borderColor = "#1a1a1a";
-              newHTML += "<div onclick='ShowPopup(\"mySoulPopup\");' style='cursor:pointer; position:absolute; user-select: none;top:-23px; left: 17px; font-size:20px; font-weight: 600; color: " + fontColor + "; text-shadow: 2px 0 0 " + borderColor + ", 0 -2px 0 " + borderColor + ", 0 2px 0 " + borderColor + ", -2px 0 0 " + borderColor + ";'>Soul: " + mySoulCountEl.innerHTML + "</div>";
+              newHTML += "<div onclick='TogglePopup(\"mySoulPopup\");' style='cursor:pointer; position:absolute; user-select: none;top:-23px; left: 17px; font-size:20px; font-weight: 600; color: " + fontColor + "; text-shadow: 2px 0 0 " + borderColor + ", 0 -2px 0 " + borderColor + ", 0 2px 0 " + borderColor + ", -2px 0 0 " + borderColor + ";'>Soul: " + mySoulCountEl.innerHTML + "</div>";
               mySoulCountEl.innerHTML = "";
             }
             var theirSoulCountEl = document.getElementById("theirSoulCount");
             if (!!theirSoulCountEl && zone == "theirChar") {
               var fontColor = "#DDD";
               var borderColor = "#1a1a1a";
-              newHTML += "<div onclick='ShowPopup(\"theirSoulPopup\");' style='cursor:pointer; position:absolute; user-select: none; bottom:-25px; left: 17px; font-size:20px; font-weight: 600; color: " + fontColor + "; text-shadow: 2px 0 0 " + borderColor + ", 0 -2px 0 " + borderColor + ", 0 2px 0 " + borderColor + ", -2px 0 0 " + borderColor + ";'>Soul: " + theirSoulCountEl.innerHTML + "</div>";
+              newHTML += "<div onclick='TogglePopup(\"theirSoulPopup\");' style='cursor:pointer; position:absolute; user-select: none; bottom:-25px; left: 17px; font-size:20px; font-weight: 600; color: " + fontColor + "; text-shadow: 2px 0 0 " + borderColor + ", 0 -2px 0 " + borderColor + ", 0 2px 0 " + borderColor + ", -2px 0 0 " + borderColor + ";'>Soul: " + theirSoulCountEl.innerHTML + "</div>";
               theirSoulCountEl.innerHTML = "";
             }
             <?php
