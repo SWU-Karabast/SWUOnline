@@ -318,6 +318,7 @@ function MZBounce($player, $target)
       return substr($mzArr[0], 0, 2) == "MY" ? "MYHAND-" . $index : "THEIRHAND-" . $index;
     case "MYRESOURCES": case "THEIRRESOURCES":
       $cardID = RemoveResource($player, $mzArr[1]);
+      //TODO : to fix opponent card in my resources (Traitorous + SLT) we need to add owner information on resources
       $owner = $player;
       $index = AddHand($owner, $cardID);
       return substr($mzArr[0], 0, 2) == "MY" ? "MYHAND-" . $index : "THEIRHAND-" . $index;
