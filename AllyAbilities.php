@@ -486,7 +486,7 @@ function CollectBounty($player, $index, $cardID, $reportMode=false, $bountyUnitO
   $opponent = $player == 1 ? 2 : 1;
   $numBounties = 0;
   switch($cardID) {
-    case "CLIENTBOUNTY"://The Client
+    case "1090660242-2"://The Client
       ++$numBounties;
       if($reportMode) break;
       Restore(5, $opponent);
