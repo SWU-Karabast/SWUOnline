@@ -79,6 +79,9 @@ switch ($popupType) {
       echo (CreatePopup("menuPopup", [], 1, 0, "Main Menu", 1, MainMenuUI(), "./", true));
     }
     break;
+  case "leaveGame":
+    echo (CreatePopup("leaveGame", [], 1, 0, "Leave Game", 1, LeaveGameUI(), "./", true));
+    break;
   case "mySoulPopup":
     echo (CreatePopup("mySoulPopup", $mySoul, 1, 0, "My Soul"));
     break;
