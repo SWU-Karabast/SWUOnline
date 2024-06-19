@@ -5631,6 +5631,36 @@ default: return "";
 }
 default: return "";
 }
+case "2":
+switch($cardID[3]) {
+case "6":
+switch($cardID[4]) {
+case "4":
+switch($cardID[5]) {
+case "3":
+switch($cardID[6]) {
+case "5":
+switch($cardID[7]) {
+case "9":
+switch($cardID[8]) {
+case "7":
+switch($cardID[9]) {
+case "5":
+return "Han Solo";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 case "6":
@@ -6527,6 +6557,36 @@ case "0":
 switch($cardID[9]) {
 case "7":
 return "Kintan Intimidator";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "3":
+switch($cardID[3]) {
+case "4":
+switch($cardID[4]) {
+case "2":
+switch($cardID[5]) {
+case "3":
+switch($cardID[6]) {
+case "7":
+switch($cardID[7]) {
+case "8":
+switch($cardID[8]) {
+case "7":
+switch($cardID[9]) {
+case "1":
+return "Ephant Mon";
 default: return "";
 }
 default: return "";
@@ -9443,6 +9503,36 @@ case "6":
 switch($cardID[9]) {
 case "1":
 return "Clan Saxon Gauntlet";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "6":
+switch($cardID[3]) {
+case "1":
+switch($cardID[4]) {
+case "0":
+switch($cardID[5]) {
+case "3":
+switch($cardID[6]) {
+case "3":
+switch($cardID[7]) {
+case "1":
+switch($cardID[8]) {
+case "1":
+switch($cardID[9]) {
+case "0":
+return "Evacuate";
 default: return "";
 }
 default: return "";
@@ -14241,6 +14331,40 @@ case "c":
 switch($cardID[9]) {
 case "0":
 return "Bo-Katan Kryze";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "7":
+switch($cardID[2]) {
+case "4":
+switch($cardID[3]) {
+case "2":
+switch($cardID[4]) {
+case "d":
+switch($cardID[5]) {
+case "e":
+switch($cardID[6]) {
+case "a":
+switch($cardID[7]) {
+case "1":
+switch($cardID[8]) {
+case "f":
+switch($cardID[9]) {
+case "1":
+return "Han Solo";
 default: return "";
 }
 default: return "";
@@ -19895,6 +20019,36 @@ default: return "";
 }
 default: return "";
 }
+case "2":
+switch($cardID[3]) {
+case "6":
+switch($cardID[4]) {
+case "4":
+switch($cardID[5]) {
+case "3":
+switch($cardID[6]) {
+case "5":
+switch($cardID[7]) {
+case "9":
+switch($cardID[8]) {
+case "7":
+switch($cardID[9]) {
+case "5":
+return "Worth the Risk";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 case "6":
@@ -20791,6 +20945,36 @@ case "0":
 switch($cardID[9]) {
 case "7":
 return "";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "3":
+switch($cardID[3]) {
+case "4":
+switch($cardID[4]) {
+case "2":
+switch($cardID[5]) {
+case "3":
+switch($cardID[6]) {
+case "7":
+switch($cardID[7]) {
+case "8":
+switch($cardID[8]) {
+case "7":
+switch($cardID[9]) {
+case "1":
+return "Head of Security";
 default: return "";
 }
 default: return "";
@@ -23706,6 +23890,36 @@ switch($cardID[8]) {
 case "6":
 switch($cardID[9]) {
 case "1":
+return "";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "6":
+switch($cardID[3]) {
+case "1":
+switch($cardID[4]) {
+case "0":
+switch($cardID[5]) {
+case "3":
+switch($cardID[6]) {
+case "3":
+switch($cardID[7]) {
+case "1":
+switch($cardID[8]) {
+case "1":
+switch($cardID[9]) {
+case "0":
 return "";
 default: return "";
 }
@@ -28505,6 +28719,40 @@ case "c":
 switch($cardID[9]) {
 case "0":
 return "Princess in Exile";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "7":
+switch($cardID[2]) {
+case "4":
+switch($cardID[3]) {
+case "2":
+switch($cardID[4]) {
+case "d":
+switch($cardID[5]) {
+case "e":
+switch($cardID[6]) {
+case "a":
+switch($cardID[7]) {
+case "1":
+switch($cardID[8]) {
+case "f":
+switch($cardID[9]) {
+case "1":
+return "Worth the Risk";
 default: return "";
 }
 default: return "";
@@ -34159,6 +34407,36 @@ default: return -1;
 }
 default: return -1;
 }
+case "2":
+switch($cardID[3]) {
+case "6":
+switch($cardID[4]) {
+case "4":
+switch($cardID[5]) {
+case "3":
+switch($cardID[6]) {
+case "5":
+switch($cardID[7]) {
+case "9":
+switch($cardID[8]) {
+case "7":
+switch($cardID[9]) {
+case "5":
+return 5;
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
 default: return -1;
 }
 case "6":
@@ -35055,6 +35333,36 @@ case "0":
 switch($cardID[9]) {
 case "7":
 return 1;
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+case "3":
+switch($cardID[3]) {
+case "4":
+switch($cardID[4]) {
+case "2":
+switch($cardID[5]) {
+case "3":
+switch($cardID[6]) {
+case "7":
+switch($cardID[7]) {
+case "8":
+switch($cardID[8]) {
+case "7":
+switch($cardID[9]) {
+case "1":
+return 5;
 default: return -1;
 }
 default: return -1;
@@ -37970,6 +38278,36 @@ switch($cardID[8]) {
 case "6":
 switch($cardID[9]) {
 case "1":
+return 6;
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+case "6":
+switch($cardID[3]) {
+case "1":
+switch($cardID[4]) {
+case "0":
+switch($cardID[5]) {
+case "3":
+switch($cardID[6]) {
+case "3":
+switch($cardID[7]) {
+case "1":
+switch($cardID[8]) {
+case "1":
+switch($cardID[9]) {
+case "0":
 return 6;
 default: return -1;
 }
@@ -42769,6 +43107,40 @@ case "c":
 switch($cardID[9]) {
 case "0":
 return 6;
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+case "7":
+switch($cardID[2]) {
+case "4":
+switch($cardID[3]) {
+case "2":
+switch($cardID[4]) {
+case "d":
+switch($cardID[5]) {
+case "e":
+switch($cardID[6]) {
+case "a":
+switch($cardID[7]) {
+case "1":
+switch($cardID[8]) {
+case "f":
+switch($cardID[9]) {
+case "1":
+return 5;
 default: return -1;
 }
 default: return -1;
@@ -48423,6 +48795,36 @@ default: return -1;
 }
 default: return -1;
 }
+case "2":
+switch($cardID[3]) {
+case "6":
+switch($cardID[4]) {
+case "4":
+switch($cardID[5]) {
+case "3":
+switch($cardID[6]) {
+case "5":
+switch($cardID[7]) {
+case "9":
+switch($cardID[8]) {
+case "7":
+switch($cardID[9]) {
+case "5":
+return 6;
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
 default: return -1;
 }
 case "6":
@@ -49333,6 +49735,36 @@ default: return -1;
 }
 default: return -1;
 }
+case "3":
+switch($cardID[3]) {
+case "4":
+switch($cardID[4]) {
+case "2":
+switch($cardID[5]) {
+case "3":
+switch($cardID[6]) {
+case "7":
+switch($cardID[7]) {
+case "8":
+switch($cardID[8]) {
+case "7":
+switch($cardID[9]) {
+case "1":
+return 6;
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
 default: return -1;
 }
 case "1":
@@ -52249,6 +52681,36 @@ default: return -1;
 }
 default: return -1;
 }
+case "6":
+switch($cardID[3]) {
+case "1":
+switch($cardID[4]) {
+case "0":
+switch($cardID[5]) {
+case "3":
+switch($cardID[6]) {
+case "3":
+switch($cardID[7]) {
+case "1":
+switch($cardID[8]) {
+case "1":
+switch($cardID[9]) {
+case "0":
+return ;
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
 default: return -1;
 }
 case "7":
@@ -57033,6 +57495,40 @@ case "c":
 switch($cardID[9]) {
 case "0":
 return 7;
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+case "7":
+switch($cardID[2]) {
+case "4":
+switch($cardID[3]) {
+case "2":
+switch($cardID[4]) {
+case "d":
+switch($cardID[5]) {
+case "e":
+switch($cardID[6]) {
+case "a":
+switch($cardID[7]) {
+case "1":
+switch($cardID[8]) {
+case "f":
+switch($cardID[9]) {
+case "1":
+return 6;
 default: return -1;
 }
 default: return -1;
@@ -62687,6 +63183,36 @@ default: return -1;
 }
 default: return -1;
 }
+case "2":
+switch($cardID[3]) {
+case "6":
+switch($cardID[4]) {
+case "4":
+switch($cardID[5]) {
+case "3":
+switch($cardID[6]) {
+case "5":
+switch($cardID[7]) {
+case "9":
+switch($cardID[8]) {
+case "7":
+switch($cardID[9]) {
+case "5":
+return 3;
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
 default: return -1;
 }
 case "6":
@@ -63597,6 +64123,36 @@ default: return -1;
 }
 default: return -1;
 }
+case "3":
+switch($cardID[3]) {
+case "4":
+switch($cardID[4]) {
+case "2":
+switch($cardID[5]) {
+case "3":
+switch($cardID[6]) {
+case "7":
+switch($cardID[7]) {
+case "8":
+switch($cardID[8]) {
+case "7":
+switch($cardID[9]) {
+case "1":
+return 4;
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
 default: return -1;
 }
 case "1":
@@ -66499,6 +67055,36 @@ case "6":
 switch($cardID[9]) {
 case "1":
 return 4;
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+case "6":
+switch($cardID[3]) {
+case "1":
+switch($cardID[4]) {
+case "0":
+switch($cardID[5]) {
+case "3":
+switch($cardID[6]) {
+case "3":
+switch($cardID[7]) {
+case "1":
+switch($cardID[8]) {
+case "1":
+switch($cardID[9]) {
+case "0":
+return ;
 default: return -1;
 }
 default: return -1;
@@ -71297,6 +71883,40 @@ case "c":
 switch($cardID[9]) {
 case "0":
 return 4;
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+default: return -1;
+}
+case "7":
+switch($cardID[2]) {
+case "4":
+switch($cardID[3]) {
+case "2":
+switch($cardID[4]) {
+case "d":
+switch($cardID[5]) {
+case "e":
+switch($cardID[6]) {
+case "a":
+switch($cardID[7]) {
+case "1":
+switch($cardID[8]) {
+case "f":
+switch($cardID[9]) {
+case "1":
+return 3;
 default: return -1;
 }
 default: return -1;
@@ -76951,6 +77571,36 @@ default: return "";
 }
 default: return "";
 }
+case "2":
+switch($cardID[3]) {
+case "6":
+switch($cardID[4]) {
+case "4":
+switch($cardID[5]) {
+case "3":
+switch($cardID[6]) {
+case "5":
+switch($cardID[7]) {
+case "9":
+switch($cardID[8]) {
+case "7":
+switch($cardID[9]) {
+case "5":
+return "Heroism,Aggression";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 case "6":
@@ -77847,6 +78497,36 @@ case "0":
 switch($cardID[9]) {
 case "7":
 return "Cunning,Villainy";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "3":
+switch($cardID[3]) {
+case "4":
+switch($cardID[4]) {
+case "2":
+switch($cardID[5]) {
+case "3":
+switch($cardID[6]) {
+case "7":
+switch($cardID[7]) {
+case "8":
+switch($cardID[8]) {
+case "7":
+switch($cardID[9]) {
+case "1":
+return "Command,Villainy";
 default: return "";
 }
 default: return "";
@@ -80777,6 +81457,36 @@ default: return "";
 }
 default: return "";
 }
+case "6":
+switch($cardID[3]) {
+case "1":
+switch($cardID[4]) {
+case "0":
+switch($cardID[5]) {
+case "3":
+switch($cardID[6]) {
+case "3":
+switch($cardID[7]) {
+case "1":
+switch($cardID[8]) {
+case "1":
+switch($cardID[9]) {
+case "0":
+return "Cunning";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 case "7":
@@ -85560,6 +86270,40 @@ switch($cardID[8]) {
 case "c":
 switch($cardID[9]) {
 case "0":
+return "Heroism,Aggression";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "7":
+switch($cardID[2]) {
+case "4":
+switch($cardID[3]) {
+case "2":
+switch($cardID[4]) {
+case "d":
+switch($cardID[5]) {
+case "e":
+switch($cardID[6]) {
+case "a":
+switch($cardID[7]) {
+case "1":
+switch($cardID[8]) {
+case "f":
+switch($cardID[9]) {
+case "1":
 return "Heroism,Aggression";
 default: return "";
 }
@@ -91215,6 +91959,36 @@ default: return "";
 }
 default: return "";
 }
+case "2":
+switch($cardID[3]) {
+case "6":
+switch($cardID[4]) {
+case "4":
+switch($cardID[5]) {
+case "3":
+switch($cardID[6]) {
+case "5":
+switch($cardID[7]) {
+case "9":
+switch($cardID[8]) {
+case "7":
+switch($cardID[9]) {
+case "5":
+return "Underworld";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 case "6":
@@ -92110,6 +92884,36 @@ switch($cardID[8]) {
 case "0":
 switch($cardID[9]) {
 case "7":
+return "Underworld";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "3":
+switch($cardID[3]) {
+case "4":
+switch($cardID[4]) {
+case "2":
+switch($cardID[5]) {
+case "3":
+switch($cardID[6]) {
+case "7":
+switch($cardID[7]) {
+case "8":
+switch($cardID[8]) {
+case "7":
+switch($cardID[9]) {
+case "1":
 return "Underworld";
 default: return "";
 }
@@ -95027,6 +95831,36 @@ case "6":
 switch($cardID[9]) {
 case "1":
 return "Mandalorian,Vehicle,Transport";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "6":
+switch($cardID[3]) {
+case "1":
+switch($cardID[4]) {
+case "0":
+switch($cardID[5]) {
+case "3":
+switch($cardID[6]) {
+case "3":
+switch($cardID[7]) {
+case "1":
+switch($cardID[8]) {
+case "1":
+switch($cardID[9]) {
+case "0":
+return "Tactic";
 default: return "";
 }
 default: return "";
@@ -99825,6 +100659,40 @@ case "c":
 switch($cardID[9]) {
 case "0":
 return "Mandalorian";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "7":
+switch($cardID[2]) {
+case "4":
+switch($cardID[3]) {
+case "2":
+switch($cardID[4]) {
+case "d":
+switch($cardID[5]) {
+case "e":
+switch($cardID[6]) {
+case "a":
+switch($cardID[7]) {
+case "1":
+switch($cardID[8]) {
+case "f":
+switch($cardID[9]) {
+case "1":
+return "Underworld";
 default: return "";
 }
 default: return "";
@@ -105479,6 +106347,36 @@ default: return "";
 }
 default: return "";
 }
+case "2":
+switch($cardID[3]) {
+case "6":
+switch($cardID[4]) {
+case "4":
+switch($cardID[5]) {
+case "3":
+switch($cardID[6]) {
+case "5":
+switch($cardID[7]) {
+case "9":
+switch($cardID[8]) {
+case "7":
+switch($cardID[9]) {
+case "5":
+return "Ground";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 case "6":
@@ -106374,6 +107272,36 @@ switch($cardID[8]) {
 case "0":
 switch($cardID[9]) {
 case "7":
+return "Ground";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "3":
+switch($cardID[3]) {
+case "4":
+switch($cardID[4]) {
+case "2":
+switch($cardID[5]) {
+case "3":
+switch($cardID[6]) {
+case "7":
+switch($cardID[7]) {
+case "8":
+switch($cardID[8]) {
+case "7":
+switch($cardID[9]) {
+case "1":
 return "Ground";
 default: return "";
 }
@@ -109305,6 +110233,36 @@ default: return "";
 }
 default: return "";
 }
+case "6":
+switch($cardID[3]) {
+case "1":
+switch($cardID[4]) {
+case "0":
+switch($cardID[5]) {
+case "3":
+switch($cardID[6]) {
+case "3":
+switch($cardID[7]) {
+case "1":
+switch($cardID[8]) {
+case "1":
+switch($cardID[9]) {
+case "0":
+return "";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 case "7":
@@ -114088,6 +115046,40 @@ switch($cardID[8]) {
 case "c":
 switch($cardID[9]) {
 case "0":
+return "Ground";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "7":
+switch($cardID[2]) {
+case "4":
+switch($cardID[3]) {
+case "2":
+switch($cardID[4]) {
+case "d":
+switch($cardID[5]) {
+case "e":
+switch($cardID[6]) {
+case "a":
+switch($cardID[7]) {
+case "1":
+switch($cardID[8]) {
+case "f":
+switch($cardID[9]) {
+case "1":
 return "Ground";
 default: return "";
 }
@@ -119743,6 +120735,36 @@ default: return "";
 }
 default: return "";
 }
+case "2":
+switch($cardID[3]) {
+case "6":
+switch($cardID[4]) {
+case "4":
+switch($cardID[5]) {
+case "3":
+switch($cardID[6]) {
+case "5":
+switch($cardID[7]) {
+case "9":
+switch($cardID[8]) {
+case "7":
+switch($cardID[9]) {
+case "5":
+return "Leader";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 case "6":
@@ -120638,6 +121660,36 @@ switch($cardID[8]) {
 case "0":
 switch($cardID[9]) {
 case "7":
+return "Unit";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "3":
+switch($cardID[3]) {
+case "4":
+switch($cardID[4]) {
+case "2":
+switch($cardID[5]) {
+case "3":
+switch($cardID[6]) {
+case "7":
+switch($cardID[7]) {
+case "8":
+switch($cardID[8]) {
+case "7":
+switch($cardID[9]) {
+case "1":
 return "Unit";
 default: return "";
 }
@@ -123555,6 +124607,36 @@ case "6":
 switch($cardID[9]) {
 case "1":
 return "Unit";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "6":
+switch($cardID[3]) {
+case "1":
+switch($cardID[4]) {
+case "0":
+switch($cardID[5]) {
+case "3":
+switch($cardID[6]) {
+case "3":
+switch($cardID[7]) {
+case "1":
+switch($cardID[8]) {
+case "1":
+switch($cardID[9]) {
+case "0":
+return "Event";
 default: return "";
 }
 default: return "";
@@ -128369,6 +129451,40 @@ default: return "";
 }
 default: return "";
 }
+case "7":
+switch($cardID[2]) {
+case "4":
+switch($cardID[3]) {
+case "2":
+switch($cardID[4]) {
+case "d":
+switch($cardID[5]) {
+case "e":
+switch($cardID[6]) {
+case "a":
+switch($cardID[7]) {
+case "1":
+switch($cardID[8]) {
+case "f":
+switch($cardID[9]) {
+case "1":
+return "Leader";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 default: return "";
@@ -130677,6 +131793,40 @@ default: return "";
 }
 default: return "";
 }
+case "2":
+switch($cardID[2]) {
+case "2":
+switch($cardID[3]) {
+case "6":
+switch($cardID[4]) {
+case "4":
+switch($cardID[5]) {
+case "3":
+switch($cardID[6]) {
+case "5":
+switch($cardID[7]) {
+case "9":
+switch($cardID[8]) {
+case "7":
+switch($cardID[9]) {
+case "5":
+return "Unit";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 case "c":
@@ -130736,6 +131886,40 @@ switch($cardID[8]) {
 case "c":
 switch($cardID[9]) {
 case "0":
+return "Unit";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "7":
+switch($cardID[2]) {
+case "4":
+switch($cardID[3]) {
+case "2":
+switch($cardID[4]) {
+case "d":
+switch($cardID[5]) {
+case "e":
+switch($cardID[6]) {
+case "a":
+switch($cardID[7]) {
+case "1":
+switch($cardID[8]) {
+case "f":
+switch($cardID[9]) {
+case "1":
 return "Unit";
 default: return "";
 }
@@ -136391,6 +137575,36 @@ default: return 0;
 }
 default: return 0;
 }
+case "2":
+switch($cardID[3]) {
+case "6":
+switch($cardID[4]) {
+case "4":
+switch($cardID[5]) {
+case "3":
+switch($cardID[6]) {
+case "5":
+switch($cardID[7]) {
+case "9":
+switch($cardID[8]) {
+case "7":
+switch($cardID[9]) {
+case "5":
+return 1;
+default: return 0;
+}
+default: return 0;
+}
+default: return 0;
+}
+default: return 0;
+}
+default: return 0;
+}
+default: return 0;
+}
+default: return 0;
+}
 default: return 0;
 }
 case "6":
@@ -137287,6 +138501,36 @@ case "0":
 switch($cardID[9]) {
 case "7":
 return 0;
+default: return 0;
+}
+default: return 0;
+}
+default: return 0;
+}
+default: return 0;
+}
+default: return 0;
+}
+default: return 0;
+}
+default: return 0;
+}
+case "3":
+switch($cardID[3]) {
+case "4":
+switch($cardID[4]) {
+case "2":
+switch($cardID[5]) {
+case "3":
+switch($cardID[6]) {
+case "7":
+switch($cardID[7]) {
+case "8":
+switch($cardID[8]) {
+case "7":
+switch($cardID[9]) {
+case "1":
+return 1;
 default: return 0;
 }
 default: return 0;
@@ -140217,6 +141461,36 @@ default: return 0;
 }
 default: return 0;
 }
+case "6":
+switch($cardID[3]) {
+case "1":
+switch($cardID[4]) {
+case "0":
+switch($cardID[5]) {
+case "3":
+switch($cardID[6]) {
+case "3":
+switch($cardID[7]) {
+case "1":
+switch($cardID[8]) {
+case "1":
+switch($cardID[9]) {
+case "0":
+return 0;
+default: return 0;
+}
+default: return 0;
+}
+default: return 0;
+}
+default: return 0;
+}
+default: return 0;
+}
+default: return 0;
+}
+default: return 0;
+}
 default: return 0;
 }
 case "7":
@@ -145000,6 +146274,40 @@ switch($cardID[8]) {
 case "c":
 switch($cardID[9]) {
 case "0":
+return 1;
+default: return 0;
+}
+default: return 0;
+}
+default: return 0;
+}
+default: return 0;
+}
+default: return 0;
+}
+default: return 0;
+}
+default: return 0;
+}
+default: return 0;
+}
+case "7":
+switch($cardID[2]) {
+case "4":
+switch($cardID[3]) {
+case "2":
+switch($cardID[4]) {
+case "d":
+switch($cardID[5]) {
+case "e":
+switch($cardID[6]) {
+case "a":
+switch($cardID[7]) {
+case "1":
+switch($cardID[8]) {
+case "f":
+switch($cardID[9]) {
+case "1":
 return 1;
 default: return 0;
 }
@@ -153817,6 +155125,36 @@ default: return "";
 }
 default: return "";
 }
+case "2":
+switch($cardID[3]) {
+case "6":
+switch($cardID[4]) {
+case "4":
+switch($cardID[5]) {
+case "3":
+switch($cardID[6]) {
+case "5":
+switch($cardID[7]) {
+case "9":
+switch($cardID[8]) {
+case "7":
+switch($cardID[9]) {
+case "5":
+return "SHD";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 case "6":
@@ -154712,6 +156050,36 @@ switch($cardID[8]) {
 case "0":
 switch($cardID[9]) {
 case "7":
+return "SHD";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "3":
+switch($cardID[3]) {
+case "4":
+switch($cardID[4]) {
+case "2":
+switch($cardID[5]) {
+case "3":
+switch($cardID[6]) {
+case "7":
+switch($cardID[7]) {
+case "8":
+switch($cardID[8]) {
+case "7":
+switch($cardID[9]) {
+case "1":
 return "SHD";
 default: return "";
 }
@@ -157643,6 +159011,36 @@ default: return "";
 }
 default: return "";
 }
+case "6":
+switch($cardID[3]) {
+case "1":
+switch($cardID[4]) {
+case "0":
+switch($cardID[5]) {
+case "3":
+switch($cardID[6]) {
+case "3":
+switch($cardID[7]) {
+case "1":
+switch($cardID[8]) {
+case "1":
+switch($cardID[9]) {
+case "0":
+return "SHD";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 case "7":
@@ -162426,6 +163824,40 @@ switch($cardID[8]) {
 case "c":
 switch($cardID[9]) {
 case "0":
+return "SHD";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "7":
+switch($cardID[2]) {
+case "4":
+switch($cardID[3]) {
+case "2":
+switch($cardID[4]) {
+case "d":
+switch($cardID[5]) {
+case "e":
+switch($cardID[6]) {
+case "a":
+switch($cardID[7]) {
+case "1":
+switch($cardID[8]) {
+case "f":
+switch($cardID[9]) {
+case "1":
 return "SHD";
 default: return "";
 }
@@ -163123,6 +164555,8 @@ case "0":
 return "2526288781";
 case "1":
 return "1480894253";
+case "3":
+return "9226435975";
 case "4":
 return "1384530409";
 case "5":
@@ -163149,6 +164583,8 @@ case "9":
 return "8552719712";
 case "1":
 return "7936091758";
+case "8":
+return "9734237871";
 default: return "";
 }
 case "3":
@@ -163375,6 +164811,8 @@ case "3":
 switch($cardID[6]) {
 case "2":
 return "5778949819";
+case "3":
+return "8261033110";
 case "4":
 return "4328408486";
 case "6":
