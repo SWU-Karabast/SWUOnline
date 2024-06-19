@@ -70,7 +70,7 @@ class Ally {
   }
 
   function MaxHealth() {
-    $max = CardHP($this->CardID());
+    $max = AllyHealth($this->CardID(), $this->PlayerID());
     $upgrades = $this->GetUpgrades();
     for($i=0; $i<count($upgrades); ++$i) if($upgrades[$i] != "-") $max += CardHP($upgrades[$i]);
     $max += $this->allies[$this->index+9];
