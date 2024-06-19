@@ -555,7 +555,7 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
       include_once "./includes/dbh.inc.php";
       include_once "./includes/functions.inc.php";
       $conceded = true;
-      if(!IsGameOver()) PlayerLoseHealth($playerID, 999);
+      if(!IsGameOver()) PlayerWon(($playerID == 1 ? 2 : 1));
       break;
     case 100003: //Report Bug
       if($isSimulation) return;
@@ -615,10 +615,6 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
         WriteLog($myName . " gave a badge to " . $theirName);
       }
       break;
-    case 100011: //Resume adventure (roguelike)
-      if($roguelikeGameID == "") break;
-      header("Location: " . $redirectPath . "/Roguelike/ContinueAdventure.php?gameName=" . $roguelikeGameID . "&playerID=1&health=" . GetHealth(1));
-      break;
     case 100012: //Create Replay
       if(!file_exists("./Games/" . $gameName . "/origGamestate.txt"))
       {
@@ -667,6 +663,14 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
       copy("./Games/$gameName/lastTurnGamestate.txt", $folderName . "/lastTurnGamestate.txt");
       WriteLog("Thank you for reporting the player. The chat log has been saved to the server. Please report it to mods on the discord server with the game number for reference ($gameName).");
       break;
+    case 100015:
+      if($isSimulation) return;
+      include_once "./includes/dbh.inc.php";
+      include_once "./includes/functions.inc.php";
+      $conceded = true;
+      if(!IsGameOver()) PlayerWon(($playerID == 1 ? 2 : 1));
+      header("Location: " . $redirectPath . "/MainMenu.php");
+      break;
     default: break;
   }
   return true;
@@ -690,6 +694,7 @@ function IsModeAsync($mode)
     case 100007: return true;
     case 100010: return true;
     case 100012: return true;
+    case 100015: return true;
   }
   return false;
 }
