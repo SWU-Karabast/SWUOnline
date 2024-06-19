@@ -56,6 +56,7 @@ if ($isGamePlayer) {
   if ($playerStatus > 0) {
     WriteLog("Player $playerID has reconnected.");
     SetCachePiece($gameName, $playerID + 3, "0");
+    GamestateUpdated($gameName);
   }
 }
 $count = 0;
@@ -74,14 +75,14 @@ while ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     $oppStatus = $cacheArr[$otherP + 2];
     if (($currentTime - $oppLastTime) > 3000 && ($oppStatus == "0")) {
       WriteLog("Opponent has disconnected. Waiting 60 seconds to reconnect.");
+      SetCachePiece($gameName, $otherP + 3, "2");
+      $opponentDisconnected = true;
       GamestateUpdated($gameName);
-      SetCachePiece($gameName, $otherP + 3, "1");
     } else if (($currentTime - $oppLastTime) > 60000 && $oppStatus == "1") {
       WriteLog("Opponent has left the game.");
-      GamestateUpdated($gameName);
       SetCachePiece($gameName, $otherP + 3, "2");
+      GamestateUpdated($gameName);
       $lastUpdate = 0;
-      $opponentDisconnected = true;
     }
     //Handle server timeout
     $lastUpdateTime = $cacheArr[5];
@@ -107,19 +108,6 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   include "Libraries/UILibraries2.php";
   include "Libraries/StatFunctions.php";
   include "Libraries/PlayerSettings.php";
-  if ($opponentDisconnected && !IsGameOver()) {
-    include_once "./includes/dbh.inc.php";
-    include_once "./includes/functions.inc.php";
-    include_once "./APIKeys/APIKeys.php";
-    PlayerLoseHealth($otherP, GetHealth($otherP));
-    include "WriteGamestate.php";
-  }
-  else if($opponentInactive && !IsGameOver()) {
-    $currentPlayerActivity = 2;
-    WriteLog("The current player is inactive.");
-    include "WriteGamestate.php";
-    GamestateUpdated($gameName);
-  }
 
   if ($turn[0] == "REMATCH" && intval($playerID) != 3) {
     include "MenuFiles/ParseGamefile.php";
@@ -355,8 +343,11 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       if (CanPassPhase($turn[0])) {
         if ($turn[0] == "B") echo (CreateButton($playerID, "Undo Block", 10001, 0, "18px") . " " . CreateButton($playerID, "Pass", 99, 0, "18px") . " " . CreateButton($playerID, "Pass Block and Reactions", 101, 0, "16px", "", "Reactions will not be skipped if the opponent reacts"));
       }
+      if ($opponentDisconnected == true && $playerID != 3) {
+        echo (" " . CreateButton($playerID, "Claim Victory", 100007, 0, "18px", "", "claimVictoryButton"));
+      }
     } else {
-      if ($currentPlayerActivity == 2 && $playerID != 3) {
+      if (($currentPlayerActivity == 2 || $opponentDisconnected == true) && $playerID != 3) {
         echo ("Opponent is inactive " . CreateButton($playerID, "Claim Victory", 100007, 0, "18px", "", "claimVictoryButton"));
       } else {
         echo($helpText);
