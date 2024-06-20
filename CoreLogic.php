@@ -334,8 +334,10 @@ function MainCharacterPlayCardAbilities($cardID, $from)
     switch($character[$i]) {
       case "3045538805"://Hondo Ohnaka
         if($from == "RESOURCES") {
-          $character[$i+1] = 1;
-          AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+          AddDecisionQueue("YESNO", $currentPlayer, "if you want use Hondo Ohnaka's ability");
+          AddDecisionQueue("NOPASS", $currentPlayer, "-");
+          AddDecisionQueue("EXHAUSTCHARACTER", $currentPlayer, $i, 1);
+          AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY", 1);
           AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to give an experience token", 1);
           AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
           AddDecisionQueue("MZOP", $currentPlayer, "ADDEXPERIENCE", 1);
@@ -343,18 +345,22 @@ function MainCharacterPlayCardAbilities($cardID, $from)
         break;
       case "1384530409"://Cad Bane
         if($from != 'PLAY' && $from != 'EQUIP' && TraitContains($cardID, "Underworld", $currentPlayer)) { 
-          $character[$i+1] = 1;
           $otherPlayer = ($currentPlayer == 1 ? 2 : 1);
-          AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY");
+          AddDecisionQueue("YESNO", $currentPlayer, "if you want use Cad Bane's ability");
+          AddDecisionQueue("NOPASS", $currentPlayer, "-");
+          AddDecisionQueue("EXHAUSTCHARACTER", $currentPlayer, $i, 1);
+          AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY", 1);
           AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a unit to deal 1 damage to", 1);
-          AddDecisionQueue("MAYCHOOSEMULTIZONE", $otherPlayer, "<-", 1);
+          AddDecisionQueue("CHOOSEMULTIZONE", $otherPlayer, "<-", 1);
           AddDecisionQueue("MZOP", $otherPlayer, "DEALDAMAGE,1", 1);
         }
         break;
       case "9005139831"://The Mandalorian
         if(DefinedTypesContains($cardID, "Upgrade", $currentPlayer)) {
-          $character[$i+1] = 1;
-          AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:maxHealth=4");
+          AddDecisionQueue("YESNO", $currentPlayer, "if you want use The Mandalorian's ability");
+          AddDecisionQueue("NOPASS", $currentPlayer, "-");
+          AddDecisionQueue("EXHAUSTCHARACTER", $currentPlayer, $i, 1);
+          AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:maxHealth=4", 1);
           AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to exhaust", 1);
           AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
           AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);

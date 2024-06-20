@@ -877,7 +877,7 @@ function AllyPlayCardAbility($cardID, $player="", $reportMode=false, $from="-")
             AddDecisionQueue("ADDMZUSES", $player, "-1", 1);
             AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY");
             AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a unit to deal 2 damage to", 1);
-            AddDecisionQueue("MAYCHOOSEMULTIZONE", $otherPlayer, "<-", 1);
+            AddDecisionQueue("CHOOSEMULTIZONE", $otherPlayer, "<-", 1);
             AddDecisionQueue("MZOP", $otherPlayer, "DEALDAMAGE,2", 1);
           }
         }
