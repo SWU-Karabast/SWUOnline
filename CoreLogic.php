@@ -2201,6 +2201,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
             $ally->DealDamage(floor($ally->MaxHealth()/2));
           }
           break;
+        case "0254929700"://Doctor Aphra
+          AddDecisionQueue("FINDINDICES", $currentPlayer, "GY");
+          AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "3-", 1);
+          AddDecisionQueue("APPENDLASTRESULT", $currentPlayer, "-3", 1);
+          AddDecisionQueue("MULTICHOOSEDISCARD", $currentPlayer, "<-", 1);
+          AddDecisionQueue("SPECIFICCARD", $currentPlayer, "DOCTORAPHRA", 1);
+          break;
         default: break;
       }
       RemoveCharacter($currentPlayer, CharacterPieces());

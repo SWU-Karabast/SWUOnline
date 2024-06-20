@@ -432,6 +432,12 @@ function SpecificCardLogic($player, $card, $lastResult)
         $ally->Attach("2007868442");//Experience token
       }
       return $lastResult;
+    case "DOCTORAPHRA":
+      $index = GetRandom() % count($lastResult);
+      $cardID = RemoveDiscard($player, $lastResult[$index]);
+      WriteLog(CardLink($cardID, $cardID) . " is returned by " . CardLink("0254929700", "0254929700"));
+      AddHand($player, $cardID);
+      return $lastResult;
     default: return "";
   }
 }

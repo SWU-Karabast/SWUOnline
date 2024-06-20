@@ -96,6 +96,15 @@ function AttackModifier($cardID, $player, $index)
       $ally = new Ally("MYALLY-" . $index, $player);
       if($ally->NumUpgrades() > 0) $modifier += 1;
       break;
+    case "58f9f2d4a0"://Dr. Aphra
+      $discard = &GetDiscard($player);
+      $costs = [];
+      for($i = 0; $i < count($discard); $i += DiscardPieces()) {
+        $cost = CardCost($discard[$i]);
+        $costs[$cost] = true;
+      }
+      if(count($costs) >= 5) $modifier += 3;
+      break;
     default: break;
   }
   return $modifier;
