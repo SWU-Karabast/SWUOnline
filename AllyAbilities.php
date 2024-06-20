@@ -262,6 +262,7 @@ function AllyPlayableExhausted($cardID) {
     case "1885628519"://Crosshair
     case "040a3e81f3"://Lando Leader Unit
     case "2b13cefced"://Fennec Shand Unit
+    case "a742dea1f1"://Han Solo Red Unit
       return true;
     default: return false;
   }
