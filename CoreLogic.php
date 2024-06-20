@@ -2241,6 +2241,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "6253392993"://Bright Hope
       if($from != "PLAY") {
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:arena=Ground");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to bounce");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "BOUNCE", 1);
