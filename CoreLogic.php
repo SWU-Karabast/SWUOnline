@@ -2241,6 +2241,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "6253392993"://Bright Hope
       if($from != "PLAY") {
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:arena=Ground");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to bounce");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "BOUNCE", 1);
@@ -4089,11 +4090,15 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "8261033110"://Evacuate
       $p1Allies = &GetAllies(1);
       for($i=count($p1Allies)-AllyPieces(); $i>=0; $i-=AllyPieces()) {
+        if($p1Allies[$i] != '0e65f012f5'){
         MZBounce(1, "MYALLY-" . $i);
+        }
       }
       $p2Allies = &GetAllies(2);
       for($i=count($p2Allies)-AllyPieces(); $i>=0; $i-=AllyPieces()) {
-        MZBounce(2, "MYALLY-" . $i);
+        if($p2Allies[$i] != '0e65f012f5'){ //NEED TO FILTER BY LEADERS
+          MZBounce(2, "MYALLY-" . $i);
+        }
       }
       break;
     case "1910812527"://Final Showdown
