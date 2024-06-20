@@ -3571,6 +3571,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "1081897816"://Mandalorian Warrior
       if($from != "PLAY") {
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Mandalorian&THEIRALLY:trait=Mandalorian");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "index=MYALLY-" . $playAlly->Index());
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to add experience");
         AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "ADDEXPERIENCE", 1);
