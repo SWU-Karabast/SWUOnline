@@ -279,6 +279,8 @@ function AllyDoesAbilityExhaust($cardID, $abilityIndex) {
       return $abilityIndex == 1;
     case "2b13cefced"://Fennec Shand Unit
       return $abilityIndex == 1;
+    case "a742dea1f1"://Han Solo Red Unit
+      return $abilityIndex == 1;
     default: return true;
   }
 }

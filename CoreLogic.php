@@ -4105,6 +4105,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         $ally->Ready();
       }
       break;
+    case "a742dea1f1"://Han Solo Red Unit
     case "9226435975"://Han Solo Red
       $abilityName = GetResolvedAbilityName($cardID, $from);
       if($abilityName == "Play") {
@@ -4154,6 +4155,7 @@ function AfterPlayedByAbility($cardID) {
       AddDecisionQueue("OP", $currentPlayer, "ADDTOPDECKASRESOURCE");
       MZChooseAndDestroy($currentPlayer, "MYRESOURCES", context:"Choose a resource to destroy");
       break;
+    case "a742dea1f1"://Han Solo Red Unit
     case "9226435975"://Han Solo Red
       AddDecisionQueue("OP", $currentPlayer, "GETLASTALLYMZ");
       AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,2", 1);
