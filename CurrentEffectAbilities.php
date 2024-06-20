@@ -261,6 +261,10 @@ function CurrentEffectCostModifiers($cardID, $from)
           $costModifier -= 99;
           $remove = true;
           break;
+        case "9226435975"://Han Solo Red
+          $costModifier -= 1;
+          $remove = true;
+          break;
         default: break;
       }
       if($remove) RemoveCurrentTurnEffect($i);

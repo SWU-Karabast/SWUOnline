@@ -783,6 +783,9 @@ function GetAbilityTypes($cardID)
     case "2b13cefced"://Fennec Shand Unit
       $abilityTypes = "A,AA";
       break;
+    case "9226435975"://Han Solo Red
+      $abilityTypes = "A";
+      break;
     default: break;
   }
   if(DefinedTypesContains($cardID, "Leader", $currentPlayer) && !IsAlly($cardID, $currentPlayer)) {
@@ -913,6 +916,9 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       break;
     case "2b13cefced"://Fennec Shand Unit
       $abilityNames = "Ambush,Attack";
+      break;
+    case "9226435975"://Han Solo Red
+      $abilityNames = "Play";
       break;
     default: break;
   }
@@ -1191,6 +1197,8 @@ function LeaderUnit($cardID) {
       return "919facb76d";
     case "0254929700"://Doctor Aphra
       return "58f9f2d4a0";
+    case "9226435975"://Han Solo Red
+      return "a742dea1f1";
     default: return "";
   }
 }
@@ -1263,6 +1271,8 @@ function LeaderUndeployed($cardID) {
       return "9334480612";
     case "58f9f2d4a0"://Doctor Aphra
       return "0254929700";
+    case "a742dea1f1"://Han Solo Red
+      return "9226435975";
     default: return "";
   }
 }
@@ -1616,6 +1626,7 @@ function DefinedCardType2Wrapper($cardID)
     case "9794215464"://Gar Saxon
     case "9334480612"://Boba Fett Green Leader
     case "0254929700"://Doctor Aphra
+    case "9226435975"://Han Solo Red
       return "";
     default: return DefinedCardType2($cardID);
   }

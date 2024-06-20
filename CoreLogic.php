@@ -4105,6 +4105,18 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         $ally->Ready();
       }
       break;
+    case "9226435975"://Han Solo Red
+      $abilityName = GetResolvedAbilityName($cardID, $from);
+      if($abilityName == "Play") {
+        global $CS_AfterPlayedBy;
+        SetClassState($currentPlayer, $CS_AfterPlayedBy, $cardID);
+        AddCurrentTurnEffect("9226435975", $currentPlayer);
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND:definedType=Unit");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to play");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
+      }
+      break;
     default: break;
   }
 }
@@ -4141,6 +4153,10 @@ function AfterPlayedByAbility($cardID) {
     case "5440730550"://Lando Calrissian
       AddDecisionQueue("OP", $currentPlayer, "ADDTOPDECKASRESOURCE");
       MZChooseAndDestroy($currentPlayer, "MYRESOURCES", context:"Choose a resource to destroy");
+      break;
+    case "9226435975"://Han Solo Red
+      AddDecisionQueue("OP", $currentPlayer, "GETLASTALLYMZ");
+      AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,2", 1);
       break;
     case "3572356139"://Chewbacca, Walking Carpet
       AddDecisionQueue("OP", $currentPlayer, "GETLASTALLYMZ");
