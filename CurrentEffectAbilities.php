@@ -486,8 +486,11 @@ function CurrentEffectEndTurnAbilities()
         }
         break;
       case "5696041568-2"://Triple Dark Raid
-        $ally = new Ally("MYALLY-" . SearchAlliesForUniqueID($currentTurnEffects[$i+2], $currentTurnEffects[$i+1]), $currentTurnEffects[$i+1]);
-        MZBounce($currentTurnEffects[$i+1], "MYALLY-" . $ally->Index());
+        $allyId = SearchAlliesForUniqueID($currentTurnEffects[$i+2], $currentTurnEffects[$i+1]);
+        if($allyId > -1) {
+          $ally = new Ally("MYALLY-" . $allyId, $currentTurnEffects[$i+1]);
+          MZBounce($currentTurnEffects[$i+1], "MYALLY-" . $ally->Index());
+        }
         break;
       case "1910812527":
         DealDamageAsync($currentTurnEffects[$i+1], 999999);
