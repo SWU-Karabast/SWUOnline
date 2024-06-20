@@ -487,7 +487,7 @@ function CurrentEffectEndTurnAbilities()
         break;
       case "5696041568-2"://Triple Dark Raid
         $allyId = SearchAlliesForUniqueID($currentTurnEffects[$i+2], $currentTurnEffects[$i+1]);
-        if($allyId >= -1) {
+        if($allyId > -1) {
           $ally = new Ally("MYALLY-" . $allyId, $currentTurnEffects[$i+1]);
           MZBounce($currentTurnEffects[$i+1], "MYALLY-" . $ally->Index());
         }
