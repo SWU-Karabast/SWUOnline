@@ -4096,6 +4096,15 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         MZBounce(2, "MYALLY-" . $i);
       }
       break;
+    case "1910812527"://Final Showdown
+      AddCurrentTurnEffect("1910812527", $currentPlayer);
+      $myAllies = &GetAllies($currentPlayer);
+      for($i=0; $i<count($myAllies); $i+=AllyPieces())
+      {
+        $ally = new Ally("MYALLY-" . $i, $currentPlayer);
+        $ally->Ready();
+      }
+      break;
     default: break;
   }
 }

@@ -485,6 +485,9 @@ function CurrentEffectEndTurnAbilities()
         $ally = new Ally("MYALLY-" . SearchAlliesForUniqueID($currentTurnEffects[$i+2], $currentTurnEffects[$i+1]), $currentTurnEffects[$i+1]);
         MZBounce($currentTurnEffects[$i+1], "MYALLY-" . $ally->Index());
         break;
+      case "1910812527":
+        DealDamageAsync($currentTurnEffects[$i+1], 999999);
+        break;
       default: break;
     }
     if($remove) RemoveCurrentTurnEffect($i);
