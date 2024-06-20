@@ -866,12 +866,15 @@ function AllyPlayCardAbility($cardID, $player="", $reportMode=false, $from="-")
         }
         break;
       case "724979d608"://Cad Bane Leader 
-        $cadIndex = SearchAlliesForCard($opponent, "724979d608"); 
+        $cadIndex = SearchAlliesForCard($player, "724979d608");
         if($cadIndex != "") {
-          $cadbane = new Ally("MYALLY-" . $cadIndex, $opponent);
-          if($from != 'PLAY' && $cadbane->NumUses() > 0 && TraitContains($cardID, "Underworld", $currentPlayer )) { 
-            $cadbane->ModifyUses(-1);
+          $cadbane = new Ally("MYALLY-" . $cadIndex, $player);
+          if($from != 'PLAY' && $cadbane->NumUses() > 0 && TraitContains($cardID, "Underworld", $currentPlayer)) {
             $otherPlayer = ($player == 1 ? 2 : 1);
+            AddDecisionQueue("YESNO", $player, "if you want use Cad Bane's ability");
+            AddDecisionQueue("NOPASS", $player, "-");
+            AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $cadIndex, 1);
+            AddDecisionQueue("ADDMZUSES", $player, "-1", 1);
             AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY");
             AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a unit to deal 2 damage to", 1);
             AddDecisionQueue("MAYCHOOSEMULTIZONE", $otherPlayer, "<-", 1);
