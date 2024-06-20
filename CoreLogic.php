@@ -4089,11 +4089,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "8261033110"://Evacuate
       $p1Allies = &GetAllies(1);
       for($i=count($p1Allies)-AllyPieces(); $i>=0; $i-=AllyPieces()) {
-        MZBounce(1, "MYALLY-" . $i);
+        if(!IsLeader($p1Allies[$i], 1))
+          MZBounce(1, "MYALLY-" . $i);
       }
       $p2Allies = &GetAllies(2);
       for($i=count($p2Allies)-AllyPieces(); $i>=0; $i-=AllyPieces()) {
-        MZBounce(2, "MYALLY-" . $i);
+        if(!IsLeader($p2Allies[$i], 1))
+          MZBounce(2, "MYALLY-" . $i);
       }
       break;
     case "1910812527"://Final Showdown
