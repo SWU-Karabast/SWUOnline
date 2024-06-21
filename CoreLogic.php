@@ -4124,6 +4124,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
       }
       break;
+    case "7354795397":
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      PummelHit($otherPlayer);
+      Draw($currentPlayer);
+      break;
     default: break;
   }
 }
