@@ -790,6 +790,9 @@ function GetAbilityTypes($cardID)
     case "a742dea1f1"://Han Solo Red Unit
       $abilityTypes = "A,AA";
       break;
+    case "2744523125"://Salacious Crumb
+      $abilityTypes = "A,AA";
+      break;
     default: break;
   }
   if(DefinedTypesContains($cardID, "Leader", $currentPlayer) && !IsAlly($cardID, $currentPlayer)) {
@@ -926,6 +929,9 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       break;
     case "a742dea1f1"://Han Solo Red Unit
       $abilityNames = "Play,Attack";
+      break;
+    case "2744523125"://Salacious Crumb
+      $abilityNames = "Bounce,Attack";
       break;
     default: break;
   }

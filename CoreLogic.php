@@ -4132,6 +4132,18 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "9270539174"://Wild Rancor
       DamageAllAllies(2, "9270539174", arena:"Ground", except:"MYALLY-".LastAllyIndex($currentPlayer));
       break;
+    case "2744523125"://Salacious Crumb
+      $abilityName = GetResolvedAbilityName($cardID, $from);
+      if($abilityName == "Bounce") {
+        MZBounce($currentPlayer, "MYALLY-" . LastAllyIndex($currentPlayer));
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:arena=Ground&THEIRALLY:arena=Ground");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 1 damage to");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1", 1);
+      } else if($from != "PLAY") {
+        Restore(1, $currentPlayer);
+      }
+      break;
     default: break;
   }
 }
