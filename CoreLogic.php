@@ -2149,7 +2149,7 @@ function IsClassBonusActive($player, $class)
 
 function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalCosts = "-")
 {
-  global $currentPlayer, $layers, $CS_PlayIndex, $initiativePlayer;
+  global $currentPlayer, $layers, $CS_PlayIndex, $initiativePlayer, $CCS_FrontLineShuttle;
   $index = GetClassState($currentPlayer, $CS_PlayIndex);
   if($target != "-")
   {
@@ -3380,6 +3380,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an ally to attack with");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
+        AddDecisionQueue("SETCOMBATCHAINSTATE", $currentPlayer, $CCS_FrontLineShuttle, 1);
         AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
       }
       break;

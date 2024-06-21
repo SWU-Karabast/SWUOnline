@@ -1490,7 +1490,7 @@ function AddPrePitchDecisionQueue($cardID, $from, $index = -1, $skipAbilityType 
 //Find the legal targets for an attack
 function GetTargetOfAttack($attackID)
 {
-  global $mainPlayer, $combatChainState, $CCS_AttackTarget, $CCS_IsAmbush;
+  global $mainPlayer, $combatChainState, $CCS_AttackTarget, $CCS_IsAmbush, $CCS_FrontLineShuttle;
   $defPlayer = $mainPlayer == 1 ? 2 : 1;
   if(HasCleave($attackID))
   {
@@ -1500,6 +1500,7 @@ function GetTargetOfAttack($attackID)
   $targets = "";
   $sentinelTargets = "";
   if($combatChainState[$CCS_IsAmbush] != 1) $targets = "THEIRCHAR-0";
+  if($combatChainState[$CCS_FrontLineShuttle] != 0) $targets = "";
   $attacker = new Ally(AttackerMZID($mainPlayer));
   $attackerUpgrades = $attacker->GetUpgrades();
   for($i=0; $i<count($attackerUpgrades); ++$i)
