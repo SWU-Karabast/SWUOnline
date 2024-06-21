@@ -1499,8 +1499,11 @@ function GetTargetOfAttack($attackID)
   }
   $targets = "";
   $sentinelTargets = "";
-  if($combatChainState[$CCS_IsAmbush] != 1) $targets = "THEIRCHAR-0";
-  if($combatChainState[$CCS_FrontLineShuttle] != 0) $targets = "";
+  if($combatChainState[$CCS_FrontLineShuttle] == 0 ||$combatChainState[$CCS_IsAmbush] != 1){
+    $targets = "THEIRCHAR-0";
+    //revert frontline shuttle effect in case of leia leader unit
+    $combatChainState[$CCS_FrontLineShuttle] = 0;
+  }
   $attacker = new Ally(AttackerMZID($mainPlayer));
   $attackerUpgrades = $attacker->GetUpgrades();
   for($i=0; $i<count($attackerUpgrades); ++$i)
