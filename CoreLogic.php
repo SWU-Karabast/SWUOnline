@@ -4124,10 +4124,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
       }
       break;
-    case "7354795397":
+    case "7354795397"://No Bargain
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
       PummelHit($otherPlayer);
       Draw($currentPlayer);
+      break;
+    case "9270539174"://Wild Rancor
+      DamageAllAllies(2, "9270539174", arena:"Ground", except:"MYALLY-".LastAllyIndex($currentPlayer));
       break;
     default: break;
   }
@@ -4266,7 +4269,7 @@ function DamagePlayerAllies($player, $damage, $source, $type, $arena="")
   }
 }
 
-function DamageAllAllies($amount, $source, $alsoRest=false, $alsoFreeze=false, $arena="")
+function DamageAllAllies($amount, $source, $alsoRest=false, $alsoFreeze=false, $arena="", $except="")
 {
   global $currentPlayer;
   $otherPlayer = $currentPlayer == 1 ? 2 : 1;
@@ -4283,6 +4286,7 @@ function DamageAllAllies($amount, $source, $alsoRest=false, $alsoFreeze=false, $
   for($i=count($allies) - AllyPieces(); $i>=0; $i-=AllyPieces())
   {
     if(!ArenaContains($allies[$i], $arena, $currentPlayer)) continue;
+    if($except != "" && $except == ("MYALLY-" . $i)) continue;
     if($alsoRest) $allies[$i+1] = 1;
     if($alsoFreeze) $allies[$i+3] = 1;
     $ally = new Ally("MYALLY-$i");
