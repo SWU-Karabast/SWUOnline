@@ -592,13 +592,9 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
       break;
     case 100007: //Claim Victory when opponent is inactive
       if($isSimulation) return;
-      if($currentPlayerActivity == 2)
-      {
-        include_once "./includes/dbh.inc.php";
-        include_once "./includes/functions.inc.php";
-        if(!IsGameOver()) PlayerWon(($playerID == 1 ? 1 : 2));
-        WriteLog("The opponent forfeit due to inactivity.");
-      }
+      include_once "./includes/dbh.inc.php";
+      include_once "./includes/functions.inc.php";
+      if(!IsGameOver()) PlayerWon(($playerID == 1 ? 1 : 2));
       break;
     case 100010: //Grant badge
       if($isSimulation) return;
