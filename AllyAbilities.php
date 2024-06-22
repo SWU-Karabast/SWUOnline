@@ -1186,7 +1186,7 @@ function SpecificAllyAttackAbilities($attackID)
       if($attackerAlly->IsUpgraded()) {
         AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY");
         AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 2 damage", 1);
-        AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,2", 1);
       }
       break;
