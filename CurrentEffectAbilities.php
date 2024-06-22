@@ -265,6 +265,12 @@ function CurrentEffectCostModifiers($cardID, $from)
           $costModifier -= 1;
           $remove = true;
           break;
+        case "0622803599-3"://Jabba the Hutt
+          if(DefinedTypesContains($cardID, "Unit", $player)) {
+            $costModifier -= 1;
+            $remove = true;
+          }
+          break;
         default: break;
       }
       if($remove) RemoveCurrentTurnEffect($i);

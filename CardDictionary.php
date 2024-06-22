@@ -793,6 +793,9 @@ function GetAbilityTypes($cardID)
     case "2744523125"://Salacious Crumb
       $abilityTypes = "A,AA";
       break;
+    case "0622803599"://Jabba the Hutt
+      $abilityTypes = "A";
+      break;
     default: break;
   }
   if(DefinedTypesContains($cardID, "Leader", $currentPlayer) && !IsAlly($cardID, $currentPlayer)) {
@@ -932,6 +935,9 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       break;
     case "2744523125"://Salacious Crumb
       $abilityNames = "Bounce,Attack";
+      break;
+    case "0622803599"://Jabba the Hutt
+      $abilityNames = "Bounty";
       break;
     default: break;
   }
@@ -1212,6 +1218,8 @@ function LeaderUnit($cardID) {
       return "58f9f2d4a0";
     case "9226435975"://Han Solo Red
       return "a742dea1f1";
+    case "0622803599"://Jabba the Hutt
+      return "f928681d36";
     default: return "";
   }
 }
@@ -1286,6 +1294,8 @@ function LeaderUndeployed($cardID) {
       return "0254929700";
     case "a742dea1f1"://Han Solo Red
       return "9226435975";
+    case "f928681d36"://Jabba the Hutt
+      return "0622803599";
     default: return "";
   }
 }
@@ -1640,6 +1650,7 @@ function DefinedCardType2Wrapper($cardID)
     case "9334480612"://Boba Fett Green Leader
     case "0254929700"://Doctor Aphra
     case "9226435975"://Han Solo Red
+    case "0622803599"://Jabba the Hutt
       return "";
     default: return DefinedCardType2($cardID);
   }

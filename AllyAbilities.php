@@ -494,6 +494,11 @@ function CollectBounty($player, $index, $cardID, $reportMode=false, $bountyUnitO
       if($reportMode) break;
       Restore(5, $opponent);
       break;
+    case "0622803599-2"://Jabba the Hutt
+      ++$numBounties;
+      if($reportMode) break;
+      AddCurrentTurnEffect("0622803599-3", $opponent);
+      break;
     case "2178538979"://Price on Your Head
       ++$numBounties;
       if($reportMode) break;

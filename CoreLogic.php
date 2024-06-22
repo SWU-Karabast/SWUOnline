@@ -4145,6 +4145,16 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         Restore(1, $currentPlayer);
       }
       break;
+    case "0622803599"://Jabba the Hutt
+      $abilityName = GetResolvedAbilityName($cardID, $from);
+      if($abilityName == "Bounty") {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to give bounty");
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "0622803599-2,PLAY", 1);
+      }
+      break;
     default: break;
   }
 }
