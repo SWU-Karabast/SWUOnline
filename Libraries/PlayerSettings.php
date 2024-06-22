@@ -94,6 +94,8 @@ function GetCardBack($player)
   switch($settings[$SET_Cardback]) {
     case 1: return "CBBlack";
     case 2: return "CBKTOD";
+    case 3: return "CBRebelResource";
+    case 4; return "CBRebelResourceDark";
     default: return "CardBack";
   }
 }
@@ -266,6 +268,8 @@ function GetSettingsUI($player)
   $rv .= "<h3>Card Backs</h3>";
   $hasCardBacks = false;
   $rv .= CreateRadioButton($SET_Cardback . "-" . 0, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Default");
+  $rv .= CreateRadioButton($SET_Cardback . "-" . 3, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Rebel Resource");
+  $rv .= CreateRadioButton($SET_Cardback . "-" . 4, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Rebel Resource Dark");
   foreach(PatreonCampaign::cases() as $campaign) {
     if(isset($_SESSION[$campaign->SessionID()]) || (isset($_SESSION["useruid"]) && $campaign->IsTeamMember($_SESSION["useruid"]))) {
       $hasCardBacks = true;

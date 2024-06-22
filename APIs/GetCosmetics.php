@@ -19,6 +19,14 @@ $cardBack = new stdClass();
 $cardBack->name = "Default";
 $cardBack->id = 0;
 array_push($response->cardBacks, $cardBack);
+$cardBack = new stdClass();
+$cardBack->name = "Rebel Resource";
+$cardBack->id = 3;
+array_push($response->cardBacks, $cardBack);
+$cardBack = new stdClass();
+$cardBack->name = "Rebel Resource Dark";
+$cardBack->id = 4;
+array_push($response->cardBacks, $cardBack);
 
 $response->playmats = [];
 if(IsUserLoggedIn()) {
