@@ -249,14 +249,15 @@ function HasGrit($cardID, $player, $index)
 {
   $ally = new Ally("MYALLY-" . $index, $player);
   if($ally->LostAbilities()) return false;
-  $allies = &GetAllies($player);
-  for($i=0; $i<count($allies); $i+=AllyPieces())
-  {
-    switch($allies[$i])
-    {
-      case "4783554451"://First Light
-        return true;
-      default: break;
+  if(!IsLeader($ally->CardID(), $player)) {
+    $allies = &GetAllies($player);
+    for ($i = 0; $i < count($allies); $i += AllyPieces()) {
+      switch ($allies[$i]) {
+        case "4783554451"://First Light
+          return true;
+        default:
+          break;
+      }
     }
   }
   switch($cardID)
