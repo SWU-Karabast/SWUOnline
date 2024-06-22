@@ -121,9 +121,6 @@ function CharacterStartTurnAbility($player)
         AddDecisionQueue("SETDQCONTEXT", $player, "The top of your deck is " . CardLink($myDeck[0], $myDeck[0]) . " and the top of their deck is " . CardLink($theirDeck[0], $theirDeck[0]));
         AddDecisionQueue("OK", $player, "-");
         break;
-      case "0254929700"://Doctor Aphra
-        Mill($player, 1);
-        break;
       default:
         break;
     }

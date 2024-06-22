@@ -1056,6 +1056,8 @@ function ResumeRoundPass()
   CurrentEffectEndTurnAbilities();
   ResetCharacter(1);
   ResetCharacter(2);
+  CharacterEndTurnAbilities(1);
+  CharacterEndTurnAbilities(2);
   UnsetTurnModifiers();
   $currentTurnEffects = $nextTurnEffects;
   $nextTurnEffects = [];
