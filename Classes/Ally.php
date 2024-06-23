@@ -236,7 +236,9 @@ class Ally {
     for($i=0; $i<count($theirAllies); $i+=AllyPieces()) {
       switch($theirAllies[$i]) {
         case "3731235174"://Supreme Leader Snoke
-          $power -= 2;
+          if(!IsLeader($this->CardID(), $this->playerID)) {
+            $power -= 2;
+          }
           break;
         default: break;
       }
