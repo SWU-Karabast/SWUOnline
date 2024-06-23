@@ -96,6 +96,7 @@ function GetCardBack($player)
     case 2: return "CBKTOD";
     case 3: return "CBRebelResource";
     case 4; return "CBRebelResourceDark";
+    case 5; return "CBGDP";
     default: return "CardBack";
   }
 }
@@ -270,6 +271,7 @@ function GetSettingsUI($player)
   $rv .= CreateRadioButton($SET_Cardback . "-" . 0, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Default");
   $rv .= CreateRadioButton($SET_Cardback . "-" . 3, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Rebel Resource");
   $rv .= CreateRadioButton($SET_Cardback . "-" . 4, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Rebel Resource Dark");
+  $rv .= CreateRadioButton($SET_Cardback . "-" . 5, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Golden Dice Podcast");
   foreach(PatreonCampaign::cases() as $campaign) {
     if(isset($_SESSION[$campaign->SessionID()]) || (isset($_SESSION["useruid"]) && $campaign->IsTeamMember($_SESSION["useruid"]))) {
       $hasCardBacks = true;
