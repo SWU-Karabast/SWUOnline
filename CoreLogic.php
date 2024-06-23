@@ -4136,7 +4136,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "2744523125"://Salacious Crumb
       $abilityName = GetResolvedAbilityName($cardID, $from);
       if($abilityName == "Bounce") {
-        MZBounce($currentPlayer, "MYALLY-" . LastAllyIndex($currentPlayer));
+        $salaciousCrumbIndex = SearchAlliesForCard($currentPlayer, $cardID);
+        MZBounce($currentPlayer, "MYALLY-" . $salaciousCrumbIndex);
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:arena=Ground&THEIRALLY:arena=Ground");
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 1 damage to");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
