@@ -1298,7 +1298,7 @@ function SpecificAllyAttackAbilities($attackID)
       break;
     case "4595532978"://Ketsu Onyo
       if(GetAttackTarget() == "THEIRCHAR-0") {
-        DefeatUpgrade($mainPlayer);
+        DefeatUpgrade($mainPlayer, true);
       }
       break;
     case "5966087637"://Poe Dameron
