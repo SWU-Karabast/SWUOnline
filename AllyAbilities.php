@@ -112,10 +112,9 @@ function AllyStaticHealthModifier($cardID, $index, $player, $myCardID, $myIndex,
       }
       break;
     case "3731235174"://Supreme Leader Snoke
-      return $player != $myPlayer ? -2 : 0;
+      return $player != $myPlayer && !IsLeader($cardID, $player) ? -2 : 0;
     case "6097248635"://4-LOM
       return CardTitle($cardID) == "Zuckuss" ? 1 : 0;
-      break;
     case "1690726274"://Zuckuss
       return CardTitle($cardID) == "4-LOM" ? 1 : 0;
     default: break;
