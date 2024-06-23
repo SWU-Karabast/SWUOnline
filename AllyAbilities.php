@@ -943,9 +943,11 @@ function SpecificAllyAttackAbilities($attackID)
         ReadyResource($mainPlayer);
         break;
       case "3987987905"://Hardpoint Heavy Blaster
-        if(GetAttackTarget() != "THEIRCHAR-0") {
+        $attackTarget = GetAttackTarget();
+        $target = new Ally($attackTarget, $defPlayer);
+        if($attackTarget != "THEIRCHAR-0") {
           AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 2 damage to");
-          AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY:arena=" . CardArenas($attackID));
+          AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY:arena=" . CardArenas($target->CardID()));
           AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
           AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,2", 1);
         }
