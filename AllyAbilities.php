@@ -1459,6 +1459,20 @@ function AllyEndTurnAbilities($player)
   }
 }
 
+function CharacterEndTurnAbilities($player){
+  $character = &GetPlayerCharacter($player);
+  for($i = 0; $i < count($character); $i += CharacterPieces()) {
+    if($character[$i + 1] == 0 || $character[$i + 1] == 1) continue; //Do not process ability if it is destroyed
+    switch($character[$i]) {
+      case "0254929700"://Doctor Aphra
+        Mill($player, 1);
+        break;
+      default:
+        break;
+    }
+  }
+}
+
 function AllyCardDiscarded($player, $discardedID) {
   //My allies card discarded effects
   $allies = &GetAllies($player);
