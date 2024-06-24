@@ -797,6 +797,9 @@ function GetAbilityTypes($cardID)
     case "0622803599"://Jabba the Hutt
       $abilityTypes = "A";
       break;
+    case "f928681d36"://Jabba the Hutt Leader Unit
+      $abilityTypes = "A,AA";
+      break;
     default: break;
   }
   if(DefinedTypesContains($cardID, "Leader", $currentPlayer) && !IsAlly($cardID, $currentPlayer)) {
@@ -940,6 +943,8 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
     case "0622803599"://Jabba the Hutt
       $abilityNames = "Bounty";
       break;
+    case "f928681d36"://Jabba the Hutt Leader Unit
+      $abilityNames = "Bounty,Attack";
     default: break;
   }
   if(DefinedTypesContains($cardID, "Leader", $currentPlayer) && !IsAlly($cardID, $currentPlayer)) {

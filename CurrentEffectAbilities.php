@@ -271,6 +271,12 @@ function CurrentEffectCostModifiers($cardID, $from)
             $remove = true;
           }
           break;
+        case "f928681d36-3"://Jabba the Hutt Leader Unit
+          if(DefinedTypesContains($cardID, "Unit", $player)) {
+            $costModifier -= 2;
+            $remove = true;
+          }
+          break;
         default: break;
       }
       if($remove) RemoveCurrentTurnEffect($i);
