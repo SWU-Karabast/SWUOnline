@@ -1,13 +1,14 @@
-@property --myColor1 {
-  syntax: '<color>';
-  initial-value: rgba(0, 0, 0, 0.3);
-  inherits: false;
+#theirChar .dmg-animation, #myChar .dmg-animation {
+  height: 100% !important;
+  left: 0 !important;
+  padding: 0 !important;
+  border-radius:7px !important;
 }
 
-@property --myColor2 {
-  syntax: '<color>';
-  initial-value: rgba(0, 0, 0, 0.3);
-  inherits: false;
+.last-played-card img {
+  object-fit: contain;
+  background-color: rgba(37, 37, 37, 0.3); 
+  /* background-color: black; */
 }
 
 .effect-display {
@@ -121,6 +122,99 @@
   background: #FB0007; 
 }
 
+@property --myColor1 {
+  syntax: '<color>';
+  initial-value: rgba(0, 0, 0, 0.3);
+  inherits: false;
+}
+
+@property --myColor2 {
+  syntax: '<color>';
+  initial-value: rgba(0, 0, 0, 0.3);
+  inherits: false;
+}
+
+/* Trigger Order */
+
+.tiles-wrapper {
+display: flex; 
+flex-wrap: wrap;
+}
+
+.tiles-wrapper .tile {
+  margin: 0 4px 20px 20px;
+}
+
+.trigger-order h2 {
+  font-size: 24px;
+  font-weight: 700;
+  text-align: left;
+  line-height: normal;
+  margin: 18px 20px 10px 10px;
+}
+
+.trigger-order p {
+  font-size: 16px;
+  font-weight: 400;
+  text-align: left;
+  line-height: normal;
+  margin: 0px 20px 25px 10px;
+}
+
+.trigger-first, .trigger-last {
+height: 124px;
+display: flex;
+align-items: center;
+}
+
+.trigger-first {
+margin: 0 0 0 10px;
+}
+
+.trigger-last {
+  margin: 0 20px 0 20px;
+}
+
+.trigger-first p, .trigger-last p {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.reorder-button {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.tile a {
+  margin-bottom: 0px !important;
+}
+
+.left-arrow {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background: url('../Images/arrow-left.png') no-repeat center center;
+  background-size: contain;
+  text-indent: -9999px;
+  border: none;
+}
+
+.right-arrow {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background: url('../Images/arrow-right.png') no-repeat center center;
+  background-size: contain;
+  text-indent: -9999px;
+  border: none;
+}
+
+.left-arrow:after, .right-arrow:after {
+  content: '';
+}
+
+  
 /* Less than 1200px wide */
 
 @media screen and (max-width: 1199px) {
