@@ -3389,11 +3389,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       if($abilityName == "Shuttle") {
         $ally = new Ally("MYALLY-" . $index);
         $ally->Destroy();
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, 1);
+        AddDecisionQueue("SETCOMBATCHAINSTATE", $currentPlayer, $CCS_FrontLineShuttle, 1);
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY", 1);
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an ally to attack with");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
-        AddDecisionQueue("SETCOMBATCHAINSTATE", $currentPlayer, $CCS_FrontLineShuttle, 1);
         AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
       }
       break;
@@ -4159,7 +4160,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         Restore(1, $currentPlayer);
       }
       break;
-    case "0622803599"://Jabba the Hutt
+    case "0622803599"://Jabba the Hutt Leader
       $abilityName = GetResolvedAbilityName($cardID, $from);
       if($abilityName == "Bounty") {
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
@@ -4167,6 +4168,16 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
         AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "0622803599-2,PLAY", 1);
+      }
+      break;
+    case "f928681d36"://Jabba the Hutt Leader Unit
+      $abilityName = GetResolvedAbilityName($cardID, $from);
+      if($abilityName == "Bounty") {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to give bounty");
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "f928681d36-2,PLAY", 1);
       }
       break;
     default: break;

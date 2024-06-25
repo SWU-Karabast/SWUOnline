@@ -498,6 +498,11 @@ function CollectBounty($player, $index, $cardID, $reportMode=false, $bountyUnitO
       if($reportMode) break;
       AddCurrentTurnEffect("0622803599-3", $opponent);
       break;
+    case "f928681d36-2"://Jabba the Hutt Leader Unit
+      ++$numBounties;
+      if($reportMode) break;
+      AddCurrentTurnEffect("f928681d36-3", $opponent);
+      break;
     case "2178538979"://Price on Your Head
       ++$numBounties;
       if($reportMode) break;
@@ -1190,7 +1195,7 @@ function SpecificAllyAttackAbilities($attackID)
       break;
     case "9951020952"://Koska Reeves
       if($attackerAlly->IsUpgraded()) {
-        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY");
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:arena=Ground&THEIRALLY:arena=Ground");
         AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 2 damage", 1);
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,2", 1);
