@@ -1246,6 +1246,7 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,2", 1);
       break;
     case "a579b400c0"://Bo-Katan Kryze
+      global $CS_NumMandalorianAttacks;
       $number = GetClassState($mainPlayer, $CS_NumMandalorianAttacks) ? 2 : 1;
       for($i=0; $i<$number; ++$i) {
         AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY");
