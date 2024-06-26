@@ -220,7 +220,11 @@ class Ally {
           if(TraitContains($this->CardID(), "Vehicle", $this->PlayerID())) $power += 1;
           break;
         case "4484318969"://Moff Gideon Leader
-          if(CardCost($this->CardID()) <= 3 && IsAllyAttackTarget()) $power += 1;
+          global $mainPlayer;
+          //As defined on NetworkingLibraries.GetTargetOfAttack, $mainPlayer is always the attacker
+          if(CardCost($this->CardID()) <= 3 && $mainPlayer == $this->playerID && AttackIndex() == $this->index && IsAllyAttackTarget()) {
+            $power += 1;
+          }
           break;
         case "3feee05e13"://Gar Saxon
           if($this->IsUpgraded()) $power += 1;
