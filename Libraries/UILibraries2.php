@@ -251,10 +251,10 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
   $imgCounterFontSize = 24;
   //Attacker Label Style
   if (!is_numeric($counters)) {
-    $rv .= "<div style='margin: 0px; top: 80%; left: 50%;
-    margin-right: -50%; border-radius: 7px; width: fit-content; text-align: center; line-height: 16px; height: 16px; padding: 5px; border: 3px solid " . PopupBorderColor($darkMode) . ";
-    transform: translate(-50%, -50%); position:absolute; z-index: 10; background:" . BackgroundColor($darkMode) . ";
-    font-size:14px; font-weight:800; color:" . PopupBorderColor($darkMode) . "; user-select: none;'>" . $counters . "</div>";
+    $rv .= "<div style='margin: 0px; top: 101px; left: 50%;
+    margin-right: -50%; border-radius: 0 0 8px 8px; width: 120px; text-align: center; line-height: normal; padding:10px 0 13px;
+    transform: translate(-50%, -50%); position:absolute; z-index: 10; background:rgb(0, 0, 0, 0.8);
+    font-size:16px; font-weight:600; color:white; user-select: none; line-height:normal;'>" . $counters . "</div>";
   }
 
   //Default Counters Style (Deck, Discard, Hero, Equipment)
@@ -620,7 +620,7 @@ function CreatePopup($id, $fromArr, $canClose, $defaultState = 0, $title = "", $
     $overCC = 1001;
   }
   if ($overCombatChain) {
-    $top = "220px";
+    $top = "160px";
     $left = "calc(25% - 129px)";
     $width = "auto";
     $height = "auto";
