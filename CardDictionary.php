@@ -395,6 +395,7 @@ function HasAmbush($cardID, $player, $index, $from)
     case "2121724481"://Cloud-Rider
     case "8107876051"://Enfy's Nest
     case "6097248635"://4-LOM
+    case "9483244696"://Weequay Pirate Gang
       return true;
     case "2027289177"://Escort Skiff
       return SearchCount(SearchAllies($player, aspect:"Command")) > 1;
@@ -1520,6 +1521,7 @@ function SmuggleCost($cardID, $player="", $index="")
     case "9552605383": $minCost = 4; break;//L3-37
     case "1312599620": $minCost = 4; break;//Smuggler's Starfighter
     case "8305828130": $minCost = 4; break;//Warbird Stowaway
+    case "9483244696": $minCost = 5; break;//Weequay Pirate Gang
     default: break;
   }
   $allies = &GetAllies($player);
