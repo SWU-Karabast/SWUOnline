@@ -105,6 +105,9 @@ function AttackModifier($cardID, $player, $index)
       }
       if(count($costs) >= 5) $modifier += 3;
       break;
+    case "8305828130"://Warbird Stowaway
+        $modifier += $initiativePlayer == $player ? 2 : 0;
+        break;
     default: break;
   }
   return $modifier;

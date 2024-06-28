@@ -1518,6 +1518,7 @@ function SmuggleCost($cardID, $player="", $index="")
     case "5632569775": $minCost = 5; break;//Lom Pyke
     case "9552605383": $minCost = 4; break;//L3-37
     case "1312599620": $minCost = 4; break;//Smuggler's Starfighter
+    case "8305828130": $minCost = 4; break;//Warbird Stowaway
     default: break;
   }
   $allies = &GetAllies($player);
