@@ -244,6 +244,9 @@ function HasSentinel($cardID, $player, $index)
       return $ally->IsUpgraded();
     case "4590862665"://Gamorrean Retainer
         return SearchCount(SearchAllies($player, aspect:"Command")) > 1;
+    case "4341703515"://Supercommando Squad
+      $ally = new Ally("MYALLY-" . $index, $player);
+      return $ally->IsUpgraded();
     default: return false;
   }
 }
@@ -432,6 +435,7 @@ function HasShielded($cardID, $player, $index)
     case "5080989992"://Rose Tico
     case "0598830553"://Dryden Vos
     case "6635692731"://Hutt's Henchman
+    case "4341703515"://Supercommando Squad
       return true;
     default: return false;
   }
