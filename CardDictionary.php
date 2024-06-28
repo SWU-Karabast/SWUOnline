@@ -241,6 +241,8 @@ function HasSentinel($cardID, $player, $index)
     case "9405733493"://Protector of the Throne
       $ally = new Ally("MYALLY-" . $index, $player);
       return $ally->IsUpgraded();
+    case "4590862665"://Gamorrean Retainer
+        return SearchCount(SearchAllies($player, aspect:"Command")) > 1;
     default: return false;
   }
 }
