@@ -98,7 +98,7 @@ function RestoreAmount($cardID, $player, $index)
   }
   switch($cardID)
   {
-    case "0074718689": $amount += 1; break;
+    case "0074718689": $amount += 1; break;//Restored Arc 170
     case "1081012039": $amount += 2; break;
     case "1611702639": $amount += $initiativePlayer == $player ? 2 : 0; break;//Consortium Starviper
     case "4405415770": $amount += 2; break;
@@ -114,6 +114,7 @@ function RestoreAmount($cardID, $player, $index)
     case "5511838014": $amount += 1; break;//Kuil
     case "e091d2a983": $amount += 3; break;//Rey
     case "7022736145": $amount += 2; break;//Tarfful
+    case "6870437193": $amount += 2; break;//Twin Pod Cloud Car
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
