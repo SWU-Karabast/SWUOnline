@@ -159,7 +159,7 @@ function RaidAmount($cardID, $player, $index)
     case "1017822723": $amount += 2; break;
     case "2404916657": $amount += 2; break;
     case "7495752423": $amount += 2; break;
-    case "4642322279": $amount += SearchCount(SearchAllies($player, aspect:"Aggression")) > 1 ? 2 : 0; break;
+    case "4642322279": $amount += SearchCount(SearchAllies($player, aspect:"Aggression")) > 1 ? 2 : 0; break;//Partisan Insurgent
     case "6028207223": $amount += 1; break;
     case "8995892693": $amount += 1; break;
     case "3613174521": $amount += 1; break;
@@ -173,6 +173,7 @@ function RaidAmount($cardID, $player, $index)
     case "415bde775d": $amount += 1; break;//Hondo Ohnaka
     case "724979d608": $amount += 2; break;//Cad Bane
     case "5818136044": $amount += 2; break;//Xanadu Blood
+    case "8991513192": $amount += SearchCount(SearchAllies($player, aspect:"Aggression")) > 1 ? 2 : 0; break;//Hunting Nexu
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
