@@ -430,6 +430,7 @@ function HasShielded($cardID, $player, $index)
     case "1090660242"://The Client
     case "5080989992"://Rose Tico
     case "0598830553"://Dryden Vos
+    case "6635692731"://Hutt's Henchman
       return true;
     default: return false;
   }
