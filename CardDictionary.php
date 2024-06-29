@@ -439,6 +439,9 @@ function HasShielded($cardID, $player, $index)
     case "6635692731"://Hutt's Henchman
     case "4341703515"://Supercommando Squad
       return true;
+    case "6939947927"://Hunter of the Haxion Brood
+      $otherPlayer = $player == 1 ? 2 : 1;
+      return SearchCount(SearchAllies($otherPlayer, hasBountyOnly:true)) > 0 ? true : false;
     default: return false;
   }
 }
