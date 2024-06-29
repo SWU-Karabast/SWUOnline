@@ -248,6 +248,9 @@ function HasSentinel($cardID, $player, $index)
     case "4341703515"://Supercommando Squad
       $ally = new Ally("MYALLY-" . $index, $player);
       return $ally->IsUpgraded();
+    case "9871430123"://Sugi
+      $otherPlayer = $player == 1 ? 2 : 1;
+      return SearchCount(SearchAllies($otherPlayer, hasUpgradeOnly:true)) > 0;
     default: return false;
   }
 }
@@ -1541,6 +1544,7 @@ function SmuggleCost($cardID, $player="", $index="")
     case "5171970586": $minCost = 3; break;//Collections Starhopper
     case "6234506067": $minCost = 5; break;//Cassian Andor
     case "5169472456": $minCost = 9; break;//Chewbacca Pykesbane
+    case "9871430123": $minCost = 6; break;//Sugi
     default: break;
   }
   $allies = &GetAllies($player);
