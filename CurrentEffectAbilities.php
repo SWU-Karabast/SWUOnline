@@ -132,6 +132,7 @@ function EffectAttackModifier($cardID)
     case "1312599620": return -3;//Smuggler's Starfighter
     case "8107876051": return -3;//Enfy's Nest
     case "9334480612": return 1;//Boba Fett Green Leader
+    case "6962053552": return 2;//Desperate Attack
     default: return 0;
   }
 }
