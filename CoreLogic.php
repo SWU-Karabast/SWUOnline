@@ -4115,6 +4115,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $p2Hand = &GetHand(2);
       DamageTrigger(2, count($p2Hand)/HandPieces(), "DAMAGE", "8090818642");
       break;
+    case "7826408293"://Daring Raid
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "MYCHAR-0,THEIRCHAR-0,");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose something to deal 2 damage to");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,2", 1);
+      break;
     default: break;
   }
 }
