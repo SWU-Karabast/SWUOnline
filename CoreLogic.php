@@ -2078,7 +2078,6 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
 {
   global $currentPlayer, $layers, $CS_PlayIndex, $initiativePlayer, $CCS_FrontLineShuttle;
   $index = GetClassState($currentPlayer, $CS_PlayIndex);
-  WriteLog($cardID);
   if($target != "-")
   {
     $targetArr = explode("-", $target);
