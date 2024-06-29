@@ -616,6 +616,11 @@ function CollectBounty($player, $index, $cardID, $reportMode=false, $bountyUnitO
       Draw($opponent);
       Draw($opponent);
       break;
+    case "2151430798."://Guavian Antagonizer
+      ++$numBounties;
+      if($reportMode) break;
+      Draw($opponent);
+      break;
     default: break;
   }
   if($numBounties > 0 && !$reportMode) {
