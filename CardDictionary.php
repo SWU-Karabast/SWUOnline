@@ -968,7 +968,10 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       $abilityNames = "Bounty,Attack";
     default: break;
   }
-  if(DefinedTypesContains($cardID, "Leader", $currentPlayer) && !IsAlly($cardID, $currentPlayer)) {
+  if(IsAlly($cardID, $currentPlayer)) {
+
+  }
+  else if(DefinedTypesContains($cardID, "Leader", $currentPlayer)) {
     $char = &GetPlayerCharacter($currentPlayer);
     if($char[CharacterPieces() + 1] == 1) $abilityNames = "";
     if($char[CharacterPieces() + 2] == 0) {
