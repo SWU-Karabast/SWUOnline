@@ -903,6 +903,34 @@ function NumActionBlocked()
   return $num;
 }
 
+function NumCardsBlocking()
+{
+  global $combatChain, $defPlayer;
+  $num = 0;
+  for($i=0; $i<count($combatChain); $i += CombatChainPieces())
+  {
+    if($combatChain[$i+1] == $defPlayer)
+    {
+      $type = CardType($combatChain[$i]);
+      if($type != "I" && $type != "C") ++$num;
+    }
+  }
+  return $num;
+}
+
+function NumCardsNonEquipBlocking()
+{
+  global $combatChain, $defPlayer;
+  $num = 0;
+  for ($i = 0; $i < count($combatChain); $i += CombatChainPieces()) {
+    if ($combatChain[$i + 1] == $defPlayer) {
+      $type = CardType($combatChain[$i]);
+      if ($type != "E" && $type != "I" && $type != "C") ++$num;
+    }
+  }
+  return $num;
+}
+
 function NumAttacksBlocking()
 {
   global $combatChain, $defPlayer;
@@ -912,6 +940,51 @@ function NumAttacksBlocking()
     if($combatChain[$i+1] == $defPlayer)
     {
       if(CardType($combatChain[$i]) == "AA") ++$num;
+    }
+  }
+  return $num;
+}
+
+function NumActionsBlocking()
+{
+  global $combatChain, $defPlayer;
+  $num = 0;
+  for($i=0; $i<count($combatChain); $i += CombatChainPieces())
+  {
+    if($combatChain[$i+1] == $defPlayer)
+    {
+      $cardType = CardType($combatChain[$i]);
+      if($cardType == "A" || $cardType == "AA") ++$num;
+    }
+  }
+  return $num;
+}
+
+function NumNonAttackActionBlocking()
+{
+  global $combatChain, $defPlayer;
+  $num = 0;
+  for($i=0; $i<count($combatChain); $i += CombatChainPieces())
+  {
+    if($combatChain[$i+1] == $defPlayer)
+    {
+      $type = CardType($combatChain[$i]);
+      if($type == "A") ++$num;
+    }
+  }
+  return $num;
+}
+
+function NumReactionBlocking()
+{
+  global $combatChain, $defPlayer;
+  $num = 0;
+  for($i=0; $i<count($combatChain); $i += CombatChainPieces())
+  {
+    if($combatChain[$i+1] == $defPlayer)
+    {
+      $type = CardType($combatChain[$i]);
+      if($type == "AR" || $type == "DR") ++$num;
     }
   }
   return $num;
@@ -4109,31 +4182,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "f928681d36-2,PLAY", 1);
       }
       break;
-    case "8090818642"://The Chaos of War
-      $p1Hand = &GetHand(1);
-      DamageTrigger(1, count($p1Hand)/HandPieces(), "DAMAGE", "8090818642");
-      $p2Hand = &GetHand(2);
-      DamageTrigger(2, count($p2Hand)/HandPieces(), "DAMAGE", "8090818642");
-      break;
-    case "7826408293"://Daring Raid
-      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
-      AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "MYCHAR-0,THEIRCHAR-0,");
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose something to deal 2 damage to");
-      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-      AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,2", 1);
-      break;
-    case "4772866341"://Pillage
-      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
-      PummelHit($otherPlayer);
-      PummelHit($otherPlayer);
-      break;
-    case "5984647454"://Enforced Loyalty
-      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose something to sacrifice");
-      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-      AddDecisionQueue("MZOP", $currentPlayer, "DESTROY", 1);
-      AddDecisionQueue("DRAW", $currentPlayer, "-", 1);
-      AddDecisionQueue("DRAW", $currentPlayer, "-", 1);
+    case "5169472456"://Chewbacca Pykesbane
+      if($from != "PLAY") {
+        MZChooseAndDestroy($currentPlayer, "MYALLY:maxHealth=5&THEIRALLY:maxHealth=5", may:true, filter:"index=MYALLY-" . $playAlly->Index());
+      }
       break;
     case "6234506067"://Cassian Andor
       if($from == "RESOURCES") $playAlly->Ready();

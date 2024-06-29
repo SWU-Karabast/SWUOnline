@@ -285,6 +285,7 @@ function HasGrit($cardID, $player, $index)
     case "4aa0804b2b"://Qi'Ra
     case "1477806735"://Wookiee Warrior
     case "9195624101"://Heroic Renegade
+    case "5169472456"://Chewbacca Pykesbane
       return true;
     default: return false;
   }
@@ -1058,7 +1059,7 @@ function GoesWhereAfterResolving($cardID, $from = null, $player = "", $playedFro
 {
   global $currentPlayer, $mainPlayer;
   if($player == "") $player = $currentPlayer;
-  if(DefinedTypesContains($cardID, "Upgrade", $currentPlayer)) return "ATTACHTARGET"; 
+  if(DefinedTypesContains($cardID, "Upgrade", $currentPlayer)) return "ATTACHTARGET";
   if(IsAlly($cardID)) return "ALLY";
   switch($cardID) {
     case "2703877689": return "RESOURCE";//Resupply
