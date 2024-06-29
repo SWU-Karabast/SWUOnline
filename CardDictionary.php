@@ -1536,7 +1536,7 @@ function SmuggleCost($cardID, $player="", $index="")
     case "9483244696": $minCost = 5; break;//Weequay Pirate Gang
     case "5171970586": $minCost = 3; break;//Collections Starhopper
     case "6234506067": $minCost = 5; break;//Cassian Andor
-    case "5169472456": $minCost = 9: break;//Chewbacca Pykesbane
+    case "5169472456": $minCost = 9; break;//Chewbacca Pykesbane
     default: break;
   }
   $allies = &GetAllies($player);
