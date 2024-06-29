@@ -903,34 +903,6 @@ function NumActionBlocked()
   return $num;
 }
 
-function NumCardsBlocking()
-{
-  global $combatChain, $defPlayer;
-  $num = 0;
-  for($i=0; $i<count($combatChain); $i += CombatChainPieces())
-  {
-    if($combatChain[$i+1] == $defPlayer)
-    {
-      $type = CardType($combatChain[$i]);
-      if($type != "I" && $type != "C") ++$num;
-    }
-  }
-  return $num;
-}
-
-function NumCardsNonEquipBlocking()
-{
-  global $combatChain, $defPlayer;
-  $num = 0;
-  for ($i = 0; $i < count($combatChain); $i += CombatChainPieces()) {
-    if ($combatChain[$i + 1] == $defPlayer) {
-      $type = CardType($combatChain[$i]);
-      if ($type != "E" && $type != "I" && $type != "C") ++$num;
-    }
-  }
-  return $num;
-}
-
 function NumAttacksBlocking()
 {
   global $combatChain, $defPlayer;
@@ -940,51 +912,6 @@ function NumAttacksBlocking()
     if($combatChain[$i+1] == $defPlayer)
     {
       if(CardType($combatChain[$i]) == "AA") ++$num;
-    }
-  }
-  return $num;
-}
-
-function NumActionsBlocking()
-{
-  global $combatChain, $defPlayer;
-  $num = 0;
-  for($i=0; $i<count($combatChain); $i += CombatChainPieces())
-  {
-    if($combatChain[$i+1] == $defPlayer)
-    {
-      $cardType = CardType($combatChain[$i]);
-      if($cardType == "A" || $cardType == "AA") ++$num;
-    }
-  }
-  return $num;
-}
-
-function NumNonAttackActionBlocking()
-{
-  global $combatChain, $defPlayer;
-  $num = 0;
-  for($i=0; $i<count($combatChain); $i += CombatChainPieces())
-  {
-    if($combatChain[$i+1] == $defPlayer)
-    {
-      $type = CardType($combatChain[$i]);
-      if($type == "A") ++$num;
-    }
-  }
-  return $num;
-}
-
-function NumReactionBlocking()
-{
-  global $combatChain, $defPlayer;
-  $num = 0;
-  for($i=0; $i<count($combatChain); $i += CombatChainPieces())
-  {
-    if($combatChain[$i+1] == $defPlayer)
-    {
-      $type = CardType($combatChain[$i]);
-      if($type == "AR" || $type == "DR") ++$num;
     }
   }
   return $num;
@@ -4181,6 +4108,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
         AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "f928681d36-2,PLAY", 1);
       }
+      break;
+    case "8090818642"://The Chaos of War
+      $p1Hand = &GetHand(1);
+      DamageTrigger(1, count($p1Hand)/HandPieces(), "DAMAGE", "8090818642");
+      $p2Hand = &GetHand(2);
+      DamageTrigger(2, count($p2Hand)/HandPieces(), "DAMAGE", "8090818642");
       break;
     default: break;
   }
