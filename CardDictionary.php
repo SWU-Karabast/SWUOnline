@@ -596,32 +596,34 @@ function PrepareAmount($cardID)
   }
 }
 
-function AbilityCost($cardID)
+function AbilityCost($cardID, $index=-1)
 {
   global $currentPlayer;
+  $abilityName = GetResolvedAbilityName($cardID);
+  if($abilityName == "Heroic Resolve") return 2;
   switch($cardID) {
     case "2579145458"://Luke Skywalker
-      return GetResolvedAbilityName($cardID) == "Give Shield" ? 1 : 0;
+      return $abilityName == "Give Shield" ? 1 : 0;
     case "2912358777"://Grand Moff Tarkin
-      return GetResolvedAbilityName($cardID) == "Give Experience" ? 1 : 0;
+      return $abilityName == "Give Experience" ? 1 : 0;
     case "3187874229"://Cassian Andor
-      return GetResolvedAbilityName($cardID) == "Draw Card" ? 1 : 0;
+      return $abilityName == "Draw Card" ? 1 : 0;
     case "4300219753"://Fett's Firespray
-      return GetResolvedAbilityName($cardID) == "Exhaust" ? 2 : 0;
+      return $abilityName == "Exhaust" ? 2 : 0;
     case "5784497124"://Emperor Palpatine
-      return GetResolvedAbilityName($cardID) == "Deal Damage" ? 1 : 0;
+      return $abilityName == "Deal Damage" ? 1 : 0;
     case "6088773439"://Darth Vader
-      return GetResolvedAbilityName($cardID) == "Deal Damage" ? 1 : 0;
+      return $abilityName == "Deal Damage" ? 1 : 0;
     case "1951911851"://Grand Admiral Thrawn
-      return GetResolvedAbilityName($cardID) == "Exhaust" ? 1 : 0;
+      return $abilityName == "Exhaust" ? 1 : 0;
     case "1885628519"://Crosshair
-      return GetResolvedAbilityName($cardID) == "Buff" ? 2 : 0;
+      return $abilityName == "Buff" ? 2 : 0;
     case "2432897157"://Qi'Ra
-      return GetResolvedAbilityName($cardID) == "Shield" ? 1 : 0;
+      return $abilityName == "Shield" ? 1 : 0;
     case "4352150438"://Rey
-      return GetResolvedAbilityName($cardID) == "Experience" ? 1 : 0;
+      return $abilityName == "Experience" ? 1 : 0;
     case "0911874487"://Fennec Shand
-      return GetResolvedAbilityName($cardID) == "Ambush" ? 1 : 0;
+      return $abilityName == "Ambush" ? 1 : 0;
     default: break;
   }
   if(IsAlly($cardID)) return 0;
@@ -694,7 +696,7 @@ function GetAbilityType($cardID, $index = -1, $from="-")
   }
 }
 
-function GetAbilityTypes($cardID)
+function GetAbilityTypes($cardID, $index = -1, $from="-")
 {
   global $currentPlayer;
   $abilityTypes = "";
@@ -823,7 +825,21 @@ function GetAbilityTypes($cardID)
       break;
     default: break;
   }
-  if(DefinedTypesContains($cardID, "Leader", $currentPlayer) && !IsAlly($cardID, $currentPlayer)) {
+  if(IsAlly($cardID, $currentPlayer)) {
+    if($abilityTypes == "") $abilityTypes = "AA";
+    $ally = new Ally("MYALLY-" . $index, $currentPlayer);
+    $upgrades = $ally->GetUpgrades();
+    for($i=0; $i<count($upgrades); ++$i) {
+      switch($upgrades[$i]) {
+        case "4085341914"://Heroic Resolve
+          if($abilityTypes != "") $abilityTypes .= ",";
+          $abilityTypes .= "A";
+          break;
+        default: break;
+      }
+    }
+  }
+  else if(DefinedTypesContains($cardID, "Leader", $currentPlayer)) {
     $char = &GetPlayerCharacter($currentPlayer);
     if($char[CharacterPieces() + 1] == 1) $abilityTypes = "";
     if($char[CharacterPieces() + 2] == 0) {
@@ -969,7 +985,18 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
     default: break;
   }
   if(IsAlly($cardID, $currentPlayer)) {
-
+    if($abilityNames == "") $abilityNames = "Attack";
+    $ally = new Ally("MYALLY-" . $index, $currentPlayer);
+    $upgrades = $ally->GetUpgrades();
+    for($i=0; $i<count($upgrades); ++$i) {
+      switch($upgrades[$i]) {
+        case "4085341914"://Heroic Resolve
+          if($abilityNames != "") $abilityNames .= ",";
+          $abilityNames .= "Heroic Resolve";
+          break;
+        default: break;
+      }
+    }
   }
   else if(DefinedTypesContains($cardID, "Leader", $currentPlayer)) {
     $char = &GetPlayerCharacter($currentPlayer);
@@ -984,6 +1011,7 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
 
 function GetAbilityIndex($cardID, $index, $abilityName)
 {
+  $abilityName = str_replace("_", " ", $abilityName);
   $names = explode(",", GetAbilityNames($cardID, $index));
   for($i = 0; $i < count($names); ++$i) {
     if($abilityName == $names[$i]) return $i;
@@ -993,10 +1021,10 @@ function GetAbilityIndex($cardID, $index, $abilityName)
 
 function GetResolvedAbilityType($cardID, $from="-")
 {
-  global $currentPlayer, $CS_AbilityIndex;
+  global $currentPlayer, $CS_AbilityIndex, $CS_PlayIndex;
   if($from == "HAND") return "";
   $abilityIndex = GetClassState($currentPlayer, $CS_AbilityIndex);
-  $abilityTypes = GetAbilityTypes($cardID);
+  $abilityTypes = GetAbilityTypes($cardID, GetClassState($currentPlayer, $CS_PlayIndex));
   if($abilityTypes == "" || $abilityIndex == "-") return GetAbilityType($cardID, -1, $from);
   $abilityTypes = explode(",", $abilityTypes);
   return $abilityTypes[$abilityIndex];
@@ -1004,10 +1032,10 @@ function GetResolvedAbilityType($cardID, $from="-")
 
 function GetResolvedAbilityName($cardID, $from="-")
 {
-  global $currentPlayer, $CS_AbilityIndex;
+  global $currentPlayer, $CS_AbilityIndex, $CS_PlayIndex;
   if($from != "PLAY" && $from != "EQUIP" && $from != "-") return "";
   $abilityIndex = GetClassState($currentPlayer, $CS_AbilityIndex);
-  $abilityNames = GetAbilityNames($cardID);
+  $abilityNames = GetAbilityNames($cardID, GetClassState($currentPlayer, $CS_PlayIndex));
   if($abilityNames == "" || $abilityIndex == "-") return "";
   $abilityNames = explode(",", $abilityNames);
   return $abilityNames[$abilityIndex];
@@ -1045,7 +1073,7 @@ function IsPlayable($cardID, $phase, $from, $index = -1, &$restriction = null, $
   if($isStaticType) {
     $cardType = GetAbilityType($cardID, $index, $from);
     if($cardType == "") {
-      $abilityTypes = GetAbilityTypes($cardID);
+      $abilityTypes = GetAbilityTypes($cardID, $index);
       $typeArr = explode(",", $abilityTypes);
       $cardType = $typeArr[0];
     }
