@@ -66,6 +66,9 @@ function AttackModifier($cardID, $player, $index)
     case "3988315236"://Seasoned Shoretrooper
       $modifier += NumResources($player) >= 6 ? 2 : 0;
       break;
+    case "7922308768"://Valiant Assault Ship
+      $modifier += $player == $mainPlayer && NumResources($mainPlayer) < NumResources($defPlayer) ? 2 : 0;
+      break;
     case "6348804504"://Ardent Sympathizer
       $modifier += $initiativePlayer == $player ? 2 : 0;
       break;

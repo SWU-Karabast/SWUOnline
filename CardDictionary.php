@@ -487,6 +487,7 @@ function HasSaboteur($cardID, $player, $index)
     case "4595532978"://Ketsu Onyo
     case "3786602643"://House Kast Soldier
     case "2b13cefced"://Fennec Shand
+    case "7922308768"://Valiant Assault Ship
       return true;
     default: return false;
   }
