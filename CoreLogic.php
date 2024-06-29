@@ -4184,6 +4184,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,2", 1);
       }
       break;
+    case "6475868209"://Criminal Muscle
+      if($from != "PLAY") {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY&MYALLY");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "unique=1");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "BOUNCE", 1);
+      }
+      break;
     default: break;
   }
 }
