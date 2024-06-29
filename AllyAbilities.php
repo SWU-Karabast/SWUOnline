@@ -1353,6 +1353,12 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("SPECIFICCARD", $mainPlayer, "ROSETICO", 1);
       break;
+    case "9040137775"://Principled Outlaw
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to exhaust");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "REST", 1);
+      break;
     default: break;
   }
 }
