@@ -4141,6 +4141,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "6234506067"://Cassian Andor
       if($from == "RESOURCES") $playAlly->Ready();
       break;
+    case "5169472456"://Chewbacca Pykesbane
+      if($from != "PLAY") {
+        MZChooseAndDestroy($currentPlayer, "MYALLY:maxHealth=5&THEIRALLY:maxHealth=5", may:true, filter:"index=MYALLY-" . $playAlly->Index());
+      }
     default: break;
   }
 }
