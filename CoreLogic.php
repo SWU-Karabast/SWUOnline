@@ -4135,6 +4135,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("DRAW", $currentPlayer, "-", 1);
       AddDecisionQueue("DRAW", $currentPlayer, "-", 1);
       break;
+    case "6234506067"://Cassian Andor
+      if($from == "RESOURCES") $playAlly->Ready();
+      break;
     default: break;
   }
 }
