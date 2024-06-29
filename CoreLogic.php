@@ -3037,7 +3037,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("PASSPARAMETER", $currentPlayer, "1");
         $otherPlayer = $currentPlayer == 1 ? 2 : 1;
         AddDecisionQueue("FINDINDICES", $otherPlayer, "HAND");
-        AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a card to discard", 1);
+        AddDecisionQueue("REVEALHANDCARDS", $otherPlayer, "-");
+        AddDecisionQueue("FINDINDICES", $otherPlayer, "HAND");
+        AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "If you have the named card, you must discard it", 1);
         AddDecisionQueue("MAYCHOOSEHAND", $otherPlayer, "<-", 1);
         AddDecisionQueue("MULTIREMOVEHAND", $otherPlayer, "-", 1);
         AddDecisionQueue("ADDDISCARD", $otherPlayer, "HAND", 1);
