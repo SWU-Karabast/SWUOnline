@@ -296,7 +296,7 @@ function HasGrit($cardID, $player, $index)
 
 function HasOverwhelm($cardID, $player, $index)
 {
-  global $defPlayer;
+  global $defPlayer, $currentTurnEffects;
   $ally = new Ally("MYALLY-" . $index, $player);
   if($ally->LostAbilities()) return false;
   $allies = &GetAllies($player);
@@ -307,6 +307,14 @@ function HasOverwhelm($cardID, $player, $index)
       case "4484318969"://Moff Gideon Leader
         if(CardCost($cardID) <= 3 && IsAllyAttackTarget()) return true;
         break;
+      default: break;
+    }
+  }
+  for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnPieces()) {
+    if($currentTurnEffects[$i+1] != $player) continue;
+    if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
+    switch($currentTurnEffects[$i]) {
+      case "4085341914": return true;//Heroic Resolve
       default: break;
     }
   }

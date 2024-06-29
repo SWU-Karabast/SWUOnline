@@ -2078,6 +2078,17 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
 {
   global $currentPlayer, $layers, $CS_PlayIndex, $initiativePlayer, $CCS_FrontLineShuttle;
   $index = GetClassState($currentPlayer, $CS_PlayIndex);
+  if($from == "PLAY" && IsAlly($cardID, $currentPlayer)) {
+    $abilityName = GetResolvedAbilityName($cardID, $from);
+    if($abilityName == "Heroic Resolve") {
+      $ally = new Ally("MYALLY-" . $index, $currentPlayer);
+      $ally->DefeatUpgrade("4085341914");
+      AddCurrentTurnEffect("4085341914", $currentPlayer, "PLAY", $ally->UniqueID());
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYALLY-" . $index);
+      AddDecisionQueue("MZOP", $currentPlayer, "ATTACK");
+      return;
+    }
+  }
   if($target != "-")
   {
     $targetArr = explode("-", $target);
