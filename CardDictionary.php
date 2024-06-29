@@ -454,6 +454,8 @@ function HasShielded($cardID, $player, $index)
     case "6939947927"://Hunter of the Haxion Brood
       $otherPlayer = $player == 1 ? 2 : 1;
       return SearchCount(SearchAllies($otherPlayer, hasBountyOnly:true)) > 0 ? true : false;
+    case "0088477218"://Privateer Scyk
+      return SearchCount(SearchAllies($player, aspect:"Cunning")) > 1;
     default: return false;
   }
 }
