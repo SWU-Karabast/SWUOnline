@@ -427,6 +427,10 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
         AddDecisionQueue("OP", $player, "REMOVECARD", 1);
         AddDecisionQueue("ALLRANDOMBOTTOM", $player, "DECK");
         break;
+      case "9637610169"://Bo Katan
+        if(GetHealth(1) >= 15) Draw($player);
+        if(GetHealth(2) >= 15) Draw($player);
+        break;
       default: break;
     }
   }
