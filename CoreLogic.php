@@ -4122,6 +4122,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,2", 1);
       break;
+    case "4772866341"://Pillage
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      PummelHit($otherPlayer);
+      PummelHit($otherPlayer);
+      break;
     default: break;
   }
 }
