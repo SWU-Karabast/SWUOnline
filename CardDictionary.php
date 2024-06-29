@@ -285,6 +285,7 @@ function HasGrit($cardID, $player, $index)
     case "4aa0804b2b"://Qi'Ra
     case "1477806735"://Wookiee Warrior
     case "9195624101"://Heroic Renegade
+    case "5169472456"://Chewbacca Pykesbane
       return true;
     default: return false;
   }
@@ -1533,7 +1534,7 @@ function SmuggleCost($cardID, $player="", $index="")
     case "1312599620": $minCost = 4; break;//Smuggler's Starfighter
     case "8305828130": $minCost = 4; break;//Warbird Stowaway
     case "9483244696": $minCost = 5; break;//Weequay Pirate Gang
-    case "5171970586": $minCost = 3; break;//Collections Starhopper
+    case "5169472456": $minCost = 9; break;//Chewbacca Pykesbane
     default: break;
   }
   $allies = &GetAllies($player);

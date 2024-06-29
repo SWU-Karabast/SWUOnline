@@ -298,6 +298,16 @@ function NumNonEquipmentDefended()
   return $number;
 }
 
+function NumCardsDefended()
+{
+  global $combatChain, $defPlayer;
+  $number = 0;
+  for($i = 0; $i < count($combatChain); $i += CombatChainPieces()) {
+    if($combatChain[$i + 1] == $defPlayer) ++$number;
+  }
+  return $number;
+}
+
 function CombatChainPlayAbility($cardID)
 {
   global $combatChain, $defPlayer;
