@@ -610,6 +610,12 @@ function CollectBounty($player, $index, $cardID, $reportMode=false, $bountyUnitO
       if(count($deck)/DeckPieces() < $amount) $amount = count($deck)/DeckPieces();
       AddLayer("TRIGGER", $opponent, "9642863632", target:$amount);
       break;
+    case "0807120264"://Death Mark
+      ++$numBounties;
+      if($reportMode) break;
+      Draw($opponent);
+      Draw($opponent);
+      break;
     default: break;
   }
   if($numBounties > 0 && !$reportMode) {
