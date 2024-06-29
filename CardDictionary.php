@@ -1533,6 +1533,7 @@ function SmuggleCost($cardID, $player="", $index="")
     case "1312599620": $minCost = 4; break;//Smuggler's Starfighter
     case "8305828130": $minCost = 4; break;//Warbird Stowaway
     case "9483244696": $minCost = 5; break;//Weequay Pirate Gang
+    case "5171970586": $minCost = 3; break;//Collections Starhopper
     default: break;
   }
   $allies = &GetAllies($player);
