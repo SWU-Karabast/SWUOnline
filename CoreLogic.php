@@ -4127,6 +4127,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       PummelHit($otherPlayer);
       PummelHit($otherPlayer);
       break;
+    case "5984647454"://Enforced Loyalty
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose something to sacrifice");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "DESTROY", 1);
+      AddDecisionQueue("DRAW", $currentPlayer, "-", 1);
+      AddDecisionQueue("DRAW", $currentPlayer, "-", 1);
+      break;
     default: break;
   }
 }
