@@ -3633,8 +3633,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "5874342508"://Hotshot DL-44 Blaster
       if($from == "RESOURCES") {
-        AddDecisionQueue("PASSPARAMETER", $currentPlayer, $target);
-        AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
+        $ally = new Ally($target);
+        if(!$ally->IsExhausted() && $ally->PlayerID() == $currentPlayer) {
+          AddDecisionQueue("PASSPARAMETER", $currentPlayer, $target);
+          AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
+        }
       }
       break;
     case "6884078296"://Greef Karga

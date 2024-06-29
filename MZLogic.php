@@ -167,15 +167,13 @@ function MZAttack($player, $mzIndex)
   $currentPlayer = $player;
   $mainPlayer = $player;
   $defPlayer = ($player == 1 ? 2 : 1);
-  $ally = new Ally($mzIndex);
-  if (!$ally->IsExhausted() && $ally->PlayerID() == $currentPlayer) {
-    $ally->Exhaust();
-    SetClassState($player, $CS_CharacterIndex, $ally->Index());
-    SetClassState($player, $CS_PlayIndex, $ally->Index());
-    $abilityIndex = GetAbilityIndex($ally->CardID(), $ally->Index(), "Attack");
-    SetClassState($player, $CS_AbilityIndex, $abilityIndex);
-    PlayCard($ally->CardID(), "PLAY", -1, $ally->Index(), $ally->UniqueID(), skipAbilityType:true);
-  }
+  $ally = new Ally($mzIndex, $player);
+  $ally->Exhaust();
+  SetClassState($player, $CS_CharacterIndex, $ally->Index());
+  SetClassState($player, $CS_PlayIndex, $ally->Index());
+  $abilityIndex = GetAbilityIndex($ally->CardID(), $ally->Index(), "Attack");
+  SetClassState($player, $CS_AbilityIndex, $abilityIndex);
+  PlayCard($ally->CardID(), "PLAY", -1, $ally->Index(), $ally->UniqueID(), skipAbilityType:true);
 }
 
 function MZUndestroy($player, $parameter, $lastResult)
