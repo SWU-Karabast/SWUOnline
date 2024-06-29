@@ -1277,54 +1277,11 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
     case "DQVARPASSIFSET":
       if ($dqVars[$parameter] == "1") return "PASS";
       return "PROCEED";
-    case "LORDSUTCLIFFE":
-      if ($lastResult == "PASS") return $lastResult;
-      LordSutcliffeAfterDQ($player, $parameter);
-      return $lastResult;
-    case "BINGO":
-      if($lastResult == "") WriteLog("No card was revealed for " . CardLink("EVR156","EVR156") . ".");
-      $cardType = CardType($lastResult);
-      if($cardType == "AA") {
-        WriteLog(CardLink("EVR156","EVR156") . " gained go again.");
-        GiveAttackGoAgain();
-      } else if($cardType == "A") {
-        WriteLog(CardLink("EVR156","EVR156") . " draw a card.");
-        Draw($player);
-      } else WriteLog(CardLink("EVR156","EVR156") . "... did not hit the mark.");
-      return $lastResult;
     case "ADDCARDTOCHAIN":
       AddCombatChain($lastResult, $player, $parameter, 0);
       return $lastResult;
     case "ATTACKWITHIT":
       PlayCardSkipCosts($lastResult, "DECK");
-      return $lastResult;
-    case "HEAVE":
-      PrependDecisionQueue("PAYRESOURCES", $player, "<-");
-      AddArsenal($lastResult, $player, "HAND", "UP");
-      $heaveValue = HeaveValue($lastResult);
-      for($i = 0; $i < $heaveValue; ++$i) {
-        PlayAura("WTR075", $player);
-      }
-      WriteLog("You must pay " . HeaveValue($lastResult) . " resources to heave this");
-      return HeaveValue($lastResult);
-    case "BRAVOSTARSHOW":
-      $hand = &GetHand($player);
-      $cards = "";
-      $hasLightning = false;
-      $hasIce = false;
-      $hasEarth = false;
-      for($i = 0; $i < count($lastResult); ++$i) {
-        if($cards != "") $cards .= ",";
-        $card = $hand[$lastResult[$i]];
-        if(TalentContains($card, "LIGHTNING")) $hasLightning = true;
-        if(TalentContains($card, "ICE")) $hasIce = true;
-        if(TalentContains($card, "EARTH")) $hasEarth = true;
-        $cards .= $card;
-      }
-      if(RevealCards($cards, $player) && $hasLightning && $hasIce && $hasEarth) {
-        WriteLog("Bravo, Star of the Show gives the next attack with cost 3 or more +2, Dominate, and go again");
-        AddCurrentTurnEffect("EVR017", $player);
-      }
       return $lastResult;
     case "SETDQCONTEXT":
       $dqState[4] = implode("_", explode(" ", $parameter));
@@ -1332,20 +1289,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
     case "AFTERDIEROLL":
       AfterDieRoll($player);
       return $lastResult;
-    case "PICKACARD":
-      $hand = &GetHand(($player == 1 ? 2 : 1));
-      $rand = GetRandom(0, count($hand) - 1);
-      if(RevealCards($hand[$rand], $player) && CardName($hand[$dqVars[0]]) == CardName($hand[$rand])) {
-        WriteLog("Bingo! Your opponent tossed you a silver.");
-        PutItemIntoPlayForPlayer("EVR195", $player);
-      }
-      return $lastResult;
     case "MODAL":
       return ModalAbilities($player, $parameter, $lastResult);
-    case "SCOUR":
-      WriteLog("Scour deals " . $parameter . " arcane damage");
-      DealArcane($parameter, 0, "PLAYCARD", "EVR124", true, $player, resolvedTarget: ($player == 1 ? 2 : 1));
-      return "";
     case "SETABILITYTYPE":
       global $CS_PlayIndex;
       $lastPlayed[2] = $lastResult;
