@@ -42,13 +42,22 @@ function CompletesAttackEffect($cardID) {
       if(GetClassState($defPlayer, $CS_NumLeftPlay) > 0) ReadyResource($mainPlayer, 2);
       break;
     case "9647945674"://Zeb Orrelios
-      if(GetAttackTarget() == "NA") {
+      if(GetAttackTarget() == "NA") {//This means the target was defeated
         AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY:arena=Ground");
         AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 4 damage to");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,4", 1);
       }
       break;
+    case "0518313150"://Embo
+      if(GetAttackTarget() == "NA") {//This means the target was defeated
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY");
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to restore 2 damage");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "RESTORE,2", 1);
+      }
+      break;
+    default: break;
   }
 }
 
