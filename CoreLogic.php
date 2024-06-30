@@ -4239,6 +4239,19 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "8380936981"://Jabba's Rancor
       JabbasRancor($currentPlayer, $playAlly->Index());
       break;
+    case "2750823386"://Look the Other Way
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to exhaust");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+      AddDecisionQueue("YESNO", $otherPlayer, "if you want to pay 2 to prevent the unit from being exhausted", 1);
+      AddDecisionQueue("NOPASS", $otherPlayer, "-", 1);
+      AddDecisionQueue("PAYRESOURCES", $otherPlayer, "2", 1);
+      AddDecisionQueue("ELSE", $currentPlayer, "-");
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
+      break;
     default: break;
   }
 }
