@@ -1822,6 +1822,9 @@ function SelfCostModifier($cardID)
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
       if(GetClassState($otherPlayer, $CS_NumAlliesDestroyed) > 0) $modifier -= 2;
       break;
+    case "8380936981"://Jabba's Rancor
+      if(ControlsNamedCard($currentPlayer, "Jabba the Hutt")) $modifier -= 1;
+      break;
     default: break;
   }
   //Target cost modifier
@@ -4232,6 +4235,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
       AddDecisionQueue("BUTTONINPUT", $otherPlayer, "Ready Resources,Ready Unit");
       AddDecisionQueue("MODAL", $currentPlayer, "LETTHEWOOKIEWIN");
+      break;
+    case "8380936981"://Jabba's Rancor
+      JabbasRancor($currentPlayer, $playAlly->Index());
       break;
     default: break;
   }

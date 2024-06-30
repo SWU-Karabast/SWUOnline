@@ -1403,6 +1403,9 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("PASSPARAMETER", $mainPlayer, "{0}", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "ADDSHIELD", 1);
       break;
+    case "8380936981"://Jabba's Rancor
+      JabbasRancor($mainPlayer, $attackerAlly->Index());
+      break;
     default: break;
   }
 }
@@ -1597,4 +1600,16 @@ function XanaduBlood($player, $index=-1) {
   AddDecisionQueue("SETDQCONTEXT", $player, "Choose what you want to exhaust", 1);
   AddDecisionQueue("BUTTONINPUT", $player, "Unit,Resource", 1);
   AddDecisionQueue("SPECIFICCARD", $player, "XANADUBLOOD", 1);
+}
+
+function JabbasRancor($player, $index=-1) {
+  AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
+  if($index > -1) AddDecisionQueue("MZFILTER", $player, "index=MYALLY-" . $index);
+  AddDecisionQueue("SETDQCONTEXT", $player, "Choose something to deal 3 damage to");
+  AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+  AddDecisionQueue("MZOP", $player, "DEALDAMAGE,3", 1);
+  AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY");
+  AddDecisionQueue("SETDQCONTEXT", $player, "Choose something to deal 3 damage to");
+  AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+  AddDecisionQueue("MZOP", $player, "DEALDAMAGE,3", 1);
 }
