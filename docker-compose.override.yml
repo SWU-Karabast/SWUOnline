@@ -1,0 +1,14 @@
+# this file holds debug-specific settings for docker-compose launch
+# by default, docker-compose.override.yml will be merged with docker-compose.yml for docker compose commands (see https://docs.docker.com/compose/multiple-compose-files/merge/#additional-information)
+# to run without the debug settings (i.e. to mirror the live configuration), use docker-compose -f docker-compose.yml
+version: "3.7"
+services:
+  web-server:
+    build:
+      target: dev
+    volumes:
+      - "./DevTools/xdebug/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:Z"
+      - "./DevTools/xdebug/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini:Z"
+    environment:
+      XDEBUG_MODE: debug
+      XDEBUG_CONFIG: client_host=host.docker.internal client_port=9003
