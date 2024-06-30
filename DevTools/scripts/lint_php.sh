@@ -19,11 +19,16 @@ for i in **/*.php; do
     if [[ $? -eq 0 ]]; then
         echo ${out}
     else
+        # apply the red text format to each line of output so it works in Git Action log
         linting_passed=false
-        echo -e "${RED_TEXT}${out}${RESET_TEXT}"
+        readarray -t out_lines <<<"$out"
+        echo $out_lines
+        for out_line in "${out_lines[@]}"
+        do
+            echo -e "${RED_TEXT}${out_line}${RESET_TEXT}"
+        done
     fi
 done
-)
 
 if [[ $linting_passed == true ]]; then
     echo -e "\n${GREEN_TEXT}PHP linting succeeded${RESET_TEXT}"
@@ -32,3 +37,4 @@ else
     echo -e "\n${RED_TEXT}PHP linting failed, please fix indicated files${RESET_TEXT}"
     exit 1
 fi
+)
