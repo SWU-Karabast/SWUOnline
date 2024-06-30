@@ -1,0 +1,10 @@
+name: Pull Request Checks
+on: [pull_request]
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4  
+      - name: Run linter script
+        run: ./DevTools/scripts/lint_php.sh

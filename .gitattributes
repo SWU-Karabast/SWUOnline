@@ -2,4 +2,4 @@
 * text=auto
 
 # set lf eol to avoid windows docker adding an extra character to the folder name
-docker-entrypoint.sh text eol=lf
+*.sh text eol=lf
