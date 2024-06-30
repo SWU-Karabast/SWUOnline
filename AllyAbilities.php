@@ -963,6 +963,7 @@ function IsAlly($cardID, $player="")
 function SpecificAllyAttackAbilities($attackID)
 {
   global $mainPlayer, $defPlayer, $combatChainState, $CCS_WeaponIndex;
+  $i = $combatChainState[$CCS_WeaponIndex];
   $attackerAlly = new Ally(AttackerMZID($mainPlayer), $mainPlayer);
   $upgrades = $attackerAlly->GetUpgrades();
   for($i=0; $i<count($upgrades); ++$i) {
@@ -1017,12 +1018,21 @@ function SpecificAllyAttackAbilities($attackID)
           if(TraitContains($ally->CardID(), "Mandalorian", $mainPlayer)) $ally->Attach("2007868442");//Experience token
         }
         break;
+      case "1938453783"://Armed to the Teeth
+        //Adapted from Benthic Two-Tubes
+        $ally = new Ally("MYALLY-" . $i, $mainPlayer);
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
+        AddDecisionQueue("MZFILTER", $mainPlayer, "index=MYALLY-" . $i);
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to give +2/+0");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
+        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "1938453783,HAND", 1);
+        break;
       default: break;
     }
   }
   if($attackerAlly->LostAbilities()) return;
   $allies = &GetAllies($mainPlayer);
-  $i = $combatChainState[$CCS_WeaponIndex];
   switch($allies[$i]) {
     case "6931439330"://The Ghost
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:trait=Spectre");

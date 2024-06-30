@@ -1590,6 +1590,8 @@ function SmuggleCost($cardID, $player="", $index="")
     case "5169472456": $minCost = 9; break;//Chewbacca Pykesbane
     case "9871430123": $minCost = 6; break;//Sugi
     case "9040137775": $minCost = 6; break;//Principled Outlaw
+    case "1938453783": $minCost = 4; break;//Armed to the Teeth
+    case "1141018768": $minCost = 3; break;//Commission
     default: break;
   }
   $allies = &GetAllies($player);

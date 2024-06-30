@@ -134,6 +134,7 @@ function EffectAttackModifier($cardID)
     case "9334480612": return 1;//Boba Fett Green Leader
     case "6962053552": return 2;//Desperate Attack
     case "4085341914": return 4;//Heroic Resolve
+    case "1938453783": return 2;//Armed to the Teeth
     default: return 0;
   }
 }
