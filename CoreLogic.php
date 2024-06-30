@@ -4192,6 +4192,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "BOUNCE", 1);
       }
       break;
+    case "1743599390"://Trandoshan Hunters
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      if(SearchCount(SearchAllies($otherPlayer, hasBountyOnly:true)) > 0) $playAlly->Attach("2007868442");//Experience token
+      break;
     default: break;
   }
 }

@@ -337,6 +337,7 @@ function HasOverwhelm($cardID, $player, $index)
     case "9270539174"://Wild Rancor
     case "2556508706"://Resourceful Pursuers
     case "3803148745"://Ruthless Assassin
+    case "1743599390"://Trandoshan Hunters
       return true;
     case "4619930426"://First Legion Snowtrooper
       $target = GetAttackTarget();
