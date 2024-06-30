@@ -19,10 +19,10 @@ for i in **/*.php; do
     if [[ $? -eq 0 ]]; then
         echo ${out}
     else
-        # apply the red text format to each line of output so it works in Git Action log
         linting_passed=false
+
+        # apply the red text format to each line of output so it works in Git Action log
         readarray -t out_lines <<<"$out"
-        echo $out_lines
         for out_line in "${out_lines[@]}"
         do
             echo -e "${RED_TEXT}${out_line}${RESET_TEXT}"
