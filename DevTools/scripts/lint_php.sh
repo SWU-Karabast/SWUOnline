@@ -4,11 +4,13 @@ RED_TEXT='\033[1;31m'
 GREEN_TEXT='\033[1;32m'
 RESET_TEXT='\033[0m'
 
+PARENT_DIR="$( cd -P "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 # allow globbing subdirectories for search
 shopt -s globstar
 
 linting_passed=true
-for i in **/*.php; do
+for i in $PARENT_DIR/../../**/*.php; do
     # capture output so we can display in red on failure
     out=$((php -l "$i") 2>&1)
     
