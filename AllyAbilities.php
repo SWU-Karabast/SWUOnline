@@ -1398,6 +1398,11 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MZNOCARDASPECTORPASS", $mainPlayer, "Villainy", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "ADDEXPERIENCE", 1);
       break;
+    case "8903067778"://Finn leader unit
+      DefeatUpgrade($mainPlayer, search:"MYALLY");
+      AddDecisionQueue("PASSPARAMETER", $mainPlayer, "{0}", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "ADDSHIELD", 1);
+      break;
     default: break;
   }
 }
