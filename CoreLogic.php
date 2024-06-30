@@ -4220,6 +4220,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("OP", $currentPlayer, "REMOVECARD", 1);
       AddDecisionQueue("ALLRANDOMBOTTOM", $currentPlayer, "DECK");
       break;
+    case "9596662994"://Finn
+      $abilityName = GetResolvedAbilityName($cardID, $from);
+      if($abilityName == "Shield") {
+        DefeatUpgrade($currentPlayer, search:"MYALLY");
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "ADDSHIELD", 1);
+      }
+      break;
     default: break;
   }
 }

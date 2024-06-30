@@ -836,6 +836,9 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
     case "f928681d36"://Jabba the Hutt Leader Unit
       $abilityTypes = "A,AA";
       break;
+    case "9596662994"://Finn
+      $abilityTypes = "A";
+      break;
     default: break;
   }
   if(IsAlly($cardID, $currentPlayer)) {
@@ -995,6 +998,10 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       break;
     case "f928681d36"://Jabba the Hutt Leader Unit
       $abilityNames = "Bounty,Attack";
+      break;
+    case "9596662994"://Finn
+      $abilityNames = "Shield";
+      break;
     default: break;
   }
   if(IsAlly($cardID, $currentPlayer)) {
@@ -1291,6 +1298,8 @@ function LeaderUnit($cardID) {
       return "a742dea1f1";
     case "0622803599"://Jabba the Hutt
       return "f928681d36";
+    case "9596662994"://Finn
+      return "8903067778";
     default: return "";
   }
 }
@@ -1367,6 +1376,8 @@ function LeaderUndeployed($cardID) {
       return "9226435975";
     case "f928681d36"://Jabba the Hutt
       return "0622803599";
+    case "8903067778"://Finn
+      return "9596662994";
     default: return "";
   }
 }
@@ -1731,6 +1742,7 @@ function DefinedCardType2Wrapper($cardID)
     case "0254929700"://Doctor Aphra
     case "9226435975"://Han Solo Red
     case "0622803599"://Jabba the Hutt
+    case "9596662994"://Finn
       return "";
     default: return DefinedCardType2($cardID);
   }

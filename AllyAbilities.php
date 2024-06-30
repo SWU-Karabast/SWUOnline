@@ -621,6 +621,14 @@ function CollectBounty($player, $index, $cardID, $reportMode=false, $bountyUnitO
       if($reportMode) break;
       Draw($opponent);
       break;
+    case "0474909987"://Val
+      ++$numBounties;
+      if($reportMode) break;
+      AddDecisionQueue("MULTIZONEINDICES", $opponent, "MYALLY&THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $opponent, "Choose a unit to deal 3 damage to");
+      AddDecisionQueue("CHOOSEMULTIZONE", $opponent, "<-", 1);
+      AddDecisionQueue("MZOP", $opponent, "DEALDAMAGE,3", 1);
+      break;
     default: break;
   }
   if($numBounties > 0 && !$reportMode) {
