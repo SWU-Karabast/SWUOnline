@@ -963,7 +963,7 @@ function IsAlly($cardID, $player="")
 function SpecificAllyAttackAbilities($attackID)
 {
   global $mainPlayer, $defPlayer, $combatChainState, $CCS_WeaponIndex;
-  $i = $combatChainState[$CCS_WeaponIndex];
+  $attackerIndex = $combatChainState[$CCS_WeaponIndex];
   $attackerAlly = new Ally(AttackerMZID($mainPlayer), $mainPlayer);
   $upgrades = $attackerAlly->GetUpgrades();
   for($i=0; $i<count($upgrades); ++$i) {
@@ -1020,9 +1020,9 @@ function SpecificAllyAttackAbilities($attackID)
         break;
       case "1938453783"://Armed to the Teeth
         //Adapted from Benthic Two-Tubes
-        $ally = new Ally("MYALLY-" . $i, $mainPlayer);
+        $ally = new Ally("MYALLY-" . $attackerIndex, $mainPlayer);
         AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
-        AddDecisionQueue("MZFILTER", $mainPlayer, "index=MYALLY-" . $i);
+        AddDecisionQueue("MZFILTER", $mainPlayer, "index=MYALLY-" . $attackerIndex);
         AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to give +2/+0");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
@@ -1033,7 +1033,7 @@ function SpecificAllyAttackAbilities($attackID)
   }
   if($attackerAlly->LostAbilities()) return;
   $allies = &GetAllies($mainPlayer);
-  switch($allies[$i]) {
+  switch($allies[$attackerIndex]) {
     case "6931439330"://The Ghost
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:trait=Spectre");
       AddDecisionQueue("MZFILTER", $mainPlayer, "index=MYALLY-" . $attackerAlly->Index());
@@ -1042,9 +1042,9 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MZOP", $mainPlayer, "ADDSHIELD", 1);
       break;
     case "0256267292"://Benthic 'Two Tubes'
-      $ally = new Ally("MYALLY-" . $i, $mainPlayer);
+      $ally = new Ally("MYALLY-" . $attackerIndex, $mainPlayer);
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:aspect=Aggression");
-      AddDecisionQueue("MZFILTER", $mainPlayer, "index=MYALLY-" . $i);
+      AddDecisionQueue("MZFILTER", $mainPlayer, "index=MYALLY-" . $attackerIndex);
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to give Raid 2");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
@@ -1103,7 +1103,7 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Do you want to deal 1 damage to Fifth Brother?");
       AddDecisionQueue("YESNO", $mainPlayer, "-");
       AddDecisionQueue("NOPASS", $mainPlayer, "-");
-      AddDecisionQueue("PASSPARAMETER", $mainPlayer, "MYALLY-" . $i, 1);
+      AddDecisionQueue("PASSPARAMETER", $mainPlayer, "MYALLY-" . $attackerIndex, 1);
       AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,1", 1);
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:arena=Ground&THEIRALLY:arena=Ground", 1);
       AddDecisionQueue("MZFILTER", $mainPlayer, "index=MYALLY-" . $attackerAlly->Index());
@@ -1373,6 +1373,22 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to exhaust");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "REST", 1);
+      break;
+    case "0196346374"://Rey (Keeping the Past)
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to heal");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "RESTORE,2", 1);
+      AddDecisionQueue("MZNOCARDASPECTORPASS", $mainPlayer, "Heroism", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "ADDSHIELD", 1);
+      break;
+    case "6263178121"://Kylo Ren (Killing the Past)
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to give +2/+0");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "ADDEFFECT,6263178121", 1);
+      AddDecisionQueue("MZNOCARDASPECTORPASS", $mainPlayer, "Villainy", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "ADDEXPERIENCE", 1);
       break;
     default: break;
   }

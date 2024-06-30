@@ -135,6 +135,7 @@ function EffectAttackModifier($cardID)
     case "6962053552": return 2;//Desperate Attack
     case "4085341914": return 4;//Heroic Resolve
     case "1938453783": return 2;//Armed to the Teeth
+    case "6263178121": return 2;//Kylo Ren (Killing the Past)
     default: return 0;
   }
 }

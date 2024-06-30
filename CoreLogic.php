@@ -1780,7 +1780,21 @@ function SelfCostModifier($cardID)
       for($i=0; $i<count($aspectArr); ++$i)
       {
         --$playerAspects[$aspectArr[$i]];
-        if($playerAspects[$aspectArr[$i]] < 0) ++$penalty;
+        if($playerAspects[$aspectArr[$i]] < 0) {
+          //We have determined that the player is liable for an aspect penalty
+          //Now we need to determine if they are exempt
+          switch($cardID) {
+            case "6263178121"://Kylo Ren (Killing the Past)
+              if(!ControlsNamedCard($currentPlayer, "Rey")) ++$penalty;
+              break;
+            case "0196346374"://Rey (Keeping the Past)
+              if(!ControlsNamedCard($currentPlayer, "Kylo Ren")) ++$penalty;
+              break;
+            default:
+              ++$penalty;
+              break;
+          }
+        }
       }
       $modifier += $penalty * 2;
     }

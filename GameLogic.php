@@ -393,6 +393,10 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $ally = new Ally($lastResult);
           $ally->Attach("8752877738");//Shield Token
           break;
+        case "ADDEFFECT":
+          $ally = new Ally($lastResult);
+          $ally->AddEffect($parameterArr[1]);
+          break;
         case "POWER":
           $ally = new Ally($lastResult);
           return $ally->CurrentPower();
@@ -851,6 +855,13 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       for($i = 0; $i < count($cards); ++$i) {
         $cardID = GetMZCard($player, $cards[$i]);
         if(!TraitContains($cardID, $parameter, $player)) return "PASS";
+      }
+      return $lastResult;
+    case "MZNOCARDASPECTORPASS":
+      $cards = explode(",", $lastResult);
+      for($i = 0; $i < count($cards); ++$i) {
+        $cardID = GetMZCard($player, $cards[$i]);
+        if(AspectContains($cardID, $parameter, $player)) return "PASS";
       }
       return $lastResult;
     case "NONECARDTYPEORPASS":

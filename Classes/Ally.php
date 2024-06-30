@@ -306,6 +306,10 @@ class Ally {
     else $this->allies[$this->index + 4] = $this->allies[$this->index + 4] . "," . $cardID;
   }
 
+  function AddEffect($effectID) {
+    AddCurrentTurnEffect($effectID, $this->PlayerID(), $this->UniqueID());
+  }
+
   function Attach($cardID) {
     if($this->allies[$this->index + 4] == "-") $this->allies[$this->index + 4] = $cardID;
     else $this->allies[$this->index + 4] = $this->allies[$this->index + 4] . "," . $cardID;
