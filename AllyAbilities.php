@@ -409,6 +409,13 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
         AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
         AddDecisionQueue("SPECIFICCARD", $player, "OBIWANKENOBI", 1);
         break;
+      case "0474909987"://Val
+        AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to add two experience");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+        AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
+        AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
+        break;
       case "7351946067"://Rhokai Gunship
         AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
         AddDecisionQueue("PREPENDLASTRESULT", $player, "MYCHAR-0,THEIRCHAR-0,");
