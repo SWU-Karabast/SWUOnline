@@ -4228,6 +4228,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "ADDSHIELD", 1);
       }
       break;
+    case "7578472075"://Let the Wookie Win
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      AddDecisionQueue("BUTTONINPUT", $otherPlayer, "Ready Resources,Ready Unit");
+      AddDecisionQueue("MODAL", $currentPlayer, "LETTHEWOOKIEWIN");
+      break;
     default: break;
   }
 }

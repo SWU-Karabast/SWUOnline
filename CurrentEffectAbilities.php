@@ -136,6 +136,9 @@ function EffectAttackModifier($cardID)
     case "4085341914": return 4;//Heroic Resolve
     case "1938453783": return 2;//Armed to the Teeth
     case "6263178121": return 2;//Kylo Ren (Killing the Past)
+    case "7578472075"://Let the Wookie Win
+      $attacker = new Ally(AttackerMZID($mainPlayer), $mainPlayer);
+      return TraitContains($attacker->CardID(), "Wookiee", $mainPlayer) ? 2 : 0;
     default: return 0;
   }
 }
@@ -596,6 +599,7 @@ function IsCombatEffectActive($cardID)
     case "4721657243": return true;//Kihraxz Heavy Fighter
     case "7171636330": return true;//Chain Code Collector
     case "8107876051": return true;//Enfy's Nest
+    case "7578472075": return true;//Let the Wookie Win
     default: return false;
   }
 }

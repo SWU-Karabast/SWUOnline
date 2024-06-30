@@ -164,6 +164,22 @@ function ModalAbilities($player, $card, $lastResult)
         }
       }
       return 1;
+    case "LETTHEWOOKIEWIN":
+      switch($lastResult) {
+        case "Ready_Resources":
+          ReadyResource($player, 6);
+          break;
+        case "Ready_Unit":
+          AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
+          AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to attack with");
+          AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
+          AddDecisionQueue("MZOP", $player, "READY", 1);
+          AddDecisionQueue("MZOP", $player, "ADDEFFECT,7578472075", 1);
+          AddDecisionQueue("MZOP", $player, "ATTACK", 1);
+          break;
+        default: break;
+      }
+      return 1;
     default: return "";
   }
 }
