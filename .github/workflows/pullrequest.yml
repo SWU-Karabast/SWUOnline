@@ -1,0 +1,8 @@
+name: Pull Request Checks
+on: [pull_request]
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: PHP Syntax Checker (Lint)
+        uses: StephaneBour/actions-php-lint@8.3
