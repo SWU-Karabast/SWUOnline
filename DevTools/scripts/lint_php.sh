@@ -9,8 +9,9 @@ PARENT_DIR="$( cd -P "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # allow globbing subdirectories for search
 shopt -s globstar
 
+(cd $PARENT_DIR/../../
 linting_passed=true
-for i in $PARENT_DIR/../../**/*.php; do
+for i in **/*.php; do
     # capture output so we can display in red on failure
     out=$((php -l "$i") 2>&1)
     
@@ -22,6 +23,7 @@ for i in $PARENT_DIR/../../**/*.php; do
         echo -e "${RED_TEXT}${out}${RESET_TEXT}"
     fi
 done
+)
 
 if [[ $linting_passed == true ]]; then
     echo -e "\n${GREEN_TEXT}PHP linting succeeded${RESET_TEXT}"
