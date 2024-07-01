@@ -584,6 +584,25 @@ function CollectBounty($player, $index, $cardID, $reportMode=false, $bountyUnitO
       if($reportMode) break;
       Draw($opponent);
       break;
+    case "6420322033"://Enticing Reward
+      ++$numBounties;
+      if($reportMode) break;
+      AddDecisionQueue("FINDINDICES", $opponent, "DECKTOPXREMOVE," . 10);
+      AddDecisionQueue("SETDQVAR", $opponent, "0", 1);
+      AddDecisionQueue("FILTER", $opponent, "LastResult-exclude-definedType-Unit", 1);
+      AddDecisionQueue("MAYCHOOSECARD", $opponent, "<-", 1);
+      AddDecisionQueue("ADDHAND", $opponent, "-", 1);
+      AddDecisionQueue("REVEALCARDS", $opponent, "-", 1);
+      AddDecisionQueue("OP", $opponent, "REMOVECARD");
+      AddDecisionQueue("SETDQVAR", $opponent, "0", 1);
+      AddDecisionQueue("FILTER", $opponent, "LastResult-exclude-definedType-Unit", 1);
+      AddDecisionQueue("MAYCHOOSECARD", $opponent, "<-", 1);
+      AddDecisionQueue("ADDHAND", $opponent, "-", 1);
+      AddDecisionQueue("REVEALCARDS", $opponent, "-", 1);
+      AddDecisionQueue("OP", $opponent, "REMOVECARD");
+      AddDecisionQueue("ALLRANDOMBOTTOM", $opponent, "DECK");
+      if(!CardIsUnique($bountyUnit)) PummelHit($opponent);
+      break;
     case "9503028597"://Clone Deserter
       ++$numBounties;
       if($reportMode) break;
