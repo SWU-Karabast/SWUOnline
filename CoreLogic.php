@@ -4277,6 +4277,19 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $damage = count($ally->GetCaptives()) > 0 ? 6 : 3;
       $ally->DealDamage($damage);
       break;
+    case "9999079491"://Mystic Reflection
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to debuff", 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, 0, 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $otherPlayer, "9999079491,HAND", 1);
+      if(SearchCount(SearchAllies($currentPlayer, trait:"Force")) > 0) {
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "REDUCEHEALTH,2", 1);
+      }
+      break;
     default: break;
   }
 }
@@ -4522,10 +4535,10 @@ function PlayRequiresTarget($cardID)
   // 0: My Hero + Their Hero
   // 1: Their Hero only
   // 2: Any Target
-  // 3: Their Allies
+  // 3: Their Units
   // 4: My Hero only (For afflictions)
-  // 6: Any ally
-  // 7: Friendly ally
+  // 6: Any unit
+  // 7: Friendly unit
   function GetArcaneTargetIndices($player, $target)
   {
     global $CS_ArcaneTargetsSelected;
