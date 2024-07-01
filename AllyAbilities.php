@@ -177,6 +177,7 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
   if(!$skipDestroy) {
     if(DefinedTypesContains($cardID, "Leader", $player)) ;//If it's a leader it doesn't go in the discard
     else if($cardID == "8954587682" && !$ally->LostAbilities()) AddResources($cardID, $player, "PLAY", "DOWN");
+    else if($cardID == "7204838421" && !$ally->LostAbilities()) AddResources($cardID, $player, "PLAY", "DOWN");//Enterprising Lackeys
     else AddGraveyard($cardID, $owner, "PLAY");
   }
   for($j = $index + AllyPieces() - 1; $j >= $index; --$j) unset($allies[$j]);
@@ -443,6 +444,10 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
       case "9637610169"://Bo Katan
         if(GetHealth(1) >= 15) Draw($player);
         if(GetHealth(2) >= 15) Draw($player);
+        break;
+      case "7204838421"://Enterprising Lackeys
+        $discard = &GetDiscard($player);
+        MZMoveCard($player, "MYRESOURCES", "MYDISCARD,RESOURCES", may:false);
         break;
       default: break;
     }

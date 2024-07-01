@@ -1604,6 +1604,7 @@ function SmuggleCost($cardID, $player="", $index="")
     case "1141018768": $minCost = 3; break;//Commission
     case "4002861992": $minCost = 7; break;//DJ (Blatant Thief)
     case "6117103324": $minCost = 4; break;//Jetpack
+    case "7204838421": $minCost = 6; break;//Enterprising Lackeys
     default: break;
   }
   $allies = &GetAllies($player);
