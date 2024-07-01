@@ -4271,6 +4271,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("FINDINDICES", $currentPlayer, "MZLASTHAND", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
       break;
+    case "8576088385"://Detention Block Rescue
+      $owner = MZPlayerID($currentPlayer, $target);
+      $ally = new Ally($target, $owner);
+      $damage = count($ally->GetCaptives()) > 0 ? 6 : 3;
+      $ally->DealDamage($damage);
+      break;
     default: break;
   }
 }
@@ -4506,81 +4512,10 @@ function PlayRequiresTarget($cardID)
     case "5778949819": return 7;//Relentless Pursuit
     case "1973545191": return 6;//Unexpected Escape
     case "0598830553": return 6;//Dryden Vos
+    case "8576088385": return 6;//Detention Block Rescue
     default: return -1;
   }
 }
-
-  function ArcaneDamage($cardID)
-  {
-    global $currentPlayer;
-    switch($cardID)
-    {
-      default: return 0;
-    }
-  }
-
-  //Parameters:
-  //Player = Player controlling the arcane effects
-  //target = See function PlayRequiresTarget
-  function DealArcane($damage, $target=0, $type="PLAYCARD", $source="NA", $fromQueue=false, $player=0, $mayAbility=false, $limitDuplicates=false, $skipHitEffect=false, $resolvedTarget="", $nbArcaneInstance=1)
-  {
-    global $currentPlayer, $CS_ArcaneTargetsSelected;
-    if ($player == 0) $player = $currentPlayer;
-    if ($damage > 0) {
-      //$damage += CurrentEffectArcaneModifier($source, $player) * $nbArcaneInstance;
-      if ($type != "PLAYCARD") WriteLog(CardLink($source, $source) . " is dealing " . $damage . " arcane damage.");
-      if ($fromQueue) {
-        if (!$limitDuplicates) {
-          PrependDecisionQueue("PASSPARAMETER", $player, "{0}");
-          PrependDecisionQueue("SETCLASSSTATE", $player, $CS_ArcaneTargetsSelected); //If already selected for arcane multiselect (e.g. Singe/Azvolai)
-          PrependDecisionQueue("PASSPARAMETER", $player, "-");
-        }
-        if (!$skipHitEffect) PrependDecisionQueue("ARCANEHITEFFECT", $player, $source, 1);
-        PrependDecisionQueue("DEALARCANE", $player, $damage . "-" . $source . "-" . $type, 1);
-        if ($resolvedTarget != "") {
-          PrependDecisionQueue("PASSPARAMETER", $currentPlayer, $resolvedTarget);
-        } else {
-          PrependDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
-          if ($mayAbility) {
-            PrependDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-          } else {
-            PrependDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
-          }
-          PrependDecisionQueue("SETDQCONTEXT", $player, "Choose a target for <0>");
-          PrependDecisionQueue("FINDINDICES", $player, "ARCANETARGET," . $target);
-          PrependDecisionQueue("SETDQVAR", $currentPlayer, "0");
-          PrependDecisionQueue("PASSPARAMETER", $currentPlayer, $source);
-        }
-      } else {
-        if ($resolvedTarget != "") {
-          AddDecisionQueue("PASSPARAMETER", $currentPlayer, $resolvedTarget);
-        } else {
-          AddDecisionQueue("PASSPARAMETER", $currentPlayer, $source);
-          AddDecisionQueue("SETDQVAR", $currentPlayer, "0");
-          AddDecisionQueue("FINDINDICES", $player, "ARCANETARGET," . $target);
-          AddDecisionQueue("SETDQCONTEXT", $player, "Choose a target for <0>");
-          if ($mayAbility) {
-            AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-          } else {
-            AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
-          }
-          AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
-        }
-        AddDecisionQueue("DEALARCANE", $player, $damage . "-" . $source . "-" . $type, 1);
-        if (!$skipHitEffect) AddDecisionQueue("ARCANEHITEFFECT", $player, $source, 1);
-        if (!$limitDuplicates) {
-          AddDecisionQueue("PASSPARAMETER", $player, "-");
-          AddDecisionQueue("SETCLASSSTATE", $player, $CS_ArcaneTargetsSelected);
-          AddDecisionQueue("PASSPARAMETER", $player, "{0}");
-        }
-      }
-    }
-  }
-
-  function ArcaneHitEffect($player, $source, $target, $damage)
-  {
-
-  }
 
   //target type return values
   //-1: no target
