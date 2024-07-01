@@ -4,7 +4,7 @@ function CheckImage($cardID, $url, $definedType, $isBack=false, $set="SOR")
 {
   $filename = "./WebpImages/" . $cardID . ".webp";
   $filename = "./WebpImages2/" . $cardID . ".webp";
-  $filenameNew = "./New Cards/" . $cardID . ".webp";
+  $filenameNew = "./UnimplementedCards/" . $cardID . ".webp";
   $concatFilename = "./concat/" . $cardID . ".webp";
   $cropFilename = "./crops/" . $cardID . "_cropped.png";
   $isNew = false;
