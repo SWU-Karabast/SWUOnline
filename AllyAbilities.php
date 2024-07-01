@@ -1494,18 +1494,6 @@ function AllyTakeDamageAbilities($player, $index, $damage, $preventable)
   return $damage;
 }
 
-//Ally Recollection
-function AllyBeginTurnEffects()
-{
-  global $mainPlayer;
-  $mainAllies = &GetAllies($mainPlayer);
-  for($i = 0; $i < count($mainAllies); $i += AllyPieces()) {
-    if($mainAllies[$i+1] != 0) {
-      if($mainAllies[$i+3] != 1) $mainAllies[$i+1] = 2;
-    }
-  }
-}
-
 function AllyBeginEndTurnEffects()
 {
   global $mainPlayer, $defPlayer;
@@ -1513,7 +1501,6 @@ function AllyBeginEndTurnEffects()
   $mainAllies = &GetAllies($mainPlayer);
   for($i = count($mainAllies) - AllyPieces(); $i >= 0; $i -= AllyPieces()) {
     if($mainAllies[$i+1] != 0) {
-      if(HasVigor($mainAllies[$i], $mainPlayer, $i)) $mainAllies[$i+1] = 2;
       $mainAllies[$i+3] = 0;
       $mainAllies[$i+8] = 1;
       $mainAllies[$i+10] = 0;//Reset times attacked

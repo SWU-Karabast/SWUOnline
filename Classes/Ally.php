@@ -283,7 +283,17 @@ class Ally {
   }
 
   function Ready() {
+    $upgrades = $this->GetUpgrades();
+    for($i=0; $i<count($upgrades); ++$i) {
+      switch($upgrades[$i]) {
+        case "7718080954"://Frozen in Carbonite
+          return false;
+        default: break;
+      }
+    }
+    if($this->allies[$this->index+3] == 1) return false;
     $this->allies[$this->index+1] = 2;
+    return true;
   }
   
   function Exhaust() {

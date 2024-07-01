@@ -521,14 +521,6 @@ function HasCleave($cardID)
   }
 }
 
-function HasVigor($cardID, $player, $index)
-{
-  switch($cardID)
-  {
-    default: return false;
-  }
-}
-
 function HasTrueSight($cardID, $player, $index)
 {
   global $currentTurnEffects;
@@ -1148,6 +1140,7 @@ function UpgradeFilter($cardID)
     case "8055390529"://Traitorous
       return "maxCost=3";
     case "1368144544"://Imprisoned
+    case "7718080954"://Frozen in Carbonite
       return "leader=1";
     default: return "";
   }

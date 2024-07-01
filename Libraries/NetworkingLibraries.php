@@ -1067,7 +1067,6 @@ function ResumeRoundPass()
   EndTurnProcedure($initiativePlayer == 1 ? 2 : 1);
   $currentRound+= 1;
   WriteLog("<span style='color:#6E6DFF;'>A new round has begun</span>");
-  AllyBeginTurnEffects();
   CharacterStartTurnAbility(1);
   CharacterStartTurnAbility(2);
   AllyBeginRoundAbilities(1);

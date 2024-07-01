@@ -4241,6 +4241,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddResources($resourceCard, $currentPlayer, "PLAY", "DOWN");
       }
       break;
+    case "7718080954"://Frozen in Carbonite
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, $target);
+      AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
+      break;
     default: break;
   }
 }
