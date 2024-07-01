@@ -312,6 +312,12 @@ function AllyLeavesPlayAbility($player, $index)
       $otherPlayer = ($player == 1 ? 2 : 1);
       SearchCurrentTurnEffects("3401690666", $otherPlayer, remove:true);
       break;
+    case "4002861992"://DJ (Blatant Thief)
+      $otherPlayer = $player == 1 ? 2 : 1;
+      $resources = &GetResourceCards($player);
+      $resourceCard = RemoveResource($player, count($resources) - ResourcePieces());
+      AddResources($resourceCard, $otherPlayer, "PLAY", "DOWN");
+      break;
     default: break;
   }
   //Opponent character abilities

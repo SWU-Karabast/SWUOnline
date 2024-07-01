@@ -4233,6 +4233,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
       break;
+    case "4002861992"://DJ (Blatant Thief)
+      if($from == "RESOURCES") {
+        $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+        $theirResources = &GetResourceCards($otherPlayer);
+        $resourceCard = RemoveResource($otherPlayer, count($theirResources) - ResourcePieces());
+        AddResources($resourceCard, $currentPlayer, "PLAY", "DOWN");
+      }
+      break;
     default: break;
   }
 }
