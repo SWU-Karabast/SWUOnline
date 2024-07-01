@@ -514,6 +514,10 @@ function CurrentEffectEndTurnAbilities()
       case "1910812527":
         DealDamageAsync($currentTurnEffects[$i+1], 999999);
         break;
+      case "6117103324"://Jetpack
+        $ally = new Ally("MYALLY-" . SearchAlliesForUniqueID($currentTurnEffects[$i+2], $currentTurnEffects[$i+1]), $currentTurnEffects[$i+1]);
+        $ally->DefeatUpgrade("8752877738");
+        break;
       default: break;
     }
     if($remove) RemoveCurrentTurnEffect($i);

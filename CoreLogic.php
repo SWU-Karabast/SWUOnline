@@ -4245,6 +4245,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, $target);
       AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
       break;
+    case "6117103324"://Jetpack
+      $ally = new Ally($target, $currentPlayer);
+      $ally->AddEffect("6117103324");
+      $ally->Attach("8752877738");//Shield Token
+      break;
     default: break;
   }
 }

@@ -1138,6 +1138,7 @@ function UpgradeFilter($cardID)
     case "6471336466"://Vambrace Flamethrower
     case "3141660491"://The Darksaber
     case "6775521270"://Inspiring Mentor
+    case "6117103324"://Jetpack
       return "trait=Vehicle";
     case "8055390529"://Traitorous
       return "maxCost=3";
@@ -1602,6 +1603,7 @@ function SmuggleCost($cardID, $player="", $index="")
     case "1938453783": $minCost = 4; break;//Armed to the Teeth
     case "1141018768": $minCost = 3; break;//Commission
     case "4002861992": $minCost = 7; break;//DJ (Blatant Thief)
+    case "6117103324": $minCost = 4; break;//Jetpack
     default: break;
   }
   $allies = &GetAllies($player);
