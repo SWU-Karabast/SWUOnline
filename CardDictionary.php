@@ -174,6 +174,7 @@ function RaidAmount($cardID, $player, $index)
     case "724979d608": $amount += 2; break;//Cad Bane
     case "5818136044": $amount += 2; break;//Xanadu Blood
     case "8991513192": $amount += SearchCount(SearchAllies($player, aspect:"Aggression")) > 1 ? 2 : 0; break;//Hunting Nexu
+    case "1810342362": $amount += 2; break;//Lurking TIE Phantom
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;

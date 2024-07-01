@@ -427,6 +427,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           return $uniqueID;
         case "CAPTURE":
           $cardID = MZRemove($player, $lastResult);
+          if($cardID == "1810342362") return $cardID;//Lurking TIE Phantom
           if($cardID == "3417125055")//IG-11
           {
             $allies = &GetAllies($player);
