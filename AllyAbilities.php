@@ -446,6 +446,17 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
         break;
       default: break;
     }
+    $upgrades = $destroyedAlly->GetUpgrades();
+    for($i=0; $i<count($upgrades); ++$i) {
+      switch($upgrades[$i]) {
+        case "6775521270"://Inspiring Mentor
+          AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
+          AddDecisionQueue("SETDQCONTEXT", $player, "Choose a card to give an experience");
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+          AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
+          break;
+      }
+    }
   }
   //Abilities that trigger when a different ally is destroyed
   $allies = &GetAllies($player);
@@ -1060,6 +1071,13 @@ function SpecificAllyAttackAbilities($attackID)
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
         AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "1938453783,HAND", 1);
+        break;
+      case "6775521270"://Inspiring Mentor
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
+        AddDecisionQueue("MZFILTER", $mainPlayer, "index=MYALLY-" . $attackerIndex);
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to give an experience");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "ADDEXPERIENCE", 1);
         break;
       default: break;
     }

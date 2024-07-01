@@ -1136,6 +1136,7 @@ function UpgradeFilter($cardID)
     case "5738033724"://Boba Fett's Armor
     case "6471336466"://Vambrace Flamethrower
     case "3141660491"://The Darksaber
+    case "6775521270"://Inspiring Mentor
       return "trait=Vehicle";
     case "8055390529"://Traitorous
       return "maxCost=3";
