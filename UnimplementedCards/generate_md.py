@@ -8,7 +8,7 @@ IGNORE_FILES_LIST = ["generate_md.py", README_FILE_NAME]
 
 def list_image_files(root_dir: Path) -> list[Path]:
     image_files: list[Path] = []
-    for file_path in root_dir.iterdir():
+    for file_path in sorted(root_dir.iterdir()):
         if file_path.name.lower() in IGNORE_FILES_LIST or file_path.is_dir():
             continue
 
