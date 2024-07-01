@@ -1749,10 +1749,12 @@ function SameWeaponEquippedTwice()
 
 function SelfCostModifier($cardID)
 {
-  global $currentPlayer, $CS_LastAttack, $CS_LayerTarget, $layers;
+  global $currentPlayer, $CS_LastAttack, $CS_LayerTarget, $CS_NumClonesPlayed, $layers;
   $modifier = 0;
   //Aspect Penalty
-  if(!TraitContains($cardID, "Spectre", $currentPlayer) || (HeroCard($currentPlayer) != "7440067052" && SearchAlliesForCard($currentPlayer, "80df3928eb") == "")) {
+  $heraSyndullaAspectPenaltyIgnore = TraitContains($cardID, "Spectre", $currentPlayer) && (HeroCard($currentPlayer) == "7440067052" || SearchAlliesForCard($currentPlayer, "80df3928eb") != ""); //Hera Syndulla (Spectre Two)
+  $omegaAspectPenaltyIgnore = TraitContains($cardID, "Clone", $currentPlayer) && SearchAlliesForCard($currentPlayer, "1386874723") != "" && GetClassState($currentPlayer, $CS_NumClonesPlayed) < 1; //Omega (Part of the Squad)
+  if(!$heraSyndullaAspectPenaltyIgnore && !$omegaAspectPenaltyIgnore) {
     $penalty = 0;
     $cardAspects = CardAspects($cardID);
     if($cardAspects != "") {
@@ -2231,7 +2233,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MAYCHOOSECARD", $currentPlayer, "<-", 1);
         AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
         AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
-        AddDecisionQueue("OP", $currentPlayer, "REMOVECARD", 1);
+        AddDecisionQueue("OP", $currentPlayer, "REMOVECARD");
         AddDecisionQueue("ALLRANDOMBOTTOM", $currentPlayer, "DECK");
       }
       break;
@@ -4249,6 +4251,18 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $ally = new Ally($target, $currentPlayer);
       $ally->AddEffect("6117103324");
       $ally->Attach("8752877738");//Shield Token
+      break;
+    case "1386874723"://Omega (Part of the Squad)
+      if($from != "PLAY") {
+        AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE," . 5);
+        AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+        AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Clone", 1);
+        AddDecisionQueue("MAYCHOOSECARD", $currentPlayer, "<-", 1); //The search window only shows takeable cards, same as Grand Moff Tarkin unit's trigger(which I copied the code from). Ideally the player would get to see all the cards in the search(to see what's getting sent to the bottom).
+        AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
+        AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
+        AddDecisionQueue("OP", $currentPlayer, "REMOVECARD");
+        AddDecisionQueue("ALLRANDOMBOTTOM", $currentPlayer, "DECK");
+      }
       break;
     default: break;
   }
