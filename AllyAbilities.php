@@ -941,7 +941,7 @@ function AllyPlayCardAbility($cardID, $player="", $reportMode=false, $from="-")
             AddDecisionQueue("NOPASS", $player, "-");
             AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $cadIndex, 1);
             AddDecisionQueue("ADDMZUSES", $player, "-1", 1);
-            AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY");
+            AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY", 1);
             AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a unit to deal 2 damage to", 1);
             AddDecisionQueue("CHOOSEMULTIZONE", $otherPlayer, "<-", 1);
             AddDecisionQueue("MZOP", $otherPlayer, "DEALDAMAGE,2", 1);
@@ -959,13 +959,19 @@ function AllyPlayCardAbility($cardID, $player="", $reportMode=false, $from="-")
         }
         break;
       case "3952758746"://Toro Calican
-        if($i != LastAllyIndex($player) && TraitContains($cardID, "Bounty Hunter", $player)){
-          if($reportMode) return true;
-          AddDecisionQueue("YESNO", $player, "if you want to deal damage");
-          AddDecisionQueue("NOPASS", $player, "-");
-          AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . LastAllyIndex($player), 1);
-          AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1", 1);
-          AddDecisionQueue("MZOP", $player, "READY", 1);
+        $toroIndex = SearchAlliesForCard($player, "3952758746");
+        if($toroIndex != "") {
+          $toroCalican = new Ally("MYALLY-" . $toroIndex, $player);
+          if($i != LastAllyIndex($player) && TraitContains($cardID, "Bounty Hunter", $currentPlayer) && $toroCalican->NumUses() > 0){
+            if($reportMode) return true;
+            AddDecisionQueue("YESNO", $player, "if you want to use Toro Calican's ability");
+            AddDecisionQueue("NOPASS", $player, "-");
+            AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . LastAllyIndex($player), 1);
+            AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1", 1);
+            AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $toroIndex, 1);
+            AddDecisionQueue("MZOP", $player, "READY", 1);
+            AddDecisionQueue("ADDMZUSES", $player, "-1", 1);
+          }
         }
         break;
       default: break;
