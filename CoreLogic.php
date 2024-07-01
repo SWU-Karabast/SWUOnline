@@ -1290,25 +1290,6 @@ function OnRevealEffect($player, $cardID, $from, $index)
   }
 }
 
-function DoesAttackHaveGoAgain()
-{
-  global $combatChain, $combatChainState, $CCS_CurrentAttackGainedGoAgain, $mainPlayer, $defPlayer, $CS_NumRedPlayed, $CS_NumNonAttackCards;
-  global $CS_NumAuras, $CS_ArcaneDamageTaken, $myDeck, $CS_AnotherWeaponGainedGoAgain;
-
-  if(count($combatChain) == 0) return false;//No combat chain, so no
-  $attackType = CardType($combatChain[0]);
-  $attackSubtype = CardSubType($combatChain[0]);
-  if(CurrentEffectPreventsGoAgain()) return false;
-  if(HasGoAgain($combatChain[0])) return true;
-  if($combatChainState[$CCS_CurrentAttackGainedGoAgain] == 1 || CurrentEffectGrantsGoAgain() || MainCharacterGrantsGoAgain()) return true;
-  switch($combatChain[0])
-  {
-
-    default: break;
-  }
-  return false;
-}
-
 function IsEquipUsable($player, $index)
 {
   $character = &GetPlayerCharacter($player);
@@ -4238,6 +4219,36 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "8380936981"://Jabba's Rancor
       JabbasRancor($currentPlayer, $playAlly->Index());
+      break;
+    case "2750823386"://Look the Other Way
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to exhaust");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+      AddDecisionQueue("YESNO", $otherPlayer, "if you want to pay 2 to prevent the unit from being exhausted", 1);
+      AddDecisionQueue("NOPASS", $otherPlayer, "-", 1);
+      AddDecisionQueue("PAYRESOURCES", $otherPlayer, "2", 1);
+      AddDecisionQueue("ELSE", $currentPlayer, "-");
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
+      break;
+    case "4002861992"://DJ (Blatant Thief)
+      if($from == "RESOURCES") {
+        $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+        $theirResources = &GetResourceCards($otherPlayer);
+        $resourceCard = RemoveResource($otherPlayer, count($theirResources) - ResourcePieces());
+        AddResources($resourceCard, $currentPlayer, "PLAY", "DOWN");
+      }
+      break;
+    case "7718080954"://Frozen in Carbonite
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, $target);
+      AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
+      break;
+    case "6117103324"://Jetpack
+      $ally = new Ally($target, $currentPlayer);
+      $ally->AddEffect("6117103324");
+      $ally->Attach("8752877738");//Shield Token
       break;
     default: break;
   }

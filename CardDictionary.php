@@ -174,6 +174,7 @@ function RaidAmount($cardID, $player, $index)
     case "724979d608": $amount += 2; break;//Cad Bane
     case "5818136044": $amount += 2; break;//Xanadu Blood
     case "8991513192": $amount += SearchCount(SearchAllies($player, aspect:"Aggression")) > 1 ? 2 : 0; break;//Hunting Nexu
+    case "1810342362": $amount += 2; break;//Lurking TIE Phantom
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
@@ -419,6 +420,7 @@ function HasAmbush($cardID, $player, $index, $from)
     case "6097248635"://4-LOM
     case "9483244696"://Weequay Pirate Gang
     case "2556508706"://Resourceful Pursuers
+    case "1086021299"://Arquitens Assault Cruiser
       return true;
     case "2027289177"://Escort Skiff
       return SearchCount(SearchAllies($player, aspect:"Command")) > 1;
@@ -513,14 +515,6 @@ function HasSaboteur($cardID, $player, $index)
 }
 
 function HasCleave($cardID)
-{
-  switch($cardID)
-  {
-    default: return false;
-  }
-}
-
-function HasVigor($cardID, $player, $index)
 {
   switch($cardID)
   {
@@ -1143,9 +1137,14 @@ function UpgradeFilter($cardID)
     case "5738033724"://Boba Fett's Armor
     case "6471336466"://Vambrace Flamethrower
     case "3141660491"://The Darksaber
+    case "6775521270"://Inspiring Mentor
+    case "6117103324"://Jetpack
       return "trait=Vehicle";
     case "8055390529"://Traitorous
       return "maxCost=3";
+    case "1368144544"://Imprisoned
+    case "7718080954"://Frozen in Carbonite
+      return "leader=1";
     default: return "";
   }
 }
@@ -1603,6 +1602,8 @@ function SmuggleCost($cardID, $player="", $index="")
     case "9040137775": $minCost = 6; break;//Principled Outlaw
     case "1938453783": $minCost = 4; break;//Armed to the Teeth
     case "1141018768": $minCost = 3; break;//Commission
+    case "4002861992": $minCost = 7; break;//DJ (Blatant Thief)
+    case "6117103324": $minCost = 4; break;//Jetpack
     default: break;
   }
   $allies = &GetAllies($player);

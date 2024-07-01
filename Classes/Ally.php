@@ -103,13 +103,15 @@ class Ally {
   }
 
   function Destroy() {
-    if($this->index == -1) return;
-    DestroyAlly($this->playerID, $this->index);
+    if($this->index == -1) return "";
+    if($this->CardID() == "1810342362") return "";//Lurking TIE Phantom
+    return DestroyAlly($this->playerID, $this->index);
   }
 
   //Returns true if the ally is destroyed
   function DealDamage($amount, $bypassShield = false, $fromCombat = false, &$damageDealt = NULL) {
     if($this->index == -1 || $amount <= 0) return false;
+    if(!$fromCombat && $this->CardID() == "1810342362") return;//Lurking TIE Phantom
     $subcards = $this->GetSubcards();
     for($i=0; $i<count($subcards); ++$i) {
       if($subcards[$i] == "8752877738") {
@@ -283,7 +285,17 @@ class Ally {
   }
 
   function Ready() {
+    $upgrades = $this->GetUpgrades();
+    for($i=0; $i<count($upgrades); ++$i) {
+      switch($upgrades[$i]) {
+        case "7718080954"://Frozen in Carbonite
+          return false;
+        default: break;
+      }
+    }
+    if($this->allies[$this->index+3] == 1) return false;
     $this->allies[$this->index+1] = 2;
+    return true;
   }
   
   function Exhaust() {
@@ -307,7 +319,7 @@ class Ally {
   }
 
   function AddEffect($effectID) {
-    AddCurrentTurnEffect($effectID, $this->PlayerID(), $this->UniqueID());
+    AddCurrentTurnEffect($effectID, $this->PlayerID(), uniqueID:$this->UniqueID());
   }
 
   function Attach($cardID) {
@@ -432,6 +444,14 @@ class Ally {
       if($currentTurnEffects[$i+1] != $this->PlayerID()) continue;
       if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $this->UniqueID()) continue;
       if($currentTurnEffects[$i] == "2639435822") return true;
+    }
+    $upgrades = $this->GetUpgrades();
+    for($i=0; $i<count($upgrades); ++$i) {
+      switch($upgrades[$i]) {
+        case "1368144544"://Imprisoned
+          return true;
+        default: break;
+      }
     }
     return false;
   }

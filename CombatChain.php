@@ -57,6 +57,13 @@ function CompletesAttackEffect($cardID) {
         AddDecisionQueue("MZOP", $mainPlayer, "RESTORE,2", 1);
       }
       break;
+    case "1086021299"://Arquitens Assault Cruiser
+      if(GetAttackTarget() == "NA") {//This means the target was defeated
+        $discard = &GetDiscard($defPlayer);
+        $defeatedCard = RemoveDiscard($defPlayer, count($discard)-DiscardPieces());
+        AddResources($defeatedCard, $mainPlayer, "PLAY", "DOWN");
+      }
+      break;
     default: break;
   }
 }

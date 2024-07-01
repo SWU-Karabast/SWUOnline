@@ -255,7 +255,7 @@ header("Location: " . $redirectPath . "/GameLobby.php?gameName=$gameName&playerI
 function CardOverride($cardID)
 {
   switch ($cardID) {
-    case "1706333706": return "8380936981"://Jabba's Rancor
+    case "1706333706": return "8380936981";//Jabba's Rancor
     default: return $cardID;
   }
 }
