@@ -1147,6 +1147,8 @@ function UpgradeFilter($cardID)
       return "trait=Vehicle";
     case "8055390529"://Traitorous
       return "maxCost=3";
+    case "1368144544"://Imprisoned
+      return "leader=1";
     default: return "";
   }
 }

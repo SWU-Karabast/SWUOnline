@@ -433,6 +433,14 @@ class Ally {
       if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $this->UniqueID()) continue;
       if($currentTurnEffects[$i] == "2639435822") return true;
     }
+    $upgrades = $this->GetUpgrades();
+    for($i=0; $i<count($upgrades); ++$i) {
+      switch($upgrades[$i]) {
+        case "1368144544"://Imprisoned
+          return true;
+        default: break;
+      }
+    }
     return false;
   }
 
