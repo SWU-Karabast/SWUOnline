@@ -1290,25 +1290,6 @@ function OnRevealEffect($player, $cardID, $from, $index)
   }
 }
 
-function DoesAttackHaveGoAgain()
-{
-  global $combatChain, $combatChainState, $CCS_CurrentAttackGainedGoAgain, $mainPlayer, $defPlayer, $CS_NumRedPlayed, $CS_NumNonAttackCards;
-  global $CS_NumAuras, $CS_ArcaneDamageTaken, $myDeck, $CS_AnotherWeaponGainedGoAgain;
-
-  if(count($combatChain) == 0) return false;//No combat chain, so no
-  $attackType = CardType($combatChain[0]);
-  $attackSubtype = CardSubType($combatChain[0]);
-  if(CurrentEffectPreventsGoAgain()) return false;
-  if(HasGoAgain($combatChain[0])) return true;
-  if($combatChainState[$CCS_CurrentAttackGainedGoAgain] == 1 || CurrentEffectGrantsGoAgain() || MainCharacterGrantsGoAgain()) return true;
-  switch($combatChain[0])
-  {
-
-    default: break;
-  }
-  return false;
-}
-
 function IsEquipUsable($player, $index)
 {
   $character = &GetPlayerCharacter($player);

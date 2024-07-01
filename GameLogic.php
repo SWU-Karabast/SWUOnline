@@ -457,7 +457,6 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       switch($parameter)
       {
         case "DESTROYFROZENARSENAL": DestroyFrozenArsenal($player); return "";
-        case "GIVEATTACKGOAGAIN": GiveAttackGoAgain(); return $lastResult;
         case "BOOST": return DoBoost($player);
         case "REMOVECARD":
           if($lastResult == "") return $dqVars[0];
@@ -1117,10 +1116,6 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       WriteLog($message);
       if($numAA == 1 && $numNAA == 1) DealArcane(2, 0, "PLAYCARD", "MON158", true, $player);
       return $lastResult;
-    case "GIVEACTIONGOAGAIN":
-      if($parameter == "A") SetClassState($player, $CS_NextNAACardGoAgain, 1);
-      else if($parameter == "AA") GiveAttackGoAgain();
-      return 1;
     case "PROCESSATTACKTARGET":
       $combatChainState[$CCS_AttackTarget] = $lastResult;
       $mzArr = explode("-", $lastResult);
