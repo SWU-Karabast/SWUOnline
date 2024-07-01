@@ -144,6 +144,10 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         case "AURACLASS": $rv = SearchAura($player, "", "", -1, -1, $subparam); break;
         case "DECKAURAMAXCOST": $rv = SearchDeck($player, "", "Aura", $subparam); break;
         case "QUELL": $rv = QuellIndices($player); break;
+        case "MZLASTHAND":
+          $hand = &GetHand($player);
+          if(count($hand) > 0) $rv = "MYHAND-" . count($hand) - HandPieces();
+          break;
         default: $rv = ""; break;
       }
       return ($rv == "" ? "PASS" : $rv);
