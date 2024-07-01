@@ -1097,30 +1097,6 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $arsenal = &GetArsenal($player);
       if(count($arsenal) > 0 && count($params) == 2) AddCurrentTurnEffect($params[0], $player, $params[1], $arsenal[count($arsenal) - ArsenalPieces() + 5]);
       return $lastResult;
-    case "AWAKENINGTOKENS":
-      $num = GetHealth($player == 1 ? 2 : 1) - GetHealth($player);
-      for($i = 0; $i < $num; ++$i) PlayAura("WTR075", $player);
-      return 1;
-    case "INVERTEXISTENCE":
-      if($lastResult == "") {
-        WriteLog("No cards were selected, so Invert Existence did not banish any cards");
-        return $lastResult;
-      }
-      $cards = explode(",", $lastResult);
-      $numAA = 0;
-      $numNAA = 0;
-      $message = "Invert existence banished ";
-      for($i = 0; $i < count($cards); ++$i) {
-        $type = CardType($cards[$i]);
-        if($type == "AA") ++$numAA;
-        else if($type == "A") ++$numNAA;
-        if($i >= 1) $message .= ", ";
-        if($i != 0 && $i == count($cards) - 1) $message .= "and ";
-        $message .= CardLink($cards[$i], $cards[$i]);
-      }
-      WriteLog($message);
-      if($numAA == 1 && $numNAA == 1) DealArcane(2, 0, "PLAYCARD", "MON158", true, $player);
-      return $lastResult;
     case "PROCESSATTACKTARGET":
       $combatChainState[$CCS_AttackTarget] = $lastResult;
       $mzArr = explode("-", $lastResult);
