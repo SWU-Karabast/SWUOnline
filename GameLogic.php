@@ -972,65 +972,11 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       }
       PrependDecisionQueue("INCDQVAR", $player, "1", 1);
       return $prevented;
-    case "THREATENARCANE":
-      DealArcane(1, 2, "ABILITY", $parameter, true);
-      return $lastResult;
     case "COLLECTBOUNTY":
       $paramArr = explode(",", $parameter);
       $bounty = $paramArr[0];
       $bountyUnit = $paramArr[1];
       CollectBounty($player, -1, $bounty, reportMode:false, bountyUnitOverride:$bountyUnit);
-      return $lastResult;
-    case "DEALARCANE":
-      $dqState[7] = $lastResult;
-      $target = explode("-", $lastResult);
-      $targetPlayer = ($target[0] == "MYCHAR" || $target[0] == "MYALLY" ? $player : ($player == 1 ? 2 : 1));
-      $parameters = explode("-", $parameter);
-      $damage = $parameters[0];
-      $source = $parameters[1];
-      $type = $parameters[2];
-      if($type == "PLAYCARD") {
-        $damage += ConsumeArcaneBonus($player);
-        WriteLog(CardLink($source, $source) . " is dealing " . $damage . " arcane damage");
-      }
-      if($target[0] == "THEIRALLY" || $target[0] == "MYALLY") {
-        $allies = &GetAllies($targetPlayer);
-        if($allies[$target[1]+6] > 0) {
-          $damage -= 3;
-          if($damage < 0) $damage = 0;
-          --$allies[$target[1]+6];
-        }
-        $damage = CurrentEffectDamagePrevention($player, $type, $damage, $source, true, $allies[$target[1]+5]);
-        if($damage < 0) $damage = 0;
-        $allies[$target[1]+2] -= $damage;
-        if($allies[$target[1]+2] <= 0) {
-          DestroyAlly($targetPlayer, $target[1]);
-        } else {
-          AppendClassState($player, $CS_ArcaneTargetsSelected, $lastResult);
-        }
-        return "";
-      }
-      AppendClassState($player, $CS_ArcaneTargetsSelected, $lastResult);
-      $target = $targetPlayer;
-      $sourceType = CardType($source);
-      if($sourceType == "A" || $sourceType == "AA") $damage += CountCurrentTurnEffects("ELE065", $player);
-      $arcaneBarrier = 0;//ArcaneBarrierChoices($target, $damage);
-      PrependDecisionQueue("TAKEARCANE", $target, $damage . "-" . $source . "-" . $player);
-      PrependDecisionQueue("PASSPARAMETER", $target, "{1}");
-      //CheckSpellvoid($target, $damage);
-      PrependDecisionQueue("INCDQVAR", $target, "1", 1);
-      PrependDecisionQueue("PASSPARAMETER", $targetPlayer, "0");
-      PrependDecisionQueue("INCDQVAR", $target, "1", 1);
-      PrependDecisionQueue("PAYRESOURCES", $target, "<-", 1);
-      PrependDecisionQueue("ARCANECHOSEN", $target, "-", 1, 1);
-      PrependDecisionQueue("CHOOSEARCANE", $target, $arcaneBarrier, 1, 1);
-      PrependDecisionQueue("SETDQVAR", $target, "0", 1);
-      PrependDecisionQueue("PASSPARAMETER", $target, $damage . "-" . $source, 1);
-      PrependDecisionQueue("SETDQVAR", $target, "1", 1);
-      PrependDecisionQueue("PASSPARAMETER", $target, "0", 1);
-      return $parameter;
-    case "ARCANEHITEFFECT":
-      if($dqVars[0] > 0) ArcaneHitEffect($player, $parameter, $dqState[7], $dqVars[0]); //player, source, target, damage
       return $lastResult;
     case "ARCANECHOSEN":
       if($lastResult > 0) {

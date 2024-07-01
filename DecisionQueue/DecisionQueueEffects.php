@@ -219,7 +219,7 @@ function SpecificCardLogic($player, $card, $lastResult)
       if(TraitContains($cardID, "Force", $player)) Draw($player);
       break;
     case "GALACTICAMBITION":
-      DealArcane(CardCost($lastResult), 4, "PLAYCARD", "5494760041", player:$player);
+      DealDamageAsync($player, CardCost($lastResult), "DAMAGE", "5494760041");
       break;
     case "C3PO":
       $deck = new Deck($player);
