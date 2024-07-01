@@ -918,6 +918,7 @@ function AllyPlayCardAbility($cardID, $player="", $reportMode=false, $from="-")
         if($cadIndex != "") {
           $cadbane = new Ally("MYALLY-" . $cadIndex, $player);
           if($from != 'PLAY' && $cadbane->NumUses() > 0 && TraitContains($cardID, "Underworld", $currentPlayer)) {
+            if($reportMode) return true;
             $otherPlayer = ($player == 1 ? 2 : 1);
             AddDecisionQueue("YESNO", $player, "if you want use Cad Bane's ability");
             AddDecisionQueue("NOPASS", $player, "-");
@@ -932,11 +933,22 @@ function AllyPlayCardAbility($cardID, $player="", $reportMode=false, $from="-")
         break;
       case "4088c46c4d"://The Mandalorian
         if(DefinedTypesContains($cardID, "Upgrade", $player)) {
+          if($reportMode) return true;
           $character[$i+1] = 1;
           AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:maxHealth=6");
           AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to exhaust", 1);
           AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
           AddDecisionQueue("MZOP", $player, "REST", 1);
+        }
+        break;
+      case "3952758746"://Toro Calican
+        if($i != LastAllyIndex($player) && TraitContains($cardID, "Bounty Hunter", $player)){
+          if($reportMode) return true;
+          AddDecisionQueue("YESNO", $player, "if you want to deal damage");
+          AddDecisionQueue("NOPASS", $player, "-");
+          AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . LastAllyIndex($player), 1);
+          AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1", 1);
+          AddDecisionQueue("MZOP", $player, "READY", 1);
         }
         break;
       default: break;
