@@ -1663,12 +1663,12 @@ function XanaduBlood($player, $index=-1) {
 }
 
 function JabbasRancor($player, $index=-1) {
-  AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
+  AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:arena=Ground");
   if($index > -1) AddDecisionQueue("MZFILTER", $player, "index=MYALLY-" . $index);
   AddDecisionQueue("SETDQCONTEXT", $player, "Choose something to deal 3 damage to");
   AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
   AddDecisionQueue("MZOP", $player, "DEALDAMAGE,3", 1);
-  AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY");
+  AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:arena=Ground");
   AddDecisionQueue("SETDQCONTEXT", $player, "Choose something to deal 3 damage to");
   AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
   AddDecisionQueue("MZOP", $player, "DEALDAMAGE,3", 1);
