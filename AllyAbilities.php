@@ -998,6 +998,20 @@ function AllyPlayCardAbility($cardID, $player="", $reportMode=false, $from="-")
           }
         }
         break;
+      case "3010720738"://Tobias Beckett
+        $tobiasBeckett = New Ally("MYALLY-" . $i, $player);
+        if($tobiasBeckett->NumUses() > 0 && !DefinedTypesContains($cardID, "Unit", $player)) {
+          if($reportMode) return true;
+          $playedCardCost = CardCost($cardID);
+          AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:maxCost=" . $playedCardCost . "&THEIRALLY:maxCost=" . $playedCardCost);
+          AddDecisionQueue("MZFILTER", $player, "status=1", 1);
+          AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to exhaust with Tobias Beckett", 1);
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+          AddDecisionQueue("MZOP", $player, "REST", 1);
+          AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $i, 1);
+          AddDecisionQueue("ADDMZUSES", $player, -1, 1);
+        }
+        break;
       default: break;
     }
   }

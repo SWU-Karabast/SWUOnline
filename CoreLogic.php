@@ -1747,7 +1747,7 @@ function SameWeaponEquippedTwice()
   return false;
 }
 
-function SelfCostModifier($cardID)
+function SelfCostModifier($cardID, $from)
 {
   global $currentPlayer, $CS_LastAttack, $CS_LayerTarget, $CS_NumClonesPlayed, $layers;
   $modifier = 0;
@@ -1757,6 +1757,28 @@ function SelfCostModifier($cardID)
   if(!$heraSyndullaAspectPenaltyIgnore && !$omegaAspectPenaltyIgnore) {
     $penalty = 0;
     $cardAspects = CardAspects($cardID);
+    //Manually changing the aspects of cards played with smuggle that have different aspect requirements for smuggle.
+    //Not a great solution; ideally we could define a whole smuggle ability in one place.
+    if ($from == "RESOURCES") {
+      switch($cardID) {
+        case "5169472456"://Chewbacca (Pykesbane)
+          $cardAspects = "Heroism,Aggression";
+          break;
+        case "9871430123"://Sugi
+          $cardAspects = "Vigilance";
+          break;
+        case "5874342508"://Hotshot DL-44 Blaster
+          $cardAspects = "Cunning";
+          break;
+        case "4002861992"://DJ (Blatant Thief)
+          $cardAspects = "Cunning,Cunning";
+          break;
+        case "3010720738"://Tobias Beckett
+          $cardAspects = "Vigilance";
+          break;
+        default: break;
+      }
+    }
     if($cardAspects != "") {
       $aspectArr = explode(",", $cardAspects);
       $playerAspects = PlayerAspects($currentPlayer);
