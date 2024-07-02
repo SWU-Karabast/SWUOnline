@@ -16,7 +16,7 @@ jobs:
         id: filter
         with:
           filters: |
-            UnimplementedCards:
+            Unimplemented-Cards:
               - 'UnimplementedCards/**'
   lint:
     runs-on: ubuntu-latest
