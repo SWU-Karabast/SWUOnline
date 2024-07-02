@@ -3,7 +3,6 @@ on:
   pull_request:
     branches:
       - main
-      - action-typo-fix
 jobs:
   # this job checks changes to specific files / folders so we can filter other jobs based on the changes
   changes:
