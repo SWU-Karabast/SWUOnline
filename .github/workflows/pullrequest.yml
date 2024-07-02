@@ -3,7 +3,6 @@ on:
   pull_request:
     branches:
       - main
-      - merge-pr-actions
 jobs:
   # this job checks changes to specific files / folders so we can filter other jobs based on the changes
   changes:
@@ -28,7 +27,7 @@ jobs:
         run: ./DevTools/scripts/lint_php.sh
   check-unimplemented-readme:
     needs: changes
-    if: ${{ needs.changes.outputs.unimplemented-cards == 'true' }}
+    if: ${{ needs.changes.outputs.unimplemented-cards == 'true' }}  # only execute if there are changes to the unimplemented cards folder
     runs-on: ubuntu-latest
     steps:
       - name: Check out repo
