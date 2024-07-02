@@ -141,6 +141,7 @@ if ($decklink != "") {
   $hasBannedCard = false;
   for($i=0; $i<count($deck); ++$i) {
     $cardID = UUIDLookup($deck[$i]->id);
+    $cardID = CardOverride($cardID);
     if(CardSet($cardID) == $bannedSet) {
       $hasBannedCard = true;
     }
@@ -153,6 +154,7 @@ if ($decklink != "") {
   $sideboardCards = "";
   for($i=0; $i<count($sideboard); ++$i) {
     $cardID = UUIDLookup($sideboard[$i]->id);
+    $cardID = CardOverride($cardID);
     if(CardSet($cardID) == $bannedSet) {
       $hasBannedCard = true;
     }
@@ -250,65 +252,12 @@ if ($matchup == "") {
 session_write_close();
 header("Location: " . $redirectPath . "/GameLobby.php?gameName=$gameName&playerID=$playerID");
 
-function GetAltCardID($cardID)
+function CardOverride($cardID)
 {
   switch ($cardID) {
-    case "OXO001": return "WTR155";
-    case "OXO002": return "WTR156";
-    case "OXO003": return "WTR157";
-    case "OXO004": return "WTR158";
-    case "BOL002": return "MON405";
-    case "BOL006": return "MON400";
-    case "CHN002": return "MON407";
-    case "CHN006": return "MON401";
-    case "LEV002": return "MON406";
-    case "LEV005": return "MON400";
-    case "PSM002": return "MON404";
-    case "PSM007": return "MON402";
-    case "FAB015": return "WTR191";
-    case "FAB016": return "WTR162";
-    case "FAB023": return "MON135";
-    case "FAB024": return "ARC200";
-    case "FAB030": return "DYN030";
-    case "FAB057": return "EVR063";
-    case "DVR026": return "WTR182";
-    case "RVD008": return "WTR006";
-    case "UPR209": return "WTR191";
-    case "UPR210": return "WTR192";
-    case "UPR211": return "WTR193";
-    case "HER075": return "DYN025";
-    case "LGS112": return "DYN070";
-    case "LGS116": return "DYN200";
-    case "LGS117": return "DYN201";
-    case "LGS118": return "DYN202";
-    case "ARC218":
-    case "UPR224":
-    case "MON306":
-    case "ELE237": //Cracked Baubles
-      return "WTR224";
-    case "DYN238": return "MON401";
-    case "RVD004": return "DVR004";
-    case "OUT077": return "WTR098";
-    case "OUT078": return "WTR099";
-    case "OUT079": return "WTR100";
-    case "OUT083": return "WTR107";
-    case "OUT084": return "WTR108";
-    case "OUT085": return "WTR109";
-    case "OUT086": return "EVR047";
-    case "OUT087": return "EVR048";
-    case "OUT088": return "EVR049";
-    case "OUT213": return "ARC191";
-    case "OUT214": return "ARC192";
-    case "OUT215": return "ARC193";
-    case "OUT216": return "MON251";
-    case "OUT217": return "MON252";
-    case "OUT218": return "MON253";
-    case "OUT222": return "ARC203";
-    case "OUT223": return "ARC204";
-    case "OUT224": return "ARC205";
-    case "WIN022": return "OUT091";
+    case "1706333706": return "8380936981";//Jabba's Rancor
+    default: return $cardID;
   }
-  return $cardID;
 }
 
 function IsBanned($cardID, $format)

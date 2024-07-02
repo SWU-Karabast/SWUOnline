@@ -25,7 +25,7 @@ function CombatDummyAI()
         for($i=0; $i<count($character) && $index == -1; $i += CharacterPieces()) if(CardType($character[$i]) != "C") $index = $i;
         $cardID = $character[$index];
         $from = "EQUIP";
-        $baseCost = AbilityCost($cardID);
+        $baseCost = AbilityCost($cardID, $index);
         $cost = $baseCost + CurrentEffectCostModifiers($cardID, $from) + CharacterCostModifier($cardID, $from);
 
         if($index != -1 && $cost == 0)

@@ -1,0 +1,38 @@
+name: Pull Request Checks
+on:
+  pull_request:
+    branches:
+      - main
+jobs:
+  # this job checks changes to specific files / folders so we can filter other jobs based on the changes
+  changes:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      unimplemented-cards: ${{ steps.filter.outputs.unimplemented-cards }}
+    steps:
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            UnimplementedCards:
+              - 'UnimplementedCards/**'
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4  
+      - name: Run linter script
+        run: ./DevTools/scripts/lint_php.sh
+  check-unimplemented-readme:
+    needs: changes
+    if: ${{ needs.changes.outputs.unimplemented-cards == 'true' }}  # only execute if there are changes to the unimplemented cards folder
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+      - name: Install Python
+        uses: actions/setup-python@v4
+      - name: Run readme validation script
+        run: python UnimplementedCards/generate_md.py validate --verbose

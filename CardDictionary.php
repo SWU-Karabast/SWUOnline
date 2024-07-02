@@ -174,6 +174,7 @@ function RaidAmount($cardID, $player, $index)
     case "724979d608": $amount += 2; break;//Cad Bane
     case "5818136044": $amount += 2; break;//Xanadu Blood
     case "8991513192": $amount += SearchCount(SearchAllies($player, aspect:"Aggression")) > 1 ? 2 : 0; break;//Hunting Nexu
+    case "1810342362": $amount += 2; break;//Lurking TIE Phantom
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
@@ -248,6 +249,9 @@ function HasSentinel($cardID, $player, $index)
     case "4341703515"://Supercommando Squad
       $ally = new Ally("MYALLY-" . $index, $player);
       return $ally->IsUpgraded();
+    case "9871430123"://Sugi
+      $otherPlayer = $player == 1 ? 2 : 1;
+      return SearchCount(SearchAllies($otherPlayer, hasUpgradeOnly:true)) > 0;
     default: return false;
   }
 }
@@ -293,7 +297,7 @@ function HasGrit($cardID, $player, $index)
 
 function HasOverwhelm($cardID, $player, $index)
 {
-  global $defPlayer;
+  global $defPlayer, $currentTurnEffects;
   $ally = new Ally("MYALLY-" . $index, $player);
   if($ally->LostAbilities()) return false;
   $allies = &GetAllies($player);
@@ -304,6 +308,14 @@ function HasOverwhelm($cardID, $player, $index)
       case "4484318969"://Moff Gideon Leader
         if(CardCost($cardID) <= 3 && IsAllyAttackTarget()) return true;
         break;
+      default: break;
+    }
+  }
+  for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnPieces()) {
+    if($currentTurnEffects[$i+1] != $player) continue;
+    if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
+    switch($currentTurnEffects[$i]) {
+      case "4085341914": return true;//Heroic Resolve
       default: break;
     }
   }
@@ -325,6 +337,8 @@ function HasOverwhelm($cardID, $player, $index)
     case "8862896760"://Maul
     case "9270539174"://Wild Rancor
     case "2556508706"://Resourceful Pursuers
+    case "3803148745"://Ruthless Assassin
+    case "1743599390"://Trandoshan Hunters
       return true;
     case "4619930426"://First Legion Snowtrooper
       $target = GetAttackTarget();
@@ -406,6 +420,7 @@ function HasAmbush($cardID, $player, $index, $from)
     case "6097248635"://4-LOM
     case "9483244696"://Weequay Pirate Gang
     case "2556508706"://Resourceful Pursuers
+    case "1086021299"://Arquitens Assault Cruiser
       return true;
     case "2027289177"://Escort Skiff
       return SearchCount(SearchAllies($player, aspect:"Command")) > 1;
@@ -439,6 +454,11 @@ function HasShielded($cardID, $player, $index)
     case "6635692731"://Hutt's Henchman
     case "4341703515"://Supercommando Squad
       return true;
+    case "6939947927"://Hunter of the Haxion Brood
+      $otherPlayer = $player == 1 ? 2 : 1;
+      return SearchCount(SearchAllies($otherPlayer, hasBountyOnly:true)) > 0 ? true : false;
+    case "0088477218"://Privateer Scyk
+      return SearchCount(SearchAllies($player, aspect:"Cunning")) > 1;
     default: return false;
   }
 }
@@ -487,20 +507,14 @@ function HasSaboteur($cardID, $player, $index)
     case "4595532978"://Ketsu Onyo
     case "3786602643"://House Kast Soldier
     case "2b13cefced"://Fennec Shand
+    case "7922308768"://Valiant Assault Ship
+    case "2151430798"://Guavian Antagonizer
       return true;
     default: return false;
   }
 }
 
 function HasCleave($cardID)
-{
-  switch($cardID)
-  {
-    default: return false;
-  }
-}
-
-function HasVigor($cardID, $player, $index)
 {
   switch($cardID)
   {
@@ -589,32 +603,34 @@ function PrepareAmount($cardID)
   }
 }
 
-function AbilityCost($cardID)
+function AbilityCost($cardID, $index=-1)
 {
   global $currentPlayer;
+  $abilityName = GetResolvedAbilityName($cardID);
+  if($abilityName == "Heroic Resolve") return 2;
   switch($cardID) {
     case "2579145458"://Luke Skywalker
-      return GetResolvedAbilityName($cardID) == "Give Shield" ? 1 : 0;
+      return $abilityName == "Give Shield" ? 1 : 0;
     case "2912358777"://Grand Moff Tarkin
-      return GetResolvedAbilityName($cardID) == "Give Experience" ? 1 : 0;
+      return $abilityName == "Give Experience" ? 1 : 0;
     case "3187874229"://Cassian Andor
-      return GetResolvedAbilityName($cardID) == "Draw Card" ? 1 : 0;
+      return $abilityName == "Draw Card" ? 1 : 0;
     case "4300219753"://Fett's Firespray
-      return GetResolvedAbilityName($cardID) == "Exhaust" ? 2 : 0;
+      return $abilityName == "Exhaust" ? 2 : 0;
     case "5784497124"://Emperor Palpatine
-      return GetResolvedAbilityName($cardID) == "Deal Damage" ? 1 : 0;
+      return $abilityName == "Deal Damage" ? 1 : 0;
     case "6088773439"://Darth Vader
-      return GetResolvedAbilityName($cardID) == "Deal Damage" ? 1 : 0;
+      return $abilityName == "Deal Damage" ? 1 : 0;
     case "1951911851"://Grand Admiral Thrawn
-      return GetResolvedAbilityName($cardID) == "Exhaust" ? 1 : 0;
+      return $abilityName == "Exhaust" ? 1 : 0;
     case "1885628519"://Crosshair
-      return GetResolvedAbilityName($cardID) == "Buff" ? 2 : 0;
+      return $abilityName == "Buff" ? 2 : 0;
     case "2432897157"://Qi'Ra
-      return GetResolvedAbilityName($cardID) == "Shield" ? 1 : 0;
+      return $abilityName == "Shield" ? 1 : 0;
     case "4352150438"://Rey
-      return GetResolvedAbilityName($cardID) == "Experience" ? 1 : 0;
+      return $abilityName == "Experience" ? 1 : 0;
     case "0911874487"://Fennec Shand
-      return GetResolvedAbilityName($cardID) == "Ambush" ? 1 : 0;
+      return $abilityName == "Ambush" ? 1 : 0;
     default: break;
   }
   if(IsAlly($cardID)) return 0;
@@ -687,7 +703,7 @@ function GetAbilityType($cardID, $index = -1, $from="-")
   }
 }
 
-function GetAbilityTypes($cardID)
+function GetAbilityTypes($cardID, $index = -1, $from="-")
 {
   global $currentPlayer;
   $abilityTypes = "";
@@ -814,9 +830,26 @@ function GetAbilityTypes($cardID)
     case "f928681d36"://Jabba the Hutt Leader Unit
       $abilityTypes = "A,AA";
       break;
+    case "9596662994"://Finn
+      $abilityTypes = "A";
+      break;
     default: break;
   }
-  if(DefinedTypesContains($cardID, "Leader", $currentPlayer) && !IsAlly($cardID, $currentPlayer)) {
+  if(IsAlly($cardID, $currentPlayer)) {
+    if($abilityTypes == "") $abilityTypes = "AA";
+    $ally = new Ally("MYALLY-" . $index, $currentPlayer);
+    $upgrades = $ally->GetUpgrades();
+    for($i=0; $i<count($upgrades); ++$i) {
+      switch($upgrades[$i]) {
+        case "4085341914"://Heroic Resolve
+          if($abilityTypes != "") $abilityTypes .= ",";
+          $abilityTypes .= "A";
+          break;
+        default: break;
+      }
+    }
+  }
+  else if(DefinedTypesContains($cardID, "Leader", $currentPlayer)) {
     $char = &GetPlayerCharacter($currentPlayer);
     if($char[CharacterPieces() + 1] == 1) $abilityTypes = "";
     if($char[CharacterPieces() + 2] == 0) {
@@ -959,9 +992,27 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       break;
     case "f928681d36"://Jabba the Hutt Leader Unit
       $abilityNames = "Bounty,Attack";
+      break;
+    case "9596662994"://Finn
+      $abilityNames = "Shield";
+      break;
     default: break;
   }
-  if(DefinedTypesContains($cardID, "Leader", $currentPlayer) && !IsAlly($cardID, $currentPlayer)) {
+  if(IsAlly($cardID, $currentPlayer)) {
+    if($abilityNames == "") $abilityNames = "Attack";
+    $ally = new Ally("MYALLY-" . $index, $currentPlayer);
+    $upgrades = $ally->GetUpgrades();
+    for($i=0; $i<count($upgrades); ++$i) {
+      switch($upgrades[$i]) {
+        case "4085341914"://Heroic Resolve
+          if($abilityNames != "") $abilityNames .= ",";
+          $abilityNames .= "Heroic Resolve";
+          break;
+        default: break;
+      }
+    }
+  }
+  else if(DefinedTypesContains($cardID, "Leader", $currentPlayer)) {
     $char = &GetPlayerCharacter($currentPlayer);
     if($char[CharacterPieces() + 1] == 1) $abilityNames = "";
     if($char[CharacterPieces() + 2] == 0) {
@@ -974,6 +1025,7 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
 
 function GetAbilityIndex($cardID, $index, $abilityName)
 {
+  $abilityName = str_replace("_", " ", $abilityName);
   $names = explode(",", GetAbilityNames($cardID, $index));
   for($i = 0; $i < count($names); ++$i) {
     if($abilityName == $names[$i]) return $i;
@@ -983,10 +1035,10 @@ function GetAbilityIndex($cardID, $index, $abilityName)
 
 function GetResolvedAbilityType($cardID, $from="-")
 {
-  global $currentPlayer, $CS_AbilityIndex;
+  global $currentPlayer, $CS_AbilityIndex, $CS_PlayIndex;
   if($from == "HAND") return "";
   $abilityIndex = GetClassState($currentPlayer, $CS_AbilityIndex);
-  $abilityTypes = GetAbilityTypes($cardID);
+  $abilityTypes = GetAbilityTypes($cardID, GetClassState($currentPlayer, $CS_PlayIndex));
   if($abilityTypes == "" || $abilityIndex == "-") return GetAbilityType($cardID, -1, $from);
   $abilityTypes = explode(",", $abilityTypes);
   return $abilityTypes[$abilityIndex];
@@ -994,10 +1046,10 @@ function GetResolvedAbilityType($cardID, $from="-")
 
 function GetResolvedAbilityName($cardID, $from="-")
 {
-  global $currentPlayer, $CS_AbilityIndex;
+  global $currentPlayer, $CS_AbilityIndex, $CS_PlayIndex;
   if($from != "PLAY" && $from != "EQUIP" && $from != "-") return "";
   $abilityIndex = GetClassState($currentPlayer, $CS_AbilityIndex);
-  $abilityNames = GetAbilityNames($cardID);
+  $abilityNames = GetAbilityNames($cardID, GetClassState($currentPlayer, $CS_PlayIndex));
   if($abilityNames == "" || $abilityIndex == "-") return "";
   $abilityNames = explode(",", $abilityNames);
   return $abilityNames[$abilityIndex];
@@ -1035,7 +1087,7 @@ function IsPlayable($cardID, $phase, $from, $index = -1, &$restriction = null, $
   if($isStaticType) {
     $cardType = GetAbilityType($cardID, $index, $from);
     if($cardType == "") {
-      $abilityTypes = GetAbilityTypes($cardID);
+      $abilityTypes = GetAbilityTypes($cardID, $index);
       $typeArr = explode(",", $abilityTypes);
       $cardType = $typeArr[0];
     }
@@ -1085,9 +1137,14 @@ function UpgradeFilter($cardID)
     case "5738033724"://Boba Fett's Armor
     case "6471336466"://Vambrace Flamethrower
     case "3141660491"://The Darksaber
+    case "6775521270"://Inspiring Mentor
+    case "6117103324"://Jetpack
       return "trait=Vehicle";
     case "8055390529"://Traitorous
       return "maxCost=3";
+    case "1368144544"://Imprisoned
+    case "7718080954"://Frozen in Carbonite
+      return "leader=1";
     default: return "";
   }
 }
@@ -1240,6 +1297,8 @@ function LeaderUnit($cardID) {
       return "a742dea1f1";
     case "0622803599"://Jabba the Hutt
       return "f928681d36";
+    case "9596662994"://Finn
+      return "8903067778";
     default: return "";
   }
 }
@@ -1316,6 +1375,8 @@ function LeaderUndeployed($cardID) {
       return "9226435975";
     case "f928681d36"://Jabba the Hutt
       return "0622803599";
+    case "8903067778"://Finn
+      return "9596662994";
     default: return "";
   }
 }
@@ -1537,6 +1598,13 @@ function SmuggleCost($cardID, $player="", $index="")
     case "5171970586": $minCost = 3; break;//Collections Starhopper
     case "6234506067": $minCost = 5; break;//Cassian Andor
     case "5169472456": $minCost = 9; break;//Chewbacca Pykesbane
+    case "9871430123": $minCost = 6; break;//Sugi
+    case "9040137775": $minCost = 6; break;//Principled Outlaw
+    case "1938453783": $minCost = 4; break;//Armed to the Teeth
+    case "1141018768": $minCost = 3; break;//Commission
+    case "4002861992": $minCost = 7; break;//DJ (Blatant Thief)
+    case "6117103324": $minCost = 4; break;//Jetpack
+    case "7204838421": $minCost = 6; break;//Enterprising Lackeys
     default: break;
   }
   $allies = &GetAllies($player);
@@ -1676,6 +1744,7 @@ function DefinedCardType2Wrapper($cardID)
     case "0254929700"://Doctor Aphra
     case "9226435975"://Han Solo Red
     case "0622803599"://Jabba the Hutt
+    case "9596662994"://Finn
       return "";
     default: return DefinedCardType2($cardID);
   }

@@ -28,8 +28,8 @@ function PummelHit($player = -1, $passable = false, $fromDQ = false, $context=""
   }
 }
 
-function DefeatUpgrade($player, $may = false) {
-  AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
+function DefeatUpgrade($player, $may = false, $search="MYALLY&THEIRALLY") {
+  AddDecisionQueue("MULTIZONEINDICES", $player, $search);
   AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to defeat an upgrade from");
   if ($may) AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
   else AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
@@ -682,16 +682,11 @@ function ShouldHoldPriority($player, $layerCard = "")
   return 0;
 }
 
-function GiveAttackGoAgain()
-{
-  global $combatChainState, $CCS_CurrentAttackGainedGoAgain;
-  $combatChainState[$CCS_CurrentAttackGainedGoAgain] = 1;
-}
-
 function EndTurnProcedure($player) {
   $allies = &GetAllies($player);
   for($i = 0; $i < count($allies); $i += AllyPieces()) {
-    $allies[$i+1] = 2;
+    $ally = new Ally("MYALLY-" . $i, $player);
+    $ally->Ready();
   }
   $resources = &GetResourceCards($player);
   for($i=0; $i<count($resources); $i+=ResourcePieces()) {

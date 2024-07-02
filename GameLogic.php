@@ -144,6 +144,10 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         case "AURACLASS": $rv = SearchAura($player, "", "", -1, -1, $subparam); break;
         case "DECKAURAMAXCOST": $rv = SearchDeck($player, "", "Aura", $subparam); break;
         case "QUELL": $rv = QuellIndices($player); break;
+        case "MZLASTHAND":
+          $hand = &GetHand($player);
+          if(count($hand) > 0) $rv = "MYHAND-" . count($hand) - HandPieces();
+          break;
         default: $rv = ""; break;
       }
       return ($rv == "" ? "PASS" : $rv);
@@ -393,6 +397,10 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $ally = new Ally($lastResult);
           $ally->Attach("8752877738");//Shield Token
           break;
+        case "ADDEFFECT":
+          $ally = new Ally($lastResult);
+          $ally->AddEffect($parameterArr[1]);
+          break;
         case "POWER":
           $ally = new Ally($lastResult);
           return $ally->CurrentPower();
@@ -423,6 +431,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           return $uniqueID;
         case "CAPTURE":
           $cardID = MZRemove($player, $lastResult);
+          if($cardID == "1810342362") return $cardID;//Lurking TIE Phantom
           if($cardID == "3417125055")//IG-11
           {
             $allies = &GetAllies($player);
@@ -453,7 +462,6 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       switch($parameter)
       {
         case "DESTROYFROZENARSENAL": DestroyFrozenArsenal($player); return "";
-        case "GIVEATTACKGOAGAIN": GiveAttackGoAgain(); return $lastResult;
         case "BOOST": return DoBoost($player);
         case "REMOVECARD":
           if($lastResult == "") return $dqVars[0];
@@ -853,6 +861,13 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         if(!TraitContains($cardID, $parameter, $player)) return "PASS";
       }
       return $lastResult;
+    case "MZNOCARDASPECTORPASS":
+      $cards = explode(",", $lastResult);
+      for($i = 0; $i < count($cards); ++$i) {
+        $cardID = GetMZCard($player, $cards[$i]);
+        if(AspectContains($cardID, $parameter, $player)) return "PASS";
+      }
+      return $lastResult;
     case "NONECARDTYPEORPASS":
       $cards = explode(",", $lastResult);
       for($i = 0; $i < count($cards); ++$i) {
@@ -957,65 +972,11 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       }
       PrependDecisionQueue("INCDQVAR", $player, "1", 1);
       return $prevented;
-    case "THREATENARCANE":
-      DealArcane(1, 2, "ABILITY", $parameter, true);
-      return $lastResult;
     case "COLLECTBOUNTY":
       $paramArr = explode(",", $parameter);
       $bounty = $paramArr[0];
       $bountyUnit = $paramArr[1];
       CollectBounty($player, -1, $bounty, reportMode:false, bountyUnitOverride:$bountyUnit);
-      return $lastResult;
-    case "DEALARCANE":
-      $dqState[7] = $lastResult;
-      $target = explode("-", $lastResult);
-      $targetPlayer = ($target[0] == "MYCHAR" || $target[0] == "MYALLY" ? $player : ($player == 1 ? 2 : 1));
-      $parameters = explode("-", $parameter);
-      $damage = $parameters[0];
-      $source = $parameters[1];
-      $type = $parameters[2];
-      if($type == "PLAYCARD") {
-        $damage += ConsumeArcaneBonus($player);
-        WriteLog(CardLink($source, $source) . " is dealing " . $damage . " arcane damage");
-      }
-      if($target[0] == "THEIRALLY" || $target[0] == "MYALLY") {
-        $allies = &GetAllies($targetPlayer);
-        if($allies[$target[1]+6] > 0) {
-          $damage -= 3;
-          if($damage < 0) $damage = 0;
-          --$allies[$target[1]+6];
-        }
-        $damage = CurrentEffectDamagePrevention($player, $type, $damage, $source, true, $allies[$target[1]+5]);
-        if($damage < 0) $damage = 0;
-        $allies[$target[1]+2] -= $damage;
-        if($allies[$target[1]+2] <= 0) {
-          DestroyAlly($targetPlayer, $target[1]);
-        } else {
-          AppendClassState($player, $CS_ArcaneTargetsSelected, $lastResult);
-        }
-        return "";
-      }
-      AppendClassState($player, $CS_ArcaneTargetsSelected, $lastResult);
-      $target = $targetPlayer;
-      $sourceType = CardType($source);
-      if($sourceType == "A" || $sourceType == "AA") $damage += CountCurrentTurnEffects("ELE065", $player);
-      $arcaneBarrier = 0;//ArcaneBarrierChoices($target, $damage);
-      PrependDecisionQueue("TAKEARCANE", $target, $damage . "-" . $source . "-" . $player);
-      PrependDecisionQueue("PASSPARAMETER", $target, "{1}");
-      //CheckSpellvoid($target, $damage);
-      PrependDecisionQueue("INCDQVAR", $target, "1", 1);
-      PrependDecisionQueue("PASSPARAMETER", $targetPlayer, "0");
-      PrependDecisionQueue("INCDQVAR", $target, "1", 1);
-      PrependDecisionQueue("PAYRESOURCES", $target, "<-", 1);
-      PrependDecisionQueue("ARCANECHOSEN", $target, "-", 1, 1);
-      PrependDecisionQueue("CHOOSEARCANE", $target, $arcaneBarrier, 1, 1);
-      PrependDecisionQueue("SETDQVAR", $target, "0", 1);
-      PrependDecisionQueue("PASSPARAMETER", $target, $damage . "-" . $source, 1);
-      PrependDecisionQueue("SETDQVAR", $target, "1", 1);
-      PrependDecisionQueue("PASSPARAMETER", $target, "0", 1);
-      return $parameter;
-    case "ARCANEHITEFFECT":
-      if($dqVars[0] > 0) ArcaneHitEffect($player, $parameter, $dqState[7], $dqVars[0]); //player, source, target, damage
       return $lastResult;
     case "ARCANECHOSEN":
       if($lastResult > 0) {
@@ -1082,34 +1043,6 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $arsenal = &GetArsenal($player);
       if(count($arsenal) > 0 && count($params) == 2) AddCurrentTurnEffect($params[0], $player, $params[1], $arsenal[count($arsenal) - ArsenalPieces() + 5]);
       return $lastResult;
-    case "AWAKENINGTOKENS":
-      $num = GetHealth($player == 1 ? 2 : 1) - GetHealth($player);
-      for($i = 0; $i < $num; ++$i) PlayAura("WTR075", $player);
-      return 1;
-    case "INVERTEXISTENCE":
-      if($lastResult == "") {
-        WriteLog("No cards were selected, so Invert Existence did not banish any cards");
-        return $lastResult;
-      }
-      $cards = explode(",", $lastResult);
-      $numAA = 0;
-      $numNAA = 0;
-      $message = "Invert existence banished ";
-      for($i = 0; $i < count($cards); ++$i) {
-        $type = CardType($cards[$i]);
-        if($type == "AA") ++$numAA;
-        else if($type == "A") ++$numNAA;
-        if($i >= 1) $message .= ", ";
-        if($i != 0 && $i == count($cards) - 1) $message .= "and ";
-        $message .= CardLink($cards[$i], $cards[$i]);
-      }
-      WriteLog($message);
-      if($numAA == 1 && $numNAA == 1) DealArcane(2, 0, "PLAYCARD", "MON158", true, $player);
-      return $lastResult;
-    case "GIVEACTIONGOAGAIN":
-      if($parameter == "A") SetClassState($player, $CS_NextNAACardGoAgain, 1);
-      else if($parameter == "AA") GiveAttackGoAgain();
-      return 1;
     case "PROCESSATTACKTARGET":
       $combatChainState[$CCS_AttackTarget] = $lastResult;
       $mzArr = explode("-", $lastResult);
@@ -1277,54 +1210,11 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
     case "DQVARPASSIFSET":
       if ($dqVars[$parameter] == "1") return "PASS";
       return "PROCEED";
-    case "LORDSUTCLIFFE":
-      if ($lastResult == "PASS") return $lastResult;
-      LordSutcliffeAfterDQ($player, $parameter);
-      return $lastResult;
-    case "BINGO":
-      if($lastResult == "") WriteLog("No card was revealed for " . CardLink("EVR156","EVR156") . ".");
-      $cardType = CardType($lastResult);
-      if($cardType == "AA") {
-        WriteLog(CardLink("EVR156","EVR156") . " gained go again.");
-        GiveAttackGoAgain();
-      } else if($cardType == "A") {
-        WriteLog(CardLink("EVR156","EVR156") . " draw a card.");
-        Draw($player);
-      } else WriteLog(CardLink("EVR156","EVR156") . "... did not hit the mark.");
-      return $lastResult;
     case "ADDCARDTOCHAIN":
       AddCombatChain($lastResult, $player, $parameter, 0);
       return $lastResult;
     case "ATTACKWITHIT":
       PlayCardSkipCosts($lastResult, "DECK");
-      return $lastResult;
-    case "HEAVE":
-      PrependDecisionQueue("PAYRESOURCES", $player, "<-");
-      AddArsenal($lastResult, $player, "HAND", "UP");
-      $heaveValue = HeaveValue($lastResult);
-      for($i = 0; $i < $heaveValue; ++$i) {
-        PlayAura("WTR075", $player);
-      }
-      WriteLog("You must pay " . HeaveValue($lastResult) . " resources to heave this");
-      return HeaveValue($lastResult);
-    case "BRAVOSTARSHOW":
-      $hand = &GetHand($player);
-      $cards = "";
-      $hasLightning = false;
-      $hasIce = false;
-      $hasEarth = false;
-      for($i = 0; $i < count($lastResult); ++$i) {
-        if($cards != "") $cards .= ",";
-        $card = $hand[$lastResult[$i]];
-        if(TalentContains($card, "LIGHTNING")) $hasLightning = true;
-        if(TalentContains($card, "ICE")) $hasIce = true;
-        if(TalentContains($card, "EARTH")) $hasEarth = true;
-        $cards .= $card;
-      }
-      if(RevealCards($cards, $player) && $hasLightning && $hasIce && $hasEarth) {
-        WriteLog("Bravo, Star of the Show gives the next attack with cost 3 or more +2, Dominate, and go again");
-        AddCurrentTurnEffect("EVR017", $player);
-      }
       return $lastResult;
     case "SETDQCONTEXT":
       $dqState[4] = implode("_", explode(" ", $parameter));
@@ -1332,20 +1222,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
     case "AFTERDIEROLL":
       AfterDieRoll($player);
       return $lastResult;
-    case "PICKACARD":
-      $hand = &GetHand(($player == 1 ? 2 : 1));
-      $rand = GetRandom(0, count($hand) - 1);
-      if(RevealCards($hand[$rand], $player) && CardName($hand[$dqVars[0]]) == CardName($hand[$rand])) {
-        WriteLog("Bingo! Your opponent tossed you a silver.");
-        PutItemIntoPlayForPlayer("EVR195", $player);
-      }
-      return $lastResult;
     case "MODAL":
       return ModalAbilities($player, $parameter, $lastResult);
-    case "SCOUR":
-      WriteLog("Scour deals " . $parameter . " arcane damage");
-      DealArcane($parameter, 0, "PLAYCARD", "EVR124", true, $player, resolvedTarget: ($player == 1 ? 2 : 1));
-      return "";
     case "SETABILITYTYPE":
       global $CS_PlayIndex;
       $lastPlayed[2] = $lastResult;

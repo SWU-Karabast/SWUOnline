@@ -27,8 +27,14 @@ function MZDestroy($player, $lastResult)
       case "THEIRHAND": $lastResult = DiscardCard($otherPlayer, $mzIndex[1]); break;
       case "MYCHAR": $lastResult = DestroyCharacter($player, $mzIndex[1]); break;
       case "THEIRCHAR": $lastResult = DestroyCharacter($otherPlayer, $mzIndex[1]); break;
-      case "MYALLY": $lastResult = DestroyAlly($player, $mzIndex[1]); break;
-      case "THEIRALLY": $lastResult = DestroyAlly($otherPlayer, $mzIndex[1]); break;
+      case "MYALLY":
+        $ally = new Ally("MYALLY-" . $mzIndex[1], $player);
+        $lastResult = $ally->Destroy();
+        break;
+      case "THEIRALLY":
+        $ally = new Ally("MYALLY-" . $mzIndex[1], $otherPlayer);
+        $lastResult = $ally->Destroy();
+        break;
       case "MYAURAS": $lastResult = DestroyAura($player, $mzIndex[1]); break;
       case "THEIRAURAS": $lastResult = DestroyAura($otherPlayer, $mzIndex[1]); break;
       case "MYITEMS": $lastResult = DestroyItemForPlayer($player, $mzIndex[1]); break;

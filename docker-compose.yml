@@ -6,7 +6,7 @@ services:
       context: .
     restart: always
     volumes:
-      - "./:/var/www/html/SWUOnline"
+      - "./:/var/www/html/SWUOnline:Z"
     command: bash "/var/www/html/SWUOnline/docker-entrypoint.sh"
     ports:
       - "8080:80"

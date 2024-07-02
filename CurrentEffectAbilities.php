@@ -106,6 +106,7 @@ function EffectAttackModifier($cardID)
     case "3038238423": return 2;//Fleet Lieutenant
     case "9757839764": return 2;//Adelphi Patrol Wing
     case "3208391441": return -2;//Make an Opening
+    case "9999079491": return -2;//Mystic Reflection
     case "6432884726": return 2;//Steadfast Battalion
     case "8244682354": return -1;//Jyn Erso
     case "8600121285": return 1;//IG-88
@@ -132,6 +133,13 @@ function EffectAttackModifier($cardID)
     case "1312599620": return -3;//Smuggler's Starfighter
     case "8107876051": return -3;//Enfy's Nest
     case "9334480612": return 1;//Boba Fett Green Leader
+    case "6962053552": return 2;//Desperate Attack
+    case "4085341914": return 4;//Heroic Resolve
+    case "1938453783": return 2;//Armed to the Teeth
+    case "6263178121": return 2;//Kylo Ren (Killing the Past)
+    case "7578472075"://Let the Wookie Win
+      $attacker = new Ally(AttackerMZID($mainPlayer), $mainPlayer);
+      return TraitContains($attacker->CardID(), "Wookiee", $mainPlayer) ? 2 : 0;
     default: return 0;
   }
 }
@@ -507,6 +515,10 @@ function CurrentEffectEndTurnAbilities()
       case "1910812527":
         DealDamageAsync($currentTurnEffects[$i+1], 999999);
         break;
+      case "6117103324"://Jetpack
+        $ally = new Ally("MYALLY-" . SearchAlliesForUniqueID($currentTurnEffects[$i+2], $currentTurnEffects[$i+1]), $currentTurnEffects[$i+1]);
+        $ally->DefeatUpgrade("8752877738");
+        break;
       default: break;
     }
     if($remove) RemoveCurrentTurnEffect($i);
@@ -592,6 +604,7 @@ function IsCombatEffectActive($cardID)
     case "4721657243": return true;//Kihraxz Heavy Fighter
     case "7171636330": return true;//Chain Code Collector
     case "8107876051": return true;//Enfy's Nest
+    case "7578472075": return true;//Let the Wookie Win
     default: return false;
   }
 }
