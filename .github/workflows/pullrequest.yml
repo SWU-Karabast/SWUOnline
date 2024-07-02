@@ -5,6 +5,20 @@ on:
       - main
       - merge-pr-actions
 jobs:
+  # this job checks changes to specific files / folders so we can filter other jobs based on the changes
+  changes:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      unimplemented-cards: ${{ steps.filter.outputs.unimplemented-cards }}
+    steps:
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            UnimplementedCards:
+              - 'UnimplementedCards/**'
   lint:
     runs-on: ubuntu-latest
     steps:
@@ -13,17 +27,10 @@ jobs:
       - name: Run linter script
         run: ./DevTools/scripts/lint_php.sh
   check-unimplemented-readme:
+    needs: changes
+    if: ${{ needs.changes.outputs.unimplemented-cards == 'true' }}
     runs-on: ubuntu-latest
-    permissions:
-      pull-requests: read
     steps:
-      # use a filter to disable this action unless there's a change to UnimplementedCards
-      - uses: dorny/paths-filter@v3
-        id: filter
-        with:
-          filters: |
-            UnimplementedCards:
-              - 'UnimplementedCards/**'
       - name: Check out repo
         uses: actions/checkout@v4
       - name: Install Python
