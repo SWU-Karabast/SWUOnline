@@ -3,6 +3,7 @@ on:
   pull_request:
     branches:
       - main
+      - merge-pr-actions
 jobs:
   lint:
     runs-on: ubuntu-latest
