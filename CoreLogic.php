@@ -35,26 +35,6 @@ function EvaluateCombatChain(&$totalAttack, &$totalDefense, &$attackModifiers=[]
       }
     }
 
-    /*
-    //Now check current turn effects
-    for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnPieces())
-    {
-      if(IsCombatEffectActive($currentTurnEffects[$i]) && !IsCombatEffectLimited($i))
-      {
-        if($currentTurnEffects[$i+1] == $mainPlayer)
-        {
-          $attack = EffectAttackModifier($currentTurnEffects[$i]);
-          if(($canGainAttack || $attack < 0) && !($snagActive && $currentTurnEffects[$i] == $combatChain[0]))
-          {
-            array_push($attackModifiers, $currentTurnEffects[$i]);
-            array_push($attackModifiers, $attack);
-            AddAttack($totalAttack, $attack);
-          }
-        }
-      }
-    }
-    */
-
     if($combatChainState[$CCS_WeaponIndex] != -1)
     {
       $attack = 0;
@@ -4334,6 +4314,18 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("SPECIFICCARD", $currentPlayer, "HUNTEROUTCASTSERGEANT", 1);
       }
+      break;
+    case "4663781580"://Swoop Down
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:arena=Space");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to attack with", 1);
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "4663781580,HAND", 1);
+      AddDecisionQueue("ADDCURRENTEFFECT", $otherPlayer, "4663781580", 1);
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
       break;
     default: break;
   }

@@ -1510,7 +1510,7 @@ function GetTargetOfAttack($attackID)
   }
   $allies = &GetAllies($defPlayer);
   for($i = 0; $i < count($allies); $i += AllyPieces()) {
-    if($attacker->CardID() != "5464125379" && CardArenas($attacker->CardID()) != CardArenas($allies[$i])) continue;//Strafing Gunship
+    if($attacker->CardID() != "5464125379" && CardArenas($attacker->CardID()) != CardArenas($allies[$i]) && !SearchCurrentTurnEffects("4663781580", $mainPlayer)) continue;//Strafing Gunship, Swoop Down
     if(!AllyCanBeAttackTarget($defPlayer, $i, $allies[$i])) continue;
     if($targets != "") $targets .= ",";
     $targets .= "THEIRALLY-" . $i;
