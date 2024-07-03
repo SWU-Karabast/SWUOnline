@@ -66,6 +66,7 @@ class Ally {
       $healed = $amount - ($this->Health() - $this->MaxHealth());
       $this->allies[$this->index+2] = $this->MaxHealth();
     }
+    AddEvent("RESTORE", $this->UniqueID() . "!" . $healed);
     return $healed;
   }
 
