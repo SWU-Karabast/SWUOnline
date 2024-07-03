@@ -580,8 +580,9 @@ function Restore($amount, $player)
   }
   $health = &GetHealth($player);
   WriteLog("Player " . $player . " gained " . $amount . " health.");
+  if($amount > $health) $amount = $health;
   $health -= $amount;
-  if($health < 0) $health = 0;
+  AddEvent("RESTORE", "P" . $player . "BASE!" . $amount);
   return true;
 }
 
