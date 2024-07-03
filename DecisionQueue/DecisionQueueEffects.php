@@ -454,6 +454,20 @@ function SpecificCardLogic($player, $card, $lastResult)
       WriteLog(CardLink($cardID, $cardID) . " is returned by " . CardLink("0254929700", "0254929700"));
       AddHand($player, $cardID);
       return $lastResult;
+    case "ENDLESSLEGIONS":
+      $resources = &GetResourceCards($player);
+      $cardsToPlay = [];
+      AddCurrentTurnEffect("5576996578", $player);
+      for($i=count($resources)-ResourcePieces(); $i>=0; $i-=ResourcePieces()) {
+        if(DefinedTypesContains($resources[$i], "Unit", $player)) {
+          $resourceCard = RemoveResource($player, $i);
+          array_push($cardsToPlay, $resourceCard);
+        }
+      }
+      for($i=0; $i<count($cardsToPlay); ++$i) {
+        PlayCard($cardsToPlay[$i], "RESOURCES");
+      }
+      return 1;
     default: return "";
   }
 }
