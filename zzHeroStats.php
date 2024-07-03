@@ -62,6 +62,7 @@ FROM completedgame
 WHERE WinningHero=? and LosingHero<>\"DUMMY\" and numTurns > 1
 GROUP by LosingHero
 ORDER BY Count";
+$conn = GetDBConnection();
 $stmt = mysqli_stmt_init($conn);
 if (!mysqli_stmt_prepare($stmt, $sql)) {
   echo ("ERROR");
@@ -176,6 +177,7 @@ while ($row = mysqli_fetch_array($loseCardData, MYSQLI_NUM)) {
     ++$cardData[$card][1];
   }
 }
+mysqli_close($conn);
 
 echo ("<div id='wrapper' style='text-align: center; position:relative;'>");
 

@@ -75,6 +75,7 @@ group by LosingHero
 ) AS internalQuery
 GROUP BY Hero
 ORDER BY Total DESC";
+$conn = GetDBConnection();
 $stmt = mysqli_stmt_init($conn);
 if (!mysqli_stmt_prepare($stmt, $sql)) {
   //header("location: ../Signup.php?error=stmtfailed");
@@ -125,6 +126,7 @@ while ($row = mysqli_fetch_array($winData, MYSQLI_NUM)) {
   for ($i = 0; $i < count($gameData) && $gameData[$i][0] != $heroID; ++$i);
   array_push($gameData[$i], $row[1]);
 }
+mysqli_close($conn);
 
 echo ("<div id='wrapper' style='text-align: center; position:relative;'>");
 

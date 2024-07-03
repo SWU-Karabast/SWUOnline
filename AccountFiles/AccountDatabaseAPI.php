@@ -54,9 +54,11 @@ function PasswordLogin($username, $password, $rememberMe) {
 			storeRememberMeCookie($conn, $_SESSION["useruid"], $cookie);
 		}
 		session_write_close();
+		mysqli_close($conn);
 
 		return true;
   }
+  mysqli_close($conn);
   return false;
 }
 
