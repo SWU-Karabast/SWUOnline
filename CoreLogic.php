@@ -4327,6 +4327,17 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
       break;
+    case "9752523457"://Finalizer
+      $allies = &GetAllies($currentPlayer);
+      for($i=0; $i<count($allies); $i+=AllyPieces()) {
+        $ally = new Ally("MYALLY-" . $i, $currentPlayer);
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader", 1);
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit for " . CardLink($ally->CardID(), $ally->CardID()) . " to capture (must be in same arena)", 1);
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "CAPTURE," . $ally->UniqueID(), 1);
+      }
+      break;
     default: break;
   }
 }
