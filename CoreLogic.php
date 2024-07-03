@@ -4290,6 +4290,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "REDUCEHEALTH,2", 1);
       }
       break;
+    case "5576996578"://Endless Legions
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "ENDLESSLEGIONS");
+      break;
     default: break;
   }
 }
