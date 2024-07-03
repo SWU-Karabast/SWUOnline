@@ -21,6 +21,7 @@ if (isset($_POST['reset-password-submit'])) {
 
   require 'dbh.inc.php';
 
+	$conn = GetDBConnection();
   $sql = "SELECT * FROM pwdReset WHERE pwdResetSelector=? AND pwdResetExpires >= ?";
   $stmt = mysqli_stmt_init($conn);
   if (!mysqli_stmt_prepare($stmt, $sql)) {
@@ -77,10 +78,12 @@ if (isset($_POST['reset-password-submit'])) {
               $stmt = mysqli_stmt_init($conn);
               if (!mysqli_stmt_prepare($stmt, $sql)) {
                 echo "There was an issue deleting the password request.";
+                mysqli_close($conn);
                 exit();
               } else {
                 mysqli_stmt_bind_param($stmt, "s", $tokenEmail);
                 mysqli_stmt_execute($stmt);
+                mysqli_close($conn);
                 header("Location: ../Signup.php?newpwd=passwordupdated");
               }
 

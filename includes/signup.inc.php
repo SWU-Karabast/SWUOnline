@@ -14,6 +14,7 @@ if (isset($_POST["submit"])) {
   require_once "dbh.inc.php";
   require_once 'functions.inc.php';
 
+	$conn = GetDBConnection();
   // We set the functions "!== false" since "=== true" has a risk of giving us the wrong outcome
   if (emptyInputSignup($username, $email, $pwd, $pwdRepeat) !== false) {
     header("location: ../Signup.php?error=emptyinput");
@@ -46,6 +47,7 @@ if (isset($_POST["submit"])) {
   // Now we insert the user into the database
   createUser($conn, $username, $email, $pwd);
   createUser($conn, $username, $email, $pwd, true);
+  mysqli_close($conn);
 
 } else {
 	header("location: ../Signup.php");
