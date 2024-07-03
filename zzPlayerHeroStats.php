@@ -60,6 +60,7 @@ h3 {
 
 echo ("<div id=\"cardDetail\" style=\"z-index:100000; display:none; position:fixed;\"></div>");
 
+$conn = GetDBConnection();
 $sql = "SELECT WinningHero,LosingHero,count(WinningHero) AS Count,WinnerDeck
 FROM completedgame
 WHERE WinningHero=? and LosingHero<>\"DUMMY\" and WinningPID=?
@@ -179,6 +180,7 @@ while ($row = mysqli_fetch_array($loseCardData, MYSQLI_NUM)) {
     ++$cardData[$card][1];
   }
 }
+mysqli_close($conn);
 echo ("<div id='wrapper' style='position:fixed; top:60px; height:calc(100% - 100px); background-color:rgba(0,0,0,.8); text-align: center; overflow-y:scroll'>");
 
 //echo ("<section>");
