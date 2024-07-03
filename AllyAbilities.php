@@ -160,7 +160,7 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
     CollectBounties($player, $index);
     IncrementClassState($player, $CS_NumAlliesDestroyed);
   }
-  if(!IsLeader($cardID, $player)) IncrementClassState($player, $CS_NumLeftPlay);
+  IncrementClassState($player, $CS_NumLeftPlay);
   AllyLeavesPlayAbility($player, $index);
   $ally = new Ally("MYALLY-" . $index, $player);
   $upgrades = $ally->GetUpgrades();
