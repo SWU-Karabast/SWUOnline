@@ -16,6 +16,7 @@ if (isset($_POST['reset-request-submit'])) {
   // Then we grab the e-mail the user submitted from the form.
   $userEmail = $_POST["email"];
 
+	$conn = GetDBConnection();
   // Finally we delete any existing entries.
   $sql = "DELETE FROM pwdReset WHERE pwdResetEmail=?";
   $stmt = mysqli_stmt_init($conn);
