@@ -1493,6 +1493,12 @@ function SpecificAllyAttackAbilities($attackID)
     case "8380936981"://Jabba's Rancor
       JabbasRancor($mainPlayer, $attackerAlly->Index());
       break;
+    case "c9ff9863d7"://Hunter (Outcast Sergeant)
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYRESOURCES");
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a resource to reveal", 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("SPECIFICCARD", $mainPlayer, "HUNTEROUTCASTSERGEANT", 1);
+      break;
     default: break;
   }
 }

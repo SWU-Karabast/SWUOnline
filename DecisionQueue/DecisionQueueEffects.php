@@ -468,6 +468,19 @@ function SpecificCardLogic($player, $card, $lastResult)
         PlayCard($cardsToPlay[$i], "RESOURCES");
       }
       return 1;
+    case "HUNTEROUTCASTSERGEANT":
+      $chosenResourceIndex = explode("-", $lastResult)[1];
+      $resourceCardID = &GetResourceCards($player)[$chosenResourceIndex];
+      $resourceTitle = CardTitle($resourceCardID);
+      RevealCards($resourceCardID, $player, "RESOURCES");
+      if(CardIsUnique($resourceCardID) && SearchAlliesForTitle($player, $resourceTitle) != "") {
+        //Technically only the ally in play needs to be unique, but I'm going to assume that if the resource card is unique
+        //and the ally in play shares a name with it then the ally in play is unique.
+        //If for some reason cards are printed that make this not guaranteed we can make the check more rigorous.
+        MZBounce($player, $lastResult);
+        AddTopDeckAsResource($player);
+      }
+      return 1;
     default: return "";
   }
 }

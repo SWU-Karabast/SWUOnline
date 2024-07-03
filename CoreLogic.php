@@ -4325,6 +4325,15 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("NOPASS", $currentPlayer, "-", 1);
         AddDecisionQueue("OP", $currentPlayer, "ADDTOPDECKASRESOURCE", 1);
       }
+        break;
+    case "8709191884"://Hunter (Outcast Sergeant)
+      $abilityName = GetResolvedAbilityName($cardID, $from);
+      if($abilityName == "Replace Resource") {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYRESOURCES");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a resource to reveal", 1);
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("SPECIFICCARD", $currentPlayer, "HUNTEROUTCASTSERGEANT", 1);
+      }
       break;
     default: break;
   }

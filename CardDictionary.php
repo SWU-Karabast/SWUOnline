@@ -339,6 +339,7 @@ function HasOverwhelm($cardID, $player, $index)
     case "2556508706"://Resourceful Pursuers
     case "3803148745"://Ruthless Assassin
     case "1743599390"://Trandoshan Hunters
+    case "c9ff9863d7"://Hunter (Outcast Sergeant)
       return true;
     case "4619930426"://First Legion Snowtrooper
       $target = GetAttackTarget();
@@ -631,6 +632,8 @@ function AbilityCost($cardID, $index=-1)
       return $abilityName == "Experience" ? 1 : 0;
     case "0911874487"://Fennec Shand
       return $abilityName == "Ambush" ? 1 : 0;
+    case "8709191884"://Hunter (Outcast Sergeant)
+      return $abilityName == "Replace Resource" ? 1 : 0;
     default: break;
   }
   if(IsAlly($cardID)) return 0;
@@ -833,6 +836,9 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
     case "9596662994"://Finn
       $abilityTypes = "A";
       break;
+    case "8709191884"://Hunter (Outcast Sergeant)
+      $abilityTypes = "A";
+      break;
     default: break;
   }
   if(IsAlly($cardID, $currentPlayer)) {
@@ -996,6 +1002,8 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
     case "9596662994"://Finn
       $abilityNames = "Shield";
       break;
+    case "8709191884"://Hunter (Outcast Sergeant)
+      $abilityNames = "Replace Resource";
     default: break;
   }
   if(IsAlly($cardID, $currentPlayer)) {
@@ -1299,6 +1307,8 @@ function LeaderUnit($cardID) {
       return "f928681d36";
     case "9596662994"://Finn
       return "8903067778";
+    case "8709191884"://Hunter (Outcast Sergeant)
+      return "c9ff9863d7";
     default: return "";
   }
 }
@@ -1377,6 +1387,8 @@ function LeaderUndeployed($cardID) {
       return "0622803599";
     case "8903067778"://Finn
       return "9596662994";
+    case "c9ff9863d7"://Hunter (Outcast Sergeant)
+      return "8709191884";
     default: return "";
   }
 }
