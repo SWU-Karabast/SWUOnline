@@ -695,6 +695,7 @@
                       element.animate(exhaustAnimation,timing);
                     }
                     if(timeoutAmount > 0) setTimeout(RenderUpdate, timeoutAmount, responseArr[2]);
+                    else RenderUpdate(responseArr[2]);
                   }
                 }
               }
