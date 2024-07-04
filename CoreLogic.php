@@ -2549,7 +2549,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "8294130780"://Gladiator Star Destroyer
       if($from != "PLAY") {
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to give Sentinel");
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "WRITECHOICE", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
