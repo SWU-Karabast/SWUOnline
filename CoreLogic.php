@@ -4339,6 +4339,17 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "CAPTURE," . $ally->UniqueID(), 1);
       }
       break;
+    case "6425029011"://Altering the Deal
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "hasCaptives=0", 1);
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a friendly unit to discard a captive from.", 1);
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETCAPTIVES", 1);
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a captive to discard", 1);
+      AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
+      AddDecisionQueue("OP", $currentPlayer, "DISCARDCAPTIVE", 1);
+      break;
     default: break;
   }
 }
