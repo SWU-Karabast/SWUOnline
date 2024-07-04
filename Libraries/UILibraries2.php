@@ -371,7 +371,7 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
   }
 
   //Card Power style
-  if (isset($opts) && isset($opts['currentPower']) && $opts['currentPower'] != 0) {
+  if (isset($opts) && isset($opts['currentPower']) && $opts['currentPower'] >= 0) {
     $bgImage = "./Images/attack_v2.png";
     $left = "-2px";
     $top = "67px";
