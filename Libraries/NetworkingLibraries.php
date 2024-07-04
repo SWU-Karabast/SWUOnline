@@ -1299,8 +1299,8 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
       //CR 5.1.4. Declare Modes and Targets
       //CR 5.1.4a Declare targets for resolution abilities
       if($from != "PLAY" && ($turn[0] != "B" || (count($layers) > 0 && $layers[0] != ""))) GetLayerTarget($cardID);
-      //CR 5.1.4b Declare target of attack
-      AddDecisionQueue("GETTARGETOFATTACK", $currentPlayer, $cardID . "," . $from);
+      //Right now only units in play can attack
+      if($from == "PLAY") AddDecisionQueue("GETTARGETOFATTACK", $currentPlayer, $cardID . "," . $from);
 
       if($dynCost == "") AddDecisionQueue("PASSPARAMETER", $currentPlayer, "0");
       else AddDecisionQueue("GETCLASSSTATE", $currentPlayer, $CS_LastDynCost);
@@ -1510,7 +1510,7 @@ function GetTargetOfAttack($attackID)
   }
   $allies = &GetAllies($defPlayer);
   for($i = 0; $i < count($allies); $i += AllyPieces()) {
-    if($attacker->CardID() != "5464125379" && CardArenas($attacker->CardID()) != CardArenas($allies[$i])) continue;//Strafing Gunship
+    if($attacker->CardID() != "5464125379" && CardArenas($attacker->CardID()) != CardArenas($allies[$i]) && !SearchCurrentTurnEffects("4663781580", $mainPlayer)) continue;//Strafing Gunship, Swoop Down
     if(!AllyCanBeAttackTarget($defPlayer, $i, $allies[$i])) continue;
     if($targets != "") $targets .= ",";
     $targets .= "THEIRALLY-" . $i;

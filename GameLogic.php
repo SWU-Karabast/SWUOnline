@@ -430,18 +430,25 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $uniqueID = AllyTakeControl($player, $index);
           return $uniqueID;
         case "CAPTURE":
-          $cardID = MZRemove($player, $lastResult);
-          if($cardID == "1810342362") return $cardID;//Lurking TIE Phantom
+          $cardID = GetMZCard($player, $lastResult);
+          if($cardID == "1810342362") {//Lurking TIE Phantom
+            WriteLog(CardLink($cardID, $cardID) . " avoided capture.");
+            return $cardID;
+          }
           if($cardID == "3417125055")//IG-11
           {
+            DestroyAlly(($player == 1 ? 2 : 1), explode("-", $lastResult)[1]);
             $allies = &GetAllies($player);
             for($i=count($allies)-AllyPieces(); $i>=0; $i-=AllyPieces())
             {
               $ally = new Ally("MYALLY-" . $i, $player);
               if(ArenaContains($ally->CardID(), "Ground", $player)) $ally->DealDamage(3);
             }
+            WriteLog(CardLink($cardID, $cardID) . " resisted capture.");
             return $cardID;
           }
+          CollectBounties(substr($lastResult, 0, 2) == "MY" ? $player : ($player == 1 ? 2 : 1), explode("-", $lastResult)[1]);
+          MZRemove($player, $lastResult);
           $uniqueID = $parameterArr[1];
           $index = SearchAlliesForUniqueID($uniqueID, $player);
           if($index >= 0) {
@@ -1230,8 +1237,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $index = GetAbilityIndex($parameter, GetClassState($player, $CS_PlayIndex), $lastResult);
       SetClassState($player, $CS_AbilityIndex, $index);
       if(IsAlly($parameter, $player) && AllyDoesAbilityExhaust($parameter, $index)) {
-        $allies = &GetAllies($player);
-        $allies[GetClassState($player, $CS_PlayIndex)+1] = 1;
+        $ally = new Ally("MYALLY-" . GetClassState($player, $CS_PlayIndex), $player);
+        $ally->Exhaust();
       }
       $names = explode(",", GetAbilityNames($parameter, GetClassState($player, $CS_PlayIndex)));
       WriteLog(implode(" ", explode("_", $names[$index])) . " ability was chosen.");
@@ -1419,9 +1426,6 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         $auras[$lastResult[$i] + 1] = 1;
       }
       return "";
-    case "CARDDISCARDED":
-      CardDiscarded($player, $lastResult);
-      return $lastResult;
     case "NEGATE":
       NegateLayer($parameter);
       return "";
