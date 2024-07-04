@@ -436,7 +436,7 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
         AddDecisionQueue("FILTER", $player, "LastResult-include-definedType-Unit", 1);
         AddDecisionQueue("FILTER", $player, "LastResult-include-maxCost-2", 1);
         AddDecisionQueue("CHOOSECARD", $player, "<-", 1);
-        AddDecisionQueue("ADDDISCARD", $player, "HAND,TT", 1);
+        AddDecisionQueue("ADDDISCARD", $player, "HAND,TTFREE", 1);
         AddDecisionQueue("REVEALCARDS", $player, "-", 1);
         AddDecisionQueue("OP", $player, "REMOVECARD", 1);
         AddDecisionQueue("ALLRANDOMBOTTOM", $player, "DECK");

@@ -680,7 +680,9 @@ function ReplaceBanishModifier($player, $oldMod, $newMod)
 function UnsetTurnModifiers()
 {
   UnsetDiscardModifier(1, "TT");
+  UnsetDiscardModifier(1, "TTFREE");
   UnsetDiscardModifier(2, "TT");
+  UnsetDiscardModifier(2, "TTFREE");
 }
 
 function UnsetTurnBanish()

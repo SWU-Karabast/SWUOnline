@@ -1091,7 +1091,7 @@ function IsPlayable($cardID, $phase, $from, $index = -1, &$restriction = null, $
   if($phase == "M" && $from == "GY") {
     $discard = &GetDiscard($player);
     if($discard[$index] == "4843813137") return true;//Brutal Traditions
-    return $discard[$index+1] == "TT" ? true : false;
+    return $discard[$index+1] == "TT" || $discard[$index+1] == "TTFREE" ? true : false;
   }
   $isStaticType = IsStaticType($cardType, $from, $cardID);
   if($isStaticType) {
@@ -1640,7 +1640,7 @@ function PlayableFromBanish($cardID, $mod="")
 {
   global $currentPlayer, $CS_NumNonAttackCards, $CS_Num6PowBan;
   $mod = explode("-", $mod)[0];
-  if($mod == "TCL" || $mod == "TT" || $mod == "TCC" || $mod == "NT" || $mod == "INST") return true;
+  if($mod == "TCL" || $mod == "TT" || $mod == "TTFREE" || $mod == "TCC" || $mod == "NT" || $mod == "INST") return true;
   switch($cardID) {
 
     default: return false;
