@@ -340,6 +340,7 @@ function HasOverwhelm($cardID, $player, $index)
     case "3803148745"://Ruthless Assassin
     case "1743599390"://Trandoshan Hunters
     case "c9ff9863d7"://Hunter (Outcast Sergeant)
+    case "9752523457"://Finalizer
       return true;
     case "4619930426"://First Legion Snowtrooper
       $target = GetAttackTarget();
@@ -473,6 +474,7 @@ function HasSaboteur($cardID, $player, $index)
     if($currentTurnEffects[$i+1] != $player) continue;
     if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
     switch($currentTurnEffects[$i]) {
+      case "4663781580": return true;//Swoop Down
       case "9210902604": return true;//Precision Fire
       default: break;
     }
