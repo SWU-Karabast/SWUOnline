@@ -663,23 +663,26 @@
                   for(var i=0; i<eventsArr.length; i+=2) {
                     var eventType = eventsArr[i];//DAMAGE
                     if(eventType == "DAMAGE") {
-                      if(timeoutAmount < 500) timeoutAmount = 500;
                       var eventArr = eventsArr[i+1].split("!");
                       //Now do the animation
                       if(eventArr[0] == "P1BASE" || eventArr[0] == "P2BASE") var element = document.getElementById(eventArr[0]);
                       else var element = document.getElementById("unique-" + eventArr[0]);
-                      element.innerHTML += "<div class='dmg-animation' style='position:absolute; text-align:center; font-size:36px; top: 0px; left:-2px; width:100%; height: calc(100% - 8px); padding: 0 2px; border-radius:12px; background-color:rgba(255,0,0,0.5); z-index:1000;'><div style='padding: 25px 0; width:100%; height:100%:'></div></div>";
-                      element.innerHTML += "<div style='position:absolute; text-align:center; animation-name: move; animation-duration: 0.6s; font-size:34px; font-weight: 600; text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.60); top:0px; left:0px; width:100%; height:100%; background-color:rgba(0,0,0,0); z-index:1000;'><div style='padding: 25px 0; width:100%; height:100%:'>-" + eventArr[1] + "</div></div>";
+                      if(!!element) {
+                        if(timeoutAmount < 500) timeoutAmount = 500;
+                        element.innerHTML += "<div class='dmg-animation' style='position:absolute; text-align:center; font-size:36px; top: 0px; left:-2px; width:100%; height: calc(100% - 8px); padding: 0 2px; border-radius:12px; background-color:rgba(255,0,0,0.5); z-index:1000;'><div style='padding: 25px 0; width:100%; height:100%:'></div></div>";
+                        element.innerHTML += "<div style='position:absolute; text-align:center; animation-name: move; animation-duration: 0.6s; font-size:34px; font-weight: 600; text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.60); top:0px; left:0px; width:100%; height:100%; background-color:rgba(0,0,0,0); z-index:1000;'><div style='padding: 25px 0; width:100%; height:100%:'>-" + eventArr[1] + "</div></div>";
+                      }
                     } else if(eventType == "RESTORE") {
-                      if(timeoutAmount < 500) timeoutAmount = 500;
                       var eventArr = eventsArr[i+1].split("!");
                       //Now do the animation
                       if(eventArr[0] == "P1BASE" || eventArr[0] == "P2BASE") var element = document.getElementById(eventArr[0]);
                       else var element = document.getElementById("unique-" + eventArr[0]);
-                      element.innerHTML += "<div class='dmg-animation' style='position:absolute; text-align:center; font-size:36px; top: 0px; left:-2px; width:100%; height: calc(100% - 8px); padding: 0 2px; border-radius:12px; background-color:rgba(95,167,219,0.5); z-index:1000;'><div style='padding: 25px 0; width:100%; height:100%:'></div></div>";
-                      element.innerHTML += "<div style='position:absolute; text-align:center; animation-name: move; animation-duration: 0.6s; font-size:34px; font-weight: 600; text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.60); top:0px; left:0px; width:100%; height:100%; background-color:rgba(0,0,0,0); z-index:1000;'><div style='padding: 25px 0; width:100%; height:100%:'>+" + eventArr[1] + "</div></div>";
+                      if(!!element) {
+                        if(timeoutAmount < 500) timeoutAmount = 500;
+                        element.innerHTML += "<div class='dmg-animation' style='position:absolute; text-align:center; font-size:36px; top: 0px; left:-2px; width:100%; height: calc(100% - 8px); padding: 0 2px; border-radius:12px; background-color:rgba(95,167,219,0.5); z-index:1000;'><div style='padding: 25px 0; width:100%; height:100%:'></div></div>";
+                        element.innerHTML += "<div style='position:absolute; text-align:center; animation-name: move; animation-duration: 0.6s; font-size:34px; font-weight: 600; text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.60); top:0px; left:0px; width:100%; height:100%; background-color:rgba(0,0,0,0); z-index:1000;'><div style='padding: 25px 0; width:100%; height:100%:'>+" + eventArr[1] + "</div></div>";
+                      }
                     } else if(eventType == "EXHAUST") {
-                      if(timeoutAmount < 60) timeoutAmount = 60;
                       var eventArr = eventsArr[i+1].split("!");
                       //Now do the animation
                       if(eventArr[0] == "P1BASE" || eventArr[0] == "P2BASE") var element = document.getElementById(eventArr[0]);
@@ -692,11 +695,16 @@
                         { transform: "rotate(0deg) scale(1)" },
                         { transform: "rotate(5deg) scale(1)" },
                       ];
-                      element.animate(exhaustAnimation,timing);
+                      if(!!element) {
+                        if(timeoutAmount < 60) timeoutAmount = 60;
+                        element.animate(exhaustAnimation,timing);
+                        element.innerHTML += "<div style='position:absolute; text-align:center; font-size:36px; top: 0px; left:-2px; width:100%; height: calc(100% - 16px); padding: 0 2px; border-radius:12px; background-color:rgba(0,0,0,0.5);'><div style='width:100%; height:100%:'></div></div>";
+                        element.className += "exhausted";
+                      }
                     }
-                    if(timeoutAmount > 0) setTimeout(RenderUpdate, timeoutAmount, responseArr[2]);
-                    else RenderUpdate(responseArr[2]);
                   }
+                  if(timeoutAmount > 0) setTimeout(RenderUpdate, timeoutAmount, responseArr[2]);
+                  else RenderUpdate(responseArr[2]);
                 }
               }
               else RenderUpdate(responseArr[2]);
