@@ -132,9 +132,9 @@
         border = "";
         if (borderColor != -1) margin = borderColor > 0 ? "margin:0px;" : "margin:1px;";
         if (folder == "crops") margin = "0px;";
-        
+
         var rv = "<a style='" + margin + " position:relative; display:inline-block;" + (action > 0 ? "cursor:pointer;" : "") + "'" + (showHover > 0 ? " onmouseover='ShowCardDetail(event, this)' onmouseout='HideCardDetail()'" : "") + (action > 0 ? " onclick='SubmitInput(\"" + action + "\", \"&cardID=" + actionData + "\");'" : "") + ">";
-        
+
         if (borderColor > 0) {
           border = "border-radius:8px; border:2px solid " + BorderColorMap(borderColor) + ";";
         } else if (folder == "concat") {
@@ -142,7 +142,7 @@
         } else {
           border = "border: 1px solid transparent;";
         }
-        
+
         var orientation = landscape == 1 ? "data-orientation='landscape'" : "";
         if(rotate == 1 || landscape == 1) {
           height = (maxHeight);
@@ -659,18 +659,43 @@
                   var popup = document.getElementById("CHOOSEMULTIZONE");
                   if(!popup) popup = document.getElementById("MAYCHOOSEMULTIZONE");
                   if(popup) popup.style.display = "none";
-                  setTimeout(RenderUpdate, 500, responseArr[2]);
+                  var timeoutAmount = 0;
                   for(var i=0; i<eventsArr.length; i+=2) {
                     var eventType = eventsArr[i];//DAMAGE
                     if(eventType == "DAMAGE") {
+                      if(timeoutAmount < 500) timeoutAmount = 500;
                       var eventArr = eventsArr[i+1].split("!");
                       //Now do the animation
                       if(eventArr[0] == "P1BASE" || eventArr[0] == "P2BASE") var element = document.getElementById(eventArr[0]);
                       else var element = document.getElementById("unique-" + eventArr[0]);
                       element.innerHTML += "<div class='dmg-animation' style='position:absolute; text-align:center; font-size:36px; top: 0px; left:-2px; width:100%; height: calc(100% - 8px); padding: 0 2px; border-radius:12px; background-color:rgba(255,0,0,0.5); z-index:1000;'><div style='padding: 25px 0; width:100%; height:100%:'></div></div>";
                       element.innerHTML += "<div style='position:absolute; text-align:center; animation-name: move; animation-duration: 0.6s; font-size:34px; font-weight: 600; text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.60); top:0px; left:0px; width:100%; height:100%; background-color:rgba(0,0,0,0); z-index:1000;'><div style='padding: 25px 0; width:100%; height:100%:'>-" + eventArr[1] + "</div></div>";
+                    } else if(eventType == "RESTORE") {
+                      if(timeoutAmount < 500) timeoutAmount = 500;
+                      var eventArr = eventsArr[i+1].split("!");
+                      //Now do the animation
+                      if(eventArr[0] == "P1BASE" || eventArr[0] == "P2BASE") var element = document.getElementById(eventArr[0]);
+                      else var element = document.getElementById("unique-" + eventArr[0]);
+                      element.innerHTML += "<div class='dmg-animation' style='position:absolute; text-align:center; font-size:36px; top: 0px; left:-2px; width:100%; height: calc(100% - 8px); padding: 0 2px; border-radius:12px; background-color:rgba(95,167,219,0.5); z-index:1000;'><div style='padding: 25px 0; width:100%; height:100%:'></div></div>";
+                      element.innerHTML += "<div style='position:absolute; text-align:center; animation-name: move; animation-duration: 0.6s; font-size:34px; font-weight: 600; text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.60); top:0px; left:0px; width:100%; height:100%; background-color:rgba(0,0,0,0); z-index:1000;'><div style='padding: 25px 0; width:100%; height:100%:'>+" + eventArr[1] + "</div></div>";
+                    } else if(eventType == "EXHAUST") {
+                      if(timeoutAmount < 60) timeoutAmount = 60;
+                      var eventArr = eventsArr[i+1].split("!");
+                      //Now do the animation
+                      if(eventArr[0] == "P1BASE" || eventArr[0] == "P2BASE") var element = document.getElementById(eventArr[0]);
+                      else var element = document.getElementById("unique-" + eventArr[0]);
+                      const timing = {
+                          duration: 60,
+                          iterations: 1,
+                        };
+                        const exhaustAnimation = [
+                        { transform: "rotate(0deg) scale(1)" },
+                        { transform: "rotate(5deg) scale(1)" },
+                      ];
+                      element.animate(exhaustAnimation,timing);
                     }
-                    
+                    if(timeoutAmount > 0) setTimeout(RenderUpdate, timeoutAmount, responseArr[2]);
+                    else RenderUpdate(responseArr[2]);
                   }
                 }
               }
@@ -757,24 +782,24 @@
     <div id='mainDiv' style='position:fixed; z-index:20; left:0px; top:0px; width:100%; height:100%;'></div>
     <div id='chatbox' style='z-index:40; position:fixed; bottom:20px; right:18px; display:flex;'>
         <?php if ($playerID != 3 && !IsChatMuted()): ?>
-            <input id='chatText' 
-                  style='background: black; color: white; font-size:16px; font-family:barlow; margin-left: 8px; height: 32px; border: 1px solid #454545; border-radius: 5px 0 0 5px;' 
-                  type='text' 
-                  name='chatText' 
-                  value='' 
-                  autocomplete='off' 
+            <input id='chatText'
+                  style='background: black; color: white; font-size:16px; font-family:barlow; margin-left: 8px; height: 32px; border: 1px solid #454545; border-radius: 5px 0 0 5px;'
+                  type='text'
+                  name='chatText'
+                  value=''
+                  autocomplete='off'
                   onkeypress='ChatKey(event)'>
-            <button style='border: 1px solid #454545; border-radius: 0 5px 5px 0; width:55px; height:32px; color: white; margin: 0 0 0 -1px; padding: 0 5px; font-size:16px; font-weight:600; box-shadow: none;' 
+            <button style='border: 1px solid #454545; border-radius: 0 5px 5px 0; width:55px; height:32px; color: white; margin: 0 0 0 -1px; padding: 0 5px; font-size:16px; font-weight:600; box-shadow: none;'
                     onclick='SubmitChat()'>Chat
             </button>
-            <button title='Disable Chat' 
-                    <?= ProcessInputLink($playerID, 26, $SET_MuteChat . "-1", fullRefresh:true); ?> 
+            <button title='Disable Chat'
+                    <?= ProcessInputLink($playerID, 26, $SET_MuteChat . "-1", fullRefresh:true); ?>
                     style='border: 1px solid #454545; color: #1a1a1a; padding: 0; box-shadow: none;'>
                 <img style='height:16px; width:16px; float:left; margin: 7px;' src='./Images/disable.png' />
             </button>
         <?php else: ?>
-            <button title='Re-enable Chat' 
-                    <?= ProcessInputLink($playerID, 26, $SET_MuteChat . "-0", fullRefresh:true); ?> 
+            <button title='Re-enable Chat'
+                    <?= ProcessInputLink($playerID, 26, $SET_MuteChat . "-0", fullRefresh:true); ?>
                     style='border: 1px solid #454545; width: 100%; padding: 0 0 4px 0; height: 32px; font: inherit; box-shadow: none;'>
                 ⌨️ Re-enable Chat
             </button>

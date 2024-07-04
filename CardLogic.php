@@ -10,6 +10,7 @@ function PummelHit($player = -1, $passable = false, $fromDQ = false, $context=""
   if($context == "") $context = "Choose a card to discard";
   if($fromDQ)
   {
+    PrependDecisionQueue("CARDDISCARDED", $player, "-", 1);
     PrependDecisionQueue("ADDDISCARD", $player, "HAND", 1);
     PrependDecisionQueue("MULTIREMOVEHAND", $player, "-", 1);
     if($may) PrependDecisionQueue("MAYCHOOSEHAND", $player, "<-", 1);

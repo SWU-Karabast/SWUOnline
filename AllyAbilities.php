@@ -160,7 +160,7 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
     CollectBounties($player, $index);
     IncrementClassState($player, $CS_NumAlliesDestroyed);
   }
-  if(!IsLeader($cardID, $player)) IncrementClassState($player, $CS_NumLeftPlay);
+  IncrementClassState($player, $CS_NumLeftPlay);
   AllyLeavesPlayAbility($player, $index);
   $ally = new Ally("MYALLY-" . $index, $player);
   $upgrades = $ally->GetUpgrades();
@@ -1498,6 +1498,19 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a resource to reveal", 1);
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("SPECIFICCARD", $mainPlayer, "HUNTEROUTCASTSERGEANT", 1);
+      break;
+    case "9734237871"://Ephant Mon
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
+      AddDecisionQueue("MZFILTER", $mainPlayer, "definedType=Leader");
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to capture another unit");
+      AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("SETDQVAR", $mainPlayer, "0", 1);
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY", 1);
+      AddDecisionQueue("MZFILTER", $mainPlayer, "definedType=Leader", 1);
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to capture (must be in same arena and have attacked your base)", 1);
+      AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "CAPTURE,{0}", 1);
       break;
     default: break;
   }
