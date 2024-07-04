@@ -400,7 +400,9 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
         $discard = &GetDiscard($playerID);
         if($found >= count($discard)) break;
         $cardID = $discard[$found];
+        $modifier = $discard[$found+1];
         if(!IsPlayable($cardID, $turn[0], "GY", $found)) break;
+        if($modifier == "TTFREE") AddCurrentTurnEffect("TTFREE", $playerID);
         RemoveDiscard($playerID, $found);
         PlayCard($cardID, "GY");
       }

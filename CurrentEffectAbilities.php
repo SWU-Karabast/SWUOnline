@@ -213,6 +213,10 @@ function CurrentEffectCostModifiers($cardID, $from)
     $remove = false;
     if($currentTurnEffects[$i + 1] == $currentPlayer) {
       switch($currentTurnEffects[$i]) {
+        case "TTFREE"://Free
+          $costModifier -= 99;
+          $remove = true;
+          break;
         case "5707383130"://Bendu
           if(!AspectContains($cardID, "Heroism", $currentPlayer) && !AspectContains($cardID, "Villainy", $currentPlayer)) {
             $costModifier -= 2;
