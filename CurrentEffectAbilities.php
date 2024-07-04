@@ -85,9 +85,9 @@ function FinalizeChainLinkEffects()
   return false;
 }
 
-function EffectAttackModifier($cardID)
+function EffectAttackModifier($cardID, $playerID="")
 {
-  global $mainPlayer;
+  global $mainPlayer, $defPlayer;
   $params = explode("_", $cardID);
   if(count($params) == 1) {
     $params = explode("-", $cardID);
@@ -140,6 +140,12 @@ function EffectAttackModifier($cardID)
     case "7578472075"://Let the Wookie Win
       $attacker = new Ally(AttackerMZID($mainPlayer), $mainPlayer);
       return TraitContains($attacker->CardID(), "Wookiee", $mainPlayer) ? 2 : 0;
+    case "4663781580"://Swoop Down
+      $attackTarget = GetAttackTarget();
+      if(!IsAllyAttackTarget()) return 0;
+      $ally = new Ally($attackTarget, $defPlayer);
+      $modifier = $playerID == $defPlayer ? -2 : 2;
+      return CardArenas($ally->CardID()) == "Ground" ? $modifier : 0;
     default: return 0;
   }
 }
@@ -609,6 +615,7 @@ function IsCombatEffectActive($cardID)
     case "7171636330": return true;//Chain Code Collector
     case "8107876051": return true;//Enfy's Nest
     case "7578472075": return true;//Let the Wookie Win
+    case "4663781580": return true;//Swoop Down
     default: return false;
   }
 }
