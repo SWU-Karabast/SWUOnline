@@ -145,8 +145,8 @@ function ModalAbilities($player, $card, $lastResult)
             Draw($player);
             break;
           case "Defeat_Upgrades":
-            DefeatUpgrade($player);
-            DefeatUpgrade($player);
+            DefeatUpgrade($player, may:true);
+            DefeatUpgrade($player, may:true);
             break;
           case "Ready_Unit":
             AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:maxAttack=3&THEIRALLY:maxAttack=3");
