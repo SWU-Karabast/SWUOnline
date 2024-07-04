@@ -106,7 +106,7 @@ function AttackModifier($cardID, $player, $index)
       if($player == $defPlayer && GetAttackTarget() == "THEIRALLY-" . $index) $modifier += 2;
       break;
     case "6769342445"://Jango Fett
-      if(IsAllyAttackTarget()) {
+      if(IsAllyAttackTarget() && $player == $mainPlayer) {
         $ally = new Ally(GetAttackTarget(), $defPlayer);
         if($ally->HasBounty()) $modifier += 3;
       }
