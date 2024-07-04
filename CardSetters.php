@@ -20,7 +20,6 @@ function BanishCard(&$banish, &$classState, $cardID, $modifier, $player = "", $f
   global $CS_CardsBanished, $actionPoints, $CS_Num6PowBan, $currentPlayer, $mainPlayer;
   $rv = -1;
   if ($player == "") $player = $currentPlayer;
-  AddEvent("BANISH", ($modifier == "INT" || $modifier == "UZURI" ? "CardBack" : $cardID));
   if(CardType($cardID) != "T") { //If you banish a token, the token ceases to exist.
     $rv = count($banish);
     array_push($banish, $cardID);
@@ -222,7 +221,6 @@ function SetCCAttackModifier($index, $amount)
 function AddMaterial($cardID, $player, $from)
 {
   global $currentPlayer, $mainPlayer, $mainPlayerGamestateStillBuilt;
-  AddEvent("SOUL", $cardID);
   $material = &GetMaterial($player);
   array_push($material, $cardID);
 }
