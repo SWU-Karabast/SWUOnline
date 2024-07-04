@@ -1281,16 +1281,20 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,1", 1);
       break;
     case "5464125379"://Strafing Gunship
-      $target = GetAttackTarget();
-      $ally = new Ally($target, $defPlayer);
-      if(CardArenas($ally->CardID()) == "Ground") {
-        AddCurrentTurnEffect("5464125379", $defPlayer, from:"PLAY");
+      if(IsAllyAttackTarget()) {
+        $target = GetAttackTarget();
+        $ally = new Ally($target, $defPlayer);
+        if(CardArenas($ally->CardID()) == "Ground") {
+          AddCurrentTurnEffect("5464125379", $defPlayer, from:"PLAY");
+        }
       }
       break;
     case "9725921907"://Kintan Intimidator
-      $target = GetAttackTarget();
-      $ally = new Ally($target, $defPlayer);
-      $ally->Exhaust();
+      if(IsAllyAttackTarget()) {
+        $target = GetAttackTarget();
+        $ally = new Ally($target, $defPlayer);
+        $ally->Exhaust();
+      }
       break;
     case "8190373087"://Gentle Giant
       $power = $attackerAlly->CurrentPower();
