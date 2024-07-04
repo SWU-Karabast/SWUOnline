@@ -32,12 +32,13 @@ function PummelHit($player = -1, $passable = false, $fromDQ = false, $context=""
 function DefeatUpgrade($player, $may = false, $search="MYALLY&THEIRALLY") {
   AddDecisionQueue("MULTIZONEINDICES", $player, $search);
   AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to defeat an upgrade from");
-  if ($may) AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+  if($may) AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
   else AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
   AddDecisionQueue("SETDQVAR", $player, 0, 1);
   AddDecisionQueue("MZOP", $player, "GETUPGRADES", 1);
   AddDecisionQueue("SETDQCONTEXT", $player, "Choose an upgrade to defeat");
-  AddDecisionQueue("CHOOSECARD", $player, "<-", 1);
+  if($may) AddDecisionQueue("MAYCHOOSECARD", $player, "<-", 1);
+  else AddDecisionQueue("CHOOSECARD", $player, "<-", 1);
   AddDecisionQueue("OP", $player, "DEFEATUPGRADE", 1);
 }
 

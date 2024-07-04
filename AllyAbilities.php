@@ -436,7 +436,7 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
         AddDecisionQueue("FILTER", $player, "LastResult-include-definedType-Unit", 1);
         AddDecisionQueue("FILTER", $player, "LastResult-include-maxCost-2", 1);
         AddDecisionQueue("CHOOSECARD", $player, "<-", 1);
-        AddDecisionQueue("ADDDISCARD", $player, "HAND,TT", 1);
+        AddDecisionQueue("ADDDISCARD", $player, "HAND,TTFREE", 1);
         AddDecisionQueue("REVEALCARDS", $player, "-", 1);
         AddDecisionQueue("OP", $player, "REMOVECARD", 1);
         AddDecisionQueue("ALLRANDOMBOTTOM", $player, "DECK");
@@ -1281,16 +1281,20 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,1", 1);
       break;
     case "5464125379"://Strafing Gunship
-      $target = GetAttackTarget();
-      $ally = new Ally($target, $defPlayer);
-      if(CardArenas($ally->CardID()) == "Ground") {
-        AddCurrentTurnEffect("5464125379", $defPlayer, from:"PLAY");
+      if(IsAllyAttackTarget()) {
+        $target = GetAttackTarget();
+        $ally = new Ally($target, $defPlayer);
+        if(CardArenas($ally->CardID()) == "Ground") {
+          AddCurrentTurnEffect("5464125379", $defPlayer, from:"PLAY");
+        }
       }
       break;
     case "9725921907"://Kintan Intimidator
-      $target = GetAttackTarget();
-      $ally = new Ally($target, $defPlayer);
-      $ally->Exhaust();
+      if(IsAllyAttackTarget()) {
+        $target = GetAttackTarget();
+        $ally = new Ally($target, $defPlayer);
+        $ally->Exhaust();
+      }
       break;
     case "8190373087"://Gentle Giant
       $power = $attackerAlly->CurrentPower();
