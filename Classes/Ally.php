@@ -301,6 +301,7 @@ class Ally {
   
   function Exhaust() {
     if($this->index == -1) return;
+    AddEvent("EXHAUST", $this->UniqueID());
     $this->allies[$this->index+1] = 1;
   }
 
