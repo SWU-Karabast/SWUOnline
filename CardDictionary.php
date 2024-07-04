@@ -297,7 +297,7 @@ function HasGrit($cardID, $player, $index)
 
 function HasOverwhelm($cardID, $player, $index)
 {
-  global $defPlayer, $currentTurnEffects;
+  global $defPlayer, $currentTurnEffects, $mainPlayer;
   $ally = new Ally("MYALLY-" . $index, $player);
   if($ally->LostAbilities()) return false;
   $allies = &GetAllies($player);
@@ -350,7 +350,7 @@ function HasOverwhelm($cardID, $player, $index)
     case "3487311898"://Clan Challengers
       return $ally->IsUpgraded();
     case "6769342445"://Jango Fett
-      if(IsAllyAttackTarget()) {
+      if(IsAllyAttackTarget() && $mainPlayer == $player) {
         $targetAlly = new Ally(GetAttackTarget(), $defPlayer);
         if($targetAlly->HasBounty()) return true;
       }
