@@ -1237,8 +1237,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $index = GetAbilityIndex($parameter, GetClassState($player, $CS_PlayIndex), $lastResult);
       SetClassState($player, $CS_AbilityIndex, $index);
       if(IsAlly($parameter, $player) && AllyDoesAbilityExhaust($parameter, $index)) {
-        $allies = &GetAllies($player);
-        $allies[GetClassState($player, $CS_PlayIndex)+1] = 1;
+        $ally = new Ally("MYALLY-" . GetClassState($player, $CS_PlayIndex), $player);
+        $ally->Exhaust();
       }
       $names = explode(",", GetAbilityNames($parameter, GetClassState($player, $CS_PlayIndex)));
       WriteLog(implode(" ", explode("_", $names[$index])) . " ability was chosen.");
