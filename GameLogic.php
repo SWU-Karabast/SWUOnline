@@ -518,6 +518,13 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $ally = new Ally($dqVars[0], $allyPlayer);
           $ally->RescueCaptive($captiveID, $player);
           return $lastResult;
+        case "DISCARDCAPTIVE":
+          $captiveID = $lastResult;
+          $mzArr = explode("-", $dqVars[0]);
+          $allyPlayer = $mzArr[0] == "MYALLY" ? $player : ($player == 1 ? 2 : 1);
+          $ally = new Ally($dqVars[0], $allyPlayer);
+          $ally->DiscardCaptive($captiveID);
+          return $lastResult;
         case "PLAYCARD":
           PlayCard($lastResult, $paramArr[1], -1, -1);
           return $lastResult;
@@ -642,6 +649,15 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             if($mzArr[0] == "MYALLY" || $mzArr[0] == "THEIRALLY") {
               $ally = new Ally($arr[$i]);
               if($ally->NumAttacks() == $params[1]) unset($arr[$i]);
+            }
+            break;
+          case "hasCaptives":
+            $mzArr = explode("-", $arr[$i]);
+            if($mzArr[0] == "MYALLY" || $mzArr[0] == "THEIRALLY") {
+              $ally = new Ally($arr[$i]);
+              $hasCaptives = count($ally->GetCaptives()) > 0;
+              if($params[1] == 1 && $hasCaptives) unset($arr[$i]);
+              else if($params[1] == 0 && !$hasCaptives) unset($arr[$i]);
             }
             break;
           default: break;
