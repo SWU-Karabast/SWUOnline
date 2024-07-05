@@ -236,7 +236,7 @@ function CurrentEffectCostModifiers($cardID, $from)
           $remove = true;
           break;
         case "3509161777"://You're My Only Hope
-          $costModifier -= PlayerRemainingHealth($player) <= 5 ? 99 : 5;
+          $costModifier -= PlayerRemainingHealth($currentPlayer) <= 5 ? 99 : 5;
           $remove = true;
           break;
         case "5494760041"://Galactic Ambition
