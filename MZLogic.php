@@ -290,10 +290,13 @@ function MZWakeUp($player, $target)
   $pieces = explode("-", $target);
   $player = (substr($pieces[0], 0, 2) == "MY" ? $player : ($player == 1 ? 2 : 1));
   $zone = &GetMZZone($player, $pieces[0]);
+
+  if(SearchLimitedCurrentTurnEffects("8800836530", $player) == $target) { // No Good to me Dead
+    return;
+  }
+
   switch($pieces[0]) {
     case "MYCHAR": case "THEIRCHAR":
-      $zone[$pieces[1]+1] = 2;
-      break;
     case "THEIRALLY": case "MYALLY":
       $zone[$pieces[1]+1] = 2;
       break;
