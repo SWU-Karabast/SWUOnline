@@ -291,7 +291,7 @@ function MZWakeUp($player, $target)
   $player = (substr($pieces[0], 0, 2) == "MY" ? $player : ($player == 1 ? 2 : 1));
   $zone = &GetMZZone($player, $pieces[0]);
 
-  if(SearchLimitedCurrentTurnEffects(8800836530, $player) == $target) { // No Good to me Dead
+  if(SearchLimitedCurrentTurnEffects("8800836530", $player) == $target) { // No Good to me Dead
     return;
   }
 
