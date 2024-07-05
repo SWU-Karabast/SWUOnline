@@ -1189,6 +1189,13 @@ function TraitContains($cardID, $trait, $player="", $index=-1)
   return DelimStringContains($cardTrait, $trait);
 }
 
+function HasKeyword($cardID, $keyword, $player="", $index=-1){
+  switch($keyword){
+    case "Smuggle": return SmuggleCost($cardID, $player, $index) > -1;
+    default: return false;
+  }
+}
+
 function ArenaContains($cardID, $arena, $player="")
 {
   $cardArena = CardArenas($cardID);
@@ -3824,11 +3831,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       global $CS_AfterPlayedBy;
       SetClassState($currentPlayer, $CS_AfterPlayedBy, $cardID);
       AddCurrentTurnEffect($cardID, $currentPlayer);//Cost discount
-      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYRESOURCES");
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYRESOURCES:keyword=Smuggle");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to play");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-      AddDecisionQueue("MZREMOVE", $currentPlayer, "-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
+      AddDecisionQueue("MZREMOVE", $currentPlayer, "-", 1);
       break;
     case "040a3e81f3"://Lando Calrissian Leader Unit
       $abilityName = GetResolvedAbilityName($cardID, $from);
@@ -3836,11 +3843,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         global $CS_AfterPlayedBy;
         SetClassState($currentPlayer, $CS_AfterPlayedBy, $cardID);
         AddCurrentTurnEffect($cardID, $currentPlayer);//Cost discount
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYRESOURCES");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYRESOURCES:keyword=Smuggle");
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to play");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-        AddDecisionQueue("MZREMOVE", $currentPlayer, "-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
+        AddDecisionQueue("MZREMOVE", $currentPlayer, "-", 1);
       }
       break;
     case "0754286363"://The Mandalorian's Rifle

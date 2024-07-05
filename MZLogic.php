@@ -160,10 +160,11 @@ function MZPlayCard($player, $mzIndex) {
   $mzArr = explode("-", $mzIndex);
   $zone = &GetMZZone($player, $mzArr[0]);
   $cardID = $zone[$mzArr[1]];
+  $from = preg_replace('/^(MY|THEIR)/', '', $mzArr[0]);
   MZRemove($player, $mzIndex);
   SetClassState($player, $CS_CharacterIndex, $mzArr[1]);
   SetClassState($player, $CS_PlayIndex, $mzArr[1]);
-  PlayCard($cardID, $mzArr[0], -1, $mzArr[1]);
+  PlayCard($cardID, $from, -1, $mzArr[1]);
   return $cardID;
 }
 
