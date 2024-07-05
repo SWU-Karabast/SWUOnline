@@ -263,7 +263,8 @@ function CurrentEffectCostModifiers($cardID, $from)
         case "8968669390"://U-Wing Reinforcement
           $costModifier -= 99;
           break;
-        case "5440730550"://Lando Calrissian
+        case "5440730550"://Lando Calrissian Leader
+        case "040a3e81f3"://Lando Calrissian Leader Unit
           $costModifier -= 2;
           $remove = true;
           break;
