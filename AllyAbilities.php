@@ -38,7 +38,7 @@ function CheckHealthAllAllies($player)
   $otherPlayer = $player == 1 ? 2 : 1;
   $theirAllies = &GetAllies($otherPlayer);
   for($i=0; $i<count($theirAllies); $i+=AllyPieces()) {
-    $ally = new Ally("THEIRALLY-" . $i, $otherplayer);
+    $ally = new Ally("THEIRALLY-" . $i, $otherPlayer);
     $ally->DefeatIfNoRemainingHP();
   }
 }
