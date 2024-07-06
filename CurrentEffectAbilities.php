@@ -300,6 +300,10 @@ function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
           $costModifier -= 99;
           $remove = true;
           break;
+        case "3399023235"://Fenn Rau
+          $costModifier -= 2;
+          $remove = true;
+          break;
         default: break;
       }
       if($remove && !$reportMode) RemoveCurrentTurnEffect($i);

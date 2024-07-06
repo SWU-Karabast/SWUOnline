@@ -1709,6 +1709,17 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
           break;
         case "ATTACHTARGET":
           MZAttach($currentPlayer, $target, $cardID);
+          //When you play an upgrade on this unit (e.g. Fenn Rau)
+          if(IsAlly($cardID, $currentPlayer)) {
+            $owner = MZPlayerID($currentPlayer, $target);
+            $targetAlly = new Ally($target, $owner);
+            switch($targetAlly->CardID()) {
+              case "3399023235"://Fenn Rau
+                WriteLog("here");
+                break;
+              default: break;
+            }
+          }
           break;
         default:
           break;
