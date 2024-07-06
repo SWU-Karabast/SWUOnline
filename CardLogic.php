@@ -756,7 +756,7 @@ function DiscardCard($player, $index)
   $hand = &GetHand($player);
   $discarded = RemoveHand($player, $index);
   AddGraveyard($discarded, $player, "HAND");
-  CardDiscarded($player, $discarded, $source);
+  CardDiscarded($player, $discarded);
   return $discarded;
 }
 

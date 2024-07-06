@@ -205,7 +205,7 @@ function CurrentEffectBaseAttackSet($cardID)
   return $mod;
 }
 
-function CurrentEffectCostModifiers($cardID, $from)
+function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
 {
   global $currentTurnEffects, $currentPlayer, $CS_PlayUniqueID;
   $costModifier = 0;
@@ -236,7 +236,7 @@ function CurrentEffectCostModifiers($cardID, $from)
           $remove = true;
           break;
         case "3509161777"://You're My Only Hope
-          $costModifier -= PlayerRemainingHealth($player) <= 5 ? 99 : 5;
+          $costModifier -= PlayerRemainingHealth($currentPlayer) <= 5 ? 99 : 5;
           $remove = true;
           break;
         case "5494760041"://Galactic Ambition
@@ -269,7 +269,7 @@ function CurrentEffectCostModifiers($cardID, $from)
           $remove = true;
           break;
         case "4643489029"://Palpatine's Return
-          $costModifier -= TraitContains($cardID, "Force", $player) ? 8 : 6;
+          $costModifier -= TraitContains($cardID, "Force", $currentPlayer) ? 8 : 6;
           $remove = true;
           break;
         case "4717189843"://A New Adventure
@@ -285,13 +285,13 @@ function CurrentEffectCostModifiers($cardID, $from)
           $remove = true;
           break;
         case "0622803599-3"://Jabba the Hutt
-          if(DefinedTypesContains($cardID, "Unit", $player)) {
+          if(DefinedTypesContains($cardID, "Unit", $currentPlayer)) {
             $costModifier -= 1;
             $remove = true;
           }
           break;
         case "f928681d36-3"://Jabba the Hutt Leader Unit
-          if(DefinedTypesContains($cardID, "Unit", $player)) {
+          if(DefinedTypesContains($cardID, "Unit", $currentPlayer)) {
             $costModifier -= 2;
             $remove = true;
           }
@@ -302,7 +302,7 @@ function CurrentEffectCostModifiers($cardID, $from)
           break;
         default: break;
       }
-      if($remove) RemoveCurrentTurnEffect($i);
+      if($remove && !$reportMode) RemoveCurrentTurnEffect($i);
     }
   }
   return $costModifier;
