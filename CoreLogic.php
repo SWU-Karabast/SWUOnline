@@ -497,32 +497,6 @@ function ProcessDealDamageEffect($cardID)
 
 }
 
-function ArcaneDamagePrevented($player, $cardMZIndex)
-{
-  $prevented = 0;
-  $params = explode("-", $cardMZIndex);
-  $zone = $params[0];
-  $index = $params[1];
-  switch($zone)
-  {
-    case "MYCHAR": $source = &GetPlayerCharacter($player); break;
-    case "MYITEMS": $source = &GetItems($player); break;
-    case "MYAURAS": $source = &GetAuras($player); break;
-  }
-  if($zone == "MYCHAR" && $source[$index+1] == 0) return;
-  $cardID = $source[$index];
-  $spellVoidAmount = SpellVoidAmount($cardID, $player);
-  if($spellVoidAmount > 0)
-  {
-    if($zone == "MYCHAR") DestroyCharacter($player, $index);
-    else if($zone == "MYITEMS") DestroyItemForPlayer($player, $index);
-    else if($zone == "MYAURAS") DestroyAura($player, $index);
-    $prevented += $spellVoidAmount;
-    WriteLog(CardLink($cardID, $cardID) . " was destroyed and prevented " . $spellVoidAmount . " arcane damage.");
-  }
-  return $prevented;
-}
-
 function CurrentEffectDamageModifiers($player, $source, $type)
 {
   global $currentTurnEffects;
@@ -4252,6 +4226,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         $theirResources = &GetResourceCards($otherPlayer);
         $resourceCard = RemoveResource($otherPlayer, count($theirResources) - ResourcePieces());
         AddResources($resourceCard, $currentPlayer, "PLAY", "DOWN");
+        AddCurrentTurnEffect($cardID, $currentPlayer);
       }
       break;
     case "7718080954"://Frozen in Carbonite

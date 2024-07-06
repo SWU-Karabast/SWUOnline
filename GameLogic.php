@@ -986,7 +986,6 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
     case "SPELLVOIDCHOICES":
       $damage = $parameter;
       if($lastResult != "PASS") {
-        $prevented = ArcaneDamagePrevented($player, $lastResult);
         $damage -= $prevented;
         if($damage < 0) $damage = 0;
         $dqVars[0] = $damage;

@@ -1672,14 +1672,6 @@ function RequiresDieRoll($cardID, $from, $player)
   return false;
 }
 
-function SpellVoidAmount($cardID, $player)
-{
-  if($cardID == "ARC112" && SearchCurrentTurnEffects("DYN171", $player)) return 1;
-  switch($cardID) {
-    default: return 0;
-  }
-}
-
 function IsSpecialization($cardID)
 {
   switch ($cardID) {

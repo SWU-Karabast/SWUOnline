@@ -733,37 +733,6 @@ function CountItem($cardID, $player)
   return $count;
 }
 
-function SearchArcaneReplacement($player, $zone)
-{
-  $cardList = "";
-  switch ($zone) {
-    case "MYCHAR":
-      $array = &GetPlayerCharacter($player);
-      $count = CharacterPieces();
-      break;
-    case "MYITEMS":
-      $array = &GetItems($player);
-      $count = ItemPieces();
-      break;
-    case "MYAURAS":
-      $array = &GetAuras($player);
-      $count = AuraPieces();
-      break;
-  }
-  for ($i = 0; $i < count($array); $i += $count) {
-    if ($zone == "MYCHAR" && !IsCharacterAbilityActive($player, $i)) continue;
-    $cardID = $array[$i];
-    if (SpellVoidAmount($cardID, $player) > 0 && IsCharacterActive($player, $i)) {
-      if ($cardList != "") $cardList = $cardList . ",";
-      $cardList = $cardList . $i;
-    } elseif (SpellVoidAmount($cardID, $player) > 0 && $zone != "MYCHAR") {
-      if ($cardList != "") $cardList = $cardList . ",";
-      $cardList = $cardList . $i;
-    }
-  }
-  return $cardList;
-}
-
 function SearchChainLinks($minPower = -1, $maxPower = -1, $cardType = "")
 {
   global $chainLinks;
