@@ -160,10 +160,11 @@ function MZPlayCard($player, $mzIndex) {
   $mzArr = explode("-", $mzIndex);
   $zone = &GetMZZone($player, $mzArr[0]);
   $cardID = $zone[$mzArr[1]];
+  $from = preg_replace('/^(MY|THEIR)/', '', $mzArr[0]);
   MZRemove($player, $mzIndex);
   SetClassState($player, $CS_CharacterIndex, $mzArr[1]);
   SetClassState($player, $CS_PlayIndex, $mzArr[1]);
-  PlayCard($cardID, $mzArr[0], -1, $mzArr[1]);
+  PlayCard($cardID, $from, -1, $mzArr[1]);
   return $cardID;
 }
 
@@ -290,10 +291,13 @@ function MZWakeUp($player, $target)
   $pieces = explode("-", $target);
   $player = (substr($pieces[0], 0, 2) == "MY" ? $player : ($player == 1 ? 2 : 1));
   $zone = &GetMZZone($player, $pieces[0]);
+
+  if(SearchLimitedCurrentTurnEffects("8800836530", $player) == $target) { // No Good to me Dead
+    return;
+  }
+
   switch($pieces[0]) {
     case "MYCHAR": case "THEIRCHAR":
-      $zone[$pieces[1]+1] = 2;
-      break;
     case "THEIRALLY": case "MYALLY":
       $zone[$pieces[1]+1] = 2;
       break;
