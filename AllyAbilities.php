@@ -32,12 +32,14 @@ function CheckHealthAllAllies($player)
 {
   $allies = &GetAllies($player);
   for($i=0; $i<count($allies); $i+=AllyPieces()) {
+    if (!isset($allies[$i])) continue;
     $ally = new Ally("MYALLY-" . $i, $player);
     $ally->DefeatIfNoRemainingHP();
   }
   $otherPlayer = $player == 1 ? 2 : 1;
   $theirAllies = &GetAllies($otherPlayer);
   for($i=0; $i<count($theirAllies); $i+=AllyPieces()) {
+    if (!isset($theirAllies[$i])) continue;
     $ally = new Ally("THEIRALLY-" . $i, $otherPlayer);
     $ally->DefeatIfNoRemainingHP();
   }
