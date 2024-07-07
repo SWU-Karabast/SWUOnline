@@ -196,6 +196,7 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
 
 function AllyTakeControl($player, $index) {
   global $currentTurnEffects;
+  if($index == "") return -1;
   $otherPlayer = $player == 1 ? 2 : 1;
   $myAllies = &GetAllies($player);
   $theirAllies = &GetAllies($otherPlayer);
