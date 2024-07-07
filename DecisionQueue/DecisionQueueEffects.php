@@ -21,7 +21,7 @@ function ModalAbilities($player, $card, $lastResult)
       switch($lastResult[0]) {
         case "Leave": break;
         case "Play":
-          PrependDecisionQueue("SWAPTURN", $mainPlayer, "-");
+          PrependDecisionQueue("SWAPTURN", $player, "-");
           MZPlayCard($player, "MYDECK-0");
           break;
         case "Discard": Mill($player, 1); break;
