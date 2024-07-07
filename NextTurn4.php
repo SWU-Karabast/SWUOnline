@@ -2,7 +2,7 @@
 
     <style>
       @keyframes move {
-        from {margin-top: 0px;}
+        from {margin-top: 0;}
         to {margin-top: -50px;}
       }
     </style>
@@ -787,7 +787,7 @@
     ?>
     <div id='popupContainer'></div>
     <div id="cardDetail" style="z-index:100000; display:none; position:fixed;"></div>
-    <div id='mainDiv' style='position:fixed; z-index:20; left:0px; top:0px; width:100%; height:100%;'></div>
+    <div id='mainDiv' style='position:fixed; z-index:20; left:0; top:0; width:100%; height:100%;'></div>
     <div id='chatbox' style='z-index:40; position:fixed; bottom:20px; right:18px; display:flex;'>
         <?php if ($playerID != 3 && !IsChatMuted()): ?>
             <input id='chatText'
