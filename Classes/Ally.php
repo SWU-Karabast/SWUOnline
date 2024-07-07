@@ -86,7 +86,6 @@ class Ally {
     }
     $otherPlayer = $this->PlayerID() == 1 ? 2 : 1;
     $theirAllies = &GetAllies($otherPlayer);
-    while(true) {};
     for($i=0; $i<count($theirAllies); $i+=AllyPieces()) {
       if(AllyHasStaticHealthModifier($theirAllies[$i])) {
         $max += AllyStaticHealthModifier($this->CardID(), $this->Index(), $this->PlayerID(), $theirAllies[$i], $i, $otherPlayer);
