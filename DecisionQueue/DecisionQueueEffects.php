@@ -359,7 +359,7 @@ function SpecificCardLogic($player, $card, $lastResult)
       }
       return $lastResult;
     case "LTCHILDSEN":
-      if ($lastResult == []) {
+      if($lastResult == "PASS" || $lastResult == []) {
         return $lastResult;
       }
       $hand = &GetHand($player);
