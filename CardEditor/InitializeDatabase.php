@@ -13,32 +13,28 @@ for($i=0; $i<count($columnArr); ++$i) {
   if($i<count($columnArr)-1) $query .= ", ";
 }
 $query .= ");";
-echo($query);
+echo("Query: " . $query . "<br>");
 
+//Create the database table
 $conn = GetDBConnection();
 $stmt = mysqli_stmt_init($conn);
+if (!mysqli_stmt_prepare($stmt, "DROP TABLE carddata;")) {
+  echo("Unable to prepare drop table statement");
+  exit;
+}
+mysqli_stmt_execute($stmt);
+mysqli_stmt_close($stmt);
+$stmt = mysqli_stmt_init($conn);
 if (!mysqli_stmt_prepare($stmt, $query)) {
-  echo("Unable to prepare MySql statement");
+  echo("Unable to prepare create table statement");
   exit;
 }
 mysqli_stmt_execute($stmt);
 mysqli_stmt_close($stmt);
 mysqli_close($conn);
-//include_once "CardEditorDatabase.php";
-//include_once '../GeneratedCode/DatabaseGeneratedCardDictionaries.php';
 
-/*
-$sets = ["WTR", "ARC", "CRU", "MON", "ELE", "EVR", "UPR", "DYN", "OUT", "DVR", "RVD", "DTD", "LGS", "HER", "FAB", "TCC", "EVO", "HVY"];
+//Now generate the card editor page
+$filename = "./EditCard.php";
 
-foreach($sets as &$set) {
-    for($i=0; $i<800; ++$i) {
-      $cardID = $set;
-      if($i<100) $cardID .= "0";
-      if($i<10) $cardID .= "0";
-      $cardID .= $i;
-      if(GeneratedGoAgain($cardID)) CreateEditCard($cardID, 1);
-    }
-}
-    */
 
 ?>
