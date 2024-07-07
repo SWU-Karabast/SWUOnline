@@ -17,6 +17,13 @@ echo("Query: " . $query . "<br>");
 
 //Create the database table
 $conn = GetDBConnection();
+//First create a backup of the table
+//https://stackoverflow.com/questions/22195493/export-mysql-database-using-php
+$tableName  = 'carddata';
+$backupFile = getcwd() . '/Backups/carddata.sql';
+$query      = "SELECT * INTO OUTFILE '$backupFile' FROM $tableName";
+$result = mysqli_query($conn,$query);
+//Now delete the existing table if applicable
 $stmt = mysqli_stmt_init($conn);
 if (!mysqli_stmt_prepare($stmt, "DROP TABLE carddata;")) {
   echo("Unable to prepare drop table statement");
