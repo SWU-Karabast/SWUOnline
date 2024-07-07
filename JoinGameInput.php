@@ -189,7 +189,6 @@ if ($decklink != "") {
     addFavoriteDeck($_SESSION["userid"], $saveLink, $deckName, $character, $deckFormat);
   }
 } else {
-  $deckFile = $deck;
   copy($deckFile, "./Games/" . $gameName . "/p" . $playerID . "Deck.txt");
   copy($deckFile, "./Games/" . $gameName . "/p" . $playerID . "DeckOrig.txt");
 }
