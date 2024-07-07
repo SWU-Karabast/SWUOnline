@@ -73,7 +73,7 @@ function FinalizeChainLinkEffects()
       case "9560139036"://Ezra Bridger
         SearchCurrentTurnEffects("9560139036", $mainPlayer, remove:true);
         PrependDecisionQueue("MODAL", $mainPlayer, "EZRABRIDGER", 1);
-        PrependDecisionQueue("SHOWMODES", $mainPlayer, $cardID, 1);
+        PrependDecisionQueue("SHOWMODES", $mainPlayer, $currentTurnEffects[$i], 1);
         PrependDecisionQueue("MULTICHOOSETEXT", $mainPlayer, "1-Leave,Play,Discard-1");
         PrependDecisionQueue("SETDQCONTEXT", $mainPlayer, "The top card is <0>; Choose a mode for Ezra Bridger");
         PrependDecisionQueue("SETDQVAR", $mainPlayer, "0");
