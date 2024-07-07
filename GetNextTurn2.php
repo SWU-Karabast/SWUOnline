@@ -356,7 +356,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     $prompt = "";
     // Pass Button - Active then Inactive (which is hidden) 
 ?>
-    <div title='Space is the shortcut to pass.' <?= ProcessInputLink($playerID, 99, 0, prompt: $prompt) ?> class='passButton' style='display: inline-block; z-index: 20; cursor:pointer; padding:8px 20px 10px; box-shadow:inset 0px 0px 0px 1px #454545; border-radius: 5px;'>
+    <div title='Space is the shortcut to pass.' <?= ProcessInputLink($playerID, 99, 0, prompt: $prompt) ?> class='passButton' style='display: inline-block; z-index: 20; cursor:pointer; padding:8px 20px 10px; box-shadow:inset 0 0 0 1px #454545; border-radius: 5px;'>
     <span style='margin: 0 1px 0 0; color:white; font-size:18px; font-weight: 600; user-select: none;'>
         <?= $passLabel ?>
       </span>
