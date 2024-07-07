@@ -66,9 +66,11 @@ include_once 'Header.php';
 
 <div class='stats container bg-black'>
   <?php
+  /*
   echo ("<h2>Your Record</h2>");
   $forIndividual = true;
   include_once "zzGameStats.php";
+  */
   ?>
 </div>
 

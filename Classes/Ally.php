@@ -41,12 +41,8 @@ class Ally {
     return $this->index;
   }
 
-  function Damage() {
+  function Health() {
     return $this->allies[$this->index+2];
-  }
-
-  function AddDamage($amount) {
-    $this->allies[$this->index+2] += $amount;
   }
 
   function Owner() {
@@ -59,13 +55,16 @@ class Ally {
     return $this->allies[$this->index+12];
   }
 
+  function AddHealth($amount) {
+    $this->allies[$this->index+2] += $amount;
+  }
+
   function Heal($amount) {
     $healed = $amount;
-    if($amount > $this->Damage()) {
-      $healed = $this->Damage();
-      $this->allies[$this->index+2] = 0;
-    } else {
-      $this->allies[$this->index+2] -= $amount;
+    $this->AddHealth($amount);
+    if($this->Health() > $this->MaxHealth()) {
+      $healed = $amount - ($this->Health() - $this->MaxHealth());
+      $this->allies[$this->index+2] = $this->MaxHealth();
     }
     AddEvent("RESTORE", $this->UniqueID() . "!" . $healed);
     return $healed;
@@ -92,21 +91,12 @@ class Ally {
     return $max;
   }
 
-  function Health() {
-    return $this->MaxHealth() - $this->Damage();
-  }
-
-  //Returns true if the ally is destroyed
-  function DefeatIfNoRemainingHP() {
-    if($this->Health() <= 0 && ($this->CardID() != "d1a7b76ae7" || $this->LostAbilities())) {
-      DestroyAlly($this->playerID, $this->index);
-      return true;
-    }
-    return false;
+  function Damage() {
+    return $this->MaxHealth() - $this->Health();
   }
 
   function IsDamaged() {
-    return $this->Damage() > 0;
+    return $this->Health() < $this->MaxHealth();
   }
 
   function IsExhausted() {
@@ -154,9 +144,12 @@ class Ally {
       default: break;
     }
     if($damageDealt != NULL) $damageDealt = $amount;
-    $this->AddDamage($amount);
+    $this->allies[$this->index+2] -= $amount;
     AddEvent("DAMAGE", $this->UniqueID() . "!" . $amount);
-    if ($this->DefeatIfNoRemainingHP()) return true;
+    if($this->Health() <= 0 && ($this->CardID() != "d1a7b76ae7" || $this->LostAbilities())) { //Chirrut Imwe
+      DestroyAlly($this->playerID, $this->index, fromCombat:$fromCombat);
+      return true;
+    }
     AllyDamageTakenAbilities($this->playerID, $this->index, survived:true, damage:$amount, fromCombat:$fromCombat);
     switch($this->CardID())
     {
@@ -170,8 +163,23 @@ class Ally {
 
   function AddRoundHealthModifier($amount) {
     if($this->index == -1) return;
+    $this->allies[$this->index+2] += $amount;
     $this->allies[$this->index+9] += $amount;
-    $this->DefeatIfNoRemainingHP();
+    if($this->Health() <= 0) {
+      DestroyAlly($this->playerID, $this->index);
+      return true;
+    }
+    return false;
+  }
+
+  function TempReduceHealth($amount) {
+    if($this->index == -1) return;
+    $this->allies[$this->index+2] -= $amount;
+    if($this->Health() <= 0) {
+      DestroyAlly($this->playerID, $this->index);
+      return true;
+    }
+    return false;
   }
 
   function NumAttacks() {
@@ -189,7 +197,7 @@ class Ally {
     $upgrades = $this->GetUpgrades();
     for($i=0; $i<count($upgrades); ++$i) if($upgrades[$i] != "-") $power += AttackValue($upgrades[$i]);
     if(HasGrit($this->CardID(), $this->playerID, $this->index)) {
-      $damage = $this->Damage();
+      $damage = $this->MaxHealth() - $this->Health();
       if($damage > 0) $power += $damage;
     }
     //Other ally buffs
@@ -203,7 +211,7 @@ class Ally {
           if(CardTitle($this->CardID()) == "4-LOM") $power += 1;
           break;
         case "e2c6231b35"://Director Krennic
-          if($this->IsDamaged()) $power += 1;
+          if($this->Health() < $this->MaxHealth()) $power += 1;
           break;
         case "1557302740"://General Veers
           if($i != $this->index && TraitContains($this->CardID(), "Imperial", $this->PlayerID())) $power += 1;
@@ -247,7 +255,7 @@ class Ally {
     for($i=0; $i<count($myChar); $i+=CharacterPieces()) {
       switch($myChar[$i]) {
         case "8560666697"://Director Krennic
-          if($this->IsDamaged()) $power += 1;
+          if($this->Health() < $this->MaxHealth()) $power += 1;
           break;
         case "9794215464"://Gar Saxon
           if($this->IsUpgraded()) $power += 1;
@@ -268,8 +276,13 @@ class Ally {
   //All the things that should happen at the end of a round
   function EndRound() {
     if($this->index == -1) return;
+    $this->allies[$this->index+2] -= $this->allies[$this->index+9];
     $this->allies[$this->index+9] = 0;
-    $this->DefeatIfNoRemainingHP();
+    if($this->Health() <= 0) {
+      DestroyAlly($this->playerID, $this->index);
+      return true;
+    }
+    return false;
   }
 
   function Ready() {
@@ -292,6 +305,16 @@ class Ally {
     $this->allies[$this->index+1] = 1;
   }
 
+  function AddBuffCounter() {
+    ++$this->allies[$this->index+2];
+    ++$this->allies[$this->index+7];
+  }
+
+  function ModifyNamedCounters($type, $amount = 1) {
+    $this->allies[$this->index+6] += $amount;
+    return $this->allies[$this->index+6];//Return the amount of that type of counter
+  }
+
   function AddSubcard($cardID) {
     if($this->allies[$this->index + 4] == "-") $this->allies[$this->index + 4] = $cardID;
     else $this->allies[$this->index + 4] = $this->allies[$this->index + 4] . "," . $cardID;
@@ -304,6 +327,7 @@ class Ally {
   function Attach($cardID) {
     if($this->allies[$this->index + 4] == "-") $this->allies[$this->index + 4] = $cardID;
     else $this->allies[$this->index + 4] = $this->allies[$this->index + 4] . "," . $cardID;
+    $this->AddHealth(CardHP($cardID));
     if (CardIsUnique($cardID)) {
       $this->CheckUniqueUpgrade($cardID);
     }
@@ -381,9 +405,15 @@ class Ally {
         unset($subcards[$i]);
         $subcards = array_values($subcards);
         $this->allies[$this->index + 4] = count($subcards) > 0 ? implode(",", $subcards) : "-";
-        $this->DefeatIfNoRemainingHP();
+        $this->allies[$this->index+2] -= CardHP($upgradeID);
+        if($this->Health() <= 0) {
+          DestroyAlly($this->playerID, $this->index);
+          return true;
+        }
+        return false;
       } 
     }
+    return false;
   }
   
   function RescueCaptive($captiveID, $newController=-1) {
