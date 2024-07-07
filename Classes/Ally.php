@@ -303,6 +303,20 @@ class Ally {
     if($this->allies[$this->index + 4] == "-") $this->allies[$this->index + 4] = $cardID;
     else $this->allies[$this->index + 4] = $this->allies[$this->index + 4] . "," . $cardID;
   }
+  
+  function RemoveSubcard($subcardID) {
+    if($this->index == -1) return false;
+    $subcards = $this->GetSubcards();
+    for($i=0; $i<count($subcards); ++$i) {
+      if($subcards[$i] == $subcardID) {
+        unset($subcards[$i]);
+        $subcards = array_values($subcards);
+        $this->allies[$this->index + 4] = count($subcards) > 0 ? implode(",", $subcards) : "-";
+        return true;
+      }
+    }
+    return false;
+  }
 
   function AddEffect($effectID) {
     AddCurrentTurnEffect($effectID, $this->PlayerID(), uniqueID:$this->UniqueID());
@@ -382,47 +396,29 @@ class Ally {
   }
 
   function DefeatUpgrade($upgradeID) {
-    if($this->index == -1) return false;
-    $subcards = $this->GetSubcards();
-    for($i=0; $i<count($subcards); ++$i) {
-      if($subcards[$i] == $upgradeID) {
-        unset($subcards[$i]);
-        $subcards = array_values($subcards);
-        $this->allies[$this->index + 4] = count($subcards) > 0 ? implode(",", $subcards) : "-";
-        $this->DefeatIfNoRemainingHP();
-      }
+    if($this->RemoveSubcard($upgradeID)) {
+      $this->DefeatIfNoRemainingHP();
+      return true;
     }
+    else return false;
   }
 
   function RescueCaptive($captiveID, $newController=-1) {
-    if($this->index == -1) return;
-    $subcards = $this->GetSubcards();
-    for($i=0; $i<count($subcards); ++$i) {
-      if($subcards[$i] == $captiveID) {
-        unset($subcards[$i]);
-        $subcards = array_values($subcards);
-        $this->allies[$this->index + 4] = count($subcards) > 0 ? implode(",", $subcards) : "-";
-        $otherPlayer = $this->PlayerID() == 1 ? 2 : 1;
-        if($newController == -1) $newController = $otherPlayer;
-        PlayAlly($captiveID, $newController, from:"CAPTIVE");
-        return;
-      }
+    if($this->RemoveSubcard($captiveID)) {
+      $otherPlayer = $this->PlayerID() == 1 ? 2 : 1;
+      if($newController == -1) $newController = $otherPlayer;
+      PlayAlly($captiveID, $newController, from:"CAPTIVE");
     }
+    else return false;
   }
 
   function DiscardCaptive($captiveID) {
-    if($this->index == -1) return;
-    $subcards = $this->GetSubcards();
-    for($i=0; $i<count($subcards); ++$i) {
-      if($subcards[$i] == $captiveID) {
-        unset($subcards[$i]);
-        $subcards = array_values($subcards);
-        $this->allies[$this->index + 4] = count($subcards) > 0 ? implode(",", $subcards) : "-";
-        $otherPlayer = $this->PlayerID() == 1 ? 2 : 1;
-        AddGraveyard($captiveID, $otherPlayer, "CAPTIVE");
-        return;
-      }
+    if($this->RemoveSubcard($captiveID)) {
+      $otherPlayer = $this->PlayerID() == 1 ? 2 : 1;
+      AddGraveyard($captiveID, $otherPlayer, "CAPTIVE");
+      return true;
     }
+    else return false;
   }
 
   function NumUses() {

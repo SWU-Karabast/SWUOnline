@@ -4329,6 +4329,17 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
       AddDecisionQueue("OP", $currentPlayer, "DISCARDCAPTIVE", 1);
       break;
+    case "6452159858"://Evidence of the Crime
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:hasUpgradeOnly=true&THEIRALLY:hasUpgradeOnly=true");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to take a 3-cost or less upgrade from.", 1);
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "1", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETUPGRADES", 1);
+      AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-maxCost-3", 1);
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an upgrade to take.", 1);
+      AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "CHOOSETARGETANDMOVEUPGRADE", 1);
+      break;
     case "3399023235"://Fenn Rau
       AddCurrentTurnEffect($cardID, $currentPlayer);//Cost discount
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND:definedType=Upgrade");

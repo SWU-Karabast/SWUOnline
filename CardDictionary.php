@@ -1753,6 +1753,9 @@ function DefinedCardType2Wrapper($cardID)
     case "0622803599"://Jabba the Hutt
     case "9596662994"://Finn
       return "";
+    case "8752877738":
+    case "2007868442":
+      return "Upgrade";
     default: return DefinedCardType2($cardID);
   }
 }
