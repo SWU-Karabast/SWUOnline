@@ -497,32 +497,6 @@ function ProcessDealDamageEffect($cardID)
 
 }
 
-function ArcaneDamagePrevented($player, $cardMZIndex)
-{
-  $prevented = 0;
-  $params = explode("-", $cardMZIndex);
-  $zone = $params[0];
-  $index = $params[1];
-  switch($zone)
-  {
-    case "MYCHAR": $source = &GetPlayerCharacter($player); break;
-    case "MYITEMS": $source = &GetItems($player); break;
-    case "MYAURAS": $source = &GetAuras($player); break;
-  }
-  if($zone == "MYCHAR" && $source[$index+1] == 0) return;
-  $cardID = $source[$index];
-  $spellVoidAmount = SpellVoidAmount($cardID, $player);
-  if($spellVoidAmount > 0)
-  {
-    if($zone == "MYCHAR") DestroyCharacter($player, $index);
-    else if($zone == "MYITEMS") DestroyItemForPlayer($player, $index);
-    else if($zone == "MYAURAS") DestroyAura($player, $index);
-    $prevented += $spellVoidAmount;
-    WriteLog(CardLink($cardID, $cardID) . " was destroyed and prevented " . $spellVoidAmount . " arcane damage.");
-  }
-  return $prevented;
-}
-
 function CurrentEffectDamageModifiers($player, $source, $type)
 {
   global $currentTurnEffects;
@@ -1187,6 +1161,13 @@ function TraitContains($cardID, $trait, $player="", $index=-1)
   }
   $cardTrait = CardTraits($cardID);
   return DelimStringContains($cardTrait, $trait);
+}
+
+function HasKeyword($cardID, $keyword, $player="", $index=-1){
+  switch($keyword){
+    case "Smuggle": return SmuggleCost($cardID, $player, $index) > -1;
+    default: return false;
+  }
 }
 
 function ArenaContains($cardID, $arena, $player="")
@@ -3339,7 +3320,6 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY", 1);
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an ally to attack with");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
       }
       break;
@@ -3825,11 +3805,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       global $CS_AfterPlayedBy;
       SetClassState($currentPlayer, $CS_AfterPlayedBy, $cardID);
       AddCurrentTurnEffect($cardID, $currentPlayer);//Cost discount
-      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYRESOURCES");
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYRESOURCES:keyword=Smuggle");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to play");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-      AddDecisionQueue("MZREMOVE", $currentPlayer, "-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
+      AddDecisionQueue("MZREMOVE", $currentPlayer, "-", 1);
       break;
     case "040a3e81f3"://Lando Calrissian Leader Unit
       $abilityName = GetResolvedAbilityName($cardID, $from);
@@ -3837,11 +3817,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         global $CS_AfterPlayedBy;
         SetClassState($currentPlayer, $CS_AfterPlayedBy, $cardID);
         AddCurrentTurnEffect($cardID, $currentPlayer);//Cost discount
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYRESOURCES");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYRESOURCES:keyword=Smuggle");
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to play");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-        AddDecisionQueue("MZREMOVE", $currentPlayer, "-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
+        AddDecisionQueue("MZREMOVE", $currentPlayer, "-", 1);
       }
       break;
     case "0754286363"://The Mandalorian's Rifle
@@ -4246,6 +4226,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         $theirResources = &GetResourceCards($otherPlayer);
         $resourceCard = RemoveResource($otherPlayer, count($theirResources) - ResourcePieces());
         AddResources($resourceCard, $currentPlayer, "PLAY", "DOWN");
+        AddCurrentTurnEffect($cardID, $currentPlayer);
       }
       break;
     case "7718080954"://Frozen in Carbonite
@@ -4469,12 +4450,14 @@ function DestroyAllAllies()
   $theirAllies = &GetAllies($otherPlayer);
   for($i=count($theirAllies) - AllyPieces(); $i>=0; $i-=AllyPieces())
   {
+    if (!isset($theirAllies[$i])) continue;
     $ally = new Ally("MYALLY-" . $i, $otherPlayer);
     $ally->Destroy();
   }
   $allies = &GetAllies($currentPlayer);
   for($i=count($allies) - AllyPieces(); $i>=0; $i-=AllyPieces())
   {
+    if (!isset($allies[$i])) continue;
     $ally = new Ally("MYALLY-" . $i, $currentPlayer);
     $ally->Destroy();
   }

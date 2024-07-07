@@ -32,13 +32,15 @@ function CheckHealthAllAllies($player)
 {
   $allies = &GetAllies($player);
   for($i=0; $i<count($allies); $i+=AllyPieces()) {
+    if (!isset($allies[$i])) continue;
     $ally = new Ally("MYALLY-" . $i, $player);
     $ally->DefeatIfNoRemainingHP();
   }
   $otherPlayer = $player == 1 ? 2 : 1;
   $theirAllies = &GetAllies($otherPlayer);
   for($i=0; $i<count($theirAllies); $i+=AllyPieces()) {
-    $ally = new Ally("THEIRALLY-" . $i, $otherplayer);
+    if (!isset($theirAllies[$i])) continue;
+    $ally = new Ally("THEIRALLY-" . $i, $otherPlayer);
     $ally->DefeatIfNoRemainingHP();
   }
 }
@@ -1363,7 +1365,7 @@ function SpecificAllyAttackAbilities($attackID)
       break;
     case "a579b400c0"://Bo-Katan Kryze
       global $CS_NumMandalorianAttacks;
-      $number = GetClassState($mainPlayer, $CS_NumMandalorianAttacks) ? 2 : 1;
+      $number = GetClassState($mainPlayer, $CS_NumMandalorianAttacks) > 1 ? 2 : 1;
       for($i=0; $i<$number; ++$i) {
         AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY");
         AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 1 damage to");

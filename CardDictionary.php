@@ -1081,7 +1081,7 @@ function IsPlayable($cardID, $phase, $from, $index = -1, &$restriction = null, $
     if($char[1] != 2) return false;//Can't attack if rested
   }
   $otherPlayer = ($player == 1 ? 2 : 1);
-  if($from == "HAND" && ((CardCost($cardID) + SelfCostModifier($cardID, $from)) > NumResourcesAvailable($currentPlayer)) && !HasAlternativeCost($cardID)) return false;
+  if($from == "HAND" && ((CardCost($cardID) + SelfCostModifier($cardID, $from) + CurrentEffectCostModifiers($cardID, $from, reportMode:true) + CharacterCostModifier($cardID, $from)) > NumResourcesAvailable($currentPlayer)) && !HasAlternativeCost($cardID)) return false;
   if($from == "RESOURCES") {
     if(!PlayableFromResources($cardID, index:$index)) return false;
     if((SmuggleCost($cardID, index:$index) + SelfCostModifier($cardID, $from)) > NumResourcesAvailable($currentPlayer) && !HasAlternativeCost($cardID)) return false;
@@ -1670,14 +1670,6 @@ function RequiresDieRoll($cardID, $from, $player)
   if(GetDieRoll($player) > 0) return false;
   if($turn[0] == "B") return false;
   return false;
-}
-
-function SpellVoidAmount($cardID, $player)
-{
-  if($cardID == "ARC112" && SearchCurrentTurnEffects("DYN171", $player)) return 1;
-  switch($cardID) {
-    default: return 0;
-  }
 }
 
 function IsSpecialization($cardID)
