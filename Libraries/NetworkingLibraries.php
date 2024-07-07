@@ -15,15 +15,6 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
       if ($index != -1 && IsPlayable($character[$index], $turn[0], "CHAR", $index)) {
         SetClassState($playerID, $CS_CharacterIndex, $index);
         SetClassState($playerID, $CS_PlayIndex, $index);
-        $character = &GetPlayerCharacter($playerID);
-        if ($turn[0] == "B") {
-          if ($cardID == "MON187") {
-            $character[$index + 1] = 0;
-            BanishCardForPlayer($cardID, $currentPlayer, "EQUIP", "NA");
-          } else $character[$index + 6] = 1; //Else just put it on the combat chain
-        } else {
-
-        }
         PlayCard($cardID, "EQUIP", -1, $index);
       }
       else
