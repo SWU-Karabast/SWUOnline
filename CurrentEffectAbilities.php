@@ -305,6 +305,9 @@ function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
           $costModifier -= 2;
           $remove = true;
           break;
+        case "7642980906"://Stolen Landspeeder
+          $costModifier -= 99;
+          $remove = false;
         default: break;
       }
       if($remove && !$reportMode) RemoveCurrentTurnEffect($i);
@@ -716,13 +719,10 @@ function CurrentEffectAllyEntersPlay($player, $index)
     $remove = false;
     if($currentTurnEffects[$i + 1] == $player) {
       switch($currentTurnEffects[$i]) {
-        case "RfPP8h16Wv":
-          if(SubtypeContains($allies[$index], "BEAST", $player) || SubtypeContains($allies[$index], "ANIMAL", $player))
-          {
-            ++$allies[$index+2];
-            ++$allies[$index+7];
-            $remove = 1;
-          }
+        case "7642980906"://Stolen Landspeeder
+          $ally = new Ally("MYALLY-" . $index, $player);
+          $ally->Attach("2007868442");//Experience token
+          RemoveCurrentTurnEffect($i);
           break;
         default:
           break;
