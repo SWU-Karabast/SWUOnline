@@ -276,7 +276,8 @@ class Ally {
   //All the things that should happen at the end of a round
   function EndRound() {
     if($this->index == -1) return;
-    $this->allies[$this->index+2] -= $this->allies[$this->index+9];
+    $roundHealthModifier = $this->allies[$this->index+9];
+    if(is_int($roundHealthModifier)) $this->allies[$this->index+2] -= $roundHealthModifier;
     $this->allies[$this->index+9] = 0;
     if($this->Health() <= 0) {
       DestroyAlly($this->playerID, $this->index);
