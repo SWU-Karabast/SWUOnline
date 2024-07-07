@@ -3685,7 +3685,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "0505904136"://Scanning Officer
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
       $resources = &GetResourceCards($otherPlayer);
-      if(count($resouces) == 0) break;
+      if(count($resources) == 0) break;
       $numDestroyed = 0;
       $cards = "";
       for($i = 0; $i < 3 && count($resources) > 0; $i++) {
