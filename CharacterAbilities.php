@@ -329,6 +329,7 @@ function ShiyanaCharacter($cardID, $player="")
 function EquipPayAdditionalCosts($cardIndex, $from)
 {
   global $currentPlayer;
+  if($cardIndex == -1) return;//TODO: Add error handling
   $character = &GetPlayerCharacter($currentPlayer);
   $cardID = $character[$cardIndex];
   switch($cardID) {
