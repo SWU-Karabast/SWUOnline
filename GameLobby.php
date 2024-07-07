@@ -13,8 +13,11 @@ ob_end_clean();
 session_start();
 
 $authKey = "";
-$gameName = $_GET["gameName"];
-$playerID = $_GET["playerID"];
+$gameName = TryGET("gameName", "");
+$playerID = TryGET("playerID", "");
+
+if($gameName == "" || $playerID == "") exit;
+
 if ($playerID == 1 && isset($_SESSION["p1AuthKey"]))
   $authKey = $_SESSION["p1AuthKey"];
 else if ($playerID == 2 && isset($_SESSION["p2AuthKey"]))
