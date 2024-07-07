@@ -10,7 +10,8 @@ class Ally {
 
   // Constructor
   function __construct($MZIndex, $player="") {
-    global $currentPlayer;
+    global $currentPlayer, $debugInfo;
+    $debugInfo['mzIndex'] = $MZIndex;
     $mzArr = explode("-", $MZIndex);
     if($player == "") $player = ($mzArr[0] == "MYALLY" ? $currentPlayer : ($currentPlayer == 1 ? 2 : 1));
     if($mzArr[1] == "") {
@@ -72,6 +73,8 @@ class Ally {
   }
 
   function MaxHealth() {
+    global $debugInfo;
+    $debugInfo['allies'] = $this->allies; 
     $max = AllyHealth($this->CardID(), $this->PlayerID());
     $upgrades = $this->GetUpgrades();
     for($i=0; $i<count($upgrades); ++$i) if($upgrades[$i] != "-") $max += CardHP($upgrades[$i]);
@@ -83,6 +86,7 @@ class Ally {
     }
     $otherPlayer = $this->PlayerID() == 1 ? 2 : 1;
     $theirAllies = &GetAllies($otherPlayer);
+    while(true) {};
     for($i=0; $i<count($theirAllies); $i+=AllyPieces()) {
       if(AllyHasStaticHealthModifier($theirAllies[$i])) {
         $max += AllyStaticHealthModifier($this->CardID(), $this->Index(), $this->PlayerID(), $theirAllies[$i], $i, $otherPlayer);
@@ -462,5 +466,28 @@ function LastAllyIndex($player) {
   $allies = &GetAllies($player);
   return count($allies) - AllyPieces();
 }
+
+//code to try and capture info about what is happening when the script is killed
+function shutdownFunction() {
+  global $debugInfo;
+
+  $error = error_get_last();
+  if ($error !== NULL) {
+      $info = "[SHUTDOWN] file: " . $error['file'] . " - line: " . $error['line'] . " - message: " . $error['message'];
+      error_log($info);
+
+      // Log the stored debug information
+      error_log("Debug info: " . print_r($debugInfo, true));
+
+      // Capture the stack trace
+      ob_start();
+      debug_print_backtrace();
+      $stack_trace = ob_get_clean();
+      error_log($stack_trace);
+  }
+}
+
+$debugInfo = array(); // Global variable to store debug information
+register_shutdown_function('shutdownFunction');
 
 ?>

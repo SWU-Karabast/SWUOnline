@@ -6,7 +6,7 @@ function PlayAlly($cardID, $player, $subCards = "-", $from="-")
   if(count($allies) < AllyPieces()) $allies = [];
   array_push($allies, $cardID);
   array_push($allies, AllyEntersPlayState($cardID, $player, $from));
-  array_push($allies, 0);
+  array_push($allies, 0); //Damage
   array_push($allies, 0); //Frozen
   array_push($allies, $subCards); //Subcards
   array_push($allies, GetUniqueId()); //Unique ID
