@@ -1709,28 +1709,6 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
           break;
         case "ATTACHTARGET":
           MZAttach($currentPlayer, $target, $cardID);
-          //When you play an upgrade on this unit (e.g. Fenn Rau)
-          $mzArr = explode("-", $target);
-          if($mzArr[0] == "MYALLY" || $mzArr[0] == "THEIRALLY") {
-            $owner = MZPlayerID($currentPlayer, $target);
-            $targetAlly = new Ally($target, $owner);
-            switch($targetAlly->CardID()) {
-              case "3399023235"://Fenn Rau
-                if($currentPlayer == $owner) {
-                  $otherPlayer = $currentPlayer == 1 ? 2 : 1;
-                  AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
-                  AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to give -2/-2", 1);
-                  AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-                  AddDecisionQueue("SETDQVAR", $currentPlayer, 0, 1);
-                  AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
-                  AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $otherPlayer, "3399023235-2,HAND", 1);
-                  AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
-                  AddDecisionQueue("MZOP", $currentPlayer, "REDUCEHEALTH,2", 1);
-                }
-                break;
-              default: break;
-            }
-          }
           break;
         default:
           break;
