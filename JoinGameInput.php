@@ -232,7 +232,7 @@ if ($matchup == "") {
   WriteGameFile();
   SetCachePiece($gameName, $playerID + 1, strval(round(microtime(true) * 1000)));
   SetCachePiece($gameName, $playerID + 3, "0");
-  SetCachePiece($gameName, $playerID + 6, $leader);
+  SetCachePiece($gameName, $playerID + 6, isset($leader) ? $leader : "-");
   SetCachePiece($gameName, 14, $gameStatus);
   GamestateUpdated($gameName);
 
