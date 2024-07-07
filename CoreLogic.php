@@ -4457,12 +4457,14 @@ function DestroyAllAllies()
   $theirAllies = &GetAllies($otherPlayer);
   for($i=count($theirAllies) - AllyPieces(); $i>=0; $i-=AllyPieces())
   {
+    if (!isset($theirAllies[$i])) continue;
     $ally = new Ally("MYALLY-" . $i, $otherPlayer);
     $ally->Destroy();
   }
   $allies = &GetAllies($currentPlayer);
   for($i=count($allies) - AllyPieces(); $i>=0; $i-=AllyPieces())
   {
+    if (!isset($allies[$i])) continue;
     $ally = new Ally("MYALLY-" . $i, $currentPlayer);
     $ally->Destroy();
   }
