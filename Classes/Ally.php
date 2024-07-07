@@ -74,6 +74,7 @@ class Ally {
 
   function MaxHealth() {
     global $debugInfo;
+    $debugInfo['CardID'] = $this->CardID(); 
     $debugInfo['allies'] = $this->allies; 
     $max = AllyHealth($this->CardID(), $this->PlayerID());
     $upgrades = $this->GetUpgrades();
