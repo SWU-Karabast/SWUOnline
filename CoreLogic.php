@@ -408,7 +408,7 @@ function DealDamageAsync($player, $damage, $type="DAMAGE", $source="NA")
   if($type == "COMBAT" && $damage > 0 && EffectPreventsHit()) HitEffectsPreventedThisLink();
   if($type == "COMBAT" || $type == "ATTACKHIT") $source = $combatChain[0];
   $otherPlayer = $player == 1 ? 2 : 1;
-  $damage = $damage > 0 ? $damage : 0;
+  $damage = max($damage, 0);
   $damageThreatened = $damage;
   $preventable = CanDamageBePrevented($player, $damage, $type, $source);
   if($preventable)
@@ -440,7 +440,7 @@ function DealDamageAsync($player, $damage, $type="DAMAGE", $source="NA")
     }
   }
   //else: CR 2.0 6.4.10h If damage is not prevented, damage prevention effects are not consumed
-  $damage = $damage > 0 ? $damage : 0;
+  $damage = max($damage, 0);
   $damage = CurrentEffectDamagePrevention($player, $type, $damage, $source, $preventable);
   $damage = AuraTakeDamageAbilities($player, $damage, $type);
   $damage = PermanentTakeDamageAbilities($player, $damage, $type);
