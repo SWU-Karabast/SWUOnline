@@ -73,7 +73,7 @@ include_once "./includes/dbh.inc.php";
 
   echo("<div style='height:800px; overflow-y:scroll;'>");
   foreach ($userData as $key => $user) {
-    echo("User Name: " . $userData[$key][3] . " Elo: " . intval($userData[$key][0]) . " Num Games: " . $userData[$key][1] . " Num Wins: " . $userData[$key][2] . "<BR>");
+    echo("User Name: " . $user[3] . " Elo: " . intval($user[0]) . " Num Games: " . $user[1] . " Num Wins: " . $user[2] . "<BR>");
   }
   echo("</div>");
 

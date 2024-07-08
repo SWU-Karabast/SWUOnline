@@ -124,11 +124,11 @@ switch ($mode) {
     $newLayers = [];
     for ($i = 0; $i < count($submission->layers); ++$i) {
       for ($j = $submission->layers[$i]; $j < $submission->layers[$i] + LayerPieces(); ++$j) {
-        array_push($newLayers, $layers[$j]);
+        $newLayers[] = $layers[$j];
       }
     }
     for ($i = $dqState[8] + LayerPieces(); $i < $dqState[8] + LayerPieces() * 2; ++$i) {
-      array_push($newLayers, $layers[$i]);
+      $newLayers[] = $layers[$i];
     }
     $layers = $newLayers;
     break;

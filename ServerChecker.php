@@ -25,7 +25,7 @@ $reactFE = "https://fe.talishar.net/game/play";
 
 $isShadowBanned = false;
 if (isset($_SESSION["isBanned"]))
-  $isShadowBanned = (intval($_SESSION["isBanned"]) == 1 ? true : false);
+  $isShadowBanned = intval($_SESSION["isBanned"]) == 1;
 else if (isset($_SESSION["useruid"]))
   $isShadowBanned = IsBanned($_SESSION["useruid"]);
 

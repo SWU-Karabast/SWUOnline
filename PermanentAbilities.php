@@ -3,7 +3,7 @@
 function PutPermanentIntoPlay($player, $cardID)
 {
   $permanents = &GetPermanents($player);
-  array_push($permanents, $cardID);
+  $permanents[] = $cardID;
   return count($permanents) - PermanentPieces();
 }
 

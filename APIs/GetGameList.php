@@ -29,7 +29,7 @@ $canSeeQueue = IsUserLoggedIn();
 $response->canSeeQueue = $canSeeQueue;
 
 $isShadowBanned = false;
-if(isset($_SESSION["isBanned"])) $isShadowBanned = (intval($_SESSION["isBanned"]) == 1 ? true : false);
+if(isset($_SESSION["isBanned"])) $isShadowBanned = intval($_SESSION["isBanned"]) == 1;
 else if(IsUserLoggedIn()) $isShadowBanned = IsBanned(LoggedInUserName());
 
 if(IsUserLoggedIn()) {
@@ -71,7 +71,7 @@ if ($handle = opendir($path)) {
           $gameInProgress->secondsSinceLastUpdate = intval(($currentTime - $lastGamestateUpdate) / 1000);
           $gameInProgress->gameName = $gameToken;
           $gameInProgress->format = GetCachePiece($gameToken, 13);
-          if(true) array_push($response->gamesInProgress, $gameInProgress);
+          if(true) $response->gamesInProgress[] = $gameInProgress;
         }
       }
       else if ($currentTime - $lastGamestateUpdate > 300000) //~5 minutes?
@@ -107,7 +107,7 @@ if ($handle = opendir($path)) {
         $openGame->formatName = $formatName;
         $openGame->description = $description;
         $openGame->gameName = $gameToken;
-        array_push($response->openGames, $openGame);
+        $response->openGames[] = $openGame;
       }
     }
   }

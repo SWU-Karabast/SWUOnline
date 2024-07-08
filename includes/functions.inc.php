@@ -221,7 +221,7 @@ function LoadFavoriteDecks($userID)
 		mysqli_stmt_execute($stmt);
 		$data = mysqli_stmt_get_result($stmt);
 		while ($row = mysqli_fetch_array($data, MYSQLI_NUM)) {
-			for ($i = 0; $i < 4; ++$i) array_push($output, $row[$i]);
+			for ($i = 0; $i < 4; ++$i) $output[] = $row[$i];
 		}
 		mysqli_stmt_close($stmt);
 	}
@@ -309,7 +309,7 @@ function SerializeGameResult($player, $DeckLink, $deckAfterSB, $gameID = "", $op
 	$deduplicatedDeck = [];
 	for ($i = 0; $i < count($deckAfterSB); ++$i) {
 		if ($i > 0 && $deckAfterSB[$i] == $deckAfterSB[$i - 1]) continue; //Don't send duplicates
-		array_push($deduplicatedDeck, $deckAfterSB[$i]);
+		$deduplicatedDeck[] = $deckAfterSB[$i];
 	}
 	for ($i = 0; $i < count($deduplicatedDeck); ++$i) {
 		$deck["cardResults"][$i] = [];
@@ -396,7 +396,7 @@ function LoadBadges($userID)
 		mysqli_stmt_execute($stmt);
 		$data = mysqli_stmt_get_result($stmt);
 		while ($row = mysqli_fetch_array($data, MYSQLI_NUM)) {
-			for ($i = 0; $i < 7; ++$i) array_push($output, $row[$i]);
+			for ($i = 0; $i < 7; ++$i) $output[] = $row[$i];
 		}
 		mysqli_stmt_close($stmt);
 	}
@@ -467,8 +467,7 @@ function LoadSavedSettings($playerId)
 		mysqli_stmt_execute($stmt);
 		$data = mysqli_stmt_get_result($stmt);
 		while ($row = mysqli_fetch_array($data, MYSQLI_NUM)) {
-			array_push($output, $row[0]);
-			array_push($output, $row[1]);
+      array_push($output, $row[0], $row[1]);
 		}
 		mysqli_stmt_close($stmt);
 	}
@@ -488,7 +487,7 @@ function LoadBlockedPlayers($playerId)
 		mysqli_stmt_execute($stmt);
 		$data = mysqli_stmt_get_result($stmt);
 		while ($row = mysqli_fetch_array($data, MYSQLI_NUM)) {
-			array_push($output, $row[0]);
+			$output[] = $row[0];
 		}
 		mysqli_stmt_close($stmt);
 	}

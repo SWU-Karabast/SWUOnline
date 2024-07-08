@@ -14,7 +14,7 @@ class Ally {
     $mzArr = explode("-", $MZIndex);
     if($player == "") $player = ($mzArr[0] == "MYALLY" ? $currentPlayer : ($currentPlayer == 1 ? 2 : 1));
     if($mzArr[1] == "") {
-      for($i=0; $i<AllyPieces(); ++$i) array_push($this->allies, 9999);
+      for($i=0; $i<AllyPieces(); ++$i) $this->allies[] = 9999;
       $this->index = -1;
     } else {
       $this->index = intval($mzArr[1]);
@@ -345,7 +345,7 @@ class Ally {
     $subcards = $this->GetSubcards();
     $upgrades = [];
     for($i=0; $i<count($subcards); ++$i) {
-      if(DefinedTypesContains($subcards[$i], "Upgrade", $this->PlayerID()) || DefinedTypesContains($subcards[$i], "Token Upgrade", $this->PlayerID())) array_push($upgrades, $subcards[$i]);
+      if(DefinedTypesContains($subcards[$i], "Upgrade", $this->PlayerID()) || DefinedTypesContains($subcards[$i], "Token Upgrade", $this->PlayerID())) $upgrades[] = $subcards[$i];
     }
     return $upgrades;
   }
@@ -355,7 +355,7 @@ class Ally {
     $subcards = $this->GetSubcards();
     $capturedUnits = [];
     for($i=0; $i<count($subcards); ++$i) {
-      if(DefinedTypesContains($subcards[$i], "Unit", $this->PlayerID())) array_push($capturedUnits, $subcards[$i]);
+      if(DefinedTypesContains($subcards[$i], "Unit", $this->PlayerID())) $capturedUnits[] = $subcards[$i];
     }
     return $capturedUnits;
   }

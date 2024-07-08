@@ -4,19 +4,19 @@ function PlayAlly($cardID, $player, $subCards = "-", $from="-")
 {
   $allies = &GetAllies($player);
   if(count($allies) < AllyPieces()) $allies = [];
-  array_push($allies, $cardID);
-  array_push($allies, AllyEntersPlayState($cardID, $player, $from));
-  array_push($allies, AllyHealth($cardID, $player));
-  array_push($allies, 0); //Frozen
-  array_push($allies, $subCards); //Subcards
-  array_push($allies, GetUniqueId()); //Unique ID
-  array_push($allies, AllyEnduranceCounters($cardID)); //Endurance Counters
-  array_push($allies, 0); //Buff Counters
-  array_push($allies, 1); //Ability/effect uses
-  array_push($allies, 0); //Round health modifier
-  array_push($allies, 0); //Times attacked
-  array_push($allies, $player); //Owner
-  array_push($allies, 0); //Turns in play
+  $allies[] = $cardID;
+  $allies[] = AllyEntersPlayState($cardID, $player, $from);
+  $allies[] = AllyHealth($cardID, $player);
+  $allies[] = 0; //Frozen
+  $allies[] = $subCards; //Subcards
+  $allies[] = GetUniqueId(); //Unique ID
+  $allies[] = AllyEnduranceCounters($cardID); //Endurance Counters
+  $allies[] = 0; //Buff Counters
+  $allies[] = 1; //Ability/effect uses
+  $allies[] = 0; //Round health modifier
+  $allies[] = 0; //Times attacked
+  $allies[] = $player; //Owner
+  $allies[] = 0; //Turns in play
   $index = count($allies) - AllyPieces();
   CurrentEffectAllyEntersPlay($player, $index);
   AllyEntersPlayAbilities($player);
@@ -131,7 +131,7 @@ function DealAllyDamage($targetPlayer, $index, $damage, $type="")
     --$allies[$index+6];
   }
   $allies[$index+2] -= $damage;
-  if($allies[$index+2] <= 0) DestroyAlly($targetPlayer, $index, fromCombat:($type == "COMBAT" ? true : false));
+  if($allies[$index+2] <= 0) DestroyAlly($targetPlayer, $index, fromCombat: $type == "COMBAT");
 }
 
 function RemoveAlly($player, $index)
@@ -197,7 +197,7 @@ function AllyTakeControl($player, $index) {
     $currentTurnEffects[$i+1] = $player;
   }
   for($i=$index; $i<$index+AllyPieces(); ++$i) {
-    array_push($myAllies, $theirAllies[$i]);
+    $myAllies[] = $theirAllies[$i];
   }
   RemoveAlly($otherPlayer, $index);
   CheckUnique($cardID, $player);
@@ -1018,6 +1018,7 @@ function AllyPlayCardAbility($cardID, $player="", $reportMode=false, $from="-")
         AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a card to deal " . $damage . " damage to");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $otherPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $otherPlayer, "DEALDAMAGE," . $damage, 1);
+        break;
       default: break;
     }
   }

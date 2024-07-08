@@ -146,7 +146,7 @@ function ParseGamestate($useRedis = false)
   $chainLinks = array();
   for ($i = 0; $i < $numChainLinks; ++$i) {
     $chainLink = GetStringArray($gamestateContent[57+$i]);
-    array_push($chainLinks, $chainLink);
+    $chainLinks[] = $chainLink;
   }
   $chainLinkSummary = GetStringArray($gamestateContent[57+$numChainLinks]);
   $p1Key = trim($gamestateContent[58+$numChainLinks]);

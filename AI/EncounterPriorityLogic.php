@@ -47,31 +47,31 @@ function PushArray($priorityArray, $zone, $zoneArr, $character, $priorityIndex) 
     case "Hand":
       for($i = 0; $i < count($zoneArr); ++$i) //for each item in the respective source location, it pushes in a storedPriorityNode array. See the top of this function for the definition of each index. The priority is stolen from EncounterPriorityValues.php, see that file for more details
       {
-        array_push($priorityArray, array($zoneArr[$i], "Hand", $i, GetPriority($zoneArr[$i], $character[0], $priorityIndex)));
+        $priorityArray[] = array($zoneArr[$i], "Hand", $i, GetPriority($zoneArr[$i], $character[0], $priorityIndex));
       }
       return $priorityArray;
     case "Arsenal":
       for($i = 0; $i < count($zoneArr); $i += ArsenalPieces())
       {
-        array_push($priorityArray, array($zoneArr[$i], "Arsenal", $i, GetPriority($zoneArr[$i], $character[0], $priorityIndex)));
+        $priorityArray[] = array($zoneArr[$i], "Arsenal", $i, GetPriority($zoneArr[$i], $character[0], $priorityIndex));
       }
       return $priorityArray;
     case "Character":
       for($i = 0; $i < count($zoneArr); $i += CharacterPieces())
       {
-        array_push($priorityArray, array($zoneArr[$i], "Character", $i, GetPriority($zoneArr[$i], $character[0], $priorityIndex)));
+        $priorityArray[] = array($zoneArr[$i], "Character", $i, GetPriority($zoneArr[$i], $character[0], $priorityIndex));
       }
       return $priorityArray;
     case "Items":
       for($i = 0; $i < count($zoneArr); $i += ItemPieces())
       {
-        array_push($priorityArray, array($zoneArr[$i], "Item", $i, GetPriority($zoneArr[$i], $character[0], $priorityIndex)));
+        $priorityArray[] = array($zoneArr[$i], "Item", $i, GetPriority($zoneArr[$i], $character[0], $priorityIndex));
       }
       return $priorityArray;
     case "Allies":
     for($i = 0; $i < count($zoneArr); $i += AllyPieces())
       {
-        array_push($priorityArray, array($zoneArr[$i], "Ally", $i, GetPriority($zoneArr[$i], $character[0], $priorityIndex)));
+        $priorityArray[] = array($zoneArr[$i], "Ally", $i, GetPriority($zoneArr[$i], $character[0], $priorityIndex));
       }
     return $priorityArray;
     default: return $priorityArray;

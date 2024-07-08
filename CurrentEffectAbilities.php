@@ -146,6 +146,7 @@ function EffectAttackModifier($cardID, $playerID="")
       $ally = new Ally($attackTarget, $defPlayer);
       $modifier = $playerID == $defPlayer ? -2 : 2;
       return CardArenas($ally->CardID()) == "Ground" ? $modifier : 0;
+      //TODO CARDID CAN'T BE EQUAL TO '3399023235-2'
     case "3399023235": return $cardID == "3399023235-2" ? -2 : 0;//Fenn Rau
     default: return 0;
   }

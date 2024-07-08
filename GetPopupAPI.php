@@ -58,7 +58,7 @@ switch ($popupType) {
       $thisModifier->Name = $effectName;
       $thisModifier->cardID = $cardID;
       $thisModifier->modifier = $bonus;
-      array_push($response->Cards, $thisModifier);
+      $response->Cards[] = $thisModifier;
     }
     break;
   case "myPitchPopup":
@@ -161,7 +161,7 @@ function AddSetting(&$response, $name, $setting)
   $thisSetting = new stdClass();
   $thisSetting->name = $name;
   $thisSetting->value = $mySettings[$setting];
-  array_push($response, $thisSetting);
+  $response[] = $thisSetting;
 }
 
 function JSONPopup($response, $zone, $zonePieces)
@@ -169,7 +169,7 @@ function JSONPopup($response, $zone, $zonePieces)
   $response->cards = array();
   for($i=0; $i<count($zone); $i+=$zonePieces)
   {
-    array_push($response->cards, JSONRenderedCard($zone[$i]));
+    $response->cards[] = JSONRenderedCard($zone[$i]);
   }
 }
 
@@ -196,7 +196,7 @@ function ChainLinkObject($link)
     $card->cardID = $chainLinks[$link][$i];
     $card->Name = CardName($chainLinks[$link][$i]);
 
-    array_push($chainLink->Cards, $card);
+    $chainLink->Cards[] = $card;
   }
   return $chainLink;
 }

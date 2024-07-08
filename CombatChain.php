@@ -329,7 +329,7 @@ function IsDominateActive()
     }
   }
   switch($combatChain[0]) {
-    case "WTR095": case "WTR096": case "WTR097": return (ComboActive() ? true : false);
+    case "WTR095": case "WTR096": case "WTR097": return ComboActive();
     case "WTR179": case "WTR180": case "WTR181": return true;
     case "ARC080": return true;
     case "MON004": return true;
@@ -338,7 +338,7 @@ function IsDominateActive()
     case "MON275": case "MON276": case "MON277": return true;
     case "ELE209": case "ELE210": case "ELE211": return HasIncreasedAttack();
     case "EVR027": case "EVR028": case "EVR029": return true;
-    case "EVR038": return (ComboActive() ? true : false);
+    case "EVR038": return ComboActive();
     case "EVR076": case "EVR077": case "EVR078": return $combatChainState[$CCS_NumBoosted] > 0;
     case "EVR110": case "EVR111": case "EVR112": return GetClassState($mainPlayer, $CS_NumAuras) > 0;
     case "EVR138":

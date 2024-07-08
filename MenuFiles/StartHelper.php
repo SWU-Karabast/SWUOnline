@@ -68,7 +68,7 @@ function initializePlayerState($handler, $deckHandler, $player)
       case $SET_IsPatron: $value = $isPatron; break;
       default: $value = SettingDefaultValue($i, $materialDeck[0]); break;
     }
-    array_push($settingArray, $value);
+    $settingArray[] = $value;
   }
   for($i=0; $i<count($savedSettings); $i+=2)
   {
