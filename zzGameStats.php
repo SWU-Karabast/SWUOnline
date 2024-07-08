@@ -114,7 +114,7 @@ $blitzPlays = 0;
 $ccPlays = 0;
 $gameData = [];
 while ($row = mysqli_fetch_array($playData, MYSQLI_NUM)) {
-  array_push($gameData, []);
+  $gameData[] = [];
   $index = count($gameData) - 1;
   $gameData[$index][0] = $row[0];
   $gameData[$index][1] = $row[1];
@@ -124,7 +124,7 @@ while ($row = mysqli_fetch_array($playData, MYSQLI_NUM)) {
 while ($row = mysqli_fetch_array($winData, MYSQLI_NUM)) {
   $heroID = $row[0];
   for ($i = 0; $i < count($gameData) && $gameData[$i][0] != $heroID; ++$i);
-  array_push($gameData[$i], $row[1]);
+  $gameData[$i][] = $row[1];
 }
 mysqli_close($conn);
 

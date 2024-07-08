@@ -427,7 +427,7 @@ function SearchPitchForNumCosts($player)
   $pitch = &GetPitch($player);
   for ($i = 0; $i < count($pitch); $i += PitchPieces()) {
     $cost = CardCost($pitch[$i]);
-    while (count($countArr) <= $cost) array_push($countArr, 0);
+    while (count($countArr) <= $cost) $countArr[] = 0;
     if ($countArr[$cost] == 0) ++$count;
     ++$countArr[$cost];
   }

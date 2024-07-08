@@ -265,7 +265,7 @@ function FixHand($currentPlayer)
   $fix = [];
   for($i = 0; $i < count($hand); ++$i)
   {
-    if($hand[$i] != "") array_push($fix, $hand[$i]);
+    if($hand[$i] != "") $fix[] = $hand[$i];
   }
   $hand = $fix;
 }

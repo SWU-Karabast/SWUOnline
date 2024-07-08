@@ -674,7 +674,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     $theirAllies = &GetAllies($otherPlayer);
     $myAllies = &GetAllies($playerID);
     for ($i = 0; $i < count($options); ++$i) {
-      array_push($optionsIndex, $options[$i]);
+      $optionsIndex[] = $options[$i];
       $option = explode("-", $options[$i]);
       if ($option[0] == "MYAURAS") $source = $myAuras;
       else if ($option[0] == "THEIRAURAS") $source = $theirAuras;

@@ -23,8 +23,7 @@ function EvaluateCombatChain(&$totalAttack, &$totalDefense, &$attackModifiers=[]
         else $attack = AttackValue($combatChain[$i-1]);
         if($canGainAttack || $i == 1 || $attack < 0)
         {
-          array_push($attackModifiers, $combatChain[$i-1]);
-          array_push($attackModifiers, $attack);
+          array_push($attackModifiers, $combatChain[$i-1], $attack);
           if($i == 1) $totalAttack += $attack;
           else AddAttack($totalAttack, $attack);
         }
@@ -47,30 +46,26 @@ function EvaluateCombatChain(&$totalAttack, &$totalDefense, &$attackModifiers=[]
       }
       if($canGainAttack || $attack < 0)
       {
-        array_push($attackModifiers, "+1 Attack Counters");
-        array_push($attackModifiers, $attack);
+        array_push($attackModifiers, "+1 Attack Counters", $attack);
         AddAttack($totalAttack, $attack);
       }
     }
     $attack = MainCharacterAttackModifiers();
     if($canGainAttack || $attack < 0)
     {
-      array_push($attackModifiers, "Character/Equipment");
-      array_push($attackModifiers, $attack);
+      array_push($attackModifiers, "Character/Equipment", $attack);
       AddAttack($totalAttack, $attack);
     }
     $attack = AuraAttackModifiers(0);
     if($canGainAttack || $attack < 0)
     {
-      array_push($attackModifiers, "Aura Ability");
-      array_push($attackModifiers, $attack);
+      array_push($attackModifiers, "Aura Ability", $attack);
       AddAttack($totalAttack, $attack);
     }
     $attack = ArsenalAttackModifier();
     if($canGainAttack || $attack < 0)
     {
-      array_push($attackModifiers, "Arsenal Ability");
-      array_push($attackModifiers, $attack);
+      array_push($attackModifiers, "Arsenal Ability", $attack);
       AddAttack($totalAttack, $attack);
     }
 }
@@ -117,13 +112,13 @@ function AddCombatChain($cardID, $player, $from, $resourcesPaid)
 {
   global $combatChain, $turn;
   $index = count($combatChain);
-  array_push($combatChain, $cardID);
-  array_push($combatChain, $player);
-  array_push($combatChain, $from);
-  array_push($combatChain, $resourcesPaid);
-  array_push($combatChain, RepriseActive());
-  array_push($combatChain, 0);//Attack modifier
-  array_push($combatChain, 0);//Defense modifier
+  $combatChain[] = $cardID;
+  $combatChain[] = $player;
+  $combatChain[] = $from;
+  $combatChain[] = $resourcesPaid;
+  $combatChain[] = RepriseActive();
+  $combatChain[] = 0;//Attack modifier
+  $combatChain[] = 0;//Defense modifier
   if($turn[0] == "B" || CardType($cardID) == "DR") OnBlockEffects($index, $from);
   CurrentEffectAttackAbility();
   return $index;
@@ -804,7 +799,7 @@ function CombatChainClosedCharacterEffects()
           if ($wasRevealed) {
             if (AttackValue($deck[0]) < 6) {
               WriteLog("The card was put on the bottom of your deck.");
-              array_push($deck, array_shift($deck));
+              $deck[] = array_shift($deck);
             }
           }
           break;
@@ -1486,7 +1481,7 @@ function NumEquipBlock()
   {
     $deck = &GetDeck($player);
     $cardID = RemovePitch($player, $index);
-    array_push($deck, $cardID);
+    $deck[] = $cardID;
   }
 
   function GetUniqueId()
@@ -1926,13 +1921,13 @@ function GetCurrentAttackNames()
   global $combatChain, $currentTurnEffects, $mainPlayer;
   $names = [];
   if(count($combatChain) == 0) return $names;
-  array_push($names, CardName($combatChain[0]));
+  $names[] = CardName($combatChain[0]);
   for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnEffectPieces())
   {
     $effectArr = explode("-", $currentTurnEffects[$i]);
     $name = CurrentEffectNameModifier($effectArr[0], (count($effectArr) > 1 ? GamestateUnsanitize($effectArr[1]) : "N/A"));
     //You have to do this at the end, or you might have a recursive loop -- e.g. with OUT052
-    if($name != "" && $currentTurnEffects[$i+1] == $mainPlayer && IsCombatEffectActive($effectArr[0]) && !IsCombatEffectLimited($i)) array_push($names, $name);
+    if($name != "" && $currentTurnEffects[$i+1] == $mainPlayer && IsCombatEffectActive($effectArr[0]) && !IsCombatEffectLimited($i)) $names[] = $name;
   }
   return $names;
 }
@@ -4677,7 +4672,7 @@ function Draw($player, $mainPhase = true, $fromCardEffect = true)
     return -1;
   }
   if(CurrentEffectPreventsDraw($player, $mainPhase)) return -1;
-  array_push($hand, array_shift($deck));
+  $hand[] = array_shift($deck);
   PermanentDrawCardAbilities($player);
   $hand = array_values($hand);
   return $hand[count($hand) - 1];

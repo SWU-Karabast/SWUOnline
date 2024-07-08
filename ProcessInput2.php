@@ -39,7 +39,7 @@ $chkCount = isset($_GET["chkCount"]) ? $_GET["chkCount"] : 0;
 $chkInput = [];
 for ($i = 0; $i < $chkCount; ++$i) {
   $chk = isset($_GET[("chk" . $i)]) ? $_GET[("chk" . $i)] : "";
-  if ($chk != "") array_push($chkInput, $chk);
+  if ($chk != "") $chkInput[] = $chk;
 }
 $inputText = isset($_GET["inputText"]) ? $_GET["inputText"] : "";
 

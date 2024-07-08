@@ -15,16 +15,16 @@ function PlayAura($cardID, $player, $number = 1, $isToken = false, $rogueHeronSp
   $theirHoldState = AuraDefaultHoldTriggerState($cardID);
   if($theirHoldState == 0 && HoldPrioritySetting($otherPlayer) == 1) $theirHoldState = 1;
   for($i = 0; $i < $number; ++$i) {
-    array_push($auras, $cardID);
-    array_push($auras, AuraEntersPlayState($cardID)); //Status
-    if($rogueHeronSpecial) array_push($auras, 0); //Only happens on the damage effect of the Heron Master in the Roguelike Gamemode
-    else array_push($auras, AuraPlayCounters($cardID)); //Miscellaneous Counters
-    array_push($auras, 0); //Attack counters
-    array_push($auras, ($isToken ? 1 : 0)); //Is token 0=No, 1=Yes
-    array_push($auras, AuraNumUses($cardID));
-    array_push($auras, GetUniqueId());
-    array_push($auras, $myHoldState); //My Hold priority for triggers setting 2=Always hold, 1=Hold, 0=Don't hold
-    array_push($auras, $theirHoldState); //Opponent Hold priority for triggers setting 2=Always hold, 1=Hold, 0=Don't hold
+    $auras[] = $cardID;
+    $auras[] = AuraEntersPlayState($cardID);
+    if($rogueHeronSpecial) $auras[] = 0; //Only happens on the damage effect of the Heron Master in the Roguelike Gamemode
+    else $auras[] = AuraPlayCounters($cardID); //Miscellaneous Counters
+    $auras[] = 0; //Attack counters
+    $auras[] = ($isToken ? 1 : 0); //Is token 0=No, 1=Yes
+    $auras[] = AuraNumUses($cardID);
+    $auras[] = GetUniqueId();
+    $auras[] = $myHoldState; //My Hold priority for triggers setting 2=Always hold, 1=Hold, 0=Don't hold
+    $auras[] = $theirHoldState; //Opponent Hold priority for triggers setting 2=Always hold, 1=Hold, 0=Don't hold
   }
   if(DelimStringContains(CardSubType($cardID), "Affliction")) IncrementClassState($otherPlayer, $CS_NumAuras, $number);
   else if($cardID != "ELE111") IncrementClassState($player, $CS_NumAuras, $number);

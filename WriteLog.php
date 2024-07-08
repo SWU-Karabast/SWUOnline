@@ -27,7 +27,7 @@ function ClearLog($n=20)
   if ($handle) {
     while (!feof($handle)) {
         $buffer = fgets($handle);
-        array_push($lines, $buffer);
+        $lines[] = $buffer;
         array_shift($lines);
     }
     fclose($handle);

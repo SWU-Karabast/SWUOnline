@@ -660,7 +660,7 @@ function CreatePopupAPI($id, $fromArr, $canClose, $defaultState = 0, $title = ""
   $result->additionalComments = $additionalComments;
   $cards = array();
   for ($i = 0; $i < count($fromArr); $i += $arrElements) {
-    array_push($cards, JSONRenderedCard($fromArr[$i]));
+    $cards[] = JSONRenderedCard($fromArr[$i]);
   }
   if (count($cardsArray) > 0) {
     $cards = $cardsArray;
@@ -1049,9 +1049,9 @@ function GetTheirBanishForDisplay($playerID)
   $banish = array();
   for ($i = 0; $i < count($theirBanish); $i += BanishPieces()) {
     if ($theirBanish[$i + 1] == "INT" || $theirBanish[$i + 1] == "UZURI")
-      array_push($banish, $TheirCardBack);
+      $banish[] = $TheirCardBack;
     else
-      array_push($banish, $theirBanish[$i]);
+      $banish[] = $theirBanish[$i];
   }
   return $banish;
 }
@@ -1063,9 +1063,9 @@ function GetMyBanishForDisplay($playerID)
   $banish = array();
   for ($i = 0; $i < count($myBanish); $i += BanishPieces()) {
     if ($myBanish[$i + 1] == "INT" || $myBanish[$i + 1] == "UZURI")
-      array_push($banish, $myCardBack);
+      $banish[] = $myCardBack;
     else
-      array_push($banish, $myBanish[$i]);
+      $banish[] = $myBanish[$i];
   }
   return $banish;
 }

@@ -70,17 +70,17 @@ function PutCharacterIntoPlayForPlayer($cardID, $player)
 {
   $char = &GetPlayerCharacter($player);
   $index = count($char);
-  array_push($char, $cardID);
-  array_push($char, 2);
-  array_push($char, CharacterCounters($cardID));
-  array_push($char, 0);
-  array_push($char, 0);
-  array_push($char, 1);
-  array_push($char, 0);
-  array_push($char, 0);
-  array_push($char, 0);
-  array_push($char, 2);
-  array_push($char, 0);
+  $char[] = $cardID;
+  $char[] = 2;
+  $char[] = CharacterCounters($cardID);
+  $char[] = 0;
+  $char[] = 0;
+  $char[] = 1;
+  $char[] = 0;
+  $char[] = 0;
+  $char[] = 0;
+  $char[] = 2;
+  $char[] = 0;
   return $index;
 }
 

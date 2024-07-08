@@ -97,10 +97,10 @@ if($handler) {
   $response->deck->demiHero = [];//TODO: Move from cards to here
   for($i = 1; $i < count($character); ++$i) {
     $cardID = $character[$i];
-    if (SubtypeContains($cardID, "Head")) array_push($response->deck->head, $cardID);
-    else if (SubtypeContains($cardID, "Chest")) array_push($response->deck->chest, $cardID);
-    else if (SubtypeContains($cardID, "Arms")) array_push($response->deck->arms, $cardID);
-    else if (SubtypeContains($cardID, "Legs")) array_push($response->deck->legs, $cardID);
+    if (SubtypeContains($cardID, "Head")) $response->deck->head[] = $cardID;
+    else if (SubtypeContains($cardID, "Chest")) $response->deck->chest[] = $cardID;
+    else if (SubtypeContains($cardID, "Arms")) $response->deck->arms[] = $cardID;
+    else if (SubtypeContains($cardID, "Legs")) $response->deck->legs[] = $cardID;
     else {
       $handItem = new stdClass();
       $handItem->id = $cardID;
@@ -110,8 +110,8 @@ if($handler) {
       else if(SubtypeContains($cardID, "Off-Hand")) $numHands = 1;
       else if(Is1H($handItem->id)) $numHands = 1;
       $handItem->numHands = $numHands;
-      array_push($response->deck->weapons, $handItem);
-      array_push($response->deck->hands, $handItem);
+      $response->deck->weapons[] = $handItem;
+      $response->deck->hands[] = $handItem;
     }
   }
 
@@ -123,7 +123,7 @@ if($handler) {
   {
     if(CardType($response->deck->cards[$i]) == "D")
     {
-      array_push($response->deck->demiHero, $response->deck->cards[$i]);
+      $response->deck->demiHero[] = $response->deck->cards[$i];
       unset($response->deck->cards[$i]);
     }
   }
@@ -141,7 +141,7 @@ if($handler) {
   {
     if(CardType($response->deck->cardsSB[$i]) == "D")
     {
-      array_push($response->deck->demiHero, $response->deck->cardsSB[$i]);
+      $response->deck->demiHero[] = $response->deck->cardsSB[$i];
       unset($response->deck->cardsSB[$i]);
     }
   }
@@ -160,7 +160,7 @@ if($handler) {
     else if(Is1H($handItem->id)) $numHands = 1;
     $handItem->numHands = $numHands;
     $handItem->is1H = Is1H($handItem->id);
-    array_push($response->deck->handsSB, $handItem);
+    $response->deck->handsSB[] = $handItem;
   }
 
   $cardIndex = [];
@@ -171,7 +171,7 @@ if($handler) {
       $dictionaryCard = new stdClass();
       $dictionaryCard->id = $card;
       $dictionaryCard->pitch = PitchValue($card);
-      array_push($response->deck->cardDictionary, $dictionaryCard);
+      $response->deck->cardDictionary[] = $dictionaryCard;
     }
   }
 
