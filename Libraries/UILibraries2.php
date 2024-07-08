@@ -701,7 +701,6 @@ function CardStats($player)
   if ($darkMode) {
     $lighterColor = "rgba(94, 94, 94, 0.95)";
     $darkerColor = "rgba(74, 74, 74, 0.95)";
-    ;
   } else {
     $lighterColor = "rgba(255, 255, 255, 0.1)";
     $darkerColor = "rgba(255, 255, 255, 0)";
