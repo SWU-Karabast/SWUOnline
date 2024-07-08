@@ -955,7 +955,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       $inOptions = in_array($mzIndex, $optionsIndex);
       $action = $mzChooseFromPlay && $inOptions ? 16 : 0;
       $actionDataOverride = $mzChooseFromPlay && $inOptions ? $mzIndex : 0;
-      $border = CardBorderColor($theirAllies[$i], "ALLY", $action == 16 ? true : false, "THEIRS");
+      $border = CardBorderColor($theirAllies[$i], "ALLY", $action == 16, "THEIRS");
 
       $ally = new Ally($mzIndex, $otherPlayer);
       $opts = array(
@@ -1002,7 +1002,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     $inOptions = in_array($mzIndex, $optionsIndex);
     $action = $mzChooseFromPlay && $inOptions ? 16 : 0;
     $actionDataOverride = $mzChooseFromPlay && $inOptions ? $mzIndex : 0;
-    $border = CardBorderColor($theirCharacter[$i], "CHAR", $action == 16 ? true : false, "THEIRS");
+    $border = CardBorderColor($theirCharacter[$i], "CHAR", $action == 16, "THEIRS");
     $atkCounters = 0;
     $counters = 0;
     $epicActionUsed = 0;
@@ -1085,7 +1085,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   if (count($myAuras) > 0) {
     for ($i = 0; $i < count($myAuras); $i += AuraPieces()) {
       if (IsTileable($myAuras[$i])) continue;
-      $playable = ($currentPlayer == $playerID ? $myAuras[$i + 1] == 2 && IsPlayable($myAuras[$i], $turn[0], "PLAY", $i, $restriction) : false);
+      $playable = ($currentPlayer == $playerID && $myAuras[$i+1] == 2 && IsPlayable($myAuras[$i], $turn[0], "PLAY", $i, $restriction));
       $border = CardBorderColor($myAuras[$i], "PLAY", $playable);
       $counters = $myAuras[$i + 2];
       $atkCounters = $myAuras[$i + 3];
@@ -1099,7 +1099,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   if (count($myItems) > 0) {
     for ($i = 0; $i < count($myItems); $i += ItemPieces()) {
       if (IsTileable($myItems[$i])) continue;
-      $playable = ($currentPlayer == $playerID ? IsPlayable($myItems[$i], $turn[0], "PLAY", $i, $restriction) : false);
+      $playable = ($currentPlayer == $playerID && IsPlayable($myItems[$i], $turn[0], "PLAY", $i, $restriction));
       $border = CardBorderColor($myItems[$i], "PLAY", $playable);
       echo ("<div style='position:relative; display: inline-block;'>");
       echo (Card($myItems[$i], "concat", $cardSizeAura, $currentPlayer == $playerID && $turn[0] != "P" && $playable ? 10 : 0, 1, ItemOverlay($myItems[$i], $myItems[$i + 2], $myItems[$i + 3]), $border, $myItems[$i + 1], strval($i), "", false, 0, 0, 0, "ITEMS", controller: $playerID) . "&nbsp");
@@ -1121,7 +1121,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         $inOptions = in_array($mzIndex, $optionsIndex);
         $action = $inOptions ? 16 : 0;
         $actionDataOverride = $inOptions ? $mzIndex : 0;
-        $border = CardBorderColor($myAllies[$i], "PLAY", $action == 16 ? true : false);
+        $border = CardBorderColor($myAllies[$i], "PLAY", $action == 16);
       } else {
         $playable = IsPlayable($myAllies[$i], $turn[0], "PLAY", $i, $restriction) && ($myAllies[$i + 1] == 2 || AllyPlayableExhausted($myAllies[$i]));
         $border = CardBorderColor($myAllies[$i], "PLAY", $playable);
@@ -1196,7 +1196,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       $inOptions = in_array($mzIndex, $optionsIndex);
       $action = $inOptions ? 16 : 0;
       $actionDataOverride = $inOptions ? $mzIndex : 0;
-      $border = CardBorderColor($myCharacter[$i], "CHAR", $action == 16 ? true : false);
+      $border = CardBorderColor($myCharacter[$i], "CHAR", $action == 16);
     } else {
       $playable = $playerID == $currentPlayer && IsPlayable($myCharacter[$i], $turn[0], "CHAR", $i, $restriction) && ($myCharacter[$i + 1] == 2 || $epicActionUsed == 0);
       $border = CardBorderColor($myCharacter[$i], "CHAR", $playable);

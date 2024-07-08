@@ -458,7 +458,7 @@ function HasShielded($cardID, $player, $index)
       return true;
     case "6939947927"://Hunter of the Haxion Brood
       $otherPlayer = $player == 1 ? 2 : 1;
-      return SearchCount(SearchAllies($otherPlayer, hasBountyOnly:true)) > 0 ? true : false;
+      return SearchCount(SearchAllies($otherPlayer, hasBountyOnly:true)) > 0;
     case "0088477218"://Privateer Scyk
       return SearchCount(SearchAllies($player, aspect:"Cunning")) > 1;
     default: return false;
@@ -1091,7 +1091,7 @@ function IsPlayable($cardID, $phase, $from, $index = -1, &$restriction = null, $
   if($phase == "M" && $from == "GY") {
     $discard = &GetDiscard($player);
     if($discard[$index] == "4843813137") return true;//Brutal Traditions
-    return $discard[$index+1] == "TT" || $discard[$index+1] == "TTFREE" ? true : false;
+    return $discard[$index+1] == "TT" || $discard[$index+1] == "TTFREE";
   }
   $isStaticType = IsStaticType($cardType, $from, $cardID);
   if($isStaticType) {

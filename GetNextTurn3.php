@@ -581,7 +581,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   $auraTileMap = [];
   $myAurasOutput = array();
   for ($i = 0; $i + AuraPieces() - 1 < count($myAuras); $i += AuraPieces()) {
-    $playable = ($currentPlayer == $playerID ? $myAuras[$i + 1] == 2 && IsPlayable($myAuras[$i], $turn[0], "PLAY", $i, $restriction) : false);
+    $playable = ($currentPlayer == $playerID && $myAuras[$i+1] == 2 && IsPlayable($myAuras[$i], $turn[0], "PLAY", $i, $restriction));
     $border = CardBorderColor($myAuras[$i], "PLAY", $playable);
     $counters = $myAuras[$i + 2];
     $atkCounters = $myAuras[$i + 3];
@@ -613,7 +613,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   for ($i = 0; $i + ItemPieces() - 1 < count($myItems); $i += ItemPieces()) {
     $type = CardType($myItems[$i]);
     $sType = CardSubType($myItems[$i]);
-    $playable = ($currentPlayer == $playerID ? IsPlayable($myItems[$i], $turn[0], "PLAY", $i, $restriction) : false);
+    $playable = ($currentPlayer == $playerID && IsPlayable($myItems[$i], $turn[0], "PLAY", $i, $restriction));
     $border = CardBorderColor($myItems[$i], "PLAY", $playable);
     $actionTypeOut = (($currentPlayer == $playerID) && $playable == 1 ? 10 : 0);
     if ($restriction != "") $restriction = implode("_", explode(" ", $restriction));
@@ -682,7 +682,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   $response->turnPhase = $turnPhase;
 
   // Do we have priority?
-  $response->havePriority = $currentPlayer == $playerID ? true : false;
+  $response->havePriority = $currentPlayer == $playerID;
 
   // opponent and player Action Points
   if ($mainPlayer == $playerID || ($playerID == 3 && $mainPlayer != $otherPlayer)) {
@@ -699,7 +699,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     JSONRenderedCard($lastPlayed[0], controller: $lastPlayed[1]);
 
   // is the player the active player (is it their turn?)
-  $response->amIActivePlayer = ($turn[1] == $playerID) ? true : false;
+  $response->amIActivePlayer = $turn[1] == $playerID;
 
   //Turn number
   $response->turnNo = $currentRound;

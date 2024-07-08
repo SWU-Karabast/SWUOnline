@@ -575,7 +575,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       for($i=0; $i<count($input); ++$i)
       {
         $inputArr = explode("-", $input[$i]);
-        $passFilter = ($relationship == "include" ? false : true);
+        $passFilter = !($relationship == "include");
         for($j=0; $j<count($compareArr); ++$j)
         {
           switch($type)
@@ -1027,7 +1027,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       return $damage;
     case "PAYRESOURCES":
       $paramArr = explode(",", $parameter);
-      $skipChoice = count($paramArr) > 1 ? $paramArr[1] == 1 : false;
+      $skipChoice = count($paramArr) > 1 && $paramArr[1] == 1;
       $numResources = $paramArr[0];
       if($skipChoice == 1) { //Skip choice
         $resourceCards = &GetResourceCards($currentPlayer);

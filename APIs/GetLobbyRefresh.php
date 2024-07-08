@@ -163,7 +163,7 @@ if ($lastUpdate != 0 && $cacheVal < $lastUpdate) {
   $response->submitSideboard = ($playerID == 1 ? ($gameStatus == $MGS_ReadyToStart ? "block" : "none") : ($gameStatus == $MGS_P2Sideboard ? "block" : "none"));
 
   $response->myPriority = true;
-  if ($gameStatus == $MGS_ChooseFirstPlayer) $response->myPriority = ($playerID == $firstPlayerChooser ? true : false);
+  if ($gameStatus == $MGS_ChooseFirstPlayer) $response->myPriority = $playerID == $firstPlayerChooser;
   else if ($playerID == 1 && $gameStatus < $MGS_ReadyToStart) $response->myPriority = false;
   else if ($playerID == 2 && $gameStatus >= $MGS_ReadyToStart) $response->myPriority = false;
 
@@ -178,7 +178,7 @@ if ($lastUpdate != 0 && $cacheVal < $lastUpdate) {
   // If both players have enabled chat, is true, else false
   $p1ChatStatus = intval(GetCachePiece($gameName, 15));
   $p2ChatStatus = intval(GetCachePiece($gameName, 16));
-  $response->chatEnabled = ($p1ChatStatus == 1 && $p2ChatStatus == 1 ? true : false);
+  $response->chatEnabled = $p1ChatStatus == 1 && $p2ChatStatus == 1;
   if($playerID == 1) $response->chatInvited = ($p1ChatStatus == 0 && $p2ChatStatus == 1);
   else if($playerID == 2) $response->chatInvited = ($p2ChatStatus == 0 && $p1ChatStatus == 1);
 

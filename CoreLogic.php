@@ -168,13 +168,13 @@ function CachedTotalBlock()
 function CachedDominateActive()
 {
   global $combatChainState, $CCS_CachedDominateActive;
-  return ($combatChainState[$CCS_CachedDominateActive] == "1" ? true : false);
+  return $combatChainState[$CCS_CachedDominateActive] == "1";
 }
 
 function CachedOverpowerActive()
 {
   global $combatChainState, $CCS_CachedOverpowerActive;
-  return ($combatChainState[$CCS_CachedOverpowerActive] == "1" ? true : false);
+  return $combatChainState[$CCS_CachedOverpowerActive] == "1";
 }
 
 function CachedNumBlockedFromHand() //Dominate

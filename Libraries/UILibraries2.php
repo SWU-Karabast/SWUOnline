@@ -79,7 +79,7 @@ function JSONRenderedCard(
   $numUses = NULL
 ) {
   global $playerID;
-  $isSpectator = (isset($playerID) && intval($playerID) == 3 ? true : false);
+  $isSpectator = isset($playerID) && intval($playerID) == 3;
 
   $countersMap->counters = property_exists($countersMap, 'counters') ?
     $countersMap->counters : $counters;
@@ -164,7 +164,7 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
     $overlay = $opts['overlay'] ?? 0;
   }
 
-  $LanguageJP = ((IsLanguageJP($playerID) && TranslationExist("JP", $cardNumber)) ? true : false);
+  $LanguageJP = IsLanguageJP($playerID) && TranslationExist("JP", $cardNumber);
   if ($darkMode == null)
     $darkMode = false;
   if ($folder == "crops") {
@@ -242,7 +242,7 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
   $rv .= "<div " . ($id != "" ? "id='" . $id . "-ovr' " : "") . "class='overlay'" . "style='visibility:" . ($overlay == 1 ? "visible" : "hidden") . "; height: {$height}px; width: {$width}px; top:2px; left:2px; position:absolute; background: rgba(0, 0, 0, 0.5); z-index: 1; border-radius: 8px;'></div>";
 
   // Counters Style
-  $dynamicScaling = (function_exists("IsDynamicScalingEnabled") ? IsDynamicScalingEnabled($playerID) : false);
+  $dynamicScaling = (function_exists("IsDynamicScalingEnabled") && IsDynamicScalingEnabled($playerID));
   $counterHeight = $dynamicScaling ? intval($maxHeight / 3.3) : 28;
   // Icon Size
   $iconSize = 26;

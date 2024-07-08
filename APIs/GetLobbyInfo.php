@@ -67,7 +67,7 @@ $response->badges = [];
 
 $response->amIActive = true; //Is the game waiting on me to do something?
 
-if ($gameStatus == $MGS_ChooseFirstPlayer) $response->amIActive = $playerID == $firstPlayerChooser ? true : false;
+if ($gameStatus == $MGS_ChooseFirstPlayer) $response->amIActive = $playerID == $firstPlayerChooser;
 else if ($playerID == 1 && $gameStatus < $MGS_ReadyToStart) $response->amIActive = false;
 else if ($playerID == 2 && $gameStatus >= $MGS_ReadyToStart) $response->amIActive = false;
 

@@ -131,7 +131,7 @@ function DealAllyDamage($targetPlayer, $index, $damage, $type="")
     --$allies[$index+6];
   }
   $allies[$index+2] -= $damage;
-  if($allies[$index+2] <= 0) DestroyAlly($targetPlayer, $index, fromCombat:($type == "COMBAT" ? true : false));
+  if($allies[$index+2] <= 0) DestroyAlly($targetPlayer, $index, fromCombat: $type == "COMBAT");
 }
 
 function RemoveAlly($player, $index)

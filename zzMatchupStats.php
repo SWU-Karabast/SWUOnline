@@ -11,7 +11,7 @@ if (!isset($_SESSION["useruid"])) {
 }
 
 $forIndividual = TryGet("forPlayer", false);
-$forIndividual = ($forIndividual ? true : false);//If it evaluates to true, explicitly cast it to boolean
+$forIndividual = (bool)$forIndividual;//If it evaluates to true, explicitly cast it to boolean
 $useruid = $_SESSION["useruid"];
 $userid = $_SESSION["userid"];
 if (!$forIndividual) exit;

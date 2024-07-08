@@ -10,7 +10,7 @@ if (!isset($_SESSION["useruid"])) {
   exit;
 }
 $forIndividual = TryGet("forIndividual", false);
-$forIndividual = ($forIndividual ? true : false);//If it evaluates to true, explicitly cast it to boolean
+$forIndividual = (bool)$forIndividual;//If it evaluates to true, explicitly cast it to boolean
 $useruid = $_SESSION["useruid"];
 $userID = $_SESSION["userid"];
 if (!$forIndividual) exit;
