@@ -10,8 +10,7 @@ class Ally {
 
   // Constructor
   function __construct($MZIndex, $player="") {
-    global $currentPlayer, $debugInfo;
-    $debugInfo['mzIndex'] = $MZIndex;
+    global $currentPlayer;
     $mzArr = explode("-", $MZIndex);
     if($player == "") $player = ($mzArr[0] == "MYALLY" ? $currentPlayer : ($currentPlayer == 1 ? 2 : 1));
     if($mzArr[1] == "") {
@@ -42,12 +41,8 @@ class Ally {
     return $this->index;
   }
 
-  function Damage() {
+  function Health() {
     return $this->allies[$this->index+2];
-  }
-
-  function AddDamage($amount) {
-    $this->allies[$this->index+2] += $amount;
   }
 
   function Owner() {
@@ -60,22 +55,22 @@ class Ally {
     return $this->allies[$this->index+12];
   }
 
+  function AddHealth($amount) {
+    $this->allies[$this->index+2] += $amount;
+  }
+
   function Heal($amount) {
     $healed = $amount;
-    if($amount > $this->Damage()) {
-      $healed = $this->Damage();
-      $this->allies[$this->index+2] = 0;
-    } else {
-      $this->allies[$this->index+2] -= $amount;
+    $this->AddHealth($amount);
+    if($this->Health() > $this->MaxHealth()) {
+      $healed = $amount - ($this->Health() - $this->MaxHealth());
+      $this->allies[$this->index+2] = $this->MaxHealth();
     }
     AddEvent("RESTORE", $this->UniqueID() . "!" . $healed);
     return $healed;
   }
 
   function MaxHealth() {
-    global $debugInfo;
-    $debugInfo['CardID'] = $this->CardID(); 
-    $debugInfo['allies'] = $this->allies; 
     $max = AllyHealth($this->CardID(), $this->PlayerID());
     $upgrades = $this->GetUpgrades();
     for($i=0; $i<count($upgrades); ++$i) if($upgrades[$i] != "-") $max += CardHP($upgrades[$i]);
@@ -96,21 +91,12 @@ class Ally {
     return $max;
   }
 
-  function Health() {
-    return $this->MaxHealth() - $this->Damage();
-  }
-
-  //Returns true if the ally is destroyed
-  function DefeatIfNoRemainingHP() {
-    if($this->Health() <= 0 && ($this->CardID() != "d1a7b76ae7" || $this->LostAbilities())) {
-      DestroyAlly($this->playerID, $this->index);
-      return true;
-    }
-    return false;
+  function Damage() {
+    return $this->MaxHealth() - $this->Health();
   }
 
   function IsDamaged() {
-    return $this->Damage() > 0;
+    return $this->Health() < $this->MaxHealth();
   }
 
   function IsExhausted() {
@@ -158,9 +144,12 @@ class Ally {
       default: break;
     }
     if($damageDealt != NULL) $damageDealt = $amount;
-    $this->AddDamage($amount);
+    $this->allies[$this->index+2] -= $amount;
     AddEvent("DAMAGE", $this->UniqueID() . "!" . $amount);
-    if ($this->DefeatIfNoRemainingHP()) return true;
+    if($this->Health() <= 0 && ($this->CardID() != "d1a7b76ae7" || $this->LostAbilities())) { //Chirrut Imwe
+      DestroyAlly($this->playerID, $this->index, fromCombat:$fromCombat);
+      return true;
+    }
     AllyDamageTakenAbilities($this->playerID, $this->index, survived:true, damage:$amount, fromCombat:$fromCombat);
     switch($this->CardID())
     {
@@ -174,8 +163,23 @@ class Ally {
 
   function AddRoundHealthModifier($amount) {
     if($this->index == -1) return;
+    $this->allies[$this->index+2] += $amount;
     $this->allies[$this->index+9] += $amount;
-    $this->DefeatIfNoRemainingHP();
+    if($this->Health() <= 0) {
+      DestroyAlly($this->playerID, $this->index);
+      return true;
+    }
+    return false;
+  }
+
+  function TempReduceHealth($amount) {
+    if($this->index == -1) return;
+    $this->allies[$this->index+2] -= $amount;
+    if($this->Health() <= 0) {
+      DestroyAlly($this->playerID, $this->index);
+      return true;
+    }
+    return false;
   }
 
   function NumAttacks() {
@@ -193,7 +197,7 @@ class Ally {
     $upgrades = $this->GetUpgrades();
     for($i=0; $i<count($upgrades); ++$i) if($upgrades[$i] != "-") $power += AttackValue($upgrades[$i]);
     if(HasGrit($this->CardID(), $this->playerID, $this->index)) {
-      $damage = $this->Damage();
+      $damage = $this->MaxHealth() - $this->Health();
       if($damage > 0) $power += $damage;
     }
     //Other ally buffs
@@ -207,7 +211,7 @@ class Ally {
           if(CardTitle($this->CardID()) == "4-LOM") $power += 1;
           break;
         case "e2c6231b35"://Director Krennic
-          if($this->IsDamaged()) $power += 1;
+          if($this->Health() < $this->MaxHealth()) $power += 1;
           break;
         case "1557302740"://General Veers
           if($i != $this->index && TraitContains($this->CardID(), "Imperial", $this->PlayerID())) $power += 1;
@@ -251,7 +255,7 @@ class Ally {
     for($i=0; $i<count($myChar); $i+=CharacterPieces()) {
       switch($myChar[$i]) {
         case "8560666697"://Director Krennic
-          if($this->IsDamaged()) $power += 1;
+          if($this->Health() < $this->MaxHealth()) $power += 1;
           break;
         case "9794215464"://Gar Saxon
           if($this->IsUpgraded()) $power += 1;
@@ -274,7 +278,12 @@ class Ally {
     if($this->index == -1) return;
     $roundHealthModifier = $this->allies[$this->index+9];
     if(is_int($roundHealthModifier)) $this->allies[$this->index+2] -= $roundHealthModifier;
-    $this->DefeatIfNoRemainingHP();
+    $this->allies[$this->index+9] = 0;
+    if($this->Health() <= 0) {
+      DestroyAlly($this->playerID, $this->index);
+      return true;
+    }
+    return false;
   }
 
   function Ready() {
@@ -290,11 +299,21 @@ class Ally {
     $this->allies[$this->index+1] = 2;
     return true;
   }
-  
+
   function Exhaust() {
     if($this->index == -1) return;
     AddEvent("EXHAUST", $this->UniqueID());
     $this->allies[$this->index+1] = 1;
+  }
+
+  function AddBuffCounter() {
+    ++$this->allies[$this->index+2];
+    ++$this->allies[$this->index+7];
+  }
+
+  function ModifyNamedCounters($type, $amount = 1) {
+    $this->allies[$this->index+6] += $amount;
+    return $this->allies[$this->index+6];//Return the amount of that type of counter
   }
 
   function AddSubcard($cardID) {
@@ -309,6 +328,7 @@ class Ally {
   function Attach($cardID) {
     if($this->allies[$this->index + 4] == "-") $this->allies[$this->index + 4] = $cardID;
     else $this->allies[$this->index + 4] = $this->allies[$this->index + 4] . "," . $cardID;
+    $this->AddHealth(CardHP($cardID));
     if (CardIsUnique($cardID)) {
       $this->CheckUniqueUpgrade($cardID);
     }
@@ -387,11 +407,17 @@ class Ally {
         unset($subcards[$i]);
         $subcards = array_values($subcards);
         $this->allies[$this->index + 4] = count($subcards) > 0 ? implode(",", $subcards) : "-";
-        $this->DefeatIfNoRemainingHP();
-      } 
+        $this->allies[$this->index+2] -= CardHP($upgradeID);
+        if($this->Health() <= 0) {
+          DestroyAlly($this->playerID, $this->index);
+          return true;
+        }
+        return false;
+      }
     }
+    return false;
   }
-  
+
   function RescueCaptive($captiveID, $newController=-1) {
     if($this->index == -1) return;
     $subcards = $this->GetSubcards();
@@ -404,10 +430,10 @@ class Ally {
         if($newController == -1) $newController = $otherPlayer;
         PlayAlly($captiveID, $newController, from:"CAPTIVE");
         return;
-      } 
+      }
     }
   }
-  
+
   function DiscardCaptive($captiveID) {
     if($this->index == -1) return;
     $subcards = $this->GetSubcards();
@@ -419,7 +445,7 @@ class Ally {
         $otherPlayer = $this->PlayerID() == 1 ? 2 : 1;
         AddGraveyard($captiveID, $otherPlayer, "CAPTIVE");
         return;
-      } 
+      }
     }
   }
 
@@ -468,28 +494,5 @@ function LastAllyIndex($player) {
   $allies = &GetAllies($player);
   return count($allies) - AllyPieces();
 }
-
-//code to try and capture info about what is happening when the script is killed
-function shutdownFunction() {
-  global $debugInfo;
-
-  $error = error_get_last();
-  if ($error !== NULL && $error['type'] == 1) {
-      $info = "[SHUTDOWN] file: " . $error['file'] . " - line: " . $error['line'] . " - message: " . $error['message'];
-      error_log($info);
-
-      // Log the stored debug information
-      error_log("Debug info: " . print_r($debugInfo, true));
-
-      // Capture the stack trace
-      ob_start();
-      debug_print_backtrace();
-      $stack_trace = ob_get_clean();
-      error_log($stack_trace);
-  }
-}
-
-$debugInfo = array(); // Global variable to store debug information
-//register_shutdown_function('shutdownFunction');//Uncomment this for debugging info
 
 ?>

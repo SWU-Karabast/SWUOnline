@@ -225,6 +225,13 @@ function MZGainControl($player, $target)
   }
 }
 
+function MZBuffAlly($player, $target)
+{
+  $targetArr = explode("-", $target);
+  $allies = &GetAllies($player);
+  ++$allies[$targetArr[1]+7];//Buff counters
+  ++$allies[$targetArr[1]+2];//Life
+}
 
 function MZHealAlly($player, $target, $amount)
 {
