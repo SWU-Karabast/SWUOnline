@@ -117,7 +117,7 @@ if ($matchup == "" && $playerID == 2 && $gameStatus >= $MGS_Player2Joined) {
 }
 
 $deckLoaded = false;
-if(substr($decklink, 0, 9) == "DRAFTFAB-")
+if(str_starts_with($decklink, "DRAFTFAB-"))
 {
   $isDraftFaB = true;
   $deckFile = "../Games/" . $gameName . "/p" . $playerID . "Deck.txt";

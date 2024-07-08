@@ -333,7 +333,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         case "GETCARDINDEX": $mzArr = explode("-", $lastResult); return $mzArr[1];
         case "GETUNIQUEID":
           $mzArr = explode("-", $lastResult);
-          if(substr($mzArr[0], 0, 5) == "THEIR") $zone = &GetMZZone(($player == 1 ? 2 : 1), $mzArr[0]);
+          if(str_starts_with($mzArr[0], "THEIR")) $zone = &GetMZZone(($player == 1 ? 2 : 1), $mzArr[0]);
           else $zone = &GetMZZone($player, $mzArr[0]);
           switch($mzArr[0]) {
             case "ALLY": case "MYALLY": case "THEIRALLY": return $zone[$mzArr[1] + 5];
@@ -447,7 +447,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             WriteLog(CardLink($cardID, $cardID) . " resisted capture.");
             return $cardID;
           }
-          CollectBounties(substr($lastResult, 0, 2) == "MY" ? $player : ($player == 1 ? 2 : 1), explode("-", $lastResult)[1]);
+          CollectBounties(str_starts_with($lastResult, "MY") ? $player : ($player == 1 ? 2 : 1), explode("-", $lastResult)[1]);
           MZRemove($player, $lastResult);
           $uniqueID = $parameterArr[1];
           $index = SearchAlliesForUniqueID($uniqueID, $player);
@@ -1118,7 +1118,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       SetClassState($player, $CS_LayerTarget, $target);
       return $lastResult;
     case "SHOWSELECTEDTARGET":
-      if(substr($lastResult, 0, 5) == "THEIR") {
+      if(str_starts_with($lastResult, "THEIR")) {
         $otherP = ($player == 1 ? 2 : 1);
         WriteLog(GetMZCardLink($otherP, $lastResult) . " was targeted");
       } else {
@@ -1266,7 +1266,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $params = explode(",", $parameter);
       for($i = 0; $i < count($lastResultArr); ++$i) {
         $mzIndex = explode("-", $lastResultArr[$i]);
-        $target = (substr($mzIndex[0], 0, 2) == "MY") ? $player : ($player == 1 ? 2 : 1);
+        $target = (str_starts_with($mzIndex[0], "MY")) ? $player : ($player == 1 ? 2 : 1);
         DamageTrigger($target, $params[0], $params[1], GetMZCard($target, $lastResultArr[$i]));
       }
       return $lastResult;

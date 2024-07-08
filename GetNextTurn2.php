@@ -719,8 +719,8 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       if ($option[0] == "LAYER" && (IsAbilityLayer($card))) $card = $source[$index + 2];
       $playerBorderColor = 0;
 
-      if (substr($option[0], 0, 2) == "MY") $playerBorderColor = 1;
-      else if (substr($option[0], 0, 5) == "THEIR") $playerBorderColor = 2;
+      if (str_starts_with($option[0], "MY")) $playerBorderColor = 1;
+      else if (str_starts_with($option[0], "THEIR")) $playerBorderColor = 2;
       else if ($option[0] == "CC") $playerBorderColor = ($combatChain[$index + 1] == $playerID ? 1 : 2);
       else if ($option[0] == "LAYER") {
         $playerBorderColor = ($layers[$index + 1] == $playerID ? 1 : 2);
@@ -1051,7 +1051,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
 
   $restriction = "";
   $actionType = $turn[0] == "ARS" ? 4 : 27;
-  if (strpos($turn[0], "CHOOSEHAND") !== false && ($turn[0] != "" || $turn[0] != "MAYMULTICHOOSEHAND")) $actionType = 16;
+  if (str_contains($turn[0], "CHOOSEHAND") && ($turn[0] != "" || $turn[0] != "MAYMULTICHOOSEHAND")) $actionType = 16;
   $handLeft = "calc(50% - " . ((count($myHand) * ($cardWidth + 15)) / 2) . "px - 119px)";
   echo ("<div id='myHand' style='display:none; position:fixed; left:" . $handLeft . "; bottom: 80px; z-index:100;'>"); //Hand div
   $handContents = "";
@@ -1061,7 +1061,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       if (IsCasterMode()) $handContents .= ClientRenderedCard(cardNumber: $myHand[$i], controller: 2);
       else $handContents .= ClientRenderedCard(cardNumber: $MyCardBack, controller: 2);
     } else {
-      if ($playerID == $currentPlayer) $playable = $turn[0] == "ARS" || ($actionType == 16 && strpos("," . $turn[2] . ",", "," . $i . ",") !== false) || ($turn[0] == "M" || $turn[0] == "INSTANT") && IsPlayable($myHand[$i], $turn[0], "HAND", -1, $restriction);
+      if ($playerID == $currentPlayer) $playable = $turn[0] == "ARS" || ($actionType == 16 && str_contains("," . $turn[2] . ",", "," . $i . ",")) || ($turn[0] == "M" || $turn[0] == "INSTANT") && IsPlayable($myHand[$i], $turn[0], "HAND", -1, $restriction);
       else $playable = false;
       $border = CardBorderColor($myHand[$i], "HAND", $playable);
       $actionTypeOut = (($currentPlayer == $playerID) && $playable == 1 ? $actionType : 0);

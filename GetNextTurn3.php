@@ -366,13 +366,13 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   // my hand contents
   $restriction = "";
   $actionType = $turn[0] == "ARS" ? 4 : 27;
-  if (strpos($turn[0], "CHOOSEHAND") !== false && ($turn[0] != "MULTICHOOSEHAND" || $turn[0] != "MAYMULTICHOOSEHAND")) $actionType = 16;
+  if (str_contains($turn[0], "CHOOSEHAND") && ($turn[0] != "MULTICHOOSEHAND" || $turn[0] != "MAYMULTICHOOSEHAND")) $actionType = 16;
   $myHandContents = array();
   for ($i = 0; $i < count($myHand); ++$i) {
     if ($playerID == 3) {
       array_push($myHandContents, JSONRenderedCard(cardNumber: $MyCardBack, controller: 2));
     } else {
-      if ($playerID == $currentPlayer) $playable = $turn[0] == "ARS" || IsPlayable($myHand[$i], $turn[0], "HAND", -1, $restriction) || ($actionType == 16 && strpos("," . $turn[2] . ",", "," . $i . ",") !== false);
+      if ($playerID == $currentPlayer) $playable = $turn[0] == "ARS" || IsPlayable($myHand[$i], $turn[0], "HAND", -1, $restriction) || ($actionType == 16 && str_contains("," . $turn[2] . ",", "," . $i . ","));
       else $playable = false;
       $border = CardBorderColor($myHand[$i], "HAND", $playable);
       $actionTypeOut = (($currentPlayer == $playerID) && $playable == 1 ? $actionType : 0);
@@ -483,7 +483,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
           countersMap: (object) ["counters" => $myArsenal[$i + 3]]
         ));
       } else {
-        if ($playerID == $currentPlayer) $playable = $turn[0] == "ARS" || IsPlayable($myArsenal[$i], $turn[0], "ARS", $i, $restriction) || ($actionType == 16 && strpos("," . $turn[2] . ",", "," . $i . ",") !== false);
+        if ($playerID == $currentPlayer) $playable = $turn[0] == "ARS" || IsPlayable($myArsenal[$i], $turn[0], "ARS", $i, $restriction) || ($actionType == 16 && str_contains("," . $turn[2] . ",", "," . $i . ","));
         else $playable = false;
         $border =
           CardBorderColor($myArsenal[$i], "ARS", $playable);
@@ -919,8 +919,8 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       if ($option[0] == "LAYER" && (IsAbilityLayer($card))) $card = $source[$index + 2];
       $playerBorderColor = 0;
 
-      if (substr($option[0], 0, 2) == "MY") $playerBorderColor = 1;
-      else if (substr($option[0], 0, 5) == "THEIR") $playerBorderColor = 2;
+      if (str_starts_with($option[0], "MY")) $playerBorderColor = 1;
+      else if (str_starts_with($option[0], "THEIR")) $playerBorderColor = 2;
       else if ($option[0] == "CC") $playerBorderColor = ($combatChain[$index + 1] == $playerID ? 1 : 2);
       else if ($option[0] == "LAYER") {
         $playerBorderColor = ($layers[$index + 1] == $playerID ? 1 : 2);

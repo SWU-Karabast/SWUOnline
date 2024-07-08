@@ -906,7 +906,7 @@ function SearchMultizone($player, $searches)
         }
       }
     }
-    $searchPlayer = (substr($zone, 0, 2) == "MY" ? $player : ($player == 1 ? 2 : 1));
+    $searchPlayer = (str_starts_with($zone, "MY") ? $player : ($player == 1 ? 2 : 1));
     $searchResult = "";
     if(!$isCardID && !$isSameName)
     {
