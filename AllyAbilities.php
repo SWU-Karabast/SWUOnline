@@ -631,13 +631,7 @@ function CollectBounty($player, $index, $cardID, $reportMode=false, $bountyUnitO
     case "7642980906"://Stolen Landspeeder
       ++$numBounties;
       if($reportMode) break;
-      if($ally->Owner() == $opponent) {
-        AddDecisionQueue("MULTIZONEINDICES", $opponent, "MYDISCARD:cardID=" . $cardID);
-        AddDecisionQueue("SETDQCONTEXT", $opponent, "Click the Stolen Landspeeder to play it for free.", 1);
-        AddDecisionQueue("MAYCHOOSEMULTIZONE", $opponent, "<-", 1);
-        AddDecisionQueue("ADDCURRENTEFFECT", $opponent, $cardID, 1);//Cost discount and experience adding.
-        AddDecisionQueue("MZOP", $opponent, "PLAYCARD", 1);
-      }
+      if($ally->Owner() == $opponent) AddLayer("TRIGGER", $opponent, "7642980906");
       break;
     case "9642863632"://Bounty Hunter's Quarry
       ++$numBounties;

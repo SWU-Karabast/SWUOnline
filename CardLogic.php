@@ -626,6 +626,15 @@ function ProcessTrigger($player, $parameter, $uniqueID, $target="-")
       AddDecisionQueue("SETDQCONTEXT", $player, "Choose a card to play");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
       AddDecisionQueue("MZOP", $player, "PLAYCARD", 1);
+      break;
+    case "7642980906"://Stolen Landspeeder
+      AddDecisionQueue("MULTIZONEINDICES", $player, "MYDISCARD:cardID=" . "7642980906");
+      AddDecisionQueue("SETDQCONTEXT", $player, "Click the Stolen Landspeeder to play it for free.", 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+      AddDecisionQueue("ADDCURRENTEFFECT", $player, "7642980906", 1);//Cost discount and experience adding.
+      AddDecisionQueue("MZOP", $player, "PLAYCARD", 1);
+      AddDecisionQueue("REMOVECURRENTEFFECT", $player, "7642980906");
+      break;
     default: break;
   }
 }

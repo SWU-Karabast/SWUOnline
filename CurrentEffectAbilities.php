@@ -720,9 +720,9 @@ function CurrentEffectAllyEntersPlay($player, $index)
     if($currentTurnEffects[$i + 1] == $player) {
       switch($currentTurnEffects[$i]) {
         case "7642980906"://Stolen Landspeeder
+          $remove = true;
           $ally = new Ally("MYALLY-" . $index, $player);
           $ally->Attach("2007868442");//Experience token
-          RemoveCurrentTurnEffect($i);
           break;
         default:
           break;
