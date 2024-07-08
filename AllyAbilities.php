@@ -171,7 +171,7 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
   $captives = $ally->GetCaptives();
   $otherPlayer = $player == 1 ? 2 : 1;
   for($i=0; $i<count($captives); ++$i) {
-    PlayAlly($captives[$i], $otherPlayer, from:"CAPTIVE");
+    AddLayer("TRIGGER", $currentPlayer, "PLAYALLY", $captives[$i], "CAPTIVE", $captives[$i]);
   }
   $owner = $allies[$index+11];
   if(!$skipDestroy) {
