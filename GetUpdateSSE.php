@@ -40,7 +40,14 @@ $response->padding = str_pad("",4096);
 
 ob_start();
 // Loop until the client close the stream
+$count = 0;
 while(true) {
+  ++$count;
+  if($count % 100 == 0) {
+    if(!file_exists("Games/" . $gameName . "/GameFile.txt")) {
+      exit;
+    }
+  }
   $cacheVal = intval(GetCachePiece($gameName, 1));
   if($cacheVal > $lastUpdate)
   {

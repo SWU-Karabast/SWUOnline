@@ -27,9 +27,7 @@ function PutItemIntoPlayForPlayer($item, $player, $steamCounterModifier = 0, $nu
     array_push($items, $theirHoldState);
   }
   switch($item) {
-    case "pv4n1n3gyg"://Cleric Robes
-      if(IsClassBonusActive($player, "CLERIC")) Draw($player);
-      break;
+    
     default: break;
   }
 }

@@ -356,9 +356,7 @@ function CurrentEffectAttackAbility()
     $remove = false;
     if($currentTurnEffects[$i + 1] == $mainPlayer) {
       switch ($currentTurnEffects[$i]) {
-        case "Tx6iJQNSA6"://Majestic Spirit's Crest
-          if(!IsAlly($attackID)) Draw($mainPlayer);
-          break;
+        
         default:
           break;
       }

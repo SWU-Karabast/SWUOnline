@@ -283,29 +283,6 @@ function OnBlockEffects($index, $from)
   }
 }
 
-function CombatChainCloseAbilities($player, $cardID, $chainLink)
-{
-  global $chainLinkSummary, $mainPlayer, $defPlayer, $chainLinks;
-  switch($cardID) {
-    case "EVR002":
-      if($chainLinkSummary[$chainLink*ChainLinkSummaryPieces()] == 0 && $chainLinks[$chainLink][0] == $cardID) {
-        PlayAura("WTR225", $defPlayer);
-      }
-      break;
-    case "UPR189":
-      if($chainLinkSummary[$chainLink*ChainLinkSummaryPieces()+1] <= 2) {
-        Draw($player);
-        WriteLog(CardLink($cardID, $cardID) . " drew a card");
-      }
-      break;
-    case "DYN121":
-      if($player == $mainPlayer) PlayerLoseHealth($mainPlayer, GetHealth($mainPlayer));
-      break;
-    default:
-      break;
-  }
-}
-
 function NumNonEquipmentDefended()
 {
   global $combatChain, $defPlayer;
