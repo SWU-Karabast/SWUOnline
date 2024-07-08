@@ -516,7 +516,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
           $caption = getCaption($layers[$i]);
           
           // Determine counters for the card, using number of tiles if tileable, otherwise using the caption
-          $counters = IsTileable($layerName) && $nbTiles > 1 ? $nbTiles : ($caption ? $caption : 0);
+          $counters = IsTileable($layerName) && $nbTiles > 1 ? $nbTiles : ($caption ?: 0);
   
           // Add the card to the content
           $content .= "<div class='tile' style='max-width:{$cardSize}px;'>" .
