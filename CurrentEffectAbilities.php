@@ -146,7 +146,6 @@ function EffectAttackModifier($cardID, $playerID="")
       $ally = new Ally($attackTarget, $defPlayer);
       $modifier = $playerID == $defPlayer ? -2 : 2;
       return CardArenas($ally->CardID()) == "Ground" ? $modifier : 0;
-    case "3399023235": return $cardID == "3399023235-2" ? -2 : 0;//Fenn Rau
     default: return 0;
   }
 }
@@ -299,10 +298,6 @@ function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
           break;
         case "5576996578"://Endless Legions
           $costModifier -= 99;
-          $remove = true;
-          break;
-        case "3399023235"://Fenn Rau
-          $costModifier -= 2;
           $remove = true;
           break;
         default: break;
