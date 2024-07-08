@@ -163,8 +163,8 @@ function ParseGamestate($useRedis = false)
   $roguelikeGameID = trim($gamestateContent[69+$numChainLinks]); //Roguelike game id
   $events = GetStringArray($gamestateContent[70+$numChainLinks]); //Events
   $EffectContext = trim($gamestateContent[71+$numChainLinks]); //What update number the gamestate is for
-  $initiativePlayer = trim($gamestateContent[72+$numChainLinks]); //The player that has initiative
-  $initiativeTaken = trim($gamestateContent[73+$numChainLinks]); //If initiative is taken yet
+  $initiativePlayer = isset($gamestateContent[72+$numChainLinks]) ? trim($gamestateContent[72+$numChainLinks]) : ""; //The player that has initiative
+  $initiativeTaken = isset(trim($gamestateContent[73+$numChainLinks])) ? trim($gamestateContent[73+$numChainLinks]) : ""; //If initiative is taken yet
 
   fclose($handler);
   BuildMyGamestate($playerID);
