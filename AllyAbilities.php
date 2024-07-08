@@ -145,17 +145,6 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
   $allies = &GetAllies($player);
   $cardID = $allies[$index];
   if(!$skipDestroy) {
-    if($cardID == "7642980906") {//Stolen Landspeeder
-      $ally = new Ally("MYALLY-" . $index, $player);
-      if($player != $ally->Owner()) {
-        $ally->Attach("2007868442");//Experience token
-        $ally->Heal(999);
-        $otherPlayer = $player == 1 ? 2 : 1;
-        AddDecisionQueue("PASSPARAMETER", $otherPlayer, "THEIRALLY-" . $ally->Index(), 1);
-        AddDecisionQueue("MZOP", $otherPlayer, "TAKECONTROL", 1);
-        return $cardID;
-      }
-    }
     AllyDestroyedAbility($player, $index, $fromCombat);
     CollectBounties($player, $index);
     IncrementClassState($player, $CS_NumAlliesDestroyed);
@@ -176,7 +165,7 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
   $owner = $allies[$index+11];
   if(!$skipDestroy) {
     if(DefinedTypesContains($cardID, "Leader", $player)) ;//If it's a leader it doesn't go in the discard
-    else if($cardID == "8954587682" && !$ally->LostAbilities()) AddResources($cardID, $player, "PLAY", "DOWN");
+    else if($cardID == "8954587682" && !$ally->LostAbilities()) AddResources($cardID, $player, "PLAY", "DOWN");//Superlaser Technician
     else if($cardID == "7204838421" && !$ally->LostAbilities()) AddResources($cardID, $player, "PLAY", "DOWN");//Enterprising Lackeys
     else AddGraveyard($cardID, $owner, "PLAY");
   }
@@ -585,11 +574,6 @@ function CollectBounty($player, $index, $cardID, $reportMode=false, $bountyUnitO
         ReadyResource($opponent);
       }
       break;
-    case "6878039039"://Hylobon Enforcer
-      ++$numBounties;
-      if($reportMode) break;
-      Draw($opponent);
-      break;
     case "6420322033"://Enticing Reward
       ++$numBounties;
       if($reportMode) break;
@@ -610,6 +594,8 @@ function CollectBounty($player, $index, $cardID, $reportMode=false, $bountyUnitO
       if(!CardIsUnique($bountyUnit)) PummelHit($opponent);
       break;
     case "9503028597"://Clone Deserter
+    case "9108611319"://Cartel Turncoat
+    case "6878039039"://Hylobon Enforcer
       ++$numBounties;
       if($reportMode) break;
       Draw($opponent);
@@ -635,11 +621,6 @@ function CollectBounty($player, $index, $cardID, $reportMode=false, $bountyUnitO
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $opponent, "<-", 1);
       AddDecisionQueue("MZOP", $opponent, "REST", 1);
       break;
-    case "9108611319"://Cartel Turncoat
-      ++$numBounties;
-      if($reportMode) break;
-      Draw($opponent);
-      break;
     case "0252207505"://Synara San
       if($bountyUnitOverride != "-" || $ally->IsExhausted()) {
         ++$numBounties;
@@ -650,6 +631,7 @@ function CollectBounty($player, $index, $cardID, $reportMode=false, $bountyUnitO
     case "7642980906"://Stolen Landspeeder
       ++$numBounties;
       if($reportMode) break;
+      if($ally->Owner() == $opponent) AddLayer("TRIGGER", $opponent, "7642980906");
       break;
     case "9642863632"://Bounty Hunter's Quarry
       ++$numBounties;
