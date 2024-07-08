@@ -490,6 +490,6 @@ function shutdownFunction() {
 }
 
 $debugInfo = array(); // Global variable to store debug information
-register_shutdown_function('shutdownFunction');
+//register_shutdown_function('shutdownFunction');//Uncomment this for debugging info
 
 ?>
