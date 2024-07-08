@@ -474,7 +474,7 @@ function shutdownFunction() {
   global $debugInfo;
 
   $error = error_get_last();
-  if ($error !== NULL) {
+  if ($error !== NULL && $error['type'] == 1) {
       $info = "[SHUTDOWN] file: " . $error['file'] . " - line: " . $error['line'] . " - message: " . $error['message'];
       error_log($info);
 
