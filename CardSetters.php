@@ -374,7 +374,7 @@ function AddCharacterEffect($player, $index, $effect)
   global $myStateBuiltFor;
   if ($mainPlayerGamestateStillBuilt) {
     if ($player == $mainPlayer) {
-      $mainCharacterEffects[] = $index;
+      array_push($mainCharacterEffects, $index, $effect);
     } else {
       array_push($defCharacterEffects, $index, $effect);
     }
