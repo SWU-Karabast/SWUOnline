@@ -130,7 +130,7 @@ if ($lastUpdate != 0 && $cacheVal < $lastUpdate) {
   $data["logContent"] = JSONLog($gameName, $playerID);
 
   // Player Joined Audio
-  $data["playerJoinAudio"] = $playerID == 1 && $gameStatus == $MGS_ChooseFirstPlayer ? true : false;
+  $data["playerJoinAudio"] = $playerID == 1 && $gameStatus == $MGS_ChooseFirstPlayer;
 
   // Other player info
   $theirInfo = "";

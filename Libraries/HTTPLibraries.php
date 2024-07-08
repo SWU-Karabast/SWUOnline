@@ -60,7 +60,7 @@ function GetGameCounter($path = "./")
 function IsReplay()
 {
   global $gameName;
-  return (GetCachePiece($gameName, 10) == "1" ? true : false);
+  return GetCachePiece($gameName, 10) == "1";
 }
 
 function SetHeaders()

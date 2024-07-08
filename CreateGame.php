@@ -48,7 +48,7 @@ if (!isset($_SESSION["userid"])) {
 }
 
 $isShadowBanned = false;
-if(isset($_SESSION["isBanned"])) $isShadowBanned = (intval($_SESSION["isBanned"]) == 1 ? true : false);
+if(isset($_SESSION["isBanned"])) $isShadowBanned = intval($_SESSION["isBanned"]) == 1;
 else if(isset($_SESSION["userid"])) $isShadowBanned = IsBanned($_SESSION["userid"]);
 
 if($visibility == "public" && $deckTestMode != "" && !isset($_SESSION["userid"])) {

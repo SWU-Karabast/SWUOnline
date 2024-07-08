@@ -8,7 +8,7 @@ function EncounterAI()
 {
   global $currentPlayer, $p2CharEquip, $decisionQueue, $mainPlayer, $mainPlayerGamestateStillBuilt, $combatChain, $actionPoints;
   $AIDebug = false;
-  $currentPlayerIsAI = ($currentPlayer == 2 && IsEncounterAI($p2CharEquip[0])) ? true : false;
+  $currentPlayerIsAI = $currentPlayer == 2 && IsEncounterAI($p2CharEquip[0]);
   if(!IsGameOver() && $currentPlayerIsAI)
   {
     $isBowActive = false;
@@ -221,13 +221,13 @@ function EncounterAI()
         PassInput();
       }
       ProcessMacros();
-      $currentPlayerIsAI = ($currentPlayer == 2 ? true : false);
+      $currentPlayerIsAI = $currentPlayer == 2;
       if($logicCount == 30 && $currentPlayerIsAI)
       {
         for($i=0; $i<=30 && $currentPlayerIsAI; ++$i)
         {
           PassInput();
-          $currentPlayerIsAI = ($currentPlayer == 2 ? true : false);
+          $currentPlayerIsAI = $currentPlayer == 2;
         }
       }
     }

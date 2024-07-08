@@ -302,7 +302,7 @@ function SpecificCardLogic($player, $card, $lastResult)
     case "RESTOCK":
       $arr = [];
       for($i = count($lastResult); $i >= 0; --$i) {
-        if($lastResult[$i] != "") array_push($arr, RemoveGraveyard($player, $lastResult[$i]));
+        if($lastResult[$i] != "") $arr[] = RemoveGraveyard($player, $lastResult[$i]);
       }
       RevealCards(implode(",", $arr), $player);
       if(count($arr) > 0) {
@@ -321,7 +321,7 @@ function SpecificCardLogic($player, $card, $lastResult)
       for($i=0; $i<count($upgrades); ++$i) {
         if(!IsToken($upgrades[$i])) AddHand($owner, $upgrades[$i]);
         $ally->DealDamage(CardHP($upgrades[$i]));
-        array_push($upgradesReturned, $upgrades[$i]);
+        $upgradesReturned[] = $upgrades[$i];
       }
       $ally->ClearSubcards();
       for($i=0; $i<count($upgradesReturned); ++$i) {
@@ -464,7 +464,7 @@ function SpecificCardLogic($player, $card, $lastResult)
       for($i=count($resources)-ResourcePieces(); $i>=0; $i-=ResourcePieces()) {
         if(DefinedTypesContains($resources[$i], "Unit", $player)) {
           $resourceCard = RemoveResource($player, $i);
-          array_push($cardsToPlay, $resourceCard);
+          $cardsToPlay[] = $resourceCard;
         }
       }
       for($i=0; $i<count($cardsToPlay); ++$i) {

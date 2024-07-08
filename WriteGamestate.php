@@ -13,9 +13,7 @@ while (!flock($handler, LOCK_EX) && $lockTries < 10) {
 
 if ($lockTries == 10) { fclose($handler); exit; }
 
-$gamestateContent = "";
-
-$gamestateContent .= implode(" ", $playerHealths) . "\r\n";
+$gamestateContent = implode(" ", $playerHealths) . "\r\n";
 
 //Player 1
 $gamestateContent .= implode(" ", $p1Hand) . "\r\n";

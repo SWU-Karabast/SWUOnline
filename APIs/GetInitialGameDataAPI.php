@@ -55,7 +55,7 @@ if(!AltArtsDisabled($playerID))
         $altArt->name = $campaign->CampaignName() . (count($cardBacks) > 1 ? " " . $i + 1 : "");
         $altArt->cardId = $arr[0];
         $altArt->altPath = $arr[1];
-        array_push($response->altArts, $altArt);
+        $response->altArts[] = $altArt;
       }
     }
   }

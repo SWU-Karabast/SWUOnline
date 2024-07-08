@@ -57,8 +57,8 @@ function PatreonLogin($access_token, $silent=true, $debugMode=false)
       {
         $_SESSION[$campaign->SessionID()] = true;
         $campaignName = $campaign->CampaignName();
-  			array_push($yourPatronages, $campaignName);
-        array_push($output->patreonCampaigns, $campaignName);
+  			$yourPatronages[] = $campaignName;
+        $output->patreonCampaigns[] = $campaignName;
       }
     }
 	}

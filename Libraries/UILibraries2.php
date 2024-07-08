@@ -79,7 +79,7 @@ function JSONRenderedCard(
   $numUses = NULL
 ) {
   global $playerID;
-  $isSpectator = (isset($playerID) && intval($playerID) == 3 ? true : false);
+  $isSpectator = isset($playerID) && intval($playerID) == 3;
 
   $countersMap->counters = property_exists($countersMap, 'counters') ?
     $countersMap->counters : $counters;
@@ -164,7 +164,7 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
     $overlay = $opts['overlay'] ?? 0;
   }
 
-  $LanguageJP = ((IsLanguageJP($playerID) && TranslationExist("JP", $cardNumber)) ? true : false);
+  $LanguageJP = IsLanguageJP($playerID) && TranslationExist("JP", $cardNumber);
   if ($darkMode == null)
     $darkMode = false;
   if ($folder == "crops") {
@@ -242,7 +242,7 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
   $rv .= "<div " . ($id != "" ? "id='" . $id . "-ovr' " : "") . "class='overlay'" . "style='visibility:" . ($overlay == 1 ? "visible" : "hidden") . "; height: {$height}px; width: {$width}px; top:2px; left:2px; position:absolute; background: rgba(0, 0, 0, 0.5); z-index: 1; border-radius: 8px;'></div>";
 
   // Counters Style
-  $dynamicScaling = (function_exists("IsDynamicScalingEnabled") ? IsDynamicScalingEnabled($playerID) : false);
+  $dynamicScaling = (function_exists("IsDynamicScalingEnabled") && IsDynamicScalingEnabled($playerID));
   $counterHeight = $dynamicScaling ? intval($maxHeight / 3.3) : 28;
   // Icon Size
   $iconSize = 26;
@@ -660,7 +660,7 @@ function CreatePopupAPI($id, $fromArr, $canClose, $defaultState = 0, $title = ""
   $result->additionalComments = $additionalComments;
   $cards = array();
   for ($i = 0; $i < count($fromArr); $i += $arrElements) {
-    array_push($cards, JSONRenderedCard($fromArr[$i]));
+    $cards[] = JSONRenderedCard($fromArr[$i]);
   }
   if (count($cardsArray) > 0) {
     $cards = $cardsArray;
@@ -701,7 +701,6 @@ function CardStats($player)
   if ($darkMode) {
     $lighterColor = "rgba(94, 94, 94, 0.95)";
     $darkerColor = "rgba(74, 74, 74, 0.95)";
-    ;
   } else {
     $lighterColor = "rgba(255, 255, 255, 0.1)";
     $darkerColor = "rgba(255, 255, 255, 0)";
@@ -1050,9 +1049,9 @@ function GetTheirBanishForDisplay($playerID)
   $banish = array();
   for ($i = 0; $i < count($theirBanish); $i += BanishPieces()) {
     if ($theirBanish[$i + 1] == "INT" || $theirBanish[$i + 1] == "UZURI")
-      array_push($banish, $TheirCardBack);
+      $banish[] = $TheirCardBack;
     else
-      array_push($banish, $theirBanish[$i]);
+      $banish[] = $theirBanish[$i];
   }
   return $banish;
 }
@@ -1064,9 +1063,9 @@ function GetMyBanishForDisplay($playerID)
   $banish = array();
   for ($i = 0; $i < count($myBanish); $i += BanishPieces()) {
     if ($myBanish[$i + 1] == "INT" || $myBanish[$i + 1] == "UZURI")
-      array_push($banish, $myCardBack);
+      $banish[] = $myCardBack;
     else
-      array_push($banish, $myBanish[$i]);
+      $banish[] = $myBanish[$i];
   }
   return $banish;
 }

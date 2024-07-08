@@ -41,7 +41,7 @@ if (IsUserLoggedIn()) {
       $deck->cardBack = "DEFAULT";
       $deck->playmat = "DEFAULT";
       $deck->link = $favoriteDecks[$i];
-      array_push($response->favoriteDecks, $deck);
+      $response->favoriteDecks[] = $deck;
     }
 
   }

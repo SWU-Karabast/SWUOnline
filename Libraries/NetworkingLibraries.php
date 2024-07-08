@@ -97,7 +97,7 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
           array_unshift($deck, $buttonInput);
           WriteLog("Player " . $playerID . " put a card on top of the deck.");
         } else if ($mode == 9) {
-          array_push($deck, $buttonInput);
+          $deck[] = $buttonInput;
           WriteLog("Player " . $playerID . " put a card on the bottom of the deck.");
         }
         unset($options[$found]);
@@ -152,7 +152,7 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
         $hand = &GetHand($playerID);
         $deck = &GetDeck($playerID);
         $cardID = $hand[$buttonInput];
-        array_push($deck, $cardID);
+        $deck[] = $cardID;
         unset($hand[$buttonInput]);
         $hand = array_values($hand);
         ContinueDecisionQueue($cardID);
@@ -194,7 +194,7 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
       }
       break;
     case 19: //MULTICHOOSE X
-      if (substr($turn[0], 0, 11) != "MULTICHOOSE" && substr($turn[0], 0, 14) != "MAYMULTICHOOSE") break;
+      if (!str_starts_with($turn[0], "MULTICHOOSE") && !str_starts_with($turn[0], "MAYMULTICHOOSE")) break;
       $params = explode("-", $turn[2]);
       $maxSelect = intval($params[0]);
       $options = explode(",", $params[1]);
@@ -221,7 +221,7 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
           break;
         }
         else {
-          array_push($input, $options[$chkInput[$i]]);
+          $input[] = $options[$chkInput[$i]];
         }
       }
       if (!$skipWriteGamestate) {
@@ -352,7 +352,7 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
       $index = $buttonInput;
       if($index >= $dqState[8]) break;
       $layer = [];
-      for($i=$index; $i<$index+LayerPieces(); ++$i) array_push($layer, $layers[$i]);
+      for($i=$index; $i<$index+LayerPieces(); ++$i) $layer[] = $layers[$i];
       $counter = 0;
       for($i=$index + LayerPieces(); $i<($index + LayerPieces()*2); ++$i)
       {
@@ -364,7 +364,7 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
       $index = $buttonInput;
       if($index == 0) break;
       $layer = [];
-      for($i=$index; $i<$index+LayerPieces(); ++$i) array_push($layer, $layers[$i]);
+      for($i=$index; $i<$index+LayerPieces(); ++$i) $layer[] = $layers[$i];
       $counter = 0;
       for($i=$index - LayerPieces(); $i<$index; ++$i)
       {
@@ -499,7 +499,7 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
     case 10011:
       WriteLog("Player " . $playerID ." manually added a card to their hand.", highlight: true);
       $hand = &GetHand($playerID);
-      array_push($hand, $cardID);
+      $hand[] = $cardID;
       break;
     case 10012:
       WriteLog("Player " . $playerID ." manually added a resource to their pool.", highlight: true);
@@ -943,7 +943,7 @@ function FinalizeChainLink($chainClosed = false)
 
   ChainLinkResolvedEffects();
 
-  array_push($chainLinks, array());
+  $chainLinks[] = array();
   $CLIndex = count($chainLinks) - 1;
   for ($i = 1; $i < count($combatChain); $i += CombatChainPieces()) {
     $cardType = CardType($combatChain[$i - 1]);
@@ -976,22 +976,22 @@ function FinalizeChainLink($chainClosed = false)
           break;
       }
     }
-    array_push($chainLinks[$CLIndex], $combatChain[$i - 1]); //Card ID
-    array_push($chainLinks[$CLIndex], $combatChain[$i]); //Player ID
-    array_push($chainLinks[$CLIndex], ($goesWhere == "GY" && $combatChain[$i + 1] != "PLAY" ? "1" : "0")); //Still on chain? 1 = yes, 0 = no
-    array_push($chainLinks[$CLIndex], $combatChain[$i + 1]); //From
-    array_push($chainLinks[$CLIndex], $combatChain[$i + 4]); //Attack Modifier
-    array_push($chainLinks[$CLIndex], $combatChain[$i + 5]); //Defense Modifier
+    $chainLinks[$CLIndex][] = $combatChain[$i-1]; //Card ID
+    $chainLinks[$CLIndex][] = $combatChain[$i]; //Player ID
+    $chainLinks[$CLIndex][] = ($goesWhere == "GY" && $combatChain[$i+1] != "PLAY" ? "1" : "0"); //Still on chain? 1 = yes, 0 = no
+    $chainLinks[$CLIndex][] = $combatChain[$i+1]; //From
+    $chainLinks[$CLIndex][] = $combatChain[$i+4]; //Attack Modifier
+    $chainLinks[$CLIndex][] = $combatChain[$i+5]; //Defense Modifier
   }
 
-  array_push($chainLinkSummary, $combatChainState[$CCS_DamageDealt]);
-  array_push($chainLinkSummary, $combatChainState[$CCS_LinkTotalAttack]);
-  array_push($chainLinkSummary, "-");//Talent
-  array_push($chainLinkSummary, "-");//Class
-  array_push($chainLinkSummary, SerializeCurrentAttackNames());
+  $chainLinkSummary[] = $combatChainState[$CCS_DamageDealt];
+  $chainLinkSummary[] = $combatChainState[$CCS_LinkTotalAttack];
+  $chainLinkSummary[] = "-";//Talent
+  $chainLinkSummary[] = "-";//Class
+  $chainLinkSummary[] = SerializeCurrentAttackNames();
   $numHitsOnLink = ($combatChainState[$CCS_DamageDealt] > 0 ? 1 : 0);
   $numHitsOnLink += intval($combatChainState[$CCS_HitThisLink]);
-  array_push($chainLinkSummary, $numHitsOnLink);//Num hits on link
+  $chainLinkSummary[] = $numHitsOnLink;//Num hits on link
 
   //Clean up combat effects that were used and are one-time
   CleanUpCombatEffects();
@@ -1073,7 +1073,7 @@ function BeginTurnPass()
 {
   global $mainPlayer, $defPlayer, $decisionQueue;
   ResetCombatChainState(); // The combat chain must be closed prior to the turn ending. The close step is outlined in 7.8 - specifically: CR 2.1 - 7.8.7. Fifth and finally, the Close Step ends, and the Action Phase continues. The Action Phase will always continue after the combat chain is closed - so there is another round of priority windows
-  ProcessDecisionQueue("");
+  ProcessDecisionQueue();
 }
 
 function PlayerSuppress($player)
@@ -1111,7 +1111,7 @@ function FinishTurnPass()
   BeginEndPhaseEffects();
   PermanentBeginEndPhaseEffects();
   AddDecisionQueue("PASSTURN", $mainPlayer, "-");
-  ProcessDecisionQueue("");
+  ProcessDecisionQueue();
 }
 
 function PassTurn()
@@ -1908,8 +1908,8 @@ function WriteGamestate()
 function AddEvent($type, $value)
 {
   global $events;
-  array_push($events, $type);
-  array_push($events, $value);
+  $events[] = $type;
+  $events[] = $value;
 }
 
 ?>
