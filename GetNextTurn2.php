@@ -569,8 +569,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   }
 
   if ($turn[0] == "DYNPITCH" && $turn[1] == $playerID) {
-    $content = "";
-    $content .= "<div display:inline;'>";
+    $content = "<div display:inline;'>";
     $options = explode(",", $turn[2]);
     for ($i = 0; $i < count($options); ++$i) {
       $content .= CreateButton($playerID, $options[$i], 7, $options[$i], "24px");
@@ -668,8 +667,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   $mzChooseFromPlay = false;
   $optionsIndex = [];
   if(($turn[0] == "MAYCHOOSEMULTIZONE" || $turn[0] == "CHOOSEMULTIZONE") && $turn[1] == $playerID) {
-    $content = "";
-    $content .= "<div display:inline;'>";
+    $content = "<div display:inline;'>";
     $options = explode(",", $turn[2]);
     $mzChooseFromPlay = true;
     $otherPlayer = $playerID == 2 ? 1 : 2;
