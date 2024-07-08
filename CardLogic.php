@@ -108,10 +108,7 @@ function AddCurrentTurnEffect($cardID, $player, $from = "", $uniqueID = -1)
     AddCurrentTurnEffectFromCombat($cardID, $player, $uniqueID);
     return;
   }
-  array_push($currentTurnEffects, $cardID);
-  array_push($currentTurnEffects, $player);
-  array_push($currentTurnEffects, $uniqueID);
-  array_push($currentTurnEffects, CurrentTurnEffectUses($cardID));
+  array_push($currentTurnEffects, $cardID, $player, $uniqueID, CurrentTurnEffectUses($cardID));
 }
 
 function AddAfterResolveEffect($cardID, $player, $from = "", $uniqueID = -1)
@@ -122,10 +119,7 @@ function AddAfterResolveEffect($cardID, $player, $from = "", $uniqueID = -1)
     AddCurrentTurnEffectFromCombat($cardID, $player, $uniqueID);
     return;
   }
-  array_push($afterResolveEffects, $cardID);
-  array_push($afterResolveEffects, $player);
-  array_push($afterResolveEffects, $uniqueID);
-  array_push($afterResolveEffects, CurrentTurnEffectUses($cardID));
+  array_push($afterResolveEffects, $cardID, $player, $uniqueID, CurrentTurnEffectUses($cardID));
 }
 
 function HasLeader($player) {
@@ -142,10 +136,7 @@ function CopyCurrentTurnEffectsFromAfterResolveEffects()
 {
   global $currentTurnEffects, $afterResolveEffects;
   for($i = 0; $i < count($afterResolveEffects); $i += CurrentTurnEffectPieces()) {
-    array_push($currentTurnEffects, $afterResolveEffects[$i]);
-    array_push($currentTurnEffects, $afterResolveEffects[$i+1]);
-    array_push($currentTurnEffects, $afterResolveEffects[$i+2]);
-    array_push($currentTurnEffects, $afterResolveEffects[$i+3]);
+    array_push($currentTurnEffects, $afterResolveEffects[$i], $afterResolveEffects[$i+1], $afterResolveEffects[$i+2], $afterResolveEffects[$i+3]);
   }
   $afterResolveEffects = [];
 }
@@ -154,20 +145,14 @@ function CopyCurrentTurnEffectsFromAfterResolveEffects()
 function AddCurrentTurnEffectFromCombat($cardID, $player, $uniqueID = -1)
 {
   global $currentTurnEffectsFromCombat;
-  array_push($currentTurnEffectsFromCombat, $cardID);
-  array_push($currentTurnEffectsFromCombat, $player);
-  array_push($currentTurnEffectsFromCombat, $uniqueID);
-  array_push($currentTurnEffectsFromCombat, CurrentTurnEffectUses($cardID));
+  array_push($currentTurnEffectsFromCombat, $cardID, $player, $uniqueID, CurrentTurnEffectUses($cardID));
 }
 
 function CopyCurrentTurnEffectsFromCombat()
 {
   global $currentTurnEffects, $currentTurnEffectsFromCombat;
   for($i = 0; $i < count($currentTurnEffectsFromCombat); $i += CurrentTurnEffectPieces()) {
-    array_push($currentTurnEffects, $currentTurnEffectsFromCombat[$i]);
-    array_push($currentTurnEffects, $currentTurnEffectsFromCombat[$i+1]);
-    array_push($currentTurnEffects, $currentTurnEffectsFromCombat[$i+2]);
-    array_push($currentTurnEffects, $currentTurnEffectsFromCombat[$i+3]);
+    array_push($currentTurnEffects, $currentTurnEffectsFromCombat[$i], $currentTurnEffectsFromCombat[$i+1], $currentTurnEffectsFromCombat[$i+2], $currentTurnEffectsFromCombat[$i+3]);
   }
   $currentTurnEffectsFromCombat = [];
 }
@@ -205,10 +190,7 @@ function CurrentTurnEffectUses($cardID)
 function AddNextTurnEffect($cardID, $player, $uniqueID = -1)
 {
   global $nextTurnEffects;
-  array_push($nextTurnEffects, $cardID);
-  array_push($nextTurnEffects, $player);
-  array_push($nextTurnEffects, $uniqueID);
-  array_push($nextTurnEffects, CurrentTurnEffectUses($cardID));
+  array_push($nextTurnEffects, $cardID, $player, $uniqueID, CurrentTurnEffectUses($cardID));
 }
 
 function IsCombatEffectLimited($index)
@@ -229,13 +211,7 @@ function IsCombatEffectLimited($index)
 function PrependLayer($cardID, $player, $parameter, $target = "-", $additionalCosts = "-", $uniqueID = "-")
 {
     global $layers;
-    array_push($layers, $cardID);
-    array_push($layers, $player);
-    array_push($layers, $parameter);
-    array_push($layers, $target);
-    array_push($layers, $additionalCosts);
-    array_push($layers, $uniqueID);
-    array_push($layers, GetUniqueId());
+    array_push($layers, $cardID, $player, $parameter, $target, $additionalCosts, $uniqueID, GetUniqueId());
     return count($layers);//How far it is from the end
 }
 
@@ -249,13 +225,7 @@ function AddLayer($cardID, $player, $parameter, $target = "-", $additionalCosts 
   global $layers, $dqState;
   //Layers are on a stack, so you need to push things on in reverse order
   if($append) {
-    array_push($layers, $cardID);
-    array_push($layers, $player);
-    array_push($layers, $parameter);
-    array_push($layers, $target);
-    array_push($layers, $additionalCosts);
-    array_push($layers, $uniqueID);
-    array_push($layers, GetUniqueId());
+    array_push($layers, $cardID, $player, $parameter, $target, $additionalCosts, $uniqueID, GetUniqueId());
     if(IsAbilityLayer($cardID))
     {
       $orderableIndex = intval($dqState[8]);
