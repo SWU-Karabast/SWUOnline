@@ -626,6 +626,7 @@ function ProcessTrigger($player, $parameter, $uniqueID, $target="-")
       AddDecisionQueue("SETDQCONTEXT", $player, "Choose a card to play");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
       AddDecisionQueue("MZOP", $player, "PLAYCARD", 1);
+      break;
     default: break;
   }
 }

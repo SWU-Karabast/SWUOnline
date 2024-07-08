@@ -1036,6 +1036,7 @@ function AllyPlayCardAbility($cardID, $player="", $reportMode=false, $from="-")
         AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a card to deal " . $damage . " damage to");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $otherPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $otherPlayer, "DEALDAMAGE," . $damage, 1);
+        break;
       default: break;
     }
   }

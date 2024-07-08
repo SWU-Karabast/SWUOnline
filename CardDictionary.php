@@ -1006,6 +1006,7 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       break;
     case "8709191884"://Hunter (Outcast Sergeant)
       $abilityNames = "Replace Resource";
+      break;
     default: break;
   }
   if(IsAlly($cardID, $currentPlayer)) {
