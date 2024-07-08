@@ -272,7 +272,8 @@ class Ally {
   //All the things that should happen at the end of a round
   function EndRound() {
     if($this->index == -1) return;
-    $this->allies[$this->index+9] = 0;
+    $roundHealthModifier = $this->allies[$this->index+9];
+    if(is_int($roundHealthModifier)) $this->allies[$this->index+2] -= $roundHealthModifier;
     $this->DefeatIfNoRemainingHP();
   }
 
@@ -314,7 +315,8 @@ class Ally {
   }
 
   function GetSubcards() {
-    if($this->allies[$this->index + 4] == "-") return [];
+    $subcards = $this->allies[$this->index + 4];
+    if($subcards == null || $subcards == "" || $subcards == "-") return [];
     return explode(",", $this->allies[$this->index + 4]);
   }
 

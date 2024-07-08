@@ -303,6 +303,7 @@ function AddDecisionQueue($phase, $player, $parameter, $subsequent = 0, $makeChe
 function PrependDecisionQueue($phase, $player, $parameter, $subsequent = 0, $makeCheckpoint = 0)
 {
   global $decisionQueue;
+  if($parameter == null || $parameter == "") return;
   $parameter = str_replace(" ", "_", $parameter);
   array_unshift($decisionQueue, $makeCheckpoint);
   array_unshift($decisionQueue, $subsequent);

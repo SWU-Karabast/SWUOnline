@@ -207,9 +207,12 @@ function deleteDirectory($dir)
 
   if (!is_dir($dir)) {
     $handler = fopen($dir, "w");
-    fwrite($handler, "");
-    fclose($handler);
-    return unlink($dir);
+    if($handler) {
+      fwrite($handler, "");
+      fclose($handler);
+      return unlink($dir);
+    }
+    return true;
   }
 
   foreach (scandir($dir) as $item) {

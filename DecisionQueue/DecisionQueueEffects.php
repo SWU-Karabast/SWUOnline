@@ -21,7 +21,7 @@ function ModalAbilities($player, $card, $lastResult)
       switch($lastResult[0]) {
         case "Leave": break;
         case "Play":
-          PrependDecisionQueue("SWAPTURN", $mainPlayer, "-");
+          PrependDecisionQueue("SWAPTURN", $player, "-");
           MZPlayCard($player, "MYDECK-0");
           break;
         case "Discard": Mill($player, 1); break;
@@ -353,13 +353,16 @@ function SpecificCardLogic($player, $card, $lastResult)
       AddDecisionQueue("MZOP", $player, "DEALDAMAGE," . $damage, 1);
       return $lastResult;
     case "MEDALCEREMONY":
+      if($lastResult == "PASS") {
+        return $lastResult;
+      }
       for($i=0; $i<count($lastResult); ++$i) {
         $ally = new Ally("MYALLY-" . $lastResult[$i], $player);
         $ally->Attach("2007868442");//Experience token
       }
       return $lastResult;
     case "LTCHILDSEN":
-      if ($lastResult == []) {
+      if($lastResult == "PASS" || $lastResult == []) {
         return $lastResult;
       }
       $hand = &GetHand($player);

@@ -3685,6 +3685,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "0505904136"://Scanning Officer
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
       $resources = &GetResourceCards($otherPlayer);
+      if(count($resources) == 0) break;
       $numDestroyed = 0;
       $cards = "";
       for($i = 0; $i < 3 && count($resources) > 0; $i++) {
@@ -4664,7 +4665,7 @@ function Draw($player, $mainPhase = true, $fromCardEffect = true)
   $hand = &GetHand($player);
   if(count($deck) == 0) {
     $char = &GetPlayerCharacter($player);
-    if($char[CharacterPieces()] != "DUMMY") WriteLog("Player " . $player . " took 3 damage for having no cards left in their deck.");
+    if(count($char) > CharacterPieces() && $char[CharacterPieces()] != "DUMMY") WriteLog("Player " . $player . " took 3 damage for having no cards left in their deck.");
     DealDamageAsync($player, 3, "DAMAGE", "DRAW");
     return -1;
   }

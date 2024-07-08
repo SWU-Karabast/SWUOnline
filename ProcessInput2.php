@@ -22,8 +22,8 @@ include_once "./includes/functions.inc.php";
 include_once "APIKeys/APIKeys.php";
 
 //We should always have a player ID as a URL parameter
-$gameName = $_GET["gameName"];
-if (!IsGameNameValid($gameName)) {
+$gameName = TryGET("gameName", "");
+if ($gameName == "" || !IsGameNameValid($gameName)) {
   echo ("Invalid game name.");
   exit;
 }
