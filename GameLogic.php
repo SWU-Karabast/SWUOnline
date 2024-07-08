@@ -413,10 +413,6 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $ally = new Ally($lastResult);
           $rv = implode(",", $ally->GetUpgrades());
           return $rv == "" ? "PASS" : $rv;
-        case "CHOOSETARGETANDMOVEUPGRADE":
-          GetLayerTarget($lastResult);
-          AddDecisionQueue("MZOP", $player, "MOVEUPGRADE", 1);
-          break;
         case "MOVEUPGRADE":
           //Requires unit to take upgrade from, upgrade to take, and unit to give upgrade to.
           $sourceUnit = new Ally($dqVars[1]);
@@ -605,6 +601,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
     case "MZFILTER":
       $params = explode("=", $parameter);
       $arr = explode(",", $lastResult);
+      if($params[0] == "canAttach") $params = explode("=", UpgradeFilter($params[1]));
       for($i=count($arr)-1; $i>=0; --$i) {
         switch($params[0]) {
           case "index": if($arr[$i] == $params[1]) unset($arr[$i]); break;
