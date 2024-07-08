@@ -22,9 +22,7 @@ function BanishCard(&$banish, &$classState, $cardID, $modifier, $player = "", $f
   if ($player == "") $player = $currentPlayer;
   if(CardType($cardID) != "T") { //If you banish a token, the token ceases to exist.
     $rv = count($banish);
-    array_push($banish, $cardID);
-    array_push($banish, $modifier);
-    array_push($banish, GetUniqueId());
+    array_push($banish, $cardID, $modifier, GetUniqueId());
   }
   ++$classState[$CS_CardsBanished];
   return $rv;
@@ -42,7 +40,7 @@ function RemoveBanish($player, $index)
 function AddBottomDeck($cardID, $player, $from)
 {
   $deck = &GetDeck($player);
-  array_push($deck, $cardID);
+  $deck[] = $cardID;
 }
 
 function AddTopDeck($cardID, $player, $from)
@@ -54,7 +52,7 @@ function AddTopDeck($cardID, $player, $from)
 function AddPlayerHand($cardID, $player, $from)
 {
   $hand = &GetHand($player);
-  array_push($hand, $cardID);
+  $hand[] = $cardID;
 }
 
 function RemoveHand($player, $index)
@@ -91,39 +89,39 @@ function RemovePitch($player, $index)
 function AddCharacter($cardID, $player, $counters=0, $status=2)
 {
   $char = &GetPlayerCharacter($player);
-  array_push($char, $cardID);
-  array_push($char, $status);
-  array_push($char, $counters);
-  array_push($char, 0);
-  array_push($char, 0);
-  array_push($char, 1);
-  array_push($char, 0);
-  array_push($char, 0);
-  array_push($char, 0);
-  array_push($char, 2);
-  array_push($char, 0);
+  $char[] = $cardID;
+  $char[] = $status;
+  $char[] = $counters;
+  $char[] = 0;
+  $char[] = 0;
+  $char[] = 1;
+  $char[] = 0;
+  $char[] = 0;
+  $char[] = 0;
+  $char[] = 2;
+  $char[] = 0;
 }
 
 function AddMemory($cardID, $player, $from, $facing, $counters=0)
 {
   $arsenal = &GetArsenal($player);
-  array_push($arsenal, $cardID);
-  array_push($arsenal, $facing);
-  array_push($arsenal, 1); //Num uses - currently always 1
-  array_push($arsenal, $counters); //Counters
-  array_push($arsenal, "0"); //Is Frozen (1 = Frozen)
-  array_push($arsenal, GetUniqueId()); //Unique ID
+  $arsenal[] = $cardID;
+  $arsenal[] = $facing;
+  $arsenal[] = 1; //Num uses - currently always 1
+  $arsenal[] = $counters; //Counters
+  $arsenal[] = "0"; //Is Frozen (1 = Frozen)
+  $arsenal[] = GetUniqueId(); //Unique ID
 }
 
 function AddResources($cardID, $player, $from, $facing, $counters=0, $isExhausted="0")
 {
   $arsenal = &GetArsenal($player);
-  array_push($arsenal, $cardID);
-  array_push($arsenal, $facing);
-  array_push($arsenal, 1); //Num uses - currently always 1
-  array_push($arsenal, $counters); //Counters
-  array_push($arsenal, $isExhausted); //Is Frozen (1 = Frozen)
-  array_push($arsenal, GetUniqueId()); //Unique ID
+  $arsenal[] = $cardID;
+  $arsenal[] = $facing;
+  $arsenal[] = 1; //Num uses - currently always 1
+  $arsenal[] = $counters; //Counters
+  $arsenal[] = $isExhausted; //Is Frozen (1 = Frozen)
+  $arsenal[] = GetUniqueId(); //Unique ID
 }
 
 function AddArsenal($cardID, $player, $from, $facing, $counters=0)
@@ -168,7 +166,7 @@ function ArsenalTurnFaceUpAbility($cardID, $player)
 function AddHand($player, $cardID)
 {
   $hand = &GetHand($player);
-  array_push($hand, $cardID);
+  $hand[] = $cardID;
   return count($hand) - 1;
 }
 
@@ -222,7 +220,7 @@ function AddMaterial($cardID, $player, $from)
 {
   global $currentPlayer, $mainPlayer, $mainPlayerGamestateStillBuilt;
   $material = &GetMaterial($player);
-  array_push($material, $cardID);
+  $material[] = $cardID;
 }
 
 function RemoveMaterial($player, $index)
@@ -376,19 +374,15 @@ function AddCharacterEffect($player, $index, $effect)
   global $myStateBuiltFor;
   if ($mainPlayerGamestateStillBuilt) {
     if ($player == $mainPlayer) {
-      array_push($mainCharacterEffects, $index);
-      array_push($mainCharacterEffects, $effect);
+      $mainCharacterEffects[] = $index;
     } else {
-      array_push($defCharacterEffects, $index);
-      array_push($defCharacterEffects, $effect);
+      array_push($defCharacterEffects, $index, $effect);
     }
   } else {
     if ($player == $myStateBuiltFor) {
-      array_push($myCharacterEffects, $index);
-      array_push($myCharacterEffects, $effect);
+      array_push($myCharacterEffects, $index, $effect);
     } else {
-      array_push($theirCharacterEffects, $index);
-      array_push($theirCharacterEffects, $effect);
+      array_push($theirCharacterEffects, $index, $effect);
     }
   }
 }
@@ -460,8 +454,7 @@ function RemoveCharacterEffects($player, $index, $effect)
 function AddSpecificGraveyard($cardID, &$graveyard, $from, $player, $modifier="-")
 {
   if($cardID == "3991112153" && ($from == "HAND" || $from == "DECK")) $modifier = "TT";
-  array_push($graveyard, $cardID);
-  array_push($graveyard, $modifier);
+  array_push($graveyard, $cardID, $modifier);
 }
 
 function NegateLayer($MZIndex, $goesWhere = "GY")

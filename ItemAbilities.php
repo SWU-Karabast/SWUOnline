@@ -18,13 +18,7 @@ function PutItemIntoPlayForPlayer($item, $player, $steamCounterModifier = 0, $nu
   for($i = 0; $i < $number; ++$i) {
     $uniqueID = GetUniqueId();
     $steamCounters = SteamCounterLogic($item, $player, $uniqueID) + $steamCounterModifier;
-    array_push($items, $item);
-    array_push($items, $steamCounters);
-    array_push($items, ItemEntersPlayState($item));
-    array_push($items, ItemUses($item));
-    array_push($items, $uniqueID);
-    array_push($items, $myHoldState);
-    array_push($items, $theirHoldState);
+    array_push($items, $item, $steamCounters, ItemEntersPlayState($item), ItemUses($item), $uniqueID, $myHoldState, $theirHoldState);
   }
   switch($item) {
     
@@ -128,7 +122,7 @@ function StealItem($srcPlayer, $index, $destPlayer)
   $srcItems = &GetItems($srcPlayer);
   $destItems = &GetItems($destPlayer);
   for($i = 0; $i < ItemPieces(); ++$i) {
-    array_push($destItems, $srcItems[$index+$i]);
+    $destItems[] = $srcItems[$index+$i];
     unset($srcItems[$index+$i]);
   }
   $srcItems = array_values($srcItems);

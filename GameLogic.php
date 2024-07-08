@@ -182,7 +182,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       if($lastResult == "") return $lastResult;
       $cards = explode(",", $lastResult);
       $params = explode(",", $parameter);
-      if(count($params) < 3) array_push($params, "");
+      if(count($params) < 3) $params[] = "";
       $mzIndices = "";
       for ($i = 0; $i < count($cards); ++$i) {
         $index = BanishCardForPlayer($cards[$i], $player, $params[0], $params[1], $params[2]);
@@ -259,7 +259,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           if($i != 0 && $i == count($cards) - 1) $log .= "and ";
           $log .= CardLink($cards[$i], $cards[$i]);
         }
-        array_push($hand, $cards[$i]);
+        $hand[] = $cards[$i];
       }
       if($log != "") WriteLog($log . " added to hand");
       return $lastResult;
@@ -290,14 +290,12 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       return $lastResult;
     case "ADDCHARACTEREFFECT":
       $characterEffects = &GetCharacterEffects($player);
-      array_push($characterEffects, $lastResult);
-      array_push($characterEffects, $parameter);
+      array_push($characterEffects, $lastResult, $parameter);
       return $lastResult;
     case "ADDMZBUFF":
       $lrArr = explode("-", $lastResult);
       $characterEffects = &GetCharacterEffects($player);
-      array_push($characterEffects, $lrArr[1]);
-      array_push($characterEffects, $parameter);
+      array_push($characterEffects, $lrArr[1], $parameter);
       return $lastResult;
     case "ADDMZUSES":
       $lrArr = explode("-", $lastResult);
@@ -562,12 +560,12 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         case "LastResult": $input = explode(",", $lastResult); for($i=0; $i<count($input); ++$i) $input[$i] = $input[$i] . "-" . $input[$i]; break;
         case "CombatChain":
           $lastResultArr = explode(",", $lastResult);
-          for($i=0; $i<count($lastResultArr); ++$i) array_push($input, $combatChain[$lastResultArr[$i]+CCOffset($type)] . "-" . $lastResultArr[$i]);
+          for($i=0; $i<count($lastResultArr); ++$i) $input[] = $combatChain[$lastResultArr[$i]+CCOffset($type)] . "-" . $lastResultArr[$i];
           break;
         case "Deck":
           $lastResultArr = explode(",", $lastResult);
           $deck = &GetDeck($player);
-          for($i=0; $i<count($lastResultArr); ++$i) array_push($input, $deck[$lastResultArr[$i]*DeckPieces()] . "-" . $lastResultArr[$i]);
+          for($i=0; $i<count($lastResultArr); ++$i) $input[] = $deck[$lastResultArr[$i] * DeckPieces()] . "-" . $lastResultArr[$i];
           break;
         default: break;
       }
@@ -591,7 +589,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             default: break;
           }
         }
-        if($passFilter) array_push($output, $inputArr[1]);
+        if($passFilter) $output[] = $inputArr[1];
       }
       return (count($output) > 0 ? implode(",", $output) : "PASS");
     case "MZFILTER":
@@ -680,12 +678,12 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       return $lastResult;
     case "ADDBOTDECK":
       $deck = &GetDeck($player);
-      array_push($deck, $lastResult);
+      $deck[] = $lastResult;
       return $lastResult;
     case "MULTIADDDECK":
       $deck = &GetDeck($player);
       $cards = explode(",", $lastResult);
-      for($i = 0; $i < count($cards); ++$i) array_push($deck, $cards[$i]);
+      for($i = 0; $i < count($cards); ++$i) $deck[] = $cards[$i];
       return $lastResult;
     case "MULTIADDTOPDECK":
       $deck = &GetDeck($player);
@@ -730,7 +728,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       if($parameter == "SKIPSEED") { global $randomSeeded; $randomSeeded = true; }
       while(count($zone) > 0) {
         $index = GetRandom(0, count($zone) - 1);
-        array_push($destArr, $zone[$index]);
+        $destArr[] = $zone[$index];
         unset($zone[$index]);
         $zone = array_values($zone);
       }
@@ -765,7 +763,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       if(is_array($lastResult)) $modes = $lastResult;
       else {
         $modes = [];
-        array_push($modes, $lastResult);
+        $modes[] = $lastResult;
       }
       $text = "";
       for($i = 0; $i < count($modes); ++$i) {
@@ -1087,7 +1085,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $hand = &GetHand($player);
       $char = &GetPlayerCharacter($player);
       for($i = 0; $i < CharacterIntellect($char[0]); ++$i) {
-        array_push($hand, array_shift($deck));
+        $hand[] = array_shift($deck);
       }
       return 1;
     case "RESUMEROUNDPASS":
