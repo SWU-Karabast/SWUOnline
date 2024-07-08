@@ -2998,7 +2998,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       Restore(2, $currentPlayer);
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to attack and give -2/-2", 1);
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to give -2/-2", 1);
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("SETDQVAR", $currentPlayer, 0, 1);
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
@@ -4333,6 +4333,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a captive to discard", 1);
       AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
       AddDecisionQueue("OP", $currentPlayer, "DISCARDCAPTIVE", 1);
+      break;
+    case "3399023235"://Fenn Rau
+      AddCurrentTurnEffect($cardID, $currentPlayer);//Cost discount
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND:definedType=Upgrade");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an upgrade to play");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
       break;
     default: break;
   }
