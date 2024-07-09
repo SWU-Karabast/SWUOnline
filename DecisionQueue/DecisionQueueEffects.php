@@ -484,6 +484,14 @@ function SpecificCardLogic($player, $card, $lastResult)
         AddTopDeckAsResource($player);
       }
       return 1;
+    case "SURVIVORS'GAUNTLET":
+      $prefix = substr($dqVars[1], 0, 2) == "MY" ? "MY" : "THEIR";
+      AddDecisionQueue("MULTIZONEINDICES", $player, $prefix . "ALLY", 1);
+      AddDecisionQueue("MZFILTER", $player, "canAttach={0}", 1);
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to move <0> to.", 1);
+      AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
+      AddDecisionQueue("MZOP", $player, "MOVEUPGRADE", 1);
+      return 1;
     default: return "";
   }
 }

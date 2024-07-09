@@ -1512,6 +1512,17 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "CAPTURE,{0}", 1);
       break;
+    case "1503633301"://Survivors' Gauntlet
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:hasUpgradeOnly=true&THEIRALLY:hasUpgradeOnly=true");
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to move an upgrade from.", 1);
+      AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("SETDQVAR", $mainPlayer, "1", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "GETUPGRADES", 1);
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose an upgrade to move.", 1);
+      AddDecisionQueue("CHOOSECARD", $mainPlayer, "<-", 1);
+      AddDecisionQueue("SETDQVAR", $mainPlayer, "0", 1);
+      AddDecisionQueue("SPECIFICCARD", $mainPlayer, "SURVIVORS'GAUNTLET", 1);
+      break;
     default: break;
   }
 }
