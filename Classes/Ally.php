@@ -192,7 +192,8 @@ class Ally {
     $upgrades = $this->GetUpgrades();
     for($i=0; $i<count($upgrades); ++$i) if($upgrades[$i] != "-") $power += AttackValue($upgrades[$i]);
     if(HasGrit($this->CardID(), $this->playerID, $this->index)) {
-      if($damage > 0) $power += $this->Damage();
+      $damage = $this->Damage();
+      if($damage > 0) $power += $damage;
     }
     //Other ally buffs
     $otherAllies = &GetAllies($this->playerID);
