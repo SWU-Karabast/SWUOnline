@@ -336,7 +336,6 @@ function HasOverwhelm($cardID, $player, $index)
     case "4935319539"://Krayt Dragon
     case "8862896760"://Maul
     case "9270539174"://Wild Rancor
-    case "2556508706"://Resourceful Pursuers
     case "3803148745"://Ruthless Assassin
     case "1743599390"://Trandoshan Hunters
     case "c9ff9863d7"://Hunter (Outcast Sergeant)
@@ -421,7 +420,6 @@ function HasAmbush($cardID, $player, $index, $from)
     case "8107876051"://Enfy's Nest
     case "6097248635"://4-LOM
     case "9483244696"://Weequay Pirate Gang
-    case "2556508706"://Resourceful Pursuers
     case "1086021299"://Arquitens Assault Cruiser
       return true;
     case "2027289177"://Escort Skiff
@@ -512,6 +510,7 @@ function HasSaboteur($cardID, $player, $index)
     case "2b13cefced"://Fennec Shand
     case "7922308768"://Valiant Assault Ship
     case "2151430798"://Guavian Antagonizer
+    case "2556508706"://Resourceful Pursuers
       return true;
     default: return false;
   }
