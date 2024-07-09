@@ -110,12 +110,8 @@ function SearchInner(&$array, $player, $zone, $count, $type, $definedType, $maxC
           $ally = new Ally("MYALLY-" . $i, $player);
           if($ally->Health() > $maxHealth) continue;
         }
-        if($minAttack > -1) {
-          if($zone == "ALLY") {
-            $ally = new Ally("MYALLY-" . $i, $player);
-          } else {
-            $ally = new Ally("MYALLY-" . $i, $player == 1 ? 2 : 1);
-          }
+        if($minAttack > -1 && $zone == "ALLY") {
+          $ally = new Ally("MYALLY-" . $i, $player);
           if($ally->CurrentPower() < $minAttack) continue;
         }
         if($hasBountyOnly && $zone == "ALLY") {
