@@ -1094,9 +1094,9 @@ function ClassOverride($cardID, $player="")
     $toAdd = "";
     switch($currentTurnEffects[$i])
     {
-      case "MON095": case "MON096": case "MON097": $toAdd = "ILLUSIONIST";
-      case "EVR150": case "EVR151": case "EVR152": $toAdd = "ILLUSIONIST";
-      case "UPR155": case "UPR156": case "UPR157": $toAdd = "ILLUSIONIST";
+      case "MON095": case "MON096": case "MON097":
+      case "EVR150": case "EVR151": case "EVR152":
+      case "UPR155": case "UPR156": case "UPR157": $toAdd = "ILLUSIONIST"; break;
       default: break;
     }
     if($toAdd != "")

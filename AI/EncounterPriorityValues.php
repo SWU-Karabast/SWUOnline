@@ -423,7 +423,7 @@ function ROGUE025ActionPrio()
   {
     switch($permanents[$i])
     {
-      case "ROGUE803": $found = true;
+      case "ROGUE803": $found = true; break;
       default: break;
     }
   }
