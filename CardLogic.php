@@ -425,7 +425,7 @@ function ContinueDecisionQueue($lastResult = "")
           } else {
             global $CS_AbilityIndex;
             if($cardID == "TRIGGER") {
-              ProcessTrigger($player, $parameter, $uniqueID, $target);
+              ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $target);
               ProcessDecisionQueue();
             }
             else {
@@ -560,7 +560,7 @@ function ProcessLayer($player, $parameter)
   }
 }
 
-function ProcessTrigger($player, $parameter, $uniqueID, $target="-")
+function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $target="-")
 {
   global $combatChain, $CS_NumNonAttackCards, $CS_ArcaneDamageDealt, $CS_NumRedPlayed, $CS_DamageTaken, $EffectContext;
   global $CID_BloodRotPox, $CID_Inertia, $CID_Frailty, $combatChainState, $CCS_IsAmbush;
@@ -588,7 +588,7 @@ function ProcessTrigger($player, $parameter, $uniqueID, $target="-")
       PlayAlly($target, $player, from:"CAPTIVE");
       break;
     case "AFTERPLAYABILITY":
-      AllyPlayCardAbility($target, $player);
+      AllyPlayCardAbility($target, $player, from: $additionalCosts);
       break;
     case "9642863632"://Bounty Hunter's Quarry
       AddCurrentTurnEffect($parameter, $player);
