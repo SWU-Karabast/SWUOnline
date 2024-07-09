@@ -282,7 +282,7 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
   }
 
   // Shield Icon Style
-  $shieldCount = isset($opts) && isset($opts['subcards']) && is_array($opts['subcards']) ? (array_count_values($opts['subcards'])['8752877738'] ?? 0) : 0;
+  $shieldCount = isset($opts['subcards']) && is_array($opts['subcards']) ? (array_count_values($opts['subcards'])['8752877738'] ?? 0) : 0;
   if ($shieldCount > 0) {
     for ($i = 0; $i < $shieldCount; $i++) {
       $rv .= "<div style='margin: 0px;
@@ -308,7 +308,7 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
   }
 
   // Sentinel Icon Style
-  if (isset($opts) && isset($opts['hasSentinel']) && $opts['hasSentinel']) {
+  if (isset($opts['hasSentinel']) && $opts['hasSentinel']) {
     $rv .= "<div style='margin: 0px;
     top: 42px; 
     left: 89px;
@@ -328,7 +328,7 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
 
   }
   // Damage Counter Style
-  $damaged = isset($opts) && isset($opts['currentHP']) && isset($opts['maxHP']) && $opts['currentHP'] < $opts['maxHP']; 
+  $damaged = isset($opts['currentHP']) && isset($opts['maxHP']) && $opts['currentHP'] < $opts['maxHP'];
   if ($damaged) {
     $rv .= "<div style='margin: 0px;
     top: 82px;
@@ -355,7 +355,7 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
 
 
   //Card HP Style
-  if (isset($opts) && isset($opts['currentHP']) && $opts['currentHP'] != 0) {
+  if (isset($opts['currentHP']) && $opts['currentHP'] != 0) {
     $bgImage = "./Images/life_v2.png";
     $right = "-2px";
     $top = "67px";
@@ -371,7 +371,7 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
   }
 
   //Card Power style
-  if (isset($opts) && isset($opts['currentPower']) && $opts['currentPower'] >= 0) {
+  if (isset($opts['currentPower']) && $opts['currentPower'] >= 0) {
     $bgImage = "./Images/attack_v2.png";
     $left = "-2px";
     $top = "67px";
@@ -387,7 +387,7 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
   }
 
   // Subcards style
-  if (isset($opts) && isset($opts['subcards']) && count($opts['subcards']) > 0) {
+  if (isset($opts['subcards']) && count($opts['subcards']) > 0) {
     for ($i = 0; $i < count($opts['subcards']); $i++) {
       // Don't render shield subcard
       if ($opts['subcards'][$i] != "8752877738") {
