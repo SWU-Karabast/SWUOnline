@@ -20,7 +20,7 @@ include_once "./APIKeys/APIKeys.php";
 
   // The below code snippet needs to be active wherever the the user is landing in $redirect_uri parameter above. It will grab the auth code from Patreon and get the tokens via the oAuth client
 
-  if(isset($_GET['code']) && !empty($_GET['code']) ) {
+  if(!empty($_GET['code'])) {
   	$oauth_client = new OAuth($client_id, $client_secret);
 
   	$tokens = $oauth_client->get_tokens($_GET['code'], $redirect_uri);
