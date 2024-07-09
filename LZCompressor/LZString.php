@@ -245,7 +245,6 @@ class LZString
      * @param integer $resetValue
      * @param callable $getNextValue
      * @param integer $exponent
-     * @param string $feed
      * @return integer
      */
     private static function readBits(LZData $data, $resetValue, $getNextValue, $exponent)
