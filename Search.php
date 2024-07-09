@@ -100,7 +100,6 @@ function SearchInner(&$array, $player, $zone, $count, $type, $definedType, $maxC
         && ($arena == "" || ArenaContains($cardID, $arena, $player))
         && ($trait == -1 || TraitContains($cardID, $trait, $player, $i))
         && ($maxAttack == -1 || AttackValue($cardID) <= $maxAttack)
-        && ($minAttack == -1 || AttackValue($cardID) >= $minAttack)
         && ($keyword == "" || HasKeyword($cardID, $keyword, $player, $i))
       ) {
         if($maxAttack > -1 && $zone == "ALLY") {
@@ -110,6 +109,14 @@ function SearchInner(&$array, $player, $zone, $count, $type, $definedType, $maxC
         if($maxHealth > -1 && $zone == "ALLY") {
           $ally = new Ally("MYALLY-" . $i, $player);
           if($ally->Health() > $maxHealth) continue;
+        }
+        if($minAttack > -1) {
+          if($zone == "ALLY") {
+            $ally = new Ally("MYALLY-" . $i, $player);
+          } else {
+            $ally = new Ally("MYALLY-" . $i, $player == 1 ? 2 : 1);
+          }
+          if($ally->CurrentPower() < $minAttack) continue;
         }
         if($hasBountyOnly && $zone == "ALLY") {
           $ally = new Ally("MYALLY-" . $i, $player);
