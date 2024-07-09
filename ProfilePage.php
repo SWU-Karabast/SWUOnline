@@ -88,7 +88,7 @@ function DisplayPatreon()
   $redirect_uri = "https://www.karabast.net/SWUOnline/PatreonLogin.php";
   $href = 'https://www.patreon.com/oauth2/authorize?response_type=code&client_id=' . $client_id . '&redirect_uri=' . urlencode($redirect_uri);
   $state = array();
-  $state['final_page'] = 'http://karabast.net/SWUOnline/MainMenu.php';
+  $state['final_page'] = 'https://karabast.net/SWUOnline/MainMenu.php';
   $state_parameters = '&state=' . urlencode(base64_encode(json_encode($state)));
   $href .= $state_parameters;
   $scope_parameters = '&scope=identity%20identity.memberships';

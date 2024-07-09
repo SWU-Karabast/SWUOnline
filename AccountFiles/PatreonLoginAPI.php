@@ -24,7 +24,7 @@ $redirect_uri = "https://www.karabast.net/SWUOnline/PatreonLogin.php";
 
 $response = new stdClass();
 
-if (isset($_GET['code']) && !empty($_GET['code'])) {
+if (!empty($_GET['code'])) {
   $oauth_client = new OAuth($client_id, $client_secret);
 
   $tokens = $oauth_client->get_tokens($_GET['code'], $redirect_uri);

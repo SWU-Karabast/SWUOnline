@@ -12,7 +12,7 @@ class API {
 	// The cache for request results - an array that matches md5 of the unique API request to the returned result
 	public $request_cache;
 
-	// Sets the reqeuest method for cURL
+	// Sets the request method for cURL
 	public $api_request_method = 'GET';
 
 	// Holds POST for cURL for requests other than GET

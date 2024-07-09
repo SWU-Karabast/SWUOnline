@@ -10,7 +10,7 @@ class LZString
      *
      * @return string
      */
-    public static function compressToEncodedURIComponent($input)
+    public static function compressToEncodedURIComponent(string $input): string
     {
         if ($input === null) {
             return "";
@@ -31,7 +31,7 @@ class LZString
      *
      * @return null|string
      */
-    public static function decompressFromEncodedURIComponent($input)
+    public static function decompressFromEncodedURIComponent(string $input)
     {
         if ($input === null) {
             return "";
@@ -95,7 +95,7 @@ class LZString
      * @param string $uncompressed
      * @return string
      */
-    public static function compress($uncompressed)
+    public static function compress(string $uncompressed)
     {
         return self::_compress($uncompressed, 16, function($a) {
             return LZUtil::fromCharCode($a);
@@ -106,7 +106,7 @@ class LZString
      * @param string $compressed
      * @return string
      */
-    public static function decompress($compressed)
+    public static function decompress(string $compressed)
     {
         return self::_decompress($compressed, 32768, function($data) {
             $sub = substr($data->str, $data->index, 16);
@@ -123,7 +123,7 @@ class LZString
      * @param callable $getCharFromInt
      * @return string
      */
-    private static function _compress($uncompressed, $bitsPerChar, $getCharFromInt) {
+    private static function _compress(string $uncompressed, int $bitsPerChar, callable $getCharFromInt) {
 
         if(!is_string($uncompressed) || strlen($uncompressed) === 0) {
             return '';
@@ -180,7 +180,7 @@ class LZString
      *
      * @return LZContext
      */
-    private static function produceW(LZContext $context, $bitsPerChar, $getCharFromInt)
+    private static function produceW(LZContext $context, int $bitsPerChar, callable $getCharFromInt)
     {
         if($context->dictionaryToCreateContains($context->w)) {
             if(LZUtil::charCodeAt($context->w)<256) {
@@ -224,7 +224,7 @@ class LZString
      * @param integer $bitsPerChar
      * @param callable $getCharFromInt
      */
-    private static function writeBit($value, LZData $data, $bitsPerChar, $getCharFromInt)
+    private static function writeBit(string $value, LZData $data, int $bitsPerChar, callable $getCharFromInt)
     {
         if(null !== $value) {
             $data->val = ($data->val << 1) | $value;
@@ -245,10 +245,9 @@ class LZString
      * @param integer $resetValue
      * @param callable $getNextValue
      * @param integer $exponent
-     * @param string $feed
      * @return integer
      */
-    private static function readBits(LZData $data, $resetValue, $getNextValue, $exponent)
+    private static function readBits(LZData $data, int $resetValue, callable $getNextValue, int $exponent)
     {
         $bits = 0;
         $maxPower = pow(2, $exponent);
@@ -272,7 +271,7 @@ class LZString
      * @param callable $getNextValue
      * @return string
      */
-    private static function _decompress($compressed, $resetValue, $getNextValue)
+    private static function _decompress(string $compressed, int $resetValue, callable $getNextValue)
     {
         if(!is_string($compressed) || strlen($compressed) === 0) {
             return '';

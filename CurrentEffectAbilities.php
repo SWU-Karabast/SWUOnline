@@ -309,6 +309,7 @@ function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
         case "7642980906"://Stolen Landspeeder
           $costModifier -= 99;
           $remove = false;
+          break;
         default: break;
       }
       if($remove && !$reportMode) RemoveCurrentTurnEffect($i);

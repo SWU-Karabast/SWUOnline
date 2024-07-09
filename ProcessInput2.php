@@ -33,15 +33,15 @@ $authKey = $_GET["authKey"];
 //We should also have some information on the type of command
 $inputMode = $_GET["mode"];
 $mode = $inputMode;
-$buttonInput = isset($_GET["buttonInput"]) ? $_GET["buttonInput"] : ""; //The player that is the target of the command - e.g. for changing health total
-$cardID = isset($_GET["cardID"]) ? $_GET["cardID"] : "";
-$chkCount = isset($_GET["chkCount"]) ? $_GET["chkCount"] : 0;
+$buttonInput = $_GET["buttonInput"] ?? ""; //The player that is the target of the command - e.g. for changing health total
+$cardID = $_GET["cardID"] ?? "";
+$chkCount = $_GET["chkCount"] ?? 0;
 $chkInput = [];
 for ($i = 0; $i < $chkCount; ++$i) {
-  $chk = isset($_GET[("chk" . $i)]) ? $_GET[("chk" . $i)] : "";
+  $chk = $_GET[("chk" . $i)] ?? "";
   if ($chk != "") $chkInput[] = $chk;
 }
-$inputText = isset($_GET["inputText"]) ? $_GET["inputText"] : "";
+$inputText = $_GET["inputText"] ?? "";
 
 SetHeaders();
 

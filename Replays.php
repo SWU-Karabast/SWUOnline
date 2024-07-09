@@ -3,8 +3,7 @@ include "HostFiles/Redirector.php";
 include_once 'MenuBar.php';
 include_once 'APIKeys/APIKeys.php';
 
-if (isset($_SESSION["isPatron"])) $isPatron = $_SESSION["isPatron"];
-else $isPatron = false;
+$isPatron = $_SESSION["isPatron"] ?? false;
 
 if(!$isPatron)
 {

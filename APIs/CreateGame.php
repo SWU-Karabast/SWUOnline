@@ -79,10 +79,9 @@ session_write_close();
 $gameName = GetGameCounter("../");
 
 
-if ((!file_exists("../Games/$gameName")) && (mkdir("../Games/$gameName", 0700, true))) {
-} else {
+if (file_exists("../Games/$gameName") || !mkdir("../Games/$gameName", 0700, true)) {
   $response->error = "Game file could not be created.";
-  echo (json_encode($response));
+  echo(json_encode($response));
   exit;
 }
 
