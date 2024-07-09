@@ -27,8 +27,7 @@ if(!file_exists("./Replays/" . $userId . "/" . $replayNumber . "/"))
 
 $gameName = GetGameCounter();
 
-if ( (!file_exists("Games/$gameName")) && (mkdir("Games/$gameName", 0700, true)) ){
-} else {
+if (file_exists("Games/$gameName") || !mkdir("Games/$gameName", 0700, true)) {
   print_r("Encountered a problem creating a game. Please return to the main menu and try again");
 }
 
