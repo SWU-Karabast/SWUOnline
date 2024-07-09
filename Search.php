@@ -99,20 +99,25 @@ function SearchInner(&$array, $player, $zone, $count, $type, $definedType, $maxC
         && ($aspect == "" || AspectContains($cardID, $aspect, $player))
         && ($arena == "" || ArenaContains($cardID, $arena, $player))
         && ($trait == -1 || TraitContains($cardID, $trait, $player, $i))
-        && ($maxAttack == -1 || AttackValue($cardID) <= $maxAttack)
         && ($keyword == "" || HasKeyword($cardID, $keyword, $player, $i))
       ) {
-        if($maxAttack > -1 && $zone == "ALLY") {
-          $ally = new Ally("MYALLY-" . $i, $player);
-          if($ally->CurrentPower() > $maxAttack) continue;
+        if($maxAttack > -1) {
+          if($zone == "ALLY") {
+            $ally = new Ally("MYALLY-" . $i, $player);
+            if($ally->CurrentPower() > $maxAttack) continue;
+          } elseif(AttackValue($cardID) > $maxAttack) continue;
         }
-        if($maxHealth > -1 && $zone == "ALLY") {
-          $ally = new Ally("MYALLY-" . $i, $player);
-          if($ally->Health() > $maxHealth) continue;
+        if($maxHealth > -1) {
+          if($zone == "ALLY") {
+            $ally = new Ally("MYALLY-" . $i, $player);
+            if($ally->Health() > $maxHealth) continue;
+          } elseif(CardHP($cardID) > $maxHealth) continue;
         }
-        if($minAttack > -1 && $zone == "ALLY") {
-          $ally = new Ally("MYALLY-" . $i, $player);
-          if($ally->CurrentPower() < $minAttack) continue;
+        if($minAttack > -1) {
+          if($zone == "ALLY") {
+            $ally = new Ally("MYALLY-" . $i, $player);
+            if($ally->CurrentPower() < $minAttack) continue;
+          } elseif(AttackValue($cardID) < $minAttack) continue;
         }
         if($hasBountyOnly && $zone == "ALLY") {
           $ally = new Ally("MYALLY-" . $i, $player);
