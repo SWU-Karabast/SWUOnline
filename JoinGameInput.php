@@ -150,7 +150,7 @@ if ($decklink != "") {
       $cards .= $cardID;
     }
   }
-  $sideboard = isset($deckObj->sideboard) ? $deckObj->sideboard : [];
+  $sideboard = $deckObj->sideboard ?? [];
   $sideboardCards = "";
   for($i=0; $i<count($sideboard); ++$i) {
     $cardID = UUIDLookup($sideboard[$i]->id);
@@ -216,15 +216,15 @@ if ($matchup == "") {
   }
 
   if ($playerID == 1) {
-    $p1uid = (isset($_SESSION["useruid"]) ? $_SESSION["useruid"] : "Player 1");
-    $p1id = (isset($_SESSION["userid"]) ? $_SESSION["userid"] : "");
+    $p1uid = ($_SESSION["useruid"] ?? "Player 1");
+    $p1id = ($_SESSION["userid"] ?? "");
     $p1IsPatron = (isset($_SESSION["isPatron"]) ? "1" : "");
-    $p1ContentCreatorID = (isset($_SESSION["patreonEnum"]) ? $_SESSION["patreonEnum"] : "");
+    $p1ContentCreatorID = ($_SESSION["patreonEnum"] ?? "");
   } else if ($playerID == 2) {
-    $p2uid = (isset($_SESSION["useruid"]) ? $_SESSION["useruid"] : "Player 2");
-    $p2id = (isset($_SESSION["userid"]) ? $_SESSION["userid"] : "");
+    $p2uid = ($_SESSION["useruid"] ?? "Player 2");
+    $p2id = ($_SESSION["userid"] ?? "");
     $p2IsPatron = (isset($_SESSION["isPatron"]) ? "1" : "");
-    $p2ContentCreatorID = (isset($_SESSION["patreonEnum"]) ? $_SESSION["patreonEnum"] : "");
+    $p2ContentCreatorID = ($_SESSION["patreonEnum"] ?? "");
   }
 
   if ($playerID == 2) $p2Key = hash("sha256", rand() . rand() . rand());
@@ -232,7 +232,7 @@ if ($matchup == "") {
   WriteGameFile();
   SetCachePiece($gameName, $playerID + 1, strval(round(microtime(true) * 1000)));
   SetCachePiece($gameName, $playerID + 3, "0");
-  SetCachePiece($gameName, $playerID + 6, isset($leader) ? $leader : "-");
+  SetCachePiece($gameName, $playerID + 6, $leader ?? "-");
   SetCachePiece($gameName, 14, $gameStatus);
   GamestateUpdated($gameName);
 

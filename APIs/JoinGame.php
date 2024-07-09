@@ -172,7 +172,7 @@ if ($decklink != "") {
         if ($playerID == 1) $p1Matchups = $deckObj->{'matchups'};
         else if ($playerID == 2) $p2Matchups = $deckObj->{'matchups'};
     }
-    $deckFormat = (isset($deckObj->{'format'}) ? $deckObj->{'format'} : "");
+    $deckFormat = ($deckObj->{'format'} ?? "");
     //$cards = $deckObj->{'cards'};
     $deckCards = "";
     $sideboardCards = "";
@@ -251,15 +251,15 @@ if ($matchup == "") {
   }
 
   if ($playerID == 1) {
-    $p1uid = (isset($_SESSION["useruid"]) ? $_SESSION["useruid"] : "Player 1");
-    $p1id = (isset($_SESSION["userid"]) ? $_SESSION["userid"] : "");
+    $p1uid = ($_SESSION["useruid"] ?? "Player 1");
+    $p1id = ($_SESSION["userid"] ?? "");
     $p1IsPatron = (isset($_SESSION["isPatron"]) ? "1" : "");
-    $p1ContentCreatorID = (isset($_SESSION["patreonEnum"]) ? $_SESSION["patreonEnum"] : "");
+    $p1ContentCreatorID = ($_SESSION["patreonEnum"] ?? "");
   } else if ($playerID == 2) {
-    $p2uid = (isset($_SESSION["useruid"]) ? $_SESSION["useruid"] : "Player 2");
-    $p2id = (isset($_SESSION["userid"]) ? $_SESSION["userid"] : "");
+    $p2uid = ($_SESSION["useruid"] ?? "Player 2");
+    $p2id = ($_SESSION["userid"] ?? "");
     $p2IsPatron = (isset($_SESSION["isPatron"]) ? "1" : "");
-    $p2ContentCreatorID = (isset($_SESSION["patreonEnum"]) ? $_SESSION["patreonEnum"] : "");
+    $p2ContentCreatorID = ($_SESSION["patreonEnum"] ?? "");
   }
 
   if ($playerID == 2) $p2Key = hash("sha256", rand() . rand() . rand());
