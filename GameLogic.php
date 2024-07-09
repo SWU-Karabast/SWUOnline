@@ -338,7 +338,6 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             case "BANISH": case "MYBANISH": case "THEIRBANISH": return $zone[$mzArr[1] + 2];
             default: return "-1";
           }
-        case "BUFFALLY": MZBuffAlly($player, $lastResult); return $lastResult;
         case "BOUNCE": return MZBounce($player, $lastResult);
         case "COLLECTBOUNTIES":
           $mzArr = explode("-", $lastResult);
@@ -429,12 +428,11 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           return $uniqueID;
         case "CAPTURE":
           $cardID = GetMZCard($player, $lastResult);
-          if($cardID == "1810342362") {//Lurking TIE Phantom
+          if($cardID == "1810342362") { //Lurking TIE Phantom
             WriteLog(CardLink($cardID, $cardID) . " avoided capture.");
             return $cardID;
           }
-          if($cardID == "3417125055")//IG-11
-          {
+          if($cardID == "3417125055") { //IG-11
             DestroyAlly(($player == 1 ? 2 : 1), explode("-", $lastResult)[1]);
             $allies = &GetAllies($player);
             for($i=count($allies)-AllyPieces(); $i>=0; $i-=AllyPieces())

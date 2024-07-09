@@ -6,7 +6,7 @@ function PlayAlly($cardID, $player, $subCards = "-", $from="-")
   if(count($allies) < AllyPieces()) $allies = [];
   $allies[] = $cardID;
   $allies[] = AllyEntersPlayState($cardID, $player, $from);
-  $allies[] = AllyHealth($cardID, $player);
+  $allies[] = 0; //Damage
   $allies[] = 0; //Frozen
   $allies[] = $subCards; //Subcards
   $allies[] = GetUniqueId(); //Unique ID
@@ -22,33 +22,29 @@ function PlayAlly($cardID, $player, $subCards = "-", $from="-")
   AllyEntersPlayAbilities($player);
   $otherPlayer = $player == 1 ? 2 : 1;
   $theirAllies = &GetAllies($otherPlayer);
+
   if(AllyHasStaticHealthModifier($cardID)) {
-    //Health modifiers this has that applies to other units
-    for($i = 0; $i < count($allies); $i += AllyPieces()) {
-      $allies[$i+2] += AllyStaticHealthModifier($allies[$i], $i, $player, $cardID, $index, $player);
-    }
-    //Health modifiers this has that apply to other units controlled by the other player
-    for($i=count($theirAllies)-AllyPieces(); $i>=0; $i-=AllyPieces()) {
-        $theirAllies[$i+2] += AllyStaticHealthModifier($theirAllies[$i], $i, $otherPlayer, $cardID, $index, $player);
-        if($theirAllies[$i+2] <= 0) DestroyAlly($otherPlayer, $i);
-    }
+    CheckHealthAllAllies($player);
   }
-  //Health modifiers other units have that apply to this
-  for($i=count($allies)-AllyPieces(); $i>=0; $i-=AllyPieces()) {
-    if(AllyHasStaticHealthModifier($allies[$i])) {
-      $allies[$index+2] += AllyStaticHealthModifier($cardID, $index, $player, $allies[$i], $i, $player);
-    }
-  }
-  //Health modifiers other units controlled by the other player have that apply to this
-  for($i=0; $i<count($theirAllies); $i+=AllyPieces()) {
-    if(AllyHasStaticHealthModifier($theirAllies[$i])) {
-      $allies[$index+2] += AllyStaticHealthModifier($cardID, $index, $player, $theirAllies[$i], $i, $otherPlayer);
-      if($allies[$index+2] <= 0) DestroyAlly($player, $index);
-    }
-  }
-  $allies[$index+2] += CharacterStaticHealthModifiers($cardID, $index, $player);
   CheckUnique($cardID, $player);
   return $index;
+}
+
+function CheckHealthAllAllies($player)
+{
+  $allies = &GetAllies($player);
+  for($i = count($allies) - AllyPieces(); $i >= 0; $i -= AllyPieces()) {
+    if (!isset($allies[$i])) continue;
+    $ally = new Ally("MYALLY-" . $i, $player);
+    $ally->DefeatIfNoRemainingHP();
+  }
+  $otherPlayer = $player == 1 ? 2 : 1;
+  $theirAllies = &GetAllies($otherPlayer);
+  for($i = count($allies) - AllyPieces(); $i >= 0; $i -= AllyPieces()) {
+    if (!isset($theirAllies[$i])) continue;
+    $ally = new Ally("THEIRALLY-" . $i, $otherPlayer);
+    $ally->DefeatIfNoRemainingHP();
+  }
 }
 
 function CheckUnique($cardID, $player) {
@@ -122,6 +118,8 @@ function AllyStaticHealthModifier($cardID, $index, $player, $myCardID, $myIndex,
   return 0;
 }
 
+// Health update: Leaving this for now. Not sure it is used and may be removed in a more
+// comprehensive cleanup to ensure everything is going through the ally class method.
 function DealAllyDamage($targetPlayer, $index, $damage, $type="")
 {
   $allies = &GetAllies($targetPlayer);
@@ -144,6 +142,8 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
   global $combatChain, $mainPlayer, $defPlayer, $CS_NumAlliesDestroyed, $CS_NumLeftPlay;
   $allies = &GetAllies($player);
   $cardID = $allies[$index];
+  $owner = $allies[$index+11];
+  $otherPlayer = $player == 1 ? 2 : 1;
   if(!$skipDestroy) {
     AllyDestroyedAbility($player, $index, $fromCombat);
     CollectBounties($player, $index);
@@ -158,11 +158,6 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
     AddGraveyard($upgrades[$i], $player, "PLAY");
   }
   $captives = $ally->GetCaptives();
-  $otherPlayer = $player == 1 ? 2 : 1;
-  for($i=0; $i<count($captives); ++$i) {
-    AddLayer("TRIGGER", $currentPlayer, "PLAYALLY", $captives[$i], "CAPTIVE", $captives[$i]);
-  }
-  $owner = $allies[$index+11];
   if(!$skipDestroy) {
     if(DefinedTypesContains($cardID, "Leader", $player)) ;//If it's a leader it doesn't go in the discard
     else if($cardID == "8954587682" && !$ally->LostAbilities()) AddResources($cardID, $player, "PLAY", "DOWN");//Superlaser Technician
@@ -171,12 +166,11 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
   }
   for($j = $index + AllyPieces() - 1; $j >= $index; --$j) unset($allies[$j]);
   $allies = array_values($allies);
+  for($i=0; $i<count($captives); ++$i) {
+    PlayAlly($captives[$i], $otherPlayer, from:"CAPTIVE");
+  }
   if(AllyHasStaticHealthModifier($cardID)) {
-    for($i = count($allies)-AllyPieces(); $i >= 0; $i -= AllyPieces()) {
-      //myIndex is -1 because the unit is destroyed
-      $allies[$i+2] -= AllyStaticHealthModifier($allies[$i], $i, $player, $cardID, -1, $player);
-      if($allies[$i+2] <= 0) DestroyAlly($player, $i);
-    }
+    CheckHealthAllAllies($player);
   }
   if($player == $mainPlayer) UpdateAttacker();
   else UpdateAttackTarget();
@@ -200,6 +194,7 @@ function AllyTakeControl($player, $index) {
     $myAllies[] = $theirAllies[$i];
   }
   RemoveAlly($otherPlayer, $index);
+  CheckHealthAllAllies($player);
   CheckUnique($cardID, $player);
   return $uniqueID;
 }
@@ -769,13 +764,6 @@ function AllyCanBeAttackTarget($player, $index, $cardID)
       return count($aspectArr) < 3;
     default: return true;
   }
-}
-
-function BuffAlly($player, $index, $amount=1)
-{
-  $allies = &GetAllies($player);
-  $allies[$index+7] += $amount;//Buff counters
-  $allies[$index+2] += $amount;//Life
 }
 
 function AllyEnduranceCounters($cardID)
@@ -1659,15 +1647,6 @@ function AllyCardDiscarded($player, $discardedID) {
         break;
       default: break;
     }
-  }
-}
-
-function GiveAlliesHealthBonus($player, $amount)
-{
-  $allies = &GetAllies($player);
-  for($i=0; $i<count($allies); $i+=AllyPieces())
-  {
-    $allies[$i+2] += $amount;
   }
 }
 

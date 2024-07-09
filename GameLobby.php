@@ -162,7 +162,7 @@ $isMobile = IsMobile();
           }
           ?>
         </div>
-∆
+
         <div id="their-info">
         </div>
       </div>
