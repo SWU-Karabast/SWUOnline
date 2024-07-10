@@ -542,6 +542,9 @@ function CurrentEffectEndTurnAbilities()
         $ally = new Ally("MYALLY-" . SearchAlliesForUniqueID($currentTurnEffects[$i+2], $currentTurnEffects[$i+1]), $currentTurnEffects[$i+1]);
         $ally->DefeatUpgrade("8752877738");
         break;
+      case "4002861992"://DJ (Blatant Thief)
+        AddNextTurnEffect($currentTurnEffects[$i], $currentTurnEffects[$i + 1]);
+        break;
       default: break;
     }
     if($remove) RemoveCurrentTurnEffect($i);
