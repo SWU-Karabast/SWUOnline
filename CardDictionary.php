@@ -495,15 +495,15 @@ function HasSaboteur($cardID, $player, $index)
   }
   switch($cardID)
   {
-    case "1017822723":
-    case "9859536518":
-    case "0046930738":
-    case "7533529264":
-    case "1746195484":
-    case "5907868016":
-    case "0828695133":
-    case "9250443409":
-    case "3c60596a7a":
+    case "1017822723"://Rogue Operative
+    case "9859536518"://Jawa Scavenger
+    case "0046930738"://Rebel Pathfinder
+    case "7533529264"://Wolffe
+    case "1746195484"://Jedha Agitator
+    case "5907868016"://Fighters for Freedom
+    case "0828695133"://Seventh Sister
+    case "9250443409"://Lando Calrissian (Responsible Businessman)
+    case "3c60596a7a"://Cassian Andor (Dedicated to the Rebellion)
     case "1690726274"://Zuckuss
     case "4595532978"://Ketsu Onyo
     case "3786602643"://House Kast Soldier
@@ -511,6 +511,7 @@ function HasSaboteur($cardID, $player, $index)
     case "7922308768"://Valiant Assault Ship
     case "2151430798"://Guavian Antagonizer
     case "2556508706"://Resourceful Pursuers
+    case "2965702252"://Unlicensed Headhunter
       return true;
     default: return false;
   }
