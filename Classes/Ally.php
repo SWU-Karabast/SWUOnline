@@ -126,9 +126,11 @@ class Ally {
     $subcards = $this->GetSubcards();
     for($i=0; $i<count($subcards); ++$i) {
       if($subcards[$i] == "8752877738") {
+        //Shield Token
         unset($subcards[$i]);
         $subcards = array_values($subcards);
         $this->allies[$this->index+4] = count($subcards) > 0 ? implode(",", $subcards) : "-";
+        AddEvent("SHIELDDESTROYED", $this->UniqueID());
         if(!$bypassShield) return false;//Cancel the damage if shield prevented it
       }
       switch($subcards[$i]) {
