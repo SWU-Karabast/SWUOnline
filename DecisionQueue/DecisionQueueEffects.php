@@ -495,19 +495,21 @@ function SpecificCardLogic($player, $card, $lastResult)
     case "PREVIZSLA":
       $upgradeID = $dqVars[0];
       $upgradeCost = CardCost($upgradeID);
-      AddDecisionQueue("YESNO", $player, "if you want to pay " . $upgradeCost . " to steal " . CardName($upgradeID), 1);
-      AddDecisionQueue("NOPASS", $player, "-", 1);
-      AddDecisionQueue("PAYRESOURCES", $player, $upgradeCost . ",1", 1);
-      $preIndex = "MYALLY-" . SearchAlliesForCard($player, "3086868510");
-      if(DecisionQueueStaticEffect("MZFILTER", $player, "canAttach=" . $upgradeID, $preIndex) != "PASS") {
-        AddDecisionQueue("PASSPARAMETER", $player, $preIndex, 1);
-        AddDecisionQueue("MZOP", $player, "MOVEUPGRADE", 1);
-      }
-      else {
-        AddDecisionQueue("PASSPARAMETER", $player, $dqVars[1], 1);
-        AddDecisionQueue("SETDQVAR", $player, "0", 1);
-        AddDecisionQueue("PASSPARAMETER", $player, $upgradeID, 1);
-        AddDecisionQueue("OP", $player, "DEFEATUPGRADE", 1);
+      if(NumResourcesAvailable($player) >= $upgradeCost) {
+        AddDecisionQueue("YESNO", $player, "if you want to pay " . $upgradeCost . " to steal " . CardName($upgradeID), 1);
+        AddDecisionQueue("NOPASS", $player, "-", 1);
+        AddDecisionQueue("PAYRESOURCES", $player, $upgradeCost . ",1", 1);
+        $preIndex = "MYALLY-" . SearchAlliesForCard($player, "3086868510");
+        if(DecisionQueueStaticEffect("MZFILTER", $player, "canAttach=" . $upgradeID, $preIndex) != "PASS") {
+          AddDecisionQueue("PASSPARAMETER", $player, $preIndex, 1);
+          AddDecisionQueue("MZOP", $player, "MOVEUPGRADE", 1);
+        }
+        else {
+          AddDecisionQueue("PASSPARAMETER", $player, $dqVars[1], 1);
+          AddDecisionQueue("SETDQVAR", $player, "0", 1);
+          AddDecisionQueue("PASSPARAMETER", $player, $upgradeID, 1);
+          AddDecisionQueue("OP", $player, "DEFEATUPGRADE", 1);
+        }
       }
       return 1;
     default: return "";

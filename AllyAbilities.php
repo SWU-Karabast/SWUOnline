@@ -1523,6 +1523,18 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("SETDQVAR", $mainPlayer, "0", 1);
       AddDecisionQueue("SPECIFICCARD", $mainPlayer, "SURVIVORS'GAUNTLET", 1);
       break;
+    case "3086868510"://Pre Viszla
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:hasUpgradeOnly=true&THEIRALLY:hasUpgradeOnly=true");
+      AddDecisionQueue("MZFILTER", $mainPlayer, "trait=Vehicle", 1);
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to steal an upgrade from.", 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("SETDQVAR", $mainPlayer, "1", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "GETUPGRADES", 1);
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose an upgrade to steal.", 1);
+      AddDecisionQueue("CHOOSECARD", $mainPlayer, "<-", 1);
+      AddDecisionQueue("SETDQVAR", $mainPlayer, "0", 1);
+      AddDecisionQueue("SPECIFICCARD", $mainPlayer, "PREVIZSLA", 1);
+      break;
     default: break;
   }
 }
