@@ -865,31 +865,32 @@ function AddAllyPlayAbilityLayers($cardID, $from) {
   global $currentPlayer;
   $allies = &GetAllies($currentPlayer);
   for($i=0; $i<count($allies); $i+=AllyPieces()) {
-    if(AllyHasPlayCardAbility($allies[$i], $currentPlayer)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $allies[$i]);
+    if(AllyHasPlayCardAbility($allies[$i], $currentPlayer, $i)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $allies[$i]);
   }
   $otherPlayer = $currentPlayer == 1 ? 2 : 1;
   $theirAllies = &GetAllies($otherPlayer);
   for($i=0; $i<count($theirAllies); $i+=AllyPieces()) {
-    if(AllyHasPlayCardAbility($theirAllies[$i], $otherPlayer)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $theirAllies[$i]);
+    if(AllyHasPlayCardAbility($theirAllies[$i], $otherPlayer, $i)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $theirAllies[$i]);
   }
 }
 
-function AllyHasPlayCardAbility($cardID, $player) {
+function AllyHasPlayCardAbility($cardID, $player, $index) {
   global $currentPlayer;
   if($player == $currentPlayer) {
     switch($cardID) {
       case "415bde775d"://Hondo Ohnaka
       case "0052542605"://Bossk
       case "0961039929"://Colonel Yularen
-      case "9850906885"://Maz Kanata
-      case "5907868016"://Fighters for Freedom
       case "8031540027"://Dengar
-      case "0981852103"://Lady Proxima
       case "724979d608"://Cad Bane Leader 
       case "4088c46c4d"://The Mandalorian
-      case "3952758746"://Toro Calican
       case "3010720738"://Tobias Beckett
         return true;
+      case "9850906885"://Maz Kanata
+      case "5907868016"://Fighters for Freedom
+      case "0981852103"://Lady Proxima
+      case "3952758746"://Toro Calican
+        return $index != LastAllyIndex($player);
       default: break;
     }
   } else {
@@ -932,13 +933,13 @@ function AllyPlayCardAbility($cardID, $player="", $from="-", $abilityID="-")
       }
       break;
     case "9850906885"://Maz Kanata
-      if($i != LastAllyIndex($player) && DefinedTypesContains($cardID, "Unit", $player)) {
+      if(DefinedTypesContains($cardID, "Unit", $player)) {
         $me = new Ally("MYALLY-" . $i, $player);
         $me->Attach("2007868442");//Experience token
       }
       break;
     case "5907868016"://Fighters for Freedom
-      if($i != LastAllyIndex($player) && AspectContains($cardID, "Aggression", $player)) {
+      if(AspectContains($cardID, "Aggression", $player)) {
         $otherPlayer = ($player == 1 ? 2 : 1);
         DealDamageAsync($otherPlayer, 1, "DAMAGE", "5907868016");
         WriteLog(CardLink("5907868016", "5907868016") . " is dealing 1 damage.");
@@ -955,7 +956,7 @@ function AllyPlayCardAbility($cardID, $player="", $from="-", $abilityID="-")
       }
       break;
     case "0981852103"://Lady Proxima
-      if($i < count($allies)-AllyPieces() && TraitContains($cardID, "Underworld", $player)) {
+      if(TraitContains($cardID, "Underworld", $player)) {
         $otherPlayer = $player == 1 ? 2 : 1;
         DealDamageAsync($otherPlayer, 1, "DAMAGE", "0981852103");
       }
@@ -990,7 +991,7 @@ function AllyPlayCardAbility($cardID, $player="", $from="-", $abilityID="-")
       $toroIndex = SearchAlliesForCard($player, "3952758746");
       if($toroIndex != "") {
         $toroCalican = new Ally("MYALLY-" . $toroIndex, $player);
-        if($i != LastAllyIndex($player) && TraitContains($cardID, "Bounty Hunter", $currentPlayer) && $toroCalican->NumUses() > 0){
+        if(TraitContains($cardID, "Bounty Hunter", $currentPlayer) && $toroCalican->NumUses() > 0){
           AddDecisionQueue("YESNO", $player, "if you want to use Toro Calican's ability");
           AddDecisionQueue("NOPASS", $player, "-");
           AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . LastAllyIndex($player), 1);
