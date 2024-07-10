@@ -861,156 +861,178 @@ function AllyAttackedAbility($attackTarget, $index) {
   }
 }
 
-function AllyPlayCardAbility($cardID, $player="", $reportMode=false, $from="-")
+function AddAllyPlayAbilityLayers($cardID, $from) {
+  global $currentPlayer;
+  $allies = &GetAllies($currentPlayer);
+  for($i=0; $i<count($allies); $i+=AllyPieces()) {
+    if(AllyHasPlayCardAbility($allies[$i], $currentPlayer)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $allies[$i]);
+  }
+  $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+  $theirAllies = &GetAllies($otherPlayer);
+  for($i=0; $i<count($theirAllies); $i+=AllyPieces()) {
+    if(AllyHasPlayCardAbility($theirAllies[$i], $otherPlayer)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $theirAllies[$i]);
+  }
+}
+
+function AllyHasPlayCardAbility($cardID, $player) {
+  global $currentPlayer;
+  if($player == $currentPlayer) {
+    switch($cardID) {
+      case "415bde775d"://Hondo Ohnaka
+      case "0052542605"://Bossk
+      case "0961039929"://Colonel Yularen
+      case "9850906885"://Maz Kanata
+      case "5907868016"://Fighters for Freedom
+      case "8031540027"://Dengar
+      case "0981852103"://Lady Proxima
+      case "724979d608"://Cad Bane Leader 
+      case "4088c46c4d"://The Mandalorian
+      case "3952758746"://Toro Calican
+      case "3010720738"://Tobias Beckett
+        return true;
+      default: break;
+    }
+  } else {
+    switch($cardID) {
+      case "5555846790"://Saw Gerrera
+      case "4935319539"://Krayt Dragon
+        return true;
+      default: break;
+    }
+  }
+  return false;
+}
+
+function AllyPlayCardAbility($cardID, $player="", $from="-", $abilityID="-")
 {
   global $currentPlayer;
   if($player == "") $player = $currentPlayer;
   $allies = &GetAllies($player);
-  for($i=0; $i<count($allies); $i+=AllyPieces())
+  switch($abilityID)
   {
-    switch($allies[$i])
-    {
-      case "415bde775d"://Hondo Ohnaka
-        if($from == "RESOURCES") {
-          if($reportMode) return true;
-          AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
-          AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to give an experience token", 1);
-          AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-          AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
-        }
-        break;
-      case "0052542605"://Bossk
-        if(DefinedTypesContains($cardID, "Event", $player)) {
-          if($reportMode) return true;
-          AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
-          AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal 2 damage to");
-          AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-          AddDecisionQueue("MZOP", $player, "DEALDAMAGE,2", 1);
-        }
-        break;
-      case "0961039929"://Colonel Yularen
-        if(DefinedTypesContains($cardID, "Unit", $player) && AspectContains($cardID, "Command", $player)) {
-          if($reportMode) return true;
-          Restore(1, $player);
-        }
-        break;
-      case "9850906885"://Maz Kanata
-        if($i != LastAllyIndex($player) && DefinedTypesContains($cardID, "Unit", $player)) {
-          if($reportMode) return true;
-          $me = new Ally("MYALLY-" . $i, $player);
-          $me->Attach("2007868442");//Experience token
-        }
-        break;
-      case "5907868016"://Fighters for Freedom
-        if($i != LastAllyIndex($player) && AspectContains($cardID, "Aggression", $player)) {
-          if($reportMode) return true;
+    case "415bde775d"://Hondo Ohnaka
+      if($from == "RESOURCES") {
+        AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to give an experience token", 1);
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+        AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
+      }
+      break;
+    case "0052542605"://Bossk
+      if(DefinedTypesContains($cardID, "Event", $player)) {
+        AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal 2 damage to");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+        AddDecisionQueue("MZOP", $player, "DEALDAMAGE,2", 1);
+      }
+      break;
+    case "0961039929"://Colonel Yularen
+      if(DefinedTypesContains($cardID, "Unit", $player) && AspectContains($cardID, "Command", $player)) {
+        Restore(1, $player);
+      }
+      break;
+    case "9850906885"://Maz Kanata
+      if($i != LastAllyIndex($player) && DefinedTypesContains($cardID, "Unit", $player)) {
+        $me = new Ally("MYALLY-" . $i, $player);
+        $me->Attach("2007868442");//Experience token
+      }
+      break;
+    case "5907868016"://Fighters for Freedom
+      if($i != LastAllyIndex($player) && AspectContains($cardID, "Aggression", $player)) {
+        $otherPlayer = ($player == 1 ? 2 : 1);
+        DealDamageAsync($otherPlayer, 1, "DAMAGE", "5907868016");
+        WriteLog(CardLink("5907868016", "5907868016") . " is dealing 1 damage.");
+      }
+      break;
+    case "8031540027"://Dengar
+      if(DefinedTypesContains($cardID, "Upgrade", $player)) {
+        global $CS_LayerTarget;
+        $target = GetClassState($player, $CS_LayerTarget);
+        AddDecisionQueue("YESNO", $player, "Do you want to deal 1 damage from " . CardLink($allies[$i], $allies[$i]) . "?");
+        AddDecisionQueue("NOPASS", $player, "-");
+        AddDecisionQueue("PASSPARAMETER", $player, $target, 1);
+        AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1", 1);
+      }
+      break;
+    case "0981852103"://Lady Proxima
+      if($i < count($allies)-AllyPieces() && TraitContains($cardID, "Underworld", $player)) {
+        $otherPlayer = $player == 1 ? 2 : 1;
+        DealDamageAsync($otherPlayer, 1, "DAMAGE", "0981852103");
+      }
+      break;
+    case "724979d608"://Cad Bane Leader 
+      $cadIndex = SearchAlliesForCard($player, "724979d608");
+      if($cadIndex != "") {
+        $cadbane = new Ally("MYALLY-" . $cadIndex, $player);
+        if($from != 'PLAY' && $cadbane->NumUses() > 0 && TraitContains($cardID, "Underworld", $currentPlayer)) {
           $otherPlayer = ($player == 1 ? 2 : 1);
-          DealDamageAsync($otherPlayer, 1, "DAMAGE", "5907868016");
-          WriteLog(CardLink("5907868016", "5907868016") . " is dealing 1 damage.");
-        }
-        break;
-      case "8031540027"://Dengar
-        if(DefinedTypesContains($cardID, "Upgrade", $player)) {
-          if($reportMode) return true;
-          global $CS_LayerTarget;
-          $target = GetClassState($player, $CS_LayerTarget);
-          AddDecisionQueue("YESNO", $player, "Do you want to deal 1 damage from " . CardLink($allies[$i], $allies[$i]) . "?");
+          AddDecisionQueue("YESNO", $player, "if you want use Cad Bane's ability");
           AddDecisionQueue("NOPASS", $player, "-");
-          AddDecisionQueue("PASSPARAMETER", $player, $target, 1);
+          AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $cadIndex, 1);
+          AddDecisionQueue("ADDMZUSES", $player, "-1", 1);
+          AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY", 1);
+          AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a unit to deal 2 damage to", 1);
+          AddDecisionQueue("CHOOSEMULTIZONE", $otherPlayer, "<-", 1);
+          AddDecisionQueue("MZOP", $otherPlayer, "DEALDAMAGE,2", 1);
+        }
+      }
+      break;
+    case "4088c46c4d"://The Mandalorian
+      if(DefinedTypesContains($cardID, "Upgrade", $player)) {
+        $character[$i+1] = 1;
+        AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:maxHealth=6");
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to exhaust", 1);
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+        AddDecisionQueue("MZOP", $player, "REST", 1);
+      }
+      break;
+    case "3952758746"://Toro Calican
+      $toroIndex = SearchAlliesForCard($player, "3952758746");
+      if($toroIndex != "") {
+        $toroCalican = new Ally("MYALLY-" . $toroIndex, $player);
+        if($i != LastAllyIndex($player) && TraitContains($cardID, "Bounty Hunter", $currentPlayer) && $toroCalican->NumUses() > 0){
+          AddDecisionQueue("YESNO", $player, "if you want to use Toro Calican's ability");
+          AddDecisionQueue("NOPASS", $player, "-");
+          AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . LastAllyIndex($player), 1);
           AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1", 1);
+          AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $toroIndex, 1);
+          AddDecisionQueue("MZOP", $player, "READY", 1);
+          AddDecisionQueue("ADDMZUSES", $player, "-1", 1);
         }
-        break;
-      case "0981852103"://Lady Proxima
-        if($i < count($allies)-AllyPieces() && TraitContains($cardID, "Underworld", $player)) {
-          if($reportMode) return true;
-          $otherPlayer = $player == 1 ? 2 : 1;
-          DealDamageAsync($otherPlayer, 1, "DAMAGE", "0981852103");
-        }
-        break;
-      case "724979d608"://Cad Bane Leader 
-        $cadIndex = SearchAlliesForCard($player, "724979d608");
-        if($cadIndex != "") {
-          $cadbane = new Ally("MYALLY-" . $cadIndex, $player);
-          if($from != 'PLAY' && $cadbane->NumUses() > 0 && TraitContains($cardID, "Underworld", $currentPlayer)) {
-            if($reportMode) return true;
-            $otherPlayer = ($player == 1 ? 2 : 1);
-            AddDecisionQueue("YESNO", $player, "if you want use Cad Bane's ability");
-            AddDecisionQueue("NOPASS", $player, "-");
-            AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $cadIndex, 1);
-            AddDecisionQueue("ADDMZUSES", $player, "-1", 1);
-            AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY", 1);
-            AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a unit to deal 2 damage to", 1);
-            AddDecisionQueue("CHOOSEMULTIZONE", $otherPlayer, "<-", 1);
-            AddDecisionQueue("MZOP", $otherPlayer, "DEALDAMAGE,2", 1);
-          }
-        }
-        break;
-      case "4088c46c4d"://The Mandalorian
-        if(DefinedTypesContains($cardID, "Upgrade", $player)) {
-          if($reportMode) return true;
-          $character[$i+1] = 1;
-          AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:maxHealth=6");
-          AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to exhaust", 1);
-          AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-          AddDecisionQueue("MZOP", $player, "REST", 1);
-        }
-        break;
-      case "3952758746"://Toro Calican
-        $toroIndex = SearchAlliesForCard($player, "3952758746");
-        if($toroIndex != "") {
-          $toroCalican = new Ally("MYALLY-" . $toroIndex, $player);
-          if($i != LastAllyIndex($player) && TraitContains($cardID, "Bounty Hunter", $currentPlayer) && $toroCalican->NumUses() > 0){
-            if($reportMode) return true;
-            AddDecisionQueue("YESNO", $player, "if you want to use Toro Calican's ability");
-            AddDecisionQueue("NOPASS", $player, "-");
-            AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . LastAllyIndex($player), 1);
-            AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1", 1);
-            AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $toroIndex, 1);
-            AddDecisionQueue("MZOP", $player, "READY", 1);
-            AddDecisionQueue("ADDMZUSES", $player, "-1", 1);
-          }
-        }
-        break;
-      case "3010720738"://Tobias Beckett
-        $tobiasBeckett = New Ally("MYALLY-" . $i, $player);
-        if($tobiasBeckett->NumUses() > 0 && !DefinedTypesContains($cardID, "Unit", $player)) {
-          if($reportMode) return true;
-          $playedCardCost = CardCost($cardID);
-          AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:maxCost=" . $playedCardCost . "&THEIRALLY:maxCost=" . $playedCardCost);
-          AddDecisionQueue("MZFILTER", $player, "status=1", 1);
-          AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to exhaust with Tobias Beckett", 1);
-          AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-          AddDecisionQueue("MZOP", $player, "REST", 1);
-          AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $i, 1);
-          AddDecisionQueue("ADDMZUSES", $player, -1, 1);
-        }
-        break;
-      default: break;
-    }
+      }
+      break;
+    case "3010720738"://Tobias Beckett
+      $tobiasBeckett = New Ally("MYALLY-" . $i, $player);
+      if($tobiasBeckett->NumUses() > 0 && !DefinedTypesContains($cardID, "Unit", $player)) {
+        $playedCardCost = CardCost($cardID);
+        AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:maxCost=" . $playedCardCost . "&THEIRALLY:maxCost=" . $playedCardCost);
+        AddDecisionQueue("MZFILTER", $player, "status=1", 1);
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to exhaust with Tobias Beckett", 1);
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+        AddDecisionQueue("MZOP", $player, "REST", 1);
+        AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $i, 1);
+        AddDecisionQueue("ADDMZUSES", $player, -1, 1);
+      }
+      break;
+    default: break;
   }
   $otherPlayer = ($player == 1 ? 2 : 1);
-  $allies = &GetAllies($otherPlayer);
-  for($i=0; $i<count($allies); $i+=AllyPieces())
+  switch($abilityID)
   {
-    switch($allies[$i])
-    {
-      case "5555846790"://Saw Gerrera
-        if(DefinedTypesContains($cardID, "Event", $player)) {
-          if($reportMode) return true;
-          DealDamageAsync($player, 2, "DAMAGE", "5555846790");
-        }
-        break;
-      case "4935319539"://Krayt Dragon
-        if($reportMode) return true;
-        $damage = CardCost($cardID);
-        AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "THEIRALLY:arena=Ground");
-        AddDecisionQueue("PREPENDLASTRESULT", $otherPlayer, "THEIRCHAR-0,");
-        AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a card to deal " . $damage . " damage to");
-        AddDecisionQueue("MAYCHOOSEMULTIZONE", $otherPlayer, "<-", 1);
-        AddDecisionQueue("MZOP", $otherPlayer, "DEALDAMAGE," . $damage, 1);
-        break;
-      default: break;
-    }
+    case "5555846790"://Saw Gerrera
+      if(DefinedTypesContains($cardID, "Event", $player)) {
+        DealDamageAsync($player, 2, "DAMAGE", "5555846790");
+      }
+      break;
+    case "4935319539"://Krayt Dragon
+      $damage = CardCost($cardID);
+      AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "THEIRALLY:arena=Ground");
+      AddDecisionQueue("PREPENDLASTRESULT", $otherPlayer, "THEIRCHAR-0,");
+      AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a card to deal " . $damage . " damage to");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $otherPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $otherPlayer, "DEALDAMAGE," . $damage, 1);
+      break;
+    default: break;
   }
 }
 
