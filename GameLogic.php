@@ -602,26 +602,29 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $params = explode("=", $parameter);
       $arr = explode(",", $lastResult);
       if($params[0] == "canAttach") $params = explode("=", UpgradeFilter($params[1]));
+      $invertedMatching = substr($params[0], -1, 1) == "!";
+      $params[0] = rtrim($params[0], "!");
       for($i=count($arr)-1; $i>=0; --$i) {
+        $match = false;
         switch($params[0]) {
-          case "index": if($arr[$i] == $params[1]) unset($arr[$i]); break;
-          case "trait": if(TraitContains(GetMZCard($player, $arr[$i]), $params[1], $player)) unset($arr[$i]); break;
-          case "definedType": if(DefinedTypesContains(GetMZCard($player, $arr[$i]), $params[1], $player)) unset($arr[$i]); break;
-          case "maxCost": if(CardCost(GetMZCard($player, $arr[$i])) > $params[1]) unset($arr[$i]); break;
+          case "index": if($arr[$i] == $params[1]) $match = true; break;
+          case "trait": if(TraitContains(GetMZCard($player, $arr[$i]), $params[1], $player)) $match = true; break;
+          case "definedType": if(DefinedTypesContains(GetMZCard($player, $arr[$i]), $params[1], $player)) $match = true; break;
+          case "maxCost": if(CardCost(GetMZCard($player, $arr[$i])) > $params[1]) $match = true; break;
           case "dqVar":
             $mzArr = explode(",", $dqVars[$params[1]]);
-            for($j=0; $j<count($mzArr); ++$j) if($mzArr[$j] == $arr[$i]) { unset($arr[$i]); }
+            for($j=0; $j<count($mzArr); ++$j) if($mzArr[$j] == $arr[$i]) { $match = true; }
             break;
           case "status":
             $mzArr = explode("-", $arr[$i]);
             if($mzArr[0] == "MYALLY" || $mzArr[0] == "THEIRALLY") {
               $ally = new Ally($arr[$i]);
-              if($params[1] == 1 && $ally->IsExhausted()) unset($arr[$i]);
-              else if($params[1] == 0 && !$ally->IsExhausted()) unset($arr[$i]);
+              if($params[1] == 1 && $ally->IsExhausted()) $match = true;
+              else if($params[1] == 0 && !$ally->IsExhausted()) $match = true;
             } else if($mzArr[0] == "MYRESOURCES" || $mzArr[0] == "THEIRRESOURCES") {
               $resources = &GetResources($player);
-              if($params[1] == 1 && $resources[$i+4] == 1) unset($arr[$i]);
-              else if($params[1] == 0 && $resources[$i+4] != 1) unset($arr[$i]);
+              if($params[1] == 1 && $resources[$i+4] == 1) $match = true;
+              else if($params[1] == 0 && $resources[$i+4] != 1) $match = true;
             }
             break;
           case "leader":
@@ -629,8 +632,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             if($mzArr[0] == "MYALLY" || $mzArr[0] == "THEIRALLY") {
               $ally = new Ally($arr[$i]);
               $isLeader = DefinedTypesContains($ally->CardID(), "Leader", $player);
-              if($params[1] == 1 && $isLeader) unset($arr[$i]);
-              else if($params[1] == 0 && !$isLeader) unset($arr[$i]);
+              if($params[1] == 1 && $isLeader) $match = true;
+              else if($params[1] == 0 && !$isLeader) $match = true;
             }
             break;
           case "unique":
@@ -638,8 +641,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             if($mzArr[0] == "MYALLY" || $mzArr[0] == "THEIRALLY") {
               $ally = new Ally($arr[$i]);
               $isUnique = CardIsUnique($ally->CardID());
-              if($params[1] == 1 && $isUnique) unset($arr[$i]);
-              else if($params[1] == 0 && !$isUnique) unset($arr[$i]);
+              if($params[1] == 1 && $isUnique) $match = true;
+              else if($params[1] == 0 && !$isUnique) $match = true;
             }
             break;
           case "turns":
@@ -647,14 +650,14 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             $paramsArr = explode(">", $params[1]);
             if($mzArr[0] == "MYALLY" || $mzArr[0] == "THEIRALLY") {
               $ally = new Ally($arr[$i]);
-              if($ally->TurnsInPlay() > $paramsArr[1]) unset($arr[$i]);
+              if($ally->TurnsInPlay() > $paramsArr[1]) $match = true;
             }
             break;
           case "numAttacks":
             $mzArr = explode("-", $arr[$i]);
             if($mzArr[0] == "MYALLY" || $mzArr[0] == "THEIRALLY") {
               $ally = new Ally($arr[$i]);
-              if($ally->NumAttacks() == $params[1]) unset($arr[$i]);
+              if($ally->NumAttacks() == $params[1]) $match = true;
             }
             break;
           case "hasCaptives":
@@ -662,12 +665,14 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             if($mzArr[0] == "MYALLY" || $mzArr[0] == "THEIRALLY") {
               $ally = new Ally($arr[$i]);
               $hasCaptives = count($ally->GetCaptives()) > 0;
-              if($params[1] == 1 && $hasCaptives) unset($arr[$i]);
-              else if($params[1] == 0 && !$hasCaptives) unset($arr[$i]);
+              if($params[1] == 1 && $hasCaptives) $match = true;
+              else if($params[1] == 0 && !$hasCaptives) $match = true;
             }
             break;
           default: break;
         }
+        if($invertedMatching && !$match) unset($arr[$i]);
+        else if(!$invertedMatching && $match) unset($arr[$i]);
       }
       $rv = implode(",", $arr);
       return ($rv == "" ? "PASS" : $rv);
