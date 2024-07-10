@@ -520,6 +520,7 @@ function CollectBounty($player, $index, $cardID, $reportMode=false, $bountyUnitO
       ++$numBounties;
       if($reportMode) break;
       AddCurrentTurnEffect("f928681d36-3", $opponent);
+      WriteLog("This is a partially manual card. Name the card in chat that bounty was applied to");
       break;
     case "2178538979"://Price on Your Head
       ++$numBounties;
