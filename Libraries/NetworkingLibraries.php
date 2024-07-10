@@ -1407,15 +1407,6 @@ function PlayCardSkipCosts($cardID, $from)
 function GetLayerTarget($cardID)
 {
   global $currentPlayer;
-  switch ($cardID) {
-    case "215upufyoz"://Tether in Flames
-      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "LAYER");
-      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-      AddDecisionQueue("SETLAYERTARGET", $currentPlayer, $cardID, 1);
-      break;
-    default:
-      break;
-  }
   if(DefinedTypesContains($cardID, "Upgrade", $currentPlayer)) 
   {
     $upgradeFilter = UpgradeFilter($cardID);

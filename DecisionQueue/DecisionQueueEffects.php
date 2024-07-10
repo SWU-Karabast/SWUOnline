@@ -484,6 +484,34 @@ function SpecificCardLogic($player, $card, $lastResult)
         AddTopDeckAsResource($player);
       }
       return 1;
+    case "SURVIVORS'GAUNTLET":
+      $prefix = substr($dqVars[1], 0, 2) == "MY" ? "MY" : "THEIR";
+      AddDecisionQueue("MULTIZONEINDICES", $player, $prefix . "ALLY", 1);
+      AddDecisionQueue("MZFILTER", $player, "canAttach={0}", 1);
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to move <0> to.", 1);
+      AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
+      AddDecisionQueue("MZOP", $player, "MOVEUPGRADE", 1);
+      return 1;
+    case "PREVIZSLA":
+      $upgradeID = $dqVars[0];
+      $upgradeCost = CardCost($upgradeID);
+      if(NumResourcesAvailable($player) >= $upgradeCost) {
+        AddDecisionQueue("YESNO", $player, "if you want to pay " . $upgradeCost . " to steal " . CardName($upgradeID), 1);
+        AddDecisionQueue("NOPASS", $player, "-", 1);
+        AddDecisionQueue("PAYRESOURCES", $player, $upgradeCost . ",1", 1);
+        $preIndex = "MYALLY-" . SearchAlliesForCard($player, "3086868510");
+        if(DecisionQueueStaticEffect("MZFILTER", $player, "canAttach=" . $upgradeID, $preIndex) != "PASS") {
+          AddDecisionQueue("PASSPARAMETER", $player, $preIndex, 1);
+          AddDecisionQueue("MZOP", $player, "MOVEUPGRADE", 1);
+        }
+        else {
+          AddDecisionQueue("PASSPARAMETER", $player, $dqVars[1], 1);
+          AddDecisionQueue("SETDQVAR", $player, "0", 1);
+          AddDecisionQueue("PASSPARAMETER", $player, $upgradeID, 1);
+          AddDecisionQueue("OP", $player, "DEFEATUPGRADE", 1);
+        }
+      }
+      return 1;
     default: return "";
   }
 }

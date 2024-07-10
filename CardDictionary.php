@@ -1150,10 +1150,15 @@ function UpgradeFilter($cardID)
     case "6775521270"://Inspiring Mentor
     case "6117103324"://Jetpack
       return "trait=Vehicle";
+    case "3987987905"://Hardpoint Heavy Blaster
+    case "7280213969"://Smuggling Compartment
+      return "trait!=Vehicle";
     case "8055390529"://Traitorous
       return "maxCost=3";
     case "1368144544"://Imprisoned
     case "7718080954"://Frozen in Carbonite
+    case "6911505367"://Second Chance
+    case "7270736993"://Unrefusable Offer
       return "leader=1";
     default: return "";
   }
@@ -1753,6 +1758,9 @@ function DefinedCardType2Wrapper($cardID)
     case "0622803599"://Jabba the Hutt
     case "9596662994"://Finn
       return "";
+    case "8752877738":
+    case "2007868442":
+      return "Upgrade";
     default: return DefinedCardType2($cardID);
   }
 }
