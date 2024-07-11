@@ -509,6 +509,15 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             UpgradeLeftPlay($upgradeID, $allyPlayer, $mzArr[1]);
           }
           return $lastResult;
+        case "BOUNCEUPGRADE":
+          $upgradeID = $lastResult;
+          $mzArr = explode("-", $dqVars[0]);
+          $allyPlayer = $mzArr[0] == "MYALLY" ? $player : ($player == 1 ? 2 : 1);
+          $ally = new Ally($dqVars[0], $allyPlayer);
+          $destroyed = $ally->DefeatUpgrade($upgradeID);
+          if(!IsToken($upgradeID)) AddHand($allyPlayer, $upgradeID);
+          UpgradeLeftPlay($upgradeID, $allyPlayer, $mzArr[1]);
+          return $lastResult;
         case "RESCUECAPTIVE":
           $captiveID = $lastResult;
           $mzArr = explode("-", $dqVars[0]);
