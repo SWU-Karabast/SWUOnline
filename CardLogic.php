@@ -589,7 +589,10 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       PlayAlly($target, $player, from:"CAPTIVE");
       break;
     case "AFTERPLAYABILITY":
-      AllyPlayCardAbility($target, $player, from: $additionalCosts, abilityID:$uniqueID);
+      $arr = explode(",", $uniqueID);
+      $abilityID = $arr[0];
+      $uniqueID = $arr[1];
+      AllyPlayCardAbility($target, $player, from: $additionalCosts, abilityID:$abilityID, uniqueID:$uniqueID);
       break;
     case "9642863632"://Bounty Hunter's Quarry
       AddCurrentTurnEffect($parameter, $player);
