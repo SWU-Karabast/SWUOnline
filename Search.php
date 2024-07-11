@@ -769,6 +769,7 @@ function GetMZCardLink($player, $MZ)
 //Each search is delimited by &, which means a set UNION
 //Each search is the format <zone>:<condition 1>;<condition 2>,...
 //Each condition is format <search parameter name>=<parameter value>
+//cardID=, sameName=, and sameTitle= cannot be combined with other conditions.
 //Example: AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND:maxAttack=3;type=AA");
 function SearchMultizone($player, $searches)
 {
@@ -797,6 +798,9 @@ function SearchMultizone($player, $searches)
     $zone = $searchArr[0];
     $isCardID = false;
     $isSameName = false;
+    $isSameTitle = false;
+    $searchResult = "";
+    $searchPlayer = (str_starts_with($zone, "MY") ? $player : ($player == 1 ? 2 : 1));
     if(count($searchArr) > 1) //Means there are conditions
     {
       $conditions = explode(";", $searchArr[1]);
@@ -893,8 +897,6 @@ function SearchMultizone($player, $searches)
                 break;
               default: break;
             }
-            $searchResult = SearchMultiZoneFormat($searchResult, $zone);
-            $rv = CombineSearches($rv, $searchResult);
             $isCardID = true;
             break;
           case "sameName":
@@ -905,18 +907,23 @@ function SearchMultizone($player, $searches)
               case "MYDISCARD": $searchResult = SearchDiscardByName($player, $name); break;
               default: break;
             }
-            $rv = SearchMultiZoneFormat($searchResult, $zone);
-            //$rv = CombineSearches($rv, $searchResult);
             $isSameName = true;
+            break;
+          case "sameTitle":
+            $title = CardTitle($condition[1]);
+            switch($zone)
+            {
+              case "MYALLY": case "THEIRALLY": $searchResult = SearchAlliesForTitle($searchPlayer, $title); break;
+              default: break;
+            }
+            $isSameTitle = true;
             break;
           default:
             break;
         }
       }
     }
-    $searchPlayer = (str_starts_with($zone, "MY") ? $player : ($player == 1 ? 2 : 1));
-    $searchResult = "";
-    if(!$isCardID && !$isSameName)
+    if(!$isCardID && !$isSameName && !$isSameTitle)
     {
       switch ($zone) {
         case "MYDECK": case "THEIRDECK":
