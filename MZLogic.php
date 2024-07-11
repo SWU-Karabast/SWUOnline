@@ -49,7 +49,6 @@ function MZDestroy($player, $lastResult)
 
 function MZRemove($player, $lastResult)
 {
-  //TODO: Make each removal function return the card ID that was removed, so you know what it was
   $lastResultArr = explode(",", $lastResult);
   $otherPlayer = ($player == 1 ? 2 : 1);
   for($i = 0; $i < count($lastResultArr); ++$i) {
