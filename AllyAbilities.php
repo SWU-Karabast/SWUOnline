@@ -873,16 +873,16 @@ function AddAllyPlayAbilityLayers($cardID, $from) {
   global $currentPlayer;
   $allies = &GetAllies($currentPlayer);
   for($i=0; $i<count($allies); $i+=AllyPieces()) {
-    if(AllyHasPlayCardAbility($allies[$i], $currentPlayer, $i)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $allies[$i]);
+    if(AllyHasPlayCardAbility($cardID, $allies[$i], $currentPlayer, $i)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $allies[$i] . "," . $allies[$i+5]);
   }
   $otherPlayer = $currentPlayer == 1 ? 2 : 1;
   $theirAllies = &GetAllies($otherPlayer);
   for($i=0; $i<count($theirAllies); $i+=AllyPieces()) {
-    if(AllyHasPlayCardAbility($theirAllies[$i], $otherPlayer, $i)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $theirAllies[$i]);
+    if(AllyHasPlayCardAbility($cardID, $theirAllies[$i], $otherPlayer, $i)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $theirAllies[$i] . "," . $allies[$i+5]);
   }
 }
 
-function AllyHasPlayCardAbility($cardID, $player, $index) {
+function AllyHasPlayCardAbility($playedCard, $cardID, $player, $index) {
   global $currentPlayer;
   if($player == $currentPlayer) {
     switch($cardID) {
@@ -898,7 +898,7 @@ function AllyHasPlayCardAbility($cardID, $player, $index) {
       case "5907868016"://Fighters for Freedom
       case "0981852103"://Lady Proxima
       case "3952758746"://Toro Calican
-        return $index != LastAllyIndex($player);
+        return $playedCard == $cardID && $index == LastAllyIndex($player) ? false : true;
       default: break;
     }
   } else {
@@ -912,11 +912,12 @@ function AllyHasPlayCardAbility($cardID, $player, $index) {
   return false;
 }
 
-function AllyPlayCardAbility($cardID, $player="", $from="-", $abilityID="-")
+function AllyPlayCardAbility($cardID, $player="", $from="-", $abilityID="-", $uniqueID='-')
 {
   global $currentPlayer;
   if($player == "") $player = $currentPlayer;
   $allies = &GetAllies($player);
+  $index = SearchAlliesForUniqueID($uniqueID, $player);
   switch($abilityID)
   {
     case "415bde775d"://Hondo Ohnaka
@@ -942,7 +943,7 @@ function AllyPlayCardAbility($cardID, $player="", $from="-", $abilityID="-")
       break;
     case "9850906885"://Maz Kanata
       if(DefinedTypesContains($cardID, "Unit", $player)) {
-        $me = new Ally("MYALLY-" . $i, $player);
+        $me = new Ally("MYALLY-" . $index, $player);
         $me->Attach("2007868442");//Experience token
       }
       break;
@@ -957,7 +958,7 @@ function AllyPlayCardAbility($cardID, $player="", $from="-", $abilityID="-")
       if(DefinedTypesContains($cardID, "Upgrade", $player)) {
         global $CS_LayerTarget;
         $target = GetClassState($player, $CS_LayerTarget);
-        AddDecisionQueue("YESNO", $player, "Do you want to deal 1 damage from " . CardLink($allies[$i], $allies[$i]) . "?");
+        AddDecisionQueue("YESNO", $player, "Do you want to deal 1 damage from " . CardLink($allies[$index], $allies[$index]) . "?");
         AddDecisionQueue("NOPASS", $player, "-");
         AddDecisionQueue("PASSPARAMETER", $player, $target, 1);
         AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1", 1);
@@ -988,7 +989,7 @@ function AllyPlayCardAbility($cardID, $player="", $from="-", $abilityID="-")
       break;
     case "4088c46c4d"://The Mandalorian
       if(DefinedTypesContains($cardID, "Upgrade", $player)) {
-        $character[$i+1] = 1;
+        $character[$index+1] = 1;
         AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:maxHealth=6");
         AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to exhaust", 1);
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
@@ -1011,7 +1012,7 @@ function AllyPlayCardAbility($cardID, $player="", $from="-", $abilityID="-")
       }
       break;
     case "3010720738"://Tobias Beckett
-      $tobiasBeckett = New Ally("MYALLY-" . $i, $player);
+      $tobiasBeckett = New Ally("MYALLY-" . $index, $player);
       if($tobiasBeckett->NumUses() > 0 && !DefinedTypesContains($cardID, "Unit", $player)) {
         $playedCardCost = CardCost($cardID);
         AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:maxCost=" . $playedCardCost . "&THEIRALLY:maxCost=" . $playedCardCost);
@@ -1019,7 +1020,7 @@ function AllyPlayCardAbility($cardID, $player="", $from="-", $abilityID="-")
         AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to exhaust with Tobias Beckett", 1);
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
         AddDecisionQueue("MZOP", $player, "REST", 1);
-        AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $i, 1);
+        AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $index, 1);
         AddDecisionQueue("ADDMZUSES", $player, -1, 1);
       }
       break;

@@ -4167,10 +4167,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "6475868209"://Criminal Muscle
       if($from != "PLAY") {
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY&MYALLY");
-        AddDecisionQueue("MZFILTER", $currentPlayer, "unique=1");
-        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "BOUNCE", 1);
+        DefeatUpgrade($currentPlayer, may:true, search:"MYALLY&THEIRALLY", to:"HAND");
       }
       break;
     case "1743599390"://Trandoshan Hunters
