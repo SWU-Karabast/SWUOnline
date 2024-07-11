@@ -625,6 +625,13 @@ function CollectBounty($player, $index, $cardID, $reportMode=false, $bountyUnitO
         DealDamageAsync($player, 5, "DAMAGE", "0252207505");
       }
       break;
+    case "2965702252"://Unlicensed Headhunter
+      if($bountyUnitOverride != "-" || $ally->IsExhausted()) {
+        ++$numBounties;
+        if($reportMode) break;
+        Restore(5, $opponent);
+      }
+      break;
     case "7642980906"://Stolen Landspeeder
       ++$numBounties;
       if($reportMode) break;
