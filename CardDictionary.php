@@ -99,14 +99,14 @@ function RestoreAmount($cardID, $player, $index)
   switch($cardID)
   {
     case "0074718689": $amount += 1; break;//Restored Arc 170
-    case "1081012039": $amount += 2; break;
+    case "1081012039": $amount += 2; break;//Regional Sympathizers
     case "1611702639": $amount += $initiativePlayer == $player ? 2 : 0; break;//Consortium Starviper
-    case "4405415770": $amount += 2; break;
-    case "0827076106": $amount += 1; break;
-    case "4919000710": $amount += 2; break;
-    case "9412277544": $amount += 1; break;
-    case "e2c6231b35": $amount += 2; break;
-    case "7109944284": $amount += 3; break;
+    case "4405415770": $amount += 2; break;//Yoda, Old Master
+    case "0827076106": $amount += 1; break;//Admiral Ackbar
+    case "4919000710": $amount += 2; break;//Home One
+    case "9412277544": $amount += 1; break;//Del Meeko
+    case "e2c6231b35": $amount += 2; break;//Director Krennic
+    case "7109944284": $amount += 3; break;//Luke Skywalker unit
     case "8142386948": $amount += 2; break;//Razor Crest
     case "4327133297": $amount += 2; break;//Moisture Farmer
     case "5977238053": $amount += 2; break;//Sundari Peacekeeper
@@ -115,6 +115,7 @@ function RestoreAmount($cardID, $player, $index)
     case "e091d2a983": $amount += 3; break;//Rey
     case "7022736145": $amount += 2; break;//Tarfful
     case "6870437193": $amount += 2; break;//Twin Pod Cloud Car
+    case "3671559022": $amount += 2; break;//Echo
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
@@ -495,15 +496,15 @@ function HasSaboteur($cardID, $player, $index)
   }
   switch($cardID)
   {
-    case "1017822723":
-    case "9859536518":
-    case "0046930738":
-    case "7533529264":
-    case "1746195484":
-    case "5907868016":
-    case "0828695133":
-    case "9250443409":
-    case "3c60596a7a":
+    case "1017822723"://Rogue Operative
+    case "9859536518"://Jawa Scavenger
+    case "0046930738"://Rebel Pathfinder
+    case "7533529264"://Wolffe
+    case "1746195484"://Jedha Agitator
+    case "5907868016"://Fighters for Freedom
+    case "0828695133"://Seventh Sister
+    case "9250443409"://Lando Calrissian (Responsible Businessman)
+    case "3c60596a7a"://Cassian Andor (Dedicated to the Rebellion)
     case "1690726274"://Zuckuss
     case "4595532978"://Ketsu Onyo
     case "3786602643"://House Kast Soldier
@@ -511,6 +512,7 @@ function HasSaboteur($cardID, $player, $index)
     case "7922308768"://Valiant Assault Ship
     case "2151430798"://Guavian Antagonizer
     case "2556508706"://Resourceful Pursuers
+    case "2965702252"://Unlicensed Headhunter
       return true;
     default: return false;
   }
@@ -1150,10 +1152,15 @@ function UpgradeFilter($cardID)
     case "6775521270"://Inspiring Mentor
     case "6117103324"://Jetpack
       return "trait=Vehicle";
+    case "3987987905"://Hardpoint Heavy Blaster
+    case "7280213969"://Smuggling Compartment
+      return "trait!=Vehicle";
     case "8055390529"://Traitorous
       return "maxCost=3";
     case "1368144544"://Imprisoned
     case "7718080954"://Frozen in Carbonite
+    case "6911505367"://Second Chance
+    case "7270736993"://Unrefusable Offer
       return "leader=1";
     default: return "";
   }
@@ -1753,6 +1760,9 @@ function DefinedCardType2Wrapper($cardID)
     case "0622803599"://Jabba the Hutt
     case "9596662994"://Finn
       return "";
+    case "8752877738":
+    case "2007868442":
+      return "Upgrade";
     default: return DefinedCardType2($cardID);
   }
 }

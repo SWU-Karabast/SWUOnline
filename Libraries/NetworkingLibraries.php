@@ -1407,15 +1407,6 @@ function PlayCardSkipCosts($cardID, $from)
 function GetLayerTarget($cardID)
 {
   global $currentPlayer;
-  switch ($cardID) {
-    case "215upufyoz"://Tether in Flames
-      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "LAYER");
-      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-      AddDecisionQueue("SETLAYERTARGET", $currentPlayer, $cardID, 1);
-      break;
-    default:
-      break;
-  }
   if(DefinedTypesContains($cardID, "Upgrade", $currentPlayer)) 
   {
     $upgradeFilter = UpgradeFilter($cardID);
@@ -1755,7 +1746,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
         //TODO: Fix this Relentless and first light and The Mandalorian hack
         else if($from == "PLAY" || $from == "EQUIP" || HasWhenPlayed($cardID) || $cardID == "3401690666" || $cardID == "4783554451" || $cardID == "4088c46c4d" || DefinedTypesContains($cardID, "Event", $currentPlayer) || DefinedTypesContains($cardID, "Upgrade", $currentPlayer)) AddLayer($layerName, $currentPlayer, $cardID, $from . "!" . $resourcesPaid . "!" . $target . "!" . $additionalCosts . "!" . $abilityIndex . "!" . $playIndex, "-", $uniqueID, append:true);
         else if($from != "PLAY" && $from != "EQUIP") {
-          if(AllyPlayCardAbility($cardID, $currentPlayer, reportMode:true, from:$from)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $target, $additionalCosts);
+          AddAllyPlayAbilityLayers($cardID, $from);
         }
       }
     }
