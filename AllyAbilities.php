@@ -873,16 +873,16 @@ function AddAllyPlayAbilityLayers($cardID, $from) {
   global $currentPlayer;
   $allies = &GetAllies($currentPlayer);
   for($i=0; $i<count($allies); $i+=AllyPieces()) {
-    if(AllyHasPlayCardAbility($allies[$i], $currentPlayer, $i)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $allies[$i]);
+    if(AllyHasPlayCardAbility($cardID, $allies[$i], $currentPlayer, $i)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $allies[$i]);
   }
   $otherPlayer = $currentPlayer == 1 ? 2 : 1;
   $theirAllies = &GetAllies($otherPlayer);
   for($i=0; $i<count($theirAllies); $i+=AllyPieces()) {
-    if(AllyHasPlayCardAbility($theirAllies[$i], $otherPlayer, $i)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $theirAllies[$i]);
+    if(AllyHasPlayCardAbility($cardID, $theirAllies[$i], $otherPlayer, $i)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $theirAllies[$i]);
   }
 }
 
-function AllyHasPlayCardAbility($cardID, $player, $index) {
+function AllyHasPlayCardAbility($playedCard, $cardID, $player, $index) {
   global $currentPlayer;
   if($player == $currentPlayer) {
     switch($cardID) {
@@ -898,7 +898,7 @@ function AllyHasPlayCardAbility($cardID, $player, $index) {
       case "5907868016"://Fighters for Freedom
       case "0981852103"://Lady Proxima
       case "3952758746"://Toro Calican
-        return $index != LastAllyIndex($player);
+        return $playedCard == $cardID && $index == LastAllyIndex($player) ? false : true;
       default: break;
     }
   } else {
