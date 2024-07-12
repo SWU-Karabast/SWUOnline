@@ -194,6 +194,7 @@ function HasSentinel($cardID, $player, $index)
     switch($currentTurnEffects[$i]) {
       case "8294130780": $hasSentinel = true; break;//Gladiator Star Destroyer
       case "3572356139": $hasSentinel = true; break;//Chewbacca, Walking Carpet
+      case "3468546373": $hasSentinel = true; break;//General Rieekan
       case "9070397522": return false;//SpecForce Soldier
       default: break;
     }
@@ -1422,6 +1423,7 @@ function HasAttackAbility($cardID) {
     case "1503633301"://Survivors' Gauntlet
     case "8240629990"://Avenger
     case "6931439330"://The Ghost
+    case "3468546373"://General Rieekan
       return true;
     default: return false;
   }
