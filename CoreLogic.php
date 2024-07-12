@@ -2170,8 +2170,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "7262314209"://Mission Briefing
-      Draw($currentPlayer);
-      Draw($currentPlayer);
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      $player = $additionalCosts == "Yourself" ? $currentPlayer : $otherPlayer;
+      Draw($player);
+      Draw($player);
       break;
     case "6253392993"://Bright Hope
       if($from != "PLAY") {
@@ -4114,8 +4116,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "4772866341"://Pillage
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
-      PummelHit($otherPlayer);
-      PummelHit($otherPlayer);
+      $player = $additionalCosts == "Yourself" ? $currentPlayer : $otherPlayer;
+      PummelHit($player);
+      PummelHit($player);
       break;
     case "5984647454"://Enforced Loyalty
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
