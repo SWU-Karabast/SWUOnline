@@ -140,8 +140,9 @@ if ($decklink != "") {
   $bannedSet = "";
   $hasBannedCard = false;
   for($i=0; $i<count($deck); ++$i) {
+    $deck[$i]->id = CardIDOverride($deck[$i]->id);
     $cardID = UUIDLookup($deck[$i]->id);
-    $cardID = CardOverride($cardID);
+    $cardID = CardUUIDOverride($cardID);
     if(CardSet($cardID) == $bannedSet) {
       $hasBannedCard = true;
     }
@@ -153,8 +154,9 @@ if ($decklink != "") {
   $sideboard = $deckObj->sideboard ?? [];
   $sideboardCards = "";
   for($i=0; $i<count($sideboard); ++$i) {
+    $sideboard[$i]->id = CardIDOverride($sideboard[$i]->id);
     $cardID = UUIDLookup($sideboard[$i]->id);
-    $cardID = CardOverride($cardID);
+    $cardID = CardUUIDOverride($cardID);
     if(CardSet($cardID) == $bannedSet) {
       $hasBannedCard = true;
     }
@@ -251,7 +253,25 @@ if ($matchup == "") {
 session_write_close();
 header("Location: " . $redirectPath . "/GameLobby.php?gameName=$gameName&playerID=$playerID");
 
-function CardOverride($cardID)
+function CardIDOverride($cardID) {
+  switch($cardID) {
+    case "SHD_231": return "SOR_220";
+    case "SHD_030": return "SOR_033";
+    case "SHD_063": return "SOR_066";
+    case "SHD066": return "SOR_068";
+    case "SHD070": return "SOR_069";
+    case "SHD085": return "SOR_083";
+    case "SHD083": return "SOR_081";
+    case "SHD166": return "SOR_162";
+    case "SHD223": return "SOR_215";
+    case "SHD238": return "SOR_229";
+    case "SHD257": return "SOR_247";
+    case "SHD262": return "SOR_251";
+    default: return $cardID;
+  }
+}
+
+function CardUUIDOverride($cardID)
 {
   switch ($cardID) {
     case "1706333706": return "8380936981";//Jabba's Rancor
