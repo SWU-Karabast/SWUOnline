@@ -144,6 +144,7 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
   $cardID = $allies[$index];
   $owner = $allies[$index+11];
   $otherPlayer = $player == 1 ? 2 : 1;
+  $discardPileModifier = "-";
   if(!$skipDestroy) {
     AllyDestroyedAbility($player, $index, $fromCombat);
     CollectBounties($player, $index);
@@ -155,6 +156,7 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
   $upgrades = $ally->GetUpgrades();
   for($i=0; $i<count($upgrades); ++$i) {
     if($upgrades[$i] == "8752877738" || $upgrades[$i] == "2007868442") continue;
+    if($upgrades[$i] == "6911505367") $discardPileModifier = "TTFREE";//Second Chance
     AddGraveyard($upgrades[$i], $player, "PLAY");
   }
   $captives = $ally->GetCaptives();
@@ -162,7 +164,7 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
     if(DefinedTypesContains($cardID, "Leader", $player)) ;//If it's a leader it doesn't go in the discard
     else if($cardID == "8954587682" && !$ally->LostAbilities()) AddResources($cardID, $player, "PLAY", "DOWN");//Superlaser Technician
     else if($cardID == "7204838421" && !$ally->LostAbilities()) AddResources($cardID, $player, "PLAY", "DOWN");//Enterprising Lackeys
-    else AddGraveyard($cardID, $owner, "PLAY");
+    else AddGraveyard($cardID, $owner, "PLAY", $discardPileModifier);
   }
   for($j = $index + AllyPieces() - 1; $j >= $index; --$j) unset($allies[$j]);
   $allies = array_values($allies);
