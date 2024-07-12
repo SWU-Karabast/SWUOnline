@@ -4139,8 +4139,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "6962053552"://Desperate Attack
       if($from != "PLAY") {
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
-        AddDecisionQueue("MZFILTER", $currentPlayer, "damaged=1");
-        AddDecisionQueue("MZFILTER", $currentPlayer, "status=0");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "status=1");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "damaged=0");
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to attack and give +2");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);

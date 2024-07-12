@@ -611,7 +611,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $params = explode("=", $parameter);
       $arr = explode(",", $lastResult);
       if($params[0] == "canAttach") $params = explode("=", UpgradeFilter($params[1]));
-      $invertedMatching = substr($params[0], -1, 1) == "!";
+      $invertedMatching = str_ends_with($params[0], "!");
       $params[0] = rtrim($params[0], "!");
       for($i=count($arr)-1; $i>=0; --$i) {
         $match = false;
