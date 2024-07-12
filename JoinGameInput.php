@@ -258,6 +258,15 @@ function CardIDOverride($cardID) {
     case "SHD_231": return "SOR_220";
     case "SHD_030": return "SOR_033";
     case "SHD_063": return "SOR_066";
+    case "SHD066": return "SOR_068";
+    case "SHD070": return "SOR_069";
+    case "SHD085": return "SOR_083";
+    case "SHD083": return "SOR_081";
+    case "SHD166": return "SOR_162";
+    case "SHD223": return "SOR_215";
+    case "SHD238": return "SOR_229";
+    case "SHD257": return "SOR_247";
+    case "SHD262": return "SOR_251";
     default: return $cardID;
   }
 }
