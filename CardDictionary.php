@@ -1634,8 +1634,11 @@ function SmuggleCost($cardID, $player="", $index="")
   {
     switch($allies[$i]) {
       case "3881257511"://Tech
-        $cost = CardCost($cardID) + 2;
-        if($minCost == -1 || $minCost > $cost) $minCost = $cost;
+        $techAlly = new Ally("MYALLY-" . $allies[$i], $player);
+        if(!$techAlly->LostAbilities()) {
+          $cost = CardCost($cardID)+2;
+          if($minCost == -1 || $minCost > $cost) $minCost = $cost;
+        } 
         break;
       default: break;
     }
