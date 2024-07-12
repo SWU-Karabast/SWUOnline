@@ -155,10 +155,10 @@ include_once 'Header.php';
         <img src="./images/shd-art-v2.png" alt="SHD" style="max-width: 100%;">
         <div style="text-align: left;">
           <b style="margin: 15px 0; display: block;">Set 2 now available!</b>
-          <p>With the launch of set 2 we are now making these cards available in the premier formats! A big thanks to everyone who has contributed to the project, whether it be through bug reports, feature requests, or just playing games. 
-             Together we've logged well over 300,000 games! It's clear this game has captured our hearts and set 2 promises to offer a bounty of great games whether you're playing at your LGS or on Karabast
-             while you're smuggled up at home. We know there's still a lot of work to be done, but the team is excited about the future of the product. We encourage you to join the discord hang out with the community or chat about ways you could
-             contribute to the project. Either way we hope you enjoy playing. Have fun and may the force be with you! </p>
+          <p>With the launch of Set 2 we are now making these cards available in the premier formats! A big thanks to everyone who has contributed to the project, whether it be through bug reports, feature requests, or just playing games. 
+             Together, we've logged well over 300,000 games! It's clear this game has captured our hearts, and set 2 promises to offer a bounty of great games whether you're playing at your LGS or on Karabast
+             while you're smuggled up at home. We know there's still a lot of work to be done, but the team is excited about the future of the project. We encourage you to join the Discord, hang out with the community, or chat about ways you could
+             contribute to the project. Either way, we hope you enjoy playing. Have fun, and may the force be with you!</p>
           </p>
         </div>
       </div>
