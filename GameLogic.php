@@ -636,6 +636,14 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
               else if($params[1] == 0 && $resources[$i+4] != 1) $match = true;
             }
             break;
+          case "damaged":
+            $mzArr = explode("-", $arr[$i]);
+            if($mzArr[0] == "MYALLY" || $mzArr[0] == "THEIRALLY") {
+              $ally = new Ally($arr[$i]);
+              if($params[1] == 1 && $ally->IsDamaged()) $match = true;
+              else if($params[1] == 0 && !$ally->IsDamaged()) $match = true;
+            }
+            break;
           case "leader":
             $mzArr = explode("-", $arr[$i]);
             if($mzArr[0] == "MYALLY" || $mzArr[0] == "THEIRALLY") {
