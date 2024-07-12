@@ -137,11 +137,12 @@ if ($decklink != "") {
   $base = UUIDLookup($deckObj->base->id);
   $deck = $deckObj->deck;
   $cards = "";
-  $bannedSet = "SHD";
+  $bannedSet = "";
   $hasBannedCard = false;
   for($i=0; $i<count($deck); ++$i) {
+    $deck[$i]->id = CardIDOverride($deck[$i]->id);
     $cardID = UUIDLookup($deck[$i]->id);
-    $cardID = CardOverride($cardID);
+    $cardID = CardUUIDOverride($cardID);
     if(CardSet($cardID) == $bannedSet) {
       $hasBannedCard = true;
     }
@@ -153,8 +154,9 @@ if ($decklink != "") {
   $sideboard = $deckObj->sideboard ?? [];
   $sideboardCards = "";
   for($i=0; $i<count($sideboard); ++$i) {
+    $sideboard[$i]->id = CardIDOverride($sideboard[$i]->id);
     $cardID = UUIDLookup($sideboard[$i]->id);
-    $cardID = CardOverride($cardID);
+    $cardID = CardUUIDOverride($cardID);
     if(CardSet($cardID) == $bannedSet) {
       $hasBannedCard = true;
     }
@@ -251,7 +253,26 @@ if ($matchup == "") {
 session_write_close();
 header("Location: " . $redirectPath . "/GameLobby.php?gameName=$gameName&playerID=$playerID");
 
-function CardOverride($cardID)
+function CardIDOverride($cardID) {
+  switch($cardID) {
+    case "SHD_231": return "SOR_220"; //Surprise Strike 
+    case "SHD_030": return "SOR_033"; //Death Trooper
+    case "SHD_063": return "SOR_066"; //System Patrol Craft
+    case "SHD_066": return "SOR_068"; //Cargo Juggernaut
+    case "SHD_070": return "SOR_069"; //Resilient
+    case "SHD_085": return "SOR_083"; //Superlaser Technician
+    case "SHD_083": return "SOR_081"; //Seasoned Shoretrooper
+    case "SHD_166": return "SOR_162"; //Disabling Fang Fighter
+    case "SHD_223": return "SOR_215"; //Snapshot Reflexes
+    case "SHD_238": return "SOR_229"; //Cell Block Guard
+    case "SHD_257": return "SOR_247"; //Underworld Thug
+    case "SHD_262": return "SOR_251"; //Confiscate
+    case "SHD_236": return "SOR_227"; //Snowtrooper Lieutenant
+    default: return $cardID;
+  }
+}
+
+function CardUUIDOverride($cardID)
 {
   switch ($cardID) {
     case "1706333706": return "8380936981";//Jabba's Rancor

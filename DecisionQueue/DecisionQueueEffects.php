@@ -512,6 +512,17 @@ function SpecificCardLogic($player, $card, $lastResult)
         }
       }
       return 1;
+    case "GENERALRIEEKAN":
+      $targetAlly = new Ally($lastResult, $player);
+      AddDecisionQueue("PASSPARAMETER", $player, $lastResult, 1);
+      if(HasSentinel($targetAlly->CardID(), $player, $targetAlly->Index())) {
+        AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
+      }
+      else {
+        AddDecisionQueue("MZOP", $player, "GETUNIQUEID", 1);
+        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $player, "3468546373,PLAY", 1);
+      }
+      return 1;
     default: return "";
   }
 }

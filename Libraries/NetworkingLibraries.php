@@ -1742,7 +1742,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
           if(GetResolvedAbilityType($cardID) == "A") $layerName = "ACTIVATEDABILITY";
           else $layerName = "ATTACKABILITY";
         }
-        if($layerName == "ATTACKABILITY") { if(HasAttackAbility($cardID)) AddLayer($layerName, $currentPlayer, $cardID, $from . "!" . $resourcesPaid . "!" . $target . "!" . $additionalCosts . "!" . $abilityIndex . "!" . $playIndex, "-", $uniqueID, append:true); }
+        if($layerName == "ATTACKABILITY") { if(HasAttackAbility($cardID)) PlayAbility($cardID, "PLAY", "0"); }
         //TODO: Fix this Relentless and first light and The Mandalorian hack
         else if($from == "PLAY" || $from == "EQUIP" || HasWhenPlayed($cardID) || $cardID == "3401690666" || $cardID == "4783554451" || $cardID == "4088c46c4d" || DefinedTypesContains($cardID, "Event", $currentPlayer) || DefinedTypesContains($cardID, "Upgrade", $currentPlayer)) AddLayer($layerName, $currentPlayer, $cardID, $from . "!" . $resourcesPaid . "!" . $target . "!" . $additionalCosts . "!" . $abilityIndex . "!" . $playIndex, "-", $uniqueID, append:true);
         else if($from != "PLAY" && $from != "EQUIP") {
