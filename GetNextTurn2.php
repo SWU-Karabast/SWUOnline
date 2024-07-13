@@ -705,7 +705,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       else if ($option[0] == "CC") $source = $combatChain;
       else if ($option[0] == "COMBATCHAINLINK") $source = $combatChain;
 
-      if($option[0] != "MYCHAR" && $option[0] != "THEIRCHAR" && $option[0] != "MYALLY" && $option[0] != "THEIRALLY") $mzChooseFromPlay = false;
+      if($option[0] != "MYCHAR" && $option[0] != "THEIRCHAR" && $option[0] != "MYALLY" && $option[0] != "THEIRALLY" && $option[0] != "MYHAND") $mzChooseFromPlay = false;
 
       $counters = 0;
       $lifeCounters = 0;
@@ -1057,12 +1057,20 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       if (IsCasterMode()) $handContents .= ClientRenderedCard(cardNumber: $myHand[$i], controller: 2);
       else $handContents .= ClientRenderedCard(cardNumber: $MyCardBack, controller: 2);
     } else {
-      if ($playerID == $currentPlayer) $playable = $turn[0] == "ARS" || ($actionType == 16 && str_contains("," . $turn[2] . ",", "," . $i . ",")) || ($turn[0] == "M" || $turn[0] == "INSTANT") && IsPlayable($myHand[$i], $turn[0], "HAND", -1, $restriction);
-      else $playable = false;
-      $border = CardBorderColor($myHand[$i], "HAND", $playable);
-      $actionTypeOut = (($currentPlayer == $playerID) && $playable == 1 ? $actionType : 0);
-      if ($restriction != "") $restriction = implode("_", explode(" ", $restriction));
-      $actionDataOverride = (($actionType == 16 || $actionType == 27) ? strval($i) : "");
+      if($mzChooseFromPlay) {
+        $mzIndex = "MYHAND-" . $i;
+        $inOptions = in_array($mzIndex, $optionsIndex);
+        $actionTypeOut = $inOptions ? 16 : 0;
+        $actionDataOverride = $inOptions ? $mzIndex : 0;
+        $border = CardBorderColor($myCharacter[$i], "HAND", $actionTypeOut == 16);
+      } else {
+        if ($playerID == $currentPlayer) $playable = $turn[0] == "ARS" || ($actionType == 16 && str_contains("," . $turn[2] . ",", "," . $i . ",")) || ($turn[0] == "M" || $turn[0] == "INSTANT") && IsPlayable($myHand[$i], $turn[0], "HAND", -1, $restriction);
+        else $playable = false;
+        $border = CardBorderColor($myHand[$i], "HAND", $playable);
+        $actionTypeOut = (($currentPlayer == $playerID) && $playable == 1 ? $actionType : 0);
+        if ($restriction != "") $restriction = implode("_", explode(" ", $restriction));
+        $actionDataOverride = (($actionType == 16 || $actionType == 27) ? strval($i) : "");
+      }
       $handContents .= ClientRenderedCard(cardNumber: $myHand[$i], action: $actionTypeOut, borderColor: $border, actionDataOverride: $actionDataOverride, controller: $playerID, restriction: $restriction);
     }
   }
