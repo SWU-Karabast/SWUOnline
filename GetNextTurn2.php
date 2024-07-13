@@ -895,8 +895,6 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   echo (($manualMode ? "<span style='position:absolute; left:50%; -ms-transform: translateX(-50%); transform: translateX(-50%);  bottom:0px; z-index:1000;'>" . CreateButton($playerID, "Draw", 10010, 0, "20px") . "</span>" : ""));
   echo ("</div>");
   echo ("</div>");
-
-  echo (($manualMode ? "<span style='position:absolute; top:2%; left:1%;'>" . CreateButton($playerID, "+1", 10013, 0, "20px") . "<br><br>" . CreateButton($playerID, "-1", 10014, 0, "20px") . "</span>" : ""));
   echo ("</div>");
 
   //Now display their Auras and Items

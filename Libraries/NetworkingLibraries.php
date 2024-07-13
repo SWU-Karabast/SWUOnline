@@ -491,26 +491,6 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
       $hand = &GetHand($playerID);
       $hand[] = $cardID;
       break;
-    case 10012:
-      WriteLog("Player " . $playerID ." manually added a resource to their pool.", highlight: true);
-      $resources = &GetResources($playerID);
-      $resources[0] += 1;
-      break;
-    case 10013:
-      WriteLog("Player " . $playerID ." manually added a resource to their opponent's pool.", highlight: true);
-      $resources = &GetResources($playerID == 1 ? 2 : 1);
-      $resources[0] += 1;
-      break;
-    case 10014:
-      WriteLog("Player " . $playerID ." manually removed a resource from their opponent's pool.", highlight: true);
-      $resources = &GetResources($playerID == 1 ? 2 : 1);
-      $resources[0] -= 1;
-      break;
-    case 10015:
-      WriteLog("Player " . $playerID ." manually removed a resource from their pool.", highlight: true);
-      $resources = &GetResources($playerID);
-      $resources[0] -= 1;
-      break;
     case 100000: //Quick Rematch
       if($isSimulation) return;
       if($turn[0] != "OVER") break;
