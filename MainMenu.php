@@ -152,7 +152,7 @@ include_once 'Header.php';
     <h2>News</h2>
     <div style="position: relative;">
       <div style='vertical-align:middle; text-align:center;'>
-        <img src="./images/shd-art-v3.png" alt="SHD" style="max-width: 100%; border-radius: 5px;">
+        <img src="./Images/shd-art-v3.png" alt="SHD" style="max-width: 100%; border-radius: 5px;">
         <div style="text-align: left;">
           <b style="margin: 15px 0; display: block;">Set 2 now available!</b>
           <p>With the launch of Set 2 we are now making these cards available in the premier formats! A big thanks to everyone who has contributed to the project, whether it be through bug reports, feature requests, or just playing games. 
