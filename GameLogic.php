@@ -338,6 +338,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             case "BANISH": case "MYBANISH": case "THEIRBANISH": return $zone[$mzArr[1] + 2];
             default: return "-1";
           }
+        case "GETARENA": return CardArenas(GetMZCard($player, $lastResult));
         case "BOUNCE": return MZBounce($player, $lastResult);
         case "COLLECTBOUNTIES":
           $mzArr = explode("-", $lastResult);

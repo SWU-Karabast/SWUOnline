@@ -1610,6 +1610,11 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
         $ally = new Ally("MYALLY-" . GetClassState($currentPlayer, $CS_PlayIndex), $currentPlayer);
         $attackValue = $ally->CurrentPower();
         $ally->IncrementTimesAttacked();
+        if(GetAttackTarget() == "THEIRCHAR-0") {
+          //Add attacker to defender's list of units that attacked their base this phase.
+          global $CS_UnitsThatAttackedBase;
+          AppendClassState($defPlayer, $CS_UnitsThatAttackedBase, $ally->UniqueID(), false);
+        }
       }
       else $attackValue = ($baseAttackSet != -1 ? $baseAttackSet : AttackValue($cardID));
       $combatChainState[$CCS_LinkBaseAttack] = BaseAttackModifiers($attackValue);
@@ -1620,7 +1625,6 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
         $char = &GetPlayerCharacter($currentPlayer);
         $char[1] = 1;
       }
-      // If you attacked an aura with Spectra
       if (!$chainClosed) {
         IncrementClassState($currentPlayer, $CS_NumAttacks);
         if(TraitContains($cardID, "Mandalorian", $currentPlayer, $index)) IncrementClassState($currentPlayer, $CS_NumMandalorianAttacks);

@@ -1014,3 +1014,16 @@ function UnitCardSharesName($cardID, $player)
   }
   return false;
 }
+
+function GetUnitsThatAttackedBaseMZIndices($player) {//$player is the owner of the base
+  global $CS_UnitsThatAttackedBase;
+  $unitsThatAttackedBaseUniqueIDs = explode(",", GetClassState($player, $CS_UnitsThatAttackedBase));
+  $unitsThatAttackedBaseMZIndices = "";
+  for($i = 0; $i < count($unitsThatAttackedBaseUniqueIDs); ++$i) {
+    $index = SearchAlliesForUniqueID($unitsThatAttackedBaseUniqueIDs[$i], $player == 1 ? 2 :1);
+    if($index == -1) continue;
+    if($unitsThatAttackedBaseMZIndices != "") $unitsThatAttackedBaseMZIndices .= ",";
+    $unitsThatAttackedBaseMZIndices .= "THEIRALLY-" . $index;
+  }
+  return $unitsThatAttackedBaseMZIndices;
+}

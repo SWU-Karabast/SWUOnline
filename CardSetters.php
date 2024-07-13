@@ -344,10 +344,16 @@ function DecrementClassState($player, $piece, $amount = 1)
   SetClassState($player, $piece, (GetClassState($player, $piece) - $amount));
 }
 
-function AppendClassState($player, $piece, $value)
+function AppendClassState($player, $piece, $value, $allowRepeats = true)
 {
   $currentState = GetClassState($player, $piece);
   if ($currentState == "-") $currentState = "";
+  if (!$allowRepeats) {
+    $currentStateArray = explode(",", $currentState);
+    for($i = 0; $i < count($currentStateArray); ++$i) {
+      if($currentStateArray[$i] == $value) return;
+    }
+  }
   if ($currentState != "") $currentState .= ",";
   $currentState .= $value;
   SetClassState($player, $piece, $currentState);

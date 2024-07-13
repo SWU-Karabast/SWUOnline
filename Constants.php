@@ -266,6 +266,7 @@ $CS_AnotherWeaponGainedGoAgain = 63;
 $CS_NumContractsCompleted = 64;
 $CS_HitsWithSword = 65;
 $CS_NumClonesPlayed = 66;
+$CS_UnitsThatAttackedBase = 67;
 
 function SetAfterPlayedBy($player, $cardID)
 {
@@ -453,7 +454,7 @@ function ResetClassState($player)
   global $CS_HighestRoll, $CS_NumAuras, $CS_AbilityIndex, $CS_AdditionalCosts, $CS_NumRedPlayed, $CS_PlayUniqueID, $CS_AlluvionUsed;
   global $CS_NumPhantasmAADestroyed, $CS_NumEventsPlayed, $CS_MaxQuellUsed, $CS_DamageDealt, $CS_ArcaneTargetsSelected, $CS_NumDragonAttacks, $CS_NumIllusionistAttacks;
   global $CS_LastDynCost, $CS_NumIllusionistActionCardAttacks, $CS_ArcaneDamageDealt, $CS_LayerPlayIndex, $CS_NumCardsPlayed, $CS_NamesOfCardsPlayed, $CS_NumBoostPlayed;
-  global $CS_PlayedAsInstant, $CS_AnotherWeaponGainedGoAgain, $CS_NumContractsCompleted, $CS_HitsWithSword, $CS_NumMelodyPlayed, $CS_NumClonesPlayed;
+  global $CS_PlayedAsInstant, $CS_AnotherWeaponGainedGoAgain, $CS_NumContractsCompleted, $CS_HitsWithSword, $CS_NumMelodyPlayed, $CS_NumClonesPlayed, $CS_UnitsThatAttackedBase;
 
   $classState = &GetPlayerClassState($player);
   $classState[$CS_NumVillainyPlayed] = 0;
@@ -521,6 +522,7 @@ function ResetClassState($player)
   $classState[$CS_NumContractsCompleted] = 0;
   $classState[$CS_HitsWithSword] = 0;
   $classState[$CS_NumClonesPlayed] = 0;
+  $classState[$CS_UnitsThatAttackedBase] = "-";
 }
 
 function ResetCharacterEffects()
