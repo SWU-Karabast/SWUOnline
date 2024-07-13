@@ -1438,10 +1438,12 @@ function AddPrePitchDecisionQueue($cardID, $from, $index = -1, $skipAbilityType 
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose player to discard 2 cards");
       AddDecisionQueue("BUTTONINPUT", $currentPlayer, "Yourself,Opponent");
       AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_AdditionalCosts);
+      break;
     case "7262314209"://Mission Briefing
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose player to draw 2 cards");
       AddDecisionQueue("BUTTONINPUT", $currentPlayer, "Yourself,Opponent");
       AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_AdditionalCosts);
+      break;
     default:
       break;
   }
