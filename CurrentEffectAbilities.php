@@ -632,6 +632,7 @@ function IsCombatEffectActive($cardID)
     case "8107876051": return true;//Enfy's Nest
     case "7578472075": return true;//Let the Wookie Win
     case "4663781580": return true;//Swoop Down
+    case "4085341914": return true;//Heroic Resolve
     default: return false;
   }
 }
