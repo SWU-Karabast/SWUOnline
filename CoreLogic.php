@@ -338,7 +338,7 @@ function MainCharacterPlayCardAbilities($cardID, $from)
         }
         break;
       case "9334480612"://Boba Fett Green Leader
-        if(DefinedTypesContains($cardID, "Unit", $currentPlayer)) {
+        if($from != "PLAY" && DefinedTypesContains($cardID, "Unit", $currentPlayer) && HasKeyword($cardID, "Any", $currentPlayer)) {
           $character[$i+1] = 1;
           AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
           AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to give +1 power");
@@ -1161,6 +1161,26 @@ function TraitContains($cardID, $trait, $player="", $index=-1)
 function HasKeyword($cardID, $keyword, $player="", $index=-1){
   switch($keyword){
     case "Smuggle": return SmuggleCost($cardID, $player, $index) > -1;
+    case "Raid": return RaidAmount($cardID, $player, $index, true) > 0;
+    case "Grit": return HasGrit($cardID, $player, $index);
+    case "Restore": return RestoreAmount($cardID, $player, $index) > 0;
+    case "Bounty": return CollectBounty($player, $index, $cardID, true) > 0;
+    case "Overwhelm": return HasOverwhelm($cardID, $player, $index);
+    case "Saboteur": return HasSaboteur($cardID, $player, $index);
+    case "Shielded": return HasShielded($cardID, $player, $index);
+    case "Sentinel": return HasSentinel($cardID, $player, $index);
+    case "Ambush": return HasAmbush($cardID, $player, $index,"");
+    case "Any":
+      return SmuggleCost($cardID, $player, $index) > -1 ||
+        RaidAmount($cardID, $player, $index, true) > 0 ||
+        HasGrit($cardID, $player, $index) ||
+        RestoreAmount($cardID, $player, $index) > 0 ||
+        CollectBounty($player, $index, $cardID, true) > 0 ||
+        HasOverwhelm($cardID, $player, $index) ||
+        HasSaboteur($cardID, $player, $index) ||
+        HasShielded($cardID, $player, $index) ||
+        HasSentinel($cardID, $player, $index) ||
+        HasAmbush($cardID, $player, $index, "");
     default: return false;
   }
 }

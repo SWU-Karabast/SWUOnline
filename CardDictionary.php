@@ -122,10 +122,10 @@ function RestoreAmount($cardID, $player, $index)
   return $amount;
 }
 
-function RaidAmount($cardID, $player, $index)
+function RaidAmount($cardID, $player, $index, $reportMode = false)
 {
   global $currentTurnEffects, $combatChain;
-  if(count($combatChain) == 0) return 0;
+  if(count($combatChain) == 0 && !$reportMode) return 0;
   $amount = 0;
   $allies = &GetAllies($player);
   for($i=0; $i<count($allies); $i+=AllyPieces())
@@ -157,17 +157,17 @@ function RaidAmount($cardID, $player, $index)
   }
   switch($cardID)
   {
-    case "1017822723": $amount += 2; break;
-    case "2404916657": $amount += 2; break;
-    case "7495752423": $amount += 2; break;
+    case "1017822723": $amount += 2; break; //Rogue Operative
+    case "2404916657": $amount += 2; break; //Cantina Braggart
+    case "7495752423": $amount += 2; break; //Green Squadron A-Wing
     case "4642322279": $amount += SearchCount(SearchAllies($player, aspect:"Aggression")) > 1 ? 2 : 0; break;//Partisan Insurgent
-    case "6028207223": $amount += 1; break;
-    case "8995892693": $amount += 1; break;
-    case "3613174521": $amount += 1; break;
-    case "4111616117": $amount += 1; break;
-    case "87e8807695": $amount += 1; break;
+    case "6028207223": $amount += 1; break; //Pirated Starfighter
+    case "8995892693": $amount += 1; break; //Red Three
+    case "3613174521": $amount += 1; break; //Outer Rim Headhunter
+    case "4111616117": $amount += 1; break; //Volunteer Soldier
+    case "87e8807695": $amount += 1; break; //Leia leader unit
     case "8395007579": $amount += $ally->MaxHealth() - $ally->Health(); break;//Fifth Brother
-    case "6208347478": $amount += SearchCount(SearchAllies($player, trait:"Spectre")) > 1 ? 1 : 0; break;//Chopper
+    case "6208347478": $amount += SearchCount(SearchAllies($player, trait:"Spectre")) >= 1 ? 1 : 0; break;//Chopper
     case "3487311898": $amount += 3; break;//Clan Challengers
     case "5977238053": $amount += 2; break;//Sundari Peacekeeper
     case "1805986989": $amount += 2; break;//Modded Cohort
