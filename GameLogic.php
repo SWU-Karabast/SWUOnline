@@ -611,7 +611,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $params = explode("=", $parameter);
       $arr = explode(",", $lastResult);
       if($params[0] == "canAttach") $params = explode("=", UpgradeFilter($params[1]));
-      $invertedMatching = substr($params[0], -1, 1) == "!";
+      $invertedMatching = str_ends_with($params[0], "!");
       $params[0] = rtrim($params[0], "!");
       for($i=count($arr)-1; $i>=0; --$i) {
         $match = false;
@@ -634,6 +634,14 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
               $resources = &GetResources($player);
               if($params[1] == 1 && $resources[$i+4] == 1) $match = true;
               else if($params[1] == 0 && $resources[$i+4] != 1) $match = true;
+            }
+            break;
+          case "damaged":
+            $mzArr = explode("-", $arr[$i]);
+            if($mzArr[0] == "MYALLY" || $mzArr[0] == "THEIRALLY") {
+              $ally = new Ally($arr[$i]);
+              if($params[1] == 1 && $ally->IsDamaged()) $match = true;
+              else if($params[1] == 0 && !$ally->IsDamaged()) $match = true;
             }
             break;
           case "leader":
