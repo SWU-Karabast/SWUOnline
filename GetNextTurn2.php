@@ -314,10 +314,8 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
 
   if($initiativePlayer == $playerID || ($playerID == 3 && $initiativePlayer == 2)) {
     echo ("<div class='my-initiative'><span>Initiative</span>");
-    echo (($manualMode ? "<span style='position:absolute; top:97%; right:0; display: inline-block;'>" . CreateButton($playerID, "+1", 10002, 0, "20px") . CreateButton($playerID, "-1", 10004, 0, "20px") . "</span>" : ""));
   } else {
     echo ("<div class='their-initiative'><span>Initiative</span>");
-    echo (($manualMode ? "<span style='position:absolute; top:-60%; right:0; display: inline-block;'>" . CreateButton($playerID, "+1", 10002, 0, "20px") . CreateButton($playerID, "-1", 10004, 0, "20px") . "</span>" : ""));
   }
   echo ("</div>");
 

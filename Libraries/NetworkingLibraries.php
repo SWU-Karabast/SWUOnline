@@ -458,19 +458,9 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
       $skipWriteGamestate = true;
       WriteLog("Player " . $playerID . " cancel their blocks.");
       break;
-    case 10002:
-      WriteLog("Player " . $playerID . " manually add 1 action point.", highlight:true);
-      ++$actionPoints;
-      break;
     case 10003: //Revert to prior turn
       RevertGamestate($buttonInput);
       WriteLog("Player " . $playerID . " reverted back to a prior turn.");
-      break;
-    case 10004:
-      if($actionPoints > 0) {
-        WriteLog("Player " . $playerID ." manually subtracted 1 action point.", highlight: true);
-        --$actionPoints;
-      }
       break;
     case 10005:
       WriteLog("Player " . $playerID ." manually subtracted 1 damage from themselves.", highlight: true);
