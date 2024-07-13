@@ -2105,11 +2105,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     if($abilityName == "Heroic Resolve") {
       $ally = new Ally("MYALLY-" . $index, $currentPlayer);
       $ally->DefeatUpgrade("4085341914");
-      if(!$ally->IsExhausted()) {
-        AddCurrentTurnEffect("4085341914", $currentPlayer, "PLAY", $ally->UniqueID());
-        AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYALLY-" . $index);
-        AddDecisionQueue("MZOP", $currentPlayer, "ATTACK");
-      }
+      AddCurrentTurnEffect("4085341914", $currentPlayer, "PLAY", $ally->UniqueID());
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYALLY-" . $index);
+      AddDecisionQueue("MZOP", $currentPlayer, "ATTACK");
       return "";
     }
   }
@@ -2482,6 +2480,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "2554951775"://Bail Organa
       if($from == "PLAY" && GetResolvedAbilityType($cardID) == "A") {
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "index=MYALLY-" . $index);
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to add an experience");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "ADDEXPERIENCE", 1);
@@ -3974,7 +3973,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       if($numUpgrades > 0) {
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:maxAttack=" . $numUpgrades . "&THEIRALLY:maxAttack=" . $numUpgrades);
-        if($index > -1) AddDecisionQueue("MZFILTER", $player, "index=MYALLY-" . $playAlly->Index());
+        if($index > -1) AddDecisionQueue("MZFILTER", $currentPlayer, "index=MYALLY-" . $playAlly->Index());
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to ready");
         AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
