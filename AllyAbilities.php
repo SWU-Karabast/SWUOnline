@@ -144,6 +144,7 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
   $cardID = $allies[$index];
   $owner = $allies[$index+11];
   $otherPlayer = $player == 1 ? 2 : 1;
+  $discardPileModifier = "-";
   if(!$skipDestroy) {
     AllyDestroyedAbility($player, $index, $fromCombat);
     CollectBounties($player, $index);
@@ -155,6 +156,7 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
   $upgrades = $ally->GetUpgrades();
   for($i=0; $i<count($upgrades); ++$i) {
     if($upgrades[$i] == "8752877738" || $upgrades[$i] == "2007868442") continue;
+    if($upgrades[$i] == "6911505367") $discardPileModifier = "TTFREE";//Second Chance
     AddGraveyard($upgrades[$i], $player, "PLAY");
   }
   $captives = $ally->GetCaptives();
@@ -162,7 +164,7 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
     if(DefinedTypesContains($cardID, "Leader", $player)) ;//If it's a leader it doesn't go in the discard
     else if($cardID == "8954587682" && !$ally->LostAbilities()) AddResources($cardID, $player, "PLAY", "DOWN");//Superlaser Technician
     else if($cardID == "7204838421" && !$ally->LostAbilities()) AddResources($cardID, $player, "PLAY", "DOWN");//Enterprising Lackeys
-    else AddGraveyard($cardID, $owner, "PLAY");
+    else AddGraveyard($cardID, $owner, "PLAY", $discardPileModifier);
   }
   for($j = $index + AllyPieces() - 1; $j >= $index; --$j) unset($allies[$j]);
   $allies = array_values($allies);
@@ -801,7 +803,7 @@ function AllyDamagePrevention($player, $index, $damage)
   return $damage;
 }
 
-//NOTE: This is for ally abilities that trigger when any ally attacks (for example miragai GRANTS an ability)
+//NOTE: This is for ally abilities that trigger when any ally attacks
 function AllyAttackAbilities($attackID)
 {
   global $mainPlayer, $combatChainState, $CCS_AttackUniqueID, $defPlayer, $CCS_IsAmbush;
@@ -1135,13 +1137,6 @@ function SpecificAllyAttackAbilities($attackID)
   if($attackerAlly->LostAbilities()) return;
   $allies = &GetAllies($mainPlayer);
   switch($allies[$attackerIndex]) {
-    case "6931439330"://The Ghost
-      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:trait=Spectre");
-      AddDecisionQueue("MZFILTER", $mainPlayer, "index=MYALLY-" . $attackerAlly->Index());
-      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to give a shield");
-      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
-      AddDecisionQueue("MZOP", $mainPlayer, "ADDSHIELD", 1);
-      break;
     case "0256267292"://Benthic 'Two Tubes'
       $ally = new Ally("MYALLY-" . $attackerIndex, $mainPlayer);
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:aspect=Aggression");
@@ -1270,10 +1265,6 @@ function SpecificAllyAttackAbilities($attackID)
       AddResources($card, $mainPlayer, "DECK", "DOWN");
       AddNextTurnEffect("5e90bd91b0", $mainPlayer);
       break;
-    case "8240629990"://Avenger
-      $otherPlayer = $mainPlayer == 1 ? 2 : 1;
-      MZChooseAndDestroy($otherPlayer, "MYALLY", filter:"definedType=Leader", context:"Choose a unit to destroy");
-      break;
     case "6c5b96c7ef"://Emperor Palpatine
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
       AddDecisionQueue("MZFILTER", $mainPlayer, "index=MYALLY-" . $attackerAlly->Index());
@@ -1316,6 +1307,7 @@ function SpecificAllyAttackAbilities($attackID)
       break;
     case "4534554684"://Freetown Backup
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
+      AddDecisionQueue("MZFILTER", $mainPlayer, "index=MYALLY-" . $attackerIndex);
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to give +2/+2", 1);
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "ADDHEALTH,2", 1);
@@ -1377,12 +1369,6 @@ function SpecificAllyAttackAbilities($attackID)
         }
       }
       break;
-    case "1304452249"://Covetous Rivals
-      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:hasBountyOnly=true&THEIRALLY:hasBountyOnly=true");
-      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit with bounty to deal 2 damage to");
-      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
-      AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,2", 1);
-      break;
     case "a579b400c0"://Bo-Katan Kryze
       global $CS_NumMandalorianAttacks;
       $number = GetClassState($mainPlayer, $CS_NumMandalorianAttacks) > 1 ? 2 : 1;
@@ -1437,9 +1423,6 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to give a shield", 1);
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "ADDSHIELD", 1);
-      break;
-    case "5818136044"://Xanadu Blood
-      XanaduBlood($mainPlayer, $attackerAlly->Index());
       break;
     case "4595532978"://Ketsu Onyo
       //TODO ADD OVERWHELM
@@ -1500,9 +1483,6 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("PASSPARAMETER", $mainPlayer, "{0}", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "ADDSHIELD", 1);
       break;
-    case "8380936981"://Jabba's Rancor
-      JabbasRancor($mainPlayer, $attackerAlly->Index());
-      break;
     case "c9ff9863d7"://Hunter (Outcast Sergeant)
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYRESOURCES");
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a resource to reveal", 1);
@@ -1521,29 +1501,6 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to capture (must be in same arena and have attacked your base)", 1);
       AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "CAPTURE,{0}", 1);
-      break;
-    case "1503633301"://Survivors' Gauntlet
-      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:hasUpgradeOnly=true&THEIRALLY:hasUpgradeOnly=true");
-      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to move an upgrade from.", 1);
-      AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
-      AddDecisionQueue("SETDQVAR", $mainPlayer, "1", 1);
-      AddDecisionQueue("MZOP", $mainPlayer, "GETUPGRADES", 1);
-      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose an upgrade to move.", 1);
-      AddDecisionQueue("CHOOSECARD", $mainPlayer, "<-", 1);
-      AddDecisionQueue("SETDQVAR", $mainPlayer, "0", 1);
-      AddDecisionQueue("SPECIFICCARD", $mainPlayer, "SURVIVORS'GAUNTLET", 1);
-      break;
-    case "3086868510"://Pre Viszla
-      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:hasUpgradeOnly=true&THEIRALLY:hasUpgradeOnly=true");
-      AddDecisionQueue("MZFILTER", $mainPlayer, "trait=Vehicle", 1);
-      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to steal an upgrade from.", 1);
-      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
-      AddDecisionQueue("SETDQVAR", $mainPlayer, "1", 1);
-      AddDecisionQueue("MZOP", $mainPlayer, "GETUPGRADES", 1);
-      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose an upgrade to steal.", 1);
-      AddDecisionQueue("CHOOSECARD", $mainPlayer, "<-", 1);
-      AddDecisionQueue("SETDQVAR", $mainPlayer, "0", 1);
-      AddDecisionQueue("SPECIFICCARD", $mainPlayer, "PREVIZSLA", 1);
       break;
     default: break;
   }
