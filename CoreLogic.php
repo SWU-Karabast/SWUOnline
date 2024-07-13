@@ -2462,6 +2462,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "2554951775"://Bail Organa
       if($from == "PLAY" && GetResolvedAbilityType($cardID) == "A") {
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "index=MYALLY-" . $index);
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to add an experience");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "ADDEXPERIENCE", 1);
