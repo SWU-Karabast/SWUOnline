@@ -523,6 +523,16 @@ function SpecificCardLogic($player, $card, $lastResult)
         AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $player, "3468546373,PLAY", 1);
       }
       return 1;
+    case "RULEWITHRESPECT":
+      global $CS_UnitsThatAttackedBase;
+      $unitsThatAttackedBase = explode(",", GetClassState($player, $CS_UnitsThatAttackedBase));
+      $opponent = $player == 1 ? 2: 1;
+      for($i = 0; $i < count($unitsThatAttackedBase); ++$i) {
+        $targetMZIndex = "THEIRALLY-" . SearchAlliesForUniqueID($unitsThatAttackedBase[$i], $opponent);
+        if($targetMZIndex == "THEIRALLY--1" || IsLeader(GetMZCard($player, $targetMZIndex))) continue;
+        DecisionQueueStaticEffect("MZOP", $player, "CAPTURE," . $lastResult, $targetMZIndex);
+      }
+      return 1;
     default: return "";
   }
 }

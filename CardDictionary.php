@@ -870,7 +870,7 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
   return $abilityTypes;
 }
 
-function IsLeader($cardID, $playerID) {
+function IsLeader($cardID, $playerID = "") {
   return DefinedTypesContains($cardID, "Leader", $playerID);
 }
 
