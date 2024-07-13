@@ -281,8 +281,8 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       background: url(./Images/dmgbg-l.png) left no-repeat, url(./Images/dmgbg-r.png) right no-repeat; background-size: contain;
       filter: drop-shadow(1px 2px 1px rgba(0, 0, 0, 0.40));
       font-weight: 700; font-size: 24px; text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.30);  
-      user-select: none;pointer-events:none;'>$myHealth</span>"); 
-  echo (($manualMode ? "<span style='position:absolute; top:120px; left:65px;'>" . CreateButton($playerID, "+1", 10006, 0, "20px") . CreateButton($playerID, "-1", 10005, 0, "20px") . "</span>" : ""));
+      user-select: none;pointer-events:none;'>$myHealth</span>");
+      echo (($manualMode ? "<span style='position:absolute; top:120px; left:65px;'>" . CreateButton($playerID, "+1", 10006, 0, "20px") . CreateButton($playerID, "-1", 10005, 0, "20px") . "</span>" : ""));
   echo ("<span class='base-their-dmg' 
       style='position:fixed;
       height: 30px;
@@ -314,10 +314,8 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
 
   if($initiativePlayer == $playerID || ($playerID == 3 && $initiativePlayer == 2)) {
     echo ("<div class='my-initiative'><span>Initiative</span>");
-    echo (($manualMode ? "<span style='position:absolute; top:97%; right:0; display: inline-block;'>" . CreateButton($playerID, "+1", 10002, 0, "20px") . CreateButton($playerID, "-1", 10004, 0, "20px") . "</span>" : ""));
   } else {
     echo ("<div class='their-initiative'><span>Initiative</span>");
-    echo (($manualMode ? "<span style='position:absolute; top:-60%; right:0; display: inline-block;'>" . CreateButton($playerID, "+1", 10002, 0, "20px") . CreateButton($playerID, "-1", 10004, 0, "20px") . "</span>" : ""));
   }
   echo ("</div>");
 
@@ -707,7 +705,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       else if ($option[0] == "CC") $source = $combatChain;
       else if ($option[0] == "COMBATCHAINLINK") $source = $combatChain;
 
-      if($option[0] != "MYCHAR" && $option[0] != "THEIRCHAR" && $option[0] != "MYALLY" && $option[0] != "THEIRALLY") $mzChooseFromPlay = false;
+      if($option[0] != "MYCHAR" && $option[0] != "THEIRCHAR" && $option[0] != "MYALLY" && $option[0] != "THEIRALLY" && $option[0] != "MYHAND") $mzChooseFromPlay = false;
 
       $counters = 0;
       $lifeCounters = 0;
@@ -897,8 +895,6 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   echo (($manualMode ? "<span style='position:absolute; left:50%; -ms-transform: translateX(-50%); transform: translateX(-50%);  bottom:0px; z-index:1000;'>" . CreateButton($playerID, "Draw", 10010, 0, "20px") . "</span>" : ""));
   echo ("</div>");
   echo ("</div>");
-
-  echo (($manualMode ? "<span style='position:absolute; top:2%; left:1%;'>" . CreateButton($playerID, "+1", 10013, 0, "20px") . "<br><br>" . CreateButton($playerID, "-1", 10014, 0, "20px") . "</span>" : ""));
   echo ("</div>");
 
   //Now display their Auras and Items
@@ -1061,12 +1057,20 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       if (IsCasterMode()) $handContents .= ClientRenderedCard(cardNumber: $myHand[$i], controller: 2);
       else $handContents .= ClientRenderedCard(cardNumber: $MyCardBack, controller: 2);
     } else {
-      if ($playerID == $currentPlayer) $playable = $turn[0] == "ARS" || ($actionType == 16 && str_contains("," . $turn[2] . ",", "," . $i . ",")) || ($turn[0] == "M" || $turn[0] == "INSTANT") && IsPlayable($myHand[$i], $turn[0], "HAND", -1, $restriction);
-      else $playable = false;
-      $border = CardBorderColor($myHand[$i], "HAND", $playable);
-      $actionTypeOut = (($currentPlayer == $playerID) && $playable == 1 ? $actionType : 0);
-      if ($restriction != "") $restriction = implode("_", explode(" ", $restriction));
-      $actionDataOverride = (($actionType == 16 || $actionType == 27) ? strval($i) : "");
+      if($mzChooseFromPlay) {
+        $mzIndex = "MYHAND-" . $i;
+        $inOptions = in_array($mzIndex, $optionsIndex);
+        $actionTypeOut = $inOptions ? 16 : 0;
+        $actionDataOverride = $inOptions ? $mzIndex : 0;
+        $border = CardBorderColor($myHand[$i], "HAND", $actionTypeOut == 16);
+      } else {
+        if ($playerID == $currentPlayer) $playable = $turn[0] == "ARS" || ($actionType == 16 && str_contains("," . $turn[2] . ",", "," . $i . ",")) || ($turn[0] == "M" || $turn[0] == "INSTANT") && IsPlayable($myHand[$i], $turn[0], "HAND", -1, $restriction);
+        else $playable = false;
+        $border = CardBorderColor($myHand[$i], "HAND", $playable);
+        $actionTypeOut = (($currentPlayer == $playerID) && $playable == 1 ? $actionType : 0);
+        if ($restriction != "") $restriction = implode("_", explode(" ", $restriction));
+        $actionDataOverride = (($actionType == 16 || $actionType == 27) ? strval($i) : "");
+      }
       $handContents .= ClientRenderedCard(cardNumber: $myHand[$i], action: $actionTypeOut, borderColor: $border, actionDataOverride: $actionDataOverride, controller: $playerID, restriction: $restriction);
     }
   }
@@ -1146,6 +1150,12 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       //My Unit Spacing
       if($cardArena == "Ground") $cardText = '<div id="unique-' . $myAllies[$i+5] . '" class="cardContainer ' . ($myAllies[$i + 1] != 2 ? 'exhausted' : '') . '">';
       else $cardText = '<div id="unique-' . $myAllies[$i+5] . '" class="cardContainer ' . ($myAllies[$i + 1] != 2 ? 'exhausted' : '') . '">';
+      if($manualMode) {
+        $cardText .= "<div style='position:relative; left:-15px; width:15px; height:100%;'>";
+        $cardText .= CreateButton($playerID, "+", 10006, $i, "20px");
+        //"<span style='position:absolute; top:120px; left:65px;'>" .  CreateButton($playerID, "-1", 10005, 0, "20px") . "</span>"
+        $cardText .= "</div>";
+      }
       $cardText .= (Card($myAllies[$i], "concat", $cardSizeAura, $opts));
       $cardText .= ("</div>");
       if($cardArena == "Ground") $groundAllies .= $cardText;
