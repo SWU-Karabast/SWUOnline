@@ -2085,11 +2085,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     if($abilityName == "Heroic Resolve") {
       $ally = new Ally("MYALLY-" . $index, $currentPlayer);
       $ally->DefeatUpgrade("4085341914");
-      if(!$ally->IsExhausted()) {
-        AddCurrentTurnEffect("4085341914", $currentPlayer, "PLAY", $ally->UniqueID());
-        AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYALLY-" . $index);
-        AddDecisionQueue("MZOP", $currentPlayer, "ATTACK");
-      }
+      AddCurrentTurnEffect("4085341914", $currentPlayer, "PLAY", $ally->UniqueID());
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYALLY-" . $index);
+      AddDecisionQueue("MZOP", $currentPlayer, "ATTACK");
       return "";
     }
   }
