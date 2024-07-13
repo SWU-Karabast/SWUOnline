@@ -281,8 +281,8 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       background: url(./Images/dmgbg-l.png) left no-repeat, url(./Images/dmgbg-r.png) right no-repeat; background-size: contain;
       filter: drop-shadow(1px 2px 1px rgba(0, 0, 0, 0.40));
       font-weight: 700; font-size: 24px; text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.30);  
-      user-select: none;pointer-events:none;'>$myHealth</span>"); 
-  echo (($manualMode ? "<span style='position:absolute; top:120px; left:65px;'>" . CreateButton($playerID, "+1", 10006, 0, "20px") . CreateButton($playerID, "-1", 10005, 0, "20px") . "</span>" : ""));
+      user-select: none;pointer-events:none;'>$myHealth</span>");
+      echo (($manualMode ? "<span style='position:absolute; top:120px; left:65px;'>" . CreateButton($playerID, "+1", 10006, 0, "20px") . CreateButton($playerID, "-1", 10005, 0, "20px") . "</span>" : ""));
   echo ("<span class='base-their-dmg' 
       style='position:fixed;
       height: 30px;
@@ -1062,7 +1062,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         $inOptions = in_array($mzIndex, $optionsIndex);
         $actionTypeOut = $inOptions ? 16 : 0;
         $actionDataOverride = $inOptions ? $mzIndex : 0;
-        $border = CardBorderColor($myCharacter[$i], "HAND", $actionTypeOut == 16);
+        $border = CardBorderColor($myHand[$i], "HAND", $actionTypeOut == 16);
       } else {
         if ($playerID == $currentPlayer) $playable = $turn[0] == "ARS" || ($actionType == 16 && str_contains("," . $turn[2] . ",", "," . $i . ",")) || ($turn[0] == "M" || $turn[0] == "INSTANT") && IsPlayable($myHand[$i], $turn[0], "HAND", -1, $restriction);
         else $playable = false;
