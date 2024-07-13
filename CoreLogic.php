@@ -1713,34 +1713,54 @@ function SelfCostModifier($cardID, $from)
   //Aspect Penalty
   $heraSyndullaAspectPenaltyIgnore = TraitContains($cardID, "Spectre", $currentPlayer) && (HeroCard($currentPlayer) == "7440067052" || SearchAlliesForCard($currentPlayer, "80df3928eb") != ""); //Hera Syndulla (Spectre Two)
   $omegaAspectPenaltyIgnore = TraitContains($cardID, "Clone", $currentPlayer) && SearchAlliesForCard($currentPlayer, "1386874723") != "" && GetClassState($currentPlayer, $CS_NumClonesPlayed) < 1; //Omega (Part of the Squad)
+  $playerAspects = PlayerAspects($currentPlayer);
   if(!$heraSyndullaAspectPenaltyIgnore && !$omegaAspectPenaltyIgnore) {
     $penalty = 0;
     $cardAspects = CardAspects($cardID);
     //Manually changing the aspects of cards played with smuggle that have different aspect requirements for smuggle.
     //Not a great solution; ideally we could define a whole smuggle ability in one place.
     if ($from == "RESOURCES") {
+      $tech = SearchAlliesForCard($currentPlayer, "3881257511");
+      if($tech != "") {
+        $ally = new Ally("MYALLY-" . $tech, $currentPlayer);
+        $techOnBoard = !$ally->LostAbilities();
+      } else {
+        $techOnBoard = false;
+      }
       switch($cardID) {
         case "5169472456"://Chewbacca (Pykesbane)
-          $cardAspects = "Heroism,Aggression";
+          if(!$techOnBoard || $playerAspects["Aggression"] != 0) {
+            //if tech is here and player is not aggression, tech will always be cheaper than aggression cost
+            $cardAspects = "Heroism,Aggression";
+          }
           break;
         case "9871430123"://Sugi
+          //vigilance is always cheaper than vigilance,vigilance, do not use tech passive
           $cardAspects = "Vigilance";
           break;
         case "5874342508"://Hotshot DL-44 Blaster
-          $cardAspects = "Cunning";
+          if(!$techOnBoard || ($playerAspects["Cunning"] != 0 && $playerAspects["Aggression"] == 0)) {
+            //if tech is here, cunning smuggle is better only if player is cunning and not aggression
+            $cardAspects = "Cunning";
+          }
           break;
         case "4002861992"://DJ (Blatant Thief)
-          $cardAspects = "Cunning,Cunning";
+          if(!$techOnBoard) {
+            //cunning will always be cheaper than cunning+cunning, do not add a cunning if tech is here
+            $cardAspects = "Cunning,Cunning";
+          }
           break;
         case "3010720738"://Tobias Beckett
-          $cardAspects = "Vigilance";
+          if(!$techOnBoard || $playerAspects["Vigilance"] != 0) {
+            //if tech is here and player is not vigilance, tech will always be cheaper than vigilance cost
+            $cardAspects = "Vigilance";
+          }
           break;
         default: break;
       }
     }
     if($cardAspects != "") {
       $aspectArr = explode(",", $cardAspects);
-      $playerAspects = PlayerAspects($currentPlayer);
       for($i=0; $i<count($aspectArr); ++$i)
       {
         --$playerAspects[$aspectArr[$i]];
@@ -2065,10 +2085,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     if($abilityName == "Heroic Resolve") {
       $ally = new Ally("MYALLY-" . $index, $currentPlayer);
       $ally->DefeatUpgrade("4085341914");
-      AddCurrentTurnEffect("4085341914", $currentPlayer, "PLAY", $ally->UniqueID());
-      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYALLY-" . $index);
-      AddDecisionQueue("MZOP", $currentPlayer, "ATTACK");
-      return;
+      if(!$ally->IsExhausted()) {
+        AddCurrentTurnEffect("4085341914", $currentPlayer, "PLAY", $ally->UniqueID());
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYALLY-" . $index);
+        AddDecisionQueue("MZOP", $currentPlayer, "ATTACK");
+      }
+      return "";
     }
   }
   if($target != "-")
@@ -4141,6 +4163,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       if($from != "PLAY") {
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
         AddDecisionQueue("MZFILTER", $currentPlayer, "status=1");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "damaged=0");
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to attack and give +2");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
