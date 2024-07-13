@@ -936,9 +936,13 @@ function CardBorderColor($cardID, $from, $isPlayable, $mod = "-")
   global $playerID, $currentPlayer, $turn;
   if ($playerID != $currentPlayer)
     return 0;
-  if ($turn[0] == "B")
-    return ($isPlayable ? 6 : 0);
-  if ($from == "BANISH") {
+  if($from == "HAND") {
+    $helptext = GetPhaseHelptext();
+    if($helptext == "Choose a card to resource") return 3;
+    else if($helptext == "Choose a card to discard") return 7;
+    else return 6;
+  }
+  else if ($from == "BANISH") {
     if ($isPlayable || PlayableFromBanish($cardID, $mod))
       return 7;
     return 0;

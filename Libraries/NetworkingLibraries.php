@@ -458,19 +458,9 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
       $skipWriteGamestate = true;
       WriteLog("Player " . $playerID . " cancel their blocks.");
       break;
-    case 10002:
-      WriteLog("Player " . $playerID . " manually add 1 action point.", highlight:true);
-      ++$actionPoints;
-      break;
     case 10003: //Revert to prior turn
       RevertGamestate($buttonInput);
       WriteLog("Player " . $playerID . " reverted back to a prior turn.");
-      break;
-    case 10004:
-      if($actionPoints > 0) {
-        WriteLog("Player " . $playerID ." manually subtracted 1 action point.", highlight: true);
-        --$actionPoints;
-      }
       break;
     case 10005:
       WriteLog("Player " . $playerID ." manually subtracted 1 damage from themselves.", highlight: true);
@@ -500,26 +490,6 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
       WriteLog("Player " . $playerID ." manually added a card to their hand.", highlight: true);
       $hand = &GetHand($playerID);
       $hand[] = $cardID;
-      break;
-    case 10012:
-      WriteLog("Player " . $playerID ." manually added a resource to their pool.", highlight: true);
-      $resources = &GetResources($playerID);
-      $resources[0] += 1;
-      break;
-    case 10013:
-      WriteLog("Player " . $playerID ." manually added a resource to their opponent's pool.", highlight: true);
-      $resources = &GetResources($playerID == 1 ? 2 : 1);
-      $resources[0] += 1;
-      break;
-    case 10014:
-      WriteLog("Player " . $playerID ." manually removed a resource from their opponent's pool.", highlight: true);
-      $resources = &GetResources($playerID == 1 ? 2 : 1);
-      $resources[0] -= 1;
-      break;
-    case 10015:
-      WriteLog("Player " . $playerID ." manually removed a resource from their pool.", highlight: true);
-      $resources = &GetResources($playerID);
-      $resources[0] -= 1;
       break;
     case 100000: //Quick Rematch
       if($isSimulation) return;
@@ -1468,10 +1438,12 @@ function AddPrePitchDecisionQueue($cardID, $from, $index = -1, $skipAbilityType 
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose player to discard 2 cards");
       AddDecisionQueue("BUTTONINPUT", $currentPlayer, "Yourself,Opponent");
       AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_AdditionalCosts);
+      break;
     case "7262314209"://Mission Briefing
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose player to draw 2 cards");
       AddDecisionQueue("BUTTONINPUT", $currentPlayer, "Yourself,Opponent");
       AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_AdditionalCosts);
+      break;
     default:
       break;
   }
