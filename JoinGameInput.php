@@ -269,6 +269,7 @@ function CardIDOverride($cardID) {
     case "SHD_238": return "SOR_229"; //Cell Block Guard
     case "SHD_257": return "SOR_247"; //Underworld Thug
     case "SHD_262": return "SOR_251"; //Confiscate
+    case "SHD_121": return "SOR_117"; //Mercenary Company
     default: return $cardID;
   }
 }
