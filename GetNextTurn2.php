@@ -873,26 +873,6 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   echo ("</div>");
   echo ("</div>");
   echo ("</div>");
-
-  //Now display their Auras and Items
-  if (count($landmarks) > 0) {
-    echo ("<div style='position: fixed; top:105px; left: calc(50% + 200px); display:inline;'>");
-    echo ("<h3 style='font-size:16px; font-weight: 600; color: " . $fontColor . "; text-shadow: 2px 0 0 " . $borderColor . ", 0 -2px 0 " . $borderColor . ", 0 2px 0 " . $borderColor . ", -2px 0 0 " . $borderColor . ";'>Landmark:</h3>");
-    for ($i = 0; $i < count($landmarks); $i += LandmarkPieces()) {
-      $playable = $playerID == $currentPlayer && IsPlayable($landmarks[$i], $turn[0], "PLAY", $i, $restriction);
-      $action = ($playable && $currentPlayer == $playerID ? 25 : 0);
-      $border = CardBorderColor($landmarks[$i], "PLAY", $playable);
-      $counters = 0;
-      echo (Card($landmarks[$i], "concat", $cardSizeAura, $action, 1, 0, $border, $counters, strval($i), ""));
-    }
-    echo ("</div>");
-  }
-
-  $permTop = 7;
-  $theirPermHeight = $cardSize * 2 + 60;
-  $theirPermWidth = "calc(50% - " . ($cardWidth * 2 + $permLeft - 10) . "px)";
-  echo ("<div style='overflow-y:auto; position: fixed; top:" . $permTop . "px; left:" . $permLeft . "px; width:" . $theirPermWidth . "; height:" . $theirPermHeight . "px;'>");
-  DisplayTiles(($playerID == 1 ? 2 : 1));
   if ($playerID == 3) {
     $otherPlayer = $playerID == 2 ? 2 : 1;
   } else {
@@ -934,7 +914,6 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       else $spaceAllies .= $cardText;
     }
   }
-  echo ("</div>");
   //Now display their Leader and Base
   $numWeapons = 0;
   echo ("<div id='theirChar'>");
@@ -1027,12 +1006,6 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   echo ($banishUI);
   echo ("</div>"); //End hand div
 
-  //Now display my Auras and items
-  $permHeight = $cardSize * 2;
-  $permTop = intval(GetCharacterBottom("C", "")) - ($cardSize - 14); // - 332;
-  $myPermWidth = "calc(50% - 30vw)";
-  echo ("<div style='overflow-y:auto; position: fixed; bottom:" . $permTop . "px; left:" . $permLeft . "px; width:" . $myPermWidth . "; max-height:50%;'>");
-  DisplayTiles($playerID);
   $myAllies = GetAllies($playerID);
   $spaceAllies = "";
   $groundAllies = "";
@@ -1084,7 +1057,6 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       else $spaceAllies .= $cardText;
     }
   }
-  echo ("</div>");
 
   //Space allies
   echo ("<div class='spaceAlliesContainer' style='overflow-y:auto; padding: 5px 20px 12px 20px; position: fixed; bottom:200px; left:41px; width: calc(50% - 291px); max-height:" . $permHeight . "px;'>");
@@ -1148,7 +1120,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   echo ("<div class='resource-wrapper my-resources'>");
   echo ("<div class='resources' title='Click to see your resources.' style='padding:28px 0; display: flex; justify-content: center; cursor:pointer;' onclick='TogglePopup(\"myResourcePopup\");'><img style='width:26px; height:34px; margin-top:3px;' src='./Images/Resource.png' /><span style='color:white; font-size:32px; font-weight: 700; margin: 0 0 0 10px;'>" . $numReady . "/" . $total . "</span></div>");
   echo ("</div>");
-  echo ("</div>"); //End arsenal div
+  echo ("</div>"); //End resource div
 
   //Show deck, discard
   //Display My Discard
