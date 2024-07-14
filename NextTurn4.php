@@ -259,8 +259,17 @@
       // Function to handle drag start event
       function dragStart(e) {
           // Set the drag's data and styling
-          e.dataTransfer.setData("text/plain", e.target.id);
+          var id = e.target.id;
+          var element = e.target;
+          var tries = 0;
+          while(id == "" && tries < 20) {
+            element = element.parentNode;
+            id = element.id;
+            ++tries;
+          }
+          e.dataTransfer.setData("text/plain", id);
           e.target.style.opacity = "0.4";
+          HideCardDetail();
       }
 
       // Function to handle drag end event
@@ -283,7 +292,6 @@
 
           // Append dragged element to drop target
           var draggedElement = document.getElementById(data);
-          alert(data);
           //e.target.appendChild(draggedElement);
       }
 
@@ -349,17 +357,18 @@
               var charLeft = GetCharacterLeft(type, substype);
               var charBottom = GetCharacterBottom(type, substype);
               positionStyle = "fixed; left:" + charLeft + "; bottom:" + charBottom;
-              var id = type == "W" ? "P<?php echo ($playerID); ?>BASE" : "P<?php echo ($playerID); ?>LEADER";
+              id = type == "W" ? "P<?php echo ($playerID); ?>BASE" : "P<?php echo ($playerID); ?>LEADER";
             } else if (zone == "theirChar") {
               var charLeft = GetCharacterLeft(type, substype);
               var charTop = GetCharacterTop(type, substype);
               positionStyle = "fixed; left:" + charLeft + "; top:" + charTop;
-              var id = type == "W" ? "P<?php echo ($playerID == 1 ? 2 : 1); ?>BASE" : "P<?php echo ($playerID == 1 ? 2 : 1); ?>LEADER";
-            } else if(zone == "myHand") {
-              var id = "MYHAND-" + (i*<?php echo(HandPieces()); ?>);
-            } else if(zone == "theirHand") {
-              var id = "THEIRHAND-" + (i*<?php echo(HandPieces()); ?>);
+              id = type == "W" ? "P<?php echo ($playerID == 1 ? 2 : 1); ?>BASE" : "P<?php echo ($playerID == 1 ? 2 : 1); ?>LEADER";
             }
+          }
+          if(zone == "myHand") {
+              id = "MYHAND-" + (i*<?php echo(HandPieces()); ?>);
+          } else if(zone == "theirHand") {
+            id = "THEIRHAND-" + (i*<?php echo(HandPieces()); ?>);
           }
           var styles = " style='position:" + positionStyle + "; margin:1px;'"
           var droppable = " class='draggable' draggable='true' ondragstart='dragStart(event)' ondragend='dragEnd(event)'";
