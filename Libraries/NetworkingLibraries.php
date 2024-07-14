@@ -491,6 +491,18 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
       $hand = &GetHand($playerID);
       $hand[] = $cardID;
       break;
+    case 10012://Add damage to friendly ally
+      WriteLog("Player " . $playerID ." manually added damage to a friendly unit.", highlight: true);
+      $index = $buttonInput;
+      $ally = new Ally("MYALLY-" . $index, $playerID);
+      $ally->AddDamage(1);
+      break;
+    case 10013://Remove damage from friendly ally
+      WriteLog("Player " . $playerID ." manually removed damage from a friendly unit.", highlight: true);
+      $index = $buttonInput;
+      $ally = new Ally("MYALLY-" . $index, $playerID);
+      $ally->RemoveDamage(1);
+      break;
     case 100000: //Quick Rematch
       if($isSimulation) return;
       if($turn[0] != "OVER") break;

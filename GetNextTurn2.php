@@ -1152,7 +1152,8 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       else $cardText = '<div id="unique-' . $myAllies[$i+5] . '" class="cardContainer ' . ($myAllies[$i + 1] != 2 ? 'exhausted' : '') . '">';
       if($manualMode) {
         $cardText .= "<div style='position:relative; left:-15px; width:15px; height:100%;'>";
-        $cardText .= CreateButton($playerID, "+", 10006, $i, "20px");
+        $cardText .= CreateButton($playerID, "+", 10012, $i, "20px");
+        $cardText .= CreateButton($playerID, "-", 10013, $i, "20px");
         //"<span style='position:absolute; top:120px; left:65px;'>" .  CreateButton($playerID, "-1", 10005, 0, "20px") . "</span>"
         $cardText .= "</div>";
       }

@@ -48,6 +48,10 @@ class Ally {
   function AddDamage($amount) {
     $this->allies[$this->index+2] += $amount;
   }
+  
+  function RemoveDamage($amount) {
+    if($this->allies[$this->index+2] > 0) $this->allies[$this->index+2] -= $amount;
+  }
 
   function Owner() {
     return $this->allies[$this->index+11];
