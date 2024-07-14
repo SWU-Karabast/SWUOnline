@@ -534,40 +534,6 @@
         bottom: -1px;
       }
 
-      .breakChain {
-        background: url("./Images/chainLinkRight.png") no-repeat;
-        background-size: contain;
-        transition: 150ms ease-in-out;
-      }
-
-      .breakChain:hover {
-        background: url("./Images/chainLinkBreak.png") no-repeat;
-        background-size: contain;
-        cursor: pointer;
-        -webkit-transform: scale(1.3);
-        -ms-transform: scale(1.3);
-        transform: scale(1.3);
-      }
-
-      .breakChain:focus {
-        outline: none;
-      }
-
-      .chainSummary {
-        cursor: pointer;
-        transition: 150ms ease-in-out;
-      }
-
-      .chainSummary:hover {
-        -webkit-transform: scale(1.4);
-        -ms-transform: scale(1.4);
-        transform: scale(1.4);
-      }
-
-      .chainSummary:focus {
-        outline: none;
-      }
-
       .MenuButtons {
         cursor: pointer;
         transition: 150ms ease-in-out;
