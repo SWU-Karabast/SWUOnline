@@ -167,7 +167,7 @@ function RaidAmount($cardID, $player, $index, $reportMode = false)
     case "4111616117": $amount += 1; break; //Volunteer Soldier
     case "87e8807695": $amount += 1; break; //Leia leader unit
     case "8395007579": $amount += $ally->MaxHealth() - $ally->Health(); break;//Fifth Brother
-    case "6208347478": $amount += SearchCount(SearchAllies($player, trait:"Spectre")) >= 1 ? 1 : 0; break;//Chopper
+    case "6208347478": $amount += SearchCount(SearchAllies($player, trait:"Spectre")) > 1 ? 1 : 0; break;//Chopper
     case "3487311898": $amount += 3; break;//Clan Challengers
     case "5977238053": $amount += 2; break;//Sundari Peacekeeper
     case "1805986989": $amount += 2; break;//Modded Cohort
