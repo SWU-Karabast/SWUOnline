@@ -57,18 +57,7 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
         return false;
       }
       break;
-    case 6: //Pitch Deck
-      if ($turn[0] != "PDECK") break;
-      $found = PitchHasCard($cardID);
-      if ($found >= 0) {
-        PitchDeck($currentPlayer, $found);
-        PassTurn(); //Resume passing the turn
-      }
-      else
-      {
-        echo("Pitch deck " . $turn[0] . " Invalid Input<BR>");
-        return false;
-      }
+    case 6: //Deprecated
       break;
     case 7: //Number input
       if ($turn[0] == "DYNPITCH") {

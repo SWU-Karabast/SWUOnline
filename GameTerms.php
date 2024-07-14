@@ -34,8 +34,6 @@ function TypeToPlay($phase)
       return "a card to reserve";
     case "ARS":
       return "a card to add to arsenal";
-    case "PDECK":
-      return "a card from the pitch zone";
     case "OPT":
       return "a card to add to the deck top or bottom";
     case "CHOOSETOPOPPONENT":

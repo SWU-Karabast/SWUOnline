@@ -173,13 +173,6 @@ function EncounterAI()
           PassInput();
         }
       }
-      else if($turn[0] == "PDECK")//choosing which card to bottom from pitch
-      {
-        if($AIDebug) WriteLog("AI Branch - Pitch Deck");
-        $pitch = &GetPitch($currentPlayer);
-        ProcessInput($currentPlayer, 6, "", $pitch[0], 0, "");
-        CacheCombatResult();
-      }
       else if($turn[0] == "ARS" && $mainPlayer = $currentPlayer)//choose a card to arsenal
       {
         if($AIDebug) WriteLog("AI Branch - Choose Arsenal");
