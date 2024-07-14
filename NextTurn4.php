@@ -5,6 +5,15 @@
         from {margin-top: 0;}
         to {margin-top: -50px;}
       }
+
+      .draggable {
+      }
+
+      .droppable {
+          background-color: #e0e0e0;
+          border: 2px dashed #aaa;
+      }
+
     </style>
 
     <?php
@@ -247,17 +256,39 @@
         else return "#EDEDED";
       }
 
+      // Function to handle drag start event
+      function dragStart(e) {
+          // Set the drag's data and styling
+          e.dataTransfer.setData("text/plain", e.target.id);
+          e.target.style.opacity = "0.4";
+      }
+
+      // Function to handle drag end event
+      function dragEnd(e) {
+          // Reset the element's opacity after drag
+          e.target.style.opacity = "1";
+      }
+
+      // Function to handle drag over event
+      function dragOver(e) {
+          e.preventDefault(); // Allow drop
+      }
+
+      // Function to handle drop event
+      function drop(e) {
+          e.preventDefault(); // Prevent default action (open as link for some elements)
+
+          // Get the data being dragged
+          var data = e.dataTransfer.getData("text/plain");
+
+          // Append dragged element to drop target
+          var draggedElement = document.getElementById(data);
+          alert(data);
+          //e.target.appendChild(draggedElement);
+      }
+
       function CardHasAltArt(cardID) {
         switch (cardID) {
-          case "WTR002": case "WTR150": case "WTR162": case "WTR224":
-          case "MON155": case "MON215": case "MON216": case "MON217": case "MON219": case "MON220":
-          case "ELE146":
-          case "UPR006": case "UPR007": case "UPR008": case "UPR009": case "UPR010": case "UPR011": case "UPR012":
-          case "UPR013": case "UPR014": case "UPR015": case "UPR016": case "UPR017": case "UPR042": case "UPR043":
-          case "UPR169": case "UPR406": case "UPR407": case "UPR408": case "UPR409": case "UPR410": case "UPR411":
-          case "UPR412": case "UPR413": case "UPR414": case "UPR415": case "UPR416": case "UPR417":
-          case "DYN234":
-            return true;
           default:
             return false;
         }
@@ -268,19 +299,6 @@
         switch (Language) {
           case "JP": //Japanese
             switch (cardID) {
-              case "CRU046":
-              case "CRU050":
-              case "CRU063":
-              case "CRU069":
-              case "CRU072":
-              case "CRU073":
-              case "CRU074":
-              case "CRU186":
-              case "CRU187":
-              case "CRU194":
-              case "WTR100":
-              case "WTR191":
-                return true;
               default:
                 return false;
             }
@@ -337,10 +355,16 @@
               var charTop = GetCharacterTop(type, substype);
               positionStyle = "fixed; left:" + charLeft + "; top:" + charTop;
               var id = type == "W" ? "P<?php echo ($playerID == 1 ? 2 : 1); ?>BASE" : "P<?php echo ($playerID == 1 ? 2 : 1); ?>LEADER";
+            } else if(zone == "myHand") {
+              var id = "MYHAND-" + (i*<?php echo(HandPieces()); ?>);
+            } else if(zone == "theirHand") {
+              var id = "THEIRHAND-" + (i*<?php echo(HandPieces()); ?>);
             }
           }
-          if(id != "-") newHTML += "<span id='" + id + "' style='position:" + positionStyle + "; margin:1px;'>";
-          else newHTML += "<span style='position:" + positionStyle + "; margin:1px;'>";
+          var styles = " style='position:" + positionStyle + "; margin:1px;'"
+          var droppable = " class='draggable' draggable='true' ondragstart='dragStart(event)' ondragend='dragEnd(event)'";
+          if(id != "-") newHTML += "<span id='" + id + "' " + styles + droppable + ">";
+          else newHTML += "<span " + styles + droppable + ">";
           if (type == "C") {
             folder = "WebpImages2";
             <?php
