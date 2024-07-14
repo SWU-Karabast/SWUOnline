@@ -833,7 +833,7 @@ function AllyAttackAbilities($attackID)
     switch($defAllies[$i]) {
       case "7674544152"://Kragan Gorr
         if(GetAttackTarget() == "THEIRCHAR-0") {
-          AddDecisionQueue("MULTIZONEINDICES", $defPlayer, "MYALLY");
+          AddDecisionQueue("MULTIZONEINDICES", $defPlayer, "MYALLY:arena=" . CardArenas($attackID));
           AddDecisionQueue("SETDQCONTEXT", $defPlayer, "Choose a unit to give a shield");
           AddDecisionQueue("MAYCHOOSEMULTIZONE", $defPlayer, "<-", 1);
           AddDecisionQueue("MZOP", $defPlayer, "ADDSHIELD", 1);
