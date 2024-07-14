@@ -10,8 +10,7 @@
       }
 
       .droppable {
-          background-color: #e0e0e0;
-          border: 2px dashed #aaa;
+          border: 3px dashed #ffff00 !important;
       }
 
     </style>
@@ -270,12 +269,17 @@
           e.dataTransfer.setData("text/plain", id);
           e.target.style.opacity = "0.4";
           HideCardDetail();
+          //Now show the droppable areas
+          var dropArea = document.getElementById("groundArena");
+          dropArea.classList.add("droppable");
       }
 
       // Function to handle drag end event
       function dragEnd(e) {
           // Reset the element's opacity after drag
           e.target.style.opacity = "1";
+          var dropArea = document.getElementById("groundArena");
+          dropArea.classList.remove("droppable");
       }
 
       // Function to handle drag over event
@@ -286,6 +290,7 @@
       // Function to handle drop event
       function drop(e) {
           e.preventDefault(); // Prevent default action (open as link for some elements)
+          //alert(e.target.id);
 
           // Get the data being dragged
           var data = e.dataTransfer.getData("text/plain");
@@ -293,6 +298,7 @@
           // Append dragged element to drop target
           var draggedElement = document.getElementById(data);
           //e.target.appendChild(draggedElement);
+          alert(data);
       }
 
       function CardHasAltArt(cardID) {
