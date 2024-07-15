@@ -2266,7 +2266,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "8981523525"://Moment of Peace
       if($target != "-") {
         $ally = new Ally($target);
-        $ally->Attach("8752877738");//Shield
+        $ally->Attach("8752877738", $currentPlayer);//Shield
       }
       break;
     case "8679831560"://Repair
