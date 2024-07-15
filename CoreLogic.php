@@ -4186,7 +4186,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "6475868209"://Criminal Muscle
       if($from != "PLAY") {
-        DefeatUpgrade($currentPlayer, may:true, search:"MYALLY&THEIRALLY", to:"HAND");
+        DefeatUpgrade($currentPlayer, may:true, upgradeFilter: "unique=1", to:"HAND");
       }
       break;
     case "1743599390"://Trandoshan Hunters
