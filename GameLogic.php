@@ -659,6 +659,10 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
               $isUnique = CardIsUnique($ally->CardID());
               if($params[1] == 1 && $isUnique) $match = true;
               else if($params[1] == 0 && !$isUnique) $match = true;
+            } else {
+              $isUnique = CardIsUnique($mzArr[0]);
+              if($params[1] == 1 && $isUnique) $match = true;
+              elseif($params[1] == 0 && !$isUnique) $match = true;
             }
             break;
           case "turns":

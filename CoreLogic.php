@@ -4127,6 +4127,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
         AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "0622803599-2,PLAY", 1);
+        WriteLog("This is a partially manual card. Name the card in chat that bounty was applied to");
       }
       break;
     case "f928681d36"://Jabba the Hutt Leader Unit
@@ -4137,6 +4138,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
         AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "f928681d36-2,PLAY", 1);
+        WriteLog("This is a partially manual card. Name the card in chat that bounty was applied to");
       }
       break;
     case "8090818642"://The Chaos of War
@@ -4204,7 +4206,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "6475868209"://Criminal Muscle
       if($from != "PLAY") {
-        DefeatUpgrade($currentPlayer, may:true, search:"MYALLY&THEIRALLY", to:"HAND");
+        DefeatUpgrade($currentPlayer, may:true, upgradeFilter: "unique=1", to:"HAND");
       }
       break;
     case "1743599390"://Trandoshan Hunters
