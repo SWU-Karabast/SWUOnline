@@ -319,8 +319,7 @@ function SpecificCardLogic($player, $card, $lastResult)
       $ally = new Ally($lastResult, $owner);
       $upgrades = $ally->GetUpgrades(true);
       for($i=0; $i<count($upgrades); $i+=2) {
-        if(!IsToken($upgrades[$i])) AddHand($upgrades[$i+2], $upgrades[$i]);
-        $ally->DealDamage(CardHP($upgrades[$i]));
+        if(!IsToken($upgrades[$i])) AddHand($upgrades[$i+1], $upgrades[$i]);
         $upgradesReturned[] = $upgrades[$i];
       }
       $ally->ClearSubcards();
