@@ -153,13 +153,13 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
   IncrementClassState($player, $CS_NumLeftPlay);
   AllyLeavesPlayAbility($player, $index);
   $ally = new Ally("MYALLY-" . $index, $player);
-  $upgrades = $ally->GetUpgrades();
-  for($i=0; $i<count($upgrades); ++$i) {
+  $upgrades = $ally->GetUpgrades(true);
+  for($i=0; $i<count($upgrades); $i+=2) {
     if($upgrades[$i] == "8752877738" || $upgrades[$i] == "2007868442") continue;
     if($upgrades[$i] == "6911505367") $discardPileModifier = "TTFREE";//Second Chance
-    AddGraveyard($upgrades[$i], $player, "PLAY");
+    AddGraveyard($upgrades[$i], $upgrades[$i+1], "PLAY");
   }
-  $captives = $ally->GetCaptives();
+  $captives = $ally->GetCaptives(true);
   if(!$skipDestroy) {
     if(DefinedTypesContains($cardID, "Leader", $player)) ;//If it's a leader it doesn't go in the discard
     else if($cardID == "8954587682" && !$ally->LostAbilities()) AddResources($cardID, $player, "PLAY", "DOWN");//Superlaser Technician
@@ -168,8 +168,8 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
   }
   for($j = $index + AllyPieces() - 1; $j >= $index; --$j) unset($allies[$j]);
   $allies = array_values($allies);
-  for($i=0; $i<count($captives); ++$i) {
-    PlayAlly($captives[$i], $otherPlayer, from:"CAPTIVE");
+  for($i=0; $i<count($captives); $i+=2) {
+    PlayAlly($captives[$i], $captives[$i+1], from:"CAPTIVE");
   }
   if(AllyHasStaticHealthModifier($cardID)) {
     CheckHealthAllAllies($player);
@@ -946,7 +946,7 @@ function AllyPlayCardAbility($cardID, $player="", $from="-", $abilityID="-", $un
     case "9850906885"://Maz Kanata
       if(DefinedTypesContains($cardID, "Unit", $player)) {
         $me = new Ally("MYALLY-" . $index, $player);
-        $me->Attach("2007868442");//Experience token
+        $me->Attach("2007868442", $player);//Experience token
       }
       break;
     case "5907868016"://Fighters for Freedom
@@ -1111,7 +1111,7 @@ function SpecificAllyAttackAbilities($attackID)
         for($j=0; $j<count($allies); $j+=AllyPieces()) {
           if($j == $attackerAlly->Index()) continue;
           $ally = new Ally("MYALLY-" . $j, $mainPlayer);
-          if(TraitContains($ally->CardID(), "Mandalorian", $mainPlayer)) $ally->Attach("2007868442");//Experience token
+          if(TraitContains($ally->CardID(), "Mandalorian", $mainPlayer)) $ally->Attach("2007868442", $mainPlayer);//Experience token
         }
         break;
       case "1938453783"://Armed to the Teeth

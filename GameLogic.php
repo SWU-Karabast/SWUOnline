@@ -389,11 +389,11 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           return $lastResult;
         case "ADDEXPERIENCE":
           $ally = new Ally($lastResult);
-          $ally->Attach("2007868442");//Experience token
+          $ally->Attach("2007868442", $player);//Experience token
           break;
         case "ADDSHIELD":
           $ally = new Ally($lastResult);
-          $ally->Attach("8752877738");//Shield Token
+          $ally->Attach("8752877738", $player);//Shield Token
           break;
         case "ADDEFFECT":
           $ally = new Ally($lastResult);
@@ -419,8 +419,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $sourceUnit = new Ally($dqVars[1]);
           $upgradeID = $dqVars[0];
           $targetUnit = new Ally($lastResult);
-          $sourceUnit->RemoveSubcard($upgradeID);
-          $targetUnit->Attach($upgradeID);
+          $upgradeOwner = $sourceUnit->RemoveSubcard($upgradeID);
+          $targetUnit->Attach($upgradeID, $upgradeOwner);
           return $lastResult;
         case "GETCAPTIVES":
           $ally = new Ally($lastResult);
@@ -505,17 +505,17 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $mzArr = explode("-", $dqVars[0]);
           $allyPlayer = $mzArr[0] == "MYALLY" ? $player : ($player == 1 ? 2 : 1);
           $ally = new Ally($dqVars[0], $allyPlayer);
-          $destroyed = $ally->DefeatUpgrade($upgradeID);
-          if($destroyed) UpgradeLeftPlay($upgradeID, $allyPlayer, $mzArr[1]);
+          $ownerId = $ally->DefeatUpgrade($upgradeID);
+          if($ownerId != -1) UpgradeLeftPlay($upgradeID, $allyPlayer, $mzArr[1]);
           return $lastResult;
         case "BOUNCEUPGRADE":
           $upgradeID = $lastResult;
           $mzArr = explode("-", $dqVars[0]);
           $allyPlayer = $mzArr[0] == "MYALLY" ? $player : ($player == 1 ? 2 : 1);
           $ally = new Ally($dqVars[0], $allyPlayer);
-          $destroyed = $ally->DefeatUpgrade($upgradeID);
-          if(!IsToken($upgradeID)) AddHand($allyPlayer, $upgradeID);
-          UpgradeLeftPlay($upgradeID, $allyPlayer, $mzArr[1]);
+          $ownerId = $ally->DefeatUpgrade($upgradeID);
+          if(!IsToken($upgradeID)) AddHand($ownerId, $upgradeID);
+          if($ownerId != -1) UpgradeLeftPlay($upgradeID, $allyPlayer, $mzArr[1]);
           return $lastResult;
         case "RESCUECAPTIVE":
           $captiveID = $lastResult;

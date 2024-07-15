@@ -128,9 +128,10 @@ class Ally {
     if($this->index == -1 || $amount <= 0) return false;
     if(!$fromCombat && $this->CardID() == "1810342362") return;//Lurking TIE Phantom
     $subcards = $this->GetSubcards();
-    for($i=0; $i<count($subcards); ++$i) {
+    for($i=0; $i<count($subcards); $i+=2) {
       if($subcards[$i] == "8752877738") {
         //Shield Token
+        unset($subcards[$i+1]);
         unset($subcards[$i]);
         $subcards = array_values($subcards);
         $this->allies[$this->index+4] = count($subcards) > 0 ? implode(",", $subcards) : "-";
@@ -170,7 +171,7 @@ class Ally {
     switch($this->CardID())
     {
       case "4843225228"://Phase-III Dark Trooper
-        if($fromCombat) $this->Attach("2007868442");//Experience token
+        if($fromCombat) $this->Attach("2007868442", $this->playerID);//Experience token
         break;
       default: break;
     }
@@ -311,24 +312,26 @@ class Ally {
   function RemoveSubcard($subcardID) {
     if($this->index == -1) return false;
     $subcards = $this->GetSubcards();
-    for($i=0; $i<count($subcards); ++$i) {
+    for($i=0; $i<count($subcards); $i+=2) {
       if($subcards[$i] == $subcardID) {
+        $ownerId=$subcards[$i+1];
+        unset($subcards[$i+1]);
         unset($subcards[$i]);
         $subcards = array_values($subcards);
         $this->allies[$this->index + 4] = count($subcards) > 0 ? implode(",", $subcards) : "-";
-        return true;
+        return $ownerId;
       }
     }
-    return false;
+    return -1;
   }
 
   function AddEffect($effectID) {
     AddCurrentTurnEffect($effectID, $this->PlayerID(), uniqueID:$this->UniqueID());
   }
 
-  function Attach($cardID) {
+  function Attach($cardID, $ownerID) {
     if($this->allies[$this->index + 4] == "-") $this->allies[$this->index + 4] = $cardID;
-    else $this->allies[$this->index + 4] = $this->allies[$this->index + 4] . "," . $cardID;
+    else $this->allies[$this->index + 4] = $this->allies[$this->index + 4] . "," . $cardID.",".$ownerID;
     if (CardIsUnique($cardID)) {
       $this->CheckUniqueUpgrade($cardID);
     }
@@ -340,22 +343,28 @@ class Ally {
     return explode(",", $this->allies[$this->index + 4]);
   }
 
-  function GetUpgrades() {
+  function GetUpgrades($withOwnerData = false) {
     if($this->allies[$this->index + 4] == "-") return [];
     $subcards = $this->GetSubcards();
     $upgrades = [];
-    for($i=0; $i<count($subcards); ++$i) {
-      if(DefinedTypesContains($subcards[$i], "Upgrade", $this->PlayerID()) || DefinedTypesContains($subcards[$i], "Token Upgrade", $this->PlayerID())) $upgrades[] = $subcards[$i];
+    for($i=0; $i<count($subcards); $i+=2) {
+      if(DefinedTypesContains($subcards[$i], "Upgrade", $this->PlayerID()) || DefinedTypesContains($subcards[$i], "Token Upgrade", $this->PlayerID())) {
+        if($withOwnerData) array_push($upgrades, $subcards[$i], $subcards[$i+1]);
+        else $upgrades[] = $subcards[$i];
+      }
     }
     return $upgrades;
   }
 
-  function GetCaptives() {
+  function GetCaptives($withOwnerData = false) {
     if($this->allies[$this->index + 4] == "-") return [];
     $subcards = $this->GetSubcards();
     $capturedUnits = [];
-    for($i=0; $i<count($subcards); ++$i) {
-      if(DefinedTypesContains($subcards[$i], "Unit", $this->PlayerID())) $capturedUnits[] = $subcards[$i];
+    for($i=0; $i<count($subcards); $i+=2) {
+      if(DefinedTypesContains($subcards[$i], "Unit", $this->PlayerID())) {
+        if($withOwnerData) array_push($capturedUnits, $subcards[$i], $subcards[$i+1]);
+        else $capturedUnits[] = $subcards[$i];
+      }
     }
     return $capturedUnits;
   }
@@ -381,8 +390,8 @@ class Ally {
       $this->DefeatUpgrade($cardID);
       WriteLog("Existing copy of upgrade defeated due to unique rule.");
     } elseif ($firstCopy != "" && $secondCopy != "" && $firstCopy != $secondCopy) {
-      $otherindex = $this->index == $firstCopy ? $secondCopy : $firstCopy;
-      $otherAlly = new Ally("MYALLY-" . $otherindex);
+      $otherIndex = $this->index == $firstCopy ? $secondCopy : $firstCopy;
+      $otherAlly = new Ally("MYALLY-" . $otherIndex);
       $otherAlly->DefeatUpgrade($cardID);
       WriteLog("Existing copy of upgrade defeated due to unique rule.");
     }
@@ -391,7 +400,7 @@ class Ally {
   function HasUpgrade($upgradeID) {
     if($this->index == -1) return false;
     $subcards = $this->GetSubcards();
-    for($i=0; $i<count($subcards); ++$i) {
+    for($i=0; $i<count($subcards); $i+=2) {
       if($subcards[$i] == $upgradeID) {
         return true;
       }
@@ -400,26 +409,26 @@ class Ally {
   }
 
   function DefeatUpgrade($upgradeID) {
-    if($this->RemoveSubcard($upgradeID)) {
+    $ownerId = $this->RemoveSubcard($upgradeID);
+    if($ownerId != -1) {
       $this->DefeatIfNoRemainingHP();
-      return true;
+      return $ownerId;
     }
-    else return false;
+    else return -1;
   }
 
   function RescueCaptive($captiveID, $newController=-1) {
-    if($this->RemoveSubcard($captiveID)) {
-      $otherPlayer = $this->PlayerID() == 1 ? 2 : 1;
-      if($newController == -1) $newController = $otherPlayer;
+    $ownerId = $this->RemoveSubcard($captiveID);
+    if($ownerId!=-1) {
+      if($newController==-1) $newController = $ownerId;
       PlayAlly($captiveID, $newController, from:"CAPTIVE");
     }
-    else return false;
   }
 
   function DiscardCaptive($captiveID) {
-    if($this->RemoveSubcard($captiveID)) {
-      $otherPlayer = $this->PlayerID() == 1 ? 2 : 1;
-      AddGraveyard($captiveID, $otherPlayer, "CAPTIVE");
+    $ownerId = $this->RemoveSubcard($captiveID);
+    if($ownerId!=-1) {
+      AddGraveyard($captiveID, $ownerId, "CAPTIVE");
       return true;
     }
     else return false;

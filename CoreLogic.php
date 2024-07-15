@@ -2265,7 +2265,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "8981523525"://Moment of Peace
       if($target != "-") {
         $ally = new Ally($target);
-        $ally->Attach("8752877738");//Shield
+        $ally->Attach("8752877738", $ally->PlayerID());//Shield
       }
       break;
     case "8679831560"://Repair
@@ -2286,7 +2286,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         $allies = &GetAllies($currentPlayer);
         for($i=0; $i<count($allies); $i+=AllyPieces()) {
           $ally = new Ally("MYALLY-" . $i);
-          if($ally->IsDamaged()) $ally->Attach("2007868442");//Experience token
+          if($ally->IsDamaged()) $ally->Attach("2007868442", $currentPlayer);//Experience token
         }
       }
       break;
@@ -2641,7 +2641,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       if($from != "PLAY") {
         $ally = new Ally("MYALLY-" . LastAllyIndex($currentPlayer));
         for($i=0; $i<(GetClassState($currentPlayer, $CS_NumCardsPlayed)-1); ++$i) {
-          $ally->Attach("2007868442");//Experience token
+          $ally->Attach("2007868442", $currentPlayer);//Experience token
         }
       }
       break;
@@ -2874,7 +2874,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       if(CardTitle(GetMZCard($currentPlayer, $target)) == "Luke Skywalker") {
         $ally = new Ally($target, $currentPlayer);
         $ally->Heal($ally->MaxHealth()-$ally->Health());
-        $ally->Attach("8752877738");//Shield Token
+        $ally->Attach("8752877738", $currentPlayer);//Shield Token
       }
       break;
     case "5494760041"://Galactic Ambition
@@ -2943,10 +2943,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "7861932582"://The Force is With Me
       $ally = new Ally($target, $currentPlayer);
-      $ally->Attach("2007868442");//Experience token
-      $ally->Attach("2007868442");//Experience token
-      if(SearchCount(SearchAllies($currentPlayer, trait:"Force")) > 0) {
-        $ally->Attach("8752877738");//Shield Token
+      $ally->Attach("2007868442", $currentPlayer);//Experience token
+      $ally->Attach("2007868442", $currentPlayer);//Experience token
+      if(SearchCount(SearchAllies($currentPlayer, trait: "Force")) > 0) {
+        $ally->Attach("8752877738", $currentPlayer);//Shield Token
       }
       if(!$ally->IsExhausted()) {
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Do you want to attack with the unit?");
@@ -3557,7 +3557,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "2288926269"://Privateer Crew
       if($from == "RESOURCES") {
-        for($i=0; $i<3; ++$i) $playAlly->Attach("2007868442");//Experience token
+        for($i=0; $i<3; ++$i) $playAlly->Attach("2007868442", $currentPlayer);//Experience token
       }
       break;
     case "2470093702"://Wrecker
@@ -3584,7 +3584,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "3514010297"://Mandalorian Armor
       $ally = new Ally($target, $currentPlayer);
       if(TraitContains(GetMZCard($currentPlayer, $target), "Mandalorian", $currentPlayer, $ally->Index())) {
-        $ally->Attach("8752877738");//Shield Token
+        $ally->Attach("8752877738", $currentPlayer);//Shield Token
       }
       break;
     case "1480894253"://Kylo Ren
@@ -3902,7 +3902,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "5778949819"://Relentless Pursuit
       $ally = new Ally($target, $currentPlayer);
-      if(TraitContains($ally->CardID(), "Bounty Hunter", $currentPlayer)) $ally->Attach("8752877738");//Shield Token
+      if(TraitContains($ally->CardID(), "Bounty Hunter", $currentPlayer)) $ally->Attach("8752877738", $currentPlayer);//Shield Token
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:maxCost=" . (CardCost($ally->CardID())));
       AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to capture");
@@ -4189,7 +4189,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "1743599390"://Trandoshan Hunters
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
-      if(SearchCount(SearchAllies($otherPlayer, hasBountyOnly:true)) > 0) $playAlly->Attach("2007868442");//Experience token
+      if(SearchCount(SearchAllies($otherPlayer, hasBountyOnly:true)) > 0) $playAlly->Attach("2007868442", $currentPlayer);//Experience token
       break;
     case "1141018768"://Commission
       WriteLog("This is a partially manual card. Enforce the type restriction manually.");
@@ -4246,7 +4246,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "6117103324"://Jetpack
       $ally = new Ally($target, $currentPlayer);
       $ally->AddEffect("6117103324");
-      $ally->Attach("8752877738");//Shield Token
+      $ally->Attach("8752877738", $currentPlayer);//Shield Token
       break;
     case "1386874723"://Omega (Part of the Squad)
       if($from != "PLAY") {

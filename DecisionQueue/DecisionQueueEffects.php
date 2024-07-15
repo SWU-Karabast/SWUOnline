@@ -317,9 +317,9 @@ function SpecificCardLogic($player, $card, $lastResult)
       $upgradesReturned = [];
       $owner = MZPlayerID($player, $lastResult);
       $ally = new Ally($lastResult, $owner);
-      $upgrades = $ally->GetUpgrades();
-      for($i=0; $i<count($upgrades); ++$i) {
-        if(!IsToken($upgrades[$i])) AddHand($owner, $upgrades[$i]);
+      $upgrades = $ally->GetUpgrades(true);
+      for($i=0; $i<count($upgrades); $i+=2) {
+        if(!IsToken($upgrades[$i])) AddHand($upgrades[$i+2], $upgrades[$i]);
         $ally->DealDamage(CardHP($upgrades[$i]));
         $upgradesReturned[] = $upgrades[$i];
       }
@@ -358,7 +358,7 @@ function SpecificCardLogic($player, $card, $lastResult)
       }
       for($i=0; $i<count($lastResult); ++$i) {
         $ally = new Ally("MYALLY-" . $lastResult[$i], $player);
-        $ally->Attach("2007868442");//Experience token
+        $ally->Attach("2007868442", $player);//Experience token
       }
       return $lastResult;
     case "LTCHILDSEN":
@@ -369,7 +369,7 @@ function SpecificCardLogic($player, $card, $lastResult)
       $reveal = "";
       for($i=0; $i<count($lastResult); ++$i) {
         $ally = new Ally("MYALLY-" . LastAllyIndex($player), $player);
-        $ally->Attach("2007868442");//Experience token
+        $ally->Attach("2007868442", $player);//Experience token
         $reveal .= $hand[$lastResult[$i]] . ",";
       }
       $reveal = rtrim($reveal, ",");
@@ -378,13 +378,13 @@ function SpecificCardLogic($player, $card, $lastResult)
     case "MULTIGIVEEXPERIENCE":
       for($i=0; $i<count($lastResult); ++$i) {
         $ally = new Ally("MYALLY-" . $lastResult[$i], $player);
-        $ally->Attach("2007868442");//Experience token
+        $ally->Attach("2007868442", $player);//Experience token
       }
       return $lastResult;
     case "MULTIGIVESHIELD":
       for($i=0; $i<count($lastResult); ++$i) {
         $ally = new Ally("MYALLY-" . $lastResult[$i], $player);
-        $ally->Attach("8752877738");//Shield Token
+        $ally->Attach("8752877738", $player);//Shield Token
       }
       return $lastResult;
     case "IHADNOCHOICE":
@@ -414,7 +414,7 @@ function SpecificCardLogic($player, $card, $lastResult)
       if($target == "PASS") {
         $allies = &GetAllies($player);
         $ally = new Ally("MYALLY-" . count($allies) - AllyPieces(), $player);
-        $ally->Attach("8752877738");//Shield Token
+        $ally->Attach("8752877738", $player);//Shield Token
       } else {
         $owner = MZPlayerID($player, $target);
         $ally = new Ally($target, $owner);
@@ -447,8 +447,8 @@ function SpecificCardLogic($player, $card, $lastResult)
       if($ally->HasUpgrade("8752877738"))//Shield token
       {
         $ally->DefeatUpgrade("8752877738");//Shield token
-        $ally->Attach("2007868442");//Experience token
-        $ally->Attach("2007868442");//Experience token
+        $ally->Attach("2007868442", $player);//Experience token
+        $ally->Attach("2007868442", $player);//Experience token
       }
       return $lastResult;
     case "DOCTORAPHRA":
