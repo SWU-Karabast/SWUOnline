@@ -419,7 +419,7 @@ function HasAmbush($cardID, $player, $index, $from)
     case "8862896760"://Maul
     case "2143627819"://The Marauder
     case "2121724481"://Cloud-Rider
-    case "8107876051"://Enfy's Nest
+    case "8107876051"://Enfys Nest
     case "6097248635"://4-LOM
     case "9483244696"://Weequay Pirate Gang
     case "1086021299"://Arquitens Assault Cruiser
