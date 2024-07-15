@@ -2946,7 +2946,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $ally = new Ally($target, $currentPlayer);
       $ally->Attach("2007868442");//Experience token
       $ally->Attach("2007868442");//Experience token
-      if(SearchCount(SearchAllies($currentPlayer, trait: "Force")) > 0) {
+      if(SearchCount(SearchAllies($currentPlayer, trait:"Force")) > 0) {
         $ally->Attach("8752877738");//Shield Token
       }
       if(!$ally->IsExhausted()) {
