@@ -421,15 +421,15 @@ class Ally {
 
   function RescueCaptive($captiveID, $newController=-1) {
     $ownerId = $this->RemoveSubcard($captiveID);
-    if($ownerId!=-1) {
-      if($newController==-1) $newController = $ownerId;
-      PlayAlly($captiveID, $newController, from: "CAPTIVE", owner: $ownerId);
+    if($ownerId != -1) {
+      if($newController == -1) $newController = $ownerId;
+      PlayAlly($captiveID, $newController, from:"CAPTIVE", owner:$ownerId);
     }
   }
 
   function DiscardCaptive($captiveID) {
     $ownerId = $this->RemoveSubcard($captiveID);
-    if($ownerId!=-1) {
+    if($ownerId != -1) {
       AddGraveyard($captiveID, $ownerId, "CAPTIVE");
       return true;
     }
