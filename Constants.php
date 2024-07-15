@@ -195,6 +195,12 @@ function EventPieces()
   return 2;
 }
 
+//0 - cardId
+//1 - ownerId
+function SubcardPieces(){
+  return 2;
+}
+
 $SHMOP_CURRENTPLAYER = 9;
 $SHMOP_ISREPLAY = 10;//0 = not replay, 1 = replay
 

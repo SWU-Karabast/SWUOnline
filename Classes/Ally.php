@@ -128,7 +128,7 @@ class Ally {
     if($this->index == -1 || $amount <= 0) return false;
     if(!$fromCombat && $this->CardID() == "1810342362") return;//Lurking TIE Phantom
     $subcards = $this->GetSubcards();
-    for($i=0; $i<count($subcards); $i+=2) {
+    for($i=0; $i<count($subcards); $i+=SubcardPieces()) {
       if($subcards[$i] == "8752877738") {
         //Shield Token
         unset($subcards[$i+1]);
@@ -312,7 +312,7 @@ class Ally {
   function RemoveSubcard($subcardID) {
     if($this->index == -1) return false;
     $subcards = $this->GetSubcards();
-    for($i=0; $i<count($subcards); $i+=2) {
+    for($i=0; $i<count($subcards); $i+=SubcardPieces()) {
       if($subcards[$i] == $subcardID) {
         $ownerId = $subcards[$i+1];
         unset($subcards[$i+1]);
@@ -347,7 +347,7 @@ class Ally {
     if($this->allies[$this->index + 4] == "-") return [];
     $subcards = $this->GetSubcards();
     $upgrades = [];
-    for($i=0; $i<count($subcards); $i+=2) {
+    for($i=0; $i<count($subcards); $i+=SubcardPieces()) {
       if(DefinedTypesContains($subcards[$i], "Upgrade", $this->PlayerID()) || DefinedTypesContains($subcards[$i], "Token Upgrade", $this->PlayerID())) {
         if($withOwnerData) array_push($upgrades, $subcards[$i], $subcards[$i+1]);
         else $upgrades[] = $subcards[$i];
@@ -360,7 +360,7 @@ class Ally {
     if($this->allies[$this->index + 4] == "-") return [];
     $subcards = $this->GetSubcards();
     $capturedUnits = [];
-    for($i=0; $i<count($subcards); $i+=2) {
+    for($i=0; $i<count($subcards); $i+=SubcardPieces()) {
       if(DefinedTypesContains($subcards[$i], "Unit", $this->PlayerID())) {
         if($withOwnerData) array_push($capturedUnits, $subcards[$i], $subcards[$i+1]);
         else $capturedUnits[] = $subcards[$i];
@@ -402,7 +402,7 @@ class Ally {
   function HasUpgrade($upgradeID) {
     if($this->index == -1) return false;
     $subcards = $this->GetSubcards();
-    for($i=0; $i<count($subcards); $i+=2) {
+    for($i=0; $i<count($subcards); $i+=SubcardPieces()) {
       if($subcards[$i] == $upgradeID) {
         return true;
       }

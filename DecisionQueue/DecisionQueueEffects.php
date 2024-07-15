@@ -318,7 +318,7 @@ function SpecificCardLogic($player, $card, $lastResult)
       $owner = MZPlayerID($player, $lastResult);
       $ally = new Ally($lastResult, $owner);
       $upgrades = $ally->GetUpgrades(true);
-      for($i=0; $i<count($upgrades); $i+=2) {
+      for($i=0; $i<count($upgrades); $i+=SubcardPieces()) {
         if(!IsToken($upgrades[$i])) AddHand($upgrades[$i+1], $upgrades[$i]);
         $upgradesReturned[] = $upgrades[$i];
       }

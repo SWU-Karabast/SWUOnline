@@ -388,7 +388,7 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
 
   // Subcards style
   if (isset($opts['subcards']) && count($opts['subcards']) > 0) {
-    for ($i = 0; $i < count($opts['subcards']); $i+=2) {
+    for ($i = 0; $i < count($opts['subcards']); $i+=SubcardPieces()) {
       // Don't render shield subcard
       if ($opts['subcards'][$i] != "8752877738") {
         $rv .= "<div style='

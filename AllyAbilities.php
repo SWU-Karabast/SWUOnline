@@ -154,7 +154,7 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
   AllyLeavesPlayAbility($player, $index);
   $ally = new Ally("MYALLY-" . $index, $player);
   $upgrades = $ally->GetUpgrades(true);
-  for($i=0; $i<count($upgrades); $i+=2) {
+  for($i=0; $i<count($upgrades); $i+=SubcardPieces()) {
     if($upgrades[$i] == "8752877738" || $upgrades[$i] == "2007868442") continue;
     if($upgrades[$i] == "6911505367") $discardPileModifier = "TTFREE";//Second Chance
     AddGraveyard($upgrades[$i], $upgrades[$i+1], "PLAY");
@@ -168,7 +168,7 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
   }
   for($j = $index + AllyPieces() - 1; $j >= $index; --$j) unset($allies[$j]);
   $allies = array_values($allies);
-  for($i=0; $i<count($captives); $i+=2) {
+  for($i=0; $i<count($captives); $i+=SubcardPieces()) {
     PlayAlly($captives[$i], $captives[$i+1], from:"CAPTIVE");
   }
   if(AllyHasStaticHealthModifier($cardID)) {
