@@ -946,7 +946,7 @@ function AllyPlayCardAbility($cardID, $player="", $from="-", $abilityID="-", $un
     case "9850906885"://Maz Kanata
       if(DefinedTypesContains($cardID, "Unit", $player)) {
         $me = new Ally("MYALLY-" . $index, $player);
-        $me->Attach("2007868442", $player);//Experience token
+        $me->Attach("2007868442");//Experience token
       }
       break;
     case "5907868016"://Fighters for Freedom
@@ -1111,7 +1111,7 @@ function SpecificAllyAttackAbilities($attackID)
         for($j=0; $j<count($allies); $j+=AllyPieces()) {
           if($j == $attackerAlly->Index()) continue;
           $ally = new Ally("MYALLY-" . $j, $mainPlayer);
-          if(TraitContains($ally->CardID(), "Mandalorian", $mainPlayer)) $ally->Attach("2007868442", $mainPlayer);//Experience token
+          if(TraitContains($ally->CardID(), "Mandalorian", $mainPlayer)) $ally->Attach("2007868442");//Experience token
         }
         break;
       case "1938453783"://Armed to the Teeth

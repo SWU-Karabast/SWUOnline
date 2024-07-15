@@ -171,7 +171,7 @@ class Ally {
     switch($this->CardID())
     {
       case "4843225228"://Phase-III Dark Trooper
-        if($fromCombat) $this->Attach("2007868442", $this->playerID);//Experience token
+        if($fromCombat) $this->Attach("2007868442");//Experience token
         break;
       default: break;
     }
@@ -304,9 +304,10 @@ class Ally {
     $this->allies[$this->index+1] = 1;
   }
 
-  function AddSubcard($cardID, $ownerId) {
-    if($this->allies[$this->index + 4] == "-") $this->allies[$this->index + 4] = $cardID.",".$ownerId;
-    else $this->allies[$this->index + 4] = $this->allies[$this->index + 4] . "," . $cardID.",".$ownerId;
+  function AddSubcard($cardID, $ownerID = null) {
+    $ownerID = $ownerID ?? $this->playerID;
+    if($this->allies[$this->index+4] == "-") $this->allies[$this->index+4] = $cardID . "," . $ownerID;
+    else $this->allies[$this->index+4] = $this->allies[$this->index+4] . "," . $cardID . "," . $ownerID;
   }
   
   function RemoveSubcard($subcardID) {
@@ -329,9 +330,8 @@ class Ally {
     AddCurrentTurnEffect($effectID, $this->PlayerID(), uniqueID:$this->UniqueID());
   }
 
-  function Attach($cardID, $ownerID) {
-    if($this->allies[$this->index + 4] == "-") $this->allies[$this->index + 4] = $cardID.",".$ownerID;
-    else $this->allies[$this->index + 4] = $this->allies[$this->index + 4] . "," . $cardID.",".$ownerID;
+  function Attach($cardID, $ownerID = null) {
+    $this->AddSubcard($cardID, $ownerID);
     if (CardIsUnique($cardID)) {
       $this->CheckUniqueUpgrade($cardID);
     }

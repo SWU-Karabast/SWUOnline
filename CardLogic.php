@@ -584,7 +584,7 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
     case "SHIELDED":
       $index = SearchAlliesForUniqueID($uniqueID, $player);
       $ally = new Ally("MYALLY-" . $index, $player);
-      $ally->Attach("8752877738", $player);//Shield Token
+      $ally->Attach("8752877738");//Shield Token
       break;
     case "PLAYALLY":
       PlayAlly($target, $player, from:"CAPTIVE");

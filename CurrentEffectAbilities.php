@@ -728,7 +728,7 @@ function CurrentEffectAllyEntersPlay($player, $index)
         case "7642980906"://Stolen Landspeeder
           $remove = true;
           $ally = new Ally("MYALLY-" . $index, $player);
-          $ally->Attach("2007868442", $player);//Experience token
+          $ally->Attach("2007868442");//Experience token
           break;
         default:
           break;

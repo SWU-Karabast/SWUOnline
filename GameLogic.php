@@ -389,11 +389,11 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           return $lastResult;
         case "ADDEXPERIENCE":
           $ally = new Ally($lastResult);
-          $ally->Attach("2007868442", $player);//Experience token
+          $ally->Attach("2007868442");//Experience token
           break;
         case "ADDSHIELD":
           $ally = new Ally($lastResult);
-          $ally->Attach("8752877738", $player);//Shield Token
+          $ally->Attach("8752877738");//Shield Token
           break;
         case "ADDEFFECT":
           $ally = new Ally($lastResult);
