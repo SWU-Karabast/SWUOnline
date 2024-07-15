@@ -819,7 +819,7 @@ function AllyAttackAbilities($attackID)
       case "20f21b4948"://Jyn Erso
         AddCurrentTurnEffect("20f21b4948", $defPlayer);
         break;
-      case "8107876051"://Enfy's Nest
+      case "8107876051"://Enfys Nest
         if($combatChainState[$CCS_IsAmbush] == 1) {
           $target = new Ally(GetAttackTarget(), $defPlayer);
           AddCurrentTurnEffect("8107876051", $defPlayer, "PLAY", $target->UniqueID());
