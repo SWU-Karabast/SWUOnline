@@ -485,9 +485,10 @@ function SpecificCardLogic($player, $card, $lastResult)
       }
       return 1;
     case "SURVIVORS'GAUNTLET":
-      $prefix = substr($dqVars[1], 0, 2) == "MY" ? "MY" : "THEIR";
+      $prefix = str_starts_with($dqVars[1], "MY") ? "MY" : "THEIR";
       AddDecisionQueue("MULTIZONEINDICES", $player, $prefix . "ALLY", 1);
       AddDecisionQueue("MZFILTER", $player, "canAttach={0}", 1);
+      AddDecisionQueue("MZFILTER", $player, "index=" . $dqVars[1], 1);
       AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to move <0> to.", 1);
       AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
       AddDecisionQueue("MZOP", $player, "MOVEUPGRADE", 1);
