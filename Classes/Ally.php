@@ -304,9 +304,9 @@ class Ally {
     $this->allies[$this->index+1] = 1;
   }
 
-  function AddSubcard($cardID) {
-    if($this->allies[$this->index + 4] == "-") $this->allies[$this->index + 4] = $cardID;
-    else $this->allies[$this->index + 4] = $this->allies[$this->index + 4] . "," . $cardID;
+  function AddSubcard($cardID, $ownerId) {
+    if($this->allies[$this->index + 4] == "-") $this->allies[$this->index + 4] = $cardID.",".$ownerId;
+    else $this->allies[$this->index + 4] = $this->allies[$this->index + 4] . "," . $cardID.",".$ownerId;
   }
   
   function RemoveSubcard($subcardID) {
@@ -314,7 +314,7 @@ class Ally {
     $subcards = $this->GetSubcards();
     for($i=0; $i<count($subcards); $i+=2) {
       if($subcards[$i] == $subcardID) {
-        $ownerId=$subcards[$i+1];
+        $ownerId = $subcards[$i+1];
         unset($subcards[$i+1]);
         unset($subcards[$i]);
         $subcards = array_values($subcards);
@@ -330,7 +330,7 @@ class Ally {
   }
 
   function Attach($cardID, $ownerID) {
-    if($this->allies[$this->index + 4] == "-") $this->allies[$this->index + 4] = $cardID;
+    if($this->allies[$this->index + 4] == "-") $this->allies[$this->index + 4] = $cardID.",".$ownerID;
     else $this->allies[$this->index + 4] = $this->allies[$this->index + 4] . "," . $cardID.",".$ownerID;
     if (CardIsUnique($cardID)) {
       $this->CheckUniqueUpgrade($cardID);
@@ -387,12 +387,14 @@ class Ally {
     }
 
     if($firstCopy != "" && $firstCopy == $secondCopy && $this->index == $firstCopy) {
-      $this->DefeatUpgrade($cardID);
+      $ownerId = $this->DefeatUpgrade($cardID);
+      AddGraveyard($cardID, $ownerId, "PLAY");
       WriteLog("Existing copy of upgrade defeated due to unique rule.");
     } elseif ($firstCopy != "" && $secondCopy != "" && $firstCopy != $secondCopy) {
       $otherIndex = $this->index == $firstCopy ? $secondCopy : $firstCopy;
       $otherAlly = new Ally("MYALLY-" . $otherIndex);
-      $otherAlly->DefeatUpgrade($cardID);
+      $ownerId = $otherAlly->DefeatUpgrade($cardID);
+      AddGraveyard($cardID, $ownerId, "PLAY");
       WriteLog("Existing copy of upgrade defeated due to unique rule.");
     }
   }

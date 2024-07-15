@@ -452,13 +452,14 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             WriteLog(CardLink($cardID, $cardID) . " resisted capture.");
             return $cardID;
           }
-          CollectBounties(str_starts_with($lastResult, "MY") ? $player : ($player == 1 ? 2 : 1), explode("-", $lastResult)[1]);
+          $otherPlayer = ($player == 1 ? 2 : 1);
+          CollectBounties(str_starts_with($lastResult, "MY") ? $player : $otherPlayer, explode("-", $lastResult)[1]);
           MZRemove($player, $lastResult);
           $uniqueID = $parameterArr[1];
           $index = SearchAlliesForUniqueID($uniqueID, $player);
           if($index >= 0) {
             $ally = new Ally("MYALLY-" . $index, $player);
-            $ally->AddSubcard($cardID);
+            $ally->AddSubcard($cardID, $otherPlayer);
           }
           return $cardID;
         case "WRITECHOICE":
@@ -506,6 +507,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $allyPlayer = $mzArr[0] == "MYALLY" ? $player : ($player == 1 ? 2 : 1);
           $ally = new Ally($dqVars[0], $allyPlayer);
           $ownerId = $ally->DefeatUpgrade($upgradeID);
+          if(!IsToken($upgradeID)) AddGraveyard($upgradeID, $ownerId, "PLAY");
           if($ownerId != -1) UpgradeLeftPlay($upgradeID, $allyPlayer, $mzArr[1]);
           return $lastResult;
         case "BOUNCEUPGRADE":
