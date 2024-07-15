@@ -437,12 +437,16 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           return $uniqueID;
         case "CAPTURE":
           $cardID = GetMZCard($player, $lastResult);
+          $otherPlayer = ($player == 1 ? 2 : 1);
+          $targetPlayer = str_starts_with($lastResult, "MY") ? $player : $otherPlayer;
+          $captured = new Ally($lastResult, $targetPlayer);
+          $ownerId = $captured->Owner();
           if($cardID == "1810342362") { //Lurking TIE Phantom
             WriteLog(CardLink($cardID, $cardID) . " avoided capture.");
             return $cardID;
           }
           if($cardID == "3417125055") { //IG-11
-            DestroyAlly(($player == 1 ? 2 : 1), explode("-", $lastResult)[1]);
+            DestroyAlly($otherPlayer, explode("-", $lastResult)[1]);
             $allies = &GetAllies($player);
             for($i=count($allies)-AllyPieces(); $i>=0; $i-=AllyPieces())
             {
@@ -452,14 +456,14 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             WriteLog(CardLink($cardID, $cardID) . " resisted capture.");
             return $cardID;
           }
-          $otherPlayer = ($player == 1 ? 2 : 1);
-          CollectBounties(str_starts_with($lastResult, "MY") ? $player : $otherPlayer, explode("-", $lastResult)[1]);
+          $capturedIndex = explode("-", $lastResult)[1];
+          CollectBounties($targetPlayer, $capturedIndex);
           MZRemove($player, $lastResult);
           $uniqueID = $parameterArr[1];
           $index = SearchAlliesForUniqueID($uniqueID, $player);
           if($index >= 0) {
             $ally = new Ally("MYALLY-" . $index, $player);
-            $ally->AddSubcard($cardID, $otherPlayer);
+            $ally->AddSubcard($cardID, $ownerId);
           }
           return $cardID;
         case "WRITECHOICE":

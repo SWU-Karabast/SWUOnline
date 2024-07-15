@@ -1,6 +1,6 @@
 <?php
 
-function PlayAlly($cardID, $player, $subCards = "-", $from="-")
+function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null)
 {
   $allies = &GetAllies($player);
   if(count($allies) < AllyPieces()) $allies = [];
@@ -15,7 +15,7 @@ function PlayAlly($cardID, $player, $subCards = "-", $from="-")
   $allies[] = 1; //Ability/effect uses
   $allies[] = 0; //Round health modifier
   $allies[] = 0; //Times attacked
-  $allies[] = $player; //Owner
+  $allies[] = $owner ?? $player; //Owner
   $allies[] = 0; //Turns in play
   $index = count($allies) - AllyPieces();
   CurrentEffectAllyEntersPlay($player, $index);
