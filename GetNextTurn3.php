@@ -770,15 +770,6 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     $playerInputPopup->popup = CreatePopupAPI("YESNO", [], 0, 1, $caption, 1, "");
   }
 
-  if ($turn[0] == "PDECK" && $currentPlayer == $playerID) {
-    $playerInputPopup->active = true;
-    $pitchingCards = array();
-    for ($i = 0; $i < count($myPitch); $i += 1) {
-      $pitchingCards[] = JSONRenderedCard($myPitch[$i], action: 6, actionDataOverride: $myPitch[$i]);
-    }
-    $playerInputPopup->popup = CreatePopupAPI("PITCH", [], 0, 1, "Choose a card from your Pitch Zone to add to the bottom of your deck", 1, cardsArray: $pitchingCards);
-  }
-
   if ($turn[0] == "DYNPITCH" && $turn[1] == $playerID) {
     $playerInputPopup->active = true;
     $options = explode(",", $turn[2]);

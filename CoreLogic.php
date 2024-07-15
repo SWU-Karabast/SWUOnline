@@ -1441,7 +1441,6 @@ function NumEquipBlock()
     switch($phase)
     {
       case "P": return 0;
-      case "PDECK": return 0;
       case "CHOOSEDECK": return 0;
       case "HANDTOPBOTTOM": return 0;
       case "CHOOSECOMBATCHAIN": return 0;
@@ -1466,28 +1465,6 @@ function NumEquipBlock()
       case "CHOOSEMYSOUL": return 0;
       case "OVER": return 0;
       default: return 1;
-    }
-  }
-
-  //Returns true if done for that player
-  function EndTurnPitchHandling($player)
-  {
-    global $currentPlayer, $turn;
-    $pitch = &GetPitch($player);
-    if(count($pitch) == 0)
-    {
-      return true;
-    }
-    else if(count($pitch) == 1)
-    {
-      PitchDeck($player, 0);
-      return true;
-    }
-    else
-    {
-      $currentPlayer = $player;
-      $turn[0] = "PDECK";
-      return false;
     }
   }
 
