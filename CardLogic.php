@@ -611,6 +611,21 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       AddDecisionQueue("MZOP", $player, "PLAYCARD", 1);
       AddDecisionQueue("REMOVECURRENTEFFECT", $player, "7642980906");
       break;
+    case "7270736993"://Unrefusable Offer
+      //There's in theory a minor bug with this implementation: if there's a second copy of the bountied unit in the discard
+      //it can be played even if the original unit is somehow removed from the discard before this trigger resolves.
+      //I can't think of a way to prevent this without adding functionality to track a specific card between zones.
+      global $CS_AfterPlayedBy;
+      AddDecisionQueue("YESNO", $player, "if you want to play " . CardLink($target, $target) . " for free off of " . CardLink("7270736993", "7270736993"));
+      AddDecisionQueue("NOPASS", $player, "-");
+      AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRDISCARD:cardID=" . $target . ";maxCount=1", 1);
+      AddDecisionQueue("SETDQVAR", $player, "0", 1);
+      AddDecisionQueue("PASSPARAMETER", $player, "7270736993", 1);
+      AddDecisionQueue("SETCLASSSTATE", $player, $CS_AfterPlayedBy, 1);
+      AddDecisionQueue("ADDCURRENTEFFECT", $player, "7270736993", 1);
+      AddDecisionQueue("PASSPARAMETER", $player, "{0}", 1);
+      AddDecisionQueue("MZOP", $player, "PLAYCARD", 1);
+      break;
     default: break;
   }
 }

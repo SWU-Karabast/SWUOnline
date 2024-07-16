@@ -156,7 +156,9 @@ function MZAddZone($player, $parameter, $lastResult)
 function MZPlayCard($player, $mzIndex) {
   global $CS_CharacterIndex, $CS_PlayIndex;
   $mzArr = explode("-", $mzIndex);
-  $zone = &GetMZZone($player, $mzArr[0]);
+  //GetMZZone doesn't respect MY/THEIR differences, and changing it to do so messes up attacking, so I'm adding this check here for now.
+  if(substr($mzArr[0], 0, 5) == "THEIR") $zone = &GetMZZone($player == 1 ? 2 : 1, $mzArr[0]);
+  else $zone = &GetMZZone($player, $mzArr[0]);
   $cardID = $zone[$mzArr[1]];
   $from = preg_replace('/^(MY|THEIR)/', '', $mzArr[0]);
   MZRemove($player, $mzIndex);
