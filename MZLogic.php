@@ -6,11 +6,11 @@ function MZAttach($player, $mzIndex, $cardID) {
   switch($mzArr[0]) {
     case "MYALLY":
       $ally = new Ally($mzIndex, $player);
-      $ally->Attach($cardID);
+      $ally->Attach($cardID, $player);
       break;
     case "THEIRALLY":
       $ally = new Ally($mzIndex, $otherPlayer);
-      $ally->Attach($cardID);
+      $ally->Attach($cardID, $player);
       break;
     default: break;
   }
