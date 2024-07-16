@@ -18,6 +18,10 @@ function EffectHitEffect($cardID)
     case "0802973415"://Outflank
       AddCurrentTurnEffect("0802973415-1", $mainPlayer);
       break;
+    case "5896817672-1"://Headhunting
+    case "5896817672-2":
+      AddCurrentTurnEffect("5896817672" . (substr($cardID, -2, 2) == "-1" ? "-2" : "-3"), $mainPlayer);
+      break;
     case "6514927936-1"://Leia Organa
       AddCurrentTurnEffectFromCombat("6514927936-2", $mainPlayer);
       break;
@@ -34,18 +38,38 @@ function FinalizeChainLinkEffects()
   for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnPieces()) {
     switch($currentTurnEffects[$i]) {
       case "8988732248-2"://Rebel Assault
+        PrependDecisionQueue("REMOVECURRENTEFFECT", $mainPlayer, $currentTurnEffects[$i]);
         PrependDecisionQueue("SWAPTURN", $mainPlayer, "-");
         PrependDecisionQueue("ELSE", $mainPlayer, "-");
         PrependDecisionQueue("MZOP", $mainPlayer, "ATTACK", 1);
-        PrependDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        PrependDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
         PrependDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to attack with");
         PrependDecisionQueue("MZFILTER", $mainPlayer, "status=1");
         PrependDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:trait=Rebel");
         return true;
       case "0802973415-1"://Outflank
+        PrependDecisionQueue("REMOVECURRENTEFFECT", $mainPlayer, $currentTurnEffects[$i]);
         PrependDecisionQueue("SWAPTURN", $mainPlayer, "-");
         PrependDecisionQueue("ELSE", $mainPlayer, "-");
         PrependDecisionQueue("MZOP", $mainPlayer, "ATTACK", 1);
+        PrependDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        PrependDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to attack with");
+        PrependDecisionQueue("MZFILTER", $mainPlayer, "status=1");
+        PrependDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
+        return true;
+      case "5896817672-2"://Headhunting
+      case "5896817672-3":
+        global $CCS_CantAttackBase;
+        PrependDecisionQueue("REMOVECURRENTEFFECT", $mainPlayer, $currentTurnEffects[$i]);
+        PrependDecisionQueue("MZOP", $mainPlayer, "ATTACK", 1);
+        PrependDecisionQueue("PASSPARAMETER", $mainPlayer, "{0}");
+        PrependDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "5896817672", 1);
+        PrependDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
+        PrependDecisionQueue("MZALLCARDTRAITORPASS", $mainPlayer, "Bounty Hunter", 1);
+        PrependDecisionQueue("PASSPARAMETER", $mainPlayer, "{0}", 1);
+        PrependDecisionQueue("SETCOMBATCHAINSTATE", $mainPlayer, $CCS_CantAttackBase, 1);
+        PrependDecisionQueue("PASSPARAMETER", $mainPlayer, 1, 1);
+        PrependDecisionQueue("SETDQVAR", $mainPlayer, "0");
         PrependDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
         PrependDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to attack with");
         PrependDecisionQueue("MZFILTER", $mainPlayer, "status=1");
@@ -116,6 +140,7 @@ function EffectAttackModifier($cardID, $playerID="")
     case "9210902604"://Precision Fire
       $attacker = new Ally(AttackerMZID($mainPlayer), $mainPlayer);
       return TraitContains($attacker->CardID(), "Trooper", $mainPlayer) ? 2 : 0;
+    case "5896817672": if(!$subparam) return 2; else return 0;//Headhunting
     case "8297630396": return 1;//Shoot First
     case "5464125379": return -2;//Strafing Gunship
     case "8495694166": return -2;//Jedi Lightsaber
@@ -131,7 +156,7 @@ function EffectAttackModifier($cardID, $playerID="")
     case "7171636330": return -4;//Chain Code Collector
     case "2526288781": return 1;//Bossk
     case "1312599620": return -3;//Smuggler's Starfighter
-    case "8107876051": return -3;//Enfy's Nest
+    case "8107876051": return -3;//Enfys Nest
     case "9334480612": return 1;//Boba Fett Green Leader
     case "6962053552": return 2;//Desperate Attack
     case "4085341914": return 4;//Heroic Resolve
@@ -629,10 +654,11 @@ function IsCombatEffectActive($cardID)
     case "2503039837": return true;//Moff Gideon Leader
     case "4721657243": return true;//Kihraxz Heavy Fighter
     case "7171636330": return true;//Chain Code Collector
-    case "8107876051": return true;//Enfy's Nest
+    case "8107876051": return true;//Enfys Nest
     case "7578472075": return true;//Let the Wookie Win
     case "4663781580": return true;//Swoop Down
     case "4085341914": return true;//Heroic Resolve
+    case "5896817672": return true;//Headhunting
     default: return false;
   }
 }
