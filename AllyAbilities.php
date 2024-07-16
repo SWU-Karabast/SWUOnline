@@ -639,6 +639,11 @@ function CollectBounty($player, $index, $cardID, $reportMode=false, $bountyUnitO
       if($reportMode) break;
       if($ally->Owner() == $opponent) AddLayer("TRIGGER", $opponent, "7642980906");
       break;
+    case "7270736993"://Unrefusable Offer
+      ++$numBounties;
+      if($reportMode) break;
+      AddLayer("TRIGGER", $opponent, "7270736993", $bountyUnit);//Passing the cardID of the bountied unit as $target in order to search for it from discard
+      break;
     case "9642863632"://Bounty Hunter's Quarry
       ++$numBounties;
       if($reportMode) break;
