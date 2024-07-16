@@ -68,11 +68,11 @@ function CompletesAttackEffect($cardID) {
   }
 }
 
-function AttackModifier($cardID, $player, $index)
+function AttackModifier($cardID, $player, $index, $skipRaid = false)
 {
   global $mainPlayer, $defPlayer, $initiativePlayer, $combatChain, $combatChainState, $CS_NumLeftPlay;
   $modifier = 0;
-  if($player == $mainPlayer) {
+  if($player == $mainPlayer && !$skipRaid) {
     //Raid is only for attackers
     $attacker = AttackerMZID($mainPlayer);
     $mzArr = explode("-", $attacker);

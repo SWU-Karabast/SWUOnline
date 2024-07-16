@@ -104,7 +104,7 @@ function SearchInner(&$array, $player, $zone, $count, $type, $definedType, $maxC
         if($maxAttack > -1) {
           if($zone == "ALLY") {
             $ally = new Ally("MYALLY-" . $i, $player);
-            if($ally->CurrentPower() > $maxAttack) continue;
+            if($ally->CurrentPower(skipRaid:true) > $maxAttack) continue;
           } elseif(AttackValue($cardID) > $maxAttack) continue;
         }
         if($maxHealth > -1) {
@@ -116,7 +116,7 @@ function SearchInner(&$array, $player, $zone, $count, $type, $definedType, $maxC
         if($minAttack > -1) {
           if($zone == "ALLY") {
             $ally = new Ally("MYALLY-" . $i, $player);
-            if($ally->CurrentPower() < $minAttack) continue;
+            if($ally->CurrentPower(skipRaid:true) < $minAttack) continue;
           } elseif(AttackValue($cardID) < $minAttack) continue;
         }
         if($hasBountyOnly && $zone == "ALLY") {

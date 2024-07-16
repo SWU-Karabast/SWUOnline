@@ -192,10 +192,10 @@ class Ally {
     ++$this->allies[$this->index+10];
   }
 
-  function CurrentPower() {
+  function CurrentPower($skipRaid = false) {
     global $currentTurnEffects;
     $power = AttackValue($this->CardID()) + $this->allies[$this->index+7];
-    $power += AttackModifier($this->CardID(), $this->playerID, $this->index);
+    $power += AttackModifier($this->CardID(), $this->playerID, $this->index, $skipRaid);
     $upgrades = $this->GetUpgrades();
     for($i=0; $i<count($upgrades); ++$i) if($upgrades[$i] != "-") $power += AttackValue($upgrades[$i]);
     if(HasGrit($this->CardID(), $this->playerID, $this->index)) {
