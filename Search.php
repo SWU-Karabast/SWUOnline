@@ -769,13 +769,15 @@ function GetMZCardLink($player, $MZ)
 //Each search is delimited by &, which means a set UNION
 //Each search is the format <zone>:<condition 1>;<condition 2>,...
 //Each condition is format <search parameter name>=<parameter value>
-//cardID=, sameName=, and sameTitle= cannot be combined with other conditions.
+//cardID=, sameName=, and sameTitle= cannot be combined with other conditions, except maxCount=.
 //Example: AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND:maxAttack=3;type=AA");
 function SearchMultizone($player, $searches)
 {
   $unionSearches = explode("&", $searches);
   $rv = "";
+  $opponent = $player == 1 ? 2 : 1;
   for($i = 0; $i < count($unionSearches); ++$i) {
+    $maxCount = -1;
     $type = "";
     $definedType = "";
     $maxCost = -1;
@@ -807,6 +809,9 @@ function SearchMultizone($player, $searches)
       for ($j = 0; $j < count($conditions); ++$j) {
         $condition = explode("=", $conditions[$j]);
         switch ($condition[0]) {
+          case "maxCount":
+            $maxCount = $condition[1];
+            break;
           case "type":
             $type = $condition[1];
             break;
@@ -876,6 +881,12 @@ function SearchMultizone($player, $searches)
                 else if(count($cards) == 2) $searchResult = SearchDeckForCard($player, $cards[0], $cards[1]);
                 else if(count($cards) == 3) $searchResult = SearchDeckForCard($player, $cards[0], $cards[1], $cards[2]);
                 else WriteLog("Deck multizone search only supports 3 cards -- report bug.");
+                break;
+              case "THEIRDISCARD":
+                if(count($cards) == 1) $searchResult = SearchDiscardForCard($opponent, $cards[0]);
+                else if(count($cards) == 2) $searchResult = SearchDiscardForCard($opponent, $cards[0], $cards[1]);
+                else if(count($cards) == 3) $searchResult = SearchDiscardForCard($opponent, $cards[0], $cards[1], $cards[2]);
+                else WriteLog("Discard multizone search only supports 3 cards -- report bug.");
                 break;
               case "MYDISCARD":
                 if(count($cards) == 1) $searchResult = SearchDiscardForCard($player, $cards[0]);
@@ -973,6 +984,11 @@ function SearchMultizone($player, $searches)
       }
     }
     $searchResult = SearchMultiZoneFormat($searchResult, $zone);
+    if ($maxCount != -1) {
+      $searchResult = explode(",", $searchResult);
+      $searchResult = array_slice($searchResult, 0, $maxCount);
+      $searchResult = implode(",", $searchResult);
+    }
     $rv = CombineSearches($rv, $searchResult);
   }
   return $rv;

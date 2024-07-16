@@ -283,7 +283,7 @@ function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
           $costModifier -= 1;
           $remove = true;
           break;
-        case "8506660490":
+        case "8506660490"://Darth Vader
           $costModifier -= 99;
           break;
         case "8968669390"://U-Wing Reinforcement
@@ -298,11 +298,12 @@ function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
           $costModifier -= TraitContains($cardID, "Force", $currentPlayer) ? 8 : 6;
           $remove = true;
           break;
+        case "7270736993"://Unrefusable Offer
         case "4717189843"://A New Adventure
           $costModifier -= 99;
           $remove = true;
           break;
-        case "9642863632"://Bounty Hunter Quary
+        case "9642863632"://Bounty Hunter's Quarry
           $costModifier -= 99;
           $remove = true;
           break;
@@ -539,6 +540,7 @@ function CurrentEffectEndTurnAbilities()
     }
     switch($cardID) {
       case "3426168686-2"://Sneak Attack
+      case "7270736993-2"://Unrefusable Offer
         $ally = new Ally("MYALLY-" . SearchAlliesForUniqueID($currentTurnEffects[$i+2], $currentTurnEffects[$i+1]), $currentTurnEffects[$i+1]);
         $ally->Destroy();
         break;
