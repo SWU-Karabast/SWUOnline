@@ -2082,7 +2082,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     $abilityName = GetResolvedAbilityName($cardID, $from);
     if($abilityName == "Heroic Resolve") {
       $ally = new Ally("MYALLY-" . $index, $currentPlayer);
-      $ally->DefeatUpgrade("4085341914");
+      $ownerId = $ally->DefeatUpgrade("4085341914");
+      AddGraveyard("4085341914", $ownerId, "PLAY");
       AddCurrentTurnEffect("4085341914", $currentPlayer, "PLAY", $ally->UniqueID());
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYALLY-" . $index);
       AddDecisionQueue("MZOP", $currentPlayer, "ATTACK");
@@ -2266,7 +2267,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "8981523525"://Moment of Peace
       if($target != "-") {
         $ally = new Ally($target);
-        $ally->Attach("8752877738");//Shield
+        $ally->Attach("8752877738", $currentPlayer);//Shield
       }
       break;
     case "8679831560"://Repair

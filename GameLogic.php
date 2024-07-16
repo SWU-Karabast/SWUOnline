@@ -419,8 +419,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $sourceUnit = new Ally($dqVars[1]);
           $upgradeID = $dqVars[0];
           $targetUnit = new Ally($lastResult);
-          $sourceUnit->RemoveSubcard($upgradeID);
-          $targetUnit->Attach($upgradeID);
+          $upgradeOwner = $sourceUnit->RemoveSubcard($upgradeID);
+          $targetUnit->Attach($upgradeID, $upgradeOwner);
           return $lastResult;
         case "GETCAPTIVES":
           $ally = new Ally($lastResult);
@@ -437,12 +437,16 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           return $uniqueID;
         case "CAPTURE":
           $cardID = GetMZCard($player, $lastResult);
+          $otherPlayer = ($player == 1 ? 2 : 1);
+          $targetPlayer = str_starts_with($lastResult, "MY") ? $player : $otherPlayer;
+          $captured = new Ally($lastResult, $targetPlayer);
+          $ownerId = $captured->Owner();
           if($cardID == "1810342362") { //Lurking TIE Phantom
             WriteLog(CardLink($cardID, $cardID) . " avoided capture.");
             return $cardID;
           }
           if($cardID == "3417125055") { //IG-11
-            DestroyAlly(($player == 1 ? 2 : 1), explode("-", $lastResult)[1]);
+            DestroyAlly($otherPlayer, explode("-", $lastResult)[1]);
             $allies = &GetAllies($player);
             for($i=count($allies)-AllyPieces(); $i>=0; $i-=AllyPieces())
             {
@@ -452,13 +456,14 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             WriteLog(CardLink($cardID, $cardID) . " resisted capture.");
             return $cardID;
           }
-          CollectBounties(str_starts_with($lastResult, "MY") ? $player : ($player == 1 ? 2 : 1), explode("-", $lastResult)[1]);
+          $capturedIndex = explode("-", $lastResult)[1];
+          CollectBounties($targetPlayer, $capturedIndex);
           MZRemove($player, $lastResult);
           $uniqueID = $parameterArr[1];
           $index = SearchAlliesForUniqueID($uniqueID, $player);
           if($index >= 0) {
             $ally = new Ally("MYALLY-" . $index, $player);
-            $ally->AddSubcard($cardID);
+            $ally->AddSubcard($cardID, $ownerId);
           }
           return $cardID;
         case "WRITECHOICE":
@@ -505,17 +510,18 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $mzArr = explode("-", $dqVars[0]);
           $allyPlayer = $mzArr[0] == "MYALLY" ? $player : ($player == 1 ? 2 : 1);
           $ally = new Ally($dqVars[0], $allyPlayer);
-          $destroyed = $ally->DefeatUpgrade($upgradeID);
-          if($destroyed) UpgradeLeftPlay($upgradeID, $allyPlayer, $mzArr[1]);
+          $ownerId = $ally->DefeatUpgrade($upgradeID);
+          if(!IsToken($upgradeID)) AddGraveyard($upgradeID, $ownerId, "PLAY");
+          if($ownerId != -1) UpgradeLeftPlay($upgradeID, $allyPlayer, $mzArr[1]);
           return $lastResult;
         case "BOUNCEUPGRADE":
           $upgradeID = $lastResult;
           $mzArr = explode("-", $dqVars[0]);
           $allyPlayer = $mzArr[0] == "MYALLY" ? $player : ($player == 1 ? 2 : 1);
           $ally = new Ally($dqVars[0], $allyPlayer);
-          $destroyed = $ally->DefeatUpgrade($upgradeID);
-          if(!IsToken($upgradeID)) AddHand($allyPlayer, $upgradeID);
-          UpgradeLeftPlay($upgradeID, $allyPlayer, $mzArr[1]);
+          $ownerId = $ally->DefeatUpgrade($upgradeID);
+          if(!IsToken($upgradeID)) AddHand($ownerId, $upgradeID);
+          if($ownerId != -1) UpgradeLeftPlay($upgradeID, $allyPlayer, $mzArr[1]);
           return $lastResult;
         case "RESCUECAPTIVE":
           $captiveID = $lastResult;

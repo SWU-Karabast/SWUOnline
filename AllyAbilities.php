@@ -1,6 +1,6 @@
 <?php
 
-function PlayAlly($cardID, $player, $subCards = "-", $from="-")
+function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null)
 {
   $allies = &GetAllies($player);
   if(count($allies) < AllyPieces()) $allies = [];
@@ -15,7 +15,7 @@ function PlayAlly($cardID, $player, $subCards = "-", $from="-")
   $allies[] = 1; //Ability/effect uses
   $allies[] = 0; //Round health modifier
   $allies[] = 0; //Times attacked
-  $allies[] = $player; //Owner
+  $allies[] = $owner ?? $player; //Owner
   $allies[] = 0; //Turns in play
   $index = count($allies) - AllyPieces();
   CurrentEffectAllyEntersPlay($player, $index);
@@ -153,13 +153,13 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
   IncrementClassState($player, $CS_NumLeftPlay);
   AllyLeavesPlayAbility($player, $index);
   $ally = new Ally("MYALLY-" . $index, $player);
-  $upgrades = $ally->GetUpgrades();
-  for($i=0; $i<count($upgrades); ++$i) {
+  $upgrades = $ally->GetUpgrades(true);
+  for($i=0; $i<count($upgrades); $i+=SubcardPieces()) {
     if($upgrades[$i] == "8752877738" || $upgrades[$i] == "2007868442") continue;
     if($upgrades[$i] == "6911505367") $discardPileModifier = "TTFREE";//Second Chance
-    AddGraveyard($upgrades[$i], $player, "PLAY");
+    AddGraveyard($upgrades[$i], $upgrades[$i+1], "PLAY");
   }
-  $captives = $ally->GetCaptives();
+  $captives = $ally->GetCaptives(true);
   if(!$skipDestroy) {
     if(DefinedTypesContains($cardID, "Leader", $player)) ;//If it's a leader it doesn't go in the discard
     else if($cardID == "8954587682" && !$ally->LostAbilities()) AddResources($cardID, $player, "PLAY", "DOWN");//Superlaser Technician
@@ -168,8 +168,8 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
   }
   for($j = $index + AllyPieces() - 1; $j >= $index; --$j) unset($allies[$j]);
   $allies = array_values($allies);
-  for($i=0; $i<count($captives); ++$i) {
-    PlayAlly($captives[$i], $otherPlayer, from:"CAPTIVE");
+  for($i=0; $i<count($captives); $i+=SubcardPieces()) {
+    PlayAlly($captives[$i], $captives[$i+1], from:"CAPTIVE");
   }
   if(AllyHasStaticHealthModifier($cardID)) {
     CheckHealthAllAllies($player);
