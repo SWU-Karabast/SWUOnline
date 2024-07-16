@@ -470,6 +470,12 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $ally = new Ally($lastResult);
           WriteLog(CardLink($ally->CardID(), $ally->CardID()) . " was chosen");
           return $lastResult;
+        case "WRITECHOICEFROMUNIQUE":
+          $controller = UnitUniqueIDController($lastResult);
+          $index = SearchAlliesForUniqueID($lastResult, $controller);
+          $ally = new Ally($controller == $currentPlayer ? "MYALLY-" . $index : "THEIRALLY-" . $index);
+          WriteLog(CardLink($ally->CardID(), $ally->CardID()) . " was chosen");
+          return $lastResult;
         default: break;
       }
       return $lastResult;
