@@ -303,9 +303,13 @@ function AllyLeavesPlayAbility($player, $index)
     case "4002861992"://DJ (Blatant Thief)
       if(SearchCurrentTurnEffects("4002861992", $player, remove:true)) {
         $otherPlayer = $player == 1 ? 2 : 1;
-        $resources = &GetResourceCards($player);
-        $resourceCard = RemoveResource($player, count($resources) - ResourcePieces());
-        AddResources($resourceCard, $otherPlayer, "PLAY", "DOWN");
+        $notOwnedresources = &GetControlledButNotOwnedResourceCards($player);
+        if (count($notOwnedresources) > 0) {
+          $resources = &GetResourceCards($player);
+          $resIndex = array_search(end($notOwnedresources), $fruits);
+          $resourceCard = RemoveResource($player, $resIndex);
+          AddResources($resourceCard, $otherPlayer, "PLAY", "DOWN");
+        }
       }
       break;
     default: break;

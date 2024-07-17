@@ -227,6 +227,19 @@ function &GetResourceCards($player)
   }
 }
 
+function &GetControlledButNotOwnedResourceCards($player)
+{
+  global $ownResources = &GetResourceCards($player)
+
+  // Filter out the resources that are owned by the player
+  $filteredResources = array_filter($ownResources, function($resource) use ($player) {
+      $owner = MZPlayerID($player, $resource); 
+      return $owner <> $player;
+  });
+
+  return $filteredResources;
+}
+
 function &GetMemory($player)
 {
   global $currentPlayer, $mainPlayer, $mainPlayerGamestateStillBuilt;
