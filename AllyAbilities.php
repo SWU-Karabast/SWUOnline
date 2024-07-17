@@ -306,7 +306,7 @@ function AllyLeavesPlayAbility($player, $index)
         $notOwnedresources = &GetControlledButNotOwnedResourceCards($player);
         if (count($notOwnedresources) > 0) {
           $resources = &GetResourceCards($player);
-          $resIndex = array_search(end($notOwnedresources), $fruits);
+          $resIndex = array_search(end($notOwnedresources), $resources);
           $resourceCard = RemoveResource($player, $resIndex);
           AddResources($resourceCard, $otherPlayer, "PLAY", "DOWN");
         }
