@@ -30,8 +30,13 @@ function PummelHit($player = -1, $passable = false, $fromDQ = false, $context=""
 }
 
 function DefeatUpgrade($player, $may = false, $search="MYALLY&THEIRALLY", $upgradeFilter="", $to="DISCARD") {
+  $verb = "";
+  switch($to) {
+    case "DISCARD": $verb = "defeat"; break;
+    case "HAND": $verb = "bounce"; break;
+  }
   AddDecisionQueue("MULTIZONEINDICES", $player, $search);
-  AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to defeat an upgrade from");
+  AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to " . $verb . " an upgrade from");
   if($may) AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
   else AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
   AddDecisionQueue("SETDQVAR", $player, 0, 1);
@@ -519,6 +524,7 @@ function ContinueDecisionQueue($lastResult = "")
     if(str_contains($parameter, "{2}")) $parameter = str_replace("{2}", $dqVars[2], $parameter);
   }
   if(count($dqVars) > 1) $parameter = str_replace("<1>", CardLink($dqVars[1], $dqVars[1]), $parameter);
+  $parameter = str_replace(" ", "_", $parameter);//CardLink()s contain spaces, which can break things if this $parameter makes it to WriteGamestate.php(such as if $phase is YESNO). But CardLink() is also used in some cases where the underscores would show up directly, so I fix this here.
   $subsequent = array_shift($decisionQueue);
   $makeCheckpoint = array_shift($decisionQueue);
   $turn[0] = $phase;
