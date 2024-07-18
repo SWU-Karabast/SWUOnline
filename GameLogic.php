@@ -645,9 +645,9 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
               if($params[1] == 1 && $ally->IsExhausted()) $match = true;
               else if($params[1] == 0 && !$ally->IsExhausted()) $match = true;
             } else if($mzArr[0] == "MYRESOURCES" || $mzArr[0] == "THEIRRESOURCES") {
-              $resources = &GetResources($player);
-              if($params[1] == 1 && $resources[$i+4] == 1) $match = true;
-              else if($params[1] == 0 && $resources[$i+4] != 1) $match = true;
+              $resources = &GetResourceCards($player);
+              if($params[1] == 1 && $resources[$mzArr[1]+4] == 1) $match = true;
+              else if($params[1] == 0 && $resources[$mzArr[1]+4] != 1) $match = true;
             }
             break;
           case "damaged":
@@ -1083,11 +1083,11 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             --$numResources;
           }
         }
-      } else {
+      } else for($i = 0; $i < $numResources; ++$i) {
         PrependDecisionQueue("MZOP", $player, "REST", 1);
         PrependDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
         PrependDecisionQueue("SETDQCONTEXT", $player, "Choose a resource to exhaust");
-        PrependDecisionQueue("MZFILTER", $player, "MYRESOURCES");
+        PrependDecisionQueue("MZFILTER", $player, "status=1");
         PrependDecisionQueue("MULTIZONEINDICES", $player, "MYRESOURCES");
       }
       return $parameter;

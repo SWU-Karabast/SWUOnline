@@ -524,6 +524,7 @@ function ContinueDecisionQueue($lastResult = "")
     if(str_contains($parameter, "{2}")) $parameter = str_replace("{2}", $dqVars[2], $parameter);
   }
   if(count($dqVars) > 1) $parameter = str_replace("<1>", CardLink($dqVars[1], $dqVars[1]), $parameter);
+  $parameter = str_replace(" ", "_", $parameter);//CardLink()s contain spaces, which can break things if this $parameter makes it to WriteGamestate.php(such as if $phase is YESNO). But CardLink() is also used in some cases where the underscores would show up directly, so I fix this here.
   $subsequent = array_shift($decisionQueue);
   $makeCheckpoint = array_shift($decisionQueue);
   $turn[0] = $phase;
