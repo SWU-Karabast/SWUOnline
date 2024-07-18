@@ -660,6 +660,7 @@ function IsCombatEffectActive($cardID)
     case "4663781580": return true;//Swoop Down
     case "4085341914": return true;//Heroic Resolve
     case "5896817672": return true;//Headhunting
+    case "6962053552": return true;//Desperate attack
     default: return false;
   }
 }
