@@ -52,8 +52,10 @@ class Deck {
     $rv = "";
     for($i=0; $i<$amount; ++$i)
     {
+      $nextCard = $remove ? array_shift($this->deck) : $this->deck[$i];
+      if(!$nextCard) return $rv;
       if($rv != "") $rv .= ",";
-      $rv .= ($remove ? array_shift($this->deck) : $this->deck[$i]);
+      $rv .= $nextCard;
     }
     return $rv;
   }

@@ -4015,15 +4015,17 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "5696041568"://Triple Dark Raid
       global $CS_AfterPlayedBy;
-      SetClassState($currentPlayer, $CS_AfterPlayedBy, $cardID);
-      AddCurrentTurnEffect($cardID, $currentPlayer);
-      AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE," . 8);
-      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+      AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE,8");
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "0");
       AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Vehicle", 1);
       AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
-      AddDecisionQueue("SETDQVAR", $currentPlayer, "1", 1);
-      AddDecisionQueue("OP", $currentPlayer, "REMOVECARD", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "1");
+      AddDecisionQueue("OP", $currentPlayer, "REMOVECARD");
       AddDecisionQueue("ALLRANDOMBOTTOM", $currentPlayer, "DECK");
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{1}");
+      AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, $cardID, 1);
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, $cardID, 1);
+      AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_AfterPlayedBy, 1);
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{1}", 1);
       AddDecisionQueue("OP", $currentPlayer, "PLAYCARD,DECK", 1);
       break;
