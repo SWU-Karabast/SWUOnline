@@ -1295,7 +1295,14 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       SetClassState($player, $CS_AbilityIndex, $index);
       if(IsAlly($parameter, $player) && AllyDoesAbilityExhaust($parameter, $index)) {
         $ally = new Ally("MYALLY-" . GetClassState($player, $CS_PlayIndex), $player);
-        $ally->Exhaust();
+        if($ally->IsExhausted()){
+          WriteLog("Cannot doing this ability while exhausted. Reverting gamestate.");
+          CloseCombatChain();
+          RevertGamestate();
+          return;
+        } else {
+          $ally->Exhaust();
+        }
       }
       $names = explode(",", GetAbilityNames($parameter, GetClassState($player, $CS_PlayIndex)));
       WriteLog(implode(" ", explode("_", $names[$index])) . " ability was chosen.");
