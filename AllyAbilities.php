@@ -1435,7 +1435,7 @@ function SpecificAllyAttackAbilities($attackID)
     case "4595532978"://Ketsu Onyo
       //TODO ADD OVERWHELM
       if(GetAttackTarget() == "THEIRCHAR-0") {
-        DefeatUpgrade($mainPlayer, true);
+        DefeatUpgrade($mainPlayer, true, upgradeFilter: "maxCost=2");
       }
       break;
     case "5966087637"://Poe Dameron
