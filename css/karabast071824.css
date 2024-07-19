@@ -168,6 +168,13 @@ select {
   flex-direction: row;
 }
 
+.info-box {
+  border-radius: 5px;
+  padding: 10px;
+  background: rgba(24, 50, 81, 0.60);
+  margin-bottom: 20px;
+}
+
 
 /* HEADER ---------------------------------------------------------------------------------------------- */
 
