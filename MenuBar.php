@@ -26,7 +26,7 @@ $isMobile = IsMobile();
   <meta charset="utf-8">
   <title>Karabast</title>
   <link rel="shortcut icon" type="image/png" href="Images/karabastTiny.png" />
-  <link rel="stylesheet" href="./css/karabast.css">
+  <link rel="stylesheet" href="./css/karabast071824.css">
   <!-- <link rel="stylesheet" href="./css/menuStyles2.css"> -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

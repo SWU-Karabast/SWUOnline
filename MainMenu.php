@@ -108,7 +108,7 @@ include_once 'Header.php';
 
   <?php
   echo ("<label for='format' class='SelectDeckInput'>Format</label>");
-  echo ("<select name='format' id='format'>");
+  echo ("<select name='format' id='format' onchange='toggleInfoBox()'>");
   if ($canSeeQueue) {
     echo ("<option value='cc' " . ($defaultFormat == 0 ? " selected" : "") . ">Premier</option>");
     echo ("<option value='compcc' " . ($defaultFormat == 1 ? " selected" : "") . ">Request-Undo Premier</option>");
@@ -116,6 +116,13 @@ include_once 'Header.php';
   echo ("<option value='livinglegendscc'" . ($defaultFormat == 4 ? " selected" : "") . ">Open Format</option>");
   echo ("</select>");
   ?>
+
+  <div class='info-box' id='info-box' style='display: <?php echo ($defaultFormat == 4 ? "block" : "none"); ?>;'>
+    <p>
+      <img src="./Images/infoicon.png" alt="Info" style="width: 13px; height: 13px; margin: 0 2px -1px 0;">
+      <span>Set 2 cards are now available in Premier Format. Open Format allows for custom rules and deck sizes, but it may take longer to find an opponent.</span>
+    </p>
+  </div>
 
   <?php
   if ($canSeeQueue) {
@@ -195,6 +202,21 @@ include_once 'Header.php';
   function changeLanguage() {
     window.location.search = '?language=' + document.getElementById('languageSelect').value;
   }
+
+  function toggleInfoBox() {
+    var formatSelect = document.getElementById('format');
+    var infoBox = document.getElementById('info-box');
+    if (formatSelect.value === 'livinglegendscc') {
+      infoBox.style.display = 'block';
+    } else {
+      infoBox.style.display = 'none';
+    }
+  }
+
+  // Ensure the info box is displayed correctly based on the default selected format
+  window.onload = function() {
+    toggleInfoBox();
+  };
 </script>
 <?php
 include_once 'Disclaimer.php';
