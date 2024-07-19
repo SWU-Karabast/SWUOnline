@@ -132,7 +132,12 @@ if ($decklink != "") {
     $curl = curl_init();
     $isSilvie = str_contains($decklink, "silvie");
     $isFaBMeta = str_contains($decklink, "fabmeta");
-    if($isSilvie) {
+    $isSWUOnline = str_contains($decklink, "swudb");
+    if ($isSWUOnline) {
+      $decklinkArr = explode("/", $decklink);
+      $apiLink = "https://swudb.com/deck/view/" . trim($decklinkArr[count($decklinkArr) - 1]) . "?handler=JsonFile";
+    }
+    else if($isSilvie) {
         $decklinkArr = explode("/", $decklink);
         $uid = $decklinkArr[count($decklinkArr) - 2];
         $slug = $decklinkArr[count($decklinkArr) - 1];
@@ -140,7 +145,7 @@ if ($decklink != "") {
         $apiLink .= "id=" . $slug;
         $apiLink .= "&user=" . $uid;
     }
-
+    
     curl_setopt($curl, CURLOPT_URL, $apiLink);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
     $apiDeck = curl_exec($curl);
@@ -166,61 +171,65 @@ if ($decklink != "") {
         echo 'Deck object is null. Failed to retrieve deck from API.';
         exit;
     }
-    $cards = json_decode(LZString::decompressFromEncodedURIComponent($deckObj->deck->code));
-    $deckName = $cards->{'name'};
-    if (isset($deckObj->{'matchups'})) {
-        if ($playerID == 1) $p1Matchups = $deckObj->{'matchups'};
-        else if ($playerID == 2) $p2Matchups = $deckObj->{'matchups'};
+    $deckName = $deckObj->metadata->{"name"};
+    $leader = UUIDLookup($deckObj->leader->id);
+    $character = $leader;//TODO: Change to leader name
+    $deckFormat = 1;
+    $base = UUIDLookup($deckObj->base->id);
+    $deck = $deckObj->deck;
+    $cards = "";
+    $bannedSet = "";
+    $hasBannedCard = false;
+    for($i=0; $i<count($deck); ++$i) {
+      $deck[$i]->id = CardIDOverride($deck[$i]->id);
+      $cardID = UUIDLookup($deck[$i]->id);
+      $cardID = CardUUIDOverride($cardID);
+      if(CardSet($cardID) == $bannedSet) {
+        $hasBannedCard = true;
+      }
+      for($j=0; $j<$deck[$i]->count; ++$j) {
+        if($cards != "") $cards .= " ";
+        $cards .= $cardID;
+      }
     }
-    $deckFormat = ($deckObj->{'format'} ?? "");
-    //$cards = $deckObj->{'cards'};
-    $deckCards = "";
+    $sideboard = $deckObj->sideboard ?? [];
     $sideboardCards = "";
-    $materialCards = "";
-    $totalCards = 0;
-
-    foreach($cards as $key => $value) {
-        if(str_contains($key, "-s")) continue;//TODO: Sideboard
-        if(CardTypeContains($key, "REGALIA") || CardTypeContains($key, "CHAMPION"))
-        {
-            if($materialCards != "") $materialCards .= " ";
-            $materialCards .= $key;
-        }
-        else
-        {
-            if(is_int($value) && $value > 0 && $value <= 4) for($i=0; $i<$value; ++$i)
-            {
-                if($deckCards != "") $deckCards .= " ";
-                $deckCards .= $key;
-            }
-        }
+    for($i=0; $i<count($sideboard); ++$i) {
+      $sideboard[$i]->id = CardIDOverride($sideboard[$i]->id);
+      $cardID = UUIDLookup($sideboard[$i]->id);
+      $cardID = CardUUIDOverride($cardID);
+      if(CardSet($cardID) == $bannedSet) {
+        $hasBannedCard = true;
+      }
+      for($j=0; $j<$sideboard[$i]->count; ++$j) {
+        if($sideboardCards != "") $sideboardCards .= " ";
+        $sideboardCards .= $cardID;
+      }
+    }
+    
+    if ($format != "livinglegendscc" && $hasBannedCard) {
+      $_SESSION['error'] = '⚠️ Unreleased cards must be played in the open format.';
+      header("Location: " . $redirectPath . "/MainMenu.php");
+      WriteGameFile();
+      exit;
     }
 
     //We have the decklist, now write to file
     $filename = "../Games/" . $gameName . "/p" . $playerID . "Deck.txt";
     $deckFile = fopen($filename, "w");
-    fwrite($deckFile, $materialCards . "\r\n");
-    fwrite($deckFile, $deckCards . "\r\n");
+    fwrite($deckFile, $base . " " . $leader . "\r\n");
+    fwrite($deckFile, $cards . "\r\n");
+    fwrite($deckFile, $sideboardCards . "\r\n");
     fclose($deckFile);
     copy($filename, "../Games/" . $gameName . "/p" . $playerID . "DeckOrig.txt");
 
-    if (isset($_SESSION["userid"])) {
-        include_once '../includes/functions.inc.php';
-        include_once "../includes/dbh.inc.php";
-        /*
-        $deckbuilderID = GetDeckBuilderId($_SESSION["userid"], $decklink);
-        if ($deckbuilderID != "") {
-          if ($playerID == 1) $p1deckbuilderID = $deckbuilderID;
-          else $p2deckbuilderID = $deckbuilderID;
-        }
-        */
-    }
-
     if ($favoriteDeck == "on" && isset($_SESSION["userid"])) {
-        //Save deck
-        include_once '../includes/functions.inc.php';
-        include_once "../includes/dbh.inc.php";
-        addFavoriteDeck($_SESSION["userid"], $decklink, $deckName, $character, $deckFormat);
+      //Save deck
+      include_once './includes/functions.inc.php';
+      include_once "./includes/dbh.inc.php";
+      $saveLink = explode("https://", $originalLink);
+      $saveLink = count($saveLink) > 1 ? $saveLink[1] : $originalLink;
+      addFavoriteDeck($_SESSION["userid"], $saveLink, $deckName, $character, $deckFormat);
     }
 } else {
     $deckFile = $deck;
@@ -291,86 +300,33 @@ echo (json_encode($response));
 
 session_write_close();
 
-
-function ParseDraftFab($deck, $filename)
-{
-  global $character;
-  $character = "DYN001";
-  $deckCards = "";
-  $headSideboard = "";
-  $chestSideboard = "";
-  $armsSideboard = "";
-  $legsSideboard = "";
-  $offhandSideboard = "";
-  $weaponSideboard = "";
-  $sideboardCards = "";
-  $quiverSideboard = "";
-
-  $cards = explode(",", $deck);
-  for ($i = 0; $i < count($cards); ++$i) {
-    $card = explode(":", $cards[$i]);
-    $cardID = $card[0];
-    $quantity = $card[2];
-    $type = CardType($cardID);
-    switch ($type) {
-      case TypeContains($cardID, "T"):
-        break;
-      case TypeContains($cardID, "C"):
-        $character = $cardID;
-        break;
-      case TypeContains($cardID, "W"):
-        if ($weaponSideboard != "") $weaponSideboard .= " ";
-        $weaponSideboard .= $cardID;
-        break;
-      case TypeContains($cardID, "E"):
-        if (SubtypeContains($cardID, "Head")) {
-          if ($headSideboard != "") $headSideboard .= " ";
-          $headSideboard .= $cardID;
-        } else if (SubtypeContains($cardID, "Chest")) {
-          if ($chestSideboard != "") $chestSideboard .= " ";
-          $chestSideboard .= $cardID;
-        } else if (SubtypeContains($cardID, "Arms")) {
-          if ($armsSideboard != "") $armsSideboard .= " ";
-          $armsSideboard .= $cardID;
-        } else if (SubtypeContains($cardID, "Legs")) {
-          if ($legsSideboard != "") $legsSideboard .= " ";
-          $legsSideboard .= $cardID;
-        } else if (SubtypeContains($cardID, "Off-Hand")) {
-          if ($offhandSideboard != "") $offhandSideboard .= " ";
-          $offhandSideboard .= $cardID;
-        } else if (SubtypeContains($cardID, "Quiver")) {
-          if ($quiverSideboard != "") $quiverSideboard .= " ";
-          $quiverSideboard .= $cardID;
-        }
-        break;
-      default:
-        for ($j = 0; $j < $quantity; ++$j) {
-          if ($card[1] == "S") {
-            if ($sideboardCards != "") $sideboardCards .= " ";
-            $sideboardCards .= GetAltCardID($cardID);
-          } else {
-            if ($deckCards != "") $deckCards .= " ";
-            $deckCards .= GetAltCardID($cardID);
-          }
-        }
-        break;
-    }
+function CardIDOverride($cardID) {
+  switch($cardID) {
+    case "SHD_030": return "SOR_033"; //Death Trooper
+    case "SHD_063": return "SOR_066"; //System Patrol Craft
+    case "SHD_066": return "SOR_068"; //Cargo Juggernaut
+    case "SHD_070": return "SOR_069"; //Resilient
+    case "SHD_081": return "SOR_080"; //General Tagge
+    case "SHD_085": return "SOR_083"; //Superlaser Technician
+    case "SHD_083": return "SOR_081"; //Seasoned Shoretrooper
+    case "SHD_166": return "SOR_162"; //Disabling Fang Fighter
+    case "SHD_223": return "SOR_215"; //Snapshot Reflexes
+    case "SHD_231": return "SOR_220"; //Surprise Strike 
+    case "SHD_236": return "SOR_227"; //Snowtrooper Lieutenant
+    case "SHD_238": return "SOR_229"; //Cell Block Guard
+    case "SHD_257": return "SOR_247"; //Underworld Thug
+    case "SHD_262": return "SOR_251"; //Confiscate
+    case "SHD_121": return "SOR_117"; //Mercenary Company
+    default: return $cardID;
   }
+}
 
-
-  $deckFile = fopen($filename, "w");
-  $charString = $character;
-
-  fwrite($deckFile, $charString . "\r\n");
-  fwrite($deckFile, $deckCards . "\r\n");
-  fwrite($deckFile, $headSideboard . "\r\n");
-  fwrite($deckFile, $chestSideboard . "\r\n");
-  fwrite($deckFile, $armsSideboard . "\r\n");
-  fwrite($deckFile, $legsSideboard . "\r\n");
-  fwrite($deckFile, $offhandSideboard . "\r\n");
-  fwrite($deckFile, $weaponSideboard . "\r\n");
-  fwrite($deckFile, $sideboardCards);
-  fclose($deckFile);
+function CardUUIDOverride($cardID)
+{
+  switch ($cardID) {
+    case "1706333706": return "8380936981";//Jabba's Rancor
+    default: return $cardID;
+  }
 }
 
 function GetAltCardID($cardID)
