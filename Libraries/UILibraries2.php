@@ -940,7 +940,9 @@ function CardBorderColor($cardID, $from, $isPlayable, $mod = "-")
     $helptext = GetPhaseHelptext();
     if($helptext == "Choose a card to resource") return 3;
     else if($helptext == "Choose a card to discard") return 7;
-    else return 6;
+    else if($isPlayable)
+      return $mod == "THEIRS" ? 2 : 6; // red border for opponent's cards
+    else return 0;
   }
   else if ($from == "BANISH") {
     if ($isPlayable || PlayableFromBanish($cardID, $mod))
