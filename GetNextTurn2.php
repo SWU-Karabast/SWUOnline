@@ -198,81 +198,10 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   $TheirCardBack = GetCardBack($playerID == 1 ? 2 : 1);
   $otherPlayer = ($playerID == 1 ? 2 : 1);
 
-  echo '<style>
-
-    #theirHand span a {
-      border-radius: 8px;
-    }
-
-    .base-my-dmg {
-      bottom: 365px;
-    } 
-
-    .base-their-dmg{
-      top: 305px;
-    } 
-
-    @media only screen and (max-height: 733px) {
-      .base-my-dmg {
-        bottom: calc(50% - 2px);
-      } 
-
-      .base-their-dmg{
-        top: calc(50% - 62px);
-      } 
-    }
-    
-    .spaceAlliesContainer, .groundAlliesContainer,
-    .spaceEnemiesContainer, .groundEnemiesContainer {
-      display: flex;
-      flex-wrap: wrap;
-      column-gap: 15px;
-    }
-
-    .spaceAlliesContainer, .spaceEnemiesContainer {
-      flex-direction: row-reverse;
-      align-items: flex-start;
-    }
-
-    .groundAlliesContainer, .groundEnemiesContainer {
-      flex-wrap: wrap-reverse;
-      align-items: flex-end;
-    }
-
-    .spaceAlliesContainer .cardContainer, .groundAlliesContainer .cardContainer,
-    .spaceEnemiesContainer .cardContainer, .groundEnemiesContainer .cardContainer  {
-      position: relative;
-      display: flex;
-    }
-
-    .spaceAlliesContainer .cardImage, .groundAlliesContainer .cardImage,
-    .spaceEnemiesContainer .cardImage, .groundEnemiesContainer .cardImage {
-      filter: drop-shadow(2px 2px 6px rgb(0, 0, 0, 0.3));
-    }
-
-    .cardContainer.exhausted {
-      transform: rotate(5deg);
-    }
-
-  </style>';
-
   //Display background
-  if (IsDarkPlainMode($playerID))
-    echo ("<div class='container;' style='position:absolute; z-index:-100; left:0px; top:0px; width:100%; height:100%;'><img style='object-fit: cover; height:100%; width:100%;' src='./Images/darkplain.jpg'/>
-    </div>");
-  else if (IsDarkMode($playerID))
-    echo ("<div class='container;' style='position:absolute; z-index:-100; left:0px; top:0px; width:100%; height:100%;'><img style='object-fit: cover; height:100%; width:100%;' src='./Images/flicflak.jpg'/>
-    </div>");
-  else if (IsPlainMode($playerID))
-    echo ("<div class='container;' style='position:absolute; z-index:-100; left:0px; top:0px; width:100%; height:100%;'><img style='object-fit: cover; height:100%; width:100%;' src='./Images/lightplain.jpg'/>
-    </div>");
-  else
-    echo ("<div class='container;' style='position:absolute; z-index:-100; left:0px; top:0px; width:100%; height:100%;
-    -webkit-filter: grayscale(1); -webkit-filter: grayscale(15%); -moz-filter: grayscale(15%); filter: gray;filter: grayscale(15%);
-    filter: url(data:image/svg+xml;utf8,<svg version='1.1' xmlns='http://www.w3.org/2000/svg' height='0'><filter id='greyscale'><feColorMatrix type='matrix' values='0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0'/></filter></svg>
-    <img style='object-fit: cover; height:100%; width:100%;' src='./Images/gamebg.jpg'/></div>");
-  
-    //Base Damage Numbers
+  echo ("<div class='container game-bg'><img src='./Images/gamebg.jpg'/></div>");
+
+  //Base Damage Numbers
   echo ("<div style='position:absolute; z-index:1; left: calc(50% - 169px); width: 100px;'><div style='display: flex; justify-content: center;'>
       <span class='base-my-dmg' 
       style='position:fixed;
