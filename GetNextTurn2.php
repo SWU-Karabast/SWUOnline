@@ -160,7 +160,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     exit();
   }
 
-  echo ("<div id='iconHolder' style='display:none;'>" . $icon . "</div>");
+  echo ("<div id='iconHolder'>" . $icon . "</div>");
 
   if ($windowWidth / 16 > $windowHeight / 9) $windowWidth = $windowHeight / 9 * 16;
 
@@ -202,27 +202,12 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   echo ("<div class='container game-bg'><img src='./Images/gamebg.jpg'/></div>");
 
   //Base Damage Numbers
-  echo ("<div style='position:absolute; z-index:1; left: calc(50% - 169px); width: 100px;'><div style='display: flex; justify-content: center;'>
-      <span class='base-my-dmg' 
-      style='position:fixed;
-      height: 30px;
-      padding: 0 10px; 
-      background: url(./Images/dmgbg-l.png) left no-repeat, url(./Images/dmgbg-r.png) right no-repeat; background-size: contain;
-      filter: drop-shadow(1px 2px 1px rgba(0, 0, 0, 0.40));
-      font-weight: 700; font-size: 24px; text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.30);  
-      user-select: none;pointer-events:none;'>$myHealth</span>");
-      echo (($manualMode ? "<span style='position:absolute; top:120px; left:65px;'>" . CreateButton($playerID, "+1", 10006, 0, "20px") . CreateButton($playerID, "-1", 10005, 0, "20px") . "</span>" : ""));
-  echo ("<span class='base-their-dmg' 
-      style='position:fixed;
-      height: 30px;
-      padding: 0 10px; 
-      background: url(./Images/dmgbg-l.png) left no-repeat, url(./Images/dmgbg-r.png) right no-repeat; background-size: contain;
-      filter: drop-shadow(1px 2px 1px rgba(0, 0, 0, 0.40));
-      font-weight: 700; font-size: 24px; text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.30);  
-      user-select: none;pointer-events:none;'>$theirHealth</span>");
-  echo (($manualMode ? "<span style='position:absolute; top:0px; left:65px;'>" . CreateButton($playerID, "+1", 10008, 0, "20px") . CreateButton($playerID, "-1", 10007, 0, "20px") . "</span>" : ""));
+  echo ("<div class='base-dmg-wrapper'><div class='base-dmg-position'><span class='base-my-dmg'>$myHealth</span>");
+      echo (($manualMode ? "<span class='base-my-dmg-manual'>" . CreateButton($playerID, "+1", 10006, 0, "20px") . CreateButton($playerID, "-1", 10005, 0, "20px") . "</span>" : ""));
+  echo ("<span class='base-their-dmg'>$theirHealth</span>");
+  echo (($manualMode ? "<span class='base-their-dmg-manual'>" . CreateButton($playerID, "+1", 10008, 0, "20px") . CreateButton($playerID, "-1", 10007, 0, "20px") . "</span>" : ""));
   echo ("</div></div>");
-  echo ("<div style='position:absolute; top:37px; left:-130px; z-index:-5;'></div>");
+  echo ("<div class='base-their-dmg-manual'></div>");
   if ($turn[0] == "ARS" || (count($layers) > 0 && $layers[0] == "ENDTURN")) {
     $passLabel = "End Turn";
     $fontSize = 30;
@@ -249,16 +234,15 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   echo ("</div>");
 
   //Now display the screen for this turn
-  echo ("<span style='position:fixed; left:0; right:238px; bottom:20px; display:inline-block; font-size:30px; text-align:center; min-height:35px'>");
+  echo ("<span class='display-game-screen'>");
 
-
-  echo (($manualMode ? "<span style='position:relative; top: 5px; z-index:10; color: " . $fontColor . "; font-family:Helvetica; font-size:18px; font-weight: 550;text-shadow: 2px 0 0 " . $borderColor . ", 0 -2px 0 " . $borderColor . ", 0 2px 0 " . $borderColor . ", -2px 0 0 " . $borderColor . ";'>Add to hand: </span><input style='width: 100px;' id='manualAddCardToHand' type='text' /><input type='button' style='position:relative; font-size: 14px; top:0; left:0; bottom: 5px; box-shadow: none;' value='Add' onclick='AddCardToHand()' />&nbsp;" : ""));
+  echo (($manualMode ? "<span style='color: " . $fontColor . "; text-shadow: 2px 0 0 " . $borderColor . ", 0 -2px 0 " . $borderColor . ", 0 2px 0 " . $borderColor . ", -2px 0 0 " . $borderColor . ";'>Add to hand: </span><input id='manualAddCardToHand' type='text' /><input class='manualAddCardToHand-button' type='button' value='Add' onclick='AddCardToHand()' />&nbsp;" : ""));
 
   //Tell the player what to pick
   if ($turn[0] != "OVER") {
     $helpText = ($currentPlayer != $playerID ? " Waiting for other player to choose " . TypeToPlay($turn[0]) . "&nbsp" : " " . GetPhaseHelptext() . "&nbsp;");
 
-    echo ("<span style='font-size:18px;'><img height='16px;' style='margin-right:5px; vertical-align: -2px; user-select: none;' title='" . $readyText . "' src='./Images/" . $icon . "'/>");
+    echo ("<span class='playerpick-span'><img class='playerpick-img' title='" . $readyText . "' src='./Images/" . $icon . "'/>");
     if ($currentPlayer == $playerID) {
       echo ($helpText);
       if ($turn[0] == "P" || $turn[0] == "CHOOSEHANDCANCEL" || $turn[0] == "CHOOSEDISCARDCANCEL") echo ("(" . ($turn[0] == "P" ? $myResources[0] . " of " . $myResources[1] . " " : "") . "or " . CreateButton($playerID, "Cancel", 10000, 0, "18px") . ")");
