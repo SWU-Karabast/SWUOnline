@@ -195,7 +195,10 @@ function AllyTakeControl($player, $index) {
   for($i=$index; $i<$index+AllyPieces(); ++$i) {
     $myAllies[] = $theirAllies[$i];
   }
-  RemoveAlly($otherPlayer, $index);
+  for ($i=$index+AllyPieces()-1; $i>=$index; $i--) {
+    unset($theirAllies[$i]);
+  }
+  CheckHealthAllAllies($otherPlayer);
   CheckHealthAllAllies($player);
   CheckUnique($cardID, $player);
   return $uniqueID;

@@ -477,7 +477,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   
           // Add the card to the content
           $cardId = $layerName;
-          if($cardId = "AFTERPLAYABILITY") $cardId = explode(',', $layers[$i+5])[0];
+          if($cardId == "AFTERPLAYABILITY") $cardId = explode(',', $layers[$i+5])[0];
           $content .= "<div class='tile' style='max-width:{$cardSize}px;'>" . Card($cardId, "concat", $cardSize, 0, 1, 0, $layerColor, $counters, controller: $layerController);
   
           // Add reorder buttons for ability layers if applicable
