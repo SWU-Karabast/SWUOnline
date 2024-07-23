@@ -2882,8 +2882,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "5494760041"://Galactic Ambition
       global $CS_AfterPlayedBy;
       SetClassState($currentPlayer, $CS_AfterPlayedBy, $cardID);
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to play");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to play");
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "definedType!=Unit", 1);
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("SETDQVAR", $currentPlayer, 0, 1);
       AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, "5494760041", 1);
