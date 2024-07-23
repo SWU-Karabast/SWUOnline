@@ -119,14 +119,16 @@ class Ally {
 
   function Destroy() {
     if($this->index == -1) return "";
-    if($this->CardID() == "1810342362") return "";//Lurking TIE Phantom
+    global $mainPlayer;
+    if($this->CardID() == "1810342362" && !$this->LostAbilities() && $mainPlayer != $this->playerID) return "";//Lurking TIE Phantom
     return DestroyAlly($this->playerID, $this->index);
   }
 
   //Returns true if the ally is destroyed
   function DealDamage($amount, $bypassShield = false, $fromCombat = false, &$damageDealt = NULL) {
     if($this->index == -1 || $amount <= 0) return false;
-    if(!$fromCombat && $this->CardID() == "1810342362") return;//Lurking TIE Phantom
+    global $mainPlayer;
+    if(!$fromCombat && $this->CardID() == "1810342362" && !$this->LostAbilities() && $mainPlayer != $this->playerID) return;//Lurking TIE Phantom
     $subcards = $this->GetSubcards();
     for($i=0; $i<count($subcards); $i+=SubcardPieces()) {
       if($subcards[$i] == "8752877738") {
