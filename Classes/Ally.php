@@ -119,7 +119,8 @@ class Ally {
 
   function Destroy() {
     if($this->index == -1) return "";
-    if($this->CardID() == "1810342362") return "";//Lurking TIE Phantom
+    global $mainPlayer;
+    if($this->CardID() == "1810342362" && !$this->LostAbilities() && $mainPlayer != $this->playerID) return "";//Lurking TIE Phantom
     return DestroyAlly($this->playerID, $this->index);
   }
 
