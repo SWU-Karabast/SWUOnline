@@ -34,6 +34,57 @@ td {
   text-align: center;
 }
 
+/* Game Background */
+
+.game-bg img {
+  object-fit: cover; 
+  height:100%; 
+  width:100%;
+}
+
+.game-bg {
+  position:absolute !important; 
+  z-index:-100; 
+  left:0px; 
+  top:0px; 
+  width:100%; 
+  height:100%;
+}
+
+/* Arena BGs */
+
+#spaceArena, #groundArena, .groundArena-dimmer {
+  position: absolute;
+  top: 140px;
+  width: calc(50% - 251px);
+  height: calc(100% - 340px);
+  border-radius: 17px;
+  background-size: cover;
+}
+
+#spaceArena {
+  z-index: -5;
+  left: 41px;
+  opacity: .6;
+  background-position: 60% 50%;
+  background-image: url('../Images/bg-deathstar.jpg');
+}
+
+#groundArena {
+  z-index: -5;
+  right: 278px;
+  opacity: .4;
+  background-position: 80% 50%;
+  background-image: url('../Images/bg-echobase.jpg');
+}
+
+.groundArena-dimmer {
+  z-index: -6;
+  right: 278px;
+  opacity: .6;
+  background: #131F2A;
+}
+
 /* Buttons */
 
 .passButton {
@@ -180,11 +231,8 @@ td {
   right:278px; 
 }
 
-.my-units-manual {
-  position:relative; 
-  left:-15px; 
-  width:15px; 
-  height:100%;
+.cardContainer.exhausted {
+  transform: rotate(5deg);
 }
 
 .spaceEnemiesContainer, .groundEnemiesContainer {
@@ -231,8 +279,11 @@ td {
   filter: drop-shadow(2px 2px 6px rgb(0, 0, 0, 0.3));
 }
 
-.cardContainer.exhausted {
-  transform: rotate(5deg);
+.my-units-manual {
+  position:relative; 
+  left:-15px; 
+  width:15px; 
+  height:100%;
 }
 
 /* My Resources */
@@ -457,47 +508,6 @@ td {
   z-index:1000;
 }
 
-/* Table Border */
-
-.table-border-a {
-  border-spacing:0; 
-  border-collapse: collapse;
-}
-
-/* Arena BGs */
-
-#spaceArena, #groundArena, .groundArena-dimmer {
-  position: absolute;
-  top: 140px;
-  width: calc(50% - 251px);
-  height: calc(100% - 340px);
-  border-radius: 17px;
-  background-size: cover;
-}
-
-#spaceArena {
-  z-index: -5;
-  left: 41px;
-  opacity: .6;
-  background-position: 60% 50%;
-  background-image: url('../Images/bg-deathstar.jpg');
-}
-
-#groundArena {
-  z-index: -5;
-  right: 278px;
-  opacity: .4;
-  background-position: 80% 50%;
-  background-image: url('../Images/bg-echobase.jpg');
-}
-
-.groundArena-dimmer {
-  z-index: -6;
-  right: 278px;
-  opacity: .6;
-  background: #131F2A;
-}
-
 /* Effects UI */
 
 .opponent-effects {
@@ -652,14 +662,6 @@ td {
   position:absolute; 
   top:0px; 
   left:65px;
-}
-
-/* Game Background */
-
-.game-bg img {
-  object-fit: cover; 
-  height:100%; 
-  width:100%;
 }
 
 /* Trigger Order */
@@ -1167,6 +1169,11 @@ input[type="button"]:focus {
 
 .fused-card {
   position:absolute; z-index:100; top:125px; left:7px;
+}
+
+.table-border-a {
+  border-spacing:0; 
+  border-collapse: collapse;
 }
 
 /* Responsive Layouts */
