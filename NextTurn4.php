@@ -83,7 +83,7 @@
       <meta charset="utf-8">
       <title>Karabast</title>
       <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
-      <link rel="stylesheet" href="css/gamestyle062424.css">
+      <link rel="stylesheet" href="css/gamestyle072424.css">
       <link rel="stylesheet" href="css/newrepublic.css">
       <link rel="preconnect" href="https://fonts.googleapis.com">
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -503,68 +503,6 @@
 
         ?>
       }
-
-      div,
-      span {
-        font-family: "Barlow", sans-serif;
-        color: white;
-      }
-
-      td {
-        text-align: center;
-      }
-
-      .passButton {
-        background-color: #292929;
-        transition: 150ms ease-in-out;
-        margin: 0 3px 0 7px;
-      }
-
-      .passButton:hover {
-        background-color: #292929;
-        -webkit-transform: scale(1.1);
-        -ms-transform: scale(1.1);
-        transform: scale(1.1);
-      }
-
-      .passButton:active {
-        background-color: #292929;
-        background-size: contain;
-      }
-
-      .passInactive {
-        background-color: #292929;
-        background-size: contain;
-      }
-
-
-      .claimButton {
-        background: linear-gradient(180deg, #292929 0%, #292929 100%) padding-box,
-                    linear-gradient(180deg, #454545 0%, #394B51 40%, #0080ad 100%) border-box;
-        border-radius: 5px;
-        border: 1px solid transparent;
-        height:40px;
-        padding: 8px 19px 10px;
-        box-shadow: none;
-        position: relative;
-        bottom: -1px;
-      }
-
-      .MenuButtons {
-        cursor: pointer;
-        transition: 150ms ease-in-out;
-        margin-right: 6px;
-      }
-
-      .MenuButtons:hover {
-        -webkit-transform: scale(1.2);
-        -ms-transform: scale(1.2);
-        transform: scale(1.2);
-      }
-
-      .MenuButtons:focus {
-        outline: none;
-      }
     </style>
 
   </head>
@@ -661,8 +599,8 @@
                       else var element = document.getElementById("unique-" + eventArr[0]);
                       if(!!element) {
                         if(timeoutAmount < 500) timeoutAmount = 500;
-                        element.innerHTML += "<div class='dmg-animation' style='position:absolute; text-align:center; font-size:36px; top: 0px; left:-2px; width:100%; height: calc(100% - 8px); padding: 0 2px; border-radius:12px; background-color:rgba(255,0,0,0.5); z-index:1000;'><div style='padding: 25px 0; width:100%; height:100%:'></div></div>";
-                        element.innerHTML += "<div style='position:absolute; text-align:center; animation-name: move; animation-duration: 0.6s; font-size:34px; font-weight: 600; text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.60); top:0px; left:0px; width:100%; height:100%; background-color:rgba(0,0,0,0); z-index:1000;'><div style='padding: 25px 0; width:100%; height:100%:'>-" + eventArr[1] + "</div></div>";
+                        element.innerHTML += "<div class='dmg-animation dmg-animation-a'><div class='dmg-animation-a-inner'></div></div>";
+                        element.innerHTML += "<div class='dmg-animation-a-label'><div class='dmg-animation-a-label-inner'>-" + eventArr[1] + "</div></div>";
                       }
                     } else if(eventType == "RESTORE") {
                       var eventArr = eventsArr[i+1].split("!");

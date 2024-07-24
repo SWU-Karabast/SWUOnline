@@ -836,7 +836,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   $actionType = $turn[0] == "ARS" ? 4 : 27;
   if (str_contains($turn[0], "CHOOSEHAND") && ($turn[0] != "" || $turn[0] != "MAYMULTICHOOSEHAND")) $actionType = 16;
   $handLeft = "calc(50% - " . ((count($myHand) * ($cardWidth + 15)) / 2) . "px - 119px)";
-  echo ("<div id='myHand' style='display:none; position:fixed; left:" . $handLeft . "; bottom: 80px; z-index:100;'>"); //Hand div
+  echo ("<div id='myHand' style='left:" . $handLeft . ";'>"); //Hand div
   $handContents = "";
   for ($i = 0; $i < count($myHand); ++$i) {
     if ($handContents != "") $handContents .= "|";
@@ -997,7 +997,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   //Display My Deck
   if (count($myDeck) > 0) {
     $playerDeck = new Deck($playerID);
-    if ($turn[0] == "OVER") echo ("<div class= 'my-deck my-deck-fill' title='Click to view the cards in your Deck.' style='right:" . GetZoneRight("DECK") . "; bottom:" . GetZoneBottom("MYDECK") . "' onclick='TogglePopup(\"myDeckPopup\");'>");
+    if ($turn[0] == "OVER") echo ("<div class= 'my-deck my-deck-fill' title='Click to view the cards in your Deck.' style='" . GetZoneRight("DECK") . "; bottom:" . GetZoneBottom("MYDECK") . "' onclick='TogglePopup(\"myDeckPopup\");'>");
     else echo ("<div class='my-deck'>");
     echo (Card($MyCardBack, "concat", $cardSizeAura, 0, 0, 0, 0, $playerDeck->RemainingCards()));
   } else {
@@ -1005,7 +1005,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     echo ("<div class= 'my-deck my-deck-empty' style='padding:" . $cardSizeAura / 2 . "px;'>");
     echo ("<div class= 'my-deck-empty-label' style='color: " . $bordelessFontColor . ";'>Deck</div>");
   }
-  echo (($manualMode ? "<span class= 'my-deck-manual'>" . CreateButton($playerID, "Draw", 10009, 0, "20px") . "</span>" : ""));
+  echo (($manualMode ? "<span class='my-deck-manual'>" . CreateButton($playerID, "Draw", 10009, 0, "20px") . "</span>" : ""));
   echo ("</div>");
   echo ("</div>");
 
@@ -1029,27 +1029,27 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
 
   //Turn title
   echo ("<div class='round-title'>Round " . $currentRound . "</div>");
-  echo ("<div class='last-played-title' style='flex-grow:0; flex-shrink:0; text-align:left; width:100%; font-weight:bold; font-size:16px; font-weight: 600; color: white; margin-top: 5px; user-select: none;'>Last Played</div>");
-  echo ("<div class='last-played-card' style='flex-grow:0; flex-shrink:0; position:relative; margin:10px 0 14px 0'>");
+  echo ("<div class='last-played-title'>Last Played</div>");
+  echo ("<div class='last-played-card'>");
   if (count($lastPlayed) == 0) echo Card($MyCardBack, "CardImages", intval($rightSideWidth * 1.3));
   else {
     echo Card($lastPlayed[0], "CardImages", intval($rightSideWidth * 1.3), controller: $lastPlayed[1]);
     if (count($lastPlayed) >= 4) {
-      if ($lastPlayed[3] == "FUSED") echo ("<img title='This card was fused.' style='position:absolute; z-index:100; top:125px; left:7px;' src='./Images/fuse2.png' />");
+      if ($lastPlayed[3] == "FUSED") echo ("<img class='fused-card' title='This card was fused.' src='./Images/fuse2.png' />");
     }
   }
   echo ("</div>");
 
-  echo ("<div id='gamelog' style='flex-grow:1; position:relative; overflow-y: scroll; margin: 0 0 36px 0; padding-right:10px; color: white; font-size: 15px; line-height: 21px; scrollbar-color: #888888 rgba(0, 0, 0, 0); scrollbar-width: thin;'>");
+  echo ("<div id='gamelog'>");
   EchoLog($gameName, $playerID);
   echo ("</div>");
   if ($playerID != 3) {
-    echo ("<div id='chatPlaceholder' style='flex-grow:0; flex-shrink:0; height:26px;'></div>");
+    echo ("<div id='chatPlaceholder'></div>");
     echo ("</div>");
   }
 
-  echo ("<div style='display:none;' id='lastCurrentPlayer'>" . $currentPlayer . "</div>");
-  echo ("<div style='display:none;' id='passConfirm'>" . ($turn[0] == "ARS" && count($myHand) > 0 && !ArsenalFull($playerID) ? "true" : "false") . "</div>");
+  echo ("<div id='lastCurrentPlayer' style='display:none;'>" . $currentPlayer . "</div>");
+  echo ("<div id='passConfirm' style='display:none;'>" . ($turn[0] == "ARS" && count($myHand) > 0 && !ArsenalFull($playerID) ? "true" : "false") . "</div>");
 }
 
 function PlayableCardBorderColor($cardID)
@@ -1070,9 +1070,9 @@ function ChoosePopup($zone, $options, $mode, $caption = "", $zoneSize = 1)
   $content = "";
   $options = explode(",", $options);
 
-  $content .= "<table style='border-spacing:0; border-collapse: collapse;'><tr>";
+  $content .= "<table class='choosepopup-table'><tr>";
   for ($i = 0; $i < count($options); ++$i) {
-    $content .= "<td style='display: inline-block;'>";
+    $content .= "<td class='choosepopup-table-td'>";
     $content .= "<div class='container'>";
     $content .= "<label class='multichoose'>" . Card($zone[$options[$i]], "concat", $cardSize, $mode, 1, 0, 0, 0, strval($options[$i])) . "</label>";
     $content .= "<div class='overlay'><div class='text'>Select</div></div></div></td>";
@@ -1231,7 +1231,7 @@ function DisplayTiles($player)
   }
   if ($count > 0) {
     $border = CardBorderColor("CRU197", "PLAY", $playable);
-    echo ("<div style='position:relative; display: inline-block;'>");
+    echo ("<div class='tile-display'>");
     echo (Card("ENLIGHTEN", "concat", $cardSizeAura, $playable ? 22 : 0, 1, 0, $border, ($count > 1 ? $count : 0), strval($actionIndex)) . "&nbsp");
     DisplayPriorityGem(($player == $playerID ? $auras[$first + 7] : $auras[$first + 8]), "AURAS-" . $first, ($player != $playerID ? 1 : 0));
     echo ("</div>");
@@ -1255,7 +1255,7 @@ function DisplayPriorityGem($setting, $MZindex, $otherPlayer = 0)
   }
   if ($setting != 2 && $playerID != 3) {
     $gem = ($setting == 1 ? "hexagonRedGem.png" : "hexagonGrayGem.png");
-    if ($setting == 0) echo ("<img " . ProcessInputLink($playerID, ($otherPlayer ? 104 : 103), $MZindex) . " title='Not holding priority' style='position:absolute; display: inline-block; z-index:1001; " . $position . " left:" . $cardWidth / 2 - 13 . "px; width:40px; height:40px; cursor:pointer;' src='./Images/$gem' />");
-    else if ($setting == 1) echo ("<img " . ProcessInputLink($playerID, ($otherPlayer ? 104 : 103), $MZindex) . " title='Holding priority' style='position:absolute; display: inline-block; z-index:1001; " . $position . " left:" . $cardWidth / 2 - 13 . "px; width:40px; height:40px; cursor:pointer;' src='./Images/$gem' />");
+    if ($setting == 0) echo ("<img " . ProcessInputLink($playerID, ($otherPlayer ? 104 : 103), $MZindex) . " title='Not holding priority' class='priority-gem' style='" . $position . " left:" . $cardWidth / 2 - 13 . "px;' src='./Images/$gem' />");
+    else if ($setting == 1) echo ("<img " . ProcessInputLink($playerID, ($otherPlayer ? 104 : 103), $MZindex) . " title='Holding priority' class='priority-gem' style='" . $position . " left:" . $cardWidth / 2 - 13 . "px;' src='./Images/$gem' />");
   }
 }
