@@ -1,4 +1,335 @@
+
+/* Log */
+
+#sidebarWrapper {
+  display:flex; 
+  flex-direction: column; 
+  background: rgba(0, 0, 0, 0.7); 
+  position:fixed; 
+  width:218px !important; 
+  top:0; 
+  right:0; 
+  height: 100%; 
+  padding-left:20px;
+}
+
+.MenuButtons {
+  cursor:pointer;
+}
+
+.menu-buttons-wrapper-a {
+  flex-grow:0; 
+  flex-shrink:0;
+  position:relative; 
+  top: 6px; 
+  height:50px;
+}
+
+.menu-buttons-wrapper-b {
+  position:absolute; 
+  top:12px; 
+  right:20px;
+}
+
+.stats-icon, .menu-icon {
+  width:44px; 
+  height:44px;
+}
+
+.settings-icon, .exit-icon {
+  width:20px; 
+  height:20px;
+}
+
+.round-title {
+  flex-grow:0; 
+  flex-shrink:0; 
+  text-align:left; 
+  margin-top: -32px; 
+  width:100%; 
+  font-weight:bold; 
+  font-size:20px; 
+  text-transform: uppercase; 
+  font-weight: 600; 
+  color: white; 
+  user-select: none;
+}
+
+
+/* My Resources */
+
+.my-resources .resources {
+  padding:28px 0; 
+  display: flex; 
+  justify-content: center; 
+  cursor:pointer;
+}
+
+.my-resources .resources img {
+  width:26px; 
+  height:34px; 
+  margin-top:3px;
+}
+
+.my-resources .resources span {
+  color:white; 
+  font-size:32px; 
+  font-weight: 700; 
+  margin: 0 0 0 10px;
+}
+
+/* My Discard */
+
+.my-discard-fill, .my-deck-fill {
+  cursor:pointer;
+}
+
+.my-discard-empty {
+  position:fixed;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.my-discard-empty-label {
+  position:absolute; 
+  margin: 0; 
+  top: 50%; 
+  left: 50%; 
+  transform: translate(-50%, -50%); 
+  user-select:none;
+}
+
+.my-deck-empty {
+  position:fixed;
+}
+
+.my-deck-empty-label {
+  position:absolute; 
+  margin: 0; 
+  top: 50%; 
+  left: 50%; 
+  transform: translate(-50%, -50%); 
+  user-select:none;
+}
+
+.my-deck-manual {
+  position:absolute; 
+  left:50%; 
+  -ms-transform: translateX(-50%); 
+  transform: translateX(-50%); 
+  bottom:0px; 
+  z-index:1000;
+}
+
+
+
+
+/* My Units */
+
+.spaceAlliesContainer {
+  overflow-y:auto; 
+  padding: 5px 20px 12px 20px; 
+  position: fixed; 
+  bottom:200px; 
+  left:41px; 
+  width: calc(50% - 291px); 
+}
+
+.groundAlliesContainer {
+  overflow-y:auto; 
+  padding: 5px 20px 12px 20px; 
+  position: fixed; 
+  bottom:200px; 
+  right:278px; 
+  width: calc(50% - 291px); 
+}
+
+.my-units-manual {
+  position:relative; 
+  left:-15px; 
+  width:15px; 
+  height:100%;
+}
+
+/* Their Resources */
+
+.their-resources .resources {
+  padding:28px 0; 
+  display: flex; 
+  justify-content: center; 
+  cursor:default;
+}
+
+.their-resources .resources img {
+  width:26px; 
+  height:34px; 
+  margin-top:3px;
+}
+
+.their-resources .resources span {
+  color:white; 
+  font-size:32px; 
+  font-weight: 700; 
+  margin: 0 0 0 10px;
+}
+
+/* Their Units */
+
+.spaceEnemiesContainer {
+  overflow-y:auto; 
+  padding: 20px 20px 15px 20px; 
+  position: fixed; 
+  top:140px; 
+  left:41px; 
+  width: calc(50% - 291px);
+}
+
+.groundEnemiesContainer {
+  overflow-y:auto; 
+  padding: 20px 20px 15px 20px; 
+  position: fixed; 
+  top:140px; 
+  right:278px; 
+  width: calc(50% - 291px); 
+}
+
+/* Opponent Hand */
+
+.their-hand-wrapper {
+  display: flex; 
+  justify-content: center; 
+}
+
+.their-discard {
+  cursor:pointer;
+}
+
+.their-discard-empty {
+  position:absolute; 
+  margin: 0; 
+  position: absolute; 
+  top: 50%; 
+  left: 50%; 
+  transform: translate(-50%, -50%); 
+  user-select:none;
+}
+
+.their-deck-empty-pos {
+  position:fixed; 
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.their-deck-empty {
+  position:absolute; 
+  margin: 0;  
+  top: 50%; 
+  left: 50%; 
+  transform: translate(-50%, -50%); 
+  user-select:none;
+}
+
+.their-deck-manual {
+  position:absolute; 
+  left:50%; 
+  -ms-transform: translateX(-50%); 
+  transform: translateX(-50%);  
+  bottom:0px; 
+  z-index:1000;
+}
+
+/* Table Border */
+
+.table-border-a {
+  border-spacing:0; 
+  border-collapse: collapse;
+}
+
+
+/* Arena BGs */
+
+#spaceArena {
+  position: absolute; 
+  z-index: -5; 
+  top:140px; 
+  left:41px; 
+  width:calc(50% - 251px); 
+  height:calc(100% - 340px); 
+  opacity:.6; 
+  border-radius:17px; 
+  background-size: cover; 
+  background-position: 60% 50%; 
+  background-image: url('../Images/bg-deathstar.jpg');
+}
+
+
+#groundArena {
+  position: absolute; 
+  z-index: -5; 
+  top:140px; 
+  right:278px; 
+  width:calc(50% - 251px); 
+  height:calc(100% - 340px); 
+  opacity:.4; 
+  border-radius:17px; 
+  background-size: cover; 
+  background-position: 80% 50%; 
+  background-image: url('../Images/bg-echobase.jpg');
+}
+
+.groundArena-dimmer {
+  position: absolute; 
+  z-index: -6; 
+  top:140px; 
+  right:278px; 
+  width:calc(50% - 251px); 
+  height:calc(100% - 340px); 
+  opacity:.6;
+  border-radius:17px; 
+  background-size: cover; 
+  background:#131F2A;
+}
+
+
+/* Effects UI */
+
+.opponent-effects {
+  position:absolute; 
+  width:90px; 
+  left:20px; 
+  top:150px;
+}
+
+.friendly-effects {
+  position:fixed; 
+  width:90px; 
+  left:20px; 
+  bottom:213px;
+}
+
 /* Pass Button */
+
+.passButton {
+  display: inline-block; 
+  z-index: 20; 
+  cursor:pointer; 
+  padding:8px 20px 10px; 
+  box-shadow:inset 0 0 0 1px #454545; 
+  border-radius: 5px;
+}
+
+.pass-label {
+  margin: 0 1px 0 0; 
+  color:white;
+  font-size:18px; 
+  font-weight: 600; 
+  user-select: none;
+}
+
+.pass-tag {
+  bottom:2px; 
+  font-size:12px; 
+  color:#BDBDBD; 
+  user-select: none;
+}
 
 /* Player Pick */
 
@@ -87,7 +418,6 @@
   top:0px; 
   left:65px;
 }
-
 
 /* Game Background */
 
