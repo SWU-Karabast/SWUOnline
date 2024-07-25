@@ -1767,10 +1767,10 @@ function SelfCostModifier($cardID, $from)
           //Now we need to determine if they are exempt
           switch($cardID) {
             case "6263178121"://Kylo Ren (Killing the Past)
-              if(!ControlsNamedCard($currentPlayer, "Rey")) ++$penalty;
+              if($aspectArr[$i] != "Villainy" || !ControlsNamedCard($currentPlayer, "Rey")) ++$penalty;
               break;
             case "0196346374"://Rey (Keeping the Past)
-              if(!ControlsNamedCard($currentPlayer, "Kylo Ren")) ++$penalty;
+              if($aspectArr[$i] != "Heroism" || !ControlsNamedCard($currentPlayer, "Kylo Ren")) ++$penalty;
               break;
             default:
               ++$penalty;
@@ -2538,7 +2538,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       if($from != "PLAY") {
         AddCurrentTurnEffect($cardID, $currentPlayer);//Cost discount
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to play");
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYDISCARD:definedType=Unit&Aspect=Heroism");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYDISCARD:definedType=Unit&aspect=Heroism");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
       }
