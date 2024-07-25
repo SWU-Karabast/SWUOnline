@@ -4262,7 +4262,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         $theirResources = &GetResourceCards($otherPlayer);
         $resourceCard = RemoveResource($otherPlayer, count($theirResources) - ResourcePieces());
         AddResources($resourceCard, $currentPlayer, "PLAY", "DOWN");
-        AddCurrentTurnEffect($cardID, $currentPlayer);
+        AddCurrentTurnEffect($cardID, $currentPlayer, "", $resourceCard);
       }
       break;
     case "7718080954"://Frozen in Carbonite
