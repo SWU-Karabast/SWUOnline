@@ -84,7 +84,6 @@
       <title>Karabast</title>
       <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
       <link rel="stylesheet" href="css/gamestyle072424.css">
-      <link rel="stylesheet" href="css/newrepublic.css">
       <link rel="preconnect" href="https://fonts.googleapis.com">
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
       <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Gemunu+Libre:wght@200..800&display=swap" rel="stylesheet">
@@ -418,7 +417,7 @@
       function GetCharacterLeft(cardType, cardSubType) {
         switch (cardType) {
           case "C": case "W":
-            return "calc(50% - 183px)";
+            return "0000";
           default:
             break;
         }
@@ -439,9 +438,9 @@
       function GetCharacterBottom(cardType, cardSubType) {
         switch (cardType) {
           case "C":
-            return "219px";
+            return "0000";
           case "W":
-            return "329px";
+            return "0000";
           default:
             break;
         }
@@ -462,9 +461,9 @@
       function GetCharacterTop(cardType, cardSubType) {
         switch (cardType) {
           case "C":
-            return "159px";
+            return "0000";
           case "W":
-            return "269px";
+            return "0000";
           default:
             break;
         }

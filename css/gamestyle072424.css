@@ -1,14 +1,5 @@
 /* Core Styles */
 
-:root {
-  --dark-color: #1a1a1a;
-  --light-color: #DDD;
-  --text-shadow: 2px 0 0 var(--dark-color), 0 -2px 0 var(--dark-color), 0 2px 0 var(--dark-color), -2px 0 0 var(--dark-color);
-  --grey-transparent-background: rgba(74, 74, 74, 0.9);
-  --font-family: 'Helvetica', sans-serif;
-  --button-box-shadow: 1px 1px 0 var(--dark-color), -1px -1px 0 var(--dark-color), -1px 1px 0 var(--dark-color), 1px -1px 0 var(--dark-color);
-}
-
 html, body {
   scroll-behavior: smooth;
   height: 100vh;
@@ -83,6 +74,92 @@ td {
   right: 278px;
   opacity: .6;
   background: #131F2A;
+}
+
+/* Leaders & Bases */
+
+#P1LEADER, #P1BASE, #P2LEADER, #P2BASE {
+  left: calc(50% - 183px) !important;
+  position: fixed !important;
+  margin: 1px !important;
+}
+
+#P1LEADER {
+  bottom: 219px !important;
+  top: auto !important;
+}
+
+#P1BASE {
+  bottom: 329px !important;
+  top: auto !important;
+}
+
+#P2LEADER {
+  top: 159px !important;
+  bottom: auto !important;
+}
+
+#P2BASE {
+  top: 269px !important;
+  bottom: auto !important;
+}
+
+/* Base Damage Counters */
+
+.base-dmg-wrapper {
+  position:absolute; 
+  z-index:1; 
+  left: calc(50% - 169px); 
+  width: 100px;
+}
+
+.base-dmg-position {
+  display: flex; 
+  justify-content: center;
+}
+
+.base-my-dmg, .base-their-dmg {
+  position:fixed;
+  height: 30px;
+  padding: 0 10px; 
+  background: url('../Images/dmgbg-l.png') left no-repeat, url('../Images/dmgbg-r.png') right no-repeat; 
+  background-size: contain;
+  filter: drop-shadow(1px 2px 1px rgba(0, 0, 0, 0.40));
+  font-weight: 700; 
+  font-size: 24px; 
+  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.30);  
+  user-select: none;
+  pointer-events:none
+}
+
+.base-my-dmg {
+  bottom: 365px;
+} 
+
+.base-their-dmg {
+  top: 305px;
+} 
+
+.base-my-dmg-manual {
+  position:absolute; 
+  top:120px; 
+  left:65px;
+}
+
+.base-their-dmg-manual {
+  position:absolute; 
+  top:0px; 
+  left:65px;
+}
+
+@media only screen and (max-height: 733px) {
+  .base-my-dmg {
+    bottom: calc(50% - 2px);
+  } 
+  
+  .base-their-dmg{
+    top: calc(50% - 62px);
+  } 
 }
 
 /* Buttons */
@@ -616,54 +693,6 @@ td {
   box-shadow: none;
 }
 
-/* Base Damage Counters */
-
-.base-dmg-wrapper {
-  position:absolute; 
-  z-index:1; 
-  left: calc(50% - 169px); 
-  width: 100px;
-}
-
-.base-dmg-position {
-  display: flex; 
-  justify-content: center;
-}
-
-.base-my-dmg, .base-their-dmg {
-  position:fixed;
-  height: 30px;
-  padding: 0 10px; 
-  background: url('../Images/dmgbg-l.png') left no-repeat, url('../Images/dmgbg-r.png') right no-repeat; 
-  background-size: contain;
-  filter: drop-shadow(1px 2px 1px rgba(0, 0, 0, 0.40));
-  font-weight: 700; 
-  font-size: 24px; 
-  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.30);  
-  user-select: none;
-  pointer-events:none
-}
-
-.base-my-dmg {
-  bottom: 365px;
-} 
-
-.base-their-dmg {
-  top: 305px;
-} 
-
-.base-my-dmg-manual {
-  position:absolute; 
-  top:120px; 
-  left:65px;
-}
-
-.base-their-dmg-manual {
-  position:absolute; 
-  top:0px; 
-  left:65px;
-}
-
 /* Trigger Order */
 
 .tiles-wrapper {
@@ -762,6 +791,10 @@ margin: 0 0 0 10px;
   flex-grow:0; 
   flex-shrink:0; 
   height:26px;
+}
+
+#chatText {
+  width: 104px;
 }
 
 .MenuButtons {
@@ -1132,16 +1165,6 @@ input[type="button"]:focus {
   font-weight: 600;
 }
 
-.GameLobby_Input {
-  font-family: var(--font-family);
-  border: 1px solid var(--dark-color);
-  box-shadow: var(--button-box-shadow);
-  padding: 2px 5px;
-  font-size: 16px;
-  font-weight: 500;
-  border-radius: 5%;
-}
-
 .leave-game-wrapper {
   display: flex;
   justify-content: center;
@@ -1177,16 +1200,6 @@ input[type="button"]:focus {
 }
 
 /* Responsive Layouts */
-
-@media only screen and (max-height: 733px) {
-  .base-my-dmg {
-    bottom: calc(50% - 2px);
-  } 
-  
-  .base-their-dmg{
-    top: calc(50% - 62px);
-  } 
-  }
 
 @media screen and (max-width: 1199px) {
 
