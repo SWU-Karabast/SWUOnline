@@ -4395,7 +4395,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "1503633301"://Survivors' Gauntlet
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:hasUpgradeOnly=true&THEIRALLY:hasUpgradeOnly=true");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to move an upgrade from.", 1);
-      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("SETDQVAR", $currentPlayer, "1", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "GETUPGRADES", 1);
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an upgrade to move.", 1);
