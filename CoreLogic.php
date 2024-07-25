@@ -1767,10 +1767,10 @@ function SelfCostModifier($cardID, $from)
           //Now we need to determine if they are exempt
           switch($cardID) {
             case "6263178121"://Kylo Ren (Killing the Past)
-              if(!ControlsNamedCard($currentPlayer, "Rey")) ++$penalty;
+              if($aspectArr[$i] != "Villainy" || !ControlsNamedCard($currentPlayer, "Rey")) ++$penalty;
               break;
             case "0196346374"://Rey (Keeping the Past)
-              if(!ControlsNamedCard($currentPlayer, "Kylo Ren")) ++$penalty;
+              if($aspectArr[$i] != "Heroism" || !ControlsNamedCard($currentPlayer, "Kylo Ren")) ++$penalty;
               break;
             default:
               ++$penalty;
@@ -2538,7 +2538,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       if($from != "PLAY") {
         AddCurrentTurnEffect($cardID, $currentPlayer);//Cost discount
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to play");
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYDISCARD:definedType=Unit&Aspect=Heroism");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYDISCARD:definedType=Unit&aspect=Heroism");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
       }
@@ -2882,8 +2882,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "5494760041"://Galactic Ambition
       global $CS_AfterPlayedBy;
       SetClassState($currentPlayer, $CS_AfterPlayedBy, $cardID);
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to play");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to play");
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "definedType!=Unit", 1);
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("SETDQVAR", $currentPlayer, 0, 1);
       AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, "5494760041", 1);
@@ -4394,7 +4395,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "1503633301"://Survivors' Gauntlet
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:hasUpgradeOnly=true&THEIRALLY:hasUpgradeOnly=true");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to move an upgrade from.", 1);
-      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("SETDQVAR", $currentPlayer, "1", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "GETUPGRADES", 1);
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an upgrade to move.", 1);

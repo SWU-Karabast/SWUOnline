@@ -441,7 +441,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $targetPlayer = str_starts_with($lastResult, "MY") ? $player : $otherPlayer;
           $captured = new Ally($lastResult, $targetPlayer);
           $ownerId = $captured->Owner();
-          if($cardID == "1810342362") { //Lurking TIE Phantom
+          if($cardID == "1810342362" && !$captured->LostAbilities()) { //Lurking TIE Phantom
             WriteLog(CardLink($cardID, $cardID) . " avoided capture.");
             return $cardID;
           }
@@ -456,7 +456,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             WriteLog(CardLink($cardID, $cardID) . " resisted capture.");
             return $cardID;
           }
-          $capturedIndex = explode("-", $lastResult)[1];
+          $capturedIndex = $captured->Index();
           CollectBounties($targetPlayer, $capturedIndex);
           MZRemove($player, $lastResult);
           $uniqueID = $parameterArr[1];
