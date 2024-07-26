@@ -607,6 +607,7 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       AddDecisionQueue("MZMYDECKTOPX", $player, $target);
       AddDecisionQueue("SETDQCONTEXT", $player, "Choose a card to play");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+      AddDecisionQueue("MZFILTER", $player, "maxCost=3", 1);
       AddDecisionQueue("MZOP", $player, "PLAYCARD", 1);
       break;
     case "7642980906"://Stolen Landspeeder
