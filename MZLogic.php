@@ -152,6 +152,8 @@ function MZAddZone($player, $parameter, $lastResult)
         AddGraveyard($cardIDs[$i], $otherPlayer, "-", $from);
         if($from == "HAND") CardDiscarded($otherPlayer, $cardIDs[$i]);
         break;
+      case "MYALLY": PlayAlly($cardIDs[$i], $player, from:$from); break;
+      case "THEIRALLY": PlayAlly($cardIDs[$i], $otherPlayer); break;
       default: break;
     }
   }

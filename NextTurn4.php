@@ -290,15 +290,15 @@
       // Function to handle drop event
       function drop(e) {
           e.preventDefault(); // Prevent default action (open as link for some elements)
-          //alert(e.target.id);
+          var destination = e.target.id;
 
-          // Get the data being dragged
-          var data = e.dataTransfer.getData("text/plain");
+          // Get the card being dragged
+          var draggedCard = e.dataTransfer.getData("text/plain");
 
-          // Append dragged element to drop target
-          var draggedElement = document.getElementById(data);
-          //e.target.appendChild(draggedElement);
-          alert(data);
+          // Send the action input to the server
+          SubmitInput("10014", "&cardID=" + draggedCard + "!" + destination);
+
+          //var draggedElement = document.getElementById(draggedCard);
       }
 
       function CardHasAltArt(cardID) {
