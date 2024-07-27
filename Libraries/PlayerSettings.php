@@ -140,6 +140,15 @@ function IsColorblindMode($player)
   return $settings[$SET_ColorblindMode] == "1";
 }
 
+function IsScreenReaderMode($player)
+{
+  global $SET_ColorblindMode;
+  if(!function_exists("GetSettings")) return false;
+  $settings = GetSettings($player);
+  if ($settings == null) return false;
+  return $settings[$SET_ColorblindMode] == "1";
+}
+
 function ShortcutAttackThreshold($player)
 {
   global $SET_ShortcutAttackThreshold;
