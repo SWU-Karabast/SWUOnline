@@ -492,6 +492,29 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
       $ally = new Ally("MYALLY-" . $index, $playerID);
       $ally->RemoveDamage(1);
       break;
+    case 10014://Move a card
+      if(!IsManualMode($playerID)) break;
+      $paramArr = explode("!", $cardID);
+      $draggedMZID = $paramArr[0];
+      $draggedMZArr = explode("-", $draggedMZID);
+      switch($draggedMZArr[0]) {
+        case "MYHAND": $from = "HAND"; break;
+        case "THEIRHAND": $from = "HAND"; break;
+        case "MYALLY": $from = "ALLY"; break;
+        case "THEIRALLY": $from = "ALLY"; break;
+        default: $from = ""; break;
+      }
+      switch($paramArr[1]) {
+        case "groundArena":
+          $destination = "MYALLY";
+          break;
+        default:
+          $destination = "";
+          break;
+      }
+      MZAddZone($playerID, $destination . "," . $from, $draggedMZID);
+      MZRemove($playerID, $draggedMZID);
+      break;
     case 100000: //Quick Rematch
       if($isSimulation) return;
       if($turn[0] != "OVER") break;
