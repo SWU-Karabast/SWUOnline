@@ -373,11 +373,13 @@ function SearchCurrentTurnEffects($cardID, $player, $remove = false)
 function GetCurrentTurnEffects($cardID, $player, $remove = false)
 {
   global $currentTurnEffects;
+  $rv = [];
   for ($i = 0; $i < count($currentTurnEffects); $i += CurrentTurnEffectPieces()) {
     if ($currentTurnEffects[$i] == $cardID && $currentTurnEffects[$i + 1] == $player) {
       $turnEffect = array_slice($currentTurnEffects, $i, CurrentTurnEffectPieces());
+      $rv = array_slice($currentTurnEffects, $i, CurrentTurnEffectPieces());
       if ($remove) RemoveCurrentTurnEffect($i);
-      return array_slice($currentTurnEffects, $i, CurrentTurnEffectPieces());
+      return $rv;
     }
   }
   return false;
