@@ -492,6 +492,29 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
       $ally = new Ally("MYALLY-" . $index, $playerID);
       $ally->RemoveDamage(1);
       break;
+    case 10014://Move a card
+      if(!IsManualMode($playerID)) break;
+      $paramArr = explode("!", $cardID);
+      $draggedMZID = $paramArr[0];
+      $draggedMZArr = explode("-", $draggedMZID);
+      switch($draggedMZArr[0]) {
+        case "MYHAND": $from = "HAND"; break;
+        case "THEIRHAND": $from = "HAND"; break;
+        case "MYALLY": $from = "ALLY"; break;
+        case "THEIRALLY": $from = "ALLY"; break;
+        default: $from = ""; break;
+      }
+      switch($paramArr[1]) {
+        case "groundArena":
+          $destination = "MYALLY";
+          break;
+        default:
+          $destination = "";
+          break;
+      }
+      MZAddZone($playerID, $destination . "," . $from, $draggedMZID);
+      MZRemove($playerID, $draggedMZID);
+      break;
     case 100000: //Quick Rematch
       if($isSimulation) return;
       if($turn[0] != "OVER") break;
@@ -825,13 +848,13 @@ function ResolveChainLink()
     $destroyed = $defender->DealDamage($totalAttack, bypassShield:HasSaboteur($attackerID, $mainPlayer, $attacker->Index()), fromCombat:true, damageDealt:$combatChainState[$CCS_DamageDealt]);
     if($destroyed) ClearAttackTarget();
     if($attackerArr[0] == "MYALLY" && (!$destroyed || ($combatChain[0] != "9500514827" && $combatChain[0] != "4328408486" && !SearchCurrentTurnEffects("8297630396", $mainPlayer)))) { //Han Solo shoots first; also Incinerator Trooper
-      $destroyed = $attacker->DealDamage($defenderPower, fromCombat:true);
-      if($destroyed) {
+      $attackerDestroyed = $attacker->DealDamage($defenderPower, fromCombat:true);
+      if($attackerDestroyed) {
         ClearAttacker();
         $attackerSurvived = 0;
       }
     }
-    if($hasOverwhelm) DealDamageAsync($defPlayer, $excess, "OVERWHELM", $attackerID);
+    if($hasOverwhelm && $destroyed) DealDamageAsync($defPlayer, $excess, "OVERWHELM", $attackerID);
     else if($attackerID == "3830969722") { //Blizzard Assault AT-AT
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal " . $excess . " damage to");
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY:arena=Ground");

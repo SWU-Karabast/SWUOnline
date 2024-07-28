@@ -195,7 +195,10 @@ function AllyTakeControl($player, $index) {
   for($i=$index; $i<$index+AllyPieces(); ++$i) {
     $myAllies[] = $theirAllies[$i];
   }
-  RemoveAlly($otherPlayer, $index);
+  for ($i=$index+AllyPieces()-1; $i>=$index; $i--) {
+    unset($theirAllies[$i]);
+  }
+  CheckHealthAllAllies($otherPlayer);
   CheckHealthAllAllies($player);
   CheckUnique($cardID, $player);
   return $uniqueID;
@@ -301,11 +304,15 @@ function AllyLeavesPlayAbility($player, $index)
       SearchCurrentTurnEffects("3401690666", $otherPlayer, remove:true);
       break;
     case "4002861992"://DJ (Blatant Thief)
-      if(SearchCurrentTurnEffects("4002861992", $player, remove:true)) {
-        $otherPlayer = $player == 1 ? 2 : 1;
-        $resources = &GetResourceCards($player);
-        $resourceCard = RemoveResource($player, count($resources) - ResourcePieces());
-        AddResources($resourceCard, $otherPlayer, "PLAY", "DOWN");
+      $DJTurnEffect = &GetCurrentTurnEffects("4002861992", $player, remove: true);
+      if ($DJTurnEffect !== false) {
+
+        $cardIndex = &GetCardIndexInResources($player, $DJTurnEffect[3]);
+        if ($cardIndex >= 0) {
+          $otherPlayer = $player == 1 ? 2 : 1;
+          $resourceCard = RemoveResource($player, $cardIndex);
+          AddResources($resourceCard, $otherPlayer, "PLAY", "DOWN");
+        }
       }
       break;
     default: break;
@@ -494,9 +501,13 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
         }
         break;
       case "8687233791"://Punishing One
-        if($destroyedAlly->IsUpgraded()) {
-          $thisAlly = new Ally("MYALLY-" . $i, $otherPlayer);
-          $thisAlly->Ready();
+        $thisAlly = new Ally("MYALLY-" . $i, $otherPlayer);
+        if($destroyedAlly->IsUpgraded() && $thisAlly->IsExhausted() && $thisAlly->NumUses() > 0) {
+          AddDecisionQueue("YESNO", $otherPlayer, "if you want to ready " . CardLink("", $thisAlly->CardID()));
+          AddDecisionQueue("NOPASS", $otherPlayer, "-");
+          AddDecisionQueue("PASSPARAMETER", $otherPlayer, "MYALLY-" . $i, 1);
+          AddDecisionQueue("MZOP", $otherPlayer, "READY", 1);
+          AddDecisionQueue("ADDMZUSES", $otherPlayer, "-1", 1);
         }
         break;
       default: break;
@@ -1647,11 +1658,16 @@ function AllyCardDiscarded($player, $discardedID) {
   for($i = 0; $i < count($allies); $i += AllyPieces()) {
     switch($allies[$i]) {
       case "6910883839"://Migs Mayfield
-        AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
-        AddDecisionQueue("PREPENDLASTRESULT", $player, "MYCHAR-0,THEIRCHAR-0,");
-        AddDecisionQueue("SETDQCONTEXT", $player, "Choose something to deal 2 damage to");
-        AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-        AddDecisionQueue("MZOP", $player, "DEALDAMAGE,2", 1);
+        $ally = new Ally("MYALLY-" . $i, $player);
+        if($ally->NumUses() > 0) {
+          AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
+          AddDecisionQueue("PREPENDLASTRESULT", $player, "MYCHAR-0,THEIRCHAR-0,");
+          AddDecisionQueue("SETDQCONTEXT", $player, "Choose something to deal 2 damage to");
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+          AddDecisionQueue("MZOP", $player, "DEALDAMAGE,2", 1);
+          AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $i, 1);
+          AddDecisionQueue("ADDMZUSES", $player, "-1", 1);
+        }
         break;
       default: break;
     }
@@ -1661,11 +1677,16 @@ function AllyCardDiscarded($player, $discardedID) {
   for($i = 0; $i < count($allies); $i += AllyPieces()) {
     switch($allies[$i]) {
       case "6910883839"://Migs Mayfield
-        AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY&THEIRALLY");
-        AddDecisionQueue("PREPENDLASTRESULT", $otherPlayer, "MYCHAR-0,THEIRCHAR-0,");
-        AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose something to deal 2 damage to");
-        AddDecisionQueue("MAYCHOOSEMULTIZONE", $otherPlayer, "<-", 1);
-        AddDecisionQueue("MZOP", $otherPlayer, "DEALDAMAGE,2", 1);
+        $ally = new Ally("MYALLY-" . $i, $otherPlayer);
+        if($ally->NumUses() > 0) {
+          AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY&THEIRALLY");
+          AddDecisionQueue("PREPENDLASTRESULT", $otherPlayer, "MYCHAR-0,THEIRCHAR-0,");
+          AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose something to deal 2 damage to");
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $otherPlayer, "<-", 1);
+          AddDecisionQueue("MZOP", $otherPlayer, "DEALDAMAGE,2", 1);
+          AddDecisionQueue("PASSPARAMETER", $otherPlayer, "MYALLY-" . $i, 1);
+          AddDecisionQueue("ADDMZUSES", $otherPlayer, "-1", 1);
+        }
         break;
       default: break;
     }

@@ -98,7 +98,7 @@ function MZDiscard($player, $parameter, $lastResult)
   $lastResultArr = explode(",", $lastResult);
   $otherPlayer = ($player == 1 ? 2 : 1);
   $params = explode(",", $parameter);
-  $cardIDs = [];
+  $handDiscard = false;
   for($i = 0; $i < count($lastResultArr); ++$i) {
     $mzIndex = explode("-", $lastResultArr[$i]);
     $cardOwner = (str_starts_with($mzIndex[0], "MY") ? $player : $otherPlayer);
@@ -106,7 +106,12 @@ function MZDiscard($player, $parameter, $lastResult)
     $cardID = $zone[$mzIndex[1]];
     AddGraveyard($cardID, $cardOwner, $params[0]);
     WriteLog(CardLink($cardID, $cardID) . " was discarded");
+    if(!$handDiscard && str_ends_with($mzIndex[0], "HAND")) {
+      $handDiscard = true;
+    }
   }
+  //At the moment discardedID is not used anywhere
+  if($handDiscard) AllyCardDiscarded($player, "");
   return $lastResult;
 }
 
@@ -147,6 +152,8 @@ function MZAddZone($player, $parameter, $lastResult)
         AddGraveyard($cardIDs[$i], $otherPlayer, "-", $from);
         if($from == "HAND") CardDiscarded($otherPlayer, $cardIDs[$i]);
         break;
+      case "MYALLY": PlayAlly($cardIDs[$i], $player, from:$from); break;
+      case "THEIRALLY": PlayAlly($cardIDs[$i], $otherPlayer); break;
       default: break;
     }
   }
