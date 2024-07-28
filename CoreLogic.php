@@ -2077,6 +2077,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
 {
   global $currentPlayer, $layers, $CS_PlayIndex, $initiativePlayer, $CCS_CantAttackBase;
   $index = GetClassState($currentPlayer, $CS_PlayIndex);
+  
+  MainCharacterPlayCardAbilities($cardID, $from);
+  AuraPlayAbilities($cardID, $from);
+  PermanentPlayAbilities($cardID, $from);
+    
   if($from == "PLAY" && IsAlly($cardID, $currentPlayer)) {
     $playAlly = new Ally("MYALLY-" . $index);
     $abilityName = GetResolvedAbilityName($cardID, $from);
