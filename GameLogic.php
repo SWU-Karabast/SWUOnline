@@ -895,6 +895,10 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
     case "YESPASS":
       if($lastResult == "YES") return "PASS";
       return 1;
+    case "NOALLYUNIQUEIDPASS":
+      $index = SearchAlliesForUniqueID($parameter, $player);
+      if($index == -1) return "PASS";
+      return 1;
     case "NULLPASS":
       if($lastResult == "") return "PASS";
       return $lastResult;

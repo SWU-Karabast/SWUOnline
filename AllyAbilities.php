@@ -689,10 +689,11 @@ function CollectBounty($player, $index, $cardID, $reportMode=false, $bountyUnitO
     if($bosskIndex != "") {
       $bossk = new Ally("MYALLY-" . $bosskIndex, $opponent);
       if($bossk->NumUses() > 0) {
-        AddDecisionQueue("PASSPARAMETER", $opponent, $cardID);
-        AddDecisionQueue("SETDQVAR", $opponent, 0);
-        AddDecisionQueue("SETDQCONTEXT", $opponent, "Do you want to collect the bounty for <0> again with Bossk?");
-        AddDecisionQueue("YESNO", $opponent, "-");
+        AddDecisionQueue("NOALLYUNIQUEIDPASS", $opponent, $bossk->UniqueID());
+        AddDecisionQueue("PASSPARAMETER", $opponent, $cardID, 1);
+        AddDecisionQueue("SETDQVAR", $opponent, 0, 1);
+        AddDecisionQueue("SETDQCONTEXT", $opponent, "Do you want to collect the bounty for <0> again with Bossk?", 1);
+        AddDecisionQueue("YESNO", $opponent, "-", 1);
         AddDecisionQueue("NOPASS", $opponent, "-", 1);
         AddDecisionQueue("PASSPARAMETER", $opponent, "MYALLY-" . $bosskIndex, 1);
         AddDecisionQueue("ADDMZUSES", $opponent, "-1", 1);
