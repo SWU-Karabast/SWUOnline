@@ -360,14 +360,10 @@
           if (type != "") {
             folder = "WebpImages2";
             if (zone == "myChar") {
-              var charLeft = GetCharacterLeft(type, substype);
-              var charBottom = GetCharacterBottom(type, substype);
-              positionStyle = "fixed; left:" + charLeft + "; bottom:" + charBottom;
+              positionStyle = "fixed;"
               id = type == "W" ? "P<?php echo ($playerID); ?>BASE" : "P<?php echo ($playerID); ?>LEADER";
             } else if (zone == "theirChar") {
-              var charLeft = GetCharacterLeft(type, substype);
-              var charTop = GetCharacterTop(type, substype);
-              positionStyle = "fixed; left:" + charLeft + "; top:" + charTop;
+              positionStyle = "fixed;"
               id = type == "W" ? "P<?php echo ($playerID == 1 ? 2 : 1); ?>BASE" : "P<?php echo ($playerID == 1 ? 2 : 1); ?>LEADER";
             }
           }
@@ -394,13 +390,13 @@
               var borderColor = "#1a1a1a";
               var backgroundColor = "#DDD";
               //var myName = document.getElementById("myUsername").innerHTML;
-              newHTML += "<div style='cursor:default; margin: 0px; top: 85%; left: 50%; margin-right: -50%; border-radius: 5px 5px 0 0; text-align: center; line-height: 12px; height: 15px; padding: 5px; transform: translate(-50%, -50%); position: absolute; z-index: 10; background:black; font-size: 16px; font-weight: 500; color:white; user-select: none;'>" + <?php echo ($playerID == 1 ? "p1uid" : "p2uid"); ?> + "</div>";
+              newHTML += "<div class='player-name'>" + <?php echo ($playerID == 1 ? "p1uid" : "p2uid"); ?> + "</div>";
             } else if (zone == "theirChar") {
               var fontColor = "#DDD";
               var borderColor = "#1a1a1a";
               var backgroundColor = "#DDD";
               //var theirName = document.getElementById("theirUsername").innerHTML;
-              newHTML += "<div style='cursor:default; margin: 0px; top: 85%; left: 50%; margin-right: -50%; border-radius: 5px 5px 0 0; text-align: center; line-height: 12px; height: 15px; padding: 5px; transform: translate(-50%, -50%); position: absolute; z-index: 10; background:black; font-size: 16px; font-weight: 500; color:white; user-select: none;'>" + <?php echo ($playerID == 1 ? "p2uid" : "p1uid"); ?> + "</div>";
+              newHTML += "<div class='player-name'>" + <?php echo ($playerID == 1 ? "p2uid" : "p1uid"); ?> + "</div>";
             }
 
           }

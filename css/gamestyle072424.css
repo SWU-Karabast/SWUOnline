@@ -76,32 +76,27 @@ td {
   background: #131F2A;
 }
 
-/* Leaders & Bases */
+/* Player Names */
 
-#P1LEADER, #P1BASE, #P2LEADER, #P2BASE {
-  left: calc(50% - 183px) !important;
-  position: fixed !important;
-  margin: 1px !important;
-}
-
-#P1LEADER {
-  bottom: 219px !important;
-  top: auto !important;
-}
-
-#P1BASE {
-  bottom: 329px !important;
-  top: auto !important;
-}
-
-#P2LEADER {
-  top: 159px !important;
-  bottom: auto !important;
-}
-
-#P2BASE {
-  top: 269px !important;
-  bottom: auto !important;
+.player-name {
+  cursor:default; 
+  margin: 0px; 
+  top: 85%; 
+  left: 50%;
+  margin-right: -50%; 
+  border-radius: 5px 5px 0 0; 
+  text-align: center; 
+  line-height: 12px; 
+  height: 15px; 
+  padding: 5px; 
+  transform: translate(-50%, -50%); 
+  position: absolute; 
+  z-index: 10; 
+  background:black; 
+  font-size: 16px; 
+  font-weight: 500; 
+  color:white; 
+  user-select: none;
 }
 
 /* Base Damage Counters */
@@ -152,15 +147,120 @@ td {
   left:65px;
 }
 
-@media only screen and (max-height: 733px) {
+
+/* Leaders & Bases */
+
+#P1LEADER, #P1BASE, #P2LEADER, #P2BASE {
+  left: calc(50% - 183px);
+}
+
+#P1LEADER {
+  bottom: 219px;
+}
+
+#P1BASE {
+  bottom: 329px;
+}
+
+#P2LEADER {
+  top: 159px;
+}
+
+#P2BASE {
+  top: 269px;
+}
+
+/* Leaders & Bases - Responsive Styles */
+
+@media only screen and (max-height: 810px) {
+  #P1LEADER {
+    bottom: calc(50% - 185px);
+  } 
+
+  #P1BASE {
+    bottom: calc(50% - 75px);
+  } 
+  
+  #P2LEADER {
+    top: calc(50% - 248px);
+  } 
+
+  #P2BASE {
+    top: calc(50% - 138px);
+  }
+
   .base-my-dmg {
-    bottom: calc(50% - 2px);
+    bottom: calc(50% - 40px);
   } 
   
   .base-their-dmg{
-    top: calc(50% - 62px);
+    top: calc(50% - 102px);
   } 
 }
+
+@media only screen and (max-height: 770px) {
+  #P1LEADER {
+    bottom: calc(50% - 177px);
+  } 
+
+  #P1BASE {
+    bottom: calc(50% - 72px);
+  } 
+  
+  #P2LEADER {
+    top: calc(50% - 240px);
+  } 
+
+  #P2BASE {
+    top: calc(50% - 135px);
+  }
+
+  .base-my-dmg {
+    bottom: calc(50% - 36px);
+  } 
+  
+  .base-their-dmg{
+    top: calc(50% - 99px);
+  } 
+
+  #myHand {
+    bottom: calc(50% - 296px) !important;
+  }
+
+  .their-hand-wrapper {
+    top: calc(50% - 381px) !important;
+    position: absolute;
+  }
+
+  .display-game-screen {
+    z-index: 1000;
+  }
+
+}
+
+@media only screen and (max-height: 735px) {
+
+  #myHand {
+    bottom: calc(50% - 290px) !important;
+  }
+
+  .their-hand-wrapper {
+    top: calc(50% - 367px) !important;
+    position: absolute;
+  }
+
+}
+
+@media only screen and (max-height: 720px) {
+ 
+  .status-wrapper {
+    padding: 3px 20px 16px;
+    border-radius: 30px;
+    background-color: rgb(0, 0, 0, 0.90);
+  }
+
+}
+
 
 /* Buttons */
 
@@ -668,7 +768,7 @@ td {
   display:inline-block; 
   font-size:30px; 
   text-align:center; 
-  min-height:35px;
+  min-height:45px;
 }
 
 .display-game-screen-manual {

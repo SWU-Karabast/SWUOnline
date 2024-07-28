@@ -235,6 +235,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
 
   //Now display the screen for this turn
   echo ("<span class='display-game-screen'>");
+  echo ("<span class='status-wrapper'>");
 
   echo (($manualMode ? "<span style='color: " . $fontColor . "; text-shadow: 2px 0 0 " . $borderColor . ", 0 -2px 0 " . $borderColor . ", 0 2px 0 " . $borderColor . ", -2px 0 0 " . $borderColor . ";'>Add to hand: </span><input id='manualAddCardToHand' type='text' /><input class='manualAddCardToHand-button' type='button' value='Add' onclick='AddCardToHand()' />&nbsp;" : ""));
 
@@ -281,6 +282,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   
   if($turn[0] == "M" && $initiativeTaken != 1 && $currentPlayer == $playerID) echo ("&nbsp;" . CreateButton($playerID, "Claim Initiative", 34, "-", "18px"));
   
+  echo ("</span>");
   echo ("</span>");
 
   //Deduplicate current turn effects
