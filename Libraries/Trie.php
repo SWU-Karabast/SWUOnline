@@ -13,7 +13,7 @@
       foreach ($trie as $key => $value)
       {
         fwrite($handler, "case \"" . $key . "\":\r\n");
-        TraverseTrie($trie[$key], $keySoFar . $key, $handler, $isString, $defaultValue, $dataType);
+        TraverseTrie($trie[$key], $keySoFar . $key, $handler, $isString, $defaultValue, $dataType, $language);
       }
       fwrite($handler, "default: return " . $default . ";\r\n");
       fwrite($handler, "}\r\n");
