@@ -198,7 +198,7 @@ td {
   } 
 }
 
-@media only screen and (max-height: 770px) {
+@media only screen and (max-height: 760px) {
   #P1LEADER {
     bottom: calc(50% - 177px);
   } 
@@ -238,7 +238,7 @@ td {
 
 }
 
-@media only screen and (max-height: 735px) {
+@media only screen and (max-height: 740px) {
 
   #myHand {
     bottom: calc(50% - 290px) !important;
@@ -252,30 +252,27 @@ td {
 }
 
 @media only screen and (max-height: 720px) {
+
+  .display-game-screen {
+    bottom: 0px !important;
+  }
  
   .status-wrapper {
-    padding: 3px 20px 16px;
-    border-radius: 30px;
-    background-color: rgb(0, 0, 0, 0.90);
+    border-radius: 10px 10px 0 0;
+    background-color: rgb(0, 0, 0, 0.60);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  #spaceArena, #groundArena, .groundArena-dimmer {
+    top: 130px;
+    height: calc(100% - 320px);
   }
 
 }
 
 
 /* Buttons */
-
-.passButton {
-  background-color: #292929;
-  transition: 150ms ease-in-out;
-  margin: 0 3px 0 7px;
-}
-
-.passButton:hover {
-  background-color: #292929;
-  -webkit-transform: scale(1.1);
-  -ms-transform: scale(1.1);
-  transform: scale(1.1);
-}
 
 .passButton:active {
   background-color: #292929;
@@ -292,11 +289,11 @@ td {
               linear-gradient(180deg, #454545 0%, #394B51 40%, #0080ad 100%) border-box;
   border-radius: 5px;
   border: 1px solid transparent;
+  margin: 0 0 0 10px !important;
   height:40px;
   padding: 8px 19px 10px;
   box-shadow: none;
   position: relative;
-  bottom: -1px;
 }
 
 .MenuButtons {
@@ -728,6 +725,16 @@ td {
   padding:8px 20px 10px; 
   box-shadow:inset 0 0 0 1px #454545; 
   border-radius: 5px;
+  background-color: #292929;
+  transition: 150ms ease-in-out;
+  margin: 0 0 0 10px;
+}
+
+.passButton:hover {
+  background-color: #292929;
+  -webkit-transform: scale(1.1);
+  -ms-transform: scale(1.1);
+  transform: scale(1.1);
 }
 
 .pass-label {
@@ -753,7 +760,7 @@ td {
 
 .playerpick-img {
   height:16px; 
-  margin-right:5px; 
+  margin-right:8px; 
   vertical-align: -2px; 
   user-select: none;
 }
@@ -764,7 +771,7 @@ td {
   position:fixed; 
   left:0; 
   right:238px; 
-  bottom:15px; 
+  bottom:12px; 
   display:inline-block; 
   font-size:30px; 
   text-align:center; 
@@ -791,6 +798,22 @@ td {
   left:0; 
   bottom: 5px; 
   box-shadow: none;
+}
+
+.status-wrapper {
+  padding: 10px 20px;
+  width: fit-content;
+  margin: auto;
+  display: flex;
+  flex-direction: row;
+}
+
+.playerpick-span {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
 }
 
 /* Trigger Order */
