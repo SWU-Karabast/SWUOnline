@@ -1738,6 +1738,10 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
         WriteLog("<span style='color:red;'>The event does nothing because of Relentless.</span>");
       }
       else {
+        MainCharacterPlayCardAbilities($cardID, $from);
+        AuraPlayAbilities($cardID, $from);
+        PermanentPlayAbilities($cardID, $from);
+        
         $abilityIndex = GetClassState($currentPlayer, $CS_AbilityIndex);
         $playIndex = GetClassState($currentPlayer, $CS_PlayIndex);
         $layerName = "PLAYABILITY";
