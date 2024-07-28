@@ -346,68 +346,67 @@
 
       //Note: 96 = Card Size
       function PopulateZone(zone, size = 96, folder = "concat") {
-        var zoneEl = document.getElementById(zone);
-        var zoneData = zoneEl.innerHTML;
-        if (zoneData == "") return;
-        var zoneArr = zoneData.split("|");
-        var newHTML = "";
-        for (var i = 0; i < zoneArr.length; ++i) {
-          cardArr = zoneArr[i].split(" ");
-          var id = "-";
-          var positionStyle = "relative";
-          var type = cardArr[10];
-          var substype = cardArr[11];
-          if (type != "") {
-            folder = "WebpImages2";
-            if (zone == "myChar") {
-              positionStyle = "fixed;"
-              id = type == "W" ? "P<?php echo ($playerID); ?>BASE" : "P<?php echo ($playerID); ?>LEADER";
-            } else if (zone == "theirChar") {
-              positionStyle = "fixed;"
-              id = type == "W" ? "P<?php echo ($playerID == 1 ? 2 : 1); ?>BASE" : "P<?php echo ($playerID == 1 ? 2 : 1); ?>LEADER";
-            }
-          }
-          if(zone == "myHand") {
-              id = "MYHAND-" + (i*<?php echo(HandPieces()); ?>);
-          } else if(zone == "theirHand") {
-            id = "THEIRHAND-" + (i*<?php echo(HandPieces()); ?>);
-          }
-          var styles = " style='position:" + positionStyle + "; margin:1px;'"
-          var droppable = " class='draggable' draggable='true' ondragstart='dragStart(event)' ondragend='dragEnd(event)'";
-          if(id != "-") newHTML += "<span id='" + id + "' " + styles + droppable + ">";
-          else newHTML += "<span " + styles + droppable + ">";
-          if (type == "C") {
-            folder = "WebpImages2";
-            <?php
-            echo ("var p1uid = '" . ($p1uid == "-" ? "Player 1" : $p1uid) . "';");
-            echo ("var p2uid = '" . ($p2uid == "-" ? "Player 2" : $p2uid) . "';");
-            ?>
+          var zoneEl = document.getElementById(zone);
+          var zoneData = zoneEl.innerHTML;
+          if (zoneData == "") return;
+          var zoneArr = zoneData.split("|");
+          var newHTML = "";
+          for (var i = 0; i < zoneArr.length; ++i) {
+              cardArr = zoneArr[i].split(" ");
+              var id = "-";
+              var positionStyle = "relative";
+              var type = cardArr[10];
+              var substype = cardArr[11];
+              var className = "";
+              if (type != "") {
+                  folder = "WebpImages2";
+                  if (zone == "myChar") {
+                      positionStyle = "fixed;";
+                      id = type == "W" ? "P<?php echo ($playerID); ?>BASE" : "P<?php echo ($playerID); ?>LEADER";
+                      className = type == "W" ? "my-base" : "my-leader";
+                  } else if (zone == "theirChar") {
+                      positionStyle = "fixed;";
+                      id = type == "W" ? "P<?php echo ($playerID == 1 ? 2 : 1); ?>BASE" : "P<?php echo ($playerID == 1 ? 2 : 1); ?>LEADER";
+                      className = type == "W" ? "their-base" : "their-leader";
+                  }
+              }
+              if (zone == "myHand") {
+                  id = "MYHAND-" + (i * <?php echo(HandPieces()); ?>);
+              } else if (zone == "theirHand") {
+                  id = "THEIRHAND-" + (i * <?php echo(HandPieces()); ?>);
+              }
+              var styles = " style='position:" + positionStyle + "; margin:1px;'";
+              var droppable = " class='draggable " + className + "' draggable='true' ondragstart='dragStart(event)' ondragend='dragEnd(event)'";
+              if (id != "-") newHTML += "<span id='" + id + "' " + styles + droppable + ">";
+              else newHTML += "<span " + styles + droppable + ">";
+              if (type == "C") {
+                  folder = "WebpImages2";
+                  <?php
+                  echo ("var p1uid = '" . ($p1uid == "-" ? "Player 1" : $p1uid) . "';");
+                  echo ("var p2uid = '" . ($p2uid == "-" ? "Player 2" : $p2uid) . "';");
+                  ?>
 
-            // User Tags
-
-            if (zone == "myChar") {
-              var fontColor = "#DDD";
-              var borderColor = "#1a1a1a";
-              var backgroundColor = "#DDD";
-              //var myName = document.getElementById("myUsername").innerHTML;
-              newHTML += "<div class='player-name'>" + <?php echo ($playerID == 1 ? "p1uid" : "p2uid"); ?> + "</div>";
-            } else if (zone == "theirChar") {
-              var fontColor = "#DDD";
-              var borderColor = "#1a1a1a";
-              var backgroundColor = "#DDD";
-              //var theirName = document.getElementById("theirUsername").innerHTML;
-              newHTML += "<div class='player-name'>" + <?php echo ($playerID == 1 ? "p2uid" : "p1uid"); ?> + "</div>";
-            }
-
+                  // User Tags
+                  if (zone == "myChar") {
+                      var fontColor = "#DDD";
+                      var borderColor = "#1a1a1a";
+                      var backgroundColor = "#DDD";
+                      newHTML += "<div class='player-name'>" + <?php echo ($playerID == 1 ? "p1uid" : "p2uid"); ?> + "</div>";
+                  } else if (zone == "theirChar") {
+                      var fontColor = "#DDD";
+                      var borderColor = "#1a1a1a";
+                      var backgroundColor = "#DDD";
+                      newHTML += "<div class='player-name'>" + <?php echo ($playerID == 1 ? "p2uid" : "p1uid"); ?> + "</div>";
+                  }
+              }
+              var restriction = cardArr[12];
+              if (typeof restriction != "string") restriction = "";
+              restriction = restriction.replace(/_/g, ' ');
+              newHTML += Card(cardArr[0], folder, size, cardArr[1], 1, cardArr[2], cardArr[3], cardArr[4], cardArr[5], "", cardArr[17], cardArr[6], cardArr[7], cardArr[8], cardArr[9], restriction, cardArr[13], cardArr[14], cardArr[15], cardArr[16], cardArr[18], cardArr[19]);
+              newHTML += "</span>";
           }
-          var restriction = cardArr[12];
-          if(typeof restriction != "string") restriction = "";
-          restriction = restriction.replace(/_/g, ' ');
-          newHTML += Card(cardArr[0], folder, size, cardArr[1], 1, cardArr[2], cardArr[3], cardArr[4], cardArr[5], "", cardArr[17], cardArr[6], cardArr[7], cardArr[8], cardArr[9], restriction, cardArr[13], cardArr[14], cardArr[15], cardArr[16], cardArr[18], cardArr[19]);
-          newHTML += "</span>";
-        }
-        zoneEl.innerHTML = newHTML;
-        zoneEl.style.display = "inline";
+          zoneEl.innerHTML = newHTML;
+          zoneEl.style.display = "inline";
       }
 
       function GetCharacterLeft(cardType, cardSubType) {

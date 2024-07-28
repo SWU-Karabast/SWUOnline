@@ -150,42 +150,42 @@ td {
 
 /* Leaders & Bases */
 
-#P1LEADER, #P1BASE, #P2LEADER, #P2BASE {
+.my-leader, .my-base, .their-leader, .their-base {
   left: calc(50% - 183px);
 }
 
-#P1LEADER {
+.my-leader {
   bottom: 219px;
 }
 
-#P1BASE {
+.my-base {
   bottom: 329px;
 }
 
-#P2LEADER {
+.their-leader {
   top: 159px;
 }
 
-#P2BASE {
+.their-base {
   top: 269px;
 }
 
 /* Leaders & Bases - Responsive Styles */
 
 @media only screen and (max-height: 810px) {
-  #P1LEADER {
+  .my-leader {
     bottom: calc(50% - 185px);
   } 
 
-  #P1BASE {
+  .my-base {
     bottom: calc(50% - 75px);
   } 
   
-  #P2LEADER {
+  .their-leader {
     top: calc(50% - 248px);
   } 
 
-  #P2BASE {
+  .their-base {
     top: calc(50% - 138px);
   }
 
@@ -199,19 +199,19 @@ td {
 }
 
 @media only screen and (max-height: 760px) {
-  #P1LEADER {
+  .my-leader {
     bottom: calc(50% - 177px);
   } 
 
-  #P1BASE {
+  .my-base {
     bottom: calc(50% - 72px);
   } 
   
-  #P2LEADER {
+  .their-leader {
     top: calc(50% - 240px);
   } 
 
-  #P2BASE {
+  .their-base {
     top: calc(50% - 135px);
   }
 
