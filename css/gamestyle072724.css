@@ -395,6 +395,8 @@ td {
   position: fixed; 
   bottom:200px; 
   width: calc(50% - 291px); 
+  scrollbar-color: rgba(255, 255, 255, 0) rgba(0, 0, 0, 0); 
+  scrollbar-width: thin;
 }
 
 .spaceAlliesContainer {
@@ -415,6 +417,8 @@ td {
   position: fixed; 
   top:140px; 
   width: calc(50% - 291px);
+  scrollbar-color: rgba(255, 255, 255, 0) rgba(0, 0, 0, 0); 
+  scrollbar-width: thin;
 }
 
 .spaceEnemiesContainer { 
