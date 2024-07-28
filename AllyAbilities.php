@@ -306,8 +306,7 @@ function AllyLeavesPlayAbility($player, $index)
     case "4002861992"://DJ (Blatant Thief)
       $DJTurnEffect = &GetCurrentTurnEffects("4002861992", $player, remove: true);
       if ($DJTurnEffect !== false) {
-
-        $cardIndex = &GetCardIndexInResources($player, $DJTurnEffect[3]);
+        $cardIndex = &GetCardIndexInResources($player, $DJTurnEffect[2]);
         if ($cardIndex >= 0) {
           $otherPlayer = $player == 1 ? 2 : 1;
           $resourceCard = RemoveResource($player, $cardIndex);
@@ -689,10 +688,11 @@ function CollectBounty($player, $index, $cardID, $reportMode=false, $bountyUnitO
     if($bosskIndex != "") {
       $bossk = new Ally("MYALLY-" . $bosskIndex, $opponent);
       if($bossk->NumUses() > 0) {
-        AddDecisionQueue("PASSPARAMETER", $opponent, $cardID);
-        AddDecisionQueue("SETDQVAR", $opponent, 0);
-        AddDecisionQueue("SETDQCONTEXT", $opponent, "Do you want to collect the bounty for <0> again with Bossk?");
-        AddDecisionQueue("YESNO", $opponent, "-");
+        AddDecisionQueue("NOALLYUNIQUEIDPASS", $opponent, $bossk->UniqueID());
+        AddDecisionQueue("PASSPARAMETER", $opponent, $cardID, 1);
+        AddDecisionQueue("SETDQVAR", $opponent, 0, 1);
+        AddDecisionQueue("SETDQCONTEXT", $opponent, "Do you want to collect the bounty for <0> again with Bossk?", 1);
+        AddDecisionQueue("YESNO", $opponent, "-", 1);
         AddDecisionQueue("NOPASS", $opponent, "-", 1);
         AddDecisionQueue("PASSPARAMETER", $opponent, "MYALLY-" . $bosskIndex, 1);
         AddDecisionQueue("ADDMZUSES", $opponent, "-1", 1);
@@ -1494,7 +1494,7 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MZOP", $mainPlayer, "ADDEXPERIENCE", 1);
       break;
     case "8903067778"://Finn leader unit
-      DefeatUpgrade($mainPlayer, search:"MYALLY");
+      DefeatUpgrade($mainPlayer, may:true, search:"MYALLY");
       AddDecisionQueue("PASSPARAMETER", $mainPlayer, "{0}", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "ADDSHIELD", 1);
       break;

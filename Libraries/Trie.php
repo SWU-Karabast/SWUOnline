@@ -2,17 +2,18 @@
 
 
   //Data Type - 0=ignore, 1=boolean
-  function TraverseTrie(&$trie, $keySoFar, &$handler=null, $isString=true, $defaultValue="", $dataType=0)
+  function TraverseTrie(&$trie, $keySoFar, &$handler=null, $isString=true, $defaultValue="", $dataType=0, $language="PHP")
   {
     $default = ($defaultValue != "" ? ($isString ? "\"" . $defaultValue . "\"" : $defaultValue) : ($isString ? "\"\"" : "0"));
     $depth = strlen($keySoFar);
     if(is_array($trie))
     {
-      fwrite($handler, "switch(\$cardID[" . $depth . "]) {\r\n");
+      if($language == "PHP") fwrite($handler, "switch(\$cardID[" . $depth . "]) {\r\n");
+      else if($language == "js") fwrite($handler, "switch(cardID[" . $depth . "]) {\r\n");
       foreach ($trie as $key => $value)
       {
         fwrite($handler, "case \"" . $key . "\":\r\n");
-        TraverseTrie($trie[$key], $keySoFar . $key, $handler, $isString, $defaultValue, $dataType);
+        TraverseTrie($trie[$key], $keySoFar . $key, $handler, $isString, $defaultValue, $dataType, $language);
       }
       fwrite($handler, "default: return " . $default . ";\r\n");
       fwrite($handler, "}\r\n");
