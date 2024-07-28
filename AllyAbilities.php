@@ -306,8 +306,7 @@ function AllyLeavesPlayAbility($player, $index)
     case "4002861992"://DJ (Blatant Thief)
       $DJTurnEffect = &GetCurrentTurnEffects("4002861992", $player, remove: true);
       if ($DJTurnEffect !== false) {
-
-        $cardIndex = &GetCardIndexInResources($player, $DJTurnEffect[3]);
+        $cardIndex = &GetCardIndexInResources($player, $DJTurnEffect[2]);
         if ($cardIndex >= 0) {
           $otherPlayer = $player == 1 ? 2 : 1;
           $resourceCard = RemoveResource($player, $cardIndex);
