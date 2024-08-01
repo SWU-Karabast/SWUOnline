@@ -48,7 +48,7 @@ if (!isset($_SESSION["userid"])) {
 }
 
 $isShadowBanned = false;
-if(isset($_SESSION["isBanned"])) $isShadowBanned = (intval($_SESSION["isBanned"]) == 1 ? true : false);
+if(isset($_SESSION["isBanned"])) $isShadowBanned = intval($_SESSION["isBanned"]) == 1;
 else if(isset($_SESSION["userid"])) $isShadowBanned = IsBanned($_SESSION["userid"]);
 
 if($visibility == "public" && $deckTestMode != "" && !isset($_SESSION["userid"])) {
@@ -82,8 +82,7 @@ if($isShadowBanned) {
 
 $gameName = GetGameCounter();
 
-if ( (!file_exists("Games/$gameName")) && (mkdir("Games/$gameName", 0700, true)) ){
-} else {
+if (file_exists("Games/$gameName") || !mkdir("Games/$gameName", 0700, true)) {
   print_r("Encountered a problem creating a game. Please return to the main menu and try again");
 }
 

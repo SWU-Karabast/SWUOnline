@@ -106,7 +106,7 @@ function AttackModifier($cardID, $player, $index)
       if($player == $defPlayer && GetAttackTarget() == "THEIRALLY-" . $index) $modifier += 2;
       break;
     case "6769342445"://Jango Fett
-      if(IsAllyAttackTarget()) {
+      if(IsAllyAttackTarget() && $player == $mainPlayer) {
         $ally = new Ally(GetAttackTarget(), $defPlayer);
         if($ally->HasBounty()) $modifier += 3;
       }
@@ -283,29 +283,6 @@ function OnBlockEffects($index, $from)
   }
 }
 
-function CombatChainCloseAbilities($player, $cardID, $chainLink)
-{
-  global $chainLinkSummary, $mainPlayer, $defPlayer, $chainLinks;
-  switch($cardID) {
-    case "EVR002":
-      if($chainLinkSummary[$chainLink*ChainLinkSummaryPieces()] == 0 && $chainLinks[$chainLink][0] == $cardID) {
-        PlayAura("WTR225", $defPlayer);
-      }
-      break;
-    case "UPR189":
-      if($chainLinkSummary[$chainLink*ChainLinkSummaryPieces()+1] <= 2) {
-        Draw($player);
-        WriteLog(CardLink($cardID, $cardID) . " drew a card");
-      }
-      break;
-    case "DYN121":
-      if($player == $mainPlayer) PlayerLoseHealth($mainPlayer, GetHealth($mainPlayer));
-      break;
-    default:
-      break;
-  }
-}
-
 function NumNonEquipmentDefended()
 {
   global $combatChain, $defPlayer;
@@ -352,7 +329,7 @@ function IsDominateActive()
     }
   }
   switch($combatChain[0]) {
-    case "WTR095": case "WTR096": case "WTR097": return (ComboActive() ? true : false);
+    case "WTR095": case "WTR096": case "WTR097": return ComboActive();
     case "WTR179": case "WTR180": case "WTR181": return true;
     case "ARC080": return true;
     case "MON004": return true;
@@ -361,7 +338,7 @@ function IsDominateActive()
     case "MON275": case "MON276": case "MON277": return true;
     case "ELE209": case "ELE210": case "ELE211": return HasIncreasedAttack();
     case "EVR027": case "EVR028": case "EVR029": return true;
-    case "EVR038": return (ComboActive() ? true : false);
+    case "EVR038": return ComboActive();
     case "EVR076": case "EVR077": case "EVR078": return $combatChainState[$CCS_NumBoosted] > 0;
     case "EVR110": case "EVR111": case "EVR112": return GetClassState($mainPlayer, $CS_NumAuras) > 0;
     case "EVR138":

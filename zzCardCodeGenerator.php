@@ -99,17 +99,23 @@
   GenerateFunction($uniqueTrie, $handler, "CardIsUnique", false, 0);
   GenerateFunction($hasPlayTrie, $handler, "HasWhenPlayed", false, "false", 1);
   GenerateFunction($setTrie, $handler, "CardSet", true, "");
-
   GenerateFunction($uuidLookupTrie, $handler, "UUIDLookup", true, "");
 
   fwrite($handler, "?>");
 
   fclose($handler);
 
-  function GenerateFunction($cardArray, $handler, $functionName, $isString, $defaultValue, $dataType = 0)
+
+  $generateFilename = "./GeneratedCode/GeneratedCardDictionaries.js";
+  $handler = fopen($generateFilename, "w");
+  GenerateFunction($titleTrie, $handler, "CardTitle", true, "", language:"js");
+  fclose($handler);
+
+  function GenerateFunction($cardArray, $handler, $functionName, $isString, $defaultValue, $dataType = 0, $language = "PHP")
   {
-    fwrite($handler, "function " . $functionName . "(\$cardID) {\r\n");
-    TraverseTrie($cardArray, "", $handler, $isString, $defaultValue, $dataType);
+    if($language == "PHP") fwrite($handler, "function " . $functionName . "(\$cardID) {\r\n");
+    else if($language = "js") fwrite($handler, "function " . $functionName . "(cardID) {\r\n");
+    TraverseTrie($cardArray, "", $handler, $isString, $defaultValue, $dataType, $language);
     fwrite($handler, "}\r\n\r\n");
   }
 

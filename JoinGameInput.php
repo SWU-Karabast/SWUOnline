@@ -120,6 +120,19 @@ if ($decklink != "") {
     $json = $apiDeck;
     echo($json);
   }
+  else if(str_contains($decklink, "sw-unlimited-db.com/decks")) {
+    $decklinkArr = explode("/", $decklink);
+	  $deckId = trim($decklinkArr[count($decklinkArr) - 1]);
+    $curl = curl_init();
+    curl_setopt($curl, CURLOPT_URL, "https://sw-unlimited-db.com/umbraco/api/deckapi/get?id=" . $deckId);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+    $apiDeck = curl_exec($curl);
+    $apiInfo = curl_getinfo($curl);
+    $errorMessage = curl_error($curl);
+    curl_close($curl);
+    $json = $apiDeck;
+    echo($json);
+  }
   else $json = $decklink;
 
   if($json == "") {
@@ -137,11 +150,12 @@ if ($decklink != "") {
   $base = UUIDLookup($deckObj->base->id);
   $deck = $deckObj->deck;
   $cards = "";
-  $bannedSet = "SHD";
+  $bannedSet = "";
   $hasBannedCard = false;
   for($i=0; $i<count($deck); ++$i) {
+    $deck[$i]->id = CardIDOverride($deck[$i]->id);
     $cardID = UUIDLookup($deck[$i]->id);
-    $cardID = CardOverride($cardID);
+    $cardID = CardUUIDOverride($cardID);
     if(CardSet($cardID) == $bannedSet) {
       $hasBannedCard = true;
     }
@@ -150,11 +164,12 @@ if ($decklink != "") {
       $cards .= $cardID;
     }
   }
-  $sideboard = isset($deckObj->sideboard) ? $deckObj->sideboard : [];
+  $sideboard = $deckObj->sideboard ?? [];
   $sideboardCards = "";
   for($i=0; $i<count($sideboard); ++$i) {
+    $sideboard[$i]->id = CardIDOverride($sideboard[$i]->id);
     $cardID = UUIDLookup($sideboard[$i]->id);
-    $cardID = CardOverride($cardID);
+    $cardID = CardUUIDOverride($cardID);
     if(CardSet($cardID) == $bannedSet) {
       $hasBannedCard = true;
     }
@@ -189,7 +204,6 @@ if ($decklink != "") {
     addFavoriteDeck($_SESSION["userid"], $saveLink, $deckName, $character, $deckFormat);
   }
 } else {
-  $deckFile = $deck;
   copy($deckFile, "./Games/" . $gameName . "/p" . $playerID . "Deck.txt");
   copy($deckFile, "./Games/" . $gameName . "/p" . $playerID . "DeckOrig.txt");
 }
@@ -217,15 +231,15 @@ if ($matchup == "") {
   }
 
   if ($playerID == 1) {
-    $p1uid = (isset($_SESSION["useruid"]) ? $_SESSION["useruid"] : "Player 1");
-    $p1id = (isset($_SESSION["userid"]) ? $_SESSION["userid"] : "");
+    $p1uid = ($_SESSION["useruid"] ?? "Player 1");
+    $p1id = ($_SESSION["userid"] ?? "");
     $p1IsPatron = (isset($_SESSION["isPatron"]) ? "1" : "");
-    $p1ContentCreatorID = (isset($_SESSION["patreonEnum"]) ? $_SESSION["patreonEnum"] : "");
+    $p1ContentCreatorID = ($_SESSION["patreonEnum"] ?? "");
   } else if ($playerID == 2) {
-    $p2uid = (isset($_SESSION["useruid"]) ? $_SESSION["useruid"] : "Player 2");
-    $p2id = (isset($_SESSION["userid"]) ? $_SESSION["userid"] : "");
+    $p2uid = ($_SESSION["useruid"] ?? "Player 2");
+    $p2id = ($_SESSION["userid"] ?? "");
     $p2IsPatron = (isset($_SESSION["isPatron"]) ? "1" : "");
-    $p2ContentCreatorID = (isset($_SESSION["patreonEnum"]) ? $_SESSION["patreonEnum"] : "");
+    $p2ContentCreatorID = ($_SESSION["patreonEnum"] ?? "");
   }
 
   if ($playerID == 2) $p2Key = hash("sha256", rand() . rand() . rand());
@@ -233,7 +247,7 @@ if ($matchup == "") {
   WriteGameFile();
   SetCachePiece($gameName, $playerID + 1, strval(round(microtime(true) * 1000)));
   SetCachePiece($gameName, $playerID + 3, "0");
-  SetCachePiece($gameName, $playerID + 6, $character);
+  SetCachePiece($gameName, $playerID + 6, $leader ?? "-");
   SetCachePiece($gameName, 14, $gameStatus);
   GamestateUpdated($gameName);
 
@@ -252,7 +266,28 @@ if ($matchup == "") {
 session_write_close();
 header("Location: " . $redirectPath . "/GameLobby.php?gameName=$gameName&playerID=$playerID");
 
-function CardOverride($cardID)
+function CardIDOverride($cardID) {
+  switch($cardID) {
+    case "SHD_030": return "SOR_033"; //Death Trooper
+    case "SHD_063": return "SOR_066"; //System Patrol Craft
+    case "SHD_066": return "SOR_068"; //Cargo Juggernaut
+    case "SHD_070": return "SOR_069"; //Resilient
+    case "SHD_081": return "SOR_080"; //General Tagge
+    case "SHD_085": return "SOR_083"; //Superlaser Technician
+    case "SHD_083": return "SOR_081"; //Seasoned Shoretrooper
+    case "SHD_166": return "SOR_162"; //Disabling Fang Fighter
+    case "SHD_223": return "SOR_215"; //Snapshot Reflexes
+    case "SHD_231": return "SOR_220"; //Surprise Strike 
+    case "SHD_236": return "SOR_227"; //Snowtrooper Lieutenant
+    case "SHD_238": return "SOR_229"; //Cell Block Guard
+    case "SHD_257": return "SOR_247"; //Underworld Thug
+    case "SHD_262": return "SOR_251"; //Confiscate
+    case "SHD_121": return "SOR_117"; //Mercenary Company
+    default: return $cardID;
+  }
+}
+
+function CardUUIDOverride($cardID)
 {
   switch ($cardID) {
     case "1706333706": return "8380936981";//Jabba's Rancor

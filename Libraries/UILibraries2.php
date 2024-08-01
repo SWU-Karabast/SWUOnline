@@ -79,7 +79,7 @@ function JSONRenderedCard(
   $numUses = NULL
 ) {
   global $playerID;
-  $isSpectator = (isset($playerID) && intval($playerID) == 3 ? true : false);
+  $isSpectator = isset($playerID) && intval($playerID) == 3;
 
   $countersMap->counters = property_exists($countersMap, 'counters') ?
     $countersMap->counters : $counters;
@@ -164,7 +164,7 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
     $overlay = $opts['overlay'] ?? 0;
   }
 
-  $LanguageJP = ((IsLanguageJP($playerID) && TranslationExist("JP", $cardNumber)) ? true : false);
+  $LanguageJP = IsLanguageJP($playerID) && TranslationExist("JP", $cardNumber);
   if ($darkMode == null)
     $darkMode = false;
   if ($folder == "crops") {
@@ -237,12 +237,12 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
 
   if ($controller != 0 && IsPatron($controller) && CardHasAltArt($cardNumber))
     $folderPath = "PatreonImages/" . $folderPath;
-
-  $rv .= "<img " . ($id != "" ? "id='" . $id . "-img' " : "") . "data-orientation='" . ($rotate ? "landscape' " : "portrait' ") . "class='cardImage'" . "style='{$border} height: {$height}px; width: {$width}px; position:relative; border-radius:10px;' src='{$folderPath}/{$cardNumber}{$fileExt}' />";
+  $altText = IsScreenReaderMode($playerID) ? " alt='" . CardTitle($cardNumber) . "' " : "";
+  $rv .= "<img " . ($id != "" ? "id='" . $id . "-img' " : "") . $altText . "data-orientation='" . ($rotate ? "landscape' " : "portrait' ") . "class='cardImage'" . "style='$border height: {$height}px; width: {$width}px; position:relative; border-radius:10px;' src='$folderPath/$cardNumber$fileExt' />";
   $rv .= "<div " . ($id != "" ? "id='" . $id . "-ovr' " : "") . "class='overlay'" . "style='visibility:" . ($overlay == 1 ? "visible" : "hidden") . "; height: {$height}px; width: {$width}px; top:2px; left:2px; position:absolute; background: rgba(0, 0, 0, 0.5); z-index: 1; border-radius: 8px;'></div>";
 
   // Counters Style
-  $dynamicScaling = (function_exists("IsDynamicScalingEnabled") ? IsDynamicScalingEnabled($playerID) : false);
+  $dynamicScaling = (function_exists("IsDynamicScalingEnabled") && IsDynamicScalingEnabled($playerID));
   $counterHeight = $dynamicScaling ? intval($maxHeight / 3.3) : 28;
   // Icon Size
   $iconSize = 26;
@@ -282,7 +282,7 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
   }
 
   // Shield Icon Style
-  $shieldCount = isset($opts) && isset($opts['subcards']) && is_array($opts['subcards']) ? (array_count_values($opts['subcards'])['8752877738'] ?? 0) : 0;
+  $shieldCount = isset($opts['subcards']) && is_array($opts['subcards']) ? (array_count_values($opts['subcards'])['8752877738'] ?? 0) : 0;
   if ($shieldCount > 0) {
     for ($i = 0; $i < $shieldCount; $i++) {
       $rv .= "<div style='margin: 0px;
@@ -308,7 +308,7 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
   }
 
   // Sentinel Icon Style
-  if (isset($opts) && isset($opts['hasSentinel']) && $opts['hasSentinel']) {
+  if (isset($opts['hasSentinel']) && $opts['hasSentinel']) {
     $rv .= "<div style='margin: 0px;
     top: 42px; 
     left: 89px;
@@ -328,7 +328,7 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
 
   }
   // Damage Counter Style
-  $damaged = isset($opts) && isset($opts['currentHP']) && isset($opts['maxHP']) && $opts['currentHP'] < $opts['maxHP']; 
+  $damaged = isset($opts['currentHP']) && isset($opts['maxHP']) && $opts['currentHP'] < $opts['maxHP'];
   if ($damaged) {
     $rv .= "<div style='margin: 0px;
     top: 82px;
@@ -355,7 +355,7 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
 
 
   //Card HP Style
-  if (isset($opts) && isset($opts['currentHP']) && $opts['currentHP'] != 0) {
+  if (isset($opts['currentHP']) && $opts['currentHP'] != 0) {
     $bgImage = "./Images/life_v2.png";
     $right = "-2px";
     $top = "67px";
@@ -371,7 +371,7 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
   }
 
   //Card Power style
-  if (isset($opts) && isset($opts['currentPower']) && $opts['currentPower'] != 0) {
+  if (isset($opts['currentPower']) && $opts['currentPower'] >= 0) {
     $bgImage = "./Images/attack_v2.png";
     $left = "-2px";
     $top = "67px";
@@ -387,8 +387,8 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
   }
 
   // Subcards style
-  if (isset($opts) && isset($opts['subcards']) && count($opts['subcards']) > 0) {
-    for ($i = 0; $i < count($opts['subcards']); $i++) {
+  if (isset($opts['subcards']) && count($opts['subcards']) > 0) {
+    for ($i = 0; $i < count($opts['subcards']); $i+=SubcardPieces()) {
       // Don't render shield subcard
       if ($opts['subcards'][$i] != "8752877738") {
         $rv .= "<div style='
@@ -660,7 +660,7 @@ function CreatePopupAPI($id, $fromArr, $canClose, $defaultState = 0, $title = ""
   $result->additionalComments = $additionalComments;
   $cards = array();
   for ($i = 0; $i < count($fromArr); $i += $arrElements) {
-    array_push($cards, JSONRenderedCard($fromArr[$i]));
+    $cards[] = JSONRenderedCard($fromArr[$i]);
   }
   if (count($cardsArray) > 0) {
     $cards = $cardsArray;
@@ -701,7 +701,6 @@ function CardStats($player)
   if ($darkMode) {
     $lighterColor = "rgba(94, 94, 94, 0.95)";
     $darkerColor = "rgba(74, 74, 74, 0.95)";
-    ;
   } else {
     $lighterColor = "rgba(255, 255, 255, 0.1)";
     $darkerColor = "rgba(255, 255, 255, 0)";
@@ -937,9 +936,15 @@ function CardBorderColor($cardID, $from, $isPlayable, $mod = "-")
   global $playerID, $currentPlayer, $turn;
   if ($playerID != $currentPlayer)
     return 0;
-  if ($turn[0] == "B")
-    return ($isPlayable ? 6 : 0);
-  if ($from == "BANISH") {
+  if($from == "HAND") {
+    $helptext = GetPhaseHelptext();
+    if($helptext == "Choose a card to resource") return 3;
+    else if($helptext == "Choose a card to discard") return 7;
+    else if($isPlayable)
+      return $mod == "THEIRS" ? 2 : 6; // red border for opponent's cards
+    else return 0;
+  }
+  else if ($from == "BANISH") {
     if ($isPlayable || PlayableFromBanish($cardID, $mod))
       return 7;
     return 0;
@@ -1050,9 +1055,9 @@ function GetTheirBanishForDisplay($playerID)
   $banish = array();
   for ($i = 0; $i < count($theirBanish); $i += BanishPieces()) {
     if ($theirBanish[$i + 1] == "INT" || $theirBanish[$i + 1] == "UZURI")
-      array_push($banish, $TheirCardBack);
+      $banish[] = $TheirCardBack;
     else
-      array_push($banish, $theirBanish[$i]);
+      $banish[] = $theirBanish[$i];
   }
   return $banish;
 }
@@ -1064,9 +1069,9 @@ function GetMyBanishForDisplay($playerID)
   $banish = array();
   for ($i = 0; $i < count($myBanish); $i += BanishPieces()) {
     if ($myBanish[$i + 1] == "INT" || $myBanish[$i + 1] == "UZURI")
-      array_push($banish, $myCardBack);
+      $banish[] = $myCardBack;
     else
-      array_push($banish, $myBanish[$i]);
+      $banish[] = $myBanish[$i];
   }
   return $banish;
 }

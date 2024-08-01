@@ -18,15 +18,19 @@ $response->cardBacks = [];
 $cardBack = new stdClass();
 $cardBack->name = "Default";
 $cardBack->id = 0;
-array_push($response->cardBacks, $cardBack);
+$response->cardBacks[] = $cardBack;
 $cardBack = new stdClass();
 $cardBack->name = "Rebel Resource";
 $cardBack->id = 3;
-array_push($response->cardBacks, $cardBack);
+$response->cardBacks[] = $cardBack;
 $cardBack = new stdClass();
 $cardBack->name = "Rebel Resource Dark";
 $cardBack->id = 4;
-array_push($response->cardBacks, $cardBack);
+$response->cardBacks[] = $cardBack;
+$cardBack = new stdClass();
+$cardBack->name = "L8 Night Gaming";
+$cardBack->id = 6;
+$response->cardBacks[] = $cardBack;
 
 $response->playmats = [];
 if(IsUserLoggedIn()) {
@@ -39,7 +43,7 @@ if(IsUserLoggedIn()) {
         $cardBack = new stdClass();
         $cardBack->name = $campaign->CampaignName() . (count($cardBacks) > 1 ? " " . $i + 1 : "");
         $cardBack->id = $cardBacks[$i];
-        array_push($response->cardBacks, $cardBack);
+        $response->cardBacks[] = $cardBack;
       }
     }
   }
@@ -49,7 +53,7 @@ if(IsUserLoggedIn()) {
     $playmat = new stdClass();
     $playmat->id = $i;
     $playmat->name = GetPlaymatName($i);
-    array_push($response->playmats, $playmat);
+    $response->playmats[] = $playmat;
   }
 }
 

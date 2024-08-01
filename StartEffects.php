@@ -3,8 +3,7 @@
 //include "ParseGamestate.php";
 //include "WriteLog.php";
 
-array_push($layerPriority, ShouldHoldPriority(1));
-array_push($layerPriority, ShouldHoldPriority(2));
+array_push($layerPriority, ShouldHoldPriority(1), ShouldHoldPriority(2));
 
 $mainPlayer = $firstPlayer;
 $currentPlayer = $firstPlayer;

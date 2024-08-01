@@ -28,13 +28,13 @@ if (isset($_SESSION["userid"])) {
   if (isset($settingArray[$SET_GameVisibility])) $defaultVisibility = $settingArray[$SET_GameVisibility];
 }
 $_SESSION['language'] = $language;
-if (isset($_SESSION["isPatron"])) $isPatron = $_SESSION["isPatron"];
-else $isPatron = false;
+$isPatron = $_SESSION["isPatron"] ?? false;
 
 $createGameText = ($language == 1 ? "Create Game" : "ゲームを作る");
 $languageText = ($language == 1 ? "Language" : "言語");
 $createNewGameText = ($language == 1 ? "Create New Game" : "新しいゲームを作成する");
 $starterDecksText = ($language == 1 ? "Starter Decks" : "おすすめデッキ");
+$deckUrl = TryGet("deckUrl", '');
 
 $canSeeQueue = isset($_SESSION["useruid"]);
 
@@ -94,8 +94,8 @@ include_once 'Header.php';
   */
 
   ?>
-  <label for="fabdb"><u><a style='color:lightblue;' href='https://www.swudb.com/' target='_blank'>SWUDB</a></u> Deck Link <span class="secondary">(use the url or 'Deck Link' button)</span></label>
-  <input type="text" id="fabdb" name="fabdb">
+  <label for="fabdb"><u><a style='color:lightblue;' href='https://www.swudb.com/' target='_blank'>SWUDB</a></u> or <u><a style='color:lightblue;' href='https://www.sw-unlimited-db.com/' target='_blank'>SW-Unlimited-DB</a></u> Deck Link <span class="secondary">(use the url or 'Deck Link' button)</span></label>
+  <input type="text" id="fabdb" name="fabdb" value='<?= $deckUrl ?>'>
   <?php
   if (isset($_SESSION["userid"])) {
     echo ("<span class='save-deck'>");
@@ -109,7 +109,7 @@ include_once 'Header.php';
 
   <?php
   echo ("<label for='format' class='SelectDeckInput'>Format</label>");
-  echo ("<select name='format' id='format'>");
+  echo ("<select name='format' id='format' onchange='toggleInfoBox()'>");
   if ($canSeeQueue) {
     echo ("<option value='cc' " . ($defaultFormat == 0 ? " selected" : "") . ">Premier</option>");
     echo ("<option value='compcc' " . ($defaultFormat == 1 ? " selected" : "") . ">Request-Undo Premier</option>");
@@ -117,6 +117,13 @@ include_once 'Header.php';
   echo ("<option value='livinglegendscc'" . ($defaultFormat == 4 ? " selected" : "") . ">Open Format</option>");
   echo ("</select>");
   ?>
+
+  <div class='info-box' id='info-box' style='display: <?php echo ($defaultFormat == 4 ? "block" : "none"); ?>;'>
+    <p>
+      <img src="./Images/infoicon.png" alt="Info" style="width: 13px; height: 13px; margin: 0 2px -1px 0;">
+      <span>Set 2 cards are now available in Premier Format. Open Format allows for custom rules and deck sizes, but it may take longer to find an opponent.</span>
+    </p>
+  </div>
 
   <?php
   if ($canSeeQueue) {
@@ -153,7 +160,16 @@ include_once 'Header.php';
     <h2>News</h2>
     <div style="position: relative;">
       <div style='vertical-align:middle; text-align:center;'>
-      
+        <img src="./Images/shd-art-v3.png" alt="SHD" style="max-width: 100%; border-radius: 5px;">
+        <div style="text-align: left;">
+          <b style="margin: 15px 0; display: block;">Set 2 now available!</b>
+          <p>With the launch of Set 2 we are now making these cards available in the premier formats! A big thanks to everyone who has contributed to the project, whether it be through bug reports, feature requests, or just playing games. 
+             Together, we've logged well over 300,000 games! It's clear this game has captured our hearts, and set 2 promises to offer a bounty of great games whether you're playing at your LGS or on Karabast
+             while you're smuggled up at home.</p>
+          <p>We know there's still a lot of work to be done, but the team is excited about the future of the project. We encourage you to join our <a target="_blank" href="https://discord.gg/hKRaqHND4v">Discord</a> to chat with the community, provide us feedback, or even help out with development. 
+            Either way, we hope you enjoy playing. Have fun, and may the force be with you!</p>
+          </p>
+        </div>
       </div>
     </div>
     <?php
@@ -187,6 +203,21 @@ include_once 'Header.php';
   function changeLanguage() {
     window.location.search = '?language=' + document.getElementById('languageSelect').value;
   }
+
+  function toggleInfoBox() {
+    var formatSelect = document.getElementById('format');
+    var infoBox = document.getElementById('info-box');
+    if (formatSelect.value === 'livinglegendscc') {
+      infoBox.style.display = 'block';
+    } else {
+      infoBox.style.display = 'none';
+    }
+  }
+
+  // Ensure the info box is displayed correctly based on the default selected format
+  window.onload = function() {
+    toggleInfoBox();
+  };
 </script>
 <?php
 include_once 'Disclaimer.php';

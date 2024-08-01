@@ -8,7 +8,7 @@ function EncounterAI()
 {
   global $currentPlayer, $p2CharEquip, $decisionQueue, $mainPlayer, $mainPlayerGamestateStillBuilt, $combatChain, $actionPoints;
   $AIDebug = false;
-  $currentPlayerIsAI = ($currentPlayer == 2 && IsEncounterAI($p2CharEquip[0])) ? true : false;
+  $currentPlayerIsAI = $currentPlayer == 2 && IsEncounterAI($p2CharEquip[0]);
   if(!IsGameOver() && $currentPlayerIsAI)
   {
     $isBowActive = false;
@@ -173,13 +173,6 @@ function EncounterAI()
           PassInput();
         }
       }
-      else if($turn[0] == "PDECK")//choosing which card to bottom from pitch
-      {
-        if($AIDebug) WriteLog("AI Branch - Pitch Deck");
-        $pitch = &GetPitch($currentPlayer);
-        ProcessInput($currentPlayer, 6, "", $pitch[0], 0, "");
-        CacheCombatResult();
-      }
       else if($turn[0] == "ARS" && $mainPlayer = $currentPlayer)//choose a card to arsenal
       {
         if($AIDebug) WriteLog("AI Branch - Choose Arsenal");
@@ -221,13 +214,13 @@ function EncounterAI()
         PassInput();
       }
       ProcessMacros();
-      $currentPlayerIsAI = ($currentPlayer == 2 ? true : false);
+      $currentPlayerIsAI = $currentPlayer == 2;
       if($logicCount == 30 && $currentPlayerIsAI)
       {
         for($i=0; $i<=30 && $currentPlayerIsAI; ++$i)
         {
           PassInput();
-          $currentPlayerIsAI = ($currentPlayer == 2 ? true : false);
+          $currentPlayerIsAI = $currentPlayer == 2;
         }
       }
     }

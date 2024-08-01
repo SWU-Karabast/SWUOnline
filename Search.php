@@ -1,102 +1,91 @@
 <?php
 
-function SearchDeck($player, $type = "", $definedType = "", $maxCost = -1, $minCost = -1, $aspect = "", $arena = "", $hasBountyOnly = false, $hasUpgradeOnly = false, $trait = -1, $damagedOnly = false, $maxAttack = -1, $maxHealth = -1, $frozenOnly = false, $hasNegCounters = false, $hasEnergyCounters = false, $comboOnly = false, $minAttack = false)
+function SearchDeck($player, $type = "", $definedType = "", $maxCost = -1, $minCost = -1, $aspect = "", $arena = "", $hasBountyOnly = false, $hasUpgradeOnly = false, $trait = -1, $damagedOnly = false, $maxAttack = -1, $maxHealth = -1, $frozenOnly = false, $hasNegCounters = false, $hasEnergyCounters = false, $comboOnly = false, $minAttack = false, $keyword = false)
 {
-  $otherPlayer = ($player == 1 ? 2 : 1);
-  if (SearchAurasForCard("UPR138", $otherPlayer) != "") {
-    WriteLog("Deck search prevented by Channel the Bleak Expanse.");
-    return "";
-  }
   $deck = &GetDeck($player);
-  return SearchInner($deck, $player, "DECK", DeckPieces(), $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
+  return SearchInner($deck, $player, "DECK", DeckPieces(), $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack, $keyword);
 }
 
-function SearchHand($player, $type = "", $definedType = "", $maxCost = -1, $minCost = -1, $aspect = "", $arena = "", $hasBountyOnly = false, $hasUpgradeOnly = false, $trait = -1, $damagedOnly = false, $maxAttack = -1, $maxHealth = -1, $frozenOnly = false, $hasNegCounters = false, $hasEnergyCounters = false, $comboOnly = false, $minAttack = false)
+function SearchHand($player, $type = "", $definedType = "", $maxCost = -1, $minCost = -1, $aspect = "", $arena = "", $hasBountyOnly = false, $hasUpgradeOnly = false, $trait = -1, $damagedOnly = false, $maxAttack = -1, $maxHealth = -1, $frozenOnly = false, $hasNegCounters = false, $hasEnergyCounters = false, $comboOnly = false, $minAttack = false, $keyword = false)
 {
   $hand = &GetHand($player);
-  return SearchInner($hand, $player, "HAND", HandPieces(), $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
+  return SearchInner($hand, $player, "HAND", HandPieces(), $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack, $keyword);
 }
 
-function SearchCharacter($player, $type = "", $definedType = "", $maxCost = -1, $minCost = -1, $aspect = "", $arena = "", $hasBountyOnly = false, $hasUpgradeOnly = false, $trait = -1, $damagedOnly = false, $maxAttack = -1, $maxHealth = -1, $frozenOnly = false, $hasNegCounters = false, $hasEnergyCounters = false, $comboOnly = false, $minAttack = false)
+function SearchCharacter($player, $type = "", $definedType = "", $maxCost = -1, $minCost = -1, $aspect = "", $arena = "", $hasBountyOnly = false, $hasUpgradeOnly = false, $trait = -1, $damagedOnly = false, $maxAttack = -1, $maxHealth = -1, $frozenOnly = false, $hasNegCounters = false, $hasEnergyCounters = false, $comboOnly = false, $minAttack = false, $keyword = false)
 {
   $character = &GetPlayerCharacter($player);
-  return SearchInner($character, $player, "CHAR", CharacterPieces(), $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
+  return SearchInner($character, $player, "CHAR", CharacterPieces(), $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack, $keyword);
 }
 
-function SearchPitch($player, $type = "", $definedType = "", $maxCost = -1, $minCost = -1, $aspect = "", $arena = "", $hasBountyOnly = false, $hasUpgradeOnly = false, $trait = -1, $damagedOnly = false, $maxAttack = -1, $maxHealth = -1, $frozenOnly = false, $hasNegCounters = false, $hasEnergyCounters = false, $comboOnly = false, $minAttack = false)
+function SearchPitch($player, $type = "", $definedType = "", $maxCost = -1, $minCost = -1, $aspect = "", $arena = "", $hasBountyOnly = false, $hasUpgradeOnly = false, $trait = -1, $damagedOnly = false, $maxAttack = -1, $maxHealth = -1, $frozenOnly = false, $hasNegCounters = false, $hasEnergyCounters = false, $comboOnly = false, $minAttack = false, $keyword = false)
 {
   $searchPitch = &GetPitch($player);
-  return SearchInner($searchPitch, $player, "PITCH", PitchPieces(), $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
+  return SearchInner($searchPitch, $player, "PITCH", PitchPieces(), $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack, $keyword);
 }
 
-function SearchDiscard($player, $type = "", $definedType = "", $maxCost = -1, $minCost = -1, $aspect = "", $arena = "", $hasBountyOnly = false, $hasUpgradeOnly = false, $trait = -1, $damagedOnly = false, $maxAttack = -1, $maxHealth = -1, $frozenOnly = false, $hasNegCounters = false, $hasEnergyCounters = false, $comboOnly = false, $minAttack = false)
+function SearchDiscard($player, $type = "", $definedType = "", $maxCost = -1, $minCost = -1, $aspect = "", $arena = "", $hasBountyOnly = false, $hasUpgradeOnly = false, $trait = -1, $damagedOnly = false, $maxAttack = -1, $maxHealth = -1, $frozenOnly = false, $hasNegCounters = false, $hasEnergyCounters = false, $comboOnly = false, $minAttack = false, $keyword = false)
 {
   $discard = &GetDiscard($player);
-  return SearchInner($discard, $player, "DISCARD", DiscardPieces(), $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
+  return SearchInner($discard, $player, "DISCARD", DiscardPieces(), $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack, $keyword);
 }
 
-function SearchBanish($player, $type = "", $definedType = "", $maxCost = -1, $minCost = -1, $aspect = "", $arena = "", $hasBountyOnly = false, $hasUpgradeOnly = false, $trait = -1, $damagedOnly = false, $maxAttack = -1, $maxHealth = -1, $frozenOnly = false, $hasNegCounters = false, $hasEnergyCounters = false, $comboOnly = false, $minAttack = false)
+function SearchBanish($player, $type = "", $definedType = "", $maxCost = -1, $minCost = -1, $aspect = "", $arena = "", $hasBountyOnly = false, $hasUpgradeOnly = false, $trait = -1, $damagedOnly = false, $maxAttack = -1, $maxHealth = -1, $frozenOnly = false, $hasNegCounters = false, $hasEnergyCounters = false, $comboOnly = false, $minAttack = false, $keyword = false)
 {
   $banish = &GetBanish($player);
-  return SearchInner($banish, $player, "BANISH", BanishPieces(), $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
+  return SearchInner($banish, $player, "BANISH", BanishPieces(), $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack, $keyword);
 }
 
-function SearchCombatChainLink($player, $type = "", $definedType = "", $maxCost = -1, $minCost = -1, $aspect = "", $arena = "", $hasBountyOnly = false, $hasUpgradeOnly = false, $trait = -1, $damagedOnly = false, $maxAttack = -1, $maxHealth = -1, $frozenOnly = false, $hasNegCounters = false, $hasEnergyCounters = false, $comboOnly = false, $minAttack = false)
+function SearchCombatChainLink($player, $type = "", $definedType = "", $maxCost = -1, $minCost = -1, $aspect = "", $arena = "", $hasBountyOnly = false, $hasUpgradeOnly = false, $trait = -1, $damagedOnly = false, $maxAttack = -1, $maxHealth = -1, $frozenOnly = false, $hasNegCounters = false, $hasEnergyCounters = false, $comboOnly = false, $minAttack = false, $keyword = false)
 {
   global $combatChain;
-  return SearchInner($combatChain, $player, "CC", CombatChainPieces(), $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
+  return SearchInner($combatChain, $player, "CC", CombatChainPieces(), $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack, $keyword);
 }
 
-function SearchResources($player, $type = "", $definedType = "", $maxCost = -1, $minCost = -1, $aspect = "", $arena = "", $hasBountyOnly = false, $hasUpgradeOnly = false, $trait = -1, $damagedOnly = false, $maxAttack = -1, $maxHealth = -1, $frozenOnly = false, $hasNegCounters = false, $hasEnergyCounters = false, $comboOnly = false, $minAttack = false)
+function SearchResources($player, $type = "", $definedType = "", $maxCost = -1, $minCost = -1, $aspect = "", $arena = "", $hasBountyOnly = false, $hasUpgradeOnly = false, $trait = -1, $damagedOnly = false, $maxAttack = -1, $maxHealth = -1, $frozenOnly = false, $hasNegCounters = false, $hasEnergyCounters = false, $comboOnly = false, $minAttack = false, $keyword = false)
 {
   $arsenal = &GetMemory($player);
-  return SearchInner($arsenal, $player, "MEM", MemoryPieces(), $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
+  return SearchInner($arsenal, $player, "MEM", MemoryPieces(), $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack, $keyword);
 }
 
-function SearchAura($player, $type = "", $definedType = "", $maxCost = -1, $minCost = -1, $aspect = "", $arena = "", $hasBountyOnly = false, $hasUpgradeOnly = false, $trait = -1, $damagedOnly = false, $maxAttack = -1, $maxHealth = -1, $frozenOnly = false, $hasNegCounters = false, $hasEnergyCounters = false, $comboOnly = false, $minAttack = false)
+function SearchAura($player, $type = "", $definedType = "", $maxCost = -1, $minCost = -1, $aspect = "", $arena = "", $hasBountyOnly = false, $hasUpgradeOnly = false, $trait = -1, $damagedOnly = false, $maxAttack = -1, $maxHealth = -1, $frozenOnly = false, $hasNegCounters = false, $hasEnergyCounters = false, $comboOnly = false, $minAttack = false, $keyword = false)
 {
   $auras = &GetAuras($player);
-  return SearchInner($auras, $player, "AURAS", AuraPieces(), $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
+  return SearchInner($auras, $player, "AURAS", AuraPieces(), $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack, $keyword);
 }
 
-function SearchItems($player, $type = "", $definedType = "", $maxCost = -1, $minCost = -1, $aspect = "", $arena = "", $hasBountyOnly = false, $hasUpgradeOnly = false, $trait = -1, $damagedOnly = false, $maxAttack = -1, $maxHealth = -1, $frozenOnly = false, $hasNegCounters = false, $hasEnergyCounters = false, $comboOnly = false, $minAttack = false)
+function SearchItems($player, $type = "", $definedType = "", $maxCost = -1, $minCost = -1, $aspect = "", $arena = "", $hasBountyOnly = false, $hasUpgradeOnly = false, $trait = -1, $damagedOnly = false, $maxAttack = -1, $maxHealth = -1, $frozenOnly = false, $hasNegCounters = false, $hasEnergyCounters = false, $comboOnly = false, $minAttack = false, $keyword = false)
 {
   $items = &GetItems($player);
-  return SearchInner($items, $player, "ITEMS", ItemPieces(), $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
+  return SearchInner($items, $player, "ITEMS", ItemPieces(), $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack, $keyword);
 }
 
-function SearchAllies($player, $type = "", $definedType = "", $maxCost = -1, $minCost = -1, $aspect = "", $arena = "", $hasBountyOnly = false, $hasUpgradeOnly = false, $trait = -1, $damagedOnly = false, $maxAttack = -1, $maxHealth = -1, $frozenOnly = false, $hasNegCounters = false, $hasEnergyCounters = false, $comboOnly = false, $minAttack = false)
+function SearchAllies($player, $type = "", $definedType = "", $maxCost = -1, $minCost = -1, $aspect = "", $arena = "", $hasBountyOnly = false, $hasUpgradeOnly = false, $trait = -1, $damagedOnly = false, $maxAttack = -1, $maxHealth = -1, $frozenOnly = false, $hasNegCounters = false, $hasEnergyCounters = false, $comboOnly = false, $minAttack = false, $keyword = false)
 {
   $allies = &GetAllies($player);
-  return SearchInner($allies, $player, "ALLY", AllyPieces(), $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
+  return SearchInner($allies, $player, "ALLY", AllyPieces(), $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack, $keyword);
 }
 
-function SearchPermanents($player, $type = "", $definedType = "", $maxCost = -1, $minCost = -1, $aspect = "", $arena = "", $hasBountyOnly = false, $hasUpgradeOnly = false, $trait = -1, $damagedOnly = false, $maxAttack = -1, $maxHealth = -1, $frozenOnly = false, $hasNegCounters = false, $hasEnergyCounters = false, $comboOnly = false, $minAttack = false)
+function SearchPermanents($player, $type = "", $definedType = "", $maxCost = -1, $minCost = -1, $aspect = "", $arena = "", $hasBountyOnly = false, $hasUpgradeOnly = false, $trait = -1, $damagedOnly = false, $maxAttack = -1, $maxHealth = -1, $frozenOnly = false, $hasNegCounters = false, $hasEnergyCounters = false, $comboOnly = false, $minAttack = false, $keyword = false)
 {
   $permanents = &GetPermanents($player);
-  return SearchInner($permanents, $player, "PERM", PermanentPieces(), $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
+  return SearchInner($permanents, $player, "PERM", PermanentPieces(), $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack, $keyword);
 }
 
-function SearchLayer($player, $type = "", $definedType = "", $maxCost = -1, $minCost = -1, $aspect = "", $arena = "", $hasBountyOnly = false, $hasUpgradeOnly = false, $trait = -1, $damagedOnly = false, $maxAttack = -1, $maxHealth = -1, $frozenOnly = false, $hasNegCounters = false, $hasEnergyCounters = false, $comboOnly = false, $minAttack = false)
+function SearchLayer($player, $type = "", $definedType = "", $maxCost = -1, $minCost = -1, $aspect = "", $arena = "", $hasBountyOnly = false, $hasUpgradeOnly = false, $trait = -1, $damagedOnly = false, $maxAttack = -1, $maxHealth = -1, $frozenOnly = false, $hasNegCounters = false, $hasEnergyCounters = false, $comboOnly = false, $minAttack = false, $keyword = false)
 {
   global $layers;
-  return SearchInner($layers, $player, "LAYER", LayerPieces(), $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
+  return SearchInner($layers, $player, "LAYER", LayerPieces(), $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack, $keyword);
 }
 
-function SearchLandmarks($player, $type = "", $definedType = "", $maxCost = -1, $minCost = -1, $aspect = "", $arena = "", $hasBountyOnly = false, $hasUpgradeOnly = false, $trait = -1, $damagedOnly = false, $maxAttack = -1, $maxHealth = -1, $frozenOnly = false, $hasNegCounters = false, $hasEnergyCounters = false, $comboOnly = false, $minAttack = false)
-{
-  global $landmarks;
-  return SearchInner($landmarks, $player, "LANDMARK", LandmarkPieces(), $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
-}
-
-function SearchMaterial($player, $type = "", $definedType = "", $maxCost = -1, $minCost = -1, $aspect = "", $arena = "", $hasBountyOnly = false, $hasUpgradeOnly = false, $trait = -1, $damagedOnly = false, $maxAttack = -1, $maxHealth = -1, $frozenOnly = false, $hasNegCounters = false, $hasEnergyCounters = false, $comboOnly = false, $minAttack = false)
+function SearchMaterial($player, $type = "", $definedType = "", $maxCost = -1, $minCost = -1, $aspect = "", $arena = "", $hasBountyOnly = false, $hasUpgradeOnly = false, $trait = -1, $damagedOnly = false, $maxAttack = -1, $maxHealth = -1, $frozenOnly = false, $hasNegCounters = false, $hasEnergyCounters = false, $comboOnly = false, $minAttack = false, $keyword = false)
 {
   $material = &GetMaterial($player);
-  return SearchInner($material, $player, "MATERIAL", MaterialPieces(), $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
+  return SearchInner($material, $player, "MATERIAL", MaterialPieces(), $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack, $keyword);
 }
 
 
-function SearchInner(&$array, $player, $zone, $count, $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack)
+function SearchInner(&$array, $player, $zone, $count, $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack, $keyword)
 {
   $cardList = "";
   for ($i = 0; $i < count($array); $i += $count) {
@@ -110,16 +99,25 @@ function SearchInner(&$array, $player, $zone, $count, $type, $definedType, $maxC
         && ($aspect == "" || AspectContains($cardID, $aspect, $player))
         && ($arena == "" || ArenaContains($cardID, $arena, $player))
         && ($trait == -1 || TraitContains($cardID, $trait, $player, $i))
-        && ($maxAttack == -1 || AttackValue($cardID) <= $maxAttack)
-        && ($minAttack == -1 || AttackValue($cardID) >= $minAttack)
+        && ($keyword == "" || HasKeyword($cardID, $keyword, $player, $i))
       ) {
-        if($maxAttack > -1 && $zone == "ALLY") {
-          $ally = new Ally("MYALLY-" . $i, $player);
-          if($ally->CurrentPower() > $maxAttack) continue;
+        if($maxAttack > -1) {
+          if($zone == "ALLY") {
+            $ally = new Ally("MYALLY-" . $i, $player);
+            if($ally->CurrentPower() > $maxAttack) continue;
+          } elseif(AttackValue($cardID) > $maxAttack) continue;
         }
-        if($maxHealth > -1 && $zone == "ALLY") {
-          $ally = new Ally("MYALLY-" . $i, $player);
-          if($ally->Health() > $maxHealth) continue;
+        if($maxHealth > -1) {
+          if($zone == "ALLY") {
+            $ally = new Ally("MYALLY-" . $i, $player);
+            if($ally->Health() > $maxHealth) continue;
+          } elseif(CardHP($cardID) > $maxHealth) continue;
+        }
+        if($minAttack > -1) {
+          if($zone == "ALLY") {
+            $ally = new Ally("MYALLY-" . $i, $player);
+            if($ally->CurrentPower() < $minAttack) continue;
+          } elseif(AttackValue($cardID) < $minAttack) continue;
         }
         if($hasBountyOnly && $zone == "ALLY") {
           $ally = new Ally("MYALLY-" . $i, $player);
@@ -372,6 +370,21 @@ function SearchCurrentTurnEffects($cardID, $player, $remove = false)
   return false;
 }
 
+function GetCurrentTurnEffects($cardID, $player, $remove = false)
+{
+  global $currentTurnEffects;
+  $rv = [];
+  for ($i = 0; $i < count($currentTurnEffects); $i += CurrentTurnEffectPieces()) {
+    if ($currentTurnEffects[$i] == $cardID && $currentTurnEffects[$i + 1] == $player) {
+      $turnEffect = array_slice($currentTurnEffects, $i, CurrentTurnEffectPieces());
+      $rv = array_slice($currentTurnEffects, $i, CurrentTurnEffectPieces());
+      if ($remove) RemoveCurrentTurnEffect($i);
+      return $rv;
+    }
+  }
+  return false;
+}
+
 function SearchLimitedCurrentTurnEffects($cardID, $player, $remove = false)
 {
   global $currentTurnEffects;
@@ -437,7 +450,7 @@ function SearchPitchForNumCosts($player)
   $pitch = &GetPitch($player);
   for ($i = 0; $i < count($pitch); $i += PitchPieces()) {
     $cost = CardCost($pitch[$i]);
-    while (count($countArr) <= $cost) array_push($countArr, 0);
+    while (count($countArr) <= $cost) $countArr[] = 0;
     if ($countArr[$cost] == 0) ++$count;
     ++$countArr[$cost];
   }
@@ -743,37 +756,6 @@ function CountItem($cardID, $player)
   return $count;
 }
 
-function SearchArcaneReplacement($player, $zone)
-{
-  $cardList = "";
-  switch ($zone) {
-    case "MYCHAR":
-      $array = &GetPlayerCharacter($player);
-      $count = CharacterPieces();
-      break;
-    case "MYITEMS":
-      $array = &GetItems($player);
-      $count = ItemPieces();
-      break;
-    case "MYAURAS":
-      $array = &GetAuras($player);
-      $count = AuraPieces();
-      break;
-  }
-  for ($i = 0; $i < count($array); $i += $count) {
-    if ($zone == "MYCHAR" && !IsCharacterAbilityActive($player, $i)) continue;
-    $cardID = $array[$i];
-    if (SpellVoidAmount($cardID, $player) > 0 && IsCharacterActive($player, $i)) {
-      if ($cardList != "") $cardList = $cardList . ",";
-      $cardList = $cardList . $i;
-    } elseif (SpellVoidAmount($cardID, $player) > 0 && $zone != "MYCHAR") {
-      if ($cardList != "") $cardList = $cardList . ",";
-      $cardList = $cardList . $i;
-    }
-  }
-  return $cardList;
-}
-
 function SearchChainLinks($minPower = -1, $maxPower = -1, $cardType = "")
 {
   global $chainLinks;
@@ -802,12 +784,15 @@ function GetMZCardLink($player, $MZ)
 //Each search is delimited by &, which means a set UNION
 //Each search is the format <zone>:<condition 1>;<condition 2>,...
 //Each condition is format <search parameter name>=<parameter value>
+//cardID=, sameName=, and sameTitle= cannot be combined with other conditions, except maxCount=.
 //Example: AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND:maxAttack=3;type=AA");
 function SearchMultizone($player, $searches)
 {
   $unionSearches = explode("&", $searches);
   $rv = "";
+  $opponent = $player == 1 ? 2 : 1;
   for($i = 0; $i < count($unionSearches); ++$i) {
+    $maxCount = -1;
     $type = "";
     $definedType = "";
     $maxCost = -1;
@@ -817,6 +802,7 @@ function SearchMultizone($player, $searches)
     $hasBountyOnly = false;
     $hasUpgradeOnly = false;
     $trait = -1;
+    $keyword = "";
     $damagedOnly = false;
     $maxAttack = -1;
     $minAttack = -1;
@@ -829,12 +815,18 @@ function SearchMultizone($player, $searches)
     $zone = $searchArr[0];
     $isCardID = false;
     $isSameName = false;
+    $isSameTitle = false;
+    $searchResult = "";
+    $searchPlayer = (str_starts_with($zone, "MY") ? $player : ($player == 1 ? 2 : 1));
     if(count($searchArr) > 1) //Means there are conditions
     {
       $conditions = explode(";", $searchArr[1]);
       for ($j = 0; $j < count($conditions); ++$j) {
         $condition = explode("=", $conditions[$j]);
         switch ($condition[0]) {
+          case "maxCount":
+            $maxCount = $condition[1];
+            break;
           case "type":
             $type = $condition[1];
             break;
@@ -861,6 +853,9 @@ function SearchMultizone($player, $searches)
             break;
           case "trait":
             $trait = $condition[1];
+            break;
+          case "keyword":
+            $keyword = $condition[1];
             break;
           case "damagedOnly":
             $damagedOnly = $condition[1];
@@ -902,6 +897,12 @@ function SearchMultizone($player, $searches)
                 else if(count($cards) == 3) $searchResult = SearchDeckForCard($player, $cards[0], $cards[1], $cards[2]);
                 else WriteLog("Deck multizone search only supports 3 cards -- report bug.");
                 break;
+              case "THEIRDISCARD":
+                if(count($cards) == 1) $searchResult = SearchDiscardForCard($opponent, $cards[0]);
+                else if(count($cards) == 2) $searchResult = SearchDiscardForCard($opponent, $cards[0], $cards[1]);
+                else if(count($cards) == 3) $searchResult = SearchDiscardForCard($opponent, $cards[0], $cards[1], $cards[2]);
+                else WriteLog("Discard multizone search only supports 3 cards -- report bug.");
+                break;
               case "MYDISCARD":
                 if(count($cards) == 1) $searchResult = SearchDiscardForCard($player, $cards[0]);
                 else if(count($cards) == 2) $searchResult = SearchDiscardForCard($player, $cards[0], $cards[1]);
@@ -922,8 +923,6 @@ function SearchMultizone($player, $searches)
                 break;
               default: break;
             }
-            $searchResult = SearchMultiZoneFormat($searchResult, $zone);
-            $rv = CombineSearches($rv, $searchResult);
             $isCardID = true;
             break;
           case "sameName":
@@ -934,70 +933,77 @@ function SearchMultizone($player, $searches)
               case "MYDISCARD": $searchResult = SearchDiscardByName($player, $name); break;
               default: break;
             }
-            $rv = SearchMultiZoneFormat($searchResult, $zone);
-            //$rv = CombineSearches($rv, $searchResult);
             $isSameName = true;
+            break;
+          case "sameTitle":
+            $title = CardTitle($condition[1]);
+            switch($zone)
+            {
+              case "MYALLY": case "THEIRALLY": $searchResult = SearchAlliesForTitle($searchPlayer, $title); break;
+              default: break;
+            }
+            $isSameTitle = true;
             break;
           default:
             break;
         }
       }
     }
-    $searchPlayer = (substr($zone, 0, 2) == "MY" ? $player : ($player == 1 ? 2 : 1));
-    $searchResult = "";
-    if(!$isCardID && !$isSameName)
+    if(!$isCardID && !$isSameName && !$isSameTitle)
     {
       switch ($zone) {
         case "MYDECK": case "THEIRDECK":
-          $searchResult = SearchDeck($searchPlayer, $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
+          $searchResult = SearchDeck($searchPlayer, $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack, $keyword);
           break;
         case "MYHAND": case "THEIRHAND":
-          $searchResult = SearchHand($searchPlayer, $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
+          $searchResult = SearchHand($searchPlayer, $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack, $keyword);
           break;
         case "MYDISCARD": case "THEIRDISCARD":
-          $searchResult = SearchDiscard($searchPlayer, $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
+          $searchResult = SearchDiscard($searchPlayer, $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack, $keyword);
           break;
         case "MYAURAS": case "THEIRAURAS":
-          $searchResult = SearchAura($searchPlayer, $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
+          $searchResult = SearchAura($searchPlayer, $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack, $keyword);
           break;
         case "MYCHAR": case "THEIRCHAR":
-          $searchResult = SearchCharacter($searchPlayer, $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
+          $searchResult = SearchCharacter($searchPlayer, $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack, $keyword);
           break;
         case "MYITEMS": case "THEIRITEMS":
-          $searchResult = SearchItems($searchPlayer, $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
+          $searchResult = SearchItems($searchPlayer, $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack, $keyword);
           break;
         case "MYALLY": case "THEIRALLY":
-          $searchResult = SearchAllies($searchPlayer, $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
+          $searchResult = SearchAllies($searchPlayer, $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack, $keyword);
           break;
         case "MYPERM": case "THEIRPERM":
-          $searchResult = SearchPermanents($searchPlayer, $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
+          $searchResult = SearchPermanents($searchPlayer, $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack, $keyword);
           break;
         case "MYBANISH": case "THEIRBANISH":
-          $searchResult = SearchBanish($searchPlayer, $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
+          $searchResult = SearchBanish($searchPlayer, $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack, $keyword);
           break;
         case "MYPITCH": case "THEIRPITCH":
-          $searchResult = SearchPitch($searchPlayer, $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
+          $searchResult = SearchPitch($searchPlayer, $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack, $keyword);
           break;
         case "MYMATERIAL": case "THEIRMATERIAL":
-          $searchResult = SearchMaterial($searchPlayer, $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
+          $searchResult = SearchMaterial($searchPlayer, $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack, $keyword);
           break;
         case "MYRESOURCES": case "THEIRRESOURCES":
-          $searchResult = SearchResources($searchPlayer, $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
+          $searchResult = SearchResources($searchPlayer, $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack, $keyword);
           break;
         case "COMBATCHAINLINK":
-          $searchResult = SearchCombatChainLink($searchPlayer, $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
+          $searchResult = SearchCombatChainLink($searchPlayer, $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack, $keyword);
           break;
         case "LAYER":
-          $searchResult = SearchLayer($searchPlayer, $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
-          break;
-        case "LANDMARK":
-          $searchResult = SearchLandmarks($searchPlayer, $type, $definedType,$maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack);
+          $searchResult = SearchLayer($searchPlayer, $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $comboOnly, $minAttack, $keyword);
           break;
         default:
           break;
       }
     }
     $searchResult = SearchMultiZoneFormat($searchResult, $zone);
+    if ($maxCount != -1) {
+      $searchResult = explode(",", $searchResult);
+      $searchResult = array_slice($searchResult, 0, $maxCount);
+      $searchResult = implode(",", $searchResult);
+    }
     $rv = CombineSearches($rv, $searchResult);
   }
   return $rv;
@@ -1038,4 +1044,17 @@ function UnitCardSharesName($cardID, $player)
     if($title == CardTitle($allies[$i])) return true;
   }
   return false;
+}
+
+function GetUnitsThatAttackedBaseMZIndices($player) {//$player is the owner of the base
+  global $CS_UnitsThatAttackedBase;
+  $unitsThatAttackedBaseUniqueIDs = explode(",", GetClassState($player, $CS_UnitsThatAttackedBase));
+  $unitsThatAttackedBaseMZIndices = "";
+  for($i = 0; $i < count($unitsThatAttackedBaseUniqueIDs); ++$i) {
+    $index = SearchAlliesForUniqueID($unitsThatAttackedBaseUniqueIDs[$i], $player == 1 ? 2 :1);
+    if($index == -1) continue;
+    if($unitsThatAttackedBaseMZIndices != "") $unitsThatAttackedBaseMZIndices .= ",";
+    $unitsThatAttackedBaseMZIndices .= "THEIRALLY-" . $index;
+  }
+  return $unitsThatAttackedBaseMZIndices;
 }

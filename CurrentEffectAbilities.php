@@ -18,6 +18,10 @@ function EffectHitEffect($cardID)
     case "0802973415"://Outflank
       AddCurrentTurnEffect("0802973415-1", $mainPlayer);
       break;
+    case "5896817672-1"://Headhunting
+    case "5896817672-2":
+      AddCurrentTurnEffect("5896817672" . (substr($cardID, -2, 2) == "-1" ? "-2" : "-3"), $mainPlayer);
+      break;
     case "6514927936-1"://Leia Organa
       AddCurrentTurnEffectFromCombat("6514927936-2", $mainPlayer);
       break;
@@ -34,18 +38,38 @@ function FinalizeChainLinkEffects()
   for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnPieces()) {
     switch($currentTurnEffects[$i]) {
       case "8988732248-2"://Rebel Assault
+        PrependDecisionQueue("REMOVECURRENTEFFECT", $mainPlayer, $currentTurnEffects[$i]);
         PrependDecisionQueue("SWAPTURN", $mainPlayer, "-");
         PrependDecisionQueue("ELSE", $mainPlayer, "-");
         PrependDecisionQueue("MZOP", $mainPlayer, "ATTACK", 1);
-        PrependDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        PrependDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
         PrependDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to attack with");
         PrependDecisionQueue("MZFILTER", $mainPlayer, "status=1");
         PrependDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:trait=Rebel");
         return true;
       case "0802973415-1"://Outflank
+        PrependDecisionQueue("REMOVECURRENTEFFECT", $mainPlayer, $currentTurnEffects[$i]);
         PrependDecisionQueue("SWAPTURN", $mainPlayer, "-");
         PrependDecisionQueue("ELSE", $mainPlayer, "-");
         PrependDecisionQueue("MZOP", $mainPlayer, "ATTACK", 1);
+        PrependDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        PrependDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to attack with");
+        PrependDecisionQueue("MZFILTER", $mainPlayer, "status=1");
+        PrependDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
+        return true;
+      case "5896817672-2"://Headhunting
+      case "5896817672-3":
+        global $CCS_CantAttackBase;
+        PrependDecisionQueue("REMOVECURRENTEFFECT", $mainPlayer, $currentTurnEffects[$i]);
+        PrependDecisionQueue("MZOP", $mainPlayer, "ATTACK", 1);
+        PrependDecisionQueue("PASSPARAMETER", $mainPlayer, "{0}");
+        PrependDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "5896817672", 1);
+        PrependDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
+        PrependDecisionQueue("MZALLCARDTRAITORPASS", $mainPlayer, "Bounty Hunter", 1);
+        PrependDecisionQueue("PASSPARAMETER", $mainPlayer, "{0}", 1);
+        PrependDecisionQueue("SETCOMBATCHAINSTATE", $mainPlayer, $CCS_CantAttackBase, 1);
+        PrependDecisionQueue("PASSPARAMETER", $mainPlayer, 1, 1);
+        PrependDecisionQueue("SETDQVAR", $mainPlayer, "0");
         PrependDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
         PrependDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to attack with");
         PrependDecisionQueue("MZFILTER", $mainPlayer, "status=1");
@@ -73,7 +97,7 @@ function FinalizeChainLinkEffects()
       case "9560139036"://Ezra Bridger
         SearchCurrentTurnEffects("9560139036", $mainPlayer, remove:true);
         PrependDecisionQueue("MODAL", $mainPlayer, "EZRABRIDGER", 1);
-        PrependDecisionQueue("SHOWMODES", $mainPlayer, $cardID, 1);
+        PrependDecisionQueue("SHOWMODES", $mainPlayer, $currentTurnEffects[$i], 1);
         PrependDecisionQueue("MULTICHOOSETEXT", $mainPlayer, "1-Leave,Play,Discard-1");
         PrependDecisionQueue("SETDQCONTEXT", $mainPlayer, "The top card is <0>; Choose a mode for Ezra Bridger");
         PrependDecisionQueue("SETDQVAR", $mainPlayer, "0");
@@ -116,6 +140,7 @@ function EffectAttackModifier($cardID, $playerID="")
     case "9210902604"://Precision Fire
       $attacker = new Ally(AttackerMZID($mainPlayer), $mainPlayer);
       return TraitContains($attacker->CardID(), "Trooper", $mainPlayer) ? 2 : 0;
+    case "5896817672": if(!$subparam) return 2; else return 0;//Headhunting
     case "8297630396": return 1;//Shoot First
     case "5464125379": return -2;//Strafing Gunship
     case "8495694166": return -2;//Jedi Lightsaber
@@ -131,7 +156,7 @@ function EffectAttackModifier($cardID, $playerID="")
     case "7171636330": return -4;//Chain Code Collector
     case "2526288781": return 1;//Bossk
     case "1312599620": return -3;//Smuggler's Starfighter
-    case "8107876051": return -3;//Enfy's Nest
+    case "8107876051": return -3;//Enfys Nest
     case "9334480612": return 1;//Boba Fett Green Leader
     case "6962053552": return 2;//Desperate Attack
     case "4085341914": return 4;//Heroic Resolve
@@ -146,6 +171,7 @@ function EffectAttackModifier($cardID, $playerID="")
       $ally = new Ally($attackTarget, $defPlayer);
       $modifier = $playerID == $defPlayer ? -2 : 2;
       return CardArenas($ally->CardID()) == "Ground" ? $modifier : 0;
+    case "3399023235": return isset($subparam) && $subparam == "2" ? -2 : 0;//Fenn Rau
     default: return 0;
   }
 }
@@ -205,7 +231,7 @@ function CurrentEffectBaseAttackSet($cardID)
   return $mod;
 }
 
-function CurrentEffectCostModifiers($cardID, $from)
+function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
 {
   global $currentTurnEffects, $currentPlayer, $CS_PlayUniqueID;
   $costModifier = 0;
@@ -213,6 +239,10 @@ function CurrentEffectCostModifiers($cardID, $from)
     $remove = false;
     if($currentTurnEffects[$i + 1] == $currentPlayer) {
       switch($currentTurnEffects[$i]) {
+        case "TTFREE"://Free
+          $costModifier -= 99;
+          $remove = true;
+          break;
         case "5707383130"://Bendu
           if(!AspectContains($cardID, "Heroism", $currentPlayer) && !AspectContains($cardID, "Villainy", $currentPlayer)) {
             $costModifier -= 2;
@@ -232,7 +262,7 @@ function CurrentEffectCostModifiers($cardID, $from)
           $remove = true;
           break;
         case "3509161777"://You're My Only Hope
-          $costModifier -= PlayerRemainingHealth($player) <= 5 ? 99 : 5;
+          $costModifier -= PlayerRemainingHealth($currentPlayer) <= 5 ? 99 : 5;
           $remove = true;
           break;
         case "5494760041"://Galactic Ambition
@@ -253,25 +283,27 @@ function CurrentEffectCostModifiers($cardID, $from)
           $costModifier -= 1;
           $remove = true;
           break;
-        case "8506660490":
+        case "8506660490"://Darth Vader
           $costModifier -= 99;
           break;
         case "8968669390"://U-Wing Reinforcement
           $costModifier -= 99;
           break;
-        case "5440730550"://Lando Calrissian
+        case "5440730550"://Lando Calrissian Leader
+        case "040a3e81f3"://Lando Calrissian Leader Unit
           $costModifier -= 2;
           $remove = true;
           break;
         case "4643489029"://Palpatine's Return
-          $costModifier -= TraitContains($cardID, "Force", $player) ? 8 : 6;
+          $costModifier -= TraitContains($cardID, "Force", $currentPlayer) ? 8 : 6;
           $remove = true;
           break;
+        case "7270736993"://Unrefusable Offer
         case "4717189843"://A New Adventure
           $costModifier -= 99;
           $remove = true;
           break;
-        case "9642863632"://Bounty Hunter Quary
+        case "9642863632"://Bounty Hunter's Quarry
           $costModifier -= 99;
           $remove = true;
           break;
@@ -280,13 +312,13 @@ function CurrentEffectCostModifiers($cardID, $from)
           $remove = true;
           break;
         case "0622803599-3"://Jabba the Hutt
-          if(DefinedTypesContains($cardID, "Unit", $player)) {
+          if(DefinedTypesContains($cardID, "Unit", $currentPlayer)) {
             $costModifier -= 1;
             $remove = true;
           }
           break;
         case "f928681d36-3"://Jabba the Hutt Leader Unit
-          if(DefinedTypesContains($cardID, "Unit", $player)) {
+          if(DefinedTypesContains($cardID, "Unit", $currentPlayer)) {
             $costModifier -= 2;
             $remove = true;
           }
@@ -295,9 +327,17 @@ function CurrentEffectCostModifiers($cardID, $from)
           $costModifier -= 99;
           $remove = true;
           break;
+        case "3399023235"://Fenn Rau
+          $costModifier -= 2;
+          $remove = true;
+          break;
+        case "7642980906"://Stolen Landspeeder
+          $costModifier -= 99;
+          $remove = false;
+          break;
         default: break;
       }
-      if($remove) RemoveCurrentTurnEffect($i);
+      if($remove && !$reportMode) RemoveCurrentTurnEffect($i);
     }
   }
   return $costModifier;
@@ -351,9 +391,7 @@ function CurrentEffectAttackAbility()
     $remove = false;
     if($currentTurnEffects[$i + 1] == $mainPlayer) {
       switch ($currentTurnEffects[$i]) {
-        case "Tx6iJQNSA6"://Majestic Spirit's Crest
-          if(!IsAlly($attackID)) Draw($mainPlayer);
-          break;
+        
         default:
           break;
       }
@@ -502,6 +540,7 @@ function CurrentEffectEndTurnAbilities()
     }
     switch($cardID) {
       case "3426168686-2"://Sneak Attack
+      case "7270736993-2"://Unrefusable Offer
         $ally = new Ally("MYALLY-" . SearchAlliesForUniqueID($currentTurnEffects[$i+2], $currentTurnEffects[$i+1]), $currentTurnEffects[$i+1]);
         $ally->Destroy();
         break;
@@ -526,8 +565,14 @@ function CurrentEffectEndTurnAbilities()
         DealDamageAsync($currentTurnEffects[$i+1], 999999);
         break;
       case "6117103324"://Jetpack
-        $ally = new Ally("MYALLY-" . SearchAlliesForUniqueID($currentTurnEffects[$i+2], $currentTurnEffects[$i+1]), $currentTurnEffects[$i+1]);
-        $ally->DefeatUpgrade("8752877738");
+        $allyIndex = SearchAlliesForUniqueID($currentTurnEffects[$i+2], $currentTurnEffects[$i+1]);
+        if($allyIndex > -1) {
+          $ally = new Ally("MYALLY-" . $allyIndex, $currentTurnEffects[$i+1]);
+          $ally->DefeatUpgrade("8752877738");
+        }
+        break;
+      case "4002861992"://DJ (Blatant Thief)
+        AddNextTurnEffect($currentTurnEffects[$i], $currentTurnEffects[$i + 1]);
         break;
       default: break;
     }
@@ -613,9 +658,12 @@ function IsCombatEffectActive($cardID)
     case "2503039837": return true;//Moff Gideon Leader
     case "4721657243": return true;//Kihraxz Heavy Fighter
     case "7171636330": return true;//Chain Code Collector
-    case "8107876051": return true;//Enfy's Nest
+    case "8107876051": return true;//Enfys Nest
     case "7578472075": return true;//Let the Wookie Win
     case "4663781580": return true;//Swoop Down
+    case "4085341914": return true;//Heroic Resolve
+    case "5896817672": return true;//Headhunting
+    case "6962053552": return true;//Desperate attack
     default: return false;
   }
 }
@@ -708,13 +756,10 @@ function CurrentEffectAllyEntersPlay($player, $index)
     $remove = false;
     if($currentTurnEffects[$i + 1] == $player) {
       switch($currentTurnEffects[$i]) {
-        case "RfPP8h16Wv":
-          if(SubtypeContains($allies[$index], "BEAST", $player) || SubtypeContains($allies[$index], "ANIMAL", $player))
-          {
-            ++$allies[$index+2];
-            ++$allies[$index+7];
-            $remove = 1;
-          }
+        case "7642980906"://Stolen Landspeeder
+          $remove = true;
+          $ally = new Ally("MYALLY-" . $index, $player);
+          $ally->Attach("2007868442");//Experience token
           break;
         default:
           break;

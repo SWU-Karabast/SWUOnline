@@ -59,7 +59,7 @@ class Deck {
   }
 
   function Add($cardID) {
-    array_push($this->deck, $cardID);
+    $this->deck[] = $cardID;
   }
 
   function Banish() {

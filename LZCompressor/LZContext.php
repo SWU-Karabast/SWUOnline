@@ -59,14 +59,16 @@ class LZContext
      * @param string $val
      * @return bool
      */
-    public function dictionaryContains($val) {
+    public function dictionaryContains(string $val): bool
+    {
         return array_key_exists($val, $this->dictionary);
     }
 
     /**
      * @param $val
      */
-    public function addToDictionary($val) {
+    public function addToDictionary($val): void
+    {
         $this->dictionary[$val] = $this->dictSize++;
     }
 
@@ -74,7 +76,8 @@ class LZContext
      * @param string $val
      * @return bool
      */
-    public function dictionaryToCreateContains($val) {
+    public function dictionaryToCreateContains(string $val): bool
+    {
         return array_key_exists($val, $this->dictionaryToCreate);
     }
 

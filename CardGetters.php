@@ -171,6 +171,16 @@ function &GetResources($player)
   }
 }
 
+function &GetCardIndexInResources($player, $cardId)
+{
+  $resources = &GetResourceCards($player);
+  for ($i = 0; $i < count($resources); $i += ArsenalPieces()) {
+    if ($resources[$i] == $cardId)
+      return $i;
+  }
+  return -1;
+}
+
 function &GetItems($player)
 {
   global $currentPlayer, $mainPlayer, $mainPlayerGamestateStillBuilt;

@@ -14,7 +14,7 @@ class Ally {
     $mzArr = explode("-", $MZIndex);
     if($player == "") $player = ($mzArr[0] == "MYALLY" ? $currentPlayer : ($currentPlayer == 1 ? 2 : 1));
     if($mzArr[1] == "") {
-      for($i=0; $i<AllyPieces(); ++$i) array_push($this->allies, 9999);
+      for($i=0; $i<AllyPieces(); ++$i) $this->allies[] = 9999;
       $this->index = -1;
     } else {
       $this->index = intval($mzArr[1]);
@@ -41,8 +41,16 @@ class Ally {
     return $this->index;
   }
 
-  function Health() {
+  function Damage() {
     return $this->allies[$this->index+2];
+  }
+
+  function AddDamage($amount) {
+    $this->allies[$this->index+2] += $amount;
+  }
+  
+  function RemoveDamage($amount) {
+    if($this->allies[$this->index+2] > 0) $this->allies[$this->index+2] -= $amount;
   }
 
   function Owner() {
@@ -55,16 +63,13 @@ class Ally {
     return $this->allies[$this->index+12];
   }
 
-  function AddHealth($amount) {
-    $this->allies[$this->index+2] += $amount;
-  }
-
   function Heal($amount) {
     $healed = $amount;
-    $this->AddHealth($amount);
-    if($this->Health() > $this->MaxHealth()) {
-      $healed = $amount - ($this->Health() - $this->MaxHealth());
-      $this->allies[$this->index+2] = $this->MaxHealth();
+    if($amount > $this->Damage()) {
+      $healed = $this->Damage();
+      $this->allies[$this->index+2] = 0;
+    } else {
+      $this->allies[$this->index+2] -= $amount;
     }
     AddEvent("RESTORE", $this->UniqueID() . "!" . $healed);
     return $healed;
@@ -91,12 +96,21 @@ class Ally {
     return $max;
   }
 
-  function Damage() {
-    return $this->MaxHealth() - $this->Health();
+  function Health() {
+    return $this->MaxHealth() - $this->Damage();
+  }
+
+  //Returns true if the ally is destroyed
+  function DefeatIfNoRemainingHP() {
+    if($this->Health() <= 0 && ($this->CardID() != "d1a7b76ae7" || $this->LostAbilities())) {
+      DestroyAlly($this->playerID, $this->index);
+      return true;
+    }
+    return false;
   }
 
   function IsDamaged() {
-    return $this->Health() < $this->MaxHealth();
+    return $this->Damage() > 0;
   }
 
   function IsExhausted() {
@@ -105,20 +119,25 @@ class Ally {
 
   function Destroy() {
     if($this->index == -1) return "";
-    if($this->CardID() == "1810342362") return "";//Lurking TIE Phantom
+    global $mainPlayer;
+    if($this->CardID() == "1810342362" && !$this->LostAbilities() && $mainPlayer != $this->playerID) return "";//Lurking TIE Phantom
     return DestroyAlly($this->playerID, $this->index);
   }
 
   //Returns true if the ally is destroyed
   function DealDamage($amount, $bypassShield = false, $fromCombat = false, &$damageDealt = NULL) {
     if($this->index == -1 || $amount <= 0) return false;
-    if(!$fromCombat && $this->CardID() == "1810342362") return;//Lurking TIE Phantom
+    global $mainPlayer;
+    if(!$fromCombat && $this->CardID() == "1810342362" && !$this->LostAbilities() && $mainPlayer != $this->playerID) return;//Lurking TIE Phantom
     $subcards = $this->GetSubcards();
-    for($i=0; $i<count($subcards); ++$i) {
+    for($i=0; $i<count($subcards); $i+=SubcardPieces()) {
       if($subcards[$i] == "8752877738") {
+        //Shield Token
+        unset($subcards[$i+1]);
         unset($subcards[$i]);
         $subcards = array_values($subcards);
         $this->allies[$this->index+4] = count($subcards) > 0 ? implode(",", $subcards) : "-";
+        AddEvent("SHIELDDESTROYED", $this->UniqueID());
         if(!$bypassShield) return false;//Cancel the damage if shield prevented it
       }
       switch($subcards[$i]) {
@@ -144,7 +163,7 @@ class Ally {
       default: break;
     }
     if($damageDealt != NULL) $damageDealt = $amount;
-    $this->allies[$this->index+2] -= $amount;
+    $this->AddDamage($amount);
     AddEvent("DAMAGE", $this->UniqueID() . "!" . $amount);
     if($this->Health() <= 0 && ($this->CardID() != "d1a7b76ae7" || $this->LostAbilities())) { //Chirrut Imwe
       DestroyAlly($this->playerID, $this->index, fromCombat:$fromCombat);
@@ -163,23 +182,8 @@ class Ally {
 
   function AddRoundHealthModifier($amount) {
     if($this->index == -1) return;
-    $this->allies[$this->index+2] += $amount;
     $this->allies[$this->index+9] += $amount;
-    if($this->Health() <= 0) {
-      DestroyAlly($this->playerID, $this->index);
-      return true;
-    }
-    return false;
-  }
-
-  function TempReduceHealth($amount) {
-    if($this->index == -1) return;
-    $this->allies[$this->index+2] -= $amount;
-    if($this->Health() <= 0) {
-      DestroyAlly($this->playerID, $this->index);
-      return true;
-    }
-    return false;
+    $this->DefeatIfNoRemainingHP();
   }
 
   function NumAttacks() {
@@ -197,7 +201,7 @@ class Ally {
     $upgrades = $this->GetUpgrades();
     for($i=0; $i<count($upgrades); ++$i) if($upgrades[$i] != "-") $power += AttackValue($upgrades[$i]);
     if(HasGrit($this->CardID(), $this->playerID, $this->index)) {
-      $damage = $this->MaxHealth() - $this->Health();
+      $damage = $this->Damage();
       if($damage > 0) $power += $damage;
     }
     //Other ally buffs
@@ -211,7 +215,7 @@ class Ally {
           if(CardTitle($this->CardID()) == "4-LOM") $power += 1;
           break;
         case "e2c6231b35"://Director Krennic
-          if($this->Health() < $this->MaxHealth()) $power += 1;
+          if($this->IsDamaged()) $power += 1;
           break;
         case "1557302740"://General Veers
           if($i != $this->index && TraitContains($this->CardID(), "Imperial", $this->PlayerID())) $power += 1;
@@ -255,7 +259,7 @@ class Ally {
     for($i=0; $i<count($myChar); $i+=CharacterPieces()) {
       switch($myChar[$i]) {
         case "8560666697"://Director Krennic
-          if($this->Health() < $this->MaxHealth()) $power += 1;
+          if($this->IsDamaged()) $power += 1;
           break;
         case "9794215464"://Gar Saxon
           if($this->IsUpgraded()) $power += 1;
@@ -276,13 +280,10 @@ class Ally {
   //All the things that should happen at the end of a round
   function EndRound() {
     if($this->index == -1) return;
-    $this->allies[$this->index+2] -= $this->allies[$this->index+9];
+    $roundHealthModifier = $this->allies[$this->index+9];
+    if(is_int($roundHealthModifier)) $this->allies[$this->index+2] -= $roundHealthModifier;
     $this->allies[$this->index+9] = 0;
-    if($this->Health() <= 0) {
-      DestroyAlly($this->playerID, $this->index);
-      return true;
-    }
-    return false;
+    $this->DefeatIfNoRemainingHP();
   }
 
   function Ready() {
@@ -298,62 +299,74 @@ class Ally {
     $this->allies[$this->index+1] = 2;
     return true;
   }
-  
+
   function Exhaust() {
     if($this->index == -1) return;
     AddEvent("EXHAUST", $this->UniqueID());
     $this->allies[$this->index+1] = 1;
   }
 
-  function AddBuffCounter() {
-    ++$this->allies[$this->index+2];
-    ++$this->allies[$this->index+7];
+  function AddSubcard($cardID, $ownerID = null) {
+    $ownerID = $ownerID ?? $this->playerID;
+    if($this->allies[$this->index+4] == "-") $this->allies[$this->index+4] = $cardID . "," . $ownerID;
+    else $this->allies[$this->index+4] = $this->allies[$this->index+4] . "," . $cardID . "," . $ownerID;
   }
-
-  function ModifyNamedCounters($type, $amount = 1) {
-    $this->allies[$this->index+6] += $amount;
-    return $this->allies[$this->index+6];//Return the amount of that type of counter
-  }
-
-  function AddSubcard($cardID) {
-    if($this->allies[$this->index + 4] == "-") $this->allies[$this->index + 4] = $cardID;
-    else $this->allies[$this->index + 4] = $this->allies[$this->index + 4] . "," . $cardID;
+  
+  function RemoveSubcard($subcardID) {
+    if($this->index == -1) return false;
+    $subcards = $this->GetSubcards();
+    for($i=0; $i<count($subcards); $i+=SubcardPieces()) {
+      if($subcards[$i] == $subcardID) {
+        $ownerId = $subcards[$i+1];
+        unset($subcards[$i+1]);
+        unset($subcards[$i]);
+        $subcards = array_values($subcards);
+        $this->allies[$this->index + 4] = count($subcards) > 0 ? implode(",", $subcards) : "-";
+        return $ownerId;
+      }
+    }
+    return -1;
   }
 
   function AddEffect($effectID) {
     AddCurrentTurnEffect($effectID, $this->PlayerID(), uniqueID:$this->UniqueID());
   }
 
-  function Attach($cardID) {
-    if($this->allies[$this->index + 4] == "-") $this->allies[$this->index + 4] = $cardID;
-    else $this->allies[$this->index + 4] = $this->allies[$this->index + 4] . "," . $cardID;
-    $this->AddHealth(CardHP($cardID));
+  function Attach($cardID, $ownerID = null) {
+    $this->AddSubcard($cardID, $ownerID);
     if (CardIsUnique($cardID)) {
       $this->CheckUniqueUpgrade($cardID);
     }
   }
 
   function GetSubcards() {
-    if($this->allies[$this->index + 4] == "-") return [];
+    $subcards = $this->allies[$this->index + 4];
+    if($subcards == null || $subcards == "" || $subcards == "-") return [];
     return explode(",", $this->allies[$this->index + 4]);
   }
 
-  function GetUpgrades() {
+  function GetUpgrades($withOwnerData = false) {
     if($this->allies[$this->index + 4] == "-") return [];
     $subcards = $this->GetSubcards();
     $upgrades = [];
-    for($i=0; $i<count($subcards); ++$i) {
-      if(DefinedTypesContains($subcards[$i], "Upgrade", $this->PlayerID()) || DefinedTypesContains($subcards[$i], "Token Upgrade", $this->PlayerID())) array_push($upgrades, $subcards[$i]);
+    for($i=0; $i<count($subcards); $i+=SubcardPieces()) {
+      if(DefinedTypesContains($subcards[$i], "Upgrade", $this->PlayerID()) || DefinedTypesContains($subcards[$i], "Token Upgrade", $this->PlayerID())) {
+        if($withOwnerData) array_push($upgrades, $subcards[$i], $subcards[$i+1]);
+        else $upgrades[] = $subcards[$i];
+      }
     }
     return $upgrades;
   }
 
-  function GetCaptives() {
+  function GetCaptives($withOwnerData = false) {
     if($this->allies[$this->index + 4] == "-") return [];
     $subcards = $this->GetSubcards();
     $capturedUnits = [];
-    for($i=0; $i<count($subcards); ++$i) {
-      if(DefinedTypesContains($subcards[$i], "Unit", $this->PlayerID())) array_push($capturedUnits, $subcards[$i]);
+    for($i=0; $i<count($subcards); $i+=SubcardPieces()) {
+      if(DefinedTypesContains($subcards[$i], "Unit", $this->PlayerID())) {
+        if($withOwnerData) array_push($capturedUnits, $subcards[$i], $subcards[$i+1]);
+        else $capturedUnits[] = $subcards[$i];
+      }
     }
     return $capturedUnits;
   }
@@ -376,12 +389,14 @@ class Ally {
     }
 
     if($firstCopy != "" && $firstCopy == $secondCopy && $this->index == $firstCopy) {
-      $this->DefeatUpgrade($cardID);
+      $ownerId = $this->DefeatUpgrade($cardID);
+      AddGraveyard($cardID, $ownerId, "PLAY");
       WriteLog("Existing copy of upgrade defeated due to unique rule.");
     } elseif ($firstCopy != "" && $secondCopy != "" && $firstCopy != $secondCopy) {
-      $otherindex = $this->index == $firstCopy ? $secondCopy : $firstCopy;
-      $otherAlly = new Ally("MYALLY-" . $otherindex);
-      $otherAlly->DefeatUpgrade($cardID);
+      $otherIndex = $this->index == $firstCopy ? $secondCopy : $firstCopy;
+      $otherAlly = new Ally("MYALLY-" . $otherIndex);
+      $ownerId = $otherAlly->DefeatUpgrade($cardID);
+      AddGraveyard($cardID, $ownerId, "PLAY");
       WriteLog("Existing copy of upgrade defeated due to unique rule.");
     }
   }
@@ -389,7 +404,7 @@ class Ally {
   function HasUpgrade($upgradeID) {
     if($this->index == -1) return false;
     $subcards = $this->GetSubcards();
-    for($i=0; $i<count($subcards); ++$i) {
+    for($i=0; $i<count($subcards); $i+=SubcardPieces()) {
       if($subcards[$i] == $upgradeID) {
         return true;
       }
@@ -398,38 +413,29 @@ class Ally {
   }
 
   function DefeatUpgrade($upgradeID) {
-    if($this->index == -1) return false;
-    $subcards = $this->GetSubcards();
-    for($i=0; $i<count($subcards); ++$i) {
-      if($subcards[$i] == $upgradeID) {
-        unset($subcards[$i]);
-        $subcards = array_values($subcards);
-        $this->allies[$this->index + 4] = count($subcards) > 0 ? implode(",", $subcards) : "-";
-        $this->allies[$this->index+2] -= CardHP($upgradeID);
-        if($this->Health() <= 0) {
-          DestroyAlly($this->playerID, $this->index);
-          return true;
-        }
-        return false;
-      } 
+    $ownerId = $this->RemoveSubcard($upgradeID);
+    if($ownerId != -1) {
+      $this->DefeatIfNoRemainingHP();
+      return $ownerId;
     }
-    return false;
+    else return -1;
   }
-  
+
   function RescueCaptive($captiveID, $newController=-1) {
-    if($this->index == -1) return;
-    $subcards = $this->GetSubcards();
-    for($i=0; $i<count($subcards); ++$i) {
-      if($subcards[$i] == $captiveID) {
-        unset($subcards[$i]);
-        $subcards = array_values($subcards);
-        $this->allies[$this->index + 4] = count($subcards) > 0 ? implode(",", $subcards) : "-";
-        $otherPlayer = $this->PlayerID() == 1 ? 2 : 1;
-        if($newController == -1) $newController = $otherPlayer;
-        PlayAlly($captiveID, $newController, from:"CAPTIVE");
-        return;
-      } 
+    $ownerId = $this->RemoveSubcard($captiveID);
+    if($ownerId != -1) {
+      if($newController == -1) $newController = $ownerId;
+      PlayAlly($captiveID, $newController, from:"CAPTIVE", owner:$ownerId);
     }
+  }
+
+  function DiscardCaptive($captiveID) {
+    $ownerId = $this->RemoveSubcard($captiveID);
+    if($ownerId != -1) {
+      AddGraveyard($captiveID, $ownerId, "CAPTIVE");
+      return true;
+    }
+    else return false;
   }
 
   function NumUses() {

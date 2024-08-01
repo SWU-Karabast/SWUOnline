@@ -84,7 +84,7 @@ function LogCombatResolutionStats($damageThreatened, $damageBlocked)
   $defStats = &GetTurnStats($defPlayer);
   if(count($mainStats) <= $baseIndex) StatsStartTurn();
   if(count($defStats) <= $baseIndex) StatsStartTurn();
-  $mainStats[$baseIndex + $TurnStats_DamageThreatened] += $damageThreatened > $damageBlocked ? $damageBlocked : $damageThreatened;//Excess is logged in the damage function
+  $mainStats[$baseIndex + $TurnStats_DamageThreatened] += min($damageThreatened, $damageBlocked);//Excess is logged in the damage function
   $defStats[$baseIndex + $TurnStats_DamageBlocked] += $damageBlocked;
   $defStats[$baseIndex + $TurnStats_Overblock] += $damageBlocked > $damageThreatened ? $damageBlocked - $damageThreatened : 0;
 }
@@ -107,8 +107,8 @@ function StatsStartTurn()
   $p2Stats = &GetTurnStats(2);
   for($i=0; $i<TurnStatPieces(); ++$i)
   {
-    array_push($p1Stats, 0);
-    array_push($p2Stats, 0);
+    $p1Stats[] = 0;
+    $p2Stats[] = 0;
   }
 }
 

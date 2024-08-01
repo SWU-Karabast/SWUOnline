@@ -29,16 +29,30 @@ function PummelHit($player = -1, $passable = false, $fromDQ = false, $context=""
   }
 }
 
-function DefeatUpgrade($player, $may = false, $search="MYALLY&THEIRALLY") {
-  AddDecisionQueue("MULTIZONEINDICES", $player, $search);
-  AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to defeat an upgrade from");
-  if ($may) AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+function DefeatUpgrade($player, $may = false, $search="MYALLY&THEIRALLY", $upgradeFilter="", $to="DISCARD", $passable=false) {
+  $verb = "";
+  switch($to) {
+    case "DISCARD": $verb = "defeat"; break;
+    case "HAND": $verb = "bounce"; break;
+  }
+  if($passable) {
+    AddDecisionQueue("MULTIZONEINDICES", $player, $search, 1);
+    AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to " . $verb . " an upgrade from", 1);
+  }
+  else {
+    AddDecisionQueue("MULTIZONEINDICES", $player, $search);
+    AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to " . $verb . " an upgrade from");
+  }
+  if($may) AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
   else AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
   AddDecisionQueue("SETDQVAR", $player, 0, 1);
   AddDecisionQueue("MZOP", $player, "GETUPGRADES", 1);
+  if($upgradeFilter != "") AddDecisionQueue("MZFILTER", $player, $upgradeFilter, 1);
   AddDecisionQueue("SETDQCONTEXT", $player, "Choose an upgrade to defeat");
-  AddDecisionQueue("CHOOSECARD", $player, "<-", 1);
-  AddDecisionQueue("OP", $player, "DEFEATUPGRADE", 1);
+  if($may) AddDecisionQueue("MAYCHOOSECARD", $player, "<-", 1);
+  else AddDecisionQueue("CHOOSECARD", $player, "<-", 1);
+  if($to == "DISCARD") AddDecisionQueue("OP", $player, "DEFEATUPGRADE", 1);
+  else if($to == "HAND") AddDecisionQueue("OP", $player, "BOUNCEUPGRADE", 1);
 }
 
 function PlayCaptive($player, $target="")
@@ -107,10 +121,7 @@ function AddCurrentTurnEffect($cardID, $player, $from = "", $uniqueID = -1)
     AddCurrentTurnEffectFromCombat($cardID, $player, $uniqueID);
     return;
   }
-  array_push($currentTurnEffects, $cardID);
-  array_push($currentTurnEffects, $player);
-  array_push($currentTurnEffects, $uniqueID);
-  array_push($currentTurnEffects, CurrentTurnEffectUses($cardID));
+  array_push($currentTurnEffects, $cardID, $player, $uniqueID, CurrentTurnEffectUses($cardID));
 }
 
 function AddAfterResolveEffect($cardID, $player, $from = "", $uniqueID = -1)
@@ -121,10 +132,7 @@ function AddAfterResolveEffect($cardID, $player, $from = "", $uniqueID = -1)
     AddCurrentTurnEffectFromCombat($cardID, $player, $uniqueID);
     return;
   }
-  array_push($afterResolveEffects, $cardID);
-  array_push($afterResolveEffects, $player);
-  array_push($afterResolveEffects, $uniqueID);
-  array_push($afterResolveEffects, CurrentTurnEffectUses($cardID));
+  array_push($afterResolveEffects, $cardID, $player, $uniqueID, CurrentTurnEffectUses($cardID));
 }
 
 function HasLeader($player) {
@@ -141,10 +149,7 @@ function CopyCurrentTurnEffectsFromAfterResolveEffects()
 {
   global $currentTurnEffects, $afterResolveEffects;
   for($i = 0; $i < count($afterResolveEffects); $i += CurrentTurnEffectPieces()) {
-    array_push($currentTurnEffects, $afterResolveEffects[$i]);
-    array_push($currentTurnEffects, $afterResolveEffects[$i+1]);
-    array_push($currentTurnEffects, $afterResolveEffects[$i+2]);
-    array_push($currentTurnEffects, $afterResolveEffects[$i+3]);
+    array_push($currentTurnEffects, $afterResolveEffects[$i], $afterResolveEffects[$i+1], $afterResolveEffects[$i+2], $afterResolveEffects[$i+3]);
   }
   $afterResolveEffects = [];
 }
@@ -153,20 +158,14 @@ function CopyCurrentTurnEffectsFromAfterResolveEffects()
 function AddCurrentTurnEffectFromCombat($cardID, $player, $uniqueID = -1)
 {
   global $currentTurnEffectsFromCombat;
-  array_push($currentTurnEffectsFromCombat, $cardID);
-  array_push($currentTurnEffectsFromCombat, $player);
-  array_push($currentTurnEffectsFromCombat, $uniqueID);
-  array_push($currentTurnEffectsFromCombat, CurrentTurnEffectUses($cardID));
+  array_push($currentTurnEffectsFromCombat, $cardID, $player, $uniqueID, CurrentTurnEffectUses($cardID));
 }
 
 function CopyCurrentTurnEffectsFromCombat()
 {
   global $currentTurnEffects, $currentTurnEffectsFromCombat;
   for($i = 0; $i < count($currentTurnEffectsFromCombat); $i += CurrentTurnEffectPieces()) {
-    array_push($currentTurnEffects, $currentTurnEffectsFromCombat[$i]);
-    array_push($currentTurnEffects, $currentTurnEffectsFromCombat[$i+1]);
-    array_push($currentTurnEffects, $currentTurnEffectsFromCombat[$i+2]);
-    array_push($currentTurnEffects, $currentTurnEffectsFromCombat[$i+3]);
+    array_push($currentTurnEffects, $currentTurnEffectsFromCombat[$i], $currentTurnEffectsFromCombat[$i+1], $currentTurnEffectsFromCombat[$i+2], $currentTurnEffectsFromCombat[$i+3]);
   }
   $currentTurnEffectsFromCombat = [];
 }
@@ -204,10 +203,7 @@ function CurrentTurnEffectUses($cardID)
 function AddNextTurnEffect($cardID, $player, $uniqueID = -1)
 {
   global $nextTurnEffects;
-  array_push($nextTurnEffects, $cardID);
-  array_push($nextTurnEffects, $player);
-  array_push($nextTurnEffects, $uniqueID);
-  array_push($nextTurnEffects, CurrentTurnEffectUses($cardID));
+  array_push($nextTurnEffects, $cardID, $player, $uniqueID, CurrentTurnEffectUses($cardID));
 }
 
 function IsCombatEffectLimited($index)
@@ -228,13 +224,7 @@ function IsCombatEffectLimited($index)
 function PrependLayer($cardID, $player, $parameter, $target = "-", $additionalCosts = "-", $uniqueID = "-")
 {
     global $layers;
-    array_push($layers, $cardID);
-    array_push($layers, $player);
-    array_push($layers, $parameter);
-    array_push($layers, $target);
-    array_push($layers, $additionalCosts);
-    array_push($layers, $uniqueID);
-    array_push($layers, GetUniqueId());
+    array_push($layers, $cardID, $player, $parameter, $target, $additionalCosts, $uniqueID, GetUniqueId());
     return count($layers);//How far it is from the end
 }
 
@@ -248,13 +238,7 @@ function AddLayer($cardID, $player, $parameter, $target = "-", $additionalCosts 
   global $layers, $dqState;
   //Layers are on a stack, so you need to push things on in reverse order
   if($append) {
-    array_push($layers, $cardID);
-    array_push($layers, $player);
-    array_push($layers, $parameter);
-    array_push($layers, $target);
-    array_push($layers, $additionalCosts);
-    array_push($layers, $uniqueID);
-    array_push($layers, GetUniqueId());
+    array_push($layers, $cardID, $player, $parameter, $target, $additionalCosts, $uniqueID, GetUniqueId());
     if(IsAbilityLayer($cardID))
     {
       $orderableIndex = intval($dqState[8]);
@@ -302,6 +286,7 @@ function AddDecisionQueue($phase, $player, $parameter, $subsequent = 0, $makeChe
 function PrependDecisionQueue($phase, $player, $parameter, $subsequent = 0, $makeCheckpoint = 0)
 {
   global $decisionQueue;
+  if($parameter == null || $parameter == "") return;
   $parameter = str_replace(" ", "_", $parameter);
   array_unshift($decisionQueue, $makeCheckpoint);
   array_unshift($decisionQueue, $subsequent);
@@ -453,7 +438,7 @@ function ContinueDecisionQueue($lastResult = "")
           } else {
             global $CS_AbilityIndex;
             if($cardID == "TRIGGER") {
-              ProcessTrigger($player, $parameter, $uniqueID, $target);
+              ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $target);
               ProcessDecisionQueue();
             }
             else {
@@ -542,8 +527,10 @@ function ContinueDecisionQueue($lastResult = "")
     if(str_contains($parameter, "{0}")) $parameter = str_replace("{0}", $dqVars[0], $parameter);
     if(str_contains($parameter, "<0>")) $parameter = str_replace("<0>", CardLink($dqVars[0], $dqVars[0]), $parameter);
     if(str_contains($parameter, "{1}")) $parameter = str_replace("{1}", $dqVars[1], $parameter);
+    if(str_contains($parameter, "{2}")) $parameter = str_replace("{2}", $dqVars[2], $parameter);
   }
   if(count($dqVars) > 1) $parameter = str_replace("<1>", CardLink($dqVars[1], $dqVars[1]), $parameter);
+  $parameter = str_replace(" ", "_", $parameter);//CardLink()s contain spaces, which can break things if this $parameter makes it to WriteGamestate.php(such as if $phase is YESNO). But CardLink() is also used in some cases where the underscores would show up directly, so I fix this here.
   $subsequent = array_shift($decisionQueue);
   $makeCheckpoint = array_shift($decisionQueue);
   $turn[0] = $phase;
@@ -588,7 +575,7 @@ function ProcessLayer($player, $parameter)
   }
 }
 
-function ProcessTrigger($player, $parameter, $uniqueID, $target="-")
+function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $target="-")
 {
   global $combatChain, $CS_NumNonAttackCards, $CS_ArcaneDamageDealt, $CS_NumRedPlayed, $CS_DamageTaken, $EffectContext;
   global $CID_BloodRotPox, $CID_Inertia, $CID_Frailty, $combatChainState, $CCS_IsAmbush;
@@ -612,15 +599,46 @@ function ProcessTrigger($player, $parameter, $uniqueID, $target="-")
       $ally = new Ally("MYALLY-" . $index, $player);
       $ally->Attach("8752877738");//Shield Token
       break;
+    case "PLAYALLY":
+      PlayAlly($target, $player, from:"CAPTIVE");
+      break;
     case "AFTERPLAYABILITY":
-      AllyPlayCardAbility($target, $player);
+      $arr = explode(",", $uniqueID);
+      $abilityID = $arr[0];
+      $uniqueID = $arr[1];
+      AllyPlayCardAbility($target, $player, from: $additionalCosts, abilityID:$abilityID, uniqueID:$uniqueID);
       break;
     case "9642863632"://Bounty Hunter's Quarry
       AddCurrentTurnEffect($parameter, $player);
       AddDecisionQueue("MZMYDECKTOPX", $player, $target);
+      AddDecisionQueue("MZFILTER", $player, "maxCost=3", 1);
       AddDecisionQueue("SETDQCONTEXT", $player, "Choose a card to play");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
       AddDecisionQueue("MZOP", $player, "PLAYCARD", 1);
+      break;
+    case "7642980906"://Stolen Landspeeder
+      AddDecisionQueue("MULTIZONEINDICES", $player, "MYDISCARD:cardID=" . "7642980906");
+      AddDecisionQueue("SETDQCONTEXT", $player, "Click the Stolen Landspeeder to play it for free.", 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+      AddDecisionQueue("ADDCURRENTEFFECT", $player, "7642980906", 1);//Cost discount and experience adding.
+      AddDecisionQueue("MZOP", $player, "PLAYCARD", 1);
+      AddDecisionQueue("REMOVECURRENTEFFECT", $player, "7642980906");
+      break;
+    case "7270736993"://Unrefusable Offer
+      //There's in theory a minor bug with this implementation: if there's a second copy of the bountied unit in the discard
+      //it can be played even if the original unit is somehow removed from the discard before this trigger resolves.
+      //I can't think of a way to prevent this without adding functionality to track a specific card between zones.
+      global $CS_AfterPlayedBy;
+      AddDecisionQueue("YESNO", $player, "if you want to play " . CardLink($target, $target) . " for free off of " . CardLink("7270736993", "7270736993"));
+      AddDecisionQueue("NOPASS", $player, "-");
+      AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRDISCARD:cardID=" . $target . ";maxCount=1", 1);
+      AddDecisionQueue("SETDQVAR", $player, "0", 1);
+      AddDecisionQueue("PASSPARAMETER", $player, "7270736993", 1);
+      AddDecisionQueue("SETCLASSSTATE", $player, $CS_AfterPlayedBy, 1);
+      AddDecisionQueue("ADDCURRENTEFFECT", $player, "7270736993", 1);
+      AddDecisionQueue("PASSPARAMETER", $player, "{0}", 1);
+      AddDecisionQueue("MZOP", $player, "PLAYCARD", 1);
+      break;
     default: break;
   }
 }
@@ -695,7 +713,7 @@ function EndTurnProcedure($player) {
   }
   Draw($player);
   Draw($player);
-  MZMoveCard($player, "MYHAND", "MYRESOURCES", may:true, context:"Choose a card to resource (Current: " . NumResources($player) . ")", silent:true);
+  MZMoveCard($player, "MYHAND", "MYRESOURCES", may:true, context:"Choose a card to resource", silent:true);
   AddDecisionQueue("AFTERRESOURCE", $player, "HAND", 1);
 }
 
@@ -755,7 +773,7 @@ function DiscardCard($player, $index)
   $hand = &GetHand($player);
   $discarded = RemoveHand($player, $index);
   AddGraveyard($discarded, $player, "HAND");
-  CardDiscarded($player, $discarded, $source);
+  CardDiscarded($player, $discarded);
   return $discarded;
 }
 

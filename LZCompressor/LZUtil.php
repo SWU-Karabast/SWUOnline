@@ -23,7 +23,7 @@ class LZUtil
      * @param integer $character
      * @return string
      */
-    public static function getBaseValue($alphabet, $character)
+    public static function getBaseValue(string $alphabet, int $character)
     {
         if(!array_key_exists($alphabet, self::$baseReverseDic)) {
             self::$baseReverseDic[$alphabet] = array();
@@ -51,7 +51,7 @@ class LZUtil
      * @param int|string $u
      * @return string
      */
-    public static function utf8_chr($u)
+    public static function utf8_chr(int|string $u)
     {
         return mb_convert_encoding('&#' . intval($u) . ';', 'UTF-8', 'HTML-ENTITIES');
     }
@@ -62,7 +62,7 @@ class LZUtil
      *
      * @return bool|integer
      */
-    public static function charCodeAt($str, $num=0)
+    public static function charCodeAt(string $str, int $num=0)
     {
         return self::utf8_ord(self::utf8_charAt($str, $num));
     }
@@ -72,7 +72,7 @@ class LZUtil
      *
      * @return bool|integer
      */
-    public static function utf8_ord($ch)
+    public static function utf8_ord(string $ch)
     {
         // must remain php's strlen
         $len = strlen($ch);
@@ -95,7 +95,7 @@ class LZUtil
      *
      * @return string
      */
-    public static function utf8_charAt($str, $num)
+    public static function utf8_charAt(string $str, int $num)
     {
         return mb_substr($str, $num, 1, 'UTF-8');
     }
@@ -104,7 +104,7 @@ class LZUtil
      * @param string $str
      * @return integer
      */
-    public static function utf8_strlen($str) {
+    public static function utf8_strlen(string $str) {
         return mb_strlen($str, 'UTF-8');
     }
 }

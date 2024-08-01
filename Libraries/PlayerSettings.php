@@ -97,6 +97,7 @@ function GetCardBack($player)
     case 3: return "CBRebelResource";
     case 4; return "CBRebelResourceDark";
     case 5; return "CBGDP";
+    case 6; return "CBL8NightGaming";
     default: return "CardBack";
   }
 }
@@ -134,6 +135,15 @@ function ShouldAutotargetOpponent($player)
 function IsColorblindMode($player)
 {
   global $SET_ColorblindMode;
+  $settings = GetSettings($player);
+  if ($settings == null) return false;
+  return $settings[$SET_ColorblindMode] == "1";
+}
+
+function IsScreenReaderMode($player)
+{
+  global $SET_ColorblindMode;
+  if(!function_exists("GetSettings")) return false;
   $settings = GetSettings($player);
   if ($settings == null) return false;
   return $settings[$SET_ColorblindMode] == "1";
@@ -272,6 +282,7 @@ function GetSettingsUI($player)
   $rv .= CreateRadioButton($SET_Cardback . "-" . 3, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Rebel Resource");
   $rv .= CreateRadioButton($SET_Cardback . "-" . 4, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Rebel Resource Dark");
   $rv .= CreateRadioButton($SET_Cardback . "-" . 5, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Golden Dice Podcast");
+  $rv .= CreateRadioButton($SET_Cardback . "-" . 6, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "L8 Night Gaming");
   foreach(PatreonCampaign::cases() as $campaign) {
     if(isset($_SESSION[$campaign->SessionID()]) || (isset($_SESSION["useruid"]) && $campaign->IsTeamMember($_SESSION["useruid"]))) {
       $hasCardBacks = true;

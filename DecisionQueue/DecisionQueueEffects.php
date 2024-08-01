@@ -21,7 +21,7 @@ function ModalAbilities($player, $card, $lastResult)
       switch($lastResult[0]) {
         case "Leave": break;
         case "Play":
-          PrependDecisionQueue("SWAPTURN", $mainPlayer, "-");
+          PrependDecisionQueue("SWAPTURN", $player, "-");
           MZPlayCard($player, "MYDECK-0");
           break;
         case "Discard": Mill($player, 1); break;
@@ -145,8 +145,8 @@ function ModalAbilities($player, $card, $lastResult)
             Draw($player);
             break;
           case "Defeat_Upgrades":
-            DefeatUpgrade($player);
-            DefeatUpgrade($player);
+            DefeatUpgrade($player, may:true);
+            DefeatUpgrade($player, may:true);
             break;
           case "Ready_Unit":
             AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:maxAttack=3&THEIRALLY:maxAttack=3");
@@ -302,7 +302,7 @@ function SpecificCardLogic($player, $card, $lastResult)
     case "RESTOCK":
       $arr = [];
       for($i = count($lastResult); $i >= 0; --$i) {
-        if($lastResult[$i] != "") array_push($arr, RemoveGraveyard($player, $lastResult[$i]));
+        if($lastResult[$i] != "") $arr[] = RemoveGraveyard($player, $lastResult[$i]);
       }
       RevealCards(implode(",", $arr), $player);
       if(count($arr) > 0) {
@@ -317,11 +317,10 @@ function SpecificCardLogic($player, $card, $lastResult)
       $upgradesReturned = [];
       $owner = MZPlayerID($player, $lastResult);
       $ally = new Ally($lastResult, $owner);
-      $upgrades = $ally->GetUpgrades();
-      for($i=0; $i<count($upgrades); ++$i) {
-        if(!IsToken($upgrades[$i])) AddHand($owner, $upgrades[$i]);
-        $ally->DealDamage(CardHP($upgrades[$i]));
-        array_push($upgradesReturned, $upgrades[$i]);
+      $upgrades = $ally->GetUpgrades(true);
+      for($i=0; $i<count($upgrades); $i+=SubcardPieces()) {
+        if(!IsToken($upgrades[$i])) AddHand($upgrades[$i+1], $upgrades[$i]);
+        $upgradesReturned[] = $upgrades[$i];
       }
       $ally->ClearSubcards();
       for($i=0; $i<count($upgradesReturned); ++$i) {
@@ -353,13 +352,16 @@ function SpecificCardLogic($player, $card, $lastResult)
       AddDecisionQueue("MZOP", $player, "DEALDAMAGE," . $damage, 1);
       return $lastResult;
     case "MEDALCEREMONY":
+      if($lastResult == "PASS") {
+        return $lastResult;
+      }
       for($i=0; $i<count($lastResult); ++$i) {
         $ally = new Ally("MYALLY-" . $lastResult[$i], $player);
         $ally->Attach("2007868442");//Experience token
       }
       return $lastResult;
     case "LTCHILDSEN":
-      if ($lastResult == []) {
+      if($lastResult == "PASS" || $lastResult == []) {
         return $lastResult;
       }
       $hand = &GetHand($player);
@@ -461,7 +463,7 @@ function SpecificCardLogic($player, $card, $lastResult)
       for($i=count($resources)-ResourcePieces(); $i>=0; $i-=ResourcePieces()) {
         if(DefinedTypesContains($resources[$i], "Unit", $player)) {
           $resourceCard = RemoveResource($player, $i);
-          array_push($cardsToPlay, $resourceCard);
+          $cardsToPlay[] = $resourceCard;
         }
       }
       for($i=0; $i<count($cardsToPlay); ++$i) {
@@ -479,6 +481,56 @@ function SpecificCardLogic($player, $card, $lastResult)
         //If for some reason cards are printed that make this not guaranteed we can make the check more rigorous.
         MZBounce($player, $lastResult);
         AddTopDeckAsResource($player);
+      }
+      return 1;
+    case "SURVIVORS'GAUNTLET":
+      $prefix = str_starts_with($dqVars[1], "MY") ? "MY" : "THEIR";
+      AddDecisionQueue("MULTIZONEINDICES", $player, $prefix . "ALLY", 1);
+      AddDecisionQueue("MZFILTER", $player, "canAttach={0}", 1);
+      AddDecisionQueue("MZFILTER", $player, "index=" . $dqVars[1], 1);
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to move <0> to.", 1);
+      AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
+      AddDecisionQueue("MZOP", $player, "MOVEUPGRADE", 1);
+      return 1;
+    case "PREVIZSLA":
+      $upgradeID = $dqVars[0];
+      $upgradeCost = CardCost($upgradeID);
+      if(NumResourcesAvailable($player) >= $upgradeCost) {
+        AddDecisionQueue("YESNO", $player, "if you want to pay " . $upgradeCost . " to steal " . CardName($upgradeID), 1);
+        AddDecisionQueue("NOPASS", $player, "-", 1);
+        AddDecisionQueue("PAYRESOURCES", $player, $upgradeCost . ",1", 1);
+        $preIndex = "MYALLY-" . SearchAlliesForCard($player, "3086868510");
+        if(DecisionQueueStaticEffect("MZFILTER", $player, "canAttach=" . $upgradeID, $preIndex) != "PASS") {
+          AddDecisionQueue("PASSPARAMETER", $player, $preIndex, 1);
+          AddDecisionQueue("MZOP", $player, "MOVEUPGRADE", 1);
+        }
+        else {
+          AddDecisionQueue("PASSPARAMETER", $player, $dqVars[1], 1);
+          AddDecisionQueue("SETDQVAR", $player, "0", 1);
+          AddDecisionQueue("PASSPARAMETER", $player, $upgradeID, 1);
+          AddDecisionQueue("OP", $player, "DEFEATUPGRADE", 1);
+        }
+      }
+      return 1;
+    case "GENERALRIEEKAN":
+      $targetAlly = new Ally($lastResult, $player);
+      AddDecisionQueue("PASSPARAMETER", $player, $lastResult, 1);
+      if(HasSentinel($targetAlly->CardID(), $player, $targetAlly->Index())) {
+        AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
+      }
+      else {
+        AddDecisionQueue("MZOP", $player, "GETUNIQUEID", 1);
+        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $player, "3468546373,PLAY", 1);
+      }
+      return 1;
+    case "RULEWITHRESPECT":
+      global $CS_UnitsThatAttackedBase;
+      $unitsThatAttackedBase = explode(",", GetClassState($player, $CS_UnitsThatAttackedBase));
+      $opponent = $player == 1 ? 2: 1;
+      for($i = 0; $i < count($unitsThatAttackedBase); ++$i) {
+        $targetMZIndex = "THEIRALLY-" . SearchAlliesForUniqueID($unitsThatAttackedBase[$i], $opponent);
+        if($targetMZIndex == "THEIRALLY--1" || IsLeader(GetMZCard($player, $targetMZIndex))) continue;
+        DecisionQueueStaticEffect("MZOP", $player, "CAPTURE," . $lastResult, $targetMZIndex);
       }
       return 1;
     default: return "";

@@ -99,14 +99,14 @@ function RestoreAmount($cardID, $player, $index)
   switch($cardID)
   {
     case "0074718689": $amount += 1; break;//Restored Arc 170
-    case "1081012039": $amount += 2; break;
+    case "1081012039": $amount += 2; break;//Regional Sympathizers
     case "1611702639": $amount += $initiativePlayer == $player ? 2 : 0; break;//Consortium Starviper
-    case "4405415770": $amount += 2; break;
-    case "0827076106": $amount += 1; break;
-    case "4919000710": $amount += 2; break;
-    case "9412277544": $amount += 1; break;
-    case "e2c6231b35": $amount += 2; break;
-    case "7109944284": $amount += 3; break;
+    case "4405415770": $amount += 2; break;//Yoda, Old Master
+    case "0827076106": $amount += 1; break;//Admiral Ackbar
+    case "4919000710": $amount += 2; break;//Home One
+    case "9412277544": $amount += 1; break;//Del Meeko
+    case "e2c6231b35": $amount += 2; break;//Director Krennic
+    case "7109944284": $amount += 3; break;//Luke Skywalker unit
     case "8142386948": $amount += 2; break;//Razor Crest
     case "4327133297": $amount += 2; break;//Moisture Farmer
     case "5977238053": $amount += 2; break;//Sundari Peacekeeper
@@ -115,16 +115,17 @@ function RestoreAmount($cardID, $player, $index)
     case "e091d2a983": $amount += 3; break;//Rey
     case "7022736145": $amount += 2; break;//Tarfful
     case "6870437193": $amount += 2; break;//Twin Pod Cloud Car
+    case "3671559022": $amount += 2; break;//Echo
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
   return $amount;
 }
 
-function RaidAmount($cardID, $player, $index)
+function RaidAmount($cardID, $player, $index, $reportMode = false)
 {
   global $currentTurnEffects, $combatChain;
-  if(count($combatChain) == 0) return 0;
+  if(count($combatChain) == 0 && !$reportMode) return 0;
   $amount = 0;
   $allies = &GetAllies($player);
   for($i=0; $i<count($allies); $i+=AllyPieces())
@@ -156,15 +157,15 @@ function RaidAmount($cardID, $player, $index)
   }
   switch($cardID)
   {
-    case "1017822723": $amount += 2; break;
-    case "2404916657": $amount += 2; break;
-    case "7495752423": $amount += 2; break;
+    case "1017822723": $amount += 2; break; //Rogue Operative
+    case "2404916657": $amount += 2; break; //Cantina Braggart
+    case "7495752423": $amount += 2; break; //Green Squadron A-Wing
     case "4642322279": $amount += SearchCount(SearchAllies($player, aspect:"Aggression")) > 1 ? 2 : 0; break;//Partisan Insurgent
-    case "6028207223": $amount += 1; break;
-    case "8995892693": $amount += 1; break;
-    case "3613174521": $amount += 1; break;
-    case "4111616117": $amount += 1; break;
-    case "87e8807695": $amount += 1; break;
+    case "6028207223": $amount += 1; break; //Pirated Starfighter
+    case "8995892693": $amount += 1; break; //Red Three
+    case "3613174521": $amount += 1; break; //Outer Rim Headhunter
+    case "4111616117": $amount += 1; break; //Volunteer Soldier
+    case "87e8807695": $amount += 1; break; //Leia leader unit
     case "8395007579": $amount += $ally->MaxHealth() - $ally->Health(); break;//Fifth Brother
     case "6208347478": $amount += SearchCount(SearchAllies($player, trait:"Spectre")) > 1 ? 1 : 0; break;//Chopper
     case "3487311898": $amount += 3; break;//Clan Challengers
@@ -193,6 +194,7 @@ function HasSentinel($cardID, $player, $index)
     switch($currentTurnEffects[$i]) {
       case "8294130780": $hasSentinel = true; break;//Gladiator Star Destroyer
       case "3572356139": $hasSentinel = true; break;//Chewbacca, Walking Carpet
+      case "3468546373": $hasSentinel = true; break;//General Rieekan
       case "9070397522": return false;//SpecForce Soldier
       default: break;
     }
@@ -297,7 +299,7 @@ function HasGrit($cardID, $player, $index)
 
 function HasOverwhelm($cardID, $player, $index)
 {
-  global $defPlayer, $currentTurnEffects;
+  global $defPlayer, $currentTurnEffects, $mainPlayer;
   $ally = new Ally("MYALLY-" . $index, $player);
   if($ally->LostAbilities()) return false;
   $allies = &GetAllies($player);
@@ -336,7 +338,6 @@ function HasOverwhelm($cardID, $player, $index)
     case "4935319539"://Krayt Dragon
     case "8862896760"://Maul
     case "9270539174"://Wild Rancor
-    case "2556508706"://Resourceful Pursuers
     case "3803148745"://Ruthless Assassin
     case "1743599390"://Trandoshan Hunters
     case "c9ff9863d7"://Hunter (Outcast Sergeant)
@@ -350,7 +351,7 @@ function HasOverwhelm($cardID, $player, $index)
     case "3487311898"://Clan Challengers
       return $ally->IsUpgraded();
     case "6769342445"://Jango Fett
-      if(IsAllyAttackTarget()) {
+      if(IsAllyAttackTarget() && $mainPlayer == $player) {
         $targetAlly = new Ally(GetAttackTarget(), $defPlayer);
         if($targetAlly->HasBounty()) return true;
       }
@@ -418,10 +419,9 @@ function HasAmbush($cardID, $player, $index, $from)
     case "8862896760"://Maul
     case "2143627819"://The Marauder
     case "2121724481"://Cloud-Rider
-    case "8107876051"://Enfy's Nest
+    case "8107876051"://Enfys Nest
     case "6097248635"://4-LOM
     case "9483244696"://Weequay Pirate Gang
-    case "2556508706"://Resourceful Pursuers
     case "1086021299"://Arquitens Assault Cruiser
       return true;
     case "2027289177"://Escort Skiff
@@ -458,7 +458,7 @@ function HasShielded($cardID, $player, $index)
       return true;
     case "6939947927"://Hunter of the Haxion Brood
       $otherPlayer = $player == 1 ? 2 : 1;
-      return SearchCount(SearchAllies($otherPlayer, hasBountyOnly:true)) > 0 ? true : false;
+      return SearchCount(SearchAllies($otherPlayer, hasBountyOnly:true)) > 0;
     case "0088477218"://Privateer Scyk
       return SearchCount(SearchAllies($player, aspect:"Cunning")) > 1;
     default: return false;
@@ -497,21 +497,23 @@ function HasSaboteur($cardID, $player, $index)
   }
   switch($cardID)
   {
-    case "1017822723":
-    case "9859536518":
-    case "0046930738":
-    case "7533529264":
-    case "1746195484":
-    case "5907868016":
-    case "0828695133":
-    case "9250443409":
-    case "3c60596a7a":
+    case "1017822723"://Rogue Operative
+    case "9859536518"://Jawa Scavenger
+    case "0046930738"://Rebel Pathfinder
+    case "7533529264"://Wolffe
+    case "1746195484"://Jedha Agitator
+    case "5907868016"://Fighters for Freedom
+    case "0828695133"://Seventh Sister
+    case "9250443409"://Lando Calrissian (Responsible Businessman)
+    case "3c60596a7a"://Cassian Andor (Dedicated to the Rebellion)
     case "1690726274"://Zuckuss
     case "4595532978"://Ketsu Onyo
     case "3786602643"://House Kast Soldier
     case "2b13cefced"://Fennec Shand
     case "7922308768"://Valiant Assault Ship
     case "2151430798"://Guavian Antagonizer
+    case "2556508706"://Resourceful Pursuers
+    case "2965702252"://Unlicensed Headhunter
       return true;
     default: return false;
   }
@@ -868,7 +870,7 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
   return $abilityTypes;
 }
 
-function IsLeader($cardID, $playerID) {
+function IsLeader($cardID, $playerID = "") {
   return DefinedTypesContains($cardID, "Leader", $playerID);
 }
 
@@ -1006,6 +1008,7 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       break;
     case "8709191884"://Hunter (Outcast Sergeant)
       $abilityNames = "Replace Resource";
+      break;
     default: break;
   }
   if(IsAlly($cardID, $currentPlayer)) {
@@ -1081,7 +1084,7 @@ function IsPlayable($cardID, $phase, $from, $index = -1, &$restriction = null, $
     if($char[1] != 2) return false;//Can't attack if rested
   }
   $otherPlayer = ($player == 1 ? 2 : 1);
-  if($from == "HAND" && ((CardCost($cardID) + SelfCostModifier($cardID, $from)) > NumResourcesAvailable($currentPlayer)) && !HasAlternativeCost($cardID)) return false;
+  if($from == "HAND" && ((CardCost($cardID) + SelfCostModifier($cardID, $from) + CurrentEffectCostModifiers($cardID, $from, reportMode:true) + CharacterCostModifier($cardID, $from)) > NumResourcesAvailable($currentPlayer)) && !HasAlternativeCost($cardID)) return false;
   if($from == "RESOURCES") {
     if(!PlayableFromResources($cardID, index:$index)) return false;
     if((SmuggleCost($cardID, index:$index) + SelfCostModifier($cardID, $from)) > NumResourcesAvailable($currentPlayer) && !HasAlternativeCost($cardID)) return false;
@@ -1091,7 +1094,7 @@ function IsPlayable($cardID, $phase, $from, $index = -1, &$restriction = null, $
   if($phase == "M" && $from == "GY") {
     $discard = &GetDiscard($player);
     if($discard[$index] == "4843813137") return true;//Brutal Traditions
-    return $discard[$index+1] == "TT" ? true : false;
+    return $discard[$index+1] == "TT" || $discard[$index+1] == "TTFREE";
   }
   $isStaticType = IsStaticType($cardType, $from, $cardID);
   if($isStaticType) {
@@ -1150,10 +1153,15 @@ function UpgradeFilter($cardID)
     case "6775521270"://Inspiring Mentor
     case "6117103324"://Jetpack
       return "trait=Vehicle";
+    case "3987987905"://Hardpoint Heavy Blaster
+    case "7280213969"://Smuggling Compartment
+      return "trait!=Vehicle";
     case "8055390529"://Traitorous
       return "maxCost=3";
     case "1368144544"://Imprisoned
     case "7718080954"://Frozen in Carbonite
+    case "6911505367"://Second Chance
+    case "7270736993"://Unrefusable Offer
       return "leader=1";
     default: return "";
   }
@@ -1408,6 +1416,14 @@ function HasAttackAbility($cardID) {
     case "9568000754"://R2-D2
     case "8009713136"://C-3PO
     case "7533529264"://Wolffe
+    case "5818136044"://Xanadu Blood
+    case "1304452249"://Covetous Rivals
+    case "3086868510"://Pre Vizsla
+    case "8380936981"://Jabba's Rancor
+    case "1503633301"://Survivors' Gauntlet
+    case "8240629990"://Avenger
+    case "6931439330"://The Ghost
+    case "3468546373"://General Rieekan
       return true;
     default: return false;
   }
@@ -1627,8 +1643,11 @@ function SmuggleCost($cardID, $player="", $index="")
   {
     switch($allies[$i]) {
       case "3881257511"://Tech
-        $cost = CardCost($cardID) + 2;
-        if($minCost == -1 || $minCost > $cost) $minCost = $cost;
+        $techAlly = new Ally("MYALLY-" . $allies[$i], $player);
+        if(!$techAlly->LostAbilities()) {
+          $cost = CardCost($cardID)+2;
+          if($minCost == -1 || $minCost > $cost) $minCost = $cost;
+        } 
         break;
       default: break;
     }
@@ -1640,7 +1659,7 @@ function PlayableFromBanish($cardID, $mod="")
 {
   global $currentPlayer, $CS_NumNonAttackCards, $CS_Num6PowBan;
   $mod = explode("-", $mod)[0];
-  if($mod == "TCL" || $mod == "TT" || $mod == "TCC" || $mod == "NT" || $mod == "INST") return true;
+  if($mod == "TCL" || $mod == "TT" || $mod == "TTFREE" || $mod == "TCC" || $mod == "NT" || $mod == "INST") return true;
   switch($cardID) {
 
     default: return false;
@@ -1670,14 +1689,6 @@ function RequiresDieRoll($cardID, $from, $player)
   if(GetDieRoll($player) > 0) return false;
   if($turn[0] == "B") return false;
   return false;
-}
-
-function SpellVoidAmount($cardID, $player)
-{
-  if($cardID == "ARC112" && SearchCurrentTurnEffects("DYN171", $player)) return 1;
-  switch($cardID) {
-    default: return 0;
-  }
 }
 
 function IsSpecialization($cardID)
@@ -1761,6 +1772,9 @@ function DefinedCardType2Wrapper($cardID)
     case "0622803599"://Jabba the Hutt
     case "9596662994"://Finn
       return "";
+    case "8752877738":
+    case "2007868442":
+      return "Upgrade";
     default: return DefinedCardType2($cardID);
   }
 }

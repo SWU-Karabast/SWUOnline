@@ -119,7 +119,7 @@ $loseCardData = mysqli_stmt_get_result($stmt);
 $gameData = [];
 $cardData = [];
 while ($row = mysqli_fetch_array($winData, MYSQLI_NUM)) {
-  array_push($gameData, []);
+  $gameData[] = [];
   $index = count($gameData) - 1;
   $gameData[$index][0] = $row[1];
   $gameData[$index][1] = $row[2];
@@ -153,7 +153,7 @@ while ($row = mysqli_fetch_array($loseData, MYSQLI_NUM)) {
   if ($i < count($gameData)) {
     $gameData[$i][2] = $row[2];
   } else {
-    array_push($gameData, []);
+    $gameData[] = [];
     $index = count($gameData) - 1;
     $gameData[$index][0] = $row[0];
     $gameData[$index][1] = 0; //If we get here, there were no wins

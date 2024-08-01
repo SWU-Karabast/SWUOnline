@@ -26,7 +26,7 @@ for ($i = 0; $i < count($badges); $i += 7) {
   $badge->bottomText = str_replace("{0}", $badges[$i + 2], $badges[$i + 4]);
   if ($badges[$i + 6] != "") $badge->link = $badges[$i + 6];
   $badge->image = $badges[$i + 5];
-  array_push($response->badges, $badge);
+  $response->badges[] = $badge;
 }
 
 $response->userName = LoggedInUserName();

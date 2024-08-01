@@ -13,8 +13,11 @@ ob_end_clean();
 session_start();
 
 $authKey = "";
-$gameName = $_GET["gameName"];
-$playerID = $_GET["playerID"];
+$gameName = TryGET("gameName", "");
+$playerID = TryGET("playerID", "");
+
+if($gameName == "" || $playerID == "") exit;
+
 if ($playerID == 1 && isset($_SESSION["p1AuthKey"]))
   $authKey = $_SESSION["p1AuthKey"];
 else if ($playerID == 2 && isset($_SESSION["p2AuthKey"]))
@@ -75,7 +78,7 @@ $isMobile = IsMobile();
   <meta http-equiv="content-type" content="text/html; charset=utf-8" >
   <title>Game Lobby</title>
   <link id="icon" rel="shortcut icon" type="image/png" href="./Images/<?= $icon ?>"/>
-  <link rel="stylesheet" href="./css/karabast.css">
+  <link rel="stylesheet" href="./css/karabast071824.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
@@ -159,7 +162,7 @@ $isMobile = IsMobile();
           }
           ?>
         </div>
-∆
+
         <div id="their-info">
         </div>
       </div>

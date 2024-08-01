@@ -35,9 +35,6 @@ class LZUtil16
     }
 
     /**
-     * @param string $str
-     * @param int $num
-     *
      * @return bool|integer
      */
     public static function charCodeAt($data)

@@ -1,12 +1,12 @@
 <?php
 function TryGET($key, $default = "")
 {
-  return isset($_GET[$key]) ? $_GET[$key] : $default;
+  return $_GET[$key] ?? $default;
 }
 
 function TryPOST($key, $default = "")
 {
-  return isset($_POST[$key]) ? $_POST[$key] : $default;
+  return $_POST[$key] ?? $default;
 }
 
 function IsGameNameValid($gameName)
@@ -60,7 +60,7 @@ function GetGameCounter($path = "./")
 function IsReplay()
 {
   global $gameName;
-  return (GetCachePiece($gameName, 10) == "1" ? true : false);
+  return GetCachePiece($gameName, 10) == "1";
 }
 
 function SetHeaders()
@@ -126,7 +126,7 @@ function isMobile()
     if(strpos(strtolower($_SERVER['HTTP_USER_AGENT']), 'opera mini') > 0) {
       $mobile_browser++;
       //Check for tablets on opera mini alternative headers
-      $stock_ua = strtolower(isset($_SERVER['HTTP_X_OPERAMINI_PHONE_UA']) ? $_SERVER['HTTP_X_OPERAMINI_PHONE_UA'] : (isset($_SERVER['HTTP_DEVICE_STOCK_UA']) ? $_SERVER['HTTP_DEVICE_STOCK_UA'] : ''));
+      $stock_ua = strtolower($_SERVER['HTTP_X_OPERAMINI_PHONE_UA'] ?? ($_SERVER['HTTP_DEVICE_STOCK_UA'] ?? ''));
       if (preg_match('/(tablet|ipad|playbook)|(android(?!.*mobile))/i', $stock_ua)) {
         $tablet_browser++;
       }

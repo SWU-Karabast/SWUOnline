@@ -25,7 +25,7 @@ $reactFE = "https://fe.talishar.net/game/play";
 
 $isShadowBanned = false;
 if (isset($_SESSION["isBanned"]))
-  $isShadowBanned = (intval($_SESSION["isBanned"]) == 1 ? true : false);
+  $isShadowBanned = intval($_SESSION["isBanned"]) == 1;
 else if (isset($_SESSION["useruid"]))
   $isShadowBanned = IsBanned($_SESSION["useruid"]);
 
@@ -207,9 +207,12 @@ function deleteDirectory($dir)
 
   if (!is_dir($dir)) {
     $handler = fopen($dir, "w");
-    fwrite($handler, "");
-    fclose($handler);
-    return unlink($dir);
+    if($handler) {
+      fwrite($handler, "");
+      fclose($handler);
+      return unlink($dir);
+    }
+    return true;
   }
 
   foreach (scandir($dir) as $item) {
