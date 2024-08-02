@@ -1,0 +1,3 @@
+Lorcana
+cardData
+name,subName,setId,setCardId,inkType,cost,inkable,strength,willpower,loreValue,bodyguard,challenger,challengesFor,evasive,reckless,resist,rush,shift,shiftCost,shiftOnto
