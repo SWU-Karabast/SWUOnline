@@ -23,7 +23,12 @@ function RandomizeArray(&$arr)
 function GetRandom($low=-1, $high=-1)
 {
   global $randomSeeded;
-  if(!$randomSeeded) SeedRandom();
+  if($randomSeeded) {
+    $low = $low == -1 ? 0 : $low;
+    $high = $high == -1 ? mt_getrandmax() : $high;
+    return random_int($low, $high);
+  } else SeedRandom();
+
   if($low == -1) return mt_rand();
   return mt_rand($low, $high);
 }
