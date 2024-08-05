@@ -237,7 +237,7 @@ class Ally {
           if($this->IsUpgraded()) $power += 1;
           break;
         case "919facb76d"://Boba Fett Green Leader
-          if($i != $this->index) $power += 1;
+          if($i != $this->index && HasKeyword($this->CardID(), "Any", $this->playerID, $this->index)) $power += 1;
           break;
         default: break;
       }

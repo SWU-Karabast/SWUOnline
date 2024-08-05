@@ -487,7 +487,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         case "DESTROYFROZENARSENAL": DestroyFrozenArsenal($player); return "";
         case "BOOST": return DoBoost($player);
         case "REMOVECARD":
-          if($lastResult == "") return $dqVars[0];
+          if($lastResult == "" || $lastResult == "PASS") return $dqVars[0];
           $cards = explode(",", $dqVars[0]);
           for($i = 0; $i < count($cards); ++$i) {
             if($cards[$i] == $lastResult) {
@@ -1460,7 +1460,9 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       if($damage > 0) AddDamagePreventionSelection($player, $damage, $params[1]);
       return $damage;
     case "ALLRANDOMBOTTOM":
+      if($lastResult == "PASS") return "";
       $cards = explode(",", $lastResult);
+      shuffle($cards);
       for($i=0; $i<count($cards); ++$i) {
         AddBottomDeck($cards[$i], $player, $parameter);
       }
