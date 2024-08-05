@@ -2539,9 +2539,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       if($from != "PLAY") {
         AddCurrentTurnEffect($cardID, $currentPlayer);//Cost discount
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to play");
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYDISCARD:definedType=Unit&aspect=Heroism");
-        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYDISCARD:definedType=Unit;aspect=Heroism");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1); //Technically as written the trigger is not optional, but coding to get around the case where the only options are too expensive to play(which makes Home One unplayable because trying to play off the ability reverts the gamestate) doesn't seem worth it to cover the vanishingly rare case where a player should be forced to play something despite preferring not to.
         AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
+        AddDecisionQueue("REMOVECURRENTEFFECT", $currentPlayer, $cardID);
       }
       break;
     case "4849184191"://Takedown
@@ -4395,6 +4396,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an upgrade to play");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
+      AddDecisionQueue("REMOVECURRENTEFFECT", $currentPlayer, $cardID);
+
       break;
     case "1503633301"://Survivors' Gauntlet
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:hasUpgradeOnly=true&THEIRALLY:hasUpgradeOnly=true");
