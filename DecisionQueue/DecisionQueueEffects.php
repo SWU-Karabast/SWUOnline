@@ -333,13 +333,13 @@ function SpecificCardLogic($player, $card, $lastResult)
       $ally = new Ally($lastResult, $owner);
       $upgrades = $ally->GetUpgrades(true);
       for($i=0; $i<count($upgrades); $i+=SubcardPieces()) {
+        $ally->RemoveSubcard($upgrades[$i]);
         if(!IsToken($upgrades[$i])) AddHand($upgrades[$i+1], $upgrades[$i]);
-        $upgradesReturned[] = $upgrades[$i];
       }
-      $ally->ClearSubcards();
+      /*$ally->ClearSubcards();
       for($i=0; $i<count($upgradesReturned); ++$i) {
-        UpgradeLeftPlay($upgradesReturned[$i], $ally->PlayerID(), $ally->Index());
-      }
+        UpgradeDetached($upgradesReturned[$i], $ally->PlayerID(), "MYALLY-" . $ally->Index());
+      }*/
       return $lastResult;
     case "DONTGETCOCKY":
       $deck = new Deck($player);

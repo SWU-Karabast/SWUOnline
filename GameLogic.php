@@ -518,7 +518,6 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $ally = new Ally($dqVars[0], $allyPlayer);
           $ownerId = $ally->DefeatUpgrade($upgradeID);
           if(!IsToken($upgradeID)) AddGraveyard($upgradeID, $ownerId, "PLAY");
-          if($ownerId != -1) UpgradeLeftPlay($upgradeID, $allyPlayer, $mzArr[1]);
           return $lastResult;
         case "BOUNCEUPGRADE":
           $upgradeID = $lastResult;
@@ -527,7 +526,6 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $ally = new Ally($dqVars[0], $allyPlayer);
           $ownerId = $ally->DefeatUpgrade($upgradeID);
           if(!IsToken($upgradeID)) AddHand($ownerId, $upgradeID);
-          if($ownerId != -1) UpgradeLeftPlay($upgradeID, $allyPlayer, $mzArr[1]);
           return $lastResult;
         case "RESCUECAPTIVE":
           $captiveID = $lastResult;

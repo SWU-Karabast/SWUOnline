@@ -322,6 +322,7 @@ class Ally {
         unset($subcards[$i]);
         $subcards = array_values($subcards);
         $this->allies[$this->index + 4] = count($subcards) > 0 ? implode(",", $subcards) : "-";
+        if(DefinedTypesContains($subcardID, "Upgrade")) UpgradeDetached($subcardID, $this->playerID, "MYALLY-" . $this->index);
         return $ownerId;
       }
     }
@@ -342,7 +343,7 @@ class Ally {
   function GetSubcards() {
     $subcards = $this->allies[$this->index + 4];
     if($subcards == null || $subcards == "" || $subcards == "-") return [];
-    return explode(",", $this->allies[$this->index + 4]);
+    return explode(",", $subcards);
   }
 
   function GetUpgrades($withOwnerData = false) {
