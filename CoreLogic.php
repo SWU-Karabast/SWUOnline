@@ -473,10 +473,7 @@ function FinalizeDamage($player, $damage, $damageThreatened, $type, $source)
       if($type == "COMBAT" && HasCleave($source)) DamagePlayerAllies($player, $damage, $source, $type);
     }
 
-    AuraDamageTakenAbilities($player, $damage);
-    ItemDamageTakenAbilities($player, $damage);
-    CharacterDamageTakenAbilities($player, $damage);
-    CharacterDealDamageAbilities($otherPlayer, $damage);
+    AllyDealDamageAbilities($otherPlayer, $damage);
     $classState[$CS_DamageTaken] += $damage;
     if($player == $defPlayer && $type == "COMBAT" || $type == "ATTACKHIT") $combatChainState[$CCS_AttackTotalDamage] += $damage;
     if($type == "ARCANE") $classState[$CS_ArcaneDamageTaken] += $damage;

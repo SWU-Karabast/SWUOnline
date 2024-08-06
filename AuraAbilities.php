@@ -379,21 +379,6 @@ function AuraTakeDamageAbilities($player, $damage, $type)
   return $damage;
 }
 
-
-function AuraDamageTakenAbilities($player, $damage)
-{
-  $auras = &GetAuras($player);
-  for($i = count($auras) - AuraPieces(); $i >= 0; $i -= AuraPieces()) {
-    $remove = 0;
-    switch($auras[$i]) {
-
-      default: break;
-    }
-    if($remove) DestroyAura($mainPlayer, $i);
-  }
-  return $damage;
-}
-
 function AuraLoseHealthAbilities($player, $amount)
 {
   global $mainPlayer;

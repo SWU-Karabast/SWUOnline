@@ -224,27 +224,6 @@ function ItemEndTurnAbilities()
   }
 }
 
-function ItemDamageTakenAbilities($player, $damage)
-{
-  $otherPlayer = ($player == 1 ? 2 : 1);
-  $items = &GetItems($otherPlayer);
-  for($i = count($items) - ItemPieces(); $i >= 0; $i -= ItemPieces()) {
-    $remove = false;
-    switch($items[$i]) {
-      case "EVR193":
-        if(IsHeroAttackTarget() && $damage == 2) {
-          WriteLog("Talisman of Warfare destroyed both player's arsenal");
-          DestroyArsenal(1);
-          DestroyArsenal(2);
-          $remove = true;
-        }
-        break;
-      default: break;
-    }
-    if($remove) DestroyItemForPlayer($otherPlayer, $i);
-  }
-}
-
 function SteamCounterLogic($item, $playerID, $uniqueID)
 {
   global $CS_NumBoosted;
