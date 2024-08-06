@@ -629,6 +629,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         switch($params[0]) {
           case "index": if($arr[$i] == $params[1]) $match = true; break;
           case "trait": if(TraitContains(GetMZCard($player, $arr[$i]), $params[1], $player)) $match = true; break;
+          case "aspect": if(AspectContains(GetMZCard($player, $arr[$i]), $params[1],$player)) $match = true; break;
           case "definedType": if(DefinedTypesContains(GetMZCard($player, $arr[$i]), $params[1], $player)) $match = true; break;
           case "maxCost":
             $cardID = str_starts_with($arr[$i], "MY") || str_starts_with($arr[$i], "THEIR") ? GetMZCard($player, $arr[$i]) : $arr[$i];

@@ -266,9 +266,10 @@ function SpecificCardLogic($player, $card, $lastResult)
     case "UWINGREINFORCEMENT":
       $totalCost = 0;
       $cardArr = explode(",", $lastResult);
+      if($lastResult == "") $cardArr = [];
       for($i=0; $i<count($cardArr); ++$i) {
+        AddCurrentTurnEffect("8968669390", $player);
         PlayCard($cardArr[$i], "DECK");
-        if($i == count($cardArr)-1) SetAfterPlayedBy($player, "8968669390");
         $totalCost += CardCost($cardArr[$i]);
       }
       if($totalCost > 7) {
@@ -276,19 +277,32 @@ function SpecificCardLogic($player, $card, $lastResult)
         RevertGamestate();
         return "";
       }
+      $deck = new Deck($player);
+      $searchLeftovers = explode(",", $deck->Top(true, 10 - count($cardArr)));
+      shuffle($searchLeftovers);
+      for($i=0; $i<count($searchLeftovers); ++$i) {
+        AddBottomDeck($searchLeftovers[$i], $player, $parameter);
+      }
       break;
     case "DARTHVADER":
       $totalCost = 0;
       $cardArr = explode(",", $lastResult);
+      if($lastResult == "") $cardArr = [];
       for($i=0; $i<count($cardArr); ++$i) {
+        AddCurrentTurnEffect("8506660490", $player);
         PlayCard($cardArr[$i], "DECK");
-        if($i == count($cardArr)-1) SetAfterPlayedBy($player, "8506660490");
         $totalCost += CardCost($cardArr[$i]);
       }
       if($totalCost > 3) {
         WriteLog("<span style='color:red;'>Too many units played. I find your lack of faith disturbing. Reverting gamestate.</span>");
         RevertGamestate();
         return "";
+      }
+      $deck = new Deck($player);
+      $searchLeftovers = explode(",", $deck->Top(true, 10 - count($cardArr)));
+      shuffle($searchLeftovers);
+      for($i=0; $i<count($searchLeftovers); ++$i) {
+        AddBottomDeck($searchLeftovers[$i], $player, $parameter);
       }
       break;
     case "POWERFAILURE":
