@@ -353,31 +353,16 @@ function CharacterTriggerInGraveyard($cardID)
   }
 }
 
-function CharacterDamageTakenAbilities($player, $damage)
-{
-  $char = &GetPlayerCharacter($player);
-  $otherPlayer = $player == 1 ? 1 : 2;
-  for ($i = count($char) - CharacterPieces(); $i >= 0; $i -= CharacterPieces())
-  {
-    if($char[$i + 1] != 2) continue;
-    switch ($char[$i]) {
-
-      default:
-        break;
-    }
-  }
-}
-
-function CharacterDealDamageAbilities($player, $damage)
-{
-  $char = &GetPlayerCharacter($player);
-  $otherPlayer = $player == 1 ? 1 : 2;
-  for ($i = count($char) - CharacterPieces(); $i >= 0; $i -= CharacterPieces())
-  {
-    if($char[$i + 1] != 2) continue;
-    switch ($char[$i]) {
-
-      default:
+function AllyDealDamageAbilities($player, $damage) {
+  $allies = &GetAllies($player);
+  for($i = count($allies) - AllyPieces(); $i >= 0; $i -= AllyPieces()) {
+    switch($allies[$i]) {
+      case "3c60596a7a":
+        $ally = new Ally("MYALLY-" . $i, $player);
+        if ($ally->NumUses() > 0) {
+          $ally->ModifyUses(-1);
+          Draw($player);
+        } 
         break;
     }
   }

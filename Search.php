@@ -1016,20 +1016,6 @@ function ControlsNamedCard($player, $name) {
   return false;
 }
 
-function ReservableIndices($player)
-{
-  $indices = "";
-  $auras = &GetAuras($player);
-  for($i = 0; $i < count($auras); $i += AuraPieces())
-  {
-    if($auras[$i+1] == 2 && HasReservable($auras[$i], $player, $i)) {
-      if($indices != "") $indices .= ",";
-      $indices .= $i;
-    }
-  }
-  return $indices;
-}
-
 function SearchGetLast($search) {
   $indices = explode(",", $search);
   return $indices[count($indices) - 1];

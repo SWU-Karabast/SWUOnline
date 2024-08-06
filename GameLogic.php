@@ -518,7 +518,6 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $ally = new Ally($dqVars[0], $allyPlayer);
           $ownerId = $ally->DefeatUpgrade($upgradeID);
           if(!IsToken($upgradeID)) AddGraveyard($upgradeID, $ownerId, "PLAY");
-          if($ownerId != -1) UpgradeLeftPlay($upgradeID, $allyPlayer, $mzArr[1]);
           return $lastResult;
         case "BOUNCEUPGRADE":
           $upgradeID = $lastResult;
@@ -527,7 +526,6 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $ally = new Ally($dqVars[0], $allyPlayer);
           $ownerId = $ally->DefeatUpgrade($upgradeID);
           if(!IsToken($upgradeID)) AddHand($ownerId, $upgradeID);
-          if($ownerId != -1) UpgradeLeftPlay($upgradeID, $allyPlayer, $mzArr[1]);
           return $lastResult;
         case "RESCUECAPTIVE":
           $captiveID = $lastResult;
@@ -629,6 +627,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         switch($params[0]) {
           case "index": if($arr[$i] == $params[1]) $match = true; break;
           case "trait": if(TraitContains(GetMZCard($player, $arr[$i]), $params[1], $player)) $match = true; break;
+          case "aspect": if(AspectContains(GetMZCard($player, $arr[$i]), $params[1],$player)) $match = true; break;
           case "definedType": if(DefinedTypesContains(GetMZCard($player, $arr[$i]), $params[1], $player)) $match = true; break;
           case "maxCost":
             $cardID = str_starts_with($arr[$i], "MY") || str_starts_with($arr[$i], "THEIR") ? GetMZCard($player, $arr[$i]) : $arr[$i];
@@ -1005,7 +1004,6 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $source = $parameters[1];
       $type = $parameters[2];
       if($target[0] == "THEIRALLY" || $target[0] == "MYALLY") {
-        if($type == "COMBAT" && CriticalAmount($source) > 0) $damage *= 2;
         DealAllyDamage($targetPlayer, $target[1], $damage);
         return $damage;
       } else {
@@ -1022,8 +1020,6 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $damage -= intval($lastResult);
       if($type == "COMBAT")
       {
-        if($source == "soO3hjaVfN" && SearchCurrentTurnEffects("soO3hjaVfN", $mainPlayer, true)) $damage *= 2;
-        if(CriticalAmount($source) > 0) $damage *= 2;
         $dqState[6] = $damage;
       }
       $damage = DealDamageAsync($player, $damage, $type, $source);

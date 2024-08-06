@@ -266,9 +266,10 @@ function SpecificCardLogic($player, $card, $lastResult)
     case "UWINGREINFORCEMENT":
       $totalCost = 0;
       $cardArr = explode(",", $lastResult);
+      if($lastResult == "") $cardArr = [];
       for($i=0; $i<count($cardArr); ++$i) {
+        AddCurrentTurnEffect("8968669390", $player);
         PlayCard($cardArr[$i], "DECK");
-        if($i == count($cardArr)-1) SetAfterPlayedBy($player, "8968669390");
         $totalCost += CardCost($cardArr[$i]);
       }
       if($totalCost > 7) {
@@ -276,19 +277,32 @@ function SpecificCardLogic($player, $card, $lastResult)
         RevertGamestate();
         return "";
       }
+      $deck = new Deck($player);
+      $searchLeftovers = explode(",", $deck->Top(true, 10 - count($cardArr)));
+      shuffle($searchLeftovers);
+      for($i=0; $i<count($searchLeftovers); ++$i) {
+        AddBottomDeck($searchLeftovers[$i], $player, $parameter);
+      }
       break;
     case "DARTHVADER":
       $totalCost = 0;
       $cardArr = explode(",", $lastResult);
+      if($lastResult == "") $cardArr = [];
       for($i=0; $i<count($cardArr); ++$i) {
+        AddCurrentTurnEffect("8506660490", $player);
         PlayCard($cardArr[$i], "DECK");
-        if($i == count($cardArr)-1) SetAfterPlayedBy($player, "8506660490");
         $totalCost += CardCost($cardArr[$i]);
       }
       if($totalCost > 3) {
         WriteLog("<span style='color:red;'>Too many units played. I find your lack of faith disturbing. Reverting gamestate.</span>");
         RevertGamestate();
         return "";
+      }
+      $deck = new Deck($player);
+      $searchLeftovers = explode(",", $deck->Top(true, 10 - count($cardArr)));
+      shuffle($searchLeftovers);
+      for($i=0; $i<count($searchLeftovers); ++$i) {
+        AddBottomDeck($searchLeftovers[$i], $player, $parameter);
       }
       break;
     case "POWERFAILURE":
@@ -319,13 +333,13 @@ function SpecificCardLogic($player, $card, $lastResult)
       $ally = new Ally($lastResult, $owner);
       $upgrades = $ally->GetUpgrades(true);
       for($i=0; $i<count($upgrades); $i+=SubcardPieces()) {
+        $ally->RemoveSubcard($upgrades[$i]);
         if(!IsToken($upgrades[$i])) AddHand($upgrades[$i+1], $upgrades[$i]);
-        $upgradesReturned[] = $upgrades[$i];
       }
-      $ally->ClearSubcards();
+      /*$ally->ClearSubcards();
       for($i=0; $i<count($upgradesReturned); ++$i) {
-        UpgradeLeftPlay($upgradesReturned[$i], $ally->PlayerID(), $ally->Index());
-      }
+        UpgradeDetached($upgradesReturned[$i], $ally->PlayerID(), "MYALLY-" . $ally->Index());
+      }*/
       return $lastResult;
     case "DONTGETCOCKY":
       $deck = new Deck($player);
@@ -532,6 +546,17 @@ function SpecificCardLogic($player, $card, $lastResult)
         if($targetMZIndex == "THEIRALLY--1" || IsLeader(GetMZCard($player, $targetMZIndex))) continue;
         DecisionQueueStaticEffect("MZOP", $player, "CAPTURE," . $lastResult, $targetMZIndex);
       }
+      return 1;
+    case "ANEWADVENTURE":
+      $owner = str_starts_with($lastResult, "MY") ? $player : ($player == 1 ? 2 : 1);
+      $lastResult = str_replace("THEIR", "MY", $lastResult);
+      $cardID = &GetHand($owner)[explode("-", $lastResult)[1]];
+      PrependDecisionQueue("REMOVECURRENTEFFECT", $owner, "4717189843");
+      PrependDecisionQueue("MZOP", $owner, "PLAYCARD", 1);
+      PrependDecisionQueue("PASSPARAMETER", $owner, $lastResult, 1);
+      PrependDecisionQueue("ADDCURRENTEFFECT", $owner, "4717189843", 1);
+      PrependDecisionQueue("NOPASS", $owner, "-", 1);
+      PrependDecisionQueue("YESNO", $owner, "if you want to play " . CardLink($cardID, $cardID) . " for free");
       return 1;
     default: return "";
   }
