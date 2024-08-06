@@ -772,9 +772,9 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
     case "SHUFFLEDECK":
       $zone = &GetDeck($player);
       $destArr = [];
-      if($parameter == "SKIPSEED") { global $randomSeeded; $randomSeeded = true; }
+      $skipSeed = $parameter == "SKIPSEED";
       while(count($zone) > 0) {
-        $index = GetRandom(0, count($zone) - 1);
+        $index = GetRandom(0, count($zone) - 1, $skipSeed);
         $destArr[] = $zone[$index];
         unset($zone[$index]);
         $zone = array_values($zone);
