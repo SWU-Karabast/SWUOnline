@@ -315,18 +315,18 @@ function MZBounce($player, $target)
 {
   global $CS_NumLeftPlay;
   $mzArr = explode("-", $target);
-  $player = (str_starts_with($mzArr[0], "MY") ? $player : ($player == 1 ? 2 : 1));
-  $zone = &GetMZZone($player, $mzArr[0]);
+  $controller = (str_starts_with($mzArr[0], "MY") ? $player : ($player == 1 ? 2 : 1));
+  $zone = &GetMZZone($controller, $mzArr[0]);
   switch($mzArr[0]) {
     case "THEIRALLY": case "MYALLY":
-      $allies = &GetAllies($player);
+      $allies = &GetAllies($controller);
       $owner = $allies[$mzArr[1]+11];
-      $cardID = RemoveAlly($player, $mzArr[1]);
-      IncrementClassState($player, $CS_NumLeftPlay);
+      $cardID = RemoveAlly($controller, $mzArr[1]);
+      IncrementClassState($controller, $CS_NumLeftPlay);
       $index = AddHand($owner, $cardID);
-      return str_starts_with($mzArr[0], "MY") ? "MYHAND-" . $index : "THEIRHAND-" . $index;
+      return $player == $owner ? "MYHAND-" . $index : "THEIRHAND-" . $index;
     case "MYRESOURCES": case "THEIRRESOURCES":
-      $cardID = RemoveResource($player, $mzArr[1]);
+      $cardID = RemoveResource($controller, $mzArr[1]);
       //TODO : to fix opponent card in my resources (Traitorous + SLT) we need to add owner information on resources
       $owner = $player;
       $index = AddHand($owner, $cardID);

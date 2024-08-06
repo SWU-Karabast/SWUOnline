@@ -547,6 +547,16 @@ function SpecificCardLogic($player, $card, $lastResult)
         DecisionQueueStaticEffect("MZOP", $player, "CAPTURE," . $lastResult, $targetMZIndex);
       }
       return 1;
+    case "ANEWADVENTURE":
+      $owner = str_starts_with($lastResult, "MY") ? $player : ($player == 1 ? 2 : 1);
+      str_replace("THEIR", "MY", $lastResult);
+      $cardID = &GetHand($owner)[explode("-", $lastResult)[1]];
+      AddDecisionQueue("YESNO", $owner, "if you want to play " . CardLink($cardID, $cardID) . " for free");
+      AddDecisionQueue("NOPASS", $owner, "-", 1);
+      AddDecisionQueue("ADDCURRENTEFFECT", $owner, "4717189843", 1);
+      AddDecisionQueue("PASSPARAMETER", $owner, $lastResult, 1);
+      AddDecisionQueue("MZOP", $owner, "PLAYCARD", 1);
+      return 1;
     default: return "";
   }
 }

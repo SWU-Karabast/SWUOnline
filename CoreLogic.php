@@ -3883,7 +3883,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, $cardID, 1);
       AddDecisionQueue("MZOP", $currentPlayer, "BOUNCE", 1);
-      AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "ANEWADVENTURE", 1);
       break;
     case "9757839764"://Adelphi Patrol Wing
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
