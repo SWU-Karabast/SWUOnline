@@ -1006,7 +1006,6 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $source = $parameters[1];
       $type = $parameters[2];
       if($target[0] == "THEIRALLY" || $target[0] == "MYALLY") {
-        if($type == "COMBAT" && CriticalAmount($source) > 0) $damage *= 2;
         DealAllyDamage($targetPlayer, $target[1], $damage);
         return $damage;
       } else {
@@ -1023,8 +1022,6 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $damage -= intval($lastResult);
       if($type == "COMBAT")
       {
-        if($source == "soO3hjaVfN" && SearchCurrentTurnEffects("soO3hjaVfN", $mainPlayer, true)) $damage *= 2;
-        if(CriticalAmount($source) > 0) $damage *= 2;
         $dqState[6] = $damage;
       }
       $damage = DealDamageAsync($player, $damage, $type, $source);

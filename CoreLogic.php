@@ -470,7 +470,6 @@ function FinalizeDamage($player, $damage, $damageThreatened, $type, $source)
     if($source != "NA")
     {
       $damage += CurrentEffectDamageModifiers($player, $source, $type);
-      if($type == "COMBAT" && HasCleave($source)) DamagePlayerAllies($player, $damage, $source, $type);
     }
 
     AllyDealDamageAbilities($otherPlayer, $damage);
