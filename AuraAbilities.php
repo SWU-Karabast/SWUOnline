@@ -30,14 +30,14 @@ function PlayAura($cardID, $player, $number = 1, $isToken = false, $rogueHeronSp
   else if($cardID != "ELE111") IncrementClassState($player, $CS_NumAuras, $number);
 }
 
-function UpgradeLeftPlay($cardID, $player, $index) {
-  switch($cardID) {
+function UpgradeDetached($upgradeCardID, $player, $formerBearerMZIndex) {
+  switch($upgradeCardID) {
     case "8055390529"://Traitorous
-      $allies = &GetAllies($player);
-      $owner = $allies[$index + 11];
-      if($player != $owner) AllyTakeControl($owner, $index);
+      $formerBearer = new Ally($formerBearerMZIndex, $player);
+      if($formerBearer->Owner() != $formerBearer->PlayerID()) AllyTakeControl($formerBearer->Owner(), $formerBearer->Index());
       break;
-    default: break;
+    default:
+      break;
   }
 }
 
@@ -375,21 +375,6 @@ function AuraTakeDamageAbilities($player, $damage, $type)
 
       default: break;
     }
-  }
-  return $damage;
-}
-
-
-function AuraDamageTakenAbilities($player, $damage)
-{
-  $auras = &GetAuras($player);
-  for($i = count($auras) - AuraPieces(); $i >= 0; $i -= AuraPieces()) {
-    $remove = 0;
-    switch($auras[$i]) {
-
-      default: break;
-    }
-    if($remove) DestroyAura($mainPlayer, $i);
   }
   return $damage;
 }
