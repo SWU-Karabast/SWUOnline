@@ -3720,6 +3720,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         if($cards != "") $cards .= ",";
         $cards .= $resources[$index];
         if(SmuggleCost($resources[$index], $otherPlayer, $index) >= 0) {
+          AddGraveyard($resources[$index], $otherPlayer, 'ARS');
           for($j=$index; $j<$index+ResourcePieces(); ++$j) unset($resources[$j]);
           $resources = array_values($resources);
           ++$numDestroyed;
