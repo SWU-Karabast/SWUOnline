@@ -519,67 +519,6 @@ function HasSaboteur($cardID, $player, $index)
   }
 }
 
-function HasCleave($cardID)
-{
-  switch($cardID)
-  {
-    default: return false;
-  }
-}
-
-function HasTrueSight($cardID, $player, $index)
-{
-  global $currentTurnEffects;
-  $allies = &GetAllies($player);
-  $uniqueID = $allies[$index+5];
-  for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnPieces())
-  {
-    if($currentTurnEffects[$i+2] != $uniqueID) continue;
-    switch($currentTurnEffects[$i])
-    {
-      case "i1f0ht2tsn-TRUE": return true;
-      default: break;
-    }
-  }
-  switch($cardID)
-  {
-    case "3TfIePpuZO": return true;//Trained Hawk
-    case "LNSRQ5xW6E": return true;//Stillwater Patrol
-    case "Dz8I0eJzaf": return IsClassBonusActive($player, "WARRIOR");//Sword of Seeking
-    case "du50pcescf": return CharacterLevel($player) >= 2;//Gawain, Chivalrous Thief
-    default: return false;
-  }
-}
-
-function HasReservable($cardID, $player, $index)
-{
-  switch($cardID)
-  {
-    default: return false;
-  }
-}
-
-
-//Critical only applies to combat damage, so you can assume player/attacker
-function CriticalAmount($cardID)
-{
-  global $mainPlayer;
-  switch($cardID)
-  {
-    default: return 0;
-  }
-}
-
-function HasStealth($cardID, $player, $index)
-{
-  $allies = &GetAllies($player);
-  switch($cardID)
-  {
-
-    default: return false;
-  }
-}
-
 function MemoryCost($cardID, $player)
 {
   $cost = CardMemoryCost($cardID);
@@ -598,14 +537,6 @@ function MemoryCost($cardID, $player)
     }
   }
   return $cost;
-}
-
-function PrepareAmount($cardID)
-{
-  switch($cardID)
-  {
-    default: return 0;
-  }
 }
 
 function AbilityCost($cardID, $index=-1)
