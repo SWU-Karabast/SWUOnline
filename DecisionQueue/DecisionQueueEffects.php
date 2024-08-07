@@ -247,7 +247,7 @@ function SpecificCardLogic($player, $card, $lastResult)
       $mzArr = explode("-", $lastResult);
       if($mzArr[0] == "MYALLY") Draw($player);
       else Draw($player == 1 ? 2 : 1);
-      break;
+      return $lastResult;
     case "GRANDADMIRALTHRAWN":
       $targetPlayer = ($lastResult == "Yourself" ? $player : ($player == 1 ? 2 : 1));
       $deck = new Deck($targetPlayer);
