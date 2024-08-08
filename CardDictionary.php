@@ -539,14 +539,6 @@ function MemoryCost($cardID, $player)
   return $cost;
 }
 
-function PrepareAmount($cardID)
-{
-  switch($cardID)
-  {
-    default: return 0;
-  }
-}
-
 function AbilityCost($cardID, $index=-1, $theirCard = false)
 {
   global $currentPlayer;
