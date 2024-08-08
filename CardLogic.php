@@ -664,12 +664,24 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       $otherPlayer = ($player == 1 ? 2 : 1);
       AddDecisionQueue("YESNO", $player, "if you want use Cad Bane's ability");
       AddDecisionQueue("NOPASS", $player, "-");
-      // Note that this is the other half of a hack by storing the index as the unique ID
       AddDecisionQueue("EXHAUSTCHARACTER", $player, FindCharacterIndex($player, "1384530409"), 1);
       AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY", 1);
       AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a unit to deal 1 damage to", 1);
       AddDecisionQueue("CHOOSEMULTIZONE", $otherPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $otherPlayer, "DEALDAMAGE,1", 1);
+      break;
+    case "4088c46c4d"://Mandalorian Leader Unit
+      AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:maxHealth=6");
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to exhaust", 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+      AddDecisionQueue("MZOP", $player, "REST", 1);
+      break;
+    case "9005139831"://Mandalorian Leader Ability
+      AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:maxHealth=4");
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to exhaust", 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+      AddDecisionQueue("MZOP", $player, "REST", 1);
+      AddDecisionQueue("EXHAUSTCHARACTER", $player, FindCharacterIndex($player, "9005139831"), 1);
       break;
     default: break;
   }
