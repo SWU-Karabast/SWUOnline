@@ -992,15 +992,7 @@ function AllyPlayCardAbility($cardID, $player="", $from="-", $abilityID="-", $un
       if($cadIndex != "") {
         $cadbane = new Ally("MYALLY-" . $cadIndex, $player);
         if($from != 'PLAY' && $cadbane->NumUses() > 0 && TraitContains($cardID, "Underworld", $currentPlayer)) {
-          $otherPlayer = ($player == 1 ? 2 : 1);
-          AddDecisionQueue("YESNO", $player, "if you want use Cad Bane's ability");
-          AddDecisionQueue("NOPASS", $player, "-");
-          AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $cadIndex, 1);
-          AddDecisionQueue("ADDMZUSES", $player, "-1", 1);
-          AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY", 1);
-          AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a unit to deal 2 damage to", 1);
-          AddDecisionQueue("CHOOSEMULTIZONE", $otherPlayer, "<-", 1);
-          AddDecisionQueue("MZOP", $otherPlayer, "DEALDAMAGE,2", 1);
+          AddLayer("TRIGGER", $currentPlayer, "724979d608", append:true);
         }
       }
       break;

@@ -641,6 +641,29 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       AddDecisionQueue("PASSPARAMETER", $player, "{0}", 1);
       AddDecisionQueue("MZOP", $player, "PLAYCARD", 1);
       break;
+    case "724979d608"://Cad Bane Unit
+      $cadIndex = SearchAlliesForCard($player, "724979d608");
+      $otherPlayer = ($player == 1 ? 2 : 1);
+      AddDecisionQueue("YESNO", $player, "if you want use Cad Bane's ability");
+      AddDecisionQueue("NOPASS", $player, "-");
+      AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $cadIndex, 1);
+      AddDecisionQueue("ADDMZUSES", $player, "-1", 1);
+      AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY", 1);
+      AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a unit to deal 2 damage to", 1);
+      AddDecisionQueue("CHOOSEMULTIZONE", $otherPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $otherPlayer, "DEALDAMAGE,2", 1);
+      break;
+    case "1384530409"://Cad Bane Leader ability
+      $otherPlayer = ($player == 1 ? 2 : 1);
+      AddDecisionQueue("YESNO", $player, "if you want use Cad Bane's ability");
+      AddDecisionQueue("NOPASS", $player, "-");
+      // Note that this is the other half of a hack by storing the index as the unique ID
+      AddDecisionQueue("EXHAUSTCHARACTER", $player, FindCharacterIndex($player, "1384530409"), 1);
+      AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY", 1);
+      AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a unit to deal 1 damage to", 1);
+      AddDecisionQueue("CHOOSEMULTIZONE", $otherPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $otherPlayer, "DEALDAMAGE,1", 1);
+      break;
     default: break;
   }
 }

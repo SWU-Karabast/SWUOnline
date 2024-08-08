@@ -317,15 +317,9 @@ function MainCharacterPlayCardAbilities($cardID, $from)
         }
         break;
       case "1384530409"://Cad Bane
-        if($from != 'PLAY' && $from != 'EQUIP' && TraitContains($cardID, "Underworld", $currentPlayer)) { 
-          $otherPlayer = ($currentPlayer == 1 ? 2 : 1);
-          AddDecisionQueue("YESNO", $currentPlayer, "if you want use Cad Bane's ability");
-          AddDecisionQueue("NOPASS", $currentPlayer, "-");
-          AddDecisionQueue("EXHAUSTCHARACTER", $currentPlayer, $i, 1);
-          AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY", 1);
-          AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a unit to deal 1 damage to", 1);
-          AddDecisionQueue("CHOOSEMULTIZONE", $otherPlayer, "<-", 1);
-          AddDecisionQueue("MZOP", $otherPlayer, "DEALDAMAGE,1", 1);
+        if($from != 'PLAY' && $from != 'EQUIP' && TraitContains($cardID, "Underworld", $currentPlayer)) {
+          // Note - this is a bit of a hack by sending the index in as the unique ID
+          AddLayer("TRIGGER", $currentPlayer, "1384530409", uniqueID:strval($i), append:true);
         }
         break;
       case "9005139831"://The Mandalorian
@@ -3618,7 +3612,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to bounce");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "BOUNCE", 1);
-      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY", 1);
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY", 1);
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 3 damage to", 1);
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,3", 1);
