@@ -3173,6 +3173,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $otherPlayer, "8800836530", 1);
       AddDecisionQueue("ADDLIMITEDNEXTTURNEFFECT", $otherPlayer, "8800836530", 1);
       break;
     case "9097690846"://Snowtrooper Lieutenant

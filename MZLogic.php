@@ -297,10 +297,24 @@ function MZWakeUp($player, $target)
   $pieces = explode("-", $target);
   $player = (str_starts_with($pieces[0], "MY") ? $player : ($player == 1 ? 2 : 1));
   $zone = &GetMZZone($player, $pieces[0]);
-
-  if(SearchLimitedCurrentTurnEffects("8800836530", $player) == $target) { // No Good to me Dead
+  $targetAlly = new Ally($target, $player);
+  
+  if(SearchLimitedCurrentTurnEffects("8800836530", $player) == $targetAlly->UniqueID()) { // No Good to me Dead
     return;
   }
+
+  $upgrades = $targetAlly->GetUpgrades();
+  $canReady = true;
+  for($i=0; $i<count($upgrades); ++$i) {
+    if(!$canReady) break;
+    switch($upgrades[$i]) {
+      case "7718080954"://Frozen in Carbonite
+        $canReady = false;
+      default: break;
+    }
+  }
+
+  if(!$canReady) return;
 
   switch($pieces[0]) {
     case "MYCHAR": case "THEIRCHAR":
