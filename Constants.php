@@ -273,6 +273,7 @@ $CS_NumContractsCompleted = 64;
 $CS_HitsWithSword = 65;
 $CS_NumClonesPlayed = 66;
 $CS_UnitsThatAttackedBase = 67;
+$CS_OppIndex = 68;
 
 function SetAfterPlayedBy($player, $cardID)
 {
@@ -451,7 +452,7 @@ function ResetChainLinkState()
 function ResetClassState($player)
 {
   global $CS_NumVillainyPlayed, $CS_NumBoosted, $CS_AtksWWeapon, $CS_HitsWDawnblade, $CS_DamagePrevention, $CS_CardsBanished;
-  global $CS_DamageTaken, $CS_NumActionsPlayed, $CS_CharacterIndex, $CS_PlayIndex, $CS_NumNonAttackCards;
+  global $CS_DamageTaken, $CS_NumActionsPlayed, $CS_CharacterIndex, $CS_PlayIndex, $CS_OppIndex, $CS_NumNonAttackCards;
   global $CS_PreparationCounters, $CS_NextNAACardGoAgain, $CS_NumAlliesDestroyed, $CS_Num6PowBan, $CS_ResolvingLayerUniqueID, $CS_NextWizardNAAInstant;
   global $CS_ArcaneDamageTaken, $CS_NextNAAInstant, $CS_NextDamagePrevented, $CS_LastAttack, $CS_PlayCCIndex;
   global $CS_NumLeftPlay, $CS_NumMaterializations, $CS_NumFusedLightning, $CS_AfterPlayedBy, $CS_NumAttackCards, $CS_NumPlayedFromBanish;
@@ -473,6 +474,7 @@ function ResetClassState($player)
   $classState[$CS_NumActionsPlayed] = 0;
   $classState[$CS_CharacterIndex] = 0;
   $classState[$CS_PlayIndex] = -1;
+  $classState[$CS_OppIndex] = -1;
   $classState[$CS_NumNonAttackCards] = 0;
   $classState[$CS_PreparationCounters] = 0;
   $classState[$CS_NextNAACardGoAgain] = 0;

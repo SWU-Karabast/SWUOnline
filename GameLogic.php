@@ -17,7 +17,7 @@ include "CombatChain.php";
 include_once "WriteLog.php";
 
 
-function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
+function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult, $theirCard = false)
 {
   global $redirectPath, $playerID, $gameName;
   global $currentPlayer, $combatChain, $defPlayer;
@@ -1307,6 +1307,19 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $names = explode(",", GetAbilityNames($parameter, GetClassState($player, $CS_PlayIndex)));
       WriteLog(implode(" ", explode("_", $names[$index])) . " ability was chosen.");
       return $lastResult;
+      case "SETABILITYTYPEOPP"://For activating opponent's cards
+        global $CS_OppIndex;
+        $lastPlayed[2] = $lastResult;
+        $otherPlayer = ($player == 1 ? 2 : 1);
+        $index = GetAbilityIndex($parameter, GetClassState($player, $CS_OppIndex), $lastResult, theirCard:true);
+        SetClassState($player, $CS_AbilityIndex, $index);
+        if(IsAlly($parameter, $otherPlayer) && TheirAllyDoesAbilityExhaust($parameter, $index)) {
+          $ally = new Ally("MYALLY-" . GetClassState($player, $CS_PlayIndex), $player);
+          $ally->Exhaust();
+        }
+        $names = explode(",", GetOpponentControlledAbilityNames($parameter));
+        WriteLog(implode(" ", explode("_", $names[$index])) . " ability was chosen!");
+        return $lastResult;
     case "MZSTARTTURNABILITY":
       MZStartTurnAbility($player, $lastResult);
       return "";
