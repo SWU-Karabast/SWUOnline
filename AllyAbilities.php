@@ -918,7 +918,7 @@ function AllyHasPlayCardAbility($playedCard, $cardID, $player, $index) {
       case "8031540027"://Dengar
         return DefinedTypesContains($playedCard, "Upgrade");
       case "0961039929"://Colonel Yularen
-        return $playedCard != $cardID && AspectContains($cardID, "Command") && DefinedTypesContains($cardID, "Unit");
+        return AspectContains($cardID, "Command") && DefinedTypesContains($cardID, "Unit");
       case "5907868016"://Fighters for Freedom
         return $playedCard != $cardID && AspectContains($cardID, "Aggression");
       case "3010720738"://Tobias Beckett
