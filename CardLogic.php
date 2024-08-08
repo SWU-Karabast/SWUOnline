@@ -608,15 +608,22 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       $uniqueID = $arr[1];
       AllyPlayCardAbility($target, $player, from: $additionalCosts, abilityID:$abilityID, uniqueID:$uniqueID);
       break;
-    case "9642863632"://Bounty Hunter's Quarry
-      AddCurrentTurnEffect($parameter, $player);
-      AddDecisionQueue("MZMYDECKTOPX", $player, $target);
-      AddDecisionQueue("MZFILTER", $player, "maxCost=3", 1);
-      AddDecisionQueue("MZFILTER", $player, "definedType!=Unit", 1);
+      global $CS_AfterPlayedBy;
+      AddDecisionQueue("FINDINDICES", $player, "DECKTOPXREMOVE," . $target);
+      AddDecisionQueue("SETDQVAR", $player, "0", 1);
+      AddDecisionQueue("FILTER", $player, "LastResult-include-maxCost-3", 1);
+      AddDecisionQueue("FILTER", $player, "LastResult-include-definedType-Unit", 1);
       AddDecisionQueue("SETDQCONTEXT", $player, "Choose a card to play");
-      AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+      AddDecisionQueue("CHOOSECARD", $player, "<-", 1);
+      AddDecisionQueue("SETDQVAR", $player, "1");
+      AddDecisionQueue("OP", $player, "REMOVECARD");
+      AddDecisionQueue("ALLRANDOMBOTTOM", $player, "DECK");
+      AddDecisionQueue("PASSPARAMETER", $player, "{1}");
       AddDecisionQueue("ADDCURRENTEFFECT", $player, "9642863632", 1);
-      AddDecisionQueue("MZOP", $player, "PLAYCARD", 1);
+      AddDecisionQueue("PASSPARAMETER", $player, "9642863632", 1);
+      AddDecisionQueue("SETCLASSSTATE", $player, $CS_AfterPlayedBy, 1);
+      AddDecisionQueue("PASSPARAMETER", $player, "{1}", 1);
+      AddDecisionQueue("OP", $player, "PLAYCARD,DECK", 1);
       break;
     case "7642980906"://Stolen Landspeeder
       AddDecisionQueue("MULTIZONEINDICES", $player, "MYDISCARD:cardID=" . "7642980906");
