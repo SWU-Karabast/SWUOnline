@@ -1293,13 +1293,6 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
         AddDecisionQueue("DYNPITCH", $currentPlayer, $dynCost);
         AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_LastDynCost);
       }
-      /*
-      $reservableIndices = ReservableIndices($currentPlayer);
-      if($reservableIndices != "") {
-        AddDecisionQueue("MAYMULTICHOOSEAURAS", $currentPlayer, SearchCount($reservableIndices) . "-" . $reservableIndices . "-" . 0);
-        AddDecisionQueue("RESERVABLE", $currentPlayer, "-", 1);
-      }
-      */
 
       //CR 5.1.4. Declare Modes and Targets
       //CR 5.1.4a Declare targets for resolution abilities
@@ -1500,11 +1493,6 @@ function GetTargetOfAttack($attackID)
 {
   global $mainPlayer, $combatChainState, $CCS_AttackTarget, $CCS_IsAmbush, $CCS_CantAttackBase;
   $defPlayer = $mainPlayer == 1 ? 2 : 1;
-  if(HasCleave($attackID))
-  {
-    $combatChainState[$CCS_AttackTarget] = "THEIRCHAR-0";
-    return;
-  }
   $targets = "";
   $sentinelTargets = "";
   if($combatChainState[$CCS_CantAttackBase] == 0 && $combatChainState[$CCS_IsAmbush] != 1){

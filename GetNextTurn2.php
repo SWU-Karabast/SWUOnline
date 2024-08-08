@@ -91,6 +91,8 @@ while ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   ++$count;
   if ($count == 100) break;
 }
+$otherP = ($playerID == 1 ? 2 : 1);
+$opponentDisconnected = GetCachePiece($gameName, $otherP + 3) == "2";
 
 if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   echo "0";
