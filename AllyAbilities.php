@@ -786,7 +786,6 @@ function OnKillAbility($fromCombat)
       $attackerAlly->Ready();
       break;
     case "6769342445"://Jango Fett
-      WriteLog("Jango Draw");
       Draw($mainPlayer);
       break;
     default: break;
