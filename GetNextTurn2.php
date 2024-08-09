@@ -756,9 +756,9 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       $border = CardBorderColor($theirAllies[$i], "ALLY", $action == 16, "THEIRS");
 
       $ally = new Ally($mzIndex, $otherPlayer);
+      $playable = NumResourcesAvailable($currentPlayer) >= AbilityCost($ally->CardID(), $ally->Index(), true);
 
-      if(!$mzChooseFromPlay && TheirAllyPlayableExhausted($ally->CardID())) {
-        $playable = true;
+      if(!$mzChooseFromPlay && $playable && TheirAllyPlayableExhausted($ally->CardID())) {
         $border = CardBorderColor($theirAllies[$i], "PLAY", $playable);
         $action = $currentPlayer == $playerID && $turn[0] != "P" && $playable ? 105 : 0; // 105 is the Ally Ability for opponent-controlled abilities like Mercenary Gunship
         $actionDataOverride = strval($i);
