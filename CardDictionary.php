@@ -1044,6 +1044,7 @@ function IsPlayable($cardID, $phase, $from, $index = -1, &$restriction = null, $
   if($from == "RESOURCES") {
     if(!PlayableFromResources($cardID, index:$index)) return false;
     if((SmuggleCost($cardID, index:$index) + SelfCostModifier($cardID, $from)) > NumResourcesAvailable($currentPlayer) && !HasAlternativeCost($cardID)) return false;
+    if(!SmuggleAdditionalCosts($cardID)) return false;
   }
   if(DefinedTypesContains($cardID, "Upgrade", $player) && SearchCount(SearchAllies($player)) == 0 && SearchCount(SearchAllies($otherPlayer)) == 0) return false;
   if($phase == "M" && $from == "HAND") return true;
@@ -1609,6 +1610,16 @@ function SmuggleCost($cardID, $player="", $index="")
     }
   }
   return $minCost;
+}
+
+function SmuggleAdditionalCosts($cardID, $player = ""): bool {
+  global $currentPlayer;
+  if($player = "") $player = $currentPlayer;
+  switch($cardID) {
+    case "4783554451"://First Light
+      return count(GetAllies($player)) > 0;
+    default: return true;
+  }
 }
 
 function PlayableFromBanish($cardID, $mod="")
