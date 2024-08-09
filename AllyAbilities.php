@@ -556,7 +556,12 @@ function CollectBounty($player, $index, $cardID, $reportMode=false, $bountyUnitO
       ++$numBounties;
       if($reportMode) break;
       $amount = CardIsUnique($bountyUnit) ? 6 : 4;
-      Restore($amount, $opponent);
+      AddDecisionQueue("MULTIZONEINDICES", $opponent, "MYALLY&THEIRALLY");
+      AddDecisionQueue("PREPENDLASTRESULT", $opponent, "THEIRCHAR-0,", 1);
+      AddDecisionQueue("PREPENDLASTRESULT", $opponent, "MYCHAR-0,", 1);
+      AddDecisionQueue("SETDQCONTEXT", $opponent, "Choose a card to restore ".$amount, 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $opponent, "<-", 1);
+      AddDecisionQueue("MZOP", $opponent, "RESTORE,".$amount, 1);
       break;
     case "3074091930"://Rich Reward
       ++$numBounties;
@@ -1467,7 +1472,7 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("SPECIFICCARD", $mainPlayer, "ROSETICO", 1);
       break;
     case "9040137775"://Principled Outlaw
-      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:arena=Ground&THEIRALLY:arena=Ground");
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to exhaust");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "REST", 1);
