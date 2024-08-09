@@ -2069,9 +2069,9 @@ function IsClassBonusActive($player, $class)
   return false;
 }
 
-function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalCosts = "-", $theirCard = false)
+function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalCosts = "-")
 {
-  global $currentPlayer, $layers, $CS_PlayIndex, $CS_OppIndex, $initiativePlayer, $CCS_CantAttackBase;
+  global $currentPlayer, $layers, $CS_PlayIndex, $CS_OppIndex, $CS_OppCardActive, $initiativePlayer, $CCS_CantAttackBase;
   $index = GetClassState($currentPlayer, $CS_PlayIndex);
     
   if($from == "PLAY" && IsAlly($cardID, $currentPlayer)) {
@@ -4453,7 +4453,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "GENERALRIEEKAN", 1);
       break;
     case "3577961001"://Mercenary Gunship
-      $abilityName = $theirCard ? GetOpponentControlledAbilityNames($cardID) : GetResolvedAbilityName($cardID, $from);
+      $abilityName = $CS_OppCardActive ? GetOpponentControlledAbilityNames($cardID) : GetResolvedAbilityName($cardID, $from);
         if($abilityName == "Take Control") {
           $oppIndex = GetClassState($currentPlayer, $CS_OppIndex);
           $otherPlayer = $currentPlayer == 1 ? 2 : 1;
