@@ -895,32 +895,39 @@ function AddAllyPlayAbilityLayers($cardID, $from) {
   global $currentPlayer;
   $allies = &GetAllies($currentPlayer);
   for($i=0; $i<count($allies); $i+=AllyPieces()) {
-    if(AllyHasPlayCardAbility($cardID, $allies[$i], $currentPlayer, $i)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $allies[$i] . "," . $allies[$i+5]);
+    if(AllyHasPlayCardAbility($cardID, $allies[$i], $currentPlayer, $i)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $allies[$i] . "," . $allies[$i+5], append:true);
   }
   $otherPlayer = $currentPlayer == 1 ? 2 : 1;
   $theirAllies = &GetAllies($otherPlayer);
   for($i=0; $i<count($theirAllies); $i+=AllyPieces()) {
-    if(AllyHasPlayCardAbility($cardID, $theirAllies[$i], $otherPlayer, $i)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $theirAllies[$i] . "," . $allies[$i+5]);
+    if(AllyHasPlayCardAbility($cardID, $theirAllies[$i], $otherPlayer, $i)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $theirAllies[$i] . "," . $allies[$i+5], append:true);
   }
 }
 
 function AllyHasPlayCardAbility($playedCard, $cardID, $player, $index) {
   global $currentPlayer;
+  
   if($player == $currentPlayer) {
     switch($cardID) {
       case "415bde775d"://Hondo Ohnaka
       case "0052542605"://Bossk
-      case "0961039929"://Colonel Yularen
-      case "8031540027"://Dengar
-      case "724979d608"://Cad Bane Leader 
-      case "4088c46c4d"://The Mandalorian
-      case "3010720738"://Tobias Beckett
         return true;
       case "9850906885"://Maz Kanata
-      case "5907868016"://Fighters for Freedom
-      case "0981852103"://Lady Proxima
+        return $playedCard != $cardID && DefinedTypesContains($cardID, "Unit");
       case "3952758746"://Toro Calican
         return $playedCard == $cardID && $index == LastAllyIndex($player) ? false : true;
+      case "724979d608"://Cad Bane Leader
+      case "0981852103"://Lady Proxima
+        return $playedCard != $cardID && TraitContains($playedCard, "Underworld", $player);
+      case "4088c46c4d"://The Mandalorian
+      case "8031540027"://Dengar
+        return DefinedTypesContains($playedCard, "Upgrade");
+      case "0961039929"://Colonel Yularen
+        return AspectContains($cardID, "Command") && DefinedTypesContains($cardID, "Unit");
+      case "5907868016"://Fighters for Freedom
+        return $playedCard != $cardID && AspectContains($cardID, "Aggression");
+      case "3010720738"://Tobias Beckett
+        return !DefinedTypesContains($cardID, "Unit");
       default: break;
     }
   } else {
@@ -997,25 +1004,13 @@ function AllyPlayCardAbility($cardID, $player="", $from="-", $abilityID="-", $un
       if($cadIndex != "") {
         $cadbane = new Ally("MYALLY-" . $cadIndex, $player);
         if($from != 'PLAY' && $cadbane->NumUses() > 0 && TraitContains($cardID, "Underworld", $currentPlayer)) {
-          $otherPlayer = ($player == 1 ? 2 : 1);
-          AddDecisionQueue("YESNO", $player, "if you want use Cad Bane's ability");
-          AddDecisionQueue("NOPASS", $player, "-");
-          AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $cadIndex, 1);
-          AddDecisionQueue("ADDMZUSES", $player, "-1", 1);
-          AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY", 1);
-          AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a unit to deal 2 damage to", 1);
-          AddDecisionQueue("CHOOSEMULTIZONE", $otherPlayer, "<-", 1);
-          AddDecisionQueue("MZOP", $otherPlayer, "DEALDAMAGE,2", 1);
+          AddLayer("TRIGGER", $currentPlayer, "724979d608", append:true);
         }
       }
       break;
     case "4088c46c4d"://The Mandalorian
       if(DefinedTypesContains($cardID, "Upgrade", $player)) {
-        $character[$index+1] = 1;
-        AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:maxHealth=6");
-        AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to exhaust", 1);
-        AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-        AddDecisionQueue("MZOP", $player, "REST", 1);
+        AddLayer("TRIGGER", $currentPlayer, "4088c46c4d", append:true);
       }
       break;
     case "3952758746"://Toro Calican
