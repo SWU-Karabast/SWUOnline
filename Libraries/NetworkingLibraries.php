@@ -1,7 +1,7 @@
 <?php
 function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkInput, $isSimulation=false, $inputText="")
 {
-  global $gameName, $currentPlayer, $mainPlayer, $dqVars, $turn, $CS_CharacterIndex, $CS_PlayIndex, $decisionQueue, $CS_NextNAAInstant, $skipWriteGamestate, $combatChain, $landmarks;
+  global $gameName, $currentPlayer, $mainPlayer, $dqVars, $turn, $CS_CharacterIndex, $CS_PlayIndex, $CS_OppCardActive, $decisionQueue, $CS_NextNAAInstant, $skipWriteGamestate, $combatChain, $landmarks;
   global $SET_PassDRStep, $actionPoints, $currentPlayerActivity, $redirectPath;
   global $dqState, $layers, $combatChainState;
   global $roguelikeGameID;
@@ -436,6 +436,21 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
         default: $zone = &GetAuras($playerID == 1 ? 2 : 1); $offset = 8; break;
       }
       $zone[$index + $offset] = ($zone[$index + $offset] == "1" ? "0" : "1");
+      break;
+    case 105:
+      $otherPlayer = ($playerID == 1 ? 2 : 1);
+      MakeGamestateBackup();
+      $theirAllies = &GetAllies($otherPlayer);
+      $index = $cardID; //Overridden to be index instead
+      if ($index >= count($theirAllies))
+        break; //Ally doesn't exist
+      $cardID = $theirAllies[$index];
+      if (!IsPlayable($cardID, $turn[0], "PLAY", $index))
+        break; //Ally not playable
+      $abilityNames = GetOpponentControlledAbilityNames($theirAllies[$index]);
+      SetClassState($playerID, $CS_PlayIndex, $index);
+      SetClassState($playerID, $CS_OppCardActive, 1);
+      PlayCard($cardID, "PLAY", -1, $index, $theirAllies[$index + 5]);
       break;
     case 10000: //Undo
       RevertGamestate();
@@ -1209,7 +1224,7 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
 {
   global $playerID, $turn, $currentPlayer, $actionPoints, $layers;
   global $layerPriority, $lastPlayed;
-  global $decisionQueue, $CS_PlayIndex, $CS_PlayUniqueID, $CS_LayerPlayIndex, $CS_LastDynCost, $CS_NumCardsPlayed;
+  global $decisionQueue, $CS_PlayIndex, $CS_OppIndex, $CS_OppCardActive, $CS_PlayUniqueID, $CS_LayerPlayIndex, $CS_LastDynCost, $CS_NumCardsPlayed;
   global $mainPlayer, $CS_DynCostResolved, $CS_NumVillainyPlayed, $CS_NumEventsPlayed, $CS_NumClonesPlayed;
   $resources = &GetResources($currentPlayer);
   $pitch = &GetPitch($currentPlayer);
@@ -1217,6 +1232,7 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
   $layerPriority[0] = ShouldHoldPriority(1);
   $layerPriority[1] = ShouldHoldPriority(2);
   $playingCard = $turn[0] != "P" && ($turn[0] != "B" || count($layers) > 0);
+  $oppCardActive = GetClassState($currentPlayer, $CS_OppCardActive) >= 0;
   if($uniqueID > 0) {
     $uniqueIndex = SearchAlliesForUniqueID($uniqueID, $currentPlayer);
     if($uniqueIndex != -1) $index = $uniqueIndex;
@@ -1225,6 +1241,9 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
     //CR 5.1.1 Play a Card (CR 2.0) - Layer Created
     if($playingCard)
     {
+      if ($oppCardActive) {
+        SetClassState($currentPlayer, $CS_OppIndex, $index);
+      }
       SetClassState($currentPlayer, $CS_PlayIndex, $index);
       $layerIndex = AddLayer($cardID, $currentPlayer, $from, "-", "-");
       SetClassState($currentPlayer, $CS_LayerPlayIndex, $layerIndex);
@@ -1245,10 +1264,11 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
     if(count($layers) > 0 && $layers[count($layers)-LayerPieces()] == "ENDTURN") $layers[count($layers)-LayerPieces()] = "RESUMETURN"; //Means the defending player played something, so the end turn attempt failed
   }
   if($turn[0] != "P") {
-    if($dynCostResolved >= 0) {
+    if($dynCostResolved >= 0 || $oppCardActive) {
       SetClassState($currentPlayer, $CS_DynCostResolved, $dynCostResolved);
-      if($from == "RESOURCES") $baseCost = SmuggleCost($cardID, $currentPlayer, $index) + SelfCostModifier($cardID, $from);
-      else $baseCost = ($from == "PLAY" || $from == "EQUIP" ? AbilityCost($cardID, $index) : (CardCost($cardID) + SelfCostModifier($cardID, $from)));
+      $baseCost = ($from == "RESOURCES")
+        ? SmuggleCost($cardID, $currentPlayer, $index) + SelfCostModifier($cardID, $from)
+        : ($from == "PLAY" || $from == "EQUIP" ? AbilityCost($cardID, $index, $oppCardActive) : (CardCost($cardID) + SelfCostModifier($cardID, $from)));
       if(!$playingCard) $resources[1] += $dynCostResolved;
       else {
         $frostbitesPaid = AuraCostModifier($cardID);
@@ -1280,11 +1300,16 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
       //CR 5.1.4a Declare targets for resolution abilities
       if($from != "PLAY" && ($turn[0] != "B" || (count($layers) > 0 && $layers[0] != ""))) GetLayerTarget($cardID);
       //Right now only units in play can attack
-      if($from == "PLAY") AddDecisionQueue("GETTARGETOFATTACK", $currentPlayer, $cardID . "," . $from);
+      if (!$oppCardActive) {
+        if ($from == "PLAY")
+          AddDecisionQueue("GETTARGETOFATTACK", $currentPlayer, $cardID . "," . $from);
 
-      if($dynCost == "") AddDecisionQueue("PASSPARAMETER", $currentPlayer, "0");
-      else AddDecisionQueue("GETCLASSSTATE", $currentPlayer, $CS_LastDynCost);
-      AddDecisionQueue("RESUMEPAYING", $currentPlayer, $cardID . "-" . $from . "-" . $index);
+        if ($dynCost == "")
+          AddDecisionQueue("PASSPARAMETER", $currentPlayer, "0");
+        else
+          AddDecisionQueue("GETCLASSSTATE", $currentPlayer, $CS_LastDynCost);
+        AddDecisionQueue("RESUMEPAYING", $currentPlayer, $cardID . "-" . $from . "-" . $index);
+      }
       $decisionQueue = array_merge($decisionQueue, $dqCopy);
       ProcessDecisionQueue();
       //MISSING CR 5.1.3d Decide if action that can be played as instant will be
@@ -1306,6 +1331,8 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
   }
   if($resources[1] > 0) {
     WriteLog("Not enough resources to pay for that. Reverting gamestate.");
+    if(GetClassState($currentPlayer, $CS_OppCardActive))
+      SetClassState($currentPlayer, $CS_OppCardActive, -1);
     RevertGamestate();
   }
   //CR 2.0 5.1.7. Pay Asset-Costs
@@ -1336,7 +1363,7 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
   if($playingCard) {
     $canPlayAsInstant = CanPlayAsInstant($cardID, $index, $from);
     if(IsStaticType($cardType, $from, $cardID)) {
-      $playType = GetResolvedAbilityType($cardID, $from);
+      $playType = GetResolvedAbilityType($cardID, $from, $oppCardActive);
       $abilityType = $playType;
       if($abilityType == "A" && !$canPlayAsInstant) ResetCombatChainState();
       PayAbilityAdditionalCosts($cardID);
@@ -1419,13 +1446,18 @@ function GetLayerTarget($cardID)
 
 function AddPrePitchDecisionQueue($cardID, $from, $index = -1, $skipAbilityType = false)
 {
-  global $currentPlayer, $CS_AdditionalCosts;
+  global $currentPlayer, $CS_AdditionalCosts, $CS_OppCardActive;
+  $oppCardActive = GetClassState($currentPlayer, $CS_OppCardActive) >= 0;
   if (!$skipAbilityType && IsStaticType(CardType($cardID), $from, $cardID)) {
-    $names = GetAbilityNames($cardID, $index, validate:true);
+    $names = $oppCardActive ? GetOpponentControlledAbilityNames($cardID) : GetAbilityNames($cardID, $index, validate: true);
     if ($names != "") {
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose which ability to activate");
-      AddDecisionQueue("BUTTONINPUT", $currentPlayer, $names);
-      AddDecisionQueue("SETABILITYTYPE", $currentPlayer, $cardID);
+      if (!$oppCardActive) {
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose which ability to activate");
+        AddDecisionQueue("BUTTONINPUT", $currentPlayer, $names);
+        AddDecisionQueue("SETABILITYTYPE", $currentPlayer, $cardID);
+      } else {
+        AddDecisionQueue("SETABILITYTYPEOPP", $currentPlayer, $cardID);
+      }
     }
   }
   switch ($cardID) {
@@ -1587,23 +1619,32 @@ function UpdateLinkAttack()
 
 function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $additionalCosts = "-", $uniqueID = "-1", $layerIndex = -1)
 {
-  global $turn, $combatChain, $currentPlayer, $defPlayer, $combatChainState, $CCS_AttackPlayedFrom, $CS_PlayIndex;
+  global $turn, $combatChain, $currentPlayer, $defPlayer, $combatChainState, $CCS_AttackPlayedFrom, $CS_PlayIndex, $CS_OppIndex, $CS_OppCardActive;
   global $CS_CharacterIndex, $CS_NumNonAttackCards, $CS_PlayCCIndex, $CS_NumAttacks, $CCS_LinkBaseAttack;
   global $CCS_WeaponIndex, $EffectContext, $CCS_AttackUniqueID, $CS_NumEventsPlayed, $CS_AfterPlayedBy, $layers;
   global $CS_NumDragonAttacks, $CS_NumIllusionistAttacks, $CS_NumIllusionistActionCardAttacks, $CCS_IsBoosted;
   global $SET_PassDRStep, $CS_AbilityIndex, $CS_NumMandalorianAttacks;
+  
+  $oppCardActive = GetClassState($currentPlayer, $CS_OppCardActive) >= 0;
 
-  if($layerIndex > -1) SetClassState($currentPlayer, $CS_PlayIndex, $layerIndex);
-  if(intval($uniqueID) != -1) $index = SearchForUniqueID($uniqueID, $currentPlayer);
-  if(!isset($index)) $index = GetClassState($currentPlayer, $CS_PlayIndex);
-  if($index > -1) SetClassState($currentPlayer, $CS_PlayIndex, $index);
+  $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+  if ($layerIndex > -1)
+    SetClassState($currentPlayer, $CS_PlayIndex, $layerIndex);
+  if (intval($uniqueID) != -1)
+    $index = SearchForUniqueID($uniqueID, $oppCardActive ? $otherPlayer : $currentPlayer);
+  if (!isset($index))
+    $index = GetClassState($currentPlayer, $CS_PlayIndex);
+  if ($index > -1)
+    SetClassState($currentPlayer, $CS_PlayIndex, $index);
+  if ($oppCardActive)
+    $index = GetClassState($currentPlayer, $CS_OppIndex);
 
   $definedCardType = CardType($cardID);
   //Figure out where it goes
   $openedChain = false;
   $chainClosed = false;
   $isBlock = ($turn[0] == "B" && count($layers) == 0); //This can change over the course of the function; for example if a phantasm gets popped
-  if (GoesOnCombatChain($turn[0], $cardID, $from)) {
+  if (GoesOnCombatChain($turn[0], $cardID, $from, $oppCardActive)) {
     if($from == "PLAY" && $uniqueID != "-1" && $index == -1 && !DelimStringContains(CardSubType($cardID), "Item")) { WriteLog(CardLink($cardID, $cardID) . " does not resolve because it is no longer in play."); return; }
     $index = AddCombatChain($cardID, $currentPlayer, $from, $resourcesPaid);
     if ($index == 0) {
@@ -1734,8 +1775,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
         $playIndex = GetClassState($currentPlayer, $CS_PlayIndex);
         $layerName = "PLAYABILITY";
         if($from == "PLAY" || $from == "EQUIP") {
-          if(GetResolvedAbilityType($cardID) == "A") $layerName = "ACTIVATEDABILITY";
-          else $layerName = "ATTACKABILITY";
+          $layerName = (GetResolvedAbilityType($cardID, $oppCardActive) == "A" || ($oppCardActive == true)) ? "ACTIVATEDABILITY" : "ATTACKABILITY";
         }
         if($layerName == "ATTACKABILITY") { if(HasAttackAbility($cardID)) PlayAbility($cardID, "PLAY", "0"); }
         //TODO: Fix this Relentless and first light and The Mandalorian hack

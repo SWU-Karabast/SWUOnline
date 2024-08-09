@@ -2059,9 +2059,9 @@ function IsClassBonusActive($player, $class)
   return false;
 }
 
-function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalCosts = "-")
+function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalCosts = "-", $theirCard = false)
 {
-  global $currentPlayer, $layers, $CS_PlayIndex, $initiativePlayer, $CCS_CantAttackBase;
+  global $currentPlayer, $layers, $CS_PlayIndex, $CS_OppIndex, $initiativePlayer, $CCS_CantAttackBase;
   $index = GetClassState($currentPlayer, $CS_PlayIndex);
     
   if($from == "PLAY" && IsAlly($cardID, $currentPlayer)) {
@@ -4442,6 +4442,22 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a target for " . CardLink($cardID, $cardID) . "'s ability", 1);
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "GENERALRIEEKAN", 1);
+      break;
+    case "3577961001"://Mercenary Gunship
+      $abilityName = $theirCard ? GetOpponentControlledAbilityNames($cardID) : GetResolvedAbilityName($cardID, $from);
+        if($abilityName == "Take Control") {
+          global $CS_OppCardActive;
+          $oppIndex = GetClassState($currentPlayer, $CS_OppIndex);
+          $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+          $ally = new Ally("THEIRALLY-" . $oppIndex, $otherPlayer);
+
+          AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYALLY-" . $ally->Index(), 1);
+          AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL", 1);
+          AddDecisionQueue("PASSPARAMETER", $currentPlayer, -1, 1);
+          AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_OppCardActive, 1);
+
+        }
+      break;
     default: break;
   }
 }

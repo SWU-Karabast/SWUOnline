@@ -28,6 +28,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
   global $CS_AdditionalCosts, $CS_AlluvionUsed, $CS_MaxQuellUsed, $CS_DamageDealt, $CS_ArcaneTargetsSelected, $inGameStatus;
   global $CS_ArcaneDamageDealt, $MakeStartTurnBackup, $CCS_AttackTargetUID, $chainLinkSummary, $chainLinks, $MakeStartGameBackup;
   $rv = "";
+
   switch($phase) {
     case "FINDINDICES":
       UpdateGameState($currentPlayer);
@@ -1303,6 +1304,19 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $names = explode(",", GetAbilityNames($parameter, GetClassState($player, $CS_PlayIndex)));
       WriteLog(implode(" ", explode("_", $names[$index])) . " ability was chosen.");
       return $lastResult;
+      case "SETABILITYTYPEOPP"://For activating opponent's cards
+        global $CS_OppIndex, $CS_OppCardActive;
+        $lastPlayed[2] = $lastResult;
+        $otherPlayer = ($player == 1 ? 2 : 1);
+        $index = GetAbilityIndex($parameter, GetClassState($player, $CS_OppIndex), $lastResult, theirCard:true);
+        SetClassState($player, $CS_AbilityIndex, $index);
+        if(IsAlly($parameter, $otherPlayer) && TheirAllyDoesAbilityExhaust($parameter, $index)) {
+          $ally = new Ally("MYALLY-" . GetClassState($player, $CS_PlayIndex), $player);
+          $ally->Exhaust();
+        }
+        $names = explode(",", GetOpponentControlledAbilityNames($parameter));
+        WriteLog(implode(" ", explode("_", $names[$index])) . " ability was chosen!");
+        return $lastResult;
     case "MZSTARTTURNABILITY":
       MZStartTurnAbility($player, $lastResult);
       return "";
