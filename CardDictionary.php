@@ -412,7 +412,7 @@ function HasAmbush($cardID, $player, $index, $from)
     case "1862616109":
     case "3684950815":
     case "9500514827":
-    case "8506660490":
+    case "8506660490"://Darth Vader unit
     case "1805986989"://Modded Cohort
     case "7171636330"://Chain Code Collector
     case "7982524453"://Fennec Shand
