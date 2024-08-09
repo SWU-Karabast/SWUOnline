@@ -63,8 +63,6 @@ function AllyHasStaticHealthModifier($cardID)
     case "1557302740"://General Veers
     case "9799982630"://General Dodonna
     case "4339330745"://Wedge Antilles
-    case "9097316363"://Emperor Palpatine
-    case "6c5b96c7ef"://Emperor Palpatine
     case "4511413808"://Follower of the Way
     case "3731235174"://Supreme Leader Snoke
     case "6097248635"://4-LOM
@@ -87,20 +85,6 @@ function AllyStaticHealthModifier($cardID, $index, $player, $myCardID, $myIndex,
     case "4339330745"://Wedge Antilles
       if($index != $myIndex && $player == $myPlayer && TraitContains($cardID, "Vehicle", $player)) return 1;
       break;
-    case "9097316363"://Emperor Palpatine
-    case "6c5b96c7ef"://Emperor Palpatine
-      if($cardID == "1780978508" && $player == $myPlayer) { //Royal Guard
-        $isEmperorPalpatineLeader = false;
-        $character = &GetPlayerCharacter($player);
-        for($i=0; $i<count($character); $i+=CharacterPieces()) {
-          if($character[$i] == "5784497124") { //Emperor Palpatine
-            $isEmperorPalpatineLeader = true;
-            break;
-          }
-        }
-        return $isEmperorPalpatineLeader ? 0 : 1;
-      }
-      break;
     case "4511413808"://Follower of the Way
       if($index == $myIndex && $player == $myPlayer) {
         $ally = new Ally("MYALLY-" . $index, $player);
@@ -116,6 +100,41 @@ function AllyStaticHealthModifier($cardID, $index, $player, $myCardID, $myIndex,
     default: break;
   }
   return 0;
+}
+
+// Modifiers Based on Name, whether Ally or Leader
+function NameBasedHealthModifiers($cardID, $index, $player, $stackingBuff = false) {
+  $modifier = 0;
+  $foundBuff = false;
+  $char = &GetPlayerCharacter($player);
+  for($i=0; $i<count($char); $i+=CharacterPieces()) {
+    switch($char[$i])
+    {
+      case "5784497124"://Emperor Palpatine
+        if($cardID == "1780978508") {
+          $modifier += 1;//Emperor's Royal Guard
+          $foundBuff = true;
+        }
+        break;
+      default: break;
+    }
+  }
+  if($foundBuff && !$stackingBuff) return $modifier;
+
+  $allies = GetAllies($player);
+  for($i=count($allies)-AllyPieces(); $i>=0; $i-=AllyPieces()) {
+    if($foundBuff && !$stackingBuff) break;
+    switch($allies[$i]) {
+      case "9097316363"://Emperor Palpatine (Red Unit)
+      case "6c5b96c7ef"://Emperor Palpatine (Deployed Leader Unit)
+        if($cardID == "1780978508") { //Royal Guard
+          $foundBuff = true;
+          $modifier += 1;
+        }
+        break;
+    }
+  }
+  return $modifier;
 }
 
 // Health update: Leaving this for now. Not sure it is used and may be removed in a more
