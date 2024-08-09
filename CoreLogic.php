@@ -3283,17 +3283,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("SPECIFICCARD", $currentPlayer, "LTCHILDSEN", 1);
       }
       break;
-    case "8506660490"://Darth Vader
+    case "8506660490"://Darth Vader Unit
       if($from != "PLAY") {
-        AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXINDICES,10");
-        AddDecisionQueue("FILTER", $currentPlayer, "Deck-include-aspect-Villainy", 1);
-        AddDecisionQueue("FILTER", $currentPlayer, "Deck-include-maxCost-3", 1);
-        AddDecisionQueue("FILTER", $currentPlayer, "Deck-include-definedType-Unit", 1);
-        AddDecisionQueue("SETDQVAR", $currentPlayer, "0");
-        AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "10-", 1);
-        AddDecisionQueue("MULTICHOOSEDECK", $currentPlayer, "<-", 1);
-        AddDecisionQueue("MULTIREMOVEDECK", $currentPlayer, "-", 1);
-        AddDecisionQueue("SPECIFICCARD", $currentPlayer, "DARTHVADER", 1);
+        AddLayer("TRIGGER", $currentPlayer, "8506660490", append:true);
       }
       break;
     case "8615772965"://Vigilance

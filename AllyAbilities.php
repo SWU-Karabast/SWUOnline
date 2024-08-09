@@ -786,6 +786,7 @@ function OnKillAbility($fromCombat)
       $attackerAlly->Ready();
       break;
     case "6769342445"://Jango Fett
+      WriteLog("Jango Draw");
       Draw($mainPlayer);
       break;
     default: break;
@@ -1087,12 +1088,7 @@ function AllyPlayCardAbility($cardID, $player="", $from="-", $abilityID="-", $un
       }
       break;
     case "4935319539"://Krayt Dragon
-      $damage = CardCost($cardID);
-      AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "THEIRALLY:arena=Ground");
-      AddDecisionQueue("PREPENDLASTRESULT", $otherPlayer, "THEIRCHAR-0,");
-      AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a card to deal " . $damage . " damage to");
-      AddDecisionQueue("MAYCHOOSEMULTIZONE", $otherPlayer, "<-", 1);
-      AddDecisionQueue("MZOP", $otherPlayer, "DEALDAMAGE," . $damage, 1);
+      AddLayer("TRIGGER", $currentPlayer, "4935319539", $cardID, append:true);
       break;
     default: break;
   }

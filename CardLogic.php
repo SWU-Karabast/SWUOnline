@@ -687,6 +687,26 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       AddDecisionQueue("MZOP", $player, "REST", 1);
       AddDecisionQueue("EXHAUSTCHARACTER", $player, FindCharacterIndex($player, "9005139831"), 1);
       break;
+    case "4935319539"://Krayt Dragon
+      $otherPlayer = ($player == 1 ? 2 : 1);
+      $damage = CardCost($target);
+      AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "THEIRALLY:arena=Ground");
+      AddDecisionQueue("PREPENDLASTRESULT", $otherPlayer, "THEIRCHAR-0,");
+      AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a card to deal " . $damage . " damage to");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $otherPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $otherPlayer, "DEALDAMAGE," . $damage, 1);
+      break;
+    case "8506660490"://Darth Vader unit
+      AddDecisionQueue("FINDINDICES", $player, "DECKTOPXINDICES,10");
+      AddDecisionQueue("FILTER", $player, "Deck-include-aspect-Villainy", 1);
+      AddDecisionQueue("FILTER", $player, "Deck-include-maxCost-3", 1);
+      AddDecisionQueue("FILTER", $player, "Deck-include-definedType-Unit", 1);
+      AddDecisionQueue("SETDQVAR", $player, "0");
+      AddDecisionQueue("PREPENDLASTRESULT", $player, "10-", 1);
+      AddDecisionQueue("MULTICHOOSEDECK", $player, "<-", 1);
+      AddDecisionQueue("MULTIREMOVEDECK", $player, "-", 1);
+      AddDecisionQueue("SPECIFICCARD", $player, "DARTHVADER", 1);
+      break;
     default: break;
   }
 }
