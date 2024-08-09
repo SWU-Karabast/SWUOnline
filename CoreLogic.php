@@ -4462,7 +4462,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
 
           AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYALLY-" . $ally->Index(), 1);
           AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL", 1);
-          AddDecisionQueue("PASSPARAMETER", $currentPlayer, false, 1);
+          AddDecisionQueue("PASSPARAMETER", $currentPlayer, -1, 1);
           AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_OppCardActive, 1);
 
         }

@@ -449,7 +449,7 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
         break; //Ally not playable
       $abilityNames = GetOpponentControlledAbilityNames($theirAllies[$index]);
       SetClassState($playerID, $CS_PlayIndex, $index);
-      SetClassState($playerID, $CS_OppCardActive, true);
+      SetClassState($playerID, $CS_OppCardActive, 1);
       PlayCard($cardID, "PLAY", -1, $index, $theirAllies[$index + 5]);
       break;
     case 10000: //Undo
@@ -1232,7 +1232,7 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
   $layerPriority[0] = ShouldHoldPriority(1);
   $layerPriority[1] = ShouldHoldPriority(2);
   $playingCard = $turn[0] != "P" && ($turn[0] != "B" || count($layers) > 0);
-  $oppCardActive = GetClassState($currentPlayer, $CS_OppCardActive);
+  $oppCardActive = GetClassState($currentPlayer, $CS_OppCardActive) >= 0;
   if($uniqueID > 0) {
     $uniqueIndex = SearchAlliesForUniqueID($uniqueID, $currentPlayer);
     if($uniqueIndex != -1) $index = $uniqueIndex;
@@ -1332,7 +1332,7 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
   if($resources[1] > 0) {
     WriteLog("Not enough resources to pay for that. Reverting gamestate.");
     if(GetClassState($currentPlayer, $CS_OppCardActive))
-      SetClassState($currentPlayer, $CS_OppCardActive, false);
+      SetClassState($currentPlayer, $CS_OppCardActive, -1);
     RevertGamestate();
   }
   //CR 2.0 5.1.7. Pay Asset-Costs
@@ -1447,7 +1447,7 @@ function GetLayerTarget($cardID)
 function AddPrePitchDecisionQueue($cardID, $from, $index = -1, $skipAbilityType = false)
 {
   global $currentPlayer, $CS_AdditionalCosts, $CS_OppCardActive;
-  $oppCardActive = GetClassState($currentPlayer, $CS_OppCardActive);
+  $oppCardActive = GetClassState($currentPlayer, $CS_OppCardActive) >= 0;
   if (!$skipAbilityType && IsStaticType(CardType($cardID), $from, $cardID)) {
     $names = $oppCardActive ? GetOpponentControlledAbilityNames($cardID) : GetAbilityNames($cardID, $index, validate: true);
     if ($names != "") {
@@ -1625,7 +1625,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
   global $CS_NumDragonAttacks, $CS_NumIllusionistAttacks, $CS_NumIllusionistActionCardAttacks, $CCS_IsBoosted;
   global $SET_PassDRStep, $CS_AbilityIndex, $CS_NumMandalorianAttacks;
   
-  $oppCardActive = GetClassState($currentPlayer, $CS_OppCardActive);
+  $oppCardActive = GetClassState($currentPlayer, $CS_OppCardActive) >= 0;
 
   $otherPlayer = $currentPlayer == 1 ? 2 : 1;
   if ($layerIndex > -1)

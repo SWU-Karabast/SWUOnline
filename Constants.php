@@ -476,7 +476,7 @@ function ResetClassState($player)
   $classState[$CS_CharacterIndex] = 0;
   $classState[$CS_PlayIndex] = -1;
   $classState[$CS_OppIndex] = -1;
-  $classState[$CS_OppCardActive] = false;
+  $classState[$CS_OppCardActive] = -1;
   $classState[$CS_NumNonAttackCards] = 0;
   $classState[$CS_PreparationCounters] = 0;
   $classState[$CS_NextNAACardGoAgain] = 0;
