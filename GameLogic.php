@@ -17,7 +17,7 @@ include "CombatChain.php";
 include_once "WriteLog.php";
 
 
-function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult, $theirCard = false)
+function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
 {
   global $redirectPath, $playerID, $gameName;
   global $currentPlayer, $combatChain, $defPlayer;
@@ -28,6 +28,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult, $th
   global $CS_AdditionalCosts, $CS_AlluvionUsed, $CS_MaxQuellUsed, $CS_DamageDealt, $CS_ArcaneTargetsSelected, $inGameStatus;
   global $CS_ArcaneDamageDealt, $MakeStartTurnBackup, $CCS_AttackTargetUID, $chainLinkSummary, $chainLinks, $MakeStartGameBackup;
   $rv = "";
+
   switch($phase) {
     case "FINDINDICES":
       UpdateGameState($currentPlayer);
@@ -1304,7 +1305,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult, $th
       WriteLog(implode(" ", explode("_", $names[$index])) . " ability was chosen.");
       return $lastResult;
       case "SETABILITYTYPEOPP"://For activating opponent's cards
-        global $CS_OppIndex;
+        global $CS_OppIndex, $CS_OppCardActive;
         $lastPlayed[2] = $lastResult;
         $otherPlayer = ($player == 1 ? 2 : 1);
         $index = GetAbilityIndex($parameter, GetClassState($player, $CS_OppIndex), $lastResult, theirCard:true);

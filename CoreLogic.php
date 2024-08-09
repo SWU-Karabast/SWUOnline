@@ -4455,12 +4455,16 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "3577961001"://Mercenary Gunship
       $abilityName = $theirCard ? GetOpponentControlledAbilityNames($cardID) : GetResolvedAbilityName($cardID, $from);
         if($abilityName == "Take Control") {
+          global $CS_OppCardActive;
           $oppIndex = GetClassState($currentPlayer, $CS_OppIndex);
           $otherPlayer = $currentPlayer == 1 ? 2 : 1;
           $ally = new Ally("THEIRALLY-" . $oppIndex, $otherPlayer);
 
           AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYALLY-" . $ally->Index(), 1);
           AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL", 1);
+          AddDecisionQueue("PASSPARAMETER", $currentPlayer, false, 1);
+          AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_OppCardActive, 1);
+
         }
       break;
     default: break;
