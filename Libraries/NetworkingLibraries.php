@@ -1232,7 +1232,7 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
   $layerPriority[0] = ShouldHoldPriority(1);
   $layerPriority[1] = ShouldHoldPriority(2);
   $playingCard = $turn[0] != "P" && ($turn[0] != "B" || count($layers) > 0);
-  $oppCardActive = GetClassState($currentPlayer, $CS_OppCardActive) >= 0;
+  $oppCardActive = GetClassState($currentPlayer, $CS_OppCardActive) > 0;
   if($uniqueID > 0) {
     $uniqueIndex = SearchAlliesForUniqueID($uniqueID, $currentPlayer);
     if($uniqueIndex != -1) $index = $uniqueIndex;
@@ -1447,7 +1447,7 @@ function GetLayerTarget($cardID)
 function AddPrePitchDecisionQueue($cardID, $from, $index = -1, $skipAbilityType = false)
 {
   global $currentPlayer, $CS_AdditionalCosts, $CS_OppCardActive;
-  $oppCardActive = GetClassState($currentPlayer, $CS_OppCardActive) >= 0;
+  $oppCardActive = GetClassState($currentPlayer, $CS_OppCardActive) > 0;
   if (!$skipAbilityType && IsStaticType(CardType($cardID), $from, $cardID)) {
     $names = $oppCardActive ? GetOpponentControlledAbilityNames($cardID) : GetAbilityNames($cardID, $index, validate: true);
     if ($names != "") {
@@ -1625,7 +1625,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
   global $CS_NumDragonAttacks, $CS_NumIllusionistAttacks, $CS_NumIllusionistActionCardAttacks, $CCS_IsBoosted;
   global $SET_PassDRStep, $CS_AbilityIndex, $CS_NumMandalorianAttacks;
   
-  $oppCardActive = GetClassState($currentPlayer, $CS_OppCardActive) >= 0;
+  $oppCardActive = GetClassState($currentPlayer, $CS_OppCardActive) > 0;
 
   $otherPlayer = $currentPlayer == 1 ? 2 : 1;
   if ($layerIndex > -1)
