@@ -707,6 +707,21 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       AddDecisionQueue("MULTIREMOVEDECK", $player, "-", 1);
       AddDecisionQueue("SPECIFICCARD", $player, "DARTHVADER", 1);
       break;
+    case "3045538805"://Hondo Ohnaka Leader
+      AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to give an experience token", 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+      AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
+      AddDecisionQueue("EXHAUSTCHARACTER", $player, FindCharacterIndex($player, "3045538805"), 1);
+      break;
+    case "9334480612"://Boba Fett Green Leader
+      AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a card to give +1 power");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+      AddDecisionQueue("MZOP", $player, "GETUNIQUEID", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $player, "9334480612,HAND", 1);
+      AddDecisionQueue("EXHAUSTCHARACTER", $player, FindCharacterIndex($player, "9334480612"), 1);
+      break;
     default: break;
   }
 }
