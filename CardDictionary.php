@@ -539,10 +539,10 @@ function MemoryCost($cardID, $player)
   return $cost;
 }
 
-function AbilityCost($cardID, $index=-1)
+function AbilityCost($cardID, $index=-1, $theirCard = false)
 {
-  global $currentPlayer, $CS_OppCardActive;
-  $abilityName = $CS_OppCardActive ? GetOpponentControlledAbilityNames($cardID) : GetResolvedAbilityName($cardID);
+  global $currentPlayer;
+  $abilityName = $theirCard ? GetOpponentControlledAbilityNames($cardID) : GetResolvedAbilityName($cardID);
   if($abilityName == "Heroic Resolve") return 2;
   switch($cardID) {
     case "2579145458"://Luke Skywalker
@@ -992,7 +992,7 @@ function GetOpponentControlledAbilityNames($cardID) {
   return $abilityNames;
 }
 
-function GetAbilityIndex($cardID, $index, $abilityName)
+function GetAbilityIndex($cardID, $index, $abilityName, $theirCard = false)
 {
   $abilityName = str_replace("_", " ", $abilityName);
   $names = explode(",", GetAbilityNames($cardID, $index));
@@ -1002,15 +1002,15 @@ function GetAbilityIndex($cardID, $index, $abilityName)
   return 0;
 }
 
-function GetResolvedAbilityType($cardID, $from="-")
+function GetResolvedAbilityType($cardID, $from="-", $theirCard = false)
 {
-  global $currentPlayer, $CS_AbilityIndex, $CS_PlayIndex, $CS_OppCardActive;
+  global $currentPlayer, $CS_AbilityIndex, $CS_PlayIndex;
   if($from == "HAND") return "";
   $abilityIndex = GetClassState($currentPlayer, $CS_AbilityIndex);
   $abilityTypes = GetAbilityTypes($cardID, GetClassState($currentPlayer, $CS_PlayIndex));
   if($abilityTypes == "" || $abilityIndex == "-") return GetAbilityType($cardID, -1, $from);
   $abilityTypes = explode(",", $abilityTypes);
-  return $CS_OppCardActive ? "A" : $abilityTypes[$abilityIndex]; //This will need to be updated if there are ever non-action abilities that can be activated on opponent's cards.
+  return $theirCard ? "A" : $abilityTypes[$abilityIndex]; //This will need to be updated if there are ever non-action abilities that can be activated on opponent's cards.
 }
 
 function GetResolvedAbilityName($cardID, $from="-")
@@ -1176,11 +1176,11 @@ function IsAction($cardID)
   return false;
 }
 
-function GoesOnCombatChain($phase, $cardID, $from)
+function GoesOnCombatChain($phase, $cardID, $from, $theirCard = false)
 {
-  global $layers, $CS_OppCardActive;
-  if($CS_OppCardActive) return false;
-  if($phase != "B" && $from == "EQUIP" || $from == "PLAY") $cardType = GetResolvedAbilityType($cardID, $from);
+  global $layers;
+  if($theirCard) return false;
+  if($phase != "B" && $from == "EQUIP" || $from == "PLAY") $cardType = GetResolvedAbilityType($cardID, $from, $theirCard);
   else $cardType = CardType($cardID);
   if($cardType == "I") return false; //Instants as yet never go on the combat chain
   if($phase == "B" && count($layers) == 0) return true; //Anything you play during these combat phases would go on the chain

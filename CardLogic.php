@@ -301,7 +301,7 @@ function IsDecisionQueueActive()
   return $dqState[0] == "1";
 }
 
-function ProcessDecisionQueue()
+function ProcessDecisionQueue($theirCard = false)
 {
   global $turn, $decisionQueue, $dqState;
   if($dqState[0] != "1") {
@@ -315,7 +315,7 @@ function ProcessDecisionQueue()
     $dqState[5] = "-"; //Decision queue multizone indices
     $dqState[6] = "0"; //Damage dealt
     $dqState[7] = "0"; //Target
-    ContinueDecisionQueue("");
+    ContinueDecisionQueue("", $theirCard);
   }
 }
 
@@ -366,7 +366,7 @@ function IsGamePhase($phase)
 }
 
 //Must be called with the my/their context
-function ContinueDecisionQueue($lastResult = "")
+function ContinueDecisionQueue($lastResult = "", $theirCard = false)
 {
   global $decisionQueue, $turn, $currentPlayer, $mainPlayerGamestateStillBuilt, $makeCheckpoint, $otherPlayer;
   global $layers, $layerPriority, $dqVars, $dqState, $CS_PlayIndex, $CS_AdditionalCosts, $mainPlayer, $CS_LayerPlayIndex;
@@ -403,7 +403,7 @@ function ContinueDecisionQueue($lastResult = "")
       }
       global $combatChain;
       if($priorityHeld) {
-        ContinueDecisionQueue("");
+        ContinueDecisionQueue("", $theirCard);
       } else {
         CloseDecisionQueue();
         $cardID = array_shift($layers);
@@ -452,7 +452,7 @@ function ContinueDecisionQueue($lastResult = "")
               $playIndex = count($subparamArr) > 5 ? $subparamArr[5] : -1;
                 SetClassState($player, $CS_AbilityIndex, $abilityIndex);
                 SetClassState($player, $CS_PlayIndex, $playIndex);
-                $playText = PlayAbility($cardID, $from, $resourcesPaid, $target, $additionalCosts);
+                $playText = PlayAbility($cardID, $from, $resourcesPaid, $target, $additionalCosts, $theirCard);
                 if($from != "PLAY") WriteLog("Resolving play ability of " . CardLink($cardID, $cardID) . ($playText != "" ? ": " : ".") . $playText);
                 if($from == "EQUIP") {
                   EquipPayAdditionalCosts(FindCharacterIndex($player, $cardID), "EQUIP");
@@ -463,7 +463,7 @@ function ContinueDecisionQueue($lastResult = "")
         }
         else {
           SetClassState($player, $CS_PlayIndex, $params[2]); //This is like a parameter to PlayCardEffect and other functions
-          PlayCardEffect($cardID, $params[0], $params[1], $target, $additionalCosts, $params[3], $params[2]);
+          PlayCardEffect($cardID, $params[0], $params[1], $target, $additionalCosts, $params[3], $params[2], $theirCard);
           ClearDieRoll($player);
         }
       }
@@ -486,7 +486,7 @@ function ContinueDecisionQueue($lastResult = "")
         $layerIndex = count($layers) - GetClassState($currentPlayer, $CS_LayerPlayIndex);
         $layers[$layerIndex + 2] = $params[1] . "|" . $params[2] . "|" . $params[3] . "|" . $params[4];
         $layers[$layerIndex + 4] = $additionalCosts;
-        ProcessDecisionQueue();
+        ProcessDecisionQueue($theirCard);
         return;
       }
     } else if(count($decisionQueue) > 0 && $decisionQueue[0] == "RESUMEPAYING") {
@@ -538,11 +538,11 @@ function ContinueDecisionQueue($lastResult = "")
   $currentPlayer = $player;
   $turn[2] = ($parameter == "<-" ? $lastResult : $parameter);
   $return = "PASS";
-  if($subsequent != 1 || is_array($lastResult) || strval($lastResult) != "PASS") $return = DecisionQueueStaticEffect($phase, $player, ($parameter == "<-" ? $lastResult : $parameter), $lastResult);
+  if($subsequent != 1 || is_array($lastResult) || strval($lastResult) != "PASS") $return = DecisionQueueStaticEffect($phase, $player, ($parameter == "<-" ? $lastResult : $parameter), $lastResult, $theirCard);
   if($parameter == "<-" && !is_array($lastResult) && $lastResult == "-1") $return = "PASS"; //Collapse the rest of the queue if this decision point has invalid parameters
   if(is_array($return) || strval($return) != "NOTSTATIC") {
     if($phase != "SETDQCONTEXT") $dqState[4] = "-"; //Clear out context for static states -- context only persists for one choice
-    ContinueDecisionQueue($return);
+    ContinueDecisionQueue($return, $theirCard);
   } else {
     if($mainPlayerGamestateStillBuilt) UpdateMainPlayerGameState();
   }
