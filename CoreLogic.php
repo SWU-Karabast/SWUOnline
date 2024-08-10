@@ -4256,11 +4256,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "4002861992"://DJ (Blatant Thief)
       if($from == "RESOURCES") {
+        $djAlly = new Ally("MYALLY-" . LastAllyIndex($currentPlayer), $currentPlayer);
         $otherPlayer = $currentPlayer == 1 ? 2 : 1;
         $theirResources = &GetResourceCards($otherPlayer);
         $resourceCard = RemoveResource($otherPlayer, count($theirResources) - ResourcePieces());
-        AddResources($resourceCard, $currentPlayer, "PLAY", "DOWN");
-        AddCurrentTurnEffect($cardID, $currentPlayer, "", $resourceCard);
+        AddResources($resourceCard, $currentPlayer, "PLAY", "DOWN", stealSource:$djAlly->UniqueID());
       }
       break;
     case "7718080954"://Frozen in Carbonite
