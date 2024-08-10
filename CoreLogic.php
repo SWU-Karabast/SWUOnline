@@ -309,11 +309,7 @@ function MainCharacterPlayCardAbilities($cardID, $from)
     switch($character[$i]) {
       case "3045538805"://Hondo Ohnaka
         if($from == "RESOURCES") {
-          AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
-          AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to give an experience token", 1);
-          AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-          AddDecisionQueue("MZOP", $currentPlayer, "ADDEXPERIENCE", 1);
-          AddDecisionQueue("EXHAUSTCHARACTER", $currentPlayer, $i, 1);
+          AddLayer("TRIGGER", $currentPlayer, "3045538805", append:true);
         }
         break;
       case "1384530409"://Cad Bane
@@ -329,12 +325,7 @@ function MainCharacterPlayCardAbilities($cardID, $from)
         break;
       case "9334480612"://Boba Fett Green Leader
         if($from != "PLAY" && DefinedTypesContains($cardID, "Unit", $currentPlayer) && HasKeyword($cardID, "Any", $currentPlayer)) {
-          AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
-          AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to give +1 power");
-          AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
-          AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
-          AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "9334480612,HAND", 1);
-          AddDecisionQueue("EXHAUSTCHARACTER", $currentPlayer, $i, 1);
+          AddLayer("TRIGGER", $currentPlayer, "9334480612", append:true);
         }
         break;
       default:
@@ -2083,11 +2074,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     if($targetArr[0] == "LAYERUID") { $targetArr[0] = "LAYER"; $targetArr[1] = SearchLayersForUniqueID($targetArr[1]); }
     $target = count($targetArr) > 1 ? $targetArr[0] . "-" . $targetArr[1] : "-";
   }
-  if($from != "PLAY" && $from != "EQUIP" && $from != "CHAR") {
-    AddAllyPlayAbilityLayers($cardID, $from);
-  }
   if($from != "PLAY" && IsAlly($cardID, $currentPlayer)) {
     $playAlly = new Ally("MYALLY-" . LastAllyIndex($currentPlayer));
+  }
+  if($from != "PLAY" && $from != "EQUIP" && $from != "CHAR") {
+    AddAllyPlayAbilityLayers($cardID, $from, $playAlly ? $playAlly->UniqueID() : "-");
   }
   if($from == "EQUIP" && DefinedTypesContains($cardID, "Leader", $currentPlayer)) {
     $abilityName = GetResolvedAbilityName($cardID, $from);
@@ -2753,11 +2744,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       if($from != "PLAY") {
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:arena=Ground");
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 2 damage to");
-        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,2", 1);
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:arena=Ground");
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 2 damage to");
-        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,2", 1);
       }
       break;
@@ -3283,17 +3274,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("SPECIFICCARD", $currentPlayer, "LTCHILDSEN", 1);
       }
       break;
-    case "8506660490"://Darth Vader
+    case "8506660490"://Darth Vader Unit
       if($from != "PLAY") {
-        AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXINDICES,10");
-        AddDecisionQueue("FILTER", $currentPlayer, "Deck-include-aspect-Villainy", 1);
-        AddDecisionQueue("FILTER", $currentPlayer, "Deck-include-maxCost-3", 1);
-        AddDecisionQueue("FILTER", $currentPlayer, "Deck-include-definedType-Unit", 1);
-        AddDecisionQueue("SETDQVAR", $currentPlayer, "0");
-        AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "10-", 1);
-        AddDecisionQueue("MULTICHOOSEDECK", $currentPlayer, "<-", 1);
-        AddDecisionQueue("MULTIREMOVEDECK", $currentPlayer, "-", 1);
-        AddDecisionQueue("SPECIFICCARD", $currentPlayer, "DARTHVADER", 1);
+        AddLayer("TRIGGER", $currentPlayer, "8506660490", append:true);
       }
       break;
     case "8615772965"://Vigilance
@@ -4256,11 +4239,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "4002861992"://DJ (Blatant Thief)
       if($from == "RESOURCES") {
+        $djAlly = new Ally("MYALLY-" . LastAllyIndex($currentPlayer), $currentPlayer);
         $otherPlayer = $currentPlayer == 1 ? 2 : 1;
         $theirResources = &GetResourceCards($otherPlayer);
         $resourceCard = RemoveResource($otherPlayer, count($theirResources) - ResourcePieces());
-        AddResources($resourceCard, $currentPlayer, "PLAY", "DOWN");
-        AddCurrentTurnEffect($cardID, $currentPlayer, "", $resourceCard);
+        AddResources($resourceCard, $currentPlayer, "PLAY", "DOWN", stealSource:$djAlly->UniqueID());
       }
       break;
     case "7718080954"://Frozen in Carbonite

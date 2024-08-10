@@ -93,6 +93,7 @@ class Ally {
       }
     }
     $max += CharacterStaticHealthModifiers($this->CardID(), $this->Index(), $this->PlayerID());
+    $max += NameBasedHealthModifiers($this->CardID(), $this->Index(), $this->PlayerID());
     return $max;
   }
 
@@ -125,10 +126,10 @@ class Ally {
   }
 
   //Returns true if the ally is destroyed
-  function DealDamage($amount, $bypassShield = false, $fromCombat = false, &$damageDealt = NULL) {
+  function DealDamage($amount, $bypassShield = false, $fromCombat = false, &$damageDealt = NULL, $enemyDamage = false) {
     if($this->index == -1 || $amount <= 0) return false;
     global $mainPlayer;
-    if(!$fromCombat && $this->CardID() == "1810342362" && !$this->LostAbilities() && $mainPlayer != $this->playerID) return;//Lurking TIE Phantom
+    if(!$fromCombat && $this->CardID() == "1810342362" && !$this->LostAbilities() && ($mainPlayer != $this->playerID || $enemyDamage)) return;//Lurking TIE Phantom
     $subcards = $this->GetSubcards();
     for($i=0; $i<count($subcards); $i+=SubcardPieces()) {
       if($subcards[$i] == "8752877738") {

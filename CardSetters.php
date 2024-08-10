@@ -114,7 +114,7 @@ function AddMemory($cardID, $player, $from, $facing, $counters=0)
   $arsenal[] = GetUniqueId(); //Unique ID
 }
 
-function AddResources($cardID, $player, $from, $facing, $counters=0, $isExhausted="0")
+function AddResources($cardID, $player, $from, $facing, $counters=0, $isExhausted="0", $stealSource = "-1")
 {
   $arsenal = &GetArsenal($player);
   $arsenal[] = $cardID;
@@ -123,6 +123,7 @@ function AddResources($cardID, $player, $from, $facing, $counters=0, $isExhauste
   $arsenal[] = $counters; //Counters
   $arsenal[] = $isExhausted; //Is Frozen (1 = Frozen)
   $arsenal[] = GetUniqueId(); //Unique ID
+  $arsenal[] = $stealSource;
 }
 
 function AddArsenal($cardID, $player, $from, $facing, $counters=0)

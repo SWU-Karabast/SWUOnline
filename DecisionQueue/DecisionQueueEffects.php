@@ -425,8 +425,8 @@ function SpecificCardLogic($player, $card, $lastResult)
     case "L337":
       $target = $lastResult;
       if($target == "PASS") {
-        $allies = &GetAllies($player);
-        $ally = new Ally("MYALLY-" . count($allies) - AllyPieces(), $player);
+        $ally = new Ally("MYALLY-" . SearchAlliesForCard($player, "9552605383"), $player);
+        if($ally)
         $ally->Attach("8752877738");//Shield Token
       } else {
         $owner = MZPlayerID($player, $target);

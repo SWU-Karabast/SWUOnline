@@ -61,7 +61,7 @@ function CompletesAttackEffect($cardID) {
       if(GetAttackTarget() == "NA") {//This means the target was defeated
         $discard = &GetDiscard($defPlayer);
         $defeatedCard = RemoveDiscard($defPlayer, count($discard)-DiscardPieces());
-        AddResources($defeatedCard, $mainPlayer, "PLAY", "DOWN");
+        AddResources($defeatedCard, $mainPlayer, "PLAY", "DOWN", isExhausted:true);
       }
       break;
     default: break;
