@@ -2744,11 +2744,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       if($from != "PLAY") {
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:arena=Ground");
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 2 damage to");
-        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,2", 1);
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:arena=Ground");
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 2 damage to");
-        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,2", 1);
       }
       break;
@@ -4239,11 +4239,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "4002861992"://DJ (Blatant Thief)
       if($from == "RESOURCES") {
+        $djAlly = new Ally("MYALLY-" . LastAllyIndex($currentPlayer), $currentPlayer);
         $otherPlayer = $currentPlayer == 1 ? 2 : 1;
         $theirResources = &GetResourceCards($otherPlayer);
         $resourceCard = RemoveResource($otherPlayer, count($theirResources) - ResourcePieces());
-        AddResources($resourceCard, $currentPlayer, "PLAY", "DOWN");
-        AddCurrentTurnEffect($cardID, $currentPlayer, "", $resourceCard);
+        AddResources($resourceCard, $currentPlayer, "PLAY", "DOWN", stealSource:$djAlly->UniqueID());
       }
       break;
     case "7718080954"://Frozen in Carbonite

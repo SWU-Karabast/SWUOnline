@@ -107,9 +107,10 @@ function CharacterEffectPieces()
 //3 - Counters
 //4 - Exhausted: 0 = no, 1 = yes
 //5 - Unique ID
+//6 - Steal Source (i.e. DJ or Arquitens)
 function ArsenalPieces()
 {
-  return 6;
+  return 7;
 }
 function MemoryPieces() { return ArsenalPieces(); }
 function ResourcePieces() { return ArsenalPieces(); }

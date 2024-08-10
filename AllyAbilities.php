@@ -339,13 +339,13 @@ function AllyLeavesPlayAbility($player, $index)
       SearchCurrentTurnEffects("3401690666", $otherPlayer, remove:true);
       break;
     case "4002861992"://DJ (Blatant Thief)
-      $DJTurnEffect = &GetCurrentTurnEffects("4002861992", $player, remove: true);
-      if ($DJTurnEffect !== false) {
-        $cardIndex = &GetCardIndexInResources($player, $DJTurnEffect[2]);
-        if ($cardIndex >= 0) {
+      $djAlly = new Ally("MYALLY-" . $index, $player);
+      $arsenal = &GetArsenal($player);
+      for ($i = 0; $i < count($arsenal); $i += ArsenalPieces()) {
+        if ($arsenal[$i + 6] == $djAlly->UniqueID()) {
           $otherPlayer = $player == 1 ? 2 : 1;
-          $resourceCard = RemoveResource($player, $cardIndex);
-          AddResources($resourceCard, $otherPlayer, "PLAY", "DOWN");
+          $resourceCard = RemoveResource($player, $i);
+          AddResources($resourceCard, $otherPlayer, "PLAY", "DOWN", isExhausted:($arsenal[$i+4] == 1));
         }
       }
       break;
@@ -458,7 +458,7 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
         AddDecisionQueue("PREPENDLASTRESULT", $player, "MYCHAR-0,THEIRCHAR-0,");
         AddDecisionQueue("SETDQCONTEXT", $player, "Choose something to deal 1 damage to");
         AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
-        AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1", 1);
+        AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1," . $player, 1);
         break;
       case "9151673075"://Cobb Vanth
         AddDecisionQueue("FINDINDICES", $player, "DECKTOPXREMOVE," . 10);
@@ -1732,10 +1732,10 @@ function JabbasRancor($player, $index=-1) {
   AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:arena=Ground");
   if($index > -1) AddDecisionQueue("MZFILTER", $player, "index=MYALLY-" . $index);
   AddDecisionQueue("SETDQCONTEXT", $player, "Choose something to deal 3 damage to");
-  AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+  AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
   AddDecisionQueue("MZOP", $player, "DEALDAMAGE,3", 1);
   AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:arena=Ground");
   AddDecisionQueue("SETDQCONTEXT", $player, "Choose something to deal 3 damage to");
-  AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+  AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
   AddDecisionQueue("MZOP", $player, "DEALDAMAGE,3", 1);
 }
