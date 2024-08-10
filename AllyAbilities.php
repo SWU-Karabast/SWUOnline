@@ -439,7 +439,7 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
         AddDecisionQueue("PREPENDLASTRESULT", $player, "MYCHAR-0,THEIRCHAR-0,");
         AddDecisionQueue("SETDQCONTEXT", $player, "Choose something to deal 1 damage to");
         AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
-        AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1", 1);
+        AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1," . $player, 1);
         break;
       case "9151673075"://Cobb Vanth
         AddDecisionQueue("FINDINDICES", $player, "DECKTOPXREMOVE," . 10);
