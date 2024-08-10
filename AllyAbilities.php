@@ -907,43 +907,46 @@ function AllyAttackedAbility($attackTarget, $index) {
   }
 }
 
-function AddAllyPlayAbilityLayers($cardID, $from) {
+function AddAllyPlayAbilityLayers($cardID, $from, $uniqueID = "-") {
   global $currentPlayer;
   $allies = &GetAllies($currentPlayer);
   for($i=0; $i<count($allies); $i+=AllyPieces()) {
-    if(AllyHasPlayCardAbility($cardID, $allies[$i], $currentPlayer, $i)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $allies[$i] . "," . $allies[$i+5], append:true);
+    if(AllyHasPlayCardAbility($cardID, $uniqueID, $from, $allies[$i], $currentPlayer, $i)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $allies[$i] . "," . $allies[$i+5], append:true);
   }
   $otherPlayer = $currentPlayer == 1 ? 2 : 1;
   $theirAllies = &GetAllies($otherPlayer);
   for($i=0; $i<count($theirAllies); $i+=AllyPieces()) {
-    if(AllyHasPlayCardAbility($cardID, $theirAllies[$i], $otherPlayer, $i)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $theirAllies[$i] . "," . $allies[$i+5], append:true);
+    if(AllyHasPlayCardAbility($cardID, $uniqueID, $from, $theirAllies[$i], $otherPlayer, $i)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $theirAllies[$i] . "," . $allies[$i+5], append:true);
   }
 }
 
-function AllyHasPlayCardAbility($playedCard, $cardID, $player, $index) {
+function AllyHasPlayCardAbility($playedCardID, $playedCardUniqueID, $from, $cardID, $player, $index) {
   global $currentPlayer;
+  $thisAlly = new Ally("MYALLY-" . $index, $player);
+  $thisIsNewlyPlayedAlly = $thisAlly->UniqueID() == $playedCardUniqueID;
   
   if($player == $currentPlayer) {
     switch($cardID) {
       case "415bde775d"://Hondo Ohnaka
+        return $from == "RESOURCES";
       case "0052542605"://Bossk
-        return true;
+        return DefinedTypesContains($playedCardID, "Event");
       case "9850906885"://Maz Kanata
-        return $playedCard != $cardID && DefinedTypesContains($cardID, "Unit");
+        return DefinedTypesContains($playedCardID, "Unit") && !$thisIsNewlyPlayedAlly;
       case "3952758746"://Toro Calican
-        return $playedCard == $cardID && $index == LastAllyIndex($player) ? false : true;
+        return TraitContains($playedCardID, "Bounty Hunter", $player) && !$thisIsNewlyPlayedAlly;
       case "724979d608"://Cad Bane Leader
       case "0981852103"://Lady Proxima
-        return $playedCard != $cardID && TraitContains($playedCard, "Underworld", $player);
+        return TraitContains($playedCardID, "Underworld", $player) && !$thisIsNewlyPlayedAlly;
       case "4088c46c4d"://The Mandalorian
       case "8031540027"://Dengar
-        return DefinedTypesContains($playedCard, "Upgrade");
+        return DefinedTypesContains($playedCardID, "Upgrade");
       case "0961039929"://Colonel Yularen
-        return AspectContains($cardID, "Command") && DefinedTypesContains($cardID, "Unit");
+        return AspectContains($playedCardID, "Command") && DefinedTypesContains($playedCardID, "Unit");
       case "5907868016"://Fighters for Freedom
-        return $playedCard != $cardID && AspectContains($cardID, "Aggression");
+        return AspectContains($cardID, "Aggression") && !$thisIsNewlyPlayedAlly;
       case "3010720738"://Tobias Beckett
-        return !DefinedTypesContains($cardID, "Unit");
+        return !DefinedTypesContains($playedCardID, "Unit");
       default: break;
     }
   } else {
