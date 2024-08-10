@@ -148,9 +148,6 @@ function CharacterStaticHealthModifiers($cardID, $index, $player)
   for($i=0; $i<count($char); $i+=CharacterPieces()) {
     switch($char[$i])
     {
-      case "5784497124"://Emperor Palpatine
-        if($cardID == "1780978508") $modifier += 1;//Royal Guard
-        break;
       default: break;
     }
   }
