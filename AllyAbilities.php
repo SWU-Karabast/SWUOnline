@@ -1132,7 +1132,7 @@ function SpecificAllyAttackAbilities($attackID)
         }
         break;
       case "6471336466"://Vambrace Flamethrower
-        AddDecisionQueue("FINDINDICES", $mainPlayer, "ALLTHEIRUNITSMULTI");
+        AddDecisionQueue("FINDINDICES", $mainPlayer, "ALLTHEIRGROUNDUNITSMULTI");
         AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose units to damage", 1);
         AddDecisionQueue("MULTICHOOSETHEIRUNIT", $mainPlayer, "<-", 1);
         AddDecisionQueue("MULTIDISTRIBUTEDAMAGE", $mainPlayer, 3, 1);
@@ -1465,7 +1465,7 @@ function SpecificAllyAttackAbilities($attackID)
       PummelHit($mainPlayer, may:true, context:"Choose a card to discard to defeat an upgrade (or pass)");
       DefeatUpgrade($mainPlayer, passable:true);
       PummelHit($mainPlayer, may:true, context:"Choose a card to discard to deal damage (or pass)");
-      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY", 1);
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY", 1);
       AddDecisionQueue("PREPENDLASTRESULT", $mainPlayer, "THEIRCHAR-0,", 1);
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to deal 2 damage to", 1);
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
