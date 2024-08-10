@@ -1056,13 +1056,7 @@ function AllyPlayCardAbility($cardID, $player="", $from="-", $abilityID="-", $un
       if($toroIndex != "") {
         $toroCalican = new Ally("MYALLY-" . $toroIndex, $player);
         if(TraitContains($cardID, "Bounty Hunter", $currentPlayer) && $toroCalican->NumUses() > 0){
-          AddDecisionQueue("YESNO", $player, "if you want to use Toro Calican's ability");
-          AddDecisionQueue("NOPASS", $player, "-");
-          AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . LastAllyIndex($player), 1);
-          AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1", 1);
-          AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $toroIndex, 1);
-          AddDecisionQueue("MZOP", $player, "READY", 1);
-          AddDecisionQueue("ADDMZUSES", $player, "-1", 1);
+          AddLayer("TRIGGER", $currentPlayer, "3952758746", append:true);
         }
       }
       break;

@@ -722,6 +722,16 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $player, "9334480612,HAND", 1);
       AddDecisionQueue("EXHAUSTCHARACTER", $player, FindCharacterIndex($player, "9334480612"), 1);
       break;
+    case "3952758746"://Toro Calican
+      $toroIndex = SearchAlliesForCard($player, "3952758746");
+      AddDecisionQueue("YESNO", $player, "if you want to use Toro Calican's ability");
+      AddDecisionQueue("NOPASS", $player, "-");
+      AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . LastAllyIndex($player), 1);
+      AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1", 1);
+      AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $toroIndex, 1);
+      AddDecisionQueue("MZOP", $player, "READY", 1);
+      AddDecisionQueue("ADDMZUSES", $player, "-1", 1);
+      break;
     default: break;
   }
 }
