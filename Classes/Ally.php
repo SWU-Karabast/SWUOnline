@@ -93,6 +93,7 @@ class Ally {
       }
     }
     $max += CharacterStaticHealthModifiers($this->CardID(), $this->Index(), $this->PlayerID());
+    $max += NameBasedHealthModifiers($this->CardID(), $this->Index(), $this->PlayerID());
     return $max;
   }
 
