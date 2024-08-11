@@ -2635,14 +2635,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "3407775126"://Recruit
-      AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE," . 5);
-      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
-      AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-definedType-Unit", 1);
-      AddDecisionQueue("MAYCHOOSECARD", $currentPlayer, "<-", 1);
+      AddDecisionQueue("SEARCHDECKTOPX", $currentPlayer, "5;1;include-definedType-Unit");
       AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
       AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
-      AddDecisionQueue("OP", $currentPlayer, "REMOVECARD");
-      AddDecisionQueue("ALLRANDOMBOTTOM", $currentPlayer, "DECK");
       break;
     case "3498814896"://Mon Mothma
       if($from != "PLAY") {

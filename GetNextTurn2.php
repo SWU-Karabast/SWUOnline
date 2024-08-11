@@ -690,6 +690,39 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     echo CreatePopup("MULTICHOOSE", [], 0, 1, $caption, 1, $content);
   }
 
+  if ($turn[0] == "MULTICHOOSESEARCHTARGETS" && $currentPlayer == $playerID) { //Widely copied from the above MULTICHOOSE cases, but incorporating the fact that only some options shown are selectable.
+    $content = "";
+    echo ("<div 'display:inline; width: 100%;'>");
+    $params = explode("-", $turn[2]);
+    $searchIndices = explode(",", $params[1]);
+    $validTargetIndices = explode(",", $params[3]);
+    if($validTargetIndices[0] == "") $validTargetIndices = []; //Fixing how no hits(failed search) is represented so count() accurately represents the situation.
+    $caption = "<div>Choose up to " . $params[0] . " card" . ($params[0] > 1 ? "s." : ".") . "</div>";
+    if (GetDQHelpText() != "-") $caption = "<div>" . implode(" ", explode("_", GetDQHelpText())) . "</div>";
+    $content .= CreateForm($playerID, "Submit", 19, count($validTargetIndices));
+    $content .= "<table class='table-border-a'><tr>";
+    $checkboxCount = 0; //function chkSumbmit() called by the Submit button relies on knowing the number of checkboxes and them being numbered sequentially, so I can't simply skip those corresponding to the unselectable cards outright. I had no luck with hiding the checkboxes I wanted gone so instead I do create only those that should be usable, but use this variable to track their indices, seperate from the indices of the displayed cards.
+    for ($i = 0; $i < count($searchIndices); ++$i) {
+      $selectable = array_search($searchIndices[$i], $validTargetIndices) !== false;
+      $content .= "<td>";
+      if($selectable) {$content .= CreateCheckbox($checkboxCount++, strval($i));}
+      $content .= "</td>";
+    }
+    $content .= "</tr><tr>";
+    $checkboxCount = 0;
+    for ($i = 0; $i < count($searchIndices); ++$i) {
+      $selectable = array_search($searchIndices[$i], $validTargetIndices) !== false;
+      $content .= "<td>";
+      $content .= "<div class='container'>";
+      $forAttribute = $selectable ? "for=chk" . $checkboxCount++ : "";
+      $content .= "<label class='multichoose' " . $forAttribute . ">" . Card($myDeck[$searchIndices[$i]], "concat", $cardSize, 0, 1) . "</label>";
+      if($selectable) $content .= "<div class='overlay'><div class='text'>Select</div></div>";
+      $content .= "</div></td>";
+    }
+    $content .= "</tr></table></form></div>";
+    echo CreatePopup("MULTICHOOSE", [], 0, 1, $caption, 1, $content);
+  }
+
   if($turn[0] == "INPUTCARDNAME" && $turn[1] == $playerID)
   {
     $caption = "<div>Enter a card name or ID</div>";

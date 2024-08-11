@@ -30,6 +30,35 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
   $rv = "";
 
   switch($phase) {
+    case "SEARCHDECKTOPX":
+      //The parameter for this is: the number of cards to search, the number of cards that may be chosen, then a comma-delimited list of filters using the syntax for the FILTER DecisionQueue option(excluding the initial source part), with each of these three separated by a semicolon.
+      //For example, the parameter for Darth Vader unit's search("Search the top 10 cards of your deck for any number of Villainy Aspect units with combined cost 3 or less")
+      //would be "10;99;include-aspect-Villainy,include-definedType-Unit,include-maxCost-3"(the validity of the selection(in this case the combined cost) can be checked after this step).
+      $paramArray = explode(";", $parameter);
+      if(count($paramArray) != 3) {WriteLog("SEARCHDECKTOPX called incorrectly. Please file a bug report."); return "PASS";}
+      $numToSearch = array_shift($paramArray);
+      $numToAllowChoosing = array_shift($paramArray);
+      $filterArray = explode(",", array_shift($paramArray));
+
+      $deckIndicesToShow = DecisionQueueStaticEffect("FINDINDICES", $player, "DECKTOPXINDICES," . $numToSearch, "");
+      $choosableDeckIndices = $deckIndicesToShow;
+      for($i = 0; $i < count($filterArray); ++$i) {
+        $choosableDeckIndices = DecisionQueueStaticEffect("FILTER", $player, "Deck-" . $filterArray[$i], $choosableDeckIndices);
+        if($choosableDeckIndices == "PASS") {$choosableDeckIndices = ""; break;}
+      }
+      
+      PrependDecisionQueue("PROCESSSEARCH", $player, $numToSearch); //We'll need to know how many cards were searched to figure out how many to shuffle and put on the bottom later.
+      PrependDecisionQueue("MULTICHOOSESEARCHTARGETS", $player,
+        $numToAllowChoosing . "-" . $deckIndicesToShow . "-" . "0-" . $choosableDeckIndices, //The MULTICHOOSE system(case 19 in ProcessInput()) is set up to use three params(- delimited): $maxSelect, $options(usually choosable indices, but in this case just indices to show), and $minSelect. I want to extend this with choosable indices, so they come after, at index 3. $minSelect should always be 0 for a search as a player can always choose to find nothing from a search(Comp Rules v2.0 section 8.27.1).
+        0, 1);
+      if($dqState[4] != "-") PrependDecisionQueue("SETDQCONTEXT", $player, $dqState[4]); //Repeat the DQCONTEXT message here so individual card logic can actually set it for the search screen.
+      return "";
+    case "PROCESSSEARCH":
+      $searchLeftoversCount = $parameter - count($lastResult);
+      $searchTargets = DecisionQueueStaticEffect("MULTIREMOVEDECK", $player, "-", $lastResult);
+      $searchLeftovers = DecisionQueueStaticEffect("FINDINDICES", $player, "DECKTOPXREMOVE," . $searchLeftoversCount, "-");
+      DecisionQueueStaticEffect("ALLRANDOMBOTTOM", $player, "-", $searchLeftovers);
+      return $searchTargets == "" ? "PASS" : $searchTargets;
     case "FINDINDICES":
       UpdateGameState($currentPlayer);
       BuildMainPlayerGamestate();

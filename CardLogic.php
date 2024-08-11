@@ -611,7 +611,7 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       $uniqueID = $arr[1];
       AllyPlayCardAbility($target, $player, from: $additionalCosts, abilityID:$abilityID, uniqueID:$uniqueID);
       break;
-    case "9642863632":
+    case "9642863632": //Bounty Hunter's Quarry
       global $CS_AfterPlayedBy;
       AddDecisionQueue("FINDINDICES", $player, "DECKTOPXREMOVE," . $target);
       AddDecisionQueue("SETDQVAR", $player, "0", 1);
