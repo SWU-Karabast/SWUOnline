@@ -613,7 +613,7 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       break;
     case "9642863632": //Bounty Hunter's Quarry
       global $CS_AfterPlayedBy;
-      AddDecisionQueue("SEARCHDECKTOPX", $player, $target . ";1;include-definedType-Unit,include-maxCost-3");
+      AddDecisionQueue("SEARCHDECKTOPX", $player, $target . ";1;include-definedType-Unit&include-maxCost-3");
       AddDecisionQueue("SETDQVAR", $player, "0", 1);
       AddDecisionQueue("ADDCURRENTEFFECT", $player, "9642863632", 1);
       AddDecisionQueue("PASSPARAMETER", $player, "9642863632", 1);
@@ -690,7 +690,7 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       break;
     case "8506660490"://Darth Vader unit
       AddDecisionQueue("SETDQCONTEXT", $player, "Choose any number of units with combined cost 3 or less.");
-      AddDecisionQueue("SEARCHDECKTOPX", $player, "10;99;include-definedType-Unit,include-maxCost-3");
+      AddDecisionQueue("SEARCHDECKTOPX", $player, "10;99;include-definedType-Unit&include-maxCost-3");
       AddDecisionQueue("SPECIFICCARD", $player, "DARTHVADER", 1);
       break;
     case "3045538805"://Hondo Ohnaka Leader

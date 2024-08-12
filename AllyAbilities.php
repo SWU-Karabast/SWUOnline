@@ -461,7 +461,7 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
         AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1," . $player, 1);
         break;
       case "9151673075"://Cobb Vanth
-        AddDecisionQueue("SEARCHDECKTOPX", $player, "10;1;include-definedType-Unit,include-maxCost-2");
+        AddDecisionQueue("SEARCHDECKTOPX", $player, "10;1;include-definedType-Unit&include-maxCost-2");
         AddDecisionQueue("ADDDISCARD", $player, "HAND,TTFREE", 1);
         AddDecisionQueue("REVEALCARDS", $player, "-", 1);
         break;
