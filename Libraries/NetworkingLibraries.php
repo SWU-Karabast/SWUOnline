@@ -1715,6 +1715,10 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
         case "ALLY":
           $index = PlayAlly($cardID, $currentPlayer);
           $uniqueID = &GetAllies($currentPlayer)[$index+5];
+          $ally = new Ally("MYALLY-" . $index, $currentPlayer);
+          if($ally->MaxHealth() <= 0) {
+            $ally->Destroy();
+          }
           break;
         case "RESOURCE":
           AddResources($cardID, $currentPlayer, $from, "DOWN", isExhausted:"1");
