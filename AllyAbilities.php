@@ -156,7 +156,7 @@ function RemoveAlly($player, $index)
   return DestroyAlly($player, $index, true);
 }
 
-function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
+function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false, $skipRescue = false)
 {
   global $combatChain, $mainPlayer, $defPlayer, $CS_NumAlliesDestroyed, $CS_NumLeftPlay;
   $allies = &GetAllies($player);
@@ -187,15 +187,17 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false)
   }
   for($j = $index + AllyPieces() - 1; $j >= $index; --$j) unset($allies[$j]);
   $allies = array_values($allies);
-  for($i=0; $i<count($captives); $i+=SubcardPieces()) {
-    PlayAlly($captives[$i], $captives[$i+1], from:"CAPTIVE");
+  if(!$skipRescue) {
+    for($i=0; $i<count($captives); $i+=SubcardPieces()) {
+      PlayAlly($captives[$i], $captives[$i+1], from:"CAPTIVE");
+    }
   }
   if(AllyHasStaticHealthModifier($cardID)) {
     CheckHealthAllAllies($player);
   }
   if($player == $mainPlayer) UpdateAttacker();
   else UpdateAttackTarget();
-  return $cardID;
+  return $captives;
 }
 
 function AllyTakeControl($player, $index) {

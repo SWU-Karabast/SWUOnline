@@ -4548,19 +4548,23 @@ function DestroyAllAllies()
 {
   global $currentPlayer;
   $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+  $allies = &GetAllies($currentPlayer);
+  $captives = [];
+  for($i=count($allies) - AllyPieces(); $i>=0; $i-=AllyPieces())
+  {
+    if (!isset($allies[$i])) continue;
+    $captives = array_merge($captives, DestroyAlly($currentPlayer, $i, skipRescue:true));
+  }
   $theirAllies = &GetAllies($otherPlayer);
   for($i=count($theirAllies) - AllyPieces(); $i>=0; $i-=AllyPieces())
   {
     if (!isset($theirAllies[$i])) continue;
-    $ally = new Ally("MYALLY-" . $i, $otherPlayer);
-    $ally->Destroy();
+    $captives = array_merge($captives, DestroyAlly($otherPlayer, $i, skipRescue:true));
   }
-  $allies = &GetAllies($currentPlayer);
-  for($i=count($allies) - AllyPieces(); $i>=0; $i-=AllyPieces())
-  {
-    if (!isset($allies[$i])) continue;
-    $ally = new Ally("MYALLY-" . $i, $currentPlayer);
-    $ally->Destroy();
+  if(count($captives) > 0) {
+    for($i=0; $i<count($captives); $i+=SubcardPieces()) {
+      PlayAlly($captives[$i], $captives[$i+1], from:"CAPTIVE");
+    }
   }
 }
 
