@@ -31,27 +31,41 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
 
   switch($phase) {
     case "SEARCHDECKTOPX":
-      //The parameter for this is: the number of cards to search, the number of cards that may be chosen, then a comma-delimited list of filters using the syntax for the FILTER DecisionQueue option(excluding the initial source part), with each of these three separated by a semicolon.
-      //For example, the parameter for Darth Vader unit's search("Search the top 10 cards of your deck for any number of Villainy Aspect units with combined cost 3 or less")
-      //would be "10;99;include-aspect-Villainy,include-definedType-Unit,include-maxCost-3"(the validity of the selection(in this case the combined cost) can be checked after this step).
+      //The parameter for this is: the number of cards to search, the number of cards that may be chosen, then a list of filters(delimited with | or & for OR or AND logic) using the syntax for the FILTER DecisionQueue option(excluding the initial source part), with each of these three(number to search, max choosable, filter list) separated by a semicolon.
+      //For example, the parameter for Darth Vader unit's search("Search the top 10 cards of your deck for any number of Villainy Aspect units with combined cost 3 or less") would be:
+      //"10;99;include-aspect-Villainy&include-definedType-Unit&include-maxCost-3"(the validity of the selection(in this case the combined cost) can be further checked after this step if necessary).
       $paramArray = explode(";", $parameter);
       if(count($paramArray) != 3) {WriteLog("SEARCHDECKTOPX called incorrectly. Please file a bug report."); return "PASS";}
-      $numToSearch = array_shift($paramArray);
-      $numToAllowChoosing = array_shift($paramArray);
-      $filterArray = explode(",", array_shift($paramArray));
-
+      $numToSearch = $paramArray[0];
+      $numToAllowChoosing = $paramArray[1];
       $deckIndicesToShow = DecisionQueueStaticEffect("FINDINDICES", $player, "DECKTOPXINDICES," . $numToSearch, "");
-      $choosableDeckIndices = $deckIndicesToShow;
-      for($i = 0; $i < count($filterArray); ++$i) {
-        $choosableDeckIndices = DecisionQueueStaticEffect("FILTER", $player, "Deck-" . $filterArray[$i], $choosableDeckIndices);
-        if($choosableDeckIndices == "PASS") {$choosableDeckIndices = ""; break;}
+      
+      if(substr_count($paramArray[2], "|") > 0) { //OR: Any card that matches at least one filter should be selectable.
+        $filterArray = explode("|", $paramArray[2]);
+        $chooseableDeckIndices = [];
+        foreach($filterArray as $filter) {
+          $choosableDeckIndices .= DecisionQueueStaticEffect("FILTER", $player, "Deck-" . $filter, $deckIndicesToShow) . ",";
+        }
+        $choosableDeckIndicesArray = array_unique(explode(",", $choosableDeckIndices));
+        $choosableDeckIndicesArray = array_filter($choosableDeckIndicesArray, function($a){return $a != "PASS" && $a != "";});
+        natsort($choosableDeckIndicesArray);
+        $choosableDeckIndices = implode(",", $choosableDeckIndicesArray);
+      }
+
+      else { //AND: Only cards that match every filter should be selectable.
+        $filterArray = explode("&", array_shift($paramArray));
+        $choosableDeckIndices = $deckIndicesToShow;
+        foreach($filterArray as $filter) {
+          $choosableDeckIndices = DecisionQueueStaticEffect("FILTER", $player, "Deck-" . $filter, $choosableDeckIndices);
+          if($choosableDeckIndices == "PASS") {$choosableDeckIndices = ""; break;}
+        }
       }
       
       PrependDecisionQueue("PROCESSSEARCH", $player, $numToSearch); //We'll need to know how many cards were searched to figure out how many to shuffle and put on the bottom later.
       PrependDecisionQueue("MULTICHOOSESEARCHTARGETS", $player,
         $numToAllowChoosing . "-" . $deckIndicesToShow . "-" . "0-" . $choosableDeckIndices, //The MULTICHOOSE system(case 19 in ProcessInput()) is set up to use three params(- delimited): $maxSelect, $options(usually choosable indices, but in this case just indices to show), and $minSelect. I want to extend this with choosable indices, so they come after, at index 3. $minSelect should always be 0 for a search as a player can always choose to find nothing from a search(Comp Rules v2.0 section 8.27.1).
         0, 1);
-      if($dqState[4] != "-") PrependDecisionQueue("SETDQCONTEXT", $player, $dqState[4]); //Repeat the DQCONTEXT message here so individual card logic can actually set it for the search screen.
+      if($dqState[4] != "-") PrependDecisionQueue("SETDQCONTEXT", $player, $dqState[4]); //Pass on the DQCONTEXT message here so individual card logic can actually set it for the search screen.
       return "";
     case "PROCESSSEARCH":
       $searchLeftoversCount = $parameter - count($lastResult);
@@ -621,7 +635,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $from = $params[0];
       $relationship = $params[1];//exclude other or include
       $type = $params[2];
-      $compareArr = explode("&", $params[3]);
+      $compareValue = $params[3];
       $input = [];
       switch($from)
       {
@@ -642,20 +656,17 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       {
         $inputArr = explode("-", $input[$i]);
         $passFilter = !($relationship == "include");
-        for($j=0; $j<count($compareArr); ++$j)
+        switch($type)
         {
-          switch($type)
-          {
-            case "type": if(CardType($inputArr[0]) == $compareArr[$j]) $passFilter = !$passFilter; break;
-            case "subtype": if(SubtypeContains($inputArr[0], $compareArr[$j], $player)) $passFilter = !$passFilter; break;
-            case "trait": if(TraitContains($inputArr[0], $compareArr[$j], $player)) $passFilter = !$passFilter; break;
-            case "player": if($inputArr[0] == $compareArr[$j]) $passFilter = !$passFilter; break;
-            case "definedType":
-              if(DefinedTypesContains($inputArr[0], $compareArr[$j], $player)) $passFilter = !$passFilter; break;
-            case "aspect": if(AspectContains($inputArr[0], $compareArr[$j], $player)) $passFilter = !$passFilter; break;
-            case "maxCost": if(CardCost($inputArr[0]) <= $compareArr[$j]) $passFilter = !$passFilter; break;
-            default: break;
-          }
+          case "type": if(CardType($inputArr[0]) == $compareValue) $passFilter = !$passFilter; break;
+          case "subtype": if(SubtypeContains($inputArr[0], $compareValue, $player)) $passFilter = !$passFilter; break;
+          case "trait": if(TraitContains($inputArr[0], $compareValue, $player)) $passFilter = !$passFilter; break;
+          case "player": if($inputArr[0] == $compareValue) $passFilter = !$passFilter; break;
+          case "definedType":
+            if(DefinedTypesContains($inputArr[0], $compareValue, $player)) $passFilter = !$passFilter; break;
+          case "aspect": if(AspectContains($inputArr[0], $compareValue, $player)) $passFilter = !$passFilter; break;
+          case "maxCost": if(CardCost($inputArr[0]) <= $compareValue) $passFilter = !$passFilter; break;
+          default: break;
         }
         if($passFilter) $output[] = $inputArr[1];
       }
