@@ -4449,25 +4449,27 @@ function ExhaustAllAllies($arena, $player)
 
 function DestroyAllAllies()
 {
+  //To avoid problems to do with allies entering play in the middle of things(i.e. captives), we first note the uniqueID of every ally in play and then destroy only those noted.
   global $currentPlayer;
+  //Get all uniqueIDs of allies that are on board right now.
+  $currentPlayerAllies = &GetAllies($currentPlayer);
+  $currentPlayerAlliesUniqueIDs = [];
+  for($i = 0; $i < count($currentPlayerAllies); $i += AllyPieces()) {
+    $currentPlayerAlliesUniqueIDs[] = $currentPlayerAllies[$i+5];
+  }
   $otherPlayer = $currentPlayer == 1 ? 2 : 1;
-  $allies = &GetAllies($currentPlayer);
-  $captives = [];
-  for($i=count($allies) - AllyPieces(); $i>=0; $i-=AllyPieces())
-  {
-    if (!isset($allies[$i])) continue;
-    $captives = array_merge($captives, DestroyAlly($currentPlayer, $i, skipRescue:true));
+  $otherPlayerAllies = &GetAllies($otherPlayer);
+  $otherPlayerAlliesUniqueIDs = [];
+  for($i  = 0; $i < count($otherPlayerAllies); $i += AllyPieces()) {
+    $otherPlayerAlliesUniqueIDs[] = $otherPlayerAllies[$i+5];
   }
-  $theirAllies = &GetAllies($otherPlayer);
-  for($i=count($theirAllies) - AllyPieces(); $i>=0; $i-=AllyPieces())
-  {
-    if (!isset($theirAllies[$i])) continue;
-    $captives = array_merge($captives, DestroyAlly($otherPlayer, $i, skipRescue:true));
+
+  //Destroy all those allies.
+  foreach ($currentPlayerAlliesUniqueIDs as $UID) {
+    DestroyAlly($currentPlayer, SearchAlliesForUniqueID($UID, $currentPlayer));
   }
-  if(count($captives) > 0) {
-    for($i=0; $i<count($captives); $i+=SubcardPieces()) {
-      PlayAlly($captives[$i], $captives[$i+1], from:"CAPTIVE");
-    }
+  foreach ($otherPlayerAlliesUniqueIDs as $UID) {
+    DestroyAlly($otherPlayer, SearchAlliesForUniqueID($UID, $otherPlayer));
   }
 }
 

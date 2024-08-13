@@ -197,7 +197,7 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false,
   }
   if($player == $mainPlayer) UpdateAttacker();
   else UpdateAttackTarget();
-  return $captives;
+  return $cardID;
 }
 
 function AllyTakeControl($player, $index) {
