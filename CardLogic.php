@@ -611,22 +611,14 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       $uniqueID = $arr[1];
       AllyPlayCardAbility($target, $player, from: $additionalCosts, abilityID:$abilityID, uniqueID:$uniqueID);
       break;
-    case "9642863632":
+    case "9642863632": //Bounty Hunter's Quarry
       global $CS_AfterPlayedBy;
-      AddDecisionQueue("FINDINDICES", $player, "DECKTOPXREMOVE," . $target);
+      AddDecisionQueue("SEARCHDECKTOPX", $player, $target . ";1;include-definedType-Unit&include-maxCost-3");
       AddDecisionQueue("SETDQVAR", $player, "0", 1);
-      AddDecisionQueue("FILTER", $player, "LastResult-include-maxCost-3", 1);
-      AddDecisionQueue("FILTER", $player, "LastResult-include-definedType-Unit", 1);
-      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a card to play");
-      AddDecisionQueue("CHOOSECARD", $player, "<-", 1);
-      AddDecisionQueue("SETDQVAR", $player, "1");
-      AddDecisionQueue("OP", $player, "REMOVECARD");
-      AddDecisionQueue("ALLRANDOMBOTTOM", $player, "DECK");
-      AddDecisionQueue("PASSPARAMETER", $player, "{1}");
       AddDecisionQueue("ADDCURRENTEFFECT", $player, "9642863632", 1);
       AddDecisionQueue("PASSPARAMETER", $player, "9642863632", 1);
       AddDecisionQueue("SETCLASSSTATE", $player, $CS_AfterPlayedBy, 1);
-      AddDecisionQueue("PASSPARAMETER", $player, "{1}", 1);
+      AddDecisionQueue("PASSPARAMETER", $player, "{0}", 1);
       AddDecisionQueue("OP", $player, "PLAYCARD,DECK", 1);
       break;
     case "7642980906"://Stolen Landspeeder
@@ -697,14 +689,8 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       AddDecisionQueue("MZOP", $otherPlayer, "DEALDAMAGE," . $damage, 1);
       break;
     case "8506660490"://Darth Vader unit
-      AddDecisionQueue("FINDINDICES", $player, "DECKTOPXINDICES,10");
-      AddDecisionQueue("FILTER", $player, "Deck-include-aspect-Villainy", 1);
-      AddDecisionQueue("FILTER", $player, "Deck-include-maxCost-3", 1);
-      AddDecisionQueue("FILTER", $player, "Deck-include-definedType-Unit", 1);
-      AddDecisionQueue("SETDQVAR", $player, "0");
-      AddDecisionQueue("PREPENDLASTRESULT", $player, "10-", 1);
-      AddDecisionQueue("MULTICHOOSEDECK", $player, "<-", 1);
-      AddDecisionQueue("MULTIREMOVEDECK", $player, "-", 1);
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose any number of units with combined cost 3 or less.");
+      AddDecisionQueue("SEARCHDECKTOPX", $player, "10;99;include-definedType-Unit&include-maxCost-3");
       AddDecisionQueue("SPECIFICCARD", $player, "DARTHVADER", 1);
       break;
     case "3045538805"://Hondo Ohnaka Leader
