@@ -3770,12 +3770,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "0754286363"://The Mandalorian's Rifle
       $ally = new Ally($target, $currentPlayer);
       if(CardTitle($ally->CardID()) == "The Mandalorian") {
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
-        AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
-        AddDecisionQueue("MZFILTER", $currentPlayer, "status=0");
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to capture");
-        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "CAPTURE," . $ally->UniqueID(), 1);
+        AddLayer("TRIGGER", $currentPlayer, $cardID);
       }
       break;
     case "4643489029"://Palpatine's Return
@@ -4456,19 +4451,23 @@ function DestroyAllAllies()
 {
   global $currentPlayer;
   $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+  $allies = &GetAllies($currentPlayer);
+  $captives = [];
+  for($i=count($allies) - AllyPieces(); $i>=0; $i-=AllyPieces())
+  {
+    if (!isset($allies[$i])) continue;
+    $captives = array_merge($captives, DestroyAlly($currentPlayer, $i, skipRescue:true));
+  }
   $theirAllies = &GetAllies($otherPlayer);
   for($i=count($theirAllies) - AllyPieces(); $i>=0; $i-=AllyPieces())
   {
     if (!isset($theirAllies[$i])) continue;
-    $ally = new Ally("MYALLY-" . $i, $otherPlayer);
-    $ally->Destroy();
+    $captives = array_merge($captives, DestroyAlly($otherPlayer, $i, skipRescue:true));
   }
-  $allies = &GetAllies($currentPlayer);
-  for($i=count($allies) - AllyPieces(); $i>=0; $i-=AllyPieces())
-  {
-    if (!isset($allies[$i])) continue;
-    $ally = new Ally("MYALLY-" . $i, $currentPlayer);
-    $ally->Destroy();
+  if(count($captives) > 0) {
+    for($i=0; $i<count($captives); $i+=SubcardPieces()) {
+      PlayAlly($captives[$i], $captives[$i+1], from:"CAPTIVE");
+    }
   }
 }
 
