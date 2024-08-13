@@ -2202,20 +2202,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "9266336818"://Grand Moff Tarkin
       if($from != "PLAY") {
-        AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE," . 5);
-        AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
-        AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Imperial", 1);
-        AddDecisionQueue("MAYCHOOSECARD", $currentPlayer, "<-", 1);
-        AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
+        AddDecisionQueue("SEARCHDECKTOPX", $currentPlayer, "5;2;include-trait-Imperial");
+        AddDecisionQueue("MULTIADDHAND", $currentPlayer, "-", 1);
         AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
-        AddDecisionQueue("OP", $currentPlayer, "REMOVECARD", 1);
-        AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
-        AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Imperial", 1);
-        AddDecisionQueue("MAYCHOOSECARD", $currentPlayer, "<-", 1);
-        AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
-        AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
-        AddDecisionQueue("OP", $currentPlayer, "REMOVECARD");
-        AddDecisionQueue("ALLRANDOMBOTTOM", $currentPlayer, "DECK");
       }
       break;
     case "9459170449"://Cargo Juggernaut
@@ -2635,26 +2624,15 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "3407775126"://Recruit
-      AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE," . 5);
-      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
-      AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-definedType-Unit", 1);
-      AddDecisionQueue("MAYCHOOSECARD", $currentPlayer, "<-", 1);
+      AddDecisionQueue("SEARCHDECKTOPX", $currentPlayer, "5;1;include-definedType-Unit");
       AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
       AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
-      AddDecisionQueue("OP", $currentPlayer, "REMOVECARD");
-      AddDecisionQueue("ALLRANDOMBOTTOM", $currentPlayer, "DECK");
       break;
     case "3498814896"://Mon Mothma
       if($from != "PLAY") {
-        AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE," . 5);
-        AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
-        AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Rebel", 1);
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a rebel to draw", 1);
-        AddDecisionQueue("MAYCHOOSECARD", $currentPlayer, "<-", 1);
+        AddDecisionQueue("SEARCHDECKTOPX", $currentPlayer, "5;1;include-trait-Rebel");
         AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
         AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
-        AddDecisionQueue("OP", $currentPlayer, "REMOVECARD");
-        AddDecisionQueue("ALLRANDOMBOTTOM", $currentPlayer, "DECK");
       }
       break;
     case "3509161777"://You're My Only Hope
@@ -2894,20 +2872,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MULTIDISTRIBUTEDAMAGE", $currentPlayer, $ally->CurrentPower(), 1);
       break;
     case "3974134277"://Prepare for Takeoff
-      AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE," . 8);
-      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
-      AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Vehicle", 1);
-      AddDecisionQueue("MAYCHOOSECARD", $currentPlayer, "<-", 1);
-      AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
+      AddDecisionQueue("SEARCHDECKTOPX", $currentPlayer, "8;2;include-trait-Vehicle");
+      AddDecisionQueue("MULTIADDHAND", $currentPlayer, "-", 1);
       AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
-      AddDecisionQueue("OP", $currentPlayer, "REMOVECARD", 1);
-      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
-      AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Vehicle", 1);
-      AddDecisionQueue("MAYCHOOSECARD", $currentPlayer, "<-", 1);
-      AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
-      AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
-      AddDecisionQueue("OP", $currentPlayer, "REMOVECARD", 1);
-      AddDecisionQueue("ALLRANDOMBOTTOM", $currentPlayer, "DECK");
       break;
     case "3896582249"://Redemption
       if($from != "PLAY") {
@@ -3311,13 +3278,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "8968669390"://U-Wing Reinforcement
-      AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXINDICES,10");
-      AddDecisionQueue("FILTER", $currentPlayer, "Deck-include-definedType-Unit", 1);
-      AddDecisionQueue("FILTER", $currentPlayer, "Deck-include-maxCost-7", 1);
-      AddDecisionQueue("SETDQVAR", $currentPlayer, "0");
-      AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "3-", 1);
-      AddDecisionQueue("MULTICHOOSEDECK", $currentPlayer, "<-", 1, 1);
-      AddDecisionQueue("MULTIREMOVEDECK", $currentPlayer, "-", 1);
+      AddDecisionQueue("SEARCHDECKTOPX", $currentPlayer, "10;3;include-definedType-Unit&include-maxCost-7");
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "UWINGREINFORCEMENT", 1);
       break;
     case "5950125325"://Confiscate
@@ -3338,23 +3299,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "5035052619"://Jabba the Hutt
       if($from != "PLAY") {
-        $deck = &GetDeck($currentPlayer);
-        $numTricks = 0;
-        for($i=0; $i<8 && $i<count($deck); ++$i) {
-          if(TraitContains($deck[$i], "Trick", $currentPlayer)) ++$numTricks;
-        }
-        if($numTricks == 0) {
-          WriteLog("There are no tricks.");
-        } else {
-          AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE," . 8);
-          AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
-          AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Trick", 1);
-          AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
-          AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
-          AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
-          AddDecisionQueue("OP", $currentPlayer, "REMOVECARD", 1);
-          AddDecisionQueue("ALLRANDOMBOTTOM", $currentPlayer, "DECK");
-        }
+        AddDecisionQueue("SEARCHDECKTOPX", $currentPlayer, "8;1;include-trait-Trick&include-definedType-Event");
+        AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
+        AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
       }
       break;
     case "9644107128"://Bamboozle
@@ -3535,16 +3482,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "1565760222"://Remnant Reserves
-      AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE," . 5);
-      for($i=0; $i<3; ++$i) {
-        AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
-        AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-definedType-Unit", 1);
-        AddDecisionQueue("MAYCHOOSECARD", $currentPlayer, "<-", 1);
-        AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
-        AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
-        AddDecisionQueue("OP", $currentPlayer, "REMOVECARD", 1);
-      }
-      AddDecisionQueue("ALLRANDOMBOTTOM", $currentPlayer, "DECK");
+      AddDecisionQueue("SEARCHDECKTOPX", $currentPlayer, "5;3;include-definedType-Unit");
+      AddDecisionQueue("MULTIADDHAND", $currentPlayer, "-", 1);
+      AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
       break;
     case "2288926269"://Privateer Crew
       if($from == "RESOURCES") {
@@ -3641,15 +3581,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "6884078296"://Greef Karga
       if($from != "PLAY") {
-        AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE," . 5);
-        AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
-        AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-definedType-Upgrade", 1);
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an upgrade to draw", 1);
-        AddDecisionQueue("MAYCHOOSECARD", $currentPlayer, "<-", 1);
+        AddDecisionQueue("SEARCHDECKTOPX", $currentPlayer, "5;1;include-definedType-Upgrade");
         AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
         AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
-        AddDecisionQueue("OP", $currentPlayer, "REMOVECARD");
-        AddDecisionQueue("ALLRANDOMBOTTOM", $currentPlayer, "DECK");
       }
       break;
     case "1304452249"://Covetous Rivals
@@ -3985,18 +3919,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "5696041568"://Triple Dark Raid
       global $CS_AfterPlayedBy;
-      AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE,8");
-      AddDecisionQueue("SETDQVAR", $currentPlayer, "0");
-      AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Vehicle", 1);
-      AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
-      AddDecisionQueue("SETDQVAR", $currentPlayer, "1");
-      AddDecisionQueue("OP", $currentPlayer, "REMOVECARD");
-      AddDecisionQueue("ALLRANDOMBOTTOM", $currentPlayer, "DECK");
-      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{1}");
+      AddDecisionQueue("SEARCHDECKTOPX", $currentPlayer, "7;1;include-trait-Vehicle");
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
       AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, $cardID, 1);
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, $cardID, 1);
       AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_AfterPlayedBy, 1);
-      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{1}", 1);
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
       AddDecisionQueue("OP", $currentPlayer, "PLAYCARD,DECK", 1);
       break;
     case "0911874487"://Fennec Shand
@@ -4025,19 +3953,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("PAYRESOURCES", $currentPlayer, "1,1", 1);
       break;
     case "9845101935"://This is the Way
-      WriteLog("This is a partially manual card. Enforce the type restriction manually.");
-      AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE," . 8);
-      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
-      AddDecisionQueue("MAYCHOOSECARD", $currentPlayer, "<-", 1);
-      AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
+      AddDecisionQueue("SEARCHDECKTOPX", $currentPlayer, "8;2;include-trait-Mandalorian|include-definedType-Upgrade");
+      AddDecisionQueue("MULTIADDHAND", $currentPlayer, "-", 1);
       AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
-      AddDecisionQueue("OP", $currentPlayer, "REMOVECARD", 1);
-      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
-      AddDecisionQueue("MAYCHOOSECARD", $currentPlayer, "<-", 1);
-      AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
-      AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
-      AddDecisionQueue("OP", $currentPlayer, "REMOVECARD", 1);
-      AddDecisionQueue("ALLRANDOMBOTTOM", $currentPlayer, "DECK");
       break;
     case "8261033110"://Evacuate
       $p1Allies = &GetAllies(1);
@@ -4192,14 +4110,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       if(SearchCount(SearchAllies($otherPlayer, hasBountyOnly:true)) > 0) $playAlly->Attach("2007868442");//Experience token
       break;
     case "1141018768"://Commission
-      WriteLog("This is a partially manual card. Enforce the type restriction manually.");
-      AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE," . 10);
-      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
-      AddDecisionQueue("MAYCHOOSECARD", $currentPlayer, "<-", 1);
+      AddDecisionQueue("SEARCHDECKTOPX", $currentPlayer, "10;1;include-trait-Bounty Hunter|include-trait-Item|include-trait-Transport");
       AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
       AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
-      AddDecisionQueue("OP", $currentPlayer, "REMOVECARD", 1);
-      AddDecisionQueue("ALLRANDOMBOTTOM", $currentPlayer, "DECK");
       break;
     case "9596662994"://Finn
       $abilityName = GetResolvedAbilityName($cardID, $from);
@@ -4252,14 +4165,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "1386874723"://Omega (Part of the Squad)
       if($from != "PLAY") {
-        AddDecisionQueue("FINDINDICES", $currentPlayer, "DECKTOPXREMOVE," . 5);
-        AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
-        AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Clone", 1);
-        AddDecisionQueue("MAYCHOOSECARD", $currentPlayer, "<-", 1); //The search window only shows takeable cards, same as Grand Moff Tarkin unit's trigger(which I copied the code from). Ideally the player would get to see all the cards in the search(to see what's getting sent to the bottom).
+        AddDecisionQueue("SEARCHDECKTOPX", $currentPlayer, "5;1;include-trait-Clone");
         AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
         AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
-        AddDecisionQueue("OP", $currentPlayer, "REMOVECARD");
-        AddDecisionQueue("ALLRANDOMBOTTOM", $currentPlayer, "DECK");
       }
       break;
     case "6151970296"://Bounty Posting

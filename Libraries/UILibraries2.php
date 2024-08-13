@@ -551,7 +551,7 @@ function CreateTextForm($playerID, $caption, $mode)
 //immediateSubmitMode = If set, add onchange event to submit immediately instead of form submit
 //defaultChecked = Will be checked by default if true
 //label = label to display
-function CreateCheckbox($input, $value, $immediateSubmitMode = -1, $defaultChecked = false, $label = "&nbsp;", $fullRefresh = false)
+function CreateCheckbox($input, $value, $immediateSubmitMode = -1, $defaultChecked = false, $label = "&nbsp;", $fullRefresh = false, $hidden = false)
 {
   global $playerID;
   $submitLink = "";
@@ -560,7 +560,8 @@ function CreateCheckbox($input, $value, $immediateSubmitMode = -1, $defaultCheck
     $submitLink = ProcessInputLink($playerID, $immediateSubmitMode, $input, "onchange", $fullRefresh);
   if ($defaultChecked)
     $check = " checked='checked'";
-  $rv = "<input type='checkbox' " . $submitLink . " id='chk" . $input . "' name='chk" . $input . "' value='" . $value . "' " . $check . ">";
+  $hiddenAttribute = $hidden ? " style='visibility: hidden; display: none' hidden" : "";
+  $rv = "<input type='checkbox' " . $submitLink . " id='chk" . $input . "' name='chk" . $input . "' value='" . $value . "' " . $check . $hiddenAttribute . ">";
   $rv .= "<label for='chk" . $input . "'>" . $label . "</label>";
   return $rv;
 }

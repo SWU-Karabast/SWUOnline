@@ -463,15 +463,9 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
         AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1," . $player, 1);
         break;
       case "9151673075"://Cobb Vanth
-        AddDecisionQueue("FINDINDICES", $player, "DECKTOPXREMOVE," . 10);
-        AddDecisionQueue("SETDQVAR", $player, "0", 1);
-        AddDecisionQueue("FILTER", $player, "LastResult-include-definedType-Unit", 1);
-        AddDecisionQueue("FILTER", $player, "LastResult-include-maxCost-2", 1);
-        AddDecisionQueue("CHOOSECARD", $player, "<-", 1);
+        AddDecisionQueue("SEARCHDECKTOPX", $player, "10;1;include-definedType-Unit&include-maxCost-2");
         AddDecisionQueue("ADDDISCARD", $player, "HAND,TTFREE", 1);
         AddDecisionQueue("REVEALCARDS", $player, "-", 1);
-        AddDecisionQueue("OP", $player, "REMOVECARD", 1);
-        AddDecisionQueue("ALLRANDOMBOTTOM", $player, "DECK");
         break;
       case "9637610169"://Bo Katan
         if(GetHealth(1) >= 15) Draw($player);
@@ -628,20 +622,9 @@ function CollectBounty($player, $index, $cardID, $reportMode=false, $bountyUnitO
     case "6420322033"://Enticing Reward
       ++$numBounties;
       if($reportMode) break;
-      AddDecisionQueue("FINDINDICES", $opponent, "DECKTOPXREMOVE," . 10);
-      AddDecisionQueue("SETDQVAR", $opponent, "0", 1);
-      AddDecisionQueue("FILTER", $opponent, "LastResult-exclude-definedType-Unit", 1);
-      AddDecisionQueue("MAYCHOOSECARD", $opponent, "<-", 1);
-      AddDecisionQueue("ADDHAND", $opponent, "-", 1);
+      AddDecisionQueue("SEARCHDECKTOPX", $opponent, "10;2;exclude-definedType-Unit");
+      AddDecisionQueue("MULTIADDHAND", $opponent, "-", 1);
       AddDecisionQueue("REVEALCARDS", $opponent, "-", 1);
-      AddDecisionQueue("OP", $opponent, "REMOVECARD");
-      AddDecisionQueue("SETDQVAR", $opponent, "0", 1);
-      AddDecisionQueue("FILTER", $opponent, "LastResult-exclude-definedType-Unit", 1);
-      AddDecisionQueue("MAYCHOOSECARD", $opponent, "<-", 1);
-      AddDecisionQueue("ADDHAND", $opponent, "-", 1);
-      AddDecisionQueue("REVEALCARDS", $opponent, "-", 1);
-      AddDecisionQueue("OP", $opponent, "REMOVECARD");
-      AddDecisionQueue("ALLRANDOMBOTTOM", $opponent, "DECK");
       if(!CardIsUnique($bountyUnit)) PummelHit($opponent);
       break;
     case "9503028597"://Clone Deserter
