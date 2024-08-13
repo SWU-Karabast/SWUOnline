@@ -53,7 +53,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       }
 
       else { //AND: Only cards that match every filter should be selectable.
-        $filterArray = explode("&", array_shift($paramArray));
+        $filterArray = explode("&", $paramArray[2]);
         $choosableDeckIndices = $deckIndicesToShow;
         foreach($filterArray as $filter) {
           $choosableDeckIndices = DecisionQueueStaticEffect("FILTER", $player, "Deck-" . $filter, $choosableDeckIndices);
