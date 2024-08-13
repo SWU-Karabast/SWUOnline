@@ -3836,12 +3836,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "0754286363"://The Mandalorian's Rifle
       $ally = new Ally($target, $currentPlayer);
       if(CardTitle($ally->CardID()) == "The Mandalorian") {
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
-        AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
-        AddDecisionQueue("MZFILTER", $currentPlayer, "status=0");
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to capture");
-        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "CAPTURE," . $ally->UniqueID(), 1);
+        AddLayer("TRIGGER", $currentPlayer, $cardID);
       }
       break;
     case "4643489029"://Palpatine's Return
