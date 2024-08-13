@@ -1614,7 +1614,7 @@ function SmuggleCost($cardID, $player="", $index="")
 
 function SmuggleAdditionalCosts($cardID, $player = ""): bool {
   global $currentPlayer;
-  if($player = "") $player = $currentPlayer;
+  if($player == "") $player = $currentPlayer;
   switch($cardID) {
     case "4783554451"://First Light
       return count(GetAllies($player)) > 0;
