@@ -39,6 +39,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $numToSearch = $paramArray[0];
       $numToAllowChoosing = $paramArray[1];
       $deckIndicesToShow = DecisionQueueStaticEffect("FINDINDICES", $player, "DECKTOPXINDICES," . $numToSearch, "");
+      if($deckIndicesToShow == "PASS") return "PASS";
       
       if(substr_count($paramArray[2], "|") > 0) { //OR: Any card that matches at least one filter should be selectable.
         $filterArray = explode("|", $paramArray[2]);
