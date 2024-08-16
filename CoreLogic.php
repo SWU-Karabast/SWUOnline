@@ -4466,10 +4466,12 @@ function DestroyAllAllies()
 
   //Destroy all those allies.
   foreach ($currentPlayerAlliesUniqueIDs as $UID) {
-    DestroyAlly($currentPlayer, SearchAlliesForUniqueID($UID, $currentPlayer));
+    $ally = new Ally("MYALLY-" . SearchAlliesForUniqueID($UID, $currentPlayer), $currentPlayer);
+    $ally->Destroy();
   }
   foreach ($otherPlayerAlliesUniqueIDs as $UID) {
-    DestroyAlly($otherPlayer, SearchAlliesForUniqueID($UID, $otherPlayer));
+    $ally = new Ally("MYALLY-" . SearchAlliesForUniqueID($UID, $otherPlayer), $otherPlayer);
+    $ally->Destroy();
   }
 }
 
