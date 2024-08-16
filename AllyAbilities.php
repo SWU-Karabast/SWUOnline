@@ -588,8 +588,7 @@ function CollectBounty($player, $index, $cardID, $reportMode=false, $bountyUnitO
       if($reportMode) break;
       $amount = CardIsUnique($bountyUnit) ? 6 : 4;
       AddDecisionQueue("MULTIZONEINDICES", $opponent, "MYALLY&THEIRALLY");
-      AddDecisionQueue("PREPENDLASTRESULT", $opponent, "THEIRCHAR-0,", 1);
-      AddDecisionQueue("PREPENDLASTRESULT", $opponent, "MYCHAR-0,", 1);
+      AddDecisionQueue("PREPENDLASTRESULT", $opponent, "MYCHAR-0,THEIRCHAR-0,");
       AddDecisionQueue("SETDQCONTEXT", $opponent, "Choose a card to restore ".$amount, 1);
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $opponent, "<-", 1);
       AddDecisionQueue("MZOP", $opponent, "RESTORE,".$amount, 1);

@@ -184,7 +184,6 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $groundCount = 0;
           for($i = 0; $i < count($allies); $i+=AllyPieces()) {
             if(ArenaContains($allies[$i], "Ground", $player)) {
-              WriteLog("Card in Ground -> " . $allies[$i]);
               if($groundAllies != "") $groundAllies .= ",";
               $groundAllies .= $i;
               $groundCount++;
