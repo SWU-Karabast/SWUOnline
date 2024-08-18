@@ -1,8 +1,8 @@
 Lorcana
-Deck = CardID:string
-Discard = CardID:string
-Hand = CardID:string
-Inkwell = CardID:string, Status:number
-Characters = CardID:string, Status:number, Owner:number, Damage:number
-Items = CardID:string
-Locations = CardID:string
+Deck - CardID:string
+Discard - CardID:string
+Hand - CardID:string
+Inkwell - CardID:string, Status:number
+Characters - CardID:string, Status:number, Owner:number, Damage:number
+Items - CardID:string
+Locations - CardID:string
