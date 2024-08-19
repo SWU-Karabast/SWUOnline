@@ -381,8 +381,9 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
   if(!$destroyedAlly->LostAbilities()) {
     switch($cardID) {
       case "4405415770"://Yoda, Old Master
-        WriteLog("Player $player drew a card from Yoda, Old Master");
-        Draw($player);
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose player to draw 1 card");
+        AddDecisionQueue("BUTTONINPUT", $player, "Yourself,Opponent,Both");
+        AddDecisionQueue("SPECIFICCARD", $player, "YODAOLDMASTER", 1);
         break;
       case "8429598559"://Black One
         BlackOne($player);
