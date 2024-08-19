@@ -9,7 +9,7 @@
     exit;
   }
   $useruid = $_SESSION["useruid"];
-  if ($useruid != "OotTheMonk" && $useruid != "love" && $useruid != "Cazargar" && $useruid != "Chaqa") {
+  if ($useruid != "OotTheMonk" && $useruid != "love" && $useruid != "Cazargar" && $useruid != "Chaqa" && $useruid != "Valball") {
     echo ("You must log in to use this page.");
     exit;
   }
