@@ -87,6 +87,16 @@
       else fwrite($handler, "\$arr[" . $j . "];\r\n");
     }
     fwrite($handler, "  }\r\n");
+    fwrite($handler, "  function Serialize() {\r\n");
+    fwrite($handler, "    \$rv = \"\";\r\n");
+    for($j=0; $j<count($zone->Properties); ++$j) {
+      $property = $zone->Properties[$j];
+      $propertyName = $property->Name;
+      if($j > 0) fwrite($handler, "    \$rv .= \" \";\r\n");
+      fwrite($handler, "    \$rv .= \$this->" . $propertyName . ";\r\n");
+    }
+    fwrite($handler, "    return \$rv;\r\n");
+    fwrite($handler, "  }\r\n");
     fwrite($handler, "}\r\n\r\n");
   }
   fwrite($handler, "?>");
@@ -135,6 +145,7 @@
   function AddReadGamestate() {
     $readGamestate = "";
     global $rootPath, $zones;
+    $readGamestate .= "  InitializeGamestate();\r\n";
     $readGamestate .= "  global \$gameName;\r\n";
     $readGamestate .= "  \$filename = \"" . $rootPath . "/Games/\$gameName/Gamestate.php\";\r\n";
     $readGamestate .= "  \$handler = fopen(\$filename, \"r\");\r\n";
@@ -168,8 +179,11 @@
   }
 
   function AddWriteGamestate() {
+    global $rootPath, $zones;
     $writeGamestate = "";
-    global $zones;
+    $writeGamestate .= "  global \$gameName;\r\n";
+    $writeGamestate .= "  \$filename = \"" . $rootPath . "/Games/\$gameName/Gamestate.php\";\r\n";
+    $writeGamestate .= "  \$handler = fopen(\$filename, \"w\");\r\n";
     for($i=0; $i<count($zones); ++$i) {
       $zone = $zones[$i];
       $zoneName = $zone->Name;
@@ -183,7 +197,7 @@
     $rv = "";
     $rv .= "  fwrite(\$handler, count(\$p" . $player . $zoneName . ") . \"\\r\\n\");\r\n";
     $rv .= "  for(\$i=0; \$i<count(\$p" . $player . $zoneName . "); ++\$i) {\r\n";
-    $rv .= "    fwrite(\$handler, \$p" . $player . $zoneName . "[\$i]->Serialize() . \"\\r\\n\");\r\n";
+    $rv .= "    fwrite(\$handler, trim(\$p" . $player . $zoneName . "[\$i]->Serialize()) . \"\\r\\n\");\r\n";
     $rv .= "  }\r\n";
     return $rv;
   }
