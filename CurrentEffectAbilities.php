@@ -20,7 +20,7 @@ function EffectHitEffect($cardID)
       break;
     case "5896817672-1"://Headhunting
     case "5896817672-2":
-      AddCurrentTurnEffect("5896817672" . (substr($cardID, -2, 2) == "-1" ? "-2" : "-3"), $mainPlayer);
+      AddCurrentTurnEffect("5896817672" . (str_ends_with($cardID, "-1") ? "-2" : "-3"), $mainPlayer);
       break;
     case "6514927936-1"://Leia Organa
       AddCurrentTurnEffectFromCombat("6514927936-2", $mainPlayer);

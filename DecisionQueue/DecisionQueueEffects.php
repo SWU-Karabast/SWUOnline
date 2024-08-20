@@ -426,11 +426,8 @@ function SpecificCardLogic($player, $card, $lastResult)
       $target = $lastResult;
       if($target == "PASS") {
         $ally = new Ally("MYALLY-" . SearchAlliesForCard($player, "9552605383"), $player);
-        if($ally)
         $ally->Attach("8752877738");//Shield Token
       } else {
-        $owner = MZPlayerID($player, $target);
-        $ally = new Ally($target, $owner);
         RescueUnit($player, $target);
       }
       return $lastResult;
