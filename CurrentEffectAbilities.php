@@ -753,7 +753,6 @@ function CurrentEffectNameModifier($effectID, $effectParameter)
 function CurrentEffectAllyEntersPlay($player, $index)
 {
   global $currentTurnEffects;
-  $allies = &GetAllies($player);
   for($i = count($currentTurnEffects) - CurrentTurnPieces(); $i >= 0; $i -= CurrentTurnPieces()) {
     $remove = false;
     if($currentTurnEffects[$i + 1] == $player) {
