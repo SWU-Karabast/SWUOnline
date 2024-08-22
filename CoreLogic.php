@@ -1126,10 +1126,12 @@ function TraitContains($cardID, $trait, $player="", $index=-1)
     $ally = new Ally("MYALLY-" . $index, $player);
     $upgrades = $ally->GetUpgrades();
     for($i=0; $i<count($upgrades); ++$i) {
-      switch($upgrades[$i]) {
-        case "7687006104": if($trait == "Mandalorian") { return true; } break;
-        default: break;}
-      if(TraitContains($upgrades[$i], $trait, $player)) return true;
+      switch ($upgrades[$i]) {
+        case "7687006104":
+          if($trait == "Mandalorian") return true;
+          break;
+        default: break;
+      }
     }
   }
   $cardTrait = CardTraits($cardID);
