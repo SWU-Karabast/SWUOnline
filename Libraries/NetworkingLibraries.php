@@ -834,6 +834,14 @@ function ResolveChainLink()
     AddDecisionQueue("MZOP", $player, "DEALDAMAGE," . $excess, 1);
   }
 
+  function ArquitensAssaultCruiser($player)
+  {
+    $defPlayer = $player == 1 ? 2 : 1;
+    $discard = &GetDiscard($defPlayer);
+    $defeatedCard = RemoveDiscard($defPlayer, count($discard)-DiscardPieces());
+    AddResources($defeatedCard, $player, "PLAY", "DOWN", isExhausted: true);
+  }
+
   global $combatChain, $combatChainState, $currentPlayer, $mainPlayer, $defPlayer, $CCS_CombatDamageReplaced, $CCS_LinkTotalAttack;
   global $CCS_DamageDealt;
   UpdateGameState($currentPlayer);
@@ -856,6 +864,9 @@ function ResolveChainLink()
       WriteLog("OVERWHELM : <span style='color:Crimson;'>$totalAttack damage</span> done on base");
     } else if($attackerID == "3830969722") { //Blizzard Assault AT-AT
       BlizzardAssaultATAT($mainPlayer, $totalAttack);
+    }
+    if($attackerID == "1086021299") {
+      ArquitensAssaultCruiser($mainPlayer);
     }
     ClearAttackTarget();
     CompletesAttackEffect($attackerID);
@@ -899,6 +910,9 @@ function ResolveChainLink()
   }
   if($attackerSurvived) {
     CompletesAttackEffect($attackerID);
+  }
+  if($attackerID == "1086021299") {
+    ArquitensAssaultCruiser($mainPlayer);
   }
   ProcessDecisionQueue();
 }
