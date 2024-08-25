@@ -27,6 +27,15 @@
           $propertyObj->Type = $thisProperty[1];
           array_push($zoneObj->Properties, $propertyObj);
         }
+        $display = fgets($handler);
+        if($display !== false) {
+          $displayArr = explode(":", $display);
+          if($displayArr[0] == "Display") {
+            $displayArr = explode(",", $displayArr[1]);
+            $zoneObj->Visibility = trim($displayArr[0]);
+            $zoneObj->DisplayMode = trim($displayArr[1]);
+          }
+        }
         array_push($zones, $zoneObj);
     }
   }
@@ -130,6 +139,26 @@
   fwrite($handler, "?>");
   fclose($handler);
 
+  //Write the Gamestate network file
+  $filename = $rootPath . "/GetNextTurn.php";
+  $handler = fopen($filename, "w");
+  fwrite($handler, "<?php\r\n");
+  fwrite($handler, "include '../Core/UILibraries.php';\r\n");
+  fwrite($handler, "include '../Core/NetworkingLibraries.php';\r\n");
+  fwrite($handler, "include './GamestateParser.php';\r\n");
+  fwrite($handler, "include './ZoneAccessors.php';\r\n");
+  fwrite($handler, "include './ZoneClasses.php';\r\n");
+  //TODO: Validate these inputs
+  fwrite($handler, "\$gameName = TryGet(\"gameName\");\r\n");
+  fwrite($handler, "\$playerID = TryGet(\"playerID\");\r\n");
+  fwrite($handler, "ParseGamestate();\r\n");
+
+  fwrite($handler, AddGetNextTurnForPlayer(1) . "\r\n");
+  fwrite($handler, AddGetNextTurnForPlayer(2) . "\r\n");
+
+  fwrite($handler, "?>");
+
+
   echo("Game code generator completed successfully!");
 
   function GetZoneGlobals($zones) {
@@ -144,10 +173,10 @@
 
   function AddReadGamestate() {
     $readGamestate = "";
-    global $rootPath, $zones;
+    global $zones;
     $readGamestate .= "  InitializeGamestate();\r\n";
     $readGamestate .= "  global \$gameName;\r\n";
-    $readGamestate .= "  \$filename = \"" . $rootPath . "/Games/\$gameName/Gamestate.php\";\r\n";
+    $readGamestate .= "  \$filename = \"./Games/\$gameName/Gamestate.php\";\r\n";
     $readGamestate .= "  \$handler = fopen(\$filename, \"r\");\r\n";
     $readGamestate .= "  while (!feof(\$handler)) {\r\n";
     for($i=0; $i<count($zones); ++$i) {
@@ -162,7 +191,6 @@
   }
 
   function AddReadZone($zoneName, $player) {
-    global $rootPath;
     $rv = "";
     $rv .= "    \$line = fgets(\$handler);\r\n";
     $rv .= "    if (\$line !== false) {\r\n";
@@ -179,10 +207,10 @@
   }
 
   function AddWriteGamestate() {
-    global $rootPath, $zones;
+    global $zones;
     $writeGamestate = "";
     $writeGamestate .= "  global \$gameName;\r\n";
-    $writeGamestate .= "  \$filename = \"" . $rootPath . "/Games/\$gameName/Gamestate.php\";\r\n";
+    $writeGamestate .= "  \$filename = \"./Games/\$gameName/Gamestate.php\";\r\n";
     $writeGamestate .= "  \$handler = fopen(\$filename, \"w\");\r\n";
     for($i=0; $i<count($zones); ++$i) {
       $zone = $zones[$i];
@@ -200,5 +228,50 @@
     $rv .= "    fwrite(\$handler, trim(\$p" . $player . $zoneName . "[\$i]->Serialize()) . \"\\r\\n\");\r\n";
     $rv .= "  }\r\n";
     return $rv;
+  }
+
+  function AddGetNextTurnForPlayer($player) {
+    global $zones;
+    $getNextTurn = "";
+    for($i=0; $i<count($zones); ++$i) {
+      $zone = $zones[$i];
+      $zoneName = "p" . $player . $zone->Name;
+      echo($zoneName . "<BR>");
+      if($i > 0) $getNextTurn .= "echo(\"<~>\");\r\n";
+      if($zone->DisplayMode == "Single") {
+        if($zone->Visibility == "Public") {
+          //$getNextTurn .= "echo \"Single Public\";\r\n";
+        } else if($zone->Visibility == "Private") {
+          //Single Private
+          $getNextTurn .= "  echo(ClientRenderedCard(\"CardBack\", counters:count(\$" . $zoneName . ")));\r\n";
+
+        } else if ($zone->Visibility == "Self") {
+          //$getNextTurn .= "echo \"Single Self\";\r\n";
+        }
+      } else if($zone->DisplayMode == "All") {
+        $getNextTurn .= "  \$arr = &Get" . $zone->Name . "(" . $player . ");\r\n";
+        $getNextTurn .= "  for(\$i=0; \$i<count(\$arr); ++\$i) {\r\n";
+        $getNextTurn .= "    if(\$i > 0) echo(\"<|>\");\r\n";
+        $getNextTurn .= "    \$obj = \$arr[\$i];\r\n";
+        if($zone->Visibility == "Public") {
+          $getNextTurn .= "    echo(ClientRenderedCard(\$obj->CardID));\r\n";
+        } else if($zone->Visibility == "Private") {
+          $getNextTurn .= "    echo(ClientRenderedCard(\"CardBack\"));\r\n";
+        } else if ($zone->Visibility == "Self") {
+          $getNextTurn .= "    if(\$playerID == " . $player . ") echo(ClientRenderedCard(\$obj->CardID));\r\n";
+          $getNextTurn .= "    else echo(ClientRenderedCard(\"CardBack\"));\r\n";
+        }
+        $getNextTurn .= "  }\r\n";
+      } else if($zone->DisplayMode == "Count") {
+        if($zone->Visibility == "Public") {
+          //$getNextTurn .= "echo \"Count Public\";\r\n";
+        } else if($zone->Visibility == "Private") {
+          //$getNextTurn .= "echo \"Count Private\";\r\n";
+        } else if ($zone->Visibility == "Self") {
+          //$getNextTurn .= "echo \"Count Self\";\r\n";
+        }
+      }
+    }
+    return $getNextTurn;
   }
 ?>

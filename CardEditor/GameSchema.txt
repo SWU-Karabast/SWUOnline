@@ -1,8 +1,15 @@
 Lorcana
 Deck - CardID:string
+Display: Private, Single
 Discard - CardID:string
+Display: Public, Single
 Hand - CardID:string
+Display: Self, All
 Inkwell - CardID:string, Status:number
+Display: Self, Count
 Characters - CardID:string, Status:number, Owner:number, Damage:number
+Display: Public, All
 Items - CardID:string
+Display: Public, All
 Locations - CardID:string
+Display: Public, All
