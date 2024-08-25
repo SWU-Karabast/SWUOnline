@@ -373,7 +373,7 @@ function AllyLeavesPlayAbility($player, $index)
 
 function AllyDestroyedAbility($player, $index, $fromCombat)
 {
-  global $mainPlayer, $initiativePlayer;
+  global $initiativePlayer;
   $allies = &GetAllies($player);
   $cardID = $allies[$index];
   OnKillAbility($fromCombat);
@@ -493,6 +493,8 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
   $allies = &GetAllies($player);
   for($i = count($allies) - AllyPieces(); $i >= 0; $i -= AllyPieces()) {
     if($i == $index) continue;
+    $ally = new Ally("MYALLY-" . $i, $player);
+    if($ally->LostAbilities()) continue;
     switch($allies[$i]) {
       case "9353672706"://General Krell
         Draw($player);
@@ -514,6 +516,8 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
   $otherPlayer = ($player == 1 ? 2 : 1);
   $allies = &GetAllies($otherPlayer);
   for($i = count($allies) - AllyPieces(); $i >= 0; $i -= AllyPieces()) {
+    $ally = new Ally("MYALLY-" . $i, $otherPlayer);
+    if($ally->LostAbilities()) continue;
     switch($allies[$i]) {
       case "1664771721"://Gideon Hask
         AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a unit to add an experience");
@@ -525,15 +529,14 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
         Restore(1, $otherPlayer);
         break;
       case "2649829005"://Agent Kallus
-        if($allies[$i+8] > 0) {
-          --$allies[$i+8];
+        if($ally->NumUses() > 0 && CardIsUnique($destroyedAlly->CardID())) {
+          $ally->ModifyUses(-1);
           Draw($otherPlayer);
         }
         break;
       case "8687233791"://Punishing One
-        $thisAlly = new Ally("MYALLY-" . $i, $otherPlayer);
-        if($destroyedAlly->IsUpgraded() && $thisAlly->IsExhausted() && $thisAlly->NumUses() > 0) {
-          AddDecisionQueue("YESNO", $otherPlayer, "if you want to ready " . CardLink("", $thisAlly->CardID()));
+        if($destroyedAlly->IsUpgraded() && $ally->IsExhausted() && $ally->NumUses() > 0) {
+          AddDecisionQueue("YESNO", $otherPlayer, "if you want to ready " . CardLink("", $ally->CardID()));
           AddDecisionQueue("NOPASS", $otherPlayer, "-");
           AddDecisionQueue("PASSPARAMETER", $otherPlayer, "MYALLY-" . $i, 1);
           AddDecisionQueue("MZOP", $otherPlayer, "READY", 1);
