@@ -58,8 +58,6 @@ class Ally {
   }
 
   function TurnsInPlay() {
-    global $currentRound;
-    if(IsLeader($this->CardID(), $this->PlayerID())) return $currentRound - 1;
     return $this->allies[$this->index+12];
   }
 

@@ -20,9 +20,6 @@ function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null)
   $index = count($allies) - AllyPieces();
   CurrentEffectAllyEntersPlay($player, $index);
   AllyEntersPlayAbilities($player);
-  $otherPlayer = $player == 1 ? 2 : 1;
-  $theirAllies = &GetAllies($otherPlayer);
-
   if(AllyHasStaticHealthModifier($cardID)) {
     CheckHealthAllAllies($player);
   }
@@ -158,11 +155,10 @@ function RemoveAlly($player, $index)
 
 function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false, $skipRescue = false)
 {
-  global $combatChain, $mainPlayer, $defPlayer, $CS_NumAlliesDestroyed, $CS_NumLeftPlay;
+  global $mainPlayer, $CS_NumAlliesDestroyed, $CS_NumLeftPlay;
   $allies = &GetAllies($player);
   $cardID = $allies[$index];
   $owner = $allies[$index+11];
-  $otherPlayer = $player == 1 ? 2 : 1;
   $discardPileModifier = "-";
   if(!$skipDestroy) {
     AllyDestroyedAbility($player, $index, $fromCombat);
@@ -243,8 +239,6 @@ function AllyAddGraveyard($player, $cardID, $subtype)
 
 function AllyEntersPlayState($cardID, $player, $from="-")
 {
-  //if(SearchCurrentTurnEffects("dxAEI20h8F", $player)) return 1;
-  //if(PlayerHasAlly($player == 1 ? 2 : 1, "TqCo3xlf93")) return 1;//Lunete, Frostbinder Priest
   if(DefinedTypesContains($cardID, "Leader", $player)) return 2;
   switch($cardID)
   {
@@ -373,7 +367,7 @@ function AllyLeavesPlayAbility($player, $index)
 
 function AllyDestroyedAbility($player, $index, $fromCombat)
 {
-  global $mainPlayer, $initiativePlayer;
+  global $initiativePlayer;
   $allies = &GetAllies($player);
   $cardID = $allies[$index];
   OnKillAbility($fromCombat);
@@ -381,8 +375,9 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
   if(!$destroyedAlly->LostAbilities()) {
     switch($cardID) {
       case "4405415770"://Yoda, Old Master
-        WriteLog("Player $player drew a card from Yoda, Old Master");
-        Draw($player);
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose player to draw 1 card");
+        AddDecisionQueue("BUTTONINPUT", $player, "Yourself,Opponent,Both");
+        AddDecisionQueue("SPECIFICCARD", $player, "YODAOLDMASTER", 1);
         break;
       case "8429598559"://Black One
         BlackOne($player);
@@ -472,8 +467,7 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
         if(GetHealth(2) >= 15) Draw($player);
         break;
       case "7204838421"://Enterprising Lackeys
-        $discard = &GetDiscard($player);
-        MZMoveCard($player, "MYRESOURCES", "MYDISCARD,RESOURCES", may:false);
+        MZMoveCard($player, "MYRESOURCES", "MYDISCARD,RESOURCES", may: false);
         break;
       default: break;
     }
@@ -493,6 +487,8 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
   $allies = &GetAllies($player);
   for($i = count($allies) - AllyPieces(); $i >= 0; $i -= AllyPieces()) {
     if($i == $index) continue;
+    $ally = new Ally("MYALLY-" . $i, $player);
+    if($ally->LostAbilities()) continue;
     switch($allies[$i]) {
       case "9353672706"://General Krell
         Draw($player);
@@ -514,6 +510,8 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
   $otherPlayer = ($player == 1 ? 2 : 1);
   $allies = &GetAllies($otherPlayer);
   for($i = count($allies) - AllyPieces(); $i >= 0; $i -= AllyPieces()) {
+    $ally = new Ally("MYALLY-" . $i, $otherPlayer);
+    if($ally->LostAbilities()) continue;
     switch($allies[$i]) {
       case "1664771721"://Gideon Hask
         AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a unit to add an experience");
@@ -525,15 +523,14 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
         Restore(1, $otherPlayer);
         break;
       case "2649829005"://Agent Kallus
-        if($allies[$i+8] > 0) {
-          --$allies[$i+8];
+        if($ally->NumUses() > 0 && CardIsUnique($destroyedAlly->CardID())) {
+          $ally->ModifyUses(-1);
           Draw($otherPlayer);
         }
         break;
       case "8687233791"://Punishing One
-        $thisAlly = new Ally("MYALLY-" . $i, $otherPlayer);
-        if($destroyedAlly->IsUpgraded() && $thisAlly->IsExhausted() && $thisAlly->NumUses() > 0) {
-          AddDecisionQueue("YESNO", $otherPlayer, "if you want to ready " . CardLink("", $thisAlly->CardID()));
+        if($destroyedAlly->IsUpgraded() && $ally->IsExhausted() && $ally->NumUses() > 0) {
+          AddDecisionQueue("YESNO", $otherPlayer, "if you want to ready " . CardLink("", $ally->CardID()));
           AddDecisionQueue("NOPASS", $otherPlayer, "-");
           AddDecisionQueue("PASSPARAMETER", $otherPlayer, "MYALLY-" . $i, 1);
           AddDecisionQueue("MZOP", $otherPlayer, "READY", 1);
@@ -731,7 +728,6 @@ function CollectBounty($player, $index, $cardID, $reportMode=false, $bountyUnitO
 function CollectBounties($player, $index, $reportMode=false) {
   global $currentTurnEffects;
   $ally = new Ally("MYALLY-" . $index, $player);
-  $opponent = $player == 1 ? 2 : 1;
   $numBounties = 0;
   //Current turn effect bounties
   for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnEffectPieces()) {
@@ -778,7 +774,6 @@ function OnKillAbility($fromCombat)
 
 function AllyBeginRoundAbilities($player)
 {
-  global $CS_NumMaterializations;
   $allies = &GetAllies($player);
   for($i = count($allies) - AllyPieces(); $i >= 0; $i -= AllyPieces()) {
     switch($allies[$i]) {
@@ -1059,7 +1054,6 @@ function AllyPlayCardAbility($cardID, $player="", $from="-", $abilityID="-", $un
       break;
     default: break;
   }
-  $otherPlayer = ($player == 1 ? 2 : 1);
   switch($abilityID)
   {
     case "5555846790"://Saw Gerrera
@@ -1142,7 +1136,6 @@ function SpecificAllyAttackAbilities($attackID)
         break;
       case "1938453783"://Armed to the Teeth
         //Adapted from Benthic Two-Tubes
-        $ally = new Ally("MYALLY-" . $attackerIndex, $mainPlayer);
         AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
         AddDecisionQueue("MZFILTER", $mainPlayer, "index=MYALLY-" . $attackerIndex);
         AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to give +2/+0");
@@ -1164,7 +1157,6 @@ function SpecificAllyAttackAbilities($attackID)
   $allies = &GetAllies($mainPlayer);
   switch($allies[$attackerIndex]) {
     case "0256267292"://Benthic 'Two Tubes'
-      $ally = new Ally("MYALLY-" . $attackerIndex, $mainPlayer);
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:aspect=Aggression");
       AddDecisionQueue("MZFILTER", $mainPlayer, "index=MYALLY-" . $attackerIndex);
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to give Raid 2");
@@ -1630,12 +1622,16 @@ function AllyEndTurnAbilities($player)
         AddDecisionQueue("MZOP", $player, "BOUNCE", 1);
         AddDecisionQueue("WRITELOG", $player, "Millennium Falcon bounced back to hand", 1);
         break;
-      case "d1a7b76ae7"://Chirrut Imwe
-        if($ally->Health() <= 0) DestroyAlly($player, $i);
-        break;
       default: break;
     }
     $ally->EndRound();
+    switch ($allies[$i]) {
+      case "d1a7b76ae7"://Chirrut Imwe
+        if($ally->Health() <= 0) DestroyAlly($player, $i);
+        break;
+      default:
+        break;
+    }
   }
 }
 
