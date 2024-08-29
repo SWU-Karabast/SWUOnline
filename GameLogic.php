@@ -410,15 +410,16 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         case "ATTACK": return MZAttack($player, $lastResult);
         case "ADDHEALTH": MZAddHealth($player, $lastResult, count($parameterArr) > 1 ? $parameterArr[1] : 1); return $lastResult;
         case "ENDCOMBAT": MZEndCombat($player, $lastResult); return $lastResult;
-        case "HEALALLY":
-          MZHealAlly($player, $lastResult, count($parameterArr) > 1 ? $parameterArr[1] : 1);
-          return $lastResult;
         case "RESTORE":
           $mzArr = explode("-", $lastResult);
           if($mzArr[0] == "MYCHAR") {
             Restore(count($parameterArr) > 1 ? $parameterArr[1] : 1, $player);
+          } else if($mzArr[0] == "THEIRCHAR") {
+            Restore(count($parameterArr) > 1 ? $parameterArr[1] : 1, $player == 1 ? 2 : 1);
           } else if($mzArr[0] == "MYALLY") {
             MZHealAlly($player, $lastResult, count($parameterArr) > 1 ? $parameterArr[1] : 1);
+          } else if($mzArr[0] == "THEIRALLY") {
+            MZHealAlly($player == 1 ? 2 : 1, $lastResult, count($parameterArr) > 1 ? $parameterArr[1] : 1);
           }
           return $lastResult;
         case "CHANGEATTACKTARGET": SetAttackTarget($lastResult); return $lastResult;
