@@ -558,6 +558,21 @@ function SpecificCardLogic($player, $card, $lastResult)
       PrependDecisionQueue("NOPASS", $owner, "-", 1);
       PrependDecisionQueue("YESNO", $owner, "if you want to play " . CardLink($cardID, $cardID) . " for free");
       return 1;
+    case "YODAOLDMASTER":
+      if($lastResult == "Both") {
+        WriteLog("Both player drew a card from Yoda, Old Master");
+        $otherPlayer = $player == 1 ? 2 : 1;
+        Draw($player);
+        Draw($otherPlayer);
+      } else if($lastResult == "Yourself") {
+        WriteLog("Player $player drew a card from Yoda, Old Master");
+        Draw($player);
+      } else {
+        $otherPlayer = $player == 1 ? 2 : 1;
+        WriteLog("Player $otherPlayer drew a card from Yoda, Old Master");
+        Draw($otherPlayer);
+      }
+      break;
     default: return "";
   }
 }
