@@ -58,7 +58,7 @@ $isMobile = IsMobile();
       <ul>
           <?php
             echo '<li><a target="_blank" href="https://discord.gg/hKRaqHND4v"><img src="./Images/icons/discord.svg"></img></a></li>';
-            echo '<li><a target="_blank" href="https://github.com/OotTheMonk/SWUOnline"><img src="./Images/icons/github.svg"></img></a></li>';
+            echo '<li><a target="_blank" href="https://github.com/SWU-Karabast/SWUOnline"><img src="./Images/icons/github.svg"></img></a></li>';
           ?>
       </ul>
     </div>
