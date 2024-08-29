@@ -2229,6 +2229,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "6028207223"://Pirated Starfighter
       if($from != "PLAY") {
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
         AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "BOUNCE", 1);
       }
@@ -2473,7 +2474,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "6515891401"://Karabast
       $ally = new Ally($target);
-      $damage = $ally->MaxHealth() - $ally->Health() + 1;
+      $damage = $ally->Damage() + 1;
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal " . $damage . " damage to");
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
@@ -4575,7 +4576,7 @@ function PlayRequiresTarget($cardID)
     case "8981523525": return 6;//Moment of Peace
     case "0867878280": return 6;//It Binds All Things
     case "2587711125": return 6;//Disarm
-    case "6515891401": return 6;//Karabast
+    case "6515891401": return 7;//Karabast
     case "2651321164": return 6;//Tactical Advantage
     case "1900571801": return 7;//Overwhelming Barrage
     case "7861932582": return 6;//The Force is With Me
