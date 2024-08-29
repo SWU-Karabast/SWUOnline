@@ -1208,7 +1208,7 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MZFILTER", $mainPlayer, "index=MYALLY-" . $attackerAlly->Index());
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to heal 2");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
-      AddDecisionQueue("MZOP", $mainPlayer, "HEALALLY,2", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "RESTORE,2", 1);
       break;
     case "51e8757e4c"://Sabine Wren
       DealDamageAsync($defPlayer, 1, "DAMAGE", "51e8757e4c");
@@ -1312,12 +1312,12 @@ function SpecificAllyAttackAbilities($attackID)
       }
       break;
     case "8190373087"://Gentle Giant
-      $power = $attackerAlly->CurrentPower();
+      $damage = $attackerAlly->Damage();
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
       AddDecisionQueue("MZFILTER", $mainPlayer, "index=MYALLY-" . $attackerAlly->Index());
-      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to heal " . $power);
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to heal " . $damage);
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
-      AddDecisionQueue("MZOP", $mainPlayer, "HEALALLY," . $power, 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "RESTORE," . $damage, 1);
       break;
     case "2522489681"://Zorii Bliss
       Draw($mainPlayer);
