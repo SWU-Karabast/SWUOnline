@@ -426,11 +426,8 @@ function SpecificCardLogic($player, $card, $lastResult)
       $target = $lastResult;
       if($target == "PASS") {
         $ally = new Ally("MYALLY-" . SearchAlliesForCard($player, "9552605383"), $player);
-        if($ally)
         $ally->Attach("8752877738");//Shield Token
       } else {
-        $owner = MZPlayerID($player, $target);
-        $ally = new Ally($target, $owner);
         RescueUnit($player, $target);
       }
       return $lastResult;
@@ -558,6 +555,21 @@ function SpecificCardLogic($player, $card, $lastResult)
       PrependDecisionQueue("NOPASS", $owner, "-", 1);
       PrependDecisionQueue("YESNO", $owner, "if you want to play " . CardLink($cardID, $cardID) . " for free");
       return 1;
+    case "YODAOLDMASTER":
+      if($lastResult == "Both") {
+        WriteLog("Both player drew a card from Yoda, Old Master");
+        $otherPlayer = $player == 1 ? 2 : 1;
+        Draw($player);
+        Draw($otherPlayer);
+      } else if($lastResult == "Yourself") {
+        WriteLog("Player $player drew a card from Yoda, Old Master");
+        Draw($player);
+      } else {
+        $otherPlayer = $player == 1 ? 2 : 1;
+        WriteLog("Player $otherPlayer drew a card from Yoda, Old Master");
+        Draw($otherPlayer);
+      }
+      break;
     default: return "";
   }
 }
