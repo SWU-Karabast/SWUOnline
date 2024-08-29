@@ -1795,7 +1795,22 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
     $EffectContext = $cardID;
     if(!$chainClosed) {
       if(GetClassState($currentPlayer, $CS_AfterPlayedBy) != "-") AfterPlayedByAbility(GetClassState($currentPlayer, $CS_AfterPlayedBy));
-      if(DefinedTypesContains($cardID, "Event", $currentPlayer) && SearchCurrentTurnEffects("3401690666", $currentPlayer, remove:true)) {
+
+      function RelentlessLostAbilities($player): bool
+      {
+        $relentlessIndex = SearchAlliesForCard($player, "3401690666");
+        if($relentlessIndex != "") {
+          $ally = new Ally("MYALLY-" . $relentlessIndex, $player);
+          return $ally->LostAbilities();
+        }
+        return true;
+      }
+
+      if(DefinedTypesContains($cardID, "Event", $currentPlayer)
+        && SearchCurrentTurnEffects("3401690666", $currentPlayer, remove: true)
+        && GetClassState($currentPlayer, $CS_NumEventsPlayed) <= 1 
+        && !RelentlessLostAbilities($otherPlayer)
+      ) {
         //Relentless
         WriteLog("<span style='color:red;'>The event does nothing because of Relentless.</span>");
       }
@@ -1803,7 +1818,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
         MainCharacterPlayCardAbilities($cardID, $from);
         AuraPlayAbilities($cardID, $from);
         PermanentPlayAbilities($cardID, $from);
-        
+
         $abilityIndex = GetClassState($currentPlayer, $CS_AbilityIndex);
         $playIndex = GetClassState($currentPlayer, $CS_PlayIndex);
         $layerName = "PLAYABILITY";
