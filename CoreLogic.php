@@ -376,14 +376,12 @@ function CanDamageBePrevented($player, $damage, $type, $source="-")
 
 function DealDamageAsync($player, $damage, $type="DAMAGE", $source="NA")
 {
-  global $CS_DamagePrevention, $combatChainState, $combatChain, $mainPlayer;
-  global $CCS_AttackFused, $CS_ArcaneDamagePrevention, $currentPlayer, $dqVars, $dqState;
+  global $CS_DamagePrevention, $combatChain;
+  global $CS_ArcaneDamagePrevention, $dqVars, $dqState;
 
   $classState = &GetPlayerClassState($player);
-  $Items = &GetItems($player);
   if($type == "COMBAT" && $damage > 0 && EffectPreventsHit()) HitEffectsPreventedThisLink();
   if($type == "COMBAT" || $type == "ATTACKHIT") $source = $combatChain[0];
-  $otherPlayer = $player == 1 ? 2 : 1;
   $damage = max($damage, 0);
   $damageThreatened = $damage;
   $preventable = CanDamageBePrevented($player, $damage, $type, $source);

@@ -826,19 +826,27 @@ function ChainLinkBeginResolutionEffects()
 
 function ResolveChainLink()
 {
-  global $combatChain, $combatChainState, $currentPlayer, $mainPlayer, $defPlayer, $currentTurnEffects, $CCS_CombatDamageReplaced, $CCS_LinkTotalAttack;
-  global $CCS_DamageDealt, $CCS_HitsWithWeapon;
+  function BlizzardAssaultATAT($player, $excess)
+  {
+    AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal " . $excess . " damage to");
+    AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:arena=Ground");
+    AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+    AddDecisionQueue("MZOP", $player, "DEALDAMAGE," . $excess, 1);
+  }
+
+  function ArquitensAssaultCruiser($player)
+  {
+    $defPlayer = $player == 1 ? 2 : 1;
+    $discard = &GetDiscard($defPlayer);
+    $defeatedCard = RemoveDiscard($defPlayer, count($discard)-DiscardPieces());
+    AddResources($defeatedCard, $player, "PLAY", "DOWN", isExhausted: true);
+  }
+
+  global $combatChain, $combatChainState, $currentPlayer, $mainPlayer, $defPlayer, $CCS_CombatDamageReplaced, $CCS_LinkTotalAttack;
+  global $CCS_DamageDealt;
   UpdateGameState($currentPlayer);
   BuildMainPlayerGameState();
 
-  $target = GetAttackTarget();
-  if($target == "THEIRALLY--1") {
-    CloseCombatChain(true);
-    ProcessDecisionQueue();
-    return;//Means the target was already destroyed
-  }
-
-  $totalAttack = 0;
   $totalDefense = 0;
   $attackerMZ = AttackerMZID($mainPlayer);
   $attackerArr = explode("-", $attackerMZ);
@@ -848,18 +856,35 @@ function ResolveChainLink()
   $attackerSurvived = 1;
   $totalAttack = $attacker->CurrentPower();
   $combatChainState[$CCS_LinkTotalAttack] = $totalAttack;
+
+  $target = GetAttackTarget();
+  if($target == "THEIRALLY--1") {//Means the target was already destroyed
+    if($hasOverwhelm) {
+      DealDamageAsync($defPlayer, $totalAttack, "OVERWHELM", $attackerID);
+      WriteLog("OVERWHELM : <span style='color:Crimson;'>$totalAttack damage</span> done on base");
+    } else if($attackerID == "3830969722") { //Blizzard Assault AT-AT
+      BlizzardAssaultATAT($mainPlayer, $totalAttack);
+    }
+    if($attackerID == "1086021299") {
+      ArquitensAssaultCruiser($mainPlayer);
+    }
+    ClearAttackTarget();
+    CompletesAttackEffect($attackerID);
+    CloseCombatChain(true);
+    ProcessDecisionQueue();
+    return;
+  }
+
   LogCombatResolutionStats($totalAttack, 0);
 
   $targetArr = explode("-", $target);
   if ($targetArr[0] == "THEIRALLY") {
-    //Construct the combatants
-    $index = $targetArr[1];
+    //Construct defender
     $defender = new Ally($target, $defPlayer);
     //Resolve the combat
     $defenderPower = $defender->CurrentPower();
     if($defenderPower < 0) $defenderPower = 0;
     $excess = $totalAttack - $defender->Health();
-    $damageDealt = 0;
     $destroyed = $defender->DealDamage($totalAttack, bypassShield:HasSaboteur($attackerID, $mainPlayer, $attacker->Index()), fromCombat:true, damageDealt:$combatChainState[$CCS_DamageDealt]);
     if($destroyed) ClearAttackTarget();
     if($attackerArr[0] == "MYALLY" && (!$destroyed || ($combatChain[0] != "9500514827" && $combatChain[0] != "4328408486" && !SearchCurrentTurnEffects("8297630396", $mainPlayer)))) { //Han Solo shoots first; also Incinerator Trooper
@@ -869,12 +894,12 @@ function ResolveChainLink()
         $attackerSurvived = 0;
       }
     }
-    if($hasOverwhelm && $destroyed) DealDamageAsync($defPlayer, $excess, "OVERWHELM", $attackerID);
+    if($hasOverwhelm && $destroyed) {
+      DealDamageAsync($defPlayer, $excess, "OVERWHELM", $attackerID);
+      WriteLog("OVERWHELM : <span style='color:Crimson;'>$excess damage</span> done on base");
+    }
     else if($attackerID == "3830969722") { //Blizzard Assault AT-AT
-      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal " . $excess . " damage to");
-      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY:arena=Ground");
-      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
-      AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE," . $excess, 1);
+      BlizzardAssaultATAT($mainPlayer, $excess);
     }
     AddDecisionQueue("RESOLVECOMBATDAMAGE", $mainPlayer, $totalAttack);
   } else {
@@ -885,6 +910,9 @@ function ResolveChainLink()
   }
   if($attackerSurvived) {
     CompletesAttackEffect($attackerID);
+  }
+  if($attackerID == "1086021299") {
+    ArquitensAssaultCruiser($mainPlayer);
   }
   ProcessDecisionQueue();
 }
