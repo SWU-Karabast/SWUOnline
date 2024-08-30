@@ -1133,7 +1133,7 @@ function SpecificAllyAttackAbilities($attackID)
         for($j=0; $j<count($allies); $j+=AllyPieces()) {
           if($j == $attackerAlly->Index()) continue;
           $ally = new Ally("MYALLY-" . $j, $mainPlayer);
-          if(TraitContains($ally->CardID(), "Mandalorian", $mainPlayer)) $ally->Attach("2007868442");//Experience token
+          if(TraitContains($ally->CardID(), "Mandalorian", $mainPlayer, $j)) $ally->Attach("2007868442");//Experience token
         }
         break;
       case "1938453783"://Armed to the Teeth
