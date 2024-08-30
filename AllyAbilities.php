@@ -370,7 +370,7 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
   global $initiativePlayer;
   $allies = &GetAllies($player);
   $cardID = $allies[$index];
-  OnKillAbility($fromCombat);
+  OnKillAbility($player, $index);
   $destroyedAlly = new Ally("MYALLY-" . $index, $player);
   if(!$destroyedAlly->LostAbilities()) {
     switch($cardID) {
@@ -745,11 +745,13 @@ function CollectBounties($player, $index, $reportMode=false) {
   return $numBounties;
 }
 
-function OnKillAbility($fromCombat)
+function OnKillAbility($player, $index)
 {
   global $combatChain, $mainPlayer, $defPlayer;
   if(count($combatChain) == 0) return;
   $attackerAlly = new Ally(AttackerMZID($mainPlayer), $mainPlayer);
+  if($attackerAlly->Index() == $index && $attackerAlly->PlayerID() == $player) return;
+  if($attackerAlly->LostAbilities()) return;
   $upgrades = $attackerAlly->GetUpgrades();
   for($i=0; $i<count($upgrades); ++$i) {
     switch($upgrades[$i]) {
