@@ -3762,17 +3762,26 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "040a3e81f3"://Lando Calrissian Leader Unit
       $abilityName = GetResolvedAbilityName($cardID, $from);
       if($abilityName == "Smuggle") {
-        global $CS_AfterPlayedBy;
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYRESOURCES:keyword=Smuggle");
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to play");
-        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-        AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
-        AddDecisionQueue("PASSPARAMETER", $currentPlayer, $cardID, 1);
-        AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_AfterPlayedBy, 1);
-        AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, $cardID, 1);
-        AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
-        AddDecisionQueue("MZREMOVE", $currentPlayer, "-", 1);
+        $mzIndex = "MYALLY-" . GetAllyIndex($cardID, $currentPlayer);
+        $ally = new Ally($mzIndex, $currentPlayer);
+        if($ally->NumUses() <= 0) {
+          WriteLog("Smuggle ability was already used this turn. Game state reverted");
+          RevertGamestate();
+        } else {
+          global $CS_AfterPlayedBy;
+          AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYRESOURCES:keyword=Smuggle");
+          AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to play");
+          AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+          AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+          AddDecisionQueue("PASSPARAMETER", $currentPlayer, $mzIndex, 1);
+          AddDecisionQueue("ADDMZUSES", $currentPlayer, -1, 1);
+          AddDecisionQueue("PASSPARAMETER", $currentPlayer, $cardID, 1);
+          AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_AfterPlayedBy, 1);
+          AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, $cardID, 1);
+          AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
+          AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
+          AddDecisionQueue("MZREMOVE", $currentPlayer, "-", 1);
+        }
       }
       break;
     case "0754286363"://The Mandalorian's Rifle
