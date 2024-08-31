@@ -826,22 +826,6 @@ function ChainLinkBeginResolutionEffects()
 
 function ResolveChainLink()
 {
-  function BlizzardAssaultATAT($player, $excess)
-  {
-    AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal " . $excess . " damage to");
-    AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:arena=Ground");
-    AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-    AddDecisionQueue("MZOP", $player, "DEALDAMAGE," . $excess, 1);
-  }
-
-  function ArquitensAssaultCruiser($player)
-  {
-    $defPlayer = $player == 1 ? 2 : 1;
-    $discard = &GetDiscard($defPlayer);
-    $defeatedCard = RemoveDiscard($defPlayer, count($discard)-DiscardPieces());
-    AddResources($defeatedCard, $player, "PLAY", "DOWN", isExhausted: true);
-  }
-
   global $combatChain, $combatChainState, $currentPlayer, $mainPlayer, $defPlayer, $CCS_CombatDamageReplaced, $CCS_LinkTotalAttack;
   global $CCS_DamageDealt;
   UpdateGameState($currentPlayer);
@@ -1851,6 +1835,22 @@ function RelentlessLostAbilities($player): bool
     return $ally->LostAbilities();
   }
   return true;
+}
+
+function BlizzardAssaultATAT($player, $excess)
+{
+  AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal " . $excess . " damage to");
+  AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:arena=Ground");
+  AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+  AddDecisionQueue("MZOP", $player, "DEALDAMAGE," . $excess, 1);
+}
+
+function ArquitensAssaultCruiser($player)
+{
+  $defPlayer = $player == 1 ? 2 : 1;
+  $discard = &GetDiscard($defPlayer);
+  $defeatedCard = RemoveDiscard($defPlayer, count($discard)-DiscardPieces());
+  AddResources($defeatedCard, $player, "PLAY", "DOWN", isExhausted: true);
 }
 
 function ProcessAttackTarget()
