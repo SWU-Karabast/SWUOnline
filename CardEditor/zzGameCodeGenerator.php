@@ -117,22 +117,26 @@
   //Initialize gamestate function
   fwrite($handler, "function InitializeGamestate() {\r\n");
   fwrite($handler, GetZoneGlobals($zones) . "\r\n");
+  fwrite($handler, GetCoreGlobals() . "\r\n");
   for($i=0; $i<count($zones); ++$i) {
     $zone = $zones[$i];
     $zoneName = $zone->Name;
     fwrite($handler, "  \$p1" . $zoneName . " = [];\r\n");
     fwrite($handler, "  \$p2" . $zoneName . " = [];\r\n");
   }
+  fwrite($handler, "  \$currentPlayer = 1;\r\n");//TODO: Change this to startPlayer (needs to be linked up w/ lobby code)
   fwrite($handler, "}\r\n\r\n");
   //Write gamestate function
   fwrite($handler, "function WriteGamestate() {\r\n");
   fwrite($handler, GetZoneGlobals($zones) . "\r\n");
+  fwrite($handler, GetCoreGlobals() . "\r\n");
   fwrite($handler, AddWriteGamestate() . "\r\n");
 
   fwrite($handler, "}\r\n\r\n");
   //Parse gamestate function
   fwrite($handler, "function ParseGamestate() {\r\n");
   fwrite($handler, GetZoneGlobals($zones) . "\r\n");
+  fwrite($handler, GetCoreGlobals() . "\r\n");
   fwrite($handler, AddReadGamestate() . "\r\n");
 
   fwrite($handler, "}\r\n\r\n");
@@ -157,6 +161,15 @@
   fwrite($handler, AddGetNextTurnForPlayer(2) . "\r\n");
 
   fwrite($handler, "?>");
+  
+  //Write the main game file
+  /*
+  $filename = $rootPath . "/NextTurn.php";
+  $handler = fopen($filename, "w");
+  fwrite($handler, "<?php\r\n");
+  fwrite($handler, AddNextTurn() . ";\r\n");
+  fwrite($handler, "?>");
+  */
 
 
   echo("Game code generator completed successfully!");
@@ -171,13 +184,20 @@
     return $zoneGlobals;
   }
 
+  function GetCoreGlobals() {
+    $coreGlobals = "";
+    $coreGlobals .= "  global \$currentPlayer;\r\n";
+    return $coreGlobals;
+  }
+
   function AddReadGamestate() {
     $readGamestate = "";
     global $zones;
     $readGamestate .= "  InitializeGamestate();\r\n";
     $readGamestate .= "  global \$gameName;\r\n";
-    $readGamestate .= "  \$filename = \"./Games/\$gameName/Gamestate.php\";\r\n";
+    $readGamestate .= "  \$filename = \"./Games/\$gameName/Gamestate.txt\";\r\n";
     $readGamestate .= "  \$handler = fopen(\$filename, \"r\");\r\n";
+    $readGamestate .= "  \$currentPlayer = intval(fgets(\$handler));\r\n";
     $readGamestate .= "  while (!feof(\$handler)) {\r\n";
     for($i=0; $i<count($zones); ++$i) {
       $zone = $zones[$i];
@@ -210,8 +230,11 @@
     global $zones;
     $writeGamestate = "";
     $writeGamestate .= "  global \$gameName;\r\n";
-    $writeGamestate .= "  \$filename = \"./Games/\$gameName/Gamestate.php\";\r\n";
+    $writeGamestate .= "  \$filename = \"./Games/\$gameName/Gamestate.txt\";\r\n";
     $writeGamestate .= "  \$handler = fopen(\$filename, \"w\");\r\n";
+    //First write global data
+    $writeGamestate .= "  fwrite(\$handler, \$currentPlayer . \"\\r\\n\");\r\n";
+    //Then write player zones
     for($i=0; $i<count($zones); ++$i) {
       $zone = $zones[$i];
       $zoneName = $zone->Name;
@@ -273,5 +296,10 @@
       }
     }
     return $getNextTurn;
+  }
+
+  function AddNextTurn() {
+    $nextTurn = "";
+    return $nextTurn;
   }
 ?>
