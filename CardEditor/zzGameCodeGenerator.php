@@ -125,6 +125,7 @@
     fwrite($handler, "  \$p2" . $zoneName . " = [];\r\n");
   }
   fwrite($handler, "  \$currentPlayer = 1;\r\n");//TODO: Change this to startPlayer (needs to be linked up w/ lobby code)
+  fwrite($handler, "  \$updateNumber = 1;\r\n");//TODO: Change this to startPlayer (needs to be linked up w/ lobby code)
   fwrite($handler, "}\r\n\r\n");
   //Write gamestate function
   fwrite($handler, "function WriteGamestate() {\r\n");
@@ -155,7 +156,15 @@
   //TODO: Validate these inputs
   fwrite($handler, "\$gameName = TryGet(\"gameName\");\r\n");
   fwrite($handler, "\$playerID = TryGet(\"playerID\");\r\n");
+  fwrite($handler, "\$lastUpdate = TryGet(\"lastUpdate\", 0);\r\n");
+  fwrite($handler, "\$count = 0;\r\n");
+  fwrite($handler, "while(!CheckUpdate(\$gameName, \$lastUpdate) && \$count < 100) {\r\n");
+  fwrite($handler, "  usleep(100000); //100 milliseconds\r\n");
+  fwrite($handler, "  ++\$count;\r\n");
+  fwrite($handler, "}\r\n");
   fwrite($handler, "ParseGamestate();\r\n");
+  fwrite($handler, "SetCachePiece(\$gameName, 1, \$updateNumber);\r\n");
+  fwrite($handler, "echo(\$updateNumber . \"<~>\");\r\n");
 
   fwrite($handler, AddGetNextTurnForPlayer(1) . "\r\n");
   fwrite($handler, AddGetNextTurnForPlayer(2) . "\r\n");
@@ -186,7 +195,7 @@
 
   function GetCoreGlobals() {
     $coreGlobals = "";
-    $coreGlobals .= "  global \$currentPlayer;\r\n";
+    $coreGlobals .= "  global \$currentPlayer, \$updateNumber;\r\n";
     return $coreGlobals;
   }
 
@@ -198,6 +207,7 @@
     $readGamestate .= "  \$filename = \"./Games/\$gameName/Gamestate.txt\";\r\n";
     $readGamestate .= "  \$handler = fopen(\$filename, \"r\");\r\n";
     $readGamestate .= "  \$currentPlayer = intval(fgets(\$handler));\r\n";
+    $readGamestate .= "  \$updateNumber = intval(fgets(\$handler));\r\n";
     $readGamestate .= "  while (!feof(\$handler)) {\r\n";
     for($i=0; $i<count($zones); ++$i) {
       $zone = $zones[$i];
@@ -234,6 +244,7 @@
     $writeGamestate .= "  \$handler = fopen(\$filename, \"w\");\r\n";
     //First write global data
     $writeGamestate .= "  fwrite(\$handler, \$currentPlayer . \"\\r\\n\");\r\n";
+    $writeGamestate .= "  fwrite(\$handler, \$updateNumber . \"\\r\\n\");\r\n";
     //Then write player zones
     for($i=0; $i<count($zones); ++$i) {
       $zone = $zones[$i];
@@ -264,6 +275,8 @@
       if($zone->DisplayMode == "Single") {
         if($zone->Visibility == "Public") {
           //$getNextTurn .= "echo \"Single Public\";\r\n";
+          $getNextTurn .= "  \$arr = &Get" . $zone->Name . "(" . $player . ");\r\n";
+          $getNextTurn .= "  echo(count(\$arr) > 0 ? ClientRenderedCard(\$arr[0], counters:count(\$" . $zoneName . ")) : \"Empty\");\r\n";
         } else if($zone->Visibility == "Private") {
           //Single Private
           $getNextTurn .= "  echo(ClientRenderedCard(\"CardBack\", counters:count(\$" . $zoneName . ")));\r\n";
