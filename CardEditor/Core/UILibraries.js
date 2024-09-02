@@ -6,6 +6,8 @@
         }
         fileExt = ".png";
         folderPath = folder;
+        var pathArr = folder.split("/");
+        folder = pathArr[pathArr.length - 1];
 
         if (cardNumber == "ENDSTEP" || cardNumber == "ENDTURN" || cardNumber == "RESUMETURN" || cardNumber == "PHANTASM" || cardNumber == "FINALIZECHAINLINK" || cardNumber == "DEFENDSTEP") {
           showHover = 0;

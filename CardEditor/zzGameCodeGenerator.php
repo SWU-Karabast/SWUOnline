@@ -128,14 +128,14 @@
   fwrite($handler, "  \$updateNumber = 1;\r\n");//TODO: Change this to startPlayer (needs to be linked up w/ lobby code)
   fwrite($handler, "}\r\n\r\n");
   //Write gamestate function
-  fwrite($handler, "function WriteGamestate() {\r\n");
+  fwrite($handler, "function WriteGamestate(\$filepath=\"./\") {\r\n");
   fwrite($handler, GetZoneGlobals($zones) . "\r\n");
   fwrite($handler, GetCoreGlobals() . "\r\n");
   fwrite($handler, AddWriteGamestate() . "\r\n");
 
   fwrite($handler, "}\r\n\r\n");
   //Parse gamestate function
-  fwrite($handler, "function ParseGamestate() {\r\n");
+  fwrite($handler, "function ParseGamestate(\$filepath=\"./\") {\r\n");
   fwrite($handler, GetZoneGlobals($zones) . "\r\n");
   fwrite($handler, GetCoreGlobals() . "\r\n");
   fwrite($handler, AddReadGamestate() . "\r\n");
@@ -204,7 +204,7 @@
     global $zones;
     $readGamestate .= "  InitializeGamestate();\r\n";
     $readGamestate .= "  global \$gameName;\r\n";
-    $readGamestate .= "  \$filename = \"./Games/\$gameName/Gamestate.txt\";\r\n";
+    $readGamestate .= "  \$filename = \$filepath . \"Games/\$gameName/Gamestate.txt\";\r\n";
     $readGamestate .= "  \$handler = fopen(\$filename, \"r\");\r\n";
     $readGamestate .= "  \$currentPlayer = intval(fgets(\$handler));\r\n";
     $readGamestate .= "  \$updateNumber = intval(fgets(\$handler));\r\n";
@@ -240,7 +240,7 @@
     global $zones;
     $writeGamestate = "";
     $writeGamestate .= "  global \$gameName;\r\n";
-    $writeGamestate .= "  \$filename = \"./Games/\$gameName/Gamestate.txt\";\r\n";
+    $writeGamestate .= "  \$filename = \$filepath . \"Games/\$gameName/Gamestate.txt\";\r\n";
     $writeGamestate .= "  \$handler = fopen(\$filename, \"w\");\r\n";
     //First write global data
     $writeGamestate .= "  fwrite(\$handler, \$currentPlayer . \"\\r\\n\");\r\n";
