@@ -255,3 +255,28 @@
           }
           return newHTML;
       }
+      
+      function chkSubmit(mode, count) {
+        var input = "";
+        input += "&gameName=" + document.getElementById("gameName").value;
+        input += "&playerID=" + document.getElementById("playerID").value;
+        input += "&chkCount=" + count;
+        for (var i = 0; i < count; ++i) {
+          var el = document.getElementById("chk" + i);
+          if (el.checked) input += "&chk" + i + "=" + el.value;
+        }
+        SubmitInput(mode, input);
+      }
+
+      function textSubmit(mode) {
+        var input = "";
+        input += "&gameName=" + document.getElementById("gameName").value;
+        input += "&playerID=" + document.getElementById("playerID").value;
+        input += "&inputText=" + document.getElementById("inputText").value;
+        SubmitInput(mode, input);
+      }
+
+      function suppressEventPropagation(e)
+      {
+        e.stopPropagation();
+      }
