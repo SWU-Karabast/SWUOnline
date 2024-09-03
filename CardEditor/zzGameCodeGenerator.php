@@ -171,14 +171,12 @@
 
   fwrite($handler, "?>");
   
-  //Write the main game file
-  /*
-  $filename = $rootPath . "/NextTurn.php";
+  //Write the game render file
+  $filename = $rootPath . "/NextTurnRender.php";
   $handler = fopen($filename, "w");
   fwrite($handler, "<?php\r\n");
   fwrite($handler, AddNextTurn() . ";\r\n");
   fwrite($handler, "?>");
-  */
 
 
   echo("Game code generator completed successfully!");
@@ -271,7 +269,7 @@
       $zone = $zones[$i];
       $zoneName = "p" . $player . $zone->Name;
       echo($zoneName . "<BR>");
-      if($i > 0) $getNextTurn .= "echo(\"<~>\");\r\n";
+      if($i > 0 || $player > 1) $getNextTurn .= "echo(\"<~>\");\r\n";
       if($zone->DisplayMode == "Single") {
         if($zone->Visibility == "Public") {
           //$getNextTurn .= "echo \"Single Public\";\r\n";
@@ -312,7 +310,67 @@
   }
 
   function AddNextTurn() {
-    $nextTurn = "";
-    return $nextTurn;
+    global $zones;
+    $startPiece = 1;
+    $numPieces = count($zones);
+    $myStuff = "";
+    $theirStuff = "";
+    for($i=0; $i<count($zones); ++$i) {
+      $zone = $zones[$i];
+      /*
+      $index = 3 + $i;//TODO: This 2 is awful, it's the number of static data elements in the response array
+      $name = ($i < count($zones)/2 ? "my" : "their") . $zone->Name;//TODO: multiplayer
+      $nextTurn .= "echo(\"newHTML += PopulateZone('" . $name . "', responseArr[" . $index . "], cardSize, \\\"Lorcana/concat\\\");\");\r\n";
+      $nextTurn .= "echo(\"newHTML += '<BR>';\");\r\n";
+*/
+
+      $myStuff .= "echo(\"newHTML += PopulateZone('my" . $zone->Name . "', responseArr[" . ($i + $startPiece) . "], cardSize, \\\"Lorcana/concat\\\");\");\r\n";
+      $myStuff .= "echo(\"newHTML += '<BR>';\");\r\n";
+      $theirStuff .= "echo(\"newHTML += PopulateZone('their" . $zone->Name . "', responseArr[" . ($i + $startPiece + count($zones)) . "], cardSize, \\\"Lorcana/concat\\\");\");\r\n";
+      $theirStuff .= "echo(\"newHTML += '<BR>';\");\r\n";
+      //echo("newHTML += PopulateZone('theirHand', responseArr[9], cardSize, \"Lorcana/concat\");");
+
+/*
+      $zoneName = "p" . $player . $zone->Name;
+      echo($zoneName . "<BR>");
+      if($i > 0) $getNextTurn .= "echo(\"<~>\");\r\n";
+      if($zone->DisplayMode == "Single") {
+        if($zone->Visibility == "Public") {
+          //$getNextTurn .= "echo \"Single Public\";\r\n";
+          $getNextTurn .= "  \$arr = &Get" . $zone->Name . "(" . $player . ");\r\n";
+          $getNextTurn .= "  echo(count(\$arr) > 0 ? ClientRenderedCard(\$arr[0], counters:count(\$" . $zoneName . ")) : \"Empty\");\r\n";
+        } else if($zone->Visibility == "Private") {
+          //Single Private
+          $getNextTurn .= "  echo(ClientRenderedCard(\"CardBack\", counters:count(\$" . $zoneName . ")));\r\n";
+
+        } else if ($zone->Visibility == "Self") {
+          //$getNextTurn .= "echo \"Single Self\";\r\n";
+        }
+      } else if($zone->DisplayMode == "All") {
+        $getNextTurn .= "  \$arr = &Get" . $zone->Name . "(" . $player . ");\r\n";
+        $getNextTurn .= "  for(\$i=0; \$i<count(\$arr); ++\$i) {\r\n";
+        $getNextTurn .= "    if(\$i > 0) echo(\"<|>\");\r\n";
+        $getNextTurn .= "    \$obj = \$arr[\$i];\r\n";
+        if($zone->Visibility == "Public") {
+          $getNextTurn .= "    echo(ClientRenderedCard(\$obj->CardID));\r\n";
+        } else if($zone->Visibility == "Private") {
+          $getNextTurn .= "    echo(ClientRenderedCard(\"CardBack\"));\r\n";
+        } else if ($zone->Visibility == "Self") {
+          $getNextTurn .= "    if(\$playerID == " . $player . ") echo(ClientRenderedCard(\$obj->CardID));\r\n";
+          $getNextTurn .= "    else echo(ClientRenderedCard(\"CardBack\"));\r\n";
+        }
+        $getNextTurn .= "  }\r\n";
+      } else if($zone->DisplayMode == "Count") {
+        if($zone->Visibility == "Public") {
+          //$getNextTurn .= "echo \"Count Public\";\r\n";
+        } else if($zone->Visibility == "Private") {
+          //$getNextTurn .= "echo \"Count Private\";\r\n";
+        } else if ($zone->Visibility == "Self") {
+          //$getNextTurn .= "echo \"Count Self\";\r\n";
+        }
+      }
+        */
+    }
+    return $myStuff . $theirStuff;
   }
 ?>
