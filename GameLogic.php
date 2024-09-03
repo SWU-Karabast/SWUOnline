@@ -959,6 +959,11 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $index = SearchAlliesForUniqueID($parameter, $player);
       if($index == -1) return "PASS";
       return 1;
+    case "ALREADYUSEPASS":
+      $index = SearchAlliesForUniqueID($parameter, $player);
+      $ally = new Ally('MYALLY-' . $index, $player);
+      if($ally->NumUses() == 0) return "PASS";
+      return $lastResult;
     case "NULLPASS":
       if($lastResult == "") return "PASS";
       return $lastResult;
