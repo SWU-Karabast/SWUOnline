@@ -3898,7 +3898,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "THEMARAUDER", 1);
       break;
     case "7642980906"://Stolen Landspeeder
-      if($from == "HAND") {
+      //TODO STILL A BUG IF LAST ALLY IS STOLEN LANDSPEEDER AND YOU ECL A NEW ONE
+      if($from == "HAND" && $playAlly->CardID() == "7642980906") {
         $otherPlayer = $currentPlayer == 1 ? 2 : 1;
         AddDecisionQueue("PASSPARAMETER", $otherPlayer, "THEIRALLY-" . $playAlly->Index(), 1);
         AddDecisionQueue("MZOP", $otherPlayer, "TAKECONTROL", 1);
