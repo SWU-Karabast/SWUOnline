@@ -705,22 +705,21 @@ function CollectBounty($player, $index, $cardID, $reportMode=false, $bountyUnitO
       break;
     default: break;
   }
-  if($numBounties > 0 && !$reportMode) {
-    $bosskIndex = SearchAlliesForCard($opponent, "d2bbda6982"); 
+  //Unrefusable offer can not be use with Bossk ability
+  if($numBounties > 0 && !$reportMode && $cardID != "7270736993") {
+    $bosskIndex = SearchAlliesForCard($opponent, "d2bbda6982");
     if($bosskIndex != "") {
       $bossk = new Ally("MYALLY-" . $bosskIndex, $opponent);
-      if($bossk->NumUses() > 0) {
-        AddDecisionQueue("NOALLYUNIQUEIDPASS", $opponent, $bossk->UniqueID());
-        AddDecisionQueue("ALREADYUSEPASS", $opponent, $bossk->UniqueID());
-        AddDecisionQueue("PASSPARAMETER", $opponent, $cardID, 1);
-        AddDecisionQueue("SETDQVAR", $opponent, 0, 1);
-        AddDecisionQueue("SETDQCONTEXT", $opponent, "Do you want to collect the bounty for <0> again with Bossk?", 1);
-        AddDecisionQueue("YESNO", $opponent, "-", 1);
-        AddDecisionQueue("NOPASS", $opponent, "-", 1);
-        AddDecisionQueue("PASSPARAMETER", $opponent, "MYALLY-" . $bosskIndex, 1);
-        AddDecisionQueue("ADDMZUSES", $opponent, "-1", 1);
-        AddDecisionQueue("COLLECTBOUNTY", $player, $cardID . "," . $bountyUnit, 1);
-      }
+      AddDecisionQueue("NOALLYUNIQUEIDPASS", $opponent, $bossk->UniqueID());
+      AddDecisionQueue("ALREADYUSEPASS", $opponent, $bossk->UniqueID());
+      AddDecisionQueue("PASSPARAMETER", $opponent, $cardID, 1);
+      AddDecisionQueue("SETDQVAR", $opponent, 0, 1);
+      AddDecisionQueue("SETDQCONTEXT", $opponent, "Do you want to collect the bounty for <0> again with Bossk?", 1);
+      AddDecisionQueue("YESNO", $opponent, "-", 1);
+      AddDecisionQueue("NOPASS", $opponent, "-", 1);
+      AddDecisionQueue("FINDMZINDEX", $opponent, $bossk->UniqueID(), 1);
+      AddDecisionQueue("ADDMZUSES", $opponent, "-1", 1);
+      AddDecisionQueue("COLLECTBOUNTY", $player, $cardID . "," . $bountyUnit, 1);
     }
   }
   return $numBounties;

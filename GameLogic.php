@@ -268,6 +268,14 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $index = FindCharacterIndex($player, $combatChain[$parameter]);
       $character[$index + 4] += $lastResult;
       return $lastResult;
+    case "FINDMZINDEX":
+      $allies = GetAllies($player);
+      for($i = 0; $i < count($allies); $i+=AllyPieces()) {
+        if($allies[$i+5] == $parameter){
+          return "MYALLY-".$i;
+        }
+      }
+      return "";
     case "REMOVEMYHAND":
       $hand = &GetHand($player);
       $cardID = $hand[$lastResult];
