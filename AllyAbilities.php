@@ -544,6 +544,7 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
 
 function CollectBounty($player, $index, $cardID, $reportMode=false, $bountyUnitOverride="-") {
   $ally = new Ally("MYALLY-" . $index, $player);
+  if($ally->LostAbilities()) return;
   $bountyUnit = $bountyUnitOverride == "-" ? $ally->CardID() : $bountyUnitOverride;
   $opponent = $player == 1 ? 2 : 1;
   $numBounties = 0;
