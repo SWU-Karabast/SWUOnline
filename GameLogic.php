@@ -433,8 +433,11 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             $attackerHasOverwhelm = HasOverwhelm($ally->CardID(), $player, $targetArr[1]);
             $destroyed = $ally->DealDamage($parameterArr[1], enemyDamage:(count($parameterArr) > 2 && $parameterArr[2] != $targetPlayer));
             if($destroyed) {
-              if(($isAttackTarget || $isAttacker) && !$attackerHasOverwhelm) CloseCombatChain();
-              return "";
+              global $layers;
+              if(count($layers) == 0) {
+                if(($isAttackTarget || $isAttacker) && !$attackerHasOverwhelm) CloseCombatChain();
+                return "";
+              }
             }
           } else {
             PrependDecisionQueue("TAKEDAMAGE", $targetPlayer, $parameterArr[1]);
