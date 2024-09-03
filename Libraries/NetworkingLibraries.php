@@ -767,7 +767,7 @@ function PassInput($autopass = false)
 function Pass(&$turn, $playerID, &$currentPlayer)
 {
   global $mainPlayer, $defPlayer;
-  if($turn[0] == "M" || $turn[0] == "ARS") {
+  if($turn[0] == "M" || $turn[0] == "ARS" || $turn[0] == "BUTTONINPUT") {
     return 1;
   } else if($turn[0] == "B") {
     AddLayer("DEFENDSTEP", $mainPlayer, "-");
@@ -1487,17 +1487,17 @@ function AddPrePitchDecisionQueue($cardID, $from, $index = -1, $skipAbilityType 
       break;
     case "1705806419"://Force Throw
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose player to discard a card");
-      AddDecisionQueue("BUTTONINPUT", $currentPlayer, "Yourself,Opponent");
+      AddDecisionQueue("BUTTONINPUTNOPASS", $currentPlayer, "Yourself,Opponent");
       AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_AdditionalCosts);
       break;
     case "4772866341"://Pillage
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose player to discard 2 cards");
-      AddDecisionQueue("BUTTONINPUT", $currentPlayer, "Yourself,Opponent");
+      AddDecisionQueue("BUTTONINPUTNOPASS", $currentPlayer, "Yourself,Opponent");
       AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_AdditionalCosts);
       break;
     case "7262314209"://Mission Briefing
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose player to draw 2 cards");
-      AddDecisionQueue("BUTTONINPUT", $currentPlayer, "Yourself,Opponent");
+      AddDecisionQueue("BUTTONINPUTNOPASS", $currentPlayer, "Yourself,Opponent");
       AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_AdditionalCosts);
       break;
     default:
