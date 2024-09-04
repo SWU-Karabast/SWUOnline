@@ -274,7 +274,7 @@
         if($zone->Visibility == "Public") {
           //$getNextTurn .= "echo \"Single Public\";\r\n";
           $getNextTurn .= "  \$arr = &Get" . $zone->Name . "(" . $player . ");\r\n";
-          $getNextTurn .= "  echo(count(\$arr) > 0 ? ClientRenderedCard(\$arr[0], counters:count(\$" . $zoneName . ")) : \"Empty\");\r\n";
+          $getNextTurn .= "  echo(count(\$arr) > 0 ? ClientRenderedCard(\$arr[0], counters:count(\$" . $zoneName . ")) : \"\");\r\n";
         } else if($zone->Visibility == "Private") {
           //Single Private
           $getNextTurn .= "  echo(ClientRenderedCard(\"CardBack\", counters:count(\$" . $zoneName . ")));\r\n";
