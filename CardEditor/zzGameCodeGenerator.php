@@ -36,6 +36,13 @@
             $zoneObj->DisplayMode = trim($displayArr[1]);
           }
         }
+        $location = fgets($handler);
+        if($location !== false) {
+          $locationArr = explode(":", $location);
+          if($locationArr[0] == "Location") {
+            $zoneObj->Location = trim($locationArr[1]);
+          }
+        }
         array_push($zones, $zoneObj);
     }
   }
@@ -324,9 +331,9 @@
       $nextTurn .= "echo(\"newHTML += '<BR>';\");\r\n";
 */
 
-      $myStuff .= "echo(\"newHTML += PopulateZone('my" . $zone->Name . "', responseArr[" . ($i + $startPiece) . "], cardSize, \\\"Lorcana/concat\\\");\");\r\n";
+      $myStuff .= "echo(\"newHTML += PopulateZone('my" . $zone->Name . "', responseArr[" . ($i + $startPiece) . "], cardSize, \\\"Lorcana/concat\\\", \\\"" . $zone->Location . "\\\");\");\r\n";
       $myStuff .= "echo(\"newHTML += '<BR>';\");\r\n";
-      $theirStuff .= "echo(\"newHTML += PopulateZone('their" . $zone->Name . "', responseArr[" . ($i + $startPiece + count($zones)) . "], cardSize, \\\"Lorcana/concat\\\");\");\r\n";
+      $theirStuff .= "echo(\"newHTML += PopulateZone('their" . $zone->Name . "', responseArr[" . ($i + $startPiece + count($zones)) . "], cardSize, \\\"Lorcana/concat\\\", \\\"" . $zone->Location . "\\\");\");\r\n";
       $theirStuff .= "echo(\"newHTML += '<BR>';\");\r\n";
       //echo("newHTML += PopulateZone('theirHand', responseArr[9], cardSize, \"Lorcana/concat\");");
 

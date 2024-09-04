@@ -218,7 +218,7 @@
       }
 
       //Note: 96 = Card Size
-      function PopulateZone(zone, zoneData, size = 96, folder = "concat") {
+      function PopulateZone(zone, zoneData, size = 96, folder = "concat", location = "center") {
           if (zoneData == "") return;
           var zoneArr = zoneData.split("<|>");
           var newHTML = "";

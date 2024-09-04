@@ -1,15 +1,22 @@
 Lorcana
 Deck - CardID:string
 Display: Private, Single
+Location: middle right
 Discard - CardID:string
 Display: Public, Single
+Location: middle right
 Hand - CardID:string
 Display: Self, All
+Location: bottom middle
 Inkwell - CardID:string, Status:number
 Display: Self, Count
+Location: bottom left
 Characters - CardID:string, Status:number, Owner:number, Damage:number
 Display: Public, All
+Location: top middle
 Items - CardID:string
 Display: Public, All
+Location: top left
 Locations - CardID:string
 Display: Public, All
+Location: top left
