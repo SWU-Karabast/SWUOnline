@@ -445,8 +445,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
               global $layers;
               if(count($layers) == 0) {
                 if(($isAttackTarget || $isAttacker) && !$attackerHasOverwhelm) CloseCombatChain();
-                return "";
               }
+              return "";
             }
           } else {
             PrependDecisionQueue("TAKEDAMAGE", $targetPlayer, $parameterArr[1]);
@@ -924,8 +924,11 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
     case "ADDLIMITEDCURRENTEFFECT":
       $uniqueID = $lastResult;
       $params = explode(",", $parameter);
-      AddCurrentTurnEffect($params[0], UnitUniqueIDController($uniqueID), $params[1], $uniqueID);
-      UpdateLinkAttack();
+      $controller = UnitUniqueIDController($uniqueID);
+      if($controller > 0) {
+        AddCurrentTurnEffect($params[0], $controller, $params[1], $uniqueID);
+        UpdateLinkAttack();
+      }
       return $lastResult;
     case "ADDLIMITEDNEXTTURNEFFECT":
       AddNextTurnEffect($parameter, $player, $lastResult);
