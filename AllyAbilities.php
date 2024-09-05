@@ -444,11 +444,7 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
         AddDecisionQueue("SPECIFICCARD", $player, "OBIWANKENOBI", 1);
         break;
       case "0474909987"://Val
-        AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
-        AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to add two experience");
-        AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-        AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
-        AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
+        AddLayer("TRIGGER", $player, "0474909987", target: 1);
         break;
       case "7351946067"://Rhokai Gunship
         AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
@@ -548,11 +544,11 @@ function CollectBounty($player, $index, $cardID, $reportMode=false, $bountyUnitO
   $bountyUnit = $bountyUnitOverride == "-" ? $ally->CardID() : $bountyUnitOverride;
   $opponent = $player == 1 ? 2 : 1;
   $numBounties = 0;
-  switch($cardID) {
+  switch ($cardID) {
     case "1090660242-2"://The Client
       ++$numBounties;
       if($reportMode) break;
-      Restore(5, $opponent);
+      AddLayer("TRIGGER", $opponent, "1090660242");
       break;
     case "0622803599-2"://Jabba the Hutt
       ++$numBounties;
@@ -564,57 +560,17 @@ function CollectBounty($player, $index, $cardID, $reportMode=false, $bountyUnitO
       if($reportMode) break;
       AddCurrentTurnEffect("f928681d36-3", $opponent);
       break;
-    case "2178538979"://Price on Your Head
-      ++$numBounties;
-      if($reportMode) break;
-      AddTopDeckAsResource($opponent);
-      break;
     case "2740761445"://Guild Target
       ++$numBounties;
       if($reportMode) break;
       $damage = CardIsUnique($bountyUnit) ? 3 : 2;
-      DealDamageAsync($player, $damage, "DAMAGE", "2740761445");
-      break;
-    case "4117365450"://Wanted
-      ++$numBounties;
-      if($reportMode) break;
-      ReadyResource($opponent);
-      ReadyResource($opponent);
+      AddLayer("TRIGGER", $opponent, "2740761445", target: $damage);
       break;
     case "4282425335"://Top Target
       ++$numBounties;
       if($reportMode) break;
       $amount = CardIsUnique($bountyUnit) ? 6 : 4;
-      AddDecisionQueue("MULTIZONEINDICES", $opponent, "MYALLY&THEIRALLY");
-      AddDecisionQueue("PREPENDLASTRESULT", $opponent, "MYCHAR-0,THEIRCHAR-0,");
-      AddDecisionQueue("SETDQCONTEXT", $opponent, "Choose a card to restore ".$amount, 1);
-      AddDecisionQueue("MAYCHOOSEMULTIZONE", $opponent, "<-", 1);
-      AddDecisionQueue("MZOP", $opponent, "RESTORE,".$amount, 1);
-      break;
-    case "3074091930"://Rich Reward
-      ++$numBounties;
-      if($reportMode) break;
-      AddDecisionQueue("MULTIZONEINDICES", $opponent, "MYALLY");
-      AddDecisionQueue("OP", $opponent, "MZTONORMALINDICES");
-      AddDecisionQueue("PREPENDLASTRESULT", $opponent, "3-", 1);
-      AddDecisionQueue("SETDQCONTEXT", $opponent, "Choose up to 2 units to give experience");
-      AddDecisionQueue("MULTICHOOSEUNIT", $opponent, "<-", 1);
-      AddDecisionQueue("SPECIFICCARD", $opponent, "MULTIGIVEEXPERIENCE", 1);
-      break;
-    case "1780014071"://Public Enemy
-      ++$numBounties;
-      if($reportMode) break;
-      AddDecisionQueue("MULTIZONEINDICES", $opponent, "MYALLY&THEIRALLY");
-      AddDecisionQueue("SETDQCONTEXT", $opponent, "Choose a unit to give a shield");
-      AddDecisionQueue("CHOOSEMULTIZONE", $opponent, "<-", 1);
-      AddDecisionQueue("MZOP", $opponent, "ADDSHIELD", 1);
-      break;
-    case "6135081953"://Doctor Evazan
-      ++$numBounties;
-      if($reportMode) break;
-      for($i=0; $i<12; ++$i) {
-        ReadyResource($opponent);
-      }
+      AddLayer("TRIGGER", $opponent, "4282425335", target: $amount);
       break;
     case "6420322033"://Enticing Reward
       ++$numBounties;
@@ -623,48 +579,6 @@ function CollectBounty($player, $index, $cardID, $reportMode=false, $bountyUnitO
       AddDecisionQueue("MULTIADDHAND", $opponent, "-", 1);
       AddDecisionQueue("REVEALCARDS", $opponent, "-", 1);
       if(!CardIsUnique($bountyUnit)) PummelHit($opponent);
-      break;
-    case "9503028597"://Clone Deserter
-    case "9108611319"://Cartel Turncoat
-    case "6878039039"://Hylobon Enforcer
-      ++$numBounties;
-      if($reportMode) break;
-      Draw($opponent);
-      break;
-    case "8679638018"://Wanted Insurgents
-      ++$numBounties;
-      if($reportMode) break;
-      AddDecisionQueue("MULTIZONEINDICES", $opponent, "MYALLY&THEIRALLY");
-      AddDecisionQueue("SETDQCONTEXT", $opponent, "Choose a unit to deal 2 damage to");
-      AddDecisionQueue("CHOOSEMULTIZONE", $opponent, "<-", 1);
-      AddDecisionQueue("MZOP", $opponent, "DEALDAMAGE,2", 1);
-      break;
-    case "3503780024"://Outlaw Corona
-      ++$numBounties;
-      if($reportMode) break;
-      AddTopDeckAsResource($opponent);
-      break;
-    case "6947306017"://Fugitive Wookie
-      ++$numBounties;
-      if($reportMode) break;
-      AddDecisionQueue("MULTIZONEINDICES", $opponent, "THEIRALLY");
-      AddDecisionQueue("SETDQCONTEXT", $opponent, "Choose a card to exhaust");
-      AddDecisionQueue("MAYCHOOSEMULTIZONE", $opponent, "<-", 1);
-      AddDecisionQueue("MZOP", $opponent, "REST", 1);
-      break;
-    case "0252207505"://Synara San
-      if($bountyUnitOverride != "-" || $ally->IsExhausted()) {
-        ++$numBounties;
-        if($reportMode) break;
-        DealDamageAsync($player, 5, "DAMAGE", "0252207505");
-      }
-      break;
-    case "2965702252"://Unlicensed Headhunter
-      if($bountyUnitOverride != "-" || $ally->IsExhausted()) {
-        ++$numBounties;
-        if($reportMode) break;
-        Restore(5, $opponent);
-      }
       break;
     case "7642980906"://Stolen Landspeeder
       ++$numBounties;
@@ -681,29 +595,41 @@ function CollectBounty($player, $index, $cardID, $reportMode=false, $bountyUnitO
       if($reportMode) break;
       $amount = CardIsUnique($bountyUnit) ? 10 : 5;
       $deck = &GetDeck($opponent);
-      if(count($deck)/DeckPieces() < $amount) $amount = count($deck)/DeckPieces();
-      AddLayer("TRIGGER", $opponent, "9642863632", target:$amount);
-      break;
-    case "0807120264"://Death Mark
-      ++$numBounties;
-      if($reportMode) break;
-      Draw($opponent);
-      Draw($opponent);
-      break;
-    case "2151430798."://Guavian Antagonizer
-      ++$numBounties;
-      if($reportMode) break;
-      Draw($opponent);
+      if(count($deck) / DeckPieces() < $amount) $amount = count($deck) / DeckPieces();
+      AddLayer("TRIGGER", $opponent, "9642863632", target: $amount);
       break;
     case "0474909987"://Val
       ++$numBounties;
       if($reportMode) break;
-      AddDecisionQueue("MULTIZONEINDICES", $opponent, "MYALLY&THEIRALLY");
-      AddDecisionQueue("SETDQCONTEXT", $opponent, "Choose a unit to deal 3 damage to");
-      AddDecisionQueue("MAYCHOOSEMULTIZONE", $opponent, "<-", 1);
-      AddDecisionQueue("MZOP", $opponent, "DEALDAMAGE,3", 1);
+      AddLayer("TRIGGER", $opponent, "0474909987", target: 2);
       break;
-    default: break;
+    case "0252207505"://Synara San
+    case "2965702252"://Unlicensed Headhunter
+      if($bountyUnitOverride != "-" || $ally->IsExhausted()) {
+        ++$numBounties;
+        if($reportMode) break;
+        AddLayer("TRIGGER", $opponent, $cardID);
+      }
+      break;
+    case "2178538979"://Price on Your Head
+    case "3074091930"://Rich Reward
+    case "1780014071"://Public Enemy
+    case "6135081953"://Doctor Evazan
+    case "6878039039"://Hylobon Enforcer
+    case "9108611319"://Cartel Turncoat
+    case "6947306017"://Fugitive Wookie
+    case "0807120264"://Death Mark
+    case "3503780024"://Outlaw Corona
+    case "8679638018"://Wanted Insurgents
+    case "2151430798"://Guavian Antagonizer
+    case "9503028597"://Clone Deserter
+    case "4117365450"://Wanted
+      ++$numBounties;
+      if($reportMode) break;
+      AddLayer("TRIGGER", $opponent, $cardID);
+      break;
+    default:
+      break;
   }
   //Unrefusable offer can not be use with Bossk ability
   if($numBounties > 0 && !$reportMode && $cardID != "7270736993") {

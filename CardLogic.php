@@ -623,6 +623,88 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       AddDecisionQueue("MZOP", $player, "PLAYCARD", 1);
       AddDecisionQueue("REMOVECURRENTEFFECT", $player, "7642980906");
       break;
+    case "3074091930": //Rich reward
+      AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
+      AddDecisionQueue("OP", $player, "MZTONORMALINDICES");
+      AddDecisionQueue("PREPENDLASTRESULT", $player, "3-", 1);
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose up to 2 units to give experience");
+      AddDecisionQueue("MULTICHOOSEUNIT", $player, "<-", 1);
+      AddDecisionQueue("SPECIFICCARD", $player, "MULTIGIVEEXPERIENCE", 1);
+      break;
+    case "4117365450": //Wanted
+      ReadyResource($player);
+      ReadyResource($player);
+      break;
+    case "3503780024": //Outlaw corona
+    case "2178538979": //Price on your head
+      AddTopDeckAsResource($player);
+      break;
+    case "0474909987": // Val
+      if($target == 1) {
+        AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to add two experience");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+        AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
+        AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
+      } else {
+        AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal 3 damage to");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+        AddDecisionQueue("MZOP", $player, "DEALDAMAGE,3", 1);
+      }
+      break;
+    case "2965702252": //Unlicensed Headhunter
+    case "1090660242": //The client
+    if($target == 2) Restore(5, $player);
+      break;
+    case "0252207505"://Synara San
+      $otherPlayer = $player == 1 ? 2 : 1;
+      DealDamageAsync($otherPlayer, 5, "DAMAGE", "0252207505");
+      break;
+    case "2740761445"://Guild Target
+      $otherPlayer = $player == 1 ? 2 : 1;
+      DealDamageAsync($otherPlayer, $target, "DAMAGE", "2740761445");
+      break;
+    case "4282425335"://Top Target
+      AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
+      AddDecisionQueue("PREPENDLASTRESULT", $player, "MYCHAR-0,THEIRCHAR-0,");
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a card to restore ".$target, 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+      AddDecisionQueue("MZOP", $player, "RESTORE,".$target, 1);
+      break;
+    case "1780014071": //Public enemy
+      AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to give a shield");
+      AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
+      AddDecisionQueue("MZOP", $player, "ADDSHIELD", 1);
+      break;
+    case "9503028597"://Clone Deserter
+    case "9108611319"://Cartel Turncoat
+    case "6878039039"://Hylobon Enforcer
+    case "2151430798"://Guavian Antagonizer
+      Draw($player);
+      break;
+    case "0807120264": //Death Mark
+      Draw($player);
+      Draw($player);
+      break;
+    case "6947306017": //Fugitive Wookie
+      AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a card to exhaust");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+      AddDecisionQueue("MZOP", $player, "REST", 1);
+      break;
+    case "6135081953": //Evazan
+      for ($i = 0; $i < 12; ++$i) {
+        ReadyResource($player);
+      }
+      break;
+    case"8679638018": //Wanted Insurgents
+      AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal 2 damage to");
+      AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
+      AddDecisionQueue("MZOP", $player, "DEALDAMAGE,2", 1);
+      break;
     case "7270736993"://Unrefusable Offer
       //There's in theory a minor bug with this implementation: if there's a second copy of the bountied unit in the discard
       //it can be played even if the original unit is somehow removed from the discard before this trigger resolves.
