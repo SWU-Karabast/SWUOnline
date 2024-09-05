@@ -1585,7 +1585,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       PrependDecisionQueue("MZOP", $player, "DEALDAMAGE,{1}");
       PrependDecisionQueue("PASSPARAMETER", $player, "THEIRALLY-" . $index);
       PrependDecisionQueue("SETDQVAR", $player, "1");
-      PrependDecisionQueue("BUTTONINPUT", $player, GetIndices($parameter + 1));
+      PrependDecisionQueue("BUTTONINPUTNOPASS", $player, GetIndices($parameter + 1));
       PrependDecisionQueue("SETDQCONTEXT", $player, "Choose an amount of damage to deal to " . CardLink($theirAllies[$index], $theirAllies[$index]));
       return $lastResult;
     default:
