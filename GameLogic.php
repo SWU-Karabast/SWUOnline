@@ -1075,8 +1075,6 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $targetPlayer = ($target[0] == "MYCHAR" || $target[0] == "MYALLY" ? $player : ($player == 1 ? 1 : 2));
       $parameters = explode("-", $parameter);
       $damage = $parameters[0];
-      $source = $parameters[1];
-      $type = $parameters[2];
       if($target[0] == "THEIRALLY" || $target[0] == "MYALLY") {
         DealAllyDamage($targetPlayer, $target[1], $damage);
         return $damage;
