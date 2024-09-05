@@ -4017,7 +4017,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         MZBounce($currentPlayer, "MYALLY-" . $salaciousCrumbIndex);
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:arena=Ground&THEIRALLY:arena=Ground");
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 1 damage to");
-        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1", 1);
       } else if($from != "PLAY") {
         Restore(1, $currentPlayer);
