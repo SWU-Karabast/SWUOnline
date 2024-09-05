@@ -1701,7 +1701,7 @@ function XanaduBlood($player, $index=-1) {
   AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
   AddDecisionQueue("MZOP", $player, "BOUNCE", 1);
   AddDecisionQueue("SETDQCONTEXT", $player, "Choose what you want to exhaust", 1);
-  AddDecisionQueue("BUTTONINPUT", $player, "Unit,Resource", 1);
+  AddDecisionQueue("BUTTONINPUTNOPASS", $player, "Unit,Resource", 1);
   AddDecisionQueue("SPECIFICCARD", $player, "XANADUBLOOD", 1);
 }
 

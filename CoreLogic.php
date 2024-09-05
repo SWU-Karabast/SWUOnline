@@ -1689,8 +1689,8 @@ function SelfCostModifier($cardID, $from)
   $heraSyndullaAspectPenaltyIgnore = TraitContains($cardID, "Spectre", $currentPlayer) && (HeroCard($currentPlayer) == "7440067052" || SearchAlliesForCard($currentPlayer, "80df3928eb") != ""); //Hera Syndulla (Spectre Two)
   $omegaAspectPenaltyIgnore = TraitContains($cardID, "Clone", $currentPlayer) && SearchAlliesForCard($currentPlayer, "1386874723") != "" && GetClassState($currentPlayer, $CS_NumClonesPlayed) < 1; //Omega (Part of the Squad)
   $playerAspects = PlayerAspects($currentPlayer);
+  $penalty = 0;
   if(!$heraSyndullaAspectPenaltyIgnore && !$omegaAspectPenaltyIgnore) {
-    $penalty = 0;
     $cardAspects = CardAspects($cardID);
     //Manually changing the aspects of cards played with smuggle that have different aspect requirements for smuggle.
     //Not a great solution; ideally we could define a whole smuggle ability in one place.
@@ -1797,10 +1797,10 @@ function SelfCostModifier($cardID, $from)
   }
   if(DefinedTypesContains($cardID, "Upgrade", $currentPlayer)) {
     if($targetID == "4166047484") $modifier -= 1;//Guardian of the Whills
-    if($cardID == "3141660491" && $targetID != "") {//The Darksaber
+    if($cardID == "3141660491" && $targetID != "" && $penalty > 0) {//The Darksaber
       $isMando = TraitContains($targetID, "Mandalorian", $currentPlayer, isset($mzIndex) && $mzIndex != "-" ? explode("-", $mzIndex)[1] : -1);
       if($isMando) {
-        $modifier -= 2;
+        $modifier -= $penalty * 2;
       }
     }
   }
@@ -3037,7 +3037,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "8009713136"://C-3PO
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a number");
-      AddDecisionQueue("BUTTONINPUT", $currentPlayer, "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20");
+      AddDecisionQueue("BUTTONINPUTNOPASS", $currentPlayer, "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20");
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "C3PO", 1);
       break;
     case "7911083239"://Grand Inquisitor
@@ -3762,17 +3762,26 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "040a3e81f3"://Lando Calrissian Leader Unit
       $abilityName = GetResolvedAbilityName($cardID, $from);
       if($abilityName == "Smuggle") {
-        global $CS_AfterPlayedBy;
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYRESOURCES:keyword=Smuggle");
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to play");
-        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-        AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
-        AddDecisionQueue("PASSPARAMETER", $currentPlayer, $cardID, 1);
-        AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_AfterPlayedBy, 1);
-        AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, $cardID, 1);
-        AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
-        AddDecisionQueue("MZREMOVE", $currentPlayer, "-", 1);
+        $mzIndex = "MYALLY-" . GetAllyIndex($cardID, $currentPlayer);
+        $ally = new Ally($mzIndex, $currentPlayer);
+        if($ally->NumUses() <= 0) {
+          WriteLog("Smuggle ability was already used this turn. Game state reverted");
+          RevertGamestate();
+        } else {
+          global $CS_AfterPlayedBy;
+          AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYRESOURCES:keyword=Smuggle");
+          AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to play");
+          AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+          AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+          AddDecisionQueue("PASSPARAMETER", $currentPlayer, $mzIndex, 1);
+          AddDecisionQueue("ADDMZUSES", $currentPlayer, -1, 1);
+          AddDecisionQueue("PASSPARAMETER", $currentPlayer, $cardID, 1);
+          AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_AfterPlayedBy, 1);
+          AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, $cardID, 1);
+          AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
+          AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
+          AddDecisionQueue("MZREMOVE", $currentPlayer, "-", 1);
+        }
       }
       break;
     case "0754286363"://The Mandalorian's Rifle
@@ -4133,7 +4142,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "7578472075"://Let the Wookie Win
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
-      AddDecisionQueue("BUTTONINPUT", $otherPlayer, "Ready Resources,Ready Unit");
+      AddDecisionQueue("BUTTONINPUTNOPASS", $otherPlayer, "Ready Resources,Ready Unit");
       AddDecisionQueue("MODAL", $currentPlayer, "LETTHEWOOKIEWIN");
       break;
     case "8380936981"://Jabba's Rancor
