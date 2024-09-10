@@ -485,7 +485,13 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     for ($i = 0; $i < count($options); ++$i) {
       $content .= "<td>";
       $content .= "<table><tr><td>";
-      $content .= Card($options[$i], "concat", $cardSize, 0, 1);
+      if(str_contains($options[$i], "-")) {
+        $cardDefinition = explode("-", $options[$i]);
+        $border = $playerID == $cardDefinition[1] ? 6 : 2;
+        $content .= Card($cardDefinition[0], "concat", $cardSize, 0, 1, borderColor: $border);
+      } else {
+        $content .= Card($options[$i], "concat", $cardSize, 0, 1);
+      }
       $content .= "</td></tr><tr><td>";
       if ($turn[0] == "CHOOSETOP"  || $turn[0] == "MAYCHOOSETOP" || $turn[0] == "OPT") $content .= CreateButton($playerID, "Top", 8, $options[$i], "20px");
       if ($turn[0] == "CHOOSEBOTTOM" || $turn[0] == "OPT") $content .= CreateButton($playerID, "Bottom", 9, $options[$i], "20px");
