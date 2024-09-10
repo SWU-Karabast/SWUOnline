@@ -491,12 +491,19 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
         WriteLog("Drew a card from General Krell");
         break;
       case "3feee05e13"://Gar Saxon
-        $upgrades = $destroyedAlly->GetUpgrades();
-        for($j=0; $j<count($upgrades); ++$j) {
-          if(!IsToken($upgrades[$j])) {
-            AddHand($player, $upgrades[$j]);
-            break;
+        $upgrades = $destroyedAlly->GetUpgrades(true);
+        if(count($upgrades) > 0) {
+          $upgradesParams = "";
+          for ($i = 0; $i < count($upgrades); $i += SubcardPieces()) {
+            if(!IsToken($upgrades[$i])) {
+              if($upgradesParams != "") $upgradesParams .= ",";
+              $upgradesParams .= $upgrades[$i] . "-" . $upgrades[$i+1];
+            }
           }
+          AddDecisionQueue("PASSPARAMETER", $player, $upgradesParams);
+          AddDecisionQueue("SETDQCONTEXT", $player, "Choose an upgrade to bounce");
+          AddDecisionQueue("MAYCHOOSECARD", $player, "<-", 1);
+          AddDecisionQueue("OP", $player, "BOUNCEUPGRADE", 1);
         }
         break;
       default: break;
@@ -733,7 +740,7 @@ function AllyCanBeAttackTarget($player, $index, $cardID)
         if($i == $index) continue;
         $aspects = explode(",", CardAspects($allies[$i]));
         for($j=0; $j<count($aspects); ++$j) {
-          $aspectArr[$aspects[$j]] = 1;
+          if($aspects[$j] != "") $aspectArr[$aspects[$j]] = 1;
         }
       }
       return count($aspectArr) < 3;
@@ -1267,7 +1274,7 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to exhaust to give this +3 power", 1);
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "REST", 1);
-      AddDecisionQueue("PASSPARAMETER", $mainPlayer, $allies[$i+5], 1);
+      AddDecisionQueue("PASSPARAMETER", $mainPlayer, $attackerAlly->UniqueID(), 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "4721657243,PLAY", 1);
       break;
     case "9951020952"://Koska Reeves

@@ -792,7 +792,13 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     $options = explode(",", $turn[2]);
     $optCards = array();
     for ($i = 0; $i < count($options); ++$i) {
-      $optCards[] = JSONRenderedCard($options[$i], action: 0);
+      if(str_contains($options[$i], "-")) {
+        $cardDefinition = explode("-", $options[$i]);
+        $border = $playerID == $cardDefinition[1] ? 6 : 2;
+        $optCards[] = JSONRenderedCard($cardDefinition[0], action: 0);
+      } else {
+        $optCards[] = JSONRenderedCard($options[$i], action: 0);
+      }
       if (
         $turn[0] == "CHOOSETOP" || $turn[0] == "MAYCHOOSETOP" || $turn[0] == "OPT"
       ) $playerInputButtons[] = CreateButtonAPI($playerID, "Top", 8, $options[$i], "20px");

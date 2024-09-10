@@ -3786,7 +3786,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "0754286363"://The Mandalorian's Rifle
       $ally = new Ally($target, $currentPlayer);
       if(CardTitle($ally->CardID()) == "The Mandalorian") {
-        AddLayer("TRIGGER", $currentPlayer, $cardID);
+        AddLayer("TRIGGER", $currentPlayer, $cardID, uniqueID: $ally->UniqueID());
       }
       break;
     case "4643489029"://Palpatine's Return
@@ -4026,7 +4026,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         MZBounce($currentPlayer, "MYALLY-" . $salaciousCrumbIndex);
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:arena=Ground&THEIRALLY:arena=Ground");
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 1 damage to");
-        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1", 1);
       } else if($from != "PLAY") {
         Restore(1, $currentPlayer);
