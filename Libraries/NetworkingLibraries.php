@@ -767,7 +767,7 @@ function PassInput($autopass = false)
 function Pass(&$turn, $playerID, &$currentPlayer)
 {
   global $mainPlayer, $defPlayer;
-  if($turn[0] == "M" || $turn[0] == "ARS") {
+  if($turn[0] == "M" || $turn[0] == "ARS" || $turn[0] == "BUTTONINPUT") {
     return 1;
   } else if($turn[0] == "B") {
     AddLayer("DEFENDSTEP", $mainPlayer, "-");
@@ -826,22 +826,6 @@ function ChainLinkBeginResolutionEffects()
 
 function ResolveChainLink()
 {
-  function BlizzardAssaultATAT($player, $excess)
-  {
-    AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal " . $excess . " damage to");
-    AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:arena=Ground");
-    AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-    AddDecisionQueue("MZOP", $player, "DEALDAMAGE," . $excess, 1);
-  }
-
-  function ArquitensAssaultCruiser($player)
-  {
-    $defPlayer = $player == 1 ? 2 : 1;
-    $discard = &GetDiscard($defPlayer);
-    $defeatedCard = RemoveDiscard($defPlayer, count($discard)-DiscardPieces());
-    AddResources($defeatedCard, $player, "PLAY", "DOWN", isExhausted: true);
-  }
-
   global $combatChain, $combatChainState, $currentPlayer, $mainPlayer, $defPlayer, $CCS_CombatDamageReplaced, $CCS_LinkTotalAttack;
   global $CCS_DamageDealt;
   UpdateGameState($currentPlayer);
@@ -1503,17 +1487,17 @@ function AddPrePitchDecisionQueue($cardID, $from, $index = -1, $skipAbilityType 
       break;
     case "1705806419"://Force Throw
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose player to discard a card");
-      AddDecisionQueue("BUTTONINPUT", $currentPlayer, "Yourself,Opponent");
+      AddDecisionQueue("BUTTONINPUTNOPASS", $currentPlayer, "Yourself,Opponent");
       AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_AdditionalCosts);
       break;
     case "4772866341"://Pillage
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose player to discard 2 cards");
-      AddDecisionQueue("BUTTONINPUT", $currentPlayer, "Yourself,Opponent");
+      AddDecisionQueue("BUTTONINPUTNOPASS", $currentPlayer, "Yourself,Opponent");
       AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_AdditionalCosts);
       break;
     case "7262314209"://Mission Briefing
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose player to draw 2 cards");
-      AddDecisionQueue("BUTTONINPUT", $currentPlayer, "Yourself,Opponent");
+      AddDecisionQueue("BUTTONINPUTNOPASS", $currentPlayer, "Yourself,Opponent");
       AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_AdditionalCosts);
       break;
     default:
@@ -1795,20 +1779,9 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
     $EffectContext = $cardID;
     if(!$chainClosed) {
       if(GetClassState($currentPlayer, $CS_AfterPlayedBy) != "-") AfterPlayedByAbility(GetClassState($currentPlayer, $CS_AfterPlayedBy));
-
-      function RelentlessLostAbilities($player): bool
-      {
-        $relentlessIndex = SearchAlliesForCard($player, "3401690666");
-        if($relentlessIndex != "") {
-          $ally = new Ally("MYALLY-" . $relentlessIndex, $player);
-          return $ally->LostAbilities();
-        }
-        return true;
-      }
-
       if(DefinedTypesContains($cardID, "Event", $currentPlayer)
         && SearchCurrentTurnEffects("3401690666", $currentPlayer, remove: true)
-        && GetClassState($currentPlayer, $CS_NumEventsPlayed) <= 1 
+        && GetClassState($currentPlayer, $CS_NumEventsPlayed) <= 1
         && !RelentlessLostAbilities($otherPlayer)
       ) {
         //Relentless
@@ -1852,6 +1825,32 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
   SetClassState($currentPlayer, $CS_PlayIndex, -1);
   SetClassState($currentPlayer, $CS_CharacterIndex, -1);
   ProcessDecisionQueue();
+}
+
+function RelentlessLostAbilities($player): bool
+{
+  $relentlessIndex = SearchAlliesForCard($player, "3401690666");
+  if($relentlessIndex != "") {
+    $ally = new Ally("MYALLY-" . $relentlessIndex, $player);
+    return $ally->LostAbilities();
+  }
+  return true;
+}
+
+function BlizzardAssaultATAT($player, $excess)
+{
+  AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal " . $excess . " damage to");
+  AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:arena=Ground");
+  AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+  AddDecisionQueue("MZOP", $player, "DEALDAMAGE," . $excess, 1);
+}
+
+function ArquitensAssaultCruiser($player)
+{
+  $defPlayer = $player == 1 ? 2 : 1;
+  $discard = &GetDiscard($defPlayer);
+  $defeatedCard = RemoveDiscard($defPlayer, count($discard)-DiscardPieces());
+  AddResources($defeatedCard, $player, "PLAY", "DOWN", isExhausted: true);
 }
 
 function ProcessAttackTarget()
