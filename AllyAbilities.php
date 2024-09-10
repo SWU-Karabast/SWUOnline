@@ -806,7 +806,7 @@ function AllyCanBeAttackTarget($player, $index, $cardID)
         if($i == $index) continue;
         $aspects = explode(",", CardAspects($allies[$i]));
         for($j=0; $j<count($aspects); ++$j) {
-          $aspectArr[$aspects[$j]] = 1;
+          if($aspects[$j] != "") $aspectArr[$aspects[$j]] = 1;
         }
       }
       return count($aspectArr) < 3;
