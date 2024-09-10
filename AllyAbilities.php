@@ -911,12 +911,12 @@ function AddAllyPlayAbilityLayers($cardID, $from, $uniqueID = "-") {
   global $currentPlayer;
   $allies = &GetAllies($currentPlayer);
   for($i=0; $i<count($allies); $i+=AllyPieces()) {
-    if(AllyHasPlayCardAbility($cardID, $uniqueID, $from, $allies[$i], $currentPlayer, $i)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $allies[$i] . "," . $allies[$i+5], append:true);
+    if(AllyHasPlayCardAbility($cardID, $uniqueID, $from, $allies[$i], $currentPlayer, $i)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $allies[$i] . "," . $allies[$i+5], ['append' => true]);
   }
   $otherPlayer = $currentPlayer == 1 ? 2 : 1;
   $theirAllies = &GetAllies($otherPlayer);
   for($i=0; $i<count($theirAllies); $i+=AllyPieces()) {
-    if(AllyHasPlayCardAbility($cardID, $uniqueID, $from, $theirAllies[$i], $otherPlayer, $i)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $theirAllies[$i] . "," . $allies[$i+5], append:true);
+    if(AllyHasPlayCardAbility($cardID, $uniqueID, $from, $theirAllies[$i], $otherPlayer, $i)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $theirAllies[$i] . "," . $allies[$i+5], ['append' => true]);
   }
 }
 
@@ -1023,13 +1023,13 @@ function AllyPlayCardAbility($cardID, $player="", $from="-", $abilityID="-", $un
       if($cadIndex != "") {
         $cadbane = new Ally("MYALLY-" . $cadIndex, $player);
         if($from != 'PLAY' && $cadbane->NumUses() > 0 && TraitContains($cardID, "Underworld", $currentPlayer)) {
-          AddLayer("TRIGGER", $currentPlayer, "724979d608", append:true);
+          AddLayer("TRIGGER", $currentPlayer, "724979d608", ['append' => true]);
         }
       }
       break;
     case "4088c46c4d"://The Mandalorian
       if(DefinedTypesContains($cardID, "Upgrade", $player)) {
-        AddLayer("TRIGGER", $currentPlayer, "4088c46c4d", append:true);
+        AddLayer("TRIGGER", $currentPlayer, "4088c46c4d", ['append' => true]);
       }
       break;
     case "3952758746"://Toro Calican
@@ -1037,7 +1037,7 @@ function AllyPlayCardAbility($cardID, $player="", $from="-", $abilityID="-", $un
       if($toroIndex != "") {
         $toroCalican = new Ally("MYALLY-" . $toroIndex, $player);
         if(TraitContains($cardID, "Bounty Hunter", $currentPlayer) && $toroCalican->NumUses() > 0){
-          AddLayer("TRIGGER", $currentPlayer, "3952758746", append:true);
+          AddLayer("TRIGGER", $currentPlayer, "3952758746", ['append' => true]);
         }
       }
       break;
@@ -1064,7 +1064,7 @@ function AllyPlayCardAbility($cardID, $player="", $from="-", $abilityID="-", $un
       }
       break;
     case "4935319539"://Krayt Dragon
-      AddLayer("TRIGGER", $currentPlayer, "4935319539", $cardID, append:true);
+      AddLayer("TRIGGER", $currentPlayer, "4935319539", $cardID, ['append' => true]);
       break;
     default: break;
   }

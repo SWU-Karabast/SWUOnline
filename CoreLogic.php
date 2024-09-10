@@ -309,23 +309,23 @@ function MainCharacterPlayCardAbilities($cardID, $from)
     switch($character[$i]) {
       case "3045538805"://Hondo Ohnaka
         if($from == "RESOURCES") {
-          AddLayer("TRIGGER", $currentPlayer, "3045538805", append:true);
+          AddLayer("TRIGGER", $currentPlayer, "3045538805", ['append' => true]);
         }
         break;
       case "1384530409"://Cad Bane
         if($from != 'PLAY' && $from != 'EQUIP' && TraitContains($cardID, "Underworld", $currentPlayer)) {
           // Note - this is a bit of a hack by sending the index in as the unique ID
-          AddLayer("TRIGGER", $currentPlayer, "1384530409", append:true);
+          AddLayer("TRIGGER", $currentPlayer, "1384530409", ['append' => true]);
         }
         break;
       case "9005139831"://The Mandalorian
         if(DefinedTypesContains($cardID, "Upgrade", $currentPlayer)) {
-          AddLayer("TRIGGER", $currentPlayer, "9005139831", append:true);
+          AddLayer("TRIGGER", $currentPlayer, "9005139831", ['append' => true]);
         }
         break;
       case "9334480612"://Boba Fett Green Leader
         if($from != "PLAY" && DefinedTypesContains($cardID, "Unit", $currentPlayer) && HasKeyword($cardID, "Any", $currentPlayer)) {
-          AddLayer("TRIGGER", $currentPlayer, "9334480612", append:true);
+          AddLayer("TRIGGER", $currentPlayer, "9334480612", ['append' => true]);
         }
         break;
       default:
@@ -3251,7 +3251,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "8506660490"://Darth Vader Unit
       if($from != "PLAY") {
-        AddLayer("TRIGGER", $currentPlayer, "8506660490", append:true);
+        AddLayer("TRIGGER", $currentPlayer, "8506660490", ['append' => true]);
       }
       break;
     case "8615772965"://Vigilance

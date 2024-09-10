@@ -564,7 +564,7 @@ function ProcessAfterCombatLayer() {
   $combatChainState[$CCS_AfterLinkLayers] = "NA";
   for($i = 0; $i < count($layers); $i++) {
     $layer = explode("~", $layers[$i]);
-    AddLayer($layer[0], $layer[1], $layer[2], $layer[3], $layer[4], $layer[5], append:true);
+    AddLayer($layer[0], $layer[1], $layer[2], $layer[3], $layer[4], $layer[5], ['append' => true]);
   }
 }
 

@@ -1800,7 +1800,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
         }
         if($layerName == "ATTACKABILITY") { if(HasAttackAbility($cardID)) PlayAbility($cardID, "PLAY", "0"); }
         //TODO: Fix this Relentless and first light and The Mandalorian hack
-        else if($from == "PLAY" || $from == "EQUIP" || HasWhenPlayed($cardID) || $cardID == "3401690666" || $cardID == "4783554451" || $cardID == "4088c46c4d" || DefinedTypesContains($cardID, "Event", $currentPlayer) || DefinedTypesContains($cardID, "Upgrade", $currentPlayer)) AddLayer($layerName, $currentPlayer, $cardID, $from . "!" . $resourcesPaid . "!" . $target . "!" . $additionalCosts . "!" . $abilityIndex . "!" . $playIndex, "-", $uniqueID, append:true);
+        else if($from == "PLAY" || $from == "EQUIP" || HasWhenPlayed($cardID) || $cardID == "3401690666" || $cardID == "4783554451" || $cardID == "4088c46c4d" || DefinedTypesContains($cardID, "Event", $currentPlayer) || DefinedTypesContains($cardID, "Upgrade", $currentPlayer)) AddLayer($layerName, $currentPlayer, $cardID, $from . "!" . $resourcesPaid . "!" . $target . "!" . $additionalCosts . "!" . $abilityIndex . "!" . $playIndex, "-", $uniqueID, ['append' => true]);
         else if($from != "PLAY" && $from != "EQUIP") {
           AddAllyPlayAbilityLayers($cardID, $from, $uniqueID);
         }
@@ -1808,10 +1808,10 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
     }
     if($from != "PLAY") {
       if(HasShielded($cardID, $currentPlayer, $index)) {
-        AddLayer("TRIGGER", $currentPlayer, "SHIELDED", "-", "-", $uniqueID, append:true);
+        AddLayer("TRIGGER", $currentPlayer, "SHIELDED", "-", "-", $uniqueID, ['append' => true]);
       }
       if(HasAmbush($cardID, $currentPlayer, $index, $from)) {
-        AddLayer("TRIGGER", $currentPlayer, "AMBUSH", "-", "-", $uniqueID, append:true);
+        AddLayer("TRIGGER", $currentPlayer, "AMBUSH", "-", "-", $uniqueID, ['append' => true]);
       }
     }
     if (!$openedChain) ResolveGoAgain($cardID, $currentPlayer, $from);
