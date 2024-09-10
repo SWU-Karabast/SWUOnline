@@ -465,7 +465,7 @@ class Ally {
   }
 
   function IsUpgraded() {
-    return $this->allies[$this->index + 4] != "-";
+    return $this->NumUpgrades() > 0;
   }
 
   function NumUpgrades() {
