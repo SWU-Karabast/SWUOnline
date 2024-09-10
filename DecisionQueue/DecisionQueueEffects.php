@@ -72,7 +72,7 @@ function ModalAbilities($player, $card, $lastResult)
       for($i = 0; $i < count($params); ++$i) {
         switch($params[$i]) {
           case "Experience":
-            AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
+            AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
             AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to give two experience");
             AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
             AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
