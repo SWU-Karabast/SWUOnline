@@ -495,12 +495,19 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
         WriteLog("Drew a card from General Krell");
         break;
       case "3feee05e13"://Gar Saxon
-        $upgrades = $destroyedAlly->GetUpgrades();
-        for($j=0; $j<count($upgrades); ++$j) {
-          if(!IsToken($upgrades[$j])) {
-            AddHand($player, $upgrades[$j]);
-            break;
+        $upgrades = $destroyedAlly->GetUpgrades(true);
+        if(count($upgrades) > 0) {
+          $upgradesParams = "";
+          for ($i = 0; $i < count($upgrades); $i += SubcardPieces()) {
+            if(!IsToken($upgrades[$i])) {
+              if($upgradesParams != "") $upgradesParams .= ",";
+              $upgradesParams .= $upgrades[$i] . "-" . $upgrades[$i+1];
+            }
           }
+          AddDecisionQueue("PASSPARAMETER", $player, $upgradesParams);
+          AddDecisionQueue("SETDQCONTEXT", $player, "Choose an upgrade to bounce");
+          AddDecisionQueue("MAYCHOOSECARD", $player, "<-", 1);
+          AddDecisionQueue("OP", $player, "BOUNCEUPGRADE", 1);
         }
         break;
       default: break;
