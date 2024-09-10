@@ -718,14 +718,14 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       AddDecisionQueue("MZOP", $player, "READY", 1);
       AddDecisionQueue("ADDMZUSES", $player, "-1", 1);
       break;
-    case "0754286363":
+    case "0754286363"://The Mandalorian's Rifle
       AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY");
       AddDecisionQueue("MZFILTER", $player, "definedType=Leader");
       AddDecisionQueue("MZFILTER", $player, "status=0");
       AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to capture");
       AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
       AddDecisionQueue("MZOP", $player, "CAPTURE," . $uniqueID, 1);
-        break;
+      break;
     default: break;
   }
 }

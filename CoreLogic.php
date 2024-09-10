@@ -3787,7 +3787,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "0754286363"://The Mandalorian's Rifle
       $ally = new Ally($target, $currentPlayer);
       if(CardTitle($ally->CardID()) == "The Mandalorian") {
-        AddLayer("TRIGGER", $currentPlayer, $cardID);
+        AddLayer("TRIGGER", $currentPlayer, $cardID, uniqueID: $ally->UniqueID());
       }
       break;
     case "4643489029"://Palpatine's Return
