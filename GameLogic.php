@@ -581,10 +581,25 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           return $lastResult;
         case "BOUNCEUPGRADE":
           $upgradeID = $lastResult;
-          $mzArr = explode("-", $dqVars[0]);
-          $allyPlayer = $mzArr[0] == "MYALLY" ? $player : ($player == 1 ? 2 : 1);
-          $ally = new Ally($dqVars[0], $allyPlayer);
-          $ownerId = $ally->DefeatUpgrade($upgradeID);
+          if(str_contains($upgradeID, "-")) {
+            $upgradeDefinition = explode("-", $upgradeID);
+            $upgradeID = $upgradeDefinition[0];
+            $ownerId = $upgradeDefinition[1];
+            global $myDiscard, $theirDiscard;
+            if($ownerId == $player) $graveyard = $myDiscard;
+            else $graveyard = $theirDiscard;
+            for ($i = 0; $i < count($graveyard); $i += DiscardPieces()) {
+              if($graveyard[$i] == $upgradeID) {
+                RemoveGraveyard($ownerId, $i);
+                break;
+              }
+            }
+          } else {
+            $mzArr = explode("-", $dqVars[0]);
+            $allyPlayer = $mzArr[0] == "MYALLY" ? $player : ($player == 1 ? 2 : 1);
+            $ally = new Ally($dqVars[0], $allyPlayer);
+            $ownerId = $ally->DefeatUpgrade($upgradeID);
+          }
           if(!IsToken($upgradeID)) AddHand($ownerId, $upgradeID);
           return $lastResult;
         case "RESCUECAPTIVE":
