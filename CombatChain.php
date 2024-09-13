@@ -106,7 +106,7 @@ function AttackModifier($cardID, $player, $index)
       break;
     case "4511413808"://Follower of the Way
       $ally = new Ally("MYALLY-" . $index, $player);
-      if($ally->NumUpgrades() > 0) $modifier += 1;
+      if($ally->IsUpgraded()) $modifier += 1;
       break;
     case "58f9f2d4a0"://Dr. Aphra
       $discard = &GetDiscard($player);
