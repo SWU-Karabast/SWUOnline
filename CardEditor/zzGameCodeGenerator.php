@@ -8,6 +8,7 @@
   $rootName = trim(fgets($handler));
 
   $zones = [];
+  $numRows = 0;
   //First parse the schema file to get the zones and their properties
   while (!feof($handler)) {
     $zone = fgets($handler);
@@ -34,7 +35,8 @@
             $displayArr = explode(",", $displayArr[1]);
             $zoneObj->Visibility = trim($displayArr[0]);
             $zoneObj->DisplayMode = trim($displayArr[1]);
-            $zoneObj->Row = intval(trim($displayArr[2]));
+            $zoneObj->Row = explode(" ", trim($displayArr[2]))[1];
+            if($zoneObj->Row > $numRows) $numRows = $zoneObj->Row;
           }
         }
         array_push($zones, $zoneObj);
@@ -311,25 +313,21 @@
   }
 
   function AddNextTurn() {
-    global $zones;
+    global $zones, $numRows;
     $startPiece = 1;
     $numPieces = count($zones);
     $myStuff = "";
     $theirStuff = "";
+    $header = "echo(\"var myRows = [];\");\r\n";
+    $header .= "echo(\"var theirRows = [];\");\r\n";
+    $header .= "echo(\"for(var i=0; i<" . $numRows . "; ++i) { myRows[i] = \\\"\\\"; theirRows[i] = \\\"\\\"; }\");\r\n";
     for($i=0; $i<count($zones); ++$i) {
       $zone = $zones[$i];
-      /*
-      $index = 3 + $i;//TODO: This 2 is awful, it's the number of static data elements in the response array
-      $name = ($i < count($zones)/2 ? "my" : "their") . $zone->Name;//TODO: multiplayer
-      $nextTurn .= "echo(\"newHTML += PopulateZone('" . $name . "', responseArr[" . $index . "], cardSize, \\\"Lorcana/concat\\\");\");\r\n";
-      $nextTurn .= "echo(\"newHTML += '<BR>';\");\r\n";
-*/
 
-      $myStuff .= "echo(\"newHTML += PopulateZone('my" . $zone->Name . "', responseArr[" . ($i + $startPiece) . "], cardSize, \\\"Lorcana/concat\\\", \\\"" . $zone->Row . "\\\");\");\r\n";
-      $myStuff .= "echo(\"newHTML += '<BR>';\");\r\n";
-      $theirStuff .= "echo(\"newHTML += PopulateZone('their" . $zone->Name . "', responseArr[" . ($i + $startPiece + count($zones)) . "], cardSize, \\\"Lorcana/concat\\\", \\\"" . $zone->Row . "\\\");\");\r\n";
-      $theirStuff .= "echo(\"newHTML += '<BR>';\");\r\n";
-      //echo("newHTML += PopulateZone('theirHand', responseArr[9], cardSize, \"Lorcana/concat\");");
+      $myStuff .= "echo(\"myRows[" . $zone->Row . "] += PopulateZone('my" . $zone->Name . "', responseArr[" . ($i + $startPiece) . "], cardSize, \\\"Lorcana/concat\\\", \\\"" . $zone->Row . "\\\");\");\r\n";
+      $theirStuff .= "echo(\"theirRows[" . $zone->Row . "] += PopulateZone('their" . $zone->Name . "', responseArr[" . ($i + $startPiece + count($zones)) . "], cardSize, \\\"Lorcana/concat\\\", \\\"" . $zone->Row . "\\\");\");\r\n";
+
+
 
 /*
       $zoneName = "p" . $player . $zone->Name;
@@ -372,6 +370,7 @@
       }
         */
     }
-    return $myStuff . $theirStuff;
+    $footer = "echo(\"newHTML = RenderRows(myRows, theirRows);\");\r\n";
+    return $header . $myStuff . $theirStuff . $footer;
   }
 ?>

@@ -325,6 +325,8 @@
             </button>
         <?php endif; ?>
     </div>
+    <div id='theirStuff' style='position:fixed; z-index:10; left:0; top:0; width:100%; height:50%; background-color:red;'></div>
+    <div id='myStuff' style='position:fixed; z-index:10; left:0; top:50%; width:100%; height:50%; background-color:green;'></div>
 
     <input type='hidden' id='gameName' value='<?= htmlspecialchars($gameName, ENT_QUOTES, 'UTF-8'); ?>'>
     <input type='hidden' id='playerID' value='<?= htmlspecialchars($playerID, ENT_QUOTES, 'UTF-8'); ?>'>

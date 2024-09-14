@@ -257,6 +257,18 @@
           }
           return newHTML;
       }
+
+      function RenderRows(myRows, theirRows) {
+        var theirStuff = "";
+        var myStuff = "";
+        theirRows.forEach(element => {
+          theirStuff += element + "<br>";
+        });
+        myRows.forEach(element => {
+          myStuff += element + "<br>";
+        });
+        return theirStuff + myStuff;
+      }
       
       function chkSubmit(mode, count) {
         var input = "";
