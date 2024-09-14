@@ -20,12 +20,10 @@ function CheckUpdate($gameName, $lastNumber)
   //Check if shmop exists, if not create it
   $cache = ReadCache($gameName);
   if($cache == "") {
-    InitializeCache($gameName);
     return true;
   }
   return intval($lastNumber) < intval($cache[0]);
 }
-
 
 /*
 Old schema:
@@ -161,7 +159,10 @@ function SetCachePiece($name, $piece, $value)
 {
   $piece -= 1;
   $cacheVal = ReadCache($name);
-  if($cacheVal == "") return;
+  if($cacheVal == "") {
+    InitializeCache($name);
+    $cacheVal = ReadCache($name);
+  }
   $cacheArray = explode("!", $cacheVal);
   $cacheArray[$piece] = $value;
   WriteCache($name, implode("!", $cacheArray));
