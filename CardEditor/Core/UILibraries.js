@@ -219,7 +219,7 @@
 
       //Note: 96 = Card Size
       function PopulateZone(zone, zoneData, size = 96, folder = "concat", row = 1) {
-          if (zoneData == "") return;
+          if (zoneData.trim().length == 0) return "";
           var zoneArr = zoneData.split("<|>");
           var newHTML = "";
           for (var i = 0; i < zoneArr.length; ++i) {
