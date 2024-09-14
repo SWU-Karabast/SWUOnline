@@ -474,14 +474,14 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
       WriteLog("Player " . $playerID ." manually added 1 damage point to themselves.", highlight: true);
       LoseHealth(1, $playerID);
       break;
-    case 10007:
-      WriteLog("Player " . $playerID ." manually subtracted 1 damage from their opponent.", highlight: true);
-      Restore(1, ($playerID == 1 ? 2 : 1));
-      break;
-    case 10008:
-      WriteLog("Player " . $playerID ." manually added 1 damage to their opponent.", highlight: true);
-      LoseHealth(1, ($playerID == 1 ? 2 : 1));
-      break;
+//    case 10007:
+//      WriteLog("Player " . $playerID ." manually subtracted 1 damage from their opponent.", highlight: true);
+//      Restore(1, ($playerID == 1 ? 2 : 1));
+//      break;
+//    case 10008:
+//      WriteLog("Player " . $playerID ." manually added 1 damage to their opponent.", highlight: true);
+//      LoseHealth(1, ($playerID == 1 ? 2 : 1));
+//      break;
     case 10009:
       WriteLog("Player " . $playerID ." manually drew a card for themselves.", highlight: true);
       Draw($playerID, false);
