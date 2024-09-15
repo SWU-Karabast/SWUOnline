@@ -219,9 +219,9 @@
 
       //Note: 96 = Card Size
       function PopulateZone(zone, zoneData, size = 96, folder = "concat", row = 1) {
-          if (zoneData.trim().length == 0) return "";
-          var newHTML = "";
-          var zoneArr = zoneData.split("<|>");
+          zoneData = zoneData.trim();
+          var newHTML = "<span id='" + zone + " style='display: flex; flex-wrap: wrap; justify-content: center;'>";
+          var zoneArr = (zoneData.length == 0 ? [] : zoneData.split("<|>"));
           for (var i = 0; i < zoneArr.length; ++i) {
               cardArr = zoneArr[i].split(" ");
               var id = zone + "-" + i;
@@ -255,6 +255,7 @@
               newHTML += Card(cardArr[0], folder, size, cardArr[1], 1, cardArr[2], cardArr[3], cardArr[4], cardArr[5], "", cardArr[17], cardArr[6], cardArr[7], cardArr[8], cardArr[9], restriction, cardArr[13], cardArr[14], cardArr[15], cardArr[16], cardArr[18], cardArr[19]);
               newHTML += "</span>";
           }
+          newHTML += "</span>";
           return newHTML;
       }
 
