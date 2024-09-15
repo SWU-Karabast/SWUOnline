@@ -220,8 +220,8 @@
       //Note: 96 = Card Size
       function PopulateZone(zone, zoneData, size = 96, folder = "concat", row = 1) {
           if (zoneData.trim().length == 0) return "";
-          var zoneArr = zoneData.split("<|>");
           var newHTML = "";
+          var zoneArr = zoneData.split("<|>");
           for (var i = 0; i < zoneArr.length; ++i) {
               cardArr = zoneArr[i].split(" ");
               var id = zone + "-" + i;
@@ -267,7 +267,11 @@
         myRows.forEach(element => {
           myStuff += element + "<br>";
         });
-        return theirStuff + myStuff;
+
+        var theirDiv = document.getElementById("theirStuff");
+        var myDiv = document.getElementById("myStuff");
+        theirDiv.innerHTML = theirStuff;
+        myDiv.innerHTML = myStuff;
       }
       
       function chkSubmit(mode, count) {
