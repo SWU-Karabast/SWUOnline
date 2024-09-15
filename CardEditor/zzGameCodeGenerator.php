@@ -320,7 +320,7 @@
     $theirStuff = "";
     $header = "echo(\"var myRows = [];\");\r\n";
     $header .= "echo(\"var theirRows = [];\");\r\n";
-    $header .= "echo(\"for(var i=0; i<" . $numRows . "; ++i) { myRows[i] = \\\"\\\"; theirRows[i] = \\\"\\\"; }\");\r\n";
+    $header .= "echo(\"for(var i=0; i<" . ($numRows+1) . "; ++i) { myRows[i] = \\\"\\\"; theirRows[i] = \\\"\\\"; }\");\r\n";
     for($i=0; $i<count($zones); ++$i) {
       $zone = $zones[$i];
 
