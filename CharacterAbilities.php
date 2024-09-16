@@ -357,9 +357,13 @@ function AllyDealDamageAbilities($player, $damage) {
       case "3c60596a7a":
         $ally = new Ally("MYALLY-" . $i, $player);
         if ($ally->NumUses() > 0) {
-          $ally->ModifyUses(-1);
-          Draw($player);
-        } 
+          AddDecisionQueue("SETDQCONTEXT", $player, "Choose if you want to draw a card (Cassian's ability)");
+          AddDecisionQueue("YESNO", $player, "-");
+          AddDecisionQueue("NOPASS", $player, "-");
+          AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $i, 1);
+          AddDecisionQueue("ADDMZUSES", $player, "-1", 1);
+          AddDecisionQueue("DRAW", $player, "-", 1);
+        }
         break;
     }
   }
