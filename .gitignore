@@ -3,3 +3,8 @@ HostFiles
 .DS_Store
 .env
 .vscode
+
+.idea/
+composer.phar
+composer.lock
+vendor/
