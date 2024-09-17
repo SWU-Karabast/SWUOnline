@@ -3251,7 +3251,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "8506660490"://Darth Vader Unit
       if($from != "PLAY") {
-        AddLayer("TRIGGER", $currentPlayer, "8506660490", append:true);
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose any number of units with combined cost 3 or less.");
+        AddDecisionQueue("SEARCHDECKTOPX", $currentPlayer, "10;99;include-definedType-Unit&include-maxCost-3&include-aspect-Villainy");
+        AddDecisionQueue("SPECIFICCARD", $currentPlayer, "DARTHVADER", 1);
       }
       break;
     case "8615772965"://Vigilance
