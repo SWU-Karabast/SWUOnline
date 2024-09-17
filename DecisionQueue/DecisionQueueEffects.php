@@ -197,7 +197,7 @@ function PlayerTargetedAbility($player, $card, $lastResult)
 
 function SpecificCardLogic($player, $card, $lastResult)
 {
-  global $dqVars, $CS_DamageDealt;
+  global $dqVars;
   switch($card)
   {
     case "FORCETHROW"://Force Throw

@@ -1683,7 +1683,7 @@ function SameWeaponEquippedTwice()
 
 function SelfCostModifier($cardID, $from)
 {
-  global $currentPlayer, $CS_LastAttack, $CS_LayerTarget, $CS_NumClonesPlayed, $layers;
+  global $currentPlayer, $CS_LayerTarget, $CS_NumClonesPlayed, $layers;
   $modifier = 0;
   //Aspect Penalty
   $heraSyndullaAspectPenaltyIgnore = TraitContains($cardID, "Spectre", $currentPlayer) && (HeroCard($currentPlayer) == "7440067052" || SearchAlliesForCard($currentPlayer, "80df3928eb") != ""); //Hera Syndulla (Spectre Two)
@@ -2058,7 +2058,7 @@ function IsClassBonusActive($player, $class)
 
 function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalCosts = "-", $theirCard = false)
 {
-  global $currentPlayer, $layers, $CS_PlayIndex, $CS_OppIndex, $initiativePlayer, $CCS_CantAttackBase;
+  global $currentPlayer, $CS_PlayIndex, $CS_OppIndex, $initiativePlayer, $CCS_CantAttackBase;
   $index = GetClassState($currentPlayer, $CS_PlayIndex);
     
   if($from == "PLAY" && IsAlly($cardID, $currentPlayer)) {
@@ -3232,7 +3232,6 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "1626462639"://Change of Heart
-      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
       AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1", 1);
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to take control of", 1);
@@ -3907,7 +3906,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "THEMARAUDER", 1);
       break;
     case "7642980906"://Stolen Landspeeder
-      if($from == "HAND") {
+      if($from == "HAND" && $playAlly->CardID() == "7642980906" && $playAlly->TurnsInPlay() == 0) {
+        //TODO There is a bug if you use Ambush with Landspeeder, it dies and your last Ally is a Landspeeder you got this turn (playAlly is not the good unit as Landspeeder is dead)
         $otherPlayer = $currentPlayer == 1 ? 2 : 1;
         AddDecisionQueue("PASSPARAMETER", $otherPlayer, "THEIRALLY-" . $playAlly->Index(), 1);
         AddDecisionQueue("MZOP", $otherPlayer, "TAKECONTROL", 1);

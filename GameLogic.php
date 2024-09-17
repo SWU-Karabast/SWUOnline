@@ -43,7 +43,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       
       if(substr_count($paramArray[2], "|") > 0) { //OR: Any card that matches at least one filter should be selectable.
         $filterArray = explode("|", $paramArray[2]);
-        $chooseableDeckIndices = [];
+        $choosableDeckIndices = "";
         foreach($filterArray as $filter) {
           $choosableDeckIndices .= DecisionQueueStaticEffect("FILTER", $player, "Deck-" . $filter, $deckIndicesToShow) . ",";
         }
@@ -268,6 +268,14 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $index = FindCharacterIndex($player, $combatChain[$parameter]);
       $character[$index + 4] += $lastResult;
       return $lastResult;
+    case "FINDMZINDEX":
+      $allies = GetAllies($player);
+      for($i = 0; $i < count($allies); $i+=AllyPieces()) {
+        if($allies[$i+5] == $parameter){
+          return "MYALLY-".$i;
+        }
+      }
+      return "";
     case "REMOVEMYHAND":
       $hand = &GetHand($player);
       $cardID = $hand[$lastResult];
@@ -433,7 +441,11 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             $attackerHasOverwhelm = HasOverwhelm($ally->CardID(), $player, $targetArr[1]);
             $destroyed = $ally->DealDamage($parameterArr[1], enemyDamage:(count($parameterArr) > 2 && $parameterArr[2] != $targetPlayer));
             if($destroyed) {
-              if(($isAttackTarget || $isAttacker) && !$attackerHasOverwhelm) CloseCombatChain();
+              //TODO TEST ON OTHER UNIT
+              global $layers;
+              if(count($layers) == 0) {
+                if(($isAttackTarget || $isAttacker) && !$attackerHasOverwhelm) CloseCombatChain();
+              }
               return "";
             }
           } else {
@@ -927,8 +939,11 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
     case "ADDLIMITEDCURRENTEFFECT":
       $uniqueID = $lastResult;
       $params = explode(",", $parameter);
-      AddCurrentTurnEffect($params[0], UnitUniqueIDController($uniqueID), $params[1], $uniqueID);
-      UpdateLinkAttack();
+      $controller = UnitUniqueIDController($uniqueID);
+      if($controller > 0) {
+        AddCurrentTurnEffect($params[0], $controller, $params[1], $uniqueID);
+        UpdateLinkAttack();
+      }
       return $lastResult;
     case "ADDLIMITEDNEXTTURNEFFECT":
       AddNextTurnEffect($parameter, $player, $lastResult);
@@ -970,6 +985,11 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $index = SearchAlliesForUniqueID($parameter, $player);
       if($index == -1) return "PASS";
       return 1;
+    case "ALREADYUSEPASS":
+      $index = SearchAlliesForUniqueID($parameter, $player);
+      $ally = new Ally('MYALLY-' . $index, $player);
+      if($ally->NumUses() == 0) return "PASS";
+      return $lastResult;
     case "NULLPASS":
       if($lastResult == "") return "PASS";
       return $lastResult;
@@ -1073,8 +1093,6 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $targetPlayer = ($target[0] == "MYCHAR" || $target[0] == "MYALLY" ? $player : ($player == 1 ? 1 : 2));
       $parameters = explode("-", $parameter);
       $damage = $parameters[0];
-      $source = $parameters[1];
-      $type = $parameters[2];
       if($target[0] == "THEIRALLY" || $target[0] == "MYALLY") {
         DealAllyDamage($targetPlayer, $target[1], $damage);
         return $damage;
@@ -1375,19 +1393,19 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $names = explode(",", GetAbilityNames($parameter, GetClassState($player, $CS_PlayIndex)));
       WriteLog(implode(" ", explode("_", $names[$index])) . " ability was chosen.");
       return $lastResult;
-      case "SETABILITYTYPEOPP"://For activating opponent's cards
-        global $CS_OppIndex, $CS_OppCardActive;
-        $lastPlayed[2] = $lastResult;
-        $otherPlayer = ($player == 1 ? 2 : 1);
-        $index = GetAbilityIndex($parameter, GetClassState($player, $CS_OppIndex), $lastResult, theirCard:true);
-        SetClassState($player, $CS_AbilityIndex, $index);
-        if(IsAlly($parameter, $otherPlayer) && TheirAllyDoesAbilityExhaust($parameter, $index)) {
-          $ally = new Ally("MYALLY-" . GetClassState($player, $CS_PlayIndex), $player);
-          $ally->Exhaust();
-        }
-        $names = explode(",", GetOpponentControlledAbilityNames($parameter));
-        WriteLog(implode(" ", explode("_", $names[$index])) . " ability was chosen!");
-        return $lastResult;
+    case "SETABILITYTYPEOPP"://For activating opponent's cards
+      global $CS_OppIndex, $CS_PlayIndex;
+      $lastPlayed[2] = $lastResult;
+      $otherPlayer = ($player == 1 ? 2 : 1);
+      $index = GetAbilityIndex($parameter, GetClassState($player, $CS_OppIndex), $lastResult, theirCard: true);
+      SetClassState($player, $CS_AbilityIndex, $index);
+      if(IsAlly($parameter, $otherPlayer) && TheirAllyDoesAbilityExhaust($parameter, $index)) {
+        $ally = new Ally("MYALLY-" . GetClassState($player, $CS_PlayIndex), $player);
+        $ally->Exhaust();
+      }
+      $names = explode(",", GetOpponentControlledAbilityNames($parameter));
+      WriteLog(implode(" ", explode("_", $names[$index])) . " ability was chosen!");
+      return $lastResult;
     case "MZSTARTTURNABILITY":
       MZStartTurnAbility($player, $lastResult);
       return "";
