@@ -453,14 +453,12 @@ function ContinueDecisionQueue($lastResult = "")
               $additionalCosts = count($subparamArr) > 3 ? $subparamArr[3] : "-";
               $abilityIndex = count($subparamArr) > 4 ? $subparamArr[4] : -1;
               $playIndex = count($subparamArr) > 5 ? $subparamArr[5] : -1;
-                SetClassState($player, $CS_AbilityIndex, $abilityIndex);
-                SetClassState($player, $CS_PlayIndex, $playIndex);
-                $playText = PlayAbility($cardID, $from, $resourcesPaid, $target, $additionalCosts, $oppCardActive);
-                if($from != "PLAY") WriteLog("Resolving play ability of " . CardLink($cardID, $cardID) . ($playText != "" ? ": " : ".") . $playText);
-                if($from == "EQUIP") {
-                  EquipPayAdditionalCosts(FindCharacterIndex($player, $cardID), "EQUIP");
-                }
-                ProcessDecisionQueue();
+              SetClassState($player, $CS_AbilityIndex, $abilityIndex);
+              SetClassState($player, $CS_PlayIndex, $playIndex);
+              $playText = PlayAbility($cardID, $from, $resourcesPaid, $target, $additionalCosts, $oppCardActive, uniqueId: $uniqueID);
+              if($from != "PLAY") WriteLog("Resolving play ability of " . CardLink($cardID, $cardID) . ($playText != "" ? ": " : ".") . $playText);
+              if($from == "EQUIP") EquipPayAdditionalCosts(FindCharacterIndex($player, $cardID), "EQUIP");
+              ProcessDecisionQueue();
             }
           }
         }
