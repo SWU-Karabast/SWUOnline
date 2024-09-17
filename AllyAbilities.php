@@ -85,7 +85,7 @@ function AllyStaticHealthModifier($cardID, $index, $player, $myCardID, $myIndex,
     case "4511413808"://Follower of the Way
       if($index == $myIndex && $player == $myPlayer) {
         $ally = new Ally("MYALLY-" . $index, $player);
-        if($ally->NumUpgrades() > 0) return 1;
+        if($ally->IsUpgraded()) return 1;
       }
       break;
     case "3731235174"://Supreme Leader Snoke
@@ -500,6 +500,7 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
               $upgradesParams .= $upgrades[$i] . "-" . $upgrades[$i+1];
             }
           }
+          if($upgradesParams == "") break;
           AddDecisionQueue("PASSPARAMETER", $player, $upgradesParams);
           AddDecisionQueue("SETDQCONTEXT", $player, "Choose an upgrade to bounce");
           AddDecisionQueue("MAYCHOOSECARD", $player, "<-", 1);
