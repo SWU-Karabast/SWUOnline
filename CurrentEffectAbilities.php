@@ -147,6 +147,7 @@ function EffectAttackModifier($cardID, $playerID="")
     case "3789633661": return 4;//Cunning
     case "1939951561": return $subparam;//Attack Pattern Delta
     case "8988732248": return 1;//Rebel Assault
+    case "7922308768": return $playerID == $mainPlayer && NumResources($mainPlayer) < NumResources($defPlayer) ? 2 : 0;//Valiant Assault Ship
     case "7109944284": return -1* $subparam;//Luke Skywalker
     case "1885628519": return 1;//Crosshair
     case "1480894253": return 2;//Kylo Ren
@@ -654,6 +655,7 @@ function IsCombatEffectActive($cardID)
     case "8495694166": return true;//Jedi Lightsaber
     case "3789633661": return true;//Cunning
     case "8988732248": return true;//Rebel Assault
+    case "7922308768": return true;//Valiant Assault Ship
     case "6514927936": return true;//Leia Organa
     case "0802973415": return true;//Outflank
     case "1480894253": return true;//Kylo Ren
