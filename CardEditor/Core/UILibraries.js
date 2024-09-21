@@ -164,8 +164,7 @@
           e.target.style.opacity = "0.4";
           HideCardDetail();
           //Now show the droppable areas
-          var dropArea = document.getElementById("groundArena");
-          dropArea.classList.add("droppable");
+          generatedDragStart();
       }
 
       // Function to handle drag end event
@@ -221,7 +220,7 @@
       //Note: 96 = Card Size
       function PopulateZone(zone, zoneData, size = 96, folder = "concat", row = 1) {
           zoneData = zoneData.trim();
-          var newHTML = "<span id='" + zone + " ondragover='dragOver(event)' ondrop='drop(event)' style='display: flex; flex-wrap: wrap; justify-content: center;'>";
+          var newHTML = "<span id='" + zone + "' ondragover='dragOver(event)' ondrop='drop(event)' style='display: flex; flex-wrap: wrap; justify-content: center;'>";
           var zoneArr = (zoneData.length == 0 ? [] : zoneData.split("<|>"));
           for (var i = 0; i < zoneArr.length; ++i) {
               cardArr = zoneArr[i].split(" ");

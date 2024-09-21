@@ -388,10 +388,14 @@
     global $zones;
     $rv = "";
     $rv .= "function generatedDragStart() {\r\n";
+    $rv .= "  var zone = null;\r\n";
     for($i=0; $i<count($zones); ++$i) {
       $zone = $zones[$i];
-      $rv .= "  var " . $zone->Name . " = document.getElementById(\"" . $zone->Name . "\");\r\n";
-      $rv .= "  " . $zone->Name . ".classList.add(\"droppable\");\r\n";
+      $rv .= "  zone = document.getElementById(\"my" . $zone->Name . "\");\r\n";
+      $rv .= "  if(!!zone) zone.classList.add(\"droppable\");\r\n";
+      //TODO: Only allow their with a setting? Or holding ctrl?
+      $rv .= "  zone = document.getElementById(\"their" . $zone->Name . "\");\r\n";
+      $rv .= "  if(!!zone) zone.classList.add(\"droppable\");\r\n";
     }
     $rv .= "}\r\n";
     return $rv;
