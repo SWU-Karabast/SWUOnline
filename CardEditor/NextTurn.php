@@ -331,6 +331,7 @@
     <input type='hidden' id='gameName' value='<?= htmlspecialchars($gameName, ENT_QUOTES, 'UTF-8'); ?>'>
     <input type='hidden' id='playerID' value='<?= htmlspecialchars($playerID, ENT_QUOTES, 'UTF-8'); ?>'>
     <input type='hidden' id='authKey' value='<?= htmlspecialchars($authKey, ENT_QUOTES, 'UTF-8'); ?>'>
+    <input type='hidden' id='folderPath' value='<?= htmlspecialchars($folderPath, ENT_QUOTES, 'UTF-8'); ?>'>
 
 
   </body>

@@ -194,7 +194,6 @@
 
           // Get the card being dragged
           var draggedCard = e.dataTransfer.getData("text/plain");
-          alert(draggedCard + " " + destination);
 
           // Send the action input to the server
           SubmitInput("10014", "&cardID=" + draggedCard + "!" + destination);

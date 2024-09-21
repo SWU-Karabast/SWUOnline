@@ -88,9 +88,10 @@ function SubmitInput(mode, params, fullRefresh = false) {
     }
   };
   var ajaxLink =
-    "ProcessInput2.php?gameName=" + document.getElementById("gameName").value;
+    "ProcessInput.php?gameName=" + document.getElementById("gameName").value;
   ajaxLink += "&playerID=" + document.getElementById("playerID").value;
   ajaxLink += "&authKey=" + document.getElementById("authKey").value;
+  ajaxLink += "&folderPath=" + document.getElementById("folderPath").value;
   ajaxLink += "&mode=" + mode;
   ajaxLink += params;
   xmlhttp.open("GET", ajaxLink, true);
