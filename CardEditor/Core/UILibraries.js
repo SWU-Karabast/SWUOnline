@@ -171,8 +171,8 @@
       function dragEnd(e) {
           // Reset the element's opacity after drag
           e.target.style.opacity = "1";
-          var dropArea = document.getElementById("groundArena");
-          dropArea.classList.remove("droppable");
+          //Now hide the droppable areas
+          generatedDragEnd();
       }
 
       // Function to handle drag over event
