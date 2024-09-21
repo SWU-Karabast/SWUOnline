@@ -183,7 +183,14 @@
       // Function to handle drop event
       function drop(e) {
           e.preventDefault(); // Prevent default action (open as link for some elements)
-          var destination = e.target.id;
+          var el = e.target;
+          var destination = el.id;
+          var tries = 0;
+          while((destination == "" || destination.includes("-")) && tries < 20) {
+            el = el.parentNode;
+            destination = el.id;
+            ++tries;
+          }
 
           // Get the card being dragged
           var draggedCard = e.dataTransfer.getData("text/plain");
