@@ -229,6 +229,10 @@
           zoneData = zoneData.trim();
           var newHTML = "<span id='" + zone + "' ondragover='dragOver(event)' ondrop='drop(event)' style='display: flex; flex-wrap: wrap; justify-content: center;'>";
           var zoneArr = (zoneData.length == 0 ? [] : zoneData.split("<|>"));
+          if(zoneArr.length == 0) {
+            var zoneName = zone.replace("my", "").replace("their", "");
+            newHTML += "<span style='margin: 1px;'>" + zoneName + "</span>";
+          }
           for (var i = 0; i < zoneArr.length; ++i) {
               cardArr = zoneArr[i].split(" ");
               var id = zone + "-" + i;
