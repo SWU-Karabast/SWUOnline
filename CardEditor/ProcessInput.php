@@ -52,7 +52,18 @@ include "./" . $folderPath . "/GamestateParser.php";
 include "./" . $folderPath . "/ZoneAccessors.php";
 include "./" . $folderPath . "/ZoneClasses.php";
 ParseGamestate("./" . $folderPath . "/");
-echo($folderPath);
+
+switch($mode) {
+  case 10014://Manual mode drag and drop
+    $inpArr = explode("!", $cardID);
+    $moveCard = $inpArr[0];
+    $destination = $inpArr[1];
+    echo("Moving card $moveCard to $destination");
+    break;
+  default: break;
+}
+
+GamestateUpdated($gameName);
 
 exit;
 
