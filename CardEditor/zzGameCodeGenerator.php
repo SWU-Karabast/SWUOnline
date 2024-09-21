@@ -173,13 +173,21 @@
   fwrite($handler, AddGetNextTurnForPlayer(2) . "\r\n");
 
   fwrite($handler, "?>");
+  fclose($handler);
   
   //Write the game render file
   $filename = $rootPath . "/NextTurnRender.php";
   $handler = fopen($filename, "w");
   fwrite($handler, "<?php\r\n");
-  fwrite($handler, AddNextTurn() . ";\r\n");
+  fwrite($handler, AddNextTurn() . "\r\n");
   fwrite($handler, "?>");
+  fclose($handler);
+
+  //Write JavaScript helper file
+  $filename = $rootPath . "/GeneratedUI.js";
+  $handler = fopen($filename, "w");
+  fwrite($handler, AddGeneratedUI() . "\r\n");
+  fclose($handler);
 
 
   echo("Game code generator completed successfully!");
@@ -372,5 +380,20 @@
     }
     $footer = "echo(\"newHTML = RenderRows(myRows, theirRows);\");\r\n";
     return $header . $myStuff . $theirStuff . $footer;
+  }
+
+  //var dropArea = document.getElementById("groundArena");
+  //dropArea.classList.add("droppable");
+  function AddGeneratedUI() {
+    global $zones;
+    $rv = "";
+    $rv .= "function generatedDragStart() {\r\n";
+    for($i=0; $i<count($zones); ++$i) {
+      $zone = $zones[$i];
+      $rv .= "  var " . $zone->Name . " = document.getElementById(\"" . $zone->Name . "\");\r\n";
+      $rv .= "  " . $zone->Name . ".classList.add(\"droppable\");\r\n";
+    }
+    $rv .= "}\r\n";
+    return $rv;
   }
 ?>

@@ -14,7 +14,7 @@
           borderColor = 0;
         } else if (folder == "concat") {
           fileExt = ".webp";
-        } else if (folder == "WebpImages2") {
+        } else if (folder == "WebpImages") {
           fileExt = ".webp";
         }
         var actionData = actionDataOverride != "" ? actionDataOverride : cardNumber;
@@ -188,6 +188,7 @@
 
           // Get the card being dragged
           var draggedCard = e.dataTransfer.getData("text/plain");
+          alert(draggedCard + " " + destination);
 
           // Send the action input to the server
           SubmitInput("10014", "&cardID=" + draggedCard + "!" + destination);
@@ -220,7 +221,7 @@
       //Note: 96 = Card Size
       function PopulateZone(zone, zoneData, size = 96, folder = "concat", row = 1) {
           zoneData = zoneData.trim();
-          var newHTML = "<span id='" + zone + " style='display: flex; flex-wrap: wrap; justify-content: center;'>";
+          var newHTML = "<span id='" + zone + " ondragover='dragOver(event)' ondrop='drop(event)' style='display: flex; flex-wrap: wrap; justify-content: center;'>";
           var zoneArr = (zoneData.length == 0 ? [] : zoneData.split("<|>"));
           for (var i = 0; i < zoneArr.length; ++i) {
               cardArr = zoneArr[i].split(" ");
@@ -235,7 +236,7 @@
               if (id != "-") newHTML += "<span id='" + id + "' " + styles + droppable + ">";
               else newHTML += "<span " + styles + droppable + ">";
               if (type == "C") {
-                  folder = "WebpImages2";
+                  folder = "WebpImages";
                   // User Tags
                   if (zone == "myChar") {
                       var fontColor = "#DDD";

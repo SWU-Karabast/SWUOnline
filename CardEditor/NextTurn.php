@@ -101,7 +101,8 @@
 
     </script>
 
-    <script src="../jsInclude.js"></script>
+    <script src="./Core/jsInclude.js"></script>
+    <sript src="./<?php echo($folderPath); ?>/GeneratedUI.js"></script>
     <!--<script src="./GeneratedCode/GeneratedCardDictionaries.js"></script>-->
 
     <style>
