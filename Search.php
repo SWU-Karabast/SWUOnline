@@ -650,7 +650,7 @@ function UnitUniqueIDController($uniqueID) {
   return 1;
 }
 
-function SearchAlliesForUniqueID($uniqueID, $player)
+function SearchAlliesForUniqueID($uniqueID, $player): int
 {
   $allies = &GetAllies($player);
   for ($i = 0; $i < count($allies); $i += AllyPieces()) {
