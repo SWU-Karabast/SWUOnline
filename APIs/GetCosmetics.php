@@ -31,6 +31,18 @@ $cardBack = new stdClass();
 $cardBack->name = "L8 Night Gaming";
 $cardBack->id = 6;
 $response->cardBacks[] = $cardBack;
+$cardBack = new stdClass();
+$cardBack->name = "Mobyus1 Simple";
+$cardBack->id = 7;
+$response->cardBacks[] = $cardBack;
+$cardBack = new stdClass();
+$cardBack->name = "Mobyus1 Titled";
+$cardBack->id = 8;
+$response->cardBacks[] = $cardBack;
+$cardBack = new stdClass();
+$cardBack->name = "Outmaneuver";
+$cardBack->id = 9;
+$response->cardBacks[] = $cardBack;
 
 $response->playmats = [];
 if(IsUserLoggedIn()) {
