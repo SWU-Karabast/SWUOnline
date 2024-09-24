@@ -1534,6 +1534,9 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("PASSPARAMETER", $mainPlayer, "{1}", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "CAPTURE,{0}", 1);
       break;
+    case "7922308768"://Valiant Assault Ship
+      AddCurrentTurnEffect("7922308768", $mainPlayer, 'PLAY', $attackerAlly->UniqueID());
+      break;
     default: break;
   }
 }
