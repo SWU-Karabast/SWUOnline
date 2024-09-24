@@ -1237,9 +1237,8 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
   global $playerID, $turn, $currentPlayer, $actionPoints, $layers;
   global $layerPriority, $lastPlayed;
   global $decisionQueue, $CS_PlayIndex, $CS_OppIndex, $CS_OppCardActive, $CS_PlayUniqueID, $CS_LayerPlayIndex, $CS_LastDynCost, $CS_NumCardsPlayed;
-  global $mainPlayer, $CS_DynCostResolved, $CS_NumVillainyPlayed, $CS_NumEventsPlayed, $CS_NumClonesPlayed;
+  global $CS_DynCostResolved, $CS_NumVillainyPlayed, $CS_NumEventsPlayed, $CS_NumClonesPlayed;
   $resources = &GetResources($currentPlayer);
-  $pitch = &GetPitch($currentPlayer);
   $dynCostResolved = intval($dynCostResolved);
   $layerPriority[0] = ShouldHoldPriority(1);
   $layerPriority[1] = ShouldHoldPriority(2);
@@ -1313,13 +1312,9 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
       if($from != "PLAY" && ($turn[0] != "B" || (count($layers) > 0 && $layers[0] != ""))) GetLayerTarget($cardID);
       //Right now only units in play can attack
       if (!$oppCardActive) {
-        if ($from == "PLAY")
-          AddDecisionQueue("GETTARGETOFATTACK", $currentPlayer, $cardID . "," . $from);
-
-        if ($dynCost == "")
-          AddDecisionQueue("PASSPARAMETER", $currentPlayer, "0");
-        else
-          AddDecisionQueue("GETCLASSSTATE", $currentPlayer, $CS_LastDynCost);
+        if($from == "PLAY") AddDecisionQueue("GETTARGETOFATTACK", $currentPlayer, $cardID . "," . $from);
+        if($dynCost == "") AddDecisionQueue("PASSPARAMETER", $currentPlayer, "0");
+        else AddDecisionQueue("GETCLASSSTATE", $currentPlayer, $CS_LastDynCost);
         AddDecisionQueue("RESUMEPAYING", $currentPlayer, $cardID . "-" . $from . "-" . $index);
       }
       $decisionQueue = array_merge($decisionQueue, $dqCopy);
