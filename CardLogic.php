@@ -453,14 +453,12 @@ function ContinueDecisionQueue($lastResult = "")
               $additionalCosts = count($subparamArr) > 3 ? $subparamArr[3] : "-";
               $abilityIndex = count($subparamArr) > 4 ? $subparamArr[4] : -1;
               $playIndex = count($subparamArr) > 5 ? $subparamArr[5] : -1;
-                SetClassState($player, $CS_AbilityIndex, $abilityIndex);
-                SetClassState($player, $CS_PlayIndex, $playIndex);
-                $playText = PlayAbility($cardID, $from, $resourcesPaid, $target, $additionalCosts, $oppCardActive);
-                if($from != "PLAY") WriteLog("Resolving play ability of " . CardLink($cardID, $cardID) . ($playText != "" ? ": " : ".") . $playText);
-                if($from == "EQUIP") {
-                  EquipPayAdditionalCosts(FindCharacterIndex($player, $cardID), "EQUIP");
-                }
-                ProcessDecisionQueue();
+              SetClassState($player, $CS_AbilityIndex, $abilityIndex);
+              SetClassState($player, $CS_PlayIndex, $playIndex);
+              $playText = PlayAbility($cardID, $from, $resourcesPaid, $target, $additionalCosts, $oppCardActive, uniqueId: $uniqueID);
+              if($from != "PLAY") WriteLog("Resolving play ability of " . CardLink($cardID, $cardID) . ($playText != "" ? ": " : ".") . $playText);
+              if($from == "EQUIP") EquipPayAdditionalCosts(FindCharacterIndex($player, $cardID), "EQUIP");
+              ProcessDecisionQueue();
             }
           }
         }
@@ -687,11 +685,6 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a card to deal " . $damage . " damage to");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $otherPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $otherPlayer, "DEALDAMAGE," . $damage, 1);
-      break;
-    case "8506660490"://Darth Vader unit
-      AddDecisionQueue("SETDQCONTEXT", $player, "Choose any number of units with combined cost 3 or less.");
-      AddDecisionQueue("SEARCHDECKTOPX", $player, "10;99;include-definedType-Unit&include-maxCost-3&include-aspect-Villainy");
-      AddDecisionQueue("SPECIFICCARD", $player, "DARTHVADER", 1);
       break;
     case "3045538805"://Hondo Ohnaka Leader
       AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
