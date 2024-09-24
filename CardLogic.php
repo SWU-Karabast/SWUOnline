@@ -443,7 +443,7 @@ function ContinueDecisionQueue($lastResult = "")
               ProcessDecisionQueue();
             }
             else {
-              $oppCardActive = GetClassState($currentPlayer, $CS_OppCardActive) >= 0;
+              $oppCardActive = GetClassState($currentPlayer, $CS_OppCardActive) > 0;
 
               $cardID = $parameter;
               $subparamArr = explode("!", $target);
