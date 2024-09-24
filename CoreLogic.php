@@ -2089,7 +2089,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     }
   }
   if($from != "PLAY" && $from != "EQUIP" && $from != "CHAR") {
-    AddAllyPlayAbilityLayers($cardID, $from, $playAlly ? $playAlly->UniqueID() : "-");
+    AddAllyPlayAbilityLayers($cardID, $from, isset($playAlly) ? $playAlly->UniqueID() : "-");
   }
   if($from == "EQUIP" && DefinedTypesContains($cardID, "Leader", $currentPlayer)) {
     $abilityName = GetResolvedAbilityName($cardID, $from);
