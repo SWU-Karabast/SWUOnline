@@ -686,11 +686,6 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $otherPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $otherPlayer, "DEALDAMAGE," . $damage, 1);
       break;
-    case "8506660490"://Darth Vader unit
-      AddDecisionQueue("SETDQCONTEXT", $player, "Choose any number of units with combined cost 3 or less.");
-      AddDecisionQueue("SEARCHDECKTOPX", $player, "10;99;include-definedType-Unit&include-maxCost-3&include-aspect-Villainy");
-      AddDecisionQueue("SPECIFICCARD", $player, "DARTHVADER", 1);
-      break;
     case "3045538805"://Hondo Ohnaka Leader
       AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
       AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to give an experience token", 1);
