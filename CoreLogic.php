@@ -2082,11 +2082,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
   }
   if($from != "PLAY" && IsAlly($cardID, $currentPlayer)) {
     //LastAllyIndex does not work well when you play multiple unit on same times (Vader, U-Wing, Endless Legion ...)
-    if($uniqueId != "") {
-      $playAlly = new Ally("MYALLY-" . SearchAlliesForUniqueID($additionalCosts, $currentPlayer));
-    } else {
-      $playAlly = new Ally("MYALLY-" . LastAllyIndex($currentPlayer));
-    }
+    $playAlly = new Ally("MYALLY-" . LastAllyIndex($currentPlayer));
+    // if($uniqueId != "") {
+    //   $searchAllies = SearchAlliesForUniqueID($additionalCosts, $currentPlayer);
+    //   $searchAllies = $searchAllies == -1 ? "" : $searchAllies;
+    //   $playAlly = new Ally("MYALLY-" . $searchAllies);
+    // } else {
+    //   $playAlly = new Ally("MYALLY-" . LastAllyIndex($currentPlayer));
+    // }
   }
   if($from != "PLAY" && $from != "EQUIP" && $from != "CHAR") {
     AddAllyPlayAbilityLayers($cardID, $from, isset($playAlly) ? $playAlly->UniqueID() : "-");
