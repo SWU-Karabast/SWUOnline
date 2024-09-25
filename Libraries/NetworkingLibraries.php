@@ -1339,7 +1339,7 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
   if($resources[1] > 0) {
     WriteLog("Not enough resources to pay for that. Reverting gamestate.");
     if(GetClassState($currentPlayer, $CS_OppCardActive))
-      SetClassState($currentPlayer, $CS_OppCardActive, -1);
+      SetClassState($currentPlayer, $CS_OppCardActive, 0);
     RevertGamestate();
   }
   //CR 2.0 5.1.7. Pay Asset-Costs
