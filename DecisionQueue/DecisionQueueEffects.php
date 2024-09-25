@@ -281,7 +281,7 @@ function SpecificCardLogic($player, $card, $lastResult)
       $searchLeftovers = explode(",", $deck->Top(true, 10 - count($cardArr)));
       shuffle($searchLeftovers);
       for($i=0; $i<count($searchLeftovers); ++$i) {
-        AddBottomDeck($searchLeftovers[$i], $player, "");
+        AddBottomDeck($searchLeftovers[$i], $player);
       }
       break;
     case "DARTHVADER":
@@ -302,7 +302,7 @@ function SpecificCardLogic($player, $card, $lastResult)
       $searchLeftovers = explode(",", $deck->Top(true, 10 - count($cardArr)));
       shuffle($searchLeftovers);
       for($i=0; $i<count($searchLeftovers); ++$i) {
-        AddBottomDeck($searchLeftovers[$i], $player, $parameter);
+        AddBottomDeck($searchLeftovers[$i], $player);
       }
       break;
     case "POWERFAILURE":
