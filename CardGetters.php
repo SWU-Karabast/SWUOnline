@@ -82,9 +82,10 @@ function GetClassState($player, $piece)
     if ($player == $mainPlayer) return $mainClassState[$piece];
     else return $defClassState[$piece];
   } else {
-    if ($player == $myStateBuiltFor) return $myClassState[$piece];
-    else return $theirClassState[$piece];
+    if ($player == $myStateBuiltFor && isset($myClassState[$piece])) return $myClassState[$piece];
+    else if ($player != $myStateBuiltFor && isset($theirClassState[$piece])) return $theirClassState[$piece];
   }
+  return null;
 }
 
 function &GetDeck($player)

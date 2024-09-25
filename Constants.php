@@ -474,11 +474,11 @@ function ResetClassState($player)
   $classState[$CS_CardsBanished] = 0;
   $classState[$CS_DamageTaken] = 0;
   $classState[$CS_NumActionsPlayed] = 0;
+  $classState[$CS_ArsenalFacing] = 0;
   $classState[$CS_CharacterIndex] = 0;
   $classState[$CS_PlayIndex] = -1;
-  $classState[$CS_OppIndex] = -1;
-  $classState[$CS_OppCardActive] = 0;
   $classState[$CS_NumNonAttackCards] = 0;
+  $classState[$CS_CachedCharacterLevel] = 0;
   $classState[$CS_PreparationCounters] = 0;
   $classState[$CS_NextNAACardGoAgain] = 0;
   $classState[$CS_NumAlliesDestroyed] = 0;
@@ -534,6 +534,8 @@ function ResetClassState($player)
   $classState[$CS_HitsWithSword] = 0;
   $classState[$CS_NumClonesPlayed] = 0;
   $classState[$CS_UnitsThatAttackedBase] = "-";
+  $classState[$CS_OppIndex] = -1;
+  $classState[$CS_OppCardActive] = 0;
 }
 
 function ResetCharacterEffects()
