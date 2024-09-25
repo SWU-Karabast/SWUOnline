@@ -378,7 +378,7 @@ function ResetCombatChainState()
           AddGraveyard($chainLinks[$i][$j], $chainLinks[$i][$j + 1], "CC");
           break;
         case "BOTDECK":
-          AddBottomDeck($chainLinks[$i][$j], $mainPlayer, "CC");
+          AddBottomDeck($chainLinks[$i][$j], $mainPlayer);
           break;
         case "HAND":
           AddPlayerHand($chainLinks[$i][$j], $mainPlayer, "CC");
@@ -477,7 +477,7 @@ function ResetClassState($player)
   $classState[$CS_CharacterIndex] = 0;
   $classState[$CS_PlayIndex] = -1;
   $classState[$CS_OppIndex] = -1;
-  $classState[$CS_OppCardActive] = -1;
+  $classState[$CS_OppCardActive] = 0;
   $classState[$CS_NumNonAttackCards] = 0;
   $classState[$CS_PreparationCounters] = 0;
   $classState[$CS_NextNAACardGoAgain] = 0;

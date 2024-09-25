@@ -1467,7 +1467,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $hand = &GetHand($player);
       $deck = &GetDeck($player);
       for($i=0; $i<count($hand); $i+=HandPieces()) {
-        AddBottomDeck($hand[$i], $player, "MULLIGAN");
+        AddBottomDeck($hand[$i], $player);
         PrependDecisionQueue("DRAW", $player, "-");
       }
       $hand = [];
@@ -1545,7 +1545,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $cards = explode(",", $lastResult);
       shuffle($cards);
       for($i=0; $i<count($cards); ++$i) {
-        AddBottomDeck($cards[$i], $player, $parameter);
+        AddBottomDeck($cards[$i], $player);
       }
       return "";
     case "EQUIPCARD":

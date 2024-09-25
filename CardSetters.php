@@ -37,7 +37,7 @@ function RemoveBanish($player, $index)
   $banish = array_values($banish);
 }
 
-function AddBottomDeck($cardID, $player, $from)
+function AddBottomDeck($cardID, $player)
 {
   if(!$cardID) return;
   $deck = &GetDeck($player);
