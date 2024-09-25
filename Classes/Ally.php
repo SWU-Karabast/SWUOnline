@@ -442,11 +442,11 @@ class Ally {
     return $this->allies[$this->index + 8];
   }
 
-  function ModifyUses($amount) {
+  function ModifyUses($amount): void {
     $this->allies[$this->index + 8] += $amount;
   }
 
-  function LostAbilities() {
+  function LostAbilities($ignoreFirstCardId = ""): bool {
     global $currentTurnEffects;
     for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnEffectPieces()) {
       if($currentTurnEffects[$i+1] != $this->PlayerID()) continue;
@@ -454,7 +454,13 @@ class Ally {
       if($currentTurnEffects[$i] == "2639435822") return true;
     }
     $upgrades = $this->GetUpgrades();
+    $ignoredUpgrade = 0;
     for($i=0; $i<count($upgrades); ++$i) {
+      //in case of imprisoned, upgrade are added before all triggers, we need to ignore it for krayt
+      if($ignoreFirstCardId != "" && $upgrades[$i] == $ignoreFirstCardId && $ignoredUpgrade == 0) {
+        $ignoredUpgrade++;
+        continue;
+      }
       switch($upgrades[$i]) {
         case "1368144544"://Imprisoned
           return true;
@@ -464,22 +470,22 @@ class Ally {
     return false;
   }
 
-  function IsUpgraded() {
+  function IsUpgraded(): bool {
     return $this->NumUpgrades() > 0;
   }
 
-  function NumUpgrades() {
+  function NumUpgrades(): int {
     $upgrades = $this->GetUpgrades();
     return count($upgrades);
   }
 
-  function HasBounty() {
+  function HasBounty(): bool {
     return CollectBounties($this->PlayerID(), $this->Index(), reportMode:true) > 0;
   }
 
 }
 
-function LastAllyIndex($player) {
+function LastAllyIndex($player): int {
   $allies = &GetAllies($player);
   return count($allies) - AllyPieces();
 }
