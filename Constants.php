@@ -378,7 +378,7 @@ function ResetCombatChainState()
           AddGraveyard($chainLinks[$i][$j], $chainLinks[$i][$j + 1], "CC");
           break;
         case "BOTDECK":
-          AddBottomDeck($chainLinks[$i][$j], $mainPlayer, "CC");
+          AddBottomDeck($chainLinks[$i][$j], $mainPlayer);
           break;
         case "HAND":
           AddPlayerHand($chainLinks[$i][$j], $mainPlayer, "CC");

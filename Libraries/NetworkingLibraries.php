@@ -977,7 +977,7 @@ function FinalizeChainLink($chainClosed = false)
       }
       switch ($goesWhere) {
         case "BOTDECK":
-          AddBottomDeck($combatChain[$i - 1], $mainPlayer, "CC");
+          AddBottomDeck($combatChain[$i-1], $mainPlayer);
           break;
         case "HAND":
           AddPlayerHand($combatChain[$i - 1], $mainPlayer, "CC");
@@ -1705,7 +1705,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
       $goesWhere = GoesWhereAfterResolving($cardID, $from, $currentPlayer, resourcesPaid:$resourcesPaid, additionalCosts:$additionalCosts);
       switch ($goesWhere) {
         case "BOTDECK":
-          AddBottomDeck($cardID, $currentPlayer, $from);
+          AddBottomDeck($cardID, $currentPlayer);
           break;
         case "HAND":
           AddPlayerHand($cardID, $currentPlayer, $from);
