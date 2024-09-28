@@ -197,8 +197,6 @@
 
           // Send the action input to the server
           SubmitInput("10014", "&cardID=" + draggedCard + "!" + destination);
-
-          //var draggedElement = document.getElementById(draggedCard);
       }
 
       function BorderColorMap(code) {
