@@ -98,6 +98,7 @@ function GetCardBack($player)
     case 4; return "CBRebelResourceDark";
     case 5; return "CBGDP";
     case 6; return "CBL8NightGaming";
+    case 8; return "BNCardBack"
     default: return "CardBack";
   }
 }
@@ -283,6 +284,7 @@ function GetSettingsUI($player)
   $rv .= CreateRadioButton($SET_Cardback . "-" . 4, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Rebel Resource Dark");
   $rv .= CreateRadioButton($SET_Cardback . "-" . 5, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Golden Dice Podcast");
   $rv .= CreateRadioButton($SET_Cardback . "-" . 6, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "L8 Night Gaming");
+  $rv .= CreateRadioButton($SET_Cardback . "-" . 8, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Bothan Network");
   foreach(PatreonCampaign::cases() as $campaign) {
     if(isset($_SESSION[$campaign->SessionID()]) || (isset($_SESSION["useruid"]) && $campaign->IsTeamMember($_SESSION["useruid"]))) {
       $hasCardBacks = true;
