@@ -405,7 +405,7 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
         DealDamageAsync($otherPlayer, 2, "DAMAGE", "1047592361");
         AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY");
         AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal 2 damage to");
-        AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+        AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
         AddDecisionQueue("MZOP", $player, "DEALDAMAGE,2", 1);
         break;
       case "0949648290"://Greedo
