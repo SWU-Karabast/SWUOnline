@@ -136,8 +136,8 @@ function MZAddZone($player, $parameter, $lastResult)
       case "MYHAND": AddPlayerHand($cardIDs[$i], $player, "-"); break;
       case "MYRESOURCES": AddResources($cardIDs[$i], $player, "HAND", "DOWN"); break;
       case "MYTOPDECK": AddTopDeck($cardIDs[$i], $player, "-"); break;
-      case "MYBOTDECK": AddBottomDeck($cardIDs[$i], $player, "-"); break;
-      case "THEIRBOTDECK": AddBottomDeck($cardIDs[$i], $otherPlayer, "-"); break;
+      case "MYBOTDECK": AddBottomDeck($cardIDs[$i], $player); break;
+      case "THEIRBOTDECK": AddBottomDeck($cardIDs[$i], $otherPlayer); break;
       case "MYMEMORY": AddMemory($cardIDs[$i], $player, $params[1], $params[2]); break;
       case "THEIRMATERIAL": AddMaterial($cardIDs[$i], $otherPlayer, $params[1]); break;
       case "THEIRRESOURCES": AddResources($cardIDs[$i], $player, "HAND", "DOWN"); break;
@@ -357,7 +357,7 @@ function MZSink($player, $target)
   switch($pieces[0]) {
     case "THEIRALLY": case "MYALLY":
       $cardID = RemoveAlly($player, $pieces[1]);
-      AddBottomDeck($cardID, $player, "PLAY");
+      AddBottomDeck($cardID, $player);
       break;
     default: break;
   }

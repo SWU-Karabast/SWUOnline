@@ -147,6 +147,7 @@ function EffectAttackModifier($cardID, $playerID="")
     case "3789633661": return 4;//Cunning
     case "1939951561": return $subparam;//Attack Pattern Delta
     case "8988732248": return 1;//Rebel Assault
+    case "7922308768": return NumResources($mainPlayer) < NumResources($defPlayer) ? 2 : 0;//Valiant Assault Ship
     case "7109944284": return -1* $subparam;//Luke Skywalker
     case "1885628519": return 1;//Crosshair
     case "1480894253": return 2;//Kylo Ren
@@ -244,7 +245,7 @@ function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
           $remove = true;
           break;
         case "5707383130"://Bendu
-          if(!AspectContains($cardID, "Heroism", $currentPlayer) && !AspectContains($cardID, "Villainy", $currentPlayer)) {
+          if($from != "PLAY" && !AspectContains($cardID, "Heroism", $currentPlayer) && !AspectContains($cardID, "Villainy", $currentPlayer)) {
             $costModifier -= 2;
             $remove = true;
           }
@@ -314,13 +315,13 @@ function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
           $remove = true;
           break;
         case "0622803599-3"://Jabba the Hutt
-          if(DefinedTypesContains($cardID, "Unit", $currentPlayer)) {
+          if($from != "PLAY" && DefinedTypesContains($cardID, "Unit", $currentPlayer)) {
             $costModifier -= 1;
             $remove = true;
           }
           break;
         case "f928681d36-3"://Jabba the Hutt Leader Unit
-          if(DefinedTypesContains($cardID, "Unit", $currentPlayer)) {
+          if($from != "PLAY" && DefinedTypesContains($cardID, "Unit", $currentPlayer)) {
             $costModifier -= 2;
             $remove = true;
           }
@@ -630,9 +631,8 @@ function CurrentEffectStartTurnAbilities()
 
 function IsCombatEffectActive($cardID)
 {
-  global $combatChain, $currentPlayer;
+  global $combatChain;
   if(count($combatChain) == 0) return;
-  $attackID = $combatChain[0];
   $effectArr = explode("-", $cardID);
   $cardID = $effectArr[0];
   switch($cardID)
@@ -654,6 +654,7 @@ function IsCombatEffectActive($cardID)
     case "8495694166": return true;//Jedi Lightsaber
     case "3789633661": return true;//Cunning
     case "8988732248": return true;//Rebel Assault
+    case "7922308768": return true;//Valiant Assault Ship
     case "6514927936": return true;//Leia Organa
     case "0802973415": return true;//Outflank
     case "1480894253": return true;//Kylo Ren
@@ -672,15 +673,12 @@ function IsCombatEffectActive($cardID)
 
 function IsCombatEffectPersistent($cardID)
 {
-  global $currentPlayer;
-  $effectArr = explode(",", $cardID);
   switch($cardID) {
     case "2587711125": return true;//Disarm
     case "2569134232": return true;//Jedha City
     case "3789633661": return true;//Cunning
     case "1480894253": return true;//Kylo Ren
-    default:
-      return false;
+    default: return false;
   }
 }
 

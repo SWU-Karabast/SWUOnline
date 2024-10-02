@@ -2056,7 +2056,7 @@ function IsClassBonusActive($player, $class)
   return false;
 }
 
-function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalCosts = "-", $theirCard = false)
+function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalCosts = "-", $theirCard = false, $uniqueId = "")
 {
   global $currentPlayer, $layers, $CS_PlayIndex, $CS_OppIndex, $initiativePlayer, $CCS_CantAttackBase;
   $index = GetClassState($currentPlayer, $CS_PlayIndex);
@@ -2081,10 +2081,17 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     $target = count($targetArr) > 1 ? $targetArr[0] . "-" . $targetArr[1] : "-";
   }
   if($from != "PLAY" && IsAlly($cardID, $currentPlayer)) {
-    $playAlly = new Ally("MYALLY-" . LastAllyIndex($currentPlayer));
+    //LastAllyIndex does not work well when you play multiple unit on same times (Vader, U-Wing, Endless Legion ...)
+     if($uniqueId != "") {
+       $lastAllyUniqueId = SearchAlliesForUniqueID($additionalCosts, $currentPlayer);
+       $lastAllyUniqueId = $lastAllyUniqueId == -1 ? LastAllyIndex($currentPlayer) : $lastAllyUniqueId;
+       $playAlly = new Ally("MYALLY-" . $lastAllyUniqueId);
+     } else {
+       $playAlly = new Ally("MYALLY-" . LastAllyIndex($currentPlayer));
+     }
   }
   if($from != "PLAY" && $from != "EQUIP" && $from != "CHAR") {
-    AddAllyPlayAbilityLayers($cardID, $from, $playAlly ? $playAlly->UniqueID() : "-");
+    AddAllyPlayAbilityLayers($cardID, $from, isset($playAlly) ? $playAlly->UniqueID() : "-");
   }
   if($from == "EQUIP" && DefinedTypesContains($cardID, "Leader", $currentPlayer)) {
     $abilityName = GetResolvedAbilityName($cardID, $from);
@@ -2099,7 +2106,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         $allies = &GetAllies($currentPlayer);
         AddLayer("TRIGGER", $currentPlayer, "SHIELDED", "-", "-", $allies[$playIndex + 5]);
       }
-      PlayAbility(LeaderUnit($cardID), "CHAR", 0, "-", "-");
+      PlayAbility(LeaderUnit($cardID), "CHAR", 0, "-", "-", false, $uniqueId);
       //On Deploy ability
       switch($cardID) {
         case "5784497124"://Emperor Palpatine
@@ -2418,7 +2425,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         DealDamageAsync($otherPlayer, 2, "DAMAGE", "1047592361");
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 2 damage to");
-        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,2", 1);
       }
       break;
@@ -2495,8 +2502,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "8240629990"://Avenger
-      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
-      MZChooseAndDestroy($otherPlayer, "MYALLY", filter:"definedType=Leader", context:"Choose a unit to destroy");
+      if(!$playAlly->LostAbilities()) {
+        $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+        MZChooseAndDestroy($otherPlayer, "MYALLY", filter: "definedType=Leader", context: "Choose a unit to destroy");
+      }
       break;
     case "8294130780"://Gladiator Star Destroyer
       if($from != "PLAY") {
@@ -2615,9 +2624,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "3018017739"://Vanguard Ace
       global $CS_NumCardsPlayed;
       if($from != "PLAY") {
-        $ally = new Ally("MYALLY-" . LastAllyIndex($currentPlayer));
         for($i=0; $i<(GetClassState($currentPlayer, $CS_NumCardsPlayed)-1); ++$i) {
-          $ally->Attach("2007868442");//Experience token
+          $playAlly->Attach("2007868442");//Experience token
         }
       }
       break;
@@ -2886,15 +2894,15 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "3896582249"://Redemption
       if($from != "PLAY") {
-        $ally = new Ally("MYALLY-" . LastAllyIndex($currentPlayer));
         for($i=0; $i<8; ++$i) {
           AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY", $i == 0 ? 0 : 1);
           AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "MYCHAR-0,THEIRCHAR-0,", $i == 0 ? 0 : 1);
-          AddDecisionQueue("MZFILTER", $currentPlayer, "index=MYALLY-" . $ally->Index());
+          AddDecisionQueue("MZFILTER", $currentPlayer, "index=MYALLY-" . $playAlly->Index());
+          AddDecisionQueue("MZFILTER", $currentPlayer, "damaged=0");
           AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to restore 1 (Remaining: " . (8-$i) . ")", $i == 0 ? 0 : 1);
           AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
           AddDecisionQueue("MZOP", $currentPlayer, "RESTORE,1", 1);
-          AddDecisionQueue("UNIQUETOMZ", $currentPlayer, $ally->UniqueID(), 1);
+          AddDecisionQueue("UNIQUETOMZ", $currentPlayer, $playAlly->UniqueID(), 1);
           AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1", 1);
         }
       }
@@ -3251,7 +3259,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "8506660490"://Darth Vader Unit
       if($from != "PLAY") {
-        AddLayer("TRIGGER", $currentPlayer, "8506660490", append:true);
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose any number of units with combined cost 3 or less.");
+        AddDecisionQueue("SEARCHDECKTOPX", $currentPlayer, "10;99;include-definedType-Unit&include-maxCost-3&include-aspect-Villainy");
+        AddDecisionQueue("SPECIFICCARD", $currentPlayer, "DARTHVADER", 1);
       }
       break;
     case "8615772965"://Vigilance
@@ -3787,7 +3797,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "0754286363"://The Mandalorian's Rifle
       $ally = new Ally($target, $currentPlayer);
       if(CardTitle($ally->CardID()) == "The Mandalorian") {
-        AddLayer("TRIGGER", $currentPlayer, $cardID);
+        AddLayer("TRIGGER", $currentPlayer, $cardID, uniqueID: $ally->UniqueID());
       }
       break;
     case "4643489029"://Palpatine's Return
@@ -4017,7 +4027,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       Draw($currentPlayer);
       break;
     case "9270539174"://Wild Rancor
-      DamageAllAllies(2, "9270539174", arena:"Ground", except:"MYALLY-".LastAllyIndex($currentPlayer));
+      DamageAllAllies(2, "9270539174", arena: "Ground", except: "MYALLY-" . $playAlly->Index());
       break;
     case "2744523125"://Salacious Crumb
       $abilityName = GetResolvedAbilityName($cardID, $from);
@@ -4026,7 +4036,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         MZBounce($currentPlayer, "MYALLY-" . $salaciousCrumbIndex);
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:arena=Ground&THEIRALLY:arena=Ground");
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 1 damage to");
-        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1", 1);
       } else if($from != "PLAY") {
         Restore(1, $currentPlayer);

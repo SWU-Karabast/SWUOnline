@@ -443,7 +443,7 @@ function ContinueDecisionQueue($lastResult = "")
               ProcessDecisionQueue();
             }
             else {
-              $oppCardActive = GetClassState($currentPlayer, $CS_OppCardActive) >= 0;
+              $oppCardActive = GetClassState($currentPlayer, $CS_OppCardActive) > 0;
 
               $cardID = $parameter;
               $subparamArr = explode("!", $target);
@@ -453,14 +453,12 @@ function ContinueDecisionQueue($lastResult = "")
               $additionalCosts = count($subparamArr) > 3 ? $subparamArr[3] : "-";
               $abilityIndex = count($subparamArr) > 4 ? $subparamArr[4] : -1;
               $playIndex = count($subparamArr) > 5 ? $subparamArr[5] : -1;
-                SetClassState($player, $CS_AbilityIndex, $abilityIndex);
-                SetClassState($player, $CS_PlayIndex, $playIndex);
-                $playText = PlayAbility($cardID, $from, $resourcesPaid, $target, $additionalCosts, $oppCardActive);
-                if($from != "PLAY") WriteLog("Resolving play ability of " . CardLink($cardID, $cardID) . ($playText != "" ? ": " : ".") . $playText);
-                if($from == "EQUIP") {
-                  EquipPayAdditionalCosts(FindCharacterIndex($player, $cardID), "EQUIP");
-                }
-                ProcessDecisionQueue();
+              SetClassState($player, $CS_AbilityIndex, $abilityIndex);
+              SetClassState($player, $CS_PlayIndex, $playIndex);
+              $playText = PlayAbility($cardID, $from, $resourcesPaid, $target, $additionalCosts, $oppCardActive, uniqueId: $uniqueID);
+              if($from != "PLAY") WriteLog("Resolving play ability of " . CardLink($cardID, $cardID) . ($playText != "" ? ": " : ".") . $playText);
+              if($from == "EQUIP") EquipPayAdditionalCosts(FindCharacterIndex($player, $cardID), "EQUIP");
+              ProcessDecisionQueue();
             }
           }
         }
@@ -688,11 +686,6 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $otherPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $otherPlayer, "DEALDAMAGE," . $damage, 1);
       break;
-    case "8506660490"://Darth Vader unit
-      AddDecisionQueue("SETDQCONTEXT", $player, "Choose any number of units with combined cost 3 or less.");
-      AddDecisionQueue("SEARCHDECKTOPX", $player, "10;99;include-definedType-Unit&include-maxCost-3&include-aspect-Villainy");
-      AddDecisionQueue("SPECIFICCARD", $player, "DARTHVADER", 1);
-      break;
     case "3045538805"://Hondo Ohnaka Leader
       AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
       AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to give an experience token", 1);
@@ -718,14 +711,14 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       AddDecisionQueue("MZOP", $player, "READY", 1);
       AddDecisionQueue("ADDMZUSES", $player, "-1", 1);
       break;
-    case "0754286363":
+    case "0754286363"://The Mandalorian's Rifle
       AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY");
       AddDecisionQueue("MZFILTER", $player, "definedType=Leader");
       AddDecisionQueue("MZFILTER", $player, "status=0");
       AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to capture");
       AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
       AddDecisionQueue("MZOP", $player, "CAPTURE," . $uniqueID, 1);
-        break;
+      break;
     default: break;
   }
 }

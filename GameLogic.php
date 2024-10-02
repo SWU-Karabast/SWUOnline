@@ -581,10 +581,25 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           return $lastResult;
         case "BOUNCEUPGRADE":
           $upgradeID = $lastResult;
-          $mzArr = explode("-", $dqVars[0]);
-          $allyPlayer = $mzArr[0] == "MYALLY" ? $player : ($player == 1 ? 2 : 1);
-          $ally = new Ally($dqVars[0], $allyPlayer);
-          $ownerId = $ally->DefeatUpgrade($upgradeID);
+          if(str_contains($upgradeID, "-")) {
+            $upgradeDefinition = explode("-", $upgradeID);
+            $upgradeID = $upgradeDefinition[0];
+            $ownerId = $upgradeDefinition[1];
+            global $myDiscard, $theirDiscard;
+            if($ownerId == $player) $graveyard = $myDiscard;
+            else $graveyard = $theirDiscard;
+            for ($i = 0; $i < count($graveyard); $i += DiscardPieces()) {
+              if($graveyard[$i] == $upgradeID) {
+                RemoveGraveyard($ownerId, $i);
+                break;
+              }
+            }
+          } else {
+            $mzArr = explode("-", $dqVars[0]);
+            $allyPlayer = $mzArr[0] == "MYALLY" ? $player : ($player == 1 ? 2 : 1);
+            $ally = new Ally($dqVars[0], $allyPlayer);
+            $ownerId = $ally->DefeatUpgrade($upgradeID);
+          }
           if(!IsToken($upgradeID)) AddHand($ownerId, $upgradeID);
           return $lastResult;
         case "RESCUECAPTIVE":
@@ -712,6 +727,10 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
               $ally = new Ally($arr[$i]);
               if($params[1] == 1 && $ally->IsDamaged()) $match = true;
               else if($params[1] == 0 && !$ally->IsDamaged()) $match = true;
+            } else if($mzArr[0] == "MYCHAR" || $mzArr[0] == "THEIRCHAR") {
+              $health = GetHealth($mzArr[0] == "MYCHAR" ? $player : ($player == 1 ? 2 : 0));
+              if($params[1] == 1 && $health > 0) $match = true;
+              else if($params[1] == 0 && $health == 0) $match = true;
             }
             break;
           case "leader":
@@ -1452,7 +1471,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $hand = &GetHand($player);
       $deck = &GetDeck($player);
       for($i=0; $i<count($hand); $i+=HandPieces()) {
-        AddBottomDeck($hand[$i], $player, "MULLIGAN");
+        AddBottomDeck($hand[$i], $player);
         PrependDecisionQueue("DRAW", $player, "-");
       }
       $hand = [];
@@ -1530,7 +1549,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $cards = explode(",", $lastResult);
       shuffle($cards);
       for($i=0; $i<count($cards); ++$i) {
-        AddBottomDeck($cards[$i], $player, $parameter);
+        AddBottomDeck($cards[$i], $player);
       }
       return "";
     case "EQUIPCARD":

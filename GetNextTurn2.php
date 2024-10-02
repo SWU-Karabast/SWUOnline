@@ -205,9 +205,9 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
 
   //Base Damage Numbers
   echo ("<div class='base-dmg-wrapper'><div class='base-dmg-position'><span class='base-my-dmg'>$myHealth</span>");
-      echo (($manualMode ? "<span class='base-my-dmg-manual'>" . CreateButton($playerID, "+1", 10006, 0, "20px") . CreateButton($playerID, "-1", 10005, 0, "20px") . "</span>" : ""));
+  echo (($manualMode ? "<span class='base-my-dmg-manual'>" . CreateButton($playerID, "+1", 10006, 0, "20px") . CreateButton($playerID, "-1", 10005, 0, "20px") . "</span>" : ""));
   echo ("<span class='base-their-dmg'>$theirHealth</span>");
-  echo (($manualMode ? "<span class='base-their-dmg-manual'>" . CreateButton($playerID, "+1", 10008, 0, "20px") . CreateButton($playerID, "-1", 10007, 0, "20px") . "</span>" : ""));
+//  echo (($manualMode ? "<span class='base-their-dmg-manual'>" . CreateButton($playerID, "+1", 10008, 0, "20px") . CreateButton($playerID, "-1", 10007, 0, "20px") . "</span>" : ""));
   echo ("</div></div>");
   echo ("<div class='base-their-dmg-manual'></div>");
   if ($turn[0] == "ARS" || (count($layers) > 0 && $layers[0] == "ENDTURN")) {
@@ -485,7 +485,13 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     for ($i = 0; $i < count($options); ++$i) {
       $content .= "<td>";
       $content .= "<table><tr><td>";
-      $content .= Card($options[$i], "concat", $cardSize, 0, 1);
+      if(str_contains($options[$i], "-")) {
+        $cardDefinition = explode("-", $options[$i]);
+        $border = $playerID == $cardDefinition[1] ? 6 : 2;
+        $content .= Card($cardDefinition[0], "concat", $cardSize, 0, 1, borderColor: $border);
+      } else {
+        $content .= Card($options[$i], "concat", $cardSize, 0, 1);
+      }
       $content .= "</td></tr><tr><td>";
       if ($turn[0] == "CHOOSETOP"  || $turn[0] == "MAYCHOOSETOP" || $turn[0] == "OPT") $content .= CreateButton($playerID, "Top", 8, $options[$i], "20px");
       if ($turn[0] == "CHOOSEBOTTOM" || $turn[0] == "OPT") $content .= CreateButton($playerID, "Bottom", 9, $options[$i], "20px");

@@ -474,14 +474,14 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
       WriteLog("Player " . $playerID ." manually added 1 damage point to themselves.", highlight: true);
       LoseHealth(1, $playerID);
       break;
-    case 10007:
-      WriteLog("Player " . $playerID ." manually subtracted 1 damage from their opponent.", highlight: true);
-      Restore(1, ($playerID == 1 ? 2 : 1));
-      break;
-    case 10008:
-      WriteLog("Player " . $playerID ." manually added 1 damage to their opponent.", highlight: true);
-      LoseHealth(1, ($playerID == 1 ? 2 : 1));
-      break;
+//    case 10007:
+//      WriteLog("Player " . $playerID ." manually subtracted 1 damage from their opponent.", highlight: true);
+//      Restore(1, ($playerID == 1 ? 2 : 1));
+//      break;
+//    case 10008:
+//      WriteLog("Player " . $playerID ." manually added 1 damage to their opponent.", highlight: true);
+//      LoseHealth(1, ($playerID == 1 ? 2 : 1));
+//      break;
     case 10009:
       WriteLog("Player " . $playerID ." manually drew a card for themselves.", highlight: true);
       Draw($playerID, false);
@@ -743,7 +743,7 @@ function Passed(&$turn, $playerID)
 function PassInput($autopass = false)
 {
   global $turn, $currentPlayer, $initiativeTaken, $initiativePlayer;
-  if($turn[0] == "END" || $turn[0] == "MAYMULTICHOOSETEXT" || $turn[0] == "MAYCHOOSECOMBATCHAIN" || $turn[0] == "MAYCHOOSEMULTIZONE" || $turn[0] == "MAYMULTICHOOSEAURAS" ||$turn[0] == "MAYMULTICHOOSEHAND" || $turn[0] == "MAYCHOOSEHAND" || $turn[0] == "MAYCHOOSEDISCARD" || $turn[0] == "MAYCHOOSEARSENAL" || $turn[0] == "MAYCHOOSEPERMANENT" || $turn[0] == "MAYCHOOSEDECK" || $turn[0] == "MAYCHOOSEMYSOUL" || $turn[0] == "MAYCHOOSETOP" || $turn[0] == "MAYCHOOSECARD" || $turn[0] == "INSTANT" || $turn[0] == "OK") {
+  if($turn[0] == "END" || $turn[0] == "MAYMULTICHOOSETEXT" || $turn[0] == "MAYCHOOSECOMBATCHAIN" || $turn[0] == "MAYCHOOSEMULTIZONE" || $turn[0] == "MAYMULTICHOOSEAURAS" || $turn[0] == "MAYMULTICHOOSEHAND" || $turn[0] == "MAYCHOOSEHAND" || $turn[0] == "MAYCHOOSEDISCARD" || $turn[0] == "MAYCHOOSEARSENAL" || $turn[0] == "MAYCHOOSEPERMANENT" || $turn[0] == "MAYCHOOSEDECK" || $turn[0] == "MAYCHOOSEMYSOUL" || $turn[0] == "MAYCHOOSETOP" || $turn[0] == "MAYCHOOSECARD" || $turn[0] == "INSTANT" || $turn[0] == "OK" || $turn[0] == "BUTTONINPUT") {
     ContinueDecisionQueue("PASS");
   } else {
     if($autopass == true);
@@ -977,7 +977,7 @@ function FinalizeChainLink($chainClosed = false)
       }
       switch ($goesWhere) {
         case "BOTDECK":
-          AddBottomDeck($combatChain[$i - 1], $mainPlayer, "CC");
+          AddBottomDeck($combatChain[$i-1], $mainPlayer);
           break;
         case "HAND":
           AddPlayerHand($combatChain[$i - 1], $mainPlayer, "CC");
@@ -1237,9 +1237,8 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
   global $playerID, $turn, $currentPlayer, $actionPoints, $layers;
   global $layerPriority, $lastPlayed;
   global $decisionQueue, $CS_PlayIndex, $CS_OppIndex, $CS_OppCardActive, $CS_PlayUniqueID, $CS_LayerPlayIndex, $CS_LastDynCost, $CS_NumCardsPlayed;
-  global $mainPlayer, $CS_DynCostResolved, $CS_NumVillainyPlayed, $CS_NumEventsPlayed, $CS_NumClonesPlayed;
+  global $CS_DynCostResolved, $CS_NumVillainyPlayed, $CS_NumEventsPlayed, $CS_NumClonesPlayed;
   $resources = &GetResources($currentPlayer);
-  $pitch = &GetPitch($currentPlayer);
   $dynCostResolved = intval($dynCostResolved);
   $layerPriority[0] = ShouldHoldPriority(1);
   $layerPriority[1] = ShouldHoldPriority(2);
@@ -1313,13 +1312,9 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
       if($from != "PLAY" && ($turn[0] != "B" || (count($layers) > 0 && $layers[0] != ""))) GetLayerTarget($cardID);
       //Right now only units in play can attack
       if (!$oppCardActive) {
-        if ($from == "PLAY")
-          AddDecisionQueue("GETTARGETOFATTACK", $currentPlayer, $cardID . "," . $from);
-
-        if ($dynCost == "")
-          AddDecisionQueue("PASSPARAMETER", $currentPlayer, "0");
-        else
-          AddDecisionQueue("GETCLASSSTATE", $currentPlayer, $CS_LastDynCost);
+        if($from == "PLAY") AddDecisionQueue("GETTARGETOFATTACK", $currentPlayer, $cardID . "," . $from);
+        if($dynCost == "") AddDecisionQueue("PASSPARAMETER", $currentPlayer, "0");
+        else AddDecisionQueue("GETCLASSSTATE", $currentPlayer, $CS_LastDynCost);
         AddDecisionQueue("RESUMEPAYING", $currentPlayer, $cardID . "-" . $from . "-" . $index);
       }
       $decisionQueue = array_merge($decisionQueue, $dqCopy);
@@ -1344,7 +1339,7 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
   if($resources[1] > 0) {
     WriteLog("Not enough resources to pay for that. Reverting gamestate.");
     if(GetClassState($currentPlayer, $CS_OppCardActive))
-      SetClassState($currentPlayer, $CS_OppCardActive, -1);
+      SetClassState($currentPlayer, $CS_OppCardActive, 0);
     RevertGamestate();
   }
   //CR 2.0 5.1.7. Pay Asset-Costs
@@ -1710,7 +1705,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
       $goesWhere = GoesWhereAfterResolving($cardID, $from, $currentPlayer, resourcesPaid:$resourcesPaid, additionalCosts:$additionalCosts);
       switch ($goesWhere) {
         case "BOTDECK":
-          AddBottomDeck($cardID, $currentPlayer, $from);
+          AddBottomDeck($cardID, $currentPlayer);
           break;
         case "HAND":
           AddPlayerHand($cardID, $currentPlayer, $from);

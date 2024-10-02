@@ -378,7 +378,7 @@ function ResetCombatChainState()
           AddGraveyard($chainLinks[$i][$j], $chainLinks[$i][$j + 1], "CC");
           break;
         case "BOTDECK":
-          AddBottomDeck($chainLinks[$i][$j], $mainPlayer, "CC");
+          AddBottomDeck($chainLinks[$i][$j], $mainPlayer);
           break;
         case "HAND":
           AddPlayerHand($chainLinks[$i][$j], $mainPlayer, "CC");
@@ -459,7 +459,7 @@ function ResetClassState($player)
   global $CS_ArcaneDamageTaken, $CS_NextNAAInstant, $CS_NextDamagePrevented, $CS_LastAttack, $CS_PlayCCIndex;
   global $CS_NumLeftPlay, $CS_NumMaterializations, $CS_NumFusedLightning, $CS_AfterPlayedBy, $CS_NumAttackCards, $CS_NumPlayedFromBanish;
   global $CS_NumAttacks, $CS_DieRoll, $CS_NumMandalorianAttacks, $CS_NumWizardNonAttack, $CS_LayerTarget, $CS_NumSwordAttacks;
-  global $CS_HitsWithWeapon, $CS_ArcaneDamagePrevention, $CS_DynCostResolved, $CS_CardsEnteredGY;
+  global $CS_HitsWithWeapon, $CS_ArcaneDamagePrevention, $CS_DynCostResolved, $CS_CardsEnteredGY, $CS_CachedCharacterLevel, $CS_ArsenalFacing;
   global $CS_HighestRoll, $CS_NumAuras, $CS_AbilityIndex, $CS_AdditionalCosts, $CS_NumRedPlayed, $CS_PlayUniqueID, $CS_AlluvionUsed;
   global $CS_NumPhantasmAADestroyed, $CS_NumEventsPlayed, $CS_MaxQuellUsed, $CS_DamageDealt, $CS_ArcaneTargetsSelected, $CS_NumDragonAttacks, $CS_NumIllusionistAttacks;
   global $CS_LastDynCost, $CS_NumIllusionistActionCardAttacks, $CS_ArcaneDamageDealt, $CS_LayerPlayIndex, $CS_NumCardsPlayed, $CS_NamesOfCardsPlayed, $CS_NumBoostPlayed;
@@ -474,11 +474,11 @@ function ResetClassState($player)
   $classState[$CS_CardsBanished] = 0;
   $classState[$CS_DamageTaken] = 0;
   $classState[$CS_NumActionsPlayed] = 0;
+  $classState[$CS_ArsenalFacing] = 0;
   $classState[$CS_CharacterIndex] = 0;
   $classState[$CS_PlayIndex] = -1;
-  $classState[$CS_OppIndex] = -1;
-  $classState[$CS_OppCardActive] = -1;
   $classState[$CS_NumNonAttackCards] = 0;
+  $classState[$CS_CachedCharacterLevel] = 0;
   $classState[$CS_PreparationCounters] = 0;
   $classState[$CS_NextNAACardGoAgain] = 0;
   $classState[$CS_NumAlliesDestroyed] = 0;
@@ -534,6 +534,8 @@ function ResetClassState($player)
   $classState[$CS_HitsWithSword] = 0;
   $classState[$CS_NumClonesPlayed] = 0;
   $classState[$CS_UnitsThatAttackedBase] = "-";
+  $classState[$CS_OppIndex] = -1;
+  $classState[$CS_OppCardActive] = 0;
 }
 
 function ResetCharacterEffects()
