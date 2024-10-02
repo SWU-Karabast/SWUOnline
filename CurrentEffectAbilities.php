@@ -245,7 +245,7 @@ function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
           $remove = true;
           break;
         case "5707383130"://Bendu
-          if(!AspectContains($cardID, "Heroism", $currentPlayer) && !AspectContains($cardID, "Villainy", $currentPlayer)) {
+          if($from != "PLAY" && !AspectContains($cardID, "Heroism", $currentPlayer) && !AspectContains($cardID, "Villainy", $currentPlayer)) {
             $costModifier -= 2;
             $remove = true;
           }
@@ -315,13 +315,13 @@ function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
           $remove = true;
           break;
         case "0622803599-3"://Jabba the Hutt
-          if(DefinedTypesContains($cardID, "Unit", $currentPlayer)) {
+          if($from != "PLAY" && DefinedTypesContains($cardID, "Unit", $currentPlayer)) {
             $costModifier -= 1;
             $remove = true;
           }
           break;
         case "f928681d36-3"://Jabba the Hutt Leader Unit
-          if(DefinedTypesContains($cardID, "Unit", $currentPlayer)) {
+          if($from != "PLAY" && DefinedTypesContains($cardID, "Unit", $currentPlayer)) {
             $costModifier -= 2;
             $remove = true;
           }
