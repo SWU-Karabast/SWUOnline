@@ -43,6 +43,9 @@ $cardBack = new stdClass();
 $cardBack->name = "Outmaneuver";
 $cardBack->id = 9;
 $response->cardBacks[] = $cardBack;
+$cardBack->name = "Bothan Network";
+$cardBack->id = 10;
+$response->cardBacks[] = $cardBack;
 
 $response->playmats = [];
 if(IsUserLoggedIn()) {
