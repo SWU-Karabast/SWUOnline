@@ -103,7 +103,7 @@ function GetCardBack($player)
     case 9: return "OutmaneuverPod";
     case 10: return "BNCardBack";
     case 11: return "PadawanUnlimited";
-    case 12: return "RVA SWU";
+    case 12: return "RVA_SWU";
     default: return "CardBack";
   }
 }
