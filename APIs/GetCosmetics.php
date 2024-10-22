@@ -46,6 +46,12 @@ $response->cardBacks[] = $cardBack;
 $cardBack->name = "Bothan Network";
 $cardBack->id = 10;
 $response->cardBacks[] = $cardBack;
+$cardBack->name = "Padawan Unlimited";
+$cardBack->id = 11;
+$response->cardBacks[] = $cardBack;
+$cardBack->name = "RVA SWU";
+$cardBack->id = 12;
+$response->cardBacks[] = $cardBack;
 
 $response->playmats = [];
 if(IsUserLoggedIn()) {
