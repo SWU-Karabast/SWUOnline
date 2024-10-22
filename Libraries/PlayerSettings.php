@@ -102,6 +102,8 @@ function GetCardBack($player)
     case 8: return "Mobyus1Titled";
     case 9: return "OutmaneuverPod";
     case 10: return "BNCardBack";
+    case 11: return "PadawanUnlimited";
+    case 12: return "RVA SWU";
     default: return "CardBack";
   }
 }
@@ -291,6 +293,8 @@ function GetSettingsUI($player)
   $rv .= CreateRadioButton($SET_Cardback . "-" . 8, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Mobyus1 Titled");
   $rv .= CreateRadioButton($SET_Cardback . "-" . 9, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Outmaneuver");
   $rv .= CreateRadioButton($SET_Cardback . "-" . 10, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Bothan Network");
+  $rv .= CreateRadioButton($SET_Cardback . "-" . 11, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Padawan Unlimited");
+  $rv .= CreateRadioButton($SET_Cardback . "-" . 12, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "RVA SWU");
 
   foreach(PatreonCampaign::cases() as $campaign) {
     if(isset($_SESSION[$campaign->SessionID()]) || (isset($_SESSION["useruid"]) && $campaign->IsTeamMember($_SESSION["useruid"]))) {
