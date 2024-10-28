@@ -118,13 +118,6 @@ include_once 'Header.php';
   echo ("</select>");
   ?>
 
-  <div class='info-box' id='info-box' style='display: <?php echo ($defaultFormat == 4 ? "block" : "none"); ?>;'>
-    <p>
-      <img src="./Images/infoicon.png" alt="Info" style="width: 13px; height: 13px; margin: 0 2px -1px 0;">
-      <span>Set 2 cards are now available in Premier Format. Open Format allows for custom rules and deck sizes, but it may take longer to find an opponent.</span>
-    </p>
-  </div>
-
   <?php
   if ($canSeeQueue) {
     echo '<label for="public" class="privacy-label"><input class="privacy-input" type="radio" id="public" name="visibility" value="public" ' . ($defaultVisibility == 1 ? 'checked="checked"' : "") . '>';
@@ -159,13 +152,14 @@ include_once 'Header.php';
   <div class="karabast-news container bg-black" style='<?php if (IsMobile()) echo ("display:none; "); ?>'>
     <h2>News</h2>
     <div style="position: relative;">
-      <div>
-        <h3>About Set 3</h3>
-        <p>Hi All, As we approach the launch of Set 3 I wanted to make an announcment where about our plans moving forward.</p>
-        <p>As many of you know we are currently working on an updated version of Karabast. Set 3 cards will not be implemented until we make the move to the updated site. We are currently not planning on launching before Set 3 releases, but we are working hard 
-          to get the new site up and running as soon as possible. Updates on progress can be found in the community Discord (invite link at the top of the page). If you have coding experience we are always open to new contributors. Info on how to help out can also be found on Discord.</p>
-        <p>We appreciate everyone's patience as we work on this new project for Karabast and look forward to playing games with you when we lauch!
-        </p>
+      <div style='vertical-align:middle; text-align:center;'>
+        <img src="./Images/droids.png" alt="SHD" style="max-width: 100%; border-radius: 5px;">
+        <div style="text-align: left;">
+        <h3 style="margin: 15px 0; display: block;">Set 3 cards and Karabast's next steps </h3>
+        <p>For the last few months we've been hard at work on a brand new version of Karabast. Our new codebase will dramatically simplify future card implementation, and card error fixes. We're working hard to get this new version launched as soon as possible, but that will be after Set 3 releases. Set 3 cards will not be implemented until we make this transition.</p>
+
+         <p> <a target="_blank" href="https://discord.gg/hKRaqHND4v">Join our Discord for the latest progress updates and timelines</a>. If you have coding experience we are always open to new contributors. Info on how to help out can also be found on <a target="_blank" href="https://discord.gg/hKRaqHND4v">Discord</a>. We appreciate everyone's patience as we work on this new Karabast experience, and look forward to playing games with you when we launch!</p>
+        </div>
       </div>
     </div>
     <?php
