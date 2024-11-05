@@ -94,6 +94,12 @@ include_once 'Header.php';
   */
 
   ?>
+  <div class='info-box'>
+    <p>
+      <img src="./Images/infoicon.png" alt="Info" style="width: 13px; height: 13px; margin: 0 2px -1px 0;">
+      <span>Set 3 cards are not yet available in Karbast. Playing a deck that includes any of these cards will break game creation.</span>
+    </p>
+  </div>
   <label for="fabdb"><u><a style='color:lightblue;' href='https://www.swudb.com/' target='_blank'>SWUDB</a></u> or <u><a style='color:lightblue;' href='https://www.sw-unlimited-db.com/' target='_blank'>SW-Unlimited-DB</a></u> Deck Link <span class="secondary">(use the url or 'Deck Link' button)</span></label>
   <input type="text" id="fabdb" name="fabdb" value='<?= $deckUrl ?>'>
   <?php
