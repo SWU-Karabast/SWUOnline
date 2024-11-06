@@ -1,25 +1,62 @@
 <?php
 
-include_once 'MenuBar.php';
+
+include_once 'Assets/patreon-php-master/src/OAuth.php';
+include_once 'Assets/patreon-php-master/src/API.php';
+include_once 'Assets/patreon-php-master/src/PatreonLibraries.php';
+include_once 'Assets/patreon-php-master/src/PatreonDictionary.php';
+include_once 'includes/functions.inc.php';
+include_once 'includes/dbh.inc.php';
+include_once 'Libraries/HTTPLibraries.php';
+include_once 'HostFiles/Redirector.php';
 include_once "CardDictionary.php";
 include_once "./Libraries/UILibraries2.php";
 include_once './includes/functions.inc.php';
 include_once "./includes/dbh.inc.php";
+include_once "./APIKeys/APIKeys.php";
+
+if (!isset($_SESSION["userid"])) {
+  if (isset($_COOKIE["rememberMeToken"])) {
+    loginFromCookie();
+  }
+}
+
+$isPatron = isset($_SESSION["isPatron"]);
+
+$isMobile = IsMobile();
+
+/* 
+To stop the menu bar header from showing up on refresh, had to put all of the above code in this page from menubar.php rather than just include it so it doesn't show up on refresh but the session is maintained. kept mobile and patron incase user clicks something where it matters from inside this subpage somehow
+*/
 
 if (!isset($_SESSION["useruid"])) {
   echo ("Please login to view this page.");
   exit;
 }
-if(!isset($forIndividual)) $forIndividual = TryGet("forIndividual", false);
+
+if(!isset($forIndividual)) $forIndividual = TryGet("forIndividual", default: true);
 $forIndividual = (bool)$forIndividual;//If it evaluates to true, explicitly cast it to boolean
 $useruid = $_SESSION["useruid"];
 $userID = $_SESSION["userid"];
 if (!$forIndividual) exit;
+
+/* 
+pull the date range from the AJAX button on ProfilePage.php. The one month back default is there. 
+*/
+
+
+if (isset($_GET['startDate']) && isset($_GET['endDate'])) {
+  $startDate = $_GET['startDate'];
+  $endDate = $_GET['endDate'];
+}
+
 /*
 if ($forIndividual && !isset($_SESSION["isPatron"])) {
   echo ("Please subscribe to our Patreon to access this page.");
   exit;
 }
+
+We can probably remove numDays at this point but I just want to get everything working before I break it again
 */
 
 $numDays = TryGet("numDays", 365);
@@ -56,17 +93,18 @@ h3 {
   font-size: 1.15em;
 }
 </style>");
-
 echo ("<div id=\"cardDetail\" style=\"z-index:100000; display:none; position:fixed;\"></div>");
 
 $winnerQuery = ($forIndividual ? "where WinningPID = ?" : "where WinningHero<>\"DUMMY\" and LosingHero<>\"DUMMY\" and CompletionTime >= DATE(NOW() - INTERVAL ? DAY)");
 $loserQuery = ($forIndividual ? "where LosingPID = ?" : "where WinningHero<>\"DUMMY\" and LosingHero<>\"DUMMY\" and CompletionTime >= DATE(NOW() - INTERVAL ? DAY)");
-$winnerQuery .= " and numTurns>1";
-$loserQuery .= " and numTurns>1";
+$winnerQuery .= " and numTurns>1  AND (CAST(CompletionTime AS DATE) BETWEEN ? AND ?) ";
+$loserQuery .= " and numTurns>1  AND (CAST(CompletionTime AS DATE) BETWEEN ? AND ?) ";
+
+
 $sql = "SELECT Hero,sum(Count) AS Total FROM
 (
 select WinningHero As Hero,count(WinningHero) AS Count
-from completedgame " . $winnerQuery . " group by WinningHero
+from completedgame " . $winnerQuery . " group by WinningHero 
 union all
 select LosingHero As Hero,count(LosingHero) AS Count
 from completedgame
@@ -84,11 +122,13 @@ if (!mysqli_stmt_prepare($stmt, $sql)) {
 }
 
 $param = ($forIndividual ? $userID : $numDays);
-mysqli_stmt_bind_param($stmt, "ss", $param, $param);
+mysqli_stmt_bind_param($stmt, "ssssss", $param, $startDate, $endDate, $param, $startDate, $endDate);
 mysqli_stmt_execute($stmt);
+
 
 // "Get result" returns the results from a prepared statement
 $playData = mysqli_stmt_get_result($stmt);
+
 
 
 $sql = "SELECT WinningHero,count(WinningHero) AS Count
@@ -104,7 +144,7 @@ if (!mysqli_stmt_prepare($stmt, $sql)) {
 }
 
 $param = ($forIndividual ? $userID : $numDays);
-mysqli_stmt_bind_param($stmt, "s", $param);
+mysqli_stmt_bind_param($stmt, "sss", $param, $startDate, $endDate);
 mysqli_stmt_execute($stmt);
 
 // "Get result" returns the results from a prepared statement
@@ -119,6 +159,11 @@ while ($row = mysqli_fetch_array($playData, MYSQLI_NUM)) {
   $gameData[$index][0] = $row[0];
   $gameData[$index][1] = $row[1];
   $ccPlays += $row[1];
+}
+if (!empty($gameData)) {
+  // Little user friendly warning code
+} else {
+  echo "No game data available for the selected dates.";
 }
 
 while ($row = mysqli_fetch_array($winData, MYSQLI_NUM)) {
@@ -152,6 +197,7 @@ foreach ($gameData as $row) {
   echo ("</tr>");
 }
 echo ("</table>");
+
 
 echo ("<BR>");
 echo ("<div>");
