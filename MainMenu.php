@@ -94,6 +94,12 @@ include_once 'Header.php';
   */
 
   ?>
+  <div class='info-box'>
+    <p>
+      <img src="./Images/infoicon.png" alt="Info" style="width: 13px; height: 13px; margin: 0 2px -1px 0;">
+      <span>Set 3 cards are not yet available in Karbast. Playing a deck that includes any of these cards will break game creation.</span>
+    </p>
+  </div>
   <label for="fabdb"><u><a style='color:lightblue;' href='https://www.swudb.com/' target='_blank'>SWUDB</a></u> or <u><a style='color:lightblue;' href='https://www.sw-unlimited-db.com/' target='_blank'>SW-Unlimited-DB</a></u> Deck Link <span class="secondary">(use the url or 'Deck Link' button)</span></label>
   <input type="text" id="fabdb" name="fabdb" value='<?= $deckUrl ?>'>
   <?php
@@ -117,13 +123,6 @@ include_once 'Header.php';
   echo ("<option value='livinglegendscc'" . ($defaultFormat == 4 ? " selected" : "") . ">Open Format</option>");
   echo ("</select>");
   ?>
-
-  <div class='info-box' id='info-box' style='display: <?php echo ($defaultFormat == 4 ? "block" : "none"); ?>;'>
-    <p>
-      <img src="./Images/infoicon.png" alt="Info" style="width: 13px; height: 13px; margin: 0 2px -1px 0;">
-      <span>Set 2 cards are now available in Premier Format. Open Format allows for custom rules and deck sizes, but it may take longer to find an opponent.</span>
-    </p>
-  </div>
 
   <?php
   if ($canSeeQueue) {
@@ -160,15 +159,12 @@ include_once 'Header.php';
     <h2>News</h2>
     <div style="position: relative;">
       <div style='vertical-align:middle; text-align:center;'>
-        <img src="./Images/shd-art-v3.png" alt="SHD" style="max-width: 100%; border-radius: 5px;">
+        <img src="./Images/droids.png" alt="SHD" style="max-width: 100%; border-radius: 5px;">
         <div style="text-align: left;">
-          <b style="margin: 15px 0; display: block;">Set 2 now available!</b>
-          <p>With the launch of Set 2 we are now making these cards available in the premier formats! A big thanks to everyone who has contributed to the project, whether it be through bug reports, feature requests, or just playing games. 
-             Together, we've logged well over 300,000 games! It's clear this game has captured our hearts, and set 2 promises to offer a bounty of great games whether you're playing at your LGS or on Karabast
-             while you're smuggled up at home.</p>
-          <p>We know there's still a lot of work to be done, but the team is excited about the future of the project. We encourage you to join our <a target="_blank" href="https://discord.gg/hKRaqHND4v">Discord</a> to chat with the community, provide us feedback, or even help out with development. 
-            Either way, we hope you enjoy playing. Have fun, and may the force be with you!</p>
-          </p>
+        <h3 style="margin: 15px 0; display: block;">Set 3 cards and Karabast's next steps </h3>
+        <p>For the last few months we've been hard at work on a brand new version of Karabast. Our new codebase will dramatically simplify future card implementation, and card error fixes. We're working hard to get this new version launched as soon as possible, but that will be after Set 3 releases. Set 3 cards will not be implemented until we make this transition.</p>
+
+         <p> <a target="_blank" href="https://discord.gg/hKRaqHND4v">Join our Discord for the latest progress updates and timelines</a>. If you have coding experience we are always open to new contributors. Info on how to help out can also be found on <a target="_blank" href="https://discord.gg/hKRaqHND4v">Discord</a>. We appreciate everyone's patience as we work on this new Karabast experience, and look forward to playing games with you when we launch!</p>
         </div>
       </div>
     </div>
