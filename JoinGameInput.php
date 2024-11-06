@@ -283,6 +283,16 @@ function CardIDOverride($cardID) {
     case "SHD_257": return "SOR_247"; //Underworld Thug
     case "SHD_262": return "SOR_251"; //Confiscate
     case "SHD_121": return "SOR_117"; //Mercenary Company
+    case "TWI_077": return "SOR_078"; //Vanquish
+    case "TWI_107": return "SOR_111"; //Patrolling V-Wing
+    case "TWI_123": return "SHD_128"; //Outflank
+    case "TWI_124": return "SOR_124"; //Tactical Advantage
+    case "TWI_127": return "SOR_126"; //Resupply
+    case "TWI_128": return "SHD_131"; //Take Captive
+    case "TWI_170": return "SHD_178"; //Daring Raid
+    case "TWI_177": return "SOR_172"; //Open Fire
+    case "TWI_226": return "SOR_222"; //Waylay
+    case "TWI_254": return "SOR_248"; //Open Fire
     default: return $cardID;
   }
 }
