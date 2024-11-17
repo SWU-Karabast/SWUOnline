@@ -290,7 +290,7 @@ function CardIDOverride($cardID) {
     case "TWI_127": return "SOR_126"; //Resupply
     case "TWI_128": return "SHD_131"; //Take Captive
     case "TWI_170": return "SHD_178"; //Daring Raid
-    case "TWI_177": return "SOR_172"; //Open Fire
+    case "TWI_174": return "SOR_172"; //Open Fire
     case "TWI_226": return "SOR_222"; //Waylay
     case "TWI_254": return "SOR_248"; //Volunteer Soldier
     default: return $cardID;
