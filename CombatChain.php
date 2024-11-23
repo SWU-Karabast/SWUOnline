@@ -108,6 +108,9 @@ function AttackModifier($cardID, $player, $index)
     case "2265363405"://Echo
       if(IsCoordinateActive($player)) $modifier += 2;
       break;
+    case "1209133362"://332nd Stalwart
+      if(IsCoordinateActive($player)) $modifier += 1;
+      break;
     case "58f9f2d4a0"://Dr. Aphra
       $discard = &GetDiscard($player);
       $costs = [];
