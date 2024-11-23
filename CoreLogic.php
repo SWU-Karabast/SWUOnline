@@ -522,6 +522,11 @@ function Restore($amount, $player)
     WriteLog("<span style='color:red;'>Wolffe prevents the healing</span>");
     return false;
   }
+  if(SearchAlliesForCard(1, "6277739341") || SearchAlliesForCard(2, "6277739341")) {
+    WriteLog("<span style='color:red;'>Confederate Tri-Fighter prevents the healing</span>");
+    return false;
+  }
+  
   $health = &GetHealth($player);
   WriteLog("Player " . $player . " gained " . $amount . " health.");
   if($amount > $health) $amount = $health;
