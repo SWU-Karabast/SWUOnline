@@ -4506,6 +4506,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("BUTTONINPUT", $currentPlayer, "Clone_Troopers,Battle_Droids");
       AddDecisionQueue("MODAL", $currentPlayer, "MANUFACTUREDSOLDIERS", 1);
       break;
+    case "1417180295"://Strategic Analysis
+      Draw($currentPlayer);
+      Draw($currentPlayer);
+      Draw($currentPlayer);
+      break;
     default: break;
   }
 }
