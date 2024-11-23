@@ -301,6 +301,7 @@ function HasGrit($cardID, $player, $index)
     case "9195624101"://Heroic Renegade
     case "5169472456"://Chewbacca Pykesbane
     case "8552292852"://Kashyyyk Defender
+    case "6787851182"://Dwarf Spider Droid
       return true;
     default: return false;
   }
