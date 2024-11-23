@@ -65,6 +65,7 @@ function AllyHasStaticHealthModifier($cardID)
     case "6097248635"://4-LOM
     case "1690726274"://Zuckuss
     case "2260777958"://41st Elite Corps
+    case "2265363405"://Echo
       return true;
     default: return false;
   }
@@ -92,6 +93,11 @@ function AllyStaticHealthModifier($cardID, $index, $player, $myCardID, $myIndex,
     case "2260777958"://41st Elite Corps
       if($index == $myIndex && $player == $myPlayer) {
         if(IsCoordinateActive($player)) return 3;
+      }
+      break;
+    case "2265363405"://Echo
+      if($index == $myIndex && $player == $myPlayer) {
+        if(IsCoordinateActive($player)) return 2;
       }
       break;
     case "3731235174"://Supreme Leader Snoke

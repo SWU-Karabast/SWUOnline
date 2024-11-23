@@ -105,6 +105,9 @@ function AttackModifier($cardID, $player, $index)
       $ally = new Ally("MYALLY-" . $index, $player);
       if($ally->IsUpgraded()) $modifier += 1;
       break;
+    case "2265363405"://Echo
+      if(IsCoordinateActive($player)) $modifier += 2;
+      break;
     case "58f9f2d4a0"://Dr. Aphra
       $discard = &GetDiscard($player);
       $costs = [];
