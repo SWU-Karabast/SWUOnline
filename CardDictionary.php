@@ -254,6 +254,8 @@ function HasSentinel($cardID, $player, $index)
     case "9871430123"://Sugi
       $otherPlayer = $player == 1 ? 2 : 1;
       return SearchCount(SearchAllies($otherPlayer, hasUpgradeOnly:true)) > 0;
+    case "8845972926"://Falchion Ion Tank
+      return true;
     default: return false;
   }
 }
