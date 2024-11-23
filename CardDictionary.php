@@ -568,6 +568,8 @@ function HasSaboteur($cardID, $player, $index)
     case "3600744650"://Bold Recon Commando
     case "6623894685"://Infiltrating Demolisher
       return true;
+    case "8187818742"://Republic Commando
+      return IsCoordinateActive($player);
     default: return false;
   }
 }
