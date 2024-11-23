@@ -288,6 +288,8 @@ function HasSentinel($cardID, $player, $index)
       return true;
     case "4179773207"://Infantry of the 212th
       return IsCoordinateActive($player);
+    case "9927473096"://Patrolling AAT
+      return true;
     default: return false;
   }
 }
