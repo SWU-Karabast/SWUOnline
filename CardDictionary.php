@@ -359,6 +359,8 @@ function HasOverwhelm($cardID, $player, $index)
         if($targetAlly->HasBounty()) return true;
       }
       return false;
+    case "8640210306"://Advanced Recon Commando
+      return true;
     default: return false;
   }
 }
