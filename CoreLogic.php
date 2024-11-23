@@ -2156,6 +2156,16 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         default: break;
       }
       RemoveCharacter($currentPlayer, CharacterPieces());
+      //Base deploy ability
+      $char = &GetPlayerCharacter($currentPlayer);
+      $baseID = $char[0];
+      switch($baseID) {
+        case "8589863038"://Droid Manufactory
+          PlayAlly("3463348370", $currentPlayer);//Battle Droid
+          PlayAlly("3463348370", $currentPlayer);//Battle Droid
+          break;
+        default: break;
+      }
       return CardLink($cardID, $cardID) . " was deployed.";
     }
   }
