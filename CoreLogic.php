@@ -4409,6 +4409,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1", 1);
       break;
+    case "6969421569"://Batch Brothers
+      PlayAlly("3941784506", $currentPlayer);//Clone Trooper
+      break;
     default: break;
   }
 }
