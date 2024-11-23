@@ -4533,6 +4533,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         PlayAlly("3463348370", $currentPlayer);//Battle Droid
       }
       break;
+    case "6732988831"://Grievous Reassembly
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to restore 3");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "RESTORE,3", 1);
+      PlayAlly("3463348370", $currentPlayer);//Battle Droid
+      break;
     default: break;
   }
 }
