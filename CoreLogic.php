@@ -4453,6 +4453,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $otherPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $otherPlayer, "DESTROY", 1);
       break;
+    case "3840495762"://Old Access Codes
+      if(TheyControlMoreUnits($currentPlayer)) {
+        Draw($currentPlayer);
+      }
+      break;
     default: break;
   }
 }
