@@ -129,6 +129,7 @@ function ExploitAmount($cardID, $player) {
   $amount = 0;
   switch($cardID) {
     case "6772128891": $amount += 2; break;//Hailfire Tank
+    case "6623894685": $amount += 1; break;//Infiltrating Demolisher
     default: break;
   }
   return $amount;
@@ -560,6 +561,7 @@ function HasSaboteur($cardID, $player, $index)
     case "6404471739"://Senatorial Corvette
     case "4050810437"://Droid Starfighter
     case "3600744650"://Bold Recon Commando
+    case "6623894685"://Infiltrating Demolisher
       return true;
     default: return false;
   }
