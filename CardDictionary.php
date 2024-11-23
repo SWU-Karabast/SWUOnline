@@ -366,6 +366,9 @@ function HasOverwhelm($cardID, $player, $index)
       case "4484318969"://Moff Gideon Leader
         if(CardCost($cardID) <= 3 && IsAllyAttackTarget()) return true;
         break;
+      case "40b649e6f6"://Maul
+        if($index != $i) return true;
+        break;
       default: break;
     }
   }
@@ -374,6 +377,7 @@ function HasOverwhelm($cardID, $player, $index)
     if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
     switch($currentTurnEffects[$i]) {
       case "4085341914": return true;//Heroic Resolve
+      case "6461101372": return true;//Maul
       default: break;
     }
   }
@@ -419,6 +423,7 @@ function HasOverwhelm($cardID, $player, $index)
     case "24a81d97b5"://Anakin Skywalker Leader Unit
     case "3693364726"://Aurra Sing
     case "3476041913"://Low Altitude Gunship
+    case "40b649e6f6"://Maul
       return true;
     default: return false;
   }
@@ -784,6 +789,9 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
     case "7911083239"://Grand Inquisitor
       $abilityTypes = "A";
       break;
+    case "6461101372"://Maul
+      $abilityTypes = "A";
+      break;
     case "8929774056"://Asajj Ventress
       $abilityTypes = "A";
       break;
@@ -958,6 +966,9 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       break;
     case "7911083239"://Grand Inquisitor
       $abilityNames = "Deal Damage";
+      break;
+    case "6461101372"://Maul
+      $abilityNames = "Attack";
       break;
     case "8929774056"://Asajj Ventress
       $abilityNames = "Attack";
@@ -1390,6 +1401,8 @@ function LeaderUnit($cardID) {
       return "0ee1e18cf4";
     case "8929774056"://Asajj Ventress
       return "f8e0c65364";
+    case "6461101372"://Maul
+      return "40b649e6f6";
     default: return "";
   }
 }
@@ -1477,6 +1490,8 @@ function LeaderUndeployed($cardID) {
       return "2784756758";
     case "f8e0c65364"://Asajj Ventress
       return "8929774056";
+    case "40b649e6f6"://Maul
+      return "6461101372";
     default: return "";
   }
 }

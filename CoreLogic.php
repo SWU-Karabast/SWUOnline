@@ -4640,6 +4640,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "9966134941"://Pelta Supply Frigate
       if(IsCoordinateActive($currentPlayer)) PlayAlly("3941784506", $currentPlayer);//Clone Trooper
       break;
+    case "6461101372"://Maul
+      AddCurrentTurnEffect("6461101372", $currentPlayer, "PLAY");
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "status=1", 1);
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to attack with");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
+      break;
     //PlayAbility End
     default: break;
   }
