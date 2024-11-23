@@ -199,6 +199,7 @@ function RaidAmount($cardID, $player, $index, $reportMode = false)
     case "8426882030": $amount += 1; break;//Ryloth Militia
     case "5936350569": $amount += 1; break;//Jesse
     case "2800918480": $amount += 1; break;//Soldier of the 501st
+    case "7494987248": $amount += IsCoordinateActive($currentPlayer) ? 3 : 0; break;//Plo Koon
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
@@ -488,6 +489,8 @@ function HasAmbush($cardID, $player, $index, $from)
     case "4824842849"://Subjugating Starfighter
       return true;
     case "2554988743"://Gor
+      return true;
+    case "7494987248"://Plo Koon
       return true;
     default: return false;
   }
