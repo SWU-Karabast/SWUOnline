@@ -138,6 +138,7 @@ function ExploitAmount($cardID, $player) {
     case "1320229479": $amount += 2; break;//Multi-Troop Transport
     case "1083333786": $amount += 2; break;//Battle Droid Legion
     case "5243634234": $amount += 2; break;//Baktoid Spider Droid
+    case "5084084838": $amount += 2; break;//Droideka Security
     default: break;
   }
   return $amount;
@@ -301,6 +302,8 @@ function HasSentinel($cardID, $player, $index)
     case "7289764651"://Duchess's Champion
       $otherPlayer = $player == 1 ? 2 : 1;
       return IsCoordinateActive($otherPlayer);
+    case "5084084838"://Droideka Security
+      return true;
     default: return false;
   }
 }
