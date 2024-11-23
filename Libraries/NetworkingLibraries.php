@@ -1467,6 +1467,14 @@ function AddPrePitchDecisionQueue($cardID, $from, $index = -1, $skipAbilityType 
       }
     }
   }
+  $exploitAmount = ExploitAmount($cardID, $currentPlayer);
+  for($i = 0; $i < $exploitAmount; ++$i) {
+    AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+    AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to exploit");
+    AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+    AddDecisionQueue("MZOP", $currentPlayer, "DESTROY", 1);
+    AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, "6772128891", 1);//Exploit effect
+  }
   switch ($cardID) {
     case "9644107128"://Bamboozle
       if(SearchCount(SearchHand($currentPlayer, aspect:"Cunning")) > 0) {

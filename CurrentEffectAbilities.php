@@ -338,6 +338,10 @@ function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
           $costModifier -= 99;
           $remove = false;
           break;
+        case "6772128891"://Exploit Effect
+          $costModifier -= 2;
+          $remove = true;
+          break;
         default: break;
       }
       if($remove && !$reportMode) RemoveCurrentTurnEffect($i);
