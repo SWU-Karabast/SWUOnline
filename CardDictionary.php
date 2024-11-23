@@ -492,6 +492,8 @@ function HasAmbush($cardID, $player, $index, $from)
       return true;
     case "7494987248"://Plo Koon
       return true;
+    case "7380773849"://Coruscant Guard
+      return IsCoordinateActive($player);
     default: return false;
   }
 }
