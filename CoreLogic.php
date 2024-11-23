@@ -4468,6 +4468,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       PlayAlly("3941784506", $currentPlayer);//Clone Trooper
       PlayAlly("3941784506", $currentPlayer);//Clone Trooper
       break;
+    case "0598115741"://Royal Guard Attache
+      $playAlly->DealDamage(2);
+      break;
     default: break;
   }
 }
