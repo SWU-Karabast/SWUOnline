@@ -4389,6 +4389,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("UNIQUETOMZ", $currentPlayer, $playAlly->UniqueID(), 1);
       AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,2", 1);
       break;
+    case "7439418148"://Twice the Pride
+      $ally = new Ally($target, $currentPlayer);
+      $ally->DealDamage(2);
+      break;
     default: break;
   }
 }
