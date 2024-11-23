@@ -4438,6 +4438,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "5584601885"://Battle Droid Escort
       PlayAlly("3463348370", $currentPlayer);//Battle Droid
       break;
+    case "5074877594"://Drop In
+      PlayAlly("3941784506", $currentPlayer);//Clone Trooper
+      PlayAlly("3941784506", $currentPlayer);//Clone Trooper
+      break;
     default: break;
   }
 }
