@@ -499,6 +499,11 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
       case "9479767991"://Favorable Deligate
         PummelHit($player);
         break;
+      case "1083333786"://Battle Droid Legion
+        PlayAlly("3463348370", $player);//Battle Droid
+        PlayAlly("3463348370", $player);//Battle Droid
+        PlayAlly("3463348370", $player);//Battle Droid
+        break;
       default: break;
     }
     $upgrades = $destroyedAlly->GetUpgrades();

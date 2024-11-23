@@ -136,6 +136,7 @@ function ExploitAmount($cardID, $player) {
     case "3348783048": $amount += 2; break;//Geonosis Patrol Fighter
     case "2554988743": $amount += 3; break;//Gor
     case "1320229479": $amount += 2; break;//Multi-Troop Transport
+    case "1083333786": $amount += 2; break;//Battle Droid Legion
     default: break;
   }
   return $amount;
