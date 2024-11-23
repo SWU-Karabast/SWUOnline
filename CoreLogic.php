@@ -2163,6 +2163,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         case "8589863038"://Droid Manufactory
           PlayAlly("3463348370", $currentPlayer);//Battle Droid
           PlayAlly("3463348370", $currentPlayer);//Battle Droid
+          WriteLog("Droid Manufactory deployed two Battle Droids.");
+          break;
+        case "6854189262"://Shadow Collective Camp
+          Draw($currentPlayer);
+          WriteLog("Shadow Collective Camp drew a card.");
           break;
         default: break;
       }
