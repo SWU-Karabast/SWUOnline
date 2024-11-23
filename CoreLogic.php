@@ -1784,6 +1784,10 @@ function SelfCostModifier($cardID, $from)
     case "8380936981"://Jabba's Rancor
       if(ControlsNamedCard($currentPlayer, "Jabba the Hutt")) $modifier -= 1;
       break;
+    case "6238512843"://Republic Defense Carrier
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      $modifier -= SearchCount(SearchAllies($otherPlayer));
+      break;
     default: break;
   }
   //Target cost modifier

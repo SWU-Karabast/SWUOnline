@@ -266,6 +266,8 @@ function HasSentinel($cardID, $player, $index)
       return true;
     case "6257858302"://B1 Security Team
       return true;
+    case "6238512843"://Republic Defense Carrier
+      return true;
     default: return false;
   }
 }
