@@ -4464,6 +4464,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("BUTTONINPUT", $otherPlayer, "Discard_Random,Battle_Droids");
       AddDecisionQueue("MODAL", $otherPlayer, "POLITICALPRESSURE", 1);
       break;
+    case "0511508627"://Captain Rex
+      PlayAlly("3941784506", $currentPlayer);//Clone Trooper
+      PlayAlly("3941784506", $currentPlayer);//Clone Trooper
+      break;
     default: break;
   }
 }
