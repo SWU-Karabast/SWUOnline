@@ -262,6 +262,8 @@ function HasSentinel($cardID, $player, $index)
       return SearchCount(SearchAllies($player, trait:"Republic")) > 1;
     case "7884088000"://Armored Saber Tank
       return true;
+    case "6330903136"://B2 Legionnaires
+      return true;
     default: return false;
   }
 }
@@ -368,6 +370,7 @@ function HasOverwhelm($cardID, $player, $index)
       return false;
     case "8640210306"://Advanced Recon Commando
     case "8084593619"://Dendup's Loyalist
+    case "6330903136"://B2 Legionnaires
       return true;
     default: return false;
   }
