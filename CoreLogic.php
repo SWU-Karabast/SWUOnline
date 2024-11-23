@@ -4528,6 +4528,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "2761325938"://Devastating Gunship
       MZChooseAndDestroy($currentPlayer, "THEIRALLY:maxHealth=2");
       break;
+    case "4824842849"://Subjugating Starfighter
+      if($initiativePlayer == $currentPlayer) {
+        PlayAlly("3463348370", $currentPlayer);//Battle Droid
+      }
+      break;
     default: break;
   }
 }

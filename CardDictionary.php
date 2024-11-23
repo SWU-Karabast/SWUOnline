@@ -462,6 +462,8 @@ function HasAmbush($cardID, $player, $index, $from)
       return true;
     case "1988887369"://Phase II Clone Trooper
       return true;
+    case "4824842849"://Subjugating Starfighter
+      return true;
     default: return false;
   }
 }
