@@ -131,7 +131,8 @@ function ExploitAmount($cardID, $player) {
     case "6772128891": $amount += 2; break;//Hailfire Tank
     case "6623894685": $amount += 1; break;//Infiltrating Demolisher
     case "6700679522": $amount += 2; break;//Tri-Droid Suppressor
-    case "8201333805": $amount += 3; break;//Squadron of Vultures 
+    case "8201333805": $amount += 3; break;//Squadron of Vultures
+    case "9283787549": $amount += 3; break;//Separatist Super Tank
     default: break;
   }
   return $amount;
