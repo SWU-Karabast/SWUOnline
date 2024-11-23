@@ -784,6 +784,9 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
     case "7911083239"://Grand Inquisitor
       $abilityTypes = "A";
       break;
+    case "8929774056"://Asajj Ventress
+      $abilityTypes = "A";
+      break;
     case "2784756758"://Obi-wan Kenobi
       $abilityTypes = "A";
       break;
@@ -955,6 +958,9 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       break;
     case "7911083239"://Grand Inquisitor
       $abilityNames = "Deal Damage";
+      break;
+    case "8929774056"://Asajj Ventress
+      $abilityNames = "Attack";
       break;
     case "2784756758"://Obi-wan Kenobi
       $abilityNames = "Heal";
@@ -1382,6 +1388,8 @@ function LeaderUnit($cardID) {
       return "24a81d97b5";
     case "2784756758"://Obi-wan Kenobi
       return "0ee1e18cf4";
+    case "8929774056"://Asajj Ventress
+      return "f8e0c65364";
     default: return "";
   }
 }
@@ -1467,6 +1475,8 @@ function LeaderUndeployed($cardID) {
       return "8777351722";
     case "0ee1e18cf4"://Obi-wan Kenobi
       return "2784756758";
+    case "f8e0c65364"://Asajj Ventress
+      return "8929774056";
     default: return "";
   }
 }

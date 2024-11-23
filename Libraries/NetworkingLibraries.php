@@ -871,7 +871,7 @@ function ResolveChainLink()
     $excess = $totalAttack - $defender->Health();
     $destroyed = $defender->DealDamage($totalAttack, bypassShield:HasSaboteur($attackerID, $mainPlayer, $attacker->Index()), fromCombat:true, damageDealt:$combatChainState[$CCS_DamageDealt]);
     if($destroyed) ClearAttackTarget();
-    if($attackerArr[0] == "MYALLY" && (!$destroyed || ($combatChain[0] != "9500514827" && $combatChain[0] != "4328408486" && !SearchCurrentTurnEffects("8297630396", $mainPlayer)))) { //Han Solo shoots first; also Incinerator Trooper
+    if($attackerArr[0] == "MYALLY" && (!$destroyed || !ShouldCombatDamageFirst())) {
       $attackerDestroyed = $attacker->DealDamage($defenderPower, fromCombat:true);
       if($attackerDestroyed) {
         ClearAttacker();
@@ -899,6 +899,14 @@ function ResolveChainLink()
     ArquitensAssaultCruiser($mainPlayer);
   }
   ProcessDecisionQueue();
+}
+
+function ShouldCombatDamageFirst() {
+  global $combatChain, $mainPlayer, $CS_NumEventsPlayed;
+  if($combatChain[0] == "9500514827" || $combatChain[0] == "4328408486") return true;//Han Solo shoots first; also Incinerator Trooper
+  if(SearchCurrentTurnEffects("8297630396", $mainPlayer)) return true;
+  if($combatChain[0] == "f8e0c65364" && GetClassState($mainPlayer, $CS_NumEventsPlayed) > 0) return true;//Asajj Ventress
+  return false;
 }
 
 function ResolveCombatDamage($damageDone)

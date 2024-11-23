@@ -129,6 +129,10 @@ function AttackModifier($cardID, $player, $index)
     case "24a81d97b5"://Anakin Skywalker Leader Unit
       $modifier += floor(GetHealth($player)/5);
       break;
+    case "f8e0c65364"://Asajj Ventress
+      global $CS_NumEventsPlayed;
+      if(GetClassState($player, $CS_NumEventsPlayed) > 0) $modifier += 1;
+      break;
     default: break;
   }
   return $modifier;

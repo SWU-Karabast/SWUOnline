@@ -175,6 +175,7 @@ function EffectAttackModifier($cardID, $playerID="")
     case "3399023235": return isset($subparam) && $subparam == "2" ? -2 : 0;//Fenn Rau
     case "8777351722": return IsAllyAttackTarget() ? 2 : 0;;//Anakin Skywalker Leader
     case "4910017138": return 2;//Breaking In
+    case "8929774056": return 1;//Asajj Ventress
     default: return 0;
   }
 }
