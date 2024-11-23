@@ -469,6 +469,9 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
       case "7204838421"://Enterprising Lackeys
         MZMoveCard($player, "MYRESOURCES", "MYDISCARD,RESOURCES", may: false);
         break;
+      case "8919416985"://Outspoken Representative
+        PlayAlly("3941784506", $player, from:"ABILITY");
+        break;
       default: break;
     }
     $upgrades = $destroyedAlly->GetUpgrades();

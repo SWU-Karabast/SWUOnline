@@ -257,6 +257,8 @@ function HasSentinel($cardID, $player, $index)
       return SearchCount(SearchAllies($otherPlayer, hasUpgradeOnly:true)) > 0;
     case "8845972926"://Falchion Ion Tank
       return true;
+    case "8919416985"://Outspoken Representative
+      return SearchCount(SearchAllies($player, trait:"Republic")) > 1;
     default: return false;
   }
 }
