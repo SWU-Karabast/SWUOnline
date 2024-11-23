@@ -492,6 +492,10 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
         AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1", 1);
         break;
+      case "6022703929"://OOM-Series Officer
+        $otherPlayer = $player == 1 ? 2 : 1;
+        DealDamageAsync($otherPlayer, 2, "DAMAGE", "6022703929");
+        break;
       default: break;
     }
     $upgrades = $destroyedAlly->GetUpgrades();
