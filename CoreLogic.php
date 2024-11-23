@@ -4546,6 +4546,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
       break;
+    case "9479767991"://Favorable Deligate
+      Draw($currentPlayer);
+      break;
     default: break;
   }
 }

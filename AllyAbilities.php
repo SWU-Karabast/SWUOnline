@@ -496,6 +496,9 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
         $otherPlayer = $player == 1 ? 2 : 1;
         DealDamageAsync($otherPlayer, 2, "DAMAGE", "6022703929");
         break;
+      case "9479767991"://Favorable Deligate
+        PummelHit($player);
+        break;
       default: break;
     }
     $upgrades = $destroyedAlly->GetUpgrades();
