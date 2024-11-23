@@ -4458,6 +4458,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         Draw($currentPlayer);
       }
       break;
+    case "3357486161"://Political Pressure
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose one");
+      AddDecisionQueue("BUTTONINPUT", $otherPlayer, "Discard_Random,Battle_Droids");
+      AddDecisionQueue("MODAL", $otherPlayer, "POLITICALPRESSURE", 1);
+      break;
     default: break;
   }
 }
