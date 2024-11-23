@@ -4416,6 +4416,16 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       PlayAlly("3463348370", $currentPlayer);//Battle Droid
       PlayAlly("3463348370", $currentPlayer);//Battle Droid
       break;
+    case "6401761275"://In Pursuit
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to exhaust");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY", 1);
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to exhaust", 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
+      break;
     default: break;
   }
 }
