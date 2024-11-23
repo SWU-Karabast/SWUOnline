@@ -4393,6 +4393,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $ally = new Ally($target, $currentPlayer);
       $ally->DealDamage(2);
       break;
+    case "7252148824"://501st Liberator
+      if (SearchCount(SearchAllies($currentPlayer, trait:"Republic")) > 1) {
+        Restore(3, $currentPlayer);
+      }
+      break;
     default: break;
   }
 }
