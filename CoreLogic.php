@@ -4637,6 +4637,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
       break;
+    case "9966134941"://Pelta Supply Frigate
+      if(IsCoordinateActive($currentPlayer)) PlayAlly("3941784506", $currentPlayer);//Clone Trooper
+      break;
     //PlayAbility End
     default: break;
   }
