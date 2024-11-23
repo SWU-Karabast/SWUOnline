@@ -4576,6 +4576,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         Draw($currentPlayer);
       }
       break;
+    case "5616678900"://R2-D2
+      PummelHit($currentPlayer, may:true);
+      AddDecisionQueue("SEARCHDECKTOPX", $currentPlayer, "3;1;", 1);
+      AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
+      AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
+      break;
     //PlayAbility End
     default: break;
   }
