@@ -440,6 +440,8 @@ function HasAmbush($cardID, $player, $index, $from)
       return SearchCount(SearchAllies($player, trait:"Vehicle")) > 1;
     case "5752414373"://Millennium Falcon
       return $from == "HAND";
+    case "7953154930"://Hidden Sharpshooter
+      return true;
     default: return false;
   }
 }
