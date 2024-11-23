@@ -4442,6 +4442,17 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       PlayAlly("3941784506", $currentPlayer);//Clone Trooper
       PlayAlly("3941784506", $currentPlayer);//Clone Trooper
       break;
+    case "4412828936"://Merciless Contest
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to destroy");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "DESTROY", 1);
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY");
+      AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a unit to destroy");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $otherPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $otherPlayer, "DESTROY", 1);
+      break;
     default: break;
   }
 }
