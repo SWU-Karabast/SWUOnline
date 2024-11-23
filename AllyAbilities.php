@@ -472,6 +472,10 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
       case "8919416985"://Outspoken Representative
         PlayAlly("3941784506", $player, from:"ABILITY");
         break;
+      case "6404471739"://Senatorial Corvette
+        $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+        PummelHit($otherPlayer);
+        break;
       default: break;
     }
     $upgrades = $destroyedAlly->GetUpgrades();

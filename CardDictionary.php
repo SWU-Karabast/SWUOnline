@@ -532,6 +532,7 @@ function HasSaboteur($cardID, $player, $index)
     case "2151430798"://Guavian Antagonizer
     case "2556508706"://Resourceful Pursuers
     case "2965702252"://Unlicensed Headhunter
+    case "6404471739"://Senatorial Corvette
       return true;
     default: return false;
   }
