@@ -130,6 +130,7 @@ function ExploitAmount($cardID, $player) {
   switch($cardID) {
     case "6772128891": $amount += 2; break;//Hailfire Tank
     case "6623894685": $amount += 1; break;//Infiltrating Demolisher
+    case "6700679522": $amount += 2; break;//Tri-Droid Suppressor
     default: break;
   }
   return $amount;
