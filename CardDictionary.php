@@ -789,6 +789,9 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
     case "7911083239"://Grand Inquisitor
       $abilityTypes = "A";
       break;
+    case "2155351882"://Ahsoka Tano
+      $abilityTypes = IsCoordinateActive($currentPlayer) ? "A" : "";
+      break;
     case "6461101372"://Maul
       $abilityTypes = "A";
       break;
@@ -966,6 +969,9 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       break;
     case "7911083239"://Grand Inquisitor
       $abilityNames = "Deal Damage";
+      break;
+    case "2155351882"://Ahsoka Tano
+      $abilityNames = IsCoordinateActive($currentPlayer) ? "Attack" : "";
       break;
     case "6461101372"://Maul
       $abilityNames = "Attack";
@@ -1403,6 +1409,8 @@ function LeaderUnit($cardID) {
       return "f8e0c65364";
     case "6461101372"://Maul
       return "40b649e6f6";
+    case "2155351882"://Ahsoka Tano
+      return "7224a2074a";
     default: return "";
   }
 }
@@ -1492,6 +1500,8 @@ function LeaderUndeployed($cardID) {
       return "8929774056";
     case "40b649e6f6"://Maul
       return "6461101372";
+    case "7224a2074a"://Ahsoka Tano
+      return "2155351882";
     default: return "";
   }
 }

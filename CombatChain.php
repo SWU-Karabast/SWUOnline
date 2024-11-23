@@ -114,6 +114,9 @@ function AttackModifier($cardID, $player, $index)
     case "9227411088"://Clone Heavy Gunner
       if(IsCoordinateActive($player)) $modifier += 2;
       break;
+    case "7224a2074a"://Ahsoka Tahno
+      if(IsCoordinateActive($player)) $modifier += 2;
+      break;
     case "58f9f2d4a0"://Dr. Aphra
       $discard = &GetDiscard($player);
       $costs = [];

@@ -176,6 +176,7 @@ function EffectAttackModifier($cardID, $playerID="")
     case "8777351722": return IsAllyAttackTarget() ? 2 : 0;;//Anakin Skywalker Leader
     case "4910017138": return 2;//Breaking In
     case "8929774056": return 1;//Asajj Ventress
+    case "2155351882": return 1;//Ahsoka Tano
     default: return 0;
   }
 }
@@ -674,6 +675,12 @@ function IsCombatEffectActive($cardID)
     case "4085341914": return true;//Heroic Resolve
     case "5896817672": return true;//Headhunting
     case "6962053552": return true;//Desperate attack
+    case "3399023235"://Fenn Rau
+    case "8777351722"://Anakin Skywalker Leader
+    case "4910017138"://Breaking In
+    case "8929774056"://Asajj Ventress
+    case "2155351882"://Ahsoka Tano
+      return true;
     default: return false;
   }
 }
