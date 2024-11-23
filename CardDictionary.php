@@ -540,6 +540,7 @@ function HasSaboteur($cardID, $player, $index)
     case "2556508706"://Resourceful Pursuers
     case "2965702252"://Unlicensed Headhunter
     case "6404471739"://Senatorial Corvette
+    case "4050810437"://Droid Starfighter
       return true;
     default: return false;
   }
