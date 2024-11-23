@@ -1123,6 +1123,7 @@ function UpgradeFilter($cardID)
     case "3141660491"://The Darksaber
     case "6775521270"://Inspiring Mentor
     case "6117103324"://Jetpack
+    case "7280804443"://Hold-Out Blaster
       return "trait=Vehicle";
     case "3987987905"://Hardpoint Heavy Blaster
     case "7280213969"://Smuggling Compartment

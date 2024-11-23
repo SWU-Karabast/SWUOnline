@@ -4398,6 +4398,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         Restore(3, $currentPlayer);
       }
       break;
+    case "7280804443"://Hold-Out Blaster
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:arena=Ground&THEIRALLY:arena=Ground");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to deal 1 damage");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1", 1);
+      break;
     default: break;
   }
 }
