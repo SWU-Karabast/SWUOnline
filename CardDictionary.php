@@ -137,6 +137,7 @@ function ExploitAmount($cardID, $player) {
     case "2554988743": $amount += 3; break;//Gor
     case "1320229479": $amount += 2; break;//Multi-Troop Transport
     case "1083333786": $amount += 2; break;//Battle Droid Legion
+    case "5243634234": $amount += 2; break;//Baktoid Spider Droid
     default: break;
   }
   return $amount;
@@ -499,6 +500,8 @@ function HasAmbush($cardID, $player, $index, $from)
       return IsCoordinateActive($player);
     case "6999668340"://Droid Commando
       return SearchCount(SearchAllies($player, trait:"Separatist")) > 1;
+    case "5243634234"://Baktoid Spider Droid
+      return true;
     default: return false;
   }
 }
