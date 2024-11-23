@@ -116,6 +116,7 @@ function RestoreAmount($cardID, $player, $index)
     case "7022736145": $amount += 2; break;//Tarfful
     case "6870437193": $amount += 2; break;//Twin Pod Cloud Car
     case "3671559022": $amount += 2; break;//Echo
+    case "9185282472": $amount += 2; break;//ETA-2 Light Interceptor
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
