@@ -416,6 +416,7 @@ function HasOverwhelm($cardID, $player, $index)
     case "2554988743"://Gor
     case "24a81d97b5"://Anakin Skywalker Leader Unit
     case "3693364726"://Aurra Sing
+    case "3476041913"://Low Altitude Gunship
       return true;
     default: return false;
   }
