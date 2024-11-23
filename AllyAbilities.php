@@ -946,6 +946,9 @@ function AllyAttackedAbility($attackTarget, $index) {
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $defPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $defPlayer, "ADDEXPERIENCE", 1);
       break;
+    case "4541556921"://Knight of the Republic
+      PlayAlly("3941784506", $defPlayer);//Clone Trooper
+      break;
     default: break;
   }
 }
