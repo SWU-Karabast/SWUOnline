@@ -364,6 +364,7 @@ function HasOverwhelm($cardID, $player, $index)
       }
       return false;
     case "8640210306"://Advanced Recon Commando
+    case "8084593619"://Dendup's Loyalist
       return true;
     default: return false;
   }
