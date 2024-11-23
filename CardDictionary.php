@@ -456,6 +456,8 @@ function HasAmbush($cardID, $player, $index, $from)
       return $from == "HAND";
     case "7953154930"://Hidden Sharpshooter
       return true;
+    case "1988887369"://Phase II Clone Trooper
+      return true;
     default: return false;
   }
 }
