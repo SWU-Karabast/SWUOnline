@@ -483,6 +483,9 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
         PlayAlly("3941784506", $player);//Clone Trooper
         PlayAlly("3941784506", $player);//Clone Trooper
         break;
+      case "3680942691"://Confederate Courier
+        PlayAlly("3463348370", $player);//Battle Droid
+        break;
       default: break;
     }
     $upgrades = $destroyedAlly->GetUpgrades();
