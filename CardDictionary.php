@@ -405,6 +405,7 @@ function HasOverwhelm($cardID, $player, $index)
     case "8084593619"://Dendup's Loyalist
     case "6330903136"://B2 Legionnaires
     case "2554988743"://Gor
+    case "24a81d97b5"://Anakin Skywalker Leader Unit
       return true;
     default: return false;
   }
@@ -761,6 +762,9 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
     case "7911083239"://Grand Inquisitor
       $abilityTypes = "A";
       break;
+    case "8777351722"://Anakin Skywalker
+      $abilityTypes = "A";
+      break;
     case "5954056864"://Han Solo
       $abilityTypes = "A";
       break;
@@ -926,6 +930,9 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       break;
     case "7911083239"://Grand Inquisitor
       $abilityNames = "Deal Damage";
+      break;
+    case "8777351722"://Anakin Skywalker
+      $abilityNames = "Attack";
       break;
     case "5954056864"://Han Solo
       $abilityNames = "Play Resource";
@@ -1341,6 +1348,9 @@ function LeaderUnit($cardID) {
       return "8903067778";
     case "8709191884"://Hunter (Outcast Sergeant)
       return "c9ff9863d7";
+    //Twilight of the Republic
+    case "8777351722"://Anakin Skywalker
+      return "24a81d97b5";
     default: return "";
   }
 }
@@ -1421,6 +1431,9 @@ function LeaderUndeployed($cardID) {
       return "9596662994";
     case "c9ff9863d7"://Hunter (Outcast Sergeant)
       return "8709191884";
+    //Twilight of the Republic
+    case "24a81d97b5"://Anakin Skywalker
+      return "8777351722";
     default: return "";
   }
 }
@@ -1803,6 +1816,7 @@ function DefinedCardType2Wrapper($cardID)
     case "9226435975"://Han Solo Red
     case "0622803599"://Jabba the Hutt
     case "9596662994"://Finn
+    case "8777351722"://Anakin Skywalker
       return "";
     case "8752877738":
     case "2007868442":

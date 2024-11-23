@@ -117,6 +117,9 @@ function AttackModifier($cardID, $player, $index)
     case "8305828130"://Warbird Stowaway
         $modifier += $initiativePlayer == $player ? 2 : 0;
         break;
+    case "24a81d97b5"://Anakin Skywalker Leader Unit
+      $modifier += floor(GetHealth($player)/5);
+      break;
     default: break;
   }
   return $modifier;
