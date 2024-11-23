@@ -486,6 +486,12 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
       case "3680942691"://Confederate Courier
         PlayAlly("3463348370", $player);//Battle Droid
         break;
+      case "0036920495"://Elite P-38 Starfighter
+        AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal 1 damage to");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+        AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1", 1);
+        break;
       default: break;
     }
     $upgrades = $destroyedAlly->GetUpgrades();
