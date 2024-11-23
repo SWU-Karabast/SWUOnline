@@ -4430,6 +4430,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
       break;
+    case "5936350569"://Jesse
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      PlayAlly("3463348370", $otherPlayer);//Battle Droid
+      PlayAlly("3463348370", $otherPlayer);//Battle Droid
+      break;
     default: break;
   }
 }

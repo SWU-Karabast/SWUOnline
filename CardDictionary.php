@@ -178,6 +178,7 @@ function RaidAmount($cardID, $player, $index, $reportMode = false)
     case "8991513192": $amount += SearchCount(SearchAllies($player, aspect:"Aggression")) > 1 ? 2 : 0; break;//Hunting Nexu
     case "1810342362": $amount += 2; break;//Lurking TIE Phantom
     case "8426882030": $amount += 1; break;//Ryloth Militia
+    case "5936350569": $amount += 1; break;//Jesse
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
