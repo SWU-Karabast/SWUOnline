@@ -4565,6 +4565,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
       break;
+    case "6410481716"://Mace Windu's Lightsaber
+      if(CardTitle(GetMZCard($currentPlayer, $target)) == "Mace Windu") {
+        Draw($currentPlayer);
+        Draw($currentPlayer);
+      }
+      break;
     //PlayAbility End
     default: break;
   }
