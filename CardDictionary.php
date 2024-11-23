@@ -273,6 +273,8 @@ function HasSentinel($cardID, $player, $index)
       return true;
     case "6238512843"://Republic Defense Carrier
       return true;
+    case "4179773207"://Infantry of the 212th
+      return IsCoordinateActive($player);
     default: return false;
   }
 }

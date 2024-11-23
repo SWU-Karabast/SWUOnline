@@ -923,3 +923,8 @@ function TheyControlMoreUnits($player) {
   if(count(GetAllies($player)) < count(GetAllies($otherPlayer))) return true;
   return false;
 }
+
+function IsCoordinateActive($player) {
+  $units = &GetAllies($player);
+  return count($units)/AllyPieces() >= 3;
+}
