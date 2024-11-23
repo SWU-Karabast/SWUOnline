@@ -1575,6 +1575,15 @@ function SpecificAllyAttackAbilities($attackID)
     case "7922308768"://Valiant Assault Ship
       AddCurrentTurnEffect("7922308768", $mainPlayer, 'PLAY', $attackerAlly->UniqueID());
       break;
+    case "7789777396"://Mister Bones
+      $hand = &GetHand($mainPlayer);
+      if(count($hand) == 0) {
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:arena=Ground&THEIRALLY:arena=Ground");
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose something to deal 3 damage to");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,3", 1);
+      }
+      break;
     default: break;
   }
 }
