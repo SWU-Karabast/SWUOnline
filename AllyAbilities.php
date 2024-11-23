@@ -918,6 +918,12 @@ function AllyAttackAbilities($attackID)
           AddDecisionQueue("MZOP", $defPlayer, "ADDSHIELD", 1);
         }
         break;
+      case "3693364726"://Aurra Sing
+        if(GetAttackTarget() == "THEIRCHAR-0" && CardArenas($attackID) == "Ground") {
+          $me = new Ally("MYALLIES-" . $i, $defPlayer);
+          $me->Ready();
+        }
+        break;
       default: break;
     }
   }
