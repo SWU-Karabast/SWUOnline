@@ -497,6 +497,8 @@ function HasAmbush($cardID, $player, $index, $from)
       return true;
     case "7380773849"://Coruscant Guard
       return IsCoordinateActive($player);
+    case "6999668340"://Droid Commando
+      return SearchCount(SearchAllies($player, trait:"Separatist")) > 1;
     default: return false;
   }
 }
