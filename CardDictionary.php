@@ -260,6 +260,8 @@ function HasSentinel($cardID, $player, $index)
       return true;
     case "8919416985"://Outspoken Representative
       return SearchCount(SearchAllies($player, trait:"Republic")) > 1;
+    case "7884088000"://Armored Saber Tank
+      return true;
     default: return false;
   }
 }
