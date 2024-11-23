@@ -4608,6 +4608,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, "CAPTURE,{0}", 1);
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "PRISONEROFWAR", 1);
       break;
+    case "3500129784"://Petition the Senate
+      if(SearchCount(SearchAllies($currentPlayer, trait:"Official")) >= 3) {
+        Draw($currentPlayer);
+        Draw($currentPlayer);
+        Draw($currentPlayer);
+      }
+      break;
     //PlayAbility End
     default: break;
   }
