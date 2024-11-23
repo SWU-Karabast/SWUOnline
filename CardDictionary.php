@@ -134,6 +134,7 @@ function ExploitAmount($cardID, $player) {
     case "8201333805": $amount += 3; break;//Squadron of Vultures
     case "9283787549": $amount += 3; break;//Separatist Super Tank
     case "3348783048": $amount += 2; break;//Geonosis Patrol Fighter
+    case "2554988743": $amount += 3; break;//Gor
     default: break;
   }
   return $amount;
@@ -291,6 +292,8 @@ function HasSentinel($cardID, $player, $index)
       return IsCoordinateActive($player);
     case "9927473096"://Patrolling AAT
       return true;
+    case "2554988743"://Gor
+      return true;
     default: return false;
   }
 }
@@ -399,6 +402,7 @@ function HasOverwhelm($cardID, $player, $index)
     case "8640210306"://Advanced Recon Commando
     case "8084593619"://Dendup's Loyalist
     case "6330903136"://B2 Legionnaires
+    case "2554988743"://Gor
       return true;
     default: return false;
   }
@@ -479,6 +483,8 @@ function HasAmbush($cardID, $player, $index, $from)
     case "1988887369"://Phase II Clone Trooper
       return true;
     case "4824842849"://Subjugating Starfighter
+      return true;
+    case "2554988743"://Gor
       return true;
     default: return false;
   }
