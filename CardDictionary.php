@@ -552,6 +552,7 @@ function HasSaboteur($cardID, $player, $index)
     switch($currentTurnEffects[$i]) {
       case "4663781580": return true;//Swoop Down
       case "9210902604": return true;//Precision Fire
+      case "4910017138": return true;//Breaking In
       default: break;
     }
   }
