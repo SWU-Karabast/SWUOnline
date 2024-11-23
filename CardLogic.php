@@ -917,3 +917,9 @@ function BlackOne($player) {
   AddDecisionQueue("DRAW", $player, "-", 1);
   
 }
+
+function TheyControlMoreUnits($player) {
+  $otherPlayer = $player == 1 ? 2 : 1;
+  if(count(GetAllies($player)) < count(GetAllies($otherPlayer))) return true;
+  return false;
+}

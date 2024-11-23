@@ -180,6 +180,19 @@ function ModalAbilities($player, $card, $lastResult)
         default: break;
       }
       return 1;
+    case "POLITICALPRESSURE":
+      switch($lastResult) {
+        case "Discard_Random":
+          DiscardRandom($player, "3357486161");
+          break;
+        case "Battle_Droids":
+          $otherPlayer = ($player == 1 ? 2 : 1);
+          PlayAlly("3463348370", $otherPlayer);//Battle Droid
+          PlayAlly("3463348370", $otherPlayer);//Battle Droid
+          break;
+        default: break;
+      }
+      return 1;
     default: return "";
   }
 }

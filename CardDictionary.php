@@ -116,6 +116,9 @@ function RestoreAmount($cardID, $player, $index)
     case "7022736145": $amount += 2; break;//Tarfful
     case "6870437193": $amount += 2; break;//Twin Pod Cloud Car
     case "3671559022": $amount += 2; break;//Echo
+    case "9185282472": $amount += 2; break;//ETA-2 Light Interceptor
+    case "5350889336": $amount += 3; break;//AT-TE Vanguard
+    case "3420865217": $amount += $ally->IsDamaged() ? 0 : 2; break;//Daughter of Dathomir
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
@@ -176,6 +179,8 @@ function RaidAmount($cardID, $player, $index, $reportMode = false)
     case "5818136044": $amount += 2; break;//Xanadu Blood
     case "8991513192": $amount += SearchCount(SearchAllies($player, aspect:"Aggression")) > 1 ? 2 : 0; break;//Hunting Nexu
     case "1810342362": $amount += 2; break;//Lurking TIE Phantom
+    case "8426882030": $amount += 1; break;//Ryloth Militia
+    case "5936350569": $amount += 1; break;//Jesse
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
@@ -204,6 +209,7 @@ function HasSentinel($cardID, $player, $index)
   for($i=0; $i<count($upgrades); ++$i)
   {
     if($upgrades[$i] == "4550121827") return true;//Protector
+    if($upgrades[$i] == "4991712618") return true;//Unshakeable Will
   }
   switch($cardID)
   {
@@ -254,6 +260,18 @@ function HasSentinel($cardID, $player, $index)
     case "9871430123"://Sugi
       $otherPlayer = $player == 1 ? 2 : 1;
       return SearchCount(SearchAllies($otherPlayer, hasUpgradeOnly:true)) > 0;
+    case "8845972926"://Falchion Ion Tank
+      return true;
+    case "8919416985"://Outspoken Representative
+      return SearchCount(SearchAllies($player, trait:"Republic")) > 1;
+    case "7884088000"://Armored Saber Tank
+      return true;
+    case "6330903136"://B2 Legionnaires
+      return true;
+    case "6257858302"://B1 Security Team
+      return true;
+    case "6238512843"://Republic Defense Carrier
+      return true;
     default: return false;
   }
 }
@@ -292,6 +310,8 @@ function HasGrit($cardID, $player, $index)
     case "1477806735"://Wookiee Warrior
     case "9195624101"://Heroic Renegade
     case "5169472456"://Chewbacca Pykesbane
+    case "8552292852"://Kashyyyk Defender
+    case "6787851182"://Dwarf Spider Droid
       return true;
     default: return false;
   }
@@ -356,6 +376,10 @@ function HasOverwhelm($cardID, $player, $index)
         if($targetAlly->HasBounty()) return true;
       }
       return false;
+    case "8640210306"://Advanced Recon Commando
+    case "8084593619"://Dendup's Loyalist
+    case "6330903136"://B2 Legionnaires
+      return true;
     default: return false;
   }
 }
@@ -430,6 +454,8 @@ function HasAmbush($cardID, $player, $index, $from)
       return SearchCount(SearchAllies($player, trait:"Vehicle")) > 1;
     case "5752414373"://Millennium Falcon
       return $from == "HAND";
+    case "7953154930"://Hidden Sharpshooter
+      return true;
     default: return false;
   }
 }
@@ -514,6 +540,9 @@ function HasSaboteur($cardID, $player, $index)
     case "2151430798"://Guavian Antagonizer
     case "2556508706"://Resourceful Pursuers
     case "2965702252"://Unlicensed Headhunter
+    case "6404471739"://Senatorial Corvette
+    case "4050810437"://Droid Starfighter
+    case "3600744650"://Bold Recon Commando
       return true;
     default: return false;
   }
@@ -1109,6 +1138,7 @@ function UpgradeFilter($cardID)
     case "3141660491"://The Darksaber
     case "6775521270"://Inspiring Mentor
     case "6117103324"://Jetpack
+    case "7280804443"://Hold-Out Blaster
       return "trait=Vehicle";
     case "3987987905"://Hardpoint Heavy Blaster
     case "7280213969"://Smuggling Compartment

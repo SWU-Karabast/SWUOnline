@@ -469,6 +469,23 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
       case "7204838421"://Enterprising Lackeys
         MZMoveCard($player, "MYRESOURCES", "MYDISCARD,RESOURCES", may: false);
         break;
+      case "8919416985"://Outspoken Representative
+        PlayAlly("3941784506", $player, from:"ABILITY");
+        break;
+      case "6404471739"://Senatorial Corvette
+        $otherPlayer = $player == 1 ? 2 : 1;
+        PummelHit($otherPlayer);
+        break;
+      case "5584601885"://Battle Droid Escort
+        PlayAlly("3463348370", $player);//Battle Droid
+        break;
+      case "5350889336"://AT-TE Vanguard
+        PlayAlly("3941784506", $player);//Clone Trooper
+        PlayAlly("3941784506", $player);//Clone Trooper
+        break;
+      case "3680942691"://Confederate Courier
+        PlayAlly("3463348370", $player);//Battle Droid
+        break;
       default: break;
     }
     $upgrades = $destroyedAlly->GetUpgrades();
