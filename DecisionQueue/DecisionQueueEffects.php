@@ -598,6 +598,13 @@ function SpecificCardLogic($player, $card, $lastResult)
         Draw($otherPlayer);
       }
       break;
+    case "PRISONEROFWAR":
+      $capturer = new Ally("MYALLY-" . SearchAlliesForUniqueID($dqVars[0], $player), $player);
+      if(CardCost($lastResult) < CardCost($capturer->CardID())) {
+        PlayAlly("3463348370", $player);//Battle Droid
+        PlayAlly("3463348370", $player);//Battle Droid
+      }
+      break;
     default: return "";
   }
 }
