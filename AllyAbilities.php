@@ -473,8 +473,11 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
         PlayAlly("3941784506", $player, from:"ABILITY");
         break;
       case "6404471739"://Senatorial Corvette
-        $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+        $otherPlayer = $player == 1 ? 2 : 1;
         PummelHit($otherPlayer);
+        break;
+      case "5584601885"://Battle Droid Escort
+        PlayAlly("3463348370", $player);//Battle Droid
         break;
       default: break;
     }

@@ -4435,6 +4435,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       PlayAlly("3463348370", $otherPlayer);//Battle Droid
       PlayAlly("3463348370", $otherPlayer);//Battle Droid
       break;
+    case "5584601885"://Battle Droid Escort
+      PlayAlly("3463348370", $currentPlayer);//Battle Droid
+      break;
     default: break;
   }
 }
