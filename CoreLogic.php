@@ -4515,6 +4515,16 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
       DamagePlayerAllies($otherPlayer, 2, "2103133661", "PLAYABILITY", arena:"Ground");
       break;
+    case "2483302291"://On the Doorstep
+      PlayAlly("3463348370", $currentPlayer);//Battle Droid
+      PlayAlly("3463348370", $currentPlayer);//Battle Droid
+      PlayAlly("3463348370", $currentPlayer);//Battle Droid
+      $allies = &GetAllies($currentPlayer);
+      for($i=0; $i<3; ++$i) {
+        $ally = new Ally("MYALLY-" . (count($allies) - ($i+1)*AllyPieces()), $currentPlayer);
+        $ally->Ready();
+      }
+      break;
     default: break;
   }
 }
