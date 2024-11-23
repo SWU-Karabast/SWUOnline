@@ -4363,13 +4363,21 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
           $oppIndex = GetClassState($currentPlayer, $CS_OppIndex);
           $otherPlayer = $currentPlayer == 1 ? 2 : 1;
           $ally = new Ally("THEIRALLY-" . $oppIndex, $otherPlayer);
-
           AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYALLY-" . $ally->Index(), 1);
           AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL", 1);
           AddDecisionQueue("PASSPARAMETER", $currentPlayer, -1, 1);
           AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_OppCardActive, 1);
-
         }
+      break;
+    case "8552292852"://Kashyyyk Defender
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "index=MYALLY-" . $playAlly->Index());
+      AddDecisionQueue("MZFILTER", $currentPlayer, "damaged=0");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to restore 2");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "RESTORE,2", 1);
+      AddDecisionQueue("UNIQUETOMZ", $currentPlayer, $playAlly->UniqueID(), 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,2", 1);
       break;
     default: break;
   }
