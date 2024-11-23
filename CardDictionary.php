@@ -305,6 +305,8 @@ function HasSentinel($cardID, $player, $index)
       return IsCoordinateActive($otherPlayer);
     case "5084084838"://Droideka Security
       return true;
+    case "0ee1e18cf4"://Obi-wan Kenobi
+      return true;
     default: return false;
   }
 }
@@ -782,6 +784,9 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
     case "7911083239"://Grand Inquisitor
       $abilityTypes = "A";
       break;
+    case "2784756758"://Obi-wan Kenobi
+      $abilityTypes = "A";
+      break;
     case "8777351722"://Anakin Skywalker
       $abilityTypes = "A";
       break;
@@ -950,6 +955,9 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       break;
     case "7911083239"://Grand Inquisitor
       $abilityNames = "Deal Damage";
+      break;
+    case "2784756758"://Obi-wan Kenobi
+      $abilityNames = "Heal";
       break;
     case "8777351722"://Anakin Skywalker
       $abilityNames = "Attack";
@@ -1372,6 +1380,8 @@ function LeaderUnit($cardID) {
     //Twilight of the Republic
     case "8777351722"://Anakin Skywalker
       return "24a81d97b5";
+    case "2784756758"://Obi-wan Kenobi
+      return "0ee1e18cf4";
     default: return "";
   }
 }
@@ -1455,6 +1465,8 @@ function LeaderUndeployed($cardID) {
     //Twilight of the Republic
     case "24a81d97b5"://Anakin Skywalker
       return "8777351722";
+    case "0ee1e18cf4"://Obi-wan Kenobi
+      return "2784756758";
     default: return "";
   }
 }
