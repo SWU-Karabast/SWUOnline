@@ -949,6 +949,9 @@ function AllyAttackedAbility($attackTarget, $index) {
     case "4541556921"://Knight of the Republic
       PlayAlly("3941784506", $defPlayer);//Clone Trooper
       break;
+    case "3876951742"://General's Guardian
+      PlayAlly("3463348370", $defPlayer);//Battle Droid
+      break;
     default: break;
   }
 }
