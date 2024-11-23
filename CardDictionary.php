@@ -208,6 +208,7 @@ function HasSentinel($cardID, $player, $index)
   for($i=0; $i<count($upgrades); ++$i)
   {
     if($upgrades[$i] == "4550121827") return true;//Protector
+    if($upgrades[$i] == "4991712618") return true;//Unshakeable Will
   }
   switch($cardID)
   {
