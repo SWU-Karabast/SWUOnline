@@ -4501,6 +4501,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZREMOVE", $currentPlayer, "-", 1);
       }
       break;
+    case "1192349217"://Manufactured Soldiers
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose one");
+      AddDecisionQueue("BUTTONINPUT", $currentPlayer, "Clone_Troopers,Battle_Droids");
+      AddDecisionQueue("MODAL", $currentPlayer, "MANUFACTUREDSOLDIERS", 1);
+      break;
     default: break;
   }
 }

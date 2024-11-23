@@ -193,6 +193,21 @@ function ModalAbilities($player, $card, $lastResult)
         default: break;
       }
       return 1;
+    
+    case "MANUFACTUREDSOLDIERS":
+      switch($lastResult) {
+        case "Clone_Troopers":
+          PlayAlly("3941784506", $player);//Clone Trooper
+          PlayAlly("3941784506", $player);//Clone Trooper
+          break;
+        case "Battle_Droids":
+          PlayAlly("3463348370", $player);//Battle Droid
+          PlayAlly("3463348370", $player);//Battle Droid
+          PlayAlly("3463348370", $player);//Battle Droid
+          break;
+        default: break;
+      }
+      return 1;
     default: return "";
   }
 }
