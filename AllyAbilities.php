@@ -1500,6 +1500,9 @@ function SpecificAllyAttackAbilities($attackID)
       PummelHit($mainPlayer, may:true, context:"Choose a card to discard to make opponent discard (or pass)");
       PummelHit($defPlayer, passable:true);
       break;
+    case "1320229479"://Multi-Troop Transport
+      PlayAlly("3463348370", $mainPlayer);//Battle Droid
+      break;
     case "8862896760"://Maul
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:trait=Underworld");
       AddDecisionQueue("MZFILTER", $mainPlayer, "index=MYALLY-" . $attackerAlly->Index());
