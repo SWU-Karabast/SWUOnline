@@ -202,6 +202,7 @@ function RaidAmount($cardID, $player, $index, $reportMode = false)
     case "5936350569": $amount += 1; break;//Jesse
     case "2800918480": $amount += 1; break;//Soldier of the 501st
     case "7494987248": $amount += IsCoordinateActive($currentPlayer) ? 3 : 0; break;//Plo Koon
+    case "5027991609": $amount += SearchCount(SearchAllies($player, trait:"Separatist")) > 1 ? 2 : 0; break;//Separatist Commando
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
