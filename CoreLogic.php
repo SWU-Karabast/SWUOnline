@@ -4525,6 +4525,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         $ally->Ready();
       }
       break;
+    case "2761325938"://Devastating Gunship
+      MZChooseAndDestroy($currentPlayer, "THEIRALLY:maxHealth=2");
+      break;
     default: break;
   }
 }
