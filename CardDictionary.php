@@ -297,6 +297,9 @@ function HasSentinel($cardID, $player, $index)
       return true;
     case "2554988743"://Gor
       return true;
+    case "7289764651"://Duchess's Champion
+      $otherPlayer = $player == 1 ? 2 : 1;
+      return IsCoordinateActive($otherPlayer);
     default: return false;
   }
 }
