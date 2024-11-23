@@ -4412,6 +4412,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "6969421569"://Batch Brothers
       PlayAlly("3941784506", $currentPlayer);//Clone Trooper
       break;
+    case "6826668370"://Droid Deployment
+      PlayAlly("3463348370", $currentPlayer);//Battle Droid
+      PlayAlly("3463348370", $currentPlayer);//Battle Droid
+      break;
     default: break;
   }
 }
