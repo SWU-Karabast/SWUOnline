@@ -4490,6 +4490,17 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
       PlayAlly("3941784506", $currentPlayer);//Clone Trooper
       break;
+    case "0959549331"://Unmasking the Conspiracy
+      $hand = &GetHand($currentPlayer);
+      PummelHit($currentPlayer);
+      if(count($hand) > 0) {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRHAND");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose which card you want your opponent to discard", 1);
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZDISCARD", $currentPlayer, "HAND," . $currentPlayer, 1);
+        AddDecisionQueue("MZREMOVE", $currentPlayer, "-", 1);
+      }
+      break;
     default: break;
   }
 }
