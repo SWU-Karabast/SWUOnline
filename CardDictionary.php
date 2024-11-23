@@ -133,6 +133,7 @@ function ExploitAmount($cardID, $player) {
     case "6700679522": $amount += 2; break;//Tri-Droid Suppressor
     case "8201333805": $amount += 3; break;//Squadron of Vultures
     case "9283787549": $amount += 3; break;//Separatist Super Tank
+    case "3348783048": $amount += 2; break;//Geonosis Patrol Fighter
     default: break;
   }
   return $amount;
