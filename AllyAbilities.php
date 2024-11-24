@@ -535,6 +535,14 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
         $otherPlayer = $player == 1 ? 2 : 1;
         DamagePlayerAllies($otherPlayer, 1, "0683052393", "ATTACKABILITY", arena:"Ground");
         break;
+      case "0249398533"://Obedient Vanguard
+        AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:trait=Trooper");
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to give +2/+2");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+        AddDecisionQueue("MZOP", $player, "ADDHEALTH,2", 1);
+        AddDecisionQueue("MZOP", $player, "GETUNIQUEID", 1);
+        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $player, "0249398533,PLAY", 1);
+        break;
       default: break;
     }
     $upgrades = $destroyedAlly->GetUpgrades();

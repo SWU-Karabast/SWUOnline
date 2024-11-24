@@ -241,6 +241,7 @@ function RaidAmount($cardID, $player, $index, $reportMode = false)
     case "0354710662": $amount += 2; break;//Saw Gerrera
     case "0683052393": $amount += IsCoordinateActive($currentPlayer) ? 2 : 0; break;//Hevy
     case "9964112400": $amount += 2; break;//Rush Clovis
+    case "0249398533": $amount += 1; break;//Obedient Vanguard
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
