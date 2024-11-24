@@ -141,6 +141,7 @@ function ExploitAmount($cardID, $player) {
     case "5243634234": $amount += 2; break;//Baktoid Spider Droid
     case "5084084838": $amount += 2; break;//Droideka Security
     case "6436543702": $amount += 2; break;//Providence Destroyer
+    case "8655450523": $amount += 2; break;//Count Dooku
     default: break;
   }
   return $amount;
@@ -426,6 +427,7 @@ function HasOverwhelm($cardID, $player, $index)
     case "3693364726"://Aurra Sing
     case "3476041913"://Low Altitude Gunship
     case "40b649e6f6"://Maul
+    case "8655450523"://Count Dooku
       return true;
     case "8139901441"://Bo-Katan Kryze
       return SearchCount(SearchAllies($player, trait:"Mandalorian")) > 1;
