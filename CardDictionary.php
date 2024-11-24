@@ -119,6 +119,7 @@ function RestoreAmount($cardID, $player, $index)
     case "9185282472": $amount += 2; break;//ETA-2 Light Interceptor
     case "5350889336": $amount += 3; break;//AT-TE Vanguard
     case "3420865217": $amount += $ally->IsDamaged() ? 0 : 2; break;//Daughter of Dathomir
+    case "6412545836": $amount += 1; break;//Morgan Elsbeth
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
