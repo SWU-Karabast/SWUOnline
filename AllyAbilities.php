@@ -1250,6 +1250,9 @@ function SpecificAllyAttackAbilities($attackID)
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $mainPlayer, "ADDEXPERIENCE", 1);
         break;
+      case "0414253215"://General's Blade
+        if(TraitContains($attackerAlly->CardID(), "Jedi", $mainPlayer)) AddCurrentTurnEffect($upgrades[$i], $mainPlayer, from:"PLAY");
+        break;
       default: break;
     }
   }

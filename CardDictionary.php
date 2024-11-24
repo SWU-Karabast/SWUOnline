@@ -1339,6 +1339,7 @@ function UpgradeFilter($cardID)
     case "6117103324"://Jetpack
     case "7280804443"://Hold-Out Blaster
     case "6410481716"://Mace Windu's Lightsaber
+    case "0414253215"://General's Blade
       return "trait=Vehicle";
     case "3987987905"://Hardpoint Heavy Blaster
     case "7280213969"://Smuggling Compartment
