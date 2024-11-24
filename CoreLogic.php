@@ -4873,6 +4873,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}");
       AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
       break;
+    case "2267524398"://The Clone Wars
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      for($i=0; $i<$resourcesPaid-2; ++$i) {
+        PlayAlly("3941784506", $currentPlayer);//Clone Trooper
+        PlayAlly("3463348370", $otherPlayer);//Battle Droid
+      }
     //PlayAbility End
     default: break;
   }

@@ -749,6 +749,8 @@ function DynamicCost($cardID)
     case "2639435822"://Force Lightning
       if(SearchCount(SearchAllies($currentPlayer, trait:"Force")) > 0) return "1,2,3,4,5,6,7,8,9,10";
       return "1";
+    case "2267524398"://The Clone Wars
+      return "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20";
     default: return "";
   }
 }
