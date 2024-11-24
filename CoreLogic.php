@@ -4743,6 +4743,16 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1", 1);
       break;
+    case "0026166404"://Emperor Palpatine
+      AddDecisionQueue("YESNO", $currentPlayer, "if a Heroism unit died this turn");
+      AddDecisionQueue("NOPASS", $currentPlayer, "-");
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "TWI_PALPATINE_HERO", 1);
+      break;
+    case "ad86d54e97"://Darth Sidious
+      AddDecisionQueue("YESNO", $currentPlayer, "if you played a Villainy unit this turn");
+      AddDecisionQueue("NOPASS", $currentPlayer, "-");
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "TWI_DARTHSIDIOUS_HERO", 1);
+      break;
     //PlayAbility End
     default: break;
   }

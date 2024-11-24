@@ -830,6 +830,10 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
     case "7911083239"://Grand Inquisitor
       $abilityTypes = "A";
       break;
+    case "0026166404"://Emperor Palpatine
+    case "ad86d54e97"://Darth Sidious
+      $abilityTypes = "A";
+      break;
     case "4628885755"://Mace Windu
       $abilityTypes = "A";
       break;
@@ -1020,6 +1024,10 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
     case "7911083239"://Grand Inquisitor
       $abilityNames = "Deal Damage";
       break;
+    case "0026166404"://Emperor Palpatine
+    case "ad86d54e97"://Darth Sidious
+      $abilityNames = "Activate";
+      break;
     case "4628885755"://Mace Windu
       $abilityNames = "Deal Damage";
       break;
@@ -1153,8 +1161,11 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
     $char = &GetPlayerCharacter($currentPlayer);
     if($char[CharacterPieces() + 1] == 1) $abilityNames = "";
     if($char[CharacterPieces() + 2] == 0) {
-      if($abilityNames != "") $abilityNames .= ",";
-      $abilityNames .= "Deploy";
+      //Emperor Palpatine + Darth Sidious
+      if($char[CharacterPieces()] != "0026166404" && $char[CharacterPieces()] != "ad86d54e97") {
+        if($abilityNames != "") $abilityNames .= ",";
+        $abilityNames .= "Deploy";
+      }
     }
   }
   return $abilityNames;
