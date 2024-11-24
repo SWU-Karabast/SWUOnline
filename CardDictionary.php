@@ -427,6 +427,8 @@ function HasOverwhelm($cardID, $player, $index)
     case "3476041913"://Low Altitude Gunship
     case "40b649e6f6"://Maul
       return true;
+    case "8139901441"://Bo-Katan Kryze
+      return SearchCount(SearchAllies($player, trait:"Mandalorian")) > 1;
     default: return false;
   }
 }
@@ -613,6 +615,8 @@ function HasSaboteur($cardID, $player, $index)
       $hand = &GetHand($player);
       if(count($hand)/HandPieces() >= 3) return true;
       break;
+    case "8139901441"://Bo-Katan Kryze
+      return SearchCount(SearchAllies($player, trait:"Mandalorian")) > 1;
     default: return false;
   }
   return false;

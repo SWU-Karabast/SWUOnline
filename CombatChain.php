@@ -140,6 +140,9 @@ function AttackModifier($cardID, $player, $index)
       global $CS_NumEventsPlayed;
       if(GetClassState($player, $CS_NumEventsPlayed) > 0) $modifier += 1;
       break;
+    case "8139901441"://Bo-Katan Kryze
+      if(SearchCount(SearchAllies($player, trait:"Trooper")) > 1) $modifier += 1;
+      break;
     default: break;
   }
   return $modifier;
