@@ -4695,6 +4695,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "BOUNCE", 1);
       break;
+    case "9832122703"://Luminara Unduli
+      $healAmount = SearchCount(SearchAllies($currentPlayer));
+      Restore($healAmount, $currentPlayer);
+      break;
     //PlayAbility End
     default: break;
   }

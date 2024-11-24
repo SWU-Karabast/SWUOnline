@@ -431,6 +431,8 @@ function HasOverwhelm($cardID, $player, $index)
       return true;
     case "8139901441"://Bo-Katan Kryze
       return SearchCount(SearchAllies($player, trait:"Mandalorian")) > 1;
+    case "9832122703"://Luminara Unduli
+      return IsCoordinateActive($player);
     default: return false;
   }
 }
