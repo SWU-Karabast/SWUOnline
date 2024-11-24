@@ -143,6 +143,9 @@ function AttackModifier($cardID, $player, $index)
     case "8139901441"://Bo-Katan Kryze
       if(SearchCount(SearchAllies($player, trait:"Trooper")) > 1) $modifier += 1;
       break;
+    case "1368135704"://Relentless Rocket Droid
+      if(SearchCount(SearchAllies($player, trait:"Trooper")) > 1) $modifier += 2;
+      break;
     default: break;
   }
   return $modifier;
