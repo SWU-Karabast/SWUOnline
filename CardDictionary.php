@@ -168,6 +168,7 @@ function ExploitAmount($cardID, $player, $reportMode=true) {
     case "4210027426": $amount += 2; break;//Heavy Persuader Tank
     case "7013591351": $amount += 1; break;//Admiral Trench
     case "2565830105": $amount += 4; break;//Invastion of Christophsis
+    case "2041344712": $amount += 3; break;//Osi Sobeck
     default: break;
   }
   return $amount;
