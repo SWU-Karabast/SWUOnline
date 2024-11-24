@@ -1642,6 +1642,17 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("PASSPARAMETER", $mainPlayer, "{0}", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "REDUCEHEALTH,2", 1);
       break;
+    case "7000286964": return -1;//Vulture Interceptor Wing
+      $otherPlayer = $mainPlayer == 1 ? 2 : 1;
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to give -1/-1", 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("SETDQVAR", $mainPlayer, 0, 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $otherPlayer, "7000286964,HAND", 1);
+      AddDecisionQueue("PASSPARAMETER", $mainPlayer, "{0}", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "REDUCEHEALTH,1", 1);
+      break;
     default: break;
   }
 }

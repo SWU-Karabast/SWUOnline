@@ -178,6 +178,7 @@ function EffectAttackModifier($cardID, $playerID="")
     case "8929774056": return 1;//Asajj Ventress
     case "2155351882": return 1;//Ahsoka Tano
     case "6436543702": return -2;//Providence Destroyer
+    case "7000286964": return -1;//Vulture Interceptor Wing
     default: return 0;
   }
 }
