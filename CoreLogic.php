@@ -4826,6 +4826,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         $deck->Add(RemoveDiscard($otherPlayer, $i));
       }
       break;
+    case "0398102006"://The Invisible Hand
+      PlayAlly("3463348370", $currentPlayer);//Battle Droid
+      PlayAlly("3463348370", $currentPlayer);//Battle Droid
+      PlayAlly("3463348370", $currentPlayer);//Battle Droid
+      PlayAlly("3463348370", $currentPlayer);//Battle Droid
+      break;
     //PlayAbility End
     default: break;
   }
