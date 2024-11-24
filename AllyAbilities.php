@@ -288,6 +288,15 @@ function AllyEntersPlayAbilities($player)
           PlayAlly("3463348370", $player);//Battle Droid
         }
         break;
+      case "0142631581"://Mas Amedda
+        $ally = new Ally("MYALLY-" . $i, $player);
+        if(!$ally->IsExhausted()) {
+          $ally->Exhaust();
+          AddDecisionQueue("SEARCHDECKTOPX", $player, "4;1;include-definedType-Unit");
+          AddDecisionQueue("ADDHAND", $player, "-", 1);
+          AddDecisionQueue("REVEALCARDS", $player, "-", 1);
+        }
+        break;
       default: break;
     }
   }
