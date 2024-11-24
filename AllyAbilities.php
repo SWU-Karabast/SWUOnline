@@ -68,6 +68,7 @@ function AllyHasStaticHealthModifier($cardID)
     case "2265363405"://Echo
     case "1209133362"://332nd Stalwart
     case "47557288d6"://Captain Rex
+    case "0268657344"://Admiral Yularen
       return true;
     default: return false;
   }
@@ -115,6 +116,10 @@ function AllyStaticHealthModifier($cardID, $index, $player, $myCardID, $myIndex,
       return ($player == $myPlayer && CardTitle($cardID) == "4-LOM") ? 1 : 0;
     case "47557288d6"://Captain Rex
       if($index != $myIndex && $player == $myPlayer && TraitContains($cardID, "Trooper", $player)) return 1;
+      break;
+    case "0268657344"://Admiral Yularen
+      if($index != $myIndex && $player == $myPlayer && AspectContains($cardID, "Heroism", $player)) return 1;
+      break;
     default: break;
   }
   return 0;
