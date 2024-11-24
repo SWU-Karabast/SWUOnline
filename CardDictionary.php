@@ -867,6 +867,9 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
     case "7911083239"://Grand Inquisitor
       $abilityTypes = "A";
       break;
+    case "6064906790"://Nute Gunray
+      $abilityTypes = "A";
+      break;
     case "2847868671"://Yoda
       $abilityTypes = "A";
       break;
@@ -1069,6 +1072,9 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       break;
     case "7911083239"://Grand Inquisitor
       $abilityNames = "Deal Damage";
+      break;
+    case "6064906790"://Nute Gunray
+      $abilityNames = "Droid";
       break;
     case "2847868671"://Yoda
       $abilityNames = "Draw";
@@ -1557,6 +1563,8 @@ function LeaderUnit($cardID) {
       return "f05184bd91";
     case "2847868671"://Yoda
       return "e71f6f766c";
+    case "6064906790"://Nute Gunray
+      return "b7caecf9a3";
     default: return "";
   }
 }
@@ -1666,6 +1674,8 @@ function LeaderUndeployed($cardID) {
       return "2742665601";
     case "e71f6f766c"://Yoda
       return "2847868671";
+    case "b7caecf9a3"://Nute Gunray
+      return "6064906790";
     default: return "";
   }
 }

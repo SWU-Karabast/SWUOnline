@@ -4940,6 +4940,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "REDUCEHEALTH,1", 1);
       }
       break;
+    case "6064906790"://Nute Gunray
+      WriteLog(DefinedCardType($cardID));
+      global $CS_NumAlliesDestroyed;
+      if(GetClassState($currentPlayer, $CS_NumAlliesDestroyed) >= 2) {
+        PlayAlly("3463348370", $currentPlayer);//Battle Droid
+      }
+      break;
     //PlayAbility End
     default: break;
   }

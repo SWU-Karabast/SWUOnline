@@ -1746,6 +1746,9 @@ function SpecificAllyAttackAbilities($attackID)
         AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "12122bc0b1,PLAY", 1);
       }
       break;
+    case "b7caecf9a3"://Nute Gunray
+      PlayAlly("3463348370", $mainPlayer);//Battle Droid
+      break;
     default: break;
   }
 }
