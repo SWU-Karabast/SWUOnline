@@ -1544,6 +1544,8 @@ function LeaderUnit($cardID) {
       return "cfdcbd005a";
     case "1686059165"://Wat Tambor
       return "12122bc0b1";
+    case "2742665601"://Nala Se
+      return "f05184bd91";
     default: return "";
   }
 }
@@ -1649,6 +1651,8 @@ function LeaderUndeployed($cardID) {
       return "9155536481";
     case "12122bc0b1"://Wat Tambor
       return "1686059165";
+    case "f05184bd91"://Nala Se
+      return "2742665601";
     default: return "";
   }
 }

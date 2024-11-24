@@ -1698,9 +1698,10 @@ function SelfCostModifier($cardID, $from)
   //Aspect Penalty
   $heraSyndullaAspectPenaltyIgnore = TraitContains($cardID, "Spectre", $currentPlayer) && (HeroCard($currentPlayer) == "7440067052" || SearchAlliesForCard($currentPlayer, "80df3928eb") != ""); //Hera Syndulla (Spectre Two)
   $omegaAspectPenaltyIgnore = TraitContains($cardID, "Clone", $currentPlayer) && SearchAlliesForCard($currentPlayer, "1386874723") != "" && GetClassState($currentPlayer, $CS_NumClonesPlayed) < 1; //Omega (Part of the Squad)
+  $nalaSeAspectPenaltyIgnore = TraitContains($cardID, "Clone", $currentPlayer) &&  (HeroCard($currentPlayer) == "2742665601" || SearchAlliesForCard($currentPlayer, "f05184bd91") != ""); //Nala Se (Kaminoan Prime Minister)
   $playerAspects = PlayerAspects($currentPlayer);
   $penalty = 0;
-  if(!$heraSyndullaAspectPenaltyIgnore && !$omegaAspectPenaltyIgnore) {
+  if(!$heraSyndullaAspectPenaltyIgnore && !$omegaAspectPenaltyIgnore && !$nalaSeAspectPenaltyIgnore) {
     $cardAspects = CardAspects($cardID);
     //Manually changing the aspects of cards played with smuggle that have different aspect requirements for smuggle.
     //Not a great solution; ideally we could define a whole smuggle ability in one place.

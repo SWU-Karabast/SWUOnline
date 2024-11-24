@@ -588,6 +588,9 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
           AddDecisionQueue("OP", $player, "BOUNCEUPGRADE", 1);
         }
         break;
+      case "f05184bd91"://Nala Se
+        if(TraitContains($cardID, "Clone", $player)) Restore(2, $player);
+        break;
       default: break;
     }
   }
