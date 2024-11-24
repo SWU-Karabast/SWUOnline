@@ -1631,6 +1631,17 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MZOP", $mainPlayer, "DESTROY", 1);
       AddDecisionQueue("DRAW", $mainPlayer, "-", 1);
       break;
+    case "6436543702"://Providence Destroyer
+      $otherPlayer = $mainPlayer == 1 ? 2 : 1;
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY:arena=Space");
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to give -2/-2", 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("SETDQVAR", $mainPlayer, 0, 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $otherPlayer, "6436543702,HAND", 1);
+      AddDecisionQueue("PASSPARAMETER", $mainPlayer, "{0}", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "REDUCEHEALTH,2", 1);
+      break;
     default: break;
   }
 }

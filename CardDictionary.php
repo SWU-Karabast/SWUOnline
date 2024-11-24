@@ -140,6 +140,7 @@ function ExploitAmount($cardID, $player) {
     case "1083333786": $amount += 2; break;//Battle Droid Legion
     case "5243634234": $amount += 2; break;//Baktoid Spider Droid
     case "5084084838": $amount += 2; break;//Droideka Security
+    case "6436543702": $amount += 2; break;//Providence Destroyer
     default: break;
   }
   return $amount;

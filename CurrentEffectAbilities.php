@@ -177,6 +177,7 @@ function EffectAttackModifier($cardID, $playerID="")
     case "4910017138": return 2;//Breaking In
     case "8929774056": return 1;//Asajj Ventress
     case "2155351882": return 1;//Ahsoka Tano
+    case "6436543702": return -2;//Providence Destroyer
     default: return 0;
   }
 }
