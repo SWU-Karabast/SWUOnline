@@ -166,6 +166,7 @@ function ExploitAmount($cardID, $player, $reportMode=true) {
     case "8655450523": $amount += 2; break;//Count Dooku
     case "0021045666": $amount += 3; break;//San Hill
     case "4210027426": $amount += 2; break;//Heavy Persuader Tank
+    case "7013591351": $amount += 1; break;//Admiral Trench
     default: break;
   }
   return $amount;
