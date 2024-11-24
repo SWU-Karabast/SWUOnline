@@ -203,6 +203,12 @@ function RaidAmount($cardID, $player, $index, $reportMode = false)
       default: break;
     }
   }
+  $ally = new Ally("MYALLY-" . $index, $player);
+  $upgrades = $ally->GetUpgrades();
+  for($i=0; $i<count($upgrades); ++$i)
+  {
+    if($upgrades[$i] == "2007876522") $amount += 2;//Clone Cohort
+  }
   switch($cardID)
   {
     case "1017822723": $amount += 2; break; //Rogue Operative

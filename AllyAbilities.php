@@ -546,6 +546,9 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
           AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
           AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
           break;
+        case "2007876522"://Clone Cohort
+          PlayAlly("3941784506", $player);//Clone Trooper
+          break;
       }
     }
   }
