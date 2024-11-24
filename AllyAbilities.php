@@ -1705,6 +1705,12 @@ function SpecificAllyAttackAbilities($attackID)
     case "1314547987"://Shaak Ti
       PlayAlly("3941784506", $mainPlayer);//Clone Trooper
       break;
+    case "9964112400"://Rush Clovis
+      $otherPlayer = $mainPlayer == 1 ? 2 : 1;
+      if(NumResourcesAvailable($otherPlayer) == 0) {
+        PlayAlly("3463348370", $mainPlayer);//Battle Droid
+      }
+      break;
     default: break;
   }
 }

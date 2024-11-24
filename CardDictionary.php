@@ -238,6 +238,7 @@ function RaidAmount($cardID, $player, $index, $reportMode = false)
     case "5027991609": $amount += SearchCount(SearchAllies($player, trait:"Separatist")) > 1 ? 2 : 0; break;//Separatist Commando
     case "0354710662": $amount += 2; break;//Saw Gerrera
     case "0683052393": $amount += IsCoordinateActive($currentPlayer) ? 2 : 0; break;//Hevy
+    case "9964112400": $amount += 2; break;//Rush Clovis
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
