@@ -1513,6 +1513,8 @@ function LeaderUnit($cardID) {
       return "9b212e2eeb";
     case "7734824762"://Captain Rex
       return "47557288d6";
+    case "9155536481"://Jango Fett
+      return "cfdcbd005a";
     default: return "";
   }
 }
@@ -1614,6 +1616,8 @@ function LeaderUndeployed($cardID) {
       return "4628885755";
     case "47557288d6"://Captain Rex
       return "7734824762";
+    case "cfdcbd005a"://Jango Fett
+      return "9155536481";
     default: return "";
   }
 }

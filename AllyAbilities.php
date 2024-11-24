@@ -1744,6 +1744,30 @@ function AllyDamageTakenAbilities($player, $index, $survived, $damage, $fromComb
   switch($allies[$index]) {
     default: break;
   }
+  $otherPlayer = $player == 1 ? 2 : 1;
+  $theirAllies = &GetAllies($otherPlayer);
+  for($i=0; $i<count($theirAllies); $i+=AllyPieces()) {
+    switch($theirAllies[$i]) {
+      case "cfdcbd005a"://Jango Fett Leader Unit
+        $ally = new Ally("MYALLY-" . $index, $player);
+        $ally->Exhaust();
+        break;
+      default: break;
+    }
+  }
+  $theirCharacter = &GetPlayerCharacter($otherPlayer);
+  for($i=0; $i<count($theirCharacter); $i+=CharacterPieces()) {
+    switch($theirCharacter[$i]) {
+      case "9155536481"://Jango Fett Leader
+        if($theirCharacter[$i+1] == 2) {
+          $ally = new Ally("MYALLY-" . $index, $player);
+          $ally->Exhaust();
+          $theirCharacter[$i+1] = 1;
+        }
+        break;
+      default: break;
+    }
+  }
 }
 
 function AllyTakeDamageAbilities($player, $index, $damage, $preventable)
