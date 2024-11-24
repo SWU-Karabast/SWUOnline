@@ -121,6 +121,7 @@ function RestoreAmount($cardID, $player, $index)
     case "3420865217": $amount += $ally->IsDamaged() ? 0 : 2; break;//Daughter of Dathomir
     case "6412545836": $amount += 1; break;//Morgan Elsbeth
     case "0268657344": $amount += 1; break;//Admiral Yularen
+    case "e71f6f766c": $amount += 2; break;//Yoda
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
@@ -864,6 +865,9 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
     case "7911083239"://Grand Inquisitor
       $abilityTypes = "A";
       break;
+    case "2847868671"://Yoda
+      $abilityTypes = "A";
+      break;
     case "1686059165"://Wat Tambor
       $abilityTypes = "A";
       break;
@@ -1063,6 +1067,9 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       break;
     case "7911083239"://Grand Inquisitor
       $abilityNames = "Deal Damage";
+      break;
+    case "2847868671"://Yoda
+      $abilityNames = "Draw";
       break;
     case "1686059165"://Wat Tambor
       $abilityNames = "Buff";
@@ -1546,6 +1553,8 @@ function LeaderUnit($cardID) {
       return "12122bc0b1";
     case "2742665601"://Nala Se
       return "f05184bd91";
+    case "2847868671"://Yoda
+      return "e71f6f766c";
     default: return "";
   }
 }
@@ -1653,6 +1662,8 @@ function LeaderUndeployed($cardID) {
       return "1686059165";
     case "f05184bd91"://Nala Se
       return "2742665601";
+    case "e71f6f766c"://Yoda
+      return "2847868671";
     default: return "";
   }
 }

@@ -2185,6 +2185,22 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         case "7734824762"://Captain Rex
           PlayAlly("3941784506", $currentPlayer);//Clone Trooper
           break;
+        case "2847868671"://Yoda
+        $deck = &GetDeck($currentPlayer);
+        if(count($deck) > 0) {
+          AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose if you want to discard a card to Yoda");
+          AddDecisionQueue("YESNO", $currentPlayer, "-");
+          AddDecisionQueue("NOPASS", $currentPlayer, "-");
+          AddDecisionQueue("PASSPARAMETER", $currentPlayer, "1", 1);
+          AddDecisionQueue("OP", $currentPlayer, "MILL", 1);
+          AddDecisionQueue("MZOP", $currentPlayer, "GETCARDCOST", 1);
+          AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+          AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:maxCost={0}", 1);
+          AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to destroy");
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+          AddDecisionQueue("MZOP", $currentPlayer, "DESTROY", 1);
+        }
+          break;
         default: break;
       }
       RemoveCharacter($currentPlayer, CharacterPieces());
@@ -4894,6 +4910,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to give control of", 1);
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer == 1 ? 2 : 1, "TAKECONTROL", 1);
+      break;
+    case "2847868671"://Yoda
+      global $CS_NumAlliesDestroyed;
+      if(GetClassState($currentPlayer, $CS_NumAlliesDestroyed) > 0) {
+        Draw($currentPlayer);
+        AddDecisionQueue("HANDTOPBOTTOM", $currentPlayer, "-");
+      }
       break;
     //PlayAbility End
     default: break;
