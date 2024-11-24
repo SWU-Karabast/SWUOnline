@@ -1699,6 +1699,9 @@ function SpecificAllyAttackAbilities($attackID)
         ReadyResource($mainPlayer);
       }
       break;
+    case "1314547987"://Shaak Ti
+      PlayAlly("3941784506", $mainPlayer);//Clone Trooper
+      break;
     default: break;
   }
 }
