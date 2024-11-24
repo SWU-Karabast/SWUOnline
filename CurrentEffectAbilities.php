@@ -183,6 +183,7 @@ function EffectAttackModifier($cardID, $playerID="")
     case "1686059165": return 2;//Wat Tambor
     case "12122bc0b1": return 2;//Wat Tambor
     case "2395430106": return 2;//Republic Tactical Officer
+    case "3381931079": return -4;//Malevolence
     default: return 0;
   }
 }

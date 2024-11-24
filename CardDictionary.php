@@ -122,6 +122,7 @@ function RestoreAmount($cardID, $player, $index)
     case "6412545836": $amount += 1; break;//Morgan Elsbeth
     case "0268657344": $amount += 1; break;//Admiral Yularen
     case "e71f6f766c": $amount += 2; break;//Yoda
+    case "3381931079": $amount += 2; break;//Malevolence
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
@@ -170,6 +171,7 @@ function ExploitAmount($cardID, $player, $reportMode=true) {
     case "7013591351": $amount += 1; break;//Admiral Trench
     case "2565830105": $amount += 4; break;//Invastion of Christophsis
     case "2041344712": $amount += 3; break;//Osi Sobeck
+    case "3381931079": $amount += 4; break;//Malevolence
     default: break;
   }
   return $amount;
