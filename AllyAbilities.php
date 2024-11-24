@@ -1689,6 +1689,12 @@ function SpecificAllyAttackAbilities($attackID)
         DamagePlayerAllies($otherPlayer, 1, "0354710662", "ATTACKABILITY", arena:"Ground");
       }
       break;
+    case "0021045666"://San Hill
+      global $CS_NumAlliesDestroyed;
+      for($i=0; $i<GetClassState($mainPlayer, $CS_NumAlliesDestroyed); ++$i) {
+        ReadyResource($mainPlayer);
+      }
+      break;
     default: break;
   }
 }

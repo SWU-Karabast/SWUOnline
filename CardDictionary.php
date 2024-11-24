@@ -164,6 +164,7 @@ function ExploitAmount($cardID, $player, $reportMode=true) {
     case "5084084838": $amount += 2; break;//Droideka Security
     case "6436543702": $amount += 2; break;//Providence Destroyer
     case "8655450523": $amount += 2; break;//Count Dooku
+    case "0021045666": $amount += 3; break;//San Hill
     default: break;
   }
   return $amount;
