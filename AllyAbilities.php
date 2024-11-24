@@ -1791,6 +1791,11 @@ function SpecificAllyAttackAbilities($attackID)
         AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,2", 1);
       }
       break;
+    case "0693815329"://Cad Bane
+      RescueUnit($mainPlayer == 1 ? 2 : 1, "THEIRALLY-" . $attackerIndex, may:true);
+      AddDecisionQueue("DRAW", $mainPlayer, "-", 1);
+      AddDecisionQueue("DRAW", $mainPlayer, "-", 1);
+      break;
     default: break;
   }
   //SpecificAllyAttackAbilities End
