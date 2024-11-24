@@ -67,6 +67,7 @@ function AllyHasStaticHealthModifier($cardID)
     case "2260777958"://41st Elite Corps
     case "2265363405"://Echo
     case "1209133362"://332nd Stalwart
+    case "47557288d6"://Captain Rex
       return true;
     default: return false;
   }
@@ -112,6 +113,8 @@ function AllyStaticHealthModifier($cardID, $index, $player, $myCardID, $myIndex,
       return ($player == $myPlayer && CardTitle($cardID) == "Zuckuss") ? 1 : 0;
     case "1690726274"://Zuckuss
       return ($player == $myPlayer && CardTitle($cardID) == "4-LOM") ? 1 : 0;
+    case "47557288d6"://Captain Rex
+      if($index != $myIndex && $player == $myPlayer && TraitContains($cardID, "Trooper", $player)) return 1;
     default: break;
   }
   return 0;

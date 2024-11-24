@@ -238,6 +238,9 @@ class Ally {
         case "919facb76d"://Boba Fett Green Leader
           if($i != $this->index && HasKeyword($this->CardID(), "Any", $this->playerID, $this->index)) $power += 1;
           break;
+        case "47557288d6"://Captain Rex
+          if($i != $this->index && TraitContains($this->CardID(), "Trooper", $this->PlayerID())) $power += 1;
+          break;
         default: break;
       }
     }

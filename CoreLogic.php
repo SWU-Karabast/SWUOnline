@@ -2121,7 +2121,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddLayer("TRIGGER", $currentPlayer, "SHIELDED", "-", "-", $allies[$playIndex + 5]);
       }
       PlayAbility(LeaderUnit($cardID), "CHAR", 0, "-", "-", false, $uniqueId);
-      //On Deploy ability
+      //On Deploy ability / When Deployed ability
       switch($cardID) {
         case "5784497124"://Emperor Palpatine
           AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:damagedOnly=true");
@@ -2177,6 +2177,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
               $ally->DealDamage(2);
             }
           }
+          break;
+        case "7734824762"://Captain Rex
+          PlayAlly("3941784506", $currentPlayer);//Clone Trooper
           break;
         default: break;
       }
@@ -4752,6 +4755,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("YESNO", $currentPlayer, "if you played a Villainy unit this turn");
       AddDecisionQueue("NOPASS", $currentPlayer, "-");
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "TWI_DARTHSIDIOUS_HERO", 1);
+      break;
+    case "7734824762"://Captain Rex
+      global $CS_NumAttacks;
+      if(GetClassState($currentPlayer, $CS_NumAttacks) > 0) {
+        PlayAlly("3941784506", $currentPlayer);//Clone Trooper
+      }
       break;
     //PlayAbility End
     default: break;

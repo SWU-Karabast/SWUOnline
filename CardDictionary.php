@@ -704,6 +704,8 @@ function AbilityCost($cardID, $index=-1, $theirCard = false)
       return $abilityName == "Deal Damage" ? 1 : 0;
     case "4628885755"://Mace Windu
       return $abilityName == "Deal Damage" ? 1 : 0;
+    case "7734824762"://Captain Rex
+      return $abilityName == "Clone" ? 2 : 0;
     default: break;
   }
   if(IsAlly($cardID)) return 0;
@@ -832,6 +834,9 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
       break;
     case "0026166404"://Emperor Palpatine
     case "ad86d54e97"://Darth Sidious
+      $abilityTypes = "A";
+      break;
+    case "7734824762"://Captain Rex
       $abilityTypes = "A";
       break;
     case "4628885755"://Mace Windu
@@ -1023,6 +1028,9 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       break;
     case "7911083239"://Grand Inquisitor
       $abilityNames = "Deal Damage";
+      break;
+    case "7734824762"://Captain Rex
+      $abilityNames = "Clone";
       break;
     case "0026166404"://Emperor Palpatine
     case "ad86d54e97"://Darth Sidious
@@ -1491,6 +1499,8 @@ function LeaderUnit($cardID) {
       return "3f7f027abd";
     case "4628885755"://Mace Windu
       return "9b212e2eeb";
+    case "7734824762"://Captain Rex
+      return "47557288d6";
     default: return "";
   }
 }
@@ -1590,6 +1600,8 @@ function LeaderUndeployed($cardID) {
       return "2358113881";
     case "9b212e2eeb"://Mace Windu
       return "4628885755";
+    case "47557288d6"://Captain Rex
+      return "7734824762";
     default: return "";
   }
 }
