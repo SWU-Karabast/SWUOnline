@@ -4671,6 +4671,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $ally = new Ally($target, MZPlayerID($currentPlayer, $target));
       $ally->Exhaust();
       break;
+    case "8345985976"://Trade Federation Shuttle
+      if(SearchCount(SearchAllies($currentPlayer, damagedOnly:true))) PlayAlly("3463348370", $currentPlayer);//Battle Droid
+      break;
     //PlayAbility End
     default: break;
   }
