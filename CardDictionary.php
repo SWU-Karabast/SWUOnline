@@ -655,6 +655,10 @@ function HasSaboteur($cardID, $player, $index)
       break;
     case "8139901441"://Bo-Katan Kryze
       return SearchCount(SearchAllies($player, trait:"Mandalorian")) > 1;
+    case "7099699830"://Jyn Erso
+      global $CS_NumAlliesDestroyed;
+      $otherPlayer = $player == 1 ? 2 : 1;
+      return GetClassState($otherPlayer, $CS_NumAlliesDestroyed) > 0;
     default: return false;
   }
   return false;

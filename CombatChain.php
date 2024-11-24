@@ -149,6 +149,11 @@ function AttackModifier($cardID, $player, $index)
     case "4551109857"://Anakin's Interceptor
       if(GetHealth($player) >= 15) $modifier += 2;
       break;
+    case "7099699830"://Jyn Erso
+      global $CS_NumAlliesDestroyed;
+      $otherPlayer = $player == 1 ? 2 : 1;
+      if(GetClassState($otherPlayer, $CS_NumAlliesDestroyed) > 0) $modifier += 1;
+      break;
     default: break;
   }
   return $modifier;
