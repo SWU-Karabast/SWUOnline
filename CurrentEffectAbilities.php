@@ -179,7 +179,9 @@ function EffectAttackModifier($cardID, $playerID="")
     case "2155351882": return 1;//Ahsoka Tano
     case "6436543702": return -2;//Providence Destroyer
     case "7000286964": return -1;//Vulture Interceptor Wing
-    case "0249398533": return 2;
+    case "0249398533": return 2;//Obedient Vanguard
+    case "1686059165": return 2;//Wat Tambor
+    case "12122bc0b1": return 2;//Wat Tambor
     default: return 0;
   }
 }

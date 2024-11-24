@@ -861,6 +861,9 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
     case "7911083239"://Grand Inquisitor
       $abilityTypes = "A";
       break;
+    case "1686059165"://Wat Tambor
+      $abilityTypes = "A";
+      break;
     case "0026166404"://Emperor Palpatine
     case "ad86d54e97"://Darth Sidious
       $abilityTypes = "A";
@@ -1057,6 +1060,9 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       break;
     case "7911083239"://Grand Inquisitor
       $abilityNames = "Deal Damage";
+      break;
+    case "1686059165"://Wat Tambor
+      $abilityNames = "Buff";
       break;
     case "7734824762"://Captain Rex
       $abilityNames = "Clone";
@@ -1533,6 +1539,8 @@ function LeaderUnit($cardID) {
       return "47557288d6";
     case "9155536481"://Jango Fett
       return "cfdcbd005a";
+    case "1686059165"://Wat Tambor
+      return "12122bc0b1";
     default: return "";
   }
 }
@@ -1636,6 +1644,8 @@ function LeaderUndeployed($cardID) {
       return "7734824762";
     case "cfdcbd005a"://Jango Fett
       return "9155536481";
+    case "12122bc0b1"://Wat Tambor
+      return "1686059165";
     default: return "";
   }
 }

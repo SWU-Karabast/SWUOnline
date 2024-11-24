@@ -1731,6 +1731,18 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,3", 1);
       break;
+    case "12122bc0b1"://Wat Tambor
+      global $CS_NumAlliesDestroyed;
+      if(GetClassState($mainPlayer, $CS_NumAlliesDestroyed) > 0) {
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
+        AddDecisionQueue("MZFILTER", $mainPlayer, "index=MYALLY-" . $attackerAlly->Index());
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to give +2/+2");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "ADDHEALTH,2", 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
+        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "12122bc0b1,PLAY", 1);
+      }
+      break;
     default: break;
   }
 }
