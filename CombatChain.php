@@ -71,6 +71,14 @@ function AttackModifier($cardID, $player, $index)
     $mzArr = explode("-", $attacker);
     if($mzArr[1] == $index) $modifier = RaidAmount($cardID, $mainPlayer, $mzArr[1]);
   }
+  //Base attack modifiers
+  $char = &GetPlayerCharacter($player);
+  switch($char[0]) {
+    case "9652861741"://Petranaki Arena
+      $modifier += IsLeader($cardID) ? 1 : 0;
+      break;
+    default: break;
+  }
   switch($cardID) {
     case "3988315236"://Seasoned Shoretrooper
       $modifier += NumResources($player) >= 6 ? 2 : 0;
