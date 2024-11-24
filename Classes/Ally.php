@@ -128,6 +128,9 @@ class Ally {
     if($this->index == -1 || $amount <= 0) return false;
     global $mainPlayer;
     if(!$fromCombat && $this->CardID() == "1810342362" && !$this->LostAbilities() && ($mainPlayer != $this->playerID || $enemyDamage)) return;//Lurking TIE Phantom
+    if($fromCombat && !$this->LostAbilities()) {
+      if($this->CardID() == "6190335038" && $this->PlayerID() == $mainPlayer && IsCoordinateActive($this->PlayerID())) return false;//Aayla Secura
+    }
     $subcards = $this->GetSubcards();
     for($i=0; $i<count($subcards); $i+=SubcardPieces()) {
       if($subcards[$i] == "8752877738") {
@@ -237,6 +240,12 @@ class Ally {
           break;
         case "919facb76d"://Boba Fett Green Leader
           if($i != $this->index && HasKeyword($this->CardID(), "Any", $this->playerID, $this->index)) $power += 1;
+          break;
+        case "47557288d6"://Captain Rex
+          if($i != $this->index && TraitContains($this->CardID(), "Trooper", $this->PlayerID())) $power += 1;
+          break;
+        case "1314547987"://Shaak Ti
+          if($i != $this->index && IsToken($this->CardID())) $power += 1;
           break;
         default: break;
       }

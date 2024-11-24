@@ -1337,11 +1337,13 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
     AddMemory($cardID, $currentPlayer, "HAND", "DOWN");
   }
   $resourceCards = &GetResourceCards($currentPlayer);
+  $resourcesPaid = 0;
   for($i = 0; $i < count($resourceCards); $i += ResourcePieces()) {
     if($resources[1] == 0) break;
     if($resourceCards[$i+4] == "0") {
       $resourceCards[$i+4] = "1";
       --$resources[1];
+      ++$resourcesPaid;
     }
   }
   if($resources[1] > 0) {
@@ -1361,7 +1363,7 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
     return; //We know we need to pitch more, short circuit here
   }
   $resources[0] -= $resources[1];
-  $resourcesPaid = GetClassState($currentPlayer, $CS_DynCostResolved);
+  if(DynamicCost($cardID) != "") $resourcesPaid = GetClassState($currentPlayer, $CS_DynCostResolved);
   $resources[1] = 0;
   if($turn[0] == "P") {
     $turn[0] = $turn[2];

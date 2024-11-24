@@ -386,6 +386,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         case "FREEZE": MZFreeze($lastResult); break;
         case "GAINCONTROL": MZGainControl($player, $lastResult); break;
         case "GETCARDID": return GetMZCard($player, $lastResult);
+        case "GETCARDCOST": return CardCost($lastResult);
         case "GETCARDINDEX": $mzArr = explode("-", $lastResult); return $mzArr[1];
         case "GETUNIQUEID":
           $mzArr = explode("-", $lastResult);

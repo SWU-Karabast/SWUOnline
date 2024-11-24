@@ -179,6 +179,13 @@ function EffectAttackModifier($cardID, $playerID="")
     case "2155351882": return 1;//Ahsoka Tano
     case "6436543702": return -2;//Providence Destroyer
     case "7000286964": return -1;//Vulture Interceptor Wing
+    case "0249398533": return 2;//Obedient Vanguard
+    case "1686059165": return 2;//Wat Tambor
+    case "12122bc0b1": return 2;//Wat Tambor
+    case "2395430106": return 2;//Republic Tactical Officer
+    case "3381931079": return -4;//Malevolence
+    case "5333016146": return -1;//Rune Haako
+    case "fb7af4616c": return 1;//General Grievous
     default: return 0;
   }
 }
@@ -345,6 +352,14 @@ function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
           $remove = false;
           break;
         case "6772128891"://Exploit Effect
+          $costModifier -= 2;
+          $remove = true;
+          break;
+        case "6849037019"://Now There Are Two of Them
+          $costModifier -= 5;
+          $remove = true;
+          break;
+        case "0414253215"://General's Blade
           $costModifier -= 2;
           $remove = true;
           break;
@@ -682,6 +697,8 @@ function IsCombatEffectActive($cardID)
     case "4910017138"://Breaking In
     case "8929774056"://Asajj Ventress
     case "2155351882"://Ahsoka Tano
+    case "6669050232"://Grim Resolve
+    case "2395430106"://Republic Tactical Officer
       return true;
     default: return false;
   }

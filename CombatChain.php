@@ -71,6 +71,14 @@ function AttackModifier($cardID, $player, $index)
     $mzArr = explode("-", $attacker);
     if($mzArr[1] == $index) $modifier = RaidAmount($cardID, $mainPlayer, $mzArr[1]);
   }
+  //Base attack modifiers
+  $char = &GetPlayerCharacter($player);
+  switch($char[0]) {
+    case "9652861741"://Petranaki Arena
+      $modifier += IsLeader($cardID) ? 1 : 0;
+      break;
+    default: break;
+  }
   switch($cardID) {
     case "3988315236"://Seasoned Shoretrooper
       $modifier += NumResources($player) >= 6 ? 2 : 0;
@@ -142,6 +150,17 @@ function AttackModifier($cardID, $player, $index)
       break;
     case "8139901441"://Bo-Katan Kryze
       if(SearchCount(SearchAllies($player, trait:"Trooper")) > 1) $modifier += 1;
+      break;
+    case "1368135704"://Relentless Rocket Droid
+      if(SearchCount(SearchAllies($player, trait:"Trooper")) > 1) $modifier += 2;
+      break;
+    case "4551109857"://Anakin's Interceptor
+      if(GetHealth($player) >= 15) $modifier += 2;
+      break;
+    case "7099699830"://Jyn Erso
+      global $CS_NumAlliesDestroyed;
+      $otherPlayer = $player == 1 ? 2 : 1;
+      if(GetClassState($otherPlayer, $CS_NumAlliesDestroyed) > 0) $modifier += 1;
       break;
     default: break;
   }

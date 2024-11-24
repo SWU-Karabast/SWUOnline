@@ -615,6 +615,18 @@ function SpecificCardLogic($player, $card, $lastResult)
     case "LETHALCRACKDOWN":
       DealDamageAsync($player, CardPower($lastResult), "DAMAGE", "1389085256");
       break;
+    case "TWI_PALPATINE_HERO":
+      Draw($player);
+      Restore(2, $player);
+      $char = &GetPlayerCharacter($player);
+      $char[CharacterPieces()] = "ad86d54e97";
+      break;
+    case "TWI_DARTHSIDIOUS_HERO":
+      PlayAlly("3941784506", $player);//Clone Trooper
+      DealDamageAsync(($player == 1 ? 2 : 1), 2, "DAMAGE", "ad86d54e97");
+      $char = &GetPlayerCharacter($player);
+      $char[CharacterPieces()] = "0026166404";
+      break;
     default: return "";
   }
 }

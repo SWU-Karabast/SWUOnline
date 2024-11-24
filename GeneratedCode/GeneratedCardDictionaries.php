@@ -204958,7 +204958,7 @@ switch($cardID[8]) {
 case "0":
 switch($cardID[9]) {
 case "6":
-return "Token Unit";
+return "Unit";
 default: return "";
 }
 default: return "";
@@ -205718,7 +205718,7 @@ switch($cardID[8]) {
 case "7":
 switch($cardID[9]) {
 case "0":
-return "Token Unit";
+return "Unit";
 default: return "";
 }
 default: return "";
