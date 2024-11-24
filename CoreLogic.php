@@ -4666,6 +4666,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE," . $cardsDrawn, 1);
       }
       break;
+    case "8061497086"://Perilous Position
+      WriteLog($target);
+      $ally = new Ally($target, MZPlayerID($currentPlayer, $target));
+      $ally->Exhaust();
+      break;
     //PlayAbility End
     default: break;
   }
