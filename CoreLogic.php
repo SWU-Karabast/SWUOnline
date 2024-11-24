@@ -4862,6 +4862,17 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,2", 1);
       }
       break;
+    case "2395430106"://Republic Tactical Officer
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Republic");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "status=1");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to attack and give +2");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "2395430106,HAND", 1);
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}");
+      AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
+      break;
     //PlayAbility End
     default: break;
   }

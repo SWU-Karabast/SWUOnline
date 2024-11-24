@@ -182,6 +182,7 @@ function EffectAttackModifier($cardID, $playerID="")
     case "0249398533": return 2;//Obedient Vanguard
     case "1686059165": return 2;//Wat Tambor
     case "12122bc0b1": return 2;//Wat Tambor
+    case "2395430106": return 2;//Republic Tactical Officer
     default: return 0;
   }
 }
@@ -694,6 +695,7 @@ function IsCombatEffectActive($cardID)
     case "8929774056"://Asajj Ventress
     case "2155351882"://Ahsoka Tano
     case "6669050232"://Grim Resolve
+    case "2395430106"://Republic Tactical Officer
       return true;
     default: return false;
   }
