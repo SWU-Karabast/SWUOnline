@@ -119,14 +119,36 @@ function RestoreAmount($cardID, $player, $index)
     case "9185282472": $amount += 2; break;//ETA-2 Light Interceptor
     case "5350889336": $amount += 3; break;//AT-TE Vanguard
     case "3420865217": $amount += $ally->IsDamaged() ? 0 : 2; break;//Daughter of Dathomir
+    case "6412545836": $amount += 1; break;//Morgan Elsbeth
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
   return $amount;
 }
 
-function ExploitAmount($cardID, $player) {
+function ExploitAmount($cardID, $player, $reportMode=true) {
+  global $currentTurnEffects;
   $amount = 0;
+  for($i=count($currentTurnEffects)-CurrentTurnPieces(); $i>=0; $i-=CurrentTurnPieces()) {
+    if($currentTurnEffects[$i+1] != $player) continue;
+    $remove = false;
+    switch($currentTurnEffects[$i]) {
+      case "5683908835"://Count Dooku
+        $amount += 1;
+        $remove = true;
+        break;
+      case "6fa73a45ed"://Count Dooku Leader Unit
+        if(TraitContains($cardID, "Separatist", $player)) {
+          $amount += 3;
+          $remove = true;
+        }
+        break;
+      default: break;
+    }
+    if($remove) {
+      if(!$reportMode) RemoveCurrentTurnEffect($i);
+    }
+  }
   switch($cardID) {
     case "6772128891": $amount += 2; break;//Hailfire Tank
     case "6623894685": $amount += 1; break;//Infiltrating Demolisher
@@ -139,6 +161,8 @@ function ExploitAmount($cardID, $player) {
     case "1083333786": $amount += 2; break;//Battle Droid Legion
     case "5243634234": $amount += 2; break;//Baktoid Spider Droid
     case "5084084838": $amount += 2; break;//Droideka Security
+    case "6436543702": $amount += 2; break;//Providence Destroyer
+    case "8655450523": $amount += 2; break;//Count Dooku
     default: break;
   }
   return $amount;
@@ -366,6 +390,9 @@ function HasOverwhelm($cardID, $player, $index)
       case "4484318969"://Moff Gideon Leader
         if(CardCost($cardID) <= 3 && IsAllyAttackTarget()) return true;
         break;
+      case "40b649e6f6"://Maul
+        if($index != $i) return true;
+        break;
       default: break;
     }
   }
@@ -374,6 +401,7 @@ function HasOverwhelm($cardID, $player, $index)
     if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
     switch($currentTurnEffects[$i]) {
       case "4085341914": return true;//Heroic Resolve
+      case "6461101372": return true;//Maul
       default: break;
     }
   }
@@ -419,7 +447,14 @@ function HasOverwhelm($cardID, $player, $index)
     case "24a81d97b5"://Anakin Skywalker Leader Unit
     case "3693364726"://Aurra Sing
     case "3476041913"://Low Altitude Gunship
+    case "40b649e6f6"://Maul
+    case "8655450523"://Count Dooku
+    case "6fa73a45ed"://Count Dooku Leader Unit
       return true;
+    case "8139901441"://Bo-Katan Kryze
+      return SearchCount(SearchAllies($player, trait:"Mandalorian")) > 1;
+    case "9832122703"://Luminara Unduli
+      return IsCoordinateActive($player);
     default: return false;
   }
 }
@@ -602,8 +637,15 @@ function HasSaboteur($cardID, $player, $index)
       return true;
     case "8187818742"://Republic Commando
       return IsCoordinateActive($player);
+    case "11299cc72f"://Pre Viszla
+      $hand = &GetHand($player);
+      if(count($hand)/HandPieces() >= 3) return true;
+      break;
+    case "8139901441"://Bo-Katan Kryze
+      return SearchCount(SearchAllies($player, trait:"Mandalorian")) > 1;
     default: return false;
   }
+  return false;
 }
 
 function MemoryCost($cardID, $player)
@@ -658,6 +700,10 @@ function AbilityCost($cardID, $index=-1, $theirCard = false)
       return $abilityName == "Replace Resource" ? 1 : 0;
     case "3577961001"://Mercenary Gunship
       return $abilityName == "Take Control" ? 4 : 0;
+    case "5081383630"://Pre Viszla
+      return $abilityName == "Deal Damage" ? 1 : 0;
+    case "4628885755"://Mace Windu
+      return $abilityName == "Deal Damage" ? 1 : 0;
     default: break;
   }
   if(IsAlly($cardID)) return 0;
@@ -782,6 +828,21 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
       $abilityTypes = "A,AA";
       break;
     case "7911083239"://Grand Inquisitor
+      $abilityTypes = "A";
+      break;
+    case "4628885755"://Mace Windu
+      $abilityTypes = "A";
+      break;
+    case "5683908835"://Count Dooku
+      $abilityTypes = "A";
+      break;
+    case "5081383630"://Pre Viszla
+      $abilityTypes = "A";
+      break;
+    case "2155351882"://Ahsoka Tano
+      $abilityTypes = IsCoordinateActive($currentPlayer) ? "A" : "";
+      break;
+    case "6461101372"://Maul
       $abilityTypes = "A";
       break;
     case "8929774056"://Asajj Ventress
@@ -958,6 +1019,21 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       break;
     case "7911083239"://Grand Inquisitor
       $abilityNames = "Deal Damage";
+      break;
+    case "4628885755"://Mace Windu
+      $abilityNames = "Deal Damage";
+      break;
+    case "5683908835"://Count Dooku
+      $abilityNames = "Exploit";
+      break;
+    case "5081383630"://Pre Viszla
+      $abilityNames = "Deal Damage";
+      break;
+    case "2155351882"://Ahsoka Tano
+      $abilityNames = IsCoordinateActive($currentPlayer) ? "Attack" : "";
+      break;
+    case "6461101372"://Maul
+      $abilityNames = "Attack";
       break;
     case "8929774056"://Asajj Ventress
       $abilityNames = "Attack";
@@ -1390,6 +1466,18 @@ function LeaderUnit($cardID) {
       return "0ee1e18cf4";
     case "8929774056"://Asajj Ventress
       return "f8e0c65364";
+    case "6461101372"://Maul
+      return "40b649e6f6";
+    case "2155351882"://Ahsoka Tano
+      return "7224a2074a";
+    case "5081383630"://Pre Viszla
+      return "11299cc72f";
+    case "5683908835"://Count Dooku
+      return "6fa73a45ed";
+    case "2358113881"://Quinlan Vos
+      return "3f7f027abd";
+    case "4628885755"://Mace Windu
+      return "9b212e2eeb";
     default: return "";
   }
 }
@@ -1477,6 +1565,18 @@ function LeaderUndeployed($cardID) {
       return "2784756758";
     case "f8e0c65364"://Asajj Ventress
       return "8929774056";
+    case "40b649e6f6"://Maul
+      return "6461101372";
+    case "7224a2074a"://Ahsoka Tano
+      return "2155351882";
+    case "11299cc72f"://Pre Viszla
+      return "5081383630";
+    case "6fa73a45ed"://Count Dooku
+      return "5683908835";
+    case "3f7f027abd"://Quinlan Vos
+      return "2358113881";
+    case "9b212e2eeb"://Mace Windu
+      return "4628885755";
     default: return "";
   }
 }

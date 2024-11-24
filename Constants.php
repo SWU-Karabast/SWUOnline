@@ -211,7 +211,7 @@ $CS_NumBoosted = 1;
 $CS_AtksWWeapon = 2;
 $CS_HitsWDawnblade = 3;
 $CS_DamagePrevention = 4;
-$CS_CardsBanished = 5;
+$CS_CardsDrawn = 5;
 $CS_DamageTaken = 6;
 $CS_NumActionsPlayed = 7;
 $CS_ArsenalFacing = 8;//Deprecated
@@ -453,7 +453,7 @@ function ResetChainLinkState()
 
 function ResetClassState($player)
 {
-  global $CS_NumVillainyPlayed, $CS_NumBoosted, $CS_AtksWWeapon, $CS_HitsWDawnblade, $CS_DamagePrevention, $CS_CardsBanished;
+  global $CS_NumVillainyPlayed, $CS_NumBoosted, $CS_AtksWWeapon, $CS_HitsWDawnblade, $CS_DamagePrevention, $CS_CardsDrawn;
   global $CS_DamageTaken, $CS_NumActionsPlayed, $CS_CharacterIndex, $CS_PlayIndex, $CS_OppIndex, $CS_OppCardActive, $CS_NumNonAttackCards;
   global $CS_PreparationCounters, $CS_NextNAACardGoAgain, $CS_NumAlliesDestroyed, $CS_Num6PowBan, $CS_ResolvingLayerUniqueID, $CS_NextWizardNAAInstant;
   global $CS_ArcaneDamageTaken, $CS_NextNAAInstant, $CS_NextDamagePrevented, $CS_LastAttack, $CS_PlayCCIndex;
@@ -471,7 +471,7 @@ function ResetClassState($player)
   $classState[$CS_AtksWWeapon] = 0;
   $classState[$CS_HitsWDawnblade] = 0;
   $classState[$CS_DamagePrevention] = 0;
-  $classState[$CS_CardsBanished] = 0;
+  $classState[$CS_CardsDrawn] = 0;
   $classState[$CS_DamageTaken] = 0;
   $classState[$CS_NumActionsPlayed] = 0;
   $classState[$CS_ArsenalFacing] = 0;
