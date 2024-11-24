@@ -522,6 +522,11 @@ function Restore($amount, $player)
     WriteLog("<span style='color:red;'>Wolffe prevents the healing</span>");
     return false;
   }
+  if(SearchAlliesForCard(1, "6277739341") || SearchAlliesForCard(2, "6277739341")) {
+    WriteLog("<span style='color:red;'>Confederate Tri-Fighter prevents the healing</span>");
+    return false;
+  }
+  
   $health = &GetHealth($player);
   WriteLog("Player " . $player . " gained " . $amount . " health.");
   if($amount > $health) $amount = $health;
@@ -1784,6 +1789,10 @@ function SelfCostModifier($cardID, $from)
     case "8380936981"://Jabba's Rancor
       if(ControlsNamedCard($currentPlayer, "Jabba the Hutt")) $modifier -= 1;
       break;
+    case "6238512843"://Republic Defense Carrier
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      $modifier -= SearchCount(SearchAllies($otherPlayer));
+      break;
     default: break;
   }
   //Target cost modifier
@@ -2156,6 +2165,21 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         default: break;
       }
       RemoveCharacter($currentPlayer, CharacterPieces());
+      //Base deploy ability
+      $char = &GetPlayerCharacter($currentPlayer);
+      $baseID = $char[0];
+      switch($baseID) {
+        case "8589863038"://Droid Manufactory
+          PlayAlly("3463348370", $currentPlayer);//Battle Droid
+          PlayAlly("3463348370", $currentPlayer);//Battle Droid
+          WriteLog("Droid Manufactory deployed two Battle Droids.");
+          break;
+        case "6854189262"://Shadow Collective Camp
+          Draw($currentPlayer);
+          WriteLog("Shadow Collective Camp drew a card.");
+          break;
+        default: break;
+      }
       return CardLink($cardID, $cardID) . " was deployed.";
     }
   }
@@ -4363,14 +4387,260 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
           $oppIndex = GetClassState($currentPlayer, $CS_OppIndex);
           $otherPlayer = $currentPlayer == 1 ? 2 : 1;
           $ally = new Ally("THEIRALLY-" . $oppIndex, $otherPlayer);
-
           AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYALLY-" . $ally->Index(), 1);
           AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL", 1);
           AddDecisionQueue("PASSPARAMETER", $currentPlayer, -1, 1);
           AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_OppCardActive, 1);
-
         }
       break;
+    case "8552292852"://Kashyyyk Defender
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "index=MYALLY-" . $playAlly->Index());
+      AddDecisionQueue("MZFILTER", $currentPlayer, "damaged=0");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to restore 2");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "RESTORE,2", 1);
+      AddDecisionQueue("UNIQUETOMZ", $currentPlayer, $playAlly->UniqueID(), 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,2", 1);
+      break;
+    case "7439418148"://Twice the Pride
+      $ally = new Ally($target, $currentPlayer);
+      $ally->DealDamage(2);
+      break;
+    case "7252148824"://501st Liberator
+      if (SearchCount(SearchAllies($currentPlayer, trait:"Republic")) > 1) {
+        Restore(3, $currentPlayer);
+      }
+      break;
+    case "7280804443"://Hold-Out Blaster
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:arena=Ground&THEIRALLY:arena=Ground");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to deal 1 damage");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1", 1);
+      break;
+    case "6969421569"://Batch Brothers
+      PlayAlly("3941784506", $currentPlayer);//Clone Trooper
+      break;
+    case "6826668370"://Droid Deployment
+      PlayAlly("3463348370", $currentPlayer);//Battle Droid
+      PlayAlly("3463348370", $currentPlayer);//Battle Droid
+      break;
+    case "6401761275"://In Pursuit
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to exhaust");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY", 1);
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to exhaust", 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
+      break;
+    case "5936350569"://Jesse
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      PlayAlly("3463348370", $otherPlayer);//Battle Droid
+      PlayAlly("3463348370", $otherPlayer);//Battle Droid
+      break;
+    case "5584601885"://Battle Droid Escort
+      PlayAlly("3463348370", $currentPlayer);//Battle Droid
+      break;
+    case "5074877594"://Drop In
+      PlayAlly("3941784506", $currentPlayer);//Clone Trooper
+      PlayAlly("3941784506", $currentPlayer);//Clone Trooper
+      break;
+    case "4412828936"://Merciless Contest
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to destroy");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "DESTROY", 1);
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY");
+      AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a unit to destroy");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $otherPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $otherPlayer, "DESTROY", 1);
+      break;
+    case "3840495762"://Old Access Codes
+      if(TheyControlMoreUnits($currentPlayer)) {
+        Draw($currentPlayer);
+      }
+      break;
+    case "3357486161"://Political Pressure
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose one");
+      AddDecisionQueue("BUTTONINPUT", $otherPlayer, "Discard_Random,Battle_Droids");
+      AddDecisionQueue("MODAL", $otherPlayer, "POLITICALPRESSURE", 1);
+      break;
+    case "0511508627"://Captain Rex
+      PlayAlly("3941784506", $currentPlayer);//Clone Trooper
+      PlayAlly("3941784506", $currentPlayer);//Clone Trooper
+      break;
+    case "0598115741"://Royal Guard Attache
+      $playAlly->DealDamage(2);
+      break;
+    case "0968965258"://Death By Droids
+      MZChooseAndDestroy($currentPlayer, "MYALLY:maxHealth=3&THEIRALLY:maxHealth=3");
+      PlayAlly("3463348370", $currentPlayer);//Battle Droid
+      PlayAlly("3463348370", $currentPlayer);//Battle Droid
+      break;
+    case "0036920495"://Elite P-38 Starfighter
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 1 damage to");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1", 1);
+      break;
+    case "0328412140"://Creative Thinking
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "unique=1");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to exhaust");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
+      PlayAlly("3941784506", $currentPlayer);//Clone Trooper
+      break;
+    case "0959549331"://Unmasking the Conspiracy
+      $hand = &GetHand($currentPlayer);
+      PummelHit($currentPlayer);
+      if(count($hand) > 0) {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRHAND");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose which card you want your opponent to discard", 1);
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZDISCARD", $currentPlayer, "HAND," . $currentPlayer, 1);
+        AddDecisionQueue("MZREMOVE", $currentPlayer, "-", 1);
+      }
+      break;
+    case "1192349217"://Manufactured Soldiers
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose one");
+      AddDecisionQueue("BUTTONINPUT", $currentPlayer, "Clone_Troopers,Battle_Droids");
+      AddDecisionQueue("MODAL", $currentPlayer, "MANUFACTUREDSOLDIERS", 1);
+      break;
+    case "1417180295"://Strategic Analysis
+      Draw($currentPlayer);
+      Draw($currentPlayer);
+      Draw($currentPlayer);
+      break;
+    case "2103133661"://Blood Sport
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      DamagePlayerAllies($otherPlayer, 2, "2103133661", "PLAYABILITY", arena:"Ground");
+      break;
+    case "2483302291"://On the Doorstep
+      PlayAlly("3463348370", $currentPlayer);//Battle Droid
+      PlayAlly("3463348370", $currentPlayer);//Battle Droid
+      PlayAlly("3463348370", $currentPlayer);//Battle Droid
+      $allies = &GetAllies($currentPlayer);
+      for($i=0; $i<3; ++$i) {
+        $ally = new Ally("MYALLY-" . (count($allies) - ($i+1)*AllyPieces()), $currentPlayer);
+        $ally->Ready();
+      }
+      break;
+    case "2761325938"://Devastating Gunship
+      MZChooseAndDestroy($currentPlayer, "THEIRALLY:maxHealth=2");
+      break;
+    case "4824842849"://Subjugating Starfighter
+      if($initiativePlayer == $currentPlayer) {
+        PlayAlly("3463348370", $currentPlayer);//Battle Droid
+      }
+      break;
+    case "6732988831"://Grievous Reassembly
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to restore 3");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "RESTORE,3", 1);
+      PlayAlly("3463348370", $currentPlayer);//Battle Droid
+      break;
+    case "6700679522"://Tri-Droid Suppressor
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to exhaust");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
+      break;
+    case "9479767991"://Favorable Deligate
+      Draw($currentPlayer);
+      break;
+    case "3348783048"://Geonosis Patrol Fighter
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:maxCost=3&THEIRALLY:maxCost=3");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to bounce");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "BOUNCE", 1);
+      break;
+    case "8777351722"://Anakin Skywalker
+      DealDamageAsync($currentPlayer, 2, "DAMAGE", "8777351722");
+      AddCurrentTurnEffect("8777351722", $currentPlayer, "PLAY");
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "status=1", 1);
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to attack with");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
+      break;
+    case "6410481716"://Mace Windu's Lightsaber
+      if(CardTitle(GetMZCard($currentPlayer, $target)) == "Mace Windu") {
+        Draw($currentPlayer);
+        Draw($currentPlayer);
+      }
+      break;
+    case "5616678900"://R2-D2
+      PummelHit($currentPlayer, may:true);
+      AddDecisionQueue("SEARCHDECKTOPX", $currentPlayer, "3;1;", 1);
+      AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
+      AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
+      break;
+    case "4910017138"://Breaking In
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "status=1");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to attack and give +2");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "4910017138,HAND", 1);
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
+      break;
+    case "3799780905"://Prisoner of War
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to capture another unit");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY", 1);
+      AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader", 1);
+      AddDecisionQueue("MZFILTER", $currentPlayer, "trait=Vehicle");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to capture", 1);
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "CAPTURE,{0}", 1);
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "PRISONEROFWAR", 1);
+      break;
+    case "3500129784"://Petition the Senate
+      if(SearchCount(SearchAllies($currentPlayer, trait:"Official")) >= 3) {
+        Draw($currentPlayer);
+        Draw($currentPlayer);
+        Draw($currentPlayer);
+      }
+      break;
+    case "3476041913"://Low Altitude Gunship
+      $damage = SearchCount(SearchAllies($currentPlayer, trait:"Republic"));
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal " . $damage . " damage to");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE," . $damage, 1);
+      break;
+    case "2784756758"://Obi-wan Kenobi
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to heal");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "RESTORE,1", 1);
+      break;
+    case "8929774056"://Asajj Ventress
+      global $CS_NumEventsPlayed;
+      if(GetClassState($currentPlayer, $CS_NumEventsPlayed) > 0) AddCurrentTurnEffect("8929774056", $currentPlayer, "PLAY");
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "status=1", 1);
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to attack with");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
+      break;
+    case "9966134941"://Pelta Supply Frigate
+      if(IsCoordinateActive($currentPlayer)) PlayAlly("3941784506", $currentPlayer);//Clone Trooper
+      break;
+    //PlayAbility End
     default: break;
   }
 }

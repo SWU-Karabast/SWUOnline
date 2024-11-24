@@ -64,6 +64,9 @@ function AllyHasStaticHealthModifier($cardID)
     case "3731235174"://Supreme Leader Snoke
     case "6097248635"://4-LOM
     case "1690726274"://Zuckuss
+    case "2260777958"://41st Elite Corps
+    case "2265363405"://Echo
+    case "1209133362"://332nd Stalwart
       return true;
     default: return false;
   }
@@ -86,6 +89,21 @@ function AllyStaticHealthModifier($cardID, $index, $player, $myCardID, $myIndex,
       if($index == $myIndex && $player == $myPlayer) {
         $ally = new Ally("MYALLY-" . $index, $player);
         if($ally->IsUpgraded()) return 1;
+      }
+      break;
+    case "2260777958"://41st Elite Corps
+      if($index == $myIndex && $player == $myPlayer) {
+        if(IsCoordinateActive($player)) return 3;
+      }
+      break;
+    case "2265363405"://Echo
+      if($index == $myIndex && $player == $myPlayer) {
+        if(IsCoordinateActive($player)) return 2;
+      }
+      break;
+    case "1209133362"://332nd Stalwart
+      if($index == $myIndex && $player == $myPlayer) {
+        if(IsCoordinateActive($player)) return 1;
       }
       break;
     case "3731235174"://Supreme Leader Snoke
@@ -468,6 +486,41 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
         break;
       case "7204838421"://Enterprising Lackeys
         MZMoveCard($player, "MYRESOURCES", "MYDISCARD,RESOURCES", may: false);
+        break;
+      case "8919416985"://Outspoken Representative
+        PlayAlly("3941784506", $player, from:"ABILITY");
+        break;
+      case "6404471739"://Senatorial Corvette
+        $otherPlayer = $player == 1 ? 2 : 1;
+        PummelHit($otherPlayer);
+        break;
+      case "5584601885"://Battle Droid Escort
+        PlayAlly("3463348370", $player);//Battle Droid
+        break;
+      case "5350889336"://AT-TE Vanguard
+        PlayAlly("3941784506", $player);//Clone Trooper
+        PlayAlly("3941784506", $player);//Clone Trooper
+        break;
+      case "3680942691"://Confederate Courier
+        PlayAlly("3463348370", $player);//Battle Droid
+        break;
+      case "0036920495"://Elite P-38 Starfighter
+        AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal 1 damage to");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+        AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1", 1);
+        break;
+      case "6022703929"://OOM-Series Officer
+        $otherPlayer = $player == 1 ? 2 : 1;
+        DealDamageAsync($otherPlayer, 2, "DAMAGE", "6022703929");
+        break;
+      case "9479767991"://Favorable Deligate
+        PummelHit($player);
+        break;
+      case "1083333786"://Battle Droid Legion
+        PlayAlly("3463348370", $player);//Battle Droid
+        PlayAlly("3463348370", $player);//Battle Droid
+        PlayAlly("3463348370", $player);//Battle Droid
         break;
       default: break;
     }
@@ -883,6 +936,12 @@ function AllyAttackAbilities($attackID)
           AddDecisionQueue("MZOP", $defPlayer, "ADDSHIELD", 1);
         }
         break;
+      case "3693364726"://Aurra Sing
+        if(GetAttackTarget() == "THEIRCHAR-0" && CardArenas($attackID) == "Ground") {
+          $me = new Ally("MYALLIES-" . $i, $defPlayer);
+          $me->Ready();
+        }
+        break;
       default: break;
     }
   }
@@ -910,6 +969,12 @@ function AllyAttackedAbility($attackTarget, $index) {
       AddDecisionQueue("SETDQCONTEXT", $defPlayer, "Choose a unit to give an experience token", 1);
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $defPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $defPlayer, "ADDEXPERIENCE", 1);
+      break;
+    case "4541556921"://Knight of the Republic
+      PlayAlly("3941784506", $defPlayer);//Clone Trooper
+      break;
+    case "3876951742"://General's Guardian
+      PlayAlly("3463348370", $defPlayer);//Battle Droid
       break;
     default: break;
   }
@@ -1470,6 +1535,9 @@ function SpecificAllyAttackAbilities($attackID)
       PummelHit($mainPlayer, may:true, context:"Choose a card to discard to make opponent discard (or pass)");
       PummelHit($defPlayer, passable:true);
       break;
+    case "1320229479"://Multi-Troop Transport
+      PlayAlly("3463348370", $mainPlayer);//Battle Droid
+      break;
     case "8862896760"://Maul
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:trait=Underworld");
       AddDecisionQueue("MZFILTER", $mainPlayer, "index=MYALLY-" . $attackerAlly->Index());
@@ -1536,6 +1604,25 @@ function SpecificAllyAttackAbilities($attackID)
       break;
     case "7922308768"://Valiant Assault Ship
       AddCurrentTurnEffect("7922308768", $mainPlayer, 'PLAY', $attackerAlly->UniqueID());
+      break;
+    case "7789777396"://Mister Bones
+      $hand = &GetHand($mainPlayer);
+      if(count($hand) == 0) {
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:arena=Ground&THEIRALLY:arena=Ground");
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose something to deal 3 damage to");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,3", 1);
+      }
+      break;
+    case "0ee1e18cf4"://Obi-wan Kenobi
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to heal");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "RESTORE,1", 1);
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 1 damage");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,1", 1);
       break;
     default: break;
   }

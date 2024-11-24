@@ -173,6 +173,9 @@ function EffectAttackModifier($cardID, $playerID="")
       $modifier = $playerID == $defPlayer ? -2 : 2;
       return CardArenas($ally->CardID()) == "Ground" ? $modifier : 0;
     case "3399023235": return isset($subparam) && $subparam == "2" ? -2 : 0;//Fenn Rau
+    case "8777351722": return IsAllyAttackTarget() ? 2 : 0;;//Anakin Skywalker Leader
+    case "4910017138": return 2;//Breaking In
+    case "8929774056": return 1;//Asajj Ventress
     default: return 0;
   }
 }
@@ -337,6 +340,10 @@ function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
         case "7642980906"://Stolen Landspeeder
           $costModifier -= 99;
           $remove = false;
+          break;
+        case "6772128891"://Exploit Effect
+          $costModifier -= 2;
+          $remove = true;
           break;
         default: break;
       }

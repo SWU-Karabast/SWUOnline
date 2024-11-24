@@ -180,6 +180,34 @@ function ModalAbilities($player, $card, $lastResult)
         default: break;
       }
       return 1;
+    case "POLITICALPRESSURE":
+      switch($lastResult) {
+        case "Discard_Random":
+          DiscardRandom($player, "3357486161");
+          break;
+        case "Battle_Droids":
+          $otherPlayer = ($player == 1 ? 2 : 1);
+          PlayAlly("3463348370", $otherPlayer);//Battle Droid
+          PlayAlly("3463348370", $otherPlayer);//Battle Droid
+          break;
+        default: break;
+      }
+      return 1;
+    
+    case "MANUFACTUREDSOLDIERS":
+      switch($lastResult) {
+        case "Clone_Troopers":
+          PlayAlly("3941784506", $player);//Clone Trooper
+          PlayAlly("3941784506", $player);//Clone Trooper
+          break;
+        case "Battle_Droids":
+          PlayAlly("3463348370", $player);//Battle Droid
+          PlayAlly("3463348370", $player);//Battle Droid
+          PlayAlly("3463348370", $player);//Battle Droid
+          break;
+        default: break;
+      }
+      return 1;
     default: return "";
   }
 }
@@ -568,6 +596,13 @@ function SpecificCardLogic($player, $card, $lastResult)
         $otherPlayer = $player == 1 ? 2 : 1;
         WriteLog("Player $otherPlayer drew a card from Yoda, Old Master");
         Draw($otherPlayer);
+      }
+      break;
+    case "PRISONEROFWAR":
+      $capturer = new Ally("MYALLY-" . SearchAlliesForUniqueID($dqVars[0], $player), $player);
+      if(CardCost($lastResult) < CardCost($capturer->CardID())) {
+        PlayAlly("3463348370", $player);//Battle Droid
+        PlayAlly("3463348370", $player);//Battle Droid
       }
       break;
     default: return "";

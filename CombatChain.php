@@ -105,6 +105,15 @@ function AttackModifier($cardID, $player, $index)
       $ally = new Ally("MYALLY-" . $index, $player);
       if($ally->IsUpgraded()) $modifier += 1;
       break;
+    case "2265363405"://Echo
+      if(IsCoordinateActive($player)) $modifier += 2;
+      break;
+    case "1209133362"://332nd Stalwart
+      if(IsCoordinateActive($player)) $modifier += 1;
+      break;
+    case "9227411088"://Clone Heavy Gunner
+      if(IsCoordinateActive($player)) $modifier += 2;
+      break;
     case "58f9f2d4a0"://Dr. Aphra
       $discard = &GetDiscard($player);
       $costs = [];
@@ -117,6 +126,13 @@ function AttackModifier($cardID, $player, $index)
     case "8305828130"://Warbird Stowaway
         $modifier += $initiativePlayer == $player ? 2 : 0;
         break;
+    case "24a81d97b5"://Anakin Skywalker Leader Unit
+      $modifier += floor(GetHealth($player)/5);
+      break;
+    case "f8e0c65364"://Asajj Ventress
+      global $CS_NumEventsPlayed;
+      if(GetClassState($player, $CS_NumEventsPlayed) > 0) $modifier += 1;
+      break;
     default: break;
   }
   return $modifier;
