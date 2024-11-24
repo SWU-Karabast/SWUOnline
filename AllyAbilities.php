@@ -1683,6 +1683,12 @@ function SpecificAllyAttackAbilities($attackID)
         PlayAlly("3463348370", $mainPlayer);//Battle Droid
       }
       break;
+    case "0354710662"://Saw Gerrera
+      if(GetHealth($mainPlayer) >= 15) {
+        $otherPlayer = $mainPlayer == 1 ? 2 : 1;
+        DamagePlayerAllies($otherPlayer, 1, "0354710662", "ATTACKABILITY", arena:"Ground");
+      }
+      break;
     default: break;
   }
 }
