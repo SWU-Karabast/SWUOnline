@@ -350,6 +350,7 @@ function HasSentinel($cardID, $player, $index)
 
 function HasGrit($cardID, $player, $index)
 {
+  global $currentTurnEffects;
   $ally = new Ally("MYALLY-" . $index, $player);
   if($ally->LostAbilities()) return false;
   if(!IsLeader($ally->CardID(), $player)) {
@@ -361,6 +362,14 @@ function HasGrit($cardID, $player, $index)
         default:
           break;
       }
+    }
+  }
+  for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnPieces()) {
+    if($currentTurnEffects[$i+1] != $player) continue;
+    if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
+    switch($currentTurnEffects[$i]) {
+      case "6669050232": return true;//Grim Resolve
+      default: break;
     }
   }
   switch($cardID)

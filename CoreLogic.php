@@ -4800,6 +4800,17 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "6648824001":
       ObiWansAethersprite($currentPlayer, $playAlly->Index());
       break;
+    case "6669050232"://Grim Resolve
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "status=1");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to attack and give Grit");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "6669050232,HAND", 1);
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
+      break;
     //PlayAbility End
     default: break;
   }

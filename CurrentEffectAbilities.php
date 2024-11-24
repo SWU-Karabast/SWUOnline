@@ -686,6 +686,7 @@ function IsCombatEffectActive($cardID)
     case "4910017138"://Breaking In
     case "8929774056"://Asajj Ventress
     case "2155351882"://Ahsoka Tano
+    case "6669050232"://Grim Resolve
       return true;
     default: return false;
   }
