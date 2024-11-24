@@ -117,6 +117,10 @@ function AttackModifier($cardID, $player, $index)
     case "7224a2074a"://Ahsoka Tahno
       if(IsCoordinateActive($player)) $modifier += 2;
       break;
+    case "11299cc72f"://Pre Viszla
+      $hand = &GetHand($player);
+      if(count($hand)/HandPieces() >= 6) $modifier += 2;
+      break;
     case "58f9f2d4a0"://Dr. Aphra
       $discard = &GetDiscard($player);
       $costs = [];
@@ -143,7 +147,7 @@ function AttackModifier($cardID, $player, $index)
 
 function BlockModifier($cardID, $from, $resourcesPaid)
 {
-  global $defPlayer, $CS_CardsBanished, $mainPlayer, $CS_ArcaneDamageTaken, $combatChain, $chainLinks;
+  global $defPlayer, $mainPlayer, $CS_ArcaneDamageTaken, $combatChain, $chainLinks;
   $blockModifier = 0;
   switch($cardID) {
 

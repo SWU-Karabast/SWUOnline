@@ -17,14 +17,13 @@ function BanishCardForPlayer($cardID, $player, $from, $modifier = "-", $banished
 
 function BanishCard(&$banish, &$classState, $cardID, $modifier, $player = "", $from = "", $banishedBy = "")
 {
-  global $CS_CardsBanished, $actionPoints, $CS_Num6PowBan, $currentPlayer, $mainPlayer;
+  global $actionPoints, $CS_Num6PowBan, $currentPlayer, $mainPlayer;
   $rv = -1;
   if ($player == "") $player = $currentPlayer;
   if(CardType($cardID) != "T") { //If you banish a token, the token ceases to exist.
     $rv = count($banish);
     array_push($banish, $cardID, $modifier, GetUniqueId());
   }
-  ++$classState[$CS_CardsBanished];
   return $rv;
 }
 

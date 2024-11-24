@@ -607,8 +607,13 @@ function HasSaboteur($cardID, $player, $index)
       return true;
     case "8187818742"://Republic Commando
       return IsCoordinateActive($player);
+    case "11299cc72f"://Pre Viszla
+      $hand = &GetHand($player);
+      if(count($hand)/HandPieces() >= 3) return true;
+      break;
     default: return false;
   }
+  return false;
 }
 
 function MemoryCost($cardID, $player)
@@ -663,6 +668,8 @@ function AbilityCost($cardID, $index=-1, $theirCard = false)
       return $abilityName == "Replace Resource" ? 1 : 0;
     case "3577961001"://Mercenary Gunship
       return $abilityName == "Take Control" ? 4 : 0;
+    case "5081383630"://Pre Viszla
+      return $abilityName == "Deal Damage" ? 1 : 0;
     default: break;
   }
   if(IsAlly($cardID)) return 0;
@@ -787,6 +794,9 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
       $abilityTypes = "A,AA";
       break;
     case "7911083239"://Grand Inquisitor
+      $abilityTypes = "A";
+      break;
+    case "5081383630"://Pre Viszla
       $abilityTypes = "A";
       break;
     case "2155351882"://Ahsoka Tano
@@ -968,6 +978,9 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       else $abilityNames = "Exhaust,Attack";
       break;
     case "7911083239"://Grand Inquisitor
+      $abilityNames = "Deal Damage";
+      break;
+    case "5081383630"://Pre Viszla
       $abilityNames = "Deal Damage";
       break;
     case "2155351882"://Ahsoka Tano
@@ -1411,6 +1424,8 @@ function LeaderUnit($cardID) {
       return "40b649e6f6";
     case "2155351882"://Ahsoka Tano
       return "7224a2074a";
+    case "5081383630"://Pre Viszla
+      return "11299cc72f";
     default: return "";
   }
 }
@@ -1502,6 +1517,8 @@ function LeaderUndeployed($cardID) {
       return "6461101372";
     case "7224a2074a"://Ahsoka Tano
       return "2155351882";
+    case "11299cc72f"://Pre Viszla
+      return "5081383630";
     default: return "";
   }
 }

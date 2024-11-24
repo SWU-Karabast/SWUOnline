@@ -4656,6 +4656,16 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
       break;
+    case "5081383630"://Pre Viszla
+      global $CS_CardsDrawn;
+      $cardsDrawn = GetClassState($currentPlayer, $CS_CardsDrawn);
+      if($cardsDrawn > 0) {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal " . $cardsDrawn . " damage to");
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE," . $cardsDrawn, 1);
+      }
+      break;
     //PlayAbility End
     default: break;
   }
@@ -4983,7 +4993,7 @@ function HandIntoMemory($player)
 
 function Draw($player, $mainPhase = true, $fromCardEffect = true)
 {
-  global $EffectContext, $mainPlayer;
+  global $EffectContext, $mainPlayer, $CS_CardsDrawn;
   $otherPlayer = ($player == 1 ? 2 : 1);
   $deck = &GetDeck($player);
   $hand = &GetHand($player);
@@ -4997,6 +5007,7 @@ function Draw($player, $mainPhase = true, $fromCardEffect = true)
   $hand[] = array_shift($deck);
   PermanentDrawCardAbilities($player);
   $hand = array_values($hand);
+  if($mainPhase) IncrementClassState($player, $CS_CardsDrawn);
   return $hand[count($hand) - 1];
 }
 
