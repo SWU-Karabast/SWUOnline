@@ -4767,6 +4767,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         DealDamageAsync($currentPlayer == 1 ? 2 : 1, 2, "DAMAGE", "3410014206");
       }
       break;
+    case "4210027426"://Heavy Persuader Tank
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:arena=Ground&THEIRALLY:arena=Ground", 1);
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 2 damage to", 1);
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,2", 1);
+      break;
     //PlayAbility End
     default: break;
   }
