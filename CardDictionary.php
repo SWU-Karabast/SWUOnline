@@ -266,6 +266,8 @@ function HasSentinel($cardID, $player, $index)
       case "3572356139": $hasSentinel = true; break;//Chewbacca, Walking Carpet
       case "3468546373": $hasSentinel = true; break;//General Rieekan
       case "9070397522": return false;//SpecForce Soldier
+      case "2872203891": $hasSentinel = true; break;//General Grievous
+      case "fb7af4616c": $hasSentinel = true; break;//General Grievous
       default: break;
     }
   }
@@ -867,6 +869,9 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
     case "7911083239"://Grand Inquisitor
       $abilityTypes = "A";
       break;
+    case "2872203891"://General Grievious
+      $abilityTypes = "A";
+      break;
     case "6064906790"://Nute Gunray
       $abilityTypes = "A";
       break;
@@ -1072,6 +1077,9 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       break;
     case "7911083239"://Grand Inquisitor
       $abilityNames = "Deal Damage";
+      break;
+    case "2872203891"://General Grievious
+      $abilityNames = "Sentinel";
       break;
     case "6064906790"://Nute Gunray
       $abilityNames = "Droid";
@@ -1565,6 +1573,8 @@ function LeaderUnit($cardID) {
       return "e71f6f766c";
     case "6064906790"://Nute Gunray
       return "b7caecf9a3";
+    case "2872203891"://General Grievious
+      return "fb7af4616c";
     default: return "";
   }
 }
@@ -1676,6 +1686,8 @@ function LeaderUndeployed($cardID) {
       return "2847868671";
     case "b7caecf9a3"://Nute Gunray
       return "6064906790";
+    case "fb7af4616c"://General Grievious
+      return "2872203891";
     default: return "";
   }
 }

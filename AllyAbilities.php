@@ -1749,6 +1749,14 @@ function SpecificAllyAttackAbilities($attackID)
     case "b7caecf9a3"://Nute Gunray
       PlayAlly("3463348370", $mainPlayer);//Battle Droid
       break;
+    case "fb7af4616c"://General Grievious
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to give Sentinel");
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:trait=Droid&THEIRALLY:trait=Droid");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "WRITECHOICE", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "fb7af4616c,HAND", 1);
+      break;
     default: break;
   }
 }

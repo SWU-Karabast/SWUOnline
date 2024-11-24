@@ -185,6 +185,7 @@ function EffectAttackModifier($cardID, $playerID="")
     case "2395430106": return 2;//Republic Tactical Officer
     case "3381931079": return -4;//Malevolence
     case "5333016146": return -1;//Rune Haako
+    case "fb7af4616c": return 1;//General Grievous
     default: return 0;
   }
 }
