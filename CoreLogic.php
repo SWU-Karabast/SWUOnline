@@ -4773,6 +4773,15 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,2", 1);
       break;
+    case "4512764429"://Sanctioner's Shuttle
+      if(IsCoordinateActive($currentPlayer)) {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:maxCost=3");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to capture");
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "CAPTURE," . $playAlly->UniqueID(), 1);
+      }
+      break;
     //PlayAbility End
     default: break;
   }
