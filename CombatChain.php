@@ -146,6 +146,9 @@ function AttackModifier($cardID, $player, $index)
     case "1368135704"://Relentless Rocket Droid
       if(SearchCount(SearchAllies($player, trait:"Trooper")) > 1) $modifier += 2;
       break;
+    case "4551109857"://Anakin's Interceptor
+      if(GetHealth($player) >= 15) $modifier += 2;
+      break;
     default: break;
   }
   return $modifier;
