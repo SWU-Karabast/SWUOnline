@@ -1711,6 +1711,9 @@ function SpecificAllyAttackAbilities($attackID)
         PlayAlly("3463348370", $mainPlayer);//Battle Droid
       }
       break;
+    case "6648824001":
+      ObiWansAethersprite($mainPlayer, $attackerIndex);
+      break;
     default: break;
   }
 }

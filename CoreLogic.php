@@ -4797,6 +4797,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       MZMoveCard($currentPlayer, "MYDISCARD:definedType=Unit", "MYHAND", may:true, context:"Choose ONLY units defeated this phase then pass");
       MZMoveCard($currentPlayer, "MYDISCARD:definedType=Unit", "MYHAND", may:true, context:"Choose ONLY units defeated this phase then pass");
       break;
+    case "6648824001":
+      ObiWansAethersprite($currentPlayer, $playAlly->Index());
+      break;
     //PlayAbility End
     default: break;
   }
