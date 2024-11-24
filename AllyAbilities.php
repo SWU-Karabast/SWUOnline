@@ -1656,6 +1656,9 @@ function SpecificAllyAttackAbilities($attackID)
     case "2282198576"://Anakin Skywalker
       if(IsCoordinateActive($mainPlayer)) Draw($mainPlayer);
       break;
+    case "6fa73a45ed"://Count Dooku Leader Unit
+      AddCurrentTurnEffect("6fa73a45ed", $mainPlayer);
+      break;
     default: break;
   }
 }

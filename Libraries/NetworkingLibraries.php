@@ -1476,7 +1476,7 @@ function AddPrePitchDecisionQueue($cardID, $from, $index = -1, $skipAbilityType 
     }
   }
   if($from != "PLAY") {
-    $exploitAmount = ExploitAmount($cardID, $currentPlayer);
+    $exploitAmount = ExploitAmount($cardID, $currentPlayer, reportMode:false);
     for($i = 0; $i < $exploitAmount; ++$i) {
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to exploit");

@@ -126,8 +126,29 @@ function RestoreAmount($cardID, $player, $index)
   return $amount;
 }
 
-function ExploitAmount($cardID, $player) {
+function ExploitAmount($cardID, $player, $reportMode=true) {
+  global $currentTurnEffects;
   $amount = 0;
+  for($i=count($currentTurnEffects)-CurrentTurnPieces(); $i>=0; $i-=CurrentTurnPieces()) {
+    if($currentTurnEffects[$i+1] != $player) continue;
+    $remove = false;
+    switch($currentTurnEffects[$i]) {
+      case "5683908835"://Count Dooku
+        $amount += 1;
+        $remove = true;
+        break;
+      case "6fa73a45ed"://Count Dooku Leader Unit
+        if(TraitContains($cardID, "Separatist", $player)) {
+          $amount += 3;
+          $remove = true;
+        }
+        break;
+      default: break;
+    }
+    if($remove) {
+      if(!$reportMode) RemoveCurrentTurnEffect($i);
+    }
+  }
   switch($cardID) {
     case "6772128891": $amount += 2; break;//Hailfire Tank
     case "6623894685": $amount += 1; break;//Infiltrating Demolisher
@@ -428,6 +449,7 @@ function HasOverwhelm($cardID, $player, $index)
     case "3476041913"://Low Altitude Gunship
     case "40b649e6f6"://Maul
     case "8655450523"://Count Dooku
+    case "6fa73a45ed"://Count Dooku Leader Unit
       return true;
     case "8139901441"://Bo-Katan Kryze
       return SearchCount(SearchAllies($player, trait:"Mandalorian")) > 1;
@@ -806,6 +828,9 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
     case "7911083239"://Grand Inquisitor
       $abilityTypes = "A";
       break;
+    case "5683908835"://Count Dooku
+      $abilityTypes = "A";
+      break;
     case "5081383630"://Pre Viszla
       $abilityTypes = "A";
       break;
@@ -989,6 +1014,9 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       break;
     case "7911083239"://Grand Inquisitor
       $abilityNames = "Deal Damage";
+      break;
+    case "5683908835"://Count Dooku
+      $abilityNames = "Exploit";
       break;
     case "5081383630"://Pre Viszla
       $abilityNames = "Deal Damage";
@@ -1436,6 +1464,8 @@ function LeaderUnit($cardID) {
       return "7224a2074a";
     case "5081383630"://Pre Viszla
       return "11299cc72f";
+    case "5683908835"://Count Dooku
+      return "6fa73a45ed";
     default: return "";
   }
 }
@@ -1529,6 +1559,8 @@ function LeaderUndeployed($cardID) {
       return "2155351882";
     case "11299cc72f"://Pre Viszla
       return "5081383630";
+    case "6fa73a45ed"://Count Dooku
+      return "5683908835";
     default: return "";
   }
 }

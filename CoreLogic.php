@@ -4667,7 +4667,6 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "8061497086"://Perilous Position
-      WriteLog($target);
       $ally = new Ally($target, MZPlayerID($currentPlayer, $target));
       $ally->Exhaust();
       break;
@@ -4714,6 +4713,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "DESTROY", 1);
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "LETHALCRACKDOWN", 1);
+      break;
+    case "5683908835"://Count Dooku
+      AddCurrentTurnEffect("5683908835", $currentPlayer);
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND:trait=Separatist");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to play");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
       break;
     //PlayAbility End
     default: break;
