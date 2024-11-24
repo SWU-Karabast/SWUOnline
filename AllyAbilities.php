@@ -913,6 +913,9 @@ function AllyCanBeAttackTarget($player, $index, $cardID)
         }
       }
       return count($aspectArr) < 3;
+    case "2843644198"://Sabine Wren
+      $ally = new Ally("MYALLY-" . $index, $player);
+      return !$ally->IsExhausted();
     default: return true;
   }
 }
@@ -1778,6 +1781,15 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("NOPASS", $mainPlayer, "-");
       AddDecisionQueue("PASSPARAMETER", $mainPlayer, $attackerAlly->UniqueID(), 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "3556557330,PLAY", 1);
+      break;
+    case "2843644198"://Sabine Wren
+      $card = Mill($mainPlayer, 1);
+      if(!SharesAspect($card, GetPlayerBase($mainPlayer))) {
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:arena=Ground&THEIRALLY:arenga=Ground");
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 2 damage");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,2", 1);
+      }
       break;
     default: break;
   }
