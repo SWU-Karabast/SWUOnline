@@ -4818,6 +4818,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
       DestroyAllAllies($otherPlayer);
       break;
+    case "2535372432"://Aggrieved Parliamentarian
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      $theirDiscard = &GetDiscard($otherPlayer);
+      $deck = new Deck($otherPlayer);
+      for($i=count($theirDiscard) - DiscardPieces(); $i>=0; $i-=DiscardPieces()) {
+        $deck->Add(RemoveDiscard($otherPlayer, $i));
+      }
+      break;
     //PlayAbility End
     default: break;
   }
