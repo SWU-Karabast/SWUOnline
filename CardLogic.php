@@ -677,6 +677,16 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       AddDecisionQueue("MZOP", $player, "REST", 1);
       AddDecisionQueue("EXHAUSTCHARACTER", $player, FindCharacterIndex($player, "9005139831"), 1);
       break;
+    case "2358113881"://Quinlan Vos
+      $allies = &GetAllies($player);
+      if(count($allies) == 0) break;
+      $cost = CardCost($allies[count($allies) - AllyPieces()]);
+      AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:minCost=" . $cost . ";maxCost=" . $cost);
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal 1 damage", 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+      AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1", 1);
+      AddDecisionQueue("EXHAUSTCHARACTER", $player, FindCharacterIndex($player, "2358113881"), 1);
+      break;
     case "4935319539"://Krayt Dragon
       $otherPlayer = ($player == 1 ? 2 : 1);
       $damage = CardCost($target);

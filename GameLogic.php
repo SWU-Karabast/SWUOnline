@@ -445,8 +445,9 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           MZAddHealth($player, $lastResult, count($parameterArr) > 1 ? -1 * $parameterArr[1] : 1); return $lastResult;
         case "DESTROY":
           $ally = new Ally($lastResult);
+          $id = $ally->CardID();
           $ally->Destroy();
-          return $lastResult;
+          return $id;
         case "ADDEXPERIENCE":
           $ally = new Ally($lastResult);
           $ally->Attach("2007868442");//Experience token
