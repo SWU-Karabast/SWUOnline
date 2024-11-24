@@ -1772,8 +1772,16 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "fb7af4616c,HAND", 1);
       break;
+    case "3556557330"://Asajj Ventress
+      AddDecisionQueue("YESNO", $mainPlayer, "Have you attacked with another Separatist?");
+      AddDecisionQueue("NOPASS", $mainPlayer, "-");
+      AddDecisionQueue("NOPASS", $mainPlayer, "-");
+      AddDecisionQueue("PASSPARAMETER", $mainPlayer, $attackerAlly->UniqueID(), 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "3556557330,PLAY", 1);
+      break;
     default: break;
   }
+  //SpecificAllyAttackAbilities End
 }
 
 function AllyHitEffects() {

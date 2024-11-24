@@ -172,6 +172,7 @@ function ExploitAmount($cardID, $player, $reportMode=true) {
     case "2565830105": $amount += 4; break;//Invastion of Christophsis
     case "2041344712": $amount += 3; break;//Osi Sobeck
     case "3381931079": $amount += 4; break;//Malevolence
+    case "3556557330": $amount += 2; break;//Asajj Ventress
     default: break;
   }
   return $amount;

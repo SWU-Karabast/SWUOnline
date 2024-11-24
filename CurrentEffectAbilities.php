@@ -186,6 +186,7 @@ function EffectAttackModifier($cardID, $playerID="")
     case "3381931079": return -4;//Malevolence
     case "5333016146": return -1;//Rune Haako
     case "fb7af4616c": return 1;//General Grievous
+    case "3556557330": return 3;//Asajj Ventress
     default: return 0;
   }
 }
