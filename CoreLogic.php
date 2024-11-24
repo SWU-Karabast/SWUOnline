@@ -4699,6 +4699,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $healAmount = SearchCount(SearchAllies($currentPlayer));
       Restore($healAmount, $currentPlayer);
       break;
+    case "1882027961"://Wolf Pack Escort
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "trait=Vehicle");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to return to hand");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "BOUNCE", 1);
+      break;
     //PlayAbility End
     default: break;
   }
