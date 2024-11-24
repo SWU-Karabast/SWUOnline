@@ -318,6 +318,11 @@ function MainCharacterPlayCardAbilities($cardID, $from)
           AddLayer("TRIGGER", $currentPlayer, "1384530409", append:true);
         }
         break;
+      case "2358113881"://Quinlan Vos
+        if($from != "EQUIP" && DefinedTypesContains($cardID, "Unit", $currentPlayer)) {
+          AddLayer("TRIGGER", $currentPlayer, "2358113881", append:true);
+        }
+        break;
       case "9005139831"://The Mandalorian
         if(DefinedTypesContains($cardID, "Upgrade", $currentPlayer)) {
           AddLayer("TRIGGER", $currentPlayer, "9005139831", append:true);

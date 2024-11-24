@@ -1021,6 +1021,8 @@ function AllyHasPlayCardAbility($playedCardID, $playedCardUniqueID, $from, $card
         return !$thisIsNewlyPlayedAlly && AspectContains($cardID, "Aggression");
       case "3010720738"://Tobias Beckett
         return !DefinedTypesContains($playedCardID, "Unit");
+      case "3f7f027abd"://Quinlan Vos
+        return DefinedTypesContains($playedCardID, "Unit");
       default: break;
     }
   } else {
@@ -1063,6 +1065,13 @@ function AllyPlayCardAbility($cardID, $player="", $from="-", $abilityID="-", $un
       if(DefinedTypesContains($cardID, "Unit", $player) && AspectContains($cardID, "Command", $player)) {
         Restore(1, $player);
       }
+      break;
+    case "3f7f027abd"://Quinlan Vos
+      $cost = CardCost($cardID);
+      AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:maxCost=" . $cost);
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal 1 damage", 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+      AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1", 1);
       break;
     case "9850906885"://Maz Kanata
       if(DefinedTypesContains($cardID, "Unit", $player)) {

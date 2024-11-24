@@ -1466,6 +1466,8 @@ function LeaderUnit($cardID) {
       return "11299cc72f";
     case "5683908835"://Count Dooku
       return "6fa73a45ed";
+    case "2358113881"://Quinlan Vos
+      return "3f7f027abd";
     default: return "";
   }
 }
@@ -1561,6 +1563,8 @@ function LeaderUndeployed($cardID) {
       return "5081383630";
     case "6fa73a45ed"://Count Dooku
       return "5683908835";
+    case "3f7f027abd"://Quinlan Vos
+      return "2358113881";
     default: return "";
   }
 }
