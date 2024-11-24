@@ -1714,6 +1714,12 @@ function SpecificAllyAttackAbilities($attackID)
     case "6648824001":
       ObiWansAethersprite($mainPlayer, $attackerIndex);
       break;
+    case "1641175580"://Kit Fisto
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:arena=Ground&THEIRALLY:arenga=Ground");
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 3 damage");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,3", 1);
+      break;
     default: break;
   }
 }
