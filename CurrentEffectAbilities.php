@@ -184,6 +184,7 @@ function EffectAttackModifier($cardID, $playerID="")
     case "12122bc0b1": return 2;//Wat Tambor
     case "2395430106": return 2;//Republic Tactical Officer
     case "3381931079": return -4;//Malevolence
+    case "5333016146": return -1;//Rune Haako
     default: return 0;
   }
 }

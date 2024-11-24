@@ -4926,6 +4926,20 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $otherPlayer, "3381931079,HAND", 1);
       break;
+    case "5333016146"://Rune Haako
+      global $CS_NumAlliesDestroyed;
+      if(GetClassState($currentPlayer, $CS_NumAlliesDestroyed) > 0) {
+        $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to give -1/-1", 1);
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("SETDQVAR", $currentPlayer, 0, 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $otherPlayer, "5333016146,HAND", 1);
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "REDUCEHEALTH,1", 1);
+      }
+      break;
     //PlayAbility End
     default: break;
   }
