@@ -612,6 +612,9 @@ function SpecificCardLogic($player, $card, $lastResult)
       AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
       AddDecisionQueue("MZOP", $player, "DEALDAMAGE," . $power, 1);
       break;
+    case "LETHALCRACKDOWN":
+      DealDamageAsync($player, CardPower($lastResult), "DAMAGE", "1389085256");
+      break;
     default: return "";
   }
 }
