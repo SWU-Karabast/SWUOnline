@@ -128,6 +128,9 @@ class Ally {
     if($this->index == -1 || $amount <= 0) return false;
     global $mainPlayer;
     if(!$fromCombat && $this->CardID() == "1810342362" && !$this->LostAbilities() && ($mainPlayer != $this->playerID || $enemyDamage)) return;//Lurking TIE Phantom
+    if($fromCombat && !$this->LostAbilities()) {
+      if($this->CardID() == "6190335038" && $this->PlayerID() == $mainPlayer && IsCoordinateActive($this->PlayerID())) return false;//Aayla Secura
+    }
     $subcards = $this->GetSubcards();
     for($i=0; $i<count($subcards); $i+=SubcardPieces()) {
       if($subcards[$i] == "8752877738") {
