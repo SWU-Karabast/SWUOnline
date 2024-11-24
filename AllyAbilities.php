@@ -281,7 +281,13 @@ function AllyEntersPlayAbilities($player)
   {
     switch($allies[$i])
     {
-      
+      case "9610332938"://Poggle the Lesser
+        $ally = new Ally("MYALLY-" . $i, $player);
+        if(!$ally->IsExhausted()) {
+          $ally->Exhaust();
+          PlayAlly("3463348370", $player);//Battle Droid
+        }
+        break;
       default: break;
     }
   }
