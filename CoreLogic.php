@@ -1798,6 +1798,9 @@ function SelfCostModifier($cardID, $from)
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
       $modifier -= SearchCount(SearchAllies($otherPlayer));
       break;
+    case "2443835595"://Republic Attack Pod
+      if(SearchCount(SearchAllies($currentPlayer)) >= 3) $modifier -= 1;
+      break;
     default: break;
   }
   //Target cost modifier
