@@ -4684,6 +4684,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,4", 1);
       break;
+    case "8540765053"://Savage Opress
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      if(HasMoreUnits($otherPlayer)) $playAlly->Ready();
+      break;
     //PlayAbility End
     default: break;
   }
