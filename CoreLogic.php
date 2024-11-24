@@ -4762,6 +4762,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         PlayAlly("3941784506", $currentPlayer);//Clone Trooper
       }
       break;
+    case "3410014206"://Vanguard Droid Bomber
+      if(SearchCount(SearchAllies($currentPlayer, trait:"Separatist")) > 1) {
+        DealDamageAsync($currentPlayer == 1 ? 2 : 1, 2, "DAMAGE", "3410014206");
+      }
+      break;
     //PlayAbility End
     default: break;
   }
