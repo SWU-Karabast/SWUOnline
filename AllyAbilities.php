@@ -531,6 +531,10 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
         PlayAlly("3463348370", $player);//Battle Droid
         PlayAlly("3463348370", $player);//Battle Droid
         break;
+      case "0683052393"://Hevy
+        $otherPlayer = $player == 1 ? 2 : 1;
+        DamagePlayerAllies($otherPlayer, 1, "0683052393", "ATTACKABILITY", arena:"Ground");
+        break;
       default: break;
     }
     $upgrades = $destroyedAlly->GetUpgrades();
