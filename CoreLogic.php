@@ -4973,6 +4973,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "8418001763,PLAY", 1);
       break;
+    case "0216922902"://The Zillo Beast
+      AddCurrentTurnEffect("0216922902", $currentPlayer == 1 ? 2 : 1, "PLAY");
+      break;
     //PlayAbility End
     default: break;
   }

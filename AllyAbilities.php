@@ -1919,6 +1919,9 @@ function AllyEndTurnAbilities($player)
         AddDecisionQueue("MZOP", $player, "BOUNCE", 1);
         AddDecisionQueue("WRITELOG", $player, "Millennium Falcon bounced back to hand", 1);
         break;
+      case "0216922902"://The Zillo Beast
+        $ally->Heal(5);
+        break;
       default: break;
     }
     $ally->EndRound();
