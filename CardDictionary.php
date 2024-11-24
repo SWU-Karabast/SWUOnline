@@ -1576,6 +1576,8 @@ function LeaderUnit($cardID) {
       return "b7caecf9a3";
     case "2872203891"://General Grievious
       return "fb7af4616c";
+    case "2870878795"://Padme Amidala
+      return "4ae6d91ddc";
     default: return "";
   }
 }
@@ -1689,6 +1691,8 @@ function LeaderUndeployed($cardID) {
       return "6064906790";
     case "fb7af4616c"://General Grievious
       return "2872203891";
+    case "4ae6d91ddc"://Padme Amidala
+      return "2870878795";
     default: return "";
   }
 }
