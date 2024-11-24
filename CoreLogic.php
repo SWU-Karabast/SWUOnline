@@ -4811,6 +4811,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
       break;
+    case "2565830105"://Invastion of Christophsis
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      DestroyAllAllies($otherPlayer);
+      break;
     //PlayAbility End
     default: break;
   }
@@ -4915,21 +4919,25 @@ function ExhaustAllAllies($arena, $player)
   }
 }
 
-function DestroyAllAllies()
+function DestroyAllAllies($player="")
 {
   //To avoid problems to do with allies entering play in the middle of things(i.e. captives), we first note the uniqueID of every ally in play and then destroy only those noted.
   global $currentPlayer;
   //Get all uniqueIDs of allies that are on board right now.
   $currentPlayerAllies = &GetAllies($currentPlayer);
   $currentPlayerAlliesUniqueIDs = [];
-  for($i = 0; $i < count($currentPlayerAllies); $i += AllyPieces()) {
-    $currentPlayerAlliesUniqueIDs[] = $currentPlayerAllies[$i+5];
+  if($player == "" || $player == $currentPlayer) {
+    for($i = 0; $i < count($currentPlayerAllies); $i += AllyPieces()) {
+      $currentPlayerAlliesUniqueIDs[] = $currentPlayerAllies[$i+5];
+    }
   }
   $otherPlayer = $currentPlayer == 1 ? 2 : 1;
   $otherPlayerAllies = &GetAllies($otherPlayer);
   $otherPlayerAlliesUniqueIDs = [];
-  for($i  = 0; $i < count($otherPlayerAllies); $i += AllyPieces()) {
-    $otherPlayerAlliesUniqueIDs[] = $otherPlayerAllies[$i+5];
+  if($player == "" || $player != $currentPlayer) {
+    for($i  = 0; $i < count($otherPlayerAllies); $i += AllyPieces()) {
+      $otherPlayerAlliesUniqueIDs[] = $otherPlayerAllies[$i+5];
+    }
   }
 
   //Destroy all those allies.
