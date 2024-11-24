@@ -702,6 +702,8 @@ function AbilityCost($cardID, $index=-1, $theirCard = false)
       return $abilityName == "Take Control" ? 4 : 0;
     case "5081383630"://Pre Viszla
       return $abilityName == "Deal Damage" ? 1 : 0;
+    case "4628885755"://Mace Windu
+      return $abilityName == "Deal Damage" ? 1 : 0;
     default: break;
   }
   if(IsAlly($cardID)) return 0;
@@ -826,6 +828,9 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
       $abilityTypes = "A,AA";
       break;
     case "7911083239"://Grand Inquisitor
+      $abilityTypes = "A";
+      break;
+    case "4628885755"://Mace Windu
       $abilityTypes = "A";
       break;
     case "5683908835"://Count Dooku
@@ -1013,6 +1018,9 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       else $abilityNames = "Exhaust,Attack";
       break;
     case "7911083239"://Grand Inquisitor
+      $abilityNames = "Deal Damage";
+      break;
+    case "4628885755"://Mace Windu
       $abilityNames = "Deal Damage";
       break;
     case "5683908835"://Count Dooku
@@ -1468,6 +1476,8 @@ function LeaderUnit($cardID) {
       return "6fa73a45ed";
     case "2358113881"://Quinlan Vos
       return "3f7f027abd";
+    case "4628885755"://Mace Windu
+      return "9b212e2eeb";
     default: return "";
   }
 }
@@ -1565,6 +1575,8 @@ function LeaderUndeployed($cardID) {
       return "5683908835";
     case "3f7f027abd"://Quinlan Vos
       return "2358113881";
+    case "9b212e2eeb"://Mace Windu
+      return "4628885755";
     default: return "";
   }
 }
