@@ -4782,6 +4782,16 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "CAPTURE," . $playAlly->UniqueID(), 1);
       }
       break;
+    case "6849037019"://Now There Are Two of Them
+      $allies = &GetAllies($currentPlayer);
+      if(count($allies) == AllyPieces()) {
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to put into play (make sure the trait is the same)");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND:definedType=Unit");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, $cardID, 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
+      }
+      break;
     //PlayAbility End
     default: break;
   }
