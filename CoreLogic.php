@@ -4850,6 +4850,18 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "CAPTURE," . $playAlly->UniqueID(), 1);
       break;
+    case "2298508689"://Reckless Torrent
+      if(IsCoordinateActive($currentPlayer)) {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a friendly unit to deal 2 damage (or pass)");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,2", 1);
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY", 1);
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 2 damage to (make sure it's same arena)", 1);
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,2", 1);
+      }
+      break;
     //PlayAbility End
     default: break;
   }
