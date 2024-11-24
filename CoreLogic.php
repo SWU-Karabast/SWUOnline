@@ -4879,6 +4879,21 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         PlayAlly("3941784506", $currentPlayer);//Clone Trooper
         PlayAlly("3463348370", $otherPlayer);//Battle Droid
       }
+      break;
+    case "1302133998"://Impropriety Among Thieves
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "status=1");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose their unit to take control of", 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL", 1);
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "status=1");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to give control of", 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer == 1 ? 2 : 1, "TAKECONTROL", 1);
+      break;
     //PlayAbility End
     default: break;
   }
