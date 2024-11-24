@@ -258,6 +258,7 @@ function AllyAddGraveyard($player, $cardID, $subtype)
 function AllyEntersPlayState($cardID, $player, $from="-")
 {
   if(DefinedTypesContains($cardID, "Leader", $player)) return 2;
+  if(IsToken($cardID) && SearchAlliesForCard($player, "0038286155")) return 2;//Chancellor Palpatine
   switch($cardID)
   {
     case "1785627279": return 2;//Millennium Falcon
@@ -1667,6 +1668,12 @@ function SpecificAllyAttackAbilities($attackID)
       break;
     case "6fa73a45ed"://Count Dooku Leader Unit
       AddCurrentTurnEffect("6fa73a45ed", $mainPlayer);
+      break;
+    case "0038286155"://Chancellor Palpatine
+      global $CS_NumAlliesDestroyed;
+      if(GetClassState($mainPlayer, $CS_NumAlliesDestroyed) > 0) {
+        PlayAlly("3463348370", $mainPlayer);//Battle Droid
+      }
       break;
     default: break;
   }
