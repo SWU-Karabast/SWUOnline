@@ -4993,6 +4993,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1", 1);
       break;
+    case "2483520485"://Private Manufacturing
+      Draw($currentPlayer);
+      Draw($currentPlayer);
+      if(SearchCount(SearchAllies($currentPlayer, tokenOnly:true)) == 0) {
+        MZMoveCard($currentPlayer, "MYHAND", "MYBOTDECK", context:"Choose a card to put on the bottom of your deck");
+        MZMoveCard($currentPlayer, "MYHAND", "MYBOTDECK", context:"Choose a card to put on the bottom of your deck");
+      }
+      break;
     //PlayAbility End
     default: break;
   }
