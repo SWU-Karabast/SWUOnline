@@ -3047,6 +3047,18 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "REDUCEHEALTH,2", 1);
       break;
+    case "4036958275"://Hello There
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "turns=0");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to give -4/-4", 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, 0, 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $otherPlayer, "4036958275,HAND", 1);
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "REDUCEHEALTH,4", 1);
+      break;
     case "2758597010"://Maximum Firepower
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "-", 1);
       AddDecisionQueue("SETDQVAR", $currentPlayer, 0, 1);
