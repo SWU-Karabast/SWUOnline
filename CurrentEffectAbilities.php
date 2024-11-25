@@ -131,6 +131,7 @@ function EffectAttackModifier($cardID, $playerID="")
     case "9757839764": return 2;//Adelphi Patrol Wing
     case "3208391441": return -2;//Make an Opening
     case "4036958275": return -4;//Hello There
+    case "5013214638": return -2;//Equalize
     case "9999079491": return -2;//Mystic Reflection
     case "6432884726": return 2;//Steadfast Battalion
     case "8244682354": return -1;//Jyn Erso

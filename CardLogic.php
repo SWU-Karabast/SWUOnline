@@ -146,6 +146,11 @@ function HasMoreUnits($player) {
   return count($allies) > count($theirAllies);
 }
 
+function HasFewerUnits($player) {
+  $otherPlayer = $player == 1 ? 2 : 1;
+  return HasMoreUnits($otherPlayer);
+}
+
 function CopyCurrentTurnEffectsFromAfterResolveEffects()
 {
   global $currentTurnEffects, $afterResolveEffects;
