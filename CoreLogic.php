@@ -5001,6 +5001,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         MZMoveCard($currentPlayer, "MYHAND", "MYBOTDECK", context:"Choose a card to put on the bottom of your deck");
       }
       break;
+    case "0633620454"://Synchronized Strike
+      $damage = SearchCount(SearchAllies($currentPlayer, arena:$additionalCosts));
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal " . $damage . " damage to", 1);
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE," . $damage, 1);
+      break;
     //PlayAbility End
     default: break;
   }
