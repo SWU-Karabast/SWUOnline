@@ -1813,6 +1813,9 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "3033790509,PLAY", 1);
       break;
+    case "4489623180"://Ziro the Hutt
+      ExhaustResource($defPlayer);
+      break;
     default: break;
   }
   //SpecificAllyAttackAbilities End
