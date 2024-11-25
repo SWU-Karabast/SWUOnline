@@ -5041,6 +5041,15 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
       break;
+    case "7579458834"://Reprocess
+      AddDecisionQueue("FINDINDICES", $currentPlayer, "GY");
+      AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "4-");
+      AddDecisionQueue("MULTICHOOSEDISCARD", $currentPlayer, "<-");
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "RESTOCK", 1);
+      for($i=0; $i<4; ++$i) {
+        PlayAlly("3463348370", $currentPlayer);//Battle Droid
+      }
+      break;
     //PlayAbility End
     default: break;
   }
