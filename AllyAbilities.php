@@ -69,6 +69,7 @@ function AllyHasStaticHealthModifier($cardID)
     case "1209133362"://332nd Stalwart
     case "47557288d6"://Captain Rex
     case "0268657344"://Admiral Yularen
+    case "4718895864"://Padawan Starfighter
       return true;
     default: return false;
   }
@@ -106,6 +107,11 @@ function AllyStaticHealthModifier($cardID, $index, $player, $myCardID, $myIndex,
     case "1209133362"://332nd Stalwart
       if($index == $myIndex && $player == $myPlayer) {
         if(IsCoordinateActive($player)) return 1;
+      }
+      break;
+    case "4718895864"://Padawan Starfighter
+      if($index == $myIndex && $player == $myPlayer) {
+        if(SearchCount(SearchAllies($player, trait:"Jedi"))) return 1;
       }
       break;
     case "3731235174"://Supreme Leader Snoke
