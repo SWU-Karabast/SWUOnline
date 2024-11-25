@@ -1806,6 +1806,13 @@ function SpecificAllyAttackAbilities($attackID)
         AddDecisionQueue("REVEALCARDS", $mainPlayer, "-", 1);
       }
       break;
+    case "3033790509"://Captain Typho
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to give Sentinel");
+      AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "3033790509,PLAY", 1);
+      break;
     default: break;
   }
   //SpecificAllyAttackAbilities End

@@ -271,6 +271,7 @@ function HasSentinel($cardID, $player, $index)
       case "2872203891": $hasSentinel = true; break;//General Grievous
       case "fb7af4616c": $hasSentinel = true; break;//General Grievous
       case "1039828081": $hasSentinel = true; break;//Calculating MagnaGuard
+      case "3033790509": $hasSentinel = true; break;//Captain Typho
       default: break;
     }
   }
