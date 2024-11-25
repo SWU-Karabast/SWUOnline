@@ -97,7 +97,7 @@ include_once 'Header.php';
   <div class='info-box'>
     <p>
       <img src="./Images/infoicon.png" alt="Info" style="width: 13px; height: 13px; margin: 0 2px -1px 0;">
-      <span>Set 3 cards implementation is currently in progress. Please be patient while the card effects get coded. See this link for a list of cards not yet implemented:</span>
+      <span>Most Set 3 cards cards completed. Please report bugs and let us know if there's any you particularly want to see. If you want to help implement the rest of the cards, contact OotTheMonk. See this link for a list of cards not yet implemented:</span>
       <a href='https://github.com/SWU-Karabast/SWUOnline/tree/main/UnimplementedCards' target='_blank'>Unimplemented Cards</a>
     </p>
   </div>
