@@ -242,10 +242,10 @@ function RaidAmount($cardID, $player, $index, $reportMode = false)
     case "8426882030": $amount += 1; break;//Ryloth Militia
     case "5936350569": $amount += 1; break;//Jesse
     case "2800918480": $amount += 1; break;//Soldier of the 501st
-    case "7494987248": $amount += IsCoordinateActive($currentPlayer) ? 3 : 0; break;//Plo Koon
+    case "7494987248": $amount += IsCoordinateActive($player) ? 3 : 0; break;//Plo Koon
     case "5027991609": $amount += SearchCount(SearchAllies($player, trait:"Separatist")) > 1 ? 2 : 0; break;//Separatist Commando
     case "0354710662": $amount += 2; break;//Saw Gerrera
-    case "0683052393": $amount += IsCoordinateActive($currentPlayer) ? 2 : 0; break;//Hevy
+    case "0683052393": $amount += IsCoordinateActive($player) ? 2 : 0; break;//Hevy
     case "9964112400": $amount += 2; break;//Rush Clovis
     case "0249398533": $amount += 1; break;//Obedient Vanguard
     default: break;
