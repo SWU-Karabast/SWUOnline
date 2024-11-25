@@ -65,13 +65,14 @@ function PlayCaptive($player, $target="")
   AddDecisionQueue("OP", $player, "PLAYCAPTIVE", 1);
 }
 
-function RescueUnit($player, $target="")
+function RescueUnit($player, $target="", $may=false)
 {
   AddDecisionQueue("PASSPARAMETER", $player, $target);
   AddDecisionQueue("SETDQVAR", $player, 0);
   AddDecisionQueue("MZOP", $player, "GETCAPTIVES");
   AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to rescue");
-  AddDecisionQueue("CHOOSECARD", $player, "<-", 1);
+  if($may) AddDecisionQueue("MAYCHOOSECARD", $player, "<-", 1);
+  else AddDecisionQueue("CHOOSECARD", $player, "<-", 1);
   AddDecisionQueue("OP", $player, "RESCUECAPTIVE", 1);
 }
 

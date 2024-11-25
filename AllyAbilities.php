@@ -69,6 +69,8 @@ function AllyHasStaticHealthModifier($cardID)
     case "1209133362"://332nd Stalwart
     case "47557288d6"://Captain Rex
     case "0268657344"://Admiral Yularen
+    case "4718895864"://Padawan Starfighter
+    case "9017877021"://Clone Commander Cody
       return true;
     default: return false;
   }
@@ -108,6 +110,11 @@ function AllyStaticHealthModifier($cardID, $index, $player, $myCardID, $myIndex,
         if(IsCoordinateActive($player)) return 1;
       }
       break;
+    case "4718895864"://Padawan Starfighter
+      if($index == $myIndex && $player == $myPlayer) {
+        if(SearchCount(SearchAllies($player, trait:"Jedi"))) return 1;
+      }
+      break;
     case "3731235174"://Supreme Leader Snoke
       return $player != $myPlayer && !IsLeader($cardID, $player) ? -2 : 0;
     case "6097248635"://4-LOM
@@ -119,6 +126,9 @@ function AllyStaticHealthModifier($cardID, $index, $player, $myCardID, $myIndex,
       break;
     case "0268657344"://Admiral Yularen
       if($index != $myIndex && $player == $myPlayer && AspectContains($cardID, "Heroism", $player)) return 1;
+      break;
+    case "9017877021"://Clone Commander Cody
+      if($index != $myIndex && $player == $myPlayer && IsCoordinateActive($player)) return 1;
       break;
     default: break;
   }
@@ -606,6 +616,9 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
       case "f05184bd91"://Nala Se
         if(TraitContains($cardID, "Clone", $player)) Restore(2, $player);
         break;
+      case "1039828081"://Calculating MagnaGuard
+        AddCurrentTurnEffect("1039828081", $player, "PLAY");
+        break;
       default: break;
     }
   }
@@ -913,6 +926,9 @@ function AllyCanBeAttackTarget($player, $index, $cardID)
         }
       }
       return count($aspectArr) < 3;
+    case "2843644198"://Sabine Wren
+      $ally = new Ally("MYALLY-" . $index, $player);
+      return !$ally->IsExhausted();
     default: return true;
   }
 }
@@ -1772,8 +1788,64 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "fb7af4616c,HAND", 1);
       break;
+    case "3556557330"://Asajj Ventress
+      AddDecisionQueue("YESNO", $mainPlayer, "Have you attacked with another Separatist?");
+      AddDecisionQueue("NOPASS", $mainPlayer, "-");
+      AddDecisionQueue("NOPASS", $mainPlayer, "-");
+      AddDecisionQueue("PASSPARAMETER", $mainPlayer, $attackerAlly->UniqueID(), 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "3556557330,PLAY", 1);
+      break;
+    case "2843644198"://Sabine Wren
+      $card = Mill($mainPlayer, 1);
+      if(!SharesAspect($card, GetPlayerBase($mainPlayer))) {
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:arena=Ground&THEIRALLY:arenga=Ground");
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 2 damage");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,2", 1);
+      }
+      break;
+    case "0693815329"://Cad Bane
+      RescueUnit($mainPlayer == 1 ? 2 : 1, "THEIRALLY-" . $attackerIndex, may:true);
+      AddDecisionQueue("DRAW", $mainPlayer, "-", 1);
+      AddDecisionQueue("DRAW", $mainPlayer, "-", 1);
+      break;
+    case "4ae6d91ddc"://Padme Amidala
+      if(IsCoordinateActive($mainPlayer)) {
+        AddDecisionQueue("SEARCHDECKTOPX", $mainPlayer, "3;1;include-trait-Republic");
+        AddDecisionQueue("ADDHAND", $mainPlayer, "-", 1);
+        AddDecisionQueue("REVEALCARDS", $mainPlayer, "-", 1);
+      }
+      break;
+    case "3033790509"://Captain Typho
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to give Sentinel");
+      AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "3033790509,PLAY", 1);
+      break;
+    case "4489623180"://Ziro the Hutt
+      ExhaustResource($defPlayer);
+      break;
+    case "8414572243"://Enfys Nest
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY:maxAttack=4");
+      AddDecisionQueue("MZFILTER", $mainPlayer, "definedType=Leader");
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to bounce");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "BOUNCE", 1);
+      break;
+    case "7979348081"://Kraken
+      $allies = &GetAllies($mainPlayer);
+      for($i=0; $i<count($allies); $i+=AllyPieces()) {
+        if(IsToken($allies[$i])) {
+          $ally = new Ally("MYALLY-" . $i, $mainPlayer);
+          $ally->AddRoundHealthModifier(1);
+          AddCurrentTurnEffect("7979348081", $mainPlayer, "PLAY", $ally->UniqueID());
+        }
+      }
+      break;
     default: break;
   }
+  //SpecificAllyAttackAbilities End
 }
 
 function AllyHitEffects() {
@@ -1893,6 +1965,9 @@ function AllyEndTurnAbilities($player)
         AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $i, 1);
         AddDecisionQueue("MZOP", $player, "BOUNCE", 1);
         AddDecisionQueue("WRITELOG", $player, "Millennium Falcon bounced back to hand", 1);
+        break;
+      case "0216922902"://The Zillo Beast
+        $ally->Heal(5);
         break;
       default: break;
     }

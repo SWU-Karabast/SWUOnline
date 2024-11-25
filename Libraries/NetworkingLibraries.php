@@ -1523,6 +1523,11 @@ function AddPrePitchDecisionQueue($cardID, $from, $index = -1, $skipAbilityType 
       AddDecisionQueue("BUTTONINPUTNOPASS", $currentPlayer, "Yourself,Opponent");
       AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_AdditionalCosts);
       break;
+    case "0633620454"://Synchronized Strike
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an arena");
+      AddDecisionQueue("BUTTONINPUTNOPASS", $currentPlayer, "Ground,Space");
+      AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_AdditionalCosts);
+      break;
     default:
       break;
   }

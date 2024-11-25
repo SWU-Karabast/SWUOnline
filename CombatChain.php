@@ -119,6 +119,9 @@ function AttackModifier($cardID, $player, $index)
     case "1209133362"://332nd Stalwart
       if(IsCoordinateActive($player)) $modifier += 1;
       break;
+    case "4718895864"://Padawan Starfighter
+      if(SearchCount(SearchAllies($player, trait:"Jedi"))) return 1;
+      break;
     case "9227411088"://Clone Heavy Gunner
       if(IsCoordinateActive($player)) $modifier += 2;
       break;

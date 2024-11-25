@@ -123,6 +123,7 @@ function RestoreAmount($cardID, $player, $index)
     case "0268657344": $amount += 1; break;//Admiral Yularen
     case "e71f6f766c": $amount += 2; break;//Yoda
     case "3381931079": $amount += 2; break;//Malevolence
+    case "4ae6d91ddc": $amount += 1; break;//Padme Amidala
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
@@ -172,6 +173,7 @@ function ExploitAmount($cardID, $player, $reportMode=true) {
     case "2565830105": $amount += 4; break;//Invastion of Christophsis
     case "2041344712": $amount += 3; break;//Osi Sobeck
     case "3381931079": $amount += 4; break;//Malevolence
+    case "3556557330": $amount += 2; break;//Asajj Ventress
     default: break;
   }
   return $amount;
@@ -268,6 +270,8 @@ function HasSentinel($cardID, $player, $index)
       case "9070397522": return false;//SpecForce Soldier
       case "2872203891": $hasSentinel = true; break;//General Grievous
       case "fb7af4616c": $hasSentinel = true; break;//General Grievous
+      case "1039828081": $hasSentinel = true; break;//Calculating MagnaGuard
+      case "3033790509": $hasSentinel = true; break;//Captain Typho
       default: break;
     }
   }
@@ -423,6 +427,9 @@ function HasOverwhelm($cardID, $player, $index)
       case "40b649e6f6"://Maul
         if($index != $i) return true;
         break;
+      case "9017877021"://Clone Commander Cody
+        if($index != $i && IsCoordinateActive($player)) return true;
+        break;
       default: break;
     }
   }
@@ -480,6 +487,7 @@ function HasOverwhelm($cardID, $player, $index)
     case "40b649e6f6"://Maul
     case "8655450523"://Count Dooku
     case "6fa73a45ed"://Count Dooku Leader Unit
+    case "9017877021"://Clone Commander Cody
       return true;
     case "8139901441"://Bo-Katan Kryze
       return SearchCount(SearchAllies($player, trait:"Mandalorian")) > 1;
@@ -575,6 +583,8 @@ function HasAmbush($cardID, $player, $index, $from)
       return SearchCount(SearchAllies($player, trait:"Separatist")) > 1;
     case "5243634234"://Baktoid Spider Droid
       return true;
+    case "7144880397"://Ahsoka Tano
+      return HasMoreUnits($player == 1 ? 2 : 1);
     default: return false;
   }
 }
@@ -665,6 +675,7 @@ function HasSaboteur($cardID, $player, $index)
     case "3600744650"://Bold Recon Commando
     case "6623894685"://Infiltrating Demolisher
     case "1641175580"://Kit Fisto
+    case "8414572243"://Enfys Nest
       return true;
     case "8187818742"://Republic Commando
       return IsCoordinateActive($player);
@@ -741,6 +752,8 @@ function AbilityCost($cardID, $index=-1, $theirCard = false)
       return $abilityName == "Deal Damage" ? 1 : 0;
     case "7734824762"://Captain Rex
       return $abilityName == "Clone" ? 2 : 0;
+    case "2870878795"://Padme Amidala
+      return $abilityName == "Draw" ? 1 : 0;
     default: break;
   }
   if(IsAlly($cardID)) return 0;
@@ -867,6 +880,9 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
       $abilityTypes = "A,AA";
       break;
     case "7911083239"://Grand Inquisitor
+      $abilityTypes = "A";
+      break;
+    case "2870878795"://Padme Amidala
       $abilityTypes = "A";
       break;
     case "2872203891"://General Grievious
@@ -1077,6 +1093,9 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       break;
     case "7911083239"://Grand Inquisitor
       $abilityNames = "Deal Damage";
+      break;
+    case "2870878795"://Padme Amidala
+      $abilityNames = "Draw";
       break;
     case "2872203891"://General Grievious
       $abilityNames = "Sentinel";
@@ -1373,6 +1392,7 @@ function UpgradeFilter($cardID)
     case "7280804443"://Hold-Out Blaster
     case "6410481716"://Mace Windu's Lightsaber
     case "0414253215"://General's Blade
+    case "0741296536"://Ahsoka's Padawan Lightsaber
       return "trait=Vehicle";
     case "3987987905"://Hardpoint Heavy Blaster
     case "7280213969"://Smuggling Compartment
@@ -1575,6 +1595,8 @@ function LeaderUnit($cardID) {
       return "b7caecf9a3";
     case "2872203891"://General Grievious
       return "fb7af4616c";
+    case "2870878795"://Padme Amidala
+      return "4ae6d91ddc";
     default: return "";
   }
 }
@@ -1688,6 +1710,8 @@ function LeaderUndeployed($cardID) {
       return "6064906790";
     case "fb7af4616c"://General Grievious
       return "2872203891";
+    case "4ae6d91ddc"://Padme Amidala
+      return "2870878795";
     default: return "";
   }
 }

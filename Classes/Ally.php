@@ -247,6 +247,9 @@ class Ally {
         case "1314547987"://Shaak Ti
           if($i != $this->index && IsToken($this->CardID())) $power += 1;
           break;
+        case "9017877021"://Clone Commander Cody
+          if($i != $this->index && IsCoordinateActive($this->playerID)) $power += 1;
+          break;
         default: break;
       }
     }

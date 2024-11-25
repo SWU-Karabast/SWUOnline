@@ -186,6 +186,10 @@ function EffectAttackModifier($cardID, $playerID="")
     case "3381931079": return -4;//Malevolence
     case "5333016146": return -1;//Rune Haako
     case "fb7af4616c": return 1;//General Grievous
+    case "3556557330": return 3;//Asajj Ventress
+    case "8418001763": return 2;//Huyang
+    case "0216922902": return -5;//The Zillo Beast
+    case "7979348081": return 1;//Kraken
     default: return 0;
   }
 }
@@ -601,6 +605,13 @@ function CurrentEffectEndTurnAbilities()
         break;
       case "4002861992"://DJ (Blatant Thief)
         AddNextTurnEffect($currentTurnEffects[$i], $currentTurnEffects[$i + 1]);
+        break;
+      case "8418001763"://Huyang
+        if(SearchAlliesForCard($currentTurnEffects[$i+1], "8418001763")) {
+          AddNextTurnEffect($currentTurnEffects[$i], $currentTurnEffects[$i + 1], $currentTurnEffects[$i + 2]);
+          $target = new Ally("MYALLY-" . SearchAlliesForUniqueID($currentTurnEffects[$i+2], $currentTurnEffects[$i+1]), $currentTurnEffects[$i+1]);
+          $target->AddRoundHealthModifier(2);
+        }
         break;
       default: break;
     }
