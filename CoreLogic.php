@@ -5008,6 +5008,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE," . $damage, 1);
       break;
+    case "1039828081"://Calculating MagnaGuard
+      AddCurrentTurnEffect("1039828081", $currentPlayer, "PLAY");
+      break;
     //PlayAbility End
     default: break;
   }

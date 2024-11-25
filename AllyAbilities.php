@@ -606,6 +606,9 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
       case "f05184bd91"://Nala Se
         if(TraitContains($cardID, "Clone", $player)) Restore(2, $player);
         break;
+      case "1039828081"://Calculating MagnaGuard
+        AddCurrentTurnEffect("1039828081", $player, "PLAY");
+        break;
       default: break;
     }
   }
