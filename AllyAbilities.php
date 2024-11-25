@@ -1833,6 +1833,16 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "BOUNCE", 1);
       break;
+    case "7979348081"://Kraken
+      $allies = &GetAllies($mainPlayer);
+      for($i=0; $i<count($allies); $i+=AllyPieces()) {
+        if(IsToken($allies[$i])) {
+          $ally = new Ally("MYALLY-" . $i, $mainPlayer);
+          $ally->AddRoundHealthModifier(1);
+          AddCurrentTurnEffect("7979348081", $mainPlayer, "PLAY", $ally->UniqueID());
+        }
+      }
+      break;
     default: break;
   }
   //SpecificAllyAttackAbilities End

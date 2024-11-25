@@ -5057,6 +5057,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "BOUNCE", 1);
       break;
+    case "7979348081"://Kraken
+      PlayAlly("3463348370", $currentPlayer);//Battle Droid
+      PlayAlly("3463348370", $currentPlayer);//Battle Droid
+      break;
     //PlayAbility End
     default: break;
   }
