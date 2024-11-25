@@ -1882,8 +1882,10 @@ function AllyDamageTakenAbilities($player, $index, $survived, $damage, $fromComb
   for($i=0; $i<count($theirAllies); $i+=AllyPieces()) {
     switch($theirAllies[$i]) {
       case "cfdcbd005a"://Jango Fett Leader Unit
-        $ally = new Ally("MYALLY-" . $index, $player);
-        $ally->Exhaust();
+        AddDecisionQueue("YESNO", $otherPlayer, "if you want use Jango Fett's ability");
+        AddDecisionQueue("NOPASS", $otherPlayer, "-");
+        AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $index, 1);
+        AddDecisionQueue("MZOP", $player, "REST", 1);
         break;
       default: break;
     }
@@ -1893,9 +1895,11 @@ function AllyDamageTakenAbilities($player, $index, $survived, $damage, $fromComb
     switch($theirCharacter[$i]) {
       case "9155536481"://Jango Fett Leader
         if($theirCharacter[$i+1] == 2) {
-          $ally = new Ally("MYALLY-" . $index, $player);
-          $ally->Exhaust();
-          $theirCharacter[$i+1] = 1;
+          AddDecisionQueue("YESNO", $otherPlayer, "if you want use Jango Fett's ability");
+          AddDecisionQueue("NOPASS", $otherPlayer, "-");
+          AddDecisionQueue("EXHAUSTCHARACTER", $otherPlayer, FindCharacterIndex($otherPlayer, "9155536481"), 1);
+          AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $index, 1);
+          AddDecisionQueue("MZOP", $player, "REST", 1);
         }
         break;
       default: break;
