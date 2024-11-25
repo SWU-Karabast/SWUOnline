@@ -49,7 +49,14 @@
       else if($cardNumber < 100) $cardNumber = "0" . $cardNumber;
       $set = $card->expansion->data->attributes->code;
       $cardID= $set . "_" . $cardNumber;
-      //$cardID = "SOR_" . $cardNumber;
+      switch($card->cardUid) {
+        case "3463348370"://Battle droid
+          $cardID = "TWI_T01";
+          break;
+        case "3941784506"://Clone Trooper
+          $cardID = "TWI_T02";
+          break;
+      }
       AddToTries($cardID, $card->cardUid);
 
       $definedType = $card->type->data->attributes->name;
