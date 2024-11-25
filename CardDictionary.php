@@ -123,6 +123,7 @@ function RestoreAmount($cardID, $player, $index)
     case "0268657344": $amount += 1; break;//Admiral Yularen
     case "e71f6f766c": $amount += 2; break;//Yoda
     case "3381931079": $amount += 2; break;//Malevolence
+    case "4ae6d91ddc": $amount += 1; break;//Padme Amidala
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
@@ -742,6 +743,8 @@ function AbilityCost($cardID, $index=-1, $theirCard = false)
       return $abilityName == "Deal Damage" ? 1 : 0;
     case "7734824762"://Captain Rex
       return $abilityName == "Clone" ? 2 : 0;
+    case "2870878795"://Padme Amidala
+      return $abilityName == "Draw" ? 1 : 0;
     default: break;
   }
   if(IsAlly($cardID)) return 0;
@@ -868,6 +871,9 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
       $abilityTypes = "A,AA";
       break;
     case "7911083239"://Grand Inquisitor
+      $abilityTypes = "A";
+      break;
+    case "2870878795"://Padme Amidala
       $abilityTypes = "A";
       break;
     case "2872203891"://General Grievious
@@ -1078,6 +1084,9 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       break;
     case "7911083239"://Grand Inquisitor
       $abilityNames = "Deal Damage";
+      break;
+    case "2870878795"://Padme Amidala
+      $abilityNames = "Draw";
       break;
     case "2872203891"://General Grievious
       $abilityNames = "Sentinel";

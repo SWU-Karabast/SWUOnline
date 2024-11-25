@@ -1796,6 +1796,13 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("DRAW", $mainPlayer, "-", 1);
       AddDecisionQueue("DRAW", $mainPlayer, "-", 1);
       break;
+    case "4ae6d91ddc"://Padme Amidala
+      if(IsCoordinateActive($mainPlayer)) {
+        AddDecisionQueue("SEARCHDECKTOPX", $mainPlayer, "3;1;include-trait-Republic");
+        AddDecisionQueue("ADDHAND", $mainPlayer, "-", 1);
+        AddDecisionQueue("REVEALCARDS", $mainPlayer, "-", 1);
+      }
+      break;
     default: break;
   }
   //SpecificAllyAttackAbilities End

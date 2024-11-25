@@ -4976,6 +4976,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "0216922902"://The Zillo Beast
       AddCurrentTurnEffect("0216922902", $currentPlayer == 1 ? 2 : 1, "PLAY");
       break;
+    case "2870878795"://Padme Amidala
+      if(IsCoordinateActive($currentPlayer)) {
+        AddDecisionQueue("SEARCHDECKTOPX", $currentPlayer, "3;1;include-trait-Republic");
+        AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
+        AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
+      }
+      break;
     //PlayAbility End
     default: break;
   }
