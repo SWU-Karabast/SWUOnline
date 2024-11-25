@@ -583,6 +583,8 @@ function HasAmbush($cardID, $player, $index, $from)
       return SearchCount(SearchAllies($player, trait:"Separatist")) > 1;
     case "5243634234"://Baktoid Spider Droid
       return true;
+    case "7144880397"://Ahsoka Tano
+      return HasMoreUnits($player == 1 ? 2 : 1);
     default: return false;
   }
 }
