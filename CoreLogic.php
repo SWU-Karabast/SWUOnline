@@ -4923,9 +4923,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer == 1 ? 2 : 1, "TAKECONTROL", 1);
       break;
-    case "2847868671"://Yoda
-      global $CS_NumAlliesDestroyed;
-      if(GetClassState($currentPlayer, $CS_NumAlliesDestroyed) > 0) {
+    case "2847868671"://Yoda Leader
+      global $CS_NumLeftPlay;
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      if(GetClassState($currentPlayer, $CS_NumLeftPlay) > 0 || GetClassState($otherPlayer, $CS_NumLeftPlay) > 0) {
         Draw($currentPlayer);
         AddDecisionQueue("HANDTOPBOTTOM", $currentPlayer, "-");
       }
