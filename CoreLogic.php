@@ -5011,6 +5011,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "1039828081"://Calculating MagnaGuard
       AddCurrentTurnEffect("1039828081", $currentPlayer, "PLAY");
       break;
+    case "0056489820"://Unlimited Power
+      for($i=4; $i>=1; --$i) {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal " . $i . " damage to", 1);
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE," . $i, 1);
+      }
+      break;
     //PlayAbility End
     default: break;
   }
