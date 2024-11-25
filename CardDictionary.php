@@ -427,6 +427,9 @@ function HasOverwhelm($cardID, $player, $index)
       case "40b649e6f6"://Maul
         if($index != $i) return true;
         break;
+      case "9017877021"://Clone Commander Cody
+        if($index != $i && IsCoordinateActive($player)) return true;
+        break;
       default: break;
     }
   }
@@ -484,6 +487,7 @@ function HasOverwhelm($cardID, $player, $index)
     case "40b649e6f6"://Maul
     case "8655450523"://Count Dooku
     case "6fa73a45ed"://Count Dooku Leader Unit
+    case "9017877021"://Clone Commander Cody
       return true;
     case "8139901441"://Bo-Katan Kryze
       return SearchCount(SearchAllies($player, trait:"Mandalorian")) > 1;

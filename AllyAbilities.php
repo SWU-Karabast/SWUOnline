@@ -70,6 +70,7 @@ function AllyHasStaticHealthModifier($cardID)
     case "47557288d6"://Captain Rex
     case "0268657344"://Admiral Yularen
     case "4718895864"://Padawan Starfighter
+    case "9017877021"://Clone Commander Cody
       return true;
     default: return false;
   }
@@ -125,6 +126,9 @@ function AllyStaticHealthModifier($cardID, $index, $player, $myCardID, $myIndex,
       break;
     case "0268657344"://Admiral Yularen
       if($index != $myIndex && $player == $myPlayer && AspectContains($cardID, "Heroism", $player)) return 1;
+      break;
+    case "9017877021"://Clone Commander Cody
+      if($index != $myIndex && $player == $myPlayer && IsCoordinateActive($player)) return 1;
       break;
     default: break;
   }
