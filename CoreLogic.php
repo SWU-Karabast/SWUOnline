@@ -2185,7 +2185,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         case "7734824762"://Captain Rex
           PlayAlly("3941784506", $currentPlayer);//Clone Trooper
           break;
-        case "2847868671"://Yoda
+        case "2847868671"://Yoda Leader
         $deck = &GetDeck($currentPlayer);
         if(count($deck) > 0) {
           AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose if you want to discard a card to Yoda");
@@ -2196,6 +2196,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
           AddDecisionQueue("MZOP", $currentPlayer, "GETCARDCOST", 1);
           AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
           AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:maxCost={0}", 1);
+          AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
           AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to destroy");
           AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
           AddDecisionQueue("MZOP", $currentPlayer, "DESTROY", 1);
@@ -3060,6 +3061,28 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, "REDUCEHEALTH,4", 1);
       break;
     case "5013214638"://Equalize
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to exhaust");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $otherPlayer, "8800836530", 1);
+      AddDecisionQueue("ADDLIMITEDNEXTTURNEFFECT", $otherPlayer, "8800836530", 1);
+
+
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "-", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, 0, 1);
+      for($i=3; $i>0; --$i) {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "dqVar=0");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to give +" . $i . "/+" . $i, 1);
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("APPENDDQVAR", $currentPlayer, 0, 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "ADDHEALTH," . $i, 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "1939951561_" . $i . ",PLAY", 1);
+      }
+
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "-", 1);
       AddDecisionQueue("SETDQVAR", $currentPlayer, 0, 1);
       for($i=0; $i<2; ++$i) {
