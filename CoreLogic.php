@@ -3061,28 +3061,6 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, "REDUCEHEALTH,4", 1);
       break;
     case "5013214638"://Equalize
-      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to exhaust");
-      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-      AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
-      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
-      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $otherPlayer, "8800836530", 1);
-      AddDecisionQueue("ADDLIMITEDNEXTTURNEFFECT", $otherPlayer, "8800836530", 1);
-
-
-      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "-", 1);
-      AddDecisionQueue("SETDQVAR", $currentPlayer, 0, 1);
-      for($i=3; $i>0; --$i) {
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
-        AddDecisionQueue("MZFILTER", $currentPlayer, "dqVar=0");
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to give +" . $i . "/+" . $i, 1);
-        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-        AddDecisionQueue("APPENDDQVAR", $currentPlayer, 0, 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "ADDHEALTH," . $i, 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
-        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "1939951561_" . $i . ",PLAY", 1);
-      }
-
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "-", 1);
       AddDecisionQueue("SETDQVAR", $currentPlayer, 0, 1);
       for($i=0; $i<2; ++$i) {
