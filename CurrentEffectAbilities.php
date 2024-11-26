@@ -109,16 +109,16 @@ function FinalizeChainLinkEffects()
   return false;
 }
 
-function EffectAttackModifier($effectCardID, $playerID="")
+function EffectAttackModifier($cardID, $playerID="")
 {
   global $mainPlayer, $defPlayer;
-  $params = explode("_", $effectCardID);
+  $params = explode("_", $cardID);
   if(count($params) == 1) {
-    $params = explode("-", $effectCardID);
+    $params = explode("-", $cardID);
   }
-  $effectCardID = $params[0];
+  $cardID = $params[0];
   if(count($params) > 1) $subparam = $params[1];
-  switch($effectCardID)
+  switch($cardID)
   {
     case "2587711125": return -4;//Disarm
     case "2569134232": return -4;//Jedha City
