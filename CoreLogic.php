@@ -1866,6 +1866,13 @@ function PlayerAspects($player)
     for($j=0; $j<count($cardAspects); ++$j) {
       ++$aspects[$cardAspects[$j]];
     }
+
+    // Special case
+    if ($char[$i] == '0026166404') { //Chancellor Palpatine Leader
+      $aspects["Villainy"] = 0;
+    } else if ($char[$i] == 'ad86d54e97') { //Darth Sidious Leader
+      $aspects["Heroism"] = 0;
+    }
   }
   $leaderIndex = SearchAllies($player, definedType:"Leader");
   if($leaderIndex != "") {
@@ -4798,12 +4805,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1", 1);
       break;
-    case "0026166404"://Emperor Palpatine
+    case "0026166404"://Chancellor Palpatine Leader
       AddDecisionQueue("YESNO", $currentPlayer, "if a Heroism unit died this turn");
       AddDecisionQueue("NOPASS", $currentPlayer, "-");
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "TWI_PALPATINE_HERO", 1);
       break;
-    case "ad86d54e97"://Darth Sidious
+    case "ad86d54e97"://Darth Sidious Leader
       AddDecisionQueue("YESNO", $currentPlayer, "if you played a Villainy unit this turn");
       AddDecisionQueue("NOPASS", $currentPlayer, "-");
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "TWI_DARTHSIDIOUS_HERO", 1);
