@@ -109,16 +109,16 @@ function FinalizeChainLinkEffects()
   return false;
 }
 
-function EffectAttackModifier($cardID, $playerID="")
+function EffectAttackModifier($effectCardID, $playerID="", $cardID="")
 {
   global $mainPlayer, $defPlayer;
-  $params = explode("_", $cardID);
+  $params = explode("_", $effectCardID);
   if(count($params) == 1) {
-    $params = explode("-", $cardID);
+    $params = explode("-", $effectCardID);
   }
-  $cardID = $params[0];
+  $effectCardID = $params[0];
   if(count($params) > 1) $subparam = $params[1];
-  switch($cardID)
+  switch($effectCardID)
   {
     case "2587711125": return -4;//Disarm
     case "2569134232": return -4;//Jedha City
@@ -190,7 +190,8 @@ function EffectAttackModifier($cardID, $playerID="")
     case "fb7af4616c": return 1;//General Grievous
     case "3556557330": return 3;//Asajj Ventress
     case "8418001763": return 2;//Huyang
-    case "0216922902": return -5;//The Zillo Beast
+    case "0216922902"://The Zillo Beast
+      return $cardID != "" && CardArenas($cardID) == "Ground" ? -5 : 0;
     case "7979348081": return 1;//Kraken
     default: return 0;
   }
