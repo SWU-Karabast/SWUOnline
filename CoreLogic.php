@@ -3050,7 +3050,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "4036958275"://Hello There
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
-      AddDecisionQueue("MZFILTER", $currentPlayer, "turns=0");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "turns=>0");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to give -4/-4", 1);
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("SETDQVAR", $currentPlayer, 0, 1);
@@ -3058,6 +3058,24 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $otherPlayer, "4036958275,HAND", 1);
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "REDUCEHEALTH,4", 1);
+      break;
+    case "5013214638"://Equalize
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "-", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, 0, 1);
+      for($i=0; $i<2; ++$i) {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "dqVar=0");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to give -2/-2", 1);
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("APPENDDQVAR", $currentPlayer, 0, 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "REDUCEHEALTH,2", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "5013214638,PLAY", 1);
+        
+        if (!HasFewerUnits($currentPlayer)) {
+          break;
+        }
+      }
       break;
     case "2758597010"://Maximum Firepower
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "-", 1);
@@ -4923,9 +4941,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer == 1 ? 2 : 1, "TAKECONTROL", 1);
       break;
-    case "2847868671"://Yoda
-      global $CS_NumAlliesDestroyed;
-      if(GetClassState($currentPlayer, $CS_NumAlliesDestroyed) > 0) {
+    case "2847868671"://Yoda Leader
+      global $CS_NumLeftPlay;
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      if(GetClassState($currentPlayer, $CS_NumLeftPlay) > 0 || GetClassState($otherPlayer, $CS_NumLeftPlay) > 0) {
         Draw($currentPlayer);
         AddDecisionQueue("HANDTOPBOTTOM", $currentPlayer, "-");
       }
