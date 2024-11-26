@@ -190,8 +190,7 @@ function EffectAttackModifier($effectCardID, $playerID="", $cardID="")
     case "fb7af4616c": return 1;//General Grievous
     case "3556557330": return 3;//Asajj Ventress
     case "8418001763": return 2;//Huyang
-    case "0216922902"://The Zillo Beast
-      return $cardID != "" && CardArenas($cardID) == "Ground" ? -5 : 0;
+    case "0216922902": return -5;//The Zillo Beast;
     case "7979348081": return 1;//Kraken
     default: return 0;
   }

@@ -5006,7 +5006,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "8418001763,PLAY", 1);
       break;
     case "0216922902"://The Zillo Beast
-      AddCurrentTurnEffect("0216922902", $currentPlayer == 1 ? 2 : 1, "PLAY");
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      $theirAllies = &GetTheirAllies($currentPlayer);
+      for ($i = 0; $i < count($theirAllies); $i += AllyPieces()) {
+        if (CardArenas($theirAllies[$i]) == "Ground") {
+          AddCurrentTurnEffect("0216922902", $otherPlayer, "PLAY", $theirAllies[$i+5]);
+        }
+      }
       break;
     case "2870878795"://Padme Amidala
       if(IsCoordinateActive($currentPlayer)) {
