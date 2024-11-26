@@ -175,7 +175,7 @@ function EffectAttackModifier($cardID, $playerID="")
       $modifier = $playerID == $defPlayer ? -2 : 2;
       return CardArenas($ally->CardID()) == "Ground" ? $modifier : 0;
     case "3399023235": return isset($subparam) && $subparam == "2" ? -2 : 0;//Fenn Rau
-    case "8777351722": return IsAllyAttackTarget() ? 2 : 0;;//Anakin Skywalker Leader
+    case "8777351722": return IsAllyAttackTarget() ? 2 : 0;//Anakin Skywalker Leader
     case "4910017138": return 2;//Breaking In
     case "8929774056": return 1;//Asajj Ventress
     case "2155351882": return 1;//Ahsoka Tano
