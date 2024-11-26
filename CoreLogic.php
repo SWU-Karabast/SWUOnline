@@ -3071,7 +3071,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "REDUCEHEALTH,2", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
         AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "5013214638,PLAY", 1);
-        
+
         if (!HasFewerUnits($currentPlayer)) {
           break;
         }
@@ -4738,6 +4738,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "8061497086"://Perilous Position
       $ally = new Ally($target, MZPlayerID($currentPlayer, $target));
       $ally->Exhaust();
+      $ally->DefeatIfNoRemainingHP();
       break;
     case "8345985976"://Trade Federation Shuttle
       if(SearchCount(SearchAllies($currentPlayer, damagedOnly:true))) PlayAlly("3463348370", $currentPlayer);//Battle Droid
