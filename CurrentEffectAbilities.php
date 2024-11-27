@@ -366,8 +366,10 @@ function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
           $remove = true;
           break;
         case "0414253215"://General's Blade
-          $costModifier -= 2;
-          $remove = true;
+          if($from != "PLAY" && DefinedTypesContains($cardID, "Unit", $currentPlayer)) {
+            $costModifier -= 2;
+            $remove = true;
+          }
           break;
         default: break;
       }
