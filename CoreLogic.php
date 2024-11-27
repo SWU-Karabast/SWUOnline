@@ -1810,11 +1810,14 @@ function SelfCostModifier($cardID, $from)
     $targetID = GetMZCard($currentPlayer, $mzIndex);
   } else {
     if(SearchAlliesForCard($currentPlayer, "4166047484") != "") $targetID = "4166047484";
+    else if(SearchAlliesForCard($currentPlayer, "fb7af4616c") != "") $targetID = "fb7af4616c";
+    else if(SearchAlliesForCard($currentPlayer, "4776553531") != "") $targetID = "4776553531";
     else if($cardID == "3141660491") $targetID = "4088c46c4d";
     else $targetID = "";
   }
   if(DefinedTypesContains($cardID, "Upgrade", $currentPlayer)) {
     if($targetID == "4166047484") $modifier -= 1;//Guardian of the Whills
+    if($cardID == "0875550518" && ($targetID == "fb7af4616c" || $targetID == "4776553531")) $modifier -= 2;//Grievous's Wheel Bike
     if($cardID == "3141660491" && $targetID != "" && $penalty > 0) {//The Darksaber
       $isMando = TraitContains($targetID, "Mandalorian", $currentPlayer, isset($mzIndex) && $mzIndex != "-" ? explode("-", $mzIndex)[1] : -1);
       if($isMando) {

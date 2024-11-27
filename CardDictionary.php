@@ -442,6 +442,11 @@ function HasOverwhelm($cardID, $player, $index)
       default: break;
     }
   }
+  // Check upgrades
+  $upgrades = $ally->GetUpgrades();
+  for($i=0; $i<count($upgrades); $i+=SubcardPieces()) {
+    if($upgrades[$i] == "0875550518") return true;//Grievous's Wheel Bike
+  }
   switch($cardID)
   {
     case "6072239164":
@@ -1393,6 +1398,7 @@ function UpgradeFilter($cardID)
     case "6410481716"://Mace Windu's Lightsaber
     case "0414253215"://General's Blade
     case "0741296536"://Ahsoka's Padawan Lightsaber
+    case "0875550518"://Grievous's Wheel Bike
       return "trait=Vehicle";
     case "3987987905"://Hardpoint Heavy Blaster
     case "7280213969"://Smuggling Compartment
