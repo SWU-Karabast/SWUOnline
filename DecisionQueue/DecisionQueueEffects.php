@@ -625,7 +625,7 @@ function SpecificCardLogic($player, $card, $lastResult)
       PlayAlly("3941784506", $player);//Clone Trooper
       DealDamageAsync(($player == 1 ? 2 : 1), 2, "DAMAGE", "ad86d54e97");
       $char = &GetPlayerCharacter($player);
-      $char[CharacterPieces()] = "0026166404";
+      $char[CharacterPieces()] = "0026166404"; // Chancellor Palpatine Leader
       break;
     default: return "";
   }

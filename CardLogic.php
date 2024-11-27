@@ -807,8 +807,8 @@ function EndTurnProcedure($player) {
   for($i=0; $i<count($resources); $i+=ResourcePieces()) {
     $resources[$i+4] = "0";
   }
-  Draw($player);
-  Draw($player);
+  Draw($player, false);
+  Draw($player, false);
   MZMoveCard($player, "MYHAND", "MYRESOURCES", may:true, context:"Choose a card to resource", silent:true);
   AddDecisionQueue("AFTERRESOURCE", $player, "HAND", 1);
 }

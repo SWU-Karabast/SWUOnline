@@ -897,8 +897,8 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
     case "1686059165"://Wat Tambor
       $abilityTypes = "A";
       break;
-    case "0026166404"://Emperor Palpatine
-    case "ad86d54e97"://Darth Sidious
+    case "0026166404"://Chancellor Palpatine Leader
+    case "ad86d54e97"://Darth Sidious Leader
       $abilityTypes = "A";
       break;
     case "7734824762"://Captain Rex
@@ -1112,8 +1112,8 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
     case "7734824762"://Captain Rex
       $abilityNames = "Clone";
       break;
-    case "0026166404"://Emperor Palpatine
-    case "ad86d54e97"://Darth Sidious
+    case "0026166404"://Chancellor Palpatine Leader
+    case "ad86d54e97"://Darth Sidious Leader
       $abilityNames = "Activate";
       break;
     case "4628885755"://Mace Windu
@@ -1249,7 +1249,7 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
     $char = &GetPlayerCharacter($currentPlayer);
     if($char[CharacterPieces() + 1] == 1) $abilityNames = "";
     if($char[CharacterPieces() + 2] == 0) {
-      //Emperor Palpatine + Darth Sidious
+      //Chancellor Palpatine Leader + Darth Sidious Leader
       if($char[CharacterPieces()] != "0026166404" && $char[CharacterPieces()] != "ad86d54e97") {
         if($abilityNames != "") $abilityNames .= ",";
         $abilityNames .= "Deploy";
