@@ -4657,7 +4657,6 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       PummelHit($currentPlayer, may:true);
       AddDecisionQueue("SEARCHDECKTOPX", $currentPlayer, "3;1;", 1);
       AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
-      AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
       break;
     case "4910017138"://Breaking In
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
