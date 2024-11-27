@@ -62,6 +62,7 @@ function AllyHasStaticHealthModifier($cardID)
     case "4339330745"://Wedge Antilles
     case "4511413808"://Follower of the Way
     case "3731235174"://Supreme Leader Snoke
+    case "8418001763"://Huyang
     case "6097248635"://4-LOM
     case "1690726274"://Zuckuss
     case "2260777958"://41st Elite Corps
@@ -117,6 +118,12 @@ function AllyStaticHealthModifier($cardID, $index, $player, $myCardID, $myIndex,
       break;
     case "3731235174"://Supreme Leader Snoke
       return $player != $myPlayer && !IsLeader($cardID, $player) ? -2 : 0;
+    case "8418001763"://Huyang
+      if ($player == $myPlayer) {
+        $ally = new Ally("MYALLY-" . $index, $player);
+        return SearchLimitedCurrentTurnEffects($myCardID, $player) == $ally->UniqueID() ? 2 : 0;
+      }
+      return 0;
     case "6097248635"://4-LOM
       return ($player == $myPlayer && CardTitle($cardID) == "Zuckuss") ? 1 : 0;
     case "1690726274"://Zuckuss
@@ -385,6 +392,9 @@ function AllyLeavesPlayAbility($player, $index)
     case "3401690666"://Relentless
       $otherPlayer = ($player == 1 ? 2 : 1);
       SearchCurrentTurnEffects("3401690666", $otherPlayer, remove:true);
+      break;
+    case "8418001763"://Huyang
+      SearchCurrentTurnEffects("8418001763", $player, remove:true);
       break;
     case "4002861992"://DJ (Blatant Thief)
       $djAlly = new Ally("MYALLY-" . $index, $player);

@@ -611,8 +611,6 @@ function CurrentEffectEndTurnAbilities()
       case "8418001763"://Huyang
         if(SearchAlliesForCard($currentTurnEffects[$i+1], "8418001763")) {
           AddNextTurnEffect($currentTurnEffects[$i], $currentTurnEffects[$i + 1], $currentTurnEffects[$i + 2]);
-          $target = new Ally("MYALLY-" . SearchAlliesForUniqueID($currentTurnEffects[$i+2], $currentTurnEffects[$i+1]), $currentTurnEffects[$i+1]);
-          $target->AddRoundHealthModifier(2);
         }
         break;
       default: break;
