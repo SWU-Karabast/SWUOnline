@@ -319,7 +319,7 @@ function MainCharacterPlayCardAbilities($cardID, $from)
         }
         break;
       case "2358113881"://Quinlan Vos
-        if($from != "EQUIP" && DefinedTypesContains($cardID, "Unit", $currentPlayer)) {
+        if($from != 'PLAY' && $from != "EQUIP" && DefinedTypesContains($cardID, "Unit", $currentPlayer)) {
           AddLayer("TRIGGER", $currentPlayer, "2358113881", append:true);
         }
         break;
