@@ -319,7 +319,7 @@ function MainCharacterPlayCardAbilities($cardID, $from)
         }
         break;
       case "2358113881"://Quinlan Vos
-        if($from != "EQUIP" && DefinedTypesContains($cardID, "Unit", $currentPlayer)) {
+        if($from != 'PLAY' && $from != "EQUIP" && DefinedTypesContains($cardID, "Unit", $currentPlayer)) {
           AddLayer("TRIGGER", $currentPlayer, "2358113881", append:true);
         }
         break;
@@ -1810,11 +1810,14 @@ function SelfCostModifier($cardID, $from)
     $targetID = GetMZCard($currentPlayer, $mzIndex);
   } else {
     if(SearchAlliesForCard($currentPlayer, "4166047484") != "") $targetID = "4166047484";
+    else if(SearchAlliesForCard($currentPlayer, "fb7af4616c") != "") $targetID = "fb7af4616c";
+    else if(SearchAlliesForCard($currentPlayer, "4776553531") != "") $targetID = "4776553531";
     else if($cardID == "3141660491") $targetID = "4088c46c4d";
     else $targetID = "";
   }
   if(DefinedTypesContains($cardID, "Upgrade", $currentPlayer)) {
     if($targetID == "4166047484") $modifier -= 1;//Guardian of the Whills
+    if($cardID == "0875550518" && ($targetID == "fb7af4616c" || $targetID == "4776553531")) $modifier -= 2;//Grievous's Wheel Bike
     if($cardID == "3141660491" && $targetID != "" && $penalty > 0) {//The Darksaber
       $isMando = TraitContains($targetID, "Mandalorian", $currentPlayer, isset($mzIndex) && $mzIndex != "-" ? explode("-", $mzIndex)[1] : -1);
       if($isMando) {
@@ -4657,7 +4660,6 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       PummelHit($currentPlayer, may:true);
       AddDecisionQueue("SEARCHDECKTOPX", $currentPlayer, "3;1;", 1);
       AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
-      AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
       break;
     case "4910017138"://Breaking In
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
