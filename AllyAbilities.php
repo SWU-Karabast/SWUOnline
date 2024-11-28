@@ -1732,7 +1732,7 @@ function SpecificAllyAttackAbilities($attackID)
     case "0038286155"://Chancellor Palpatine
       global $CS_NumAlliesDestroyed;
       if(GetClassState($mainPlayer, $CS_NumAlliesDestroyed) > 0) {
-        PlayAlly("3463348370", $mainPlayer);//Battle Droid
+        PlayAlly("3941784506", $mainPlayer);//Clone Trooper
       }
       break;
     case "0354710662"://Saw Gerrera
