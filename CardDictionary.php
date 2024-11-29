@@ -407,8 +407,28 @@ function HasGrit($cardID, $player, $index)
     case "6787851182"://Dwarf Spider Droid
     case "2761325938"://Devastating Gunship
       return true;
-    default: return false;
+    case "9832122703"://Luminara Unduli
+      return IsCoordinateActive($player);
+    default:
+      return false;
   }
+}
+
+function HasCoordinate($cardID, $player, $index)
+{
+  $ally = new Ally("MYALLY-" . $index, $player);
+  if($ally->LostAbilities()) return false;
+  $upgrades = $ally->GetUpgrades();
+  for ($i = 0; $i < count($upgrades); $i += SubcardPieces()) {
+    if($upgrades[$i] == "7884488904") return true;//For the republic
+  }
+  return match ($cardID) {
+    "2260777958", "9832122703", "4179773207", "7200475001", "2265363405", "9966134941", "6190335038",
+    "7380773849", "9017877021", "2282198576", "9227411088", "2298508689", "0683052393", "1641175580",
+    "8307804692", "7494987248", "5445166624", "4512764429", "1209133362", "8187818742", "7224a2074a",
+    "4ae6d91ddc" => true,
+    default => false,
+  };
 }
 
 function HasOverwhelm($cardID, $player, $index)
@@ -496,8 +516,6 @@ function HasOverwhelm($cardID, $player, $index)
       return true;
     case "8139901441"://Bo-Katan Kryze
       return SearchCount(SearchAllies($player, trait:"Mandalorian")) > 1;
-    case "9832122703"://Luminara Unduli
-      return IsCoordinateActive($player);
     default: return false;
   }
 }
