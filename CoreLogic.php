@@ -1158,6 +1158,8 @@ function HasKeyword($cardID, $keyword, $player="", $index=-1){
     case "Shielded": return HasShielded($cardID, $player, $index);
     case "Sentinel": return HasSentinel($cardID, $player, $index);
     case "Ambush": return HasAmbush($cardID, $player, $index,"");
+    case "Coordinate": return HasCoordinate($cardID, $player, $index);
+    case "Exploit": return ExploitAmount($cardID, $player, true) > 0;
     case "Any":
       return SmuggleCost($cardID, $player, $index) > -1 ||
         RaidAmount($cardID, $player, $index, true) > 0 ||
@@ -1168,7 +1170,9 @@ function HasKeyword($cardID, $keyword, $player="", $index=-1){
         HasSaboteur($cardID, $player, $index) ||
         HasShielded($cardID, $player, $index) ||
         HasSentinel($cardID, $player, $index) ||
-        HasAmbush($cardID, $player, $index, "");
+        HasAmbush($cardID, $player, $index, "") ||
+        HasCoordinate($cardID, $player, $index) ||
+        ExploitAmount($cardID, $player, true) > 0;
     default: return false;
   }
 }
