@@ -466,6 +466,7 @@ function HasOverwhelm($cardID, $player, $index)
   $upgrades = $ally->GetUpgrades();
   for($i=0; $i<count($upgrades); $i+=SubcardPieces()) {
     if($upgrades[$i] == "0875550518") return true;//Grievous's Wheel Bike
+    if($upgrades[$i] == "4886127868") return true;//Nameless Valor
   }
   switch($cardID)
   {
@@ -819,6 +820,7 @@ function AttackValue($cardID)
     case "3514010297": return 1;//Mandalorian Armor
     case "4843813137": return 1;//Brutal Traditions
     case "3141660491": return 4;//The Darksaber
+    case "4886127868": return 2;//Nameless Valor
     default: return CardPower($cardID);
   }
 }
@@ -1428,6 +1430,8 @@ function UpgradeFilter($cardID)
     case "6911505367"://Second Chance
     case "7270736993"://Unrefusable Offer
       return "leader=1";
+    case "4886127868"://Nameless Valor
+      return "token=0";
     default: return "";
   }
 }
@@ -1775,6 +1779,7 @@ function CardHP($cardID) {
     case "3514010297": return 3;//Mandalorian Armor
     case "4843813137": return 2;//Brutal Traditions
     case "3141660491": return 3;//The Darksaber
+    case "4886127868": return 2;//Nameless Valor
     default: return CardHPDictionary($cardID);
   }
 }
