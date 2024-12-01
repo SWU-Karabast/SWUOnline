@@ -175,7 +175,7 @@ function ExploitAmount($cardID, $player, $reportMode=true) {
     case "3381931079": $amount += 4; break;//Malevolence
     case "3556557330": $amount += 2; break;//Asajj Ventress
     case "3589814405": $amount += 2; break;//Tactical Droid Commander
-    case "1167572655": $amount += 3; break;//Planetary Invasion
+//    case "1167572655": $amount += 3; break;//Planetary Invasion
     default: break;
   }
   return $amount;
