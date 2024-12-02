@@ -423,10 +423,28 @@ function HasCoordinate($cardID, $player, $index)
     if($upgrades[$i] == "7884488904") return true;//For the republic
   }
   return match ($cardID) {
-    "2260777958", "9832122703", "4179773207", "7200475001", "2265363405", "9966134941", "6190335038",
-    "7380773849", "9017877021", "2282198576", "9227411088", "2298508689", "0683052393", "1641175580",
-    "8307804692", "7494987248", "5445166624", "4512764429", "1209133362", "8187818742", "7224a2074a",
-    "4ae6d91ddc" => true,
+    "2260777958",//41st Elite Corps
+    "9832122703",//Luminara Unduli
+    "4179773207",//Infantry of the 212th
+    "7200475001",//Ki-Adi-Mundi
+    "2265363405",//Echo
+    "9966134941",//Pelta Supply Frigate
+    "6190335038",//Aayla Secura
+    "7380773849",//Coruscant Guard
+    "9017877021",//Clone Commander Cody
+    "2282198576",//Anakin Skywalker
+    "9227411088",//Clone Heavy Gunner
+    "2298508689",//Reckless Torrent
+    "0683052393",//Hevy
+    "1641175580",//Kit Fisto
+    "8307804692",//Padme Abmidala 
+    "7494987248",//Plo Koon
+    "5445166624",//Clone Dive Trooper
+    "4512764429",//Sanctioner's Shuttle
+    "1209133362",//332nd Stalwart
+    "8187818742",//Republic Commando
+    "7224a2074a",//Ahsoka Tano
+    "4ae6d91ddc" => true,//Padme Amidala
     default => false,
   };
 }
