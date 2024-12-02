@@ -227,6 +227,7 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false,
   $upgrades = $ally->GetUpgrades(true);
   for($i=0; $i<count($upgrades); $i+=SubcardPieces()) {
     if($upgrades[$i] == "8752877738" || $upgrades[$i] == "2007868442") continue;
+    if($upgrades[$i] == "7547538214") PlayAlly("3463348370", $player); //droid cohort - battle droid;
     if($upgrades[$i] == "6911505367") $discardPileModifier = "TTFREE";//Second Chance
     AddGraveyard($upgrades[$i], $upgrades[$i+1], "PLAY");
   }
