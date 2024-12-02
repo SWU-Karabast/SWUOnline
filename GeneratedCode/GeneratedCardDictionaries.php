@@ -281132,9 +281132,9 @@ default: return "";
 case "0":
 switch($cardID[6]) {
 case "1":
-return "3463348370";
+return "2742665601";
 case "2":
-return "3941784506";
+return "6064906790";
 case "3":
 return "2784756758";
 case "4":
@@ -281681,6 +281681,18 @@ case "7":
 return "2483520485";
 case "6":
 return "7280804443";
+default: return "";
+}
+default: return "";
+}
+case "T":
+switch($cardID[5]) {
+case "0":
+switch($cardID[6]) {
+case "1":
+return "3463348370";
+case "2":
+return "3941784506";
 default: return "";
 }
 default: return "";
