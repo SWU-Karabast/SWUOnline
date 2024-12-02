@@ -177,6 +177,19 @@ function NameBasedHealthModifiers($cardID, $index, $player, $stackingBuff = fals
   return $modifier;
 }
 
+// Modifiers from Base
+function BaseHealthModifiers($cardID, $index, $player, $stackingBuff = false) {
+  $modifier = 0;
+  $char = &GetPlayerCharacter($player);
+  switch($char[0]) {
+    case "6594935791"://Pau City
+      $modifier += IsLeader($cardID) ? 1 : 0;
+      break;
+    default: break;
+  }
+  return $modifier;
+}
+
 // Health update: Leaving this for now. Not sure it is used and may be removed in a more
 // comprehensive cleanup to ensure everything is going through the ally class method.
 function DealAllyDamage($targetPlayer, $index, $damage, $type="")
@@ -1365,6 +1378,17 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "RESTORE,2", 1);
       break;
+    case "8307804692"://Padme Admidala
+      if(IsCoordinateActive($mainPlayer)) {
+        $otherPlayer = $mainPlayer == 1 ? 2 : 1;
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY");
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to give -3/-0 for this phase",1);
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        AddDecisionQueue("SETDQVAR", $mainPlayer, 0, 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
+        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $otherPlayer, "8307804692,HAND", 1);
+      }
+      break;
     case "51e8757e4c"://Sabine Wren
       DealDamageAsync($defPlayer, 1, "DAMAGE", "51e8757e4c");
       break;
@@ -1742,7 +1766,7 @@ function SpecificAllyAttackAbilities($attackID)
     case "0038286155"://Chancellor Palpatine
       global $CS_NumAlliesDestroyed;
       if(GetClassState($mainPlayer, $CS_NumAlliesDestroyed) > 0) {
-        PlayAlly("3463348370", $mainPlayer);//Battle Droid
+        PlayAlly("3941784506", $mainPlayer);//Clone Trooper
       }
       break;
     case "0354710662"://Saw Gerrera

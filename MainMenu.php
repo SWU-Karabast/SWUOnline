@@ -94,13 +94,6 @@ include_once 'Header.php';
   */
 
   ?>
-  <div class='info-box'>
-    <p>
-      <img src="./Images/infoicon.png" alt="Info" style="width: 13px; height: 13px; margin: 0 2px -1px 0;">
-      <span>Most Set 3 cards cards completed. Please report bugs and let us know if there's any you particularly want to see. If you want to help implement the rest of the cards, contact OotTheMonk. See this link for a list of cards not yet implemented:</span>
-      <a href='https://github.com/SWU-Karabast/SWUOnline/tree/main/UnimplementedCards' target='_blank'>Unimplemented Cards</a>
-    </p>
-  </div>
   <label for="fabdb"><u><a style='color:lightblue;' href='https://www.swudb.com/' target='_blank'>SWUDB</a></u> or <u><a style='color:lightblue;' href='https://www.sw-unlimited-db.com/' target='_blank'>SW-Unlimited-DB</a></u> Deck Link <span class="secondary">(use the url or 'Deck Link' button)</span></label>
   <input type="text" id="fabdb" name="fabdb" value='<?= $deckUrl ?>'>
   <?php
@@ -160,13 +153,12 @@ include_once 'Header.php';
     <h2>News</h2>
     <div style="position: relative;">
       <div style='vertical-align:middle; text-align:center;'>
-        <!--<img src="./Images/droids.png" alt="SHD" style="max-width: 100%; border-radius: 5px;">
+        <img src="./Images/yoda.png" alt="SHD" style="max-width: 100%; border-radius: 5px;">
         <div style="text-align: left;">
-        <h3 style="margin: 15px 0; display: block;">Set 3 cards and Karabast's next steps </h3>
-        <p>For the last few months we've been hard at work on a brand new version of Karabast. Our new codebase will dramatically simplify future card implementation, and card error fixes. We're working hard to get this new version launched as soon as possible, but that will be after Set 3 releases. Set 3 cards will not be implemented until we make this transition.</p>
-
-         <p> <a target="_blank" href="https://discord.gg/hKRaqHND4v">Join our Discord for the latest progress updates and timelines</a>. If you have coding experience we are always open to new contributors. Info on how to help out can also be found on <a target="_blank" href="https://discord.gg/hKRaqHND4v">Discord</a>. We appreciate everyone's patience as we work on this new Karabast experience, and look forward to playing games with you when we launch!</p>
-        </div>-->
+        <h3 style="margin: 15px 0; display: block;">Set 3 launches, and Karabast's next steps </h3>
+        <p>Twilight is here! Thanks to the hard work of OotTheMonk the majority of Set 3 cards have now been added to Karabast. See <a href="https://github.com/SWU-Karabast/SWUOnline/tree/main/UnimplementedCards" target="_blank">Unimplemented Cards</a> for a list of those remaining.</p>
+        <p>Bugs are a possibility during this rollout, if you discover any as you play please submit them to the <i>#bug-reports</i> channel in our <a target="_blank" href="https://discord.gg/hKRaqHND4v">Discord</a>.</p>
+        <p>The team is still hard at work on a brand new engine for Karabast that will dramatically simplify adding future sets, and card bug fixes. <a target="_blank" href="https://discord.gg/hKRaqHND4v">Join our Discord</a> for the latest progress updates and timeline. If you have coding experience we're always open to new contributors, info on how to help out can also be found on Discord.</p>
       </div>
     </div>
     <?php

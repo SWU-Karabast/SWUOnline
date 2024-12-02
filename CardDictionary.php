@@ -270,7 +270,7 @@ function HasSentinel($cardID, $player, $index)
       case "9070397522": return false;//SpecForce Soldier
       case "2872203891": $hasSentinel = true; break;//General Grievous
       case "fb7af4616c": $hasSentinel = true; break;//General Grievous
-      case "1039828081": $hasSentinel = true; break;//Calculating MagnaGuard
+      case "1039828081": if ($cardID == "1039828081") {$hasSentinel = true;} break;//Calculating MagnaGuard
       case "3033790509": $hasSentinel = true; break;//Captain Typho
       default: break;
     }
@@ -407,8 +407,28 @@ function HasGrit($cardID, $player, $index)
     case "6787851182"://Dwarf Spider Droid
     case "2761325938"://Devastating Gunship
       return true;
-    default: return false;
+    case "9832122703"://Luminara Unduli
+      return IsCoordinateActive($player);
+    default:
+      return false;
   }
+}
+
+function HasCoordinate($cardID, $player, $index)
+{
+  $ally = new Ally("MYALLY-" . $index, $player);
+  if($ally->LostAbilities()) return false;
+  $upgrades = $ally->GetUpgrades();
+  for ($i = 0; $i < count($upgrades); $i += SubcardPieces()) {
+    if($upgrades[$i] == "7884488904") return true;//For the republic
+  }
+  return match ($cardID) {
+    "2260777958", "9832122703", "4179773207", "7200475001", "2265363405", "9966134941", "6190335038",
+    "7380773849", "9017877021", "2282198576", "9227411088", "2298508689", "0683052393", "1641175580",
+    "8307804692", "7494987248", "5445166624", "4512764429", "1209133362", "8187818742", "7224a2074a",
+    "4ae6d91ddc" => true,
+    default => false,
+  };
 }
 
 function HasOverwhelm($cardID, $player, $index)
@@ -441,6 +461,12 @@ function HasOverwhelm($cardID, $player, $index)
       case "6461101372": return true;//Maul
       default: break;
     }
+  }
+  // Check upgrades
+  $upgrades = $ally->GetUpgrades();
+  for($i=0; $i<count($upgrades); $i+=SubcardPieces()) {
+    if($upgrades[$i] == "0875550518") return true;//Grievous's Wheel Bike
+    if($upgrades[$i] == "4886127868") return true;//Nameless Valor
   }
   switch($cardID)
   {
@@ -491,8 +517,6 @@ function HasOverwhelm($cardID, $player, $index)
       return true;
     case "8139901441"://Bo-Katan Kryze
       return SearchCount(SearchAllies($player, trait:"Mandalorian")) > 1;
-    case "9832122703"://Luminara Unduli
-      return IsCoordinateActive($player);
     default: return false;
   }
 }
@@ -796,6 +820,7 @@ function AttackValue($cardID)
     case "3514010297": return 1;//Mandalorian Armor
     case "4843813137": return 1;//Brutal Traditions
     case "3141660491": return 4;//The Darksaber
+    case "4886127868": return 2;//Nameless Valor
     default: return CardPower($cardID);
   }
 }
@@ -1393,6 +1418,7 @@ function UpgradeFilter($cardID)
     case "6410481716"://Mace Windu's Lightsaber
     case "0414253215"://General's Blade
     case "0741296536"://Ahsoka's Padawan Lightsaber
+    case "0875550518"://Grievous's Wheel Bike
       return "trait=Vehicle";
     case "3987987905"://Hardpoint Heavy Blaster
     case "7280213969"://Smuggling Compartment
@@ -1404,6 +1430,8 @@ function UpgradeFilter($cardID)
     case "6911505367"://Second Chance
     case "7270736993"://Unrefusable Offer
       return "leader=1";
+    case "4886127868"://Nameless Valor
+      return "token=0";
     default: return "";
   }
 }
@@ -1751,6 +1779,7 @@ function CardHP($cardID) {
     case "3514010297": return 3;//Mandalorian Armor
     case "4843813137": return 2;//Brutal Traditions
     case "3141660491": return 3;//The Darksaber
+    case "4886127868": return 2;//Nameless Valor
     default: return CardHPDictionary($cardID);
   }
 }

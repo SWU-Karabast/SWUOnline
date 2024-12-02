@@ -165,6 +165,7 @@ function EffectAttackModifier($cardID, $playerID="")
     case "4085341914": return 4;//Heroic Resolve
     case "1938453783": return 2;//Armed to the Teeth
     case "6263178121": return 2;//Kylo Ren (Killing the Past)
+    case "8307804692": return -3;//Padme Admidala
     case "7578472075"://Let the Wookie Win
       $attacker = new Ally(AttackerMZID($mainPlayer), $mainPlayer);
       return TraitContains($attacker->CardID(), "Wookiee", $mainPlayer) ? 2 : 0;
@@ -175,7 +176,7 @@ function EffectAttackModifier($cardID, $playerID="")
       $modifier = $playerID == $defPlayer ? -2 : 2;
       return CardArenas($ally->CardID()) == "Ground" ? $modifier : 0;
     case "3399023235": return isset($subparam) && $subparam == "2" ? -2 : 0;//Fenn Rau
-    case "8777351722": return IsAllyAttackTarget() ? 2 : 0;;//Anakin Skywalker Leader
+    case "8777351722": return IsAllyAttackTarget() ? 2 : 0;//Anakin Skywalker Leader
     case "4910017138": return 2;//Breaking In
     case "8929774056": return 1;//Asajj Ventress
     case "2155351882": return 1;//Ahsoka Tano
@@ -366,8 +367,10 @@ function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
           $remove = true;
           break;
         case "0414253215"://General's Blade
-          $costModifier -= 2;
-          $remove = true;
+          if($from != "PLAY" && DefinedTypesContains($cardID, "Unit", $currentPlayer)) {
+            $costModifier -= 2;
+            $remove = true;
+          }
           break;
         default: break;
       }
