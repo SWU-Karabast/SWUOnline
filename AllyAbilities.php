@@ -1076,7 +1076,7 @@ function AddAllyPlayAbilityLayers($cardID, $from, $uniqueID = "-") {
 
 function AllyHasPlayCardAbility($playedCardID, $playedCardUniqueID, $from, $cardID, $player, $index): bool
 {
-  global $currentPlayer;
+  global $currentPlayer, $CS_NumCardsPlayed;
   $thisAlly = new Ally("MYALLY-" . $index, $player);
   if($thisAlly->LostAbilities($playedCardID)) return false;
   $thisIsNewlyPlayedAlly = $thisAlly->UniqueID() == $playedCardUniqueID;
@@ -1112,6 +1112,8 @@ function AllyHasPlayCardAbility($playedCardID, $playedCardUniqueID, $from, $card
     switch ($cardID) {
       case "5555846790"://Saw Gerrera
         return DefinedTypesContains($playedCardID, "Event", $currentPlayer);
+      case "7200475001"://Ki-Adi Mundi
+        return IsCoordinateActive($player) && GetClassState($currentPlayer, $CS_NumCardsPlayed) == 2;
       case "4935319539"://Krayt Dragon
         return true;
       default: break;
@@ -1230,6 +1232,12 @@ function AllyPlayCardAbility($cardID, $player="", $from="-", $abilityID="-", $un
   }
   switch($abilityID)
   {
+
+    case "7200475001"://Ki-Adi Mundi
+      $opponent = $currentPlayer == 1 ? 2 : 1;
+      Draw($opponent);
+      Draw($opponent);
+      break;
     case "5555846790"://Saw Gerrera
       DealDamageAsync($player, 2, "DAMAGE", "5555846790");
       break;
