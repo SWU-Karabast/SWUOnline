@@ -1104,6 +1104,8 @@ function AllyHasPlayCardAbility($playedCardID, $playedCardUniqueID, $from, $card
         return !DefinedTypesContains($playedCardID, "Unit");
       case "3f7f027abd"://Quinlan Vos
         return DefinedTypesContains($playedCardID, "Unit");
+      case "3589814405"://tactical droid commander
+        return !$thisIsNewlyPlayedAlly && DefinedTypesContains($playedCardID, "Unit") && TraitContains($playedCardID, "Separatist", $player);
       default: break;
     }
   } else {
@@ -1181,6 +1183,11 @@ function AllyPlayCardAbility($cardID, $player="", $from="-", $abilityID="-", $un
       if(TraitContains($cardID, "Underworld", $player)) {
         $otherPlayer = $player == 1 ? 2 : 1;
         DealDamageAsync($otherPlayer, 1, "DAMAGE", "0981852103");
+      }
+      break;
+    case "3589814405"://tactical droid commander
+      if(TraitContains($cardID, "Separatist", $player)) {
+        AddLayer("TRIGGER", $currentPlayer, "3589814405", CardCost($cardID), append: true);
       }
       break;
     case "724979d608"://Cad Bane Leader 
