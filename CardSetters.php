@@ -167,8 +167,11 @@ function ArsenalTurnFaceUpAbility($cardID, $player)
 function AddHand($player, $cardID)
 {
   $hand = &GetHand($player);
-  $hand[] = $cardID;
-  return count($hand) - 1;
+  // If it's a token, it doesn't go to the hand
+  if($cardID != "3463348370" && $cardID != "3941784506") {
+    $hand[] = $cardID;
+  }
+  return count($hand)-1;
 }
 
 function RemoveResource($player, $index)
