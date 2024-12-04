@@ -683,6 +683,12 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       AddDecisionQueue("MZOP", $player, "REST", 1);
       AddDecisionQueue("EXHAUSTCHARACTER", $player, FindCharacterIndex($player, "9005139831"), 1);
       break;
+    case "3589814405"://tactical droid commander
+      AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:maxCost=".$target);
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to exhaust", 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+      AddDecisionQueue("MZOP", $player, "REST", 1);
+      break;
     case "2358113881"://Quinlan Vos
       $allies = &GetAllies($player);
       if(count($allies) == 0) break;

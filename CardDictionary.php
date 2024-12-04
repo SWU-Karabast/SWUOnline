@@ -174,6 +174,8 @@ function ExploitAmount($cardID, $player, $reportMode=true) {
     case "2041344712": $amount += 3; break;//Osi Sobeck
     case "3381931079": $amount += 4; break;//Malevolence
     case "3556557330": $amount += 2; break;//Asajj Ventress
+    case "3589814405": $amount += 2; break;//Tactical Droid Commander
+//    case "1167572655": $amount += 3; break;//Planetary Invasion
     default: break;
   }
   return $amount;
@@ -831,8 +833,7 @@ function AttackValue($cardID)
   if(!$cardID) return "";
   switch($cardID)
   {
-    case "4897501399"://Ruthlessness
-      return 2;
+    case "4897501399": return 2;//Ruthlessness
     case "7687006104": return 1;//Foundling
     case "5738033724": return 2;//Boba Fett's Armor
     case "3514010297": return 1;//Mandalorian Armor

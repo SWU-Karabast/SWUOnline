@@ -21,7 +21,7 @@
   $setTrie = [];
   while ($hasMoreData)
   {
-    $jsonUrl = "https://admin.starwarsunlimited.com/api/cards?pagination[page]=" . $page;
+    $jsonUrl = "https://admin.starwarsunlimited.com/api/cards?locale=en&pagination[page]=" . $page . "&pagination[pageSize]=100&filters[variantOf][id][\$null]=true";
     $curl = curl_init();
     $headers = array(
       "Content-Type: application/json",
@@ -137,11 +137,12 @@
     AddToTrie($titleTrie, $uuid, 0, str_replace('"', "'", $card->title));
     AddToTrie($subtitleTrie, $uuid, 0, str_replace('"', "'", $card->subtitle));
     AddToTrie($costTrie, $uuid, 0, $card->cost);
-    AddToTrie($hpTrie, $uuid, 0, $card->hp);
-    AddToTrie($powerTrie, $uuid, 0, $card->power);
     $definedType = $card->type->data->attributes->name;
     if($definedType == "Token Unit") $definedType = "Unit";
+    else if($definedType == "Token Upgrade") $definedType = "Upgrade";
     AddToTrie($typeTrie, $uuid, 0, $definedType);
+    AddToTrie($hpTrie, $uuid, 0, $definedType == "Upgrade" ? $card->upgradeHp : $card->hp);
+    AddToTrie($powerTrie, $uuid, 0, $definedType == "Upgrade" ? $card->upgradePower : $card->power);
     AddToTrie($setTrie, $uuid, 0, $card->expansion->data->attributes->code);
     if($card->type2->data != null) {
       $type2 = $card->type2->data->attributes->name;

@@ -227,6 +227,7 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false,
   $upgrades = $ally->GetUpgrades(true);
   for($i=0; $i<count($upgrades); $i+=SubcardPieces()) {
     if($upgrades[$i] == "8752877738" || $upgrades[$i] == "2007868442") continue;
+    if($upgrades[$i] == "7547538214") PlayAlly("3463348370", $player); //droid cohort - battle droid;
     if($upgrades[$i] == "6911505367") $discardPileModifier = "TTFREE";//Second Chance
     AddGraveyard($upgrades[$i], $upgrades[$i+1], "PLAY");
   }
@@ -1076,7 +1077,7 @@ function AddAllyPlayAbilityLayers($cardID, $from, $uniqueID = "-") {
 
 function AllyHasPlayCardAbility($playedCardID, $playedCardUniqueID, $from, $cardID, $player, $index): bool
 {
-  global $currentPlayer;
+  global $currentPlayer, $CS_NumCardsPlayed;
   $thisAlly = new Ally("MYALLY-" . $index, $player);
   if($thisAlly->LostAbilities($playedCardID)) return false;
   $thisIsNewlyPlayedAlly = $thisAlly->UniqueID() == $playedCardUniqueID;
@@ -1104,12 +1105,16 @@ function AllyHasPlayCardAbility($playedCardID, $playedCardUniqueID, $from, $card
         return !DefinedTypesContains($playedCardID, "Unit");
       case "3f7f027abd"://Quinlan Vos
         return DefinedTypesContains($playedCardID, "Unit");
+      case "3589814405"://tactical droid commander
+        return !$thisIsNewlyPlayedAlly && DefinedTypesContains($playedCardID, "Unit") && TraitContains($playedCardID, "Separatist", $player);
       default: break;
     }
   } else {
     switch ($cardID) {
       case "5555846790"://Saw Gerrera
         return DefinedTypesContains($playedCardID, "Event", $currentPlayer);
+      case "7200475001"://Ki-Adi Mundi
+        return IsCoordinateActive($player) && GetClassState($currentPlayer, $CS_NumCardsPlayed) == 2;
       case "4935319539"://Krayt Dragon
         return true;
       default: break;
@@ -1183,6 +1188,11 @@ function AllyPlayCardAbility($cardID, $player="", $from="-", $abilityID="-", $un
         DealDamageAsync($otherPlayer, 1, "DAMAGE", "0981852103");
       }
       break;
+    case "3589814405"://tactical droid commander
+      if(TraitContains($cardID, "Separatist", $player)) {
+        AddLayer("TRIGGER", $currentPlayer, "3589814405", CardCost($cardID), append: true);
+      }
+      break;
     case "724979d608"://Cad Bane Leader 
       $cadIndex = SearchAlliesForCard($player, "724979d608");
       if($cadIndex != "") {
@@ -1223,6 +1233,12 @@ function AllyPlayCardAbility($cardID, $player="", $from="-", $abilityID="-", $un
   }
   switch($abilityID)
   {
+
+    case "7200475001"://Ki-Adi Mundi
+      $opponent = $currentPlayer == 1 ? 2 : 1;
+      Draw($opponent);
+      Draw($opponent);
+      break;
     case "5555846790"://Saw Gerrera
       DealDamageAsync($player, 2, "DAMAGE", "5555846790");
       break;

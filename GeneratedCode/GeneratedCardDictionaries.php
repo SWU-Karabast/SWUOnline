@@ -123504,7 +123504,7 @@ switch($cardID[8]) {
 case "9":
 switch($cardID[9]) {
 case "0":
-return "Villainy,Vigilance";
+return "Vigilance,Villainy";
 default: return "";
 }
 default: return "";
@@ -123736,7 +123736,7 @@ switch($cardID[8]) {
 case "9":
 switch($cardID[9]) {
 case "4":
-return "Heroism,Command";
+return "Command,Heroism";
 default: return "";
 }
 default: return "";
@@ -123904,7 +123904,7 @@ switch($cardID[8]) {
 case "0":
 switch($cardID[9]) {
 case "1":
-return "Villainy,Vigilance";
+return "Vigilance,Villainy";
 default: return "";
 }
 default: return "";
@@ -123998,7 +123998,7 @@ switch($cardID[8]) {
 case "7":
 switch($cardID[9]) {
 case "7":
-return "Villainy,Command";
+return "Command,Villainy";
 default: return "";
 }
 default: return "";
@@ -124600,7 +124600,7 @@ switch($cardID[8]) {
 case "9":
 switch($cardID[9]) {
 case "1":
-return "Villainy,Cunning";
+return "Cunning,Villainy";
 default: return "";
 }
 default: return "";
@@ -124810,7 +124810,7 @@ switch($cardID[8]) {
 case "9":
 switch($cardID[9]) {
 case "8":
-return "Villainy,Aggression";
+return "Aggression,Villainy";
 default: return "";
 }
 default: return "";
@@ -125796,7 +125796,7 @@ switch($cardID[8]) {
 case "5":
 switch($cardID[9]) {
 case "3":
-return "Villainy,Cunning";
+return "Cunning,Villainy";
 default: return "";
 }
 default: return "";
@@ -126402,7 +126402,7 @@ switch($cardID[8]) {
 case "0":
 switch($cardID[9]) {
 case "4":
-return "Villainy,Cunning,Heroism";
+return "Cunning,Villainy,Heroism";
 default: return "";
 }
 default: return "";
@@ -126428,7 +126428,7 @@ switch($cardID[8]) {
 case "6":
 switch($cardID[9]) {
 case "6":
-return "Villainy,Cunning";
+return "Cunning,Villainy";
 default: return "";
 }
 default: return "";
@@ -126458,7 +126458,7 @@ switch($cardID[8]) {
 case "9":
 switch($cardID[9]) {
 case "5":
-return "Villainy,Cunning";
+return "Cunning,Villainy";
 default: return "";
 }
 default: return "";
@@ -127444,7 +127444,7 @@ switch($cardID[8]) {
 case "9":
 switch($cardID[9]) {
 case "9":
-return "Villainy,Command";
+return "Command,Villainy";
 default: return "";
 }
 default: return "";
@@ -127564,7 +127564,7 @@ switch($cardID[8]) {
 case "2":
 switch($cardID[9]) {
 case "9":
-return "Villainy,Cunning";
+return "Cunning,Villainy";
 default: return "";
 }
 default: return "";
@@ -127972,7 +127972,7 @@ switch($cardID[8]) {
 case "5":
 switch($cardID[9]) {
 case "4":
-return "Villainy,Vigilance";
+return "Vigilance,Villainy";
 default: return "";
 }
 default: return "";
@@ -128136,7 +128136,7 @@ switch($cardID[8]) {
 case "5":
 switch($cardID[9]) {
 case "2":
-return "Villainy,Cunning";
+return "Cunning,Villainy";
 default: return "";
 }
 default: return "";
@@ -128356,7 +128356,7 @@ switch($cardID[8]) {
 case "7":
 switch($cardID[9]) {
 case "2":
-return "Villainy,Aggression";
+return "Aggression,Villainy";
 default: return "";
 }
 default: return "";
@@ -128752,7 +128752,7 @@ switch($cardID[8]) {
 case "4":
 switch($cardID[9]) {
 case "0":
-return "Villainy,Command";
+return "Command,Villainy";
 default: return "";
 }
 default: return "";
@@ -128786,7 +128786,7 @@ switch($cardID[8]) {
 case "3":
 switch($cardID[9]) {
 case "6":
-return "Heroism,Command";
+return "Command,Heroism";
 default: return "";
 }
 default: return "";
@@ -129186,7 +129186,7 @@ switch($cardID[8]) {
 case "9":
 switch($cardID[9]) {
 case "6":
-return "Villainy,Cunning";
+return "Cunning,Villainy";
 default: return "";
 }
 default: return "";
@@ -129478,7 +129478,7 @@ switch($cardID[8]) {
 case "4":
 switch($cardID[9]) {
 case "1":
-return "Villainy,Aggression";
+return "Aggression,Villainy";
 default: return "";
 }
 default: return "";
@@ -129696,7 +129696,7 @@ switch($cardID[8]) {
 case "7":
 switch($cardID[9]) {
 case "7":
-return "Villainy,Vigilance";
+return "Vigilance,Villainy";
 default: return "";
 }
 default: return "";
@@ -129812,7 +129812,7 @@ switch($cardID[8]) {
 case "8":
 switch($cardID[9]) {
 case "5":
-return "Villainy,Cunning";
+return "Cunning,Villainy";
 default: return "";
 }
 default: return "";
@@ -130326,7 +130326,7 @@ switch($cardID[8]) {
 case "5":
 switch($cardID[9]) {
 case "2":
-return "Villainy,Aggression";
+return "Aggression,Villainy";
 default: return "";
 }
 default: return "";
@@ -131018,7 +131018,7 @@ switch($cardID[8]) {
 case "3":
 switch($cardID[9]) {
 case "6":
-return "Villainy,Command";
+return "Command,Villainy";
 default: return "";
 }
 default: return "";
@@ -131700,7 +131700,7 @@ switch($cardID[8]) {
 case "6":
 switch($cardID[9]) {
 case "6":
-return "Villainy,Command";
+return "Command,Villainy";
 default: return "";
 }
 default: return "";
@@ -132310,7 +132310,7 @@ switch($cardID[8]) {
 case "1":
 switch($cardID[9]) {
 case "5":
-return "Villainy,Cunning";
+return "Cunning,Villainy";
 default: return "";
 }
 default: return "";
@@ -132884,7 +132884,7 @@ switch($cardID[8]) {
 case "7":
 switch($cardID[9]) {
 case "9":
-return "Villainy,Vigilance";
+return "Vigilance,Villainy";
 default: return "";
 }
 default: return "";
@@ -133368,7 +133368,7 @@ switch($cardID[8]) {
 case "4":
 switch($cardID[9]) {
 case "2":
-return "Villainy,Vigilance";
+return "Vigilance,Villainy";
 default: return "";
 }
 default: return "";
@@ -133506,7 +133506,7 @@ switch($cardID[8]) {
 case "1":
 switch($cardID[9]) {
 case "1":
-return "Villainy,Vigilance";
+return "Vigilance,Villainy";
 default: return "";
 }
 default: return "";
@@ -135892,7 +135892,7 @@ switch($cardID[8]) {
 case "2":
 switch($cardID[9]) {
 case "d":
-return "Villainy,Command";
+return "Command,Villainy";
 default: return "";
 }
 default: return "";
@@ -136162,7 +136162,7 @@ switch($cardID[8]) {
 case "4":
 switch($cardID[9]) {
 case "6":
-return "Villainy,Cunning";
+return "Cunning,Villainy";
 default: return "";
 }
 default: return "";
@@ -136916,7 +136916,7 @@ switch($cardID[8]) {
 case "3":
 switch($cardID[9]) {
 case "0":
-return "Villainy,Aggression";
+return "Aggression,Villainy";
 default: return "";
 }
 default: return "";
@@ -137916,7 +137916,7 @@ switch($cardID[8]) {
 case "1":
 switch($cardID[9]) {
 case "2":
-return "Villainy,Command";
+return "Command,Villainy";
 default: return "";
 }
 default: return "";
@@ -138514,7 +138514,7 @@ switch($cardID[8]) {
 case "8":
 switch($cardID[9]) {
 case "5":
-return "Villainy,Aggression";
+return "Aggression,Villainy";
 default: return "";
 }
 default: return "";
@@ -138776,7 +138776,7 @@ switch($cardID[8]) {
 case "4":
 switch($cardID[9]) {
 case "8":
-return "Heroism,Command";
+return "Command,Heroism";
 default: return "";
 }
 default: return "";
@@ -138918,7 +138918,7 @@ switch($cardID[8]) {
 case "9":
 switch($cardID[9]) {
 case "0":
-return "Heroism,Command";
+return "Command,Heroism";
 default: return "";
 }
 default: return "";
@@ -139120,7 +139120,7 @@ switch($cardID[8]) {
 case "9":
 switch($cardID[9]) {
 case "0":
-return "Villainy,Vigilance";
+return "Vigilance,Villainy";
 default: return "";
 }
 default: return "";
@@ -139300,7 +139300,7 @@ switch($cardID[8]) {
 case "9":
 switch($cardID[9]) {
 case "5":
-return "Heroism,Command";
+return "Command,Heroism";
 default: return "";
 }
 default: return "";
@@ -140094,7 +140094,7 @@ switch($cardID[8]) {
 case "6":
 switch($cardID[9]) {
 case "6":
-return "Heroism,Vigilance";
+return "Vigilance,Heroism";
 default: return "";
 }
 default: return "";
@@ -142572,7 +142572,7 @@ switch($cardID[8]) {
 case "f":
 switch($cardID[9]) {
 case "6":
-return "Villainy,Aggression";
+return "Aggression,Villainy";
 default: return "";
 }
 default: return "";
@@ -142996,7 +142996,7 @@ switch($cardID[8]) {
 case "1":
 switch($cardID[9]) {
 case "9":
-return "Villainy,Command";
+return "Command,Villainy";
 default: return "";
 }
 default: return "";
@@ -143442,7 +143442,7 @@ switch($cardID[8]) {
 case "8":
 switch($cardID[9]) {
 case "2":
-return "Villainy,Vigilance";
+return "Vigilance,Villainy";
 default: return "";
 }
 default: return "";
@@ -143710,7 +143710,7 @@ switch($cardID[8]) {
 case "5":
 switch($cardID[9]) {
 case "6":
-return "Villainy,Vigilance";
+return "Vigilance,Villainy";
 default: return "";
 }
 default: return "";
@@ -144376,7 +144376,7 @@ switch($cardID[8]) {
 case "5":
 switch($cardID[9]) {
 case "3":
-return "Villainy,Vigilance";
+return "Vigilance,Villainy";
 default: return "";
 }
 default: return "";
@@ -144896,7 +144896,7 @@ switch($cardID[8]) {
 case "2":
 switch($cardID[9]) {
 case "f":
-return "Villainy,Aggression";
+return "Aggression,Villainy";
 default: return "";
 }
 default: return "";
@@ -145050,7 +145050,7 @@ switch($cardID[8]) {
 case "6":
 switch($cardID[9]) {
 case "1":
-return "Villainy,Command";
+return "Command,Villainy";
 default: return "";
 }
 default: return "";
@@ -145794,7 +145794,7 @@ switch($cardID[8]) {
 case "2":
 switch($cardID[9]) {
 case "7":
-return "Villainy,Vigilance";
+return "Vigilance,Villainy";
 default: return "";
 }
 default: return "";
@@ -146000,7 +146000,7 @@ switch($cardID[8]) {
 case "8":
 switch($cardID[9]) {
 case "8":
-return "Villainy,Vigilance";
+return "Vigilance,Villainy";
 default: return "";
 }
 default: return "";
@@ -146266,7 +146266,7 @@ switch($cardID[8]) {
 case "5":
 switch($cardID[9]) {
 case "4":
-return "Villainy,Cunning";
+return "Cunning,Villainy";
 default: return "";
 }
 default: return "";
@@ -146386,7 +146386,7 @@ switch($cardID[8]) {
 case "6":
 switch($cardID[9]) {
 case "2":
-return "Heroism,Vigilance";
+return "Vigilance,Heroism";
 default: return "";
 }
 default: return "";
@@ -146746,7 +146746,7 @@ switch($cardID[8]) {
 case "8":
 switch($cardID[9]) {
 case "4":
-return "Heroism,Vigilance";
+return "Vigilance,Heroism";
 default: return "";
 }
 default: return "";
@@ -147102,7 +147102,7 @@ switch($cardID[8]) {
 case "5":
 switch($cardID[9]) {
 case "1":
-return "Villainy,Command";
+return "Command,Villainy";
 default: return "";
 }
 default: return "";
@@ -147314,7 +147314,7 @@ switch($cardID[8]) {
 case "a":
 switch($cardID[9]) {
 case "4":
-return "Villainy,Aggression";
+return "Aggression,Villainy";
 default: return "";
 }
 default: return "";
@@ -147378,7 +147378,7 @@ switch($cardID[8]) {
 case "3":
 switch($cardID[9]) {
 case "6":
-return "Villainy,Command";
+return "Command,Villainy";
 default: return "";
 }
 default: return "";
@@ -147412,7 +147412,7 @@ switch($cardID[8]) {
 case "9":
 switch($cardID[9]) {
 case "1":
-return "Villainy,Vigilance";
+return "Vigilance,Villainy";
 default: return "";
 }
 default: return "";
@@ -147624,7 +147624,7 @@ switch($cardID[8]) {
 case "9":
 switch($cardID[9]) {
 case "7":
-return "Villainy,Cunning,Heroism";
+return "Cunning,Villainy,Heroism";
 default: return "";
 }
 default: return "";
@@ -197912,7 +197912,7 @@ switch($cardID[8]) {
 case "4":
 switch($cardID[9]) {
 case "2":
-return "Token Upgrade";
+return "Upgrade";
 default: return "";
 }
 default: return "";
@@ -202154,7 +202154,7 @@ switch($cardID[8]) {
 case "8":
 switch($cardID[9]) {
 case "1":
-return "Token Upgrade";
+return "Upgrade";
 default: return "";
 }
 default: return "";
@@ -206652,7 +206652,7 @@ switch($cardID[8]) {
 case "1":
 switch($cardID[9]) {
 case "5":
-return "Token Upgrade";
+return "Upgrade";
 default: return "";
 }
 default: return "";
@@ -213068,7 +213068,7 @@ switch($cardID[8]) {
 case "3":
 switch($cardID[9]) {
 case "8":
-return "Token Upgrade";
+return "Upgrade";
 default: return "";
 }
 default: return "";
