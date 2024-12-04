@@ -338,8 +338,8 @@ class Ally {
     return -1;
   }
 
-  function AddEffect($effectID) {
-    AddCurrentTurnEffect($effectID, $this->PlayerID(), uniqueID:$this->UniqueID());
+  function AddEffect($effectID, $from="") {
+    AddCurrentTurnEffect($effectID, $this->PlayerID(), from:$from, uniqueID:$this->UniqueID());
   }
 
   function Attach($cardID, $ownerID = null) {
