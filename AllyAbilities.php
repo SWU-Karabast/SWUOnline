@@ -113,7 +113,7 @@ function AllyStaticHealthModifier($cardID, $index, $player, $myCardID, $myIndex,
       break;
     case "4718895864"://Padawan Starfighter
       if($index == $myIndex && $player == $myPlayer) {
-        if(SearchCount(SearchAllies($player, trait:"Jedi"))) return 1;
+        if(SearchCount(SearchAllies($player, trait:"Force"))) return 1;
       }
       break;
     case "3731235174"://Supreme Leader Snoke
