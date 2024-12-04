@@ -4310,6 +4310,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "6151970296"://Bounty Posting
       MZMoveCard($currentPlayer, "MYDECK:trait=Bounty", "MYHAND", isReveal:true, may:true, context:"Choose a bounty to add to your hand");
+      AddDecisionQueue("SHUFFLEDECK", $currentPlayer, "-");
       AddDecisionQueue("YESNO", $currentPlayer, "if you want to play the upgrade", 1);
       AddDecisionQueue("NOPASS", $currentPlayer, "-", 1);
       AddDecisionQueue("FINDINDICES", $currentPlayer, "MZLASTHAND", 1);
