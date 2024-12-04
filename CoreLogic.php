@@ -4550,13 +4550,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
       AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to destroy");
-      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "DESTROY", 1);
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
       AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY");
       AddDecisionQueue("MZFILTER", $otherPlayer, "definedType=Leader");
       AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a unit to destroy");
-      AddDecisionQueue("MAYCHOOSEMULTIZONE", $otherPlayer, "<-", 1);
+      AddDecisionQueue("CHOOSEMULTIZONE", $otherPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $otherPlayer, "DESTROY", 1);
       break;
     case "3840495762"://Old Access Codes
