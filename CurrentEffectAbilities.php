@@ -142,6 +142,11 @@ function EffectAttackModifier($cardID, $playerID="")
     case "9210902604"://Precision Fire
       $attacker = new Ally(AttackerMZID($mainPlayer), $mainPlayer);
       return TraitContains($attacker->CardID(), "Trooper", $mainPlayer) ? 2 : 0;
+    case "6476609909"://Corner The Prey
+      $attackTarget = GetAttackTarget();
+      if(!IsAllyAttackTarget()) return 0;
+      $ally = new Ally($attackTarget, $defPlayer);
+      return $ally->Damage();
     case "5896817672": if(!$subparam) return 2; else return 0;//Headhunting
     case "8297630396": return 1;//Shoot First
     case "5464125379": return -2;//Strafing Gunship
