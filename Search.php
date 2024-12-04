@@ -219,6 +219,12 @@ function SearchDiscardForCard($player, $card1, $card2 = "", $card3 = "")
   return $cardList;
 }
 
+
+function GetAllyCount($player) {
+  $units = &GetAllies($player);
+  return count($units)/AllyPieces();
+}
+
 function PlayerHasAlly($player, $cardID)
 {
   return SearchAlliesForCard($player, $cardID) != "";
