@@ -2107,6 +2107,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYALLY-" . $index);
       AddDecisionQueue("MZOP", $currentPlayer, "ATTACK");
       return "";
+    } else if ($abilityName == "Mill") { //Satine Kryze
+      $ally = new Ally("MYALLY-" . $index, $currentPlayer);
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      Mill($otherPlayer, ceil($ally->Health()/2));
+      return "";
     }
   }
   if($target != "-")

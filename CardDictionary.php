@@ -1076,6 +1076,10 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
         default: break;
       }
     }
+
+    if (AnyPlayerHasAlly("6384086894")) { //Satine Kryze
+      $abilityTypes = "A," . $abilityTypes;
+    }
   }
   else if(DefinedTypesContains($cardID, "Leader", $currentPlayer)) {
     $char = &GetPlayerCharacter($currentPlayer);
@@ -1085,6 +1089,7 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
       $abilityTypes .= "A";
     }
   }
+  
   return $abilityTypes;
 }
 
@@ -1288,6 +1293,10 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
         default: break;
       }
     }
+
+    if (AnyPlayerHasAlly("6384086894")) { //Satine Kryze
+      $abilityNames = "Mill," . $abilityNames;
+    }
   }
   else if(DefinedTypesContains($cardID, "Leader", $currentPlayer)) {
     $char = &GetPlayerCharacter($currentPlayer);
@@ -1300,6 +1309,7 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       }
     }
   }
+
   return $abilityNames;
 }
 
