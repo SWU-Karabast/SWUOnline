@@ -219,9 +219,23 @@ function SearchDiscardForCard($player, $card1, $card2 = "", $card3 = "")
   return $cardList;
 }
 
+
+function GetAllyCount($player) {
+  $units = &GetAllies($player);
+  return count($units)/AllyPieces();
+}
+
 function PlayerHasAlly($player, $cardID)
 {
-  return SearchAlliesForCard($player, $cardID) != "";
+  $allies = &GetAllies($player);
+  for ($i = 0; $i < count($allies); $i += AllyPieces()) {
+    $id = $allies[$i];
+    if ($id == $cardID) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 function SearchAlliesForCard($player, $card1, $card2 = "", $card3 = "")
@@ -396,6 +410,10 @@ function SearchLimitedCurrentTurnEffects($cardID, $player, $remove = false)
     }
   }
   return -1;
+}
+
+function AnyPlayerHasAlly($cardID){
+  return PlayerHasAlly(1, $cardID) || PlayerHasAlly(2, $cardID);
 }
 
 function SearchCurrentTurnEffectsForCycle($card1, $card2, $card3, $player)

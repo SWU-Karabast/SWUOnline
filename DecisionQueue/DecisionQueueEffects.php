@@ -228,6 +228,18 @@ function SpecificCardLogic($player, $card, $lastResult)
   global $dqVars, $CS_DamageDealt;
   switch($card)
   {
+    case "RESOLUTE":
+      $otherPlayer = $player == 1 ? 2 : 1;
+      $cardID = GetMZCard($player, $lastResult);
+      $cardTitle = CardTitle($cardID);
+      $targetCards = SearchAlliesForTitle($otherPlayer, $cardTitle);
+      $targetCardsArr = explode(",", $targetCards);
+
+      for($i=0; $i<count($targetCardsArr); ++$i) {
+        $theirAlly = new Ally("THEIRALLY-" . $targetCardsArr[$i], $otherPlayer);
+        $theirAlly->DealDamage(amount:2, enemyDamage:true);
+      }
+      break;
     case "FORCETHROW"://Force Throw
       $damage = CardCost($lastResult);
       AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");

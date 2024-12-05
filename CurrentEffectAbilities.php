@@ -142,6 +142,11 @@ function EffectAttackModifier($cardID, $playerID="")
     case "9210902604"://Precision Fire
       $attacker = new Ally(AttackerMZID($mainPlayer), $mainPlayer);
       return TraitContains($attacker->CardID(), "Trooper", $mainPlayer) ? 2 : 0;
+    case "6476609909"://Corner The Prey
+      $attackTarget = GetAttackTarget();
+      if(!IsAllyAttackTarget()) return 0;
+      $ally = new Ally($attackTarget, $defPlayer);
+      return $ally->Damage();
     case "5896817672": if(!$subparam) return 2; else return 0;//Headhunting
     case "8297630396": return 1;//Shoot First
     case "5464125379": return -2;//Strafing Gunship
@@ -192,6 +197,7 @@ function EffectAttackModifier($cardID, $playerID="")
     case "3556557330": return 3;//Asajj Ventress
     case "8418001763": return 2;//Huyang
     case "0216922902": return -5;//The Zillo Beast
+    case "3596811933": return -1;//Disruptive Burst
     case "7979348081": return 1;//Kraken
     default: return 0;
   }

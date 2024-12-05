@@ -1647,6 +1647,12 @@ function SpecificAllyAttackAbilities($attackID)
         DefeatUpgrade($mainPlayer, true, upgradeFilter: "maxCost=2");
       }
       break;
+    case "2585318816"://Resolute
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 2 damage to");
+      AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("SPECIFICCARD", $mainPlayer, "RESOLUTE", 1);
+      break;
     case "5966087637"://Poe Dameron
       PummelHit($mainPlayer, may:true, context:"Choose a card to discard to defeat an upgrade (or pass)");
       DefeatUpgrade($mainPlayer, passable:true);

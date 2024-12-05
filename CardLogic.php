@@ -947,8 +947,7 @@ function TheyControlMoreUnits($player) {
 }
 
 function IsCoordinateActive($player) {
-  $units = &GetAllies($player);
-  return count($units)/AllyPieces() >= 3;
+  return GetAllyCount($player) >= 3;
 }
 
 function ObiWansAethersprite($player, $index) {
