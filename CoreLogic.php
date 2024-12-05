@@ -4603,8 +4603,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       Draw($currentPlayer);
       break;
     case "2103133661"://Blood Sport
-      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
-      DamagePlayerAllies($otherPlayer, 2, "2103133661", "PLAYABILITY", arena:"Ground");
+      DamageAllAllies(2, "2103133661", arena: "Ground");
       break;
     case "2483302291"://On the Doorstep
       PlayAlly("3463348370", $currentPlayer);//Battle Droid
