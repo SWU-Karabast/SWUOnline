@@ -113,7 +113,7 @@ function AllyStaticHealthModifier($cardID, $index, $player, $myCardID, $myIndex,
       break;
     case "4718895864"://Padawan Starfighter
       if($index == $myIndex && $player == $myPlayer) {
-        if(SearchCount(SearchAllies($player, trait:"Jedi"))) return 1;
+        if(SearchCount(SearchAllies($player, trait:"Force"))) return 1;
       }
       break;
     case "3731235174"://Supreme Leader Snoke
@@ -234,6 +234,7 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false,
   $captives = $ally->GetCaptives(true);
   if(!$skipDestroy) {
     if(DefinedTypesContains($cardID, "Leader", $player)) ;//If it's a leader it doesn't go in the discard
+    else if($cardID == "3463348370" || $cardID == "3941784506") ; // If it's a token, it doesn't go in the discard
     else if($cardID == "8954587682" && !$ally->LostAbilities()) AddResources($cardID, $player, "PLAY", "DOWN");//Superlaser Technician
     else if($cardID == "7204838421" && !$ally->LostAbilities()) AddResources($cardID, $player, "PLAY", "DOWN");//Enterprising Lackeys
     else AddGraveyard($cardID, $owner, "PLAY", $discardPileModifier);
@@ -578,6 +579,9 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
       case "1083333786"://Battle Droid Legion
         PlayAlly("3463348370", $player);//Battle Droid
         PlayAlly("3463348370", $player);//Battle Droid
+        PlayAlly("3463348370", $player);//Battle Droid
+        break;
+      case "0677558416"://Wartime Trade Official
         PlayAlly("3463348370", $player);//Battle Droid
         break;
       case "0683052393"://Hevy
