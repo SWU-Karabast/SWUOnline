@@ -125,7 +125,7 @@ class Ally {
   }
 
   //Returns true if the ally is destroyed
-  function DealDamage($amount, $bypassShield = false, $fromCombat = false, &$damageDealt = NULL, $enemyDamage = false) {
+  function DealDamage($amount, $bypassShield = false, $fromCombat = false, &$damageDealt = NULL, $enemyDamage = false, $fromUnitEffect=false) {
     if($this->index == -1 || $amount <= 0) return false;
     global $mainPlayer;
     if(!$fromCombat && $this->CardID() == "1810342362" && !$this->LostAbilities() && ($mainPlayer != $this->playerID || $enemyDamage)) return;//Lurking TIE Phantom
@@ -172,7 +172,8 @@ class Ally {
       DestroyAlly($this->playerID, $this->index, fromCombat:$fromCombat);
       return true;
     }
-    AllyDamageTakenAbilities($this->playerID, $this->index, survived:true, damage:$amount, fromCombat:$fromCombat);
+    AllyDamageTakenAbilities($this->playerID, $this->index, survived:true, 
+      damage:$amount, fromCombat:$fromCombat, enemyDamage:$enemyDamage, fromUnitEffect:$fromUnitEffect);
     switch($this->CardID())
     {
       case "4843225228"://Phase-III Dark Trooper
