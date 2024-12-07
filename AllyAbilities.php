@@ -1942,7 +1942,7 @@ function AllyDamageTakenAbilities($player, $index, $survived, $damage, $fromComb
   for($i=0; $i<count($theirAllies); $i+=AllyPieces()) {
     switch($theirAllies[$i]) {
       case "cfdcbd005a"://Jango Fett Leader Unit
-        if($theirAllies[$i+1] == 2 && ($fromCombat || ($enemyDamage && $fromUnitEffect))) {
+        if($fromCombat || ($enemyDamage && $fromUnitEffect)) {
           AddDecisionQueue("YESNO", $otherPlayer, "if you want use Jango Fett's ability");
           AddDecisionQueue("NOPASS", $otherPlayer, "-");
           AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $index, 1);
