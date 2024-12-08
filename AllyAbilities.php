@@ -209,18 +209,19 @@ function RemoveAlly($player, $index)
   return DestroyAlly($player, $index, true);
 }
 
-function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false, $skipRescue = false)
+function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false, $skipRescue = false, $fromExploit = false)
 {
   global $mainPlayer, $CS_NumAlliesDestroyed, $CS_NumLeftPlay;
   $allies = &GetAllies($player);
   $cardID = $allies[$index];
   $owner = $allies[$index+11];
   $discardPileModifier = "-";
-  if(!$skipDestroy) {
+  if(!$skipDestroy || $fromExploit) {
     AllyDestroyedAbility($player, $index, $fromCombat);
     CollectBounties($player, $index);
     IncrementClassState($player, $CS_NumAlliesDestroyed);
   }
+  
   IncrementClassState($player, $CS_NumLeftPlay);
   AllyLeavesPlayAbility($player, $index);
   $ally = new Ally("MYALLY-" . $index, $player);
@@ -232,7 +233,7 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false,
     AddGraveyard($upgrades[$i], $upgrades[$i+1], "PLAY");
   }
   $captives = $ally->GetCaptives(true);
-  if(!$skipDestroy) {
+  if(!$skipDestroy || $fromExploit) {
     if(DefinedTypesContains($cardID, "Leader", $player)) ;//If it's a leader it doesn't go in the discard
     else if($cardID == "3463348370" || $cardID == "3941784506") ; // If it's a token, it doesn't go in the discard
     else if($cardID == "8954587682" && !$ally->LostAbilities()) AddResources($cardID, $player, "PLAY", "DOWN");//Superlaser Technician

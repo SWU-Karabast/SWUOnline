@@ -618,7 +618,7 @@ function SpecificCardLogic($player, $card, $lastResult)
       }
       break;
     case "COUNTDOOKU_TWI":
-      $power = CardPower($lastResult);
+      $power = $lastResult;
       AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY", 1);
       AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal " . $power . " damage to", 1);
       AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
