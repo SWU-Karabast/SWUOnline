@@ -4526,7 +4526,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,2,$currentPlayer", 1);
       break;
     case "7439418148"://Twice the Pride
-      $ally = new Ally($target, $currentPlayer);
+      $ally = new Ally($target);
       $ally->DealDamage(2);
       break;
     case "7252148824"://501st Liberator
