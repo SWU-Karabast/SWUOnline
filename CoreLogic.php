@@ -2102,7 +2102,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     
   if($from == "PLAY" && IsAlly($cardID, $currentPlayer)) {
     $playAlly = new Ally("MYALLY-" . $index);
-    $abilityName = GetResolvedAbilityName($cardID, $from);    
+    $abilityName = GetResolvedAbilityName($cardID, $from);
     if($abilityName == "Heroic Resolve") {
       $ally = new Ally("MYALLY-" . $index, $currentPlayer);
       $ownerId = $ally->DefeatUpgrade("4085341914");

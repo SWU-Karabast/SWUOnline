@@ -223,10 +223,10 @@ function PlayerTargetedAbility($player, $card, $lastResult)
   }
 }
 
-function SpecificCardLogic($player, $paramter, $lastResult)
+function SpecificCardLogic($player, $parameter, $lastResult)
 {
   global $dqVars, $CS_DamageDealt;
-  $parameterArr = explode(",", $paramter);
+  $parameterArr = explode(",", $parameter);
   $card = $parameterArr[0];
   switch($card)
   {
@@ -466,7 +466,7 @@ function SpecificCardLogic($player, $paramter, $lastResult)
       return $lastResult;
     case "L337":
       $target = $lastResult;
-      if($target == "PASS") {        
+      if($target == "PASS") {
         $ally = GetAlly($parameterArr[1]);
         $ally->Attach("8752877738");//Shield Token
       } else {
