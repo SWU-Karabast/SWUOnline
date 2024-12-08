@@ -417,6 +417,12 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             case "BANISH": case "MYBANISH": case "THEIRBANISH": return $zone[$mzArr[1] + 2];
             default: return "-1";
           }
+        case "GETHEALTH":
+          $ally = new Ally($lastResult);
+          return $ally->Health();
+        case "GETDAMAGE":
+          $ally = new Ally($lastResult);
+          return $ally->Damage();
         case "GETARENA": return CardArenas(GetMZCard($player, $lastResult));
         case "BOUNCE": return MZBounce($player, $lastResult);
         case "COLLECTBOUNTIES":
@@ -444,7 +450,12 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           }
           return $lastResult;
         case "CHANGEATTACKTARGET": SetAttackTarget($lastResult); return $lastResult;
-        case "DEALDAMAGE":
+        case "DEALDAMAGE": 
+          // Parameter structure:
+          // 1. DEALDAMAGE
+          // 2. Damage amount
+          // 3. Player causing the damage
+          // 4. Indicates if the damage is caused by unit effects (1 = yes, 0 = no)
           $targetArr = explode("-", $lastResult);
           $targetPlayer = ($targetArr[0] == "MYCHAR" || $targetArr[0] == "MYALLY" ? $player : ($player == 1 ? 2 : 1));
           if($targetArr[0] == "MYALLY" || $targetArr[0] == "THEIRALLY") {

@@ -4855,6 +4855,18 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:damagedOnly=true");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal damage");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETDAMAGE", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "1", 1);
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETHEALTH", 1);
+      AddDecisionQueue("LESSTHANPASS", $currentPlayer, "2"); // Check if the unit has enough health to take 2 damage
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{1}", 1);
+      AddDecisionQueue("LESSTHANPASS", $currentPlayer, "4"); // Check if the unit has at least 4 damage to take 2 damage
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,2,$currentPlayer", 1);
+      AddDecisionQueue("ELSE", $currentPlayer, "-");
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1,$currentPlayer", 1);
       break;
     case "0026166404"://Chancellor Palpatine Leader
