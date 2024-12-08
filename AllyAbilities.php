@@ -287,6 +287,8 @@ function AllyTakeControl($player, $index) {
   for ($i=$index+AllyPieces()-1; $i>=$index; $i--) {
     unset($theirAllies[$i]);
   }
+  $theirAllies = array_values($theirAllies); // Reindex the array
+
   CheckHealthAllAllies();
   CheckUniqueAlly($uniqueID);
   return $uniqueID;
