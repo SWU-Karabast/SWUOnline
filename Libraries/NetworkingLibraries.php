@@ -1478,21 +1478,17 @@ function AddPrePitchDecisionQueue($cardID, $from, $index = -1, $skipAbilityType 
     }
   }
   if($from != "PLAY") {
-    $exploitAmount = ExploitAmount($cardID, $currentPlayer, reportMode:false);
-    for($i = 0; $i < $exploitAmount; ++$i) {
+    $exploitAmount = ExploitAmount($cardID, $currentPlayer, reportMode:false);  
+    if ($exploitAmount > 0) {
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to exploit");
-      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
-      AddDecisionQueue("MZOP", $currentPlayer, "GETCARDID", 1);
-      AddDecisionQueue("SETDQVAR", $currentPlayer, "1", 1);
-      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
-      AddDecisionQueue("MZOP", $currentPlayer, "DESTROY", 1);
-      AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, "6772128891", 1);//Exploit effect
-      if($cardID == "8655450523") {//Count Dooku"
-        AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{1}", 1);
-        AddDecisionQueue("SPECIFICCARD", $currentPlayer, "COUNTDOOKU_TWI", 1);
-      }
+      AddDecisionQueue("OP", $currentPlayer, "MZTONORMALINDICES");
+      AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "$exploitAmount-", 1);
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose up to $exploitAmount units to exploit");
+      AddDecisionQueue("MULTICHOOSEUNIT", $currentPlayer, "<-", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, 0);
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, $cardID,1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "EXPLOIT", 1);
     }
   }
   switch ($cardID) {
