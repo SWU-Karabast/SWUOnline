@@ -612,17 +612,6 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       $uniqueID = $arr[1];
       AllyPlayCardAbility($target, $player, from: $additionalCosts, abilityID:$abilityID, uniqueID:$uniqueID);
       break;
-    case "WHENEXPLOITEDABILITY":
-      DestroyAlly($player, $target, skipDestroy:true, fromExploit:true);
-      break;
-    case "8655450523": //Count Dooku - Fallen Jedi
-      $powers=explode(",", $target);
-      for($i=0;$i<count($powers);++$i) {
-        $power = $powers[$i];
-        AddDecisionQueue("PASSPARAMETER", $player, $power, 1);
-        AddDecisionQueue("SPECIFICCARD", $player, "COUNTDOOKU_TWI", 1);
-      }
-      break;
     case "9642863632": //Bounty Hunter's Quarry
       global $CS_AfterPlayedBy;
       AddDecisionQueue("SEARCHDECKTOPX", $player, $target . ";1;include-definedType-Unit&include-maxCost-3");

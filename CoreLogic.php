@@ -2701,7 +2701,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to damage");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-      AddDecisionQueue("MZOP", $currentPlayer, "{0},$currentPlayer,1", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "{0},$currentPlayer,1", 1);//TODO: review current player and unit effect vars here
       break;
     case "1393827469"://Tarkintown
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 3 damage to");
@@ -5017,8 +5017,6 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $otherPlayer, "3381931079,HAND", 1);
-      AddDecisionQueue("MZOP", $currentPlayer, "WRITECHOICEFROMUNIQUE", 1);
-      WriteLog("This is a partially manual card. Make sure the chosen, debuffed unit doesn't attack this phase.");
       break;
     case "5333016146"://Rune Haako
       global $CS_NumAlliesDestroyed;
