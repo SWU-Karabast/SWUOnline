@@ -1,7 +1,8 @@
 <?php
 
-function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null)
+function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null, $cloned = false, $playCardEffect = false)
 {
+  $uniqueID = GetUniqueId();
   $allies = &GetAllies($player);
   if(count($allies) < AllyPieces()) $allies = [];
   $allies[] = $cardID;
@@ -9,7 +10,7 @@ function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null)
   $allies[] = 0; //Damage
   $allies[] = 0; //Frozen
   $allies[] = $subCards; //Subcards
-  $allies[] = GetUniqueId(); //Unique ID
+  $allies[] = $uniqueID; //Unique ID
   $allies[] = AllyEnduranceCounters($cardID); //Endurance Counters
   $allies[] = 0; //Buff Counters
   $allies[] = 1; //Ability/effect uses
@@ -17,35 +18,46 @@ function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null)
   $allies[] = 0; //Times attacked
   $allies[] = $owner ?? $player; //Owner
   $allies[] = 0; //Turns in play
+  $allies[] = $cloned ? 1 : 0; //Cloned
   $index = count($allies) - AllyPieces();
   CurrentEffectAllyEntersPlay($player, $index);
   AllyEntersPlayAbilities($player);
-  if(AllyHasStaticHealthModifier($cardID)) {
-    CheckHealthAllAllies($player);
+  CheckUniqueAlly($uniqueID);
+
+  if ($playCardEffect || $cardID == "0345124206") { //Clone - Ensure that the Clone will always choose a unit to clone whenever it enters play.
+    if(HasShielded($cardID, $player, $index)) {
+      AddLayer("TRIGGER", $player, "SHIELDED", "-", "-", $uniqueID, append:true);
+    }
+    if(HasAmbush($cardID, $player, $index, $from)) {
+      AddLayer("TRIGGER", $player, "AMBUSH", "-", "-", $uniqueID, append:true);
+    }
+    PlayAbility($cardID, $from, 0, uniqueId:$uniqueID);
   }
-  CheckUnique($cardID, $player);
+
+  if (AllyHasStaticHealthModifier($cardID)) {
+    CheckHealthAllAllies();
+  }
+  
   return $index;
 }
 
-function CheckHealthAllAllies($player)
-{
-  $allies = &GetAllies($player);
-  for($i = count($allies) - AllyPieces(); $i >= 0; $i -= AllyPieces()) {
-    if (!isset($allies[$i])) continue;
-    $ally = new Ally("MYALLY-" . $i, $player);
-    $ally->DefeatIfNoRemainingHP();
-  }
-  $otherPlayer = $player == 1 ? 2 : 1;
-  $theirAllies = &GetAllies($otherPlayer);
-  for($i = count($theirAllies) - AllyPieces(); $i >= 0; $i -= AllyPieces()) {
-    if (!isset($theirAllies[$i])) continue;
-    $ally = new Ally("THEIRALLY-" . $i, $otherPlayer);
-    $ally->DefeatIfNoRemainingHP();
+function CheckHealthAllAllies() {
+  global $currentPlayer;
+  for ($player = 1; $player <= 2; $player++) {
+    $allies = &GetAllies($player);
+    $prefix = $currentPlayer == $player ? "MYALLY-" : "THEIRALLY-";
+    for ($i = 0; $i < count($allies); $i += AllyPieces()) {
+      $ally = new Ally($prefix . $i, $player);
+      $ally->DefeatIfNoRemainingHP();
+    }
   }
 }
 
-function CheckUnique($cardID, $player) {
-  if(CardIsUnique($cardID) && SearchCount(SearchAlliesForCard($player, $cardID)) > 1) {
+function CheckUniqueAlly($uniqueID) {
+  $ally = GetAlly($uniqueID);
+  $cardID = $ally->CardID();
+  $player = $ally->PlayerID();
+  if (CardIsUnique($cardID) && SearchCount(SearchAlliesForCard($player, $cardID)) > 1 && !$ally->IsCloned()) {
     PrependDecisionQueue("MZDESTROY", $player, "-", 1);
     PrependDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
     PrependDecisionQueue("SETDQCONTEXT", $player, "You have two of this unique unit; choose one to destroy");
@@ -237,7 +249,10 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false,
     else if($cardID == "3463348370" || $cardID == "3941784506") ; // If it's a token, it doesn't go in the discard
     else if($cardID == "8954587682" && !$ally->LostAbilities()) AddResources($cardID, $player, "PLAY", "DOWN");//Superlaser Technician
     else if($cardID == "7204838421" && !$ally->LostAbilities()) AddResources($cardID, $player, "PLAY", "DOWN");//Enterprising Lackeys
-    else AddGraveyard($cardID, $owner, "PLAY", $discardPileModifier);
+    else {
+      $graveyardCardID = $ally->IsCloned() ? "0345124206" : $cardID; //Clone - Replace the cloned card with the original one in the graveyard
+      AddGraveyard($graveyardCardID, $owner, "PLAY", $discardPileModifier);
+    }
   }
   for($j = $index + AllyPieces() - 1; $j >= $index; --$j) unset($allies[$j]);
   $allies = array_values($allies);
@@ -247,7 +262,7 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false,
     }
   }
   if(AllyHasStaticHealthModifier($cardID)) {
-    CheckHealthAllAllies($player);
+    CheckHealthAllAllies();
   }
   if($player == $mainPlayer) UpdateAttacker();
   else UpdateAttackTarget();
@@ -260,7 +275,6 @@ function AllyTakeControl($player, $index) {
   $otherPlayer = $player == 1 ? 2 : 1;
   $myAllies = &GetAllies($player);
   $theirAllies = &GetAllies($otherPlayer);
-  $cardID = $theirAllies[$index];
   $uniqueID = $theirAllies[$index+5];
   for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnEffectPieces()) {
     if($currentTurnEffects[$i+1] != $otherPlayer) continue;
@@ -273,9 +287,8 @@ function AllyTakeControl($player, $index) {
   for ($i=$index+AllyPieces()-1; $i>=$index; $i--) {
     unset($theirAllies[$i]);
   }
-  CheckHealthAllAllies($otherPlayer);
-  CheckHealthAllAllies($player);
-  CheckUnique($cardID, $player);
+  CheckHealthAllAllies();
+  CheckUniqueAlly($uniqueID);
   return $uniqueID;
 }
 
@@ -447,6 +460,7 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
   global $initiativePlayer;
   $allies = &GetAllies($player);
   $cardID = $allies[$index];
+  $uniqueID = $allies[$index + 5];
   OnKillAbility($player, $index);
   $destroyedAlly = new Ally("MYALLY-" . $index, $player);
   if(!$destroyedAlly->LostAbilities()) {
@@ -642,7 +656,7 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
         }
         break;
       case "f05184bd91"://Nala Se
-        if(TraitContains($cardID, "Clone", $player)) Restore(2, $player);
+        if(TraitContains($cardID, "Clone", $player) || IsCloned($uniqueID)) Restore(2, $player); //Clone
         break;
       case "1039828081"://Calculating MagnaGuard
         AddCurrentTurnEffect("1039828081", $player, "PLAY");

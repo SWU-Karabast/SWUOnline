@@ -764,6 +764,15 @@ function GetAllyIndex($cardID, $player)
   return -1;
 }
 
+function GetAlly($uniqueID) {
+  global $currentPlayer;
+  for ($player = 1; $player <= 2; $player++) {
+    $index = SearchAlliesForUniqueID($uniqueID, $player);
+    if ($index > -1) return new Ally(($currentPlayer == $player ? "MYALLY-" : "THEIRALLY-") . $index, $player);
+  }
+  return null;
+}
+
 function CountItem($cardID, $player)
 {
   $items = &GetItems($player);

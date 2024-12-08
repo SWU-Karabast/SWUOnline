@@ -1756,7 +1756,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
           $index = PlayAlly($cardID, $currentPlayer);
           $uniqueID = &GetAllies($currentPlayer)[$index+5];
           $ally = new Ally("MYALLY-" . $index, $currentPlayer);
-          if($ally->MaxHealth() <= 0) {
+          if($ally->MaxHealth() <= 0 && $ally->CardID() != "0345124206") { //Clone - Ensure that Clone remains in play while resolving it's the ability
             $ally->Destroy();
           }
           break;

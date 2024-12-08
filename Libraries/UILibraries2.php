@@ -325,8 +325,27 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
     background-size: contain;
     filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.40));
     user-select: none;'></div>";
-
   }
+
+  // Clone Icon Style
+  if (isset($opts['cloned']) && $opts['cloned']) {
+    $rv .= "<div style='margin: 0px;
+    top: 42px; 
+    left: 11px;
+    border-radius: 0%;
+    width:" . $iconSize . "px;
+    height:" . $iconSize . "px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translate(-50%, -50%);
+    position:absolute; z-index: 10;
+    background: url(./Images/CloneToken.png) no-repeat;
+    background-size: contain;
+    filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.40));
+    user-select: none;'></div>";
+  }
+
   // Damage Counter Style
   $damaged = isset($opts['currentHP']) && isset($opts['maxHP']) && $opts['currentHP'] < $opts['maxHP'];
   if ($damaged) {
