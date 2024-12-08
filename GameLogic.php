@@ -234,6 +234,26 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         PlayAura($lastResult, $player);
       }
       return $lastResult;
+    case "PLAYALLY":
+      $params = explode(";", $parameter);
+      $subCards = "-";
+      $from = "-";
+      $owner = null;
+      $cloned = false;
+      $playCardEffect = false;
+      for ($i = 0; $i < count($params); $i++) {
+        $param = explode("=", $params[$i]);
+        switch ($param[0]) {
+          case "subCards": $subCards = $param[1]; break;
+          case "from": $from = $param[1]; break;
+          case "owner": $owner = $param[1]; break;
+          case "cloned": $cloned = in_array($param[1], [1, "true"]); break;
+          case "playCardEffect": $playCardEffect = in_array($param[1], [1, "true"]); break;
+          default: break;
+        }
+      }
+      PlayAlly($lastResult, $player, $subCards, $from, $owner, $cloned, $playCardEffect);
+      return $lastResult;
     case "DRAW":
       return Draw($player);
     case "MULTIBANISH":
@@ -467,7 +487,6 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         case "POWER":
           $ally = new Ally($lastResult);
           return $ally->CurrentPower();
-          break;
         case "ADDDURABILITY":
           $mzArr = explode("-", $lastResult);
           $zone = &GetMZZone($player, $mzArr[0]);
@@ -505,6 +524,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $otherPlayer = ($player == 1 ? 2 : 1);
           $targetPlayer = str_starts_with($lastResult, "MY") ? $player : $otherPlayer;
           $captured = new Ally($lastResult, $targetPlayer);
+          $capturedCardID = $captured->IsCloned() ? "0345124206" : $cardID; //Clone - Replace the cloned card to the original one when being captured
           $ownerId = $captured->Owner();
           if($cardID == "1810342362" && !$captured->LostAbilities()) { //Lurking TIE Phantom
             WriteLog(CardLink($cardID, $cardID) . " avoided capture.");
@@ -528,7 +548,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $index = SearchAlliesForUniqueID($uniqueID, $player);
           if($index >= 0) {
             $ally = new Ally("MYALLY-" . $index, $player);
-            $ally->AddSubcard($cardID, $ownerId);
+            $ally->AddSubcard($capturedCardID, $ownerId);
           }
           return $cardID;
         case "WRITECHOICE":

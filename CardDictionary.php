@@ -543,6 +543,8 @@ function HasOverwhelm($cardID, $player, $index)
 
 function HasAmbush($cardID, $player, $index, $from)
 {
+  if ($cardID == "0345124206") return false; //Clone - Prevent bugs related to ECL and Timely.
+
   global $currentTurnEffects;
   $ally = new Ally("MYALLY-" . $index, $player);
   for($i=count($currentTurnEffects)-CurrentTurnPieces(); $i>=0; $i-=CurrentTurnPieces()) {
@@ -1472,6 +1474,11 @@ function CanPlayInstant($phase)
   if($phase == "D") return true;
   if($phase == "INSTANT") return true;
   return false;
+}
+
+function IsCloned($uniqueID) {
+  $ally = GetAlly($uniqueID);
+  return $ally->IsCloned();
 }
 
 function IsToken($cardID)

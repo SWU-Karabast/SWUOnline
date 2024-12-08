@@ -606,9 +606,6 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       $ally = new Ally("MYALLY-" . $index, $player);
       $ally->Attach("8752877738");//Shield Token
       break;
-    case "PLAYALLY":
-      PlayAlly($target, $player, from:"CAPTIVE");
-      break;
     case "AFTERPLAYABILITY":
       $arr = explode(",", $uniqueID);
       $abilityID = $arr[0];

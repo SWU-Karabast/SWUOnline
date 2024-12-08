@@ -1129,6 +1129,10 @@ function AspectContains($cardID, $aspect, $player="")
 
 function TraitContains($cardID, $trait, $player="", $index=-1)
 {
+  // ---------------------- IMPORTANT -----------------------
+  // We should add the Clone Trait to cloned cards. However, it's not possible to identify the card solely with the $cardID. 
+  // Since very few cards currently interact directly with this effect (at the moment, only Nala Se), we are handling each case individually.
+  // --------------------------------------------------------
   $trait = str_replace("_", " ", $trait); //"MZALLCARDTRAITORPASS" and possibly other decision queue options call this function with $trait having been underscoreified, so I undo that here. 
   if($index != -1) {
     $ally = new Ally("MYALLY-" . $index, $player);
@@ -2247,6 +2251,20 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
   }
   switch($cardID)
   {
+    case "0345124206"://Clone
+      $mzIndex = "MYALLY-" . $playAlly->Index();
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "trait=Vehicle");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "index=" . $mzIndex);
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose which unit you want to clone", 1);
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETCARDID", 1);
+      $playCardEffect = $from != "CAPTIVE" ? "true" : "false";
+      AddDecisionQueue("PLAYALLY", $currentPlayer, "cloned=true;from=" . $from . ";playCardEffect=" . $playCardEffect, 1);
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, $mzIndex, 1);
+      AddDecisionQueue("MZREMOVE", $currentPlayer, "-", 1);
+      break;
     case "4721628683"://Patrolling V-Wing
       if($from != "PLAY") Draw($currentPlayer);
       break;
@@ -4007,7 +4025,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to rescue from (or pass for shield)");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "L337");
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "L337," . $uniqueId);
       break;
     case "5818136044"://Xanadu Blood
       XanaduBlood($currentPlayer, $playAlly->Index());
@@ -5377,6 +5395,7 @@ function AddTopDeckAsResource($player, $isExhausted=true)
 // 4: My Hero only (For afflictions)
 // 6: Any unit
 // 7: Friendly unit
+// 8: Any Non-Leader + Non-Vehicle unit
 function PlayRequiresTarget($cardID)
 {
   global $currentPlayer;
@@ -5411,13 +5430,39 @@ function PlayRequiresTarget($cardID)
   // 4: My Hero only (For afflictions)
   // 6: Any unit
   // 7: Friendly unit
+  // 8: Any Non-Leader + Non-Vehicle unit
   function GetArcaneTargetIndices($player, $target)
   {
     global $CS_ArcaneTargetsSelected;
     $otherPlayer = ($player == 1 ? 2 : 1);
-    if ($target == 4) return "MYCHAR-0";
+
+    if ($target == 8) {
+      $rvArr = [];
+      $theirAllies = &GetAllies($otherPlayer);
+      for($i=0; $i<count($theirAllies); $i+=AllyPieces()) {
+        $cardID = $theirAllies[$i];
+        if (IsLeader($cardID) || TraitContains($cardID, "Vehicle")) {
+          continue;
+        }
+
+        $rvArr[] = "THEIRALLY-" . $i;
+      }
+
+      $myAllies = &GetAllies($player);
+      for($i=0; $i<count($myAllies); $i+=AllyPieces()) {
+        $cardID = $myAllies[$i];
+        if (IsLeader($cardID) || TraitContains($cardID, "Vehicle")) {
+          continue;
+        }
+        $rvArr[] = "MYALLY-" . $i;
+      }
+      
+      return implode(",", $rvArr);
+    } else if ($target == 4) return "MYCHAR-0";
+
     if($target != 3 && $target != 6 && $target != 7) $rv = "THEIRCHAR-0";
     else $rv = "";
+
     if(($target == 0 && !ShouldAutotargetOpponent($player)) || $target == 2)
     {
       $rv .= ",MYCHAR-0";

@@ -102,7 +102,7 @@ class Ally {
 
   //Returns true if the ally is destroyed
   function DefeatIfNoRemainingHP() {
-    if($this->Health() <= 0 && ($this->CardID() != "d1a7b76ae7" || $this->LostAbilities())) {
+    if ($this->Health() <= 0 && ($this->CardID() != "d1a7b76ae7" || $this->LostAbilities()) && ($this->CardID() != "0345124206")) {  //Clone - Ensure that Clone remains in play while resolving the it's ability
       DestroyAlly($this->playerID, $this->index);
       return true;
     }
@@ -200,7 +200,7 @@ class Ally {
 
   function CurrentPower() {
     global $currentTurnEffects;
-    $power = AttackValue($this->CardID()) + $this->allies[$this->index+7];
+    $power = ((int) (AttackValue($this->CardID() ?? 0))) + ((int) $this->allies[$this->index+7]);
     $power += AttackModifier($this->CardID(), $this->playerID, $this->index);
     $upgrades = $this->GetUpgrades();
     for($i=0; $i<count($upgrades); ++$i) if($upgrades[$i] != "-") $power += AttackValue($upgrades[$i]);
@@ -380,6 +380,10 @@ class Ally {
       }
     }
     return $capturedUnits;
+  }
+
+  function IsCloned() {
+    return $this->allies[$this->index + 13] == 1;
   }
 
   function ClearSubcards() {

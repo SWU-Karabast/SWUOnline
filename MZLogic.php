@@ -334,7 +334,12 @@ function MZBounce($player, $target)
     case "THEIRALLY": case "MYALLY":
       $allies = &GetAllies($controller);
       $owner = $allies[$mzArr[1]+11];
+      $cloned = $allies[$mzArr[1]+13];
       $cardID = RemoveAlly($controller, $mzArr[1]);
+      if ($cloned) {
+        $cardID = "0345124206"; //Clone - Replace the cloned card to the original card when bouncing back
+      }
+
       IncrementClassState($controller, $CS_NumLeftPlay);
       $index = AddHand($owner, $cardID);
       return $player == $owner ? "MYHAND-" . $index : "THEIRHAND-" . $index;
