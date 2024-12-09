@@ -142,13 +142,14 @@ function HasLeader($player) {
 
 function HasMoreUnits($player) {
   $allies = &GetAllies($player);
-  $theirAllies = &GetAllies($player == 1 ? 2 : 1);
+  $theirAllies = &GetTheirAllies($player);
   return count($allies) > count($theirAllies);
 }
 
 function HasFewerUnits($player) {
-  $otherPlayer = $player == 1 ? 2 : 1;
-  return HasMoreUnits($otherPlayer);
+  $allies = &GetAllies($player);
+  $theirAllies = &GetTheirAllies($player);
+  return count($allies) < count($theirAllies);
 }
 
 function CopyCurrentTurnEffectsFromAfterResolveEffects()
