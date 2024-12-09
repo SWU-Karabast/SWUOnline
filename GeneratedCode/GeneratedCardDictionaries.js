@@ -764,6 +764,32 @@ default: return "";
 }
 default: return "";
 }
+case "6":
+switch(cardID[4]) {
+case "1":
+switch(cardID[5]) {
+case "2":
+switch(cardID[6]) {
+case "1":
+switch(cardID[7]) {
+case "2":
+switch(cardID[8]) {
+case "3":
+switch(cardID[9]) {
+case "4":
+return "Experience";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 case "1":
@@ -4538,6 +4564,36 @@ default: return "";
 }
 default: return "";
 }
+case "1":
+switch(cardID[3]) {
+case "6":
+switch(cardID[4]) {
+case "7":
+switch(cardID[5]) {
+case "2":
+switch(cardID[6]) {
+case "4":
+switch(cardID[7]) {
+case "4":
+switch(cardID[8]) {
+case "1":
+switch(cardID[9]) {
+case "8":
+return "Han Solo";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 default: return "";
@@ -6742,6 +6798,28 @@ case "0":
 switch(cardID[9]) {
 case "1":
 return "Obi-Wan's Aethersprite";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "9":
+switch(cardID[5]) {
+case "7":
+switch(cardID[6]) {
+case "8":
+switch(cardID[7]) {
+case "6":
+switch(cardID[8]) {
+case "1":
+switch(cardID[9]) {
+case "3":
+return "Fett's Firespray";
 default: return "";
 }
 default: return "";
@@ -9982,6 +10060,36 @@ default: return "";
 }
 default: return "";
 }
+case "0":
+switch(cardID[3]) {
+case "b":
+switch(cardID[4]) {
+case "5":
+switch(cardID[5]) {
+case "6":
+switch(cardID[6]) {
+case "2":
+switch(cardID[7]) {
+case "2":
+switch(cardID[8]) {
+case "a":
+switch(cardID[9]) {
+case "7":
+return "Asajj Ventress";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 default: return "";
@@ -11314,6 +11422,36 @@ default: return "";
 }
 default: return "";
 }
+case "7":
+switch(cardID[3]) {
+case "6":
+switch(cardID[4]) {
+case "9":
+switch(cardID[5]) {
+case "8":
+switch(cardID[6]) {
+case "5":
+switch(cardID[7]) {
+case "1":
+switch(cardID[8]) {
+case "4":
+switch(cardID[9]) {
+case "4":
+return "Shield";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 case "7":
@@ -11902,6 +12040,28 @@ default: return "";
 }
 default: return "";
 }
+case "3":
+switch(cardID[5]) {
+case "1":
+switch(cardID[6]) {
+case "1":
+switch(cardID[7]) {
+case "3":
+switch(cardID[8]) {
+case "8":
+switch(cardID[9]) {
+case "1":
+return "X-Wing";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 default: return "";
@@ -12278,6 +12438,32 @@ case "0":
 switch(cardID[9]) {
 case "3":
 return "Luminara Unduli";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "1":
+switch(cardID[4]) {
+case "6":
+switch(cardID[5]) {
+case "7":
+switch(cardID[6]) {
+case "4":
+switch(cardID[7]) {
+case "3":
+switch(cardID[8]) {
+case "5":
+switch(cardID[9]) {
+case "1":
+return "Boba Fett";
 default: return "";
 }
 default: return "";
@@ -16570,6 +16756,28 @@ default: return "";
 }
 default: return "";
 }
+case "4":
+switch(cardID[5]) {
+case "0":
+switch(cardID[6]) {
+case "8":
+switch(cardID[7]) {
+case "3":
+switch(cardID[8]) {
+case "3":
+switch(cardID[9]) {
+case "2":
+return "Millennium Falcon";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 default: return "";
@@ -16590,6 +16798,32 @@ case "8":
 switch(cardID[9]) {
 case "3":
 return "Freelance Assassin";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "3":
+switch(cardID[4]) {
+case "1":
+switch(cardID[5]) {
+case "9":
+switch(cardID[6]) {
+case "1":
+switch(cardID[7]) {
+case "7":
+switch(cardID[8]) {
+case "2":
+switch(cardID[9]) {
+case "2":
+return "Never Tell Me the Odds";
 default: return "";
 }
 default: return "";
@@ -18268,6 +18502,32 @@ default: return "";
 }
 default: return "";
 }
+case "0":
+switch(cardID[4]) {
+case "7":
+switch(cardID[5]) {
+case "3":
+switch(cardID[6]) {
+case "9":
+switch(cardID[7]) {
+case "9":
+switch(cardID[8]) {
+case "2":
+switch(cardID[9]) {
+case "1":
+return "Hunting Aggressor";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 case "3":
@@ -18468,6 +18728,36 @@ default: return "";
 }
 default: return "";
 }
+case "7":
+switch(cardID[3]) {
+case "3":
+switch(cardID[4]) {
+case "7":
+switch(cardID[5]) {
+case "4":
+switch(cardID[6]) {
+case "5":
+switch(cardID[7]) {
+case "3":
+switch(cardID[8]) {
+case "9":
+switch(cardID[9]) {
+case "5":
+return "Bossk";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 case "3":
@@ -18488,6 +18778,32 @@ case "4":
 switch(cardID[9]) {
 case "5":
 return "Wedge Antilles";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "4":
+switch(cardID[4]) {
+case "6":
+switch(cardID[5]) {
+case "8":
+switch(cardID[6]) {
+case "4":
+switch(cardID[7]) {
+case "5":
+switch(cardID[8]) {
+case "1":
+switch(cardID[9]) {
+case "8":
+return "Tandem Assault";
 default: return "";
 }
 default: return "";
@@ -19164,6 +19480,28 @@ default: return "";
 }
 default: return "";
 }
+case "4":
+switch(cardID[5]) {
+case "7":
+switch(cardID[6]) {
+case "0":
+switch(cardID[7]) {
+case "6":
+switch(cardID[8]) {
+case "1":
+switch(cardID[9]) {
+case "5":
+return "Asajj Ventress";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 default: return "";
@@ -19562,6 +19900,32 @@ case "7":
 switch(cardID[9]) {
 case "5":
 return "Hello There";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "3":
+switch(cardID[4]) {
+case "6":
+switch(cardID[5]) {
+case "3":
+switch(cardID[6]) {
+case "4":
+switch(cardID[7]) {
+case "9":
+switch(cardID[8]) {
+case "0":
+switch(cardID[9]) {
+case "7":
+return "No Disintegrations";
 default: return "";
 }
 default: return "";
@@ -20588,6 +20952,32 @@ case "9":
 switch(cardID[9]) {
 case "8":
 return "Impropriety Among Thieves";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "3":
+switch(cardID[4]) {
+case "3":
+switch(cardID[5]) {
+case "7":
+switch(cardID[6]) {
+case "0":
+switch(cardID[7]) {
+case "2":
+switch(cardID[8]) {
+case "9":
+switch(cardID[9]) {
+case "5":
+return "Death Space Skirmisher";
 default: return "";
 }
 default: return "";
@@ -22310,6 +22700,32 @@ default: return "";
 }
 default: return "";
 }
+case "8":
+switch(cardID[4]) {
+case "8":
+switch(cardID[5]) {
+case "4":
+switch(cardID[6]) {
+case "8":
+switch(cardID[7]) {
+case "1":
+switch(cardID[8]) {
+case "9":
+switch(cardID[9]) {
+case "4":
+return "Chewbacca";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 case "6":
@@ -22328,6 +22744,32 @@ case "0":
 switch(cardID[9]) {
 case "9":
 return "Mission Briefing";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "8":
+switch(cardID[4]) {
+case "9":
+switch(cardID[5]) {
+case "2":
+switch(cardID[6]) {
+case "6":
+switch(cardID[7]) {
+case "6":
+switch(cardID[8]) {
+case "6":
+switch(cardID[9]) {
+case "4":
+return "TIE Fighter";
 default: return "";
 }
 default: return "";
@@ -23624,6 +24066,32 @@ default: return "";
 }
 default: return "";
 }
+case "9":
+switch(cardID[4]) {
+case "1":
+switch(cardID[5]) {
+case "9":
+switch(cardID[6]) {
+case "5":
+switch(cardID[7]) {
+case "5":
+switch(cardID[8]) {
+case "7":
+switch(cardID[9]) {
+case "7":
+return "Zygerrian Starhopper";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 case "4":
@@ -24422,6 +24890,40 @@ default: return "";
 }
 default: return "";
 }
+case "6":
+switch(cardID[2]) {
+case "e":
+switch(cardID[3]) {
+case "b":
+switch(cardID[4]) {
+case "7":
+switch(cardID[5]) {
+case "1":
+switch(cardID[6]) {
+case "1":
+switch(cardID[7]) {
+case "c":
+switch(cardID[8]) {
+case "f":
+switch(cardID[9]) {
+case "3":
+return "Boba Fett";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 case "c":
@@ -24584,6 +25086,40 @@ case "9":
 switch(cardID[9]) {
 case "7":
 return "Chancellor Palpatine";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "0":
+switch(cardID[2]) {
+case "1":
+switch(cardID[3]) {
+case "5":
+switch(cardID[4]) {
+case "e":
+switch(cardID[5]) {
+case "b":
+switch(cardID[6]) {
+case "5":
+switch(cardID[7]) {
+case "c":
+switch(cardID[8]) {
+case "5":
+switch(cardID[9]) {
+case "e":
+return "Han Solo";
 default: return "";
 }
 default: return "";

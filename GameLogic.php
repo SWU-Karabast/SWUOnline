@@ -484,6 +484,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $ally->Destroy();
           return $id;
         case "EXPLOIT":
+          global $CS_PlayedWithExploit;
+          SetClassState($player, $CS_PlayedWithExploit, true);
           $exploitedAllies = (array)$dqVars[0];
           if ($exploitedAllies == [])
           {
@@ -492,6 +494,17 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $numExploits = count($exploitedAllies);
           $explotingCardID = $dqVars[1];
 
+          for($i=0; $i<$numExploits; ++$i) {
+            AddDecisionQueue("ADDCURRENTEFFECT", $player, "6772128891", 1);//Exploit effect
+          }
+
+          for($i=0; $i<$numExploits; ++$i) {
+            $ally = new Ally("MYALLY-" . $exploitedAllies[$i]);
+            $exploitedUniqueID = $ally->UniqueID();
+            AddDecisionQueue("PASSPARAMETER", $player, $exploitedUniqueID, 1);
+            AddDecisionQueue("DESTROYALLY", $player, "-", 1);
+          }
+
           if($explotingCardID == "8655450523") {//Count Dooku - Fallen Jedi
             $exploitedAlliesPowers = [];
             for($i=0;$i<$numExploits;++$i) {
@@ -499,11 +512,6 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
               $exploitedAlliesPowers[$i] = $ally->CurrentPower();
             }
             AddLayer("TRIGGER", $player, "8655450523", implode(",", $exploitedAlliesPowers));
-          }
-
-          for($i=0; $i<$numExploits; ++$i) {
-            AddDecisionQueue("ADDCURRENTEFFECT", $player, "6772128891", 1);//Exploit effect
-            AddLayer("TRIGGER", $player, "WHENEXPLOITEDABILITY", $exploitedAllies[$i]);
           }
           break;
         case "ADDEXPERIENCE":
@@ -576,13 +584,17 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             WriteLog(CardLink($cardID, $cardID) . " resisted capture.");
             return $cardID;
           }
-          $capturedIndex = $captured->Index();
+          $capturedCardID = $captured->CardID();
+          $capturedUniqueID = $captured->UniqueID();
+          $capturedExhausted = $captured->IsExhausted();
+          $capturedOwner = $captured->Owner();
+          $capturedUpgrades = $captured->GetUpgrades();
           $index = SearchAlliesForUniqueID($uniqueID, $player);
           if($index >= 0) {
             $ally = new Ally("MYALLY-" . $index, $player);
             $ally->AddSubcard($capturedCardID, $ownerId);
           }
-          CollectBounties($targetPlayer, $capturedIndex, capturerUniqueID:$uniqueID);
+          CollectBounties($targetPlayer, $capturedCardID, $capturedUniqueID, $capturedExhausted, $capturedOwner, $capturedUpgrades, capturerUniqueID:$uniqueID);
           MZRemove($player, $lastResult);
           return $cardID;
         case "WRITECHOICE":
@@ -901,7 +913,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       PlayAura($parameter, $player);
       break;
     case "DESTROYALLY":
-      DestroyAlly($player, $lastResult);
+      $ally = GetAlly($lastResult);
+      DestroyAlly($player, $ally->Index());
       break;
     case "PARAMDELIMTOARRAY":
       return explode(",", $parameter);
@@ -1182,9 +1195,11 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
     case "COLLECTBOUNTY":
       $paramArr = explode(",", $parameter);
       $bounty = $paramArr[0];
-      $bountyUnit = $paramArr[1];
-      $capturerUniqueID = $paramArr[2];
-      CollectBounty($player, -1, $bounty, reportMode:false, bountyUnitOverride:$bountyUnit, capturerUniqueID:$capturerUniqueID);
+      $isExhausted = $paramArr[1];
+      $owner = $paramArr[2];
+      $bountyUnit = $paramArr[3];
+      $capturerUniqueID = $paramArr[4];
+      CollectBounty($player, $bounty, $isExhausted, $owner, reportMode:false, bountyUnitOverride:$bountyUnit, capturerUniqueID:$capturerUniqueID);
       return $lastResult;
     case "ARCANECHOSEN":
       if($lastResult > 0) {

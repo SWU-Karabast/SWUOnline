@@ -1480,10 +1480,11 @@ function AddPrePitchDecisionQueue($cardID, $from, $index = -1, $skipAbilityType 
   if($from != "PLAY") {
     $exploitAmount = ExploitAmount($cardID, $currentPlayer, reportMode:false);  
     if ($exploitAmount > 0) {
+      $singleExploit = $exploitAmount == 1;
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
       AddDecisionQueue("OP", $currentPlayer, "MZTONORMALINDICES");
       AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "$exploitAmount-", 1);
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose up to $exploitAmount units to exploit");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose " . ($singleExploit ? "" : "up to ") . $exploitAmount . ($singleExploit ? " unit" : " units") . " to exploit");
       AddDecisionQueue("MULTICHOOSEUNIT", $currentPlayer, "<-", 1);
       AddDecisionQueue("SETDQVAR", $currentPlayer, 0);
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, $cardID,1);
@@ -1824,7 +1825,10 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
         }
         if($layerName == "ATTACKABILITY") { if(HasAttackAbility($cardID)) PlayAbility($cardID, "PLAY", "0"); }
         //TODO: Fix this Relentless and first light and The Mandalorian hack
-        else if($from == "PLAY" || $from == "EQUIP" || HasWhenPlayed($cardID) || $cardID == "3401690666" || $cardID == "4783554451" || $cardID == "4088c46c4d" || DefinedTypesContains($cardID, "Event", $currentPlayer) || DefinedTypesContains($cardID, "Upgrade", $currentPlayer)) AddLayer($layerName, $currentPlayer, $cardID, $from . "!" . $resourcesPaid . "!" . $target . "!" . $additionalCosts . "!" . $abilityIndex . "!" . $playIndex, "-", $uniqueID, append:true);
+        //TODO: fix Dooku trigger choice
+        else if($from == "PLAY" || $from == "EQUIP" || (HasWhenPlayed($cardID) && !IsExploitWhenPlayed($cardID)) || $cardID == "3401690666" || $cardID == "4783554451" || $cardID == "4088c46c4d" || DefinedTypesContains($cardID, "Event", $currentPlayer) || DefinedTypesContains($cardID, "Upgrade", $currentPlayer)) {
+          AddLayer($layerName, $currentPlayer, $cardID, $from . "!" . $resourcesPaid . "!" . $target . "!" . $additionalCosts . "!" . $abilityIndex . "!" . $playIndex, "-", $uniqueID, append:true);
+        }
         else if($from != "PLAY" && $from != "EQUIP") {
           AddAllyPlayAbilityLayers($cardID, $from, $uniqueID);
         }
@@ -1832,10 +1836,10 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
     }
     if($from != "PLAY") {
       if(HasShielded($cardID, $currentPlayer, $index)) {
-        AddLayer("TRIGGER", $currentPlayer, "SHIELDED", "-", "-", $uniqueID, append:true);
+        AddLayer("TRIGGER", $currentPlayer, "SHIELDED", "-", "-", $uniqueID);
       }
       if(HasAmbush($cardID, $currentPlayer, $index, $from)) {
-        AddLayer("TRIGGER", $currentPlayer, "AMBUSH", "-", "-", $uniqueID, append:true);
+        AddLayer("TRIGGER", $currentPlayer, "AMBUSH", "-", "-", $uniqueID);
       }
     }
     if (!$openedChain) ResolveGoAgain($cardID, $currentPlayer, $from);
