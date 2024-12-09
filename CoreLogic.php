@@ -2127,7 +2127,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
   if($from != "PLAY" && IsAlly($cardID, $currentPlayer)) {
     //LastAllyIndex does not work well when you play multiple unit on same times (Vader, U-Wing, Endless Legion ...)
      if($uniqueId != "") {
-       $lastAllyUniqueId = SearchAlliesForUniqueID($additionalCosts, $currentPlayer);
+       $lastAllyUniqueId = SearchAlliesForUniqueID($uniqueId, $currentPlayer);
        $lastAllyUniqueId = $lastAllyUniqueId == -1 ? LastAllyIndex($currentPlayer) : $lastAllyUniqueId;
        $playAlly = new Ally("MYALLY-" . $lastAllyUniqueId);
      } else {

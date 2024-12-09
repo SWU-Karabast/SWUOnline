@@ -766,10 +766,13 @@ function GetAllyIndex($cardID, $player)
 
 function GetAlly($uniqueID) {
   global $currentPlayer;
+  if ($uniqueID == "" || $uniqueID == "-" || $uniqueID == null) return null;
+
   for ($player = 1; $player <= 2; $player++) {
     $index = SearchAlliesForUniqueID($uniqueID, $player);
     if ($index > -1) return new Ally(($currentPlayer == $player ? "MYALLY-" : "THEIRALLY-") . $index, $player);
   }
+  
   return null;
 }
 
