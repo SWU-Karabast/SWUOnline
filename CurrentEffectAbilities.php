@@ -148,6 +148,7 @@ function EffectAttackModifier($cardID, $playerID="")
       $ally = new Ally($attackTarget, $defPlayer);
       return $ally->Damage();
     case "5896817672": if(!$subparam) return 2; else return 0;//Headhunting
+    case "2359136621": return $subparam;//Guarding The Way
     case "8297630396": return 1;//Shoot First
     case "5464125379": return -2;//Strafing Gunship
     case "8495694166": return -2;//Jedi Lightsaber
