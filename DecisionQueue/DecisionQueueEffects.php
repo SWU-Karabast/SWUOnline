@@ -285,6 +285,22 @@ function SpecificCardLogic($player, $parameter, $lastResult)
         AddGraveyard($cardArr[$i], $player, "DECK");
       }
       break;
+    case "EQUALIZE":
+      if (HasFewerUnits($player)) {
+        $ally = GetAlly($lastResult);
+        AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
+        if ($ally != null) {
+          AddDecisionQueue("MZFILTER", $player, "index=" . $ally->MZIndex());
+        }
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to give -2/-2", 1);
+        AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
+        AddDecisionQueue("SETDQVAR", $player, 0, 1);
+        AddDecisionQueue("MZOP", $player, "GETUNIQUEID", 1);
+        AddDecisionQueue("SETDQVAR", $player, 1, 1);
+        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $player, "5013214638,PLAY", 1);
+        AddDecisionQueue("PASSPARAMETER", $player, "{0}", 1);
+        AddDecisionQueue("MZOP", $player, "REDUCEHEALTH,2", 1);
+      }
     case "FORCECHOKE":
       $mzArr = explode("-", $lastResult);
       if($mzArr[0] == "MYALLY") Draw($player);
