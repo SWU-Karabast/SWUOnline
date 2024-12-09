@@ -277,6 +277,7 @@ $CS_NumClonesPlayed = 66;
 $CS_UnitsThatAttackedBase = 67;
 $CS_OppIndex = 68;
 $CS_OppCardActive = 69;
+$CS_PlayedWithExploit = 70;
 
 function SetAfterPlayedBy($player, $cardID)
 {

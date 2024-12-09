@@ -221,22 +221,33 @@ function RemoveAlly($player, $index)
   return DestroyAlly($player, $index, true);
 }
 
-function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false, $skipRescue = false, $fromExploit = false)
+function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false, $skipRescue = false)
 {
-  global $mainPlayer, $CS_NumAlliesDestroyed, $CS_NumLeftPlay;
+  global $mainPlayer, $CS_NumAlliesDestroyed, $CS_NumLeftPlay, $layers;
   $allies = &GetAllies($player);
-  $cardID = $allies[$index];
-  $owner = $allies[$index+11];
+  $ally = new Ally("MYALLY-" . $index, $player);
+  $cardID = $ally->CardID();
+  $owner = $ally->Owner();
+  $uniqueID = $ally->UniqueID();
+  $lostAbilities = $ally->LostAbilities();
+  $isUpgraded = $ally->IsUpgraded();
+  $upgrades = $ally->GetUpgrades();
+  $upgradesWithOwnerData = $ally->GetUpgrades(true);
+  
   $discardPileModifier = "-";
-  if(!$skipDestroy || $fromExploit) {
-    AllyDestroyedAbility($player, $index, $fromCombat);
-    CollectBounties($player, $index);
+  if(!$skipDestroy) {
+    if(HasWhenDestroyed($cardID)) {
+      LayerAllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities, $isUpgraded, $upgrades, $upgradesWithOwnerData);
+    }
+    else {
+      AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities, $isUpgraded, $upgrades, $upgradesWithOwnerData);
+    }
+    /*Layer*/CollectBounties($player, $index);
     IncrementClassState($player, $CS_NumAlliesDestroyed);
   }
   
   IncrementClassState($player, $CS_NumLeftPlay);
-  AllyLeavesPlayAbility($player, $index);
-  $ally = new Ally("MYALLY-" . $index, $player);
+  /*Layer*/AllyLeavesPlayAbility($player, $index);
   $upgrades = $ally->GetUpgrades(true);
   for($i=0; $i<count($upgrades); $i+=SubcardPieces()) {
     if($upgrades[$i] == "8752877738" || $upgrades[$i] == "2007868442") continue;
@@ -245,11 +256,11 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false,
     AddGraveyard($upgrades[$i], $upgrades[$i+1], "PLAY");
   }
   $captives = $ally->GetCaptives(true);
-  if(!$skipDestroy || $fromExploit) {
+  if(!$skipDestroy) {
     if(DefinedTypesContains($cardID, "Leader", $player)) ;//If it's a leader it doesn't go in the discard
     else if($cardID == "3463348370" || $cardID == "3941784506") ; // If it's a token, it doesn't go in the discard
-    else if($cardID == "8954587682" && !$ally->LostAbilities()) AddResources($cardID, $player, "PLAY", "DOWN");//Superlaser Technician
-    else if($cardID == "7204838421" && !$ally->LostAbilities()) AddResources($cardID, $player, "PLAY", "DOWN");//Enterprising Lackeys
+    else if($cardID == "8954587682" && !$ally->LostAbilities()) /*Layer*/AddResources($cardID, $player, "PLAY", "DOWN");//Superlaser Technician
+    else if($cardID == "7204838421" && !$ally->LostAbilities()) /*Layer*/AddResources($cardID, $player, "PLAY", "DOWN");//Enterprising Lackeys
     else {
       $graveyardCardID = $ally->IsCloned() ? "0345124206" : $cardID; //Clone - Replace the cloned card with the original one in the graveyard
       AddGraveyard($graveyardCardID, $owner, "PLAY", $discardPileModifier);
@@ -458,15 +469,21 @@ function AllyLeavesPlayAbility($player, $index)
   }
 }
 
-function AllyDestroyedAbility($player, $index, $fromCombat)
+function LayerAllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities,
+    $isUpgraded, $upgrades, $upgradesWithOwnerData) {
+  $upgradesSerialized = implode(",",$upgrades);
+  foreach($upgradesWithOwnerData as $key => $value) if(!($key&1)) unset($upgradesWithOwnerData[$key]);
+  $upgradeOwnersSerialized = implode(",", $upgradesWithOwnerData);
+  $data = implode("-",[$uniqueID, $lostAbilities, $isUpgraded, $upgradesSerialized, $upgradeOwnersSerialized]);
+  AddLayer("TRIGGER", $player, "AFTERDESTROYABILITY", $cardID, $data, $uniqueID, append:true);
+}
+
+function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities,
+  $isUpgraded, $upgrades, $upgradesWithOwnerData)
 {
   global $initiativePlayer;
-  $allies = &GetAllies($player);
-  $cardID = $allies[$index];
-  $uniqueID = $allies[$index + 5];
-  OnKillAbility($player, $index);
-  $destroyedAlly = new Ally("MYALLY-" . $index, $player);
-  if(!$destroyedAlly->LostAbilities()) {
+  OnKillAbility($player, $uniqueID);
+  if(!$lostAbilities) {
     switch($cardID) {
       case "4405415770"://Yoda, Old Master
         AddDecisionQueue("SETDQCONTEXT", $player, "Choose player to draw 1 card");
@@ -615,7 +632,7 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
         break;
       default: break;
     }
-    $upgrades = $destroyedAlly->GetUpgrades();
+
     for($i=0; $i<count($upgrades); ++$i) {
       switch($upgrades[$i]) {
         case "6775521270"://Inspiring Mentor
@@ -642,7 +659,7 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
         WriteLog("Drew a card from General Krell");
         break;
       case "3feee05e13"://Gar Saxon
-        $upgrades = $destroyedAlly->GetUpgrades(true);
+        $upgrades = $upgradesWithOwnerData;
         if(count($upgrades) > 0) {
           $upgradesParams = "";
           for ($i = 0; $i < count($upgrades); $i += SubcardPieces()) {
@@ -684,13 +701,13 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
         Restore(1, $otherPlayer);
         break;
       case "2649829005"://Agent Kallus
-        if($ally->NumUses() > 0 && CardIsUnique($destroyedAlly->CardID())) {
+        if($ally->NumUses() > 0 && CardIsUnique($cardID)) {
           $ally->ModifyUses(-1);
           Draw($otherPlayer);
         }
         break;
       case "8687233791"://Punishing One
-        if($destroyedAlly->IsUpgraded() && $ally->IsExhausted() && $ally->NumUses() > 0) {
+        if($isUpgraded && $ally->IsExhausted() && $ally->NumUses() > 0) {
           AddDecisionQueue("YESNO", $otherPlayer, "if you want to ready " . CardLink("", $ally->CardID()));
           AddDecisionQueue("NOPASS", $otherPlayer, "-");
           AddDecisionQueue("PASSPARAMETER", $otherPlayer, "MYALLY-" . $i, 1);
@@ -906,12 +923,12 @@ function CollectBounties($player, $index, $reportMode=false, $capturerUniqueID="
   return $numBounties;
 }
 
-function OnKillAbility($player, $index)
+function OnKillAbility($player, $uniqueID)
 {
   global $combatChain, $mainPlayer, $defPlayer;
   if(count($combatChain) == 0) return;
   $attackerAlly = new Ally(AttackerMZID($mainPlayer), $mainPlayer);
-  if($attackerAlly->Index() == $index && $attackerAlly->PlayerID() == $player) return;
+  if($attackerAlly->UniqueID() == $uniqueID && $attackerAlly->PlayerID() == $player) return;
   if($attackerAlly->LostAbilities()) return;
   $upgrades = $attackerAlly->GetUpgrades();
   for($i=0; $i<count($upgrades); ++$i) {

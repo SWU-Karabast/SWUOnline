@@ -377,7 +377,7 @@ function ContinueDecisionQueue($lastResult = "")
 {
   global $decisionQueue, $turn, $currentPlayer, $mainPlayerGamestateStillBuilt, $makeCheckpoint, $otherPlayer;
   global $layers, $layerPriority, $dqVars, $dqState, $CS_PlayIndex, $CS_AdditionalCosts, $mainPlayer, $CS_LayerPlayIndex, $CS_OppCardActive;
-  global $CS_ResolvingLayerUniqueID;
+  global $CS_ResolvingLayerUniqueID, $CS_PlayedWithExploit;
 
   if(count($decisionQueue) == 0 || IsGamePhase($decisionQueue[0])) {
     if($mainPlayerGamestateStillBuilt) UpdateMainPlayerGameState();
@@ -471,6 +471,7 @@ function ContinueDecisionQueue($lastResult = "")
         }
         else {
           SetClassState($player, $CS_PlayIndex, $params[2]); //This is like a parameter to PlayCardEffect and other functions
+          SetClassState($player, $CS_PlayedWithExploit, false);
           PlayCardEffect($cardID, $params[0], $params[1], $target, $additionalCosts, $params[3], $params[2]);
           ClearDieRoll($player);
         }
@@ -491,7 +492,8 @@ function ContinueDecisionQueue($lastResult = "")
         //params 4 = Unique ID
         $additionalCosts = GetClassState($currentPlayer, $CS_AdditionalCosts);
         if($additionalCosts == "") $additionalCosts = "-";
-        $layerIndex = count($layers) - GetClassState($currentPlayer, $CS_LayerPlayIndex);
+        $playedWithExploit = GetClassState($currentPlayer, $CS_PlayedWithExploit);
+        $layerIndex = $playedWithExploit ? 0 : count($layers) - GetClassState($currentPlayer, $CS_LayerPlayIndex);
         $layers[$layerIndex + 2] = $params[1] . "|" . $params[2] . "|" . $params[3] . "|" . $params[4];
         $layers[$layerIndex + 4] = $additionalCosts;
         ProcessDecisionQueue();
@@ -592,6 +594,7 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
   $auras = &GetAuras($player);
   $parameter = ShiyanaCharacter($parameter);
   $EffectContext = $parameter;
+
   switch ($parameter) {
     case "AMBUSH":
       $index = SearchAlliesForUniqueID($uniqueID, $player);
@@ -613,8 +616,19 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       $uniqueID = $arr[1];
       AllyPlayCardAbility($target, $player, from: $additionalCosts, abilityID:$abilityID, uniqueID:$uniqueID);
       break;
-    case "WHENEXPLOITEDABILITY":
-      DestroyAlly($player, $target, skipDestroy:true, fromExploit:true);
+    case "AFTERDESTROYABILITY":
+      $arr = explode("-",$additionalCosts);
+      $uniqueID = $arr[0];
+      $lostAbilities = $arr[1];
+      $isUpgraded = $arr[2];
+      $upgrades = explode(",",$arr[3]);
+      $upgradeOwners = explode(",",$arr[4]);
+      $upgradesWithOwnerData = [];
+      for($i=0;$i<count($upgrades);++$i) {
+        $upgradesWithOwnerData[2*$i] = $upgrades[$i];
+        $upgradesWithOwnerData[2*$i + 1] = $upgradeOwners[$i];
+      }
+      AllyDestroyedAbility($player,$target,$uniqueID,$lostAbilities,$isUpgraded,$upgrades,$upgradesWithOwnerData);
       break;
     case "8655450523": //Count Dooku - Fallen Jedi
       $powers=explode(",", $target);
@@ -971,6 +985,15 @@ function TheyControlMoreUnits($player) {
 
 function IsCoordinateActive($player) {
   return GetAllyCount($player) >= 3;
+}
+
+function IsExploitWhenPlayed($cardID) {
+  switch($cardID) {
+    case "8655450523"://Count Dooku - Fallen Jedi
+      return true;
+    default:
+      return false;
+  }
 }
 
 function ObiWansAethersprite($player, $index) {

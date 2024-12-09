@@ -484,6 +484,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $ally->Destroy();
           return $id;
         case "EXPLOIT":
+          global $CS_PlayedWithExploit;
+          SetClassState($player, $CS_PlayedWithExploit, true);
           $exploitedAllies = (array)$dqVars[0];
           if ($exploitedAllies == [])
           {
@@ -492,18 +494,24 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $numExploits = count($exploitedAllies);
           $explotingCardID = $dqVars[1];
 
+          for($i=0; $i<$numExploits; ++$i) {
+            AddDecisionQueue("ADDCURRENTEFFECT", $player, "6772128891", 1);//Exploit effect
+          }
+
+          for($i=0; $i<$numExploits; ++$i) {
+            $ally = new Ally("MYALLY-" . $exploitedAllies[$i]);
+            $exploitedUniqueID = $ally->UniqueID();
+            AddDecisionQueue("PASSPARAMETER", $player, $exploitedUniqueID, 1);
+            AddDecisionQueue("DESTROYALLY", $player, "-", 1);
+          }
+
           if($explotingCardID == "8655450523") {//Count Dooku - Fallen Jedi
             $exploitedAlliesPowers = [];
             for($i=0;$i<$numExploits;++$i) {
               $ally = new Ally("MYALLY-" . $exploitedAllies[$i], $player);
               $exploitedAlliesPowers[$i] = $ally->CurrentPower();
             }
-            AddLayer("TRIGGER", $player, "8655450523", implode(",", $exploitedAlliesPowers));
-          }
-
-          for($i=0; $i<$numExploits; ++$i) {
-            AddDecisionQueue("ADDCURRENTEFFECT", $player, "6772128891", 1);//Exploit effect
-            AddLayer("TRIGGER", $player, "WHENEXPLOITEDABILITY", $exploitedAllies[$i]);
+            AddLayer("TRIGGER", $player, "8655450523", implode(",", $exploitedAlliesPowers), append:true);
           }
           break;
         case "ADDEXPERIENCE":
@@ -901,7 +909,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       PlayAura($parameter, $player);
       break;
     case "DESTROYALLY":
-      DestroyAlly($player, $lastResult);
+      $ally = GetAlly($lastResult);
+      DestroyAlly($player, $ally->Index());
       break;
     case "PARAMDELIMTOARRAY":
       return explode(",", $parameter);
