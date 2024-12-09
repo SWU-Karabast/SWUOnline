@@ -1326,7 +1326,7 @@ function SpecificAllyAttackAbilities($attackID)
         AddDecisionQueue("FINDINDICES", $mainPlayer, "ALLTHEIRGROUNDUNITSMULTI");
         AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose units to damage", 1);
         AddDecisionQueue("MULTICHOOSETHEIRUNIT", $mainPlayer, "<-", 1);
-        AddDecisionQueue("MULTIDISTRIBUTEDAMAGE", $mainPlayer, 3, 1);
+        AddDecisionQueue("MULTIDISTRIBUTEDAMAGE", $mainPlayer, "3,1", 1);
         break;
       case "3141660491"://The Darksaber
         $allies = &GetAllies($mainPlayer);
@@ -1960,10 +1960,10 @@ function AllyDamageTakenAbilities($player, $index, $survived, $damage, $fromComb
     switch($theirAllies[$i]) {
       case "cfdcbd005a"://Jango Fett Leader Unit
         if($fromCombat || ($enemyDamage && $fromUnitEffect)) {
-          AddDecisionQueue("YESNO", $otherPlayer, "if you want use Jango Fett's ability");
-          AddDecisionQueue("NOPASS", $otherPlayer, "-");
-          AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $index, 1);
-          AddDecisionQueue("MZOP", $player, "REST", 1);
+          PrependDecisionQueue("MZOP", $player, "REST", 1);
+          PrependDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $index, 1);
+          PrependDecisionQueue("NOPASS", $otherPlayer, "-");
+          PrependDecisionQueue("YESNO", $otherPlayer, "if you want use Jango Fett's ability");
         }
         break;
       default: break;
@@ -1974,11 +1974,11 @@ function AllyDamageTakenAbilities($player, $index, $survived, $damage, $fromComb
     switch($theirCharacter[$i]) {
       case "9155536481"://Jango Fett Leader
         if($theirCharacter[$i+1] == 2 && ($fromCombat || ($enemyDamage && $fromUnitEffect))) {
-          AddDecisionQueue("YESNO", $otherPlayer, "if you want use Jango Fett's ability");
-          AddDecisionQueue("NOPASS", $otherPlayer, "-");
-          AddDecisionQueue("EXHAUSTCHARACTER", $otherPlayer, FindCharacterIndex($otherPlayer, "9155536481"), 1);
-          AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $index, 1);
-          AddDecisionQueue("MZOP", $player, "REST", 1);
+          PrependDecisionQueue("MZOP", $player, "REST", 1);
+          PrependDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $index, 1);
+          PrependDecisionQueue("EXHAUSTCHARACTER", $otherPlayer, FindCharacterIndex($otherPlayer, "9155536481"), 1);
+          PrependDecisionQueue("NOPASS", $otherPlayer, "-");
+          PrependDecisionQueue("YESNO", $otherPlayer, "if you want use Jango Fett's ability");
         }
         break;
       default: break;
