@@ -489,7 +489,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       $cardID = GetMZCard($player, $lastResult);
       if(UnitCardSharesName($cardID, $player))
       {
-        $mzArr = explode(",", $lastResult);
+        $mzArr = explode("-", $lastResult);
         RemoveDiscard($player, $mzArr[1]);
         AddResources($cardID, $player, "GY", "DOWN", isExhausted:1);
       }
