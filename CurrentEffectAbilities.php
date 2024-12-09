@@ -198,6 +198,7 @@ function EffectAttackModifier($cardID, $playerID="")
     case "3556557330": return 3;//Asajj Ventress
     case "8418001763": return 2;//Huyang
     case "0216922902": return -5;//The Zillo Beast
+    case "4916334670": return 1;//Encouraging Leadership
     case "3596811933": return -1;//Disruptive Burst
     case "7979348081": return 1;//Kraken
     default: return 0;

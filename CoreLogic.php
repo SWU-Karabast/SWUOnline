@@ -5095,6 +5095,15 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         }
       }
       break;
+    case "4916334670"://Encouraging Leadership
+      $allies = &GetAllies($currentPlayer);
+      for ($i = 0; $i < count($allies); $i += AllyPieces()) {
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYALLY-$i", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "ADDHEALTH,1", 1);
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, $allies[$i+5], 1);
+        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "4916334670,PLAY", 1);
+      }
+      break;
     case "3596811933"://Disruptive Burst
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
       $theirAllies = &GetTheirAllies($currentPlayer);
