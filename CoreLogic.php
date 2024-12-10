@@ -2509,7 +2509,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("FINDINDICES", $currentPlayer, "ALLTHEIRUNITSMULTI");
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose units to damage", 1);
         AddDecisionQueue("MULTICHOOSETHEIRUNIT", $currentPlayer, "<-", 1);
-        AddDecisionQueue("MULTIDISTRIBUTEDAMAGE", $currentPlayer, 6, 1);
+        AddDecisionQueue("MULTIDISTRIBUTEDAMAGE", $currentPlayer, "6,1", 1);
       }
       break;
     case "1208707254"://Rallying Cry
@@ -3000,7 +3000,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("FINDINDICES", $currentPlayer, "ALLTHEIRUNITSMULTI");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose units to damage", 1);
       AddDecisionQueue("MULTICHOOSETHEIRUNIT", $currentPlayer, "<-", 1);
-      AddDecisionQueue("MULTIDISTRIBUTEDAMAGE", $currentPlayer, $ally->CurrentPower(), 1);
+      AddDecisionQueue("MULTIDISTRIBUTEDAMAGE", $currentPlayer, $ally->CurrentPower() . ",1", 1);
       break;
     case "3974134277"://Prepare for Takeoff
       AddDecisionQueue("SEARCHDECKTOPX", $currentPlayer, "8;2;include-trait-Vehicle&include-definedType-Unit");

@@ -1653,23 +1653,26 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       return "";
     case "MULTIDISTRIBUTEDAMAGE":
       if(!is_array($lastResult)) $lastResult = explode(",", $lastResult);
-      if($parameter == "-") {
+      if(!is_array($parameter)) $parameter = explode(",", $parameter);
+      if($parameter[0] == "-") {
         $dqVars[0] = $dqVars[0] - $dqVars[1];
-        $parameter = $dqVars[0];
+        $parameter[0] = $dqVars[0];
       }
-      else $dqVars[0] = $parameter;
+      else {
+        $dqVars[0] = $parameter[0];
+      }
       $theirAllies = &GetAllies($player == 1 ? 2 : 1);
       $index = $lastResult[count($lastResult) - 1];
       unset($lastResult[count($lastResult) - 1]);
       $lastResult = array_values($lastResult);
       if(count($lastResult) > 0) {
-        PrependDecisionQueue("MULTIDISTRIBUTEDAMAGE", $player, "-");
+        PrependDecisionQueue("MULTIDISTRIBUTEDAMAGE", $player, "-,$parameter[1]");
         PrependDecisionQueue("PASSPARAMETER", $player, implode(",", $lastResult));
       }
-      PrependDecisionQueue("MZOP", $player, "DEALDAMAGE,{1}");
+      PrependDecisionQueue("MZOP", $player, "DEALDAMAGE,{1},$player,$parameter[1]");
       PrependDecisionQueue("PASSPARAMETER", $player, "THEIRALLY-" . $index);
       PrependDecisionQueue("SETDQVAR", $player, "1");
-      PrependDecisionQueue("BUTTONINPUTNOPASS", $player, GetIndices($parameter + 1));
+      PrependDecisionQueue("BUTTONINPUTNOPASS", $player, GetIndices($parameter[0] + 1));
       PrependDecisionQueue("SETDQCONTEXT", $player, "Choose an amount of damage to deal to " . CardLink($theirAllies[$index], $theirAllies[$index]));
       return $lastResult;
     default:
