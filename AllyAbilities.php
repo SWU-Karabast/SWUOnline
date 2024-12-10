@@ -21,7 +21,9 @@ function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null,
   $allies[] = $cloned ? 1 : 0; //Cloned
   $index = count($allies) - AllyPieces();
   CurrentEffectAllyEntersPlay($player, $index);
-  AllyEntersPlayAbilities($player);
+  if ($from != "CAPTIVE" && !IsLeader($cardID) && !IsToken($cardID)) {
+    AllyWhenPlayedUnitAbilities($player);
+  }
   CheckUniqueAlly($uniqueID);
 
   if ($playCardEffect || $cardID == "0345124206") { //Clone - Ensure that the Clone will always choose a unit to clone whenever it enters play.
@@ -321,7 +323,7 @@ function AllyEntersPlayState($cardID, $player, $from="-")
   }
 }
 
-function AllyEntersPlayAbilities($player)
+function AllyWhenPlayedUnitAbilities($player)
 {
   $allies = &GetAllies($player);
   for($i=0; $i<count($allies); $i+=AllyPieces())
@@ -330,15 +332,24 @@ function AllyEntersPlayAbilities($player)
     {
       case "9610332938"://Poggle the Lesser
         $ally = new Ally("MYALLY-" . $i, $player);
-        if(!$ally->IsExhausted()) {
-          $ally->Exhaust();
-          PlayAlly("3463348370", $player);//Battle Droid
+        if (!$ally->IsExhausted()) {
+          AddDecisionQueue("SETDQCONTEXT", $player, "Choose if you want to create a Battle Droid token");
+          AddDecisionQueue("YESNO", $player, "-");
+          AddDecisionQueue("NOPASS", $player, "-");
+          AddDecisionQueue("PASSPARAMETER", $player, $ally->MZIndex(), 1);
+          AddDecisionQueue("MZOP", $player, "REST", 1);
+          AddDecisionQueue("PASSPARAMETER", $player, "3463348370", 1);
+          AddDecisionQueue("PLAYALLY", $player, "", 1);
         }
         break;
       case "0142631581"://Mas Amedda
         $ally = new Ally("MYALLY-" . $i, $player);
         if(!$ally->IsExhausted()) {
-          $ally->Exhaust();
+          AddDecisionQueue("SETDQCONTEXT", $player, "Choose if you want to search for a unit");
+          AddDecisionQueue("YESNO", $player, "-");
+          AddDecisionQueue("NOPASS", $player, "-");
+          AddDecisionQueue("PASSPARAMETER", $player, $ally->MZIndex(), 1);
+          AddDecisionQueue("MZOP", $player, "REST", 1);
           AddDecisionQueue("SEARCHDECKTOPX", $player, "4;1;include-definedType-Unit");
           AddDecisionQueue("ADDHAND", $player, "-", 1);
           AddDecisionQueue("REVEALCARDS", $player, "-", 1);
