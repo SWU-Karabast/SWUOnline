@@ -142,13 +142,14 @@ function HasLeader($player) {
 
 function HasMoreUnits($player) {
   $allies = &GetAllies($player);
-  $theirAllies = &GetAllies($player == 1 ? 2 : 1);
+  $theirAllies = &GetTheirAllies($player);
   return count($allies) > count($theirAllies);
 }
 
 function HasFewerUnits($player) {
-  $otherPlayer = $player == 1 ? 2 : 1;
-  return HasMoreUnits($otherPlayer);
+  $allies = &GetAllies($player);
+  $theirAllies = &GetTheirAllies($player);
+  return count($allies) < count($theirAllies);
 }
 
 function CopyCurrentTurnEffectsFromAfterResolveEffects()
@@ -646,8 +647,22 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       //it can be played even if the original unit is somehow removed from the discard before this trigger resolves.
       //I can't think of a way to prevent this without adding functionality to track a specific card between zones.
       global $CS_AfterPlayedBy;
+      $targetArr = explode("_", $target);
+      $target = $targetArr[0];
+      $capturerUniqueID = $targetArr[1];
       AddDecisionQueue("YESNO", $player, "if you want to play " . CardLink($target, $target) . " for free off of " . CardLink("7270736993", "7270736993"));
       AddDecisionQueue("NOPASS", $player, "-");
+
+      if ($capturerUniqueID != "-") {
+        $ally = GetAlly($capturerUniqueID);
+        if ($ally != null) {
+          AddDecisionQueue("PASSPARAMETER", $player, $ally->MZIndex(), 1);
+          AddDecisionQueue("SETDQVAR", $player, "0", 1);
+          AddDecisionQueue("PASSPARAMETER", $player, $target, 1);
+          AddDecisionQueue("OP", $player, "DISCARDCAPTIVE", 1);
+        }
+      }
+
       AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRDISCARD:cardID=" . $target . ";maxCount=1", 1);
       AddDecisionQueue("SETDQVAR", $player, "0", 1);
       AddDecisionQueue("PASSPARAMETER", $player, "7270736993", 1);

@@ -703,7 +703,7 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
   }
 }
 
-function CollectBounty($player, $index, $cardID, $reportMode=false, $bountyUnitOverride="-") {
+function CollectBounty($player, $index, $cardID, $reportMode=false, $bountyUnitOverride="-", $capturerUniqueID="-") {
   $ally = new Ally("MYALLY-" . $index, $player);
   $bountyUnit = $bountyUnitOverride == "-" ? $ally->CardID() : $bountyUnitOverride;
   $opponent = $player == 1 ? 2 : 1;
@@ -834,7 +834,7 @@ function CollectBounty($player, $index, $cardID, $reportMode=false, $bountyUnitO
     case "7270736993"://Unrefusable Offer
       ++$numBounties;
       if($reportMode) break;
-      AddLayer("TRIGGER", $opponent, "7270736993", $bountyUnit);//Passing the cardID of the bountied unit as $target in order to search for it from discard
+      AddLayer("TRIGGER", $opponent, "7270736993", $bountyUnit . "_" . $capturerUniqueID);//Passing the cardID of the bountied unit as $target in order to search for it from discard/subgroup
       break;
     case "9642863632"://Bounty Hunter's Quarry
       ++$numBounties;
@@ -878,7 +878,7 @@ function CollectBounty($player, $index, $cardID, $reportMode=false, $bountyUnitO
         AddDecisionQueue("NOPASS", $opponent, "-", 1);
         AddDecisionQueue("PASSPARAMETER", $opponent, "MYALLY-" . $bosskIndex, 1);
         AddDecisionQueue("ADDMZUSES", $opponent, "-1", 1);
-        AddDecisionQueue("COLLECTBOUNTY", $player, $cardID . "," . $bountyUnit, 1);
+        AddDecisionQueue("COLLECTBOUNTY", $player, $cardID . "," . $bountyUnit . "," . $capturerUniqueID, 1);
       }
     }
   }
@@ -886,7 +886,7 @@ function CollectBounty($player, $index, $cardID, $reportMode=false, $bountyUnitO
 }
 
 //Bounty abilities
-function CollectBounties($player, $index, $reportMode=false) {
+function CollectBounties($player, $index, $reportMode=false, $capturerUniqueID="-") {
   global $currentTurnEffects;
   $ally = new Ally("MYALLY-" . $index, $player);
   $numBounties = 0;
@@ -894,15 +894,15 @@ function CollectBounties($player, $index, $reportMode=false) {
   for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnEffectPieces()) {
     if($currentTurnEffects[$i+1] != $player) continue;
     if($currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
-    $numBounties += CollectBounty($player, $index, $currentTurnEffects[$i], $reportMode);
+    $numBounties += CollectBounty($player, $index, $currentTurnEffects[$i], $reportMode, capturerUniqueID:$capturerUniqueID);
   }
   //Upgrade bounties
   $upgrades = $ally->GetUpgrades();
   for($i=0; $i<count($upgrades); ++$i)
   {
-    $numBounties += CollectBounty($player, $index, $upgrades[$i], $reportMode);
+    $numBounties += CollectBounty($player, $index, $upgrades[$i], $reportMode, capturerUniqueID:$capturerUniqueID);
   }
-  $numBounties += CollectBounty($player, $index, $ally->CardID(), $reportMode);
+  $numBounties += CollectBounty($player, $index, $ally->CardID(), $reportMode, capturerUniqueID:$capturerUniqueID);
   return $numBounties;
 }
 

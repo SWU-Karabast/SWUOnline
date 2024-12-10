@@ -265,10 +265,13 @@ function HasSentinel($cardID, $player, $index)
   for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnPieces()) {
     if($currentTurnEffects[$i+1] != $player) continue;
     if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
-    switch($currentTurnEffects[$i]) {
+    $effectParams = explode("_", $currentTurnEffects[$i]);
+    $effectCardID = $effectParams[0];
+    switch($effectCardID) {
       case "8294130780": $hasSentinel = true; break;//Gladiator Star Destroyer
       case "3572356139": $hasSentinel = true; break;//Chewbacca, Walking Carpet
       case "3468546373": $hasSentinel = true; break;//General Rieekan
+      case "2359136621": $hasSentinel = true; break;//Guarding The Way
       case "9070397522": return false;//SpecForce Soldier
       case "2872203891": $hasSentinel = true; break;//General Grievous
       case "fb7af4616c": $hasSentinel = true; break;//General Grievous
@@ -774,6 +777,8 @@ function AbilityCost($cardID, $index=-1, $theirCard = false)
       return $abilityName == "Draw Card" ? 1 : 0;
     case "4300219753"://Fett's Firespray
       return $abilityName == "Exhaust" ? 2 : 0;
+    case "0595607848"://Disaffected Senator
+      return $abilityName == "Deal Damage" ? 2 : 0;
     case "5784497124"://Emperor Palpatine
       return $abilityName == "Deal Damage" ? 1 : 0;
     case "6088773439"://Darth Vader
@@ -923,6 +928,9 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
       $abilityTypes = "A";
       break;
     case "4300219753"://Fett's Firespray
+      $abilityTypes = "A,AA";
+      break;
+    case "0595607848"://Disaffected Senator
       $abilityTypes = "A,AA";
       break;
     case "7911083239"://Grand Inquisitor
@@ -1141,6 +1149,9 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       $ally = new Ally("MYALLY-" . $index, $currentPlayer);
       if($validate) $abilityNames = $ally->IsExhausted() ? "Exhaust" : "Exhaust,Attack";
       else $abilityNames = "Exhaust,Attack";
+      break;    
+    case "0595607848"://Disaffected Senator
+      $abilityNames = "Deal Damage,Attack";
       break;
     case "7911083239"://Grand Inquisitor
       $abilityNames = "Deal Damage";

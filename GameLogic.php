@@ -554,6 +554,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $uniqueID = AllyTakeControl($player, $index);
           return $uniqueID;
         case "CAPTURE":
+          $uniqueID = $parameterArr[1];
           $cardID = GetMZCard($player, $lastResult);
           $otherPlayer = ($player == 1 ? 2 : 1);
           $targetPlayer = str_starts_with($lastResult, "MY") ? $player : $otherPlayer;
@@ -576,14 +577,13 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             return $cardID;
           }
           $capturedIndex = $captured->Index();
-          CollectBounties($targetPlayer, $capturedIndex);
-          MZRemove($player, $lastResult);
-          $uniqueID = $parameterArr[1];
           $index = SearchAlliesForUniqueID($uniqueID, $player);
           if($index >= 0) {
             $ally = new Ally("MYALLY-" . $index, $player);
             $ally->AddSubcard($capturedCardID, $ownerId);
           }
+          CollectBounties($targetPlayer, $capturedIndex, capturerUniqueID:$uniqueID);
+          MZRemove($player, $lastResult);
           return $cardID;
         case "WRITECHOICE":
           $ally = new Ally($lastResult);
@@ -1183,7 +1183,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $paramArr = explode(",", $parameter);
       $bounty = $paramArr[0];
       $bountyUnit = $paramArr[1];
-      CollectBounty($player, -1, $bounty, reportMode:false, bountyUnitOverride:$bountyUnit);
+      $capturerUniqueID = $paramArr[2];
+      CollectBounty($player, -1, $bounty, reportMode:false, bountyUnitOverride:$bountyUnit, capturerUniqueID:$capturerUniqueID);
       return $lastResult;
     case "ARCANECHOSEN":
       if($lastResult > 0) {

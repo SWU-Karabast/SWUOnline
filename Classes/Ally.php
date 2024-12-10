@@ -24,6 +24,11 @@ class Ally {
   }
 
   // Methods
+  function MZIndex() {
+    global $currentPlayer;
+    return ($currentPlayer == $this->Controller() ? "MYALLY-" : "THEIRALLY-") . $this->index;
+  }
+
   function CardID() {
     return $this->allies[$this->index];
   }
