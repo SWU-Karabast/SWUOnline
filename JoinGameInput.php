@@ -144,7 +144,6 @@ if ($decklink != "") {
     $errorMessage = curl_error($curl);
     curl_close($curl);
     $json = $apiDeck;
-    echo ($json);
   }
   else $json = $decklink;
 
