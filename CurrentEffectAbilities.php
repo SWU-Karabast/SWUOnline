@@ -154,6 +154,7 @@ function EffectAttackModifier($cardID, $playerID="")
     case "8495694166": return -2;//Jedi Lightsaber
     case "3789633661": return 4;//Cunning
     case "1939951561": return $subparam;//Attack Pattern Delta
+    case "1039176181": return 2;//Kalani
     case "8988732248": return 1;//Rebel Assault
     case "7922308768": return NumResources($mainPlayer) < NumResources($defPlayer) ? 2 : 0;//Valiant Assault Ship
     case "7109944284": return -1* $subparam;//Luke Skywalker

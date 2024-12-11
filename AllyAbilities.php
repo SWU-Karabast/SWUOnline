@@ -1290,7 +1290,7 @@ function IsAlly($cardID, $player="")
 //NOTE: This is for the actual attack abilities that allies have
 function SpecificAllyAttackAbilities($attackID)
 {
-  global $mainPlayer, $defPlayer, $combatChainState, $CCS_WeaponIndex;
+  global $mainPlayer, $defPlayer, $combatChainState, $CCS_WeaponIndex, $initiativePlayer;
   $attackerIndex = $combatChainState[$CCS_WeaponIndex];
   $attackerAlly = new Ally(AttackerMZID($mainPlayer), $mainPlayer);
   $upgrades = $attackerAlly->GetUpgrades();
@@ -1679,6 +1679,21 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 2 damage to");
       AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("SPECIFICCARD", $mainPlayer, "RESOLUTE", 1);
+      break;
+    case "1039176181"://Kalani
+      $totalUnits = $mainPlayer == $initiativePlayer ? 2 : 1;
+      AddDecisionQueue("PASSPARAMETER", $mainPlayer, $attackerAlly->MZIndex(), 1);
+      AddDecisionQueue("SETDQVAR", $mainPlayer, 0, 1);
+      for ($i = 0; $i < $totalUnits; $i++) {
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY");
+        AddDecisionQueue("MZFILTER", $mainPlayer, "dqVar=0");
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to give +2/+2", 1);
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        AddDecisionQueue("APPENDDQVAR", $mainPlayer, 0, 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "ADDHEALTH,2", 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
+        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "1039176181,PLAY", 1);
+      }
       break;
     case "5966087637"://Poe Dameron
       PummelHit($mainPlayer, may:true, context:"Choose a card to discard to defeat an upgrade (or pass)");
