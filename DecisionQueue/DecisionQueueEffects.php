@@ -301,6 +301,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
         AddDecisionQueue("PASSPARAMETER", $player, "{0}", 1);
         AddDecisionQueue("MZOP", $player, "REDUCEHEALTH,2", 1);
       }
+      break;
     case "FORCECHOKE":
       $mzArr = explode("-", $lastResult);
       if($mzArr[0] == "MYALLY") Draw($player);

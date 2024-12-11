@@ -22,7 +22,9 @@ function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null,
   $allies[] = $cloned ? 1 : 0; //Cloned
   $index = count($allies) - AllyPieces();
   CurrentEffectAllyEntersPlay($player, $index);
-  AllyEntersPlayAbilities($player);
+  if ($from != "CAPTIVE" && !IsLeader($cardID) && !IsToken($cardID)) {
+    AllyWhenPlayedUnitAbilities($player);
+  }
   CheckUniqueAlly($uniqueID);
 
   if ($playCardEffect || $cardID == "0345124206") { //Clone - Ensure that the Clone will always choose a unit to clone whenever it enters play.
@@ -364,7 +366,7 @@ function AllyEntersPlayState($cardID, $player, $from="-")
   }
 }
 
-function AllyEntersPlayAbilities($player)
+function AllyWhenPlayedUnitAbilities($player)
 {
   $allies = &GetAllies($player);
   for($i=0; $i<count($allies); $i+=AllyPieces())
@@ -373,15 +375,24 @@ function AllyEntersPlayAbilities($player)
     {
       case "9610332938"://Poggle the Lesser
         $ally = new Ally("MYALLY-" . $i, $player);
-        if(!$ally->IsExhausted()) {
-          $ally->Exhaust();
-          PlayAlly("3463348370", $player);//Battle Droid
+        if (!$ally->IsExhausted()) {
+          AddDecisionQueue("SETDQCONTEXT", $player, "Choose if you want to create a Battle Droid token");
+          AddDecisionQueue("YESNO", $player, "-");
+          AddDecisionQueue("NOPASS", $player, "-");
+          AddDecisionQueue("PASSPARAMETER", $player, $ally->MZIndex(), 1);
+          AddDecisionQueue("MZOP", $player, "REST", 1);
+          AddDecisionQueue("PASSPARAMETER", $player, "3463348370", 1);
+          AddDecisionQueue("PLAYALLY", $player, "", 1);
         }
         break;
       case "0142631581"://Mas Amedda
         $ally = new Ally("MYALLY-" . $i, $player);
         if(!$ally->IsExhausted()) {
-          $ally->Exhaust();
+          AddDecisionQueue("SETDQCONTEXT", $player, "Choose if you want to search for a unit");
+          AddDecisionQueue("YESNO", $player, "-");
+          AddDecisionQueue("NOPASS", $player, "-");
+          AddDecisionQueue("PASSPARAMETER", $player, $ally->MZIndex(), 1);
+          AddDecisionQueue("MZOP", $player, "REST", 1);
           AddDecisionQueue("SEARCHDECKTOPX", $player, "4;1;include-definedType-Unit");
           AddDecisionQueue("ADDHAND", $player, "-", 1);
           AddDecisionQueue("REVEALCARDS", $player, "-", 1);
@@ -1330,7 +1341,7 @@ function IsAlly($cardID, $player="")
 //NOTE: This is for the actual attack abilities that allies have
 function SpecificAllyAttackAbilities($attackID)
 {
-  global $mainPlayer, $defPlayer, $combatChainState, $CCS_WeaponIndex;
+  global $mainPlayer, $defPlayer, $combatChainState, $CCS_WeaponIndex, $initiativePlayer;
   $attackerIndex = $combatChainState[$CCS_WeaponIndex];
   $attackerAlly = new Ally(AttackerMZID($mainPlayer), $mainPlayer);
   $upgrades = $attackerAlly->GetUpgrades();
@@ -1719,6 +1730,21 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 2 damage to");
       AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("SPECIFICCARD", $mainPlayer, "RESOLUTE", 1);
+      break;
+    case "1039176181"://Kalani
+      $totalUnits = $mainPlayer == $initiativePlayer ? 2 : 1;
+      AddDecisionQueue("PASSPARAMETER", $mainPlayer, $attackerAlly->MZIndex(), 1);
+      AddDecisionQueue("SETDQVAR", $mainPlayer, 0, 1);
+      for ($i = 0; $i < $totalUnits; $i++) {
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY");
+        AddDecisionQueue("MZFILTER", $mainPlayer, "dqVar=0");
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to give +2/+2", 1);
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        AddDecisionQueue("APPENDDQVAR", $mainPlayer, 0, 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "ADDHEALTH,2", 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
+        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "1039176181,PLAY", 1);
+      }
       break;
     case "5966087637"://Poe Dameron
       PummelHit($mainPlayer, may:true, context:"Choose a card to discard to defeat an upgrade (or pass)");
