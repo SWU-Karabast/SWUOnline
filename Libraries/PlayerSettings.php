@@ -296,17 +296,17 @@ function GetSettingsUI($player)
   $rv .= CreateRadioButton($SET_Cardback . "-" . 11, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Padawan Unlimited");
   $rv .= CreateRadioButton($SET_Cardback . "-" . 12, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "RVA SWU");
 
-  // foreach(PatreonCampaign::cases() as $campaign) {
-  //   if(isset($_SESSION[$campaign->SessionID()]) || (isset($_SESSION["useruid"]) && $campaign->IsTeamMember($_SESSION["useruid"]))) {
-  //     $hasCardBacks = true;
-  //     $cardBacks = $campaign->CardBacks();
-  //     $cardBacks = explode(",", $cardBacks);
-  //     for($i = 0; $i < count($cardBacks); ++$i) {
-  //       $name = $campaign->CampaignName() . (count($cardBacks) > 1 ? " " . $i + 1 : "");
-  //       $rv .= CreateRadioButton($SET_Cardback . "-" . $cardBacks[$i], str_replace(' ', '', $name), 26, $SET_Cardback . "-" . $settings[$SET_Cardback], $name);
-  //     }
-  //   }
-  // }
+  foreach(PatreonCampaign::cases() as $campaign) {
+    if(isset($_SESSION[$campaign->SessionID()]) || (isset($_SESSION["useruid"]) && $campaign->IsTeamMember($_SESSION["useruid"]))) {
+      $hasCardBacks = true;
+      $cardBacks = $campaign->CardBacks();
+      $cardBacks = explode(",", $cardBacks);
+      for($i = 0; $i < count($cardBacks); ++$i) {
+        $name = $campaign->CampaignName() . (count($cardBacks) > 1 ? " " . $i + 1 : "");
+        $rv .= CreateRadioButton($SET_Cardback . "-" . $cardBacks[$i], str_replace(' ', '', $name), 26, $SET_Cardback . "-" . $settings[$SET_Cardback], $name);
+      }
+    }
+  }
 
   $rv .= "<BR>";
   if($settings[$SET_ManualMode] == 0) $rv .= CreateCheckbox($SET_ManualMode . "-1", "Manual Mode", 26, false, "Manual Mode");
