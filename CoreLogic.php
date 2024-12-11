@@ -309,28 +309,28 @@ function MainCharacterPlayCardAbilities($cardID, $from)
     switch($character[$i]) {
       case "3045538805"://Hondo Ohnaka
         if($from == "RESOURCES") {
-          AddLayer("TRIGGER", $currentPlayer, "3045538805", append:true);
+          AddLayer("TRIGGER", $currentPlayer, "3045538805");
         }
         break;
       case "1384530409"://Cad Bane
         if($from != 'PLAY' && $from != 'EQUIP' && TraitContains($cardID, "Underworld", $currentPlayer)) {
           // Note - this is a bit of a hack by sending the index in as the unique ID
-          AddLayer("TRIGGER", $currentPlayer, "1384530409", append:true);
+          AddLayer("TRIGGER", $currentPlayer, "1384530409");
         }
         break;
       case "2358113881"://Quinlan Vos
         if($from != 'PLAY' && $from != "EQUIP" && DefinedTypesContains($cardID, "Unit", $currentPlayer)) {
-          AddLayer("TRIGGER", $currentPlayer, "2358113881", append:true);
+          AddLayer("TRIGGER", $currentPlayer, "2358113881");
         }
         break;
       case "9005139831"://The Mandalorian
         if(DefinedTypesContains($cardID, "Upgrade", $currentPlayer)) {
-          AddLayer("TRIGGER", $currentPlayer, "9005139831", append:true);
+          AddLayer("TRIGGER", $currentPlayer, "9005139831");
         }
         break;
       case "9334480612"://Boba Fett Green Leader
         if($from != "PLAY" && DefinedTypesContains($cardID, "Unit", $currentPlayer) && HasKeyword($cardID, "Any", $currentPlayer)) {
-          AddLayer("TRIGGER", $currentPlayer, "9334480612", append:true);
+          AddLayer("TRIGGER", $currentPlayer, "9334480612");
         }
         break;
       default:
@@ -1156,7 +1156,7 @@ function HasKeyword($cardID, $keyword, $player="", $index=-1){
     case "Raid": return RaidAmount($cardID, $player, $index, true) > 0;
     case "Grit": return HasGrit($cardID, $player, $index);
     case "Restore": return RestoreAmount($cardID, $player, $index) > 0;
-    case "Bounty": return CollectBounty($player, $index, $cardID, true) > 0;
+    case "Bounty": return CollectBounty($player, $cardID, "-", "-", true) > 0;
     case "Overwhelm": return HasOverwhelm($cardID, $player, $index);
     case "Saboteur": return HasSaboteur($cardID, $player, $index);
     case "Shielded": return HasShielded($cardID, $player, $index);
@@ -1169,7 +1169,7 @@ function HasKeyword($cardID, $keyword, $player="", $index=-1){
         RaidAmount($cardID, $player, $index, true) > 0 ||
         HasGrit($cardID, $player, $index) ||
         RestoreAmount($cardID, $player, $index) > 0 ||
-        CollectBounty($player, $index, $cardID, true) > 0 ||
+        CollectBounty($player, $cardID, "-", "-", true) > 0 ||
         HasOverwhelm($cardID, $player, $index) ||
         HasSaboteur($cardID, $player, $index) ||
         HasShielded($cardID, $player, $index) ||

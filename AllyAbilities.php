@@ -1,4 +1,5 @@
 <?php
+require __DIR__ . "/Libraries/LayerHelpers.php";
 
 function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null, $cloned = false, $playCardEffect = false)
 {
@@ -26,10 +27,10 @@ function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null,
 
   if ($playCardEffect || $cardID == "0345124206") { //Clone - Ensure that the Clone will always choose a unit to clone whenever it enters play.
     if(HasShielded($cardID, $player, $index)) {
-      AddLayer("TRIGGER", $player, "SHIELDED", "-", "-", $uniqueID, append:true);
+      AddLayer("TRIGGER", $player, "SHIELDED", "-", "-", $uniqueID);
     }
     if(HasAmbush($cardID, $player, $index, $from)) {
-      AddLayer("TRIGGER", $player, "AMBUSH", "-", "-", $uniqueID, append:true);
+      AddLayer("TRIGGER", $player, "AMBUSH", "-", "-", $uniqueID);
     }
     PlayAbility($cardID, $from, 0, uniqueId:$uniqueID);
   }
@@ -221,35 +222,48 @@ function RemoveAlly($player, $index)
   return DestroyAlly($player, $index, true);
 }
 
-function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false, $skipRescue = false, $fromExploit = false)
+function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false, $skipRescue = false)
 {
   global $mainPlayer, $CS_NumAlliesDestroyed, $CS_NumLeftPlay;
+
   $allies = &GetAllies($player);
-  $cardID = $allies[$index];
-  $owner = $allies[$index+11];
+  $ally = new Ally("MYALLY-" . $index, $player);
+  $cardID = $ally->CardID();
+  $owner = $ally->Owner();
+  $uniqueID = $ally->UniqueID();
+  $lostAbilities = $ally->LostAbilities();
+  $isUpgraded = $ally->IsUpgraded();
+  $upgrades = $ally->GetUpgrades();
+  $upgradesWithOwnerData = $ally->GetUpgrades(true);
+  $isExhausted = $ally->IsExhausted();
+  $hasBounty = $ally->HasBounty();
+  $isSuperlaserTech = $cardID === "8954587682";
   $discardPileModifier = "-";
-  if(!$skipDestroy || $fromExploit) {
-    AllyDestroyedAbility($player, $index, $fromCombat);
-    CollectBounties($player, $index);
+  if(!$skipDestroy) {
+    OnKillAbility($player, $uniqueID);
+    $whenDestroyData="";$whenResourceData="";$whenBountiedData="";
+    if((HasWhenDestroyed($cardID) && !$isSuperlaserTech) || UpgradesContainWhenDefeated($upgrades))
+      $whenDestroyData=SerializeAllyDestroyData($uniqueID,$lostAbilities,$isUpgraded,$upgrades,$upgradesWithOwnerData);
+    if($isSuperlaserTech && !$lostAbilities)
+      $whenResourceData=SerializeResourceData("PLAY","DOWN",0,"0","-1");
+    if(($hasBounty && !$lostAbilities) || UpgradesContainBounty($upgrades))
+      $whenBountiedData=SerializeBountiesData($uniqueID, $isExhausted, $owner, $upgrades);
+    if($whenDestroyData || $whenResourceData || $whenBountiedData)
+      LayerDestroyTriggers($player, $cardID, $uniqueID, $whenDestroyData, $whenResourceData, $whenBountiedData);
     IncrementClassState($player, $CS_NumAlliesDestroyed);
   }
   
   IncrementClassState($player, $CS_NumLeftPlay);
   AllyLeavesPlayAbility($player, $index);
-  $ally = new Ally("MYALLY-" . $index, $player);
-  $upgrades = $ally->GetUpgrades(true);
-  for($i=0; $i<count($upgrades); $i+=SubcardPieces()) {
-    if($upgrades[$i] == "8752877738" || $upgrades[$i] == "2007868442") continue;
-    if($upgrades[$i] == "7547538214") PlayAlly("3463348370", $player); //droid cohort - battle droid;
-    if($upgrades[$i] == "6911505367") $discardPileModifier = "TTFREE";//Second Chance
-    AddGraveyard($upgrades[$i], $upgrades[$i+1], "PLAY");
+  for($i=0; $i<count($upgradesWithOwnerData); $i+=SubcardPieces()) {
+    if($upgradesWithOwnerData[$i] == "8752877738" || $upgradesWithOwnerData[$i] == "2007868442") continue;
+    if($upgradesWithOwnerData[$i] == "6911505367") $discardPileModifier = "TTFREE";//Second Chance
+    AddGraveyard($upgradesWithOwnerData[$i], $upgradesWithOwnerData[$i+1], "PLAY");
   }
   $captives = $ally->GetCaptives(true);
-  if(!$skipDestroy || $fromExploit) {
+  if(!$skipDestroy) {
     if(DefinedTypesContains($cardID, "Leader", $player)) ;//If it's a leader it doesn't go in the discard
     else if($cardID == "3463348370" || $cardID == "3941784506") ; // If it's a token, it doesn't go in the discard
-    else if($cardID == "8954587682" && !$ally->LostAbilities()) AddResources($cardID, $player, "PLAY", "DOWN");//Superlaser Technician
-    else if($cardID == "7204838421" && !$ally->LostAbilities()) AddResources($cardID, $player, "PLAY", "DOWN");//Enterprising Lackeys
     else {
       $graveyardCardID = $ally->IsCloned() ? "0345124206" : $cardID; //Clone - Replace the cloned card with the original one in the graveyard
       AddGraveyard($graveyardCardID, $owner, "PLAY", $discardPileModifier);
@@ -268,6 +282,34 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false,
   if($player == $mainPlayer) UpdateAttacker();
   else UpdateAttackTarget();
   return $cardID;
+}
+
+function UpgradesContainWhenDefeated($upgrades) {
+  for($i=0;$i<count($upgrades);++$i)  {
+    if (HasWhenDestroyed($upgrades[$i])) return true;
+  }
+
+  return false;
+}
+
+function UpgradesContainBounty($upgrades) {
+  for($i=0;$i<count($upgrades);++$i)  {
+    switch($upgrades[$i]) {
+      case "2178538979"://Price on Your Head
+      case "2740761445"://Guild Target
+      case "4282425335"://Top Target
+      case "3074091930"://Rich Reward
+      case "1780014071"://Public Enemy
+      case "9642863632"://Bounty Hunter's Quarry
+      case "0807120264"://Death Mark
+      case "4117365450"://Wanted
+      case "6420322033"://Enticing Reward
+      case "7270736993"://Unrefusable Offer
+        return true;
+    }
+  }
+
+  return false;
 }
 
 function AllyTakeControl($player, $index) {
@@ -458,15 +500,11 @@ function AllyLeavesPlayAbility($player, $index)
   }
 }
 
-function AllyDestroyedAbility($player, $index, $fromCombat)
+function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities,
+  $isUpgraded, $upgrades, $upgradesWithOwnerData)
 {
   global $initiativePlayer;
-  $allies = &GetAllies($player);
-  $cardID = $allies[$index];
-  $uniqueID = $allies[$index + 5];
-  OnKillAbility($player, $index);
-  $destroyedAlly = new Ally("MYALLY-" . $index, $player);
-  if(!$destroyedAlly->LostAbilities()) {
+  if(!$lostAbilities) {
     switch($cardID) {
       case "4405415770"://Yoda, Old Master
         AddDecisionQueue("SETDQCONTEXT", $player, "Choose player to draw 1 card");
@@ -561,7 +599,12 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
         if(GetHealth(2) >= 15) Draw($player);
         break;
       case "7204838421"://Enterprising Lackeys
-        MZMoveCard($player, "MYRESOURCES", "MYDISCARD,RESOURCES", may: false);
+        $discardID = SearchDiscardForCard($player, $cardID);
+        MZChooseAndDestroy($player, "MYRESOURCES", may:true, context:"Choose a resource to destroy");
+        AddDecisionQueue("PASSPARAMETER", $player, "MYDISCARD-$discardID", 1);
+        AddDecisionQueue("MZADDZONE", $player, "MYRESOURCESEXHAUSTED", 1);
+        AddDecisionQueue("PASSPARAMETER", $player, "MYDISCARD-$discardID", 1);
+        AddDecisionQueue("MZREMOVE", $player, "-", 1);
         break;
       case "8919416985"://Outspoken Representative
         PlayAlly("3941784506", $player, from:"ABILITY");
@@ -615,7 +658,7 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
         break;
       default: break;
     }
-    $upgrades = $destroyedAlly->GetUpgrades();
+
     for($i=0; $i<count($upgrades); ++$i) {
       switch($upgrades[$i]) {
         case "6775521270"://Inspiring Mentor
@@ -626,6 +669,9 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
           break;
         case "2007876522"://Clone Cohort
           PlayAlly("3941784506", $player);//Clone Trooper
+          break;
+        case "7547538214"://Droid Cohort
+          PlayAlly("3463348370", $player);//Battle Droid
           break;
       }
     }
@@ -642,7 +688,7 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
         WriteLog("Drew a card from General Krell");
         break;
       case "3feee05e13"://Gar Saxon
-        $upgrades = $destroyedAlly->GetUpgrades(true);
+        $upgrades = $upgradesWithOwnerData;
         if(count($upgrades) > 0) {
           $upgradesParams = "";
           for ($i = 0; $i < count($upgrades); $i += SubcardPieces()) {
@@ -684,13 +730,13 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
         Restore(1, $otherPlayer);
         break;
       case "2649829005"://Agent Kallus
-        if($ally->NumUses() > 0 && CardIsUnique($destroyedAlly->CardID())) {
+        if($ally->NumUses() > 0 && CardIsUnique($cardID)) {
           $ally->ModifyUses(-1);
           Draw($otherPlayer);
         }
         break;
       case "8687233791"://Punishing One
-        if($destroyedAlly->IsUpgraded() && $ally->IsExhausted() && $ally->NumUses() > 0) {
+        if($isUpgraded && $ally->IsExhausted() && $ally->NumUses() > 0) {
           AddDecisionQueue("YESNO", $otherPlayer, "if you want to ready " . CardLink("", $ally->CardID()));
           AddDecisionQueue("NOPASS", $otherPlayer, "-");
           AddDecisionQueue("PASSPARAMETER", $otherPlayer, "MYALLY-" . $i, 1);
@@ -703,9 +749,8 @@ function AllyDestroyedAbility($player, $index, $fromCombat)
   }
 }
 
-function CollectBounty($player, $index, $cardID, $reportMode=false, $bountyUnitOverride="-", $capturerUniqueID="-") {
-  $ally = new Ally("MYALLY-" . $index, $player);
-  $bountyUnit = $bountyUnitOverride == "-" ? $ally->CardID() : $bountyUnitOverride;
+function CollectBounty($player, $cardID, $isExhausted, $bountysOwner, $reportMode=false, $bountyUnitOverride="-", $capturerUniqueID="-") {
+  $bountyUnit = $bountyUnitOverride == "-" ? $cardID : $bountyUnitOverride;
   $opponent = $player == 1 ? 2 : 1;
   $numBounties = 0;
   switch($cardID) {
@@ -813,14 +858,14 @@ function CollectBounty($player, $index, $cardID, $reportMode=false, $bountyUnitO
       AddDecisionQueue("MZOP", $opponent, "REST", 1);
       break;
     case "0252207505"://Synara San
-      if($bountyUnitOverride != "-" || $ally->IsExhausted()) {
+      if($bountyUnitOverride != "-" || $isExhausted) {
         ++$numBounties;
         if($reportMode) break;
         DealDamageAsync($player, 5, "DAMAGE", "0252207505");
       }
       break;
     case "2965702252"://Unlicensed Headhunter
-      if($bountyUnitOverride != "-" || $ally->IsExhausted()) {
+      if($bountyUnitOverride != "-" || $isExhausted) {
         ++$numBounties;
         if($reportMode) break;
         Restore(5, $opponent);
@@ -829,7 +874,7 @@ function CollectBounty($player, $index, $cardID, $reportMode=false, $bountyUnitO
     case "7642980906"://Stolen Landspeeder
       ++$numBounties;
       if($reportMode) break;
-      if($ally->Owner() == $opponent) AddLayer("TRIGGER", $opponent, "7642980906");
+      if($bountysOwner == $opponent) AddLayer("TRIGGER", $opponent, "7642980906");
       break;
     case "7270736993"://Unrefusable Offer
       ++$numBounties;
@@ -878,7 +923,7 @@ function CollectBounty($player, $index, $cardID, $reportMode=false, $bountyUnitO
         AddDecisionQueue("NOPASS", $opponent, "-", 1);
         AddDecisionQueue("PASSPARAMETER", $opponent, "MYALLY-" . $bosskIndex, 1);
         AddDecisionQueue("ADDMZUSES", $opponent, "-1", 1);
-        AddDecisionQueue("COLLECTBOUNTY", $player, $cardID . "," . $bountyUnit . "," . $capturerUniqueID, 1);
+        AddDecisionQueue("COLLECTBOUNTY", $player, "$cardID,$isExhausted,$bountysOwner,$bountyUnit,$capturerUniqueID", 1);
       }
     }
   }
@@ -886,32 +931,37 @@ function CollectBounty($player, $index, $cardID, $reportMode=false, $bountyUnitO
 }
 
 //Bounty abilities
-function CollectBounties($player, $index, $reportMode=false, $capturerUniqueID="-") {
+function CollectBounties($player, 
+  $cardID,
+  $uniqueID,
+  $isExhausted,
+  $bountysOwner,
+  $upgrades,
+  $reportMode=false,
+  $capturerUniqueID="-") {
   global $currentTurnEffects;
-  $ally = new Ally("MYALLY-" . $index, $player);
   $numBounties = 0;
   //Current turn effect bounties
   for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnEffectPieces()) {
     if($currentTurnEffects[$i+1] != $player) continue;
-    if($currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
-    $numBounties += CollectBounty($player, $index, $currentTurnEffects[$i], $reportMode, capturerUniqueID:$capturerUniqueID);
+    if($currentTurnEffects[$i+2] != $uniqueID) continue;
+    $numBounties += CollectBounty($player, $cardID,  $currentTurnEffects[$i], $reportMode, capturerUniqueID:$capturerUniqueID);
   }
   //Upgrade bounties
-  $upgrades = $ally->GetUpgrades();
   for($i=0; $i<count($upgrades); ++$i)
   {
-    $numBounties += CollectBounty($player, $index, $upgrades[$i], $reportMode, capturerUniqueID:$capturerUniqueID);
+    $numBounties += CollectBounty($player, $upgrades[$i], $isExhausted, $bountysOwner, $reportMode, capturerUniqueID:$capturerUniqueID);
   }
-  $numBounties += CollectBounty($player, $index, $ally->CardID(), $reportMode, capturerUniqueID:$capturerUniqueID);
+  $numBounties += CollectBounty($player, $cardID, $isExhausted, $bountysOwner, $reportMode, capturerUniqueID:$capturerUniqueID);
   return $numBounties;
 }
 
-function OnKillAbility($player, $index)
+function OnKillAbility($player, $uniqueID)
 {
   global $combatChain, $mainPlayer, $defPlayer;
   if(count($combatChain) == 0) return;
   $attackerAlly = new Ally(AttackerMZID($mainPlayer), $mainPlayer);
-  if($attackerAlly->Index() == $index && $attackerAlly->PlayerID() == $player) return;
+  if($attackerAlly->UniqueID() == $uniqueID && $attackerAlly->PlayerID() == $player) return;
   if($attackerAlly->LostAbilities()) return;
   $upgrades = $attackerAlly->GetUpgrades();
   for($i=0; $i<count($upgrades); ++$i) {
@@ -1087,12 +1137,12 @@ function AddAllyPlayAbilityLayers($cardID, $from, $uniqueID = "-") {
   global $currentPlayer;
   $allies = &GetAllies($currentPlayer);
   for($i=0; $i<count($allies); $i+=AllyPieces()) {
-    if(AllyHasPlayCardAbility($cardID, $uniqueID, $from, $allies[$i], $currentPlayer, $i)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $allies[$i] . "," . $allies[$i+5], append:true);
+    if(AllyHasPlayCardAbility($cardID, $uniqueID, $from, $allies[$i], $currentPlayer, $i)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $allies[$i] . "," . $allies[$i+5]);
   }
   $otherPlayer = $currentPlayer == 1 ? 2 : 1;
   $theirAllies = &GetAllies($otherPlayer);
   for($i=0; $i<count($theirAllies); $i+=AllyPieces()) {
-    if(AllyHasPlayCardAbility($cardID, $uniqueID, $from, $theirAllies[$i], $otherPlayer, $i)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $theirAllies[$i] . "," . $allies[$i+5], append:true);
+    if(AllyHasPlayCardAbility($cardID, $uniqueID, $from, $theirAllies[$i], $otherPlayer, $i)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $theirAllies[$i] . "," . $allies[$i+5]);
   }
 }
 
@@ -1211,7 +1261,7 @@ function AllyPlayCardAbility($cardID, $player="", $from="-", $abilityID="-", $un
       break;
     case "3589814405"://tactical droid commander
       if(TraitContains($cardID, "Separatist", $player)) {
-        AddLayer("TRIGGER", $currentPlayer, "3589814405", CardCost($cardID), append: true);
+        AddLayer("TRIGGER", $currentPlayer, "3589814405", CardCost($cardID));
       }
       break;
     case "724979d608"://Cad Bane Leader 
@@ -1219,13 +1269,13 @@ function AllyPlayCardAbility($cardID, $player="", $from="-", $abilityID="-", $un
       if($cadIndex != "") {
         $cadbane = new Ally("MYALLY-" . $cadIndex, $player);
         if($from != 'PLAY' && $cadbane->NumUses() > 0 && TraitContains($cardID, "Underworld", $currentPlayer)) {
-          AddLayer("TRIGGER", $currentPlayer, "724979d608", append:true);
+          AddLayer("TRIGGER", $currentPlayer, "724979d608");
         }
       }
       break;
     case "4088c46c4d"://The Mandalorian
       if(DefinedTypesContains($cardID, "Upgrade", $player)) {
-        AddLayer("TRIGGER", $currentPlayer, "4088c46c4d", append:true);
+        AddLayer("TRIGGER", $currentPlayer, "4088c46c4d");
       }
       break;
     case "3952758746"://Toro Calican
@@ -1233,7 +1283,7 @@ function AllyPlayCardAbility($cardID, $player="", $from="-", $abilityID="-", $un
       if($toroIndex != "") {
         $toroCalican = new Ally("MYALLY-" . $toroIndex, $player);
         if(TraitContains($cardID, "Bounty Hunter", $currentPlayer) && $toroCalican->NumUses() > 0){
-          AddLayer("TRIGGER", $currentPlayer, "3952758746", append:true);
+          AddLayer("TRIGGER", $currentPlayer, "3952758746");
         }
       }
       break;
@@ -1264,7 +1314,7 @@ function AllyPlayCardAbility($cardID, $player="", $from="-", $abilityID="-", $un
       DealDamageAsync($player, 2, "DAMAGE", "5555846790");
       break;
     case "4935319539"://Krayt Dragon
-      AddLayer("TRIGGER", $currentPlayer, "4935319539", $cardID, append:true);
+      AddLayer("TRIGGER", $currentPlayer, "4935319539", $cardID);
       break;
     default: break;
   }
@@ -1837,7 +1887,7 @@ function SpecificAllyAttackAbilities($attackID)
       ObiWansAethersprite($mainPlayer, $attackerIndex);
       break;
     case "1641175580"://Kit Fisto
-      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:arena=Ground&THEIRALLY:arenga=Ground");
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:arena=Ground&THEIRALLY:arena=Ground");
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 3 damage");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,3,$mainPlayer,1", 1);

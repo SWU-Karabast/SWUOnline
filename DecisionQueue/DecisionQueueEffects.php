@@ -639,7 +639,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       $power = $lastResult;
       AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY", 1);
       AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal " . $power . " damage to", 1);
-      AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
       AddDecisionQueue("MZOP", $player, "DEALDAMAGE," . $power, 1);
       break;
     case "LETHALCRACKDOWN":

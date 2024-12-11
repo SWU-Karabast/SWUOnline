@@ -504,7 +504,7 @@ class Ally {
   }
 
   function HasBounty(): bool {
-    return CollectBounties($this->PlayerID(), $this->Index(), reportMode:true) > 0;
+    return CollectBounties($this->PlayerID(), $this->CardID(), $this->UniqueID(), $this->IsExhausted(), $this->Owner(), $this->GetUpgrades(), reportMode:true) > 0;
   }
 
 }
