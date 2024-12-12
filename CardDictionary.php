@@ -2054,6 +2054,15 @@ function SmuggleAdditionalCosts($cardID, $player = ""): bool {
   }
 }
 
+function isBountyRecollectable($cardID) {
+  switch ($cardID) {
+    case "7642980906"://Stolen Landspeeder
+    case "7270736993"://Unrefusable Offer
+      return false;
+    default: return true;
+  }
+}
+
 function PlayableFromBanish($cardID, $mod="")
 {
   global $currentPlayer, $CS_NumNonAttackCards, $CS_Num6PowBan;

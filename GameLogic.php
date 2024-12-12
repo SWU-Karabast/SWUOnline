@@ -427,7 +427,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         case "BOUNCE": return MZBounce($player, $lastResult);
         case "COLLECTBOUNTIES":
           $mzArr = explode("-", $lastResult);
-          CollectBounties($mzArr[0] == "MYALLY" ? $player : ($player == 1 ? 2 : 1), $mzArr[1]);
+          $ally = new Ally($lastResult);
+          CollectBounties($mzArr[0] == "MYALLY" ? $player : ($player == 1 ? 2 : 1), $ally->CardID(), $ally->UniqueID(), $ally->IsExhausted(), $ally->Owner(), $ally->GetUpgrades());
           return $lastResult;
         case "SINK": MZSink($player, $lastResult); return $lastResult;
         case "SUPPRESS": MZSuppress($player, $lastResult); return $lastResult;
@@ -1194,12 +1195,12 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       return $prevented;
     case "COLLECTBOUNTY":
       $paramArr = explode(",", $parameter);
-      $bounty = $paramArr[0];
-      $isExhausted = $paramArr[1];
-      $owner = $paramArr[2];
-      $bountyUnit = $paramArr[3];
+      $unitCardID = $paramArr[0];
+      $bountyCardID = $paramArr[1];
+      $isExhausted = $paramArr[2];
+      $owner = $paramArr[3];
       $capturerUniqueID = $paramArr[4];
-      CollectBounty($player, $bounty, $isExhausted, $owner, reportMode:false, bountyUnitOverride:$bountyUnit, capturerUniqueID:$capturerUniqueID);
+      CollectBounty($player, $unitCardID, $bountyCardID, $isExhausted, $owner, reportMode:false, capturerUniqueID:$capturerUniqueID);
       return $lastResult;
     case "ARCANECHOSEN":
       if($lastResult > 0) {

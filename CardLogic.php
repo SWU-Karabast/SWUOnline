@@ -619,7 +619,7 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
     case "AFTERDESTROYABILITY":
       $data=explode("_",$additionalCosts);
       for($i=0;$i<DestroyTriggerPieces();++$i) {
-        if($data[$i] != "") {
+        if(isset($data[$i]) && $data[$i] != "") {
           $arr=explode("=",$data[$i]);
           switch($arr[0]) {
             case "ALLYDESTROY":

@@ -1156,7 +1156,7 @@ function HasKeyword($cardID, $keyword, $player="", $index=-1){
     case "Raid": return RaidAmount($cardID, $player, $index, true) > 0;
     case "Grit": return HasGrit($cardID, $player, $index);
     case "Restore": return RestoreAmount($cardID, $player, $index) > 0;
-    case "Bounty": return CollectBounty($player, $cardID, "-", "-", true) > 0;
+    case "Bounty": return CollectBounty($player, $cardID, $cardID, false, $player, true) > 0; // Since we don't have information about "exhausted" and "owner," this data may be imprecise in very rare cases.
     case "Overwhelm": return HasOverwhelm($cardID, $player, $index);
     case "Saboteur": return HasSaboteur($cardID, $player, $index);
     case "Shielded": return HasShielded($cardID, $player, $index);
@@ -1169,7 +1169,7 @@ function HasKeyword($cardID, $keyword, $player="", $index=-1){
         RaidAmount($cardID, $player, $index, true) > 0 ||
         HasGrit($cardID, $player, $index) ||
         RestoreAmount($cardID, $player, $index) > 0 ||
-        CollectBounty($player, $cardID, "-", "-", true) > 0 ||
+        CollectBounty($player, $cardID, $cardID, false, $player, true) > 0 || // Since we don't have information about "exhausted" and "owner," this data may be imprecise in very rare cases.
         HasOverwhelm($cardID, $player, $index) ||
         HasSaboteur($cardID, $player, $index) ||
         HasShielded($cardID, $player, $index) ||
