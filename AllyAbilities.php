@@ -68,6 +68,17 @@ function CheckUniqueAlly($uniqueID) {
   }
 }
 
+function HasWhenEnemyDestroyed($cardID) {
+  switch($cardID) {
+    case "1664771721"://Gideon Hask
+    case "b0dbca5c05"://Iden Versio Leader Unit
+    case "2649829005"://Agent Kallus
+    case "8687233791"://Punishing One
+      return true;
+    default: return false;
+  }
+}
+
 function AllyHasStaticHealthModifier($cardID)
 {
   switch($cardID)
@@ -226,7 +237,7 @@ function RemoveAlly($player, $index)
 
 function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false, $skipRescue = false)
 {
-  global $mainPlayer, $CS_NumAlliesDestroyed, $CS_NumLeftPlay;
+  global $mainPlayer, $combatChainState, $CS_NumAlliesDestroyed, $CS_NumLeftPlay, $CCS_CachedLastDestroyed;
 
   $allies = &GetAllies($player);
   $ally = new Ally("MYALLY-" . $index, $player);
@@ -252,6 +263,16 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false,
       $whenBountiedData=SerializeBountiesData($uniqueID, $isExhausted, $owner, $upgrades);
     if($whenDestroyData || $whenResourceData || $whenBountiedData)
       LayerDestroyTriggers($player, $cardID, $uniqueID, $whenDestroyData, $whenResourceData, $whenBountiedData);
+    $wasUnique = CardIsUnique($cardID);
+    $wasUpgraded = $isUpgraded;
+    $otherPlayer = $player == 1 ? 2 : 1;
+    if($mainPlayer != $player) {
+      $combatChainState[$CCS_CachedLastDestroyed] = $ally->Serialize();
+    }
+    $triggers = GetAllyWhenDestroyTheirsEffects($mainPlayer, $otherPlayer, $wasUnique, $wasUpgraded);
+    if(count($triggers) > 0) {
+      LayerTheirsDestroyedTriggers($player, $triggers);
+    }
     IncrementClassState($player, $CS_NumAlliesDestroyed);
   }
   
@@ -514,7 +535,7 @@ function AllyLeavesPlayAbility($player, $index)
 function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities,
   $isUpgraded, $upgrades, $upgradesWithOwnerData)
 {
-  global $initiativePlayer;
+  global $initiativePlayer, $combatChain;
   if(!$lostAbilities) {
     switch($cardID) {
       case "4405415770"://Yoda, Old Master
@@ -720,40 +741,6 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities,
         break;
       case "1039828081"://Calculating MagnaGuard
         AddCurrentTurnEffect("1039828081", $player, "PLAY");
-        break;
-      default: break;
-    }
-  }
-  //Abilities that trigger when an opposing ally is destroyed
-  $otherPlayer = ($player == 1 ? 2 : 1);
-  $allies = &GetAllies($otherPlayer);
-  for($i = count($allies) - AllyPieces(); $i >= 0; $i -= AllyPieces()) {
-    $ally = new Ally("MYALLY-" . $i, $otherPlayer);
-    if($ally->LostAbilities()) continue;
-    switch($allies[$i]) {
-      case "1664771721"://Gideon Hask
-        AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a unit to add an experience");
-        AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY");
-        AddDecisionQueue("MAYCHOOSEMULTIZONE", $otherPlayer, "<-", 1);
-        AddDecisionQueue("MZOP", $otherPlayer, "ADDEXPERIENCE", 1);
-        break;
-      case "b0dbca5c05"://Iden Versio
-        Restore(1, $otherPlayer);
-        break;
-      case "2649829005"://Agent Kallus
-        if($ally->NumUses() > 0 && CardIsUnique($cardID)) {
-          $ally->ModifyUses(-1);
-          Draw($otherPlayer);
-        }
-        break;
-      case "8687233791"://Punishing One
-        if($isUpgraded && $ally->IsExhausted() && $ally->NumUses() > 0) {
-          AddDecisionQueue("YESNO", $otherPlayer, "if you want to ready " . CardLink("", $ally->CardID()));
-          AddDecisionQueue("NOPASS", $otherPlayer, "-");
-          AddDecisionQueue("PASSPARAMETER", $otherPlayer, "MYALLY-" . $i, 1);
-          AddDecisionQueue("MZOP", $otherPlayer, "READY", 1);
-          AddDecisionQueue("ADDMZUSES", $otherPlayer, "-1", 1);
-        }
         break;
       default: break;
     }
