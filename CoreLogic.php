@@ -2251,6 +2251,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
   }
   switch($cardID)
   {
+    case "7895170711"://A Fine Addition
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose where to play an upgrade from");
+      AddDecisionQueue("BUTTONINPUT", $currentPlayer, "My Hand,My Discard,Opponent Discard", 1);
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "AFINEADDITION", 1);
+      break;
     case "0345124206"://Clone
       $mzIndex = "MYALLY-" . $playAlly->Index();
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");

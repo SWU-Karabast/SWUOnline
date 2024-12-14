@@ -230,6 +230,21 @@ function SpecificCardLogic($player, $parameter, $lastResult)
   $card = $parameterArr[0];
   switch($card)
   {
+    case "AFINEADDITION":
+      AddCurrentTurnEffect("TTFREE", $player);
+      switch($lastResult)
+      {
+        case "My_Hand": AddDecisionQueue("MULTIZONEINDICES", $player, "MYHAND:definedType=Upgrade");
+          break;
+        case "My_Discard": AddDecisionQueue("MULTIZONEINDICES", $player, "MYDISCARD:definedType=Upgrade");
+          break;
+        case "Opponent_Discard": AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRDISCARD:definedType=Upgrade");
+          break;
+      }
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a card to play");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+      AddDecisionQueue("MZOP", $player, "PLAYCARD", 1);
+      break;
     case "RESOLUTE":
       $otherPlayer = $player == 1 ? 2 : 1;
       $cardID = GetMZCard($player, $lastResult);
