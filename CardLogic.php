@@ -616,6 +616,53 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       $uniqueID = $arr[1];
       AllyPlayCardAbility($target, $player, from: $additionalCosts, abilityID:$abilityID, uniqueID:$uniqueID);
       break;
+    case "AFTERDESTROYTHEIRSABILITY":
+      $data=explode(",",$target);
+      for($i=0;$i<count($data);$i+=TheirsDestroyedTriggerPieces()) {
+        $cardID=$data[$i];
+        $triggerPlayer=$data[$i+1];
+        $theirsWasUnique=$data[$i+2];
+        $theirsWasUpgraded=$data[$i+3];
+        $numUses=$data[$i+4];
+        $uniqueID=$data[$i+5];
+        switch($cardID) {
+          case "1664771721"://Gideon Hask
+            AddDecisionQueue("SETDQCONTEXT", $triggerPlayer, "Choose a unit to add an experience");
+            AddDecisionQueue("MULTIZONEINDICES", $triggerPlayer, "MYALLY");
+            AddDecisionQueue("MAYCHOOSEMULTIZONE", $triggerPlayer, "<-", 1);
+            AddDecisionQueue("MZOP",  $triggerPlayer, "ADDEXPERIENCE", 1);
+            break;
+          case "b0dbca5c05"://Iden Versio
+            Restore(1, $triggerPlayer);
+            break;
+          case "2649829005"://Agent Kallus
+            if($theirsWasUnique && $numUses > 0) {
+              Draw($data[$i+1]);
+              $allyIndex = SearchAlliesForUniqueID($data[$i+5], $data[$i+1]);
+              if($allyIndex != "-1") {
+                $ally = new Ally("MYALLY-$allyIndex");
+                $ally->ModifyUses(-1);
+              }
+            }
+            break;
+          case "8687233791"://Punishing One
+            if($theirsWasUpgraded && $numUses > 0) {
+              $allyIndex = SearchAlliesForUniqueID($uniqueID, $triggerPlayer);
+              if($allyIndex != "-1") {
+                $ally = new Ally("MYALLY-$allyIndex", $triggerPlayer);
+                AddDecisionQueue("YESNO", $triggerPlayer, "if you want to ready " . CardLink("", $ally->CardID()));
+                AddDecisionQueue("NOPASS", $triggerPlayer, "-");
+                AddDecisionQueue("PASSPARAMETER", $triggerPlayer, "MYALLY-" . $allyIndex, 1);
+                AddDecisionQueue("MZOP", $triggerPlayer, "READY", 1);
+                AddDecisionQueue("ADDMZUSES", $triggerPlayer, "-1", 1);
+              }
+            }
+            break;
+          default: break;
+        }
+      }
+      break;
+
     case "AFTERDESTROYABILITY":
       $data=explode("_",$additionalCosts);
       for($i=0;$i<DestroyTriggerPieces();++$i) {

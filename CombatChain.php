@@ -19,7 +19,7 @@ function ProcessHitEffect($cardID)
       if(IsAllyAttackTarget() && $combatChainState[$CCS_DamageDealt] > 0) {
         $ally = new Ally(GetAttackTarget(), $defPlayer);
         if(!DefinedTypesContains($ally->CardID(), "Leader", $defPlayer)) {
-          DestroyAlly($defPlayer, $ally->Index());
+          DestroyAlly($defPlayer, $ally->Index(), fromCombat:true);
         }
       }
       break;

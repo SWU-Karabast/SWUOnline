@@ -111,7 +111,7 @@ class Ally {
 
   //Returns true if the ally is destroyed
   function DefeatIfNoRemainingHP() {
-    if ($this->Health() <= 0 && ($this->CardID() != "d1a7b76ae7" || $this->LostAbilities()) && ($this->CardID() != "0345124206")) {  //Clone - Ensure that Clone remains in play while resolving the it's ability
+    if ($this->Health() <= 0 && ($this->CardID() != "d1a7b76ae7" || $this->LostAbilities()) && ($this->CardID() != "0345124206")) {  //Clone - Ensure that Clone remains in play while resolving its ability
       DestroyAlly($this->playerID, $this->index);
       return true;
     }
@@ -507,6 +507,13 @@ class Ally {
     return CollectBounties($this->PlayerID(), $this->CardID(), $this->UniqueID(), $this->IsExhausted(), $this->Owner(), $this->GetUpgrades(), reportMode:true) > 0;
   }
 
+  function Serialize() {
+    $builder = [];
+    for($i=0; $i<AllyPieces();++$i) {
+      $builder[$i] = $this->allies[$this->index+$i];
+    }
+    return implode(";", $builder);
+  }
 }
 
 function LastAllyIndex($player): int {
