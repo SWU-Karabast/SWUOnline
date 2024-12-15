@@ -1548,6 +1548,11 @@ function SpecificAllyAttackAbilities($attackID)
         }
       }
       break;
+    case "5445166624"://Clone Dive Trooper
+      if (IsCoordinateActive($mainPlayer)) {
+        AddCurrentTurnEffect("5445166624", $defPlayer, from:"PLAY");
+      }
+      break;
     case "9725921907"://Kintan Intimidator
       if(IsAllyAttackTarget()) {
         $target = GetAttackTarget();

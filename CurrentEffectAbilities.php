@@ -151,6 +151,7 @@ function EffectAttackModifier($cardID, $playerID="")
     case "2359136621": return $subparam;//Guarding The Way
     case "8297630396": return 1;//Shoot First
     case "5464125379": return -2;//Strafing Gunship
+    case "5445166624": return -2;//Clone Dive Trooper
     case "8495694166": return -2;//Jedi Lightsaber
     case "3789633661": return 4;//Cunning
     case "1939951561": return $subparam;//Attack Pattern Delta
@@ -697,6 +698,7 @@ function IsCombatEffectActive($cardID)
     case "9210902604": return true;//Precision Fire
     case "8297630396": return true;//Shoot First
     case "5464125379": return true;//Strafing Gunship
+    case "5445166624": return true;//Clone Dive Trooper
     case "8495694166": return true;//Jedi Lightsaber
     case "3789633661": return true;//Cunning
     case "8988732248": return true;//Rebel Assault
