@@ -393,6 +393,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
           $cardId = $layerName;
           if($cardId == "AFTERPLAYABILITY") $cardId = explode(',', $layers[$i+5])[0];
           if($cardId == "AFTERDESTROYABILITY") $cardId = $layers[$i+3];
+          if($cardId == "AFTERDESTROYFRIENDLYABILITY") $cardId = explode(",", $layers[$i+3])[0];
           if($cardId == "AFTERDESTROYTHEIRSABILITY") {
             $cardId = explode(",", $layers[$i+3])[0];
             $layerColor = $layerColor == 1 ? 2 : 1;

@@ -68,13 +68,32 @@ function CheckUniqueAlly($uniqueID) {
   }
 }
 
-function HasWhenEnemyDestroyed($cardID) {
+function HasWhenEnemyDestroyed($cardID, $numUses, $wasUnique, $wasUpgraded) {
   switch($cardID) {
     case "1664771721"://Gideon Hask
     case "b0dbca5c05"://Iden Versio Leader Unit
-    case "2649829005"://Agent Kallus
-    case "8687233791"://Punishing One
       return true;
+    case "2649829005"://Agent Kallus
+      return $wasUnique && $numUses > 0;
+    case "8687233791"://Punishing One
+      return $wasUpgraded && $numUses > 0;
+    default: return false;
+  }
+}
+
+function HasWhenFriendlyDestroyed($player, $cardID, $numUses, $uniqueID,
+    $destroyedCardID, $destroyedUniqueID, $destroyedWasUnique, $destroyedWasUpgraded) {
+  switch($cardID) {
+    case "2649829005"://Agent Kallus //goes hand-in-hand with the enemy destroyed ability
+      return $numUses > 0 && $destroyedWasUnique && $uniqueID != $destroyedUniqueID;
+    case "9353672706"://General Krell
+      return $uniqueID != $destroyedUniqueID;
+    case "3feee05e13"://Gar Saxon leader unit
+      return $destroyedWasUpgraded;
+    case "f05184bd91"://Nala Se
+      return TraitContains($destroyedCardID, "Clone", $player) || IsCloned($destroyedUniqueID);
+    case "1039828081"://Calculating MagnaGuard
+      return $uniqueID != $destroyedUniqueID;//while not specifically stated, it is implied that it will not be the destroyed unit
     default: return false;
   }
 }
@@ -235,6 +254,16 @@ function RemoveAlly($player, $index)
   return DestroyAlly($player, $index, true);
 }
 
+function GivesWhenDestroyedToAllies($cardID) {
+  switch($cardID) {
+    case "9353672706"://General Krell gives "When Defeated" to others
+    case "3feee05e13"://Gar Saxon leader unit gives "When Defeated" to himself and others
+    case "f05184bd91"://Nala Se gives "When Defeated" to others that are Clone traits
+      return true;
+    default: return false;
+  }
+}
+
 function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false, $skipRescue = false)
 {
   global $mainPlayer, $combatChainState, $CS_NumAlliesDestroyed, $CS_NumLeftPlay, $CCS_CachedLastDestroyed;
@@ -255,7 +284,10 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false,
   if(!$skipDestroy) {
     OnKillAbility($player, $uniqueID);
     $whenDestroyData="";$whenResourceData="";$whenBountiedData="";
-    if((HasWhenDestroyed($cardID) && !$isSuperlaserTech) || UpgradesContainWhenDefeated($upgrades))
+    if((HasWhenDestroyed($cardID)
+        && !$isSuperlaserTech
+        && !GivesWhenDestroyedToAllies($cardID))
+        || UpgradesContainWhenDefeated($upgrades))
       $whenDestroyData=SerializeAllyDestroyData($uniqueID,$lostAbilities,$isUpgraded,$upgrades,$upgradesWithOwnerData);
     if($isSuperlaserTech && !$lostAbilities)
       $whenResourceData=SerializeResourceData("PLAY","DOWN",0,"0","-1");
@@ -264,12 +296,15 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false,
     if($whenDestroyData || $whenResourceData || $whenBountiedData)
       LayerDestroyTriggers($player, $cardID, $uniqueID, $whenDestroyData, $whenResourceData, $whenBountiedData);
     $wasUnique = CardIsUnique($cardID);
-    $wasUpgraded = $isUpgraded;
-    $otherPlayer = $player == 1 ? 2 : 1;
-    if($mainPlayer != $player) {
+    $triggers = GetAllyWhenDestroyFriendlyEffects($player, $cardID, $uniqueID, $wasUnique, $isUpgraded, $upgradesWithOwnerData);
+    if(count($triggers) > 0) {
+      LayerFriendlyDestroyedTriggers($player, $triggers);
+    }
+    if($mainPlayer != $player && !$ally->LostAbilities()) {
       $combatChainState[$CCS_CachedLastDestroyed] = $ally->Serialize();
     }
-    $triggers = GetAllyWhenDestroyTheirsEffects($mainPlayer, $otherPlayer, $wasUnique, $wasUpgraded);
+    $otherPlayer = $player == 1 ? 2 : 1;
+    $triggers = GetAllyWhenDestroyTheirsEffects($mainPlayer, $otherPlayer, $uniqueID, $wasUnique, $isUpgraded, $upgradesWithOwnerData);
     if(count($triggers) > 0) {
       LayerTheirsDestroyedTriggers($player, $triggers);
     }
@@ -707,43 +742,6 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities,
           PlayAlly("3463348370", $player);//Battle Droid
           break;
       }
-    }
-  }
-  //Abilities that trigger when a different ally is destroyed
-  $allies = &GetAllies($player);
-  for($i = count($allies) - AllyPieces(); $i >= 0; $i -= AllyPieces()) {
-    if($i == $index) continue;
-    $ally = new Ally("MYALLY-" . $i, $player);
-    if($ally->LostAbilities()) continue;
-    switch($allies[$i]) {
-      case "9353672706"://General Krell
-        Draw($player);
-        WriteLog("Drew a card from General Krell");
-        break;
-      case "3feee05e13"://Gar Saxon
-        $upgrades = $upgradesWithOwnerData;
-        if(count($upgrades) > 0) {
-          $upgradesParams = "";
-          for ($i = 0; $i < count($upgrades); $i += SubcardPieces()) {
-            if(!IsToken($upgrades[$i])) {
-              if($upgradesParams != "") $upgradesParams .= ",";
-              $upgradesParams .= $upgrades[$i] . "-" . $upgrades[$i+1];
-            }
-          }
-          if($upgradesParams == "") break;
-          AddDecisionQueue("PASSPARAMETER", $player, $upgradesParams);
-          AddDecisionQueue("SETDQCONTEXT", $player, "Choose an upgrade to bounce");
-          AddDecisionQueue("MAYCHOOSECARD", $player, "<-", 1);
-          AddDecisionQueue("OP", $player, "BOUNCEUPGRADE", 1);
-        }
-        break;
-      case "f05184bd91"://Nala Se
-        if(TraitContains($cardID, "Clone", $player) || IsCloned($uniqueID)) Restore(2, $player); //Clone
-        break;
-      case "1039828081"://Calculating MagnaGuard
-        AddCurrentTurnEffect("1039828081", $player, "PLAY");
-        break;
-      default: break;
     }
   }
 }

@@ -618,13 +618,10 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       break;
     case "AFTERDESTROYTHEIRSABILITY":
       $data=explode(",",$target);
-      for($i=0;$i<count($data);$i+=TheirsDestroyedTriggerPieces()) {
+      for($i=0;$i<count($data);$i+=OtherDestroyedTriggerPieces()) {
         $cardID=$data[$i];
         $triggerPlayer=$data[$i+1];
-        $theirsWasUnique=$data[$i+2];
-        $theirsWasUpgraded=$data[$i+3];
-        $numUses=$data[$i+4];
-        $uniqueID=$data[$i+5];
+        $uniqueID=$data[$i+2];
         switch($cardID) {
           case "1664771721"://Gideon Hask
             AddDecisionQueue("SETDQCONTEXT", $triggerPlayer, "Choose a unit to add an experience");
@@ -636,33 +633,83 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
             Restore(1, $triggerPlayer);
             break;
           case "2649829005"://Agent Kallus
-            if($theirsWasUnique && $numUses > 0) {
-              Draw($data[$i+1]);
-              $allyIndex = SearchAlliesForUniqueID($data[$i+5], $data[$i+1]);
-              if($allyIndex != "-1") {
-                $ally = new Ally("MYALLY-$allyIndex");
-                $ally->ModifyUses(-1);
-              }
+            $allyIndex = SearchAlliesForUniqueID($uniqueID, $triggerPlayer);
+            AddDecisionQueue("SETDQCONTEXT", $triggerPlayer, "Choose if you want to draw for Agent Kallus");
+            AddDecisionQueue("YESNO", $triggerPlayer, "-");
+            AddDecisionQueue("NOPASS", $triggerPlayer, "-");
+            AddDecisionQueue("DRAW", $triggerPlayer, "-", 1);
+            if($allyIndex != "-1") {
+              AddDecisionQueue("PASSPARAMETER", $triggerPlayer, "MYALLY-" . $allyIndex, 1);
+              AddDecisionQueue("ADDMZUSES", $triggerPlayer, "-1", 1);
             }
             break;
           case "8687233791"://Punishing One
-            if($theirsWasUpgraded && $numUses > 0) {
-              $allyIndex = SearchAlliesForUniqueID($uniqueID, $triggerPlayer);
-              if($allyIndex != "-1") {
-                $ally = new Ally("MYALLY-$allyIndex", $triggerPlayer);
-                AddDecisionQueue("YESNO", $triggerPlayer, "if you want to ready " . CardLink("", $ally->CardID()));
-                AddDecisionQueue("NOPASS", $triggerPlayer, "-");
-                AddDecisionQueue("PASSPARAMETER", $triggerPlayer, "MYALLY-" . $allyIndex, 1);
-                AddDecisionQueue("MZOP", $triggerPlayer, "READY", 1);
-                AddDecisionQueue("ADDMZUSES", $triggerPlayer, "-1", 1);
-              }
+            $allyIndex = SearchAlliesForUniqueID($uniqueID, $triggerPlayer);
+            if($allyIndex != "-1") {
+              $ally = new Ally("MYALLY-$allyIndex", $triggerPlayer);
+              AddDecisionQueue("YESNO", $triggerPlayer, "if you want to ready " . CardLink("", $ally->CardID()));
+              AddDecisionQueue("NOPASS", $triggerPlayer, "-");
+              AddDecisionQueue("PASSPARAMETER", $triggerPlayer, "MYALLY-" . $allyIndex, 1);
+              AddDecisionQueue("MZOP", $triggerPlayer, "READY", 1);
+              AddDecisionQueue("ADDMZUSES", $triggerPlayer, "-1", 1);
             }
             break;
           default: break;
         }
       }
       break;
-
+    case "AFTERDESTROYFRIENDLYABILITY":
+      $data = explode(",", $target);
+      for($i=0;$i<count($data);$i+=OtherDestroyedTriggerPieces()) {
+        $cardID=$data[$i];
+        $triggerPlayer=$data[$i+1];
+        $uniqueID=$data[$i+2];
+        $upgradesWithOwnerData=$data[$i+3];
+        switch($data[$i]) {
+          case "9353672706"://General Krell
+            AddDecisionQueue("SETDQCONTEXT", $triggerPlayer, "Choose if you want to draw for General Krell");
+            AddDecisionQueue("YESNO", $triggerPlayer, "-");
+            AddDecisionQueue("NOPASS", $triggerPlayer, "-");
+            AddDecisionQueue("DRAW", $triggerPlayer, "-", 1);
+            break;
+          case "2649829005"://Agent Kallus
+            $allyIndex = SearchAlliesForUniqueID($uniqueID, $triggerPlayer);
+            AddDecisionQueue("SETDQCONTEXT", $triggerPlayer, "Choose if you want to draw for Agent Kallus");
+            AddDecisionQueue("YESNO", $triggerPlayer, "-");
+            AddDecisionQueue("NOPASS", $triggerPlayer, "-");
+            AddDecisionQueue("DRAW", $triggerPlayer, "-", 1);
+            if($allyIndex != "-1") {
+              AddDecisionQueue("PASSPARAMETER", $triggerPlayer, "MYALLY-" . $allyIndex, 1);
+              AddDecisionQueue("ADDMZUSES", $triggerPlayer, "-1", 1);
+            }
+            break;
+          case "3feee05e13"://Gar Saxon
+            $upgrades = explode(";",$upgradesWithOwnerData);
+            if(count($upgrades) > 0) {
+              $upgradesParams = "";
+              for ($i = 0; $i < count($upgrades); $i += SubcardPieces()) {
+                if(!IsToken($upgrades[$i])) {
+                  if($upgradesParams != "") $upgradesParams .= ",";
+                  $upgradesParams .= $upgrades[$i] . "-" . $upgrades[$i+1];
+                }
+              }
+              if($upgradesParams == "") break;
+              AddDecisionQueue("PASSPARAMETER", $player, $upgradesParams);
+              AddDecisionQueue("SETDQCONTEXT", $player, "Choose an upgrade to bounce");
+              AddDecisionQueue("MAYCHOOSECARD", $player, "<-", 1);
+              AddDecisionQueue("OP", $player, "BOUNCEUPGRADE", 1);
+            }
+            break;
+          case "f05184bd91"://Nala Se
+            Restore(2, $player); //Clone
+            break;
+          case "1039828081"://Calculating MagnaGuard
+            AddCurrentTurnEffect("1039828081", $player, "PLAY", $uniqueID);
+            break;
+          default: break;
+        }
+      }
+      break;
     case "AFTERDESTROYABILITY":
       $data=explode("_",$additionalCosts);
       for($i=0;$i<DestroyTriggerPieces();++$i) {
