@@ -92,9 +92,17 @@ function RestoreAmount($cardID, $player, $index)
   }
   $ally = new Ally("MYALLY-" . $index, $player);
   $upgrades = $ally->GetUpgrades();
-  for($i=0; $i<count($upgrades); ++$i)
-  {
-    if($upgrades[$i] == "8788948272") $amount += 2;
+  for($i=0; $i<count($upgrades); ++$i) {
+    $upgradeCardID = $upgrades[$i];
+    
+    switch($upgradeCardID) {
+      case "8788948272":
+        $amount += 2;
+        break;
+      case "7884488904"://For The Republic
+        $amount += IsCoordinateActive($player) ? 2 : 0;
+        break;
+    }
   }
   switch($cardID)
   {
