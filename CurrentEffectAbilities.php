@@ -603,7 +603,7 @@ function CurrentEffectEndTurnAbilities()
       case "5696041568-2"://Triple Dark Raid
         $ally = GetAlly($currentTurnEffects[$i+2]);
         if ($ally != null) {
-          MZBounce($ally->Owner(), $ally->MZIndex());
+          MZBounce($ally->Controller(), "MYALLY-" . $ally->Index());
         }
         break;
       case "1910812527":
