@@ -826,8 +826,7 @@ function ChainLinkBeginResolutionEffects()
 
 function ResolveChainLink()
 {
-  global $combatChain, $combatChainState, $currentPlayer, $mainPlayer, $defPlayer, $CCS_CombatDamageReplaced, $CCS_LinkTotalAttack;
-  global $CCS_DamageDealt;
+  global $combatChainState, $currentPlayer, $mainPlayer, $defPlayer, $CCS_LinkTotalAttack;
   UpdateGameState($currentPlayer);
   BuildMainPlayerGameState();
 
@@ -835,13 +834,63 @@ function ResolveChainLink()
   $attackerMZ = AttackerMZID($mainPlayer);
   $attackerArr = explode("-", $attackerMZ);
   $attacker = new Ally($attackerMZ, $mainPlayer);
-  $hasOverwhelm = HasOverwhelm($attacker->CardID(), $mainPlayer, $attacker->Index());
-  $attackerID = $attacker->CardID();
-  $attackerSurvived = 1;
   $totalAttack = $attacker->CurrentPower();
   $combatChainState[$CCS_LinkTotalAttack] = $totalAttack;
-
+  $totalAttack = $attacker->CurrentPower();
   $target = GetAttackTarget();
+
+  if(!IsMultiTargetAttackActive()) {
+    ResolveSingleTarget($mainPlayer, $defPlayer, $target, $attackerArr[0], $attacker, $totalAttack, $totalDefense);
+  }
+  else {
+    ResolveMultiTarget($attacker, $mainPlayer, $defPlayer);
+  }
+}
+
+function ResolveMultiTarget(Ally $attacker, $mainPlayer, $defPlayer) {
+  global $combatChainState, $CCS_MultiAttackTargets;
+
+  $attackerID = $attacker->CardID();
+  $hasOverwhelm = HasOverwhelm($attacker->CardID(), $mainPlayer, $attacker->Index());
+  $hasSaboteur = HasSaboteur($attacker->CardID(), $mainPlayer, $attacker->Index());
+  $attackerDestroyed = 0;
+  $attackerDamage = $attacker->CurrentPower();
+  $multiTargetAllyIDs = explode(",",$combatChainState[$CCS_MultiAttackTargets]);
+  $numTargets = count($multiTargetAllyIDs);
+  for($i=0; $i<$numTargets;++$i) {
+    $defAlly = new Ally("MYALLY-$multiTargetAllyIDs[$i]", $defPlayer);
+    $defDamage = $defAlly->CurrentPower();
+    $defRemainingHP = $defAlly->Health();
+    $excess = $attackerDamage - $defRemainingHP;
+    $destroyed = $defAlly->DealDamage($attackerDamage, $hasSaboteur, fromCombat:true,enemyDamage:true,fromUnitEffect:true);
+    if($i+1 == $numTargets) $combatChainState[$CCS_MultiAttackTargets]="-";
+    $attackerDestroyed = $attackerDestroyed || $attacker->DealDamage($defDamage,fromCombat:true,enemyDamage:true,fromUnitEffect:true);
+    if ($destroyed) {
+      if($hasOverwhelm && $destroyed) {
+        DealDamageAsync($defPlayer, $excess, "OVERWHELM", $attackerID);
+        WriteLog("OVERWHELM : <span style='color:Crimson;'>$excess damage</span> done on base");
+      }
+      for($j=$i;$j<$numTargets;++$j) {
+        $multiTargetAllyIDs[$j]-=AllyPieces();
+      }
+    }
+    ProcessDecisionQueue();
+  }
+  if(!$attackerDestroyed) {
+    CompletesAttackEffect($attackerID);
+  }
+  ResolveCombatDamage($attackerDamage);
+  ClearAttackTarget();
+}
+
+function ResolveSingleTarget($mainPlayer, $defPlayer, $target, $attackerPrefix, Ally $attacker, $totalAttack, $totalDefense) {
+  global $combatChain, $combatChainState, $mainPlayer, $defPlayer, $CCS_CombatDamageReplaced;
+  global $CCS_DamageDealt;
+
+  $targetArr = explode("-", $target);
+  $attackerID = $attacker->CardID();
+  $hasOverwhelm = HasOverwhelm($attackerID, $mainPlayer, $attacker->Index());
+
   if($target == "THEIRALLY--1") {//Means the target was already destroyed
     if($hasOverwhelm) {
       DealDamageAsync($defPlayer, $totalAttack, "OVERWHELM", $attackerID);
@@ -871,7 +920,7 @@ function ResolveChainLink()
     $excess = $totalAttack - $defender->Health();
     $destroyed = $defender->DealDamage($totalAttack, bypassShield:HasSaboteur($attackerID, $mainPlayer, $attacker->Index()), fromCombat:true, damageDealt:$combatChainState[$CCS_DamageDealt]);
     if($destroyed) ClearAttackTarget();
-    if($attackerArr[0] == "MYALLY" && (!$destroyed || !ShouldCombatDamageFirst())) {
+    if($attackerPrefix == "MYALLY" && (!$destroyed || !ShouldCombatDamageFirst())) {
       $attackerDestroyed = $attacker->DealDamage($defenderPower, fromCombat:true);
       if($attackerDestroyed) {
         ClearAttacker();
@@ -970,7 +1019,7 @@ function FinalizeChainLink($chainClosed = false)
   UpdateGameState($currentPlayer);
   BuildMainPlayerGameState();
 
-  ChainLinkResolvedEffects();
+  //ChainLinkResolvedEffects();//FAB
 
   $chainLinks[] = array();
   $CLIndex = count($chainLinks) - 1;
@@ -1559,11 +1608,29 @@ function GetTargetOfAttack($attackID)
       $sentinelTargets .= "THEIRALLY-" . $i;
     }
   }
-  if($sentinelTargets != "" && !HasSaboteur($attackID, $mainPlayer, $attacker->Index())) $targets = $sentinelTargets;
+  $attackerIndex=$attacker->Index();
+  if($sentinelTargets != "" && !HasSaboteur($attackID, $mainPlayer, $attackerIndex)) $targets = $sentinelTargets;
   if(SearchCount($targets) > 1) {
-    PrependDecisionQueue("PROCESSATTACKTARGET", $mainPlayer, "-");
-    PrependDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, $targets);
-    PrependDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a target for the attack");
+    switch($attackID) {
+      case "8613680163"://Darth Maul - Revenge At Last
+        if(str_contains($targets, "THEIRCHAR-")) {
+          AddDecisionQueue("PASSPARAMETER", $mainPlayer, $targets, 1);
+          AddDecisionQueue("SETDQVAR", $mainPlayer, 0, 1);
+          AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose target");
+          AddDecisionQueue("BUTTONINPUT", $mainPlayer, "Base,Units");
+        } else {
+          AddDecisionQueue("PASSPARAMETER", $mainPlayer, $targets, 1);
+          AddDecisionQueue("SETDQVAR", $mainPlayer, 0, 1);
+          AddDecisionQueue("PASSPARAMETER", $mainPlayer, "Units", 1);  
+        }
+        AddDecisionQueue("SPECIFICCARD", $mainPlayer, "MAUL_TWI,$attackerIndex", 1);
+        break;
+      default: 
+        PrependDecisionQueue("PROCESSATTACKTARGET", $mainPlayer, "-");
+        PrependDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, $targets);
+        PrependDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a target for the attack");
+        break;
+    }
   } else if($targets == "") {
     WriteLog("There are no valid targets for this attack. Reverting gamestate.");
     RevertGamestate();
@@ -1660,7 +1727,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
   global $CS_CharacterIndex, $CS_NumNonAttackCards, $CS_PlayCCIndex, $CS_NumAttacks, $CCS_LinkBaseAttack;
   global $CCS_WeaponIndex, $EffectContext, $CCS_AttackUniqueID, $CS_NumEventsPlayed, $CS_AfterPlayedBy, $layers;
   global $CS_NumDragonAttacks, $CS_NumIllusionistAttacks, $CS_NumIllusionistActionCardAttacks, $CCS_IsBoosted;
-  global $SET_PassDRStep, $CS_AbilityIndex, $CS_NumMandalorianAttacks;
+  global $SET_PassDRStep, $CS_AbilityIndex, $CS_NumMandalorianAttacks, $CCS_MultiAttackTargets;
   
   $oppCardActive = GetClassState($currentPlayer, $CS_OppCardActive) > 0;
 

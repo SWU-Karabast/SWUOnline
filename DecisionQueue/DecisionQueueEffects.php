@@ -225,11 +225,19 @@ function PlayerTargetedAbility($player, $card, $lastResult)
 
 function SpecificCardLogic($player, $parameter, $lastResult)
 {
-  global $dqVars, $CS_DamageDealt;
+  global $dqVars, $CS_DamageDealt, $combatChainState, $CCS_MultiAttackTargets;
   $parameterArr = explode(",", $parameter);
   $card = $parameterArr[0];
   switch($card)
   {
+    case "MAUL_TWI":
+      if ($lastResult==="Units") {
+        $dqVars[0]=str_replace("THEIRCHAR-0,", "", $dqVars[0]);
+        AddDecisionQueue("PASSPARAMETER", $player, $dqVars[0], 1);
+        AddDecisionQueue("OP", $player, "MZTONORMALINDICES");
+        AddDecisionQueue("MZOP", $player, "MULTICHOOSEATTACKTARGETS", 1);
+      }
+      break;
     case "AFINEADDITION":
       AddCurrentTurnEffect("TTFREE", $player);
       switch($lastResult)

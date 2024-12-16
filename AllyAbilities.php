@@ -98,6 +98,15 @@ function HasWhenFriendlyDestroyed($player, $cardID, $numUses, $uniqueID,
   }
 }
 
+function AllyIsMultiAttacker($cardID) {
+  switch($cardID) {
+    case "8613680163"://Darth Maul - Revenge At Last
+      return true;
+    default:
+      return false;
+  }
+}
+
 function AllyHasStaticHealthModifier($cardID)
 {
   switch($cardID)

@@ -324,6 +324,7 @@ $CCS_CachedNumDefendedFromHand = 33;
 $CCS_HitThisLink = 34;
 $CCS_CantAttackBase = 35;
 $CCS_CachedLastDestroyed = 36;
+$CCS_MultiAttackTargets = 37;
 
 function ResetCombatChainState()
 {
@@ -333,7 +334,7 @@ function ResetCombatChainState()
   global $CCS_LinkTotalAttack, $CCS_LinkBaseAttack, $CCS_BaseAttackDefenseMax, $CCS_ResourceCostDefenseMin, $CCS_AfterLinkLayers;
   global $CCS_CachedTotalAttack, $CCS_CachedTotalBlock, $CCS_CombatDamageReplaced, $CCS_AttackUniqueID, $CCS_RequiredEquipmentBlock;
   global $mainPlayer, $defPlayer, $CCS_CachedDominateActive, $CCS_CachedNumBlockedFromHand, $CCS_IsBoosted, $CCS_AttackTargetUID, $CCS_CachedOverpowerActive, $CSS_CachedNumActionBlocked;
-  global $layers, $chainLinks, $chainLinkSummary, $CCS_CachedNumDefendedFromHand, $CCS_HitThisLink, $CCS_IsAmbush, $CCS_CantAttackBase, $CCS_CachedLastDestroyed;
+  global $layers, $chainLinks, $chainLinkSummary, $CCS_CachedNumDefendedFromHand, $CCS_HitThisLink, $CCS_IsAmbush, $CCS_CantAttackBase, $CCS_CachedLastDestroyed, $CCS_MultiAttackTargets;
 
   $combatChainState[$CCS_CurrentAttackGainedGoAgain] = 0;
   $combatChainState[$CCS_WeaponIndex] = -1;
@@ -367,6 +368,7 @@ function ResetCombatChainState()
   $combatChainState[$CCS_HitThisLink] = 0;
   $combatChainState[$CCS_CantAttackBase] = 0;
   $combatChainState[$CCS_CachedLastDestroyed] = "NA";
+  $combatChainState[$CCS_MultiAttackTargets] = "-";
   $defCharacter = &GetPlayerCharacter($defPlayer);
   for ($i = 0; $i < count($defCharacter); $i += CharacterPieces()) {
     $defCharacter[$i + 6] = 0;
@@ -421,7 +423,7 @@ function ResetChainLinkState()
   global $CCS_LinkTotalAttack, $CCS_LinkBaseAttack, $CCS_BaseAttackDefenseMax, $CCS_ResourceCostDefenseMin, $CCS_AfterLinkLayers;
   global $CCS_CachedTotalAttack, $CCS_CachedTotalBlock, $CCS_CombatDamageReplaced, $CCS_AttackUniqueID, $CCS_RequiredEquipmentBlock;
   global $CCS_CachedDominateActive, $CCS_CachedNumBlockedFromHand, $CCS_IsBoosted, $CCS_AttackTargetUID, $CCS_CachedOverpowerActive, $CSS_CachedNumActionBlocked;
-  global $CCS_CachedNumDefendedFromHand, $CCS_HitThisLink, $CCS_CantAttackBase, $CCS_CachedLastDestroyed;
+  global $CCS_CachedNumDefendedFromHand, $CCS_HitThisLink, $CCS_CantAttackBase, $CCS_CachedLastDestroyed, $CCS_MultiAttackTargets;
   WriteLog("The chain link was closed.");
   $combatChainState[$CCS_CurrentAttackGainedGoAgain] = 0;
   $combatChainState[$CCS_WeaponIndex] = -1;
@@ -453,6 +455,7 @@ function ResetChainLinkState()
   $combatChainState[$CCS_HitThisLink] = 0;
   $combatChainState[$CCS_CantAttackBase] = 0;
   $combatChainState[$CCS_CachedLastDestroyed] = "NA";
+  $combatChainState[$CCS_MultiAttackTargets] = "-";
   UnsetChainLinkBanish();
 }
 
