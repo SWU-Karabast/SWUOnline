@@ -1700,17 +1700,32 @@ function SameWeaponEquippedTwice()
   return false;
 }
 
+function IgnoreAspectPenalty($cardID, $player) {
+  global $myClassState, $CS_NumClonesPlayed, $CS_LayerTarget;
+
+  if(TraitContains($cardID, "Spectre")) {
+    return HeroCard($player) == "7440067052" || SearchAlliesForCard($player, "80df3928eb") != ""; //Hera Syndulla (Spectre Two)
+  }
+  if (TraitContains($cardID, "Clone")) {
+    return (SearchAlliesForCard($player, "1386874723") != "" && GetClassState($player, $CS_NumClonesPlayed) < 1) //Omega (Part of the Squad)
+      || (HeroCard($player) == "2742665601" && SearchAlliesForCard($player, "f05184bd91") != ""); //Nala Se (Kaminoan Prime Minister)
+  }
+  if(TraitContains($cardID, "Lightsaber")) {
+    $findGrievous = SearchAlliesForCard($player, "4776553531");
+    return $findGrievous != "" && $myClassState[$CS_LayerTarget] == "MYALLY-$findGrievous"; //General Grievous  (Trophy Collector)
+  }
+
+  return false;
+}
+
 function SelfCostModifier($cardID, $from)
 {
   global $currentPlayer, $CS_LastAttack, $CS_LayerTarget, $CS_NumClonesPlayed, $layers;
   $modifier = 0;
   //Aspect Penalty
-  $heraSyndullaAspectPenaltyIgnore = TraitContains($cardID, "Spectre", $currentPlayer) && (HeroCard($currentPlayer) == "7440067052" || SearchAlliesForCard($currentPlayer, "80df3928eb") != ""); //Hera Syndulla (Spectre Two)
-  $omegaAspectPenaltyIgnore = TraitContains($cardID, "Clone", $currentPlayer) && SearchAlliesForCard($currentPlayer, "1386874723") != "" && GetClassState($currentPlayer, $CS_NumClonesPlayed) < 1; //Omega (Part of the Squad)
-  $nalaSeAspectPenaltyIgnore = TraitContains($cardID, "Clone", $currentPlayer) &&  (HeroCard($currentPlayer) == "2742665601" || SearchAlliesForCard($currentPlayer, "f05184bd91") != ""); //Nala Se (Kaminoan Prime Minister)
   $playerAspects = PlayerAspects($currentPlayer);
   $penalty = 0;
-  if(!$heraSyndullaAspectPenaltyIgnore && !$omegaAspectPenaltyIgnore && !$nalaSeAspectPenaltyIgnore) {
+  if(!IgnoreAspectPenalty($cardID, $currentPlayer)) {
     $cardAspects = CardAspects($cardID);
     //Manually changing the aspects of cards played with smuggle that have different aspect requirements for smuggle.
     //Not a great solution; ideally we could define a whole smuggle ability in one place.

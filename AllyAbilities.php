@@ -1975,6 +1975,27 @@ function SpecificAllyAttackAbilities($attackID)
         }
       }
       break;
+    case "4776553531"://General Grievous - Trophy Collector
+      $findGrievous = SearchAlliesForCard($mainPlayer, "4776553531");
+      if($findGrievous !== "") {
+        $numLightsabers = 0;
+        $ally=new Ally("MYALLY-$findGrievous", $mainPlayer);
+        $upgrades = $ally->GetUpgrades();
+        if(count($upgrades) >= 4) {
+          for($i=0; $i<count($upgrades); ++$i) {
+            if(TraitContains($upgrades[$i], "Lightsaber", $mainPlayer)) ++$numLightsabers;
+          }
+        }
+        if($numLightsabers >= 4) {
+          for($i=0; $i<4;++$i) {
+            AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY", 1);
+            AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to defeat", 1);//not optional
+            AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+            AddDecisionQueue("MZOP", $mainPlayer, "DESTROY", 1);
+          }
+        }
+      }
+      break;
     default: break;
   }
   //SpecificAllyAttackAbilities End
