@@ -12,12 +12,10 @@ function DestroyTriggerPieces() {
 
 //0 - CardID
 //1 - Player
-//2 - WasUnique
-//3 - WasUpgraded
-//4 - NumUses
-//5 - UniqueID
-function TheirsDestroyedTriggerPieces() {
-  return 6;
+//2 - UniqueID
+//3 - UpgradesWithOwnerData
+function OtherDestroyedTriggerPieces() {
+  return 4;
 }
 
 function LayerDestroyTriggers($player, $cardID, $uniqueID, 
@@ -36,48 +34,67 @@ function LayerTheirsDestroyedTriggers($player, $arr) {
   AddLayer("TRIGGER", $player, "AFTERDESTROYTHEIRSABILITY", $data);
 }
 
-function GetAllyWhenDestroyTheirsEffects($mainPlayer, $player, $wasUnique, $wasUpgraded) {
+function LayerFriendlyDestroyedTriggers($player, $arr) {
+  $data=implode(",", $arr);
+  AddLayer("TRIGGER", $player, "AFTERDESTROYFRIENDLYABILITY", $data);
+}
+
+function GetAllyWhenDestroyTheirsEffects($mainPlayer, $player, 
+    $destroyedUniqueID, $destroyedWasUnique, $destroyedWasUpgraded, $destroyedUpgradesWithOwnerData) {
   global $combatChainState, $CCS_CachedLastDestroyed;
   $triggers=[];
   if($mainPlayer != $player) {
     $allies = &GetAllies($player);
     for($i=0;$i<count($allies);$i+=AllyPieces()) {
-      if(HasWhenEnemyDestroyed($allies[$i])) {
-        array_unshift($triggers, $allies[$i+5]);
-        array_unshift($triggers, $allies[$i+8]);
-        array_unshift($triggers, $wasUpgraded);
-        array_unshift($triggers, $wasUnique);
+      $ally = new Ally("MYALLY-$i", $player);
+      if(!$ally->LostAbilities() && HasWhenEnemyDestroyed($ally->CardID(), $ally->NumUses(), $destroyedWasUnique, $destroyedWasUpgraded)) {
+        array_unshift($triggers, implode(";",$destroyedUpgradesWithOwnerData));
+        array_unshift($triggers, $ally->UniqueID());
         array_unshift($triggers, $player);
-        array_unshift($triggers, $allies[$i]);
-      };
+        array_unshift($triggers, $ally->CardID());
+      }
     }
   } else {
     $allies = &GetAllies($player);
     for($i=0;$i<count($allies);$i+=AllyPieces()) {
-      if(HasWhenEnemyDestroyed($allies[$i])) {
-        array_unshift($triggers, $allies[$i+5]);
-        array_unshift($triggers, $allies[$i+8]);
-        array_unshift($triggers, $wasUpgraded);
-        array_unshift($triggers, $wasUnique);
+      $ally = new Ally("MYALLY-$i", $player);
+      if(!$ally->LostAbilities() && HasWhenEnemyDestroyed($ally->CardID(), $ally->NumUses(), $destroyedWasUnique, $destroyedWasUpgraded)) {
+        array_unshift($triggers, implode(";",$destroyedUpgradesWithOwnerData));
+        array_unshift($triggers, $ally->UniqueID());
         array_unshift($triggers, $player);
-        array_unshift($triggers, $allies[$i]);
+        array_unshift($triggers, $ally->CardID());
       };
     }
     if($combatChainState[$CCS_CachedLastDestroyed] != "NA") {
       $ally = explode(";",$combatChainState[$CCS_CachedLastDestroyed]);
-      if(HasWhenEnemyDestroyed($ally[$i])) {
-        array_unshift($triggers, $ally[$i+5]);
-        array_unshift($triggers, $ally[$i+8]);
-        array_unshift($triggers, $wasUpgraded);
-        array_unshift($triggers, $wasUnique);
+      if(HasWhenEnemyDestroyed($ally[$i], $ally[$i+8], $destroyedWasUnique, $destroyedWasUpgraded)) {
+        array_unshift($triggers, implode(";",$destroyedUpgradesWithOwnerData));
+        array_unshift($triggers, $ally[5]);
         array_unshift($triggers, $player);
-        array_unshift($triggers, $ally[$i]);
+        array_unshift($triggers, $ally[0]);
       };
     }
   }
 
   return $triggers;
 }
+
+function GetAllyWhenDestroyFriendlyEffects($player, $destroyedCardID, $destroyedUniqueID, $destroyedWasUnique, $destroyedWasUpgraded, $upgradesWithOwnerData) {
+  $triggers=[];
+  $allies = &GetAllies($player);
+    for($i=0;$i<count($allies);$i+=AllyPieces()) {
+      $ally = new Ally("MYALLY-$i", $player);
+      if(!$ally->LostAbilities() && HasWhenFriendlyDestroyed($player, $ally->CardID(), $ally->NumUses(), $ally->UniqueID(),
+          $destroyedCardID, $destroyedUniqueID, $destroyedWasUnique, $destroyedWasUpgraded)) {
+        array_unshift($triggers, implode(";",$upgradesWithOwnerData));
+        array_unshift($triggers, $ally->UniqueID());
+        array_unshift($triggers, $player);
+        array_unshift($triggers, $ally->CardID());
+      };
+    }
+  return $triggers;
+}
+
 
 function SerializeAllyDestroyData($uniqueID, $lostAbilities, $isUpgraded, $upgrades, $upgradesWithOwnerData) {
     $upgradesSerialized = implode(",",$upgrades);
