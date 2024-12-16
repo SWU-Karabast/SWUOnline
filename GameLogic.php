@@ -407,6 +407,9 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         case "GAINCONTROL": MZGainControl($player, $lastResult); break;
         case "GETCARDID": return GetMZCard($player, $lastResult);
         case "GETCARDCOST": return CardCost($lastResult);
+        case "GETCARDTITLE":
+          $cardTitle = CardTitle($lastResult);
+          return GamestateSanitize($cardTitle);
         case "GETCARDINDEX": $mzArr = explode("-", $lastResult); return $mzArr[1];
         case "GETUNIQUEID":
           $mzArr = explode("-", $lastResult);
@@ -604,6 +607,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           return $lastResult;
         case "WRITECHOICEFROMUNIQUE":
           $controller = UnitUniqueIDController($lastResult);
+          $controller = $controller != -1 ? $controller : 1;
           $index = SearchAlliesForUniqueID($lastResult, $controller);
           $ally = new Ally($controller == $currentPlayer ? "MYALLY-" . $index : "THEIRALLY-" . $index);
           WriteLog(CardLink($ally->CardID(), $ally->CardID()) . " was chosen");
@@ -1009,7 +1013,18 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
     case "ADDLIMITEDCURRENTEFFECT":
       $uniqueID = $lastResult;
       $params = explode(",", $parameter);
-      AddCurrentTurnEffect($params[0], UnitUniqueIDController($uniqueID), $params[1], $uniqueID);
+      $controller = UnitUniqueIDController($uniqueID);
+      $from = "";
+      if ($controller == -1) {
+        $controller = $player;
+      }
+      if (isset($params[1])) {
+        $from = $params[1];
+      }
+      if (isset($params[2])) {
+        $controller = $params[2]; // Override controller
+      }
+      AddCurrentTurnEffect($params[0], $controller, $from, $uniqueID);
       UpdateLinkAttack();
       return $lastResult;
     case "ADDLIMITEDNEXTTURNEFFECT":
@@ -1038,10 +1053,10 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       return $lastResult;
     case "EQUALPASS":
       if($lastResult == $parameter) return "PASS";
-      return 1;
+      return $lastResult;
     case "NOTEQUALPASS":
       if($lastResult != $parameter) return "PASS";
-      return 1;
+      return $lastResult;
     case "NOPASS":
       if($lastResult == "NO") return "PASS";
       return 1;

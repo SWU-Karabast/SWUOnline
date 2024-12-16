@@ -344,9 +344,8 @@ function AllyTakeControl($player, $index) {
   $theirAllies = &GetAllies($otherPlayer);
   $uniqueID = $theirAllies[$index+5];
   for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnEffectPieces()) {
-    if($currentTurnEffects[$i+1] != $otherPlayer) continue;
     if($currentTurnEffects[$i+2] == -1 || $currentTurnEffects[$i+2] != $uniqueID) continue;
-    $currentTurnEffects[$i+1] = $player;
+    $currentTurnEffects[$i+1] = $currentTurnEffects[$i+1] == 1 ? 2 : 1; // Swap players
   }
   for($i=$index; $i<$index+AllyPieces(); ++$i) {
     $myAllies[] = $theirAllies[$i];
@@ -489,6 +488,7 @@ function AllyLeavesPlayAbility($player, $index)
 {
   $allies = &GetAllies($player);
   $cardID = $allies[$index];
+  $uniqueID = $allies[$index + 5];
   $leaderUndeployed = LeaderUndeployed($cardID);
   if($leaderUndeployed != "") {
     AddCharacter($leaderUndeployed, $player, counters:1, status:1);
@@ -501,6 +501,14 @@ function AllyLeavesPlayAbility($player, $index)
       break;
     case "8418001763"://Huyang
       SearchCurrentTurnEffects("8418001763", $player, remove:true);
+      break;
+    case "7964782056"://Qi'Ra unit
+      $otherPlayer = $player == 1 ? 2 : 1;
+      SearchLimitedCurrentTurnEffects("7964782056", $otherPlayer, uniqueID:$uniqueID, remove:true);
+      break;
+    case "3503494534"://Regional Governor
+      $otherPlayer = $player == 1 ? 2 : 1;
+      SearchLimitedCurrentTurnEffects("3503494534", $otherPlayer, uniqueID:$uniqueID, remove:true);
       break;
     case "4002861992"://DJ (Blatant Thief)
       $djAlly = new Ally("MYALLY-" . $index, $player);
@@ -2085,6 +2093,7 @@ function AllyEndTurnAbilities($player)
   $allies = &GetAllies($player);
   for($i = count($allies) - AllyPieces(); $i >= 0; $i -= AllyPieces()) {
     $ally = new Ally("MYALLY-" . $i, $player);
+
     switch($allies[$i]) {
       case "1785627279"://Millennium Falcon
         AddDecisionQueue("SETDQCONTEXT", $player, "Do you want to pay 1 to keep Millennium Falcon running?");

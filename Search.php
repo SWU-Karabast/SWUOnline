@@ -376,7 +376,8 @@ function SearchCurrentTurnEffects($cardID, $player, $remove = false)
 {
   global $currentTurnEffects;
   for ($i = 0; $i < count($currentTurnEffects); $i += CurrentTurnEffectPieces()) {
-    if ($currentTurnEffects[$i] == $cardID && $currentTurnEffects[$i + 1] == $player) {
+    $currentCardID = explode("_", $currentTurnEffects[$i])[0];
+    if ($currentCardID == $cardID && $currentTurnEffects[$i + 1] == $player) {
       if ($remove) RemoveCurrentTurnEffect($i);
       return true;
     }
@@ -384,29 +385,30 @@ function SearchCurrentTurnEffects($cardID, $player, $remove = false)
   return false;
 }
 
-function GetCurrentTurnEffects($cardID, $player, $remove = false)
+function GetCurrentTurnEffects($cardID, $player, $uniqueID = -1, $remove = false)
 {
   global $currentTurnEffects;
-  $rv = [];
   for ($i = 0; $i < count($currentTurnEffects); $i += CurrentTurnEffectPieces()) {
-    if ($currentTurnEffects[$i] == $cardID && $currentTurnEffects[$i + 1] == $player) {
+    $currentCardID = explode("_", $currentTurnEffects[$i])[0];
+    $currentUniqueID = $currentTurnEffects[$i + 2];
+    if ($currentCardID == $cardID && $currentTurnEffects[$i + 1] == $player && ($uniqueID == -1 || $uniqueID == $currentUniqueID)) {
       $turnEffect = array_slice($currentTurnEffects, $i, CurrentTurnEffectPieces());
-      $rv = array_slice($currentTurnEffects, $i, CurrentTurnEffectPieces());
       if ($remove) RemoveCurrentTurnEffect($i);
-      return $rv;
+      return $turnEffect;
     }
   }
-  return false;
+  return null;
 }
 
-function SearchLimitedCurrentTurnEffects($cardID, $player, $remove = false)
+function SearchLimitedCurrentTurnEffects($cardID, $player, $uniqueID = -1, $remove = false)
 {
   global $currentTurnEffects;
   for ($i = 0; $i < count($currentTurnEffects); $i += CurrentTurnEffectPieces()) {
-    if ($currentTurnEffects[$i] == $cardID && $currentTurnEffects[$i + 1] == $player) {
-      $uniqueID = $currentTurnEffects[$i + 2];
+    $currentCardID = explode("_", $currentTurnEffects[$i])[0];
+    $currentUniqueID = $currentTurnEffects[$i + 2];
+    if ($currentCardID == $cardID && $currentTurnEffects[$i + 1] == $player && ($uniqueID == -1 || $uniqueID == $currentUniqueID)) {
       if ($remove) RemoveCurrentTurnEffect($i);
-      return $uniqueID;
+      return $currentUniqueID;
     }
   }
   return -1;
@@ -664,8 +666,7 @@ function SearchItemsForUniqueID($uniqueID, $player)
 function UnitUniqueIDController($uniqueID) {
   if(SearchAlliesForUniqueID($uniqueID, 1) > -1) return 1;
   if(SearchAlliesForUniqueID($uniqueID, 2) > -1) return 2;
-  //TODO: This is an error; handle more gracefully?
-  return 1;
+  return -1;
 }
 
 function SearchAlliesForUniqueID($uniqueID, $player): int
@@ -681,9 +682,11 @@ function SearchCurrentTurnEffectsForUniqueID($uniqueID)
 {
   global $currentTurnEffects;
   for ($i = 0; $i < count($currentTurnEffects); $i += CurrentTurnEffectPieces()) {
-    if ($currentTurnEffects[$i + 2] == $uniqueID) return $i;
+    if ($currentTurnEffects[$i + 2] == $uniqueID) {
+      return true;
+    }
   }
-  return -1;
+  return false;
 }
 
 function SearchUniqueIDForCurrentTurnEffects($index)

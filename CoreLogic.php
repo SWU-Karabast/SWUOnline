@@ -1857,9 +1857,30 @@ function SelfCostModifier($cardID, $from)
   for($i=0; $i<count($allies); $i+=AllyPieces())
   {
     if($allies[$i+1] == 0) continue;
+    $allyUniqueID = $allies[$i+5];
     switch($allies[$i]) {
       case "9412277544"://Del Meeko
         if(DefinedTypesContains($cardID, "Event", $currentPlayer)) $modifier += 1;
+        break;
+      case "3503494534"://Regional Governor
+        $turnEffect = GetCurrentTurnEffects("3503494534", $currentPlayer, uniqueID:$allyUniqueID);
+        if ($turnEffect != null) {
+          $cardTitle = GamestateUnsanitize(explode("_", $turnEffect[0])[1]);
+          
+          if (CardTitle($cardID) == $cardTitle) {
+            $modifier += 999;
+          }
+        }
+        break;
+      case "7964782056"://Qi'Ra unit
+        $turnEffect = GetCurrentTurnEffects("7964782056", $currentPlayer, uniqueID:$allyUniqueID);
+        if ($turnEffect != null) {
+          $cardTitle = GamestateUnsanitize(explode("_", $turnEffect[0])[1]);
+          
+          if (CardTitle($cardID) == $cardTitle) {
+            $modifier += 3;
+          }
+        }
         break;
       default: break;
     }
@@ -2946,7 +2967,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "3503494534"://Regional Governor
       if($from != "PLAY") {
-        WriteLog("This is a partially manual card. Name the card in chat and enforce the restrictions.");
+        $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+        AddDecisionQueue("INPUTCARDNAME", $currentPlayer, "<-");
+        AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, $uniqueId, 1);
+        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $otherPlayer, "3503494534_{0},HAND," . $otherPlayer, 1);
       }
       break;
     case "0523973552"://I Am Your Father
@@ -3886,10 +3911,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "2090698177"://Street Gang Recruiter
       MZMoveCard($currentPlayer, "MYDISCARD:trait=Underworld", "MYHAND", may:true, context:"Choose an uncerworld card to return with " . CardLink("2090698177", "2090698177"));
       break;
-    case "7964782056"://Qi'Ra
+    case "7964782056"://Qi'Ra unit
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
       LookAtHand($otherPlayer);
-      WriteLog("This is a partially manual card. Name the card in chat and make sure you don't play that card if you don't have enough resources.");
+      AddDecisionQueue("INPUTCARDNAME", $currentPlayer, "<-");
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, $uniqueId, 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $otherPlayer, "7964782056_{0},HAND," . $otherPlayer, 1);
       break;
     case "5830140660"://Bazine Netal
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
