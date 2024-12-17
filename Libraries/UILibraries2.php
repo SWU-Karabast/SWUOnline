@@ -565,6 +565,59 @@ function CreateTextForm($playerID, $caption, $mode)
   return $rv;
 }
 
+function CreateAutocompleteForm($playerID, $caption, $mode, $options)
+{
+    global $gameName;
+
+    $rv = "<form autocomplete='off'>";
+    $rv .= "<div style='display: flex; gap: 8px; max-width: 500px; margin: 0 auto;'>";
+    $rv .= "<div class='autocomplete' style='width: 100%;'>";
+    $rv .= "<input type='text' id='inputText' name='inputText' placeholder=\"Card Title\" onkeypress='suppressEventPropagation(event)' oninput=\"
+      const val = this.value.toLowerCase();
+      const container = this.parentNode.querySelector('.autocomplete-items');
+      container.innerHTML = '';
+
+      if (!val) {
+        return;
+      }
+      ";
+    $rv .= str_replace("<0>", "\'", str_replace("\"", "'", str_replace("'", "<0>", json_encode($options))));
+    $rv .= ".forEach(function(item) {
+        if (item.toLowerCase().includes(val)) {
+          const div = document.createElement('div');
+          div.textContent = item;
+          div.onclick = function() {
+            document.getElementById('inputText').value = this.textContent;
+            container.innerHTML = '';
+          };
+          container.appendChild(div);
+        }
+      });
+    \">";
+    $rv .= "<div class='autocomplete-items'></div>";
+    $rv .= "</div>";
+    $rv .= "<input type='button' onclick='textSubmit(" . $mode . ")' value='" . $caption . "'>";
+    $rv .= "</div>";
+    $rv .= "<input type='hidden' id='gameName' name='gameName' value='" . $gameName . "'>";
+    $rv .= "<input type='hidden' id='playerID' name='playerID' value='" . $playerID . "'>";
+    $rv .= "<input type='hidden' id='mode' name='mode' value='" . $mode . "'>";
+    $rv .= "</form>";
+
+    // CSS Embutido
+    $rv .= "<style>
+      input[type='text'] { padding: 10px 15px; width: 100%; background-color: #394452; border-radius: 5px; font-family: 'barlow'; border: 0; font-size: 16px; color: white; line-height: 1.125 }
+      input[type='text']:focus { outline: 1px solid #fff }
+      .autocomplete { position: relative; display: inline-block; }
+      .autocomplete-items { position: absolute; border-radius: 5px; overflow: hidden; margin: 8px -1px; font-weight: 400; font-size: 16px; z-index: 99; top: 100%; left: 0; right: 0; }
+      .autocomplete-items div { padding: 10px 15px; cursor: pointer; background-color: #394452; }
+      .autocomplete-items div:hover { background-color:rgb(74, 85, 100); }
+    </style>";
+
+    return $rv;
+}
+
+
+
 //input = ?
 //value = ?
 //immediateSubmitMode = If set, add onchange event to submit immediately instead of form submit

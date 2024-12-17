@@ -603,7 +603,7 @@ function CurrentEffectEndTurnAbilities()
       case "5696041568-2"://Triple Dark Raid
         $ally = GetAlly($currentTurnEffects[$i+2]);
         if ($ally != null) {
-          MZBounce($ally->Owner(), $ally->MZIndex());
+          MZBounce($ally->Controller(), "MYALLY-" . $ally->Index());
         }
         break;
       case "1910812527":
@@ -624,6 +624,12 @@ function CurrentEffectEndTurnAbilities()
           AddNextTurnEffect($currentTurnEffects[$i], $currentTurnEffects[$i + 1], $currentTurnEffects[$i + 2]);
         }
         break;
+      case "7964782056"://Qi'ra unit
+        AddNextTurnEffect($currentTurnEffects[$i], $currentTurnEffects[$i + 1], $currentTurnEffects[$i + 2]);
+        break;
+      case "3503494534"://Regional Governor
+        AddNextTurnEffect($currentTurnEffects[$i], $currentTurnEffects[$i + 1], $currentTurnEffects[$i + 2]);
+        break;
       default: break;
     }
     if($remove) RemoveCurrentTurnEffect($i);
@@ -633,7 +639,7 @@ function CurrentEffectEndTurnAbilities()
 
 function CurrentEffectStartRegroupAbilities()
 {
-  global $currentTurnEffects, $mainPlayer;
+  global $currentTurnEffects, $mainPlayer, $currentPlayer;
   for($i = count($currentTurnEffects) - CurrentTurnPieces(); $i >= 0; $i -= CurrentTurnPieces()) {
     $remove = false;
     $params = explode("_", $currentTurnEffects[$i]);
@@ -649,6 +655,47 @@ function CurrentEffectStartRegroupAbilities()
       default: break;
     }
     if($remove) RemoveCurrentTurnEffect($i);
+  }
+
+  // Check allies abilities for both players
+  for ($player = 1; $player <= 2; $player++) {
+    $allies = &GetAllies($player);
+
+    for ($i = 0; $i < count($allies); $i += AllyPieces()) {
+      $ally = new Ally("MYALLY-$i", $player);
+      
+      // Check upgrades abilities
+      $upgrades = $ally->GetUpgrades();
+      for($j=0; $j<count($upgrades); ++$j) {
+        $upgradeCardID = $upgrades[$j];
+        $processedUpgrades = [];
+
+        // Prevent duplicated upgrades
+        if (in_array($upgradeCardID, $processedUpgrades)) {
+          continue;
+        }
+
+        switch($upgradeCardID) {
+          case "3962135775"://Foresight
+            $deck = new Deck($player);
+            AddDecisionQueue("INPUTCARDNAME", $player, "<-");
+            AddDecisionQueue("SETDQVAR", $player, "0", 1);
+            AddDecisionQueue("PASSPARAMETER", $player, $deck->Top(), 1);
+            AddDecisionQueue("SETDQVAR", $player, "1", 1);
+            AddDecisionQueue("MZOP", $currentPlayer, "GETCARDTITLE", 1);
+            AddDecisionQueue("NOTEQUALPASS", $player, "{0}");
+            AddDecisionQueue("DRAW", $player, "-", 1);
+            AddDecisionQueue("REVEALCARDS", $player, "-", 1);
+            AddDecisionQueue("ELSE", $player, "-");
+            AddDecisionQueue("SETDQCONTEXT", $player, "The top card of your deck is <1>");
+            AddDecisionQueue("OK", $player, "-");
+            break;
+          default: break;
+        }
+
+        $processedUpgrades[] = $upgradeCardID;
+      }
+    }
   }
 }
 

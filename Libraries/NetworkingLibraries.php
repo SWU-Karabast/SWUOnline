@@ -328,13 +328,7 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
       }
       break;
     case 30://String input
-      $cardName = CardName(strtoupper($inputText));
-      if($cardName != "") $inputText = $cardName;
-      if($turn[2] == "OUT052" && $inputText == "Head Leads the Tail")//Validate the name
-      {
-        WriteLog("Must name another card");
-        break;
-      }
+      WriteLog("Player " . $playerID . " named " . $inputText . ".");
       ContinueDecisionQueue(GamestateSanitize($inputText));
       break;
     case 31: //Move layer deeper
