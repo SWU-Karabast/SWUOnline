@@ -77,7 +77,7 @@ function CardTalent($cardID)
 
 function RestoreAmount($cardID, $player, $index)
 {
-  global $initiativePlayer;
+  global $initiativePlayer, $currentTurnEffects;
   $amount = 0;
   $allies = &GetAllies($player);
   for($i=0; $i<count($allies); $i+=AllyPieces())
@@ -91,6 +91,16 @@ function RestoreAmount($cardID, $player, $index)
     }
   }
   $ally = new Ally("MYALLY-" . $index, $player);
+  for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnPieces()) {
+    if($currentTurnEffects[$i+1] != $player) continue;
+    if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
+    switch($currentTurnEffects[$i]) {
+      case "1272825113"://In Defense of Kimino
+        if(TraitContains($ally->CardID(), "Republic", $player, $index)) $amount += 2;
+        break;
+      default: break;
+    }
+  }
   $upgrades = $ally->GetUpgrades();
   for($i=0; $i<count($upgrades); ++$i) {
     $upgradeCardID = $upgrades[$i];
@@ -222,7 +232,6 @@ function RaidAmount($cardID, $player, $index, $reportMode = false)
       default: break;
     }
   }
-  $ally = new Ally("MYALLY-" . $index, $player);
   $upgrades = $ally->GetUpgrades();
   for($i=0; $i<count($upgrades); ++$i)
   {

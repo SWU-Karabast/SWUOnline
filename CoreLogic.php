@@ -5273,6 +5273,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       PlayAlly("3463348370", $currentPlayer);//Battle Droid
       PlayAlly("3463348370", $currentPlayer);//Battle Droid
       break;
+    case "1272825113"://In Defense of Kimino
+      AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, $cardID, 1);
+      break;
+    case "9415708584"://Pyrrhic Assault
+      AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, $cardID, 1);
+      break;
     //PlayAbility End
     default: break;
   }
