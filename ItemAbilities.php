@@ -21,7 +21,7 @@ function PutItemIntoPlayForPlayer($item, $player, $steamCounterModifier = 0, $nu
     array_push($items, $item, $steamCounters, ItemEntersPlayState($item), ItemUses($item), $uniqueID, $myHoldState, $theirHoldState);
   }
   switch($item) {
-    
+
     default: break;
   }
 }

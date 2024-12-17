@@ -40,7 +40,7 @@ function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null,
   if (AllyHasStaticHealthModifier($cardID)) {
     CheckHealthAllAllies();
   }
-  
+
   return $index;
 }
 
@@ -320,7 +320,7 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false,
     }
     IncrementClassState($player, $CS_NumAlliesDestroyed);
   }
-  
+
   IncrementClassState($player, $CS_NumLeftPlay);
   AllyLeavesPlayAbility($player, $index);
   for($i=0; $i<count($upgradesWithOwnerData); $i+=SubcardPieces()) {
@@ -754,7 +754,7 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities,
         AddDecisionQueue("MZOP", $player, "ADDHEALTH,2", 1);
         AddDecisionQueue("MZOP", $player, "GETUNIQUEID", 1);
         AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $player, "0249398533,PLAY", 1);
-        break;      
+        break;
       default: break;
     }
 
@@ -930,13 +930,13 @@ function CollectBounty($player, $unitCardID, $bountyCardID, $isExhausted, $owner
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $opponent, "<-", 1);
       AddDecisionQueue("MZOP", $opponent, "DEALDAMAGE,3,$opponent,1", 1);
       break;
-    default: 
+    default:
       $numBounties--;
       break;
   }
 
   if ($numBounties > 0 && isBountyRecollectable($bountyCardID) && !$reportMode) {
-    $bosskIndex = SearchAlliesForCard($opponent, "d2bbda6982"); 
+    $bosskIndex = SearchAlliesForCard($opponent, "d2bbda6982");
 
     if ($bosskIndex != "") {
       $bossk = new Ally("MYALLY-" . $bosskIndex, $opponent);
@@ -1288,7 +1288,7 @@ function AllyPlayCardAbility($cardID, $player="", $from="-", $abilityID="-", $un
         AddLayer("TRIGGER", $currentPlayer, "3589814405", CardCost($cardID));
       }
       break;
-    case "724979d608"://Cad Bane Leader 
+    case "724979d608"://Cad Bane Leader
       $cadIndex = SearchAlliesForCard($player, "724979d608");
       if($cadIndex != "") {
         $cadbane = new Ally("MYALLY-" . $cadIndex, $player);
@@ -2146,7 +2146,7 @@ function AllyBeginEndTurnEffects()
     }
     switch($mainAllies[$i])
     {
-      
+
       default: break;
     }
   }

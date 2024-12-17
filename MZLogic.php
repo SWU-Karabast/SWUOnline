@@ -299,7 +299,7 @@ function MZWakeUp($player, $target)
   $player = (str_starts_with($pieces[0], "MY") ? $player : ($player == 1 ? 2 : 1));
   $zone = &GetMZZone($player, $pieces[0]);
   $targetAlly = new Ally($target, $player);
-  
+
   if(SearchLimitedCurrentTurnEffects("8800836530", $player) == $targetAlly->UniqueID()) { // No Good to me Dead
     return;
   }

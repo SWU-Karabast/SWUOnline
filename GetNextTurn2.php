@@ -147,7 +147,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
 
   echo($cacheVal . $returnDelim);
   echo(implode("~", $events) . $returnDelim);
-  
+
   if ($currentPlayer == $playerID) {
     $icon = "ready.png";
     $readyText = "You are the player with priority.";
@@ -268,7 +268,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
 
   if ((CanPassPhase($turn[0]) && $currentPlayer == $playerID) || (IsReplay() && $playerID == 3)) {
     $prompt = "";
-    // Pass Button - Active then Inactive (which is hidden) 
+    // Pass Button - Active then Inactive (which is hidden)
 ?>
     <div title='Space is the shortcut to pass.' <?= ProcessInputLink($playerID, 99, 0, prompt: $prompt) ?> class='passButton'>
     <span class='pass-label'>
@@ -281,9 +281,9 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
 
   <?php
   }
-  
+
   if($turn[0] == "M" && $initiativeTaken != 1 && $currentPlayer == $playerID) echo ("&nbsp;" . CreateButton($playerID, "Claim Initiative", 34, "-", "18px"));
-  
+
   echo ("</div>");
   echo ("</div>");
 
@@ -330,10 +330,10 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
 
   if ($turn[0] == "INSTANT" && count($layers) > 0) {
       $content = "";
-      
+
       // Add a title and instructions for triggers
       $content .= "<div class='trigger-order'><h2>Choose Trigger Order</h2></div>";
-      
+
       // Function to get the caption based on layer type
       function getCaption($layer) {
           $captions = [
@@ -343,7 +343,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
           ];
           return $captions[$layer] ?? ""; // Return the caption if it exists, otherwise return an empty string
       }
-  
+
       // Check if the first layer is an attack or weapon, and if so, get and display the attack target
       if (CardType($layers[0]) == "AA" || IsWeapon($layers[0])) {
           $attackTarget = GetAttackTarget();
@@ -351,44 +351,44 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
               $content .= "&nbsp;Attack Target: " . GetMZCardLink($defPlayer, $attackTarget);
           }
       }
-  
+
       // Add a note about trigger resolution if applicable
       if ($dqState[8] != -1) {
         $content .= "<div class='trigger-order'><p>Use the arrows below to set the order abilities trigger in</p></div>";
       }
-  
+
       // Start the container for the tiles and labels using flexbox
       $content .= "<div class='tiles-wrapper' >";
-  
+
       $totalLayers = count($layers); // Total number of layers
       $layerPieces = LayerPieces();  // Number of pieces per layer
-  
+
       for ($i = 0; $i < $totalLayers; $i += $layerPieces) {
           if ($i == 0) {
               // Add 'First' text before the first tile
               $content .= "<div class='trigger-first'><p>First</p></div>";
           }
-  
+
           $layerName = IsAbilityLayer($layers[$i]) ? $layers[$i + 2] : $layers[$i]; // Get the layer name
           $layerController = $layers[$i + 1]; // Get the layer controller
           $layerColor = ($layerController == $playerID) ? 1 : 2; // Determine the color based on the controller
-          
+
           if ($playerID == 3) { // Special case for playerID 3
               $layerColor = ($layerController == $otherPlayer) ? 2 : 1;
           }
-  
+
           // Count the number of tiles with the same name if the layer is tileable
           $nbTiles = IsTileable($layerName) ? array_reduce($layers, function($count, $layer, $index) use ($layerName, $layerPieces) {
               $name = ($layer == "LAYER" || IsAbilityLayer($layer)) ? $layers[$index + 2] : $layer;
               return $name == $layerName ? $count + 1 : $count;
           }, 0) : 0;
-  
+
           // Get the caption for the current layer
           $caption = getCaption($layers[$i]);
-          
+
           // Determine counters for the card, using number of tiles if tileable, otherwise using the caption
           $counters = IsTileable($layerName) && $nbTiles > 1 ? $nbTiles : ($caption ?: 0);
-  
+
           // Add the card to the content
           $cardId = $layerName;
           if($cardId == "AFTERPLAYABILITY") $cardId = explode(',', $layers[$i+5])[0];
@@ -399,7 +399,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
             $layerColor = $layerColor == 1 ? 2 : 1;
           }
           $content .= "<div class='tile' style='max-width:{$cardSize}px;'>" . Card($cardId, "concat", $cardSize, 0, 1, 0, $layerColor, $counters, controller: $layerController);
-  
+
           // Add reorder buttons for ability layers if applicable
           if (IsAbilityLayer($layers[$i]) && $dqState[8] >= $i && $playerID == $mainPlayer) {
               if ($i < $dqState[8]) {
@@ -409,21 +409,21 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
                   $content .= "<span class='reorder-button'>" . CreateButton($playerID, "<", 32, $i, "18px", useInput:true) . "</span>";
               }
           }
-          
+
           $content .= "</div>"; // Close the tile container
-  
+
           if ($i + $layerPieces >= $totalLayers) {
               // Add 'Last' text after the last tile
               $content .= "<div class='trigger-last'><p>Last</p></div>";
           }
       }
-  
+
       // Close the container for the tiles and labels
       $content .= "</div>"; // Close the tiles-wrapper
-  
+
       echo CreatePopup("INSTANT", [], 0, 1, "", 1, $content, "./", false, true); // Output the content in a popup
   }
-  
+
   if ($turn[0] == "OVER") {
     if ($roguelikeGameID != "") {
       $caption = (GetHealth($playerID) > 0 ? "Continue Adventure" : "Game Over");
@@ -945,7 +945,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         $action = $currentPlayer == $playerID && $turn[0] != "P" && $playable ? 24 : 0;
         $actionDataOverride = strval($i);
       }
-      
+
       $opts = array(
         'currentHP' => $ally->Health(),
         'maxHP' => $ally->MaxHealth(),

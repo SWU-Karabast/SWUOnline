@@ -96,7 +96,7 @@ if (count($favoriteDecks) > 0) {
   <?php
   echo ("<h2>Your Record</h2>");
   $forIndividual = true; ?>
- 
+
  <div id="statsContainer">
     <p id="loadingMessage" style="display:none;">Loading stats...</p>
     <?php include "zzGameStats.php"; ?>
@@ -122,7 +122,7 @@ function DisplayPatreon() {
     $href .= $state_parameters;
     $scope_parameters = '&scope=identity%20identity.memberships';
     $href .= $scope_parameters;
-    
+
     if (!isset($_SESSION["patreonAuthenticated"])) {
         echo '<a class="containerPatreon" href="' . $href . '">';
         echo ("<img class='imgPatreon' src='./Assets/patreon-php-master/assets/images/login_with_patreon.png' alt='Login via Patreon'>");

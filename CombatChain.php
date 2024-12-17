@@ -211,7 +211,7 @@ function OnDefenseReactionResolveEffects()
 function OnBlockResolveEffects()
 {
 
-  
+
 }
 
 function BeginningReactionStepEffects()

@@ -439,7 +439,7 @@ function CurrentEffectAttackAbility()
     $remove = false;
     if($currentTurnEffects[$i + 1] == $mainPlayer) {
       switch ($currentTurnEffects[$i]) {
-        
+
         default:
           break;
       }
@@ -664,7 +664,7 @@ function CurrentEffectStartRegroupAbilities()
 
     for ($i = 0; $i < count($allies); $i += AllyPieces()) {
       $ally = new Ally("MYALLY-$i", $player);
-      
+
       // Check upgrades abilities
       $upgrades = $ally->GetUpgrades();
       for($j=0; $j<count($upgrades); ++$j) {

@@ -104,7 +104,7 @@ function RestoreAmount($cardID, $player, $index)
   $upgrades = $ally->GetUpgrades();
   for($i=0; $i<count($upgrades); ++$i) {
     $upgradeCardID = $upgrades[$i];
-    
+
     switch($upgradeCardID) {
       case "8788948272":
         $amount += 2;
@@ -459,7 +459,7 @@ function HasCoordinate($cardID, $player, $index)
     "2298508689",//Reckless Torrent
     "0683052393",//Hevy
     "1641175580",//Kit Fisto
-    "8307804692",//Padme Abmidala 
+    "8307804692",//Padme Abmidala
     "7494987248",//Plo Koon
     "5445166624",//Clone Dive Trooper
     "4512764429",//Sanctioner's Shuttle
@@ -1116,7 +1116,7 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
       $abilityTypes .= "A";
     }
   }
-  
+
   return $abilityTypes;
 }
 
@@ -1166,7 +1166,7 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       $ally = new Ally("MYALLY-" . $index, $currentPlayer);
       if($validate) $abilityNames = $ally->IsExhausted() ? "Exhaust" : "Exhaust,Attack";
       else $abilityNames = "Exhaust,Attack";
-      break;    
+      break;
     case "0595607848"://Disaffected Senator
       $abilityNames = "Deal Damage,Attack";
       break;
@@ -2053,7 +2053,7 @@ function SmuggleCost($cardID, $player="", $index="")
         if(!$techAlly->LostAbilities()) {
           $cost = CardCost($cardID)+2;
           if($minCost == -1 || $minCost > $cost) $minCost = $cost;
-        } 
+        }
         break;
       default: break;
     }

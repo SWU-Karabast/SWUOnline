@@ -37,7 +37,7 @@ $isMobile = IsMobile();
 <body>
 
   <div class='nav-bar'>
-    
+
     <div class='nav-bar-user'>
       <ul class='rightnav'>
         <?php //if($isPatron) echo "<li><a href='Replays.php'>Replays[BETA]</a></li>";
@@ -53,7 +53,7 @@ $isMobile = IsMobile();
         ?>
       </ul>
     </div>
-    
+
     <div class='nav-bar-links'>
       <ul>
           <?php
