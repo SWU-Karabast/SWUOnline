@@ -45,13 +45,15 @@ function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null,
 }
 
 function CheckHealthAllAllies() {
-  global $currentPlayer;
   for ($player = 1; $player <= 2; $player++) {
     $allies = &GetAllies($player);
-    $prefix = $currentPlayer == $player ? "MYALLY-" : "THEIRALLY-";
     for ($i = 0; $i < count($allies); $i += AllyPieces()) {
-      $ally = new Ally($prefix . $i, $player);
-      $ally->DefeatIfNoRemainingHP();
+      $ally = new Ally("MYALLY-" . $i, $player);
+      $defeated = $ally->DefeatIfNoRemainingHP();
+
+      if ($defeated) {
+        $i -= AllyPieces(); // Decrement to account for the removed ally
+      }
     }
   }
 }
