@@ -339,7 +339,7 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false,
   $captives = $ally->GetCaptives(true);
   if(!$skipDestroy) {
     if(DefinedTypesContains($cardID, "Leader", $player)) ;//If it's a leader it doesn't go in the discard
-    else if($cardID == "3463348370" || $cardID == "3941784506") ; // If it's a token, it doesn't go in the discard
+    else if(isToken($cardID)) ; // If it's a token, it doesn't go in the discard
     else if($isSuperlaserTech) ; //SLT is auto-added to resources
     else {
       $graveyardCardID = $ally->IsCloned() ? "0345124206" : $cardID; //Clone - Replace the cloned card with the original one in the graveyard

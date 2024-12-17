@@ -168,7 +168,7 @@ function AddHand($player, $cardID)
 {
   $hand = &GetHand($player);
   // If it's a token, it doesn't go to the hand
-  if($cardID != "3463348370" && $cardID != "3941784506") {
+  if(!isToken($cardID)) {
     $hand[] = $cardID;
   }
   return count($hand)-1;

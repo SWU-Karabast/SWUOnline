@@ -1505,8 +1505,8 @@ function IsToken($cardID)
   switch($cardID) {
     case "8752877738": return true;
     case "2007868442": return true;
-    case "3463348370": return true;
-    case "3941784506": return true;
+    case "3463348370": return true;//Battle Droid
+    case "3941784506": return true;//Clone Trooper
     default: return false;
   }
 }
