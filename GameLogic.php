@@ -743,8 +743,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $params = explode("-", $parameter);
       $from = $params[0];
       $relationship = $params[1];//exclude other or include
-      $type = $params[2];
-      $compareValue = $params[3];
+      $type = isset($params[2]) ? $params[2] : "";
+      $compareValue = isset($params[3]) ? $params[3] : "";
       $input = [];
       switch($from)
       {

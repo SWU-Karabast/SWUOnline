@@ -1381,13 +1381,28 @@ function LookAtHand($player)
 {
   $hand = &GetHand($player);
   $otherPlayer = ($player == 1 ? 2 : 1);
-  $caption = "Their hand is: ";
-  for($i=0; $i<count($hand); $i+=HandPieces())
-  {
-    if($i > 0) $caption .= ", ";
-    $caption .= CardLink($hand[$i], $hand[$i]);
+  // $caption = "Their hand is: ";
+  // for($i=0; $i<count($hand); $i+=HandPieces())
+  // {
+  //   if($i > 0) $caption .= ", ";
+  //   $caption .= CardLink($hand[$i], $hand[$i]);
+  // }
+
+  $windowWidth = intval(TryGet("windowWidth", 0));
+  $cardSize = ($windowWidth != 0 ? intval($windowWidth / 13) : 120);
+  $content = "<table><tr>";
+  for($i=0; $i<count($hand); $i+=HandPieces()) {
+    $content .= "<td>";
+    $content .= "<table><tr><td>";
+    $content .= Card($hand[$i], "concat", $cardSize, 0, 1);
+    $content .= "</td></tr><tr><td>";
+    $content .= "</td></tr>";
+    $content .= "</table>";
+    $content .= "</td>";
   }
-  AddDecisionQueue("SETDQCONTEXT", $otherPlayer, $caption);
+  $content .= "</tr></table>";
+
+  AddDecisionQueue("SETDQCONTEXT", $otherPlayer, $content);
   AddDecisionQueue("OK", $otherPlayer, "-");
 }
 
