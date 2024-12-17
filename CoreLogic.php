@@ -531,7 +531,7 @@ function Restore($amount, $player)
     WriteLog("<span style='color:red;'>Confederate Tri-Fighter prevents the healing</span>");
     return false;
   }
-  
+
   $health = &GetHealth($player);
   WriteLog("Player " . $player . " gained " . $amount . " health.");
   if($amount > $health) $amount = $health;
@@ -1131,10 +1131,10 @@ function AspectContains($cardID, $aspect, $player="")
 function TraitContains($cardID, $trait, $player="", $index=-1)
 {
   // ---------------------- IMPORTANT -----------------------
-  // We should add the Clone Trait to cloned cards. However, it's not possible to identify the card solely with the $cardID. 
+  // We should add the Clone Trait to cloned cards. However, it's not possible to identify the card solely with the $cardID.
   // Since very few cards currently interact directly with this effect (at the moment, only Nala Se), we are handling each case individually.
   // --------------------------------------------------------
-  $trait = str_replace("_", " ", $trait); //"MZALLCARDTRAITORPASS" and possibly other decision queue options call this function with $trait having been underscoreified, so I undo that here. 
+  $trait = str_replace("_", " ", $trait); //"MZALLCARDTRAITORPASS" and possibly other decision queue options call this function with $trait having been underscoreified, so I undo that here.
   if($index != -1) {
     $ally = new Ally("MYALLY-" . $index, $player);
     $upgrades = $ally->GetUpgrades();
@@ -1882,7 +1882,7 @@ function SelfCostModifier($cardID, $from)
         $turnEffect = GetCurrentTurnEffects("3503494534", $currentPlayer, uniqueID:$allyUniqueID);
         if ($turnEffect != null) {
           $cardTitle = GamestateUnsanitize(explode("_", $turnEffect[0])[1]);
-          
+
           if (CardTitle($cardID) == $cardTitle) {
             $modifier += 999;
           }
@@ -1892,7 +1892,7 @@ function SelfCostModifier($cardID, $from)
         $turnEffect = GetCurrentTurnEffects("7964782056", $currentPlayer, uniqueID:$allyUniqueID);
         if ($turnEffect != null) {
           $cardTitle = GamestateUnsanitize(explode("_", $turnEffect[0])[1]);
-          
+
           if (CardTitle($cardID) == $cardTitle) {
             $modifier += 3;
           }
@@ -2139,7 +2139,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
 {
   global $currentPlayer, $layers, $CS_PlayIndex, $CS_OppIndex, $initiativePlayer, $CCS_CantAttackBase;
   $index = GetClassState($currentPlayer, $CS_PlayIndex);
-    
+
   if($from == "PLAY" && IsAlly($cardID, $currentPlayer)) {
     $playAlly = new Ally("MYALLY-" . $index);
     $abilityName = GetResolvedAbilityName($cardID, $from);
@@ -3232,7 +3232,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         }
       }
       break;
-    case "0595607848"://Disaffected Senator      
+    case "0595607848"://Disaffected Senator
       $abilityName = GetResolvedAbilityName($cardID, $from);
       if ($abilityName == "Deal Damage") {
         AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYCHAR-0,THEIRCHAR-0");
@@ -4684,7 +4684,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 2 damage to");
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "RESOLUTE", 1);
-      break;      
+      break;
     case "0328412140"://Creative Thinking
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
       AddDecisionQueue("MZFILTER", $currentPlayer, "unique=1");
@@ -5545,7 +5545,7 @@ function PlayRequiresTarget($cardID)
         }
         $rvArr[] = "MYALLY-" . $i;
       }
-      
+
       return implode(",", $rvArr);
     } else if ($target == 4) return "MYCHAR-0";
 
