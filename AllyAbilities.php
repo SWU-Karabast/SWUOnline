@@ -2004,6 +2004,19 @@ function SpecificAllyAttackAbilities($attackID)
         }
       }
       break;
+    case "6406254252"://Soulless One - Customized for Grievous
+      if(IsCardTitleInPlay($mainPlayer, "General Grievous")) {
+        $mzIndices = GetMultizoneIndicesForTitle($mainPlayer, "General Grievous", true);
+        if($mzIndices != "") {
+          AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to exhaust", 1);
+          AddDecisionQueue("PASSPARAMETER", $mainPlayer, $mzIndices);
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+          AddDecisionQueue("MZOP", $mainPlayer, "REST", 1);
+          AddDecisionQueue("PASSPARAMETER", $mainPlayer, $attackerAlly->UniqueID(), 1);
+          AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "6406254252,PLAY", 1);
+        }
+      }
+      break;
     default: break;
   }
   //SpecificAllyAttackAbilities End

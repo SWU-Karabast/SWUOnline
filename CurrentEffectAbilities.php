@@ -203,6 +203,7 @@ function EffectAttackModifier($cardID, $playerID="")
     case "4916334670": return 1;//Encouraging Leadership
     case "3596811933": return -1;//Disruptive Burst
     case "7979348081": return 1;//Kraken
+    case "6406254252": return 2;//Soulless One
     default: return 0;
   }
 }
@@ -769,6 +770,7 @@ function IsCombatEffectActive($cardID)
     case "2155351882"://Ahsoka Tano
     case "6669050232"://Grim Resolve
     case "2395430106"://Republic Tactical Officer
+    case "6406254252"://Soulless One
       return true;
     default: return false;
   }

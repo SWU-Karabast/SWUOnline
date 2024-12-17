@@ -998,6 +998,29 @@ function IsCharacterAbilityActive($player, $index, $checkGem=false)
   return $character[$index+1] == 2;
 }
 
+function IsCardTitleInPlay($player, $title) {
+  $char = &GetPlayerCharacter($player);
+  return (count($char) > CharacterPieces() && CardTitle($char[CharacterPieces()]) == $title)
+    || (SearchCount(SearchAlliesForTitle($player, $title)) > 0);
+}
+
+function GetMultizoneIndicesForTitle($player, $title, $onlyReady=false) {
+  $indices=[];
+  $char = &GetPlayerCharacter($player);
+  $leaderIndex = CharacterPieces();
+  if(count($char) > $leaderIndex && CardTitle($char[$leaderIndex]) == $title && (!$onlyReady || $char[$leaderIndex+1] == 2))
+    array_push($indices, "MYCHAR-$leaderIndex");
+  $allies = SearchAlliesForTitle($player, $title);
+  if($allies != "") {
+    $allies = explode(",", $allies);
+    for($i=0; $i<count($allies); ++$i) {
+      $ally = new Ally("MYALLY-$allies[$i]", $player);
+      if(!$onlyReady || !$ally->IsExhausted()) array_push($indices, "MYALLY-$allies[$i]");
+    }
+  }
+  return implode(",", $indices);
+}
+
 function GetDieRoll($player)
 {
   global $CS_DieRoll;
@@ -3216,8 +3239,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       if($from != "PLAY") {
         $ready = false;
         $char = &GetPlayerCharacter($currentPlayer);
-        if(count($char) > CharacterPieces() && (CardTitle($char[CharacterPieces()]) == "Boba Fett" || CardTitle($char[CharacterPieces()]) == "Jango Fett")) $ready = true;
-        if(SearchCount(SearchAlliesForTitle($currentPlayer, "Boba Fett")) > 0 || SearchCount(SearchAlliesForTitle($currentPlayer, "Jango Fett")) > 0) $ready = true;
+        if(IsCardTitleInPlay("Boba Fett", $currentPlayer) || IsCardTitleInPlay("Jango Fett", $currentPlayer)) $ready = true;
         if($ready) {
           $playAlly->Ready();
         }
