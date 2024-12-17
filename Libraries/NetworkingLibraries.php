@@ -881,7 +881,6 @@ function ResolveSingleTarget($mainPlayer, $defPlayer, $target, $attackerPrefix, 
   global $combatChain, $combatChainState, $mainPlayer, $defPlayer, $CCS_CombatDamageReplaced;
   global $CCS_DamageDealt;
 
-  $attackerSurvived = 1;
   $targetArr = explode("-", $target);
   $attackerID = $attacker->CardID();
   $hasOverwhelm = HasOverwhelm($attackerID, $mainPlayer, $attacker->Index());
