@@ -87,7 +87,7 @@ function AttackModifier($cardID, $player, $index)
       $modifier += $initiativePlayer == $player ? 2 : 0;
       break;
     case "4619930426"://First Legion Snowtrooper
-      if(count($combatChain) == 0 || $player == $defPlayer) break;
+      if(count($combatChain) == 0 || $combatChain[0] !== "4619930426" || $player == $defPlayer) break;
       $target = GetAttackTarget();
       if($target == "THEIRCHAR-0") break;
       $ally = new Ally($target, $defPlayer);

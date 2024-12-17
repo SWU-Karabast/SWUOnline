@@ -26,7 +26,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
   global $CS_NextNAACardGoAgain, $CCS_AttackTarget, $CS_NumLeftPlay;
   global $CS_LayerTarget, $dqVars, $mainPlayer, $lastPlayed, $dqState, $CS_AbilityIndex, $CS_CharacterIndex;
   global $CS_AdditionalCosts, $CS_AlluvionUsed, $CS_MaxQuellUsed, $CS_DamageDealt, $CS_ArcaneTargetsSelected, $inGameStatus;
-  global $CS_ArcaneDamageDealt, $MakeStartTurnBackup, $CCS_AttackTargetUID, $chainLinkSummary, $chainLinks, $MakeStartGameBackup;
+  global $CS_ArcaneDamageDealt, $MakeStartTurnBackup, $CCS_AttackTargetUID, $chainLinkSummary, $chainLinks, $MakeStartGameBackup, $CCS_MultiAttackTargets;
   $rv = "";
 
   switch($phase) {
@@ -451,6 +451,22 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           }
           return $lastResult;
         case "CHANGEATTACKTARGET": SetAttackTarget($lastResult); return $lastResult;
+        case "MULTICHOOSEATTACKTARGETS":
+          $numOptions=count(explode(",",$lastResult));
+          if($numOptions===1) {
+            AddDecisionQueue("PASSPARAMETER", $player, "THEIRALLY-$lastResult", 1);
+            AddDecisionQueue("PROCESSATTACKTARGET", $player, "-", 1);
+          } else {
+            AddDecisionQueue("PREPENDLASTRESULT", $player, "$numOptions-", 1);
+            AddDecisionQueue("SETDQCONTEXT", $player, "Choose up to $numOptions units to target");
+            AddDecisionQueue("MULTICHOOSETHEIRUNIT", $player, "<-", 1);
+            AddDecisionQueue("IMPLODELASTRESULT", $player, ",", 1);
+            AddDecisionQueue("SETCOMBATCHAINSTATE", $player, $CCS_MultiAttackTargets, 1);
+            AddDecisionQueue("PROCESSATTACKTARGET", $player, "MULTI", 1);
+            //since we couldn't use the ability names for this, we need to pass 0 to the PlayCard function
+            AddDecisionQueue("PASSPARAMETER", $player, 0, 1);
+          }
+          break;
         case "DEALDAMAGE": 
           // Parameter structure:
           // 1. DEALDAMAGE
@@ -1268,6 +1284,10 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       if(count($arsenal) > 0 && count($params) == 2) AddCurrentTurnEffect($params[0], $player, $params[1], $arsenal[count($arsenal) - ArsenalPieces() + 5]);
       return $lastResult;
     case "PROCESSATTACKTARGET":
+      if($parameter==="MULTI") {
+        $targets=explode(",", $combatChainState[$CCS_MultiAttackTargets]);
+        $lastResult="THEIRALLY-$targets[0]";
+      }
       $combatChainState[$CCS_AttackTarget] = $lastResult;
       $mzArr = explode("-", $lastResult);
       $zone = &GetMZZone($defPlayer, $mzArr[0]);

@@ -693,26 +693,27 @@ function FindDefCharacter($cardID)
   return FindCharacterIndex($defPlayer, $cardID);
 }
 
-function ChainLinkResolvedEffects()
-{
-  global $combatChain, $mainPlayer, $currentTurnEffects;
-  if($combatChain[0] == "MON245" && !ExudeConfidenceReactionsPlayable())
-  {
-    AddCurrentTurnEffect($combatChain[0], $mainPlayer, "CC");
-  }
-  switch($combatChain[0])
-  {
-    case "CRU051": case "CRU052":
-      EvaluateCombatChain($totalAttack, $totalBlock);
-      for ($i = CombatChainPieces(); $i < count($combatChain); $i += CombatChainPieces()) {
-        if (!($totalBlock > 0 && (intval(BlockValue($combatChain[$i])) + BlockModifier($combatChain[$i], "CC", 0) + $combatChain[$i + 6]) > $totalAttack)) {
-          UndestroyCurrentWeapon();
-        }
-      }
-      break;
-      default: break;
-  }
-}
+//FAB
+// function ChainLinkResolvedEffects()
+// {
+//   global $combatChain, $mainPlayer, $currentTurnEffects;
+//   if($combatChain[0] == "MON245" && !ExudeConfidenceReactionsPlayable())
+//   {
+//     AddCurrentTurnEffect($combatChain[0], $mainPlayer, "CC");
+//   }
+//   switch($combatChain[0])
+//   {
+//     case "CRU051": case "CRU052":
+//       EvaluateCombatChain($totalAttack, $totalBlock);
+//       for ($i = CombatChainPieces(); $i < count($combatChain); $i += CombatChainPieces()) {
+//         if (!($totalBlock > 0 && (intval(BlockValue($combatChain[$i])) + BlockModifier($combatChain[$i], "CC", 0) + $combatChain[$i + 6]) > $totalAttack)) {
+//           UndestroyCurrentWeapon();
+//         }
+//       }
+//       break;
+//       default: break;
+//   }
+// }
 
 function CombatChainClosedMainCharacterEffects()
 {
@@ -5388,6 +5389,11 @@ function IsHarmonizeActive($player)
 {
   global $CS_NumMelodyPlayed;
   return GetClassState($player, $CS_NumMelodyPlayed) > 0;
+}
+
+function IsMultiTargetAttackActive() {
+  global $combatChainState, $CCS_MultiAttackTargets;
+  return $combatChainState[$CCS_MultiAttackTargets]!=="-";
 }
 
 function AddPreparationCounters($player, $amount=1)
