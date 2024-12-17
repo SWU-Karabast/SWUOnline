@@ -201,6 +201,13 @@ function EncounterAI()
         ProcessInput($currentPlayer, 9, $options[0], 0, 0, "");
         CacheCombatResult();
       }
+      else if($turn[0] == "LOOKHAND"  && $mainPlayer = $currentPlayer)
+      {
+        if($AIDebug) WriteLog("AI Branch - Opponent's Hand");
+        $options = explode(",", $turn[2]);
+        ProcessInput($currentPlayer, 99, $options[0], 0, 0, "");
+        CacheCombatResult();
+      }
       else if($turn[0] == "HANDTOPBOTTOM"  && $mainPlayer = $currentPlayer)
       {
         if($AIDebug) WriteLog("AI Branch - Hand Top/Bottom");

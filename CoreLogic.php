@@ -1377,35 +1377,6 @@ function RemoveCombatChain($index)
   $combatChain = array_values($combatChain);
 }
 
-function LookAtHand($player)
-{
-  $hand = &GetHand($player);
-  $otherPlayer = ($player == 1 ? 2 : 1);
-  // $caption = "Their hand is: ";
-  // for($i=0; $i<count($hand); $i+=HandPieces())
-  // {
-  //   if($i > 0) $caption .= ", ";
-  //   $caption .= CardLink($hand[$i], $hand[$i]);
-  // }
-
-  $windowWidth = intval(TryGet("windowWidth", 0));
-  $cardSize = ($windowWidth != 0 ? intval($windowWidth / 13) : 120);
-  $content = "<table><tr>";
-  for($i=0; $i<count($hand); $i+=HandPieces()) {
-    $content .= "<td>";
-    $content .= "<table><tr><td>";
-    $content .= Card($hand[$i], "concat", $cardSize, 0, 1);
-    $content .= "</td></tr><tr><td>";
-    $content .= "</td></tr>";
-    $content .= "</table>";
-    $content .= "</td>";
-  }
-  $content .= "</tr></table>";
-
-  AddDecisionQueue("SETDQCONTEXT", $otherPlayer, $content);
-  AddDecisionQueue("OK", $otherPlayer, "-");
-}
-
 function GainActionPoints($amount=1, $player=0)
 {
   global $actionPoints, $mainPlayer, $currentPlayer;
@@ -2375,7 +2346,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       if($from != "PLAY") BlackOne($currentPlayer);
       break;
     case "8986035098"://Viper Probe Droid
-      if($from != "PLAY") LookAtHand($currentPlayer == 1 ? 2 : 1);
+      if($from != "PLAY") {
+        AddDecisionQueue("LOOKHAND", $currentPlayer, "-");
+      }
       break;
     case "9266336818"://Grand Moff Tarkin
       if($from != "PLAY") {
@@ -3944,7 +3917,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "7964782056"://Qi'Ra unit
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
-      LookAtHand($otherPlayer);
+      AddDecisionQueue("LOOKHAND", $currentPlayer, "-");
       AddDecisionQueue("INPUTCARDNAME", $currentPlayer, "<-");
       AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, $uniqueId, 1);

@@ -528,6 +528,20 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     echo CreatePopup("CHOOSETOPOPPONENT", [], 0, 1, "Choose " . TypeToPlay($turn[0]), 1, $content);
   }
 
+  if ($turn[0] == "LOOKHAND" && $turn[1] == $playerID) {
+    $content = "<table style='margin: 0 auto;'><tr>";
+    for ($i = 0; $i < count($theirHand); ++$i) {
+      $content .= "<td>";
+      $content .= Card($theirHand[$i], "concat", $cardSize, 0, 1);
+      $content .= "</td>";
+    }
+    $content .= "</tr></table>";
+    $content .= "<div style='float: right;'>";
+    $content .= CreateButton($playerID, "Ok", 99, "OK", "20px");
+    $content .= "</div>";
+    echo CreatePopup("LOOKHAND", [], 0, 1, "Opponent's hand", 1, $content);
+  }
+
   if ($turn[0] == "HANDTOPBOTTOM" && $turn[1] == $playerID) {
     $content = "<table><tr>";
     for ($i = 0; $i < count($myHand); ++$i) {
