@@ -603,7 +603,7 @@ function CreateAutocompleteForm($playerID, $caption, $mode, $options)
     $rv .= "<input type='hidden' id='mode' name='mode' value='" . $mode . "'>";
     $rv .= "</form>";
 
-    // CSS Embutido
+    // CSS
     $rv .= "<style>
       input[type='text'] { padding: 10px 15px; width: 100%; background-color: #394452; border-radius: 5px; font-family: 'barlow'; border: 0; font-size: 16px; color: white; line-height: 1.125 }
       input[type='text']:focus { outline: 1px solid #fff }
@@ -616,13 +616,6 @@ function CreateAutocompleteForm($playerID, $caption, $mode, $options)
     return $rv;
 }
 
-
-
-//input = ?
-//value = ?
-//immediateSubmitMode = If set, add onchange event to submit immediately instead of form submit
-//defaultChecked = Will be checked by default if true
-//label = label to display
 function CreateCheckbox($input, $value, $immediateSubmitMode = -1, $defaultChecked = false, $label = "&nbsp;", $fullRefresh = false, $hidden = false)
 {
   global $playerID;
