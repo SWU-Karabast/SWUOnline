@@ -40,6 +40,13 @@ function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null,
   if (AllyHasStaticHealthModifier($cardID)) {
     CheckHealthAllAllies();
   }
+
+  // Verify if the Token has enough HP, accounting for other abilities in play.
+  // Non-token units are excluded as they are validated elsewhere.
+  if (IsToken($cardID)) {
+    $ally = new Ally("MYALLY-" . $index, $player);
+    $ally->DefeatIfNoRemainingHP();
+  }
   
   return $index;
 }
