@@ -860,7 +860,7 @@ function ResolveMultiTarget(Ally $attacker, $mainPlayer, $defPlayer) {
     if($i+1 == $numTargets) $combatChainState[$CCS_MultiAttackTargets]="-";
     $attackerDestroyed = $attackerDestroyed || $attacker->DealDamage($defDamage,fromCombat:true,enemyDamage:true,fromUnitEffect:true);
     if ($destroyed) {
-      if($hasOverwhelm && $destroyed) {
+      if($hasOverwhelm) {
         DealDamageAsync($defPlayer, $excess, "OVERWHELM", $attackerID);
         WriteLog("OVERWHELM : <span style='color:Crimson;'>$excess damage</span> done on base");
       }

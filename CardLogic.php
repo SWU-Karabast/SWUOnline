@@ -474,7 +474,7 @@ function ContinueDecisionQueue($lastResult = "")
         }
         else {
           SetClassState($player, $CS_PlayIndex, $params[2]); //This is like a parameter to PlayCardEffect and other functions
-          SetClassState($player, $CS_PlayedWithExploit, false);
+          SetClassState($player, $CS_PlayedWithExploit, 0);
           PlayCardEffect($cardID, $params[0], $params[1], $target, $additionalCosts, $params[3], $params[2]);
           ClearDieRoll($player);
         }
@@ -495,7 +495,7 @@ function ContinueDecisionQueue($lastResult = "")
         //params 4 = Unique ID
         $additionalCosts = GetClassState($currentPlayer, $CS_AdditionalCosts);
         if($additionalCosts == "") $additionalCosts = "-";
-        $playedWithExploit = GetClassState($currentPlayer, $CS_PlayedWithExploit);
+        $playedWithExploit = (bool)GetClassState($currentPlayer, $CS_PlayedWithExploit);
         $layerIndex = $playedWithExploit ? 0 : count($layers) - GetClassState($currentPlayer, $CS_LayerPlayIndex);
         $layers[$layerIndex + 2] = $params[1] . "|" . $params[2] . "|" . $params[3] . "|" . $params[4];
         $layers[$layerIndex + 4] = $additionalCosts;
