@@ -3226,8 +3226,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "4300219753"://Fett's Firespray
       if($from != "PLAY") {
         $ready = false;
-        $char = &GetPlayerCharacter($currentPlayer);
-        if(IsCardTitleInPlay("Boba Fett", $currentPlayer) || IsCardTitleInPlay("Jango Fett", $currentPlayer)) $ready = true;
+        if(IsCardTitleInPlay($currentPlayer, "Boba Fett") || IsCardTitleInPlay($currentPlayer, "Jango Fett")) $ready = true;
         if($ready) {
           $playAlly->Ready();
         }
