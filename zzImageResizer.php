@@ -13,7 +13,7 @@ foreach ($files as $file) {
     // Process the file here
     $imagePath = $directory . $file;
     echo($imagePath."<BR>");
-    
+
     try {
       $image = imagecreatefrompng($imagePath);
       if($image) {
@@ -21,7 +21,7 @@ foreach ($files as $file) {
         imagedestroy($image);
       }
     } catch(Exception $e) {
-      
+
 
     }
   }

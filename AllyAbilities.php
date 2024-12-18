@@ -40,7 +40,7 @@ function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null,
   if (AllyHasStaticHealthModifier($cardID)) {
     CheckHealthAllAllies();
   }
-  
+
   return $index;
 }
 
@@ -296,7 +296,8 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false,
     if((HasWhenDestroyed($cardID)
         && !$isSuperlaserTech
         && !GivesWhenDestroyedToAllies($cardID))
-        || UpgradesContainWhenDefeated($upgrades))
+        || UpgradesContainWhenDefeated($upgrades)
+        || CurrentEffectsContainWhenDefeated($player))
       $whenDestroyData=SerializeAllyDestroyData($uniqueID,$lostAbilities,$isUpgraded,$upgrades,$upgradesWithOwnerData);
     if($isSuperlaserTech && !$lostAbilities)
       $whenResourceData=SerializeResourceData("PLAY","DOWN",0,"0","-1");
@@ -319,7 +320,7 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false,
     }
     IncrementClassState($player, $CS_NumAlliesDestroyed);
   }
-  
+
   IncrementClassState($player, $CS_NumLeftPlay);
   AllyLeavesPlayAbility($player, $index);
   for($i=0; $i<count($upgradesWithOwnerData); $i+=SubcardPieces()) {
@@ -350,6 +351,18 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false,
   if($player == $mainPlayer) UpdateAttacker();
   else UpdateAttackTarget();
   return $cardID;
+}
+
+function CurrentEffectsContainWhenDefeated($player) {
+  global $currentTurnEffects;
+  for($i=0;$i<count($currentTurnEffects); $i+=CurrentTurnEffectPieces()) {
+    switch($currentTurnEffects[$i]) {
+      case "1272825113"://In Defense of Kimino
+      case "9415708584": //Pyrrhic Assault
+        return $currentTurnEffects[$i+1] == $player;
+      default: return false;
+    }
+  }
 }
 
 function UpgradesContainWhenDefeated($upgrades) {
@@ -588,7 +601,8 @@ function AllyLeavesPlayAbility($player, $index)
 function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities,
   $isUpgraded, $upgrades, $upgradesWithOwnerData)
 {
-  global $initiativePlayer, $combatChain;
+  global $initiativePlayer, $currentTurnEffects;
+
   if(!$lostAbilities) {
     switch($cardID) {
       case "4405415770"://Yoda, Old Master
@@ -742,6 +756,23 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities,
         AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $player, "0249398533,PLAY", 1);
         break;
       default: break;
+    }
+
+    for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnPieces()) {
+      if($currentTurnEffects[$i+1] != $player) continue;//each friendly unit
+      if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $uniqueID()) continue;
+      switch($currentTurnEffects[$i]) {
+        case "1272825113"://In Defense of Kimino
+          if(TraitContains($cardID, "Republic", $player)) PlayAlly("3941784506", $player);//Clone Trooper
+          break;
+        case "9415708584"://Pyrrhic Assault
+          AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY");
+          AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal 2 damage to");
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+          AddDecisionQueue("MZOP", $player, "DEALDAMAGE,2,$player,1", 1);
+          break;
+        default: break;
+      }
     }
 
     for($i=0; $i<count($upgrades); ++$i) {
@@ -899,13 +930,13 @@ function CollectBounty($player, $unitCardID, $bountyCardID, $isExhausted, $owner
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $opponent, "<-", 1);
       AddDecisionQueue("MZOP", $opponent, "DEALDAMAGE,3,$opponent,1", 1);
       break;
-    default: 
+    default:
       $numBounties--;
       break;
   }
 
   if ($numBounties > 0 && isBountyRecollectable($bountyCardID) && !$reportMode) {
-    $bosskIndex = SearchAlliesForCard($opponent, "d2bbda6982"); 
+    $bosskIndex = SearchAlliesForCard($opponent, "d2bbda6982");
 
     if ($bosskIndex != "") {
       $bossk = new Ally("MYALLY-" . $bosskIndex, $opponent);
@@ -1257,7 +1288,7 @@ function AllyPlayCardAbility($cardID, $player="", $from="-", $abilityID="-", $un
         AddLayer("TRIGGER", $currentPlayer, "3589814405", CardCost($cardID));
       }
       break;
-    case "724979d608"://Cad Bane Leader 
+    case "724979d608"://Cad Bane Leader
       $cadIndex = SearchAlliesForCard($player, "724979d608");
       if($cadIndex != "") {
         $cadbane = new Ally("MYALLY-" . $cadIndex, $player);
@@ -2004,6 +2035,19 @@ function SpecificAllyAttackAbilities($attackID)
         }
       }
       break;
+    case "6406254252"://Soulless One - Customized for Grievous
+      if(IsCardTitleInPlay($mainPlayer, "General Grievous")) {
+        $mzIndices = GetMultizoneIndicesForTitle($mainPlayer, "General Grievous", true);
+        if($mzIndices != "") {
+          AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to exhaust", 1);
+          AddDecisionQueue("PASSPARAMETER", $mainPlayer, $mzIndices);
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+          AddDecisionQueue("MZOP", $mainPlayer, "REST", 1);
+          AddDecisionQueue("PASSPARAMETER", $mainPlayer, $attackerAlly->UniqueID(), 1);
+          AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "6406254252,PLAY", 1);
+        }
+      }
+      break;
     default: break;
   }
   //SpecificAllyAttackAbilities End
@@ -2102,7 +2146,7 @@ function AllyBeginEndTurnEffects()
     }
     switch($mainAllies[$i])
     {
-      
+
       default: break;
     }
   }

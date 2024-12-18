@@ -20,7 +20,6 @@ if(!file_exists("./Games/" . $gameName . "/")) { header('HTTP/1.0 403 Forbidden'
 if($lastUpdate == "NaN") $lastUpdate = 0;
 if ($lastUpdate > 10000000) $lastUpdate = 0;
 
-
 include "WriteLog.php";
 include "HostFiles/Redirector.php";
 include "Libraries/UILibraries2.php";

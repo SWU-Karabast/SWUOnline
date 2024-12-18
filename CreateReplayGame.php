@@ -24,7 +24,6 @@ if(!file_exists("./Replays/" . $userId . "/" . $replayNumber . "/"))
   exit;
 }
 
-
 $gameName = GetGameCounter();
 
 if (file_exists("Games/$gameName") || !mkdir("Games/$gameName", 0700, true)) {

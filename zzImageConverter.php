@@ -53,14 +53,14 @@ function CheckImage($cardID, $url, $definedType, $isBack=false, $set="SOR")
     if(file_exists($filename))
     {
       echo("Attempting to convert image for " . $cardID . " to concat.<BR>");
-      
+
       $image = imagecreatefromwebp($filename);
       //$image = imagecreatefrompng($filename);
-      
+
       if($definedType == "Event") {
         $imageTop = imagecrop($image, ['x' => 0, 'y' => 0, 'width' => 450, 'height' => 110]);
         $imageBottom = imagecrop($image, ['x' => 0, 'y' => 320, 'width' => 450, 'height' => 628]);
-  
+
         $dest = imagecreatetruecolor(450, 450);
         imagecopy($dest, $imageTop, 0, 0, 0, 0, 450, 110);
         imagecopy($dest, $imageBottom, 0, 111, 0, 0, 450, 404);
@@ -68,7 +68,7 @@ function CheckImage($cardID, $url, $definedType, $isBack=false, $set="SOR")
       else {
         $imageTop = imagecrop($image, ['x' => 0, 'y' => 0, 'width' => 450, 'height' => 372]);
         $imageBottom = imagecrop($image, ['x' => 0, 'y' => 570, 'width' => 450, 'height' => 628]);
-  
+
         $dest = imagecreatetruecolor(450, 450);
         imagecopy($dest, $imageTop, 0, 0, 0, 0, 450, 372);
         imagecopy($dest, $imageBottom, 0, 373, 0, 0, 450, 78);

@@ -77,7 +77,7 @@ function CardTalent($cardID)
 
 function RestoreAmount($cardID, $player, $index)
 {
-  global $initiativePlayer;
+  global $initiativePlayer, $currentTurnEffects;
   $amount = 0;
   $allies = &GetAllies($player);
   for($i=0; $i<count($allies); $i+=AllyPieces())
@@ -91,10 +91,20 @@ function RestoreAmount($cardID, $player, $index)
     }
   }
   $ally = new Ally("MYALLY-" . $index, $player);
+  for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnPieces()) {
+    if($currentTurnEffects[$i+1] != $player) continue;
+    if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
+    switch($currentTurnEffects[$i]) {
+      case "1272825113"://In Defense of Kimino
+        if(TraitContains($ally->CardID(), "Republic", $player, $index)) $amount += 2;
+        break;
+      default: break;
+    }
+  }
   $upgrades = $ally->GetUpgrades();
   for($i=0; $i<count($upgrades); ++$i) {
     $upgradeCardID = $upgrades[$i];
-    
+
     switch($upgradeCardID) {
       case "8788948272":
         $amount += 2;
@@ -222,7 +232,6 @@ function RaidAmount($cardID, $player, $index, $reportMode = false)
       default: break;
     }
   }
-  $ally = new Ally("MYALLY-" . $index, $player);
   $upgrades = $ally->GetUpgrades();
   for($i=0; $i<count($upgrades); ++$i)
   {
@@ -450,7 +459,7 @@ function HasCoordinate($cardID, $player, $index)
     "2298508689",//Reckless Torrent
     "0683052393",//Hevy
     "1641175580",//Kit Fisto
-    "8307804692",//Padme Abmidala 
+    "8307804692",//Padme Abmidala
     "7494987248",//Plo Koon
     "5445166624",//Clone Dive Trooper
     "4512764429",//Sanctioner's Shuttle
@@ -1107,7 +1116,7 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
       $abilityTypes .= "A";
     }
   }
-  
+
   return $abilityTypes;
 }
 
@@ -1157,7 +1166,7 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       $ally = new Ally("MYALLY-" . $index, $currentPlayer);
       if($validate) $abilityNames = $ally->IsExhausted() ? "Exhaust" : "Exhaust,Attack";
       else $abilityNames = "Exhaust,Attack";
-      break;    
+      break;
     case "0595607848"://Disaffected Senator
       $abilityNames = "Deal Damage,Attack";
       break;
@@ -2044,7 +2053,7 @@ function SmuggleCost($cardID, $player="", $index="")
         if(!$techAlly->LostAbilities()) {
           $cost = CardCost($cardID)+2;
           if($minCost == -1 || $minCost > $cost) $minCost = $cost;
-        } 
+        }
         break;
       default: break;
     }

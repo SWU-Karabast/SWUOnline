@@ -25,7 +25,7 @@ $isPatron = isset($_SESSION["isPatron"]);
 
 $isMobile = IsMobile();
 
-/* 
+/*
 To stop the menu bar header from showing up on refresh, had to put all of the above code in this page from menubar.php rather than just include it so it doesn't show up on refresh but the session is maintained. kept mobile and patron incase user clicks something where it matters from inside this subpage somehow
 */
 
@@ -40,8 +40,8 @@ $useruid = $_SESSION["useruid"];
 $userID = $_SESSION["userid"];
 if (!$forIndividual) exit;
 
-/* 
-pull the date range from the AJAX button on ProfilePage.php. The one month back default is there. 
+/*
+pull the date range from the AJAX button on ProfilePage.php. The one month back default is there.
 */
 
 
@@ -104,7 +104,7 @@ $loserQuery .= " and numTurns>1  AND (CAST(CompletionTime AS DATE) BETWEEN ? AND
 $sql = "SELECT Hero,sum(Count) AS Total FROM
 (
 select WinningHero As Hero,count(WinningHero) AS Count
-from completedgame " . $winnerQuery . " group by WinningHero 
+from completedgame " . $winnerQuery . " group by WinningHero
 union all
 select LosingHero As Hero,count(LosingHero) AS Count
 from completedgame

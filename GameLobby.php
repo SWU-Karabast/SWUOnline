@@ -120,14 +120,14 @@ $isMobile = IsMobile();
               <input class='GameLobby_Input' type='text' id='chatText' name='chatText' value='' autocomplete='off' onkeypress='ChatKey(event)'>
               <button class='GameLobby_Button' style='cursor:pointer;' onclick='SubmitChat()'>Chat</button>
             </div>
-            
-            
+
+
           </div>
         </div>
       </div>
 
       <div class="player-info container bg-black">
-        
+
         <h2>Players</h2>
         <div id="my-info">
           <?php

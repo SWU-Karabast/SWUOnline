@@ -154,7 +154,7 @@
     AddToTrie($uniqueTrie, $uuid, 0, $card->unique == "true" ? 1 : 0);
     if($card->text != null && (str_contains($card->text, "When Played") || str_contains($card->text, "When played"))) AddToTrie($hasPlayTrie, $uuid, 0, true);
     if($card->text != null && (str_contains($card->text, "When Defeated") || str_contains($card->text, "When defeated"))) AddToTrie($hasDestroyedTrie, $uuid, 0, true);
-    
+
     $aspects = "";
     for($j = 0; $j < count($card->aspects->data); ++$j)
     {

@@ -61,7 +61,7 @@ include_once 'Header.php';
     if (count($favoriteDecks) == 0) {
       echo ("<div><label class='SelectDeckInput'>Starter Decks: </label>");
       echo ("<select name='decksToTry' id='decksToTry'>");
-      
+
       echo ("</select></div>");
     }
     */

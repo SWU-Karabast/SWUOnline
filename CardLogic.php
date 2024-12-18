@@ -721,7 +721,7 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
           switch($arr[0]) {
             case "ALLYDESTROY":
               $dd=DeserializeAllyDestroyData($arr[1]);
-              AllyDestroyedAbility($player, $target, $dd["UniqueID"], $dd["LostAbilities"],$dd["IsUpgraded"],$dd["Upgrades"],$dd["UpgradesWithOwnerData"]);   
+              AllyDestroyedAbility($player, $target, $dd["UniqueID"], $dd["LostAbilities"],$dd["IsUpgraded"],$dd["Upgrades"],$dd["UpgradesWithOwnerData"]);
               break;
             case "ALLYRESOURCE":
               $rd=DeserializeResourceData($arr[1]);
@@ -1081,7 +1081,7 @@ function BlackOne($player) {
   AddDecisionQueue("DRAW", $player, "-", 1);
   AddDecisionQueue("DRAW", $player, "-", 1);
   AddDecisionQueue("DRAW", $player, "-", 1);
-  
+
 }
 
 function TheyControlMoreUnits($player) {
