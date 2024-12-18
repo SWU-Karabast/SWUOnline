@@ -505,7 +505,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           return $id;
         case "EXPLOIT":
           global $CS_PlayedWithExploit;
-          SetClassState($player, $CS_PlayedWithExploit, true);
+          SetClassState($player, $CS_PlayedWithExploit, 1);
           $exploitedAllies = (array)$dqVars[0];
           if ($exploitedAllies == [])
           {

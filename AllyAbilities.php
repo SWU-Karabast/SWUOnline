@@ -767,7 +767,7 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities,
 
     for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnPieces()) {
       if($currentTurnEffects[$i+1] != $player) continue;//each friendly unit
-      if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $uniqueID()) continue;
+      if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $uniqueID) continue;
       switch($currentTurnEffects[$i]) {
         case "1272825113"://In Defense of Kimino
           if(TraitContains($cardID, "Republic", $player)) PlayAlly("3941784506", $player);//Clone Trooper

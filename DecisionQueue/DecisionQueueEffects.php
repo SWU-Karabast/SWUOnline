@@ -193,7 +193,7 @@ function ModalAbilities($player, $card, $lastResult)
         default: break;
       }
       return 1;
-    
+
     case "MANUFACTUREDSOLDIERS":
       switch($lastResult) {
         case "Clone_Troopers":
@@ -225,7 +225,7 @@ function PlayerTargetedAbility($player, $card, $lastResult)
 
 function SpecificCardLogic($player, $parameter, $lastResult)
 {
-  global $dqVars, $CS_DamageDealt, $combatChainState, $CCS_MultiAttackTargets;
+  global $dqVars;
   $parameterArr = explode(",", $parameter);
   $card = $parameterArr[0];
   switch($card)
