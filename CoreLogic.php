@@ -1731,7 +1731,7 @@ function IgnoreAspectPenalty($cardID, $player) {
   }
   if (TraitContains($cardID, "Clone")) {
     return (SearchAlliesForCard($player, "1386874723") != "" && GetClassState($player, $CS_NumClonesPlayed) < 1) //Omega (Part of the Squad)
-      || (HeroCard($player) == "2742665601" && SearchAlliesForCard($player, "f05184bd91") != ""); //Nala Se (Kaminoan Prime Minister)
+      || (HeroCard($player) == "2742665601" || SearchAlliesForCard($player, "f05184bd91") != ""); //Nala Se (Kaminoan Prime Minister)
   }
   if(TraitContains($cardID, "Lightsaber")) {
     $findGrievous = SearchAlliesForCard($player, "4776553531");
