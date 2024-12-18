@@ -678,18 +678,18 @@ function CurrentEffectStartRegroupAbilities()
 
         switch($upgradeCardID) {
           case "3962135775"://Foresight
-            AddDecisionQueue("INPUTCARDNAME", $currentPlayer, "<-");
-            AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
-            AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYDECK-0", 1);
-            AddDecisionQueue("MZOP", $currentPlayer, "GETCARDID", 1);
-            AddDecisionQueue("SETDQVAR", $currentPlayer, "1", 1);
-            AddDecisionQueue("MZOP", $currentPlayer, "GETCARDTITLE", 1);
-            AddDecisionQueue("NOTEQUALPASS", $currentPlayer, "{0}");
-            AddDecisionQueue("DRAW", $currentPlayer, "-", 1);
-            AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
-            AddDecisionQueue("ELSE", $currentPlayer, "-");
-            AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "The top card of your deck is <1>");
-            AddDecisionQueue("OK", $currentPlayer, "-");
+            AddDecisionQueue("INPUTCARDNAME", $player, "<-");
+            AddDecisionQueue("SETDQVAR", $player, "0", 1);
+            AddDecisionQueue("PASSPARAMETER", $player, "MYDECK-0", 1);
+            AddDecisionQueue("MZOP", $player, "GETCARDID", 1);
+            AddDecisionQueue("SETDQVAR", $player, "1", 1);
+            AddDecisionQueue("MZOP", $player, "GETCARDTITLE", 1);
+            AddDecisionQueue("NOTEQUALPASS", $player, "{0}");
+            AddDecisionQueue("DRAW", $player, "-", 1);
+            AddDecisionQueue("REVEALCARDS", $player, "-", 1);
+            AddDecisionQueue("ELSE", $player, "-");
+            AddDecisionQueue("SETDQCONTEXT", $player, "The top card of your deck is <1>");
+            AddDecisionQueue("OK", $player, "-");
             break;
           default: break;
         }
