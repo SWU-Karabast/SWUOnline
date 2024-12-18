@@ -67,7 +67,7 @@ function GetAllyWhenDestroyTheirsEffects($mainPlayer, $player,
     }
     if($combatChainState[$CCS_CachedLastDestroyed] != "NA") {
       $ally = explode(";",$combatChainState[$CCS_CachedLastDestroyed]);
-      if(HasWhenEnemyDestroyed($ally[$i], $ally[$i+8], $destroyedWasUnique, $destroyedWasUpgraded)) {
+      if(HasWhenEnemyDestroyed($ally[0], $ally[8], $destroyedWasUnique, $destroyedWasUpgraded)) {
         array_unshift($triggers, implode(";",$destroyedUpgradesWithOwnerData));
         array_unshift($triggers, $ally[5]);
         array_unshift($triggers, $player);

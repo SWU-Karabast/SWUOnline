@@ -257,12 +257,12 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       $otherPlayer = $player == 1 ? 2 : 1;
       $cardID = GetMZCard($player, $lastResult);
       $cardTitle = CardTitle($cardID);
-      $targetCards = SearchAlliesForTitle($otherPlayer, $cardTitle);
+      $targetCards = SearchAlliesUniqueIDForTitle($otherPlayer, $cardTitle);
       $targetCardsArr = explode(",", $targetCards);
 
       for($i=0; $i<count($targetCardsArr); ++$i) {
-        $theirAlly = new Ally("THEIRALLY-" . $targetCardsArr[$i], $otherPlayer);
-        $theirAlly->DealDamage(amount:2, enemyDamage:true);
+        $targetAlly = GetAlly($targetCardsArr[$i]);
+        $targetAlly->DealDamage(amount:2, enemyDamage:true);
       }
       break;
     case "FORCETHROW"://Force Throw

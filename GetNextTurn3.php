@@ -828,6 +828,16 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     $playerInputPopup->popup = CreatePopupAPI("INPUTCARDNAME", [], 0, 1, "Name a card");
   }
 
+  if ($turn[0] == "LOOKHAND" && $turn[1] == $playerID) {
+    $playerInputPopup->active = true;
+    $cardsArray = array();
+    for ($i = 0; $i < count($theirHand); ++$i) {
+      $cardsArray[] = JSONRenderedCard($theirHand[$i], action: 0);
+    }
+    $playerInputButtons[] = CreateButtonAPI($playerID, "Ok", 99, "OK", "20px");
+    $playerInputPopup->popup = CreatePopupAPI("LOOKHAND", [], 0, 1, "Oponnent's hand", cardsArray: $cardsArray);
+  }
+
   if ($turn[0] == "HANDTOPBOTTOM" && $turn[1] == $playerID) {
     $playerInputPopup->active = true;
     $cardsArray = array();

@@ -40,18 +40,25 @@ function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null,
   if (AllyHasStaticHealthModifier($cardID)) {
     CheckHealthAllAllies();
   }
-
+  // Verify if the Token has enough HP, accounting for other abilities in play.
+  // Non-token units are excluded as they are validated elsewhere.
+  if (IsToken($cardID)) {
+    $ally = new Ally("MYALLY-" . $index, $player);
+    $ally->DefeatIfNoRemainingHP();
+  }
   return $index;
 }
 
 function CheckHealthAllAllies() {
-  global $currentPlayer;
   for ($player = 1; $player <= 2; $player++) {
     $allies = &GetAllies($player);
-    $prefix = $currentPlayer == $player ? "MYALLY-" : "THEIRALLY-";
     for ($i = 0; $i < count($allies); $i += AllyPieces()) {
-      $ally = new Ally($prefix . $i, $player);
-      $ally->DefeatIfNoRemainingHP();
+      $ally = new Ally("MYALLY-" . $i, $player);
+      $defeated = $ally->DefeatIfNoRemainingHP();
+
+      if ($defeated) {
+        $i -= AllyPieces(); // Decrement to account for the removed ally
+      }
     }
   }
 }
@@ -331,7 +338,7 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false,
   $captives = $ally->GetCaptives(true);
   if(!$skipDestroy) {
     if(DefinedTypesContains($cardID, "Leader", $player)) ;//If it's a leader it doesn't go in the discard
-    else if($cardID == "3463348370" || $cardID == "3941784506") ; // If it's a token, it doesn't go in the discard
+    else if(isToken($cardID)) ; // If it's a token, it doesn't go in the discard
     else if($isSuperlaserTech) ; //SLT is auto-added to resources
     else {
       $graveyardCardID = $ally->IsCloned() ? "0345124206" : $cardID; //Clone - Replace the cloned card with the original one in the graveyard
