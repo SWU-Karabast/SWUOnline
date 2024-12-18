@@ -884,6 +884,7 @@ function ResolveSingleTarget($mainPlayer, $defPlayer, $target, $attackerPrefix, 
   $targetArr = explode("-", $target);
   $attackerID = $attacker->CardID();
   $hasOverwhelm = HasOverwhelm($attackerID, $mainPlayer, $attacker->Index());
+  $attackerDestroyed = 0;
 
   if($target == "THEIRALLY--1") {//Means the target was already destroyed
     if($hasOverwhelm) {
@@ -918,7 +919,6 @@ function ResolveSingleTarget($mainPlayer, $defPlayer, $target, $attackerPrefix, 
       $attackerDestroyed = $attacker->DealDamage($defenderPower, fromCombat:true);
       if($attackerDestroyed) {
         ClearAttacker();
-        $attackerSurvived = 0;
       }
     }
     if($hasOverwhelm && $destroyed) {
@@ -935,7 +935,7 @@ function ResolveSingleTarget($mainPlayer, $defPlayer, $target, $attackerPrefix, 
     DamageTrigger($defPlayer, $damage, "COMBAT", $combatChain[0]); //Include prevention
     AddDecisionQueue("RESOLVECOMBATDAMAGE", $mainPlayer, "-");
   }
-  if($attackerSurvived) {
+  if(!$attackerDestroyed) {
     CompletesAttackEffect($attackerID);
   }
   if($attackerID == "1086021299") {
@@ -1083,7 +1083,7 @@ function FinalizeChainLink($chainClosed = false)
   } else {
     ResetChainLinkState();
   }
-  
+
   if($hasChainedAction) ProcessDecisionQueue();
 }
 
@@ -1476,7 +1476,7 @@ function PlayCardSkipCosts($cardID, $from)
 function GetLayerTarget($cardID)
 {
   global $currentPlayer;
-  if(DefinedTypesContains($cardID, "Upgrade", $currentPlayer)) 
+  if(DefinedTypesContains($cardID, "Upgrade", $currentPlayer))
   {
     $upgradeFilter = UpgradeFilter($cardID);
     AddDecisionQueue("PASSPARAMETER", $currentPlayer, $cardID);
@@ -1521,7 +1521,7 @@ function AddPrePitchDecisionQueue($cardID, $from, $index = -1, $skipAbilityType 
     }
   }
   if($from != "PLAY") {
-    $exploitAmount = ExploitAmount($cardID, $currentPlayer, reportMode:false);  
+    $exploitAmount = ExploitAmount($cardID, $currentPlayer, reportMode:false);
     if ($exploitAmount > 0) {
       $singleExploit = $exploitAmount == 1;
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
@@ -1615,11 +1615,11 @@ function GetTargetOfAttack($attackID)
         } else {
           AddDecisionQueue("PASSPARAMETER", $mainPlayer, $targets, 1);
           AddDecisionQueue("SETDQVAR", $mainPlayer, 0, 1);
-          AddDecisionQueue("PASSPARAMETER", $mainPlayer, "Units", 1);  
+          AddDecisionQueue("PASSPARAMETER", $mainPlayer, "Units", 1);
         }
         AddDecisionQueue("SPECIFICCARD", $mainPlayer, "MAUL_TWI,$attackerIndex", 1);
         break;
-      default: 
+      default:
         PrependDecisionQueue("PROCESSATTACKTARGET", $mainPlayer, "-");
         PrependDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, $targets);
         PrependDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a target for the attack");
@@ -1722,7 +1722,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
   global $CCS_WeaponIndex, $EffectContext, $CCS_AttackUniqueID, $CS_NumEventsPlayed, $CS_AfterPlayedBy, $layers;
   global $CS_NumDragonAttacks, $CS_NumIllusionistAttacks, $CS_NumIllusionistActionCardAttacks, $CCS_IsBoosted;
   global $SET_PassDRStep, $CS_AbilityIndex, $CS_NumMandalorianAttacks, $CCS_MultiAttackTargets;
-  
+
   $oppCardActive = GetClassState($currentPlayer, $CS_OppCardActive) > 0;
 
   $otherPlayer = $currentPlayer == 1 ? 2 : 1;
