@@ -178,7 +178,7 @@ if ($decklink != "") {
       $sideboardCards .= $cardID;
     }
   }
-  
+
   if ($format != "livinglegendscc" && $hasBannedCard) {
     $_SESSION['error'] = '⚠️ Unreleased cards must be played in the open format.';
     header("Location: " . $redirectPath . "/MainMenu.php");
@@ -277,7 +277,7 @@ function CardIDOverride($cardID) {
     case "SHD_083": return "SOR_081"; //Seasoned Shoretrooper
     case "SHD_166": return "SOR_162"; //Disabling Fang Fighter
     case "SHD_223": return "SOR_215"; //Snapshot Reflexes
-    case "SHD_231": return "SOR_220"; //Surprise Strike 
+    case "SHD_231": return "SOR_220"; //Surprise Strike
     case "SHD_236": return "SOR_227"; //Snowtrooper Lieutenant
     case "SHD_238": return "SOR_229"; //Cell Block Guard
     case "SHD_257": return "SOR_247"; //Underworld Thug

@@ -40,7 +40,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $numToAllowChoosing = $paramArray[1];
       $deckIndicesToShow = DecisionQueueStaticEffect("FINDINDICES", $player, "DECKTOPXINDICES," . $numToSearch, "");
       if($deckIndicesToShow == "PASS") return "PASS";
-      
+
       if(substr_count($paramArray[2], "|") > 0) { //OR: Any card that matches at least one filter should be selectable.
         $filterArray = explode("|", $paramArray[2]);
         $chooseableDeckIndices = [];
@@ -61,7 +61,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           if($choosableDeckIndices == "PASS") {$choosableDeckIndices = ""; break;}
         }
       }
-      
+
       PrependDecisionQueue("PROCESSSEARCH", $player, $numToSearch); //We'll need to know how many cards were searched to figure out how many to shuffle and put on the bottom later.
       PrependDecisionQueue("MULTICHOOSESEARCHTARGETS", $player,
         $numToAllowChoosing . "-" . $deckIndicesToShow . "-" . "0-" . $choosableDeckIndices, //The MULTICHOOSE system(case 19 in ProcessInput()) is set up to use three params(- delimited): $maxSelect, $options(usually choosable indices, but in this case just indices to show), and $minSelect. I want to extend this with choosable indices, so they come after, at index 3. $minSelect should always be 0 for a search as a player can always choose to find nothing from a search(Comp Rules v2.0 section 8.27.1).
@@ -470,7 +470,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             AddDecisionQueue("PASSPARAMETER", $player, 0, 1);
           }
           break;
-        case "DEALDAMAGE": 
+        case "DEALDAMAGE":
           // Parameter structure:
           // 1. DEALDAMAGE
           // 2. Damage amount
@@ -483,8 +483,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             $isAttacker = AttackerMZID($player) == $lastResult;
             $ally = new Ally($lastResult);
             $attackerHasOverwhelm = HasOverwhelm($ally->CardID(), $player, $targetArr[1]);
-            $destroyed = $ally->DealDamage($parameterArr[1], 
-                enemyDamage:(count($parameterArr) > 2 && $parameterArr[2] != $targetPlayer), 
+            $destroyed = $ally->DealDamage($parameterArr[1],
+                enemyDamage:(count($parameterArr) > 2 && $parameterArr[2] != $targetPlayer),
                 fromUnitEffect: count($parameterArr) > 3 && (bool)$parameterArr[3]);
 
             if($destroyed) {

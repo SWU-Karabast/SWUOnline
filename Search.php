@@ -788,7 +788,7 @@ function GetAlly($uniqueID) {
     $index = SearchAlliesForUniqueID($uniqueID, $player);
     if ($index > -1) return new Ally(($currentPlayer == $player ? "MYALLY-" : "THEIRALLY-") . $index, $player);
   }
-  
+
   return null;
 }
 
