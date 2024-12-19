@@ -459,6 +459,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           if($numOptions===1) {
             AddDecisionQueue("PASSPARAMETER", $player, "THEIRALLY-$lastResult", 1);
             AddDecisionQueue("PROCESSATTACKTARGET", $player, "-", 1);
+            AddDecisionQueue("PASSPARAMETER", $player, 0, 1);
           } else {
             AddDecisionQueue("PREPENDLASTRESULT", $player, "$numOptions-", 1);
             AddDecisionQueue("SETDQCONTEXT", $player, "Choose up to $numOptions units to target");
