@@ -943,16 +943,9 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       AddSoul($lastResult, $player, $parameter);
       return $lastResult;
     case "SHUFFLEDECK":
-      $zone = &GetDeck($player);
-      $destArr = [];
+      $deck = &GetDeck($player);
       $skipSeed = $parameter == "SKIPSEED";
-      while(count($zone) > 0) {
-        $index = GetRandom(0, count($zone) - 1, $skipSeed);
-        $destArr[] = $zone[$index];
-        unset($zone[$index]);
-        $zone = array_values($zone);
-      }
-      $zone = $destArr;
+      RandomizeArray($deck, $skipSeed);
       return $lastResult;
     case "EXHAUSTCHARACTER":
       $character = &GetPlayerCharacter($player);
@@ -1671,12 +1664,12 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
     case "EQUIPCARD":
       EquipCard($player, $parameter);
       return "";
-    case "GETTARGETOFATTACK":
+    case "ATTACK":
       global $CCS_WeaponIndex, $CS_PlayIndex;
       $params = explode(",", $parameter);
       if(CardType($params[0]) == "AA" || GetResolvedAbilityType($params[0], $params[1]) == "AA") {
         $combatChainState[$CCS_WeaponIndex] = GetClassState($player, $CS_PlayIndex);
-        GetTargetOfAttack($params[0]);
+        Attack($params[0]);
       }
       return $lastResult;
     case "STARTTURN":
