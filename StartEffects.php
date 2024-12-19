@@ -37,10 +37,8 @@ if($p2CharEquip[0] == "DUMMY") {
 $initiativePlayer = $firstPlayer;
 $intiativeTaken = 0;
 
-for ($i=0; $i<2; $i++) { // Improve randomness
-  AddDecisionQueue("SHUFFLEDECK", 1, "SKIPSEED");
-  AddDecisionQueue("SHUFFLEDECK", 2, "SKIPSEED");
-}
+AddDecisionQueue("SHUFFLEDECK", 1, "SKIPSEED");
+AddDecisionQueue("SHUFFLEDECK", 2, "SKIPSEED");
 AddDecisionQueue("STARTGAME", $initiativePlayer, "-");
 
 ProcessDecisionQueue();
