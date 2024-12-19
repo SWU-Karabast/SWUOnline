@@ -1334,7 +1334,7 @@ function AttackDestroyedEffects($attackID)
 
 function CloseCombatChain($chainClosed="true")
 {
-  global $turn, $currentPlayer, $mainPlayer, $combatChainState, $CCS_AttackTarget, $CCS_CachedLastDestroyed, $layers;
+  global $turn, $currentPlayer, $mainPlayer, $combatChainState, $CCS_AttackTarget;
   AddLayer("FINALIZECHAINLINK", $mainPlayer, $chainClosed);
   $turn[0] = "M";
   $currentPlayer = $mainPlayer;
