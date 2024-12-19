@@ -1,10 +1,9 @@
 #! /bin/bash
 
 cd Games;
-for i in $(seq 1 100);
+for i in $(seq 1 20);
 do
-    if [ -d $i ]; then rm -rf $i;
-    else break;
+    if [ -d "$i" ]; then rm -rf "$i";
     fi
 done
 cd ../HostFiles;
