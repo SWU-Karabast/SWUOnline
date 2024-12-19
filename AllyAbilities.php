@@ -2043,7 +2043,7 @@ function SpecificAllyAttackAbilities($attackID)
       }
       break;
     case "6406254252"://Soulless One - Customized for Grievous
-      if(IsCardTitleInPlay($mainPlayer, "General Grievous")) {
+      if(ControlsNamedCard($mainPlayer, "General Grievous")) {
         $mzIndices = GetMultizoneIndicesForTitle($mainPlayer, "General Grievous", true);
         if($mzIndices != "") {
           AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to exhaust", 1);

@@ -239,7 +239,6 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       }
       break;
     case "AFINEADDITION":
-      AddCurrentTurnEffect("TTFREE", $player);
       switch($lastResult)
       {
         case "My_Hand": AddDecisionQueue("MULTIZONEINDICES", $player, "MYHAND:definedType=Upgrade");
@@ -251,6 +250,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       }
       AddDecisionQueue("SETDQCONTEXT", $player, "Choose a card to play");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+      AddDecisionQueue("ADDCURRENTEFFECT", $player, "7895170711", 1);
       AddDecisionQueue("MZOP", $player, "PLAYCARD", 1);
       break;
     case "RESOLUTE":
