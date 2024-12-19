@@ -536,7 +536,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       $content .= "</td>";
     }
     $content .= "</tr></table>";
-    $content .= "<div style='float: right;'>";
+    $content .= "<div style='text-align: center;'>";
     $content .= CreateButton($playerID, "Ok", 99, "OK", "20px");
     $content .= "</div>";
     echo CreatePopup("LOOKHAND", [], 0, 1, "Opponent's hand", 1, $content);

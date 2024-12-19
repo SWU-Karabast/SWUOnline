@@ -320,7 +320,20 @@ function MainCharacterPlayCardAbilities($cardID, $from)
         break;
       case "2358113881"://Quinlan Vos
         if($from != 'PLAY' && $from != "EQUIP" && DefinedTypesContains($cardID, "Unit", $currentPlayer)) {
-          AddLayer("TRIGGER", $currentPlayer, "2358113881");
+          $cardCost = CardCost($cardID);
+          $theirAllies = &GetTheirAllies($currentPlayer);
+          $hasValidTarget = false;
+
+          for ($j = 0; $j < count($theirAllies); $j += AllyPieces()) {
+            if (CardCost($theirAllies[$j]) == $cardCost) {
+              $hasValidTarget = true;
+              break;
+            }
+          }
+    
+          if ($hasValidTarget) {
+            AddLayer("TRIGGER", $currentPlayer, "2358113881");
+          }
         }
         break;
       case "9005139831"://The Mandalorian

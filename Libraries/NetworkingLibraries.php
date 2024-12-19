@@ -1363,7 +1363,7 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
       if($from != "PLAY" && ($turn[0] != "B" || (count($layers) > 0 && $layers[0] != ""))) GetLayerTarget($cardID);
       //Right now only units in play can attack
       if (!$oppCardActive) {
-        if($from == "PLAY") AddDecisionQueue("GETTARGETOFATTACK", $currentPlayer, $cardID . "," . $from);
+        if($from == "PLAY") AddDecisionQueue("ATTACK", $currentPlayer, $cardID . "," . $from);
         if($dynCost == "") AddDecisionQueue("PASSPARAMETER", $currentPlayer, "0");
         else AddDecisionQueue("GETCLASSSTATE", $currentPlayer, $CS_LastDynCost);
         AddDecisionQueue("RESUMEPAYING", $currentPlayer, $cardID . "-" . $from . "-" . $index);
@@ -1463,7 +1463,7 @@ function PlayCardSkipCosts($cardID, $from)
 {
   global $currentPlayer, $layers, $turn;
   $cardType = CardType($cardID);
-  if (($turn[0] == "M" || $turn[0] == "ATTACKWITHIT") && $cardType == "AA") GetTargetOfAttack($cardID);
+  if (($turn[0] == "M" || $turn[0] == "ATTACKWITHIT") && $cardType == "AA") Attack($cardID);
   if ($turn[0] != "B" || (count($layers) > 0 && $layers[0] != "")) {
     if (HasBoost($cardID)) Boost();
     GetLayerTarget($cardID);
@@ -1573,39 +1573,70 @@ function AddPrePitchDecisionQueue($cardID, $from, $index = -1, $skipAbilityType 
   }
 }
 
-//Find the legal targets for an attack
-function GetTargetOfAttack($attackID)
-{
-  global $mainPlayer, $combatChainState, $CCS_AttackTarget, $CCS_IsAmbush, $CCS_CantAttackBase;
+function GetTargetsForAttack(Ally $attacker, bool $canAttackBase) {
+  global $mainPlayer;
+
   $defPlayer = $mainPlayer == 1 ? 2 : 1;
-  $targets = "";
+  $targets = $canAttackBase ? "THEIRCHAR-0" : "";
   $sentinelTargets = "";
-  if($combatChainState[$CCS_CantAttackBase] == 0 && $combatChainState[$CCS_IsAmbush] != 1){
-    $targets = "THEIRCHAR-0";
-  } else {
-    $combatChainState[$CCS_CantAttackBase] = 0;
-  }
-  $attacker = new Ally(AttackerMZID($mainPlayer));
+
+  // Check upgrades
   $attackerUpgrades = $attacker->GetUpgrades();
-  for($i=0; $i<count($attackerUpgrades); ++$i)
-  {
-    if($attackerUpgrades[$i] == "3099663280") $targets = "";//Entrenched
+  for($i=0; $i<count($attackerUpgrades); ++$i) {
+    if($attackerUpgrades[$i] == "3099663280") { //Entrenched
+      $targets = "";      
+    }
   }
+
+  // Iterate through the targets
   $allies = &GetAllies($defPlayer);
   for($i = 0; $i < count($allies); $i += AllyPieces()) {
-    if($attacker->CardID() != "5464125379" && CardArenas($attacker->CardID()) != CardArenas($allies[$i]) && !SearchCurrentTurnEffects("4663781580", $mainPlayer)) continue;//Strafing Gunship, Swoop Down
-    if(!AllyCanBeAttackTarget($defPlayer, $i, $allies[$i])) continue;
+    // Check if the target is in the same arena, except for Strafing Gunship, Swoop Down
+    if (CardArenas($attacker->CardID()) != CardArenas($allies[$i]) && $attacker->CardID() != "5464125379" && !SearchCurrentTurnEffects("4663781580", $mainPlayer)) { 
+      continue;
+    }
+
+    // Check if the target can be attacked
+    if (!AllyCanBeAttackTarget($defPlayer, $i, $allies[$i])) {
+      continue;
+    }
+
+    // Append the target to the list of targets
     if($targets != "") $targets .= ",";
     $targets .= "THEIRALLY-" . $i;
-    if(HasSentinel($allies[$i], $defPlayer, $i) && CardArenas($attacker->CardID()) == CardArenas($allies[$i])) {
-      if($sentinelTargets != "") $sentinelTargets .= ",";
+
+    // If the target is a sentinel, append it to the sentinel targets
+    if (HasSentinel($allies[$i], $defPlayer, $i) && CardArenas($attacker->CardID()) == CardArenas($allies[$i])) {
+      if ($sentinelTargets != "") $sentinelTargets .= ",";
       $sentinelTargets .= "THEIRALLY-" . $i;
     }
   }
-  $attackerIndex=$attacker->Index();
-  if($sentinelTargets != "" && !HasSaboteur($attackID, $mainPlayer, $attackerIndex)) $targets = $sentinelTargets;
-  if(SearchCount($targets) > 1) {
-    switch($attackID) {
+
+  // If there are sentinel targets and the attacker does not have a saboteur, use the sentinel targets
+  if ($sentinelTargets != "" && !HasSaboteur($attacker->CardID(), $mainPlayer, $attacker->Index())) {
+    $targets = $sentinelTargets;
+  }
+
+  return $targets;
+}
+
+// Attack with an unit
+function Attack($attackerCardID)
+{
+  global $mainPlayer, $combatChainState, $CCS_AttackTarget, $CCS_IsAmbush, $CCS_CantAttackBase;
+
+  $canAttackBase = false;
+  if ($combatChainState[$CCS_CantAttackBase] == 0 && $combatChainState[$CCS_IsAmbush] != 1){
+    $canAttackBase = true;
+  } else {
+    $combatChainState[$CCS_CantAttackBase] = 0;
+  }
+
+  $attacker = new Ally(AttackerMZID($mainPlayer));
+  $targets = GetTargetsForAttack($attacker, $canAttackBase);
+
+  if (SearchCount($targets) > 1) {
+    switch($attackerCardID) {
       case "8613680163"://Darth Maul - Revenge At Last
         if(str_contains($targets, "THEIRCHAR-")) {
           AddDecisionQueue("PASSPARAMETER", $mainPlayer, $targets, 1);
@@ -1617,7 +1648,7 @@ function GetTargetOfAttack($attackID)
           AddDecisionQueue("SETDQVAR", $mainPlayer, 0, 1);
           AddDecisionQueue("PASSPARAMETER", $mainPlayer, "Units", 1);
         }
-        AddDecisionQueue("SPECIFICCARD", $mainPlayer, "MAUL_TWI,$attackerIndex", 1);
+        AddDecisionQueue("SPECIFICCARD", $mainPlayer, "MAUL_TWI," . $attacker->Index(), 1);
         break;
       default:
         PrependDecisionQueue("PROCESSATTACKTARGET", $mainPlayer, "-");
