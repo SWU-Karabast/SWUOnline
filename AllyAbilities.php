@@ -1908,8 +1908,8 @@ function SpecificAllyAttackAbilities($attackID)
       AddCurrentTurnEffect("6fa73a45ed", $mainPlayer);
       break;
     case "0038286155"://Chancellor Palpatine
-      global $CS_NumAlliesDestroyed;
-      if(GetClassState($mainPlayer, $CS_NumAlliesDestroyed) > 0) {
+      global $CS_NumLeftPlay;
+      if(GetClassState($mainPlayer, $CS_NumLeftPlay) > 0) {
         PlayAlly("3941784506", $mainPlayer);//Clone Trooper
       }
       break;
