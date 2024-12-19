@@ -2045,8 +2045,13 @@ function SpecificAllyAttackAbilities($attackID)
       }
       break;
     case "6406254252"://Soulless One - Customized for Grievous
-      if(ControlsNamedCard($mainPlayer, "General Grievous")) {
+      if(ControlsNamedCard($mainPlayer, "General Grievous") || SearchCount(SearchMultizone($mainPlayer, "MYALLY:trait=Droid")) > 0) {
         $mzIndices = GetMultizoneIndicesForTitle($mainPlayer, "General Grievous", true);
+        $droids = explode(",", SearchMultizone($mainPlayer, "MYALLY:trait=Droid"));
+        for($i=0; $i<count($droids); ++$i) {
+          $ally = new Ally($droids[$i], $mainPlayer);
+          if(!$ally->IsExhausted()) $mzIndices .= "," . $droids[$i];
+        }
         if($mzIndices != "") {
           AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to exhaust", 1);
           AddDecisionQueue("PASSPARAMETER", $mainPlayer, $mzIndices);
