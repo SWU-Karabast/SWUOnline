@@ -943,16 +943,9 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       AddSoul($lastResult, $player, $parameter);
       return $lastResult;
     case "SHUFFLEDECK":
-      $zone = &GetDeck($player);
-      $destArr = [];
+      $deck = &GetDeck($player);
       $skipSeed = $parameter == "SKIPSEED";
-      while(count($zone) > 0) {
-        $index = GetRandom(0, count($zone) - 1, $skipSeed);
-        $destArr[] = $zone[$index];
-        unset($zone[$index]);
-        $zone = array_values($zone);
-      }
-      $zone = $destArr;
+      RandomizeArray($deck, $skipSeed);
       return $lastResult;
     case "EXHAUSTCHARACTER":
       $character = &GetPlayerCharacter($player);

@@ -9,25 +9,16 @@ function DelimStringContains($str, $find)
   return false;
 }
 
-function RandomizeArray(&$arr)
-{
-  for($i=0; $i<count($arr); ++$i)
-  {
-    $rand = GetRandom(0, count($arr)-1);
-    $temp = $arr[$i];
-    $arr[$i] = $arr[$rand];
-    $arr[$rand] = $temp;
+function RandomizeArray(&$arr, $skipSeed = false){
+  $n = count($arr);
+  for ($i = $n - 1; $i > 0; $i--) {
+    $j = $skipSeed ? random_int(0, $i) : mt_rand(0, $i);
+    [$arr[$i], $arr[$j]] = [$arr[$j], $arr[$i]];
   }
 }
 
-function GetRandom($low=-1, $high=-1, $skipSeed=false)
+function GetRandom($low=-1, $high=-1)
 {
-  if($skipSeed) {
-    $low = $low == -1 ? 0 : $low;
-    $high = $high == -1 ? mt_getrandmax() : $high;
-    return random_int($low, $high);
-  }
-
   global $randomSeeded;
   if(!$randomSeeded) SeedRandom();
 
