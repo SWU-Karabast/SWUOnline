@@ -458,18 +458,6 @@ function AllyWhenPlayedUnitAbilities($player)
   {
     switch($allies[$i])
     {
-      case "9610332938"://Poggle the Lesser
-        $ally = new Ally("MYALLY-" . $i, $player);
-        if (!$ally->IsExhausted()) {
-          AddDecisionQueue("SETDQCONTEXT", $player, "Choose if you want to create a Battle Droid token");
-          AddDecisionQueue("YESNO", $player, "-");
-          AddDecisionQueue("NOPASS", $player, "-");
-          AddDecisionQueue("PASSPARAMETER", $player, $ally->MZIndex(), 1);
-          AddDecisionQueue("MZOP", $player, "REST", 1);
-          AddDecisionQueue("PASSPARAMETER", $player, "3463348370", 1);
-          AddDecisionQueue("PLAYALLY", $player, "", 1);
-        }
-        break;
       case "0142631581"://Mas Amedda
         $ally = new Ally("MYALLY-" . $i, $player);
         if(!$ally->IsExhausted()) {
@@ -1211,6 +1199,8 @@ function AllyHasPlayCardAbility($playedCardID, $playedCardUniqueID, $from, $card
         return !DefinedTypesContains($playedCardID, "Unit");
       case "3f7f027abd"://Quinlan Vos
         return DefinedTypesContains($playedCardID, "Unit");
+      case "9610332938"://Poggle the Lesser
+        return !$thisIsNewlyPlayedAlly && DefinedTypesContains($playedCardID, "Unit");
       case "3589814405"://tactical droid commander
         return !$thisIsNewlyPlayedAlly && DefinedTypesContains($playedCardID, "Unit") && TraitContains($playedCardID, "Separatist", $player);
       default: break;
@@ -1276,6 +1266,18 @@ function AllyPlayCardAbility($cardID, $player="", $from="-", $abilityID="-", $un
         $otherPlayer = ($player == 1 ? 2 : 1);
         DealDamageAsync($otherPlayer, 1, "DAMAGE", "5907868016");
         WriteLog(CardLink("5907868016", "5907868016") . " is dealing 1 damage.");
+      }
+      break;
+    case "9610332938"://Poggle the Lesser
+      $me = new Ally("MYALLY-" . $index, $player);
+      if (!$me->IsExhausted()) {
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose if you want to create a Battle Droid token");
+        AddDecisionQueue("YESNO", $player, "-");
+        AddDecisionQueue("NOPASS", $player, "-");
+        AddDecisionQueue("PASSPARAMETER", $player, $me->MZIndex(), 1);
+        AddDecisionQueue("MZOP", $player, "REST", 1);
+        AddDecisionQueue("PASSPARAMETER", $player, "3463348370", 1);
+        AddDecisionQueue("PLAYALLY", $player, "", 1);
       }
       break;
     case "8031540027"://Dengar
