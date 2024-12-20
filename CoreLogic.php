@@ -3067,13 +3067,15 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddCurrentTurnEffect($cardID, $currentPlayer, "PLAY", $ally->UniqueID());
       break;
     case "1900571801"://Overwhelming Barrage
-      $ally = new Ally($target);
-      $ally->AddRoundHealthModifier(2);
-      AddCurrentTurnEffect($cardID, $currentPlayer, "PLAY", $ally->UniqueID());
-      AddDecisionQueue("FINDINDICES", $currentPlayer, "ALLTHEIRUNITSMULTI");
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose units to damage", 1);
-      AddDecisionQueue("MULTICHOOSETHEIRUNIT", $currentPlayer, "<-", 1);
-      AddDecisionQueue("MULTIDISTRIBUTEDAMAGE", $currentPlayer, $ally->CurrentPower() . ",1", 1);
+      if ($target != "-") {
+        $ally = new Ally($target);
+        $ally->AddRoundHealthModifier(2);
+        AddCurrentTurnEffect($cardID, $currentPlayer, "PLAY", $ally->UniqueID());
+        AddDecisionQueue("FINDINDICES", $currentPlayer, "ALLTHEIRUNITSMULTI");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose units to damage", 1);
+        AddDecisionQueue("MULTICHOOSETHEIRUNIT", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MULTIDISTRIBUTEDAMAGE", $currentPlayer, $ally->CurrentPower() . ",1", 1);
+      }
       break;
     case "3974134277"://Prepare for Takeoff
       AddDecisionQueue("SEARCHDECKTOPX", $currentPlayer, "8;2;include-trait-Vehicle&include-definedType-Unit");
