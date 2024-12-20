@@ -1996,6 +1996,19 @@ function SpecificAllyAttackAbilities($attackID)
     case "4489623180"://Ziro the Hutt
       ExhaustResource($defPlayer);
       break;
+    case "9216621233"://Jar Jar Binks
+      $targets = ["MYCHAR-0", "THEIRCHAR-0"];
+      for ($i = 1; $i <= 2; $i++) {
+        $prefix = $i == $mainPlayer ? "MYALLY" : "THEIRALLY";
+        $allies = &GetAllies($i);
+        for ($j = 0; $j < count($allies); $j += AllyPieces()) {
+          $targets[] = $prefix . "-" . $j;
+        }
+      }
+      $targetIndex = GetRandom(0, count($targets) - 1);
+      AddDecisionQueue("PASSPARAMETER", $mainPlayer, $targets[$targetIndex], 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,2,$mainPlayer,1", 1);
+      break;
     case "8414572243"://Enfys Nest
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY:maxAttack=" . $attackerAlly->CurrentPower() - 1);
       AddDecisionQueue("MZFILTER", $mainPlayer, "definedType=Leader");
