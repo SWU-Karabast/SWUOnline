@@ -2313,6 +2313,19 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
   }
   switch($cardID)
   {
+    case "5013139687"://Caught In The Crossfire
+      if ($target != "-") {
+        $ally = new Ally($target);
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, $target);
+        AddDecisionQueue("SETDQVAR", $currentPlayer, "0");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:arena=" . CardArenas($ally->CardID()));
+        AddDecisionQueue("MZFILTER", $currentPlayer, "index=" . $target);
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose another unit");
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-");
+        AddDecisionQueue("APPENDDQVAR", $currentPlayer, "0", 1);
+        AddDecisionQueue("SPECIFICCARD", $currentPlayer, "CAUGHTINTHECROSSFIRE", 1);
+      }
+      break;    
     case "7895170711"://A Fine Addition
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose where to play an upgrade from");
       AddDecisionQueue("BUTTONINPUT", $currentPlayer, "My Hand,My Discard,Opponent Discard", 1);
@@ -5527,6 +5540,7 @@ function PlayRequiresTarget($cardID)
     case "6515891401": return 7;//Karabast
     case "2651321164": return 6;//Tactical Advantage
     case "1900571801": return 7;//Overwhelming Barrage
+    case "5013139687": return 3;//Caught In The Crossfire
     case "7861932582": return 6;//The Force is With Me
     case "2758597010": return 6;//Maximum Firepower
     case "2202839291": return 6;//Don't Get Cocky
