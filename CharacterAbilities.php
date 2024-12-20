@@ -123,7 +123,7 @@ function CharacterStartTurnAbility($player)
         AddDecisionQueue("PASSPARAMETER", $player, "THEIRDECK-0");
         AddDecisionQueue("MZOP", $player, "GETCARDID");
         AddDecisionQueue("SETDQVAR", $player, "1");
-        AddDecisionQueue("SETDQCONTEXT", $player, "1. The top of your deck is <0> and the top of their deck is <1>.");
+        AddDecisionQueue("SETDQCONTEXT", $player, "The top of your deck is <0> and the top of their deck is <1>.");
         AddDecisionQueue("OK", $player, "-");
         break;
       default:
