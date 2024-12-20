@@ -1026,9 +1026,13 @@ function AllyBeginRoundAbilities($player)
         AddCurrentTurnEffect("3401690666", $otherPlayer, from:"PLAY");
         break;
       case "02199f9f1e"://Grand Admiral Thrawn
-        $myDeck = &GetDeck($player);
-        $theirDeck = &GetDeck($player == 1 ? 2 : 1);
-        AddDecisionQueue("SETDQCONTEXT", $player, "The top of your deck is " . CardLink($myDeck[0], $myDeck[0]) . " and the top of their deck is " . CardLink($theirDeck[0], $theirDeck[0]));
+        AddDecisionQueue("PASSPARAMETER", $player, "MYDECK-0");
+        AddDecisionQueue("MZOP", $player, "GETCARDID");
+        AddDecisionQueue("SETDQVAR", $player, "0");
+        AddDecisionQueue("PASSPARAMETER", $player, "THEIRDECK-0");
+        AddDecisionQueue("MZOP", $player, "GETCARDID");
+        AddDecisionQueue("SETDQVAR", $player, "1");
+        AddDecisionQueue("SETDQCONTEXT", $player, "The top of your deck is <0> and the top of their deck is <1>.");
         AddDecisionQueue("OK", $player, "-");
         break;
       default: break;
