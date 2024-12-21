@@ -2315,6 +2315,21 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
   }
   switch($cardID)
   {
+    case "4569767827"://Execute Order 66
+      for ($p = 1; $p <= 2; $p++) {
+        $jediUniqueIDs = explode(",", SearchAlliesUniqueIDForTrait($p, "Jedi"));
+
+        foreach ($jediUniqueIDs as $jediUniqueID) {
+          $ally = new Ally($jediUniqueID, $p);
+          $enemyDamage = $p != $currentPlayer;
+          $destroyed = $ally->DealDamage(6, enemyDamage:$enemyDamage);
+
+          if ($destroyed) {
+            PlayAlly("3941784506", $p); //Clone Trooper
+          }
+        }
+      }
+      break;
     case "5013139687"://Caught In The Crossfire
       if ($target != "-") {
         $ally = new Ally($target);
