@@ -265,6 +265,17 @@ function SearchAlliesForTitle($player, $title)
   return $cardList;
 }
 
+function SearchAlliesForTrait($player, $trait) {
+  $allies = &GetAllies($player);
+  $cardList = [];
+  for ($i = 0; $i < count($allies); $i += AllyPieces()) {
+    if (TraitContains($allies[$i], $trait)) {
+      $cardList[] = $i;
+    }
+  }
+  return implode(',', $cardList);
+}
+
 function SearchAlliesUniqueIDForTitle($player, $title)
 {
   $allies = &GetAllies($player);

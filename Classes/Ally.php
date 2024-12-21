@@ -85,7 +85,22 @@ class Ally {
   function MaxHealth() {
     $max = AllyHealth($this->CardID(), $this->PlayerID());
     $upgrades = $this->GetUpgrades();
-    for($i=0; $i<count($upgrades); ++$i) if($upgrades[$i] != "-") $max += CardHP($upgrades[$i]);
+
+    // Upgrades buffs
+    for($i=0; $i<count($upgrades); ++$i) {
+      if ($upgrades[$i] != "-") {
+        $max += CardHP($upgrades[$i]);
+      }
+
+      switch ($upgrades[$i]) {
+        case "3292172753"://Squad Support
+          $max += SearchCount(SearchAlliesForTrait($this->Controller(), "Trooper"));
+          break;
+        default: 
+          break;
+      }
+    }
+
     $max += $this->allies[$this->index+9];
     for($i=count($this->allies)-AllyPieces(); $i>=0; $i-=AllyPieces()) {
       if(AllyHasStaticHealthModifier($this->allies[$i])) {
@@ -213,11 +228,28 @@ class Ally {
     $power = ((int) (AttackValue($this->CardID() ?? 0))) + ((int) $this->allies[$this->index+7]);
     $power += AttackModifier($this->CardID(), $this->playerID, $this->index);
     $upgrades = $this->GetUpgrades();
-    for($i=0; $i<count($upgrades); ++$i) if($upgrades[$i] != "-") $power += AttackValue($upgrades[$i]);
+
+    // Grit buff
     if(HasGrit($this->CardID(), $this->playerID, $this->index)) {
       $damage = $this->Damage();
       if($damage > 0) $power += $damage;
     }
+
+    // Upgrades buffs
+    for ($i=0; $i<count($upgrades); ++$i) {
+      if ($upgrades[$i] != "-") {
+        $power += AttackValue($upgrades[$i]);
+      }
+
+      switch ($upgrades[$i]) {
+        case "3292172753"://Squad Support
+          $power += SearchCount(SearchAlliesForTrait($this->Controller(), "Trooper"));
+          break;
+        default: 
+          break;
+      }
+    }
+
     //Other ally buffs
     $otherAllies = &GetAllies($this->playerID);
     for($i=0; $i<count($otherAllies); $i+=AllyPieces()) {

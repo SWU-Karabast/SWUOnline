@@ -22,9 +22,6 @@ function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null,
   $allies[] = $cloned ? 1 : 0; //Cloned
   $index = count($allies) - AllyPieces();
   CurrentEffectAllyEntersPlay($player, $index);
-  if ($from != "CAPTIVE" && !IsLeader($cardID) && !IsToken($cardID)) {
-    AllyWhenPlayedUnitAbilities($player);
-  }
   CheckUniqueAlly($uniqueID);
 
   if ($playCardEffect || $cardID == "0345124206") { //Clone - Ensure that the Clone will always choose a unit to clone whenever it enters play.
@@ -451,43 +448,6 @@ function AllyEntersPlayState($cardID, $player, $from="-")
   }
 }
 
-function AllyWhenPlayedUnitAbilities($player)
-{
-  $allies = &GetAllies($player);
-  for($i=0; $i<count($allies); $i+=AllyPieces())
-  {
-    switch($allies[$i])
-    {
-      case "9610332938"://Poggle the Lesser
-        $ally = new Ally("MYALLY-" . $i, $player);
-        if (!$ally->IsExhausted()) {
-          AddDecisionQueue("SETDQCONTEXT", $player, "Choose if you want to create a Battle Droid token");
-          AddDecisionQueue("YESNO", $player, "-");
-          AddDecisionQueue("NOPASS", $player, "-");
-          AddDecisionQueue("PASSPARAMETER", $player, $ally->MZIndex(), 1);
-          AddDecisionQueue("MZOP", $player, "REST", 1);
-          AddDecisionQueue("PASSPARAMETER", $player, "3463348370", 1);
-          AddDecisionQueue("PLAYALLY", $player, "", 1);
-        }
-        break;
-      case "0142631581"://Mas Amedda
-        $ally = new Ally("MYALLY-" . $i, $player);
-        if(!$ally->IsExhausted()) {
-          AddDecisionQueue("SETDQCONTEXT", $player, "Choose if you want to search for a unit");
-          AddDecisionQueue("YESNO", $player, "-");
-          AddDecisionQueue("NOPASS", $player, "-");
-          AddDecisionQueue("PASSPARAMETER", $player, $ally->MZIndex(), 1);
-          AddDecisionQueue("MZOP", $player, "REST", 1);
-          AddDecisionQueue("SEARCHDECKTOPX", $player, "4;1;include-definedType-Unit");
-          AddDecisionQueue("ADDHAND", $player, "-", 1);
-          AddDecisionQueue("REVEALCARDS", $player, "-", 1);
-        }
-        break;
-      default: break;
-    }
-  }
-}
-
 function AllyPlayableExhausted($cardID) {
   switch($cardID) {
     case "4300219753"://Fett's Firespray
@@ -725,6 +685,16 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities,
       case "5350889336"://AT-TE Vanguard
         PlayAlly("3941784506", $player);//Clone Trooper
         PlayAlly("3941784506", $player);//Clone Trooper
+        break;
+      case "8096748603"://Steela Gerrera
+        AddDecisionQueue("SETDQCONTEXT", $player, "Do you want to deal 2 damage to your base?");
+        AddDecisionQueue("YESNO", $player, "-");
+        AddDecisionQueue("NOPASS", $player, "-");
+        AddDecisionQueue("PASSPARAMETER", $player, "MYCHAR-0", 1);
+        AddDecisionQueue("MZOP", $player, "DEALDAMAGE,2,$player,1", 1);
+        AddDecisionQueue("SEARCHDECKTOPX", $player, "8;1;include-trait-Tactic", 1);
+        AddDecisionQueue("ADDHAND", $player, "-", 1);
+        AddDecisionQueue("REVEALCARDS", $player, "-", 1);
         break;
       case "3680942691"://Confederate Courier
         PlayAlly("3463348370", $player);//Battle Droid
@@ -1026,9 +996,13 @@ function AllyBeginRoundAbilities($player)
         AddCurrentTurnEffect("3401690666", $otherPlayer, from:"PLAY");
         break;
       case "02199f9f1e"://Grand Admiral Thrawn
-        $myDeck = &GetDeck($player);
-        $theirDeck = &GetDeck($player == 1 ? 2 : 1);
-        AddDecisionQueue("SETDQCONTEXT", $player, "The top of your deck is " . CardLink($myDeck[0], $myDeck[0]) . " and the top of their deck is " . CardLink($theirDeck[0], $theirDeck[0]));
+        AddDecisionQueue("PASSPARAMETER", $player, "MYDECK-0");
+        AddDecisionQueue("MZOP", $player, "GETCARDID");
+        AddDecisionQueue("SETDQVAR", $player, "0");
+        AddDecisionQueue("PASSPARAMETER", $player, "THEIRDECK-0");
+        AddDecisionQueue("MZOP", $player, "GETCARDID");
+        AddDecisionQueue("SETDQVAR", $player, "1");
+        AddDecisionQueue("SETDQCONTEXT", $player, "The top of your deck is <0> and the top of their deck is <1>.");
         AddDecisionQueue("OK", $player, "-");
         break;
       default: break;
@@ -1207,6 +1181,9 @@ function AllyHasPlayCardAbility($playedCardID, $playedCardUniqueID, $from, $card
         return !DefinedTypesContains($playedCardID, "Unit");
       case "3f7f027abd"://Quinlan Vos
         return DefinedTypesContains($playedCardID, "Unit");
+      case "0142631581"://Mas Amedda
+      case "9610332938"://Poggle the Lesser
+        return !$thisIsNewlyPlayedAlly && DefinedTypesContains($playedCardID, "Unit");
       case "3589814405"://tactical droid commander
         return !$thisIsNewlyPlayedAlly && DefinedTypesContains($playedCardID, "Unit") && TraitContains($playedCardID, "Separatist", $player);
       default: break;
@@ -1274,6 +1251,31 @@ function AllyPlayCardAbility($cardID, $player="", $from="-", $abilityID="-", $un
         WriteLog(CardLink("5907868016", "5907868016") . " is dealing 1 damage.");
       }
       break;
+    case "9610332938"://Poggle the Lesser
+      $me = new Ally("MYALLY-" . $index, $player);
+      if (!$me->IsExhausted()) {
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose if you want to create a Battle Droid token");
+        AddDecisionQueue("YESNO", $player, "-");
+        AddDecisionQueue("NOPASS", $player, "-");
+        AddDecisionQueue("PASSPARAMETER", $player, $me->MZIndex(), 1);
+        AddDecisionQueue("MZOP", $player, "REST", 1);
+        AddDecisionQueue("PASSPARAMETER", $player, "3463348370", 1);
+        AddDecisionQueue("PLAYALLY", $player, "", 1);
+      }
+      break;
+    case "0142631581"://Mas Amedda
+      $me = new Ally("MYALLY-" . $index, $player);
+      if(!$me->IsExhausted()) {
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose if you want to search for a unit");
+        AddDecisionQueue("YESNO", $player, "-");
+        AddDecisionQueue("NOPASS", $player, "-");
+        AddDecisionQueue("PASSPARAMETER", $player, $me->MZIndex(), 1);
+        AddDecisionQueue("MZOP", $player, "REST", 1);
+        AddDecisionQueue("SEARCHDECKTOPX", $player, "4;1;include-definedType-Unit");
+        AddDecisionQueue("ADDHAND", $player, "-", 1);
+        AddDecisionQueue("REVEALCARDS", $player, "-", 1);
+      }
+      break;      
     case "8031540027"://Dengar
       if(DefinedTypesContains($cardID, "Upgrade", $player)) {
         global $CS_LayerTarget;
@@ -2005,6 +2007,31 @@ function SpecificAllyAttackAbilities($attackID)
       break;
     case "4489623180"://Ziro the Hutt
       ExhaustResource($defPlayer);
+      break;
+    case "9216621233"://Jar Jar Binks
+      $targets = ["MYCHAR-0", "THEIRCHAR-0"];
+      for ($i = 1; $i <= 2; $i++) {
+        $prefix = $i == $mainPlayer ? "MYALLY" : "THEIRALLY";
+        $allies = &GetAllies($i);
+        for ($j = 0; $j < count($allies); $j += AllyPieces()) {
+          $targets[] = $prefix . "-" . $j;
+        }
+      }
+      $randomIndex = GetRandom(0, count($targets) - 1);
+      $targetMZIndex = $targets[$randomIndex];
+      $attackerCardLink = CardLink("9216621233", "9216621233");
+
+      if (str_starts_with($targetMZIndex, "MYCHAR")) {
+        WriteLog($attackerCardLink . " deals 2 damage to the attacker's base.");
+      } else if (str_starts_with($targetMZIndex, "THEIRCHAR")) {
+        WriteLog($attackerCardLink . " deals 2 damage to the defender's base.");
+      } else {
+        $ally = new Ally($targetMZIndex);
+        WriteLog($attackerCardLink . " deals 2 damage to " . CardLink($ally->CardID(), $ally->CardID()) . ".");
+      }
+
+      AddDecisionQueue("PASSPARAMETER", $mainPlayer, $targetMZIndex);
+      AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,2,$mainPlayer,1");
       break;
     case "8414572243"://Enfys Nest
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY:maxAttack=" . $attackerAlly->CurrentPower() - 1);

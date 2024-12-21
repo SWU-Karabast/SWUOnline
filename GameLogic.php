@@ -483,7 +483,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             $isAttackTarget = GetAttackTarget() == $lastResult;
             $isAttacker = AttackerMZID($player) == $lastResult;
             $ally = new Ally($lastResult);
-            $attackerHasOverwhelm = HasOverwhelm($ally->CardID(), $player, $targetArr[1]);
+            $attackerHasOverwhelm = HasOverwhelm($ally->CardID(), $ally->Controller(), $ally->Index());
             $destroyed = $ally->DealDamage($parameterArr[1],
                 enemyDamage:(count($parameterArr) > 2 && $parameterArr[2] != $targetPlayer),
                 fromUnitEffect: count($parameterArr) > 3 && (bool)$parameterArr[3]);
@@ -1396,7 +1396,9 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       }
       return $lastResult;
     case "PREPENDLASTRESULT":
-      return $parameter . $lastResult;
+      $rv = $lastResult == "PASS" ? $parameter : $parameter . $lastResult;
+      $rv = rtrim($rv, ",");
+      return $rv;
     case "APPENDLASTRESULT":
       return $lastResult . $parameter;
     case "LASTRESULTPIECE":

@@ -230,6 +230,15 @@ function SpecificCardLogic($player, $parameter, $lastResult)
   $card = $parameterArr[0];
   switch($card)
   {
+    case "CAUGHTINTHECROSSFIRE":
+      $cardArr = explode(",", $dqVars[0]);
+      rsort($cardArr); // Sort the cards by index, with the highest first, to prevent errors caused by index changes after defeat.
+      $ally1 = new Ally($cardArr[0]);
+      $ally1Power = $ally1->CurrentPower();
+      $ally2 = new Ally($cardArr[1]);
+      $ally1->DealDamage($ally2->CurrentPower(), fromUnitEffect:true);
+      $ally2->DealDamage($ally1Power, fromUnitEffect:true);
+      break;
     case "MAUL_TWI":
       if ($lastResult==="Units") {
         $dqVars[0]=str_replace("THEIRCHAR-0,", "", $dqVars[0]);
