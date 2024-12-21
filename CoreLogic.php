@@ -3991,7 +3991,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("WRITELOG", $currentPlayer, "This is a partially manual card. Make sure you attack a unit with this unit for your next action.", 1);
       break;
     case "2090698177"://Street Gang Recruiter
-      MZMoveCard($currentPlayer, "MYDISCARD:trait=Underworld", "MYHAND", may:true, context:"Choose an uncerworld card to return with " . CardLink("2090698177", "2090698177"));
+      MZMoveCard($currentPlayer, "MYDISCARD:trait=Underworld", "MYHAND", may:true, context:"Choose an underworld card to return with " . CardLink("2090698177", "2090698177"));
       break;
     case "7964782056"://Qi'Ra unit
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
