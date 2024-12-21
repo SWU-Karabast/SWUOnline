@@ -1395,7 +1395,9 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       }
       return $lastResult;
     case "PREPENDLASTRESULT":
-      return $parameter . $lastResult;
+      $rv = $lastResult == "PASS" ? $parameter : $parameter . $lastResult;
+      $rv = rtrim($rv, ",");
+      return $rv;
     case "APPENDLASTRESULT":
       return $lastResult . $parameter;
     case "LASTRESULTPIECE":

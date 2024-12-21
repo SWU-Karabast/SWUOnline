@@ -814,6 +814,8 @@ function AbilityCost($cardID, $index=-1, $theirCard = false)
       return $abilityName == "Replace Resource" ? 1 : 0;
     case "3577961001"://Mercenary Gunship
       return $abilityName == "Take Control" ? 4 : 0;
+    case "5157630261"://Compassionate Senator
+      return $abilityName == "Heal" ? 2 : 0;
     case "9262288850"://Independent Senator
       return $abilityName == "Exhaust" ? 2 : 0;
     case "5081383630"://Pre Viszla
@@ -1081,6 +1083,9 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
     case "2744523125"://Salacious Crumb
       $abilityTypes = "A,AA";
       break;
+    case "5157630261"://Compassionate Senator
+      $abilityTypes = "A,AA";
+      break;
     case "0622803599"://Jabba the Hutt
       $abilityTypes = "A";
       break;
@@ -1303,6 +1308,9 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       break;
     case "2744523125"://Salacious Crumb
       $abilityNames = "Bounce,Attack";
+      break;
+    case "5157630261"://Compassionate Senator
+      $abilityNames = "Heal,Attack";
       break;
     case "0622803599"://Jabba the Hutt
       $abilityNames = "Bounty";
