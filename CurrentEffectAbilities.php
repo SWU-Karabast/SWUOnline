@@ -377,6 +377,12 @@ function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
           $costModifier -= 5;
           $remove = true;
           break;
+        case "6570091935"://Tranquility
+          if($from != "PLAY" && DefinedTypesContains($cardID, "Unit", $currentPlayer)) {
+            $costModifier -= 1;
+            $remove = true;
+          }
+          break;          
         case "0414253215"://General's Blade
           if($from != "PLAY" && DefinedTypesContains($cardID, "Unit", $currentPlayer)) {
             $costModifier -= 2;
