@@ -187,8 +187,8 @@ function ModalAbilities($player, $card, $lastResult)
           break;
         case "Battle_Droids":
           $otherPlayer = ($player == 1 ? 2 : 1);
-          PlayAlly("3463348370", $otherPlayer);//Battle Droid
-          PlayAlly("3463348370", $otherPlayer);//Battle Droid
+          CreateBattleDroid($otherPlayer);
+          CreateBattleDroid($otherPlayer);
           break;
         default: break;
       }
@@ -197,13 +197,13 @@ function ModalAbilities($player, $card, $lastResult)
     case "MANUFACTUREDSOLDIERS":
       switch($lastResult) {
         case "Clone_Troopers":
-          PlayAlly("3941784506", $player);//Clone Trooper
-          PlayAlly("3941784506", $player);//Clone Trooper
+          CreateCloneTrooper($player);
+          CreateCloneTrooper($player);
           break;
         case "Battle_Droids":
-          PlayAlly("3463348370", $player);//Battle Droid
-          PlayAlly("3463348370", $player);//Battle Droid
-          PlayAlly("3463348370", $player);//Battle Droid
+          CreateBattleDroid($player);
+          CreateBattleDroid($player);
+          CreateBattleDroid($player);
           break;
         default: break;
       }
@@ -664,8 +664,8 @@ function SpecificCardLogic($player, $parameter, $lastResult)
     case "PRISONEROFWAR":
       $capturer = new Ally("MYALLY-" . SearchAlliesForUniqueID($dqVars[0], $player), $player);
       if(CardCost($lastResult) < CardCost($capturer->CardID())) {
-        PlayAlly("3463348370", $player);//Battle Droid
-        PlayAlly("3463348370", $player);//Battle Droid
+        CreateBattleDroid($player);
+        CreateBattleDroid($player);
       }
       break;
     case "COUNTDOOKU_TWI":
@@ -685,7 +685,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       $char[CharacterPieces()] = "ad86d54e97";
       break;
     case "TWI_DARTHSIDIOUS_HERO":
-      PlayAlly("3941784506", $player);//Clone Trooper
+      CreateCloneTrooper($player);
       DealDamageAsync(($player == 1 ? 2 : 1), 2, "DAMAGE", "ad86d54e97");
       $char = &GetPlayerCharacter($player);
       $char[CharacterPieces()] = "0026166404"; // Chancellor Palpatine Leader
