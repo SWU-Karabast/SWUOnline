@@ -2005,9 +2005,21 @@ function SpecificAllyAttackAbilities($attackID)
           $targets[] = $prefix . "-" . $j;
         }
       }
-      $targetIndex = GetRandom(0, count($targets) - 1);
-      AddDecisionQueue("PASSPARAMETER", $mainPlayer, $targets[$targetIndex], 1);
-      AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,2,$mainPlayer,1", 1);
+      $randomIndex = GetRandom(0, count($targets) - 1);
+      $targetMZIndex = $targets[$randomIndex];
+      $attackerCardLink = CardLink("9216621233", "9216621233");
+
+      if (str_starts_with($targetMZIndex, "MYCHAR")) {
+        WriteLog($attackerCardLink . " deals 2 damage to the attacker's base.");
+      } else if (str_starts_with($targetMZIndex, "THEIRCHAR")) {
+        WriteLog($attackerCardLink . " deals 2 damage to the defender's base.");
+      } else {
+        $ally = new Ally($targetMZIndex);
+        WriteLog($attackerCardLink . " deals 2 damage to " . CardLink($ally->CardID(), $ally->CardID()) . ".");
+      }
+
+      AddDecisionQueue("PASSPARAMETER", $mainPlayer, $targetMZIndex);
+      AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,2,$mainPlayer,1");
       break;
     case "8414572243"://Enfys Nest
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY:maxAttack=" . $attackerAlly->CurrentPower() - 1);
