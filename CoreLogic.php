@@ -3981,6 +3981,16 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, $uniqueId, 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $otherPlayer, "7964782056_{0},HAND," . $otherPlayer, 1);
       break;
+    case "8096748603"://Steela Gerrera
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Do you want to deal 2 damage to your base?");
+      AddDecisionQueue("YESNO", $currentPlayer, "-");
+      AddDecisionQueue("NOPASS", $currentPlayer, "-");
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYCHAR-0", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,2,$currentPlayer,1", 1);
+      AddDecisionQueue("SEARCHDECKTOPX", $currentPlayer, "8;1;include-trait-Tactic", 1);
+      AddDecisionQueue("ADDHAND", $currentPlayer, "-", 1);
+      AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
+      break;
     case "5830140660"://Bazine Netal
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRHAND");

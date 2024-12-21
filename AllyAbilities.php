@@ -686,6 +686,16 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities,
         PlayAlly("3941784506", $player);//Clone Trooper
         PlayAlly("3941784506", $player);//Clone Trooper
         break;
+      case "8096748603"://Steela Gerrera
+        AddDecisionQueue("SETDQCONTEXT", $player, "Do you want to deal 2 damage to your base?");
+        AddDecisionQueue("YESNO", $player, "-");
+        AddDecisionQueue("NOPASS", $player, "-");
+        AddDecisionQueue("PASSPARAMETER", $player, "MYCHAR-0", 1);
+        AddDecisionQueue("MZOP", $player, "DEALDAMAGE,2,$player,1", 1);
+        AddDecisionQueue("SEARCHDECKTOPX", $player, "8;1;include-trait-Tactic", 1);
+        AddDecisionQueue("ADDHAND", $player, "-", 1);
+        AddDecisionQueue("REVEALCARDS", $player, "-", 1);
+        break;
       case "3680942691"://Confederate Courier
         PlayAlly("3463348370", $player);//Battle Droid
         break;
