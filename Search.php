@@ -791,26 +791,6 @@ function GetAllyIndex($cardID, $player)
   return -1;
 }
 
-function GetAlly($uniqueID, $player = "") {
-  global $currentPlayer;
-
-  if (empty($uniqueID) || $uniqueID === "-") {
-      return null;
-  }
-
-  $players = ($player == 1 || $player == 2) ? [$player] : [1, 2];
-
-  foreach ($players as $p) {
-    $index = SearchAlliesForUniqueID($uniqueID, $p);
-    if ($index > -1) {
-      $prefix = ($currentPlayer == $p) ? "MYALLY-" : "THEIRALLY-";
-      return new Ally($prefix . $index, $p);
-    }
-  }
-
-  return null;
-}
-
 function CountItem($cardID, $player)
 {
   $items = &GetItems($player);

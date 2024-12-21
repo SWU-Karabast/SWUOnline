@@ -37,7 +37,7 @@ class Ally {
       $this->index = intval($mzArr[1]);
       $this->allies = &GetAllies($player);
     }
-    
+
     $this->playerID = $player;
   }
 
@@ -53,6 +53,10 @@ class Ally {
 
   function UniqueID() {
     return $this->allies[$this->index+5];
+  }
+
+  function Exists() {
+    return $this->index > -1;
   }
 
   //Controller

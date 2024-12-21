@@ -1521,7 +1521,7 @@ function CanPlayInstant($phase)
 }
 
 function IsCloned($uniqueID) {
-  $ally = GetAlly($uniqueID);
+  $ally = new Ally($uniqueID);
   return $ally->IsCloned();
 }
 

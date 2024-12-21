@@ -61,7 +61,7 @@ function CheckHealthAllAllies() {
 }
 
 function CheckUniqueAlly($uniqueID) {
-  $ally = GetAlly($uniqueID);
+  $ally = new Ally($uniqueID);
   $cardID = $ally->CardID();
   $player = $ally->PlayerID();
   if (CardIsUnique($cardID) && SearchCount(SearchAlliesForCard($player, $cardID)) > 1 && !$ally->IsCloned()) {

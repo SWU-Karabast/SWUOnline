@@ -270,7 +270,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       $targetCardsArr = explode(",", $targetCards);
 
       for($i=0; $i<count($targetCardsArr); ++$i) {
-        $targetAlly = GetAlly($targetCardsArr[$i]);
+        $targetAlly = new Ally($targetCardsArr[$i]);
         $targetAlly->DealDamage(amount:2, enemyDamage:true);
       }
       break;
@@ -319,9 +319,9 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       break;
     case "EQUALIZE":
       if (HasFewerUnits($player)) {
-        $ally = GetAlly($lastResult);
+        $ally = new Ally($lastResult);
         AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
-        if ($ally != null) {
+        if ($ally->Exists()) {
           AddDecisionQueue("MZFILTER", $player, "index=" . $ally->MZIndex());
         }
         AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to give -2/-2", 1);
@@ -516,7 +516,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
     case "L337":
       $target = $lastResult;
       if($target == "PASS") {
-        $ally = GetAlly($parameterArr[1]);
+        $ally = new Ally($parameterArr[1]);
         $ally->Attach("8752877738");//Shield Token
       } else {
         RescueUnit($player, $target);

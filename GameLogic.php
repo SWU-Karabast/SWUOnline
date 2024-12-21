@@ -935,7 +935,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       PlayAura($parameter, $player);
       break;
     case "DESTROYALLY":
-      $ally = GetAlly($lastResult);
+      $ally = new Ally($lastResult);
       DestroyAlly($player, $ally->Index());
       break;
     case "PARAMDELIMTOARRAY":
