@@ -95,7 +95,7 @@ function RestoreAmount($cardID, $player, $index)
     if($currentTurnEffects[$i+1] != $player) continue;
     if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
     switch($currentTurnEffects[$i]) {
-      case "1272825113"://In Defense of Kimino
+      case "1272825113"://In Defense of Kamino
         if(TraitContains($ally->CardID(), "Republic", $player, $index)) $amount += 2;
         break;
       default: break;
