@@ -1940,10 +1940,12 @@ function SpecificAllyAttackAbilities($attackID)
       ObiWansAethersprite($mainPlayer, $attackerIndex);
       break;
     case "1641175580"://Kit Fisto
-      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:arena=Ground&THEIRALLY:arena=Ground");
-      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 3 damage");
-      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
-      AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,3,$mainPlayer,1", 1);
+      if(IsCoordinateActive($mainPlayer)) {
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:arena=Ground&THEIRALLY:arena=Ground");
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 3 damage");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,3,$mainPlayer,1", 1);
+      }
       break;
     case "12122bc0b1"://Wat Tambor
       global $CS_NumAlliesDestroyed;
@@ -2070,8 +2072,13 @@ function SpecificAllyAttackAbilities($attackID)
       }
       break;
     case "6406254252"://Soulless One - Customized for Grievous
-      if(IsCardTitleInPlay($mainPlayer, "General Grievous")) {
+      if(ControlsNamedCard($mainPlayer, "General Grievous") || SearchCount(SearchMultizone($mainPlayer, "MYALLY:trait=Droid")) > 0) {
         $mzIndices = GetMultizoneIndicesForTitle($mainPlayer, "General Grievous", true);
+        $droids = explode(",", SearchMultizone($mainPlayer, "MYALLY:trait=Droid"));
+        for($i=0; $i<count($droids); ++$i) {
+          $ally = new Ally($droids[$i], $mainPlayer);
+          if(!$ally->IsExhausted()) $mzIndices .= "," . $droids[$i];
+        }
         if($mzIndices != "") {
           AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to exhaust", 1);
           AddDecisionQueue("PASSPARAMETER", $mainPlayer, $mzIndices);

@@ -1011,12 +1011,6 @@ function IsCharacterAbilityActive($player, $index, $checkGem=false)
   return $character[$index+1] == 2;
 }
 
-function IsCardTitleInPlay($player, $title) {
-  $char = &GetPlayerCharacter($player);
-  return (count($char) > CharacterPieces() && CardTitle($char[CharacterPieces()]) == $title)
-    || (SearchCount(SearchAlliesForTitle($player, $title)) > 0);
-}
-
 function GetMultizoneIndicesForTitle($player, $title, $onlyReady=false) {
   $indices=[];
   $char = &GetPlayerCharacter($player);
@@ -1353,9 +1347,8 @@ function AttackDestroyedEffects($attackID)
 
 function CloseCombatChain($chainClosed="true")
 {
-  global $turn, $currentPlayer, $mainPlayer, $combatChainState, $CCS_AttackTarget, $layers;
-  $layers = [];//In case there's another combat chain related layer like defense step
-  PrependLayer("FINALIZECHAINLINK", $mainPlayer, $chainClosed);
+  global $turn, $currentPlayer, $mainPlayer, $combatChainState, $CCS_AttackTarget;
+  AddLayer("FINALIZECHAINLINK", $mainPlayer, $chainClosed);
   $turn[0] = "M";
   $currentPlayer = $mainPlayer;
   $combatChainState[$CCS_AttackTarget] = "NA";
@@ -1723,8 +1716,7 @@ function SameWeaponEquippedTwice()
 }
 
 function IgnoreAspectPenalty($cardID, $player) {
-  global $myClassState, $CS_NumClonesPlayed, $CS_LayerTarget;
-
+  global $myClassState, $CS_NumClonesPlayed, $CS_LayerTarget, $currentTurnEffects;
   if(TraitContains($cardID, "Spectre")) {
     return HeroCard($player) == "7440067052" || SearchAlliesForCard($player, "80df3928eb") != ""; //Hera Syndulla (Spectre Two)
   }
@@ -1735,6 +1727,16 @@ function IgnoreAspectPenalty($cardID, $player) {
   if(TraitContains($cardID, "Lightsaber")) {
     $findGrievous = SearchAlliesForCard($player, "4776553531");
     return $findGrievous != "" && $myClassState[$CS_LayerTarget] == "MYALLY-$findGrievous"; //General Grievous  (Trophy Collector)
+  }
+
+  for($i=0;$i<count($currentTurnEffects);$i+=CurrentTurnEffectPieces()) {
+    if($currentTurnEffects[$i+1] != $player) continue;
+    switch($currentTurnEffects[$i]) {
+      case "7895170711"://A Fine Addition
+        RemoveCurrentTurnEffect($i);
+        return true;
+      default: break;
+    }
   }
 
   return false;
@@ -2159,7 +2161,7 @@ function IsClassBonusActive($player, $class)
 
 function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalCosts = "-", $theirCard = false, $uniqueId = "")
 {
-  global $currentPlayer, $layers, $CS_PlayIndex, $CS_OppIndex, $initiativePlayer, $CCS_CantAttackBase;
+  global $currentPlayer, $layers, $CS_PlayIndex, $CS_OppIndex, $initiativePlayer, $CCS_CantAttackBase, $CS_NumAlliesDestroyed;
   $index = GetClassState($currentPlayer, $CS_PlayIndex);
 
   if($from == "PLAY" && IsAlly($cardID, $currentPlayer)) {
@@ -2327,9 +2329,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;    
     case "7895170711"://A Fine Addition
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose where to play an upgrade from");
-      AddDecisionQueue("BUTTONINPUT", $currentPlayer, "My Hand,My Discard,Opponent Discard", 1);
-      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "AFINEADDITION", 1);
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      if(GetClassState($otherPlayer, $CS_NumAlliesDestroyed) > 0) {
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose where to play an upgrade from");
+        AddDecisionQueue("BUTTONINPUT", $currentPlayer, "My Hand,My Discard,Opponent Discard", 1);
+        AddDecisionQueue("SPECIFICCARD", $currentPlayer, "AFINEADDITION", 1);
+      }
       break;
     case "0345124206"://Clone
       $mzIndex = "MYALLY-" . $playAlly->Index();
@@ -3254,7 +3259,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "4300219753"://Fett's Firespray
       if($from != "PLAY") {
         $ready = false;
-        if(IsCardTitleInPlay($currentPlayer, "Boba Fett") || IsCardTitleInPlay($currentPlayer, "Jango Fett")) $ready = true;
+        if(ControlsNamedCard($currentPlayer, "Boba Fett") || ControlsNamedCard($currentPlayer, "Jango Fett")) $ready = true;
         if($ready) {
           $playAlly->Ready();
         }
