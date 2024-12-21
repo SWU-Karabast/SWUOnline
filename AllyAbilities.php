@@ -1169,6 +1169,7 @@ function AllyHasPlayCardAbility($playedCardID, $playedCardUniqueID, $from, $card
     switch($cardID) {
       case "415bde775d"://Hondo Ohnaka
         return $from == "RESOURCES";
+      case "3434956158"://Fives
       case "0052542605"://Bossk
         return DefinedTypesContains($playedCardID, "Event");
       case "9850906885"://Maz Kanata
@@ -1232,6 +1233,12 @@ function AllyPlayCardAbility($cardID, $player="", $from="-", $abilityID="-", $un
         AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal 2 damage to");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
         AddDecisionQueue("MZOP", $player, "DEALDAMAGE,2,$player,1", 1);
+      }
+      break;
+    case "3434956158"://Fives
+      if(DefinedTypesContains($cardID, "Event", $player)) {
+        MZMoveCard($currentPlayer, "MYDISCARD:trait=Clone;definedType=Unit", "MYBOTDECK", may:true, context:"Choose a Clone unit to put on the bottom of your deck");
+        AddDecisionQueue("DRAW", $player, "-", 1);
       }
       break;
     case "0961039929"://Colonel Yularen
