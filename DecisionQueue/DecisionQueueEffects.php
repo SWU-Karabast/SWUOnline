@@ -369,7 +369,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
         return "";
       }
       $deck = new Deck($player);
-      $searchLeftovers = explode(",", $deck->Top(true, 10 - count($cardArr)));
+      $searchLeftovers = explode(",", $deck->Bottom(true, 10 - count($cardArr)));
       shuffle($searchLeftovers);
       for($i=0; $i<count($searchLeftovers); ++$i) {
         AddBottomDeck($searchLeftovers[$i], $player);
