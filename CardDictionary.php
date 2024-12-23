@@ -659,16 +659,16 @@ function HasShielded($cardID, $player, $index)
 {
   switch($cardID)
   {
-    case "0700214503":
-    case "5264521057":
+    case "0700214503"://Crafty Smuggler
+    case "5264521057"://Wilderness Fighter
     case "9950828238"://Seventh Fleet Defender
     case "9459170449"://Cargo Juggernaut
-    case "6931439330":
-    case "9624333142":
-    case "b0dbca5c05":
-    case "3280523224":
-    case "7728042035":
-    case "7870435409":
+    case "6931439330"://The Ghost
+    case "9624333142"://Count Dooku
+    case "b0dbca5c05"://Iden Versio Leader Unit
+    case "3280523224"://Rukh
+    case "7728042035"://Chimaera
+    case "7870435409"://Bib Fortuna
     case "6135081953"://Doctor Evazan
     case "1747533523"://Village Protectors
     case "1090660242"://The Client
@@ -1264,7 +1264,7 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
     case "6536128825"://Grogu
       $abilityNames = "Exhaust,Attack";
       break;
-    case "9262288850"://Independent Senator      
+    case "9262288850"://Independent Senator
       $abilityNames = "Exhaust,Attack";
       break;
     case "1090660242"://The Client

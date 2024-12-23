@@ -1,7 +1,7 @@
 #! /bin/bash
 
 cd Games;
-for i in $(seq 1 20);
+for i in $(seq 1 50);
 do
     if [ -d "$i" ]; then rm -rf "$i";
     fi
