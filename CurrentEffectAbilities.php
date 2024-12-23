@@ -377,6 +377,12 @@ function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
           $costModifier -= 5;
           $remove = true;
           break;
+        // case "6570091935"://Tranquility
+        //   if($from != "PLAY" && DefinedTypesContains($cardID, "Unit", $currentPlayer)) {
+        //     $costModifier -= 1;
+        //     $remove = true;
+        //   }
+        //   break;          
         case "0414253215"://General's Blade
           if($from != "PLAY" && DefinedTypesContains($cardID, "Unit", $currentPlayer)) {
             $costModifier -= 2;
@@ -593,8 +599,8 @@ function CurrentEffectEndTurnAbilities()
         $ally->Destroy();
         break;
       case "1626462639"://Change of Heart
-        $ally = GetAlly($currentTurnEffects[$i+2]);
-        if ($ally != null && $ally->Controller() != $ally->Owner()) {
+        $ally = new Ally($currentTurnEffects[$i+2]);
+        if ($ally->Exists() && $ally->Controller() != $ally->Owner()) {
           $owner = $ally->Owner();
           WriteLog("Change of Heart unit reverted control of " . CardLink($ally->CardID(), $ally->CardID()) . "back to player $owner");
           AddDecisionQueue("PASSPARAMETER", $owner, "THEIRALLY-" . $ally->Index(), 1);
@@ -602,8 +608,8 @@ function CurrentEffectEndTurnAbilities()
         }
         break;
       case "5696041568-2"://Triple Dark Raid
-        $ally = GetAlly($currentTurnEffects[$i+2]);
-        if ($ally != null) {
+        $ally = new Ally($currentTurnEffects[$i+2]);
+        if ($ally->Exists()) {
           MZBounce($ally->Controller(), "MYALLY-" . $ally->Index());
         }
         break;

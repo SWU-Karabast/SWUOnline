@@ -265,12 +265,12 @@ function SearchAlliesForTitle($player, $title)
   return $cardList;
 }
 
-function SearchAlliesForTrait($player, $trait) {
+function SearchAlliesUniqueIDForTrait($player, $trait) {
   $allies = &GetAllies($player);
   $cardList = [];
   for ($i = 0; $i < count($allies); $i += AllyPieces()) {
     if (TraitContains($allies[$i], $trait)) {
-      $cardList[] = $i;
+      $cardList[] = $allies[$i + 5];
     }
   }
   return implode(',', $cardList);
@@ -789,18 +789,6 @@ function GetAllyIndex($cardID, $player)
     if($Allies[$i] == $cardID) return $i;
   }
   return -1;
-}
-
-function GetAlly($uniqueID) {
-  global $currentPlayer;
-  if ($uniqueID == "" || $uniqueID == "-" || $uniqueID == null) return null;
-
-  for ($player = 1; $player <= 2; $player++) {
-    $index = SearchAlliesForUniqueID($uniqueID, $player);
-    if ($index > -1) return new Ally(($currentPlayer == $player ? "MYALLY-" : "THEIRALLY-") . $index, $player);
-  }
-
-  return null;
 }
 
 function CountItem($cardID, $player)

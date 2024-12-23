@@ -9,17 +9,35 @@ class Ally {
   private $index;
 
   // Constructor
-  function __construct($MZIndex, $player="") {
+  function __construct($MZIndexOrUniqueID, $player="") {
     global $currentPlayer;
-    $mzArr = explode("-", $MZIndex);
-    if($player == "") $player = ($mzArr[0] == "MYALLY" ? $currentPlayer : ($currentPlayer == 1 ? 2 : 1));
-    if($mzArr[1] == "") {
+    $mzArr = explode("-", $MZIndexOrUniqueID);
+
+    if ($mzArr[0] != "MYALLY" && $mzArr[0] != "THEIRALLY") {
+      $players = ($player == 1 || $player == 2) ? [$player] : [1, 2];
+      foreach ($players as $p) {
+        $index = SearchAlliesForUniqueID($MZIndexOrUniqueID, $p);
+        if ($index > -1) {
+          $mzArr = ["MYALLY", $index];
+          $player = $p;
+          break;
+        }
+      }
+    }
+
+    if ($player == "") {
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      $player = $mzArr[0] == "MYALLY" ? $currentPlayer : $otherPlayer;
+    }
+
+    if ($mzArr[1] == "") {
       for($i=0; $i<AllyPieces(); ++$i) $this->allies[] = 9999;
       $this->index = -1;
     } else {
       $this->index = intval($mzArr[1]);
       $this->allies = &GetAllies($player);
     }
+
     $this->playerID = $player;
   }
 
@@ -35,6 +53,10 @@ class Ally {
 
   function UniqueID() {
     return $this->allies[$this->index+5];
+  }
+
+  function Exists() {
+    return $this->index > -1;
   }
 
   //Controller
@@ -94,7 +116,7 @@ class Ally {
 
       switch ($upgrades[$i]) {
         case "3292172753"://Squad Support
-          $max += SearchCount(SearchAlliesForTrait($this->Controller(), "Trooper"));
+          $max += SearchCount(SearchAlliesUniqueIDForTrait($this->Controller(), "Trooper"));
           break;
         default: 
           break;
@@ -243,7 +265,7 @@ class Ally {
 
       switch ($upgrades[$i]) {
         case "3292172753"://Squad Support
-          $power += SearchCount(SearchAlliesForTrait($this->Controller(), "Trooper"));
+          $power += SearchCount(SearchAlliesUniqueIDForTrait($this->Controller(), "Trooper"));
           break;
         default: 
           break;

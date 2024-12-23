@@ -600,7 +600,7 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
 
   switch ($parameter) {
     case "AMBUSH":
-      $ally = GetAlly($uniqueID);
+      $ally = new Ally($uniqueID);
       if (SearchCount(GetTargetsForAttack($ally, false)) > 0) {
         AddDecisionQueue("YESNO", $player, "if_you_want_to_resolve_the_ambush_attack");
         AddDecisionQueue("NOPASS", $player, "-");
@@ -777,7 +777,7 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       AddDecisionQueue("NOPASS", $player, "-");
 
       if ($capturerUniqueID != "-") {
-        $ally = GetAlly($capturerUniqueID);
+        $ally = new Ally($capturerUniqueID);
         if ($ally != null) {
           AddDecisionQueue("PASSPARAMETER", $player, $ally->MZIndex(), 1);
           AddDecisionQueue("SETDQVAR", $player, "0", 1);

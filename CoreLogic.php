@@ -2273,7 +2273,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
           }
           break;
         case "7734824762"://Captain Rex
-          PlayAlly("3941784506", $currentPlayer);//Clone Trooper
+          CreateCloneTrooper($currentPlayer);
           break;
         case "2847868671"://Yoda Leader
         $deck = &GetDeck($currentPlayer);
@@ -2300,8 +2300,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $baseID = $char[0];
       switch($baseID) {
         case "8589863038"://Droid Manufactory
-          PlayAlly("3463348370", $currentPlayer);//Battle Droid
-          PlayAlly("3463348370", $currentPlayer);//Battle Droid
+          CreateBattleDroid($currentPlayer);
+          CreateBattleDroid($currentPlayer);
           WriteLog("Droid Manufactory deployed two Battle Droids.");
           break;
         case "6854189262"://Shadow Collective Camp
@@ -2315,6 +2315,21 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
   }
   switch($cardID)
   {
+    case "4569767827"://Execute Order 66
+      for ($p = 1; $p <= 2; $p++) {
+        $jediUniqueIDs = explode(",", SearchAlliesUniqueIDForTrait($p, "Jedi"));
+
+        foreach ($jediUniqueIDs as $jediUniqueID) {
+          $ally = new Ally($jediUniqueID, $p);
+          $enemyDamage = $p != $currentPlayer;
+          $destroyed = $ally->DealDamage(6, enemyDamage:$enemyDamage);
+
+          if ($destroyed) {
+            CreateCloneTrooper($p);
+          }
+        }
+      }
+      break;
     case "5013139687"://Caught In The Crossfire
       if ($target != "-") {
         $ally = new Ally($target);
@@ -3976,7 +3991,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("WRITELOG", $currentPlayer, "This is a partially manual card. Make sure you attack a unit with this unit for your next action.", 1);
       break;
     case "2090698177"://Street Gang Recruiter
-      MZMoveCard($currentPlayer, "MYDISCARD:trait=Underworld", "MYHAND", may:true, context:"Choose an uncerworld card to return with " . CardLink("2090698177", "2090698177"));
+      MZMoveCard($currentPlayer, "MYDISCARD:trait=Underworld", "MYHAND", may:true, context:"Choose an underworld card to return with " . CardLink("2090698177", "2090698177"));
       break;
     case "7964782056"://Qi'Ra unit
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
@@ -4007,6 +4022,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "RESTORE,2", 1);
       }
       break;
+    // case "6570091935"://Tranquility
+    //   MZMoveCard($currentPlayer, "MYDISCARD:trait=Republic;definedType=Unit", "MYHAND", may:true, context:"Choose a Republic unit to return to your hand");
+    //   break;      
     case "5830140660"://Bazine Netal
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRHAND");
@@ -4680,11 +4698,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1,$currentPlayer,1", 1);
       break;
     case "6969421569"://Batch Brothers
-      PlayAlly("3941784506", $currentPlayer);//Clone Trooper
+      CreateCloneTrooper($currentPlayer);
       break;
     case "6826668370"://Droid Deployment
-      PlayAlly("3463348370", $currentPlayer);//Battle Droid
-      PlayAlly("3463348370", $currentPlayer);//Battle Droid
+      CreateBattleDroid($currentPlayer);
+      CreateBattleDroid($currentPlayer);
       break;
     case "6401761275"://In Pursuit
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
@@ -4698,15 +4716,15 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "5936350569"://Jesse
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
-      PlayAlly("3463348370", $otherPlayer);//Battle Droid
-      PlayAlly("3463348370", $otherPlayer);//Battle Droid
+      CreateBattleDroid($otherPlayer);
+      CreateBattleDroid($otherPlayer);
       break;
     case "5584601885"://Battle Droid Escort
-      PlayAlly("3463348370", $currentPlayer);//Battle Droid
+      CreateBattleDroid($currentPlayer);
       break;
     case "5074877594"://Drop In
-      PlayAlly("3941784506", $currentPlayer);//Clone Trooper
-      PlayAlly("3941784506", $currentPlayer);//Clone Trooper
+      CreateCloneTrooper($currentPlayer);
+      CreateCloneTrooper($currentPlayer);
       break;
     case "4412828936"://Merciless Contest
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
@@ -4733,16 +4751,16 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MODAL", $otherPlayer, "POLITICALPRESSURE", 1);
       break;
     case "0511508627"://Captain Rex
-      PlayAlly("3941784506", $currentPlayer);//Clone Trooper
-      PlayAlly("3941784506", $currentPlayer);//Clone Trooper
+      CreateCloneTrooper($currentPlayer);
+      CreateCloneTrooper($currentPlayer);
       break;
     case "0598115741"://Royal Guard Attache
       $playAlly->DealDamage(2);
       break;
     case "0968965258"://Death By Droids
       MZChooseAndDestroy($currentPlayer, "MYALLY:maxHealth=3&THEIRALLY:maxHealth=3");
-      PlayAlly("3463348370", $currentPlayer);//Battle Droid
-      PlayAlly("3463348370", $currentPlayer);//Battle Droid
+      CreateBattleDroid($currentPlayer);
+      CreateBattleDroid($currentPlayer);
       break;
     case "0036920495"://Elite P-38 Starfighter
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
@@ -4763,7 +4781,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to exhaust");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
-      PlayAlly("3941784506", $currentPlayer);//Clone Trooper
+      CreateCloneTrooper($currentPlayer);
       break;
     case "0959549331"://Unmasking the Conspiracy
       $hand = &GetHand($currentPlayer);
@@ -4790,9 +4808,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       DamageAllAllies(2, "2103133661", arena: "Ground");
       break;
     case "2483302291"://On the Doorstep
-      PlayAlly("3463348370", $currentPlayer);//Battle Droid
-      PlayAlly("3463348370", $currentPlayer);//Battle Droid
-      PlayAlly("3463348370", $currentPlayer);//Battle Droid
+      CreateBattleDroid($currentPlayer);
+      CreateBattleDroid($currentPlayer);
+      CreateBattleDroid($currentPlayer);
       $allies = &GetAllies($currentPlayer);
       for($i=0; $i<3; ++$i) {
         $ally = new Ally("MYALLY-" . (count($allies) - ($i+1)*AllyPieces()), $currentPlayer);
@@ -4804,7 +4822,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "4824842849"://Subjugating Starfighter
       if($initiativePlayer == $currentPlayer) {
-        PlayAlly("3463348370", $currentPlayer);//Battle Droid
+        CreateBattleDroid($currentPlayer);
       }
       break;
     case "6732988831"://Grievous Reassembly
@@ -4812,7 +4830,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to restore 3");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "RESTORE,3", 1);
-      PlayAlly("3463348370", $currentPlayer);//Battle Droid
+      CreateBattleDroid($currentPlayer);
       break;
     case "6700679522"://Tri-Droid Suppressor
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
@@ -4905,7 +4923,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
       break;
     case "9966134941"://Pelta Supply Frigate
-      if(IsCoordinateActive($currentPlayer)) PlayAlly("3941784506", $currentPlayer);//Clone Trooper
+      if(IsCoordinateActive($currentPlayer)) CreateCloneTrooper($currentPlayer);
       break;
     case "6461101372"://Maul
       AddCurrentTurnEffect("6461101372", $currentPlayer, "PLAY");
@@ -4939,7 +4957,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $ally->DefeatIfNoRemainingHP();
       break;
     case "8345985976"://Trade Federation Shuttle
-      if(SearchCount(SearchAllies($currentPlayer, damagedOnly:true))) PlayAlly("3463348370", $currentPlayer);//Battle Droid
+      if(SearchCount(SearchAllies($currentPlayer, damagedOnly:true))) CreateBattleDroid($currentPlayer);
       break;
     case "8060312086"://Self Destruct
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
@@ -5015,7 +5033,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "7734824762"://Captain Rex
       global $CS_NumAttacks;
       if(GetClassState($currentPlayer, $CS_NumAttacks) > 0) {
-        PlayAlly("3941784506", $currentPlayer);//Clone Trooper
+        CreateCloneTrooper($currentPlayer);
       }
       break;
     case "3410014206"://Vanguard Droid Bomber
@@ -5080,10 +5098,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "0398102006"://The Invisible Hand
-      PlayAlly("3463348370", $currentPlayer);//Battle Droid
-      PlayAlly("3463348370", $currentPlayer);//Battle Droid
-      PlayAlly("3463348370", $currentPlayer);//Battle Droid
-      PlayAlly("3463348370", $currentPlayer);//Battle Droid
+      CreateBattleDroid($currentPlayer);
+      CreateBattleDroid($currentPlayer);
+      CreateBattleDroid($currentPlayer);
+      CreateBattleDroid($currentPlayer);
       break;
     case "1686059165"://Wat Tambor
       global $CS_NumAlliesDestroyed;
@@ -5129,8 +5147,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "2267524398"://The Clone Wars
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
       for($i=0; $i<$resourcesPaid-2; ++$i) {
-        PlayAlly("3941784506", $currentPlayer);//Clone Trooper
-        PlayAlly("3463348370", $otherPlayer);//Battle Droid
+        CreateCloneTrooper($currentPlayer);
+        CreateBattleDroid($otherPlayer);
       }
       break;
     case "1302133998"://Impropriety Among Thieves
@@ -5183,7 +5201,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       WriteLog(DefinedCardType($cardID));
       global $CS_NumAlliesDestroyed;
       if(GetClassState($currentPlayer, $CS_NumAlliesDestroyed) >= 2) {
-        PlayAlly("3463348370", $currentPlayer);//Battle Droid
+        CreateBattleDroid($currentPlayer);
       }
       break;
     case "2872203891"://General Grievious
@@ -5309,7 +5327,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MULTICHOOSEDISCARD", $currentPlayer, "<-");
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "RESTOCK", 1);
       for($i=0; $i<4; ++$i) {
-        PlayAlly("3463348370", $currentPlayer);//Battle Droid
+        CreateBattleDroid($currentPlayer);
       }
       break;
     case "8414572243"://Enfys Nest
@@ -5320,10 +5338,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, "BOUNCE", 1);
       break;
     case "7979348081"://Kraken
-      PlayAlly("3463348370", $currentPlayer);//Battle Droid
-      PlayAlly("3463348370", $currentPlayer);//Battle Droid
+      CreateBattleDroid($currentPlayer);
+      CreateBattleDroid($currentPlayer);
       break;
-    case "1272825113"://In Defense of Kimino
+    case "1272825113"://In Defense of Kamino
       AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, $cardID, 1);
       break;
     case "9415708584"://Pyrrhic Assault
