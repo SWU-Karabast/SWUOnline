@@ -1180,7 +1180,7 @@ function FinishTurnPass()
   ResetCombatChainState();
   ItemEndTurnAbilities();
   AuraBeginEndPhaseAbilities();
-  BeginEndPhaseEffects();
+  //BeginEndPhaseEffects();
   PermanentBeginEndPhaseEffects();
   AddDecisionQueue("PASSTURN", $mainPlayer, "-");
   ProcessDecisionQueue();
@@ -1584,7 +1584,7 @@ function GetTargetsForAttack(Ally $attacker, bool $canAttackBase) {
   $attackerUpgrades = $attacker->GetUpgrades();
   for($i=0; $i<count($attackerUpgrades); ++$i) {
     if($attackerUpgrades[$i] == "3099663280") { //Entrenched
-      $targets = "";      
+      $targets = "";
     }
   }
 
@@ -1592,7 +1592,7 @@ function GetTargetsForAttack(Ally $attacker, bool $canAttackBase) {
   $allies = &GetAllies($defPlayer);
   for($i = 0; $i < count($allies); $i += AllyPieces()) {
     // Check if the target is in the same arena, except for Strafing Gunship, Swoop Down
-    if (CardArenas($attacker->CardID()) != CardArenas($allies[$i]) && $attacker->CardID() != "5464125379" && !SearchCurrentTurnEffects("4663781580", $mainPlayer)) { 
+    if (CardArenas($attacker->CardID()) != CardArenas($allies[$i]) && $attacker->CardID() != "5464125379" && !SearchCurrentTurnEffects("4663781580", $mainPlayer)) {
       continue;
     }
 

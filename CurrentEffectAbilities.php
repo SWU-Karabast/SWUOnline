@@ -84,7 +84,7 @@ function FinalizeChainLinkEffects()
         PrependDecisionQueue("MZFILTER", $mainPlayer, "status=1");
         PrependDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:trait=Rebel");
         return true;
-      case "87e8807695"://Leia Organa - Leader Unit
+      case "87e8807695"://Leia Organa Leader Unit
         SearchCurrentTurnEffects("87e8807695", $mainPlayer, remove:true);
         PrependDecisionQueue("SWAPTURN", $mainPlayer, "-");
         PrependDecisionQueue("ELSE", $mainPlayer, "-");
@@ -158,7 +158,7 @@ function EffectAttackModifier($cardID, $playerID="")
     case "1039176181": return 2;//Kalani
     case "8988732248": return 1;//Rebel Assault
     case "7922308768": return NumResources($mainPlayer) < NumResources($defPlayer) ? 2 : 0;//Valiant Assault Ship
-    case "7109944284": return -1* $subparam;//Luke Skywalker
+    case "7109944284": return -1* $subparam;//Luke Skywalker unit
     case "1885628519": return 1;//Crosshair
     case "1480894253": return 2;//Kylo Ren
     case "2503039837": return IsAllyAttackTarget() ? 1 : 0;//Moff Gideon Leader
@@ -168,7 +168,7 @@ function EffectAttackModifier($cardID, $playerID="")
     case "2526288781": return 1;//Bossk
     case "1312599620": return -3;//Smuggler's Starfighter
     case "8107876051": return -3;//Enfys Nest
-    case "9334480612": return 1;//Boba Fett Green Leader
+    case "9334480612": return 1;//Boba Fett (Daimyo)
     case "6962053552": return 2;//Desperate Attack
     case "4085341914": return 4;//Heroic Resolve
     case "1938453783": return 2;//Armed to the Teeth
@@ -382,7 +382,7 @@ function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
         //     $costModifier -= 1;
         //     $remove = true;
         //   }
-        //   break;          
+        //   break;
         case "0414253215"://General's Blade
           if($from != "PLAY" && DefinedTypesContains($cardID, "Unit", $currentPlayer)) {
             $costModifier -= 2;
@@ -793,29 +793,29 @@ function IsCombatEffectPersistent($cardID)
   }
 }
 
-function IsEffectPersistent($cardID)
-{
-  global $currentPlayer;
-  $effectArr = explode(",", $cardID);
-  switch($cardID) {
-    case "7dedg616r0": return true;//Freydis, Master Tactician
-    default:
-      return false;
-  }
-}
+// function IsEffectPersistent($cardID)//FAB
+// {
+//   global $currentPlayer;
+//   $effectArr = explode(",", $cardID);
+//   switch($cardID) {
+//     case "7dedg616r0": return true;//Freydis (Master Tactician)
+//     default:
+//       return false;
+//   }
+// }
 
-function BeginEndPhaseEffects()
-{
-  global $currentTurnEffects, $mainPlayer, $EffectContext;
-  for($i = 0; $i < count($currentTurnEffects); $i += CurrentTurnPieces()) {
-    $EffectContext = $currentTurnEffects[$i];
-    if(IsEffectPersistent($EffectContext)) AddNextTurnEffect($EffectContext, $currentTurnEffects[$i+1]);
-    switch($currentTurnEffects[$i]) {
-      default:
-        break;
-    }
-  }
-}
+// function BeginEndPhaseEffects()//FAB
+// {
+//   global $currentTurnEffects, $mainPlayer, $EffectContext;
+//   for($i = 0; $i < count($currentTurnEffects); $i += CurrentTurnPieces()) {
+//     $EffectContext = $currentTurnEffects[$i];
+//     if(IsEffectPersistent($EffectContext)) AddNextTurnEffect($EffectContext, $currentTurnEffects[$i+1]);
+//     switch($currentTurnEffects[$i]) {
+//       default:
+//         break;
+//     }
+//   }
+// }
 
 function BeginEndPhaseEffectTriggers()
 {
