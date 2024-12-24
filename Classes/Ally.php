@@ -75,7 +75,7 @@ class Ally {
   function AddDamage($amount) {
     $this->allies[$this->index+2] += $amount;
   }
-  
+
   function RemoveDamage($amount) {
     if($this->allies[$this->index+2] > 0) $this->allies[$this->index+2] -= $amount;
   }
@@ -118,7 +118,7 @@ class Ally {
         case "3292172753"://Squad Support
           $max += SearchCount(SearchAlliesUniqueIDForTrait($this->Controller(), "Trooper"));
           break;
-        default: 
+        default:
           break;
       }
     }
@@ -138,7 +138,7 @@ class Ally {
     }
     $max += CharacterStaticHealthModifiers($this->CardID(), $this->Index(), $this->PlayerID());
     $max += NameBasedHealthModifiers($this->CardID(), $this->Index(), $this->PlayerID());
-    $max += BaseHealthModifiers($this->CardID(), $this->Index(), $this->PlayerID());    
+    $max += BaseHealthModifiers($this->CardID(), $this->Index(), $this->PlayerID());
     return $max;
   }
 
@@ -219,7 +219,7 @@ class Ally {
       DestroyAlly($this->playerID, $this->index, fromCombat:$fromCombat);
       return true;
     }
-    AllyDamageTakenAbilities($this->playerID, $this->index, survived:true, 
+    AllyDamageTakenAbilities($this->playerID, $this->index, survived:true,
       damage:$amount, fromCombat:$fromCombat, enemyDamage:$enemyDamage, fromUnitEffect:$fromUnitEffect);
     switch($this->CardID())
     {
@@ -267,7 +267,7 @@ class Ally {
         case "3292172753"://Squad Support
           $power += SearchCount(SearchAlliesUniqueIDForTrait($this->Controller(), "Trooper"));
           break;
-        default: 
+        default:
           break;
       }
     }
@@ -282,8 +282,8 @@ class Ally {
         case "1690726274"://Zuckuss
           if(CardTitle($this->CardID()) == "4-LOM") $power += 1;
           break;
-        case "e2c6231b35"://Director Krennic
-          if($this->IsDamaged()) $power += 1;
+        case "e2c6231b35"://Director Krennic Leader Unit
+          if($this->IsDamaged() && !LeaderAbilitiesIgnored()) $power += 1;
           break;
         case "1557302740"://General Veers
           if($i != $this->index && TraitContains($this->CardID(), "Imperial", $this->PlayerID())) $power += 1;
@@ -301,8 +301,8 @@ class Ally {
             $power += 1;
           }
           break;
-        case "3feee05e13"://Gar Saxon
-          if($this->IsUpgraded()) $power += 1;
+        case "3feee05e13"://Gar Saxon Leader Unit
+          if($this->IsUpgraded() && !LeaderAbilitiesIgnored()) $power += 1;
           break;
         case "919facb76d"://Boba Fett Green Leader
           if($i != $this->index && HasKeyword($this->CardID(), "Any", $this->playerID, $this->index)) $power += 1;
@@ -332,11 +332,11 @@ class Ally {
     $myChar = &GetPlayerCharacter($this->playerID);
     for($i=0; $i<count($myChar); $i+=CharacterPieces()) {
       switch($myChar[$i]) {
-        case "8560666697"://Director Krennic
-          if($this->IsDamaged()) $power += 1;
+        case "8560666697"://Director Krennic Leader
+          if($this->IsDamaged() && !LeaderAbilitiesIgnored()) $power += 1;
           break;
-        case "9794215464"://Gar Saxon
-          if($this->IsUpgraded()) $power += 1;
+        case "9794215464"://Gar Saxon Leader
+          if($this->IsUpgraded() && !LeaderAbilitiesIgnored()) $power += 1;
           break;
         default: break;
       }
@@ -385,7 +385,7 @@ class Ally {
     if($this->allies[$this->index+4] == "-") $this->allies[$this->index+4] = $cardID . "," . $ownerID;
     else $this->allies[$this->index+4] = $this->allies[$this->index+4] . "," . $cardID . "," . $ownerID;
   }
-  
+
   function RemoveSubcard($subcardID) {
     if($this->index == -1) return false;
     $subcards = $this->GetSubcards();
@@ -546,6 +546,10 @@ class Ally {
         default: break;
       }
     }
+    if(IsLeader($this->CardID() && LeaderAbilitiesIgnored())) {
+      return true;
+    }
+
     return false;
   }
 

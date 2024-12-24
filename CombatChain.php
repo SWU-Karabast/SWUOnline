@@ -23,7 +23,8 @@ function ProcessHitEffect($cardID)
         }
       }
       break;
-    case "87e8807695"://Leia Organa
+    case "87e8807695"://Leia Organa Leader Unit
+      if(LeaderAbilitiesIgnored()) break;
       AddCurrentTurnEffect("87e8807695", $mainPlayer);
       break;
     default: break;
@@ -145,6 +146,7 @@ function AttackModifier($cardID, $player, $index)
         $modifier += $initiativePlayer == $player ? 2 : 0;
         break;
     case "24a81d97b5"://Anakin Skywalker Leader Unit
+      if(LeaderAbilitiesIgnored()) break;
       $modifier += floor(GetHealth($player)/5);
       break;
     case "f8e0c65364"://Asajj Ventress
