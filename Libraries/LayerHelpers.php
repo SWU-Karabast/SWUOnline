@@ -18,7 +18,7 @@ function OtherDestroyedTriggerPieces() {
   return 4;
 }
 
-function LayerDestroyTriggers($player, $cardID, $uniqueID, 
+function LayerDestroyTriggers($player, $cardID, $uniqueID,
     $serializedDestroyData,
     $serializedResourceData,
     $serializedBountyData) {
@@ -35,11 +35,25 @@ function LayerTheirsDestroyedTriggers($player, $arr) {
 }
 
 function LayerFriendlyDestroyedTriggers($player, $arr) {
+  global $layers;
+  //Calculating MagnaGuard - avoid unnecessary dupes
+  if($arr[0] == "1039828081") {
+    if(SearchCurrentTurnEffects("1039828081", $player)) return;
+    for($i=0;$i<count($layers);$i+=LayerPieces()) {
+      if($layers[$i] == "TRIGGER" && $layers[$i+1] == $player && $layers[$i+2] == "AFTERDESTROYFRIENDLYABILITY") {
+        $pieces=explode(",", $layers[$i+3]);
+        for($j=0;$j<count($pieces);$j+=OtherDestroyedTriggerPieces()) {
+          if($pieces[$j] == "1039828081") return;
+        }
+      }
+    }
+  };
+
   $data=implode(",", $arr);
   AddLayer("TRIGGER", $player, "AFTERDESTROYFRIENDLYABILITY", $data);
 }
 
-function GetAllyWhenDestroyTheirsEffects($mainPlayer, $player, 
+function GetAllyWhenDestroyTheirsEffects($mainPlayer, $player,
     $destroyedUniqueID, $destroyedWasUnique, $destroyedWasUpgraded, $destroyedUpgradesWithOwnerData) {
   global $combatChainState, $CCS_CachedLastDestroyed;
   $triggers=[];
@@ -100,7 +114,7 @@ function SerializeAllyDestroyData($uniqueID, $lostAbilities, $isUpgraded, $upgra
     $upgradesSerialized = implode(",",$upgrades);
     foreach($upgradesWithOwnerData as $key => $value) if(!($key&1)) unset($upgradesWithOwnerData[$key]);
     $upgradeOwnersSerialized = implode(",", $upgradesWithOwnerData);
-    
+
     return implode(LAYER_DATA_SEPARATOR,[$uniqueID, $lostAbilities, $isUpgraded, $upgradesSerialized, $upgradeOwnersSerialized]);
 }
 
