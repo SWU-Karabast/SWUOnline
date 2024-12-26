@@ -140,17 +140,17 @@ function GetItemGemState($player, $cardID)
   return $state;
 }
 
-function ItemHitEffects($attackID)
-{
-  global $mainPlayer;
-  $attackSubType = CardSubType($attackID);
-  $items = &GetItems($mainPlayer);
-  for($i = count($items) - ItemPieces(); $i >= 0; $i -= ItemPieces()) {
-    switch($items[$i]) {
-      default: break;
-    }
-  }
-}
+// function ItemHitEffects($attackID)//FAB
+// {
+//   global $mainPlayer;
+//   $attackSubType = CardSubType($attackID);
+//   $items = &GetItems($mainPlayer);
+//   for($i = count($items) - ItemPieces(); $i >= 0; $i -= ItemPieces()) {
+//     switch($items[$i]) {
+//       default: break;
+//     }
+//   }
+// }
 
 function ItemTakeDamageAbilities($player, $damage, $type)
 {

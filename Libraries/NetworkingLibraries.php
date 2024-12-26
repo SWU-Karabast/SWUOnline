@@ -830,7 +830,6 @@ function ResolveChainLink()
   $attacker = new Ally($attackerMZ, $mainPlayer);
   $totalAttack = $attacker->CurrentPower();
   $combatChainState[$CCS_LinkTotalAttack] = $totalAttack;
-  $totalAttack = $attacker->CurrentPower();
   $target = GetAttackTarget();
 
   if(!IsMultiTargetAttackActive()) {
@@ -842,7 +841,7 @@ function ResolveChainLink()
 }
 
 function ResolveMultiTarget(Ally $attacker, $mainPlayer, $defPlayer) {
-  global $combatChainState, $CCS_MultiAttackTargets;
+  global $combatChainState, $CCS_MultiAttackTargets, $currentTurnEffects;
 
   $attackerID = $attacker->CardID();
   $hasOverwhelm = HasOverwhelm($attacker->CardID(), $mainPlayer, $attacker->Index());
@@ -855,12 +854,24 @@ function ResolveMultiTarget(Ally $attacker, $mainPlayer, $defPlayer) {
     $defAlly = new Ally("MYALLY-$multiTargetAllyIDs[$i]", $defPlayer);
     $defDamage = $defAlly->CurrentPower();
     $defRemainingHP = $defAlly->Health();
-    $excess = $attackerDamage - $defRemainingHP;
-    $destroyed = $defAlly->DealDamage($attackerDamage, $hasSaboteur, fromCombat:true,enemyDamage:true,fromUnitEffect:true);
+    $modifiedDamage = $attackerDamage;
+    for($ctf=0;$ctf<count($currentTurnEffects);$ctf+=CurrentTurnPieces()) {
+      switch($currentTurnEffects[$ctf]) {
+        case "9399634203"://I Have the High Ground
+          if($mainPlayer != $defPlayer && $currentTurnEffects[$ctf+1] == $defPlayer && $currentTurnEffects[$ctf+2] == $defAlly->UniqueID()) {
+            $modifiedDamage -= 4;
+            $modifiedDamage = max(0, $modifiedDamage);
+          }
+          break;
+        default: break;
+      }
+    }
+    $excess = $modifiedDamage - $defRemainingHP;
+    $destroyed = $defAlly->DealDamage($modifiedDamage, $hasSaboteur, fromCombat:true,enemyDamage:true,fromUnitEffect:true);
     if($i+1 == $numTargets) $combatChainState[$CCS_MultiAttackTargets]="-";
     $attackerDestroyed = $attackerDestroyed || $attacker->DealDamage($defDamage,fromCombat:true,enemyDamage:true,fromUnitEffect:true);
     if ($destroyed) {
-      if($hasOverwhelm) {
+      if($hasOverwhelm && $excess > 0) {
         DealDamageAsync($defPlayer, $excess, "OVERWHELM", $attackerID);
         WriteLog("OVERWHELM : <span style='color:Crimson;'>$excess damage</span> done on base");
       }
@@ -992,12 +1003,12 @@ function ResolveCombatDamage($damageDone)
         }
       }
       $currentTurnEffects = array_values($currentTurnEffects); //In case any were removed
-      MainCharacterHitAbilities();
-      MainCharacterHitEffects();
-      ArsenalHitEffects();
-      AuraHitEffects($combatChain[0]);
-      ItemHitEffects($combatChain[0]);
-      AttackDamageAbilities(GetClassState($mainPlayer, $CS_DamageDealt));
+      //MainCharacterHitAbilities();
+      //MainCharacterHitEffects();
+      //ArsenalHitEffects();
+      //AuraHitEffects($combatChain[0]);
+      //ItemHitEffects($combatChain[0]);
+      //AttackDamageAbilities(GetClassState($mainPlayer, $CS_DamageDealt));
     }
   }
   $currentPlayer = $mainPlayer;

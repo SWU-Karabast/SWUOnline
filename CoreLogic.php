@@ -253,24 +253,24 @@ function ArsenalAttackModifier()
   return $modifier;
 }
 
-function ArsenalHitEffects()
-{
-  global $combatChain, $mainPlayer;
-  $attackID = $combatChain[0];
-  $attackType = CardType($attackID);
-  $attackSubType = CardSubType($attackID);
-  $arsenal = GetArsenal($mainPlayer);
-  $modifier = 0;
-  for($i=0; $i<count($arsenal); $i+=ArsenalPieces())
-  {
-    switch($arsenal[$i])
-    {
+// function ArsenalHitEffects()//FAB
+// {
+//   global $combatChain, $mainPlayer;
+//   $attackID = $combatChain[0];
+//   $attackType = CardType($attackID);
+//   $attackSubType = CardSubType($attackID);
+//   $arsenal = GetArsenal($mainPlayer);
+//   $modifier = 0;
+//   for($i=0; $i<count($arsenal); $i+=ArsenalPieces())
+//   {
+//     switch($arsenal[$i])
+//     {
 
-      default: break;
-    }
-  }
-  return $modifier;
-}
+//       default: break;
+//     }
+//   }
+//   return $modifier;
+// }
 
 function CharacterPlayCardAbilities($cardID, $from)
 {
@@ -521,15 +521,15 @@ function CurrentEffectDamageEffects($target, $source, $type, $damage)
   }
 }
 
-function AttackDamageAbilities($damageDone)
-{
-  global $combatChain, $defPlayer;
-  $attackID = $combatChain[0];
-  switch($attackID)
-  {
-    default: break;
-  }
-}
+// function AttackDamageAbilities($damageDone)//FAB
+// {
+//   global $combatChain, $defPlayer;
+//   $attackID = $combatChain[0];
+//   switch($attackID)
+//   {
+//     default: break;
+//   }
+// }
 
 function LoseHealth($amount, $player)
 {
@@ -5361,6 +5361,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "9415708584"://Pyrrhic Assault
       AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, $cardID, 1);
+      break;
+    case "9399634203"://I Have the High Ground
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "9399634203,HAND", 1);
       break;
     //PlayAbility End
     default: break;
