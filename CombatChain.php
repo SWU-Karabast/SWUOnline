@@ -64,7 +64,9 @@ function CompletesAttackEffect($cardID) {
 
 function AttackModifier($cardID, $player, $index)
 {
-  global $mainPlayer, $defPlayer, $initiativePlayer, $combatChain, $combatChainState, $CS_NumLeftPlay;
+  global $mainPlayer, $defPlayer, $initiativePlayer, $combatChain, $combatChainState, $currentTurnEffects,
+    $CS_NumLeftPlay, $CCS_MultiAttackTargets;
+
   $modifier = 0;
   if($player == $mainPlayer) {
     //Raid is only for attackers
@@ -169,6 +171,21 @@ function AttackModifier($cardID, $player, $index)
       break;
     default: break;
   }
+
+  if(!IsMultiTargetAttackActive() && GetAttackTarget() != "NA" && count($currentTurnEffects) > 0) {
+    for($i=0;$i<count($currentTurnEffects);$i+=CurrentTurnPieces()) {
+      switch($currentTurnEffects[$i]) {
+        case "9399634203"://I Have the High Ground
+          $defendingAlly = new Ally(GetAttackTarget(), $defPlayer);
+          if($player != $defPlayer && $currentTurnEffects[$i+1] == $defPlayer && $currentTurnEffects[$i+2] == $defendingAlly->UniqueID()) {
+            $modifier -= 4;
+          }
+          break;
+        default: break;
+      }
+    }
+  }
+
   return $modifier;
 }
 

@@ -253,24 +253,24 @@ function ArsenalAttackModifier()
   return $modifier;
 }
 
-function ArsenalHitEffects()
-{
-  global $combatChain, $mainPlayer;
-  $attackID = $combatChain[0];
-  $attackType = CardType($attackID);
-  $attackSubType = CardSubType($attackID);
-  $arsenal = GetArsenal($mainPlayer);
-  $modifier = 0;
-  for($i=0; $i<count($arsenal); $i+=ArsenalPieces())
-  {
-    switch($arsenal[$i])
-    {
+// function ArsenalHitEffects()//FAB
+// {
+//   global $combatChain, $mainPlayer;
+//   $attackID = $combatChain[0];
+//   $attackType = CardType($attackID);
+//   $attackSubType = CardSubType($attackID);
+//   $arsenal = GetArsenal($mainPlayer);
+//   $modifier = 0;
+//   for($i=0; $i<count($arsenal); $i+=ArsenalPieces())
+//   {
+//     switch($arsenal[$i])
+//     {
 
-      default: break;
-    }
-  }
-  return $modifier;
-}
+//       default: break;
+//     }
+//   }
+//   return $modifier;
+// }
 
 function CharacterPlayCardAbilities($cardID, $from)
 {
@@ -521,15 +521,15 @@ function CurrentEffectDamageEffects($target, $source, $type, $damage)
   }
 }
 
-function AttackDamageAbilities($damageDone)
-{
-  global $combatChain, $defPlayer;
-  $attackID = $combatChain[0];
-  switch($attackID)
-  {
-    default: break;
-  }
-}
+// function AttackDamageAbilities($damageDone)//FAB
+// {
+//   global $combatChain, $defPlayer;
+//   $attackID = $combatChain[0];
+//   switch($attackID)
+//   {
+//     default: break;
+//   }
+// }
 
 function LoseHealth($amount, $player)
 {
@@ -2319,6 +2319,17 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
   }
   switch($cardID)
   {
+    case "8839068683"://Freelance Assassin
+      if(GetResources($currentPlayer) >= 2) {
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Pay 2 resources to deal 2 damage to a unit?", 1);
+        AddDecisionQueue("YESNO", $currentPlayer, "-", 1);
+        AddDecisionQueue("NOPASS", $currentPlayer, "-", 1);
+        AddDecisionQueue("PAYRESOURCES", $currentPlayer, "2", 1);
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY", 1);
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,2,$currentPlayer,1", 1);
+      }
+      break;
     case "4569767827"://Execute Order 66
       for ($p = 1; $p <= 2; $p++) {
         $jediUniqueIDs = explode(",", SearchAlliesUniqueIDForTrait($p, "Jedi"));
@@ -5350,6 +5361,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "9415708584"://Pyrrhic Assault
       AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, $cardID, 1);
+      break;
+    case "9399634203"://I Have the High Ground
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "9399634203,HAND", 1);
       break;
     //PlayAbility End
     default: break;

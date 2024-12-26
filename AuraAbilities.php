@@ -425,21 +425,21 @@ function AuraAttackAbilities($attackID)
   }
 }
 
-function AuraHitEffects($attackID)
-{
-  global $mainPlayer;
-  $attackType = CardType($attackID);
-  $attackSubType = CardSubType($attackID);
-  $auras = &GetAuras($mainPlayer);
-  for($i = count($auras) - AuraPieces(); $i >= 0; $i -= AuraPieces()) {
-    $remove = 0;
-    switch($auras[$i]) {
+// function AuraHitEffects($attackID)
+// {
+//   global $mainPlayer;
+//   $attackType = CardType($attackID);
+//   $attackSubType = CardSubType($attackID);
+//   $auras = &GetAuras($mainPlayer);
+//   for($i = count($auras) - AuraPieces(); $i >= 0; $i -= AuraPieces()) {
+//     $remove = 0;
+//     switch($auras[$i]) {
 
-      default: break;
-    }
-    if($remove == 1) DestroyAura($mainPlayer, $i);
-  }
-}
+//       default: break;
+//     }
+//     if($remove == 1) DestroyAura($mainPlayer, $i);
+//   }
+// }
 
 function AuraAttackModifiers($index)
 {

@@ -84,7 +84,7 @@ function GetAllyWhenDestroyTheirsEffects($mainPlayer, $player,
       if(HasWhenEnemyDestroyed($ally[0], $ally[8], $destroyedWasUnique, $destroyedWasUpgraded)) {
         array_unshift($triggers, implode(";",$destroyedUpgradesWithOwnerData));
         array_unshift($triggers, $ally[5]);
-        array_unshift($triggers, $player);
+        array_unshift($triggers, $ally[11]);
         array_unshift($triggers, $ally[0]);
       };
     }
