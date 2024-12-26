@@ -1285,7 +1285,7 @@ function SwapTurn() {
 
 function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID = -1, $skipAbilityType = false)
 {
-  global $playerID, $turn, $currentPlayer, $actionPoints, $layers;
+  global $playerID, $turn, $currentPlayer, $actionPoints, $layers, $currentTurnEffects;
   global $layerPriority, $lastPlayed;
   global $decisionQueue, $CS_PlayIndex, $CS_OppIndex, $CS_OppCardActive, $CS_PlayUniqueID, $CS_LayerPlayIndex, $CS_LastDynCost, $CS_NumCardsPlayed;
   global $CS_DynCostResolved, $CS_NumVillainyPlayed, $CS_NumEventsPlayed, $CS_NumClonesPlayed;
@@ -1363,7 +1363,17 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
       if($from != "PLAY" && ($turn[0] != "B" || (count($layers) > 0 && $layers[0] != ""))) GetLayerTarget($cardID);
       //Right now only units in play can attack
       if (!$oppCardActive) {
-        if($from == "PLAY") AddDecisionQueue("ATTACK", $currentPlayer, $cardID . "," . $from);
+        if($from == "PLAY") {
+          for($i = 0; $i < count($currentTurnEffects); $i += CurrentTurnPieces()) {
+            if($currentTurnEffects[$i] == "3381931079" && $currentTurnEffects[$i+2] == $uniqueID) {//Malevolence
+              WriteLog("Cannot attack with this unit. Reverting gamestate.");
+              RevertGamestate();
+              return;
+            }
+          }
+
+          AddDecisionQueue("ATTACK", $currentPlayer, $cardID . "," . $from);
+        }
         if($dynCost == "") AddDecisionQueue("PASSPARAMETER", $currentPlayer, "0");
         else AddDecisionQueue("GETCLASSSTATE", $currentPlayer, $CS_LastDynCost);
         AddDecisionQueue("RESUMEPAYING", $currentPlayer, $cardID . "-" . $from . "-" . $index);

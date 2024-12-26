@@ -81,9 +81,7 @@ function CheckUniqueAlly($uniqueID) {
 }
 
 function LeaderAbilitiesIgnored() {
-  global $currentPlayer;
-  $otherPlayer = $currentPlayer == 1 ? 2 : 1;
-  return PlayerHasAlly($currentPlayer, "4602353389") || PlayerHasAlly($otherPlayer, "4602353389");//Brain Invaders
+  return AnyPlayerHasAlly("4602353389");//Brain Invaders
 }
 
 function HasWhenEnemyDestroyed($cardID, $numUses, $wasUnique, $wasUpgraded) {
