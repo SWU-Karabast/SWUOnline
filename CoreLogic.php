@@ -2319,6 +2319,17 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
   }
   switch($cardID)
   {
+    case "8839068683"://Freelance Assassin
+      if(GetResources($currentPlayer) >= 2) {
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Pay 2 resources to deal 2 damage to a unit?", 1);
+        AddDecisionQueue("YESNO", $currentPlayer, "-", 1);
+        AddDecisionQueue("NOPASS", $currentPlayer, "-", 1);
+        AddDecisionQueue("PAYRESOURCES", $currentPlayer, "2", 1);
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY", 1);
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,2,$currentPlayer,1", 1);
+      }
+      break;
     case "4569767827"://Execute Order 66
       for ($p = 1; $p <= 2; $p++) {
         $jediUniqueIDs = explode(",", SearchAlliesUniqueIDForTrait($p, "Jedi"));
