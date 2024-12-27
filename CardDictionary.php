@@ -794,6 +794,8 @@ function AbilityCost($cardID, $index=-1, $theirCard = false)
       return $abilityName == "Draw Card" ? 1 : 0;
     case "4300219753"://Fett's Firespray
       return $abilityName == "Exhaust" ? 2 : 0;
+    case "3258646001"://Steadfast Senator
+      return $abilityName == "Buff" ? 2 : 0;
     case "0595607848"://Disaffected Senator
       return $abilityName == "Deal Damage" ? 2 : 0;
     case "5784497124"://Emperor Palpatine
@@ -1039,6 +1041,9 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
     case "6536128825"://Grogu
       $abilityTypes = "A,AA";
       break;
+    case "3258646001"://Steadfast Senator
+      $abilityTypes = "A,AA";
+      break;
     case "9262288850"://Independent Senator
       $abilityTypes = "A,AA";
       break;
@@ -1264,6 +1269,9 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       break;
     case "6536128825"://Grogu
       $abilityNames = "Exhaust,Attack";
+      break;
+    case "3258646001"://Steadfast Senator
+      $abilityNames = "Buff,Attack";
       break;
     case "9262288850"://Independent Senator
       $abilityNames = "Exhaust,Attack";

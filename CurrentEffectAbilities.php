@@ -128,6 +128,7 @@ function EffectAttackModifier($cardID, $playerID="")
     case "1900571801": return 2;//Overwhelming Barrage
     case "3809048641": return 3;//Surprise Strike
     case "3038238423": return 2;//Fleet Lieutenant
+    case "3258646001": return 2;//Steadfast Senator
     case "9757839764": return 2;//Adelphi Patrol Wing
     case "3208391441": return -2;//Make an Opening
     case "4036958275": return -4;//Hello There
