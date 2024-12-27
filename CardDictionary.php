@@ -570,16 +570,16 @@ function HasAmbush($cardID, $player, $index, $from)
     if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
     switch($currentTurnEffects[$i]) {
       case "8327910265":
-        RemoveCurrentTurnEffect($i);
+        AddDecisionQueue("REMOVECURRENTEFFECT", $player, "8327910265");
         return true;//Energy Conversion Lab (ECL)
       case "6847268098"://Timely Intervention
-        RemoveCurrentTurnEffect($i);
+        AddDecisionQueue("REMOVECURRENTEFFECT", $player, "6847268098");
         return true;
       case "0911874487"://Fennec Shand
-        RemoveCurrentTurnEffect($i);
+        AddDecisionQueue("REMOVECURRENTEFFECT", $player, "0911874487");
         return true;
       case "2b13cefced"://Fennec Shand
-        RemoveCurrentTurnEffect($i);
+        AddDecisionQueue("REMOVECURRENTEFFECT", $player, "2b13cefced");
         return true;
       default: break;
     }
@@ -603,16 +603,16 @@ function HasAmbush($cardID, $player, $index, $from)
   }
   switch($cardID)
   {
-    case "5346983501":
-    case "6718924441":
-    case "7285270931":
-    case "3377409249":
-    case "5230572435":
-    case "0052542605":
-    case "2649829005":
-    case "1862616109":
-    case "3684950815":
-    case "9500514827":
+    case "5346983501"://Syndicate Lackeys
+    case "6718924441"://Mercenary Company
+    case "7285270931"://Auzituck Liberator Gunship
+    case "3377409249"://Rogue Squadron Skirmisher
+    case "5230572435"://Mace Windu (Party Crasher)
+    case "0052542605"://Bossk (Deadly Stalker)
+    case "2649829005"://Agent Kallus
+    case "1862616109"://Snowspeeder
+    case "3684950815"://Bounty Hunter Crew
+    case "9500514827"://Han Solo (Reluctant Hero)
     case "8506660490"://Darth Vader unit
     case "1805986989"://Modded Cohort
     case "7171636330"://Chain Code Collector
