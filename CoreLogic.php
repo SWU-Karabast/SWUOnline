@@ -5196,7 +5196,6 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $otherPlayer, "3381931079,HAND", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "WRITECHOICEFROMUNIQUE", 1);
-      WriteLog("This is a partially manual card. Make sure the chosen, debuffed unit doesn't attack this phase.");
       break;
     case "5333016146"://Rune Haako
       global $CS_NumAlliesDestroyed;

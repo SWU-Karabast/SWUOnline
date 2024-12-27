@@ -165,8 +165,10 @@ class Ally {
 
   function Destroy() {
     if($this->index == -1) return "";
-    global $mainPlayer;
-    if($this->CardID() == "1810342362" && !$this->LostAbilities() && $mainPlayer != $this->playerID) return "";//Lurking TIE Phantom
+    if($this->AvoidsDestroyByEnemyEffects()) {
+      WriteLog(CardLink($this->CardID(), $this->CardID()) . " cannot be defeated by enemy card effects.");
+      return "";
+    }
     return DestroyAlly($this->playerID, $this->index);
   }
 
@@ -174,7 +176,7 @@ class Ally {
   function DealDamage($amount, $bypassShield = false, $fromCombat = false, &$damageDealt = NULL, $enemyDamage = false, $fromUnitEffect=false) {
     if($this->index == -1 || $amount <= 0) return false;
     global $mainPlayer;
-    if(!$fromCombat && $this->CardID() == "1810342362" && !$this->LostAbilities() && ($mainPlayer != $this->playerID || $enemyDamage)) return;//Lurking TIE Phantom
+    if(!$fromCombat && $this->AvoidsDamage($enemyDamage)) return;
     if($fromCombat && !$this->LostAbilities()) {
       if($this->CardID() == "6190335038" && $this->PlayerID() == $mainPlayer && IsCoordinateActive($this->PlayerID())) return false;//Aayla Secura
     }
@@ -572,6 +574,38 @@ class Ally {
       $builder[$i] = $this->allies[$this->index+$i];
     }
     return implode(";", $builder);
+  }
+
+  function AvoidsDestroyByEnemyEffects() {
+    global $mainPlayer;
+    return $mainPlayer != $this->playerID
+      && !$this->LostAbilities()
+      && ($this->CardID() == "1810342362"//Lurking TIE Phantom
+        || $this->HasUpgrade("9003830954"))//Shadowed Intentions
+    ;
+  }
+
+  function AvoidsCapture() {
+    return !$this->LostAbilities()
+      && ($this->CardID() == "1810342362"//Lurking TIE Phantom
+        || $this->HasUpgrade("9003830954"))//Shadowed Intentions
+    ;
+  }
+
+  function AvoidsDamage($enemyDamage) {
+    global $mainPlayer;
+    return ($mainPlayer != $this->playerID || $enemyDamage)
+      && !$this->LostAbilities()
+      && $this->CardID() == "1810342362"//Lurking TIE Phantom
+    ;
+  }
+
+  function AvoidsBounce() {
+    global $mainPlayer;
+    return $mainPlayer != $this->playerID
+      && !$this->LostAbilities()
+      && $this->HasUpgrade("9003830954")//Shadowed Intentions
+    ;
   }
 }
 
