@@ -590,7 +590,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $captured = new Ally($lastResult, $targetPlayer);
           $capturedCardID = $captured->IsCloned() ? "0345124206" : $cardID; //Clone - Replace the cloned card to the original one when being captured
           $ownerId = $captured->Owner();
-          if($cardID == "1810342362" && !$captured->LostAbilities()) { //Lurking TIE Phantom
+          if($captured->AvoidsCapture()) {
             WriteLog(CardLink($cardID, $cardID) . " avoided capture.");
             return $cardID;
           }
