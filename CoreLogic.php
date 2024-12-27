@@ -603,8 +603,7 @@ function PlayerWon($playerID)
   }
 
   try {
-    SendSWUStatsResults(1);
-    //SendSWUStatsResults(2);
+    SendSWUStatsResults();
   } catch (Exception $e) {
 
   }
@@ -614,11 +613,22 @@ function PlayerWon($playerID)
   }
 }
 
-function SendSWUStatsResults($playerID) {
-  global $gameName;
+function SendSWUStatsResults() {
+  global $gameName, $firstPlayer, $winner, $currentRound, $p1uid, $p2uid, $p1DeckLink, $p2DeckLink;
 
-  $url = 'http://23.254.215.59/APIs/SubmitGameResult.php';
-  $data_json = SerializeGameResult($playerID, "", file_get_contents("./Games/" . $gameName . "/p" . $playerID . "Deck.txt"), $gameName);
+  $url = 'http://23.254.215.59/TCGEngine/APIs/SubmitGameResult.php';
+  $data_json = json_encode([
+    'gameName' => $gameName,
+    'round' => $currentRound,
+    'winner' => $winner,
+    'firstPlayer' => $firstPlayer,
+    'p1uid' => $p1uid,
+    'p2uid' => $p2uid,
+    'p1DeckLink' => $p1DeckLink,
+    'p2DeckLink' => $p2DeckLink,
+    'player1' => SerializeGameResult(1, "", file_get_contents("./Games/" . $gameName . "/p1Deck.txt"), $gameName),
+    'player2' => SerializeGameResult(2, "", file_get_contents("./Games/" . $gameName . "/p2Deck.txt"), $gameName)
+  ]);
 
   // Initialize cURL session
   $ch = curl_init($url);
