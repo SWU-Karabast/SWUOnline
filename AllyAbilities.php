@@ -327,7 +327,7 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false,
     if(count($triggers) > 0) {
       LayerFriendlyDestroyedTriggers($player, $triggers);
     }
-    if($mainPlayer != $player && !$ally->LostAbilities()) {
+    if($mainPlayer != $player && !$ally->LostAbilities() && GetAttackTarget() == "THEIRALLY-" . $ally->Index()) {
       $combatChainState[$CCS_CachedLastDestroyed] = $ally->Serialize();
     }
     $otherPlayer = $player == 1 ? 2 : 1;
