@@ -456,6 +456,9 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       AddDecisionQueue("PASSPARAMETER", $player, $lastResult);
       AddDecisionQueue("MZOP", $player, "DEALDAMAGE," . $damage, 1);
       return $lastResult;
+    case "GUERILLAINSURGENCY":
+      DamageAllAllies(4, "7235023816", arena: "Ground");
+      return $lastResult;
     case "MEDALCEREMONY":
       if($lastResult == "PASS") {
         return $lastResult;
