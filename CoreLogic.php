@@ -5610,7 +5610,8 @@ function IsHarmonizeActive($player)
 
 function IsMultiTargetAttackActive() {
   global $combatChainState, $CCS_MultiAttackTargets;
-  return $combatChainState[$CCS_MultiAttackTargets]!=="-";
+  //TODO: look into why SubmitSideboard.php is not initializing this
+  return isset($combatChainState[$CCS_MultiAttackTargets]) && $combatChainState[$CCS_MultiAttackTargets]!=="-";
 }
 
 function AddPreparationCounters($player, $amount=1)

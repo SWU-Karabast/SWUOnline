@@ -54,8 +54,8 @@ p a{
   color: #aaaaaa;
 }
 
-p:last-child { 
-  margin-bottom: 0; 
+p:last-child {
+  margin-bottom: 0;
 }
 
 b {
@@ -83,8 +83,8 @@ ul {
 /* Core Styles */
 
 body {
-  background-size: cover; 
-  background-position: center; 
+  background-size: cover;
+  background-position: center;
   background-image: url('../Images/gamebg.jpg');
   max-width: 100%;
   height: 100%;
@@ -136,11 +136,11 @@ select {
   padding: 20px;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  scrollbar-color: #888888 rgba(0, 0, 0, 0); 
+  scrollbar-color: #888888 rgba(0, 0, 0, 0);
   scrollbar-width: thin;
 }
 
-.bg-blue { 
+.bg-blue {
   background: rgba(24, 50, 81, 0.60);
 }
 
@@ -151,7 +151,7 @@ select {
 .flex-wrapper {
   flex: 1;
   overflow-y: auto;
-  scrollbar-color: #888888 rgba(0, 0, 0, 0); 
+  scrollbar-color: #888888 rgba(0, 0, 0, 0);
   scrollbar-width: thin;
   border-radius: 10px;
 }
@@ -233,14 +233,14 @@ select {
 .nav-bar {
   position: absolute;
   right: 0;
-  top: 10px;  
+  top: 10px;
   font-size: 18px;
   font-weight: 600;
   z-index: 20;
 }
 
 .nav-bar a {
-  text-decoration: none; 
+  text-decoration: none;
 }
 
 .nav-bar a:hover {
@@ -271,7 +271,7 @@ select {
 
 /* Game Browser */
 
-.game-browser-wrapper { 
+.game-browser-wrapper {
   margin-left: 20px;
   flex: 1;
 }
@@ -280,7 +280,7 @@ select {
   height: calc(100% - 40px);
 }
 
-.game-browser h3 { 
+.game-browser h3 {
   margin-bottom: 0;
 }
 
@@ -333,12 +333,12 @@ select {
 
 /* Create Game */
 
-.create-game-wrapper { 
+.create-game-wrapper {
   margin-left: 20px;
   flex: 1;
   height:fit-content;
   overflow-y: auto;
-  scrollbar-color: #888888 rgba(0, 0, 0, 0); 
+  scrollbar-color: #888888 rgba(0, 0, 0, 0);
   scrollbar-width: thin;
   border-radius: 10px;
 }
@@ -349,7 +349,7 @@ select {
   width: 100%;
 }
 
-.privacy-input, .inputFavoriteDeck { 
+.privacy-input, .inputFavoriteDeck {
   width: auto !important;
   margin: 0 5px 0 0;
 }
@@ -382,7 +382,7 @@ select {
   width: auto !important;
 }
 
-.create-game-wrapper .login-notice { 
+.create-game-wrapper .login-notice {
   margin-bottom: 10px;
 }
 
@@ -394,18 +394,23 @@ select {
   flex-direction: column;
   flex: 1;
   overflow-y: auto;
-  scrollbar-color: #888888 rgba(0, 0, 0, 0); 
+  scrollbar-color: #888888 rgba(0, 0, 0, 0);
   scrollbar-width: thin;
   border-radius: 10px;
 }
 
-.karabast-overview { 
+.karabast-overview {
   flex:0;
 }
 
-.karabast-news { 
+.karabast-news {
   height: 100%;
   margin-top: 20px;
+}
+
+.karabast-unimplemented-list {
+  display: block;
+  margin-bottom: 1rem;
 }
 
 /* GAME INVITE ---------------------------------------------------------------------------------------------- */
@@ -485,7 +490,7 @@ select {
 .lobby-container {
   display: grid;
   grid-template-rows: auto 1fr auto;
-  grid-template-areas: 
+  grid-template-areas:
     "header"
     "main"
     "footer";
@@ -529,7 +534,7 @@ select {
 
 /* Game Set Up */
 
-.game-lobby { 
+.game-lobby {
   margin-left: 20px;
   flex-basis: calc(33% - 60px);
   flex-grow: 0;
@@ -538,7 +543,7 @@ select {
   flex-direction: column;
 }
 
-.game-lobby h2 { 
+.game-lobby h2 {
   text-align: left;
 }
 
@@ -602,12 +607,12 @@ select {
 
 /* Players */
 
-.player-info { 
+.player-info {
   margin: 0 0 0 20px;
   flex-grow: 0;
 }
 
-.player-info img { 
+.player-info img {
   height: 177px !important;
   max-width: 250px !important;
   width: auto !important;
@@ -619,12 +624,12 @@ select {
 @media screen and (max-height: 1050px) { .player-info img { height: 16vh !important; } }
 @media screen and (max-height: 950px)  { .player-info img { height: 15vh !important; } }
 @media screen and (max-height: 840px)  { .player-info img { height: 110px !important; }
-  .player-info { 
+  .player-info {
   flex: 0;
   flex-basis: 157px;
   overflow-y: scroll;
   overflow-x: hidden;
-  scrollbar-color: #888888 rgba(0, 0, 0, 0); 
+  scrollbar-color: #888888 rgba(0, 0, 0, 0);
   scrollbar-width: thin;
   } }
 
@@ -647,10 +652,10 @@ select {
 }
 
 .deck-display {
-  display: block;  
-  overflow-y: scroll; 
+  display: block;
+  overflow-y: scroll;
   overflow-x: hidden;
-  scrollbar-color: #888888 rgba(0, 0, 0, 0); 
+  scrollbar-color: #888888 rgba(0, 0, 0, 0);
   scrollbar-width: thin;
 }
 
