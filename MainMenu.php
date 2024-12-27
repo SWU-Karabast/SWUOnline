@@ -153,6 +153,37 @@ include_once 'Header.php';
     <h2>News</h2>
     <div style="position: relative;">
       <div style='vertical-align:middle; text-align:center;'>
+        <img src="./Images/unimpl.png" alt="TWI" style="max-width: 100%; border-radius: 5px;">
+        <div style="text-align: left;">
+        <h3 style="margin: 15px 0; display: block;">List of Set 3 Unimplemented Cards</h3>
+        <p>Thanks to the efforts of OotTheMonk, Brubraz, and ninin, many remaining Set 3 cards have now been implemented in Karabast.</p>
+        <p>Remaining cards:</p>
+        <ul class="karabast-unimplemented-list">
+          <li>Aid from the Innocent</li>
+          <li>Barriss Offee</li>
+          <li>Bold Resistance</li>
+          <li>Consolidation of Power</li>
+          <li>Finn</li>
+          <li>Guerilla Insurgency</li>
+          <li>Heroes on Both Sides</li>
+          <li>Lux Bonteri</li>
+          <li>MagnaGuard Wing Leader</li>
+          <li>On Top of Things</li>
+          <li>Planetery Invasion</li>
+          <li>Roger Roger</li>
+          <li>Sly Moore</li>
+          <li>Steadfast Senator</li>
+          <li>Strategic Acumen</li>
+          <li>Sword and Shield Maneuver</li>
+          <li>Tranquility</li>
+          <li>Unnatural Life</li>
+          <li>Wartime Profiteering<li>
+        </ul>
+        <p style="margin-bottom: 1rem;";>Bugs are still a possibility during this rollout, if you discover any as you play please submit them to the <i>#bug-reports</i> channel in our <a target="_blank" href="https://discord.gg/hKRaqHND4v">Discord</a>.</p>
+      </div>
+    </div>
+    <div style="position: relative;">
+      <div style='vertical-align:middle; text-align:center;'>
         <img src="./Images/yoda.png" alt="SHD" style="max-width: 100%; border-radius: 5px;">
         <div style="text-align: left;">
         <h3 style="margin: 15px 0; display: block;">Set 3 launches, and Karabast's next steps </h3>
