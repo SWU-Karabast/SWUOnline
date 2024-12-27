@@ -119,11 +119,11 @@ function RestoreAmount($cardID, $player, $index)
     case "0074718689": $amount += 1; break;//Restored Arc 170
     case "1081012039": $amount += 2; break;//Regional Sympathizers
     case "1611702639": $amount += $initiativePlayer == $player ? 2 : 0; break;//Consortium Starviper
-    case "4405415770": $amount += 2; break;//Yoda, Old Master
+    case "4405415770": $amount += 2; break;//Yoda (Old Master)
     case "0827076106": $amount += 1; break;//Admiral Ackbar
     case "4919000710": $amount += 2; break;//Home One
     case "9412277544": $amount += 1; break;//Del Meeko
-    case "e2c6231b35": $amount += 2; break;//Director Krennic
+    case "e2c6231b35": $amount += !LeaderAbilitiesIgnored() ? 2 : 0; break;//Director Krennic Leader Unit
     case "7109944284": $amount += 3; break;//Luke Skywalker unit
     case "8142386948": $amount += 2; break;//Razor Crest
     case "4327133297": $amount += 2; break;//Moisture Farmer
@@ -247,14 +247,14 @@ function RaidAmount($cardID, $player, $index, $reportMode = false)
     case "8995892693": $amount += 1; break; //Red Three
     case "3613174521": $amount += 1; break; //Outer Rim Headhunter
     case "4111616117": $amount += 1; break; //Volunteer Soldier
-    case "87e8807695": $amount += 1; break; //Leia leader unit
+    case "87e8807695": $amount += !LeaderAbilitiesIgnored() ? 1 : 0; break; //Leia Leader Unit
     case "8395007579": $amount += $ally->MaxHealth() - $ally->Health(); break;//Fifth Brother
     case "6208347478": $amount += SearchCount(SearchAllies($player, trait:"Spectre")) > 1 ? 1 : 0; break;//Chopper
     case "3487311898": $amount += 3; break;//Clan Challengers
     case "5977238053": $amount += 2; break;//Sundari Peacekeeper
     case "1805986989": $amount += 2; break;//Modded Cohort
     case "415bde775d": $amount += 1; break;//Hondo Ohnaka
-    case "724979d608": $amount += 2; break;//Cad Bane
+    case "724979d608": $amount += !LeaderAbilitiesIgnored() ? 2 : 0; break;//Cad Bane Leader Unit
     case "5818136044": $amount += 2; break;//Xanadu Blood
     case "8991513192": $amount += SearchCount(SearchAllies($player, aspect:"Aggression")) > 1 ? 2 : 0; break;//Hunting Nexu
     case "1810342362": $amount += 2; break;//Lurking TIE Phantom
@@ -286,7 +286,7 @@ function HasSentinel($cardID, $player, $index)
     $effectCardID = $effectParams[0];
     switch($effectCardID) {
       case "8294130780": $hasSentinel = true; break;//Gladiator Star Destroyer
-      case "3572356139": $hasSentinel = true; break;//Chewbacca, Walking Carpet
+      case "3572356139": $hasSentinel = true; break;//Chewbacca (Walking Carpet)
       case "3468546373": $hasSentinel = true; break;//General Rieekan
       case "2359136621": $hasSentinel = true; break;//Guarding The Way
       case "9070397522": return false;//SpecForce Soldier
@@ -322,7 +322,7 @@ function HasSentinel($cardID, $player, $index)
     case "2855740390":
     case "1982478444"://Vigilant Pursuit Craft
     case "1747533523"://Village Protectors
-    case "6585115122"://The Mandalorian
+    case "6585115122"://The Mandalorian unit
     case "2969011922"://Pyke Sentinel
     case "8552719712"://Pirate Battle Tank
     case "4843225228"://Phase-III Dark Trooper
@@ -481,15 +481,12 @@ function HasOverwhelm($cardID, $player, $index)
   {
     switch($allies[$i])
     {
-      case "4484318969"://Moff Gideon Leader
-        if(CardCost($cardID) <= 3 && IsAllyAttackTarget()) return true;
-        break;
-      case "40b649e6f6"://Maul
-        if($index != $i) return true;
-        break;
+      case "4484318969"://Moff Gideon Leader Unit
+        if(CardCost($cardID) <= 3 && IsAllyAttackTarget()) return !LeaderAbilitiesIgnored();
+      case "40b649e6f6"://Maul Leader Unit
+        if($index != $i) return !LeaderAbilitiesIgnored();
       case "9017877021"://Clone Commander Cody
         if($index != $i && IsCoordinateActive($player)) return true;
-        break;
       default: break;
     }
   }
@@ -498,7 +495,7 @@ function HasOverwhelm($cardID, $player, $index)
     if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
     switch($currentTurnEffects[$i]) {
       case "4085341914": return true;//Heroic Resolve
-      case "6461101372": return true;//Maul
+      case "6461101372": return !LeaderAbilitiesIgnored();//Maul Leader
       default: break;
     }
   }
@@ -509,7 +506,7 @@ function HasOverwhelm($cardID, $player, $index)
     if($upgrades[$i] == "4886127868") return true;//Nameless Valor
   }
   switch($cardID)
-  {
+  {//TODO: overwhelm comments
     case "6072239164":
     case "6577517407":
     case "6718924441":
@@ -519,7 +516,6 @@ function HasOverwhelm($cardID, $player, $index)
     case "6432884726":
     case "5557494276"://Death Watch Loyalist
     case "2470093702"://Wrecker
-    case "4484318969"://Moff Gideon Leader
     case "4721657243"://Kihraxz Heavy Fighter
     case "5351496853"://Gideon's Light Cruiser
     case "4935319539"://Krayt Dragon
@@ -537,7 +533,7 @@ function HasOverwhelm($cardID, $player, $index)
       return $targetAlly->IsDamaged();
     case "3487311898"://Clan Challengers
       return $ally->IsUpgraded();
-    case "6769342445"://Jango Fett
+    case "6769342445"://Jango Fett (Renowned Bounty Hunter)
       if(IsAllyAttackTarget() && $mainPlayer == $player) {
         $targetAlly = new Ally(GetAttackTarget(), $defPlayer);
         if($targetAlly->HasBounty()) return true;
@@ -547,14 +543,16 @@ function HasOverwhelm($cardID, $player, $index)
     case "8084593619"://Dendup's Loyalist
     case "6330903136"://B2 Legionnaires
     case "2554988743"://Gor
-    case "24a81d97b5"://Anakin Skywalker Leader Unit
     case "3693364726"://Aurra Sing
     case "3476041913"://Low Altitude Gunship
-    case "40b649e6f6"://Maul
-    case "8655450523"://Count Dooku
-    case "6fa73a45ed"://Count Dooku Leader Unit
+    case "8655450523"://Count Dooku (Fallen Jedi)
     case "9017877021"://Clone Commander Cody
       return true;
+    case "4484318969"://Moff Gideon Leader Unit
+    case "24a81d97b5"://Anakin Skywalker Leader Unit
+    case "6fa73a45ed"://Count Dooku Leader Unit
+    case "40b649e6f6"://Maul Leader Unit
+      return !LeaderAbilitiesIgnored();
     case "8139901441"://Bo-Katan Kryze
       return SearchCount(SearchAllies($player, trait:"Mandalorian")) > 1;
     default: return false;
@@ -572,16 +570,16 @@ function HasAmbush($cardID, $player, $index, $from)
     if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
     switch($currentTurnEffects[$i]) {
       case "8327910265":
-        RemoveCurrentTurnEffect($i);
+        AddDecisionQueue("REMOVECURRENTEFFECT", $player, "8327910265");
         return true;//Energy Conversion Lab (ECL)
       case "6847268098"://Timely Intervention
-        RemoveCurrentTurnEffect($i);
+        AddDecisionQueue("REMOVECURRENTEFFECT", $player, "6847268098");
         return true;
       case "0911874487"://Fennec Shand
-        RemoveCurrentTurnEffect($i);
+        AddDecisionQueue("REMOVECURRENTEFFECT", $player, "0911874487");
         return true;
       case "2b13cefced"://Fennec Shand
-        RemoveCurrentTurnEffect($i);
+        AddDecisionQueue("REMOVECURRENTEFFECT", $player, "2b13cefced");
         return true;
       default: break;
     }
@@ -605,16 +603,16 @@ function HasAmbush($cardID, $player, $index, $from)
   }
   switch($cardID)
   {
-    case "5346983501":
-    case "6718924441":
-    case "7285270931":
-    case "3377409249":
-    case "5230572435":
-    case "0052542605":
-    case "2649829005":
-    case "1862616109":
-    case "3684950815":
-    case "9500514827":
+    case "5346983501"://Syndicate Lackeys
+    case "6718924441"://Mercenary Company
+    case "7285270931"://Auzituck Liberator Gunship
+    case "3377409249"://Rogue Squadron Skirmisher
+    case "5230572435"://Mace Windu (Party Crasher)
+    case "0052542605"://Bossk (Deadly Stalker)
+    case "2649829005"://Agent Kallus
+    case "1862616109"://Snowspeeder
+    case "3684950815"://Bounty Hunter Crew
+    case "9500514827"://Han Solo (Reluctant Hero)
     case "8506660490"://Darth Vader unit
     case "1805986989"://Modded Cohort
     case "7171636330"://Chain Code Collector
@@ -659,16 +657,17 @@ function HasShielded($cardID, $player, $index)
 {
   switch($cardID)
   {
-    case "0700214503":
-    case "5264521057":
+    case "b0dbca5c05"://Iden Versio Leader Unit
+      return !LeaderAbilitiesIgnored();
+    case "0700214503"://Crafty Smuggler
+    case "5264521057"://Wilderness Fighter
     case "9950828238"://Seventh Fleet Defender
     case "9459170449"://Cargo Juggernaut
-    case "6931439330":
-    case "9624333142":
-    case "b0dbca5c05":
-    case "3280523224":
-    case "7728042035":
-    case "7870435409":
+    case "6931439330"://The Ghost
+    case "9624333142"://Count Dooku
+    case "3280523224"://Rukh
+    case "7728042035"://Chimaera
+    case "7870435409"://Bib Fortuna
     case "6135081953"://Doctor Evazan
     case "1747533523"://Village Protectors
     case "1090660242"://The Client
@@ -892,9 +891,10 @@ function GetAbilityType($cardID, $index = -1, $from="-")
       return "A";
     case "8327910265"://Energy Conversion Lab (ECL)
       return "A";
-    case "4626028465"://Boba Fett
-    case "7440067052"://Hera Syndulla
-    case "8560666697"://Director Krennic
+    case "4626028465"://Boba Fett Leader
+    case "7440067052"://Hera Syndulla Leader
+    case "8560666697"://Director Krennic Leader
+      if(LeaderAbilitiesIgnored()) return "";
       $char = &GetPlayerCharacter($currentPlayer);
       return $char[CharacterPieces() + 2] == 0 ? "A" : "";
     default: return "";
@@ -922,32 +922,32 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
     case "2756312994"://Alliance Dispatcher
       $abilityTypes = "A,AA";
       break;
-    case "3572356139"://Chewbacca, Walking Carpet
-      $abilityTypes = "A";
+    case "3572356139"://Chewbacca (Walking Carpet)
+      $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
       break;
     case "2579145458"://Luke Skywalker
-      $abilityTypes = "A";
+      $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
       break;
     case "2912358777"://Grand Moff Tarkin
-      $abilityTypes = "A";
+      $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
       break;
     case "3187874229"://Cassian Andor
-      $abilityTypes = "A";
+      $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
       break;
     case "4841169874"://Sabine Wren
-      $abilityTypes = "A";
+      $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
       break;
     case "2048866729"://Iden Versio
-      $abilityTypes = "A";
+      $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
       break;
     case "6088773439"://Darth Vader
-      $abilityTypes = "A";
+      $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
       break;
     case "4263394087"://Chirrut Imwe
-      $abilityTypes = "A";
+      $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
       break;
     case "1480894253"://Kylo Ren
-      $abilityTypes = "A";
+      $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
       break;
     case "4300219753"://Fett's Firespray
       $abilityTypes = "A,AA";
@@ -956,65 +956,65 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
       $abilityTypes = "A,AA";
       break;
     case "7911083239"://Grand Inquisitor
-      $abilityTypes = "A";
+      $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
       break;
     case "2870878795"://Padme Amidala
-      $abilityTypes = "A";
+      $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
       break;
     case "2872203891"://General Grievious
-      $abilityTypes = "A";
+      $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
       break;
     case "6064906790"://Nute Gunray
-      $abilityTypes = "A";
+      $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
       break;
     case "2847868671"://Yoda
-      $abilityTypes = "A";
+      $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
       break;
     case "1686059165"://Wat Tambor
-      $abilityTypes = "A";
+      $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
       break;
     case "0026166404"://Chancellor Palpatine Leader
     case "ad86d54e97"://Darth Sidious Leader
-      $abilityTypes = "A";
+      $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
       break;
     case "7734824762"://Captain Rex
-      $abilityTypes = "A";
+      $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
       break;
     case "4628885755"://Mace Windu
-      $abilityTypes = "A";
+      $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
       break;
     case "5683908835"://Count Dooku
-      $abilityTypes = "A";
+      $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
       break;
     case "5081383630"://Pre Viszla
-      $abilityTypes = "A";
+      $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
       break;
     case "2155351882"://Ahsoka Tano
-      $abilityTypes = IsCoordinateActive($currentPlayer) ? "A" : "";
+      $abilityTypes = IsCoordinateActive($currentPlayer) && !LeaderAbilitiesIgnored() ? "A" : "";
       break;
     case "6461101372"://Maul
-      $abilityTypes = "A";
+      $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
       break;
     case "8929774056"://Asajj Ventress
-      $abilityTypes = "A";
+      $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
       break;
     case "2784756758"://Obi-wan Kenobi
-      $abilityTypes = "A";
+      $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
       break;
     case "8777351722"://Anakin Skywalker
-      $abilityTypes = "A";
+      $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
       break;
     case "5954056864"://Han Solo
-      $abilityTypes = "A";
+      $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
       break;
     case "6514927936"://Leia Organa
-      $abilityTypes = "A";
+      $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
       break;
     case "8244682354"://Jyn Erso
-      $abilityTypes = "A";
+      $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
       break;
     case "8600121285"://IG-88
-      $abilityTypes = "A";
+      $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
       break;
     case "7870435409"://Bib Fortuna
       $abilityTypes = "A,AA";
@@ -1022,7 +1022,7 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
     case "5784497124"://Emperor Palpatine
       $allies = &GetAllies($currentPlayer);
       if(count($allies) == 0) break;
-      $abilityTypes = "A";
+      $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
       break;
     case "8117080217"://Admiral Ozzel
       $abilityTypes = "A,AA";
@@ -1031,7 +1031,7 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
       $abilityTypes = "A,AA";
       break;
     case "1951911851"://Grand Admiral Thrawn
-      $abilityTypes = "A";
+      $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
       break;
     case "6722700037"://Doctor Pershing
       $abilityTypes = "A,AA";
@@ -1049,34 +1049,34 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
       $abilityTypes = "A,A,AA";
       break;
     case "2503039837"://Moff Gideon
-      $abilityTypes = "A";
+      $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
       break;
     case "2526288781"://Bossk
-      $abilityTypes = "A";
+      $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
       break;
     case "7424360283"://Bo-Katan Kryze
-      $abilityTypes = "A";
+      $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
       break;
     case "5440730550"://Lando Calrissian
-      $abilityTypes = "A";
+      $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
       break;
     case "040a3e81f3"://Lando Leader Unit
-      $abilityTypes = "A,AA";
+      $abilityTypes = LeaderAbilitiesIgnored() ? "AA": "A,AA";
       break;
     case "2432897157"://Qi'Ra
-      $abilityTypes = "A";
+      $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
       break;
     case "4352150438"://Rey
-      $abilityTypes = "A";
+      $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
       break;
     case "0911874487"://Fennec Shand
-      $abilityTypes = "A";
+      $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
       break;
     case "2b13cefced"://Fennec Shand Unit
       $abilityTypes = "A,AA";
       break;
     case "9226435975"://Han Solo Red
-      $abilityTypes = "A";
+      $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
       break;
     case "a742dea1f1"://Han Solo Red Unit
       $abilityTypes = "A,AA";
@@ -1088,16 +1088,16 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
       $abilityTypes = "A,AA";
       break;
     case "0622803599"://Jabba the Hutt
-      $abilityTypes = "A";
+      $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
       break;
     case "f928681d36"://Jabba the Hutt Leader Unit
-      $abilityTypes = "A,AA";
+      $abilityTypes = LeaderAbilitiesIgnored()? "AA" : "A,AA";
       break;
     case "9596662994"://Finn
-      $abilityTypes = "A";
+      $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
       break;
     case "8709191884"://Hunter (Outcast Sergeant)
-      $abilityTypes = "A";
+      $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
       break;
     default: break;
   }
@@ -1146,32 +1146,32 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
     case "2756312994"://Alliance Dispatcher
       $abilityNames = "Play Unit,Attack";
       break;
-    case "3572356139"://Chewbacca, Walking Carpet
-      $abilityNames = "Play Taunt";
+    case "3572356139"://Chewbacca (Walking Carpet)
+      $abilityNames = LeaderAbilitiesIgnored() ? "" : "Play Taunt";
       break;
     case "2579145458"://Luke Skywalker
-      $abilityNames = "Give Shield";
+      $abilityNames = LeaderAbilitiesIgnored() ? "" : "Give Shield";
       break;
     case "2912358777"://Grand Moff Tarkin
-      $abilityNames = "Give Experience";
+      $abilityNames = LeaderAbilitiesIgnored() ? "" : "Give Experience";
       break;
     case "3187874229"://Cassian Andor
-      $abilityNames = "Draw Card";
+      $abilityNames = LeaderAbilitiesIgnored() ? "" : "Draw Card";
       break;
     case "4841169874"://Sabine Wren
-      $abilityNames = "Deal Damage";
+      $abilityNames = LeaderAbilitiesIgnored() ? "" : "Deal Damage";
       break;
     case "2048866729"://Iden Versio
-      $abilityNames = "Heal";
+      $abilityNames = LeaderAbilitiesIgnored() ? "" : "Heal";
       break;
     case "6088773439"://Darth Vader
-      $abilityNames = "Deal Damage";
+      $abilityNames = LeaderAbilitiesIgnored() ? "" : "Deal Damage";
       break;
     case "4263394087"://Chirrut Imwe
-      $abilityNames = "Buff HP";
+      $abilityNames = LeaderAbilitiesIgnored() ? "" : "Buff HP";
       break;
     case "1480894253"://Kylo Ren
-      $abilityNames = "Buff Attack";
+      $abilityNames = LeaderAbilitiesIgnored() ? "" : "Buff Attack";
       break;
     case "4300219753"://Fett's Firespray
       $ally = new Ally("MYALLY-" . $index, $currentPlayer);
@@ -1182,65 +1182,65 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       $abilityNames = "Deal Damage,Attack";
       break;
     case "7911083239"://Grand Inquisitor
-      $abilityNames = "Deal Damage";
+      $abilityNames = LeaderAbilitiesIgnored() ? "" : "Deal Damage";
       break;
     case "2870878795"://Padme Amidala
-      $abilityNames = "Draw";
+      $abilityNames = LeaderAbilitiesIgnored() ? "" : "Draw";
       break;
     case "2872203891"://General Grievious
-      $abilityNames = "Sentinel";
+      $abilityNames = LeaderAbilitiesIgnored() ? "" : "Sentinel";
       break;
     case "6064906790"://Nute Gunray
-      $abilityNames = "Droid";
+      $abilityNames = LeaderAbilitiesIgnored() ? "" : "Droid";
       break;
     case "2847868671"://Yoda
-      $abilityNames = "Draw";
+      $abilityNames = LeaderAbilitiesIgnored() ? "" : "Draw";
       break;
     case "1686059165"://Wat Tambor
-      $abilityNames = "Buff";
+      $abilityNames = LeaderAbilitiesIgnored() ? "" : "Buff";
       break;
     case "7734824762"://Captain Rex
-      $abilityNames = "Clone";
+      $abilityNames = LeaderAbilitiesIgnored() ? "" : "Clone";
       break;
     case "0026166404"://Chancellor Palpatine Leader
     case "ad86d54e97"://Darth Sidious Leader
-      $abilityNames = "Activate";
+      $abilityNames = LeaderAbilitiesIgnored() ? "" : "Activate";
       break;
     case "4628885755"://Mace Windu
-      $abilityNames = "Deal Damage";
+      $abilityNames = LeaderAbilitiesIgnored() ? "" : "Deal Damage";
       break;
     case "5683908835"://Count Dooku
-      $abilityNames = "Exploit";
+      $abilityNames = LeaderAbilitiesIgnored() ? "" : "Exploit";
       break;
     case "5081383630"://Pre Viszla
-      $abilityNames = "Deal Damage";
+      $abilityNames = LeaderAbilitiesIgnored() ? "" : "Deal Damage";
       break;
     case "2155351882"://Ahsoka Tano
-      $abilityNames = IsCoordinateActive($currentPlayer) ? "Attack" : "";
+      $abilityNames = IsCoordinateActive($currentPlayer) && !LeaderAbilitiesIgnored() ? "Attack" : "";
       break;
     case "6461101372"://Maul
-      $abilityNames = "Attack";
+      $abilityNames = LeaderAbilitiesIgnored() ? "" : "Attack";
       break;
     case "8929774056"://Asajj Ventress
-      $abilityNames = "Attack";
+      $abilityNames = LeaderAbilitiesIgnored() ? "" : "Attack";
       break;
     case "2784756758"://Obi-wan Kenobi
-      $abilityNames = "Heal";
+      $abilityNames = LeaderAbilitiesIgnored() ? "" : "Heal";
       break;
     case "8777351722"://Anakin Skywalker
-      $abilityNames = "Attack";
+      $abilityNames = LeaderAbilitiesIgnored() ? "" : "Attack";
       break;
     case "5954056864"://Han Solo
-      $abilityNames = "Play Resource";
+      $abilityNames = LeaderAbilitiesIgnored() ? "" : "Play Resource";
       break;
     case "6514927936"://Leia Organa
-      $abilityNames = "Attack";
+      $abilityNames = LeaderAbilitiesIgnored() ? "" : "Attack";
       break;
     case "8244682354"://Jyn Erso
-      $abilityNames = "Attack";
+      $abilityNames = LeaderAbilitiesIgnored() ? "" : "Attack";
       break;
     case "8600121285"://IG-88
-      $abilityNames = "Attack";
+      $abilityNames = LeaderAbilitiesIgnored() ? "" : "Attack";
       break;
     case "7870435409"://Bib Fortuna
       $abilityNames = "Play Event,Attack";
@@ -1248,7 +1248,7 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
     case "5784497124"://Emperor Palpatine
       $allies = &GetAllies($currentPlayer);
       if(count($allies) == 0) break;
-      $abilityNames = "Deal Damage";
+      $abilityNames = LeaderAbilitiesIgnored() ? "" : "Deal Damage";
       break;
     case "8117080217"://Admiral Ozzel
       $abilityNames = "Play Imperial Unit,Attack";
@@ -1257,7 +1257,7 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       $abilityNames = "Shuttle,Attack";
       break;
     case "1951911851"://Grand Admiral Thrawn
-      $abilityNames = "Exhaust";
+      $abilityNames = LeaderAbilitiesIgnored() ? "" : "Exhaust";
       break;
     case "6722700037"://Doctor Pershing
       $abilityNames = "Draw,Attack";
@@ -1265,7 +1265,7 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
     case "6536128825"://Grogu
       $abilityNames = "Exhaust,Attack";
       break;
-    case "9262288850"://Independent Senator      
+    case "9262288850"://Independent Senator
       $abilityNames = "Exhaust,Attack";
       break;
     case "1090660242"://The Client
@@ -1275,34 +1275,34 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       $abilityNames = "Buff,Snipe,Attack";
       break;
     case "2503039837"://Moff Gideon
-      $abilityNames = "Attack";
+      $abilityNames = LeaderAbilitiesIgnored() ? "" : "Attack";
       break;
     case "2526288781"://Bossk
-      $abilityNames = "Deal Damage/Buff";
+      $abilityNames = LeaderAbilitiesIgnored() ? "" : "Deal Damage/Buff";
       break;
     case "7424360283"://Bo-Katan Kryze
-      $abilityNames = "Deal Damage";
+      $abilityNames = LeaderAbilitiesIgnored() ? "" : "Deal Damage";
       break;
     case "5440730550"://Lando Calrissian
-      $abilityNames = "Smuggle";
+      $abilityNames = LeaderAbilitiesIgnored() ? "" : "Smuggle";
       break;
     case "040a3e81f3"://Lando Leader Unit
-      $abilityNames = "Smuggle,Attack";
+      $abilityNames = LeaderAbilitiesIgnored() ? "Attack" : "Smuggle,Attack";
       break;
     case "2432897157"://Qi'Ra
-      $abilityNames = "Shield";
+      $abilityNames = LeaderAbilitiesIgnored() ? "" : "Shield";
       break;
     case "4352150438"://Rey
-      $abilityNames = "Experience";
+      $abilityNames = LeaderAbilitiesIgnored() ? "" : "Experience";
       break;
     case "0911874487"://Fennec Shand
-      $abilityNames = "Ambush";
+      $abilityNames = LeaderAbilitiesIgnored() ? "" : "Ambush";
       break;
     case "2b13cefced"://Fennec Shand Unit
       $abilityNames = "Ambush,Attack";
       break;
     case "9226435975"://Han Solo Red
-      $abilityNames = "Play";
+      $abilityNames = LeaderAbilitiesIgnored() ? "" : "Play";
       break;
     case "a742dea1f1"://Han Solo Red Unit
       $abilityNames = "Play,Attack";
@@ -1314,16 +1314,16 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       $abilityNames = "Heal,Attack";
       break;
     case "0622803599"://Jabba the Hutt
-      $abilityNames = "Bounty";
+      $abilityNames = LeaderAbilitiesIgnored() ? "" : "Bounty";
       break;
     case "f928681d36"://Jabba the Hutt Leader Unit
-      $abilityNames = "Bounty,Attack";
+      $abilityNames = LeaderAbilitiesIgnored() ? "Attack" : "Bounty,Attack";
       break;
     case "9596662994"://Finn
-      $abilityNames = "Shield";
+      $abilityNames = LeaderAbilitiesIgnored() ? "" : "Shield";
       break;
     case "8709191884"://Hunter (Outcast Sergeant)
-      $abilityNames = "Replace Resource";
+      $abilityNames = LeaderAbilitiesIgnored() ? "" : "Replace Resource";
       break;
     default: break;
   }
@@ -1598,7 +1598,7 @@ function IsStaticType($cardType, $from = "", $cardID = "")
 function LeaderUnit($cardID) {
   switch($cardID) {
     //Spark of Rebellion
-    case "3572356139"://Chewbacca, Walking Carpet
+    case "3572356139"://Chewbacca (Walking Carpet)
       return "8301e8d7ef";
     case "2579145458"://Luke Skywalker
       return "0dcb77795c";
@@ -1659,7 +1659,7 @@ function LeaderUnit($cardID) {
       return "2b13cefced";
     case "9794215464"://Gar Saxon
       return "3feee05e13";
-    case "9334480612"://Boba Fett Green Leader
+    case "9334480612"://Boba Fett (Daimyo)
       return "919facb76d";
     case "0254929700"://Doctor Aphra
       return "58f9f2d4a0";
@@ -1713,7 +1713,7 @@ function LeaderUnit($cardID) {
 function LeaderUndeployed($cardID) {
   switch($cardID) {
     //Spark of Rebellion
-    case "8301e8d7ef"://Chewbacca, Walking Carpet
+    case "8301e8d7ef"://Chewbacca (Walking Carpet)
       return "3572356139";
     case "0dcb77795c"://Luke Skywalker
       return "2579145458";
@@ -1774,7 +1774,7 @@ function LeaderUndeployed($cardID) {
       return "0911874487";
     case "3feee05e13"://Gar Saxon
       return "9794215464";
-    case "919facb76d"://Boba Fett Green Leader
+    case "919facb76d"://Boba Fett (Daimyo)
       return "9334480612";
     case "58f9f2d4a0"://Doctor Aphra
       return "0254929700";
@@ -2208,7 +2208,7 @@ function DefinedCardType2Wrapper($cardID)
     case "9005139831"://The Mandalorian
     case "0911874487"://Fennec Shand
     case "9794215464"://Gar Saxon
-    case "9334480612"://Boba Fett Green Leader
+    case "9334480612"://Boba Fett (Daimyo)
     case "0254929700"://Doctor Aphra
     case "9226435975"://Han Solo Red
     case "0622803599"://Jabba the Hutt

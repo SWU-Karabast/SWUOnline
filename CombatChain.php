@@ -23,7 +23,8 @@ function ProcessHitEffect($cardID)
         }
       }
       break;
-    case "87e8807695"://Leia Organa
+    case "87e8807695"://Leia Organa Leader Unit
+      if(LeaderAbilitiesIgnored()) break;
       AddCurrentTurnEffect("87e8807695", $mainPlayer);
       break;
     default: break;
@@ -63,7 +64,9 @@ function CompletesAttackEffect($cardID) {
 
 function AttackModifier($cardID, $player, $index)
 {
-  global $mainPlayer, $defPlayer, $initiativePlayer, $combatChain, $combatChainState, $CS_NumLeftPlay;
+  global $mainPlayer, $defPlayer, $initiativePlayer, $combatChain, $combatChainState, $currentTurnEffects,
+    $CS_NumLeftPlay, $CCS_MultiAttackTargets;
+
   $modifier = 0;
   if($player == $mainPlayer) {
     //Raid is only for attackers
@@ -145,6 +148,7 @@ function AttackModifier($cardID, $player, $index)
         $modifier += $initiativePlayer == $player ? 2 : 0;
         break;
     case "24a81d97b5"://Anakin Skywalker Leader Unit
+      if(LeaderAbilitiesIgnored()) break;
       $modifier += floor(GetHealth($player)/5);
       break;
     case "f8e0c65364"://Asajj Ventress
@@ -167,6 +171,21 @@ function AttackModifier($cardID, $player, $index)
       break;
     default: break;
   }
+
+  if(!IsMultiTargetAttackActive() && GetAttackTarget() != "NA" && count($currentTurnEffects) > 0) {
+    for($i=0;$i<count($currentTurnEffects);$i+=CurrentTurnPieces()) {
+      switch($currentTurnEffects[$i]) {
+        case "9399634203"://I Have the High Ground
+          $defendingAlly = new Ally(GetAttackTarget(), $defPlayer);
+          if($player != $defPlayer && $currentTurnEffects[$i+1] == $defPlayer && $currentTurnEffects[$i+2] == $defendingAlly->UniqueID()) {
+            $modifier -= 4;
+          }
+          break;
+        default: break;
+      }
+    }
+  }
+
   return $modifier;
 }
 

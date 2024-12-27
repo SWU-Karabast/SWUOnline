@@ -688,7 +688,7 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
               AddDecisionQueue("ADDMZUSES", $triggerPlayer, "-1", 1);
             }
             break;
-          case "3feee05e13"://Gar Saxon
+          case "3feee05e13"://Gar Saxon Leader Unit
             $upgrades = explode(";",$upgradesWithOwnerData);
             if(count($upgrades) > 0) {
               $upgradesParams = "";
@@ -705,8 +705,8 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
               AddDecisionQueue("OP", $player, "BOUNCEUPGRADE", 1);
             }
             break;
-          case "f05184bd91"://Nala Se
-            Restore(2, $player); //Clone
+          case "f05184bd91"://Nala Se Leader Unit
+            Restore(2, $player);
             break;
           case "1039828081"://Calculating MagnaGuard
             AddCurrentTurnEffect("1039828081", $player, "PLAY", $uniqueID);
@@ -739,7 +739,7 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
         }
       }
       break;
-    case "8655450523": //Count Dooku - Fallen Jedi
+    case "8655450523": //Count Dooku (Fallen Jedi)
       $powers=explode(",", $target);
       for($i=0;$i<count($powers);++$i) {
         $power = $powers[$i];
@@ -794,7 +794,7 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       AddDecisionQueue("PASSPARAMETER", $player, "{0}", 1);
       AddDecisionQueue("MZOP", $player, "PLAYCARD", 1);
       break;
-    case "724979d608"://Cad Bane Unit
+    case "724979d608"://Cad Bane Leader Unit
       $cadIndex = SearchAlliesForCard($player, "724979d608");
       $otherPlayer = ($player == 1 ? 2 : 1);
       AddDecisionQueue("YESNO", $player, "if you want use Cad Bane's ability");
@@ -861,13 +861,13 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
       AddDecisionQueue("EXHAUSTCHARACTER", $player, FindCharacterIndex($player, "3045538805"), 1);
       break;
-    case "9334480612"://Boba Fett Green Leader
-      AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
-      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a card to give +1 power");
-      AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-      AddDecisionQueue("MZOP", $player, "GETUNIQUEID", 1);
-      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $player, "9334480612,HAND", 1);
-      AddDecisionQueue("EXHAUSTCHARACTER", $player, FindCharacterIndex($player, "9334480612"), 1);
+    case "9334480612"://Boba Fett (Daimyo)
+      PrependDecisionQueue("EXHAUSTCHARACTER", $player, FindCharacterIndex($player, "9334480612"), 1);
+      PrependDecisionQueue("ADDLIMITEDCURRENTEFFECT", $player, "9334480612,HAND", 1);
+      PrependDecisionQueue("MZOP", $player, "GETUNIQUEID", 1);
+      PrependDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+      PrependDecisionQueue("SETDQCONTEXT", $player, "Choose a card to give +1 power");
+      PrependDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
       break;
     case "3952758746"://Toro Calican
       $toroIndex = SearchAlliesForCard($player, "3952758746");
@@ -1098,7 +1098,7 @@ function IsCoordinateActive($player) {
 
 function IsExploitWhenPlayed($cardID) {
   switch($cardID) {
-    case "8655450523"://Count Dooku - Fallen Jedi
+    case "8655450523"://Count Dooku (Fallen Jedi)
       return true;
     default:
       return false;

@@ -179,21 +179,21 @@ function ResetCharacter($player) {
   }
 }
 
-function MainCharacterHitAbilities()
-{
-  global $combatChain, $combatChainState, $CCS_WeaponIndex, $mainPlayer;
-  $attackID = $combatChain[0];
-  $mainCharacter = &GetPlayerCharacter($mainPlayer);
+// function MainCharacterHitAbilities()//FAB
+// {
+//   global $combatChain, $combatChainState, $CCS_WeaponIndex, $mainPlayer;
+//   $attackID = $combatChain[0];
+//   $mainCharacter = &GetPlayerCharacter($mainPlayer);
 
-  // This code is commented out because it is not currently used
-  // for($i = 0; $i < count($mainCharacter); $i += CharacterPieces()) {
-  //   switch($characterID) {
+//   // This code is commented out because it is not currently used
+//   // for($i = 0; $i < count($mainCharacter); $i += CharacterPieces()) {
+//   //   switch($characterID) {
 
-  //     default:
-  //       break;
-  //   }
-  // }
-}
+//   //     default:
+//   //       break;
+//   //   }
+//   // }
+// }
 
 function MainCharacterAttackModifiers($index = -1, $onlyBuffs = false)
 {
@@ -225,23 +225,23 @@ function MainCharacterAttackModifiers($index = -1, $onlyBuffs = false)
   return $modifier;
 }
 
-function MainCharacterHitEffects()
-{
-  global $combatChainState, $CCS_WeaponIndex, $mainPlayer;
-  $modifier = 0;
-  $mainCharacterEffects = &GetMainCharacterEffects($mainPlayer);
-  for($i = 0; $i < count($mainCharacterEffects); $i += 2) {
-    if($mainCharacterEffects[$i] == $combatChainState[$CCS_WeaponIndex]) {
-      switch($mainCharacterEffects[$i + 1]) {
-        case "CgyJxpEgzk"://Spirit Blade: Infusion
-          Draw($mainPlayer);
-          break;
-        default: break;
-      }
-    }
-  }
-  return $modifier;
-}
+// function MainCharacterHitEffects()//FAB
+// {
+//   global $combatChainState, $CCS_WeaponIndex, $mainPlayer;
+//   $modifier = 0;
+//   $mainCharacterEffects = &GetMainCharacterEffects($mainPlayer);
+//   for($i = 0; $i < count($mainCharacterEffects); $i += 2) {
+//     if($mainCharacterEffects[$i] == $combatChainState[$CCS_WeaponIndex]) {
+//       switch($mainCharacterEffects[$i + 1]) {
+//         case "CgyJxpEgzk"://Spirit Blade: Infusion
+//           Draw($mainPlayer);
+//           break;
+//         default: break;
+//       }
+//     }
+//   }
+//   return $modifier;
+// }
 
 function MainCharacterGrantsGoAgain()
 {
