@@ -617,8 +617,12 @@ function SendSWUStatsResults() {
   global $gameName, $firstPlayer, $winner, $currentRound, $p1id, $p2id, $p1DeckLink, $p2DeckLink;
 
   $url = 'http://23.254.215.59/TCGEngine/APIs/SubmitGameResult.php';
+	$loser = ($winner == 1 ? 2 : 1);
   $winHero = GetCachePiece($gameName, ($winner == 1 ? 7 : 8));
 	$loseHero = GetCachePiece($gameName, ($winner == 1 ? 8 : 7));
+  $winnerHealth = GetHealth($winner);
+	$winnerDeck = file_get_contents("./Games/" . $gameName . "/p" . $winner . "Deck.txt");
+	$loserDeck = file_get_contents("./Games/" . $gameName . "/p" . $loser . "Deck.txt");
   $data_json = json_encode([
     'gameName' => $gameName,
     'round' => $currentRound,
@@ -630,6 +634,9 @@ function SendSWUStatsResults() {
     'p2id' => $p2id,
     'p1DeckLink' => $p1DeckLink,
     'p2DeckLink' => $p2DeckLink,
+    'winnerHealth' => $winnerHealth,
+    'winnerDeck' => $winnerDeck,
+    'loserDeck' => $loserDeck,
     'player1' => SerializeGameResult(1, "", file_get_contents("./Games/" . $gameName . "/p1Deck.txt"), $gameName),
     'player2' => SerializeGameResult(2, "", file_get_contents("./Games/" . $gameName . "/p2Deck.txt"), $gameName)
   ]);
