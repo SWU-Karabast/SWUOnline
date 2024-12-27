@@ -602,9 +602,55 @@ function PlayerWon($playerID)
 
   }
 
+  try {
+    SendSWUStatsResults();
+  } catch (Exception $e) {
+
+  }
+
   if(!$conceded || $currentRound>= 3) {
     //If this happens, they left a game in progress -- add disconnect logging?
   }
+}
+
+function SendSWUStatsResults() {
+  global $gameName, $firstPlayer, $winner, $currentRound, $p1uid, $p2uid, $p1DeckLink, $p2DeckLink;
+
+  $url = 'http://23.254.215.59/TCGEngine/APIs/SubmitGameResult.php';
+  $data_json = json_encode([
+    'gameName' => $gameName,
+    'round' => $currentRound,
+    'winner' => $winner,
+    'firstPlayer' => $firstPlayer,
+    'p1uid' => $p1uid,
+    'p2uid' => $p2uid,
+    'p1DeckLink' => $p1DeckLink,
+    'p2DeckLink' => $p2DeckLink,
+    'player1' => SerializeGameResult(1, "", file_get_contents("./Games/" . $gameName . "/p1Deck.txt"), $gameName),
+    'player2' => SerializeGameResult(2, "", file_get_contents("./Games/" . $gameName . "/p2Deck.txt"), $gameName)
+  ]);
+
+  // Initialize cURL session
+  $ch = curl_init($url);
+
+  // Set cURL options
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+  curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+  curl_setopt($ch, CURLOPT_POST, true);
+  curl_setopt($ch, CURLOPT_POSTFIELDS, $data_json);
+
+  // Execute cURL session and get the response
+  $response = curl_exec($ch);
+
+  // Check for errors
+  if ($response === false) {
+      $error = curl_error($ch);
+      curl_close($ch);
+      die('Curl error: ' . $error);
+  }
+
+  // Close cURL session
+  curl_close($ch);
 }
 
 function UnsetBanishModifier($player, $modifier, $newMod="DECK")
