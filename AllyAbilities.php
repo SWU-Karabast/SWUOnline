@@ -72,11 +72,25 @@ function CheckUniqueAlly($uniqueID) {
   $ally = new Ally($uniqueID);
   $cardID = $ally->CardID();
   $player = $ally->PlayerID();
-  if (CardIsUnique($cardID) && SearchCount(SearchAlliesForCard($player, $cardID)) > 1 && !$ally->IsCloned()) {
-    PrependDecisionQueue("MZDESTROY", $player, "-", 1);
-    PrependDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
-    PrependDecisionQueue("SETDQCONTEXT", $player, "You have two of this unique unit; choose one to destroy");
-    PrependDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:cardID=" . $cardID);
+
+  if (CardIsUnique($cardID) && !$ally->IsCloned()) {
+    // Check if there are any other unique allies in play, ignoring cloned units
+    $allies = &GetAllies($player);
+    $uniqueAllyInPlay = false;
+    for ($i = 0; $i < count($allies); $i += AllyPieces()) {
+      $otherAlly = new Ally("MYALLY-" . $i, $player);
+      if ($otherAlly->CardID() == $cardID && $otherAlly->UniqueID() != $uniqueID && !$otherAlly->IsCloned()) {
+        $uniqueAllyInPlay = true;
+        break;
+      }
+    }
+
+    if ($uniqueAllyInPlay) {
+      PrependDecisionQueue("MZDESTROY", $player, "-", 1);
+      PrependDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
+      PrependDecisionQueue("SETDQCONTEXT", $player, "You have two of this unique unit; choose one to destroy");
+      PrependDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:cardID=" . $cardID);
+    }
   }
 }
 
