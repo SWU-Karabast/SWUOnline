@@ -1543,9 +1543,11 @@ function SpecificAllyAttackAbilities($attackID)
         AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $otherPlayer, "8307804692,HAND", 1);
       }
       break;
-    // case "6570091935"://Tranquility
-    //   // AddCurrentTurnEffect();
-    //   break;
+    case "6570091935"://Tranquility
+      AddCurrentTurnEffect("6570091935", $mainPlayer, from:"PLAY");
+      AddCurrentTurnEffect("6570091935", $mainPlayer, from:"PLAY");
+      AddCurrentTurnEffect("6570091935", $mainPlayer, from:"PLAY");
+      break;
     case "51e8757e4c"://Sabine Wren
       DealDamageAsync($defPlayer, 1, "DAMAGE", "51e8757e4c");
       break;
