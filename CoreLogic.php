@@ -2551,7 +2551,15 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         }
       }
       break;
-      case "7202133736"://Waylay
+    case "7235023816"://Guerilla Insurgency
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      MZChooseAndDestroy($currentPlayer, "MYRESOURCES", context:"Choose a resource to destroy");
+      MZChooseAndDestroy($otherPlayer, "MYRESOURCES", context:"Choose a resource to destroy");
+      PummelHit($currentPlayer);
+      PummelHit($otherPlayer);
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "GUERILLAINSURGENCY");
+      break;
+    case "7202133736"://Waylay
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
       AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to return to hand");
@@ -3793,6 +3801,20 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
       }
       break;
+      case "3258646001"://Steadfast Senator
+      $abilityName = GetResolvedAbilityName($cardID, $from);
+      if($abilityName == "Buff") {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "status=1");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to attack and give +2");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "3258646001,HAND", 1);
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
+      }
+      break;      
     case "9262288850"://Independent Senator
       $abilityName = GetResolvedAbilityName($cardID, $from);
       if($abilityName == "Exhaust") {
@@ -4094,9 +4116,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "RESTORE,2", 1);
       }
       break;
-    // case "6570091935"://Tranquility
-    //   MZMoveCard($currentPlayer, "MYDISCARD:trait=Republic;definedType=Unit", "MYHAND", may:true, context:"Choose a Republic unit to return to your hand");
-    //   break;
+    case "6570091935"://Tranquility
+      MZMoveCard($currentPlayer, "MYDISCARD:trait=Republic;definedType=Unit", "MYHAND", may:true, context:"Choose a Republic unit to return to your hand");
+      break;
     case "5830140660"://Bazine Netal
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRHAND");

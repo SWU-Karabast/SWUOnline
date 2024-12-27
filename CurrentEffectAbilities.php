@@ -128,6 +128,7 @@ function EffectAttackModifier($cardID, $playerID="")
     case "1900571801": return 2;//Overwhelming Barrage
     case "3809048641": return 3;//Surprise Strike
     case "3038238423": return 2;//Fleet Lieutenant
+    case "3258646001": return 2;//Steadfast Senator
     case "9757839764": return 2;//Adelphi Patrol Wing
     case "3208391441": return -2;//Make an Opening
     case "4036958275": return -4;//Hello There
@@ -267,10 +268,12 @@ function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
 {
   global $currentTurnEffects, $currentPlayer, $CS_PlayUniqueID;
   $costModifier = 0;
+  $uniqueEffectsActivated = [];
   for($i = count($currentTurnEffects) - CurrentTurnPieces(); $i >= 0; $i -= CurrentTurnPieces()) {
     $remove = false;
+    $effectCardID = $currentTurnEffects[$i];
     if($currentTurnEffects[$i + 1] == $currentPlayer) {
-      switch($currentTurnEffects[$i]) {
+      switch($effectCardID) {
         case "TTFREE"://Free
           $costModifier -= 99;
           $remove = true;
@@ -377,12 +380,13 @@ function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
           $costModifier -= 5;
           $remove = true;
           break;
-        // case "6570091935"://Tranquility
-        //   if($from != "PLAY" && DefinedTypesContains($cardID, "Unit", $currentPlayer)) {
-        //     $costModifier -= 1;
-        //     $remove = true;
-        //   }
-        //   break;
+        case "6570091935"://Tranquility
+          if($from != "PLAY" && DefinedTypesContains($cardID, "Unit", $currentPlayer) && TraitContains($cardID, "Republic") && !in_array($effectCardID, $uniqueEffectsActivated)) {
+            $costModifier -= 1;
+            $remove = true;
+            $uniqueEffectsActivated[] = $effectCardID;
+          }
+          break;
         case "0414253215"://General's Blade
           if($from != "PLAY" && DefinedTypesContains($cardID, "Unit", $currentPlayer)) {
             $costModifier -= 2;

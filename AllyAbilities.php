@@ -72,11 +72,25 @@ function CheckUniqueAlly($uniqueID) {
   $ally = new Ally($uniqueID);
   $cardID = $ally->CardID();
   $player = $ally->PlayerID();
-  if (CardIsUnique($cardID) && SearchCount(SearchAlliesForCard($player, $cardID)) > 1 && !$ally->IsCloned()) {
-    PrependDecisionQueue("MZDESTROY", $player, "-", 1);
-    PrependDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
-    PrependDecisionQueue("SETDQCONTEXT", $player, "You have two of this unique unit; choose one to destroy");
-    PrependDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:cardID=" . $cardID);
+
+  if (CardIsUnique($cardID) && !$ally->IsCloned()) {
+    // Check if there are any other unique allies in play, ignoring cloned units
+    $allies = &GetAllies($player);
+    $uniqueAllyInPlay = false;
+    for ($i = 0; $i < count($allies); $i += AllyPieces()) {
+      $otherAlly = new Ally("MYALLY-" . $i, $player);
+      if ($otherAlly->CardID() == $cardID && $otherAlly->UniqueID() != $uniqueID && !$otherAlly->IsCloned()) {
+        $uniqueAllyInPlay = true;
+        break;
+      }
+    }
+
+    if ($uniqueAllyInPlay) {
+      PrependDecisionQueue("MZDESTROY", $player, "-", 1);
+      PrependDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
+      PrependDecisionQueue("SETDQCONTEXT", $player, "You have two of this unique unit; choose one to destroy");
+      PrependDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:cardID=" . $cardID);
+    }
   }
 }
 
@@ -1529,9 +1543,11 @@ function SpecificAllyAttackAbilities($attackID)
         AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $otherPlayer, "8307804692,HAND", 1);
       }
       break;
-    // case "6570091935"://Tranquility
-    //   // AddCurrentTurnEffect();
-    //   break;
+    case "6570091935"://Tranquility
+      AddCurrentTurnEffect("6570091935", $mainPlayer, from:"PLAY");
+      AddCurrentTurnEffect("6570091935", $mainPlayer, from:"PLAY");
+      AddCurrentTurnEffect("6570091935", $mainPlayer, from:"PLAY");
+      break;
     case "51e8757e4c"://Sabine Wren
       DealDamageAsync($defPlayer, 1, "DAMAGE", "51e8757e4c");
       break;
