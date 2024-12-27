@@ -176,7 +176,7 @@ include_once 'Header.php';
           <li>• Unnatural Life</li>
           <li>• Wartime Profiteering</li>
         </ul>
-        <p style="margin: 1rem 0;";>Bugs are still a possibility during this rollout, if you discover any as you play please submit them to the <i>#bug-reports</i> channel in our <a target="_blank" href="https://discord.gg/hKRaqHND4v">Discord</a>.</p>
+        <p style="margin-bottom: 1rem;";>Bugs are still a possibility during this rollout, if you discover any as you play please submit them to the <i>#bug-reports</i> channel in our <a target="_blank" href="https://discord.gg/hKRaqHND4v">Discord</a>.</p>
       </div>
     </div>
     <div style="position: relative;">
