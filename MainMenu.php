@@ -164,7 +164,6 @@ include_once 'Header.php';
           <li>Bold Resistance</li>
           <li>Consolidation of Power</li>
           <li>Finn</li>
-          <li>Guerilla Insurgency</li>
           <li>Heroes on Both Sides</li>
           <li>Lux Bonteri</li>
           <li>MagnaGuard Wing Leader</li>
@@ -172,10 +171,8 @@ include_once 'Header.php';
           <li>Planetery Invasion</li>
           <li>Roger Roger</li>
           <li>Sly Moore</li>
-          <li>Steadfast Senator</li>
           <li>Strategic Acumen</li>
           <li>Sword and Shield Maneuver</li>
-          <li>Tranquility</li>
           <li>Unnatural Life</li>
           <li>Wartime Profiteering<li>
         </ul>
