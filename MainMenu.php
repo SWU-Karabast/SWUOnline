@@ -159,24 +159,24 @@ include_once 'Header.php';
         <p>Thanks to the efforts of OotTheMonk, Brubraz, and ninin, many remaining Set 3 cards have now been implemented in Karabast.</p>
         <p>Remaining cards:</p>
         <ul class="karabast-unimplemented-list">
-          <li>Aid from the Innocent</li>
-          <li>Barriss Offee</li>
-          <li>Bold Resistance</li>
-          <li>Consolidation of Power</li>
-          <li>Finn</li>
-          <li>Heroes on Both Sides</li>
-          <li>Lux Bonteri</li>
-          <li>MagnaGuard Wing Leader</li>
-          <li>On Top of Things</li>
-          <li>Planetery Invasion</li>
-          <li>Roger Roger</li>
-          <li>Sly Moore</li>
-          <li>Strategic Acumen</li>
-          <li>Sword and Shield Maneuver</li>
-          <li>Unnatural Life</li>
-          <li>Wartime Profiteering</li>
+          <li>• Aid from the Innocent</li>
+          <li>• Barriss Offee</li>
+          <li>• Bold Resistance</li>
+          <li>• Consolidation of Power</li>
+          <li>• Finn</li>
+          <li>• Heroes on Both Sides</li>
+          <li>• Lux Bonteri</li>
+          <li>• MagnaGuard Wing Leader</li>
+          <li>• On Top of Things</li>
+          <li>• Planetery Invasion</li>
+          <li>• Roger Roger</li>
+          <li>• Sly Moore</li>
+          <li>• Strategic Acumen</li>
+          <li>• Sword and Shield Maneuver</li>
+          <li>• Unnatural Life</li>
+          <li>• Wartime Profiteering</li>
         </ul>
-        <p style="margin-bottom: 1rem;";>Bugs are still a possibility during this rollout, if you discover any as you play please submit them to the <i>#bug-reports</i> channel in our <a target="_blank" href="https://discord.gg/hKRaqHND4v">Discord</a>.</p>
+        <p style="margin: 1rem 0;";>Bugs are still a possibility during this rollout, if you discover any as you play please submit them to the <i>#bug-reports</i> channel in our <a target="_blank" href="https://discord.gg/hKRaqHND4v">Discord</a>.</p>
       </div>
     </div>
     <div style="position: relative;">
