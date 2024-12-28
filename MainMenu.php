@@ -176,7 +176,7 @@ include_once 'Header.php';
           <li>• Unnatural Life</li>
           <li>• Wartime Profiteering</li>
         </ul>
-        <p style="margin-bottom: 1rem;";>Bugs are still a possibility during this rollout, if you discover any as you play please submit them to the <i>#bug-reports</i> channel in our <a target="_blank" href="https://discord.gg/hKRaqHND4v">Discord</a>.</p>
+        <p style="margin-bottom: 2rem;";>Bugs are still a possibility during this rollout, if you discover any as you play please submit them to the <i>#bug-reports</i> channel in our <a target="_blank" href="https://discord.gg/hKRaqHND4v">Discord</a>.</p>
       </div>
     </div>
     <div style="position: relative;">
@@ -184,8 +184,7 @@ include_once 'Header.php';
         <img src="./Images/yoda.png" alt="SHD" style="max-width: 100%; border-radius: 5px;">
         <div style="text-align: left;">
         <h3 style="margin: 15px 0; display: block;">Set 3 launches, and Karabast's next steps </h3>
-        <p>Twilight is here! Thanks to the hard work of OotTheMonk the majority of Set 3 cards have now been added to Karabast. See <a href="https://github.com/SWU-Karabast/SWUOnline/tree/main/UnimplementedCards" target="_blank">Unimplemented Cards</a> for a list of those remaining.</p>
-        <p>Bugs are a possibility during this rollout, if you discover any as you play please submit them to the <i>#bug-reports</i> channel in our <a target="_blank" href="https://discord.gg/hKRaqHND4v">Discord</a>.</p>
+        <p>Twilight is here! Thanks to the hard work of OotTheMonk the majority of Set 3 cards have now been added to Karabast.</p>
         <p>The team is still hard at work on a brand new engine for Karabast that will dramatically simplify adding future sets, and card bug fixes. <a target="_blank" href="https://discord.gg/hKRaqHND4v">Join our Discord</a> for the latest progress updates and timeline. If you have coding experience we're always open to new contributors, info on how to help out can also be found on Discord.</p>
       </div>
     </div>
