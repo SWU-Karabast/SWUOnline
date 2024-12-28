@@ -102,12 +102,32 @@ if ($matchup == "" && $playerID == 2 && $gameStatus >= $MGS_Player2Joined) {
   exit;
 }
 
+$uuidLookup = true;
+
 if ($decklink != "") {
   if ($playerID == 1) $p1DeckLink = $decklink;
   else if ($playerID == 2) $p2DeckLink = $decklink;
   $originalLink = $decklink;
 
-  if(str_contains($decklink, "swudb.com/deck")) {
+  if(str_contains($decklink, "swustats.net")) {
+    $decklinkArr = explode("gameName=", $decklink);
+    if(count($decklinkArr) > 1) {
+      $deckLinkArr = explode("&", $decklinkArr[1]);
+      $deckID = $deckLinkArr[0];
+      $decklink = "https://swustats.net/TCGEngine/APIs/LoadDeck.php?deckID=" . $deckID . "&format=json";
+      $curl = curl_init();
+      curl_setopt($curl, CURLOPT_URL, $decklink);
+      curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+      $apiDeck = curl_exec($curl);
+      $apiInfo = curl_getinfo($curl);
+      $errorMessage = curl_error($curl);
+      curl_close($curl);
+      $json = $apiDeck;
+      echo($json);
+      $uuidLookup = false;
+    }
+  }
+  else if(str_contains($decklink, "swudb.com/deck")) {
     $decklinkArr = explode("/", $decklink);
     $decklink = "https://swudb.com/deck/view/" . trim($decklinkArr[count($decklinkArr) - 1]) . "?handler=JsonFile";
     $curl = curl_init();
@@ -138,23 +158,24 @@ if ($decklink != "") {
   if($json == "") {
     echo "Failed to retrieve deck from API. Check to make sure you have a valid deckbuilder link. If it's a SWUDB link, make sure it's not a private deck.<BR>";
     echo "Your link: " . $originalLink . "<BR>";
+    echo "API link: " . $decklink . "<BR>";
     echo "Error Message: " . $errorMessage . "<BR>";
     exit;
   }
 
   $deckObj = json_decode($json);
   $deckName = $deckObj->metadata->{"name"};
-  $leader = UUIDLookup($deckObj->leader->id);
+  $leader = $uuidLookup ? UUIDLookup($deckObj->leader->id) : $deckObj->leader->id;
   $character = $leader;//TODO: Change to leader name
   $deckFormat = 1;
-  $base = UUIDLookup($deckObj->base->id);
+  $base = $uuidLookup ? UUIDLookup($deckObj->base->id) : $deckObj->base->id;
   $deck = $deckObj->deck;
   $cards = "";
   $bannedSet = "";
   $hasBannedCard = false;
   for($i=0; $i<count($deck); ++$i) {
     $deck[$i]->id = CardIDOverride($deck[$i]->id);
-    $cardID = UUIDLookup($deck[$i]->id);
+    $cardID = $uuidLookup ? UUIDLookup($deck[$i]->id) : $deck[$i]->id;
     $cardID = CardUUIDOverride($cardID);
     if(CardSet($cardID) == $bannedSet) {
       $hasBannedCard = true;
@@ -168,7 +189,7 @@ if ($decklink != "") {
   $sideboardCards = "";
   for($i=0; $i<count($sideboard); ++$i) {
     $sideboard[$i]->id = CardIDOverride($sideboard[$i]->id);
-    $cardID = UUIDLookup($sideboard[$i]->id);
+    $cardID = $uuidLookup ? CardUUIDOverride(UUIDLookup($sideboard[$i]->id)) : $sideboard[$i]->id;
     $cardID = CardUUIDOverride($cardID);
     if(CardSet($cardID) == $bannedSet) {
       $hasBannedCard = true;
