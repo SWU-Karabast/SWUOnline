@@ -3814,7 +3814,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
       }
-      break;      
+      break;
     case "9262288850"://Independent Senator
       $abilityName = GetResolvedAbilityName($cardID, $from);
       if($abilityName == "Exhaust") {
@@ -4382,14 +4382,25 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "8261033110"://Evacuate
       $p1Allies = &GetAllies(1);
+      $p1Captives = [];
       for($i=count($p1Allies)-AllyPieces(); $i>=0; $i-=AllyPieces()) {
-        if(!IsLeader($p1Allies[$i], 1))
+        if(!IsLeader($p1Allies[$i], 1)) {
+          $ally = new Ally("MYALLY-" . $i, 1);
+          $p1Captives = $ally->GetCaptives();
           MZBounce(1, "MYALLY-" . $i);
+        }
       }
       $p2Allies = &GetAllies(2);
       for($i=count($p2Allies)-AllyPieces(); $i>=0; $i-=AllyPieces()) {
-        if(!IsLeader($p2Allies[$i], 1))
-          MZBounce(2, "MYALLY-" . $i);
+        if(!IsLeader($p2Allies[$i], 1)) {
+          $ally = new Ally("MYALLY-" . $i, 2);
+          if(in_array($ally->CardID(), $p1Captives)) {
+            $index = array_search($ally->CardID(),$p1Captives);
+            unset($p1Captives[$index]);
+          } else {
+            MZBounce(2, "MYALLY-" . $i);
+          }
+        }
       }
       break;
     case "1910812527"://Final Showdown
