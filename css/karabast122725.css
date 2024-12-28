@@ -404,13 +404,18 @@ select {
 }
 
 .karabast-news {
-  height: 100%;
   margin-top: 20px;
 }
 
 .karabast-unimplemented-list {
   display: block;
   margin-bottom: 1rem;
+  list-style-type: disc;
+  list-style-position: inside;
+}
+
+.karabast-unimplemented-list li {
+  display: list-item;
 }
 
 /* GAME INVITE ---------------------------------------------------------------------------------------------- */
