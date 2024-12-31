@@ -9,6 +9,17 @@ function DelimStringContains($str, $find)
   return false;
 }
 
+function DelimStringShares(string $str1, string $str2): bool {
+  $arr1 = explode(",", $str1);
+  $arr2 = explode(",", $str2);
+  return ArrayShares($arr1, $arr2);
+}
+
+function ArrayShares(array $list1, array $list2): bool {
+  $commonItems = array_intersect($list1, $list2);
+  return !empty($commonItems);
+}
+
 function RandomizeArray(&$arr, $skipSeed = false){
   $n = count($arr);
   for ($i = $n - 1; $i > 0; $i--) {

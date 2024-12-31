@@ -120,6 +120,7 @@ function EffectAttackModifier($cardID, $playerID="")
   if(count($params) > 1) $subparam = $params[1];
   switch($cardID)
   {
+    case "8022262805": return 2;//Bold Resistance
     case "2587711125": return -4;//Disarm
     case "2569134232": return -4;//Jedha City
     case "1323728003": return -1;//Electrostaff
