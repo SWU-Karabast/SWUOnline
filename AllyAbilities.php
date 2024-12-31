@@ -1194,7 +1194,7 @@ function AllyHasPlayCardAbility($playedCardID, $playedCardUniqueID, $from, $card
       case "9850906885"://Maz Kanata
         return !$thisIsNewlyPlayedAlly && DefinedTypesContains($playedCardID, "Unit");
       case "3952758746"://Toro Calican
-        return !$thisIsNewlyPlayedAlly && TraitContains($playedCardID, "Bounty Hunter", $player);
+        return !$thisIsNewlyPlayedAlly && !$thisAlly->IsExhausted() && TraitContains($playedCardID, "Bounty Hunter", $player);
       case "724979d608"://Cad Bane Leader Unit
       case "0981852103"://Lady Proxima
         return !$thisIsNewlyPlayedAlly && TraitContains($playedCardID, "Underworld", $player);
@@ -1211,7 +1211,7 @@ function AllyHasPlayCardAbility($playedCardID, $playedCardUniqueID, $from, $card
         return DefinedTypesContains($playedCardID, "Unit");
       case "0142631581"://Mas Amedda
       case "9610332938"://Poggle the Lesser
-        return !$thisIsNewlyPlayedAlly && DefinedTypesContains($playedCardID, "Unit");
+        return !$thisIsNewlyPlayedAlly && !$thisAlly->IsExhausted() && DefinedTypesContains($playedCardID, "Unit");
       case "3589814405"://tactical droid commander
         return !$thisIsNewlyPlayedAlly && DefinedTypesContains($playedCardID, "Unit") && TraitContains($playedCardID, "Separatist", $player);
       default: break;
@@ -1828,12 +1828,14 @@ function SpecificAllyAttackAbilities($attackID)
       CreateBattleDroid($mainPlayer);
       break;
     case "8862896760"://Maul
-      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:trait=Underworld");
-      AddDecisionQueue("MZFILTER", $mainPlayer, "index=MYALLY-" . $attackerAlly->Index());
-      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to take the damage for Maul", 1);
-      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
-      AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
-      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "8862896760,HAND", 1);
+      if (GetAttackTarget() != "THEIRCHAR-0") {
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:trait=Underworld");
+        AddDecisionQueue("MZFILTER", $mainPlayer, "index=MYALLY-" . $attackerAlly->Index());
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to take the damage for Maul", 1);
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
+        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "8862896760,HAND", 1);
+      }
       break;
     case "5080989992"://Rose Tico
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
