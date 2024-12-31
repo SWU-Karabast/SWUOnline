@@ -951,6 +951,9 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
     case "1480894253"://Kylo Ren
       $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
       break;
+    case "5630404651"://MagnaGuard Wing Leader
+      $abilityTypes = "A,AA";
+      break;
     case "4300219753"://Fett's Firespray
       $abilityTypes = "A,AA";
       break;
@@ -1177,6 +1180,11 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       break;
     case "1480894253"://Kylo Ren
       $abilityNames = LeaderAbilitiesIgnored() ? "" : "Buff Attack";
+      break;
+    case "5630404651"://MagnaGuard Wing Leader
+      $ally = new Ally("MYALLY-" . $index, $currentPlayer);
+      if($validate) $abilityNames = $ally->IsExhausted() ? "Droid Attack" : "Droid Attack,Attack";
+      else $abilityNames = "Droid Attack,Attack";
       break;
     case "4300219753"://Fett's Firespray
       $ally = new Ally("MYALLY-" . $index, $currentPlayer);

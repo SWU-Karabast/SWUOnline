@@ -475,8 +475,11 @@ function AllyEntersPlayState($cardID, $player, $from="-")
   }
 }
 
-function AllyPlayableExhausted($cardID) {
+function AllyPlayableExhausted(Ally $ally) {
+  $cardID = $ally->CardID();
   switch($cardID) {
+    case "5630404651"://MagnaGuard Wing Leader
+      return $ally->NumUses() > 0;
     case "4300219753"://Fett's Firespray
     case "2471223947"://Frontline Shuttle
     case "1885628519"://Crosshair
@@ -488,7 +491,8 @@ function AllyPlayableExhausted($cardID) {
   }
 }
 
-function TheirAllyPlayableExhausted($cardID) {
+function TheirAllyPlayableExhausted($ally) {
+  $cardID = $ally->CardID();
   switch($cardID) {
     case "3577961001"://Mercenary Gunship
       return true;
@@ -498,6 +502,8 @@ function TheirAllyPlayableExhausted($cardID) {
 
 function AllyDoesAbilityExhaust($cardID, $abilityIndex) {
   switch($cardID) {
+    case "5630404651"://MagnaGuard Wing Leader
+      return $abilityIndex == 1;
     case "4300219753"://Fett's Firespray
       return $abilityIndex == 1;
     case "2471223947"://Frontline Shuttle

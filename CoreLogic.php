@@ -3409,6 +3409,25 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddNextTurnEffect($cardID, $currentPlayer);
       }
       break;
+    case "5630404651"://MagnaGuard Wing Leader
+      $ally = new Ally("MYALLY-" . $index);
+      $abilityName = GetResolvedAbilityName($cardID, $from);
+      if ($abilityName == "Droid Attack") {
+        if ($ally->NumUses() > 0) {
+          AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYALLY-" . $index);
+          AddDecisionQueue("ADDMZUSES", $currentPlayer, "-1");
+          AddCurrentTurnEffect($cardID . "-1", $currentPlayer);
+          AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Droid");
+          AddDecisionQueue("MZFILTER", $currentPlayer, "status=1", 1);
+          AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a droid to attack with", 1);
+          AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+          AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
+        } else {
+          WriteLog("<span style='color: red;'>You can use this ability only once each round. Reverting gamestate.</span>");
+          RevertGamestate();
+        }
+      }
+      break;      
     case "6514927936"://Leia Organa Leader
       $abilityName = GetResolvedAbilityName($cardID, $from);
       if($abilityName == "Attack") {
