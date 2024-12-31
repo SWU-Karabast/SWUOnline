@@ -1774,7 +1774,7 @@ function SameWeaponEquippedTwice()
   return false;
 }
 
-function IgnoreAspectPenalty($cardID, $player) {
+function IgnoreAspectPenalty($cardID, $player, $reportMode) {
   global $myClassState, $CS_NumClonesPlayed, $CS_LayerTarget, $currentTurnEffects;
   if(TraitContains($cardID, "Spectre")) {
     return !LeaderAbilitiesIgnored() && (HeroCard($player) == "7440067052" || SearchAlliesForCard($player, "80df3928eb") != ""); //Hera Syndulla (Spectre Two)
@@ -1784,8 +1784,8 @@ function IgnoreAspectPenalty($cardID, $player) {
       || (!LeaderAbilitiesIgnored() && (HeroCard($player) == "2742665601" || SearchAlliesForCard($player, "f05184bd91") != "")); //Nala Se (Kaminoan Prime Minister)
   }
   if(TraitContains($cardID, "Lightsaber")) {
-    $findGrievous = SearchAlliesForCard($player, "4776553531");
-    return $findGrievous != "" && $myClassState[$CS_LayerTarget] == "MYALLY-$findGrievous"; //General Grievous  (Trophy Collector)
+    $findGrievous = SearchAlliesForCard($player, "4776553531");//General Grievous  (Trophy Collector)
+    return $findGrievous != "" && ($reportMode || $myClassState[$CS_LayerTarget] == "MYALLY-$findGrievous");
   }
 
   for($i=0;$i<count($currentTurnEffects);$i+=CurrentTurnEffectPieces()) {
@@ -1801,14 +1801,14 @@ function IgnoreAspectPenalty($cardID, $player) {
   return false;
 }
 
-function SelfCostModifier($cardID, $from)
+function SelfCostModifier($cardID, $from, $reportMode=false)
 {
   global $currentPlayer, $CS_LastAttack, $CS_LayerTarget, $CS_NumClonesPlayed, $layers;
   $modifier = 0;
   //Aspect Penalty
   $playerAspects = PlayerAspects($currentPlayer);
   $penalty = 0;
-  if(!IgnoreAspectPenalty($cardID, $currentPlayer)) {
+  if(!IgnoreAspectPenalty($cardID, $currentPlayer, $reportMode)) {
     $cardAspects = CardAspects($cardID);
     //Manually changing the aspects of cards played with smuggle that have different aspect requirements for smuggle.
     //Not a great solution; ideally we could define a whole smuggle ability in one place.
