@@ -164,7 +164,6 @@ include_once 'Header.php';
           <li>Finn</li>
           <li>Heroes on Both Sides</li>
           <li>Lux Bonteri</li>
-          <li>MagnaGuard Wing Leader</li>
           <li>On Top of Things</li>
           <li>Planetery Invasion</li>
           <li>Roger Roger</li>
