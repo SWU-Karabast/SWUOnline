@@ -482,6 +482,27 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       $reveal = rtrim($reveal, ",");
       RevealCards($reveal, $player);
       return $lastResult;
+    case "BOLDRESISTANCE":
+      if (count($lastResult) == 0) {
+        return $lastResult;
+      } else if (count($lastResult) > 1) { // If there are multiple units, check if they share a trait
+        $firstAlly = new Ally("MYALLY-" . $lastResult[0], $player);
+        $traits = CardTraits($firstAlly->CardID());
+        for ($i = 1; $i < count($lastResult); $i++) {
+          $ally = new Ally("MYALLY-" . $lastResult[$i], $player);
+          if (!DelimStringShares($traits, CardTraits($ally->CardID()))) {
+            WriteLog("<span style='color:red;'>You must choose units that share the same trait. Reverting gamestate.</span>");
+            RevertGamestate();
+            return "PASS";
+          }
+        }
+      }
+
+      for ($i=0; $i<count($lastResult); $i++) {
+        $ally = new Ally("MYALLY-" . $lastResult[$i], $player);
+        AddCurrentTurnEffect("8022262805", $player, uniqueID:$ally->UniqueID()); //Bold Resistance
+      }
+      return $lastResult;
     case "MULTIGIVEEXPERIENCE":
       for($i=0; $i<count($lastResult); ++$i) {
         $ally = new Ally("MYALLY-" . $lastResult[$i], $player);

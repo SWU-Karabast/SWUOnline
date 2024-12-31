@@ -161,7 +161,6 @@ include_once 'Header.php';
         <ul class="karabast-unimplemented-list">
           <li>Aid from the Innocent</li>
           <li>Barriss Offee</li>
-          <li>Bold Resistance</li>
           <li>Consolidation of Power</li>
           <li>Finn</li>
           <li>Heroes on Both Sides</li>

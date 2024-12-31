@@ -2788,6 +2788,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, "WRITECHOICE", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "2359136621_" . ($hasInitiative ? "2" : "0") . ",PLAY", 1);
+    case "8022262805"://Bold Resistance
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+      AddDecisionQueue("OP", $currentPlayer, "MZTONORMALINDICES");
+      AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "3-", 1);
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose up to 3 units that share the same trait", 1);
+      AddDecisionQueue("MULTICHOOSEUNIT", $currentPlayer, "<-", 1);
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "BOLDRESISTANCE", 1);
+      break;
     case "7929181061"://General Tagge
       if($from != "PLAY") {
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Trooper");
@@ -5165,15 +5173,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $allies = &GetAllies($currentPlayer);
       if(count($allies) == AllyPieces()) {
         $ally = new Ally("MYALLY-0");
-        $traits = explode(",", CardTraits($ally->CardID()));
-        $searchQuery = "MYHAND:definedType=Unit";
-        foreach($traits as $trait) {
-          $searchQuery .= ";trait=" . $trait;
-        }
-
+        $traits = CardTraits($ally->CardID());
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to put into play");
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, $searchQuery);
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND:definedType=Unit");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "trait=Vehicle");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("NOTSHARETRAITPASS", $currentPlayer, $traits, 1);
         AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, $cardID, 1);
         AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
       }

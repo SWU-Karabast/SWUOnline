@@ -1073,6 +1073,13 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
     case "YESPASS":
       if($lastResult == "YES") return "PASS";
       return 1;
+    case "NOTSHARETRAITPASS":
+      $mzArr = explode("-", $lastResult);
+      if(str_starts_with($mzArr[0], "THEIR")) $zone = &GetMZZone($player == 1 ? 2 : 1, $mzArr[0]);
+      else $zone = &GetMZZone($player, $mzArr[0]);
+      $cardID = $zone[$mzArr[1]];
+      if (DelimStringShares($parameter, CardTraits($cardID))) return $lastResult;
+      return "PASS";
     case "NOALLYUNIQUEIDPASS":
       $index = SearchAlliesForUniqueID($parameter, $player);
       if($index == -1) return "PASS";
