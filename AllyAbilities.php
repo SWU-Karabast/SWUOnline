@@ -1194,7 +1194,7 @@ function AllyHasPlayCardAbility($playedCardID, $playedCardUniqueID, $from, $card
       case "9850906885"://Maz Kanata
         return !$thisIsNewlyPlayedAlly && DefinedTypesContains($playedCardID, "Unit");
       case "3952758746"://Toro Calican
-        return !$thisIsNewlyPlayedAlly && !$thisAlly->IsExhausted() && TraitContains($playedCardID, "Bounty Hunter", $player);
+        return !$thisIsNewlyPlayedAlly && TraitContains($playedCardID, "Bounty Hunter", $player);
       case "724979d608"://Cad Bane Leader Unit
       case "0981852103"://Lady Proxima
         return !$thisIsNewlyPlayedAlly && TraitContains($playedCardID, "Underworld", $player);
