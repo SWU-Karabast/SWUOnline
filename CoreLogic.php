@@ -4675,6 +4675,16 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
       break;
+    case "4895747419"://Consolidation Of Power
+      $allies = &GetAllies($currentPlayer);
+      $totalAllies = count($allies) / AllyPieces();
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+      AddDecisionQueue("OP", $currentPlayer, "MZTONORMALINDICES");
+      AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "$totalAllies-", 1);
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose any number of friendly units", 1);
+      AddDecisionQueue("MULTICHOOSEUNIT", $currentPlayer, "<-", 1);
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "CONSOLIDATIONOFPOWER", 1);
+      break;
     case "9752523457"://Finalizer
       $allies = &GetAllies($currentPlayer);
       for($i=0; $i<count($allies); $i+=AllyPieces()) {

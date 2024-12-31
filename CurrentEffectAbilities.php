@@ -311,6 +311,10 @@ function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
             $remove = true;
           }
           break;
+        case "4895747419"://Consolidation Of Power
+          $costModifier -= 99;
+          $remove = true;
+          break;
         case "5696041568"://Triple Dark Raid
           $costModifier -= 5;
           $remove = true;
