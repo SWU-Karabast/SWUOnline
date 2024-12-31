@@ -5165,15 +5165,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $allies = &GetAllies($currentPlayer);
       if(count($allies) == AllyPieces()) {
         $ally = new Ally("MYALLY-0");
-        $traits = explode(",", CardTraits($ally->CardID()));
-        $searchQuery = "MYHAND:definedType=Unit";
-        foreach($traits as $trait) {
-          $searchQuery .= ";trait=" . $trait;
-        }
-
+        $traits = CardTraits($ally->CardID());
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to put into play");
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, $searchQuery);
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND:definedType=Unit");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "trait=Vehicle");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("NOTSHARETRAITPASS", $currentPlayer, $traits, 1);
         AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, $cardID, 1);
         AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
       }
