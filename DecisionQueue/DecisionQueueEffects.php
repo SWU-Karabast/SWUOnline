@@ -482,6 +482,28 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       $reveal = rtrim($reveal, ",");
       RevealCards($reveal, $player);
       return $lastResult;
+    case "CONSOLIDATIONOFPOWER":
+      if (count($lastResult) > 0) {
+        $totalPower = 0;
+        $uniqueIDs = [];
+        for ($i=0; $i<count($lastResult); ++$i) {
+          $ally = new Ally("MYALLY-" . $lastResult[$i], $player);
+          $totalPower += $ally->CurrentPower();
+          $uniqueIDs[] = $ally->UniqueID();
+        }
+
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose a card to put into play");
+        AddDecisionQueue("MULTIZONEINDICES", $player, "MYHAND:definedType=Unit;maxCost=" . $totalPower);
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+        AddDecisionQueue("ADDCURRENTEFFECT", $player, "4895747419", 1);
+        AddDecisionQueue("MZOP", $player, "PLAYCARD", 1);
+
+        foreach ($uniqueIDs as $uniqueID) {
+          AddDecisionQueue("PASSPARAMETER", $player, $uniqueID, 1);
+          AddDecisionQueue("MZOP", $player, "DESTROY", 1);
+        }
+      }
+      return $lastResult;
     case "BOLDRESISTANCE":
       if (count($lastResult) == 0) {
         return $lastResult;

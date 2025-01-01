@@ -161,16 +161,12 @@ include_once 'Header.php';
         <ul class="karabast-unimplemented-list">
           <li>Aid from the Innocent</li>
           <li>Barriss Offee</li>
-          <li>Consolidation of Power</li>
           <li>Finn</li>
           <li>Heroes on Both Sides</li>
           <li>Lux Bonteri</li>
-          <li>MagnaGuard Wing Leader</li>
           <li>On Top of Things</li>
           <li>Planetery Invasion</li>
-          <li>Roger Roger</li>
           <li>Sly Moore</li>
-          <li>Strategic Acumen</li>
           <li>Sword and Shield Maneuver</li>
           <li>Unnatural Life</li>
           <li>Wartime Profiteering</li>

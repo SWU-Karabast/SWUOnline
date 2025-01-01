@@ -25,6 +25,9 @@ function EffectHitEffect($cardID)
     case "6514927936-1"://Leia Organa
       AddCurrentTurnEffectFromCombat("6514927936-2", $mainPlayer);
       break;
+    case "5630404651-1"://MagnaGuard Wing Leader
+      AddCurrentTurnEffectFromCombat("5630404651-2", $mainPlayer);
+      break;      
     default:
       break;
   }
@@ -74,6 +77,15 @@ function FinalizeChainLinkEffects()
         PrependDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to attack with");
         PrependDecisionQueue("MZFILTER", $mainPlayer, "status=1");
         PrependDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
+        return true;
+      case "5630404651-2"://MagnaGuard Wing Leader
+        PrependDecisionQueue("SWAPTURN", $mainPlayer, "-");
+        PrependDecisionQueue("ELSE", $mainPlayer, "-");
+        PrependDecisionQueue("MZOP", $mainPlayer, "ATTACK", 1);
+        PrependDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        PrependDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to attack with", 1);
+        PrependDecisionQueue("MZFILTER", $mainPlayer, "status=1", 1);
+        PrependDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:trait=Droid");
         return true;
       case "6514927936-2"://Leia Organa
         PrependDecisionQueue("SWAPTURN", $mainPlayer, "-");
@@ -310,6 +322,14 @@ function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
             $costModifier -= 3;
             $remove = true;
           }
+          break;
+        case "2397845395"://Strategic Acumen
+          $costModifier -= 1;
+          $remove = true;
+          break;
+        case "4895747419"://Consolidation Of Power
+          $costModifier -= 99;
+          $remove = true;
           break;
         case "5696041568"://Triple Dark Raid
           $costModifier -= 5;
@@ -763,6 +783,7 @@ function IsCombatEffectActive($cardID)
     case "8988732248": return true;//Rebel Assault
     case "7922308768": return true;//Valiant Assault Ship
     case "6514927936": return true;//Leia Organa
+    case "5630404651": return true;//MagnaGuard Wing Leader
     case "0802973415": return true;//Outflank
     case "1480894253": return true;//Kylo Ren
     case "2503039837": return true;//Moff Gideon Leader

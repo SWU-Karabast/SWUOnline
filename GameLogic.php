@@ -562,12 +562,27 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $rv = implode(",", $ally->GetUpgrades());
           return $rv == "" ? "PASS" : $rv;
         case "MOVEUPGRADE":
-          //Requires unit to take upgrade from, upgrade to take, and unit to give upgrade to.
-          $sourceUnit = new Ally($dqVars[1]);
+          //DQVars[0]: upgrade card ID
+          //DQVars[1]: mzSource (e.g. MYALLY-0, MYDISCARD-0)
+          //LastResult: mzTarget/targetUniqueID (e.g. MYALLY-0, 12)
+          $targetAlly = new Ally($lastResult);
           $upgradeID = $dqVars[0];
-          $targetUnit = new Ally($lastResult);
-          $upgradeOwner = $sourceUnit->RemoveSubcard($upgradeID);
-          $targetUnit->Attach($upgradeID, $upgradeOwner);
+          $mzSource = $dqVars[1];
+          $mzSourceArr = explode("-", $mzSource);
+          $upgradeOwnerID = null;
+
+          switch ($mzSourceArr[0]) {
+            case "MYALLY": case "THEIRALLY":
+              $sourceAlly = new Ally($mzSource);
+              $upgradeOwnerID = $sourceAlly->RemoveSubcard($upgradeID);
+              break;
+            case "MYDISCARD": case "THEIRDISCARD":
+              MZRemove($player, $mzSource);
+              break;
+            default: break;
+          }
+
+          $targetAlly->Attach($upgradeID, $upgradeOwnerID);
           return $lastResult;
         case "GETCAPTIVES":
           $ally = new Ally($lastResult);

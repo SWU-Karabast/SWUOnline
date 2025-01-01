@@ -2234,6 +2234,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYALLY-" . $index);
       AddDecisionQueue("MZOP", $currentPlayer, "ATTACK");
       return "";
+    } else if($abilityName == "Strategic Acumen") {
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to play");
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND:definedType=Unit");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, "2397845395", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
+      return "";
     } else if ($abilityName == "Mill") { //Satine Kryze
       $ally = new Ally("MYALLY-" . $index, $currentPlayer);
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
@@ -3409,6 +3416,25 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddNextTurnEffect($cardID, $currentPlayer);
       }
       break;
+    case "5630404651"://MagnaGuard Wing Leader
+      $ally = new Ally("MYALLY-" . $index);
+      $abilityName = GetResolvedAbilityName($cardID, $from);
+      if ($abilityName == "Droid Attack") {
+        if ($ally->NumUses() > 0) {
+          AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYALLY-" . $index);
+          AddDecisionQueue("ADDMZUSES", $currentPlayer, "-1");
+          AddCurrentTurnEffect($cardID . "-1", $currentPlayer);
+          AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Droid");
+          AddDecisionQueue("MZFILTER", $currentPlayer, "status=1", 1);
+          AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a droid to attack with", 1);
+          AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+          AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
+        } else {
+          WriteLog("<span style='color: red;'>You can use this ability only once each round. Reverting gamestate.</span>");
+          RevertGamestate();
+        }
+      }
+      break;      
     case "6514927936"://Leia Organa Leader
       $abilityName = GetResolvedAbilityName($cardID, $from);
       if($abilityName == "Attack") {
@@ -4675,6 +4701,16 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
       break;
+    case "4895747419"://Consolidation Of Power
+      $allies = &GetAllies($currentPlayer);
+      $totalAllies = count($allies) / AllyPieces();
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+      AddDecisionQueue("OP", $currentPlayer, "MZTONORMALINDICES");
+      AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "$totalAllies-", 1);
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose any number of friendly units", 1);
+      AddDecisionQueue("MULTICHOOSEUNIT", $currentPlayer, "<-", 1);
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "CONSOLIDATIONOFPOWER", 1);
+      break;
     case "9752523457"://Finalizer
       $allies = &GetAllies($currentPlayer);
       for($i=0; $i<count($allies); $i+=AllyPieces()) {
@@ -5539,7 +5575,7 @@ function AfterPlayedByAbility($cardID) {
       AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, $cardID . "-2,PLAY", 1);
-      break;
+      break;      
     case "8117080217"://Admiral Ozzel
       $ally->Ready();
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
