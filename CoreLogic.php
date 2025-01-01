@@ -616,7 +616,7 @@ function PlayerWon($playerID)
 function SendSWUStatsResults() {
   global $gameName, $firstPlayer, $winner, $currentRound, $p1id, $p2id, $p1DeckLink, $p2DeckLink;
 
-  $url = 'http://23.254.215.59/TCGEngine/APIs/SubmitGameResult.php';
+  $url = 'https://swustats.net/TCGEngine/APIs/SubmitGameResult.php';
 	$loser = ($winner == 1 ? 2 : 1);
   $winHero = GetCachePiece($gameName, ($winner == 1 ? 7 : 8));
 	$loseHero = GetCachePiece($gameName, ($winner == 1 ? 8 : 7));
