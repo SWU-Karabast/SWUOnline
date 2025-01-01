@@ -166,7 +166,6 @@ include_once 'Header.php';
           <li>Lux Bonteri</li>
           <li>On Top of Things</li>
           <li>Planetery Invasion</li>
-          <li>Roger Roger</li>
           <li>Sly Moore</li>
           <li>Strategic Acumen</li>
           <li>Sword and Shield Maneuver</li>
