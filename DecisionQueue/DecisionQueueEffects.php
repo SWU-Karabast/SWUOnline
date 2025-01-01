@@ -484,7 +484,6 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       return $lastResult;
     case "CONSOLIDATIONOFPOWER":
       if (count($lastResult) > 0) {
-        global $CS_AfterPlayedBy;
         $totalPower = 0;
         $uniqueIDs = [];
         for ($i=0; $i<count($lastResult); ++$i) {
@@ -496,11 +495,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
         AddDecisionQueue("SETDQCONTEXT", $player, "Choose a card to put into play");
         AddDecisionQueue("MULTIZONEINDICES", $player, "MYHAND:definedType=Unit;maxCost=" . $totalPower);
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-        AddDecisionQueue("SETDQVAR", $player, "0", 1);
-        AddDecisionQueue("PASSPARAMETER", $player, "4895747419", 1);
-        AddDecisionQueue("SETCLASSSTATE", $player, $CS_AfterPlayedBy, 1);
         AddDecisionQueue("ADDCURRENTEFFECT", $player, "4895747419", 1);
-        AddDecisionQueue("PASSPARAMETER", $player, "{0}", 1);
         AddDecisionQueue("MZOP", $player, "PLAYCARD", 1);
 
         foreach ($uniqueIDs as $uniqueID) {

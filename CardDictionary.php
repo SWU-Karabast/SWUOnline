@@ -1119,6 +1119,10 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
           if($abilityTypes != "") $abilityTypes .= ",";
           $abilityTypes .= "A";
           break;
+        case "2397845395"://Strategic Acumen
+          if($abilityTypes != "") $abilityTypes .= ",";
+          $abilityTypes .= "A";
+          break;
         default: break;
       }
     }
@@ -1353,6 +1357,10 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
           if($abilityNames != "") $abilityNames .= ",";
           $abilityNames .= "Heroic Resolve";
           break;
+        case "2397845395"://Strategic Acumen
+          if($abilityNames != "") $abilityNames .= ",";
+          $abilityNames .= "Strategic Acumen";
+          break;          
         default: break;
       }
     }

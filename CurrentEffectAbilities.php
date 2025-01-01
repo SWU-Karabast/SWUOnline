@@ -323,6 +323,10 @@ function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
             $remove = true;
           }
           break;
+        case "2397845395"://Strategic Acumen
+          $costModifier -= 1;
+          $remove = true;
+          break;
         case "4895747419"://Consolidation Of Power
           $costModifier -= 99;
           $remove = true;

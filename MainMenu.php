@@ -167,7 +167,6 @@ include_once 'Header.php';
           <li>On Top of Things</li>
           <li>Planetery Invasion</li>
           <li>Sly Moore</li>
-          <li>Strategic Acumen</li>
           <li>Sword and Shield Maneuver</li>
           <li>Unnatural Life</li>
           <li>Wartime Profiteering</li>

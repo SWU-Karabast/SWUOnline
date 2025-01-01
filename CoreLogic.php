@@ -2234,6 +2234,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYALLY-" . $index);
       AddDecisionQueue("MZOP", $currentPlayer, "ATTACK");
       return "";
+    } else if($abilityName == "Strategic Acumen") {
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to play");
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND:definedType=Unit");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, "2397845395", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
+      return "";
     } else if ($abilityName == "Mill") { //Satine Kryze
       $ally = new Ally("MYALLY-" . $index, $currentPlayer);
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
@@ -5568,7 +5575,7 @@ function AfterPlayedByAbility($cardID) {
       AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, $cardID . "-2,PLAY", 1);
-      break;
+      break;      
     case "8117080217"://Admiral Ozzel
       $ally->Ready();
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
