@@ -95,6 +95,9 @@ if(!IsReplay()) {
   }
   if ($playerID != 3 && $authKey != $targetAuth) { echo("Invalid auth key"); exit; }
   if ($playerID == 3 && !IsModeAllowedForSpectators($mode)) ExitProcessInput();
+  if(GetCachePiece($gameName, $playerID + 14) > 0) {
+    exit("refresh");
+  }
   if (!IsModeAsync($mode) && $currentPlayer != $playerID) {
     $currentTime = round(microtime(true) * 1000);
     SetCachePiece($gameName, 2, $currentTime);

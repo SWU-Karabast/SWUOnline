@@ -55,3 +55,7 @@ fclose($handler);
 
 GamestateUpdated($gameName);
 if ($playerID == 1) SetCachePiece($gameName, 11, 0);
+
+if(GetCachePiece($gameName, $playerID + 14) > 0) {
+  exit("refresh");
+}
