@@ -596,6 +596,8 @@ function PlayerWon($playerID)
 
   $inGameStatus = $GameStatus_Over;
   $turn[0] = "OVER";
+  SetCachePiece($gameName, 14, 6);//$MGS_GameOverStatsLogged
+  if(GetCachePiece($gameName, 14) == 7) return;//$MGS_StatsLoggedIrreversible
   try {
     logCompletedGameStats();
   } catch (Exception $e) {
