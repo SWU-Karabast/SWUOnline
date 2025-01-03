@@ -62,6 +62,9 @@ function SubmitChat() {
   var xmlhttp = new XMLHttpRequest();
   xmlhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
+      if (this.responseText == "refresh") {
+        location.reload();
+      }
     }
   };
   var ajaxLink =
@@ -85,6 +88,10 @@ function SubmitInput(mode, params, fullRefresh = false) {
   xmlhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
       if (fullRefresh) location.reload();
+
+      if(this.responseText == "refresh") {
+        location.reload();
+      }
     }
   };
   var ajaxLink =
