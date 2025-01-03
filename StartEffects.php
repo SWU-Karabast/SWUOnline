@@ -37,8 +37,10 @@ if($p2CharEquip[0] == "DUMMY") {
 $initiativePlayer = $firstPlayer;
 $intiativeTaken = 0;
 
-AddDecisionQueue("SHUFFLEDECK", 1, "SKIPSEED");
-AddDecisionQueue("SHUFFLEDECK", 2, "SKIPSEED");
+for ($i = 0; $i < 3; $i++) {
+  AddDecisionQueue("SHUFFLEDECK", 1, "SKIPSEED");
+  AddDecisionQueue("SHUFFLEDECK", 2, "SKIPSEED");
+}
 AddDecisionQueue("STARTGAME", $initiativePlayer, "-");
 
 ProcessDecisionQueue();
