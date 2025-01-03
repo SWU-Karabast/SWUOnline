@@ -402,7 +402,7 @@ function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
           $remove = true;
           break;
         case "6570091935"://Tranquility
-          if($from != "PLAY" && DefinedTypesContains($cardID, "Unit", $currentPlayer) && TraitContains($cardID, "Republic") && !in_array($effectCardID, $uniqueEffectsActivated)) {
+          if($from != "PLAY" && TraitContains($cardID, "Republic") && !in_array($effectCardID, $uniqueEffectsActivated)) {
             $costModifier -= 1;
             $remove = true;
             $uniqueEffectsActivated[] = $effectCardID;
