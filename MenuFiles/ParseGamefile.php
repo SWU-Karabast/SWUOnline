@@ -65,6 +65,8 @@
   $MGS_P2Sideboard = 3;
   $MGS_ReadyToStart = 4;
   $MGS_GameStarted = 5;
+  $MGS_GameOverStatsLogged = 6;
+  $MGS_StatsLoggedIrreversible = 7;
 
   $FORMAT_CompCC = 1;
   $FORMAT_CompBlitz = 3;

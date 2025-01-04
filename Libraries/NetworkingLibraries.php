@@ -447,6 +447,7 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
       PlayCard($cardID, "PLAY", -1, $index, $theirAllies[$index + 5]);
       break;
     case 10000: //Undo
+      if(GetCachePiece($gameName, 14) == 7) break;//$MGS_StatsLoggedIrreversible
       RevertGamestate();
       $skipWriteGamestate = true;
       WriteLog("Player " . $playerID . " undid their last action.");
@@ -590,7 +591,10 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
       if($isSimulation) return;
       include_once "./includes/dbh.inc.php";
       include_once "./includes/functions.inc.php";
-      if(!IsGameOver()) PlayerWon(($playerID == 1 ? 1 : 2));
+      if(!IsGameOver()) {
+        PlayerWon(($playerID == 1 ? 1 : 2));
+        SetCachePiece($gameName, 14, 7);//$MGS_StatsLoggedIrreversible
+      }
       break;
     case 100010: //Grant badge
       if($isSimulation) return;

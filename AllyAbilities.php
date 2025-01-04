@@ -755,7 +755,7 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities,
         break;
       case "0683052393"://Hevy
         $otherPlayer = $player == 1 ? 2 : 1;
-        DamagePlayerAllies($otherPlayer, 1, "0683052393", "ATTACKABILITY", arena:"Ground");
+        DamagePlayerAllies($otherPlayer, 1, "0683052393", "AFTERDESTROYEDABILITY", arena:"Ground");
         break;
       case "0249398533"://Obedient Vanguard
         AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:trait=Trooper");
@@ -1441,7 +1441,7 @@ function SpecificAllyAttackAbilities($attackID)
       case "0160548661"://Fallen Lightsaber
         if(TraitContains($attackID, "Force", $mainPlayer)) {
           WriteLog("Fallen Lightsaber deals 1 damage to all defending ground units");
-          DamagePlayerAllies($defPlayer, 1, "0160548661", "DAMAGE", arena:"Ground");
+          DamagePlayerAllies($defPlayer, 1, "0160548661", "ATTACKABILITY", arena:"Ground");
         }
         break;
       case "8495694166"://Jedi Lightsaber
@@ -1978,7 +1978,7 @@ function SpecificAllyAttackAbilities($attackID)
         CreateCloneTrooper($mainPlayer);
       }
       break;
-    case "0354710662"://Saw Gerrera
+    case "0354710662"://Saw Gerrera (Resistance Is Not Terrorism)
       if(GetHealth($mainPlayer) >= 15) {
         $otherPlayer = $mainPlayer == 1 ? 2 : 1;
         DamagePlayerAllies($otherPlayer, 1, "0354710662", "ATTACKABILITY", arena:"Ground");

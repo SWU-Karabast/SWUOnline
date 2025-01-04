@@ -596,6 +596,8 @@ function PlayerWon($playerID)
 
   $inGameStatus = $GameStatus_Over;
   $turn[0] = "OVER";
+  SetCachePiece($gameName, 14, 6);//$MGS_GameOverStatsLogged
+  if(GetCachePiece($gameName, 14) == 7) return;//$MGS_StatsLoggedIrreversible
   try {
     logCompletedGameStats();
   } catch (Exception $e) {
@@ -3434,7 +3436,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
           RevertGamestate();
         }
       }
-      break;      
+      break;
     case "6514927936"://Leia Organa Leader
       $abilityName = GetResolvedAbilityName($cardID, $from);
       if($abilityName == "Attack") {
@@ -5575,7 +5577,7 @@ function AfterPlayedByAbility($cardID) {
       AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, $cardID . "-2,PLAY", 1);
-      break;      
+      break;
     case "8117080217"://Admiral Ozzel
       $ally->Ready();
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
@@ -5655,12 +5657,24 @@ function DestroyAllAllies($player="")
 
 function DamagePlayerAllies($player, $damage, $source, $type, $arena="")
 {
+  $enemyDamage = false;
+  $fromUnitEffect = false;
+  switch($source) {
+    case "0160548661"://Fallen Lightsaber
+    case "0683052393"://Hevy
+    case "0354710662"://Saw Gerrera (Resistance Is Not Terrorism)
+      $enemyDamage = true;
+      $fromUnitEffect = true;
+      break;
+    default: break;
+  }
+
   $allies = &GetAllies($player);
   for($i=count($allies)-AllyPieces(); $i>=0; $i-=AllyPieces())
   {
     if($arena != "" && !ArenaContains($allies[$i], $arena, $player)) continue;
     $ally = new Ally("MYALLY-" . $i, $player);
-    $ally->DealDamage($damage);
+    $ally->DealDamage($damage, enemyDamage: $enemyDamage, fromUnitEffect: $fromUnitEffect);
   }
 }
 
