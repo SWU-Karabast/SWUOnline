@@ -102,7 +102,7 @@ if ($matchup == "" && $playerID == 2 && $gameStatus >= $MGS_Player2Joined) {
   exit;
 }
 
-$uuidLookup = true;
+$usesUuid = false;
 
 if ($decklink != "") {
   if ($playerID == 1) $p1DeckLink = $decklink;
@@ -124,7 +124,7 @@ if ($decklink != "") {
       curl_close($curl);
       $json = $apiDeck;
       echo($json);
-      $uuidLookup = false;
+      $usesUuid = true;
     }
   }
   else if(str_contains($decklink, "swudb.com/deck")) {
@@ -165,17 +165,18 @@ if ($decklink != "") {
 
   $deckObj = json_decode($json);
   $deckName = $deckObj->metadata->{"name"};
-  $leader = $uuidLookup ? UUIDLookup($deckObj->leader->id) : $deckObj->leader->id;
+  $leader = !$usesUuid ? UUIDLookup($deckObj->leader->id) : $deckObj->leader->id;
   $character = $leader;//TODO: Change to leader name
   $deckFormat = 1;
-  $base = $uuidLookup ? UUIDLookup($deckObj->base->id) : $deckObj->base->id;
+  $base = !$usesUuid ? UUIDLookup($deckObj->base->id) : $deckObj->base->id;
   $deck = $deckObj->deck;
   $cards = "";
   $bannedSet = "";
   $hasBannedCard = false;
   for($i=0; $i<count($deck); ++$i) {
+    if($usesUuid) $deck[$i]->id = CardIDLookup($deck[$i]->id);
     $deck[$i]->id = CardIDOverride($deck[$i]->id);
-    $cardID = $uuidLookup ? UUIDLookup($deck[$i]->id) : $deck[$i]->id;
+    $cardID = UUIDLookup($deck[$i]->id);
     $cardID = CardUUIDOverride($cardID);
     if(CardSet($cardID) == $bannedSet) {
       $hasBannedCard = true;
@@ -188,9 +189,9 @@ if ($decklink != "") {
   $sideboard = $deckObj->sideboard ?? [];
   $sideboardCards = "";
   for($i=0; $i<count($sideboard); ++$i) {
+    if($usesUuid) $sideboard[$i]->id = CardIDLookup($sideboard[$i]->id);
     $sideboard[$i]->id = CardIDOverride($sideboard[$i]->id);
-    $cardID = $uuidLookup ? CardUUIDOverride(UUIDLookup($sideboard[$i]->id)) : $sideboard[$i]->id;
-    $cardID = CardUUIDOverride($cardID);
+    $cardID = CardUUIDOverride(UUIDLookup($sideboard[$i]->id));
     if(CardSet($cardID) == $bannedSet) {
       $hasBannedCard = true;
     }
