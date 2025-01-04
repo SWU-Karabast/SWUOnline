@@ -1,6 +1,5 @@
 <?php
 
-include "WriteLog.php";
 include "Libraries/HTTPLibraries.php";
 include "Libraries/SHMOPLibraries.php";
 include "APIKeys/APIKeys.php";
@@ -8,6 +7,7 @@ include_once 'includes/functions.inc.php';
 include_once 'includes/dbh.inc.php';
 include_once 'CoreLogic.php';
 include_once 'Libraries/CoreLibraries.php';
+include_once "WriteLog.php";
 
 include_once 'LZCompressor/LZContext.php';
 include_once 'LZCompressor/LZData.php';

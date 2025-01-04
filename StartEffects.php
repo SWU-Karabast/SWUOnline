@@ -1,7 +1,7 @@
 <?php
 
 //include "ParseGamestate.php";
-//include "WriteLog.php";
+//include_once "WriteLog.php";
 
 array_push($layerPriority, ShouldHoldPriority(1), ShouldHoldPriority(2));
 

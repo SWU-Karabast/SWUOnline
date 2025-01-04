@@ -13,9 +13,9 @@ $playerCharacter = $_GET["playerCharacter"];
 $playerDeck = $_GET["playerDeck"];
 $authKey = $_GET["authKey"];
 
-include "WriteLog.php";
 include "HostFiles/Redirector.php";
 include "CardDictionary.php";
+include_once "WriteLog.php";
 
 include "MenuFiles/ParseGamefile.php";
 include "MenuFiles/WriteGamefile.php";

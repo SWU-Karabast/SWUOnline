@@ -3,7 +3,7 @@
 include 'Libraries/HTTPLibraries.php';
 include "HostFiles/Redirector.php";
 include "Libraries/SHMOPLibraries.php";
-include "WriteLog.php";
+include_once "WriteLog.php";
 
 // array holding allowed Origin domains
 SetHeaders();

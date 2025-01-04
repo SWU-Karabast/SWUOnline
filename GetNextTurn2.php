@@ -33,7 +33,7 @@ if (($playerID == 1 || $playerID == 2) && $authKey == "") {
 
 include "HostFiles/Redirector.php";
 include "Libraries/SHMOPLibraries.php";
-include "WriteLog.php";
+include_once "WriteLog.php";
 
 SetHeaders();
 
