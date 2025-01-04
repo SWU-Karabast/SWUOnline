@@ -317,6 +317,8 @@ function SerializeGameResult($player, $DeckLink, $deckAfterSB, $gameID = "", $op
 		$deck["cardResults"][$i]["played"] = 0;
 		$deck["cardResults"][$i]["blocked"] = 0;
 		$deck["cardResults"][$i]["pitched"] = 0;
+		$deck["cardResults"][$i]["resourced"] = 0;
+		$deck["cardResults"][$i]["activated"] = 0;
 		$deck["cardResults"][$i]["cardName"] = CardName($deduplicatedDeck[$i]);
 		//$deck["cardResults"][$i]["pitchValue"] = PitchValue($deduplicatedDeck[$i]);
 	}
