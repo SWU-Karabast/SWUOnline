@@ -1201,20 +1201,20 @@ function AllyAttackedAbility($attackTarget, $index) {
   }
 }
 
-function AddAllyPlayAbilityLayers($cardID, $from, $uniqueID = "-") {
+function AddAllyPlayAbilityLayers($cardID, $from, $uniqueID = "-", $resourcesPaid=-1) {
   global $currentPlayer;
   $allies = &GetAllies($currentPlayer);
   for($i=0; $i<count($allies); $i+=AllyPieces()) {
-    if(AllyHasPlayCardAbility($cardID, $uniqueID, $from, $allies[$i], $currentPlayer, $i)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $allies[$i] . "," . $allies[$i+5]);
+    if(AllyHasPlayCardAbility($cardID, $uniqueID, $from, $allies[$i], $currentPlayer, $i, $resourcesPaid)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $allies[$i] . "," . $allies[$i+5]);
   }
   $otherPlayer = $currentPlayer == 1 ? 2 : 1;
   $theirAllies = &GetAllies($otherPlayer);
   for($i=0; $i<count($theirAllies); $i+=AllyPieces()) {
-    if(AllyHasPlayCardAbility($cardID, $uniqueID, $from, $theirAllies[$i], $otherPlayer, $i)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $theirAllies[$i] . "," . $allies[$i+5]);
+    if(AllyHasPlayCardAbility($cardID, $uniqueID, $from, $theirAllies[$i], $otherPlayer, $i, $resourcesPaid)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $theirAllies[$i] . "," . $allies[$i+5]);
   }
 }
 
-function AllyHasPlayCardAbility($playedCardID, $playedCardUniqueID, $from, $cardID, $player, $index): bool
+function AllyHasPlayCardAbility($playedCardID, $playedCardUniqueID, $from, $cardID, $player, $index, $resourcesPaid): bool
 {
   global $currentPlayer, $CS_NumCardsPlayed;
   $thisAlly = new Ally("MYALLY-" . $index, $player);
@@ -1260,6 +1260,8 @@ function AllyHasPlayCardAbility($playedCardID, $playedCardUniqueID, $from, $card
         return IsCoordinateActive($player) && GetClassState($currentPlayer, $CS_NumCardsPlayed) == 2;
       case "4935319539"://Krayt Dragon
         return true;
+      case "0199085444"://Lux Bonteri
+        return $resourcesPaid < CardCost($playedCardID);
       default: break;
     }
   }
@@ -1407,7 +1409,6 @@ function AllyPlayCardAbility($cardID, $player="", $from="-", $abilityID="-", $un
   }
   switch($abilityID)
   {
-
     case "7200475001"://Ki-Adi Mundi
       $opponent = $currentPlayer == 1 ? 2 : 1;
       Draw($opponent);
@@ -1418,6 +1419,9 @@ function AllyPlayCardAbility($cardID, $player="", $from="-", $abilityID="-", $un
       break;
     case "4935319539"://Krayt Dragon
       AddLayer("TRIGGER", $currentPlayer, "4935319539", $cardID);
+      break;
+    case "0199085444"://Lux Bonteri
+      AddLayer("TRIGGER", $currentPlayer, "0199085444", $cardID);
       break;
     default: break;
   }

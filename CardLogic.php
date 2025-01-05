@@ -854,6 +854,13 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $otherPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $otherPlayer, "DEALDAMAGE," . $damage, 1);
       break;
+    case "0199085444"://Lux Bonteri
+      $otherPlayer = ($player == 1 ? 2 : 1);
+      AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a unit to ready or exhaust");
+      AddDecisionQueue("CHOOSEMULTIZONE", $otherPlayer, "<-", 1);
+      AddDecisionQueue("SPECIFICCARD", $otherPlayer, "LUXBONTERI", 1);
+      break;
     case "3045538805"://Hondo Ohnaka Leader
       AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
       AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to give an experience token", 1);

@@ -1947,7 +1947,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
           AddLayer($layerName, $currentPlayer, $cardID, $from . "!" . $resourcesPaid . "!" . $target . "!" . $additionalCosts . "!" . $abilityIndex . "!" . $playIndex, "-", $uniqueID, append:true);
         }
         else if($from != "PLAY" && $from != "EQUIP") {
-          AddAllyPlayAbilityLayers($cardID, $from, $uniqueID);
+          AddAllyPlayAbilityLayers($cardID, $from, $uniqueID, $resourcesPaid);
         }
       }
     }

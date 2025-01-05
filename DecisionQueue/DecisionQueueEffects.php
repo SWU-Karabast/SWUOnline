@@ -751,6 +751,11 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       $char = &GetPlayerCharacter($player);
       $char[CharacterPieces()] = "0026166404"; // Chancellor Palpatine Leader
       break;
+    case "LUXBONTERI":
+      $ally = new Ally($lastResult, MZPlayerID($player, $lastResult));
+      if($ally->IsExhausted()) $ally->Ready();
+      else $ally->Exhaust();
+      break;
     default: return "";
   }
 }
