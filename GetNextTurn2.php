@@ -50,12 +50,16 @@ $opponentInactive = false;
 $currentTime = round(microtime(true) * 1000);
 if ($isGamePlayer) {
   $playerStatus = intval(GetCachePiece($gameName, $playerID + 3));
-  if ($playerStatus == "-1") WriteLog("Player $playerID has connected.");
+  if ($playerStatus == "-1") {
+    SetCachePiece($gameName, $playerID + 14, 0);
+    WriteLog("Player $playerID has connected.");
+  }
   SetCachePiece($gameName, $playerID + 1, $currentTime);
   SetCachePiece($gameName, $playerID + 3, "0");
-  if ($playerStatus > 0) {
+  if ($playerStatus > 0 || GetCachePiece($gameName, $playerID + 14) > 0) {
     WriteLog("Player $playerID has reconnected.");
     SetCachePiece($gameName, $playerID + 3, "0");
+    SetCachePiece($gameName, $playerID + 14, 0);
     GamestateUpdated($gameName);
   }
 }
@@ -73,19 +77,40 @@ while ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     $otherP = ($playerID == 1 ? 2 : 1);
     $oppLastTime = intval($cacheArr[$otherP]);
     $oppStatus = $cacheArr[$otherP + 2];
-    if (($currentTime - $oppLastTime) > 20000 && ($oppStatus == "0")) {
+    $timeDiff = $currentTime - $oppLastTime;
+    $otherPlayerDisconnectStatus = GetCachePiece($gameName, $otherP + 14);
+    if (GetCachePiece($gameName, 14) == 6 && $timeDiff > 10_000 && $oppStatus == "0") {
       WriteLog("Opponent has disconnected.");
       $opponentDisconnected = true;
       SetCachePiece($gameName, $otherP + 3, "2");
+      SetCachePiece($gameName, 14, 7);//$MGS_StatsLoggedIrreversible
       GamestateUpdated($gameName);
-    }
-    //Handle server timeout
-    $lastUpdateTime = $cacheArr[5];
-    if ($currentTime - $lastUpdateTime > 90000 && $cacheArr[11] != "1")//90 seconds
-    {
-      SetCachePiece($gameName, 12, "1");
-      $opponentInactive = true;
-      $lastUpdate = 0;
+    } else {
+      if ($timeDiff > 30_000 && $otherPlayerDisconnectStatus == 0 && ($oppStatus == "0")) {
+        WriteLog("<span style='font-weight:bold; color:plum'>Karabot: </span>Player $otherP, are you still there? Your opponent will be allowed to claim victory in 30 seconds if no activity is detected.");
+        IncrementCachePiece($gameName, $otherP + 14);
+        GamestateUpdated($gameName);
+      }
+      if ($timeDiff > 55_000 && $otherPlayerDisconnectStatus == 1 && ($oppStatus == "0")) {
+        WriteLog("<span style='font-weight:bold; color:plum'>Karabot: </span>5 seconds left, Player $otherP...");
+        IncrementCachePiece($gameName, $otherP + 14);
+        GamestateUpdated($gameName);
+      }
+      if ($timeDiff > 60_000 && $otherPlayerDisconnectStatus == 2 && ($oppStatus == "0")) {
+        WriteLog("Opponent has disconnected.");
+        $opponentDisconnected = true;
+        SetCachePiece($gameName, $otherP + 3, "2");
+        IncrementCachePiece($gameName, $otherP + 14);
+        GamestateUpdated($gameName);
+      }
+      //Handle server timeout
+      $lastUpdateTime = $cacheArr[5];
+      if ($currentTime - $lastUpdateTime > 90000 && $cacheArr[11] != "1")//90 seconds
+      {
+        SetCachePiece($gameName, 12, "1");
+        $opponentInactive = true;
+        $lastUpdate = 0;
+      }
     }
   }
   ++$count;

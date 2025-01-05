@@ -20,6 +20,7 @@
   $hasPlayTrie = [];
   $hasDestroyedTrie = [];
   $setTrie = [];
+  $cardIDTrie = [];
   while ($hasMoreData)
   {
     $jsonUrl = "https://admin.starwarsunlimited.com/api/cards?locale=en&pagination[page]=" . $page . "&pagination[pageSize]=100&filters[variantOf][id][\$null]=true";
@@ -110,6 +111,7 @@
   GenerateFunction($hasDestroyedTrie, $handler, "HasWhenDestroyed", false, "false", 1);
   GenerateFunction($setTrie, $handler, "CardSet", true, "");
   GenerateFunction($uuidLookupTrie, $handler, "UUIDLookup", true, "");
+  GenerateFunction($cardIDTrie, $handler, "CardIDLookup", true, "");
 
   fwrite($handler, "?>");
 
@@ -132,7 +134,7 @@
   function AddToTries($cardID, $uuid)
   {
     global $uuidLookupTrie, $titleTrie, $subtitleTrie, $costTrie, $hpTrie, $powerTrie, $typeTrie, $type2Trie, $uniqueTrie, $card;
-    global $aspectsTrie, $traitsTrie, $arenasTrie, $hasPlayTrie, $hasDestroyedTrie, $setTrie;
+    global $aspectsTrie, $traitsTrie, $arenasTrie, $hasPlayTrie, $hasDestroyedTrie, $setTrie, $cardIDTrie;
     if($uuid != "8752877738" && $uuid != "2007868442") {
       AddToTrie($uuidLookupTrie, $cardID, 0, $uuid);
     }
@@ -146,6 +148,7 @@
     AddToTrie($hpTrie, $uuid, 0, $definedType == "Upgrade" ? $card->upgradeHp : $card->hp);
     AddToTrie($powerTrie, $uuid, 0, $definedType == "Upgrade" ? $card->upgradePower : $card->power);
     AddToTrie($setTrie, $uuid, 0, $card->expansion->data->attributes->code);
+    AddToTrie($cardIDTrie, $uuid, 0, $cardID);
     if($card->type2->data != null) {
       $type2 = $card->type2->data->attributes->name;
       if($type2 == "Leader Unit") $type2 = "Unit";

@@ -193,7 +193,7 @@ function ExploitAmount($cardID, $player, $reportMode=true) {
     case "3381931079": $amount += 4; break;//Malevolence
     case "3556557330": $amount += 2; break;//Asajj Ventress
     case "3589814405": $amount += 2; break;//Tactical Droid Commander
-//    case "1167572655": $amount += 3; break;//Planetary Invasion
+    case "1167572655": $amount += 3; break;//Planetary Invasion
     default: break;
   }
   return $amount;
@@ -228,6 +228,9 @@ function RaidAmount($cardID, $player, $index, $reportMode = false)
         break;
       case "1208707254"://Rallying Cry
         $amount += 2;
+        break;
+      case "8719468890"://Sword and Shielf Maneuver
+        $amount += TraitContains($cardID, "Trooper", $player) ? 1 : 0;
         break;
       default: break;
     }
@@ -294,6 +297,9 @@ function HasSentinel($cardID, $player, $index)
       case "fb7af4616c": $hasSentinel = true; break;//General Grievous
       case "1039828081": if ($cardID == "1039828081") {$hasSentinel = true;} break;//Calculating MagnaGuard
       case "3033790509": $hasSentinel = true; break;//Captain Typho
+      case "8719468890"://Sword and Shielf Maneuver
+        if(TraitContains($cardID, "Jedi", $player)) $hasSentinel = true;
+        break;
       default: break;
     }
   }
@@ -496,6 +502,7 @@ function HasOverwhelm($cardID, $player, $index)
     switch($currentTurnEffects[$i]) {
       case "4085341914": return true;//Heroic Resolve
       case "6461101372": return !LeaderAbilitiesIgnored();//Maul Leader
+      case "1167572655": return true;//Planetary Invasion
       default: break;
     }
   }
@@ -697,6 +704,7 @@ function HasSaboteur($cardID, $player, $index)
       case "4663781580": return true;//Swoop Down
       case "9210902604": return true;//Precision Fire
       case "4910017138": return true;//Breaking In
+      case "5610901450": return true;//Heroes on Both Sides
       default: break;
     }
   }
@@ -1445,10 +1453,10 @@ function IsPlayable($cardID, $phase, $from, $index = -1, &$restriction = null, $
     if($char[1] != 2) return false;//Can't attack if rested
   }
   $otherPlayer = ($player == 1 ? 2 : 1);
-  if($from == "HAND" && ((CardCost($cardID) + SelfCostModifier($cardID, $from) + CurrentEffectCostModifiers($cardID, $from, reportMode:true) + CharacterCostModifier($cardID, $from) - ExploitAmount($cardID, $currentPlayer) * 2) > NumResourcesAvailable($currentPlayer)) && !HasAlternativeCost($cardID)) return false;
+  if($from == "HAND" && ((CardCost($cardID) + SelfCostModifier($cardID, $from, reportMode: true) + CurrentEffectCostModifiers($cardID, $from, reportMode:true) + CharacterCostModifier($cardID, $from) - ExploitAmount($cardID, $currentPlayer) * 2) > NumResourcesAvailable($currentPlayer)) && !HasAlternativeCost($cardID)) return false;
   if($from == "RESOURCES") {
     if(!PlayableFromResources($cardID, index:$index)) return false;
-    if((SmuggleCost($cardID, index:$index) + SelfCostModifier($cardID, $from)) > NumResourcesAvailable($currentPlayer) && !HasAlternativeCost($cardID)) return false;
+    if((SmuggleCost($cardID, index:$index) + SelfCostModifier($cardID, $from, reportMode:true)) > NumResourcesAvailable($currentPlayer) && !HasAlternativeCost($cardID)) return false;
     if(!SmuggleAdditionalCosts($cardID)) return false;
   }
   if(DefinedTypesContains($cardID, "Upgrade", $player) && SearchCount(SearchAllies($player)) == 0 && SearchCount(SearchAllies($otherPlayer)) == 0) return false;

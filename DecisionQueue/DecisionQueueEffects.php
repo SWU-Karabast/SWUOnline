@@ -468,6 +468,21 @@ function SpecificCardLogic($player, $parameter, $lastResult)
         $ally->Attach("2007868442");//Experience token
       }
       return $lastResult;
+    case "PLANETARYINVASION":
+      if($lastResult == "PASS") {
+        return $lastResult;
+      }
+      
+      for($i=0; $i<count($lastResult); ++$i) {
+        $ally = new Ally("MYALLY-" . $lastResult[$i], $player);
+        $ally->Ready();
+        $ally->AddEffect("1167572655");//Planetary Invasion
+      }
+      return $lastResult;
+    case "NODISINTEGRATIONS":
+      $ally = new Ally($lastResult, MZPlayerID($player, $lastResult));
+      $ally->DealDamage($ally->Health() - 1);
+      return $lastResult;
     case "LTCHILDSEN":
       if($lastResult == "PASS" || $lastResult == []) {
         return $lastResult;
@@ -735,6 +750,11 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       DealDamageAsync(($player == 1 ? 2 : 1), 2, "DAMAGE", "ad86d54e97");
       $char = &GetPlayerCharacter($player);
       $char[CharacterPieces()] = "0026166404"; // Chancellor Palpatine Leader
+      break;
+    case "LUXBONTERI":
+      $ally = new Ally($lastResult, MZPlayerID($player, $lastResult));
+      if($ally->IsExhausted()) $ally->Ready();
+      else $ally->Exhaust();
       break;
     default: return "";
   }

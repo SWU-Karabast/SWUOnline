@@ -596,6 +596,8 @@ function PlayerWon($playerID)
 
   $inGameStatus = $GameStatus_Over;
   $turn[0] = "OVER";
+  SetCachePiece($gameName, 14, 6);//$MGS_GameOverStatsLogged
+  if(GetCachePiece($gameName, 14) == 7) return;//$MGS_StatsLoggedIrreversible
   try {
     logCompletedGameStats();
   } catch (Exception $e) {
@@ -616,7 +618,7 @@ function PlayerWon($playerID)
 function SendSWUStatsResults() {
   global $gameName, $firstPlayer, $winner, $currentRound, $p1id, $p2id, $p1DeckLink, $p2DeckLink;
 
-  $url = 'http://23.254.215.59/TCGEngine/APIs/SubmitGameResult.php';
+  $url = 'https://swustats.net/TCGEngine/APIs/SubmitGameResult.php';
 	$loser = ($winner == 1 ? 2 : 1);
   $winHero = GetCachePiece($gameName, ($winner == 1 ? 7 : 8));
 	$loseHero = GetCachePiece($gameName, ($winner == 1 ? 8 : 7));
@@ -1774,7 +1776,7 @@ function SameWeaponEquippedTwice()
   return false;
 }
 
-function IgnoreAspectPenalty($cardID, $player) {
+function IgnoreAspectPenalty($cardID, $player, $reportMode) {
   global $myClassState, $CS_NumClonesPlayed, $CS_LayerTarget, $currentTurnEffects;
   if(TraitContains($cardID, "Spectre")) {
     return !LeaderAbilitiesIgnored() && (HeroCard($player) == "7440067052" || SearchAlliesForCard($player, "80df3928eb") != ""); //Hera Syndulla (Spectre Two)
@@ -1784,8 +1786,8 @@ function IgnoreAspectPenalty($cardID, $player) {
       || (!LeaderAbilitiesIgnored() && (HeroCard($player) == "2742665601" || SearchAlliesForCard($player, "f05184bd91") != "")); //Nala Se (Kaminoan Prime Minister)
   }
   if(TraitContains($cardID, "Lightsaber")) {
-    $findGrievous = SearchAlliesForCard($player, "4776553531");
-    return $findGrievous != "" && $myClassState[$CS_LayerTarget] == "MYALLY-$findGrievous"; //General Grievous  (Trophy Collector)
+    $findGrievous = SearchAlliesForCard($player, "4776553531");//General Grievous  (Trophy Collector)
+    return $findGrievous != "" && ($reportMode || $myClassState[$CS_LayerTarget] == "MYALLY-$findGrievous");
   }
 
   for($i=0;$i<count($currentTurnEffects);$i+=CurrentTurnEffectPieces()) {
@@ -1801,14 +1803,14 @@ function IgnoreAspectPenalty($cardID, $player) {
   return false;
 }
 
-function SelfCostModifier($cardID, $from)
+function SelfCostModifier($cardID, $from, $reportMode=false)
 {
   global $currentPlayer, $CS_LastAttack, $CS_LayerTarget, $CS_NumClonesPlayed, $layers;
   $modifier = 0;
   //Aspect Penalty
   $playerAspects = PlayerAspects($currentPlayer);
   $penalty = 0;
-  if(!IgnoreAspectPenalty($cardID, $currentPlayer)) {
+  if(!IgnoreAspectPenalty($cardID, $currentPlayer, $reportMode)) {
     $cardAspects = CardAspects($cardID);
     //Manually changing the aspects of cards played with smuggle that have different aspect requirements for smuggle.
     //Not a great solution; ideally we could define a whole smuggle ability in one place.
@@ -2265,7 +2267,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
      }
   }
   if($from != "PLAY" && $from != "EQUIP" && $from != "CHAR") {
-    AddAllyPlayAbilityLayers($cardID, $from, isset($playAlly) ? $playAlly->UniqueID() : "-");
+    AddAllyPlayAbilityLayers($cardID, $from, isset($playAlly) ? $playAlly->UniqueID() : "-", $resourcesPaid);
   }
   if($from == "EQUIP" && DefinedTypesContains($cardID, "Leader", $currentPlayer)) {
     $abilityName = GetResolvedAbilityName($cardID, $from);
@@ -3434,7 +3436,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
           RevertGamestate();
         }
       }
-      break;      
+      break;
     case "6514927936"://Leia Organa Leader
       $abilityName = GetResolvedAbilityName($cardID, $from);
       if($abilityName == "Attack") {
@@ -5514,6 +5516,61 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "9399634203,HAND", 1);
       break;
+    case "1167572655"://Planetary Invasion
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+      AddDecisionQueue("OP", $currentPlayer, "MZTONORMALINDICES");
+      AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "3-", 1);
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose up to 3 units to ready", 1);
+      AddDecisionQueue("MULTICHOOSEUNIT", $currentPlayer, "<-", 1, 1);
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "PLANETARYINVASION", 1);
+      break;
+    case "4033634907"://No Disintegrations
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal all but one damage to", 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "NODISINTEGRATIONS", 1);
+      break;
+    case "2012334456"://On Top of Things
+      $ally = new Ally($target, $currentPlayer);
+      $ally->AddEffect("2012334456", "PLAY");
+      break;
+    case "5610901450"://Heroes on Both Sides
+      //Republic
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Republic&THEIRALLY:trait=Republic");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to give +2/+2", 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "ADDHEALTH,2", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "5610901450,PLAY", 1);
+      //Separatist
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Separatist&THEIRALLY:trait=Separatist");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to give +2/+2", 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "ADDHEALTH,2", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "5610901450,PLAY", 1);
+      break;
+    case "7732981122"://Sly Moore
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "token=0", 1);
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to take control of", 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "7732981122", 1);
+      break;
+    case "8719468890"://Sword and Shield Maneuver
+      AddCurrentTurnEffect("8719468890", $currentPlayer, "PLAY");
+      break;
+    case "3459567689"://Wartime Profiteering
+      global $CS_NumAlliesDestroyed;
+      $numDefeated = GetClassState(1, $CS_NumAlliesDestroyed) + GetClassState(2, $CS_NumAlliesDestroyed);
+      AddDecisionQueue("SEARCHDECKTOPX", $currentPlayer, $numDefeated . ";1;");
+      AddDecisionQueue("MULTIADDHAND", $currentPlayer, "-", 1);
+      AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
+      break;
     //PlayAbility End
     default: break;
   }
@@ -5575,7 +5632,7 @@ function AfterPlayedByAbility($cardID) {
       AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, $cardID . "-2,PLAY", 1);
-      break;      
+      break;
     case "8117080217"://Admiral Ozzel
       $ally->Ready();
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
@@ -5655,12 +5712,24 @@ function DestroyAllAllies($player="")
 
 function DamagePlayerAllies($player, $damage, $source, $type, $arena="")
 {
+  $enemyDamage = false;
+  $fromUnitEffect = false;
+  switch($source) {
+    case "0160548661"://Fallen Lightsaber
+    case "0683052393"://Hevy
+    case "0354710662"://Saw Gerrera (Resistance Is Not Terrorism)
+      $enemyDamage = true;
+      $fromUnitEffect = true;
+      break;
+    default: break;
+  }
+
   $allies = &GetAllies($player);
   for($i=count($allies)-AllyPieces(); $i>=0; $i-=AllyPieces())
   {
     if($arena != "" && !ArenaContains($allies[$i], $arena, $player)) continue;
     $ally = new Ally("MYALLY-" . $i, $player);
-    $ally->DealDamage($damage);
+    $ally->DealDamage($damage, enemyDamage: $enemyDamage, fromUnitEffect: $fromUnitEffect);
   }
 }
 

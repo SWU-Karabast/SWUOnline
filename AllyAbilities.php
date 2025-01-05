@@ -28,6 +28,9 @@ function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null,
   $allies[] = $owner ?? $player; //Owner
   $allies[] = 0; //Turns in play
   $allies[] = $cloned ? 1 : 0; //Cloned
+  $allies[] = 0; //Healed this turn
+  $allies[] = 0; //Unused
+  $allies[] = 0; //Unused
   $index = count($allies) - AllyPieces();
   CurrentEffectAllyEntersPlay($player, $index);
   CheckUniqueAlly($uniqueID);
@@ -755,7 +758,7 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities,
         break;
       case "0683052393"://Hevy
         $otherPlayer = $player == 1 ? 2 : 1;
-        DamagePlayerAllies($otherPlayer, 1, "0683052393", "ATTACKABILITY", arena:"Ground");
+        DamagePlayerAllies($otherPlayer, 1, "0683052393", "AFTERDESTROYEDABILITY", arena:"Ground");
         break;
       case "0249398533"://Obedient Vanguard
         AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:trait=Trooper");
@@ -1061,6 +1064,17 @@ function AllyBeginRoundAbilities($player)
 
 function AllyCanBeAttackTarget($player, $index, $cardID)
 {
+  global $currentTurnEffects;
+  for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnPieces()) {
+    if($currentTurnEffects[$i+1] != $player) continue;
+    $ally = new Ally("MYALLY-" . $index, $player);
+    if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
+    switch($currentTurnEffects[$i]) {
+      case "2012334456"://On Top of Things
+        return false;
+      default: break;
+    }
+  }
   switch($cardID)
   {
     case "3646264648"://Sabine Wren
@@ -1187,20 +1201,20 @@ function AllyAttackedAbility($attackTarget, $index) {
   }
 }
 
-function AddAllyPlayAbilityLayers($cardID, $from, $uniqueID = "-") {
+function AddAllyPlayAbilityLayers($cardID, $from, $uniqueID = "-", $resourcesPaid=-1) {
   global $currentPlayer;
   $allies = &GetAllies($currentPlayer);
   for($i=0; $i<count($allies); $i+=AllyPieces()) {
-    if(AllyHasPlayCardAbility($cardID, $uniqueID, $from, $allies[$i], $currentPlayer, $i)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $allies[$i] . "," . $allies[$i+5]);
+    if(AllyHasPlayCardAbility($cardID, $uniqueID, $from, $allies[$i], $currentPlayer, $i, $resourcesPaid)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $allies[$i] . "," . $allies[$i+5]);
   }
   $otherPlayer = $currentPlayer == 1 ? 2 : 1;
   $theirAllies = &GetAllies($otherPlayer);
   for($i=0; $i<count($theirAllies); $i+=AllyPieces()) {
-    if(AllyHasPlayCardAbility($cardID, $uniqueID, $from, $theirAllies[$i], $otherPlayer, $i)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $theirAllies[$i] . "," . $allies[$i+5]);
+    if(AllyHasPlayCardAbility($cardID, $uniqueID, $from, $theirAllies[$i], $otherPlayer, $i, $resourcesPaid)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $theirAllies[$i] . "," . $allies[$i+5]);
   }
 }
 
-function AllyHasPlayCardAbility($playedCardID, $playedCardUniqueID, $from, $cardID, $player, $index): bool
+function AllyHasPlayCardAbility($playedCardID, $playedCardUniqueID, $from, $cardID, $player, $index, $resourcesPaid): bool
 {
   global $currentPlayer, $CS_NumCardsPlayed;
   $thisAlly = new Ally("MYALLY-" . $index, $player);
@@ -1246,6 +1260,8 @@ function AllyHasPlayCardAbility($playedCardID, $playedCardUniqueID, $from, $card
         return IsCoordinateActive($player) && GetClassState($currentPlayer, $CS_NumCardsPlayed) == 2;
       case "4935319539"://Krayt Dragon
         return true;
+      case "0199085444"://Lux Bonteri
+        return $resourcesPaid < CardCost($playedCardID);
       default: break;
     }
   }
@@ -1393,7 +1409,6 @@ function AllyPlayCardAbility($cardID, $player="", $from="-", $abilityID="-", $un
   }
   switch($abilityID)
   {
-
     case "7200475001"://Ki-Adi Mundi
       $opponent = $currentPlayer == 1 ? 2 : 1;
       Draw($opponent);
@@ -1404,6 +1419,9 @@ function AllyPlayCardAbility($cardID, $player="", $from="-", $abilityID="-", $un
       break;
     case "4935319539"://Krayt Dragon
       AddLayer("TRIGGER", $currentPlayer, "4935319539", $cardID);
+      break;
+    case "0199085444"://Lux Bonteri
+      AddLayer("TRIGGER", $currentPlayer, "0199085444", $cardID);
       break;
     default: break;
   }
@@ -1441,7 +1459,7 @@ function SpecificAllyAttackAbilities($attackID)
       case "0160548661"://Fallen Lightsaber
         if(TraitContains($attackID, "Force", $mainPlayer)) {
           WriteLog("Fallen Lightsaber deals 1 damage to all defending ground units");
-          DamagePlayerAllies($defPlayer, 1, "0160548661", "DAMAGE", arena:"Ground");
+          DamagePlayerAllies($defPlayer, 1, "0160548661", "ATTACKABILITY", arena:"Ground");
         }
         break;
       case "8495694166"://Jedi Lightsaber
@@ -1978,7 +1996,7 @@ function SpecificAllyAttackAbilities($attackID)
         CreateCloneTrooper($mainPlayer);
       }
       break;
-    case "0354710662"://Saw Gerrera
+    case "0354710662"://Saw Gerrera (Resistance Is Not Terrorism)
       if(GetHealth($mainPlayer) >= 15) {
         $otherPlayer = $mainPlayer == 1 ? 2 : 1;
         DamagePlayerAllies($otherPlayer, 1, "0354710662", "ATTACKABILITY", arena:"Ground");
@@ -2247,6 +2265,7 @@ function AllyBeginEndTurnEffects()
       $mainAllies[$i+8] = 1;
       $mainAllies[$i+10] = 0;//Reset times attacked
       ++$mainAllies[$i+12];//Increase number of turns in play
+      $mainAllies[$i+14] = 0;//Reset was healed
     }
     switch($mainAllies[$i])
     {
@@ -2260,6 +2279,7 @@ function AllyBeginEndTurnEffects()
       $defAllies[$i+8] = 1;
       $defAllies[$i+10] = 0;//Reset times attacked
       ++$defAllies[$i+12];//Increase number of turns in play
+      $defAllies[$i+14] = 0;//Reset was healed
     }
   }
 }

@@ -15,6 +15,8 @@
 12 - Current player status (0 = active, 1 = inactive)
 13 - Format (see function FormatCode)
 14 - Game status (see $GS_ constants)
+15 - P1 Disconnect Status (0 = connected, 1 = first warning, 2 = second warning, 3 = disconnected; opponent can claim victory)
+16 - P2 Disconnect Status
 */
 
 // $useRedis = getenv('REDIS_ENABLED') ?? false;

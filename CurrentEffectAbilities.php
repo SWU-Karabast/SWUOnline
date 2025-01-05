@@ -188,6 +188,8 @@ function EffectAttackModifier($cardID, $playerID="")
     case "1938453783": return 2;//Armed to the Teeth
     case "6263178121": return 2;//Kylo Ren (Killing the Past)
     case "8307804692": return -3;//Padme Admidala
+    case "1167572655": return 1;//Planetary Invasion
+    case "5610901450": return 2;//Heroes on Both Sides
     case "7578472075"://Let the Wookie Win
       $attacker = new Ally(AttackerMZID($mainPlayer), $mainPlayer);
       return TraitContains($attacker->CardID(), "Wookiee", $mainPlayer) ? 2 : 0;
@@ -628,6 +630,15 @@ function CurrentEffectEndTurnAbilities()
         if ($ally->Exists() && $ally->Controller() != $ally->Owner()) {
           $owner = $ally->Owner();
           WriteLog("Change of Heart unit reverted control of " . CardLink($ally->CardID(), $ally->CardID()) . "back to player $owner");
+          AddDecisionQueue("PASSPARAMETER", $owner, "THEIRALLY-" . $ally->Index(), 1);
+          AddDecisionQueue("MZOP", $owner, "TAKECONTROL", 1);
+        }
+        break;
+      case "7732981122"://Sly Moore
+        $ally = new Ally($currentTurnEffects[$i+2]);
+        if ($ally->Exists() && $ally->Controller() != $ally->Owner()) {
+          $owner = $ally->Owner();
+          WriteLog("Sly Moore unit reverted control of " . CardLink($ally->CardID(), $ally->CardID()) . "back to player $owner");
           AddDecisionQueue("PASSPARAMETER", $owner, "THEIRALLY-" . $ally->Index(), 1);
           AddDecisionQueue("MZOP", $owner, "TAKECONTROL", 1);
         }

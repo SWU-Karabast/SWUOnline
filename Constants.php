@@ -129,9 +129,12 @@ function ResourcePieces() { return ArsenalPieces(); }
 //11 - Owner
 //12 - Turns in play
 //13 - Cloned - 0 = no, 1 = yes
+//14 - Healed
+//15 - Unused
+//16 - Unused
 function AllyPieces()
 {
-  return 14;
+  return 17;
 }
 
 //Card ID
