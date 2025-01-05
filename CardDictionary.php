@@ -698,6 +698,7 @@ function HasSaboteur($cardID, $player, $index)
       case "4663781580": return true;//Swoop Down
       case "9210902604": return true;//Precision Fire
       case "4910017138": return true;//Breaking In
+      case "5610901450": return true;//Heroes on Both Sides
       default: break;
     }
   }

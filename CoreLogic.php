@@ -5535,6 +5535,22 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $ally = new Ally($target, $currentPlayer);
       $ally->AddEffect("2012334456", "PLAY");
       break;
+    case "5610901450"://Heroes on Both Sides
+      //Republic
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Republic&THEIRALLY:trait=Republic");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to give +2/+2", 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "ADDHEALTH,2", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "5610901450,PLAY", 1);
+      //Separatist
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Separatist&THEIRALLY:trait=Separatist");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to give +2/+2", 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "ADDHEALTH,2", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "5610901450,PLAY", 1);
+      break;
     //PlayAbility End
     default: break;
   }
