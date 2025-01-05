@@ -82,6 +82,17 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       if(count($parameters) > 1) $subparam = $parameters[1];
       else $subparam = "";
       switch($parameter) {
+        case "MYDISCARD":
+        case "THEIRDISCARD":
+          $p = $parameter == "MYDISCARD" ? $player : ($player == 1 ? 2 : 1);
+
+          if ($subparam == "") {
+            $discard = &GetDiscard($p);
+            $rv = GetIndices(count($discard), pieces:DiscardPieces());
+          } else {
+            $rv = SearchDiscardForCard($p, $subparam);
+          }
+          break;
         case "GETINDICES": $rv = GetIndices($subparam); break;
         case "ARCANETARGET": $rv = GetArcaneTargetIndices($player, $subparam); break;
         case "DAMAGEPREVENTION":
