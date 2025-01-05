@@ -468,6 +468,17 @@ function SpecificCardLogic($player, $parameter, $lastResult)
         $ally->Attach("2007868442");//Experience token
       }
       return $lastResult;
+    case "PLANETARYINVASION":
+      if($lastResult == "PASS") {
+        return $lastResult;
+      }
+      
+      for($i=0; $i<count($lastResult); ++$i) {
+        $ally = new Ally("MYALLY-" . $lastResult[$i], $player);
+        $ally->Ready();
+        $ally->AddEffect("1167572655");//Planetary Invasion
+      }
+      return $lastResult;
     case "LTCHILDSEN":
       if($lastResult == "PASS" || $lastResult == []) {
         return $lastResult;

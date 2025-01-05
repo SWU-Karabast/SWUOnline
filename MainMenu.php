@@ -165,7 +165,6 @@ include_once 'Header.php';
           <li>Heroes on Both Sides</li>
           <li>Lux Bonteri</li>
           <li>On Top of Things</li>
-          <li>Planetery Invasion</li>
           <li>Sly Moore</li>
           <li>Sword and Shield Maneuver</li>
           <li>Unnatural Life</li>

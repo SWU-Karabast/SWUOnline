@@ -193,7 +193,7 @@ function ExploitAmount($cardID, $player, $reportMode=true) {
     case "3381931079": $amount += 4; break;//Malevolence
     case "3556557330": $amount += 2; break;//Asajj Ventress
     case "3589814405": $amount += 2; break;//Tactical Droid Commander
-//    case "1167572655": $amount += 3; break;//Planetary Invasion
+    case "1167572655": $amount += 3; break;//Planetary Invasion
     default: break;
   }
   return $amount;
@@ -496,6 +496,7 @@ function HasOverwhelm($cardID, $player, $index)
     switch($currentTurnEffects[$i]) {
       case "4085341914": return true;//Heroic Resolve
       case "6461101372": return !LeaderAbilitiesIgnored();//Maul Leader
+      case "1167572655": return true;//Planetary Invasion
       default: break;
     }
   }

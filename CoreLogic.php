@@ -5516,6 +5516,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "9399634203,HAND", 1);
       break;
+    case "1167572655"://Planetary Invasion
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+      AddDecisionQueue("OP", $currentPlayer, "MZTONORMALINDICES");
+      AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "3-", 1);
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose up to 3 units to ready", 1);
+      AddDecisionQueue("MULTICHOOSEUNIT", $currentPlayer, "<-", 1, 1);
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "PLANETARYINVASION", 1);
+      break;
     //PlayAbility End
     default: break;
   }
