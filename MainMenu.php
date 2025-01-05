@@ -163,7 +163,6 @@ include_once 'Header.php';
           <li>Barriss Offee</li>
           <li>Lux Bonteri</li>
           <li>Unnatural Life</li>
-          <li>Wartime Profiteering</li>
         </ul>
         <p style="margin-bottom: 2rem;";>Bugs are still a possibility during this rollout, if you discover any as you play please submit them to the <i>#bug-reports</i> channel in our <a target="_blank" href="https://discord.gg/hKRaqHND4v">Discord</a>.</p>
       </div>

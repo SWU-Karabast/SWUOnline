@@ -5564,6 +5564,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "8719468890"://Sword and Shield Maneuver
       AddCurrentTurnEffect("8719468890", $currentPlayer, "PLAY");
       break;
+    case "3459567689"://Wartime Profiteering
+      global $CS_NumAlliesDestroyed;
+      $numDefeated = GetClassState(1, $CS_NumAlliesDestroyed) + GetClassState(2, $CS_NumAlliesDestroyed);
+      AddDecisionQueue("SEARCHDECKTOPX", $currentPlayer, $numDefeated . ";1;");
+      AddDecisionQueue("MULTIADDHAND", $currentPlayer, "-", 1);
+      AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
+      break;
     //PlayAbility End
     default: break;
   }
