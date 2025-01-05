@@ -58,6 +58,14 @@ function CompletesAttackEffect($cardID) {
         AddDecisionQueue("MZOP", $mainPlayer, "RESTORE,2", 1);
       }
       break;
+    case "7244268162"://Finn
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("MZFILTER", $mainPlayer, "unique=0");
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit for Finn to protect");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "7244268162,PLAY", 1);
+      break;
     default: break;
   }
 }

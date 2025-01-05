@@ -174,12 +174,14 @@ class Ally {
 
   //Returns true if the ally is destroyed
   function DealDamage($amount, $bypassShield = false, $fromCombat = false, &$damageDealt = NULL, $enemyDamage = false, $fromUnitEffect=false) {
+    global $currentTurnEffects;
     if($this->index == -1 || $amount <= 0) return false;
     global $mainPlayer;
     if(!$fromCombat && $this->AvoidsDamage($enemyDamage)) return;
     if($fromCombat && !$this->LostAbilities()) {
       if($this->CardID() == "6190335038" && $this->PlayerID() == $mainPlayer && IsCoordinateActive($this->PlayerID())) return false;//Aayla Secura
     }
+    //Upgrade damage prevention
     $subcards = $this->GetSubcards();
     for($i=0; $i<count($subcards); $i+=SubcardPieces()) {
       if($subcards[$i] == "8752877738") {
@@ -194,6 +196,18 @@ class Ally {
       switch($subcards[$i]) {
         case "5738033724"://Boba Fett's Armor
           if(CardTitle($this->CardID()) == "Boba Fett") $amount -= 2;
+          if($amount < 0) $amount = 0;
+          break;
+        default: break;
+      }
+    }
+    //Current effect damage prevention
+    for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnEffectPieces()) {
+      if($currentTurnEffects[$i+1] != $this->PlayerID()) continue;
+      if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $this->UniqueID()) continue;
+      switch($currentTurnEffects[$i]) {
+        case "7244268162"://Finn
+          $amount -= 1;
           if($amount < 0) $amount = 0;
           break;
         default: break;
