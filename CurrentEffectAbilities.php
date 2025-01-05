@@ -292,7 +292,7 @@ function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
         if ($effectCardID == "TTFREE") { //Free
           $costModifier -= 99;
           $remove = true;
-        } else { // E.g TT-2, TT+3
+        } else { // TT* modifier for dynamic cost adjustments. E.g TT-2 reduces the card's cost by 2, TT+3 increases it by 3.
           $costModifier += (int) substr($effectCardID, 2);
           $remove = true;
         }
