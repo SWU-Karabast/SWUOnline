@@ -126,7 +126,7 @@ if ($lastUpdate != 0 && $cacheVal < $lastUpdate) {
   $data["showSubmit"] = $showSubmit;
 
   // Chat Log
-  $data["logContent"] = JSONLog($gameName, $playerID);
+  $data["logContent"] = JSONLog($gameName);
 
   // Player Joined Audio
   $data["playerJoinAudio"] = $playerID == 1 && $gameStatus == $MGS_ChooseFirstPlayer;

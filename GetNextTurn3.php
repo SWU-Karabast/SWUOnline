@@ -645,7 +645,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   $response->landmarks = $landmarksOutput;
 
   // Chat Log
-  $response->chatLog = JSONLog($gameName, $playerID);
+  $response->chatLog = JSONLog($gameName);
 
   // Deduplicate current turn effects
   $playerEffects = array();

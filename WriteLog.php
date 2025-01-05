@@ -60,34 +60,28 @@ function WriteError($text)
   WriteLog("ERROR: " . $text);
 }
 
-function EchoLog($gameName, $playerID)
+function EchoLog($gameName)
 {
   $filename = LogPath($gameName);
   $filesize = filesize($filename);
-  if ($filesize > 0) {
-    $handler = fopen($filename, "r");
-    $line = fread($handler, $filesize);
-    echo ($line);
+  if ($filesize > 0 && ($handler = fopen($filename, "r"))) {
+    echo(fread($handler, $filesize));
     fclose($handler);
   }
 }
 
-function JSONLog($gameName, $playerID, $path="./")
+function JSONLog($gameName, $path="./")
 {
-  $response = "";
   $filename = LogPath($gameName, $path);
   $filesize = filesize($filename);
-  if ($filesize > 0) {
-    $handler = fopen($filename, "r");
-    $line = str_replace("\r\n", "<br>", fread($handler, $filesize));
-    //$line = str_replace("<PLAYER1COLOR>", $playerID==1 ? "Blue" : "Red", $line);
-    //$line = str_replace("<PLAYER2COLOR>", $playerID==2 ? "Blue" : "Red", $line);
-    $red = "#cb0202";
-    $blue = "#128ee5";
-    $line = str_replace("<PLAYER1COLOR>", $playerID == 1 || $playerID == 3 ? $blue : $red, $line);
-    $line = str_replace("<PLAYER2COLOR>", $playerID == 2 ? $blue : $red, $line);
-    $response = $line;
-    fclose($handler);
+
+  if ($filesize <= 0) {
+    return "";
   }
+
+  $handler = fopen($filename, "r");
+  $response = fread($handler, $filesize);
+  fclose($handler);
+
   return $response;
 }

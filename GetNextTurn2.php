@@ -1114,7 +1114,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   echo ("</div>");
 
   echo ("<div id='gamelog'>");
-  EchoLog($gameName, $playerID);
+  EchoLog($gameName);
   echo ("</div>");
   if ($playerID != 3) {
     echo ("<div id='chatPlaceholder'></div>");
