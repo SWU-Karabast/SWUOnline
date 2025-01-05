@@ -28,6 +28,9 @@ function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null,
   $allies[] = $owner ?? $player; //Owner
   $allies[] = 0; //Turns in play
   $allies[] = $cloned ? 1 : 0; //Cloned
+  $allies[] = 0; //Healed this turn
+  $allies[] = 0; //Unused
+  $allies[] = 0; //Unused
   $index = count($allies) - AllyPieces();
   CurrentEffectAllyEntersPlay($player, $index);
   CheckUniqueAlly($uniqueID);
@@ -2258,6 +2261,7 @@ function AllyBeginEndTurnEffects()
       $mainAllies[$i+8] = 1;
       $mainAllies[$i+10] = 0;//Reset times attacked
       ++$mainAllies[$i+12];//Increase number of turns in play
+      $mainAllies[$i+14] = 0;//Reset was healed
     }
     switch($mainAllies[$i])
     {
@@ -2271,6 +2275,7 @@ function AllyBeginEndTurnEffects()
       $defAllies[$i+8] = 1;
       $defAllies[$i+10] = 0;//Reset times attacked
       ++$defAllies[$i+12];//Increase number of turns in play
+      $defAllies[$i+14] = 0;//Reset was healed
     }
   }
 }

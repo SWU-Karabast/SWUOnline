@@ -160,7 +160,6 @@ include_once 'Header.php';
         <p>Remaining cards:</p>
         <ul class="karabast-unimplemented-list">
           <li>Aid from the Innocent</li>
-          <li>Barriss Offee</li>
           <li>Lux Bonteri</li>
           <li>Unnatural Life</li>
         </ul>

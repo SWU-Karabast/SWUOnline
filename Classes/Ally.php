@@ -100,6 +100,7 @@ class Ally {
     } else {
       $this->allies[$this->index+2] -= $amount;
     }
+    $this->allies[$this->index+14] = 1;//Track that the ally was healed this round
     AddEvent("RESTORE", $this->UniqueID() . "!" . $healed);
     return $healed;
   }
@@ -161,6 +162,10 @@ class Ally {
 
   function IsExhausted() {
     return $this->allies[$this->index+1] == 1;
+  }
+
+  function WasHealed() {
+    return $this->allies[$this->index+14] == 1;
   }
 
   function Destroy() {
@@ -328,6 +333,9 @@ class Ally {
           break;
         case "9017877021"://Clone Commander Cody
           if($i != $this->index && IsCoordinateActive($this->playerID)) $power += 1;
+          break;
+        case "7924172103"://Bariss Offee
+          if($this->WasHealed()) $power += 1;
           break;
         default: break;
       }
