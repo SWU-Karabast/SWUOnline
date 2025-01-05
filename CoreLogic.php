@@ -5551,6 +5551,17 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "5610901450,PLAY", 1);
       break;
+    case "7732981122"://Sly Moore
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "token=0", 1);
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to take control of", 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "7732981122", 1);
+      break;
+      break;
     //PlayAbility End
     default: break;
   }

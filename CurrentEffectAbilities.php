@@ -634,6 +634,15 @@ function CurrentEffectEndTurnAbilities()
           AddDecisionQueue("MZOP", $owner, "TAKECONTROL", 1);
         }
         break;
+      case "7732981122"://Sly Moore
+        $ally = new Ally($currentTurnEffects[$i+2]);
+        if ($ally->Exists() && $ally->Controller() != $ally->Owner()) {
+          $owner = $ally->Owner();
+          WriteLog("Sly Moore unit reverted control of " . CardLink($ally->CardID(), $ally->CardID()) . "back to player $owner");
+          AddDecisionQueue("PASSPARAMETER", $owner, "THEIRALLY-" . $ally->Index(), 1);
+          AddDecisionQueue("MZOP", $owner, "TAKECONTROL", 1);
+        }
+        break;
       case "5696041568-2"://Triple Dark Raid
         $ally = new Ally($currentTurnEffects[$i+2]);
         if ($ally->Exists()) {
