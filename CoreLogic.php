@@ -5531,6 +5531,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "NODISINTEGRATIONS", 1);
       break;
+    case "2012334456"://On Top of Things
+      $ally = new Ally($target, $currentPlayer);
+      $ally->AddEffect("2012334456", "PLAY");
+      break;
     //PlayAbility End
     default: break;
   }

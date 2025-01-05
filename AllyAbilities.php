@@ -1061,6 +1061,17 @@ function AllyBeginRoundAbilities($player)
 
 function AllyCanBeAttackTarget($player, $index, $cardID)
 {
+  global $currentTurnEffects;
+  for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnPieces()) {
+    if($currentTurnEffects[$i+1] != $player) continue;
+    $ally = new Ally("MYALLY-" . $index, $player);
+    if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
+    switch($currentTurnEffects[$i]) {
+      case "2012334456"://On Top of Things
+        return false;
+      default: break;
+    }
+  }
   switch($cardID)
   {
     case "3646264648"://Sabine Wren
