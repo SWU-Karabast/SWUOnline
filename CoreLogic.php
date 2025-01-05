@@ -5524,6 +5524,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MULTICHOOSEUNIT", $currentPlayer, "<-", 1, 1);
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "PLANETARYINVASION", 1);
       break;
+    case "4033634907"://No Disintegrations
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal all but one damage to", 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "NODISINTEGRATIONS", 1);
+      break;
     //PlayAbility End
     default: break;
   }

@@ -479,6 +479,10 @@ function SpecificCardLogic($player, $parameter, $lastResult)
         $ally->AddEffect("1167572655");//Planetary Invasion
       }
       return $lastResult;
+    case "NODISINTEGRATIONS":
+      $ally = new Ally($lastResult, MZPlayerID($player, $lastResult));
+      $ally->DealDamage($ally->Health() - 1);
+      return $lastResult;
     case "LTCHILDSEN":
       if($lastResult == "PASS" || $lastResult == []) {
         return $lastResult;
