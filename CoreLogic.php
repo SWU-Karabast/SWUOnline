@@ -3681,6 +3681,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("SEARCHDECKTOPX", $currentPlayer, "10;3;include-definedType-Unit&include-maxCost-7");
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "UWINGREINFORCEMENT", 1);
       break;
+    case "7510418786"://Aid From The Innocent
+      AddDecisionQueue("SEARCHDECKTOPX", $currentPlayer, "10;2;exclude-definedType-Unit&include-aspect-Heroism");
+      AddDecisionQueue("MULTIADDDISCARD", $currentPlayer, "HAND,TT-2", 1);
+      AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
+      break;
     case "5950125325"://Confiscate
       DefeatUpgrade($currentPlayer);
       break;

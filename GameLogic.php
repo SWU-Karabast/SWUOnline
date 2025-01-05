@@ -940,10 +940,12 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       }
       return $lastResult;
     case "MULTIADDDISCARD":
+      $paramArr = explode(",", $parameter);
+      $modifier = count($paramArr) > 1 ? $paramArr[1] : "-";
       $deck = &GetDeck($player);
       $cards = explode(",", $lastResult);
       for($i = 0; $i < count($cards); ++$i) {
-        AddGraveyard($cards[$i], $player, $parameter);
+        AddGraveyard($cards[$i], $player, $paramArr[0], $modifier);
       }
       return $lastResult;
     case "MULTIREMOVEDECK":

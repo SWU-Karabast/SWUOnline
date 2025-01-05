@@ -288,135 +288,141 @@ function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
     $remove = false;
     $effectCardID = $currentTurnEffects[$i];
     if($currentTurnEffects[$i + 1] == $currentPlayer) {
-      switch($effectCardID) {
-        case "TTFREE"://Free
+      if (str_starts_with($effectCardID, "TT") && strlen($effectCardID) > 2) {
+        if ($effectCardID == "TTFREE") { //Free
           $costModifier -= 99;
           $remove = true;
-          break;
-        case "5707383130"://Bendu
-          if($from != "PLAY" && !AspectContains($cardID, "Heroism", $currentPlayer) && !AspectContains($cardID, "Villainy", $currentPlayer)) {
-            $costModifier -= 2;
-            $remove = true;
-          }
-          break;
-        case "4919000710"://Home One
-          $costModifier -= 3;
+        } else { // E.g TT-2, TT+3
+          $costModifier += (int) substr($effectCardID, 2);
           $remove = true;
-          break;
-        case "5351496853"://Gideon's Light Cruiser
-          $costModifier -= 99;
-          $remove = true;
-          break;
-        case "2756312994"://Alliance Dispatcher
-          $costModifier -= 1;
-          $remove = true;
-          break;
-        case "3509161777"://You're My Only Hope
-          $costModifier -= PlayerRemainingHealth($currentPlayer) <= 5 ? 99 : 5;
-          $remove = true;
-          break;
-        case "5494760041"://Galactic Ambition
-          $costModifier -= 99;
-          $remove = true;
-          break;
-        case "3426168686"://Sneak Attack
-          if($from != "PLAY") {
+        }
+      } else {
+        switch($effectCardID) {
+          case "5707383130"://Bendu
+            if($from != "PLAY" && !AspectContains($cardID, "Heroism", $currentPlayer) && !AspectContains($cardID, "Villainy", $currentPlayer)) {
+              $costModifier -= 2;
+              $remove = true;
+            }
+            break;
+          case "4919000710"://Home One
             $costModifier -= 3;
             $remove = true;
-          }
-          break;
-        case "2397845395"://Strategic Acumen
-          $costModifier -= 1;
-          $remove = true;
-          break;
-        case "4895747419"://Consolidation Of Power
-          $costModifier -= 99;
-          $remove = true;
-          break;
-        case "5696041568"://Triple Dark Raid
-          $costModifier -= 5;
-          $remove = true;
-          break;
-        case "7870435409"://Bib Fortuna
-          $costModifier -= 1;
-          $remove = true;
-          break;
-        case "8506660490"://Darth Vader
-          $costModifier -= 99;
-          $remove = true;
-          break;
-        case "8968669390"://U-Wing Reinforcement
-          $costModifier -= 99;
-          $remove = true;
-          break;
-        case "5440730550"://Lando Calrissian Leader
-        case "040a3e81f3"://Lando Calrissian Leader Unit
-          $costModifier -= 3;
-          $remove = true;
-          break;
-        case "4643489029"://Palpatine's Return
-          $costModifier -= TraitContains($cardID, "Force", $currentPlayer) ? 8 : 6;
-          $remove = true;
-          break;
-        case "7270736993"://Unrefusable Offer
-        case "4717189843"://A New Adventure
-          $costModifier -= 99;
-          $remove = true;
-          break;
-        case "9642863632"://Bounty Hunter's Quarry
-          $costModifier -= 99;
-          $remove = true;
-          break;
-        case "9226435975"://Han Solo Red
-          $costModifier -= 1;
-          $remove = true;
-          break;
-        case "0622803599-3"://Jabba the Hutt
-          if($from != "PLAY" && DefinedTypesContains($cardID, "Unit", $currentPlayer)) {
+            break;
+          case "5351496853"://Gideon's Light Cruiser
+            $costModifier -= 99;
+            $remove = true;
+            break;
+          case "2756312994"://Alliance Dispatcher
             $costModifier -= 1;
             $remove = true;
-          }
-          break;
-        case "f928681d36-3"://Jabba the Hutt Leader Unit
-          if($from != "PLAY" && DefinedTypesContains($cardID, "Unit", $currentPlayer)) {
-            $costModifier -= 2;
+            break;
+          case "3509161777"://You're My Only Hope
+            $costModifier -= PlayerRemainingHealth($currentPlayer) <= 5 ? 99 : 5;
             $remove = true;
-          }
-          break;
-        case "5576996578"://Endless Legions
-          $costModifier -= 99;
-          $remove = true;
-          break;
-        case "3399023235"://Fenn Rau
-          $costModifier -= 2;
-          $remove = true;
-          break;
-        case "7642980906"://Stolen Landspeeder
-          $costModifier -= 99;
-          $remove = false;
-          break;
-        case "6772128891"://Exploit Effect
-          $costModifier -= 2;
-          $remove = true;
-          break;
-        case "6849037019"://Now There Are Two of Them
-          $costModifier -= 5;
-          $remove = true;
-          break;
-        case "6570091935"://Tranquility
-          if($from != "PLAY" && TraitContains($cardID, "Republic") && !in_array($effectCardID, $uniqueEffectsActivated)) {
+            break;
+          case "5494760041"://Galactic Ambition
+            $costModifier -= 99;
+            $remove = true;
+            break;
+          case "3426168686"://Sneak Attack
+            if($from != "PLAY") {
+              $costModifier -= 3;
+              $remove = true;
+            }
+            break;
+          case "2397845395"://Strategic Acumen
             $costModifier -= 1;
             $remove = true;
-            $uniqueEffectsActivated[] = $effectCardID;
-          }
-          break;
-        case "0414253215"://General's Blade
-          if($from != "PLAY" && DefinedTypesContains($cardID, "Unit", $currentPlayer)) {
+            break;
+          case "4895747419"://Consolidation Of Power
+            $costModifier -= 99;
+            $remove = true;
+            break;
+          case "5696041568"://Triple Dark Raid
+            $costModifier -= 5;
+            $remove = true;
+            break;
+          case "7870435409"://Bib Fortuna
+            $costModifier -= 1;
+            $remove = true;
+            break;
+          case "8506660490"://Darth Vader
+            $costModifier -= 99;
+            $remove = true;
+            break;
+          case "8968669390"://U-Wing Reinforcement
+            $costModifier -= 99;
+            $remove = true;
+            break;
+          case "5440730550"://Lando Calrissian Leader
+          case "040a3e81f3"://Lando Calrissian Leader Unit
+            $costModifier -= 3;
+            $remove = true;
+            break;
+          case "4643489029"://Palpatine's Return
+            $costModifier -= TraitContains($cardID, "Force", $currentPlayer) ? 8 : 6;
+            $remove = true;
+            break;
+          case "7270736993"://Unrefusable Offer
+          case "4717189843"://A New Adventure
+            $costModifier -= 99;
+            $remove = true;
+            break;
+          case "9642863632"://Bounty Hunter's Quarry
+            $costModifier -= 99;
+            $remove = true;
+            break;
+          case "9226435975"://Han Solo Red
+            $costModifier -= 1;
+            $remove = true;
+            break;
+          case "0622803599-3"://Jabba the Hutt
+            if($from != "PLAY" && DefinedTypesContains($cardID, "Unit", $currentPlayer)) {
+              $costModifier -= 1;
+              $remove = true;
+            }
+            break;
+          case "f928681d36-3"://Jabba the Hutt Leader Unit
+            if($from != "PLAY" && DefinedTypesContains($cardID, "Unit", $currentPlayer)) {
+              $costModifier -= 2;
+              $remove = true;
+            }
+            break;
+          case "5576996578"://Endless Legions
+            $costModifier -= 99;
+            $remove = true;
+            break;
+          case "3399023235"://Fenn Rau
             $costModifier -= 2;
             $remove = true;
-          }
-          break;
-        default: break;
+            break;
+          case "7642980906"://Stolen Landspeeder
+            $costModifier -= 99;
+            $remove = false;
+            break;
+          case "6772128891"://Exploit Effect
+            $costModifier -= 2;
+            $remove = true;
+            break;
+          case "6849037019"://Now There Are Two of Them
+            $costModifier -= 5;
+            $remove = true;
+            break;
+          case "6570091935"://Tranquility
+            if($from != "PLAY" && TraitContains($cardID, "Republic") && !in_array($effectCardID, $uniqueEffectsActivated)) {
+              $costModifier -= 1;
+              $remove = true;
+              $uniqueEffectsActivated[] = $effectCardID;
+            }
+            break;
+          case "0414253215"://General's Blade
+            if($from != "PLAY" && DefinedTypesContains($cardID, "Unit", $currentPlayer)) {
+              $costModifier -= 2;
+              $remove = true;
+            }
+            break;
+          default: break;
+        }
       }
       if($remove && !$reportMode) RemoveCurrentTurnEffect($i);
     }

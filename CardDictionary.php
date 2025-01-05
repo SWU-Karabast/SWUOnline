@@ -1464,7 +1464,7 @@ function IsPlayable($cardID, $phase, $from, $index = -1, &$restriction = null, $
   if($phase == "M" && $from == "GY") {
     $discard = &GetDiscard($player);
     if($discard[$index] == "4843813137") return true;//Brutal Traditions
-    return $discard[$index+1] == "TT" || $discard[$index+1] == "TTFREE";
+    return str_starts_with($discard[$index+1], "TT");
   }
   $isStaticType = IsStaticType($cardType, $from, $cardID);
   if($isStaticType) {
