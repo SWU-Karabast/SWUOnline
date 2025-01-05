@@ -26,7 +26,7 @@ $isMobile = IsMobile();
   <meta charset="utf-8">
   <title>Karabast</title>
   <link rel="shortcut icon" type="image/png" href="Images/karabastTiny.png" />
-  <link rel="stylesheet" href="./css/karabast071824.css">
+  <link rel="stylesheet" href="./css/karabast122924.css">
   <!-- <link rel="stylesheet" href="./css/menuStyles2.css"> -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -37,7 +37,7 @@ $isMobile = IsMobile();
 <body>
 
   <div class='nav-bar'>
-    
+
     <div class='nav-bar-user'>
       <ul class='rightnav'>
         <?php //if($isPatron) echo "<li><a href='Replays.php'>Replays[BETA]</a></li>";
@@ -53,12 +53,12 @@ $isMobile = IsMobile();
         ?>
       </ul>
     </div>
-    
+
     <div class='nav-bar-links'>
       <ul>
           <?php
             echo '<li><a target="_blank" href="https://discord.gg/hKRaqHND4v"><img src="./Images/icons/discord.svg"></img></a></li>';
-            echo '<li><a target="_blank" href="https://github.com/OotTheMonk/SWUOnline"><img src="./Images/icons/github.svg"></img></a></li>';
+            echo '<li><a target="_blank" href="https://github.com/SWU-Karabast/SWUOnline"><img src="./Images/icons/github.svg"></img></a></li>';
           ?>
       </ul>
     </div>

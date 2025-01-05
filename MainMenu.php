@@ -94,7 +94,7 @@ include_once 'Header.php';
   */
 
   ?>
-  <label for="fabdb"><u><a style='color:lightblue;' href='https://www.swudb.com/' target='_blank'>SWUDB</a></u> or <u><a style='color:lightblue;' href='https://www.sw-unlimited-db.com/' target='_blank'>SW-Unlimited-DB</a></u> Deck Link <span class="secondary">(use the url or 'Deck Link' button)</span></label>
+  <label for="fabdb"><u><a style='color:lightblue;' href='https://www.swudb.com/' target='_blank'>SWUDB</a></u> or <u><a style='color:lightblue;' href='https://sw-unlimited-db.com/' target='_blank'>SW-Unlimited-DB</a></u> Deck Link <span class="secondary">(use the url or 'Deck Link' button)</span></label>
   <input type="text" id="fabdb" name="fabdb" value='<?= $deckUrl ?>'>
   <?php
   if (isset($_SESSION["userid"])) {
@@ -117,13 +117,6 @@ include_once 'Header.php';
   echo ("<option value='livinglegendscc'" . ($defaultFormat == 4 ? " selected" : "") . ">Open Format</option>");
   echo ("</select>");
   ?>
-
-  <div class='info-box' id='info-box' style='display: <?php echo ($defaultFormat == 4 ? "block" : "none"); ?>;'>
-    <p>
-      <img src="./Images/infoicon.png" alt="Info" style="width: 13px; height: 13px; margin: 0 2px -1px 0;">
-      <span>Set 2 cards are now available in Premier Format. Open Format allows for custom rules and deck sizes, but it may take longer to find an opponent.</span>
-    </p>
-  </div>
 
   <?php
   if ($canSeeQueue) {
@@ -160,16 +153,24 @@ include_once 'Header.php';
     <h2>News</h2>
     <div style="position: relative;">
       <div style='vertical-align:middle; text-align:center;'>
-        <img src="./Images/shd-art-v3.png" alt="SHD" style="max-width: 100%; border-radius: 5px;">
+        <img src="./Images/unimpl.png" alt="TWI" style="max-width: 100%; border-radius: 5px;">
         <div style="text-align: left;">
-          <b style="margin: 15px 0; display: block;">Set 2 now available!</b>
-          <p>With the launch of Set 2 we are now making these cards available in the premier formats! A big thanks to everyone who has contributed to the project, whether it be through bug reports, feature requests, or just playing games. 
-             Together, we've logged well over 300,000 games! It's clear this game has captured our hearts, and set 2 promises to offer a bounty of great games whether you're playing at your LGS or on Karabast
-             while you're smuggled up at home.</p>
-          <p>We know there's still a lot of work to be done, but the team is excited about the future of the project. We encourage you to join our <a target="_blank" href="https://discord.gg/hKRaqHND4v">Discord</a> to chat with the community, provide us feedback, or even help out with development. 
-            Either way, we hope you enjoy playing. Have fun, and may the force be with you!</p>
-          </p>
-        </div>
+        <h3 style="margin: 15px 0; display: block;">List of Set 3 Unimplemented Cards</h3>
+        <p>Thanks to the efforts of OotTheMonk, Brubraz, and ninin, many remaining Set 3 cards have now been implemented in Karabast.</p>
+        <p>Remaining cards:</p>
+        <ul class="karabast-unimplemented-list">
+          <li>Unnatural Life</li>
+        </ul>
+        <p style="margin-bottom: 2rem;";>Bugs are still a possibility during this rollout, if you discover any as you play please submit them to the <i>#bug-reports</i> channel in our <a target="_blank" href="https://discord.gg/hKRaqHND4v">Discord</a>.</p>
+      </div>
+    </div>
+    <div style="position: relative;">
+      <div style='vertical-align:middle; text-align:center;'>
+        <img src="./Images/yoda.png" alt="SHD" style="max-width: 100%; border-radius: 5px;">
+        <div style="text-align: left;">
+        <h3 style="margin: 15px 0; display: block;">Set 3 launches, and Karabast's next steps </h3>
+        <p>Twilight is here! Thanks to the hard work of OotTheMonk the majority of Set 3 cards have now been added to Karabast.</p>
+        <p>The team is still hard at work on a brand new engine for Karabast that will dramatically simplify adding future sets, and card bug fixes. <a target="_blank" href="https://discord.gg/hKRaqHND4v">Join our Discord</a> for the latest progress updates and timeline. If you have coding experience we're always open to new contributors, info on how to help out can also be found on Discord.</p>
       </div>
     </div>
     <?php

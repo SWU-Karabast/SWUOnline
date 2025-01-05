@@ -19,11 +19,12 @@ function ProcessHitEffect($cardID)
       if(IsAllyAttackTarget() && $combatChainState[$CCS_DamageDealt] > 0) {
         $ally = new Ally(GetAttackTarget(), $defPlayer);
         if(!DefinedTypesContains($ally->CardID(), "Leader", $defPlayer)) {
-          DestroyAlly($defPlayer, $ally->Index());
+          DestroyAlly($defPlayer, $ally->Index(), fromCombat:true);
         }
       }
       break;
-    case "87e8807695"://Leia Organa
+    case "87e8807695"://Leia Organa Leader Unit
+      if(LeaderAbilitiesIgnored()) break;
       AddCurrentTurnEffect("87e8807695", $mainPlayer);
       break;
     default: break;
@@ -57,12 +58,13 @@ function CompletesAttackEffect($cardID) {
         AddDecisionQueue("MZOP", $mainPlayer, "RESTORE,2", 1);
       }
       break;
-    case "1086021299"://Arquitens Assault Cruiser
-      if(GetAttackTarget() == "NA") {//This means the target was defeated
-        $discard = &GetDiscard($defPlayer);
-        $defeatedCard = RemoveDiscard($defPlayer, count($discard)-DiscardPieces());
-        AddResources($defeatedCard, $mainPlayer, "PLAY", "DOWN");
-      }
+    case "7244268162"://Finn
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("MZFILTER", $mainPlayer, "unique=0");
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit for Finn to protect");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "7244268162,PLAY", 1);
       break;
     default: break;
   }
@@ -70,7 +72,9 @@ function CompletesAttackEffect($cardID) {
 
 function AttackModifier($cardID, $player, $index)
 {
-  global $mainPlayer, $defPlayer, $initiativePlayer, $combatChain, $combatChainState, $CS_NumLeftPlay;
+  global $mainPlayer, $defPlayer, $initiativePlayer, $combatChain, $combatChainState, $currentTurnEffects,
+    $CS_NumLeftPlay, $CCS_MultiAttackTargets;
+
   $modifier = 0;
   if($player == $mainPlayer) {
     //Raid is only for attackers
@@ -78,18 +82,23 @@ function AttackModifier($cardID, $player, $index)
     $mzArr = explode("-", $attacker);
     if($mzArr[1] == $index) $modifier = RaidAmount($cardID, $mainPlayer, $mzArr[1]);
   }
+  //Base attack modifiers
+  $char = &GetPlayerCharacter($player);
+  switch($char[0]) {
+    case "9652861741"://Petranaki Arena
+      $modifier += IsLeader($cardID) ? 1 : 0;
+      break;
+    default: break;
+  }
   switch($cardID) {
     case "3988315236"://Seasoned Shoretrooper
       $modifier += NumResources($player) >= 6 ? 2 : 0;
-      break;
-    case "7922308768"://Valiant Assault Ship
-      $modifier += $player == $mainPlayer && NumResources($mainPlayer) < NumResources($defPlayer) ? 2 : 0;
       break;
     case "6348804504"://Ardent Sympathizer
       $modifier += $initiativePlayer == $player ? 2 : 0;
       break;
     case "4619930426"://First Legion Snowtrooper
-      if(count($combatChain) == 0 || $player == $defPlayer) break;
+      if(count($combatChain) == 0 || $combatChain[0] !== "4619930426" || $player == $defPlayer) break;
       $target = GetAttackTarget();
       if($target == "THEIRCHAR-0") break;
       $ally = new Ally($target, $defPlayer);
@@ -113,7 +122,26 @@ function AttackModifier($cardID, $player, $index)
       break;
     case "4511413808"://Follower of the Way
       $ally = new Ally("MYALLY-" . $index, $player);
-      if($ally->NumUpgrades() > 0) $modifier += 1;
+      if($ally->IsUpgraded()) $modifier += 1;
+      break;
+    case "2265363405"://Echo
+      if(IsCoordinateActive($player)) $modifier += 2;
+      break;
+    case "1209133362"://332nd Stalwart
+      if(IsCoordinateActive($player)) $modifier += 1;
+      break;
+    case "4718895864"://Padawan Starfighter
+      if(SearchCount(SearchAllies($player, trait:"Force"))) return 1;
+      break;
+    case "9227411088"://Clone Heavy Gunner
+      if(IsCoordinateActive($player)) $modifier += 2;
+      break;
+    case "7224a2074a"://Ahsoka Tahno
+      if(IsCoordinateActive($player)) $modifier += 2;
+      break;
+    case "11299cc72f"://Pre Viszla
+      $hand = &GetHand($player);
+      if(count($hand)/HandPieces() >= 6) $modifier += 2;
       break;
     case "58f9f2d4a0"://Dr. Aphra
       $discard = &GetDiscard($player);
@@ -127,14 +155,51 @@ function AttackModifier($cardID, $player, $index)
     case "8305828130"://Warbird Stowaway
         $modifier += $initiativePlayer == $player ? 2 : 0;
         break;
+    case "24a81d97b5"://Anakin Skywalker Leader Unit
+      if(LeaderAbilitiesIgnored()) break;
+      $modifier += floor(GetHealth($player)/5);
+      break;
+    case "f8e0c65364"://Asajj Ventress
+      global $CS_NumEventsPlayed;
+      if(GetClassState($player, $CS_NumEventsPlayed) > 0) $modifier += 1;
+      break;
+    case "8139901441"://Bo-Katan Kryze
+      if(SearchCount(SearchAllies($player, trait:"Trooper")) > 1) $modifier += 1;
+      break;
+    case "1368135704"://Relentless Rocket Droid
+      if(SearchCount(SearchAllies($player, trait:"Trooper")) > 1) $modifier += 2;
+      break;
+    case "4551109857"://Anakin's Interceptor
+      if(GetHealth($player) >= 15) $modifier += 2;
+      break;
+    case "7099699830"://Jyn Erso
+      global $CS_NumAlliesDestroyed;
+      $otherPlayer = $player == 1 ? 2 : 1;
+      if(GetClassState($otherPlayer, $CS_NumAlliesDestroyed) > 0) $modifier += 1;
+      break;
     default: break;
   }
+
+  if(!IsMultiTargetAttackActive() && GetAttackTarget() != "NA" && count($currentTurnEffects) > 0) {
+    for($i=0;$i<count($currentTurnEffects);$i+=CurrentTurnPieces()) {
+      switch($currentTurnEffects[$i]) {
+        case "9399634203"://I Have the High Ground
+          $defendingAlly = new Ally(GetAttackTarget(), $defPlayer);
+          if($player != $defPlayer && $currentTurnEffects[$i+1] == $defPlayer && $currentTurnEffects[$i+2] == $defendingAlly->UniqueID()) {
+            $modifier -= 4;
+          }
+          break;
+        default: break;
+      }
+    }
+  }
+
   return $modifier;
 }
 
 function BlockModifier($cardID, $from, $resourcesPaid)
 {
-  global $defPlayer, $CS_CardsBanished, $mainPlayer, $CS_ArcaneDamageTaken, $combatChain, $chainLinks;
+  global $defPlayer, $mainPlayer, $CS_ArcaneDamageTaken, $combatChain, $chainLinks;
   $blockModifier = 0;
   switch($cardID) {
 
@@ -173,7 +238,7 @@ function OnDefenseReactionResolveEffects()
 function OnBlockResolveEffects()
 {
 
-  
+
 }
 
 function BeginningReactionStepEffects()

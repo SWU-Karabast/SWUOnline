@@ -18,7 +18,7 @@ include_once 'Header.php';
   <div class="login container bg-black">
     <h2>Log In</h2>
     <p class="login-message">Make sure to use your username, not your email!</i></p>
-    
+
     <form action="./AccountFiles/AttemptPasswordLogin.php" method="post" class="LoginForm">
       <label>Username</label>
       <input class="username" type="text" name="userID">
@@ -26,7 +26,7 @@ include_once 'Header.php';
       <input class="password" type="password" name="password">
       <div class="remember-me">
       <input type="checkbox" checked='checked' id="rememberMe" name="rememberMe" value="rememberMe">
-      <label for="rememberMe">Remember Me</label> 
+      <label for="rememberMe">Remember Me</label>
       </div>
       <button type="submit" name="submit">Submit</button>
     </form>
@@ -40,7 +40,7 @@ include_once 'Header.php';
       your account on future visits.</p>
     <a href='./MenuFiles/PrivacyPolicy.php'>Privacy Policy</a>
   </div>
-    
+
 </div>
 
 <div class="flex-padder"></div>

@@ -30,14 +30,14 @@ function PlayAura($cardID, $player, $number = 1, $isToken = false, $rogueHeronSp
   else if($cardID != "ELE111") IncrementClassState($player, $CS_NumAuras, $number);
 }
 
-function UpgradeLeftPlay($cardID, $player, $index) {
-  switch($cardID) {
+function UpgradeDetached($upgradeCardID, $player, $formerBearerMZIndex) {
+  switch($upgradeCardID) {
     case "8055390529"://Traitorous
-      $allies = &GetAllies($player);
-      $owner = $allies[$index + 11];
-      if($player != $owner) AllyTakeControl($owner, $index);
+      $formerBearer = new Ally($formerBearerMZIndex, $player);
+      if($formerBearer->Owner() != $formerBearer->PlayerID()) AllyTakeControl($formerBearer->Owner(), $formerBearer->Index());
       break;
-    default: break;
+    default:
+      break;
   }
 }
 
@@ -379,21 +379,6 @@ function AuraTakeDamageAbilities($player, $damage, $type)
   return $damage;
 }
 
-
-function AuraDamageTakenAbilities($player, $damage)
-{
-  $auras = &GetAuras($player);
-  for($i = count($auras) - AuraPieces(); $i >= 0; $i -= AuraPieces()) {
-    $remove = 0;
-    switch($auras[$i]) {
-
-      default: break;
-    }
-    if($remove) DestroyAura($mainPlayer, $i);
-  }
-  return $damage;
-}
-
 function AuraLoseHealthAbilities($player, $amount)
 {
   global $mainPlayer;
@@ -440,21 +425,21 @@ function AuraAttackAbilities($attackID)
   }
 }
 
-function AuraHitEffects($attackID)
-{
-  global $mainPlayer;
-  $attackType = CardType($attackID);
-  $attackSubType = CardSubType($attackID);
-  $auras = &GetAuras($mainPlayer);
-  for($i = count($auras) - AuraPieces(); $i >= 0; $i -= AuraPieces()) {
-    $remove = 0;
-    switch($auras[$i]) {
+// function AuraHitEffects($attackID)
+// {
+//   global $mainPlayer;
+//   $attackType = CardType($attackID);
+//   $attackSubType = CardSubType($attackID);
+//   $auras = &GetAuras($mainPlayer);
+//   for($i = count($auras) - AuraPieces(); $i >= 0; $i -= AuraPieces()) {
+//     $remove = 0;
+//     switch($auras[$i]) {
 
-      default: break;
-    }
-    if($remove == 1) DestroyAura($mainPlayer, $i);
-  }
-}
+//       default: break;
+//     }
+//     if($remove == 1) DestroyAura($mainPlayer, $i);
+//   }
+// }
 
 function AuraAttackModifiers($index)
 {

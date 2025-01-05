@@ -21,7 +21,7 @@ function PutItemIntoPlayForPlayer($item, $player, $steamCounterModifier = 0, $nu
     array_push($items, $item, $steamCounters, ItemEntersPlayState($item), ItemUses($item), $uniqueID, $myHoldState, $theirHoldState);
   }
   switch($item) {
-    
+
     default: break;
   }
 }
@@ -140,17 +140,17 @@ function GetItemGemState($player, $cardID)
   return $state;
 }
 
-function ItemHitEffects($attackID)
-{
-  global $mainPlayer;
-  $attackSubType = CardSubType($attackID);
-  $items = &GetItems($mainPlayer);
-  for($i = count($items) - ItemPieces(); $i >= 0; $i -= ItemPieces()) {
-    switch($items[$i]) {
-      default: break;
-    }
-  }
-}
+// function ItemHitEffects($attackID)//FAB
+// {
+//   global $mainPlayer;
+//   $attackSubType = CardSubType($attackID);
+//   $items = &GetItems($mainPlayer);
+//   for($i = count($items) - ItemPieces(); $i >= 0; $i -= ItemPieces()) {
+//     switch($items[$i]) {
+//       default: break;
+//     }
+//   }
+// }
 
 function ItemTakeDamageAbilities($player, $damage, $type)
 {
@@ -221,27 +221,6 @@ function ItemEndTurnAbilities()
       default: break;
     }
     if($remove) DestroyItemForPlayer($mainPlayer, $i);
-  }
-}
-
-function ItemDamageTakenAbilities($player, $damage)
-{
-  $otherPlayer = ($player == 1 ? 2 : 1);
-  $items = &GetItems($otherPlayer);
-  for($i = count($items) - ItemPieces(); $i >= 0; $i -= ItemPieces()) {
-    $remove = false;
-    switch($items[$i]) {
-      case "EVR193":
-        if(IsHeroAttackTarget() && $damage == 2) {
-          WriteLog("Talisman of Warfare destroyed both player's arsenal");
-          DestroyArsenal(1);
-          DestroyArsenal(2);
-          $remove = true;
-        }
-        break;
-      default: break;
-    }
-    if($remove) DestroyItemForPlayer($otherPlayer, $i);
   }
 }
 

@@ -82,9 +82,10 @@ function GetClassState($player, $piece)
     if ($player == $mainPlayer) return $mainClassState[$piece];
     else return $defClassState[$piece];
   } else {
-    if ($player == $myStateBuiltFor) return $myClassState[$piece];
-    else return $theirClassState[$piece];
+    if ($player == $myStateBuiltFor && isset($myClassState[$piece])) return $myClassState[$piece];
+    else if ($player != $myStateBuiltFor && isset($theirClassState[$piece])) return $theirClassState[$piece];
   }
+  return null;
 }
 
 function &GetDeck($player)
@@ -312,6 +313,13 @@ function &GetAllies($player)
   global $p1Allies, $p2Allies;
   if ($player == 1) return $p1Allies;
   else return $p2Allies;
+}
+
+function &GetTheirAllies($player)
+{
+  global $p1Allies, $p2Allies;
+  if ($player == 1) return $p2Allies;
+  else return $p1Allies;
 }
 
 function &GetPermanents($player)

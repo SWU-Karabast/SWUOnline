@@ -18,10 +18,12 @@
   $type2Trie = [];
   $uniqueTrie = [];
   $hasPlayTrie = [];
+  $hasDestroyedTrie = [];
   $setTrie = [];
+  $cardIDTrie = [];
   while ($hasMoreData)
   {
-    $jsonUrl = "https://admin.starwarsunlimited.com/api/cards?pagination[page]=" . $page;
+    $jsonUrl = "https://admin.starwarsunlimited.com/api/cards?locale=en&pagination[page]=" . $page . "&pagination[pageSize]=100&filters[variantOf][id][\$null]=true";
     $curl = curl_init();
     $headers = array(
       "Content-Type: application/json",
@@ -49,10 +51,18 @@
       else if($cardNumber < 100) $cardNumber = "0" . $cardNumber;
       $set = $card->expansion->data->attributes->code;
       $cardID= $set . "_" . $cardNumber;
-      //$cardID = "SOR_" . $cardNumber;
+      switch($card->cardUid) {
+        case "3463348370"://Battle droid
+          $cardID = "TWI_T01";
+          break;
+        case "3941784506"://Clone Trooper
+          $cardID = "TWI_T02";
+          break;
+      }
       AddToTries($cardID, $card->cardUid);
 
       $definedType = $card->type->data->attributes->name;
+      if($definedType == "Token Unit") $definedType = "Unit";
       $imageUrl = $card->artFront->data->attributes->formats->card->url;
 
       //$imageUrl = "https://swudb.com/cards/" . $set . "/" . $cardNumber . ".png";
@@ -98,8 +108,10 @@
   GenerateFunction($type2Trie, $handler, "DefinedCardType2", true, "");
   GenerateFunction($uniqueTrie, $handler, "CardIsUnique", false, 0);
   GenerateFunction($hasPlayTrie, $handler, "HasWhenPlayed", false, "false", 1);
+  GenerateFunction($hasDestroyedTrie, $handler, "HasWhenDestroyed", false, "false", 1);
   GenerateFunction($setTrie, $handler, "CardSet", true, "");
   GenerateFunction($uuidLookupTrie, $handler, "UUIDLookup", true, "");
+  GenerateFunction($cardIDTrie, $handler, "CardIDLookup", true, "");
 
   fwrite($handler, "?>");
 
@@ -122,25 +134,30 @@
   function AddToTries($cardID, $uuid)
   {
     global $uuidLookupTrie, $titleTrie, $subtitleTrie, $costTrie, $hpTrie, $powerTrie, $typeTrie, $type2Trie, $uniqueTrie, $card;
-    global $aspectsTrie, $traitsTrie, $arenasTrie, $hasPlayTrie, $setTrie;
+    global $aspectsTrie, $traitsTrie, $arenasTrie, $hasPlayTrie, $hasDestroyedTrie, $setTrie, $cardIDTrie;
     if($uuid != "8752877738" && $uuid != "2007868442") {
       AddToTrie($uuidLookupTrie, $cardID, 0, $uuid);
     }
     AddToTrie($titleTrie, $uuid, 0, str_replace('"', "'", $card->title));
     AddToTrie($subtitleTrie, $uuid, 0, str_replace('"', "'", $card->subtitle));
     AddToTrie($costTrie, $uuid, 0, $card->cost);
-    AddToTrie($hpTrie, $uuid, 0, $card->hp);
-    AddToTrie($powerTrie, $uuid, 0, $card->power);
-    AddToTrie($typeTrie, $uuid, 0, $card->type->data->attributes->name);
+    $definedType = $card->type->data->attributes->name;
+    if($definedType == "Token Unit") $definedType = "Unit";
+    else if($definedType == "Token Upgrade") $definedType = "Upgrade";
+    AddToTrie($typeTrie, $uuid, 0, $definedType);
+    AddToTrie($hpTrie, $uuid, 0, $definedType == "Upgrade" ? $card->upgradeHp : $card->hp);
+    AddToTrie($powerTrie, $uuid, 0, $definedType == "Upgrade" ? $card->upgradePower : $card->power);
     AddToTrie($setTrie, $uuid, 0, $card->expansion->data->attributes->code);
+    AddToTrie($cardIDTrie, $uuid, 0, $cardID);
     if($card->type2->data != null) {
       $type2 = $card->type2->data->attributes->name;
       if($type2 == "Leader Unit") $type2 = "Unit";
       AddToTrie($type2Trie, $uuid, 0, $type2);
     }
     AddToTrie($uniqueTrie, $uuid, 0, $card->unique == "true" ? 1 : 0);
-    if(str_contains($card->text, "When Played") || str_contains($card->text, "When played")) AddToTrie($hasPlayTrie, $uuid, 0, true);
-    
+    if($card->text != null && (str_contains($card->text, "When Played") || str_contains($card->text, "When played"))) AddToTrie($hasPlayTrie, $uuid, 0, true);
+    if($card->text != null && (str_contains($card->text, "When Defeated") || str_contains($card->text, "When defeated"))) AddToTrie($hasDestroyedTrie, $uuid, 0, true);
+
     $aspects = "";
     for($j = 0; $j < count($card->aspects->data); ++$j)
     {

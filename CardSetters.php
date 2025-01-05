@@ -17,14 +17,13 @@ function BanishCardForPlayer($cardID, $player, $from, $modifier = "-", $banished
 
 function BanishCard(&$banish, &$classState, $cardID, $modifier, $player = "", $from = "", $banishedBy = "")
 {
-  global $CS_CardsBanished, $actionPoints, $CS_Num6PowBan, $currentPlayer, $mainPlayer;
+  global $actionPoints, $CS_Num6PowBan, $currentPlayer, $mainPlayer;
   $rv = -1;
   if ($player == "") $player = $currentPlayer;
   if(CardType($cardID) != "T") { //If you banish a token, the token ceases to exist.
     $rv = count($banish);
     array_push($banish, $cardID, $modifier, GetUniqueId());
   }
-  ++$classState[$CS_CardsBanished];
   return $rv;
 }
 
@@ -37,8 +36,9 @@ function RemoveBanish($player, $index)
   $banish = array_values($banish);
 }
 
-function AddBottomDeck($cardID, $player, $from)
+function AddBottomDeck($cardID, $player)
 {
+  if(!$cardID) return;
   $deck = &GetDeck($player);
   $deck[] = $cardID;
 }
@@ -113,7 +113,7 @@ function AddMemory($cardID, $player, $from, $facing, $counters=0)
   $arsenal[] = GetUniqueId(); //Unique ID
 }
 
-function AddResources($cardID, $player, $from, $facing, $counters=0, $isExhausted="0")
+function AddResources($cardID, $player, $from, $facing, $counters=0, $isExhausted="0", $stealSource = "-1")
 {
   $arsenal = &GetArsenal($player);
   $arsenal[] = $cardID;
@@ -122,6 +122,7 @@ function AddResources($cardID, $player, $from, $facing, $counters=0, $isExhauste
   $arsenal[] = $counters; //Counters
   $arsenal[] = $isExhausted; //Is Frozen (1 = Frozen)
   $arsenal[] = GetUniqueId(); //Unique ID
+  $arsenal[] = $stealSource;
 }
 
 function AddArsenal($cardID, $player, $from, $facing, $counters=0)
@@ -166,8 +167,11 @@ function ArsenalTurnFaceUpAbility($cardID, $player)
 function AddHand($player, $cardID)
 {
   $hand = &GetHand($player);
-  $hand[] = $cardID;
-  return count($hand) - 1;
+  // If it's a token, it doesn't go to the hand
+  if(!isToken($cardID)) {
+    $hand[] = $cardID;
+  }
+  return count($hand)-1;
 }
 
 function RemoveResource($player, $index)

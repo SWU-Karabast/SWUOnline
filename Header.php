@@ -1,7 +1,7 @@
 <div class="home-header">
-  
 
-    <a href="./MainMenu.php" class="title"> 
+
+    <a href="./MainMenu.php" class="title">
         <div class="title">
             <h1>Karabast</h1>
             <p>The Fan-Made, Open-Source <br>

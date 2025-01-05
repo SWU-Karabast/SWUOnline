@@ -9,14 +9,22 @@ function DelimStringContains($str, $find)
   return false;
 }
 
-function RandomizeArray(&$arr)
-{
-  for($i=0; $i<count($arr); ++$i)
-  {
-    $rand = GetRandom(0, count($arr)-1);
-    $temp = $arr[$i];
-    $arr[$i] = $arr[$rand];
-    $arr[$rand] = $temp;
+function DelimStringShares(string $str1, string $str2): bool {
+  $arr1 = explode(",", $str1);
+  $arr2 = explode(",", $str2);
+  return ArrayShares($arr1, $arr2);
+}
+
+function ArrayShares(array $list1, array $list2): bool {
+  $commonItems = array_intersect($list1, $list2);
+  return !empty($commonItems);
+}
+
+function RandomizeArray(&$arr, $skipSeed = false){
+  $n = count($arr);
+  for ($i = $n - 1; $i > 0; $i--) {
+    $j = $skipSeed ? random_int(0, $i) : mt_rand(0, $i);
+    [$arr[$i], $arr[$j]] = [$arr[$j], $arr[$i]];
   }
 }
 
@@ -24,6 +32,7 @@ function GetRandom($low=-1, $high=-1)
 {
   global $randomSeeded;
   if(!$randomSeeded) SeedRandom();
+
   if($low == -1) return mt_rand();
   return mt_rand($low, $high);
 }

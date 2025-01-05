@@ -78,7 +78,7 @@ $isMobile = IsMobile();
   <meta http-equiv="content-type" content="text/html; charset=utf-8" >
   <title>Game Lobby</title>
   <link id="icon" rel="shortcut icon" type="image/png" href="./Images/<?= $icon ?>"/>
-  <link rel="stylesheet" href="./css/karabast071824.css">
+  <link rel="stylesheet" href="./css/karabast122924.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
@@ -120,14 +120,14 @@ $isMobile = IsMobile();
               <input class='GameLobby_Input' type='text' id='chatText' name='chatText' value='' autocomplete='off' onkeypress='ChatKey(event)'>
               <button class='GameLobby_Button' style='cursor:pointer;' onclick='SubmitChat()'>Chat</button>
             </div>
-            
-            
+
+
           </div>
         </div>
       </div>
 
       <div class="player-info container bg-black">
-        
+
         <h2>Players</h2>
         <div id="my-info">
           <?php

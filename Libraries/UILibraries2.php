@@ -325,8 +325,27 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
     background-size: contain;
     filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.40));
     user-select: none;'></div>";
-
   }
+
+  // Clone Icon Style
+  if (isset($opts['cloned']) && $opts['cloned']) {
+    $rv .= "<div style='margin: 0px;
+    top: 42px; 
+    left: 11px;
+    border-radius: 0%;
+    width:" . $iconSize . "px;
+    height:" . $iconSize . "px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translate(-50%, -50%);
+    position:absolute; z-index: 10;
+    background: url(./Images/CloneToken.png) no-repeat;
+    background-size: contain;
+    filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.40));
+    user-select: none;'></div>";
+  }
+
   // Damage Counter Style
   $damaged = isset($opts['currentHP']) && isset($opts['maxHP']) && $opts['currentHP'] < $opts['maxHP'];
   if ($damaged) {
@@ -546,12 +565,58 @@ function CreateTextForm($playerID, $caption, $mode)
   return $rv;
 }
 
-//input = ?
-//value = ?
-//immediateSubmitMode = If set, add onchange event to submit immediately instead of form submit
-//defaultChecked = Will be checked by default if true
-//label = label to display
-function CreateCheckbox($input, $value, $immediateSubmitMode = -1, $defaultChecked = false, $label = "&nbsp;", $fullRefresh = false)
+function CreateAutocompleteForm($playerID, $caption, $mode, $options)
+{
+    global $gameName;
+
+    $rv = "<form autocomplete='off'>";
+    $rv .= "<div style='display: flex; gap: 8px; max-width: 500px; margin: 0 auto;'>";
+    $rv .= "<div class='autocomplete' style='width: 100%;'>";
+    $rv .= "<input type='text' id='inputText' name='inputText' placeholder=\"Card Title\" onkeypress='suppressEventPropagation(event)' oninput=\"
+      const val = this.value.toLowerCase();
+      const container = this.parentNode.querySelector('.autocomplete-items');
+      container.innerHTML = '';
+
+      if (!val) {
+        return;
+      }
+      ";
+    $rv .= str_replace("<0>", "\'", str_replace("\"", "'", str_replace("'", "<0>", json_encode($options))));
+    $rv .= ".forEach(function(item) {
+        if (item.toLowerCase().includes(val)) {
+          const div = document.createElement('div');
+          div.textContent = item;
+          div.onclick = function() {
+            document.getElementById('inputText').value = this.textContent;
+            container.innerHTML = '';
+          };
+          container.appendChild(div);
+        }
+      });
+    \">";
+    $rv .= "<div class='autocomplete-items'></div>";
+    $rv .= "</div>";
+    $rv .= "<input type='button' onclick='textSubmit(" . $mode . ")' value='" . $caption . "'>";
+    $rv .= "</div>";
+    $rv .= "<input type='hidden' id='gameName' name='gameName' value='" . $gameName . "'>";
+    $rv .= "<input type='hidden' id='playerID' name='playerID' value='" . $playerID . "'>";
+    $rv .= "<input type='hidden' id='mode' name='mode' value='" . $mode . "'>";
+    $rv .= "</form>";
+
+    // CSS
+    $rv .= "<style>
+      input[type='text'] { padding: 10px 15px; width: 100%; background-color: #394452; border-radius: 5px; font-family: 'barlow'; border: 0; font-size: 16px; color: white; line-height: 1.125 }
+      input[type='text']:focus { outline: 1px solid #fff }
+      .autocomplete { position: relative; display: inline-block; }
+      .autocomplete-items { position: absolute; border-radius: 5px; overflow: hidden; margin: 8px -1px; font-weight: 400; font-size: 16px; z-index: 99; top: 100%; left: 0; right: 0; }
+      .autocomplete-items div { padding: 10px 15px; cursor: pointer; background-color: #394452; }
+      .autocomplete-items div:hover { background-color:rgb(74, 85, 100); }
+    </style>";
+
+    return $rv;
+}
+
+function CreateCheckbox($input, $value, $immediateSubmitMode = -1, $defaultChecked = false, $label = "&nbsp;", $fullRefresh = false, $hidden = false)
 {
   global $playerID;
   $submitLink = "";
@@ -560,7 +625,8 @@ function CreateCheckbox($input, $value, $immediateSubmitMode = -1, $defaultCheck
     $submitLink = ProcessInputLink($playerID, $immediateSubmitMode, $input, "onchange", $fullRefresh);
   if ($defaultChecked)
     $check = " checked='checked'";
-  $rv = "<input type='checkbox' " . $submitLink . " id='chk" . $input . "' name='chk" . $input . "' value='" . $value . "' " . $check . ">";
+  $hiddenAttribute = $hidden ? " style='visibility: hidden; display: none' hidden" : "";
+  $rv = "<input type='checkbox' " . $submitLink . " id='chk" . $input . "' name='chk" . $input . "' value='" . $value . "' " . $check . $hiddenAttribute . ">";
   $rv .= "<label for='chk" . $input . "'>" . $label . "</label>";
   return $rv;
 }
@@ -1005,7 +1071,7 @@ function MainMenuUI()
   $rv .= "<img style='width: 66vh; height: 33vh;' src='./Images/ShortcutMenu.png'>";
   $isSpectateEnabled = GetCachePiece($gameName, 9) == "1";
   if ($isSpectateEnabled)
-    $rv .= "<div><input class='GameLobby_Input' onclick='copyText()' style='width:40%;' type='text' id='gameLink' value='https://karabast.net/SWUOnline/NextTurn4?gameName=$gameName&playerID=3'>&nbsp;<button class='GameLobby_Button' style='margin-left:3px;' onclick='copyText()'>Copy Spectate Link</button></div><br>";
+    $rv .= "<div><input class='GameLobby_Input' onclick='copyText()' style='width:40%;' type='text' id='gameLink' value='https://karabast.net/SWUOnline/NextTurn4.php?gameName=$gameName&playerID=3'>&nbsp;<button class='GameLobby_Button' style='margin-left:3px;' onclick='copyText()'>Copy Spectate Link</button></div><br>";
   else
     $rv .= CreateButton($playerID, "Enable Spectating", 100013, 0, "24px", "", "Enable Spectating", 1) . "<BR>";
   if (isset($_SESSION["userid"])) {

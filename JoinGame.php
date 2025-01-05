@@ -61,13 +61,13 @@ include_once 'Header.php';
     if (count($favoriteDecks) == 0) {
       echo ("<div><label class='SelectDeckInput'>Starter Decks: </label>");
       echo ("<select name='decksToTry' id='decksToTry'>");
-      
+
       echo ("</select></div>");
     }
     */
 
     ?>
-    <label for="fabdb"><u><a style='color:lightblue;' href='https://www.swudb.com/' target='_blank'>SWUDB</a></u> Deck Link <span class="secondary">(use the url or 'Deck Link' button)</span></label>
+    <label for="fabdb"><u><a style='color:lightblue;' href='https://www.swudb.com/' target='_blank'>SWUDB</a></u> or <u><a style='color:lightblue;' href='https://www.sw-unlimited-db.com/' target='_blank'>SW-Unlimited-DB</a></u> Deck Link <span class="secondary">(use the url or 'Deck Link' button)</span></label>
     <input type="text" id="fabdb" name="fabdb">
     <?php
     if (isset($_SESSION["userid"])) {

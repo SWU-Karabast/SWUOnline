@@ -94,17 +94,18 @@ function CharacterCounters ($cardID)
 
 function CharacterTakeDamageAbility($player, $index, $damage, $preventable)
 {
-  $char = &GetPlayerCharacter($player);
-  $otherPlayer = $player == 1 ? 1 : 2;
-  $type = "-";//Add this if it ever matters
-  switch ($char[$index]) {
+  // This code is commented out because it is not currently used
+  // $char = &GetPlayerCharacter($player);
+  // $otherPlayer = $player == 1 ? 1 : 2;
+  // $type = "-";//Add this if it ever matters
+  // switch ($char[$index]) {
 
-    default:
-      break;
-  }
-  if ($remove == 1) {
-    DestroyCharacter($player, $index);
-  }
+  //   default:
+  //     break;
+  // }
+  // if ($remove == 1) {
+  //   DestroyCharacter($player, $index);
+  // }
   if ($damage <= 0) $damage = 0;
   return $damage;
 }
@@ -116,9 +117,13 @@ function CharacterStartTurnAbility($player)
     if($character[$i + 1] == 0 || $character[$i + 1] == 1) continue; //Do not process ability if it is destroyed
     switch($character[$i]) {
       case "1951911851"://Grand Admiral Thrawn
-        $myDeck = &GetDeck($player);
-        $theirDeck = &GetDeck($player == 1 ? 2 : 1);
-        AddDecisionQueue("SETDQCONTEXT", $player, "The top of your deck is " . CardLink($myDeck[0], $myDeck[0]) . " and the top of their deck is " . CardLink($theirDeck[0], $theirDeck[0]));
+        AddDecisionQueue("PASSPARAMETER", $player, "MYDECK-0");
+        AddDecisionQueue("MZOP", $player, "GETCARDID");
+        AddDecisionQueue("SETDQVAR", $player, "0");
+        AddDecisionQueue("PASSPARAMETER", $player, "THEIRDECK-0");
+        AddDecisionQueue("MZOP", $player, "GETCARDID");
+        AddDecisionQueue("SETDQVAR", $player, "1");
+        AddDecisionQueue("SETDQCONTEXT", $player, "The top of your deck is <0> and the top of their deck is <1>.");
         AddDecisionQueue("OK", $player, "-");
         break;
       default:
@@ -148,9 +153,6 @@ function CharacterStaticHealthModifiers($cardID, $index, $player)
   for($i=0; $i<count($char); $i+=CharacterPieces()) {
     switch($char[$i])
     {
-      case "5784497124"://Emperor Palpatine
-        if($cardID == "1780978508") $modifier += 1;//Royal Guard
-        break;
       default: break;
     }
   }
@@ -177,20 +179,21 @@ function ResetCharacter($player) {
   }
 }
 
-function MainCharacterHitAbilities()
-{
-  global $combatChain, $combatChainState, $CCS_WeaponIndex, $mainPlayer;
-  $attackID = $combatChain[0];
-  $mainCharacter = &GetPlayerCharacter($mainPlayer);
+// function MainCharacterHitAbilities()//FAB
+// {
+//   global $combatChain, $combatChainState, $CCS_WeaponIndex, $mainPlayer;
+//   $attackID = $combatChain[0];
+//   $mainCharacter = &GetPlayerCharacter($mainPlayer);
 
-  for($i = 0; $i < count($mainCharacter); $i += CharacterPieces()) {
-    switch($characterID) {
+//   // This code is commented out because it is not currently used
+//   // for($i = 0; $i < count($mainCharacter); $i += CharacterPieces()) {
+//   //   switch($characterID) {
 
-      default:
-        break;
-    }
-  }
-}
+//   //     default:
+//   //       break;
+//   //   }
+//   // }
+// }
 
 function MainCharacterAttackModifiers($index = -1, $onlyBuffs = false)
 {
@@ -222,23 +225,23 @@ function MainCharacterAttackModifiers($index = -1, $onlyBuffs = false)
   return $modifier;
 }
 
-function MainCharacterHitEffects()
-{
-  global $combatChainState, $CCS_WeaponIndex, $mainPlayer;
-  $modifier = 0;
-  $mainCharacterEffects = &GetMainCharacterEffects($mainPlayer);
-  for($i = 0; $i < count($mainCharacterEffects); $i += 2) {
-    if($mainCharacterEffects[$i] == $combatChainState[$CCS_WeaponIndex]) {
-      switch($mainCharacterEffects[$i + 1]) {
-        case "CgyJxpEgzk"://Spirit Blade: Infusion
-          Draw($mainPlayer);
-          break;
-        default: break;
-      }
-    }
-  }
-  return $modifier;
-}
+// function MainCharacterHitEffects()//FAB
+// {
+//   global $combatChainState, $CCS_WeaponIndex, $mainPlayer;
+//   $modifier = 0;
+//   $mainCharacterEffects = &GetMainCharacterEffects($mainPlayer);
+//   for($i = 0; $i < count($mainCharacterEffects); $i += 2) {
+//     if($mainCharacterEffects[$i] == $combatChainState[$CCS_WeaponIndex]) {
+//       switch($mainCharacterEffects[$i + 1]) {
+//         case "CgyJxpEgzk"://Spirit Blade: Infusion
+//           Draw($mainPlayer);
+//           break;
+//         default: break;
+//       }
+//     }
+//   }
+//   return $modifier;
+// }
 
 function MainCharacterGrantsGoAgain()
 {
@@ -353,31 +356,20 @@ function CharacterTriggerInGraveyard($cardID)
   }
 }
 
-function CharacterDamageTakenAbilities($player, $damage)
-{
-  $char = &GetPlayerCharacter($player);
-  $otherPlayer = $player == 1 ? 1 : 2;
-  for ($i = count($char) - CharacterPieces(); $i >= 0; $i -= CharacterPieces())
-  {
-    if($char[$i + 1] != 2) continue;
-    switch ($char[$i]) {
-
-      default:
-        break;
-    }
-  }
-}
-
-function CharacterDealDamageAbilities($player, $damage)
-{
-  $char = &GetPlayerCharacter($player);
-  $otherPlayer = $player == 1 ? 1 : 2;
-  for ($i = count($char) - CharacterPieces(); $i >= 0; $i -= CharacterPieces())
-  {
-    if($char[$i + 1] != 2) continue;
-    switch ($char[$i]) {
-
-      default:
+function AllyDealDamageAbilities($player, $damage) {
+  $allies = &GetAllies($player);
+  for($i = count($allies) - AllyPieces(); $i >= 0; $i -= AllyPieces()) {
+    switch($allies[$i]) {
+      case "3c60596a7a":
+        $ally = new Ally("MYALLY-" . $i, $player);
+        if ($ally->NumUses() > 0) {
+          AddDecisionQueue("SETDQCONTEXT", $player, "Choose if you want to draw a card (Cassian's ability)");
+          AddDecisionQueue("YESNO", $player, "-");
+          AddDecisionQueue("NOPASS", $player, "-");
+          AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $i, 1);
+          AddDecisionQueue("ADDMZUSES", $player, "-1", 1);
+          AddDecisionQueue("DRAW", $player, "-", 1);
+        }
         break;
     }
   }

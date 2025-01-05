@@ -135,9 +135,10 @@ function MZAddZone($player, $parameter, $lastResult)
       case "MYBANISH": BanishCardForPlayer($cardIDs[$i], $player, $params[1], $params[2]); break;
       case "MYHAND": AddPlayerHand($cardIDs[$i], $player, "-"); break;
       case "MYRESOURCES": AddResources($cardIDs[$i], $player, "HAND", "DOWN"); break;
+      case "MYRESOURCESEXHAUSTED": AddResources($cardIDs[$i], $player, "-", "DOWN", isExhausted:"1"); break;
       case "MYTOPDECK": AddTopDeck($cardIDs[$i], $player, "-"); break;
-      case "MYBOTDECK": AddBottomDeck($cardIDs[$i], $player, "-"); break;
-      case "THEIRBOTDECK": AddBottomDeck($cardIDs[$i], $otherPlayer, "-"); break;
+      case "MYBOTDECK": AddBottomDeck($cardIDs[$i], $player); break;
+      case "THEIRBOTDECK": AddBottomDeck($cardIDs[$i], $otherPlayer); break;
       case "MYMEMORY": AddMemory($cardIDs[$i], $player, $params[1], $params[2]); break;
       case "THEIRMATERIAL": AddMaterial($cardIDs[$i], $otherPlayer, $params[1]); break;
       case "THEIRRESOURCES": AddResources($cardIDs[$i], $player, "HAND", "DOWN"); break;
@@ -164,7 +165,7 @@ function MZPlayCard($player, $mzIndex) {
   global $CS_CharacterIndex, $CS_PlayIndex;
   $mzArr = explode("-", $mzIndex);
   //GetMZZone doesn't respect MY/THEIR differences, and changing it to do so messes up attacking, so I'm adding this check here for now.
-  if(substr($mzArr[0], 0, 5) == "THEIR") $zone = &GetMZZone($player == 1 ? 2 : 1, $mzArr[0]);
+  if(str_starts_with($mzArr[0], "THEIR")) $zone = &GetMZZone($player == 1 ? 2 : 1, $mzArr[0]);
   else $zone = &GetMZZone($player, $mzArr[0]);
   $cardID = $zone[$mzArr[1]];
   $from = preg_replace('/^(MY|THEIR)/', '', $mzArr[0]);
@@ -297,10 +298,24 @@ function MZWakeUp($player, $target)
   $pieces = explode("-", $target);
   $player = (str_starts_with($pieces[0], "MY") ? $player : ($player == 1 ? 2 : 1));
   $zone = &GetMZZone($player, $pieces[0]);
+  $targetAlly = new Ally($target, $player);
 
-  if(SearchLimitedCurrentTurnEffects("8800836530", $player) == $target) { // No Good to me Dead
+  if(SearchLimitedCurrentTurnEffects("8800836530", $player) == $targetAlly->UniqueID()) { // No Good to me Dead
     return;
   }
+
+  $upgrades = $targetAlly->GetUpgrades();
+  $canReady = true;
+  for($i=0; $i<count($upgrades); ++$i) {
+    if(!$canReady) break;
+    switch($upgrades[$i]) {
+      case "7718080954"://Frozen in Carbonite
+        $canReady = false;
+      default: break;
+    }
+  }
+
+  if(!$canReady) return;
 
   switch($pieces[0]) {
     case "MYCHAR": case "THEIRCHAR":
@@ -315,18 +330,25 @@ function MZBounce($player, $target)
 {
   global $CS_NumLeftPlay;
   $mzArr = explode("-", $target);
-  $player = (str_starts_with($mzArr[0], "MY") ? $player : ($player == 1 ? 2 : 1));
-  $zone = &GetMZZone($player, $mzArr[0]);
+  $controller = (str_starts_with($mzArr[0], "MY") ? $player : ($player == 1 ? 2 : 1));
   switch($mzArr[0]) {
     case "THEIRALLY": case "MYALLY":
-      $allies = &GetAllies($player);
-      $owner = $allies[$mzArr[1]+11];
-      $cardID = RemoveAlly($player, $mzArr[1]);
-      IncrementClassState($player, $CS_NumLeftPlay);
+      $ally = new Ally($target, $controller);
+      $owner = $ally->Owner();
+      $cloned = $ally->IsCloned();
+      if($ally->AvoidsBounce()) {
+        WriteLog(CardLink($ally->CardID(), $ally->CardID()) . " avoided bounce.");
+        break;
+      }
+      $cardID = RemoveAlly($controller, $mzArr[1]);
+      if ($cloned) {
+        $cardID = "0345124206"; //Clone - Replace the cloned card to the original card when bouncing back
+      }
+      IncrementClassState($controller, $CS_NumLeftPlay);
       $index = AddHand($owner, $cardID);
-      return str_starts_with($mzArr[0], "MY") ? "MYHAND-" . $index : "THEIRHAND-" . $index;
+      return $player == $owner ? "MYHAND-" . $index : "THEIRHAND-" . $index;
     case "MYRESOURCES": case "THEIRRESOURCES":
-      $cardID = RemoveResource($player, $mzArr[1]);
+      $cardID = RemoveResource($controller, $mzArr[1]);
       //TODO : to fix opponent card in my resources (Traitorous + SLT) we need to add owner information on resources
       $owner = $player;
       $index = AddHand($owner, $cardID);
@@ -344,7 +366,7 @@ function MZSink($player, $target)
   switch($pieces[0]) {
     case "THEIRALLY": case "MYALLY":
       $cardID = RemoveAlly($player, $pieces[1]);
-      AddBottomDeck($cardID, $player, "PLAY");
+      AddBottomDeck($cardID, $player);
       break;
     default: break;
   }

@@ -52,8 +52,23 @@ class Deck {
     $rv = "";
     for($i=0; $i<$amount; ++$i)
     {
+      $nextCard = $remove ? array_shift($this->deck) : $this->deck[$i];
+      if(!$nextCard) return $rv;
       if($rv != "") $rv .= ",";
-      $rv .= ($remove ? array_shift($this->deck) : $this->deck[$i]);
+      $rv .= $nextCard;
+    }
+    return $rv;
+  }
+
+  function Bottom($remove = false, $amount = 1)
+  {
+    $rv = "";
+    for($i=0; $i<$amount; ++$i)
+    {
+      $nextCard = $remove ? array_pop($this->deck) : $this->deck[count($this->deck) - 1 - $i];
+      if(!$nextCard) return $rv;
+      if($rv != "") $rv .= ",";
+      $rv .= $nextCard;
     }
     return $rv;
   }
