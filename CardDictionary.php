@@ -229,6 +229,9 @@ function RaidAmount($cardID, $player, $index, $reportMode = false)
       case "1208707254"://Rallying Cry
         $amount += 2;
         break;
+      case "8719468890"://Sword and Shielf Maneuver
+        $amount += TraitContains($cardID, "Trooper", $player) ? 1 : 0;
+        break;
       default: break;
     }
   }
@@ -294,6 +297,9 @@ function HasSentinel($cardID, $player, $index)
       case "fb7af4616c": $hasSentinel = true; break;//General Grievous
       case "1039828081": if ($cardID == "1039828081") {$hasSentinel = true;} break;//Calculating MagnaGuard
       case "3033790509": $hasSentinel = true; break;//Captain Typho
+      case "8719468890"://Sword and Shielf Maneuver
+        if(TraitContains($cardID, "Jedi", $player)) $hasSentinel = true;
+        break;
       default: break;
     }
   }

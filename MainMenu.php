@@ -162,7 +162,6 @@ include_once 'Header.php';
           <li>Aid from the Innocent</li>
           <li>Barriss Offee</li>
           <li>Lux Bonteri</li>
-          <li>Sword and Shield Maneuver</li>
           <li>Unnatural Life</li>
           <li>Wartime Profiteering</li>
         </ul>

@@ -5561,6 +5561,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "7732981122", 1);
       break;
+    case "8719468890"://Sword and Shield Maneuver
+      AddCurrentTurnEffect("8719468890", $currentPlayer, "PLAY");
       break;
     //PlayAbility End
     default: break;
