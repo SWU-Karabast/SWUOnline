@@ -2052,6 +2052,10 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("PASSPARAMETER", $mainPlayer, $attackerAlly->UniqueID(), 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "3556557330,PLAY", 1);
       break;
+    case "f8e0c65364"://Asajj Ventress (deployed leader)
+      global $CS_NumEventsPlayed;
+      if(GetClassState($mainPlayer, $CS_NumEventsPlayed) > 0) AddCurrentTurnEffect("f8e0c65364", $mainPlayer, "PLAY");
+      break;
     case "2843644198"://Sabine Wren
       $card = Mill($mainPlayer, 1);
       if(!SharesAspect($card, GetPlayerBase($mainPlayer))) {

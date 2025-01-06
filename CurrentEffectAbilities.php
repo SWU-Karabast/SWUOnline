@@ -202,7 +202,8 @@ function EffectAttackModifier($cardID, $playerID="")
     case "3399023235": return isset($subparam) && $subparam == "2" ? -2 : 0;//Fenn Rau
     case "8777351722": return IsAllyAttackTarget() ? 2 : 0;//Anakin Skywalker Leader
     case "4910017138": return 2;//Breaking In
-    case "8929774056": return 1;//Asajj Ventress
+    case "8929774056": return 1;//Asajj Ventress (undeployed)
+    case "f8e0c65364": return 1;//Asajj Ventress (deployed)
     case "2155351882": return 1;//Ahsoka Tano
     case "6436543702": return -2;//Providence Destroyer
     case "7000286964": return -1;//Vulture Interceptor Wing
@@ -815,7 +816,8 @@ function IsCombatEffectActive($cardID)
     case "3399023235"://Fenn Rau
     case "8777351722"://Anakin Skywalker Leader
     case "4910017138"://Breaking In
-    case "8929774056"://Asajj Ventress
+    case "8929774056"://Asajj Ventress (undeployed)
+    case "f8e0c65364"://Asajj Ventress (deployed)
     case "2155351882"://Ahsoka Tano
     case "6669050232"://Grim Resolve
     case "2395430106"://Republic Tactical Officer
