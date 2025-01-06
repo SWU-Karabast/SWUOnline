@@ -572,13 +572,20 @@ function AllyLeavesPlayAbility($player, $index)
       break;
     case "4002861992"://DJ (Blatant Thief)
       $djAlly = new Ally("MYALLY-" . $index, $player);
-      $arsenal = &GetArsenal($player);
-      for ($i = 0; $i < count($arsenal); $i += ArsenalPieces()) {
-        if ($arsenal[$i + 6] == $djAlly->UniqueID()) {
-          $otherPlayer = $player == 1 ? 2 : 1;
-          $resourceCard = RemoveResource($player, $i);
-          AddResources($resourceCard, $otherPlayer, "PLAY", "DOWN", isExhausted:($arsenal[$i+4] == 1));
+      $resourceFound = false;
+      for ($p = 1; $p <= 2; $p++) { // Iterate over both players (useful when DJ changes sides)
+        $arsenal = &GetArsenal($p);
+        for ($i = 0; $i < count($arsenal); $i += ArsenalPieces()) {
+          if ($arsenal[$i + 6] == $djAlly->UniqueID()) {
+            $otherPlayer = $p == 1 ? 2 : 1;
+            $isExhausted = $arsenal[$i + 4];
+            $resourceCard = RemoveResource($p, $i);
+            AddResources($resourceCard, $otherPlayer, "PLAY", "DOWN", isExhausted:$isExhausted);
+            $resourceFound = true;
+            break;
+          }
         }
+        if ($resourceFound) break;
       }
       break;
     default: break;

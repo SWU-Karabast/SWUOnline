@@ -120,7 +120,7 @@ function AddResources($cardID, $player, $from, $facing, $counters=0, $isExhauste
   $arsenal[] = $facing;
   $arsenal[] = 1; //Num uses - currently always 1
   $arsenal[] = $counters; //Counters
-  $arsenal[] = $isExhausted; //Is Frozen (1 = Frozen)
+  $arsenal[] = $isExhausted == "1" ? "1" : "0"; //Is Frozen (1 = Frozen)
   $arsenal[] = GetUniqueId(); //Unique ID
   $arsenal[] = $stealSource;
 }

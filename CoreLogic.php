@@ -4624,9 +4624,20 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       if($from == "RESOURCES") {
         $djAlly = new Ally("MYALLY-" . LastAllyIndex($currentPlayer), $currentPlayer);
         $otherPlayer = $currentPlayer == 1 ? 2 : 1;
-        $theirResources = &GetResourceCards($otherPlayer);
-        $resourceCard = RemoveResource($otherPlayer, count($theirResources) - ResourcePieces());
-        AddResources($resourceCard, $currentPlayer, "PLAY", "DOWN", stealSource:$djAlly->UniqueID());
+        
+        // Try to get ready resources first
+        $theirResourceIndices = GetArsenalFaceDownIndices($otherPlayer, 0); 
+        if ($theirResourceIndices == "") {
+          // If no ready resources, get all resources
+          $theirResourceIndices = GetArsenalFaceDownIndices($otherPlayer);
+        }
+        $theirResourceIndicesArr = explode(",", $theirResourceIndices);
+        $theirResourceIndex = $theirResourceIndicesArr[GetRandom(0, count($theirResourceIndicesArr) - 1)]; // Pick a random resource. Important: remove this randomization if it breaks the game.
+        $theirResources = &GetArsenal($otherPlayer);
+        $isExhausted = $theirResources[$theirResourceIndex + 4];
+
+        $resourceCard = RemoveResource($otherPlayer, $theirResourceIndex);
+        AddResources($resourceCard, $currentPlayer, "PLAY", "DOWN", isExhausted:$isExhausted, stealSource:$djAlly->UniqueID());
       }
       break;
     case "7718080954"://Frozen in Carbonite
