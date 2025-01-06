@@ -20,10 +20,10 @@ if(!file_exists("./Games/" . $gameName . "/")) { header('HTTP/1.0 403 Forbidden'
 if($lastUpdate == "NaN") $lastUpdate = 0;
 if ($lastUpdate > 10000000) $lastUpdate = 0;
 
-include "WriteLog.php";
 include "HostFiles/Redirector.php";
 include "Libraries/UILibraries2.php";
 include "Libraries/SHMOPLibraries.php";
+include_once "WriteLog.php";
 
 $data = array();
 $currentTime = round(microtime(true) * 1000);
@@ -126,7 +126,7 @@ if ($lastUpdate != 0 && $cacheVal < $lastUpdate) {
   $data["showSubmit"] = $showSubmit;
 
   // Chat Log
-  $data["logContent"] = JSONLog($gameName, $playerID);
+  $data["logContent"] = JSONLog($gameName);
 
   // Player Joined Audio
   $data["playerJoinAudio"] = $playerID == 1 && $gameStatus == $MGS_ChooseFirstPlayer;

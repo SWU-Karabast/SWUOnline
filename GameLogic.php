@@ -1511,7 +1511,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         $ally->Exhaust();
       }
       $names = explode(",", GetAbilityNames($parameter, GetClassState($player, $CS_PlayIndex)));
-      WriteLog(implode(" ", explode("_", $names[$index])) . " ability was chosen.");
+      $ability = implode(" ", explode("_", $names[$index]));
+      WriteLog("<b><span style='color:Gray'>{$ability}</span></b> ability was chosen.");
       return $lastResult;
       case "SETABILITYTYPEOPP"://For activating opponent's cards
         global $CS_OppIndex, $CS_OppCardActive;

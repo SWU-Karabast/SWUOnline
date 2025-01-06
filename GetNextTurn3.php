@@ -3,7 +3,7 @@
 include 'Libraries/HTTPLibraries.php';
 include "HostFiles/Redirector.php";
 include "Libraries/SHMOPLibraries.php";
-include "WriteLog.php";
+include_once "WriteLog.php";
 
 // array holding allowed Origin domains
 SetHeaders();
@@ -645,7 +645,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   $response->landmarks = $landmarksOutput;
 
   // Chat Log
-  $response->chatLog = JSONLog($gameName, $playerID);
+  $response->chatLog = JSONLog($gameName);
 
   // Deduplicate current turn effects
   $playerEffects = array();

@@ -1,6 +1,5 @@
 <?php
 ob_start();
-include "WriteLog.php";
 include "CardDictionary.php";
 include "HostFiles/Redirector.php";
 include "Libraries/UILibraries2.php";
@@ -8,6 +7,7 @@ include "Libraries/SHMOPLibraries.php";
 include_once "Libraries/PlayerSettings.php";
 include_once "Libraries/HTTPLibraries.php";
 include_once "Assets/patreon-php-master/src/PatreonDictionary.php";
+include_once "WriteLog.php";
 ob_end_clean();
 
 session_start();
@@ -78,6 +78,7 @@ $isMobile = IsMobile();
   <meta http-equiv="content-type" content="text/html; charset=utf-8" >
   <title>Game Lobby</title>
   <link id="icon" rel="shortcut icon" type="image/png" href="./Images/<?= $icon ?>"/>
+  <link rel="stylesheet" href="./css/chat.css">
   <link rel="stylesheet" href="./css/karabast122924.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -87,7 +88,7 @@ $isMobile = IsMobile();
 
 
 
-<body onload='OnLoadCallback(<?php echo (filemtime("./Games/" . $gameName . "/gamelog.txt")); ?>)'>
+<body onload='OnLoadCallback(<?php echo (filemtime(LogPath($gameName))); ?>)'>
   <div class="lobby-container">
     <div id="cardDetail" style="display:none; position:absolute;"></div>
     <div class="lobby-header">

@@ -1,0 +1,20 @@
+.log-entry {
+    background-color: rgba(255, 255, 255, 0.1);
+    margin: 8px 0px;
+    padding: 4px 8px;
+    border-left: solid 2px #afafaf;
+    border-right: solid 2px #afafaf;
+    border-radius: 4px;
+}
+
+.player1-label {
+    color: #128ee5;
+}
+
+.player2-label {
+    color: #cb0202;
+}
+
+.bold {
+    font-weight: bold;
+}

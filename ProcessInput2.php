@@ -3,7 +3,6 @@
 error_reporting(E_ALL);
 ob_start();
 
-include "WriteLog.php";
 include "GameLogic.php";
 include "GameTerms.php";
 include "HostFiles/Redirector.php";
@@ -20,6 +19,7 @@ require_once("Libraries/CoreLibraries.php");
 include_once "./includes/dbh.inc.php";
 include_once "./includes/functions.inc.php";
 include_once "APIKeys/APIKeys.php";
+include_once "WriteLog.php";
 
 //We should always have a player ID as a URL parameter
 $gameName = TryGET("gameName", "");

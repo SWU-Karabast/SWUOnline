@@ -132,7 +132,7 @@ if ($lastUpdate != 0 && $cacheVal < $lastUpdate) {
     $response->isPrivateLobby = ($visibility == "private");
   }
 
-  $response->gameLog = JSONLog($gameName, $playerID, "../");
+  $response->gameLog = JSONLog($gameName, "../");
 
   $response->playAudio = ($playerID == 1 && $gameStatus == $MGS_ChooseFirstPlayer ? 1 : 0);
 
