@@ -908,11 +908,12 @@ function ResourceUI()
   $resources = GetResourceCards($playerID);
   for ($i = 0; $i < count($resources); $i += ResourcePieces()) {
     $action = $currentPlayer == $playerID && IsPlayable($resources[$i], $turn[0], "RESOURCES", $i) ? 5 : 0;
-    $border = CardBorderColor($resources[$i], "RESOURCES", $action > 0);
+    $border = CardBorderColor($resources[$i], "RESOURCES", $action > 0, $resources[$i + 6] != "-1" ? "THEIRS": "-");
+    $overlay = $resources[$i + 4] == 1;
     if($action > 0)
-      $rv .= Card($resources[$i], "concat", $size, $action, 1, 0, $border, 0, strval($i));
+      $rv .= Card($resources[$i], "concat", $size, $action, 1, $overlay, $border, 0, strval($i));
     else
-      $rv .= Card($resources[$i], "concat", $size, 0, 1, 0, $border);
+      $rv .= Card($resources[$i], "concat", $size, 0, 1,  $overlay, $border);
   }
   return $rv;
 }
@@ -1000,6 +1001,7 @@ function TheirBanishUIMinimal($from = "")
 function CardBorderColor($cardID, $from, $isPlayable, $mod = "-")
 {
   global $playerID, $currentPlayer, $turn;
+  if ($mod == "THEIRS") return 2;
   if ($playerID != $currentPlayer)
     return 0;
   if($from == "HAND") {

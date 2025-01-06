@@ -4636,8 +4636,22 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         $theirResources = &GetArsenal($otherPlayer);
         $isExhausted = $theirResources[$theirResourceIndex + 4];
 
+        // Steal the resource
         $resourceCard = RemoveResource($otherPlayer, $theirResourceIndex);
         AddResources($resourceCard, $currentPlayer, "PLAY", "DOWN", isExhausted:$isExhausted, stealSource:$djAlly->UniqueID());
+
+        // The new rules (v3) allow you to change the state of your resources immediately after smuggling the DJ, provided the total number of "ready" and "exhausted" resources remains the same. 
+        // So, we will exhaust the stolen resource and ready another.
+        if (!$isExhausted) {
+          $myResourceIndices = GetArsenalFaceDownIndices($currentPlayer, 1);
+          if ($myResourceIndices != "") {
+            $myResourceIndicesArr = explode(",", $myResourceIndices);
+            $myResourceIndex = $myResourceIndicesArr[GetRandom(0, count($myResourceIndicesArr) - 1)]; // Pick a random resource. Important: remove this randomization if it breaks the game.
+            $myResources = &GetArsenal($currentPlayer);
+            $myResources[$myResourceIndex + 4] = "0"; // Ready a random resource
+            $myResources[count($myResources) - ArsenalPieces() + 4] = "1"; // Exhaust the stolen resource
+          }
+        }
       }
       break;
     case "7718080954"://Frozen in Carbonite
