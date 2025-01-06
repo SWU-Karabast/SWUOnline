@@ -376,7 +376,7 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
         $cardID = $discard[$found];
         $modifier = $discard[$found+1];
         if(!IsPlayable($cardID, $turn[0], "GY", $found)) break;
-        if($modifier == "TTFREE") AddCurrentTurnEffect("TTFREE", $playerID);
+        if(str_starts_with($modifier, "TT") && strlen($modifier) > 2) AddCurrentTurnEffect($modifier, $playerID);
         RemoveDiscard($playerID, $found);
         PlayCard($cardID, "GY");
       }

@@ -159,7 +159,6 @@ include_once 'Header.php';
         <p>Thanks to the efforts of OotTheMonk, Brubraz, and ninin, many remaining Set 3 cards have now been implemented in Karabast.</p>
         <p>Remaining cards:</p>
         <ul class="karabast-unimplemented-list">
-          <li>Aid from the Innocent</li>
           <li>Unnatural Life</li>
         </ul>
         <p style="margin-bottom: 2rem;";>Bugs are still a possibility during this rollout, if you discover any as you play please submit them to the <i>#bug-reports</i> channel in our <a target="_blank" href="https://discord.gg/hKRaqHND4v">Discord</a>.</p>

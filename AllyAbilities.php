@@ -803,15 +803,9 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities,
           CreateBattleDroid($player);
           break;
         case "1555775184"://Roger Roger
-          $mzDiscardedUpgradeArr = explode(",", SearchDiscardForCard($player, $upgrades[$i]));
-          $mzTarget = $uniqueID;
-          if (count($mzDiscardedUpgradeArr) > 0) {
-            $mzTarget = "MYDISCARD-" . $mzDiscardedUpgradeArr[count($mzDiscardedUpgradeArr) - 1];
-          }
-
           AddDecisionQueue("PASSPARAMETER", $player, $upgrades[$i]);
           AddDecisionQueue("SETDQVAR", $player, "0");
-          AddDecisionQueue("PASSPARAMETER", $player, $mzTarget);
+          AddDecisionQueue("FINDINDICES", $player, "MYDISCARD," . $upgrades[$i]);
           AddDecisionQueue("SETDQVAR", $player, "1");
           AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:cardID=3463348370");
           AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to attach <0>", 1);
