@@ -185,7 +185,7 @@ function AttackModifier($cardID, $player, $index)
       switch($currentTurnEffects[$i]) {
         case "9399634203"://I Have the High Ground
           $defendingAlly = new Ally(GetAttackTarget(), $defPlayer);
-          if($player != $defPlayer && $currentTurnEffects[$i+1] == $defPlayer && $currentTurnEffects[$i+2] == $defendingAlly->UniqueID()) {
+          if($player != $defPlayer && GetAttackTarget() != "THEIRCHAR-0" && $currentTurnEffects[$i+1] == $defPlayer && $currentTurnEffects[$i+2] == $defendingAlly->UniqueID()) {
             $modifier -= 4;
           }
           break;
