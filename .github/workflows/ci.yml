@@ -17,5 +17,5 @@ jobs:
     - uses: php-actions/composer@v6
     - uses: php-actions/phpunit@v3
       with:
-        args: --testdox
-
+        test_suffix: Test.php
+        args: --testdox tests
