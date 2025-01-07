@@ -1,10 +1,19 @@
 <?php
+$gameName = $_GET["gameName"];
+include_once "MenuFiles/ParseGamefile.php";
+
+$playerID = $_GET["playerID"];
+$pid = ($playerID == 1 ? $p1id : $p2id);
+$playerName = $playerID == 1 ? $p1uid : ($playerID == 2 ? $p2uid : "-");
+
 function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkInput, $isSimulation=false, $inputText="")
 {
   global $gameName, $currentPlayer, $mainPlayer, $dqVars, $turn, $CS_CharacterIndex, $CS_PlayIndex, $CS_OppCardActive, $decisionQueue, $CS_NextNAAInstant, $skipWriteGamestate, $combatChain, $landmarks;
   global $SET_PassDRStep, $actionPoints, $currentPlayerActivity, $redirectPath;
   global $dqState, $layers, $combatChainState;
   global $roguelikeGameID;
+  global $playerName, $pid;
+
   switch ($mode) {
     case 3: //Play equipment ability
       MakeGamestateBackup();
@@ -84,10 +93,10 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
         $deck = &GetDeck($playerID);
         if ($mode == 8) {
           array_unshift($deck, $buttonInput);
-          WriteLog("Player " . $playerID . " put a card on top of the deck.");
+          WriteLog(FmtPlayer($playerName, $playerID) . " put a card on top of the deck.");
         } else if ($mode == 9) {
           $deck[] = $buttonInput;
-          WriteLog("Player " . $playerID . " put a card on the bottom of the deck.");
+          WriteLog(FmtPlayer($playerName, $playerID) . " put a card on the bottom of the deck.");
         }
         unset($options[$found]);
         $options = array_values($options);
@@ -133,7 +142,7 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
         unset($hand[$buttonInput]);
         $hand = array_values($hand);
         ContinueDecisionQueue($cardID);
-        WriteLog("Player " . $playerID . " put a card on the top of the deck.");
+        WriteLog(FmtPlayer($playerName, $playerID) . " put a card on the top of the deck.");
       }
       break;
     case 13: //HANDBOTTOM
@@ -145,7 +154,7 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
         unset($hand[$buttonInput]);
         $hand = array_values($hand);
         ContinueDecisionQueue($cardID);
-        WriteLog("Player " . $playerID . " put a card on the bottom of the deck.");
+        WriteLog(FmtPlayer($playerName, $playerID) . " put a card on the bottom of the deck.");
       }
       break;
     case 14: //Banish
@@ -328,7 +337,7 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
       }
       break;
     case 30://String input
-      WriteLog("Player " . $playerID . " named " . $inputText . ".");
+      WriteLog(FmtPlayer($playerName, $playerID) . " named " . $inputText . ".");
       ContinueDecisionQueue(GamestateSanitize($inputText));
       break;
     case 31: //Move layer deeper
@@ -359,7 +368,7 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
       break;
     case 34: //Claim Initiative
       global $initiativeTaken, $initiativePlayer, $isPass;
-      WriteLog("Player " . $playerID . " claimed initiative.");
+      WriteLog(FmtPlayer($playerName, $playerID) . " claimed " . FmtKeyword("Initiative"));
       $initiativePlayer = $currentPlayer;
       $otherPlayer = ($playerID == 1 ? 2 : 1);
       $roundPass = $initiativeTaken == ($otherPlayer + 2);
@@ -450,54 +459,54 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
       if(GetCachePiece($gameName, 14) == 7) break;//$MGS_StatsLoggedIrreversible
       RevertGamestate();
       $skipWriteGamestate = true;
-      WriteLog("Player " . $playerID . " undid their last action.");
+      WriteLog(FmtPlayer($playerName, $playerID) . " undid their last action.");
       break;
     case 10001:
       RevertGamestate("preBlockBackup.txt");
       $skipWriteGamestate = true;
-      WriteLog("Player " . $playerID . " cancel their blocks.");
+      WriteLog(FmtPlayer($playerName, $playerID) . " cancel their blocks.");
       break;
     case 10003: //Revert to prior turn
       RevertGamestate($buttonInput);
-      WriteLog("Player " . $playerID . " reverted back to a prior turn.");
+      WriteLog(FmtPlayer($playerName, $playerID) . " reverted back to a prior turn.");
       break;
     case 10005:
-      WriteLog("Player " . $playerID ." manually subtracted 1 damage from themselves.", highlight: true);
+      WriteLog(FmtPlayer($playerName, $playerID) ." manually subtracted 1 damage from themselves.", highlight: true);
       Restore(1, $playerID);
       break;
     case 10006:
-      WriteLog("Player " . $playerID ." manually added 1 damage point to themselves.", highlight: true);
+      WriteLog(FmtPlayer($playerName, $playerID) ." manually added 1 damage point to themselves.", highlight: true);
       LoseHealth(1, $playerID);
       break;
 //    case 10007:
-//      WriteLog("Player " . $playerID ." manually subtracted 1 damage from their opponent.", highlight: true);
+//      WriteLog(FmtPlayer($playerName, $playerID) ." manually subtracted 1 damage from their opponent.", highlight: true);
 //      Restore(1, ($playerID == 1 ? 2 : 1));
 //      break;
 //    case 10008:
-//      WriteLog("Player " . $playerID ." manually added 1 damage to their opponent.", highlight: true);
+//      WriteLog(FmtPlayer($playerName, $playerID) ." manually added 1 damage to their opponent.", highlight: true);
 //      LoseHealth(1, ($playerID == 1 ? 2 : 1));
 //      break;
     case 10009:
-      WriteLog("Player " . $playerID ." manually drew a card for themselves.", highlight: true);
+      WriteLog(FmtPlayer($playerName, $playerID) ." manually drew a card for themselves.", highlight: true);
       Draw($playerID, false);
       break;
     case 10010:
-      WriteLog("Player " . $playerID ." manually drew a card for their opponent.", highlight: true);
+      WriteLog(FmtPlayer($playerName, $playerID) ." manually drew a card for their opponent.", highlight: true);
       Draw(($playerID == 1 ? 2 : 1), false);
       break;
     case 10011:
-      WriteLog("Player " . $playerID ." manually added a card to their hand.", highlight: true);
+      WriteLog(FmtPlayer($playerName, $playerID) ." manually added a card to their hand.", highlight: true);
       $hand = &GetHand($playerID);
       $hand[] = $cardID;
       break;
     case 10012://Add damage to friendly ally
-      WriteLog("Player " . $playerID ." manually added damage to a friendly unit.", highlight: true);
+      WriteLog(FmtPlayer($playerName, $playerID) ." manually added damage to a friendly unit.", highlight: true);
       $index = $buttonInput;
       $ally = new Ally("MYALLY-" . $index, $playerID);
       $ally->AddDamage(1);
       break;
     case 10013://Remove damage from friendly ally
-      WriteLog("Player " . $playerID ." manually removed damage from a friendly unit.", highlight: true);
+      WriteLog(FmtPlayer($playerName, $playerID) ." manually removed damage from a friendly unit.", highlight: true);
       $index = $buttonInput;
       $ally = new Ally("MYALLY-" . $index, $playerID);
       $ally->RemoveDamage(1);
@@ -617,9 +626,7 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
         WriteLog("Failed to create replay; original gamestate file failed to create.");
         return true;
       }
-      include "MenuFiles/ParseGamefile.php";
-      WriteLog("Player " . $playerID . " saved this game as a replay.");
-      $pid = ($playerID == 1 ? $p1id : $p2id);
+      WriteLog(FmtPlayer($playerName, $playerID) . " saved this game as a replay.");
       $path = "./Replays/" . $pid . "/";
       if (!file_exists($path)) {
         mkdir($path, 0777, true);
@@ -740,12 +747,12 @@ function Passed(&$turn, $playerID)
 
 function PassInput($autopass = false)
 {
-  global $turn, $currentPlayer, $initiativeTaken, $initiativePlayer;
+  global $turn, $currentPlayer, $initiativeTaken, $initiativePlayer, $playerName;
   if($turn[0] == "END" || $turn[0] == "MAYMULTICHOOSETEXT" || $turn[0] == "MAYCHOOSECOMBATCHAIN" || $turn[0] == "MAYCHOOSEMULTIZONE" || $turn[0] == "MAYMULTICHOOSEAURAS" || $turn[0] == "MAYMULTICHOOSEHAND" || $turn[0] == "MAYCHOOSEHAND" || $turn[0] == "MAYCHOOSEDISCARD" || $turn[0] == "MAYCHOOSEARSENAL" || $turn[0] == "MAYCHOOSEPERMANENT" || $turn[0] == "MAYCHOOSEDECK" || $turn[0] == "MAYCHOOSEMYSOUL" || $turn[0] == "MAYCHOOSETOP" || $turn[0] == "MAYCHOOSECARD" || $turn[0] == "INSTANT" || $turn[0] == "OK" || $turn[0] == "LOOKHAND" || $turn[0] == "BUTTONINPUT") {
     ContinueDecisionQueue("PASS");
   } else {
     if($autopass == true);
-    else WriteLog("Player " . $currentPlayer . " passed.");
+    else WriteLog(FmtPlayer($playerName, $currentPlayer) . " passed.");
     if(Pass($turn, $currentPlayer, $currentPlayer)) {
       if($turn[0] == "M")
       {
@@ -1304,6 +1311,8 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
   global $layerPriority, $lastPlayed;
   global $decisionQueue, $CS_PlayIndex, $CS_OppIndex, $CS_OppCardActive, $CS_PlayUniqueID, $CS_LayerPlayIndex, $CS_LastDynCost, $CS_NumCardsPlayed;
   global $CS_DynCostResolved, $CS_NumVillainyPlayed, $CS_NumEventsPlayed, $CS_NumClonesPlayed;
+  global $playerName;
+
   $resources = &GetResources($currentPlayer);
   $dynCostResolved = intval($dynCostResolved);
   $layerPriority[0] = ShouldHoldPriority(1);
@@ -1326,7 +1335,7 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
       SetClassState($currentPlayer, $CS_LayerPlayIndex, $layerIndex);
     }
     //Announce the card being played
-    WriteLog("Player " . $playerID . " " . PlayTerm($turn[0], $from, $cardID) . " " . CardLink($cardID, $cardID), $turn[0] != "P" ? $currentPlayer : 0);
+    WriteLog(FmtPlayer($playerName, $playerID) . " " . PlayTerm($turn[0], $from, $cardID) . " " . CardLink($cardID, $cardID), $turn[0] != "P" ? $currentPlayer : 0);
 
     LogPlayCardStats($currentPlayer, $cardID, $from);
     if($playingCard) {
