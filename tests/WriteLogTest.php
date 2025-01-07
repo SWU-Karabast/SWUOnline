@@ -18,6 +18,16 @@ final class WriteLogTest extends TestCase
         rmdir("./Games/$gameName");
     }
 
+    public function testFormatPlayer(): void
+    {
+        $this->assertEquals(FmtPlayer("test", 1), "<span class='player1-label'>test</span>");
+    }
+
+    public function testFormatKeyword(): void
+    {
+        $this->assertEquals(FmtKeyword("test"), "<span class='keyword'>test</span>");
+    }
+
     public function testLogPath(): void
     {
         global $gameName;
