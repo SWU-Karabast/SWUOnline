@@ -4914,7 +4914,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $playAlly->DealDamage(2);
       break;
     case "0968965258"://Death By Droids
-      MZChooseAndDestroy($currentPlayer, "MYALLY:maxHealth=3&THEIRALLY:maxHealth=3");
+      MZChooseAndDestroy($currentPlayer, "MYALLY:maxCost=3&THEIRALLY:maxCost=3");
       CreateBattleDroid($currentPlayer);
       CreateBattleDroid($currentPlayer);
       break;
