@@ -94,9 +94,20 @@ td {
   z-index: 10; 
   background:black; 
   font-size: 16px; 
-  font-weight: 500; 
-  color:white; 
+  font-weight: bold; 
   user-select: none;
+}
+
+.p-box {
+  border-radius: 8px;
+}
+
+.p1-shadow {
+  box-shadow: 0 0 12px rgba(100, 120, 210, 30);
+}
+
+.p2-shadow {
+  box-shadow: 0 0 12px rgba(210, 110, 110, 30);
 }
 
 /* Base Damage Counters */

@@ -366,11 +366,14 @@
                       positionStyle = "fixed;";
                       id = type == "W" ? "P<?php echo ($playerID); ?>BASE" : "P<?php echo ($playerID); ?>LEADER";
                       className = type == "W" ? "my-base" : "my-leader";
+                      className += " p<?= $playerID ?>-shadow";
                   } else if (zone == "theirChar") {
                       positionStyle = "fixed;";
-                      id = type == "W" ? "P<?php echo ($playerID == 1 ? 2 : 1); ?>BASE" : "P<?php echo ($playerID == 1 ? 2 : 1); ?>LEADER";
+                      id = type == "W" ? "P<?= 3 - $playerID ?>BASE" : "P<?= 3 - $playerID ?>LEADER";
                       className = type == "W" ? "their-base" : "their-leader";
+                      className += " p<?= 3 - $playerID ?>-shadow";
                   }
+                  className += " p-box";
               }
               if (zone == "myHand") {
                   id = "MYHAND-" + (i * <?php echo(HandPieces()); ?>);
@@ -393,12 +396,12 @@
                       var fontColor = "#DDD";
                       var borderColor = "#1a1a1a";
                       var backgroundColor = "#DDD";
-                      newHTML += "<div class='player-name'>" + <?php echo ($playerID == 1 ? "p1uid" : "p2uid"); ?> + "</div>";
+                      newHTML += "<div class='player-name player<?php echo ($playerID == 1 ? "1" : "2"); ?>-label'>" + <?php echo ($playerID == 1 ? "p1uid" : "p2uid"); ?> + "</div>";
                   } else if (zone == "theirChar") {
                       var fontColor = "#DDD";
                       var borderColor = "#1a1a1a";
                       var backgroundColor = "#DDD";
-                      newHTML += "<div class='player-name'>" + <?php echo ($playerID == 1 ? "p2uid" : "p1uid"); ?> + "</div>";
+                      newHTML += "<div class='player-name player<?php echo ($playerID == 2 ? "1" : "2"); ?>-label'>" + <?php echo ($playerID == 1 ? "p2uid" : "p1uid"); ?> + "</div>";
                   }
               }
               var restriction = cardArr[12];

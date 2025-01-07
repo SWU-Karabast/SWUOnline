@@ -8,13 +8,18 @@
 }
 
 .player1-label {
-    color: #128ee5;
+    color: #228ef5;
 }
 
 .player2-label {
-    color: #cb0202;
+    color: #fb4242;
 }
 
 .bold {
+    font-weight: bold;
+}
+
+.initiative-text {
+    color: Gray;
     font-weight: bold;
 }
