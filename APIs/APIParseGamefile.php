@@ -1,14 +1,5 @@
 <?php
-
-if (!function_exists("GetArray")) {
-  function GetArray($handler)
-  {
-    if (!$handler) return false;
-    $line = trim(fgets($handler));
-    if ($line == "") return [];
-    return explode(" ", $line);
-  }
-}
+include_once "./Libraries/IOLibraries.php";
 
 $filename = "../Games/" . $gameName . "/GameFile.txt";
 if (!file_exists($filename)) exit;
