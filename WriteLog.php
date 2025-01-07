@@ -11,7 +11,7 @@ function CreateLog($gameName, $path="./")
 }
 
 function FmtPlayer($name, $id) {
-  return "<span class='player$id-label'>$name</span>";
+  return "<span class='p$id-label'>$name</span>";
 }
 
 function FmtKeyword($keyword) {

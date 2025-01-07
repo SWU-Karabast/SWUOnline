@@ -30,7 +30,13 @@
       echo ("Invalid player ID.");
       exit;
     }
-
+    ?>
+    
+    <style>
+      <?php include 'PlayerColors.php' ?>
+    </style>
+    
+    <?php
     if (!file_exists("./Games/" . $gameName . "/")) {
       echo ("Game does not exist");
       exit;
@@ -396,12 +402,12 @@
                       var fontColor = "#DDD";
                       var borderColor = "#1a1a1a";
                       var backgroundColor = "#DDD";
-                      newHTML += "<div class='player-name player<?php echo ($playerID == 1 ? "1" : "2"); ?>-label'>" + <?php echo ($playerID == 1 ? "p1uid" : "p2uid"); ?> + "</div>";
+                      newHTML += "<div class='player-name p<?= ($playerID == 1 ? "1" : "2"); ?>-label'>" + <?= ($playerID == 1 ? "p1uid" : "p2uid"); ?> + "</div>";
                   } else if (zone == "theirChar") {
                       var fontColor = "#DDD";
                       var borderColor = "#1a1a1a";
                       var backgroundColor = "#DDD";
-                      newHTML += "<div class='player-name player<?php echo ($playerID == 2 ? "1" : "2"); ?>-label'>" + <?php echo ($playerID == 1 ? "p2uid" : "p1uid"); ?> + "</div>";
+                      newHTML += "<div class='player-name p<?= ($playerID == 2 ? "1" : "2"); ?>-label'>" + <?= ($playerID == 1 ? "p2uid" : "p1uid"); ?> + "</div>";
                   }
               }
               var restriction = cardArr[12];

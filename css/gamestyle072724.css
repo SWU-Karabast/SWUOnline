@@ -107,14 +107,6 @@ td {
   border-radius: 8px;
 }
 
-.p1-shadow {
-  box-shadow: 0 0 12px rgba(100, 120, 210, 50);
-}
-
-.p2-shadow {
-  box-shadow: 0 0 12px rgba(210, 110, 110, 50);
-}
-
 /* Base Damage Counters */
 
 .base-dmg-wrapper {
