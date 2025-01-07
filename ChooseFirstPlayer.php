@@ -28,7 +28,8 @@ if ($action == "Go First") {
 } else {
   $firstPlayer = ($playerID == 1 ? 2 : 1);
 }
-WriteLog("Player " . $firstPlayer . " will go first.");
+$playerName = $playerID == 1 ? $p1uid : ($playerID == 2 ? $p2uid : "-");
+WriteLog(FmtPlayer($playerName, $playerID) . " will go first.");
 $gameStatus = $MGS_P2Sideboard;
 SetCachePiece($gameName, 14, $gameStatus);
 GamestateUpdated($gameName);

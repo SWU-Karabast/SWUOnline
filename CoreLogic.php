@@ -547,8 +547,10 @@ function Restore($amount, $player)
     return false;
   }
 
+  include "./MenuFiles/ParseGamefile.php";
+  $playerName = $player == 1 ? $p1uid : ($player == 2 ? $p2uid : "Player $player");
   $health = &GetHealth($player);
-  WriteLog("Player " . $player . " gained " . $amount . " health.");
+  WriteLog(FmtPlayer($playerName, $player) . " gained " . $amount . " health.");
   if($amount > $health) $amount = $health;
   $health -= $amount;
   AddEvent("RESTORE", "P" . $player . "BASE!" . $amount);
@@ -589,10 +591,8 @@ function PlayerWon($playerID)
   if($turn[0] == "OVER") return;
   include_once "./MenuFiles/ParseGamefile.php";
 
-  $winner = $playerID;
-  if ($playerID == 1 && $p1uid != "") WriteLog($p1uid . " wins!", $playerID);
-  elseif ($playerID == 2 && $p2uid != "") WriteLog($p2uid . " wins!", $playerID);
-  else WriteLog("Player " . $winner . " wins!");
+  $playerName = $playerID == 1 ? $p1uid : ($playerID == 2 ? $p2uid : "Player $playerID");
+  WriteLog(FmtPlayer($playerName, $playerID) . " wins!");
 
   $inGameStatus = $GameStatus_Over;
   $turn[0] = "OVER";
@@ -5963,7 +5963,11 @@ function Draw($player, $mainPhase = true, $fromCardEffect = true)
   $hand = &GetHand($player);
   if(count($deck) == 0) {
     $char = &GetPlayerCharacter($player);
-    if(count($char) > CharacterPieces() && $char[CharacterPieces()] != "DUMMY") WriteLog("Player " . $player . " took 3 damage for having no cards left in their deck.");
+    if(count($char) > CharacterPieces() && $char[CharacterPieces()] != "DUMMY") {
+      include "./MenuFiles/ParseGamefile.php";
+      $playerName = $player == 1 ? $p1uid : ($player == 2 ? $p2uid : "Player $player");
+      WriteLog(FmtPlayer($playerName, $player) . " took 3 damage for having no cards left in their deck.");
+    }
     DealDamageAsync($player, 3, "DAMAGE", "DRAW");
     return -1;
   }

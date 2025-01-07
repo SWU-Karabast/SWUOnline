@@ -1334,8 +1334,8 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
       $layerIndex = AddLayer($cardID, $currentPlayer, $from, "-", "-");
       SetClassState($currentPlayer, $CS_LayerPlayIndex, $layerIndex);
     }
-    //Announce the card being played
-    WriteLog(FmtPlayer($playerName, $playerID) . " " . PlayTerm($turn[0], $from, $cardID) . " " . CardLink($cardID, $cardID), $turn[0] != "P" ? $currentPlayer : 0);
+    // Announce the card being played
+    WriteLog(FmtPlayer($playerName, $playerID) . " " . PlayTerm($turn[0], $from, $cardID) . " " . CardLink($cardID, $cardID));
 
     LogPlayCardStats($currentPlayer, $cardID, $from);
     if($playingCard) {
