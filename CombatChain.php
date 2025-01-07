@@ -39,7 +39,7 @@ function CompletesAttackEffect($cardID) {
     case "9560139036"://Ezra Bridger
       AddCurrentTurnEffect("9560139036", $mainPlayer);
       break;
-    case "0e65f012f5"://Boba Fett
+    case "0e65f012f5"://Boba Fett Leader Unit
       if(GetClassState($defPlayer, $CS_NumLeftPlay) > 0) ReadyResource($mainPlayer, 2);
       break;
     case "9647945674"://Zeb Orrelios
