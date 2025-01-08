@@ -47,11 +47,17 @@ $opponentInactive = false;
 $currentTime = round(microtime(true) * 1000);
 if ($isGamePlayer) {
   $playerStatus = intval(GetCachePiece($gameName, $playerID + 3));
-  if ($playerStatus == "-1") WriteLog("Player $playerID has connected.");
+  if ($playerStatus == "-1") {
+    include "MenuFiles/ParseGamefile.php";
+    $playerName = $playerID == 1 ? $p1uid : ($playerID == 2 ? $p2uid : "-");    
+    WriteLog("$playerName has connected.");
+  }
   SetCachePiece($gameName, $playerID + 1, $currentTime);
   SetCachePiece($gameName, $playerID + 3, "0");
   if ($playerStatus > 0) {
-    WriteLog("Player $playerID has reconnected.");
+    include "MenuFiles/ParseGamefile.php";
+    $playerName = $playerID == 1 ? $p1uid : ($playerID == 2 ? $p2uid : "-");    
+    WriteLog("$playerName has reconnected.");
     SetCachePiece($gameName, $playerID + 3, "0");
   }
 }
@@ -171,8 +177,8 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       $errorOutput = "Rematch failsafe hit for game $gameName at $errorDate";
       fwrite($errorHandler, $errorOutput . "\r\n");
       fclose($errorHandler);
-
-      WriteLog("Player $firstPlayerChooser lost and will choose first player for the rematch.");
+      $playerName = $firstPlayerChooser == 1 ? $p1uid : ($firstPlayerChooser == 2 ? $p2uid : "-");
+      WriteLog("$playerName lost and will choose first player for the rematch.");
     }
     WriteGameFile();
     $currentTime = round(microtime(true) * 1000);
