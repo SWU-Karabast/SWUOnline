@@ -670,7 +670,7 @@ function CurrentEffectEndTurnAbilities()
         AddNextTurnEffect($currentTurnEffects[$i], $currentTurnEffects[$i + 1]);
         break;
       case "8418001763"://Huyang
-        if(SearchAlliesForCard($currentTurnEffects[$i+1], "8418001763")) {
+        if(SearchAlliesForCard($currentTurnEffects[$i+1], "8418001763") != "") {
           AddNextTurnEffect($currentTurnEffects[$i], $currentTurnEffects[$i + 1], $currentTurnEffects[$i + 2]);
         }
         break;
