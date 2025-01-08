@@ -94,7 +94,7 @@ include_once 'Header.php';
   */
 
   ?>
-  <label for="fabdb"><u><a style='color:lightblue;' href='https://www.swudb.com/' target='_blank'>SWUDB</a></u> or <u><a style='color:lightblue;' href='https://sw-unlimited-db.com/' target='_blank'>SW-Unlimited-DB</a></u> Deck Link <span class="secondary">(use the url or 'Deck Link' button)</span></label>
+  <label for="fabdb"><u><a style='color:lightblue;' href='https://swustats.net/' target='_blank'>SWU Stats</a></u> or <u><a style='color:lightblue;' href='https://www.swudb.com/' target='_blank'>SWUDB</a></u> or <u><a style='color:lightblue;' href='https://sw-unlimited-db.com/' target='_blank'>SW-Unlimited-DB</a></u> Deck Link <span class="secondary">(use the url or 'Deck Link' button)</span></label>
   <input type="text" id="fabdb" name="fabdb" value='<?= $deckUrl ?>'>
   <?php
   if (isset($_SESSION["userid"])) {
@@ -153,24 +153,24 @@ include_once 'Header.php';
     <h2>News</h2>
     <div style="position: relative;">
       <div style='vertical-align:middle; text-align:center;'>
-        <img src="./Images/unimpl.png" alt="TWI" style="max-width: 100%; border-radius: 5px;">
+        <a href="https://swustats.net" target="_blank">
+          <img src="./Images/SWUStats.webp" alt="SHD" style="max-width: 100%; border-radius: 5px;">
+        </a>
         <div style="text-align: left;">
-        <h3 style="margin: 15px 0; display: block;">List of Set 3 Unimplemented Cards</h3>
-        <p>Thanks to the efforts of OotTheMonk, Brubraz, and ninin, many remaining Set 3 cards have now been implemented in Karabast.</p>
-        <p>Remaining cards:</p>
-        <ul class="karabast-unimplemented-list">
-          <li>Unnatural Life</li>
-        </ul>
-        <p style="margin-bottom: 2rem;";>Bugs are still a possibility during this rollout, if you discover any as you play please submit them to the <i>#bug-reports</i> channel in our <a target="_blank" href="https://discord.gg/hKRaqHND4v">Discord</a>.</p>
+        <h3 style="margin: 15px 0; display: block;">SWU Stats</h3>
+        <p>The amazing deck stat tracking you may know from other game sites like Fabrary has finally come to SWU!</p>
+        <p>Announcing SWU Stats! This is a deckbuilder particularly focused on tracking your game stats over time to help you train for upcoming organized play tournaments or even game night at your local LGS. If you'd prefer to deckbuild on another site, you can use the Import function. Just use the deck link from swustats to make sure you can view the stats for your deck. <a target="_blank" href="https://discord.gg/qjBqtCjwkX">Join our Discord</a> for the latest progress updates.</p>
       </div>
     </div>
     <div style="position: relative;">
       <div style='vertical-align:middle; text-align:center;'>
-        <img src="./Images/yoda.png" alt="SHD" style="max-width: 100%; border-radius: 5px;">
+        <!--<img src="./Images/unimpl.png" alt="TWI" style="max-width: 100%; border-radius: 5px;">-->
         <div style="text-align: left;">
-        <h3 style="margin: 15px 0; display: block;">Set 3 launches, and Karabast's next steps </h3>
-        <p>Twilight is here! Thanks to the hard work of OotTheMonk the majority of Set 3 cards have now been added to Karabast.</p>
-        <p>The team is still hard at work on a brand new engine for Karabast that will dramatically simplify adding future sets, and card bug fixes. <a target="_blank" href="https://discord.gg/hKRaqHND4v">Join our Discord</a> for the latest progress updates and timeline. If you have coding experience we're always open to new contributors, info on how to help out can also be found on Discord.</p>
+        <h3 style="margin: 15px 0; display: block;">List of Set 3 Unimplemented Cards</h3>
+        <p>Remaining cards:</p>
+        <ul class="karabast-unimplemented-list">
+          <li>Unnatural Life</li>
+        </ul>
       </div>
     </div>
     <?php
