@@ -159,7 +159,7 @@ include_once 'Header.php';
         <div style="text-align: left;">
         <h3 style="margin: 15px 0; display: block;">SWU Stats</h3>
         <p>The amazing deck stat tracking you may know from other game sites like Fabrary has finally come to SWU!</p>
-        <p>Announcing SWU Stats! This is a deckbuilder particularly focused on tracking your game stats over time to help you train for upcoming organized play tournaments or even game night at your local LGS. If you'd prefer to deckbuild on another site, you can use the Import function. Just use the deck link from swustats to make sure you can view the stats for your deck. <a target="_blank" href="https://discord.gg/qjBqtCjwkX">Join our Discord</a> for the latest progress updates.</p>
+        <p>Announcing SWU Stats! This is a deckbuilder particularly focused on tracking your game stats over time to help you train for upcoming organized play tournaments or even game night at your local LGS. If you'd prefer to deckbuild on another site, you can use the Import function. Just use the deck link from swustats to make sure you can view the stats for your deck. <a target="_blank" href="https://discord.gg/5ZHXyVvVFC">Join our Discord</a> for the latest progress updates.</p>
       </div>
     </div>
     <div style="position: relative;">
