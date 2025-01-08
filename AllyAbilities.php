@@ -470,7 +470,7 @@ function AllyAddGraveyard($player, $cardID, $subtype)
 function AllyEntersPlayState($cardID, $player, $from="-")
 {
   if(DefinedTypesContains($cardID, "Leader", $player)) return 2;
-  if(IsToken($cardID) && SearchAlliesForCard($player, "0038286155")) return 2;//Chancellor Palpatine
+  if(IsToken($cardID) && SearchAlliesForCard($player, "0038286155") != "") return 2;//Chancellor Palpatine
   switch($cardID)
   {
     case "1785627279": return 2;//Millennium Falcon
