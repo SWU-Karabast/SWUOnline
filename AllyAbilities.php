@@ -110,7 +110,7 @@ function HasWhenEnemyDestroyed($cardID, $uniqueID, $numUses, $wasUnique, $wasUpg
       return $wasUnique && $numUses > 0;
     case "8687233791"://Punishing One
       $ally = new Ally($uniqueID);
-      return !$ally->IsExhausted() && $wasUpgraded && $numUses > 0;
+      return $ally->IsExhausted() && $wasUpgraded && $numUses > 0;
     default: return false;
   }
 }
