@@ -101,7 +101,7 @@ function LeaderAbilitiesIgnored() {
   return AnyPlayerHasAlly("4602353389");//Brain Invaders
 }
 
-function HasWhenEnemyDestroyed($cardID, $numUses, $wasUnique, $wasUpgraded) {
+function HasWhenEnemyDestroyed($cardID, $uniqueID, $numUses, $wasUnique, $wasUpgraded) {
   switch($cardID) {
     case "1664771721"://Gideon Hask
     case "b0dbca5c05"://Iden Versio Leader Unit
@@ -109,7 +109,8 @@ function HasWhenEnemyDestroyed($cardID, $numUses, $wasUnique, $wasUpgraded) {
     case "2649829005"://Agent Kallus
       return $wasUnique && $numUses > 0;
     case "8687233791"://Punishing One
-      return $wasUpgraded && $numUses > 0;
+      $ally = new Ally($uniqueID);
+      return !$ally->IsExhausted() && $wasUpgraded && $numUses > 0;
     default: return false;
   }
 }
