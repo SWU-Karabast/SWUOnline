@@ -11,6 +11,7 @@ include "Libraries/StatFunctions.php";
 include "Libraries/PlayerSettings.php";
 include "Libraries/UILibraries2.php";
 include "AI/CombatDummy.php";
+include_once "WriteLog.php";
 include_once "./includes/dbh.inc.php";
 include_once "./includes/functions.inc.php";
 include_once "./MenuFiles/StartHelper.php";
@@ -88,9 +89,7 @@ fwrite($handler, "-");//Effect Context
 fclose($handler);
 
 //Set up log file
-$filename = "./Games/" . $gameName . "/gamelog.txt";
-$handler = fopen($filename, "w");
-fclose($handler);
+CreateLog($gameName);
 
 $currentTime = strval(round(microtime(true) * 1000));
 $currentUpdate = GetCachePiece($gameName, 1);

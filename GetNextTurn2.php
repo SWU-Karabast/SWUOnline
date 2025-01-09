@@ -33,7 +33,7 @@ if (($playerID == 1 || $playerID == 2) && $authKey == "") {
 
 include "HostFiles/Redirector.php";
 include "Libraries/SHMOPLibraries.php";
-include "WriteLog.php";
+include_once "WriteLog.php";
 
 SetHeaders();
 
@@ -1142,7 +1142,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   echo ("</div>");
 
   echo ("<div id='gamelog'>");
-  EchoLog($gameName, $playerID);
+  EchoLog($gameName);
   echo ("</div>");
   if ($playerID != 3) {
     echo ("<div id='chatPlaceholder'></div>");

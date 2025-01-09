@@ -470,7 +470,7 @@ function AllyAddGraveyard($player, $cardID, $subtype)
 function AllyEntersPlayState($cardID, $player, $from="-")
 {
   if(DefinedTypesContains($cardID, "Leader", $player)) return 2;
-  if(IsToken($cardID) && SearchAlliesForCard($player, "0038286155")) return 2;//Chancellor Palpatine
+  if(IsToken($cardID) && SearchAlliesForCard($player, "0038286155") != "") return 2;//Chancellor Palpatine
   switch($cardID)
   {
     case "1785627279": return 2;//Millennium Falcon
@@ -2058,6 +2058,10 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("NOPASS", $mainPlayer, "-");
       AddDecisionQueue("PASSPARAMETER", $mainPlayer, $attackerAlly->UniqueID(), 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "3556557330,PLAY", 1);
+      break;
+    case "f8e0c65364"://Asajj Ventress (deployed leader)
+      global $CS_NumEventsPlayed;
+      if(GetClassState($mainPlayer, $CS_NumEventsPlayed) > 0) AddCurrentTurnEffect("f8e0c65364", $mainPlayer, "PLAY");
       break;
     case "2843644198"://Sabine Wren
       $card = Mill($mainPlayer, 1);

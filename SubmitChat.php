@@ -2,6 +2,8 @@
 
 include "Libraries/HTTPLibraries.php";
 include "Libraries/SHMOPLibraries.php";
+include_once "WriteLog.php";
+
 SetHeaders();
 
 $gameName = $_GET["gameName"];
@@ -46,12 +48,10 @@ $filteredChatText = str_replace("faggot", "****", $filteredChatText);
 $filteredChatText = str_replace("kill yourself", "****", $filteredChatText);
 $filteredChatText = str_replace("die in a fire", "****", $filteredChatText);
 
-$filename = "./Games/" . $gameName . "/gamelog.txt";
-$handler = fopen($filename, "a");
-$output = "<span style='font-weight:bold; color:<PLAYER" . $playerID . "COLOR>;'>" . $displayName . ": </span>" . $filteredChatText;
-fwrite($handler, $output . "\r\n");
-if (GetCachePiece($gameName, 11) >= 3) fwrite($handler, "The lobby is reactivated.\r\n");
-fclose($handler);
+if (GetCachePiece($gameName, 11) >= 3) {
+  WriteLog("The lobby is reactivated");
+}
+WriteLog("<span class='player$playerID-label bold'>$displayName</span>: $filteredChatText");
 
 GamestateUpdated($gameName);
 if ($playerID == 1) SetCachePiece($gameName, 11, 0);

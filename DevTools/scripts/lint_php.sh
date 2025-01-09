@@ -22,7 +22,7 @@ for i in **/*.php; do
         linting_passed=false
 
         # apply the red text format to each line of output so it works in Git Action log
-        readarray -t out_lines <<<"$out"
+        IFS=$'\n' read -rd '' -a out_lines <<<"$out"
         for out_line in "${out_lines[@]}"
         do
             echo -e "${RED_TEXT}${out_line}${RESET_TEXT}"

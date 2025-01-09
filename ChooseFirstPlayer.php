@@ -1,6 +1,6 @@
 <?php
 
-include "WriteLog.php";
+include_once "WriteLog.php";
 include "Libraries/HTTPLibraries.php";
 include "Libraries/SHMOPLibraries.php";
 
