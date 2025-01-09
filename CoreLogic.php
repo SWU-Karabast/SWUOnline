@@ -4051,13 +4051,16 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       if(count($resources) == 0) break;
       $numDestroyed = 0;
       $cards = "";
-      for($i = 0; $i < 3 && count($resources) > 0; $i++) {
-        $index = (GetRandom() % (count($resources)/ResourcePieces())) * ResourcePieces();
-        if($cards != "") $cards .= ",";
+      $indices = explode(",", GetIndices(count($resources), pieces:ResourcePieces()));
+      $randomIndices = array_rand($indices, count($indices) >= 3 ? 3 : count($indices));
+      rsort($randomIndices);
+      foreach ($randomIndices as $randomIndex) {
+        $index = $indices[$randomIndex];
+        if ($cards != "") $cards .= ",";
         $cards .= $resources[$index];
-        if(SmuggleCost($resources[$index], $otherPlayer, $index) >= 0) {
+        if (SmuggleCost($resources[$index], $otherPlayer, $index) >= 0) {
           AddGraveyard($resources[$index], $otherPlayer, 'ARS');
-          for($j=$index; $j<$index+ResourcePieces(); ++$j) unset($resources[$j]);
+          for ($j = $index; $j < $index + ResourcePieces(); ++$j) unset($resources[$j]);
           $resources = array_values($resources);
           ++$numDestroyed;
         }
