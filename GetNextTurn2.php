@@ -643,6 +643,9 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         $playerBorderColor = ($layers[$index + 1] == $playerID ? 1 : 2);
       }
 
+      // Overwrite the $playerBorderColor for MYRESOURCES to highlight stolen cards
+      if ($option[0] == "MYRESOURCES" && $myArsenal[$index + 6] != "-1") $playerBorderColor = 2;
+
       if ($option[0] == "THEIRARS" && $theirArsenal[$index + 1] == "DOWN") $card = $TheirCardBack;
 
       $overlay = 0;
