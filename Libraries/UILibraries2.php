@@ -151,7 +151,7 @@ function JSONRenderedCard(
 }
 
 //Rotate is deprecated
-function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $overlay = 0, $borderColor = 0, $counters = 0, $actionDataOverride = "", $id = "", $rotate = false, $lifeCounters = 0, $defCounters = 0, $atkCounters = -1, $from = "", $controller = 0, $subcardNum = 0)
+function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $overlay = 0, $borderColor = 0, $counters = 0, $actionDataOverride = "", $id = "", $rotate = false, $lifeCounters = 0, $defCounters = 0, $atkCounters = -1, $from = "", $controller = 0, $subcardNum = 0, $isExhausted = false)
 {
   global $playerID, $darkMode;
   $opts = [];
@@ -238,7 +238,7 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
   if ($controller != 0 && IsPatron($controller) && CardHasAltArt($cardNumber))
     $folderPath = "PatreonImages/" . $folderPath;
   $altText = IsScreenReaderMode($playerID) ? " alt='" . CardTitle($cardNumber) . "' " : "";
-  $rv .= "<img " . ($id != "" ? "id='" . $id . "-img' " : "") . $altText . "data-orientation='" . ($rotate ? "landscape' " : "portrait' ") . "class='cardImage'" . "style='$border height: {$height}px; width: {$width}px; position:relative; border-radius:10px;' src='$folderPath/$cardNumber$fileExt' />";
+  $rv .= "<img " . ($id != "" ? "id='" . $id . "-img' " : "") . $altText . "data-orientation='" . ($rotate ? "portrait' " : "portrait' ") . "class='cardImage'" . "style='$border height: {$height}px; width: {$width}px; position:relative; border-radius:10px" . ($isExhausted ? "; transform: rotate(5deg)" : "") . "' src='$folderPath/$cardNumber$fileExt' />";
   $rv .= "<div " . ($id != "" ? "id='" . $id . "-ovr' " : "") . "class='overlay'" . "style='visibility:" . ($overlay == 1 ? "visible" : "hidden") . "; height: {$height}px; width: {$width}px; top:2px; left:2px; position:absolute; background: rgba(0, 0, 0, 0.5); z-index: 1; border-radius: 8px;'></div>";
 
   // Counters Style
@@ -909,11 +909,11 @@ function ResourceUI()
   for ($i = 0; $i < count($resources); $i += ResourcePieces()) {
     $action = $currentPlayer == $playerID && IsPlayable($resources[$i], $turn[0], "RESOURCES", $i) ? 5 : 0;
     $border = CardBorderColor($resources[$i], "RESOURCES", $action > 0, $resources[$i + 6] != "-1" ? "THEIRS": "-");
-    $overlay = $resources[$i + 4] == 1;
+    $isExhausted = $resources[$i + 4] == 1;
     if($action > 0)
-      $rv .= Card($resources[$i], "concat", $size, $action, 1, $overlay, $border, 0, strval($i));
+      $rv .= Card($resources[$i], "concat", $size, $action, 1, $isExhausted, $border, 0, strval($i), isExhausted:$isExhausted);
     else
-      $rv .= Card($resources[$i], "concat", $size, 0, 1,  $overlay, $border);
+      $rv .= Card($resources[$i], "concat", $size, 0, 1,  $isExhausted, $border, isExhausted:$isExhausted);
   }
   return $rv;
 }
@@ -1001,9 +1001,7 @@ function TheirBanishUIMinimal($from = "")
 function CardBorderColor($cardID, $from, $isPlayable, $mod = "-")
 {
   global $playerID, $currentPlayer, $turn;
-  if ($mod == "THEIRS") return 2;
-  if ($playerID != $currentPlayer)
-    return 0;
+  if ($playerID != $currentPlayer) return 0;
   if($from == "HAND") {
     $helptext = GetPhaseHelptext();
     if($helptext == "Choose a card to resource") return 3;
