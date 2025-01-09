@@ -829,9 +829,18 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             $cardID = str_starts_with($arr[$i], "MY") || str_starts_with($arr[$i], "THEIR") ? GetMZCard($player, $arr[$i]) : $arr[$i];
             if(CardCost($cardID) > $params[1]) $match = true;
             break;
-          case "dqVar":
+          case "dqVar": // Supports mzIndex or uniqueID (e.g. MYALLY-0,18,THEIRALLY-7,12)
             $mzArr = explode(",", $dqVars[$params[1]]);
-            for($j=0; $j<count($mzArr); ++$j) if($mzArr[$j] == $arr[$i]) { $match = true; }
+            for($j=0; $j<count($mzArr); ++$j) {
+              if($mzArr[$j] == "" || $mzArr[$j] == "-") continue;
+
+              $ally = new Ally($arr[$i]);
+              $filterAlly = new Ally($mzArr[$j]);
+              if($ally->UniqueID() == $filterAlly->UniqueID()) {
+                $match = true;
+                break;
+              }
+            }
             break;
           case "status":
             $mzArr = explode("-", $arr[$i]);
