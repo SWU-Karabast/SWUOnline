@@ -372,14 +372,11 @@
                       positionStyle = "fixed;";
                       id = type == "W" ? "P<?php echo ($playerID); ?>BASE" : "P<?php echo ($playerID); ?>LEADER";
                       className = type == "W" ? "my-base" : "my-leader";
-                      className += " p<?= $playerID ?>-shadow";
                   } else if (zone == "theirChar") {
                       positionStyle = "fixed;";
                       id = type == "W" ? "P<?= 3 - $playerID ?>BASE" : "P<?= 3 - $playerID ?>LEADER";
                       className = type == "W" ? "their-base" : "their-leader";
-                      className += " p<?= 3 - $playerID ?>-shadow";
                   }
-                  className += " p-box";
               }
               if (zone == "myHand") {
                   id = "MYHAND-" + (i * <?php echo(HandPieces()); ?>);
