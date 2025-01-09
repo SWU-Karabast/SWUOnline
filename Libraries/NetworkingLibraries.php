@@ -1,10 +1,9 @@
 <?php
 $gameName = $_GET["gameName"];
+$playerID = $_GET["playerID"];
 include_once "MenuFiles/ParseGamefile.php";
 
-$playerID = $_GET["playerID"];
 $pid = ($playerID == 1 ? $p1id : $p2id);
-$playerName = $playerID == 1 ? $p1uid : ($playerID == 2 ? $p2uid : "-");
 
 function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkInput, $isSimulation=false, $inputText="")
 {
@@ -610,14 +609,12 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
       include "MenuFiles/ParseGamefile.php";
       include_once "./includes/dbh.inc.php";
       include_once "./includes/functions.inc.php";
-      $myName = ($playerID == 1 ? $p1uid : $p2uid);
-      $theirName = ($playerID == 1 ? $p2uid : $p1uid);
       if($playerID == 1) $userID = $p1id;
       else $userID = $p2id;
       if($userID != "")
       {
         AwardBadge($userID, 3);
-        WriteLog($myName . " gave a badge to " . $theirName);
+        WriteLog($playerName . " gave a badge to " . $otherPlayerName);
       }
       break;
     case 100012: //Create Replay

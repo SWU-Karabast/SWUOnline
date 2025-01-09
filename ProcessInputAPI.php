@@ -159,7 +159,7 @@ if ($inGameStatus == $GameStatus_Rematch) {
   $firstPlayerChooser = ($winner == 1 ? 2 : 1);
   $p1SideboardSubmitted = "0";
   $p2SideboardSubmitted = (IsPlayerAI(2) ? "1" : "0");
-  $playerName = $firstPlayerChooser == 1 ? $p1uid : ($firstPlayerChooser == 2 ? $p2uid : "-");
+  $playerName = $playerNames[$firstPlayerChooser];
   WriteLog("$playerName lost and will choose first player for the rematch.");
   WriteGameFile();
   $turn[0] = "REMATCH";

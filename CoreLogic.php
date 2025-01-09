@@ -536,9 +536,11 @@ function LoseHealth($amount, $player)
   PlayerLoseHealth($player, $amount);
 }
 
-function Restore($amount, $player)
+function Restore($amount, $playerID)
 {
-  if(SearchCurrentTurnEffects("7533529264", $player)) {
+  global $gameName;
+
+  if(SearchCurrentTurnEffects("7533529264", $playerID)) {
     WriteLog("<span style='color:red;'>Wolffe prevents the healing</span>");
     return false;
   }
@@ -548,12 +550,11 @@ function Restore($amount, $player)
   }
 
   include "./MenuFiles/ParseGamefile.php";
-  $playerName = $player == 1 ? $p1uid : ($player == 2 ? $p2uid : "Player $player");
-  $health = &GetHealth($player);
-  WriteLog(FmtPlayer($playerName, $player) . " gained " . $amount . " health.");
+  $health = &GetHealth($playerID);
+  WriteLog(FmtPlayer($playerName, $playerID) . " gained " . $amount . " health.");
   if($amount > $health) $amount = $health;
   $health -= $amount;
-  AddEvent("RESTORE", "P" . $player . "BASE!" . $amount);
+  AddEvent("RESTORE", "P" . $playerID . "BASE!" . $amount);
   return true;
 }
 
@@ -589,9 +590,7 @@ function PlayerWon($playerID)
   global $winner, $turn, $gameName, $p1id, $p2id, $p1uid, $p2uid, $p1IsChallengeActive, $p2IsChallengeActive, $conceded, $currentRound;
   global $p1DeckLink, $p2DeckLink, $inGameStatus, $GameStatus_Over, $firstPlayer, $p1deckbuilderID, $p2deckbuilderID;
   if($turn[0] == "OVER") return;
-  include_once "./MenuFiles/ParseGamefile.php";
-
-  $playerName = $playerID == 1 ? $p1uid : ($playerID == 2 ? $p2uid : "Player $playerID");
+  include "./MenuFiles/ParseGamefile.php";
   WriteLog(FmtPlayer($playerName, $playerID) . " wins!");
 
   $inGameStatus = $GameStatus_Over;
@@ -5965,7 +5964,6 @@ function Draw($player, $mainPhase = true, $fromCardEffect = true)
     $char = &GetPlayerCharacter($player);
     if(count($char) > CharacterPieces() && $char[CharacterPieces()] != "DUMMY") {
       include "./MenuFiles/ParseGamefile.php";
-      $playerName = $player == 1 ? $p1uid : ($player == 2 ? $p2uid : "Player $player");
       WriteLog(FmtPlayer($playerName, $player) . " took 3 damage for having no cards left in their deck.");
     }
     DealDamageAsync($player, 3, "DAMAGE", "DRAW");

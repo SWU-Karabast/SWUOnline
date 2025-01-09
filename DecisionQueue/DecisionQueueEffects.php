@@ -716,7 +716,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       } else {
         include "../MenuFiles/ParseGamefile.php";
         $chosenPlayer = $lastResult == "Yourself" ? $player : (3 - $player);
-        $playerName = $chosenPlayer == 1 ? $p1uid : ($chosenPlayer == 2 ? $p2uid : "-");
+        $playerName = $playerNames[$chosenPlayer];
         Draw($chosenPlayer);
         WriteLog("$playerName drew a card from Yoda, Old Master");
       }

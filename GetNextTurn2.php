@@ -53,14 +53,12 @@ if ($isGamePlayer) {
   if ($playerStatus == "-1") {
     SetCachePiece($gameName, $playerID + 14, 0);
     include "MenuFiles/ParseGamefile.php";
-    $playerName = $playerID == 1 ? $p1uid : ($playerID == 2 ? $p2uid : "Player {$playerID}");
     WriteLog("$playerName has connected.");
   }
   SetCachePiece($gameName, $playerID + 1, $currentTime);
   SetCachePiece($gameName, $playerID + 3, "0");
   if ($playerStatus > 0 || GetCachePiece($gameName, $playerID + 14) > 0) {
     include "MenuFiles/ParseGamefile.php";
-    $playerName = $playerID == 1 ? $p1uid : ($playerID == 2 ? $p2uid : "Player {$playerID}");
     WriteLog("$playerName has reconnected.");
     SetCachePiece($gameName, $playerID + 3, "0");
     SetCachePiece($gameName, $playerID + 14, 0);
@@ -158,7 +156,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       fwrite($errorHandler, $errorOutput . "\r\n");
       fclose($errorHandler);
 
-      $playerName = $firstPlayerChooser == 1 ? $p1uid : ($firstPlayerChooser == 2 ? $p2uid : "Player {$firstPlayerChooser}");  
+      $playerName = $playerNames[$firstPlayerChooser];  
       WriteLog("$playerName lost and will choose first player for the rematch.");
     }
     WriteGameFile();

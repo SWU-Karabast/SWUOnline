@@ -1285,7 +1285,6 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       if($damage < 0) $damage = 0;
       if($damage > 0) IncrementClassState($playerSource, $CS_ArcaneDamageDealt, $damage);
       include "MenuFiles/ParseGamefile.php";
-      $playerName = $player == 1 ? $p1uid : ($player == 2 ? $p2uid : "Player $player");
       WriteLog(FmtPlayer($playerName, $player) . " took $damage arcane damage from " . CardLink($source, $source), $player);
       if(DelimStringContains(CardSubType($source), "Ally") && $damage > 0) ProcessDealDamageEffect($source); // Interaction with Burn Them All! + Nekria
       $dqVars[0] = $damage;

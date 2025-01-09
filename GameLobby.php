@@ -47,9 +47,6 @@ if (!isset($authKey) || $authKey != $targetAuth) {
   exit;
 }
 
-$yourName = ($playerID == 1 ? $p1uid : $p2uid);
-$theirName = ($playerID == 1 ? $p2uid : $p1uid);
-
 if ($gameStatus == $MGS_GameStarted) {
   $authKey = ($playerID == 1 ? $p1Key : $p2Key);
   if (isset($gameUIPath))
@@ -137,7 +134,7 @@ $isMobile = IsMobile();
           <?php
           $contentCreator = ContentCreators::tryFrom(($playerID == 1 ? $p1ContentCreatorID : $p2ContentCreatorID));
           $nameColor = ($contentCreator != null ? $contentCreator->NameColor() : "");
-          $displayName = "<span style='color:" . $nameColor . "'>" . ($yourName != "-" ? $yourName : "Player " . $playerID) . "</span>";
+          $displayName = "<span style='color:" . $nameColor . "'>" . ($playerName != "-" ? $playerName : "Player " . $playerID) . "</span>";
           $deckFile = "./Games/" . $gameName . "/p" . $playerID . "Deck.txt";
           $handler = fopen($deckFile, "r");
 

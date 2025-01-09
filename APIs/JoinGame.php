@@ -257,7 +257,7 @@ if ($matchup == "") {
       --$tries;
     }
     $firstPlayerChooser = ($p1roll > $p2roll ? 1 : 2);
-    $playerName = $firstPlayerChooser == 1 ? $p1uid : ($firstPlayerChooser == 2 ? $p2uid : "-");
+    $playerName = $playerNames[$firstPlayerChooser];
     WriteLog("$playerName chooses who goes first.", path: "../");
     $gameStatus = $MGS_ChooseFirstPlayer;
     $joinerIP = $_SERVER['REMOTE_ADDR'];

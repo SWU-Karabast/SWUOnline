@@ -148,8 +148,7 @@ if ($lastUpdate != 0 && $cacheVal < $lastUpdate) {
   $response->theirHero = $otherHero;
   $response->theirHeroName = CardName($otherHero);
 
-  $theirName = ($playerID == 1 ? $p2uid : $p1uid);
-  if ($theirName == '-') $theirName = "Player " . ($playerID == 1 ? 2 : 1);
+  $theirName = $otherPlayerName;
   $contentCreator = ContentCreators::tryFrom(($playerID == 1 ? $p2ContentCreatorID : $p1ContentCreatorID));
   $nameColor = ($contentCreator != null ? $contentCreator->NameColor() : "");
   $overlayURL = ($contentCreator != null ? $contentCreator->HeroOverlayURL($otherHero) : "");
