@@ -49,7 +49,6 @@
 
     //First we need to parse the game state from the file
     include "Libraries/SHMOPLibraries.php";
-    include "WriteLog.php";
     include "ParseGamestate.php";
     include "GameTerms.php";
     include "GameLogic.php";
@@ -58,6 +57,7 @@
     include "Libraries/StatFunctions.php";
     include "Libraries/PlayerSettings.php";
     include "MenuFiles/ParseGamefile.php";
+    include_once "WriteLog.php";
     include_once 'includes/functions.inc.php';
     include_once 'includes/dbh.inc.php';
 
@@ -82,6 +82,7 @@
     <head>
       <meta charset="utf-8">
       <title>Karabast</title>
+      <link rel="stylesheet" href="./css/chat.css">
       <link rel="stylesheet" href="css/gamestyle072724.css">
       <link rel="preconnect" href="https://fonts.googleapis.com">
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -503,7 +504,7 @@
 
   </head>
 
-  <body onkeypress='Hotkeys(event)' onload='OnLoadCallback(<?php echo (filemtime("./Games/" . $gameName . "/gamelog.txt")); ?>)'>
+  <body onkeypress='Hotkeys(event)' onload='OnLoadCallback(<?php echo (filemtime(LogPath($gameName))); ?>)'>
 
     <?php echo (CreatePopup("inactivityWarningPopup", [], 0, 0, "⚠️ Inactivity Warning ⚠️", 1, "", "", true, true, "Interact with the screen in the next 30 seconds or you could be kicked for inactivity.")); ?>
     <?php echo (CreatePopup("inactivePopup", [], 0, 0, "⚠️ You are Inactive ⚠️", 1, "", "", true, true, "You are inactive. Your opponent is able to claim victory. Interact with the screen to clear this.")); ?>

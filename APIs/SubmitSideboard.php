@@ -10,6 +10,7 @@ include "../Libraries/StatFunctions.php";
 include "../Libraries/PlayerSettings.php";
 include "../Libraries/UILibraries2.php";
 include "../AI/CombatDummy.php";
+include "../WriteLog.php";
 include_once "../includes/dbh.inc.php";
 include_once "../includes/functions.inc.php";
 include_once "../MenuFiles/StartHelper.php";
@@ -159,7 +160,7 @@ if($p1SideboardSubmitted == "1" && $p2SideboardSubmitted == "1") {
   WriteGamestateCache($gameName, $gamestate);
 
   //Set up log file
-  $filename = "../Games/" . $gameName . "/gamelog.txt";
+  $filename = LogPath($gameName, "../");
   $filepath = "../Games/" . $gameName . "/";
   $handler = fopen($filename, "w");
   fclose($handler);

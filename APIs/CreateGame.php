@@ -4,6 +4,7 @@ ob_start();
 include "../HostFiles/Redirector.php";
 include "../Libraries/HTTPLibraries.php";
 include "../Libraries/SHMOPLibraries.php";
+include "../WriteLog.php";
 include_once "../Libraries/PlayerSettings.php";
 include_once '../Assets/patreon-php-master/src/PatreonDictionary.php';
 require_once '../Assets/patreon-php-master/src/API.php';
@@ -122,9 +123,7 @@ $gameFileHandler = fopen($filename, "w");
 include "../MenuFiles/WriteGamefile.php";
 WriteGameFile();
 
-$filename = "../Games/" . $gameName . "/gamelog.txt";
-$handler = fopen($filename, "w");
-fclose($handler);
+CreateLog($gameName, "../");
 
 $currentTime = round(microtime(true) * 1000);
 $cacheVisibility = ($visibility == "public" ? "1" : "0");
