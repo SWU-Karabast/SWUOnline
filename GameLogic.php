@@ -410,6 +410,20 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         default: break;
       }
       return $lastResult;
+    case "UIDOP":
+      $parameterArr = explode(",", $parameter);
+      switch ($parameterArr[0]) {
+        case "REVERTCONTROL": // Revert control of a unit to its owner
+          $ally = new Ally($lastResult);
+          if ($ally->Exists() && $ally->Controller() != $ally->Owner()) {
+            $owner = $ally->Owner();
+            AllyTakeControl($owner, $ally->Index());
+            WriteLog("Reverted control of " . CardLink($ally->CardID(), $ally->CardID()) . "back to player $owner");
+          } else {
+            return "PASS";
+          }
+      }
+      return $lastResult;
     case "MZOP":
       $parameterArr = explode(",", $parameter);
       switch ($parameterArr[0])

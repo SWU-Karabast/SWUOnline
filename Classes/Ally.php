@@ -168,9 +168,9 @@ class Ally {
     return $this->allies[$this->index+14] == 1;
   }
 
-  function Destroy() {
+  function Destroy($enemyEffects = true) {
     if($this->index == -1) return "";
-    if($this->AvoidsDestroyByEnemyEffects()) {
+    if($enemyEffects && $this->AvoidsDestroyByEnemyEffects()) {
       WriteLog(CardLink($this->CardID(), $this->CardID()) . " cannot be defeated by enemy card effects.");
       return "";
     }
