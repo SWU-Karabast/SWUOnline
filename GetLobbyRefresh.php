@@ -147,7 +147,7 @@ if ($lastUpdate != 0 && $cacheVal < $lastUpdate) {
   }
   $contentCreator = ContentCreators::tryFrom(($playerID == 1 ? $p2ContentCreatorID : $p1ContentCreatorID));
   $nameColor = ($contentCreator != null ? $contentCreator->NameColor() : "");
-  $theirDisplayName = "<span style='color:" . $nameColor . "'>" . ($otherPlayerName != "-" ? $otherPlayerName : "Player " . ($playerID == 1 ? 2 : 1)) . "</span>";
+  $theirDisplayName = "<span style='color:$nameColor'>$otherPlayerName</span>";
   $overlayURL = ($contentCreator != null ? $contentCreator->HeroOverlayURL($otherHero) : "");
   $channelLink = ($contentCreator != null ? $contentCreator->ChannelLink() : "");
 

@@ -374,7 +374,7 @@
                       className = type == "W" ? "my-base" : "my-leader";
                   } else if (zone == "theirChar") {
                       positionStyle = "fixed;";
-                      id = type == "W" ? "P<?= 3 - $playerID ?>BASE" : "P<?= 3 - $playerID ?>LEADER";
+                      id = type == "W" ? "P<?= $otherPlayerID ?>BASE" : "P<?= $otherPlayerID ?>LEADER";
                       className = type == "W" ? "their-base" : "their-leader";
                   }
               }
@@ -399,12 +399,12 @@
                       var fontColor = "#DDD";
                       var borderColor = "#1a1a1a";
                       var backgroundColor = "#DDD";
-                      newHTML += "<div class='player-name p<?= ($playerID == 1 ? "1" : "2"); ?>-label'>" + <?= ($playerID == 1 ? "p1uid" : "p2uid"); ?> + "</div>";
+                      newHTML += "<div class='player-name p<?= $playerID ?>-label'>" + p<?= $playerID ?>uid + "</div>";
                   } else if (zone == "theirChar") {
                       var fontColor = "#DDD";
                       var borderColor = "#1a1a1a";
                       var backgroundColor = "#DDD";
-                      newHTML += "<div class='player-name p<?= ($playerID == 2 ? "1" : "2"); ?>-label'>" + <?= ($playerID == 1 ? "p2uid" : "p1uid"); ?> + "</div>";
+                      newHTML += "<div class='player-name p<?= $otherPlayerID ?>-label'>" + p<?= $otherPlayerID ?>uid + "</div>";
                   }
               }
               var restriction = cardArr[12];
