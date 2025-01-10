@@ -93,7 +93,7 @@ while ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     $lastActionWarning = intval($cacheArr[17]);
     $finalWarning = intval($cacheArr[18]);
     if (GetCachePiece($gameName, 14) == 6 && $timeDiff > 10_000 && $oppStatus == "0") {
-      WriteLog("Opponent has disconnected.");
+      WriteLog("Player $otherP has disconnected.");
       $opponentDisconnected = true;
       SetCachePiece($gameName, $otherP + 3, "2");
       SetCachePiece($gameName, 14, 7);//$MGS_StatsLoggedIrreversible
@@ -112,7 +112,7 @@ while ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         GamestateUpdated($gameName);
       }
       if ($timeDiff > $DisconnectTimeoutMS && $otherPlayerDisconnectStatus == 2 && ($oppStatus == "0")) {
-        WriteLog("Opponent has disconnected.");
+        WriteLog("Player $otherP has disconnected.");
         $opponentDisconnected = true;
         SetCachePiece($gameName, $otherP + 3, "2");
         IncrementCachePiece($gameName, $otherP + 14);
@@ -139,7 +139,7 @@ while ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         $currentPlayerInputTimeout = true;
         $lastUpdate = 0;
       } else if ($lastCurrentPlayer == $otherP && ($currentTime - $lastActionTime) > $InputTimeoutMS && $lastActionWarning == $otherP && $finalWarning == $otherP) {
-        WriteLog("Opponent has disconnected.");
+        WriteLog("Player $otherP has disconnected.");
         $opponentDisconnected = true;
         SetCachePiece($gameName, $otherP + 3, "2");
         SetCachePiece($gameName, $otherP + 14, 3);
