@@ -1239,15 +1239,28 @@ function AspectContains($cardID, $aspect, $player="")
   return DelimStringContains($cardAspect, $aspect);
 }
 
-function TraitContains($cardID, $trait, $player="", $index=-1)
-{
-  // ---------------------- IMPORTANT -----------------------
-  // We should add the Clone Trait to cloned cards. However, it's not possible to identify the card solely with the $cardID.
-  // Since very few cards currently interact directly with this effect (at the moment, only Nala Se), we are handling each case individually.
-  // --------------------------------------------------------
+function TraitContainsAny($cardID, $traits, $player="", $index=-1) {
+  $traitsArr = explode(",", $traits);
+  for ($i = 0; $i < count($traitsArr); $i++) {
+    if (TraitContains($cardID, $traitsArr[$i], $player, $index)) return true;
+  }
+  return false;
+}
+
+function TraitContainsAll($cardID, $traits, $player="", $index=-1) {
+  $traitsArr = explode(",", $traits);
+  for ($i = 0; $i < count($traitsArr); $i++) {
+    if (!TraitContains($cardID, $traits[$i], $player, $index)) return false;
+  }
+  return true;
+}
+
+function TraitContains($cardID, $trait, $player="", $index=-1) {
   $trait = str_replace("_", " ", $trait); //"MZALLCARDTRAITORPASS" and possibly other decision queue options call this function with $trait having been underscoreified, so I undo that here.
   if($index != -1) {
     $ally = new Ally("MYALLY-" . $index, $player);
+
+    // Check for upgrades
     $upgrades = $ally->GetUpgrades();
     for($i=0; $i<count($upgrades); ++$i) {
       switch ($upgrades[$i]) {
@@ -1257,6 +1270,8 @@ function TraitContains($cardID, $trait, $player="", $index=-1)
         default: break;
       }
     }
+
+    if ($ally->IsCloned() && $trait == "Clone") return true;
   }
   $cardTrait = CardTraits($cardID);
   return DelimStringContains($cardTrait, $trait);
