@@ -262,6 +262,20 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       AddDecisionQueue("ADDCURRENTEFFECT", $player, "7895170711", 1);
       AddDecisionQueue("MZOP", $player, "PLAYCARD", 1);
       break;
+    case "CLEARTHEFIELD":
+      $otherPlayer = $player == 1 ? 2 : 1;
+      $cardID = GetMZCard($player, $lastResult);
+      $cardTitle = CardTitle($cardID);
+      $targetCards = SearchAlliesUniqueIDForTitle($otherPlayer, $cardTitle);
+      $targetCardsArr = explode(",", $targetCards);
+
+      for ($i = 0; $i < count($targetCardsArr); ++$i) {
+        $targetAlly = new Ally($targetCardsArr[$i]);
+        if (!$targetAlly->IsLeader()) {
+          MZBounce($player, $targetAlly->MZIndex());
+        }
+      }
+      break;
     case "RESOLUTE":
       $otherPlayer = $player == 1 ? 2 : 1;
       $cardID = GetMZCard($player, $lastResult);
