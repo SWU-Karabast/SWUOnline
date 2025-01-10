@@ -666,9 +666,6 @@ function CurrentEffectEndTurnAbilities()
           $ally->DefeatUpgrade("8752877738");
         }
         break;
-      case "4002861992"://DJ (Blatant Thief)
-        AddNextTurnEffect($currentTurnEffects[$i], $currentTurnEffects[$i + 1]);
-        break;
       case "8418001763"://Huyang
         if(SearchAlliesForCard($currentTurnEffects[$i+1], "8418001763") != "") {
           AddNextTurnEffect($currentTurnEffects[$i], $currentTurnEffects[$i + 1], $currentTurnEffects[$i + 2]);

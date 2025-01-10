@@ -1406,12 +1406,15 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
   }
   $resourceCards = &GetResourceCards($currentPlayer);
   $resourcesPaid = 0;
-  for($i = 0; $i < count($resourceCards); $i += ResourcePieces()) {
-    if($resources[1] == 0) break;
-    if($resourceCards[$i+4] == "0") {
-      $resourceCards[$i+4] = "1";
-      --$resources[1];
-      ++$resourcesPaid;
+  for($j = 0; $j <= 1; $j++) {
+    for($i = 0; $i < count($resourceCards); $i += ResourcePieces()) {
+      if($resources[1] == 0) break;
+      if($j == 0 && $resourceCards[$i+6] == "-1") continue; // Prioritize stolen resources
+      if($resourceCards[$i+4] == "0") {
+        $resourceCards[$i+4] = "1";
+        --$resources[1];
+        ++$resourcesPaid;
+      }
     }
   }
   if($resources[1] > 0) {
