@@ -14,6 +14,7 @@ class Ally {
     $mzArr = explode("-", $MZIndexOrUniqueID);
 
     if ($mzArr[0] != "MYALLY" && $mzArr[0] != "THEIRALLY") {
+      $mzArr = ["MYALLY", ""]; // Default non-existent ally
       $players = ($player == 1 || $player == 2) ? [$player] : [1, 2];
       foreach ($players as $p) {
         $index = SearchAlliesForUniqueID($MZIndexOrUniqueID, $p);
