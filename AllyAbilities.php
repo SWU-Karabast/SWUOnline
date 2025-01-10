@@ -101,7 +101,7 @@ function LeaderAbilitiesIgnored() {
   return AnyPlayerHasAlly("4602353389");//Brain Invaders
 }
 
-function HasWhenEnemyDestroyed($cardID, $numUses, $wasUnique, $wasUpgraded) {
+function HasWhenEnemyDestroyed($cardID, $uniqueID, $numUses, $wasUnique, $wasUpgraded) {
   switch($cardID) {
     case "1664771721"://Gideon Hask
     case "b0dbca5c05"://Iden Versio Leader Unit
@@ -109,7 +109,8 @@ function HasWhenEnemyDestroyed($cardID, $numUses, $wasUnique, $wasUpgraded) {
     case "2649829005"://Agent Kallus
       return $wasUnique && $numUses > 0;
     case "8687233791"://Punishing One
-      return $wasUpgraded && $numUses > 0;
+      $ally = new Ally($uniqueID);
+      return $ally->IsExhausted() && $wasUpgraded && $numUses > 0;
     default: return false;
   }
 }
@@ -470,7 +471,7 @@ function AllyAddGraveyard($player, $cardID, $subtype)
 function AllyEntersPlayState($cardID, $player, $from="-")
 {
   if(DefinedTypesContains($cardID, "Leader", $player)) return 2;
-  if(IsToken($cardID) && SearchAlliesForCard($player, "0038286155")) return 2;//Chancellor Palpatine
+  if(IsToken($cardID) && SearchAlliesForCard($player, "0038286155") != "") return 2;//Chancellor Palpatine
   switch($cardID)
   {
     case "1785627279": return 2;//Millennium Falcon
@@ -572,13 +573,20 @@ function AllyLeavesPlayAbility($player, $index)
       break;
     case "4002861992"://DJ (Blatant Thief)
       $djAlly = new Ally("MYALLY-" . $index, $player);
-      $arsenal = &GetArsenal($player);
-      for ($i = 0; $i < count($arsenal); $i += ArsenalPieces()) {
-        if ($arsenal[$i + 6] == $djAlly->UniqueID()) {
-          $otherPlayer = $player == 1 ? 2 : 1;
-          $resourceCard = RemoveResource($player, $i);
-          AddResources($resourceCard, $otherPlayer, "PLAY", "DOWN", isExhausted:($arsenal[$i+4] == 1));
+      $resourceFound = false;
+      for ($p = 1; $p <= 2; $p++) { // Iterate over both players (useful when DJ changes sides)
+        $arsenal = &GetArsenal($p);
+        for ($i = 0; $i < count($arsenal); $i += ArsenalPieces()) {
+          if ($arsenal[$i + 6] == $djAlly->UniqueID()) {
+            $otherPlayer = $p == 1 ? 2 : 1;
+            $isExhausted = $arsenal[$i + 4];
+            $resourceCard = RemoveResource($p, $i);
+            AddResources($resourceCard, $otherPlayer, "PLAY", "DOWN", isExhausted:$isExhausted);
+            $resourceFound = true;
+            break;
+          }
         }
+        if ($resourceFound) break;
       }
       break;
     default: break;
@@ -590,7 +598,7 @@ function AllyLeavesPlayAbility($player, $index)
   {
     switch($char[$i])
     {
-      case "4626028465"://Boba Fett
+      case "4626028465"://Boba Fett Leader
         if($char[$i+1] == 2 && NumResourcesAvailable($otherPlayer) < NumResources($otherPlayer)) {
           $char[$i+1] = 1;
           ReadyResource($otherPlayer);
@@ -1071,7 +1079,7 @@ function AllyCanBeAttackTarget($player, $index, $cardID)
   }
   switch($cardID)
   {
-    case "3646264648"://Sabine Wren
+    case "3646264648"://Sabine Wren (Explosive Artist)
       $allies = &GetAllies($player);
       $aspectArr = [];
       for($i=0; $i<count($allies); $i+=AllyPieces())
@@ -1128,10 +1136,10 @@ function AllyAttackAbilities($attackID)
   }
   for($i = 0; $i < count($allies); $i += AllyPieces()) {
     switch($allies[$i]) {
-      case "20f21b4948"://Jyn Erso
+      case "20f21b4948"://Jyn Erso Leader Unit
         AddCurrentTurnEffect("20f21b4948", $defPlayer);
         break;
-      case "8107876051"://Enfys Nest
+      case "8107876051"://Enfys Nest (Marauder)
         if($combatChainState[$CCS_IsAmbush] == 1) {
           $target = new Ally(GetAttackTarget(), $defPlayer);
           AddCurrentTurnEffect("8107876051", $defPlayer, "PLAY", $target->UniqueID());
@@ -1539,7 +1547,7 @@ function SpecificAllyAttackAbilities($attackID)
       }
       Restore(count($aspectArr), $mainPlayer);
       break;
-    case "0ca1902a46"://Darth Vader
+    case "0ca1902a46"://Darth Vader Leader Unit
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY");
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 2 damage to");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
@@ -1582,7 +1590,7 @@ function SpecificAllyAttackAbilities($attackID)
       AddCurrentTurnEffect("6570091935", $mainPlayer, from:"PLAY");
       AddCurrentTurnEffect("6570091935", $mainPlayer, from:"PLAY");
       break;
-    case "51e8757e4c"://Sabine Wren
+    case "51e8757e4c"://Sabine Wren Leader Unit
       DealDamageAsync($defPlayer, 1, "DAMAGE", "51e8757e4c");
       break;
     case "8395007579"://Fifth Brother
@@ -1597,7 +1605,7 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,1,$mainPlayer,1", 1);
       break;
-    case "6827598372"://Grand Inquisitor
+    case "6827598372"://Grand Inquisitor Leader Unit
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:maxAttack=3");
       AddDecisionQueue("MZFILTER", $mainPlayer, "index=MYALLY-" . $attackerAlly->Index());
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 1 damage to");
@@ -1612,7 +1620,7 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "ADDEXPERIENCE", 1);
       break;
-    case "4156799805"://Boba Fett
+    case "4156799805"://Boba Fett (Disintegrator)
       if(IsAllyAttackTarget()) {
         $target = GetAttackTarget();
         $ally = new Ally($target, $defPlayer);
@@ -1632,7 +1640,7 @@ function SpecificAllyAttackAbilities($attackID)
       $card = Mill($defPlayer, 1);
       if(DefinedTypesContains($card, "Event", $defPlayer)) ExhaustResource($defPlayer);
       break;
-    case "3646264648"://Sabine Wren
+    case "3646264648"://Sabine Wren (Explosives Artist)
       $attackTarget = GetAttackTarget();
       $options = $attackTarget == "THEIRCHAR-0" ? "THEIRCHAR-0" : "THEIRCHAR-0," . $attackTarget;
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose something to deal 1 damage to");
@@ -1649,7 +1657,7 @@ function SpecificAllyAttackAbilities($attackID)
         AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "6432884726,PLAY", 1);
       }
       break;
-    case "5e90bd91b0"://Han Solo
+    case "5e90bd91b0"://Han Solo Leader Unit
       $deck = new Deck($mainPlayer);
       $card = $deck->Top(remove:true);
       AddResources($card, $mainPlayer, "DECK", "DOWN");
@@ -2051,6 +2059,10 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("NOPASS", $mainPlayer, "-");
       AddDecisionQueue("PASSPARAMETER", $mainPlayer, $attackerAlly->UniqueID(), 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "3556557330,PLAY", 1);
+      break;
+    case "f8e0c65364"://Asajj Ventress (deployed leader)
+      global $CS_NumEventsPlayed;
+      if(GetClassState($mainPlayer, $CS_NumEventsPlayed) > 0) AddCurrentTurnEffect("f8e0c65364", $mainPlayer, "PLAY");
       break;
     case "2843644198"://Sabine Wren
       $card = Mill($mainPlayer, 1);

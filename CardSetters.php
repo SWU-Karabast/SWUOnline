@@ -120,7 +120,7 @@ function AddResources($cardID, $player, $from, $facing, $counters=0, $isExhauste
   $arsenal[] = $facing;
   $arsenal[] = 1; //Num uses - currently always 1
   $arsenal[] = $counters; //Counters
-  $arsenal[] = $isExhausted; //Is Frozen (1 = Frozen)
+  $arsenal[] = $isExhausted == "1" ? "1" : "0"; //Is Frozen (1 = Frozen)
   $arsenal[] = GetUniqueId(); //Unique ID
   $arsenal[] = $stealSource;
 }
@@ -202,12 +202,14 @@ function DestroyArsenal($player, $index=-1)
 {
   $arsenal = &GetArsenal($player);
   $cardIDs = "";
+  $otherPlayer = $player == 1 ? 2 : 1;
   for($i = 0; $i < count($arsenal); $i += ArsenalPieces()) {
     if($index > -1 && $index != $i) continue;
     if($cardIDs != "") $cardIDs .= ",";
     $cardIDs .= $arsenal[$i];
     WriteLog(CardLink($arsenal[$i], $arsenal[$i]) . " was destroyed from the arsenal");
-    AddGraveyard($arsenal[$i], $player, "ARS");
+    $owner = $arsenal[$i + 6] == "-1" ? $player  : $otherPlayer ;
+    AddGraveyard($arsenal[$i], $owner, "ARS");
     for($j=$i+ArsenalPieces()-1; $j>=$i; --$j) unset($arsenal[$j]);
   }
   $arsenal = array_values($arsenal);

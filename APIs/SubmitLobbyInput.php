@@ -38,16 +38,16 @@ if ($authKey != $targetAuth) {
   exit;
 }
 
-if($action == "Request Chat")
-{
-  if($playerID == 1) SetCachePiece($gameName, 15, 1);
-  else if($playerID == 2) SetCachePiece($gameName, 16, 1);
-  if(GetCachePiece($gameName, 15) != 1 || GetCachePiece($gameName, 16) != 1)
-  {
-    WriteLog($playerName . " wants to enable chat", path: "../");
-  }
-  GamestateUpdated($gameName);
-}
+// if($action == "Request Chat")
+// {
+//   if($playerID == 1) SetCachePiece($gameName, 15, 1);
+//   else if($playerID == 2) SetCachePiece($gameName, 16, 1);
+//   if(GetCachePiece($gameName, 15) != 1 || GetCachePiece($gameName, 16) != 1)//if this gets uncommented, these cache keys need to change
+//   {
+//     WriteLog($playerName . " wants to enable chat", path: "../");
+//   }
+//   GamestateUpdated($gameName);
+// }
 
 WriteGameFile();
 

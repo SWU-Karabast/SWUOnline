@@ -44,8 +44,8 @@ function SearchCombatChainLink($player, $type = "", $definedType = "", $maxCost 
 
 function SearchResources($player, $type = "", $definedType = "", $maxCost = -1, $minCost = -1, $aspect = "", $arena = "", $hasBountyOnly = false, $hasUpgradeOnly = false, $trait = -1, $damagedOnly = false, $maxAttack = -1, $maxHealth = -1, $frozenOnly = false, $hasNegCounters = false, $hasEnergyCounters = false, $tokenOnly = false, $minAttack = false, $keyword = false)
 {
-  $arsenal = &GetMemory($player);
-  return SearchInner($arsenal, $player, "MEM", MemoryPieces(), $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $tokenOnly, $minAttack, $keyword);
+  $arsenal = &GetArsenal($player);
+  return SearchInner($arsenal, $player, "ARSENAL", ArsenalPieces(), $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $tokenOnly, $minAttack, $keyword);
 }
 
 function SearchAura($player, $type = "", $definedType = "", $maxCost = -1, $minCost = -1, $aspect = "", $arena = "", $hasBountyOnly = false, $hasUpgradeOnly = false, $trait = -1, $damagedOnly = false, $maxAttack = -1, $maxHealth = -1, $frozenOnly = false, $hasNegCounters = false, $hasEnergyCounters = false, $tokenOnly = false, $minAttack = false, $keyword = false)
@@ -568,12 +568,14 @@ function SearchCharacterEffects($player, $index, $effect)
   return false;
 }
 
-function GetArsenalFaceDownIndices($player)
+function GetArsenalIndices($player, string $facing, $isExhausted = "")
 {
   $arsenal = &GetArsenal($player);
   $indices = "";
+  if (is_null($isExhausted) || ($isExhausted != "0" && $isExhausted != "1")) $isExhausted = "";
   for ($i = 0; $i < count($arsenal); $i += ArsenalPieces()) {
-    if ($arsenal[$i + 1] == "DOWN") {
+    if ($arsenal[$i + 1] == $facing) {
+      if ($isExhausted != "" && $arsenal[$i + 4] != $isExhausted) continue;
       if ($indices != "") $indices .= ",";
       $indices .= $i;
     }
@@ -581,17 +583,14 @@ function GetArsenalFaceDownIndices($player)
   return $indices;
 }
 
-function GetArsenalFaceUpIndices($player)
+function GetArsenalFaceDownIndices($player, $isExhausted = "")
 {
-  $arsenal = &GetArsenal($player);
-  $indices = "";
-  for ($i = 0; $i < count($arsenal); $i += ArsenalPieces()) {
-    if ($arsenal[$i + 1] == "UP") {
-      if ($indices != "") $indices .= ",";
-      $indices .= $i;
-    }
-  }
-  return $indices;
+  return GetArsenalIndices($player, "DOWN", $isExhausted);
+}
+
+function GetArsenalFaceUpIndices($player, $isExhausted = "")
+{
+  return GetArsenalIndices($player, "UP", $isExhausted);
 }
 
 function GetEquipmentIndices($player, $maxBlock = -1, $onCombatChain = false)

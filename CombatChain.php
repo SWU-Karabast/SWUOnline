@@ -39,7 +39,7 @@ function CompletesAttackEffect($cardID) {
     case "9560139036"://Ezra Bridger
       AddCurrentTurnEffect("9560139036", $mainPlayer);
       break;
-    case "0e65f012f5"://Boba Fett
+    case "0e65f012f5"://Boba Fett Leader Unit
       if(GetClassState($defPlayer, $CS_NumLeftPlay) > 0) ReadyResource($mainPlayer, 2);
       break;
     case "9647945674"://Zeb Orrelios
@@ -159,10 +159,6 @@ function AttackModifier($cardID, $player, $index)
       if(LeaderAbilitiesIgnored()) break;
       $modifier += floor(GetHealth($player)/5);
       break;
-    case "f8e0c65364"://Asajj Ventress
-      global $CS_NumEventsPlayed;
-      if(GetClassState($player, $CS_NumEventsPlayed) > 0) $modifier += 1;
-      break;
     case "8139901441"://Bo-Katan Kryze
       if(SearchCount(SearchAllies($player, trait:"Trooper")) > 1) $modifier += 1;
       break;
@@ -184,7 +180,9 @@ function AttackModifier($cardID, $player, $index)
     for($i=0;$i<count($currentTurnEffects);$i+=CurrentTurnPieces()) {
       switch($currentTurnEffects[$i]) {
         case "9399634203"://I Have the High Ground
-          $defendingAlly = new Ally(GetAttackTarget(), $defPlayer);
+          $target = GetAttackTarget();
+          if($target == "THEIRCHAR-0") break;
+          $defendingAlly = new Ally($target, $defPlayer);
           if($player != $defPlayer && $currentTurnEffects[$i+1] == $defPlayer && $currentTurnEffects[$i+2] == $defendingAlly->UniqueID()) {
             $modifier -= 4;
           }

@@ -17,6 +17,9 @@
 14 - Game status (see $GS_ constants)
 15 - P1 Disconnect Status (0 = connected, 1 = first warning, 2 = second warning, 3 = disconnected; opponent can claim victory)
 16 - P2 Disconnect Status
+17 - Last Action Time
+18 - Last Action Warning (0 = no warning, 1 = player 1, 2 = player 2)
+19 - Player Autopassed Last Turn (0 = none, 1 = player 1, 2 = player 2)
 */
 
 // $useRedis = getenv('REDIS_ENABLED') ?? false;

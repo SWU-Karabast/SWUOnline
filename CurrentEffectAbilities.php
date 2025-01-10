@@ -202,7 +202,8 @@ function EffectAttackModifier($cardID, $playerID="")
     case "3399023235": return isset($subparam) && $subparam == "2" ? -2 : 0;//Fenn Rau
     case "8777351722": return IsAllyAttackTarget() ? 2 : 0;//Anakin Skywalker Leader
     case "4910017138": return 2;//Breaking In
-    case "8929774056": return 1;//Asajj Ventress
+    case "8929774056": return 1;//Asajj Ventress (undeployed)
+    case "f8e0c65364": return 1;//Asajj Ventress (deployed)
     case "2155351882": return 1;//Ahsoka Tano
     case "6436543702": return -2;//Providence Destroyer
     case "7000286964": return -1;//Vulture Interceptor Wing
@@ -629,25 +630,15 @@ function CurrentEffectEndTurnAbilities()
       case "3426168686-2"://Sneak Attack
       case "7270736993-2"://Unrefusable Offer
         $ally = new Ally("MYALLY-" . SearchAlliesForUniqueID($currentTurnEffects[$i+2], $currentTurnEffects[$i+1]), $currentTurnEffects[$i+1]);
-        $ally->Destroy();
+        $ally->Destroy(false);
         break;
-      case "1626462639"://Change of Heart
-        $ally = new Ally($currentTurnEffects[$i+2]);
-        if ($ally->Exists() && $ally->Controller() != $ally->Owner()) {
-          $owner = $ally->Owner();
-          WriteLog("Change of Heart unit reverted control of " . CardLink($ally->CardID(), $ally->CardID()) . "back to player $owner");
-          AddDecisionQueue("PASSPARAMETER", $owner, "THEIRALLY-" . $ally->Index(), 1);
-          AddDecisionQueue("MZOP", $owner, "TAKECONTROL", 1);
-        }
-        break;
+      case "1302133998"://Impropriety Among Thieves
       case "7732981122"://Sly Moore
-        $ally = new Ally($currentTurnEffects[$i+2]);
-        if ($ally->Exists() && $ally->Controller() != $ally->Owner()) {
-          $owner = $ally->Owner();
-          WriteLog("Sly Moore unit reverted control of " . CardLink($ally->CardID(), $ally->CardID()) . "back to player $owner");
-          AddDecisionQueue("PASSPARAMETER", $owner, "THEIRALLY-" . $ally->Index(), 1);
-          AddDecisionQueue("MZOP", $owner, "TAKECONTROL", 1);
-        }
+      case "1626462639"://Change of Heart
+        $player = $currentTurnEffects[$i+1];
+        $uniqueID = $currentTurnEffects[$i+2];
+        AddDecisionQueue("PASSPARAMETER", $player , $uniqueID);
+        AddDecisionQueue("UIDOP", $player , "REVERTCONTROL");
         break;
       case "5696041568-2"://Triple Dark Raid
         $ally = new Ally($currentTurnEffects[$i+2]);
@@ -665,11 +656,8 @@ function CurrentEffectEndTurnAbilities()
           $ally->DefeatUpgrade("8752877738");
         }
         break;
-      case "4002861992"://DJ (Blatant Thief)
-        AddNextTurnEffect($currentTurnEffects[$i], $currentTurnEffects[$i + 1]);
-        break;
       case "8418001763"://Huyang
-        if(SearchAlliesForCard($currentTurnEffects[$i+1], "8418001763")) {
+        if(SearchAlliesForCard($currentTurnEffects[$i+1], "8418001763") != "") {
           AddNextTurnEffect($currentTurnEffects[$i], $currentTurnEffects[$i + 1], $currentTurnEffects[$i + 2]);
         }
         break;
@@ -815,7 +803,8 @@ function IsCombatEffectActive($cardID)
     case "3399023235"://Fenn Rau
     case "8777351722"://Anakin Skywalker Leader
     case "4910017138"://Breaking In
-    case "8929774056"://Asajj Ventress
+    case "8929774056"://Asajj Ventress (undeployed)
+    case "f8e0c65364"://Asajj Ventress (deployed)
     case "2155351882"://Ahsoka Tano
     case "6669050232"://Grim Resolve
     case "2395430106"://Republic Tactical Officer

@@ -212,7 +212,7 @@ function RaidAmount($cardID, $player, $index, $reportMode = false)
       case "8995892693"://Red Three
         if($index != $i && AspectContains($cardID, "Heroism", $player)) $amount += 1;
         break;
-      case "fb475d4ea4"://IG-88
+      case "fb475d4ea4"://IG-88 Leader Unit
         if($index != $i) $amount += 1;
         break;
       default: break;
@@ -1368,7 +1368,7 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
         case "2397845395"://Strategic Acumen
           if($abilityNames != "") $abilityNames .= ",";
           $abilityNames .= "Strategic Acumen";
-          break;          
+          break;
         default: break;
       }
     }
