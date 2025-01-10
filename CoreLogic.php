@@ -623,6 +623,14 @@ function SendSWUStatsResults() {
   $winHero = GetCachePiece($gameName, ($winner == 1 ? 7 : 8));
 	$loseHero = GetCachePiece($gameName, ($winner == 1 ? 8 : 7));
   $winnerHealth = GetHealth($winner);
+  $p1Char = &GetPlayerCharacter(1);
+  $p1Hero = $p1Char[CharacterPieces()];
+  $p1Base = $p1Char[0];
+  $p1BaseColor = AspectToColor(CardAspects($p1Base));
+  $p2Char = &GetPlayerCharacter(2);
+  $p2Hero = $p2Char[CharacterPieces()];
+  $p2Base = $p2Char[0];
+  $p2BaseColor = AspectToColor(CardAspects($p2Base));
 	$winnerDeck = file_get_contents("./Games/" . $gameName . "/p" . $winner . "Deck.txt");
 	$loserDeck = file_get_contents("./Games/" . $gameName . "/p" . $loser . "Deck.txt");
   $data_json = json_encode([
@@ -639,8 +647,8 @@ function SendSWUStatsResults() {
     'winnerHealth' => $winnerHealth,
     'winnerDeck' => $winnerDeck,
     'loserDeck' => $loserDeck,
-    'player1' => SerializeGameResult(1, "", file_get_contents("./Games/" . $gameName . "/p1Deck.txt"), $gameName),
-    'player2' => SerializeGameResult(2, "", file_get_contents("./Games/" . $gameName . "/p2Deck.txt"), $gameName)
+    'player1' => SerializeGameResult(1, "", file_get_contents("./Games/" . $gameName . "/p1Deck.txt"), $gameName, $p2Hero, "", "", $p2BaseColor),
+    'player2' => SerializeGameResult(2, "", file_get_contents("./Games/" . $gameName . "/p2Deck.txt"), $gameName, $p1Hero, "", "", $p1BaseColor)
   ]);
 
   // Initialize cURL session
@@ -664,6 +672,18 @@ function SendSWUStatsResults() {
 
   // Close cURL session
   curl_close($ch);
+}
+
+function AspectToColor($aspect)
+{
+  switch($aspect) {
+    case "Command": return "Green";
+    case "Vigilance": return "Blue";
+    case "Aggression": return "Red";
+    case "Cunning": return "Yellow";
+    case "Heroism": return "White";
+    case "Villainy": return "Black";
+  }
 }
 
 function UnsetBanishModifier($player, $modifier, $newMod="DECK")
@@ -4627,9 +4647,34 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       if($from == "RESOURCES") {
         $djAlly = new Ally("MYALLY-" . LastAllyIndex($currentPlayer), $currentPlayer);
         $otherPlayer = $currentPlayer == 1 ? 2 : 1;
-        $theirResources = &GetResourceCards($otherPlayer);
-        $resourceCard = RemoveResource($otherPlayer, count($theirResources) - ResourcePieces());
-        AddResources($resourceCard, $currentPlayer, "PLAY", "DOWN", stealSource:$djAlly->UniqueID());
+        
+        // Try to get ready resources first
+        $theirResourceIndices = GetArsenalFaceDownIndices($otherPlayer, 0); 
+        if ($theirResourceIndices == "") {
+          // If no ready resources, get all resources
+          $theirResourceIndices = GetArsenalFaceDownIndices($otherPlayer);
+        }
+        $theirResourceIndicesArr = explode(",", $theirResourceIndices);
+        $theirResourceIndex = $theirResourceIndicesArr[GetRandom(0, count($theirResourceIndicesArr) - 1)]; // Pick a random resource. Important: remove this randomization if it breaks the game.
+        $theirResources = &GetArsenal($otherPlayer);
+        $isExhausted = $theirResources[$theirResourceIndex + 4];
+
+        // Steal the resource
+        $resourceCard = RemoveResource($otherPlayer, $theirResourceIndex);
+        AddResources($resourceCard, $currentPlayer, "PLAY", "DOWN", isExhausted:$isExhausted, stealSource:$djAlly->UniqueID());
+
+        // The new rules (v3) allow you to change the state of your resources immediately after smuggling the DJ, provided the total number of "ready" and "exhausted" resources remains the same. 
+        // So, we will exhaust the stolen resource and ready another.
+        if (!$isExhausted) {
+          $myResourceIndices = GetArsenalFaceDownIndices($currentPlayer, 1);
+          if ($myResourceIndices != "") {
+            $myResourceIndicesArr = explode(",", $myResourceIndices);
+            $myResourceIndex = $myResourceIndicesArr[GetRandom(0, count($myResourceIndicesArr) - 1)]; // Pick a random resource. Important: remove this randomization if it breaks the game.
+            $myResources = &GetArsenal($currentPlayer);
+            $myResources[$myResourceIndex + 4] = "0"; // Ready a random resource
+            $myResources[count($myResources) - ArsenalPieces() + 4] = "1"; // Exhaust the stolen resource
+          }
+        }
       }
       break;
     case "7718080954"://Frozen in Carbonite
@@ -5465,10 +5510,17 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddCurrentTurnEffect("1039828081", $currentPlayer, "PLAY");
       break;
     case "0056489820"://Unlimited Power
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "-");
+      AddDecisionQueue("SETDQVAR", $currentPlayer, 0);
       for($i=4; $i>=1; --$i) {
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "dqVar=0");
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal " . $i . " damage to", 1);
-        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("SETDQVAR", $currentPlayer, 1, 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+        AddDecisionQueue("APPENDDQVAR", $currentPlayer, 0, 1);
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{1}", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,$i,$currentPlayer", 1);
       }
       break;

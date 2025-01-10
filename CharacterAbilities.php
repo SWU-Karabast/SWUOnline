@@ -360,7 +360,7 @@ function AllyDealDamageAbilities($player, $damage) {
   $allies = &GetAllies($player);
   for($i = count($allies) - AllyPieces(); $i >= 0; $i -= AllyPieces()) {
     switch($allies[$i]) {
-      case "3c60596a7a":
+      case "3c60596a7a"://Cassian Andor Leader Unit
         $ally = new Ally("MYALLY-" . $i, $player);
         if ($ally->NumUses() > 0) {
           AddDecisionQueue("SETDQCONTEXT", $player, "Choose if you want to draw a card (Cassian's ability)");
