@@ -7,12 +7,12 @@ $stage = getenv('STAGE') ?: 'prod';
 $isDev = $stage === 'dev';
 
 $ReturnDelim = "GSDELIM";
-$DisconnectFirstWarningMS = $isDev ? 1e6 : 30e3;
-$DisconnectFinalWarningMS = $isDev ? 1e6 : 55e3;
-$DisconnectTimeoutMS = $isDev ? 1e6 : 60e3;
-$ServerTimeoutMS = $isDev ? 1e6 : 90e3;
-$InputWarningMS = $isDev ? 1e6 : 60e3;
-$InputTimeoutMS = $isDev ? 1e6 : 90e3;
+$DisconnectFirstWarningMS = $isDev ? 1e9 : 30e3;
+$DisconnectFinalWarningMS = $isDev ? 1e9 : 55e3;
+$DisconnectTimeoutMS = $isDev ? 1e9 : 60e3;
+$ServerTimeoutMS = $isDev ? 1e9 : 90e3;
+$InputWarningMS = $isDev ? 1e9 : 60e3;
+$InputTimeoutMS = $isDev ? 1e9 : 90e3;
 
 //We should always have a player ID as a URL parameter
 $gameName = $_GET["gameName"];
