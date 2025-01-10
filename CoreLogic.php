@@ -623,6 +623,14 @@ function SendSWUStatsResults() {
   $winHero = GetCachePiece($gameName, ($winner == 1 ? 7 : 8));
 	$loseHero = GetCachePiece($gameName, ($winner == 1 ? 8 : 7));
   $winnerHealth = GetHealth($winner);
+  $p1Char = &GetPlayerCharacter(1);
+  $p1Hero = $p1Char[CharacterPieces()];
+  $p1Base = $p1Char[0];
+  $p1BaseColor = AspectToColor(CardAspects($p1Base));
+  $p2Char = &GetPlayerCharacter(2);
+  $p2Hero = $p2Char[CharacterPieces()];
+  $p2Base = $p2Char[0];
+  $p2BaseColor = AspectToColor(CardAspects($p2Base));
 	$winnerDeck = file_get_contents("./Games/" . $gameName . "/p" . $winner . "Deck.txt");
 	$loserDeck = file_get_contents("./Games/" . $gameName . "/p" . $loser . "Deck.txt");
   $data_json = json_encode([
@@ -639,8 +647,8 @@ function SendSWUStatsResults() {
     'winnerHealth' => $winnerHealth,
     'winnerDeck' => $winnerDeck,
     'loserDeck' => $loserDeck,
-    'player1' => SerializeGameResult(1, "", file_get_contents("./Games/" . $gameName . "/p1Deck.txt"), $gameName),
-    'player2' => SerializeGameResult(2, "", file_get_contents("./Games/" . $gameName . "/p2Deck.txt"), $gameName)
+    'player1' => SerializeGameResult(1, "", file_get_contents("./Games/" . $gameName . "/p1Deck.txt"), $gameName, opposingHero: $p2Hero, opposingBaseColor: $p2BaseColor),
+    'player2' => SerializeGameResult(2, "", file_get_contents("./Games/" . $gameName . "/p2Deck.txt"), $gameName, opposingHero: $p1Hero, opposingBaseColor: $p2BaseColor)
   ]);
 
   // Initialize cURL session
@@ -664,6 +672,18 @@ function SendSWUStatsResults() {
 
   // Close cURL session
   curl_close($ch);
+}
+
+function AspectToColor($aspect)
+{
+  switch($aspect) {
+    case "Command": return "Green";
+    case "Vigilance": return "Blue";
+    case "Aggression": return "Red";
+    case "Cunning": return "Yellow";
+    case "Heroism": return "White";
+    case "Villainy": return "Black";
+  }
 }
 
 function UnsetBanishModifier($player, $modifier, $newMod="DECK")
