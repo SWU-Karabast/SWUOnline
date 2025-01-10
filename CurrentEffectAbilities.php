@@ -630,25 +630,15 @@ function CurrentEffectEndTurnAbilities()
       case "3426168686-2"://Sneak Attack
       case "7270736993-2"://Unrefusable Offer
         $ally = new Ally("MYALLY-" . SearchAlliesForUniqueID($currentTurnEffects[$i+2], $currentTurnEffects[$i+1]), $currentTurnEffects[$i+1]);
-        $ally->Destroy();
+        $ally->Destroy(false);
         break;
-      case "1626462639"://Change of Heart
-        $ally = new Ally($currentTurnEffects[$i+2]);
-        if ($ally->Exists() && $ally->Controller() != $ally->Owner()) {
-          $owner = $ally->Owner();
-          WriteLog("Change of Heart unit reverted control of " . CardLink($ally->CardID(), $ally->CardID()) . "back to player $owner");
-          AddDecisionQueue("PASSPARAMETER", $owner, "THEIRALLY-" . $ally->Index(), 1);
-          AddDecisionQueue("MZOP", $owner, "TAKECONTROL", 1);
-        }
-        break;
+      case "1302133998"://Impropriety Among Thieves
       case "7732981122"://Sly Moore
-        $ally = new Ally($currentTurnEffects[$i+2]);
-        if ($ally->Exists() && $ally->Controller() != $ally->Owner()) {
-          $owner = $ally->Owner();
-          WriteLog("Sly Moore unit reverted control of " . CardLink($ally->CardID(), $ally->CardID()) . "back to player $owner");
-          AddDecisionQueue("PASSPARAMETER", $owner, "THEIRALLY-" . $ally->Index(), 1);
-          AddDecisionQueue("MZOP", $owner, "TAKECONTROL", 1);
-        }
+      case "1626462639"://Change of Heart
+        $player = $currentTurnEffects[$i+1];
+        $uniqueID = $currentTurnEffects[$i+2];
+        AddDecisionQueue("PASSPARAMETER", $player , $uniqueID);
+        AddDecisionQueue("UIDOP", $player , "REVERTCONTROL");
         break;
       case "5696041568-2"://Triple Dark Raid
         $ally = new Ally($currentTurnEffects[$i+2]);
