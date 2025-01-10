@@ -3,13 +3,16 @@
 include 'Libraries/HTTPLibraries.php';
 include 'Libraries/NetworkingLibraries.php';
 
+$stage = getenv('STAGE') ?: 'prod';
+$isDev = $stage === 'dev';
+
 $ReturnDelim = "GSDELIM";
-$DisconnectFirstWarningMS = 30_000;
-$DisconnectFinalWarningMS = 55_000;
-$DisconnectTimeoutMS = 60_000;
-$ServerTimeoutMS = 90_000;
-$InputWarningMS = 60_000;
-$InputTimeoutMS = 90_000;
+$DisconnectFirstWarningMS = $isDev ? 1e7 : 30_000;
+$DisconnectFinalWarningMS = $isDev ? 1e7 : 55_000;
+$DisconnectTimeoutMS = $isDev ? 1e7 : 60_000;
+$ServerTimeoutMS = $isDev ? 1e7 : 90_000;
+$InputWarningMS = $isDev ? 1e7 : 60_000;
+$InputTimeoutMS = $isDev ? 1e7 : 90_000;
 
 //We should always have a player ID as a URL parameter
 $gameName = $_GET["gameName"];
