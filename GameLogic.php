@@ -1025,7 +1025,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       }
       return ($rv == "" ? "PASS" : $rv);
     case "SHOWOPTIONS":
-      $params = explode("-", $parameter);
+      $params = explode("&", $parameter);
       $cardID = $params[0];
       $options = explode(";", $params[1]);
       $selectedOption = str_replace("_", " ", $options[$lastResult]);
