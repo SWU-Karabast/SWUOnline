@@ -39,7 +39,8 @@ function FinalizeChainLinkEffects()
 {
   global $mainPlayer, $currentTurnEffects;
   for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnPieces()) {
-    switch($currentTurnEffects[$i]) {
+    $cardID = $currentTurnEffects[$i];
+    switch($cardID) {
       case "8988732248-2"://Rebel Assault
         PrependDecisionQueue("REMOVECURRENTEFFECT", $mainPlayer, $currentTurnEffects[$i]);
         PrependDecisionQueue("SWAPTURN", $mainPlayer, "-");
@@ -108,10 +109,11 @@ function FinalizeChainLinkEffects()
         return true;
       case "9560139036"://Ezra Bridger
         SearchCurrentTurnEffects("9560139036", $mainPlayer, remove:true);
-        PrependDecisionQueue("MODAL", $mainPlayer, "EZRABRIDGER", 1);
-        PrependDecisionQueue("SHOWMODES", $mainPlayer, $currentTurnEffects[$i], 1);
-        PrependDecisionQueue("MULTICHOOSETEXT", $mainPlayer, "1-Leave,Play,Discard-1");
-        PrependDecisionQueue("SETDQCONTEXT", $mainPlayer, "The top card is <0>; Choose a mode for Ezra Bridger");
+        $options = "Play it;Discard it;Leave it on top of your deck";
+        PrependDecisionQueue("MODAL", $mainPlayer, "EZRABRIDGER");
+        PrependDecisionQueue("SHOWOPTIONS", $mainPlayer, "$cardID-$options");
+        PrependDecisionQueue("CHOOSEOPTION", $mainPlayer, "$cardID-$options");
+        PrependDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose an option for <0>");
         PrependDecisionQueue("SETDQVAR", $mainPlayer, "0");
         PrependDecisionQueue("DECKCARDS", $mainPlayer, "0");
         return true;

@@ -18,16 +18,19 @@ function ModalAbilities($player, $card, $lastResult)
       ExhaustAllAllies($lastResult[0], 2);
       return $lastResult;
     case "EZRABRIDGER":
-      switch($lastResult[0]) {
-        case "Leave": break;
-        case "Play":
+      switch($lastResult) {
+        case 0: // Play it
           PrependDecisionQueue("SWAPTURN", $player, "-");
           MZPlayCard($player, "MYDECK-0");
           break;
-        case "Discard": Mill($player, 1); break;
+        case 1: // Discard it
+          Mill($player, 1); 
+          break;
+        case 2: // Leave it
+          break;
         default: break;
       }
-      return 1;
+      return $lastResult;
     case "LEIAORGANA":
       switch($lastResult[0]) {
         case "Ready_Resource": ReadyResource($player); break;

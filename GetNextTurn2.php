@@ -759,7 +759,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     ChoosePopup($theirCharacter, $turn[2], 16, "Choose a card from your opponent character/equipment", CharacterPieces());
   }
 
-  if ($turn[0] == "CHOOSEOPTION" || $turn[0] == "MAYCHOOSEOPTION") {
+  if (($turn[0] == "CHOOSEOPTION" || $turn[0] == "MAYCHOOSEOPTION") && $currentPlayer == $playerID) {
     $caption = "<div>Choose " . TypeToPlay($turn[0]) .  "</div>";
     if (GetDQHelpText() != "-") $caption = "<div>" . implode(" ", explode("_", GetDQHelpText())) . "</div>";
     $params = explode("-", $turn[2]);
@@ -786,11 +786,8 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         overflow: hidden;
         cursor: pointer;
         border-radius: 0.375rem;
-        border: 2px solid #000000;
-        transition: background 0.3s ease;
-      }
-      .active-player .card {
         border: 2px solid #00FF66;
+        transition: background 0.3s ease;
       }
       .card.hidden {
         display: none;
@@ -799,9 +796,15 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         height: 270%;
         width: 270%;
         position: absolute;
-        bottom: 0;
         left: 50%;
+      }
+      .card.event img {
+        bottom: 0;
         transform: translate(-50%, 10%);
+      }
+      .card.non-event img {
+        top: 0;
+        transform: translate(-50%, -15%);
       }
       .card-content {
         width: 100%;
@@ -818,15 +821,16 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.3) 70%);
         transition: background 0.3s ease;
       }
-      .active-player .card:hover .card-content {
+      .card:hover .card-content {
         background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.5) 70%);
       }
     </style>";
     
-    $content .= "<div class='card-container" . ($turn[1] == $playerID ? " active-player" : "") . "'>";
+    $content .= "<div class='card-container'>";
     for ($i = 0; $i < count($options); ++$i) {  
       $submitLink = ProcessInputLink($playerID, 36, $i, "onclick");
-      $content .= "<div class='card" . (in_array($i, $hiddenOptions) ? " hidden" : "") . "' $submitLink>";
+      $cardTypeClass = DefinedTypesContains($cardID, "Event") ? "event" : "non-event";
+      $content .= "<div class='card $cardTypeClass" . (in_array($i, $hiddenOptions) ? " hidden" : "") . "' $submitLink>";
       $content .= "<img src='./WebpImages2/$cardID.webp' />";
       $content .= "<div class='card-content'>";
       $content .= str_replace("_", " ", $options[$i]);
