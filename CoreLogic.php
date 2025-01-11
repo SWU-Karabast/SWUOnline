@@ -3150,7 +3150,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "9680213078"://Leia Organa
       if($from != "PLAY") {
         $options = "Ready a resource;Exhaust a unit";
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an option");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose one");
         AddDecisionQueue("CHOOSEOPTION", $currentPlayer, "$cardID-$options");
         AddDecisionQueue("SHOWOPTIONS", $currentPlayer, "$cardID-$options");
         AddDecisionQueue("MODAL", $currentPlayer, "LEIAORGANA");
@@ -4674,8 +4674,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "7578472075"://Let the Wookiee Win
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
-      $options = "Ready up to 6 resources;Ready a friendly unit. If it's a Wookiee unit, attack with it. It gets +2/+0 for this attack";
-      AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose an option for your opponent");
+      $options = "They ready up to 6 resources;They ready a friendly unit. If it's a Wookiee unit, attack with it. It gets +2/+0 for this attack";
+      AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose one for your opponent");
       AddDecisionQueue("CHOOSEOPTION", $otherPlayer, "$cardID-$options");
       AddDecisionQueue("SHOWOPTIONS", $otherPlayer, "$cardID-$options");
       AddDecisionQueue("MODAL", $currentPlayer, "LETTHEWOOKIEEWIN");
@@ -5006,7 +5006,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "3357486161"://Political Pressure
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
       $options = "Discard a random card from your hand;Opponent creates 2 Battle Droid tokens";
-      AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose an option");
+      AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose one");
       AddDecisionQueue("CHOOSEOPTION", $otherPlayer, "$cardID-$options");
       AddDecisionQueue("SHOWOPTIONS", $otherPlayer, "$cardID-$options");
       AddDecisionQueue("MODAL", $otherPlayer, "POLITICALPRESSURE");

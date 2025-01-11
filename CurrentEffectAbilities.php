@@ -113,7 +113,7 @@ function FinalizeChainLinkEffects()
         PrependDecisionQueue("MODAL", $mainPlayer, "EZRABRIDGER");
         PrependDecisionQueue("SHOWOPTIONS", $mainPlayer, "$cardID-$options");
         PrependDecisionQueue("CHOOSEOPTION", $mainPlayer, "$cardID-$options");
-        PrependDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose an option for <0>");
+        PrependDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose one for <0>");
         PrependDecisionQueue("SETDQVAR", $mainPlayer, "0");
         PrependDecisionQueue("DECKCARDS", $mainPlayer, "0");
         return true;

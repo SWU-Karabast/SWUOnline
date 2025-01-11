@@ -807,7 +807,6 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         transform: translate(-50%, -15%);
       }
       .card-content {
-        height: 100%;
         width: 100%;
         display: flex;
         justify-content: center;
@@ -828,7 +827,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     </style>";
     
     $content .= "<div class='card-container'>";
-    for ($i = 0; $i < count($options); ++$i) {  
+    for ($i = 0; $i < count($options); ++$i) {
       $submitLink = ProcessInputLink($playerID, 36, $i, "onclick");
       $cardTypeClass = DefinedTypesContains($cardID, "Event") ? "event" : "non-event";
       $content .= "<div class='card $cardTypeClass" . (in_array($i, $hiddenOptions) ? " hidden" : "") . "' $submitLink>";
