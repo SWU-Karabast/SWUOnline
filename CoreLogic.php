@@ -5005,9 +5005,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "3357486161"://Political Pressure
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
-      AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose one");
-      AddDecisionQueue("BUTTONINPUT", $otherPlayer, "Discard_Random,Battle_Droids");
-      AddDecisionQueue("MODAL", $otherPlayer, "POLITICALPRESSURE", 1);
+      $options = "Discard a random card from your hand;Opponent creates 2 Battle Droid tokens";
+      AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose an option");
+      AddDecisionQueue("CHOOSEOPTION", $otherPlayer, "$cardID-$options");
+      AddDecisionQueue("SHOWOPTIONS", $otherPlayer, "$cardID-$options");
+      AddDecisionQueue("MODAL", $otherPlayer, "POLITICALPRESSURE");
       break;
     case "0511508627"://Captain Rex
       CreateCloneTrooper($currentPlayer);

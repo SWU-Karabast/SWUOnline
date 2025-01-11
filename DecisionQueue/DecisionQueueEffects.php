@@ -185,18 +185,17 @@ function ModalAbilities($player, $card, $lastResult)
       return $lastResult;
     case "POLITICALPRESSURE":
       switch($lastResult) {
-        case "Discard_Random":
+        case 0: // Discard a random card
           DiscardRandom($player, "3357486161");
           break;
-        case "Battle_Droids":
+        case 1: // Create Battle Droid tokens
           $otherPlayer = ($player == 1 ? 2 : 1);
           CreateBattleDroid($otherPlayer);
           CreateBattleDroid($otherPlayer);
           break;
         default: break;
       }
-      return 1;
-
+      return $lastResult;
     case "MANUFACTUREDSOLDIERS":
       switch($lastResult) {
         case "Clone_Troopers":
