@@ -84,9 +84,9 @@ function TypeToPlay($phase)
       return "unit";
     case "YESNO":
       return str_replace("_", " ", $turn[2]);
-    case "MULTICHOOSETEXT":
+    case "MULTICHOOSETEXT": // Deprecated, use CHOOSEOPTION instead
       return " options";
-    case "MAYMULTICHOOSETEXT":
+    case "MAYMULTICHOOSETEXT": // Deprecated, use MAYCHOOSEOPTION instead
       return " options";
     case "MAYCHOOSEOPTION":
     case "CHOOSEOPTION":
