@@ -21,6 +21,7 @@ services:
       REDIS_HOST: "app_redis"
       REDIS_ENABLED: true
       DOMAIN: "${DOMAIN:-localhost}"
+      STAGE: "${STAGE:-prod}"
     user: "${DOCKER_USER}"
 
   mysql-server:

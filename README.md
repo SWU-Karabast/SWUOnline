@@ -31,7 +31,7 @@ Use the format `DOCKER_USER=$userId:$groupId`. For example, `DOCKER_USER=1000:10
 
 Run the following commands to start / stop the service
 ```bash
-bash docker compose up -d   # start
+bash STAGE=dev docker compose up -d   # start
 bash docker compose down    # stop
 bash docker compose restart # restart
 ```

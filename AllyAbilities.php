@@ -666,10 +666,11 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities,
         }
         break;
       case "3232845719"://K-2SO
-        AddDecisionQueue("SETDQCONTEXT", $player, "Choose a mode for K-2SO");
-        AddDecisionQueue("MULTICHOOSETEXT", $player, "1-Deal 3 damage,Discard-1");
-        AddDecisionQueue("SHOWMODES", $player, $cardID, 1);
-        AddDecisionQueue("MODAL", $player, "K2SO", 1);
+        $options = "Deal 3 damage to opponent's base;Opponent discards a card from their hand";
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose one");
+        AddDecisionQueue("CHOOSEOPTION", $player, "$cardID-$options");
+        AddDecisionQueue("SHOWOPTIONS", $player, "$cardID-$options");
+        AddDecisionQueue("MODAL", $player, "K2SO");
         break;
       case "8333567388"://Distant Patroller
         AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to give a shield");
@@ -1833,6 +1834,19 @@ function SpecificAllyAttackAbilities($attackID)
         DefeatUpgrade($mainPlayer, true, upgradeFilter: "maxCost=2");
       }
       break;
+    case "0398102006"://The Invisible Hand
+      $totalUnits = SearchCount(SearchAllies($mainPlayer, trait:"Separatist"));
+      for ($i = 0; $i < $totalUnits; $i++) {
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:trait=Separatist",1 );
+        AddDecisionQueue("MZFILTER", $mainPlayer, "index=MYALLY-" . $attackerAlly->Index(), 1);
+        AddDecisionQueue("MZFILTER", $mainPlayer, "status=1",1 );
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to exhaust", 1);
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "REST", 1);
+        AddDecisionQueue("PASSPARAMETER", $mainPlayer, "THEIRCHAR-0", 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,1,$mainPlayer,1", 1);
+      }
+      break;      
     case "2585318816"://Resolute
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY");
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 2 damage to");
