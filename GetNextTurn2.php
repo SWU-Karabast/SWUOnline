@@ -305,10 +305,11 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     $top = 15;
   }
 
+  $initiativeSuffix = $initiativeTaken ? "-taken" : "";
   if($initiativePlayer == $playerID || ($playerID == 3 && $initiativePlayer == 2)) {
-    echo ("<div class='my-initiative'><span>Initiative</span>");
+    echo ("<div class='my-initiative$initiativeSuffix'><span>Initiative</span>");
   } else {
-    echo ("<div class='their-initiative'><span>Initiative</span>");
+    echo ("<div class='their-initiative$initiativeSuffix'><span>Initiative</span>");
   }
   echo ("</div>");
 
