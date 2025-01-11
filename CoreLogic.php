@@ -3687,7 +3687,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "3789633661"://Cunning
-      $options = "Return a non-leader unit with 4 or less power to its owner's hand;Give a unit +4/0 for this phase;Exhaust up to 2 units;An opponent discards a random card from their hand";
+      $options = "Return a non-leader unit with 4 or less power to its owner's hand;Give a unit +4/+0 for this phase;Exhaust up to 2 units;An opponent discards a random card from their hand";
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "-");
       AddDecisionQueue("SETDQVAR", $currentPlayer, "0");
       for ($i = 0; $i < 2; ++$i) {
@@ -4672,10 +4672,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "ADDSHIELD", 1);
       }
       break;
-    case "7578472075"://Let the Wookie Win
+    case "7578472075"://Let the Wookiee Win
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
-      AddDecisionQueue("BUTTONINPUTNOPASS", $otherPlayer, "Ready Resources,Ready Unit");
-      AddDecisionQueue("MODAL", $currentPlayer, "LETTHEWOOKIEWIN");
+      $options = "Ready up to 6 resources;Ready a friendly unit. If it's a Wookiee unit, attack with it. It gets +2/+0 for this attack";
+      AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose an option for your opponent");
+      AddDecisionQueue("CHOOSEOPTION", $otherPlayer, "$cardID-$options");
+      AddDecisionQueue("SHOWOPTIONS", $otherPlayer, "$cardID-$options");
+      AddDecisionQueue("MODAL", $currentPlayer, "LETTHEWOOKIEEWIN");
       break;
     case "8380936981"://Jabba's Rancor
       JabbasRancor($currentPlayer, $playAlly->Index());

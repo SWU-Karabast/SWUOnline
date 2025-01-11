@@ -167,12 +167,12 @@ function ModalAbilities($player, $card, $lastResult)
         default: break;
       }
       return $lastResult;
-    case "LETTHEWOOKIEWIN":
+    case "LETTHEWOOKIEEWIN":
       switch($lastResult) {
-        case "Ready_Resources":
+        case 0: // Ready resources
           ReadyResource($player, 6);
           break;
-        case "Ready_Unit":
+        case 1: // Ready a unit
           AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
           AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to attack with");
           AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
@@ -182,7 +182,7 @@ function ModalAbilities($player, $card, $lastResult)
           break;
         default: break;
       }
-      return 1;
+      return $lastResult;
     case "POLITICALPRESSURE":
       switch($lastResult) {
         case "Discard_Random":
