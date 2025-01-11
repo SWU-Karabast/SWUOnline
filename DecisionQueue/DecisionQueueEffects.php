@@ -7,9 +7,13 @@ function ModalAbilities($player, $card, $lastResult)
   {
     case "K2SO":
       $otherPlayer = ($player == 1 ? 2 : 1);
-      switch($lastResult[0]) {
-        case "Discard": PummelHit($otherPlayer); break;
-        case "Deal_3_damage": DealDamageAsync($otherPlayer, 3, "DAMAGE", "3232845719"); break;
+      switch($lastResult) {
+        case 0: // Deal damage
+          DealDamageAsync($otherPlayer, 3, "DAMAGE", "3232845719"); 
+          break;
+        case 1: // Discard a card
+          PummelHit($otherPlayer); 
+          break;
         default: break;
       }
       return $lastResult;
