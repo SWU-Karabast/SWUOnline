@@ -838,7 +838,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       $content .= "</div>";
     }
     $content .= "</div>";
-    echo CreatePopup("CHOOSEOPTION", [], 0, 1, $caption, 1, $content, height:"35%", width:"44%");
+    echo CreatePopup("CHOOSEOPTION", [], 0, 1, $caption, 1, $content, height:"35%", width:"50%");
   }
 
   // MULTICHOOSETEXT and MAYMULTICHOOSETEXT are deprecated, use MULTICHOOSE and MAYMULTICHOOSE instead

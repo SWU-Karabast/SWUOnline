@@ -120,21 +120,20 @@ function ModalAbilities($player, $card, $lastResult)
           AddDecisionQueue("MZOP", $player, "BOUNCE", 1);
           break;
         case 1: // Buff unit
-          AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
+          AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
           AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to buff", 1);
           AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
           AddDecisionQueue("MZOP", $player, "GETUNIQUEID", 1);
           AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $player, "3789633661,HAND");
           break;
         case 2: // Exhaust units
-          AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
-          AddDecisionQueue("SETDQCONTEXT", $player, "Choose a card to exhaust");
-          AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-          AddDecisionQueue("MZOP", $player, "REST", 1);
-          AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY", 1);
-          AddDecisionQueue("SETDQCONTEXT", $player, "Choose a card to exhaust");
-          AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-          AddDecisionQueue("MZOP", $player, "REST", 1);
+          for ($i = 0; $i < 2; $i++) {
+            AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
+            AddDecisionQueue("MZFILTER", $player, "status=1");
+            AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to exhaust");
+            AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+            AddDecisionQueue("MZOP", $player, "REST", 1);
+          }
           break;
         case 3: // Discard a card
           $otherPlayer = ($player == 1 ? 2 : 1);
