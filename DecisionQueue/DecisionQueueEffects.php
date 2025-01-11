@@ -102,7 +102,17 @@ function ModalAbilities($player, $card, $lastResult)
           AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
           AddDecisionQueue("MZOP", $player, "{0}", 1);
           break;
-        case 2: // Resource (Handled Elsewhere)
+        case 2: // Resource
+          $discard = &GetDiscard($player);
+          $discardIndex = 0;
+          for ($i = count($discard) - 1; $i >= 0; --$i) {
+            if ($discard[$i] == "0073206444") { //Command
+              $discardIndex = $i;
+              break;
+            }
+          }
+          RemoveDiscard($player, $discardIndex);
+          AddResources("0073206444", $player, "GY", "DOWN", isExhausted:1); //Command
           break;
         case 3: // Return a unit
           MZMoveCard($player, "MYDISCARD:definedType=Unit", "MYHAND", may:false);

@@ -1498,8 +1498,6 @@ function GoesWhereAfterResolving($cardID, $from = null, $player = "", $playedFro
   if(IsAlly($cardID)) return "ALLY";
   switch($cardID) {
     case "2703877689": return "RESOURCE";//Resupply
-    case "0073206444"://Command
-      return str_contains($additionalCosts, "Resource") ? "RESOURCE" : "GY";
     default: return "GY";
   }
 }
