@@ -230,6 +230,20 @@ if ($decklink != "") {
   copy($deckFile, "./Games/" . $gameName . "/p" . $playerID . "DeckOrig.txt");
 }
 
+if ($playerID == 1) {
+  $p1uid = ($_SESSION["useruid"] ?? "Player 1");
+  $p1id = ($_SESSION["userid"] ?? "");
+  $p1IsPatron = (isset($_SESSION["isPatron"]) ? "1" : "");
+  $p1ContentCreatorID = ($_SESSION["patreonEnum"] ?? "");
+  $playerNames[1] = $p1uid;
+} else if ($playerID == 2) {
+  $p2uid = ($_SESSION["useruid"] ?? "Player 2");
+  $p2id = ($_SESSION["userid"] ?? "");
+  $p2IsPatron = (isset($_SESSION["isPatron"]) ? "1" : "");
+  $p2ContentCreatorID = ($_SESSION["patreonEnum"] ?? "");
+  $playerNames[2] = $p2uid;
+}
+
 if ($matchup == "") {
   if ($playerID == 2) {
 
@@ -243,25 +257,14 @@ if ($matchup == "") {
     while ($p1roll == $p2roll && $tries > 0) {
       $p1roll = rand(1, 6) + rand(1, 6);
       $p2roll = rand(1, 6) + rand(1, 6);
-      WriteLog("Player 1 rolled $p1roll and Player 2 rolled $p2roll.");
+      WriteLog("$p1uid rolled $p1roll and $p2uid rolled $p2roll.");
       --$tries;
     }
     $firstPlayerChooser = ($p1roll > $p2roll ? 1 : 2);
-    WriteLog("Player $firstPlayerChooser chooses who goes first.");
+    $playerName = $playerNames[$firstPlayerChooser];
+    WriteLog("$playerName chooses who goes first.");
     $gameStatus = $MGS_ChooseFirstPlayer;
     $joinerIP = $_SERVER['REMOTE_ADDR'];
-  }
-
-  if ($playerID == 1) {
-    $p1uid = ($_SESSION["useruid"] ?? "Player 1");
-    $p1id = ($_SESSION["userid"] ?? "");
-    $p1IsPatron = (isset($_SESSION["isPatron"]) ? "1" : "");
-    $p1ContentCreatorID = ($_SESSION["patreonEnum"] ?? "");
-  } else if ($playerID == 2) {
-    $p2uid = ($_SESSION["useruid"] ?? "Player 2");
-    $p2id = ($_SESSION["userid"] ?? "");
-    $p2IsPatron = (isset($_SESSION["isPatron"]) ? "1" : "");
-    $p2ContentCreatorID = ($_SESSION["patreonEnum"] ?? "");
   }
 
   if ($playerID == 2) $p2Key = hash("sha256", rand() . rand() . rand());
