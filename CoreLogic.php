@@ -5056,9 +5056,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "1192349217"://Manufactured Soldiers
+      $options = "Create 2 Clone Trooper tokens;Create 3 Battle Droid tokens";
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose one");
-      AddDecisionQueue("BUTTONINPUT", $currentPlayer, "Clone_Troopers,Battle_Droids");
-      AddDecisionQueue("MODAL", $currentPlayer, "MANUFACTUREDSOLDIERS", 1);
+      AddDecisionQueue("CHOOSEOPTION", $currentPlayer, "$cardID-$options");
+      AddDecisionQueue("SHOWOPTIONS", $currentPlayer, "$cardID-$options");
+      AddDecisionQueue("MODAL", $currentPlayer, "MANUFACTUREDSOLDIERS");
       break;
     case "1417180295"://Strategic Analysis
       Draw($currentPlayer);

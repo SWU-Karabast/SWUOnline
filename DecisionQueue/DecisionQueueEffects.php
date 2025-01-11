@@ -198,18 +198,18 @@ function ModalAbilities($player, $card, $lastResult)
       return $lastResult;
     case "MANUFACTUREDSOLDIERS":
       switch($lastResult) {
-        case "Clone_Troopers":
+        case 0: // Create Clone Trooper tokens
           CreateCloneTrooper($player);
           CreateCloneTrooper($player);
           break;
-        case "Battle_Droids":
+        case 1: // Create Battle Droid tokens
           CreateBattleDroid($player);
           CreateBattleDroid($player);
           CreateBattleDroid($player);
           break;
         default: break;
       }
-      return 1;
+      return $lastResult;
     default: return "";
   }
 }
