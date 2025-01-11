@@ -37,9 +37,11 @@ function ModalAbilities($player, $card, $lastResult)
       }
       return $lastResult;
     case "LEIAORGANA":
-      switch($lastResult[0]) {
-        case "Ready_Resource": ReadyResource($player); break;
-        case "Exhaust_Unit":
+      switch($lastResult) {
+        case 0: // Ready a resource
+          ReadyResource($player); 
+          break;
+        case 1: // Exhaust a unit
           AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
           AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to exhaust");
           AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
@@ -47,7 +49,7 @@ function ModalAbilities($player, $card, $lastResult)
           break;
         default: break;
       }
-      return 1;
+      return $lastResult;
     case "BOMBINGRUN":
       DamageAllAllies(3, "7916724925", arena:$lastResult[0]);
       return 1;

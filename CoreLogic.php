@@ -3149,10 +3149,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "9680213078"://Leia Organa
       if($from != "PLAY") {
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a mode for Leia Organa");
-        AddDecisionQueue("MULTICHOOSETEXT", $currentPlayer, "1-Ready Resource,Exhaust Unit-1");
-        AddDecisionQueue("SHOWMODES", $currentPlayer, $cardID, 1);
-        AddDecisionQueue("MODAL", $currentPlayer, "LEIAORGANA", 1);
+        $options = "Ready a resource;Exhaust a unit";
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an option");
+        AddDecisionQueue("CHOOSEOPTION", $currentPlayer, "$cardID-$options");
+        AddDecisionQueue("SHOWOPTIONS", $currentPlayer, "$cardID-$options");
+        AddDecisionQueue("MODAL", $currentPlayer, "LEIAORGANA");
       }
       break;
     case "7916724925"://Bombing Run
