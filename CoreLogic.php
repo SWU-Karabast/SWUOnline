@@ -3711,7 +3711,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "0073206444"://Command
-      $options = "Give 2 Experience tokens to a unit;A friendly unit deals damage equal to its power to a non-unique enemy unit;Put this event into play as a resource;Return a unit from your discard pile to your hand";
+      $options = "Give 2 Experience tokens to a unit;A friendly unit deals damage equal to its power to a non unique enemy unit;Put this event into play as a resource;Return a unit from your discard pile to your hand";
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "-");
       AddDecisionQueue("SETDQVAR", $currentPlayer, "0");
       for ($i = 0; $i < 2; ++$i) {
