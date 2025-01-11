@@ -44,29 +44,30 @@ function ModalAbilities($player, $card, $lastResult)
       DamageAllAllies(3, "7916724925", arena:$lastResult[0]);
       return 1;
     case "VIGILANCE":
-      $params = explode(",", $lastResult);
-      for($i = 0; $i < count($params); ++$i) {
-        switch($params[$i]) {
-          case "Mill":
-            $otherPlayer = ($player == 1 ? 2 : 1);
-            Mill($otherPlayer, 6);
-            break;
-          case "Heal":
-            Restore(5, $player);
-            break;
-          case "Defeat":
-            MZChooseAndDestroy($player, "MYALLY:maxHealth=3&THEIRALLY:maxHealth=3", may:true);
-            break;
-          case "Shield":
-            AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to give a shield");
-            AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
-            AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-            AddDecisionQueue("MZOP", $player, "ADDSHIELD", 1);
-            break;
-          default: break;
-        }
+      switch($lastResult) {
+        case 0: // Mill opponent
+          $otherPlayer = ($player == 1 ? 2 : 1);
+          AddDecisionQueue("MILL", $otherPlayer, "6");
+          break;
+        case 1: // Heal base
+          AddDecisionQueue("PASSPARAMETER", $player, "MYCHAR-0");
+          AddDecisionQueue("MZOP", $player, "RESTORE,5");
+          break;
+        case 2: // Defeat a unit
+          AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:maxHealth=3&THEIRALLY:maxHealth=3");
+          AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to defeat");
+          AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
+          AddDecisionQueue("MZOP", $player, "DESTROY", 1);
+          break;
+        case 3: // Give a Shield token
+          AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
+          AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to give a shield");
+          AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
+          AddDecisionQueue("MZOP", $player, "ADDSHIELD", 1);
+          break;
+        default: break;
       }
-      return 1;
+      return $lastResult;
     case "COMMAND":
       $params = explode(",", $lastResult);
       for($i = 0; $i < count($params); ++$i) {

@@ -667,10 +667,10 @@ function CreatePopup($id, $fromArr, $canClose, $defaultState = 0, $title = "", $
   $style = "";
   $overCC = 1000;
   $darkMode = IsDarkMode($playerID);
-  $top = "40%";
-  $left = "calc(25% - 129px)";
   $width = "50%";
   $height = "30%";
+  $top = "calc(50% - $height/2)";
+  $left = "calc(50% - $width/2 - 129px)";
   if ($size == 2) {
     $top = "10%";
     $left = "calc(25% - 129px)";

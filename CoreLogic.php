@@ -1570,6 +1570,7 @@ function NumEquipBlock()
       case "MULTICHOOSEDECK": return 0;
       case "CHOOSEPERMANENT": return 0;
       case "MULTICHOOSETEXT": return 0;
+      case "CHOOSEOPTION": return 0;
       case "CHOOSEMYSOUL": return 0;
       case "OVER": return 0;
       default: return 1;
@@ -3683,8 +3684,16 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "8615772965"://Vigilance
-      AddDecisionQueue("PASSPARAMETER", $currentPlayer, $additionalCosts, 1);
-      AddDecisionQueue("MODAL", $currentPlayer, "VIGILANCE", 1);
+      $options = "Discard 6 cards from an opponent's deck;Heal 5 damage from a base;Defeat a unit with 3 or less remaining HP;Give a Shield token to a unit";
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "-");
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "0");
+      for ($i = 0; $i < 2; ++$i) {
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose " . ($i == 0 ? "First" : "Second") . " Vigilance Ability");
+        AddDecisionQueue("CHOOSEOPTION", $currentPlayer, "$cardID-$options-{0}");
+        AddDecisionQueue("APPENDDQVAR", $currentPlayer, "0");
+        AddDecisionQueue("SHOWOPTIONS", $currentPlayer, "$cardID-$options", 1);
+        AddDecisionQueue("MODAL", $currentPlayer, "VIGILANCE", 1);
+      }
       break;
     case "0073206444"://Command
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, $additionalCosts, 1);

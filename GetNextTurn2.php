@@ -759,6 +759,84 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     ChoosePopup($theirCharacter, $turn[2], 16, "Choose a card from your opponent character/equipment", CharacterPieces());
   }
 
+  if ($turn[0] == "CHOOSEOPTION" || $turn[0] == "MAYCHOOSEOPTION") {
+    $caption = "<div>Choose " . TypeToPlay($turn[0]) .  "</div>";
+    if (GetDQHelpText() != "-") $caption = "<div>" . implode(" ", explode("_", GetDQHelpText())) . "</div>";
+    $params = explode("-", $turn[2]);
+    $cardID = $params[0];
+    $options = explode(";", $params[1]);
+    $hiddenOptions = isset($params[2]) && $params[2] != "" ? explode(",", $params[2]) : [];
+    $content = "<style>
+      .card-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 75%;
+        gap: 16px;
+        margin-left: -5px;
+        margin-top: 3%;
+      }
+      .card {
+        display: flex;
+        justify-content: center;
+        position: relative;
+        height: 100%;
+        aspect-ratio: 0.71;
+        overflow: hidden;
+        cursor: pointer;
+        border-radius: 0.375rem;
+        border: 2px solid #000000;
+        transition: background 0.3s ease;
+      }
+      .active-player .card {
+        border: 2px solid #00FF66;
+      }
+      .card.hidden {
+        display: none;
+      }
+      .card img {
+        height: 270%;
+        width: 270%;
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translate(-50%, 10%);
+      }
+      .card-content {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        z-index: 2;
+        color: white;
+        text-align: center;
+        font-size: 16px;
+        font-weight: 500;
+        padding: 8px;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.3) 70%);
+        transition: background 0.3s ease;
+      }
+      .active-player .card:hover .card-content {
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.5) 70%);
+      }
+    </style>";
+    
+    $content .= "<div class='card-container" . ($turn[1] == $playerID ? " active-player" : "") . "'>";
+    for ($i = 0; $i < count($options); ++$i) {  
+      $submitLink = ProcessInputLink($playerID, 36, $i, "onclick");
+      $content .= "<div class='card" . (in_array($i, $hiddenOptions) ? " hidden" : "") . "' $submitLink>";
+      $content .= "<img src='./WebpImages2/$cardID.webp' />";
+      $content .= "<div class='card-content'>";
+      $content .= str_replace("_", " ", $options[$i]);
+      $content .= "</div>";
+      $content .= "</div>";
+    }
+    $content .= "</div>";
+    echo CreatePopup("CHOOSEOPTION", [], 0, 1, $caption, 1, $content);
+  }
+
   if (($turn[0] == "MULTICHOOSETHEIRDISCARD" || $turn[0] == "MULTICHOOSEDISCARD" || $turn[0] == "MULTICHOOSEHAND" || $turn[0] == "MAYMULTICHOOSEHAND" || $turn[0] == "MULTICHOOSEUNIT" || $turn[0] == "MULTICHOOSETHEIRUNIT" || $turn[0] == "MULTICHOOSEDECK" || $turn[0] == "MULTICHOOSETEXT" || $turn[0] == "MAYMULTICHOOSETEXT" || $turn[0] == "MULTICHOOSETHEIRDECK" || $turn[0] == "MAYMULTICHOOSEAURAS") && $currentPlayer == $playerID) {
     $content = "";
     $multiAllies = &GetAllies($playerID);
