@@ -134,7 +134,7 @@ $isMobile = IsMobile();
           <?php
           $contentCreator = ContentCreators::tryFrom(($playerID == 1 ? $p1ContentCreatorID : $p2ContentCreatorID));
           $nameColor = ($contentCreator != null ? $contentCreator->NameColor() : "");
-          $displayName = "<span style='color:" . $nameColor . "'>" . ($playerName != "-" ? $playerName : "Player " . $playerID) . "</span>";
+          $displayName = "<span style='color:$nameColor'>$playerName</span>";
           $deckFile = "./Games/" . $gameName . "/p" . $playerID . "Deck.txt";
           $handler = fopen($deckFile, "r");
 
