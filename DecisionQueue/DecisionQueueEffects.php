@@ -69,102 +69,93 @@ function ModalAbilities($player, $card, $lastResult)
       }
       return $lastResult;
     case "COMMAND":
-      $params = explode(",", $lastResult);
-      for($i = 0; $i < count($params); ++$i) {
-        switch($params[$i]) {
-          case "Experience":
-            AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
-            AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to give two experience");
-            AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-            AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
-            AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
-            break;
-          case "Deal_Damage":
-            AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
-            AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal damage equal to it's power");
-            AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-            AddDecisionQueue("MZOP", $player, "POWER", 1);
-            AddDecisionQueue("PREPENDLASTRESULT", $player, "DEALDAMAGE,", 1);
-            AddDecisionQueue("SETDQVAR", $player, "0", 1);
-            AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY");
-            AddDecisionQueue("MZFILTER", $player, "unique=1");
-            AddDecisionQueue("MZFILTER", $player, "definedType=Leader");
-            AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to damage");
-            AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-            AddDecisionQueue("MZOP", $player, "{0}", 1);
-            break;
-          case "Resource"://Handled Elsewhere
-            break;
-          case "Return_Unit":
-            MZMoveCard($player, "MYDISCARD:definedType=Unit", "MYHAND", may:false);
-            break;
-          default: break;
-        }
+      switch($lastResult) {
+        case 0: // Give two experience tokens
+          AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
+          AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to give two experience");
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+          AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
+          AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
+          break;
+        case 1: // Deal damage
+          AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
+          AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal damage equal to it's power");
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+          AddDecisionQueue("MZOP", $player, "POWER", 1);
+          AddDecisionQueue("PREPENDLASTRESULT", $player, "DEALDAMAGE,", 1);
+          AddDecisionQueue("SETDQVAR", $player, "0", 1);
+          AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY");
+          AddDecisionQueue("MZFILTER", $player, "unique=1");
+          AddDecisionQueue("MZFILTER", $player, "definedType=Leader");
+          AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to damage");
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+          AddDecisionQueue("MZOP", $player, "{0}", 1);
+          break;
+        case 2: // Resource (Handled Elsewhere)
+          break;
+        case 3: // Return a unit
+          MZMoveCard($player, "MYDISCARD:definedType=Unit", "MYHAND", may:false);
+          break;
+        default: break;
       }
-      return 1;
+      return $lastResult;
     case "CUNNING":
-      $params = explode(",", $lastResult);
-      for($i = 0; $i < count($params); ++$i) {
-        switch($params[$i]) {
-          case "Return_Unit":
-            AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:maxAttack=4&THEIRALLY:maxAttack=4");
-            AddDecisionQueue("MZFILTER", $player, "definedType=Leader");
-            AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to return", 1);
-            AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-            AddDecisionQueue("MZOP", $player, "BOUNCE", 1);
-            break;
-          case "Buff_Unit":
-            AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
-            AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to buff", 1);
-            AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-            AddDecisionQueue("MZOP", $player, "GETUNIQUEID", 1);
-            AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $player, "3789633661,HAND");
-            break;
-          case "Exhaust_Units":
-            AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
-            AddDecisionQueue("SETDQCONTEXT", $player, "Choose a card to exhaust");
-            AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-            AddDecisionQueue("MZOP", $player, "REST", 1);
-            AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY", 1);
-            AddDecisionQueue("SETDQCONTEXT", $player, "Choose a card to exhaust");
-            AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-            AddDecisionQueue("MZOP", $player, "REST", 1);
-            break;
-          case "Discard_Random":
-            $otherPlayer = ($player == 1 ? 2 : 1);
-            DiscardRandom($otherPlayer, "3789633661");
-            break;
-          default: break;
-        }
+      switch($lastResult) {
+        case 0: // Return unit
+          AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:maxAttack=4&THEIRALLY:maxAttack=4");
+          AddDecisionQueue("MZFILTER", $player, "definedType=Leader");
+          AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to return", 1);
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+          AddDecisionQueue("MZOP", $player, "BOUNCE", 1);
+          break;
+        case 1: // Buff unit
+          AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
+          AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to buff", 1);
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+          AddDecisionQueue("MZOP", $player, "GETUNIQUEID", 1);
+          AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $player, "3789633661,HAND");
+          break;
+        case 2: // Exhaust units
+          AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
+          AddDecisionQueue("SETDQCONTEXT", $player, "Choose a card to exhaust");
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+          AddDecisionQueue("MZOP", $player, "REST", 1);
+          AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY", 1);
+          AddDecisionQueue("SETDQCONTEXT", $player, "Choose a card to exhaust");
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+          AddDecisionQueue("MZOP", $player, "REST", 1);
+          break;
+        case 3: // Discard a card
+          $otherPlayer = ($player == 1 ? 2 : 1);
+          DiscardRandom($otherPlayer, "3789633661");
+          break;
+        default: break;
       }
-      return 1;
+      return $lastResult;
     case "AGGRESSION":
-      $params = explode(",", $lastResult);
-      for($i = 0; $i < count($params); ++$i) {
-        switch($params[$i]) {
-          case "Draw":
-            Draw($player);
-            break;
-          case "Defeat_Upgrades":
-            DefeatUpgrade($player, may:true);
-            DefeatUpgrade($player, may:true);
-            break;
-          case "Ready_Unit":
-            AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:maxAttack=3&THEIRALLY:maxAttack=3");
-            AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to ready");
-            AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
-            AddDecisionQueue("MZOP", $player, "READY", 1);
-            break;
-          case "Deal_Damage":
-            AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
-            AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal 4 damage to");
-            AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-            AddDecisionQueue("MZOP", $player, "DEALDAMAGE,4", 1);
-            break;
-          default: break;
-        }
+      switch($lastResult) {
+        case 0: // Draw
+          Draw($player);
+          break;
+        case 1: // Defeat upgrades
+          DefeatUpgrade($player, may:true);
+          DefeatUpgrade($player, may:true);
+          break;
+        case 2: // Ready a unit
+          AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:maxAttack=3&THEIRALLY:maxAttack=3");
+          AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to ready");
+          AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
+          AddDecisionQueue("MZOP", $player, "READY", 1);
+          break;
+        case 3: // Deal damage
+          AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
+          AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal 4 damage to");
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+          AddDecisionQueue("MZOP", $player, "DEALDAMAGE,4", 1);
+          break;
+        default: break;
       }
-      return 1;
+      return $lastResult;
     case "LETTHEWOOKIEWIN":
       switch($lastResult) {
         case "Ready_Resources":

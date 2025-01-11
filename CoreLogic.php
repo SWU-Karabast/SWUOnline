@@ -3683,6 +3683,18 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("SPECIFICCARD", $currentPlayer, "DARTHVADER", 1);
       }
       break;
+    case "3789633661"://Cunning
+      $options = "Return a non-leader unit with 4 or less power to its owner's hand;Give a unit +4/0 for this phase;Exhaust up to 2 units;An opponent discards a random card from their hand";
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "-");
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "0");
+      for ($i = 0; $i < 2; ++$i) {
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose " . ($i == 0 ? "First" : "Second") . " Cunning Ability");
+        AddDecisionQueue("CHOOSEOPTION", $currentPlayer, "$cardID-$options-{0}");
+        AddDecisionQueue("APPENDDQVAR", $currentPlayer, "0");
+        AddDecisionQueue("SHOWOPTIONS", $currentPlayer, "$cardID-$options", 1);
+        AddDecisionQueue("MODAL", $currentPlayer, "CUNNING", 1);
+      }
+      break;
     case "8615772965"://Vigilance
       $options = "Discard 6 cards from an opponent's deck;Heal 5 damage from a base;Defeat a unit with 3 or less remaining HP;Give a Shield token to a unit";
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "-");
@@ -3696,16 +3708,28 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "0073206444"://Command
-      AddDecisionQueue("PASSPARAMETER", $currentPlayer, $additionalCosts, 1);
-      AddDecisionQueue("MODAL", $currentPlayer, "COMMAND", 1);
+      $options = "Give 2 Experience tokens to a unit;A friendly unit deals damage equal to its power to a non-unique enemy unit;Put this event into play as a resource;Return a unit from your discard pile to your hand";
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "-");
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "0");
+      for ($i = 0; $i < 2; ++$i) {
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose " . ($i == 0 ? "First" : "Second") . " Command Ability");
+        AddDecisionQueue("CHOOSEOPTION", $currentPlayer, "$cardID-$options-{0}");
+        AddDecisionQueue("APPENDDQVAR", $currentPlayer, "0");
+        AddDecisionQueue("SHOWOPTIONS", $currentPlayer, "$cardID-$options", 1);
+        AddDecisionQueue("MODAL", $currentPlayer, "COMMAND", 1);
+      }
       break;
     case "3736081333"://Aggression
-      AddDecisionQueue("PASSPARAMETER", $currentPlayer, $additionalCosts, 1);
-      AddDecisionQueue("MODAL", $currentPlayer, "AGGRESSION", 1);
-      break;
-    case "3789633661"://Cunning
-      AddDecisionQueue("PASSPARAMETER", $currentPlayer, $additionalCosts, 1);
-      AddDecisionQueue("MODAL", $currentPlayer, "CUNNING", 1);
+      $options = "Draw a card;Defeat up to 2 upgrades;Ready a unit with 3 or less power;Deal 4 damage to a unit";
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "-");
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "0");
+      for ($i = 0; $i < 2; ++$i) {
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose " . ($i == 0 ? "First" : "Second") . " Aggression Ability");
+        AddDecisionQueue("CHOOSEOPTION", $currentPlayer, "$cardID-$options-{0}");
+        AddDecisionQueue("APPENDDQVAR", $currentPlayer, "0");
+        AddDecisionQueue("SHOWOPTIONS", $currentPlayer, "$cardID-$options", 1);
+        AddDecisionQueue("MODAL", $currentPlayer, "AGGRESSION", 1);
+      }
       break;
     case "2471223947"://Frontline Shuttle
       $abilityName = GetResolvedAbilityName($cardID, $from);

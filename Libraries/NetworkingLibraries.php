@@ -1726,28 +1726,6 @@ function PayAdditionalCosts($cardID, $from)
     }
     SetClassState($currentPlayer, $CS_AdditionalCosts, $discarded);
   }
-  switch($cardID) {
-    case "0073206444"://Command
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose 2 modes");
-      AddDecisionQueue("MULTICHOOSETEXT", $currentPlayer, "2-Experience,Deal Damage,Resource,Return Unit-2");
-      AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_AdditionalCosts, 1);
-      AddDecisionQueue("SHOWMODES", $currentPlayer, $cardID, 1);
-      break;
-    case "3736081333"://Aggression
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose 2 modes");
-      AddDecisionQueue("MULTICHOOSETEXT", $currentPlayer, "2-Draw,Defeat Upgrades,Ready Unit,Deal Damage-2");
-      AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_AdditionalCosts, 1);
-      AddDecisionQueue("SHOWMODES", $currentPlayer, $cardID, 1);
-      break;
-    case "3789633661"://Cunning
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose 2 modes");
-      AddDecisionQueue("MULTICHOOSETEXT", $currentPlayer, "2-Return Unit,Buff Unit,Exhaust Units,Discard Random-2");
-      AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_AdditionalCosts, 1);
-      AddDecisionQueue("SHOWMODES", $currentPlayer, $cardID, 1);
-      break;
-    default:
-      break;
-  }
 }
 
 function MaterializeCardEffect($cardID)
