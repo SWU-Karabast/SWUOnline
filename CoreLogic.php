@@ -3113,7 +3113,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "7366340487"://Outmaneuver
-      $options = "Ground,Space";
+      $options = "Ground;Space";
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an arena");
       AddDecisionQueue("CHOOSEOPTION", $currentPlayer, "$cardID-$options");
       AddDecisionQueue("SHOWOPTIONS", $currentPlayer, "$cardID-$options");
@@ -3157,10 +3157,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "7916724925"://Bombing Run
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a mode for Bombing Run");
-      AddDecisionQueue("MULTICHOOSETEXT", $currentPlayer, "1-Ground,Space-1");
-      AddDecisionQueue("SHOWMODES", $currentPlayer, $cardID, 1);
-      AddDecisionQueue("MODAL", $currentPlayer, "BOMBINGRUN", 1);
+      $options = "Ground;Space";
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an arena to deal 3 damage to each unit");
+      AddDecisionQueue("CHOOSEOPTION", $currentPlayer, "$cardID-$options");
+      AddDecisionQueue("SHOWOPTIONS", $currentPlayer, "$cardID-$options");
+      AddDecisionQueue("MODAL", $currentPlayer, "BOMBINGRUN");
       break;
     case "6088773439"://Darth Vader
       global $CS_NumVillainyPlayed;

@@ -51,7 +51,8 @@ function ModalAbilities($player, $card, $lastResult)
       }
       return $lastResult;
     case "BOMBINGRUN":
-      DamageAllAllies(3, "7916724925", arena:$lastResult[0]);
+      $arena = $lastResult == 0 ? "Ground" : "Space";
+      DamageAllAllies(3, "7916724925", arena:$arena);
       return 1;
     case "VIGILANCE":
       switch($lastResult) {
