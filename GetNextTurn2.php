@@ -3,13 +3,16 @@
 include 'Libraries/HTTPLibraries.php';
 include 'Libraries/NetworkingLibraries.php';
 
+$stage = getenv('STAGE') ?: 'prod';
+$isDev = $stage === 'dev';
+
 $ReturnDelim = "GSDELIM";
-$DisconnectFirstWarningMS = 30_000;
-$DisconnectFinalWarningMS = 55_000;
-$DisconnectTimeoutMS = 60_000;
-$ServerTimeoutMS = 90_000;
-$InputWarningMS = 60_000;
-$InputTimeoutMS = 90_000;
+$DisconnectFirstWarningMS = $isDev ? 1e9 : 30e3;
+$DisconnectFinalWarningMS = $isDev ? 1e9 : 55e3;
+$DisconnectTimeoutMS = $isDev ? 1e9 : 60e3;
+$ServerTimeoutMS = $isDev ? 1e9 : 90e3;
+$InputWarningMS = $isDev ? 1e9 : 60e3;
+$InputTimeoutMS = $isDev ? 1e9 : 90e3;
 
 //We should always have a player ID as a URL parameter
 $gameName = $_GET["gameName"];
@@ -756,6 +759,89 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     ChoosePopup($theirCharacter, $turn[2], 16, "Choose a card from your opponent character/equipment", CharacterPieces());
   }
 
+  if (($turn[0] == "CHOOSEOPTION" || $turn[0] == "MAYCHOOSEOPTION") && $currentPlayer == $playerID) {
+    $caption = "<div>Choose " . TypeToPlay($turn[0]) .  "</div>";
+    if (GetDQHelpText() != "-") $caption = "<div>" . implode(" ", explode("_", GetDQHelpText())) . "</div>";
+    $params = explode("-", $turn[2]);
+    $cardID = $params[0];
+    $options = explode(";", $params[1]);
+    $hiddenOptions = isset($params[2]) && $params[2] != "" ? explode(",", $params[2]) : [];
+    $content = "<style>
+      .card-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 75%;
+        gap: 16px;
+        margin-left: -5px;
+        margin-top: 3%;
+      }
+      .card {
+        display: flex;
+        justify-content: center;
+        position: relative;
+        height: 100%;
+        aspect-ratio: 0.71;
+        overflow: hidden;
+        cursor: pointer;
+        border-radius: 0.375rem;
+        border: 2px solid #00FF66;
+        transition: background 0.3s ease;
+      }
+      .card.hidden {
+        display: none;
+      }
+      .card img {
+        height: 270%;
+        width: 270%;
+        position: absolute;
+        left: 50%;
+      }
+      .card.event img {
+        bottom: 0;
+        transform: translate(-50%, 10%);
+      }
+      .card.non-event img {
+        top: 0;
+        transform: translate(-50%, -15%);
+      }
+      .card-content {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        z-index: 2;
+        color: white;
+        text-align: center;
+        font-size: 16px;
+        font-weight: 500;
+        padding: 8px;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.3) 70%);
+        transition: background 0.3s ease;
+      }
+      .card:hover .card-content {
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.5) 70%);
+      }
+    </style>";
+    
+    $content .= "<div class='card-container'>";
+    for ($i = 0; $i < count($options); ++$i) {
+      $submitLink = ProcessInputLink($playerID, 36, $i, "onclick");
+      $cardTypeClass = DefinedTypesContains($cardID, "Event") ? "event" : "non-event";
+      $content .= "<div class='card $cardTypeClass" . (in_array($i, $hiddenOptions) ? " hidden" : "") . "' $submitLink>";
+      $content .= "<img src='./WebpImages2/$cardID.webp' />";
+      $content .= "<div class='card-content'>";
+      $content .= str_replace("_", " ", $options[$i]);
+      $content .= "</div>";
+      $content .= "</div>";
+    }
+    $content .= "</div>";
+    echo CreatePopup("CHOOSEOPTION", [], 0, 1, $caption, 1, $content, height:"35%", width:"44%");
+  }
+
+  // MULTICHOOSETEXT and MAYMULTICHOOSETEXT are deprecated, use MULTICHOOSE and MAYMULTICHOOSE instead
   if (($turn[0] == "MULTICHOOSETHEIRDISCARD" || $turn[0] == "MULTICHOOSEDISCARD" || $turn[0] == "MULTICHOOSEHAND" || $turn[0] == "MAYMULTICHOOSEHAND" || $turn[0] == "MULTICHOOSEUNIT" || $turn[0] == "MULTICHOOSETHEIRUNIT" || $turn[0] == "MULTICHOOSEDECK" || $turn[0] == "MULTICHOOSETEXT" || $turn[0] == "MAYMULTICHOOSETEXT" || $turn[0] == "MULTICHOOSETHEIRDECK" || $turn[0] == "MAYMULTICHOOSEAURAS") && $currentPlayer == $playerID) {
     $content = "";
     $multiAllies = &GetAllies($playerID);

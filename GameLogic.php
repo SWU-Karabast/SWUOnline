@@ -1024,6 +1024,13 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         $rv .= $material[$i];
       }
       return ($rv == "" ? "PASS" : $rv);
+    case "SHOWOPTIONS":
+      $params = explode("-", $parameter);
+      $cardID = $params[0];
+      $options = explode(";", $params[1]);
+      $selectedOption = str_replace("_", " ", $options[$lastResult]);
+      WriteLog("Selected option for " . CardLink($parameter, $parameter) . " is: $selectedOption");
+      return $lastResult;      
     case "SHOWMODES":
       if(is_array($lastResult)) $modes = $lastResult;
       else {
@@ -1129,8 +1136,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       if(str_starts_with($mzArr[0], "THEIR")) $zone = &GetMZZone($player == 1 ? 2 : 1, $mzArr[0]);
       else $zone = &GetMZZone($player, $mzArr[0]);
       $cardID = $zone[$mzArr[1]];
-      if (DelimStringShares($parameter, CardTraits($cardID))) return $lastResult;
-      return "PASS";
+      return TraitContainsAny($cardID, $parameter) ? $lastResult : "PASS";
     case "NOALLYUNIQUEIDPASS":
       $index = SearchAlliesForUniqueID($parameter, $player);
       if($index == -1) return "PASS";

@@ -14,6 +14,7 @@ class Ally {
     $mzArr = explode("-", $MZIndexOrUniqueID);
 
     if ($mzArr[0] != "MYALLY" && $mzArr[0] != "THEIRALLY") {
+      $mzArr = ["MYALLY", ""]; // Default non-existent ally
       $players = ($player == 1 || $player == 2) ? [$player] : [1, 2];
       foreach ($players as $p) {
         $index = SearchAlliesForUniqueID($MZIndexOrUniqueID, $p);
@@ -345,7 +346,7 @@ class Ally {
     for($i=0; $i<count($theirAllies); $i+=AllyPieces()) {
       switch($theirAllies[$i]) {
         case "3731235174"://Supreme Leader Snoke
-          if(!IsLeader($this->CardID(), $this->playerID)) {
+          if (!$this->IsLeader()) {
             $power -= 2;
           }
           break;
@@ -570,11 +571,15 @@ class Ally {
         default: break;
       }
     }
-    if(IsLeader($this->CardID() && LeaderAbilitiesIgnored())) {
+    if ($this->IsLeader() && LeaderAbilitiesIgnored()) {
       return true;
     }
 
     return false;
+  }
+
+  function IsLeader() {
+    return IsLeader($this->CardID());
   }
 
   function IsUpgraded(): bool {

@@ -381,6 +381,11 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
         PlayCard($cardID, "GY");
       }
       break;
+    case 36: //CHOOSEOPTION
+      if ($turn[0] == "CHOOSEOPTION" || $turn[0] == "MAYCHOOSEOPTION") {
+        ContinueDecisionQueue($buttonInput);
+      }
+      break;
     case 99: //Pass
       global $isPass, $initiativeTaken, $dqState;
       $isPass = true;
@@ -741,7 +746,7 @@ function Passed(&$turn, $playerID)
 function PassInput($autopass = false)
 {
   global $turn, $currentPlayer, $initiativeTaken, $initiativePlayer;
-  if($turn[0] == "END" || $turn[0] == "MAYMULTICHOOSETEXT" || $turn[0] == "MAYCHOOSECOMBATCHAIN" || $turn[0] == "MAYCHOOSEMULTIZONE" || $turn[0] == "MAYMULTICHOOSEAURAS" || $turn[0] == "MAYMULTICHOOSEHAND" || $turn[0] == "MAYCHOOSEHAND" || $turn[0] == "MAYCHOOSEDISCARD" || $turn[0] == "MAYCHOOSEARSENAL" || $turn[0] == "MAYCHOOSEPERMANENT" || $turn[0] == "MAYCHOOSEDECK" || $turn[0] == "MAYCHOOSEMYSOUL" || $turn[0] == "MAYCHOOSETOP" || $turn[0] == "MAYCHOOSECARD" || $turn[0] == "INSTANT" || $turn[0] == "OK" || $turn[0] == "LOOKHAND" || $turn[0] == "BUTTONINPUT") {
+  if($turn[0] == "END" || $turn[0] == "MAYCHOOSEOPTION" || $turn[0] == "MAYMULTICHOOSETEXT" || $turn[0] == "MAYCHOOSECOMBATCHAIN" || $turn[0] == "MAYCHOOSEMULTIZONE" || $turn[0] == "MAYMULTICHOOSEAURAS" || $turn[0] == "MAYMULTICHOOSEHAND" || $turn[0] == "MAYCHOOSEHAND" || $turn[0] == "MAYCHOOSEDISCARD" || $turn[0] == "MAYCHOOSEARSENAL" || $turn[0] == "MAYCHOOSEPERMANENT" || $turn[0] == "MAYCHOOSEDECK" || $turn[0] == "MAYCHOOSEMYSOUL" || $turn[0] == "MAYCHOOSETOP" || $turn[0] == "MAYCHOOSECARD" || $turn[0] == "INSTANT" || $turn[0] == "OK" || $turn[0] == "LOOKHAND" || $turn[0] == "BUTTONINPUT") {
     ContinueDecisionQueue("PASS");
   } else {
     if($autopass == true);
@@ -1720,34 +1725,6 @@ function PayAdditionalCosts($cardID, $from)
       return;
     }
     SetClassState($currentPlayer, $CS_AdditionalCosts, $discarded);
-  }
-  switch($cardID) {
-    case "8615772965"://Vigilance
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose 2 modes");
-      AddDecisionQueue("MULTICHOOSETEXT", $currentPlayer, "2-Mill,Heal,Defeat,Shield-2");
-      AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_AdditionalCosts, 1);
-      AddDecisionQueue("SHOWMODES", $currentPlayer, $cardID, 1);
-      break;
-    case "0073206444"://Command
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose 2 modes");
-      AddDecisionQueue("MULTICHOOSETEXT", $currentPlayer, "2-Experience,Deal Damage,Resource,Return Unit-2");
-      AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_AdditionalCosts, 1);
-      AddDecisionQueue("SHOWMODES", $currentPlayer, $cardID, 1);
-      break;
-    case "3736081333"://Aggression
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose 2 modes");
-      AddDecisionQueue("MULTICHOOSETEXT", $currentPlayer, "2-Draw,Defeat Upgrades,Ready Unit,Deal Damage-2");
-      AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_AdditionalCosts, 1);
-      AddDecisionQueue("SHOWMODES", $currentPlayer, $cardID, 1);
-      break;
-    case "3789633661"://Cunning
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose 2 modes");
-      AddDecisionQueue("MULTICHOOSETEXT", $currentPlayer, "2-Return Unit,Buff Unit,Exhaust Units,Discard Random-2");
-      AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_AdditionalCosts, 1);
-      AddDecisionQueue("SHOWMODES", $currentPlayer, $cardID, 1);
-      break;
-    default:
-      break;
   }
 }
 
