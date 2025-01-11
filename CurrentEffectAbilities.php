@@ -111,8 +111,8 @@ function FinalizeChainLinkEffects()
         SearchCurrentTurnEffects("9560139036", $mainPlayer, remove:true);
         $options = "Play it;Discard it;Leave it on top of your deck";
         PrependDecisionQueue("MODAL", $mainPlayer, "EZRABRIDGER");
-        PrependDecisionQueue("SHOWOPTIONS", $mainPlayer, "$cardID-$options");
-        PrependDecisionQueue("CHOOSEOPTION", $mainPlayer, "$cardID-$options");
+        PrependDecisionQueue("SHOWOPTIONS", $mainPlayer, "$cardID&$options");
+        PrependDecisionQueue("CHOOSEOPTION", $mainPlayer, "$cardID&$options");
         PrependDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose one for <0>");
         PrependDecisionQueue("SETDQVAR", $mainPlayer, "0");
         PrependDecisionQueue("DECKCARDS", $mainPlayer, "0");

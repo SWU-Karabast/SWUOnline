@@ -762,7 +762,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   if (($turn[0] == "CHOOSEOPTION" || $turn[0] == "MAYCHOOSEOPTION") && $currentPlayer == $playerID) {
     $caption = "<div>Choose " . TypeToPlay($turn[0]) .  "</div>";
     if (GetDQHelpText() != "-") $caption = "<div>" . implode(" ", explode("_", GetDQHelpText())) . "</div>";
-    $params = explode("-", $turn[2]);
+    $params = explode("&", $turn[2]);
     $cardID = $params[0];
     $options = explode(";", $params[1]);
     $hiddenOptions = isset($params[2]) && $params[2] != "" ? explode(",", $params[2]) : [];

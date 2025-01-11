@@ -668,8 +668,8 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities,
       case "3232845719"://K-2SO
         $options = "Deal 3 damage to opponent's base;Opponent discards a card from their hand";
         AddDecisionQueue("SETDQCONTEXT", $player, "Choose one");
-        AddDecisionQueue("CHOOSEOPTION", $player, "$cardID-$options");
-        AddDecisionQueue("SHOWOPTIONS", $player, "$cardID-$options");
+        AddDecisionQueue("CHOOSEOPTION", $player, "$cardID&$options");
+        AddDecisionQueue("SHOWOPTIONS", $player, "$cardID&$options");
         AddDecisionQueue("MODAL", $player, "K2SO");
         break;
       case "8333567388"://Distant Patroller

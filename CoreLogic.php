@@ -3115,8 +3115,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "7366340487"://Outmaneuver
       $options = "Ground;Space";
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an arena");
-      AddDecisionQueue("CHOOSEOPTION", $currentPlayer, "$cardID-$options");
-      AddDecisionQueue("SHOWOPTIONS", $currentPlayer, "$cardID-$options");
+      AddDecisionQueue("CHOOSEOPTION", $currentPlayer, "$cardID&$options");
+      AddDecisionQueue("SHOWOPTIONS", $currentPlayer, "$cardID&$options");
       AddDecisionQueue("MODAL", $currentPlayer, "OUTMANEUVER");
       break;
     case "6901817734"://Asteroid Sanctuary
@@ -3151,16 +3151,16 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       if($from != "PLAY") {
         $options = "Ready a resource;Exhaust a unit";
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose one");
-        AddDecisionQueue("CHOOSEOPTION", $currentPlayer, "$cardID-$options");
-        AddDecisionQueue("SHOWOPTIONS", $currentPlayer, "$cardID-$options");
+        AddDecisionQueue("CHOOSEOPTION", $currentPlayer, "$cardID&$options");
+        AddDecisionQueue("SHOWOPTIONS", $currentPlayer, "$cardID&$options");
         AddDecisionQueue("MODAL", $currentPlayer, "LEIAORGANA");
       }
       break;
     case "7916724925"://Bombing Run
       $options = "Ground;Space";
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an arena to deal 3 damage to each unit");
-      AddDecisionQueue("CHOOSEOPTION", $currentPlayer, "$cardID-$options");
-      AddDecisionQueue("SHOWOPTIONS", $currentPlayer, "$cardID-$options");
+      AddDecisionQueue("CHOOSEOPTION", $currentPlayer, "$cardID&$options");
+      AddDecisionQueue("SHOWOPTIONS", $currentPlayer, "$cardID&$options");
       AddDecisionQueue("MODAL", $currentPlayer, "BOMBINGRUN");
       break;
     case "6088773439"://Darth Vader
@@ -3687,14 +3687,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "3789633661"://Cunning
-      $options = "Return a non leader unit with 4 or less power to its owner's hand;Give a unit +4/+0 for this phase;Exhaust up to 2 units;An opponent discards a random card from their hand";
+      $options = "Return a non-leader unit with 4 or less power to its owner's hand;Give a unit +4/+0 for this phase;Exhaust up to 2 units;An opponent discards a random card from their hand";
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "-");
       AddDecisionQueue("SETDQVAR", $currentPlayer, "0");
       for ($i = 0; $i < 2; ++$i) {
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose " . ($i == 0 ? "First" : "Second") . " Cunning Ability");
-        AddDecisionQueue("CHOOSEOPTION", $currentPlayer, "$cardID-$options-{0}");
+        AddDecisionQueue("CHOOSEOPTION", $currentPlayer, "$cardID&$options&{0}");
         AddDecisionQueue("APPENDDQVAR", $currentPlayer, "0");
-        AddDecisionQueue("SHOWOPTIONS", $currentPlayer, "$cardID-$options", 1);
+        AddDecisionQueue("SHOWOPTIONS", $currentPlayer, "$cardID&$options", 1);
         AddDecisionQueue("MODAL", $currentPlayer, "CUNNING", 1);
       }
       break;
@@ -3704,21 +3704,21 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("SETDQVAR", $currentPlayer, "0");
       for ($i = 0; $i < 2; ++$i) {
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose " . ($i == 0 ? "First" : "Second") . " Vigilance Ability");
-        AddDecisionQueue("CHOOSEOPTION", $currentPlayer, "$cardID-$options-{0}");
+        AddDecisionQueue("CHOOSEOPTION", $currentPlayer, "$cardID&$options&{0}");
         AddDecisionQueue("APPENDDQVAR", $currentPlayer, "0");
-        AddDecisionQueue("SHOWOPTIONS", $currentPlayer, "$cardID-$options", 1);
+        AddDecisionQueue("SHOWOPTIONS", $currentPlayer, "$cardID&$options", 1);
         AddDecisionQueue("MODAL", $currentPlayer, "VIGILANCE", 1);
       }
       break;
     case "0073206444"://Command
-      $options = "Give 2 Experience tokens to a unit;A friendly unit deals damage equal to its power to a non unique enemy unit;Put this event into play as a resource;Return a unit from your discard pile to your hand";
+      $options = "Give 2 Experience tokens to a unit;A friendly unit deals damage equal to its power to a non-unique enemy unit;Put this event into play as a resource;Return a unit from your discard pile to your hand";
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "-");
       AddDecisionQueue("SETDQVAR", $currentPlayer, "0");
       for ($i = 0; $i < 2; ++$i) {
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose " . ($i == 0 ? "First" : "Second") . " Command Ability");
-        AddDecisionQueue("CHOOSEOPTION", $currentPlayer, "$cardID-$options-{0}");
+        AddDecisionQueue("CHOOSEOPTION", $currentPlayer, "$cardID&$options&{0}");
         AddDecisionQueue("APPENDDQVAR", $currentPlayer, "0");
-        AddDecisionQueue("SHOWOPTIONS", $currentPlayer, "$cardID-$options", 1);
+        AddDecisionQueue("SHOWOPTIONS", $currentPlayer, "$cardID&$options", 1);
         AddDecisionQueue("MODAL", $currentPlayer, "COMMAND", 1);
       }
       break;
@@ -3728,9 +3728,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("SETDQVAR", $currentPlayer, "0");
       for ($i = 0; $i < 2; ++$i) {
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose " . ($i == 0 ? "First" : "Second") . " Aggression Ability");
-        AddDecisionQueue("CHOOSEOPTION", $currentPlayer, "$cardID-$options-{0}");
+        AddDecisionQueue("CHOOSEOPTION", $currentPlayer, "$cardID&$options&{0}");
         AddDecisionQueue("APPENDDQVAR", $currentPlayer, "0");
-        AddDecisionQueue("SHOWOPTIONS", $currentPlayer, "$cardID-$options", 1);
+        AddDecisionQueue("SHOWOPTIONS", $currentPlayer, "$cardID&$options", 1);
         AddDecisionQueue("MODAL", $currentPlayer, "AGGRESSION", 1);
       }
       break;
@@ -4676,8 +4676,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
       $options = "They ready up to 6 resources;They ready a friendly unit. If it's a Wookiee unit, attack with it. It gets +2/+0 for this attack";
       AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose one for your opponent");
-      AddDecisionQueue("CHOOSEOPTION", $otherPlayer, "$cardID-$options");
-      AddDecisionQueue("SHOWOPTIONS", $otherPlayer, "$cardID-$options");
+      AddDecisionQueue("CHOOSEOPTION", $otherPlayer, "$cardID&$options");
+      AddDecisionQueue("SHOWOPTIONS", $otherPlayer, "$cardID&$options");
       AddDecisionQueue("MODAL", $currentPlayer, "LETTHEWOOKIEEWIN");
       break;
     case "8380936981"://Jabba's Rancor
@@ -5007,8 +5007,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
       $options = "Discard a random card from your hand;Opponent creates 2 Battle Droid tokens";
       AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose one");
-      AddDecisionQueue("CHOOSEOPTION", $otherPlayer, "$cardID-$options");
-      AddDecisionQueue("SHOWOPTIONS", $otherPlayer, "$cardID-$options");
+      AddDecisionQueue("CHOOSEOPTION", $otherPlayer, "$cardID&$options");
+      AddDecisionQueue("SHOWOPTIONS", $otherPlayer, "$cardID&$options");
       AddDecisionQueue("MODAL", $otherPlayer, "POLITICALPRESSURE");
       break;
     case "0511508627"://Captain Rex
@@ -5058,8 +5058,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "1192349217"://Manufactured Soldiers
       $options = "Create 2 Clone Trooper tokens;Create 3 Battle Droid tokens";
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose one");
-      AddDecisionQueue("CHOOSEOPTION", $currentPlayer, "$cardID-$options");
-      AddDecisionQueue("SHOWOPTIONS", $currentPlayer, "$cardID-$options");
+      AddDecisionQueue("CHOOSEOPTION", $currentPlayer, "$cardID&$options");
+      AddDecisionQueue("SHOWOPTIONS", $currentPlayer, "$cardID&$options");
       AddDecisionQueue("MODAL", $currentPlayer, "MANUFACTUREDSOLDIERS");
       break;
     case "1417180295"://Strategic Analysis
