@@ -18,8 +18,9 @@ function ModalAbilities($player, $card, $lastResult)
       }
       return $lastResult;
     case "OUTMANEUVER":
-      ExhaustAllAllies($lastResult[0], 1);
-      ExhaustAllAllies($lastResult[0], 2);
+      $arena = $lastResult == 0 ? "Ground" : "Space";
+      ExhaustAllAllies($arena, 1);
+      ExhaustAllAllies($arena, 2);
       return $lastResult;
     case "EZRABRIDGER":
       switch($lastResult) {

@@ -3113,10 +3113,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "7366340487"://Outmaneuver
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a mode for Outmaneuver");
-      AddDecisionQueue("MULTICHOOSETEXT", $currentPlayer, "1-Ground,Space-1");
-      AddDecisionQueue("SHOWMODES", $currentPlayer, $cardID, 1);
-      AddDecisionQueue("MODAL", $currentPlayer, "OUTMANEUVER", 1);
+      $options = "Ground,Space";
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an arena");
+      AddDecisionQueue("CHOOSEOPTION", $currentPlayer, "$cardID-$options");
+      AddDecisionQueue("SHOWOPTIONS", $currentPlayer, "$cardID-$options");
+      AddDecisionQueue("MODAL", $currentPlayer, "OUTMANEUVER");
       break;
     case "6901817734"://Asteroid Sanctuary
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to exhaust");
