@@ -515,6 +515,8 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       if ($playerID != 3) {
         $time = ($playerID == 1 ? $p1TotalTime : $p2TotalTime);
         $totalTime = $p1TotalTime + $p2TotalTime;
+        $content .= "<BR><BR><b style='font-size: 24px;'>Import your deck on <a href='https://swustats.net'>swustats.net</a> to track your deck stats over time!</b><BR>";
+        $content .= "<i>(You will need to use the SWU Stats link to play for stats to track)</i><br>";
         $content .= "<BR><span class='Time-Span'>Your Play Time: " . intval($time / 60) . "m" . $time % 60 . "s - Game Time: " . intval($totalTime / 60) . "m" . $totalTime % 60 . "s</span>";
       }
     }
