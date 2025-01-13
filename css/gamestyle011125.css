@@ -364,10 +364,12 @@ td {
   right: 258px;
   position: absolute;
   border-radius: 20px;
-  border-width: 4px;
+  border-width: 2px;
   border-style: solid;
   height: 30px; 
-  width: 96px; 
+  width: 92px; 
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
 .my-initiative span,
@@ -418,7 +420,7 @@ td {
 
 .my-initiative-taken span,
 .their-initiative-taken span {
-  color: white;
+  color: #1a1a1a;
 }
 
 /* Units */
