@@ -125,7 +125,7 @@
 
   function GenerateFunction($cardArray, $handler, $functionName, $isString, $defaultValue, $dataType = 0, $language = "PHP")
   {
-    if($language == "PHP") fwrite($handler, "function " . $functionName . "(\$cardID) {\r\n");
+    if($language == "PHP") fwrite($handler, "function " . $functionName . "(\$cardID) {\r\n  if(strlen($functionName) < 6) return \"\";\r\n");
     else if($language = "js") fwrite($handler, "function " . $functionName . "(cardID) {\r\n");
     TraverseTrie($cardArray, "", $handler, $isString, $defaultValue, $dataType, $language);
     fwrite($handler, "}\r\n\r\n");
