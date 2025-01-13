@@ -447,7 +447,7 @@ function HasCoordinate($cardID, $player, $index)
   $ally = new Ally("MYALLY-" . $index, $player);
   if($ally->LostAbilities()) return false;
   $upgrades = $ally->GetUpgrades();
-  for ($i = 0; $i < count($upgrades); $i += SubcardPieces()) {
+  for ($i = 0; $i < count($upgrades); ++$i) {
     if($upgrades[$i] == "7884488904") return true;//For the republic
   }
   return match ($cardID) {
@@ -508,7 +508,7 @@ function HasOverwhelm($cardID, $player, $index)
   }
   // Check upgrades
   $upgrades = $ally->GetUpgrades();
-  for($i=0; $i<count($upgrades); $i+=SubcardPieces()) {
+  for($i=0; $i<count($upgrades); ++$i) {
     if($upgrades[$i] == "0875550518") return true;//Grievous's Wheel Bike
     if($upgrades[$i] == "4886127868") return true;//Nameless Valor
   }
