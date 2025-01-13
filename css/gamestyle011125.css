@@ -1362,6 +1362,14 @@ input[type="button"]:focus {
   border-collapse: collapse;
 }
 
+/* Game Ended Modal */
+
+#OVER {
+  width: calc(90% - 258px) !important;
+  left: 0 !important;
+  margin: 0 5%;
+}
+
 /* Responsive Layouts */
 
 @media screen and (max-width: 1199px) {
