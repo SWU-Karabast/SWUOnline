@@ -275,10 +275,11 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       break;
     case "CLEARTHEFIELD":
       $otherPlayer = $player == 1 ? 2 : 1;
-      $cardID = GetMZCard($player, $lastResult);
-      $cardTitle = CardTitle($cardID);
+      $ally = new Ally($lastResult);
+      $cardTitle = CardTitle($ally->CardID());
+      MZBounce($player, $ally->MZIndex());
       $targetCards = SearchAlliesUniqueIDForTitle($otherPlayer, $cardTitle);
-      $targetCardsArr = explode(",", $targetCards);
+      $targetCardsArr = $targetCards ? explode(",", $targetCards) : [];
 
       for ($i = 0; $i < count($targetCardsArr); ++$i) {
         $targetAlly = new Ally($targetCardsArr[$i]);
