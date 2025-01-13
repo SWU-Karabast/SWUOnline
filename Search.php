@@ -1088,3 +1088,15 @@ function GetUnitsThatAttackedBaseMZIndices($player) {//$player is the owner of t
   }
   return $unitsThatAttackedBaseMZIndices;
 }
+
+function AnotherSeparatistUnitHasAttacked($uniqueID, $player) {
+  global $CS_SeparatistUnitsThatAttacked;
+
+  $separatistUnitsThatAttacked = explode(",", GetClassState($player, $CS_SeparatistUnitsThatAttacked));
+
+  for($i = 0; $i < count($separatistUnitsThatAttacked); ++$i) {
+    if($separatistUnitsThatAttacked[$i] == "-") continue;
+    if($separatistUnitsThatAttacked[$i] != $uniqueID) return true;
+  }
+  return false;
+}
