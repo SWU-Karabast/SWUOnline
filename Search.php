@@ -1060,6 +1060,16 @@ function ControlsNamedCard($player, $name) {
   return false;
 }
 
+function FindLeaderInPlay($player) {
+  $char = &GetPlayerCharacter($player);
+  if(count($char) > CharacterPieces()) return $char[CharacterPieces()];
+  $units = &GetAllies($player);
+  for($i=0; $i<count($units); $i+=AllyPieces()) {
+    if(IsLeader($units[$i], $player)) return LeaderUndeployed($units[$i]);
+  }
+  return -1;
+}
+
 function SearchGetLast($search) {
   $indices = explode(",", $search);
   return $indices[count($indices) - 1];

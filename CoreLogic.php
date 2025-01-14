@@ -624,11 +624,11 @@ function SendSWUStatsResults() {
 	$loseHero = GetCachePiece($gameName, ($winner == 1 ? 8 : 7));
   $winnerHealth = GetHealth($winner);
   $p1Char = &GetPlayerCharacter(1);
-  $p1Hero = $p1Char[CharacterPieces()];
+  $p1Hero = FindLeaderInPlay(1);
   $p1Base = $p1Char[0];
   $p1BaseColor = AspectToColor(CardAspects($p1Base));
   $p2Char = &GetPlayerCharacter(2);
-  $p2Hero = $p2Char[CharacterPieces()];
+  $p2Hero = FindLeaderInPlay(2);
   $p2Base = $p2Char[0];
   $p2BaseColor = AspectToColor(CardAspects($p2Base));
 	$winnerDeck = file_get_contents("./Games/" . $gameName . "/p" . $winner . "Deck.txt");
