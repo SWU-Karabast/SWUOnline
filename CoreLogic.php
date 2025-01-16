@@ -4476,7 +4476,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
       }
       break;
-    case "2b13cefced"://Fennec Shand
+    case "2b13cefced"://Fennec Shand Leader Unit
       $abilityName = GetResolvedAbilityName($cardID, $from);
       if($abilityName == "Ambush") {
         AddCurrentTurnEffect($cardID, $currentPlayer, "PLAY");
@@ -4702,9 +4702,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       if($from == "RESOURCES") {
         $djAlly = new Ally("MYALLY-" . LastAllyIndex($currentPlayer), $currentPlayer);
         $otherPlayer = $currentPlayer == 1 ? 2 : 1;
-        
+
         // Try to get ready resources first
-        $theirResourceIndices = GetArsenalFaceDownIndices($otherPlayer, 0); 
+        $theirResourceIndices = GetArsenalFaceDownIndices($otherPlayer, 0);
         if ($theirResourceIndices == "") {
           // If no ready resources, get all resources
           $theirResourceIndices = GetArsenalFaceDownIndices($otherPlayer);
@@ -4718,7 +4718,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         $resourceCard = RemoveResource($otherPlayer, $theirResourceIndex);
         AddResources($resourceCard, $currentPlayer, "PLAY", "DOWN", isExhausted:$isExhausted, stealSource:$djAlly->UniqueID());
 
-        // The new rules (v3) allow you to change the state of your resources immediately after smuggling the DJ, provided the total number of "ready" and "exhausted" resources remains the same. 
+        // The new rules (v3) allow you to change the state of your resources immediately after smuggling the DJ, provided the total number of "ready" and "exhausted" resources remains the same.
         // So, we will exhaust the stolen resource and ready another.
         if (!$isExhausted) {
           $myResourceIndices = GetArsenalFaceDownIndices($currentPlayer, 1);

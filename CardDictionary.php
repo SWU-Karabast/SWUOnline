@@ -585,7 +585,7 @@ function HasAmbush($cardID, $player, $index, $from)
       case "0911874487"://Fennec Shand
         AddDecisionQueue("REMOVECURRENTEFFECT", $player, "0911874487");
         return true;
-      case "2b13cefced"://Fennec Shand
+      case "2b13cefced"://Fennec Shand Leader Unit
         AddDecisionQueue("REMOVECURRENTEFFECT", $player, "2b13cefced");
         return true;
       default: break;
@@ -738,7 +738,7 @@ function HasSaboteur($cardID, $player, $index)
     case "1690726274"://Zuckuss
     case "4595532978"://Ketsu Onyo
     case "3786602643"://House Kast Soldier
-    case "2b13cefced"://Fennec Shand
+    case "2b13cefced"://Fennec Shand Leader Unit
     case "7922308768"://Valiant Assault Ship
     case "2151430798"://Guavian Antagonizer
     case "2556508706"://Resourceful Pursuers
@@ -889,8 +889,15 @@ function HasGoAgain($cardID)
 
 function GetAbilityType($cardID, $index = -1, $from="-")
 {
-  global $currentPlayer;
-  if($from == "PLAY" && IsAlly($cardID)) return "AA";
+  global $currentPlayer, $mainPlayer;
+
+  if($from == "PLAY" && IsAlly($cardID)) {
+    $myAllies = GetAllies($currentPlayer);
+    if(isset($myAllies[$index]) && UIDIsAffectedByMalevolence($myAllies[$index + 5])) {
+      return "";
+    }
+    return "AA";
+  }
   switch($cardID)
   {
     case "2569134232"://Jedha City
@@ -1088,14 +1095,14 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
     case "0911874487"://Fennec Shand
       $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
       break;
-    case "2b13cefced"://Fennec Shand Unit
-      $abilityTypes = "A,AA";
+    case "2b13cefced"://Fennec Shand Leader Unit
+      $abilityTypes = LeaderAbilitiesIgnored() ? "AA" : "A,AA";
       break;
     case "9226435975"://Han Solo Red
       $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
       break;
-    case "a742dea1f1"://Han Solo Red Unit
-      $abilityTypes = "A,AA";
+    case "a742dea1f1"://Han Solo Red Leader Unit
+      $abilityTypes = LeaderAbilitiesIgnored() ? "AA" : "A,AA";
       break;
     case "2744523125"://Salacious Crumb
       $abilityTypes = "A,AA";
@@ -1120,6 +1127,12 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
   if(IsAlly($cardID, $currentPlayer)) {
     if($abilityTypes == "") $abilityTypes = "AA";
     $ally = new Ally("MYALLY-" . $index, $currentPlayer);
+
+    if(UIDIsAffectedByMalevolence($ally->UniqueID())) {
+      $abilityTypes = str_replace(",AA", "", $abilityTypes);
+      $abilityTypes = str_replace("AA", "", $abilityTypes);
+    }
+
     $upgrades = $ally->GetUpgrades();
     for($i=0; $i<count($upgrades); ++$i) {
       switch($upgrades[$i]) {
@@ -1315,7 +1328,16 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       $abilityNames = LeaderAbilitiesIgnored() ? "" : "Smuggle";
       break;
     case "040a3e81f3"://Lando Leader Unit
-      $abilityNames = LeaderAbilitiesIgnored() ? "Attack" : "Smuggle,Attack";
+      if($validate) {
+        $ally = new Ally("MYALLY-" . SearchAlliesForCard($currentPlayer, "040a3e81f3"), $currentPlayer);
+        $abilityNames = $ally->IsExhausted() ? "Smuggle" : "Smuggle,Attack";
+      } else {
+        $abilityNames = "Smuggle,Attack";
+      }
+      if(LeaderAbilitiesIgnored()) {
+        $abilityNames = str_replace(",Smuggle", "", $abilityNames);
+        $abilityNames = str_replace("Smuggle", "", $abilityNames);
+      }
       break;
     case "2432897157"://Qi'Ra
       $abilityNames = LeaderAbilitiesIgnored() ? "" : "Shield";
@@ -1323,17 +1345,35 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
     case "4352150438"://Rey
       $abilityNames = LeaderAbilitiesIgnored() ? "" : "Experience";
       break;
-    case "0911874487"://Fennec Shand
+    case "0911874487"://Fennec Shand Leader Unit
       $abilityNames = LeaderAbilitiesIgnored() ? "" : "Ambush";
       break;
-    case "2b13cefced"://Fennec Shand Unit
-      $abilityNames = "Ambush,Attack";
+    case "2b13cefced"://Fennec Shand Leader Unit
+      if($validate) {
+        $ally = new Ally("MYALLY-" . SearchAlliesForCard($currentPlayer, "2b13cefced"), $currentPlayer);
+        $abilityNames = $ally->IsExhausted() ? "Ambush" : "Ambush,Attack";
+      } else {
+        $abilityNames = "Ambush,Attack";
+      }
+      if(LeaderAbilitiesIgnored()) {
+        $abilityNames = str_replace(",Ambush", "", $abilityNames);
+        $abilityNames = str_replace("Ambush", "", $abilityNames);
+      }
       break;
     case "9226435975"://Han Solo Red
       $abilityNames = LeaderAbilitiesIgnored() ? "" : "Play";
       break;
     case "a742dea1f1"://Han Solo Red Unit
-      $abilityNames = "Play,Attack";
+      if($validate) {
+        $ally = new Ally("MYALLY-" . SearchAlliesForCard($currentPlayer, "a742dea1f1"), $currentPlayer);
+        $abilityNames = $ally->IsExhausted() ? "Play" : "Play,Attack";
+      } else {
+        $abilityNames = "Play,Attack";
+      }
+      if(LeaderAbilitiesIgnored()) {
+        $abilityNames = str_replace(",Play", "", $abilityNames);
+        $abilityNames = str_replace("Play", "", $abilityNames);
+      }
       break;
     case "2744523125"://Salacious Crumb
       $abilityNames = "Bounce,Attack";
@@ -1375,6 +1415,11 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
 
     if (AnyPlayerHasAlly("6384086894")) { //Satine Kryze
       $abilityNames = "Mill," . $abilityNames;
+    }
+
+    if(UIDIsAffectedByMalevolence($ally->UniqueID())) {
+      $abilityNames = str_replace(",Attack", "", $abilityNames);
+      $abilityNames = str_replace("Attack", "", $abilityNames);
     }
   }
   else if(DefinedTypesContains($cardID, "Leader", $currentPlayer)) {
@@ -1418,11 +1463,13 @@ function GetAbilityIndex($cardID, $index, $abilityName, $theirCard = false)
 function GetResolvedAbilityType($cardID, $from="-", $theirCard = false)
 {
   global $currentPlayer, $CS_AbilityIndex, $CS_PlayIndex;
+
   if($from == "HAND") return "";
   $abilityIndex = GetClassState($currentPlayer, $CS_AbilityIndex);
   $abilityTypes = GetAbilityTypes($cardID, GetClassState($currentPlayer, $CS_PlayIndex));
   if($abilityTypes == "" || $abilityIndex == "-") return GetAbilityType($cardID, -1, $from);
   $abilityTypes = explode(",", $abilityTypes);
+
   return $theirCard ? "A" : $abilityTypes[$abilityIndex]; //This will need to be updated if there are ever non-action abilities that can be activated on opponent's cards.
 }
 

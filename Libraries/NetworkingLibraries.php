@@ -1384,14 +1384,6 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
       //Right now only units in play can attack
       if (!$oppCardActive) {
         if($from == "PLAY") {
-          for($i = 0; $i < count($currentTurnEffects); $i += CurrentTurnPieces()) {
-            if($currentTurnEffects[$i] == "3381931079" && $currentTurnEffects[$i+2] == $uniqueID) {//Malevolence
-              WriteLog("Cannot attack with this unit. Reverting gamestate.");
-              RevertGamestate();
-              return;
-            }
-          }
-
           AddDecisionQueue("ATTACK", $currentPlayer, $cardID . "," . $from);
         }
         if($dynCost == "") AddDecisionQueue("PASSPARAMETER", $currentPlayer, "0");
