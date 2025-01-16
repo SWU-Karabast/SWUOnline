@@ -79,7 +79,7 @@ function uidExists($conn, $username)
 	mysqli_close($conn);
 }
 
-// Insert new user into database
+// Change username in database
 function changeUsername($conn, $username, $newUsername)
 {
 	$conn = GetDBConnection();
