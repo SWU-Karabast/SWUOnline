@@ -150,6 +150,7 @@ class Ally {
 
   //Returns true if the ally is destroyed
   function DefeatIfNoRemainingHP() {
+    if (!$this->Exists()) return true;
     if ($this->Health() <= 0 && ($this->CardID() != "d1a7b76ae7" || $this->LostAbilities()) && ($this->CardID() != "0345124206")) {  //Clone - Ensure that Clone remains in play while resolving its ability
       DestroyAlly($this->playerID, $this->index);
       return true;
@@ -517,12 +518,11 @@ class Ally {
   }
 
   function DefeatUpgrade($upgradeID) {
+    $uniqueID = $this->UniqueID();
     $ownerId = $this->RemoveSubcard($upgradeID);
-    if($ownerId != -1) {
-      $this->DefeatIfNoRemainingHP();
-      return $ownerId;
-    }
-    else return -1;
+    $updatedAlly = new Ally($uniqueID); // Refresh the ally, as the index or controller may have changed
+    $updatedAlly->DefeatIfNoRemainingHP();
+    return $ownerId;
   }
 
   function RescueCaptive($captiveID, $newController=-1) {
