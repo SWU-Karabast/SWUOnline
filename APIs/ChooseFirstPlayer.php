@@ -43,7 +43,7 @@ if ($action == "Go First") {
 } else {
   $firstPlayer = ($playerID == 1 ? 2 : 1);
 }
-WriteLog("Player " . $firstPlayer . " will go first.", path: "../");
+WriteLog(FmtPlayer($playerName, $playerID) . " will go first.", path: "../");
 $gameStatus = $MGS_P2Sideboard;
 SetCachePiece($gameName, 14, $gameStatus);
 GamestateUpdated($gameName);
