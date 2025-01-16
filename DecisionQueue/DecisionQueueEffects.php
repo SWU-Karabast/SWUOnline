@@ -147,7 +147,7 @@ function ModalAbilities($player, $card, $lastResult)
           break;
         case 3: // Discard a card
           $otherPlayer = ($player == 1 ? 2 : 1);
-          DiscardRandom($otherPlayer, "3789633661");
+          AddDecisionQueue("OP", $otherPlayer, "DISCARDRANDOM,3789633661");
           break;
         default: break;
       }
