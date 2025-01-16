@@ -1060,6 +1060,16 @@ function ControlsNamedCard($player, $name) {
   return false;
 }
 
+function FindLeaderInPlay($player) {
+  $char = &GetPlayerCharacter($player);
+  if(count($char) > CharacterPieces()) return $char[CharacterPieces()];
+  $units = &GetAllies($player);
+  for($i=0; $i<count($units); $i+=AllyPieces()) {
+    if(IsLeader($units[$i], $player)) return LeaderUndeployed($units[$i]);
+  }
+  return -1;
+}
+
 function SearchGetLast($search) {
   $indices = explode(",", $search);
   return $indices[count($indices) - 1];
@@ -1087,4 +1097,16 @@ function GetUnitsThatAttackedBaseMZIndices($player) {//$player is the owner of t
     $unitsThatAttackedBaseMZIndices .= "THEIRALLY-" . $index;
   }
   return $unitsThatAttackedBaseMZIndices;
+}
+
+function AnotherSeparatistUnitHasAttacked($uniqueID, $player) {
+  global $CS_SeparatistUnitsThatAttacked;
+
+  $separatistUnitsThatAttacked = explode(",", GetClassState($player, $CS_SeparatistUnitsThatAttacked));
+
+  for($i = 0; $i < count($separatistUnitsThatAttacked); ++$i) {
+    if($separatistUnitsThatAttacked[$i] == "-") continue;
+    if($separatistUnitsThatAttacked[$i] != $uniqueID) return true;
+  }
+  return false;
 }

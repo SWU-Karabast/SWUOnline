@@ -96,7 +96,7 @@ while ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     $lastActionWarning = intval($cacheArr[17]);
     $finalWarning = intval($cacheArr[18]);
     if (GetCachePiece($gameName, 14) == 6 && $timeDiff > 10_000 && $oppStatus == "0") {
-      WriteLog("Opponent has disconnected.");
+      WriteLog("Player $otherP has disconnected.");
       $opponentDisconnected = true;
       SetCachePiece($gameName, $otherP + 3, "2");
       SetCachePiece($gameName, 14, 7);//$MGS_StatsLoggedIrreversible
@@ -115,7 +115,7 @@ while ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         GamestateUpdated($gameName);
       }
       if ($timeDiff > $DisconnectTimeoutMS && $otherPlayerDisconnectStatus == 2 && ($oppStatus == "0")) {
-        WriteLog("Opponent has disconnected.");
+        WriteLog("Player $otherP has disconnected.");
         $opponentDisconnected = true;
         SetCachePiece($gameName, $otherP + 3, "2");
         IncrementCachePiece($gameName, $otherP + 14);
@@ -142,7 +142,7 @@ while ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         $currentPlayerInputTimeout = true;
         $lastUpdate = 0;
       } else if ($lastCurrentPlayer == $otherP && ($currentTime - $lastActionTime) > $InputTimeoutMS && $lastActionWarning == $otherP && $finalWarning == $otherP) {
-        WriteLog("Opponent has disconnected.");
+        WriteLog("Player $otherP has disconnected.");
         $opponentDisconnected = true;
         SetCachePiece($gameName, $otherP + 3, "2");
         SetCachePiece($gameName, $otherP + 14, 3);
@@ -305,10 +305,11 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     $top = 15;
   }
 
+  $initiativeSuffix = $initiativeTaken ? "-taken" : "";
   if($initiativePlayer == $playerID || ($playerID == 3 && $initiativePlayer == 2)) {
-    echo ("<div class='my-initiative'><span>Initiative</span>");
+    echo ("<div class='my-initiative$initiativeSuffix'><span>Initiative</span>");
   } else {
-    echo ("<div class='their-initiative'><span>Initiative</span>");
+    echo ("<div class='their-initiative$initiativeSuffix'><span>Initiative</span>");
   }
   echo ("</div>");
 
@@ -514,6 +515,8 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       if ($playerID != 3) {
         $time = ($playerID == 1 ? $p1TotalTime : $p2TotalTime);
         $totalTime = $p1TotalTime + $p2TotalTime;
+        $content .= "<BR><BR><b style='font-size: 24px;'>Import your deck on <a href='https://swustats.net'>swustats.net</a> to track your deck stats over time!</b><BR>";
+        $content .= "<i>(You will need to use the SWU Stats link to play for stats to track)</i><br>";
         $content .= "<BR><span class='Time-Span'>Your Play Time: " . intval($time / 60) . "m" . $time % 60 . "s - Game Time: " . intval($totalTime / 60) . "m" . $totalTime % 60 . "s</span>";
       }
     }

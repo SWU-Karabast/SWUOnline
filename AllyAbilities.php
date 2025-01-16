@@ -2068,11 +2068,10 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "fb7af4616c,HAND", 1);
       break;
     case "3556557330"://Asajj Ventress
-      AddDecisionQueue("YESNO", $mainPlayer, "Have you attacked with another Separatist?");
-      AddDecisionQueue("NOPASS", $mainPlayer, "-");
-      AddDecisionQueue("NOPASS", $mainPlayer, "-");
-      AddDecisionQueue("PASSPARAMETER", $mainPlayer, $attackerAlly->UniqueID(), 1);
-      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "3556557330,PLAY", 1);
+      if(AnotherSeparatistUnitHasAttacked($attackerAlly->UniqueID(), $mainPlayer)) {
+        AddDecisionQueue("PASSPARAMETER", $mainPlayer, $attackerAlly->UniqueID(), 1);
+        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "3556557330,PLAY", 1);
+      }
       break;
     case "f8e0c65364"://Asajj Ventress (deployed leader)
       global $CS_NumEventsPlayed;

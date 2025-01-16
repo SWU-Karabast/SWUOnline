@@ -119,7 +119,7 @@ if ((IsPatron(1) || IsPatron(2)) && !IsReplay()) {
 
 if($initiativeTaken > 2 && $mode != 99 && $mode != 34 && !IsModeAsync($mode)) $initiativeTaken = 0;
 
-if(GetCachePiece($gameName, 19) == $playerID && $mode != 100001) {
+if(GetCachePiece($gameName, 14) === 7 && $mode != 100001) {
   return;
 }
 //Now we can process the command
@@ -139,7 +139,8 @@ if ($inGameStatus == $GameStatus_Rematch) {
   $firstPlayerChooser = ($winner == 1 ? 2 : 1);
   $p1SideboardSubmitted = "0";
   $p2SideboardSubmitted = (IsPlayerAI(2) ? "1" : "0");
-  WriteLog("Player $firstPlayerChooser lost and will choose first player for the rematch.");
+  $playerName = $playerNames[$firstPlayerChooser];
+  WriteLog("$playerName lost and will choose first player for the rematch.");
   WriteGameFile();
   $turn[0] = "REMATCH";
   include "WriteGamestate.php";
@@ -179,6 +180,9 @@ if (!$skipWriteGamestate) {
   SetCachePiece($gameName, 17, $currentTime);
   if(GetCachePiece($gameName, 18) == $playerID) {
     SetCachePiece($gameName, 18, "0");
+    if (GetCachePiece($gameName, 19) == $playerID) {
+      SetCachePiece($gameName, 19, "0");
+    }
   }
   include "WriteGamestate.php";
 }

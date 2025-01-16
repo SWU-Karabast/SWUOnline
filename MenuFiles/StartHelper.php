@@ -1,4 +1,5 @@
 <?php
+include_once "./Libraries/IOLibraries.php";
 
 function initializePlayerState($handler, $deckHandler, $player)
 {
@@ -89,13 +90,6 @@ function SettingDefaultValue($setting, $hero)
     case $SET_Playmat: return ($hero == "DUMMY" ? 8 : 0);
     default: return "0";
   }
-}
-
-function GetArray($handler)
-{
-  $line = trim(fgets($handler));
-  if ($line == "") return [];
-  return explode(" ", $line);
 }
 
 ?>

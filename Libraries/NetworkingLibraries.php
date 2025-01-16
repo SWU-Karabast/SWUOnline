@@ -1757,7 +1757,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
   global $CS_CharacterIndex, $CS_NumNonAttackCards, $CS_PlayCCIndex, $CS_NumAttacks, $CCS_LinkBaseAttack;
   global $CCS_WeaponIndex, $EffectContext, $CCS_AttackUniqueID, $CS_NumEventsPlayed, $CS_AfterPlayedBy, $layers;
   global $CS_NumDragonAttacks, $CS_NumIllusionistAttacks, $CS_NumIllusionistActionCardAttacks, $CCS_IsBoosted;
-  global $SET_PassDRStep, $CS_AbilityIndex, $CS_NumMandalorianAttacks, $CCS_MultiAttackTargets;
+  global $SET_PassDRStep, $CS_AbilityIndex, $CS_NumMandalorianAttacks, $CCS_MultiAttackTargets, $CS_SeparatistUnitsThatAttacked;
 
   $oppCardActive = GetClassState($currentPlayer, $CS_OppCardActive) > 0;
 
@@ -1810,6 +1810,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
       if (!$chainClosed) {
         IncrementClassState($currentPlayer, $CS_NumAttacks);
         if(TraitContains($cardID, "Mandalorian", $currentPlayer, $index)) IncrementClassState($currentPlayer, $CS_NumMandalorianAttacks);
+        if(TraitContains($cardID, "Separatist", $currentPlayer, $index)) AppendClassState($currentPlayer, $CS_SeparatistUnitsThatAttacked, $ally->UniqueID(), false);
         ArsenalAttackAbilities();
         OnAttackEffects($cardID);
       }

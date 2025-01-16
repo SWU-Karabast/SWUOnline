@@ -10,6 +10,14 @@ function CreateLog($gameName, $path="./")
   fclose(fopen(LogPath($gameName, $path), "w")); 
 }
 
+function FmtPlayer($name, $id) {
+  return "<span class='p$id-label'>$name</span>";
+}
+
+function FmtKeyword($keyword) {
+  return "<span class='keyword'>$keyword</span>";
+}
+
 function WriteLog($text, $player = 0, $highlight=false, $path="./")
 {
   global $gameName;
@@ -20,7 +28,7 @@ function WriteLog($text, $player = 0, $highlight=false, $path="./")
   }
   
   $output = $highlight ? "<mark style='background-color: brown; color:azure;'>$text</mark>" : $text;
-  $output = $player != 0 ? "<span class='player$player-label'>$output</span>" : $output;
+  $output = $player != 0 ? FmtPlayer($output, $player) : $output;
   $output = "<p class='log-entry'>$output</p>";
   $output = $output . "\r\n";
   

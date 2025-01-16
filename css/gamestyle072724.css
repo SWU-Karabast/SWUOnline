@@ -94,8 +94,7 @@ td {
   z-index: 10; 
   background:black; 
   font-size: 16px; 
-  font-weight: 500; 
-  color:white; 
+  font-weight: bold;
   user-select: none;
 }
 
@@ -358,33 +357,68 @@ td {
 
 /* Initiative */
 
-.my-initiative, .their-initiative {
-  right:258px; 
-  position:absolute; 
-  border-radius: 15px; 
+.my-initiative,
+.their-initiative,
+.my-initiative-taken,
+.their-initiative-taken {
+  right: 258px;
+  position: absolute;
+  border-radius: 20px;
+  border-width: 4px;
+  border-style: solid;
   height: 30px; 
   width: 96px; 
 }
 
-.my-initiative span, .their-initiative span {
-  position:relative; 
+.my-initiative span,
+.their-initiative span,
+.my-initiative-taken span,
+.their-initiative-taken span {
+  position: relative;
   margin: 5px auto 0; 
   text-align: center; 
-  display:block; 
-  z-index:10; 
+  display: block;
+  z-index: 10;
   font-size: 16px; 
-  font-weight:600; 
-  color:black; user-select: none;
+  font-weight: 600;
+  user-select: none;
 }
 
 .my-initiative {
-  bottom:127px; 
-  background: #00BAFF; 
+  bottom: 127px;
+  background: transparent;
+  border-color: #18c1ff;
 }
 
 .their-initiative {
-  top:127px; 
-  background: #FB0007; 
+  top: 127px;
+  background: rgba(80, 0, 0, 0.5);
+  border-color: #ff2930;
+}
+
+.my-initiative-taken {
+  bottom: 127px;
+  background-color: #18c1ff;
+  border-color: #18c1ff;
+}
+
+.their-initiative-taken {
+  top: 127px;
+  background: #ff2930;
+  border-color: #ff2930;
+}
+
+.my-initiative span {
+  color: #18c1ff;
+}
+
+.their-initiative span {
+  color: #ff2930;
+}
+
+.my-initiative-taken span,
+.their-initiative-taken span {
+  color: white;
 }
 
 /* Units */

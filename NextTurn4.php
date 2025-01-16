@@ -30,7 +30,13 @@
       echo ("Invalid player ID.");
       exit;
     }
-
+    ?>
+    
+    <style>
+      <?php include 'PlayerColors.php' ?>
+    </style>
+    
+    <?php
     if (!file_exists("./Games/" . $gameName . "/")) {
       echo ("Game does not exist");
       exit;
@@ -83,7 +89,7 @@
       <meta charset="utf-8">
       <title>Karabast</title>
       <link rel="stylesheet" href="./css/chat.css">
-      <link rel="stylesheet" href="css/gamestyle072724.css">
+      <link rel="stylesheet" href="css/gamestyle011225.css">
       <link rel="preconnect" href="https://fonts.googleapis.com">
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
       <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
@@ -368,7 +374,7 @@
                       className = type == "W" ? "my-base" : "my-leader";
                   } else if (zone == "theirChar") {
                       positionStyle = "fixed;";
-                      id = type == "W" ? "P<?php echo ($playerID == 1 ? 2 : 1); ?>BASE" : "P<?php echo ($playerID == 1 ? 2 : 1); ?>LEADER";
+                      id = type == "W" ? "P<?= $otherPlayerID ?>BASE" : "P<?= $otherPlayerID ?>LEADER";
                       className = type == "W" ? "their-base" : "their-leader";
                   }
               }
@@ -393,12 +399,12 @@
                       var fontColor = "#DDD";
                       var borderColor = "#1a1a1a";
                       var backgroundColor = "#DDD";
-                      newHTML += "<div class='player-name'>" + <?php echo ($playerID == 1 ? "p1uid" : "p2uid"); ?> + "</div>";
+                      newHTML += "<div class='player-name p<?= $playerID ?>-label'>" + p<?= $playerID ?>uid + "</div>";
                   } else if (zone == "theirChar") {
                       var fontColor = "#DDD";
                       var borderColor = "#1a1a1a";
                       var backgroundColor = "#DDD";
-                      newHTML += "<div class='player-name'>" + <?php echo ($playerID == 1 ? "p2uid" : "p1uid"); ?> + "</div>";
+                      newHTML += "<div class='player-name p<?= $otherPlayerID ?>-label'>" + p<?= $otherPlayerID ?>uid + "</div>";
                   }
               }
               var restriction = cardArr[12];

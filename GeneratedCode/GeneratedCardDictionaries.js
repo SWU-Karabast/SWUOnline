@@ -964,6 +964,36 @@ default: return "";
 }
 default: return "";
 }
+case "7":
+switch(cardID[3]) {
+case "8":
+switch(cardID[4]) {
+case "5":
+switch(cardID[5]) {
+case "5":
+switch(cardID[6]) {
+case "4":
+switch(cardID[7]) {
+case "0":
+switch(cardID[8]) {
+case "1":
+switch(cardID[9]) {
+case "1":
+return "General Draven";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 case "9":
@@ -1796,6 +1826,32 @@ case "9":
 switch(cardID[9]) {
 case "8":
 return "Death Star Stormtrooper";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "8":
+switch(cardID[4]) {
+case "3":
+switch(cardID[5]) {
+case "7":
+switch(cardID[6]) {
+case "4":
+switch(cardID[7]) {
+case "3":
+switch(cardID[8]) {
+case "3":
+switch(cardID[9]) {
+case "1":
+return "Blue Leader";
 default: return "";
 }
 default: return "";
@@ -3470,6 +3526,36 @@ case "5":
 switch(cardID[9]) {
 case "5":
 return "Chancellor Palpatine";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "1":
+switch(cardID[3]) {
+case "1":
+switch(cardID[4]) {
+case "2":
+switch(cardID[5]) {
+case "6":
+switch(cardID[6]) {
+case "2":
+switch(cardID[7]) {
+case "8":
+switch(cardID[8]) {
+case "1":
+switch(cardID[9]) {
+case "3":
+return "Wedge Antilles";
 default: return "";
 }
 default: return "";
@@ -5316,6 +5402,32 @@ case "1":
 switch(cardID[9]) {
 case "6":
 return "Mace Windu's Lightsaber";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "4":
+switch(cardID[4]) {
+case "7":
+switch(cardID[5]) {
+case "8":
+switch(cardID[6]) {
+case "8":
+switch(cardID[7]) {
+case "e":
+switch(cardID[8]) {
+case "8":
+switch(cardID[9]) {
+case "9":
+return "Wedge Antilles";
 default: return "";
 }
 default: return "";
@@ -10668,6 +10780,32 @@ default: return "";
 }
 default: return "";
 }
+case "1":
+switch(cardID[4]) {
+case "5":
+switch(cardID[5]) {
+case "9":
+switch(cardID[6]) {
+case "6":
+switch(cardID[7]) {
+case "7":
+switch(cardID[8]) {
+case "0":
+switch(cardID[9]) {
+case "3":
+return "Allegiant General Pryde";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 case "9":
@@ -15200,6 +15338,36 @@ case "3":
 switch(cardID[9]) {
 case "8":
 return "Droid Manufactory";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "2":
+switch(cardID[3]) {
+case "3":
+switch(cardID[4]) {
+case "4":
+switch(cardID[5]) {
+case "1":
+switch(cardID[6]) {
+case "5":
+switch(cardID[7]) {
+case "8":
+switch(cardID[8]) {
+case "3":
+switch(cardID[9]) {
+case "0":
+return "Anakin Skywalker";
 default: return "";
 }
 default: return "";

@@ -60,9 +60,6 @@ ob_start();
 include "./APIParseGamefile.php";
 ob_end_clean();
 
-$yourName = ($playerID == 1 ? $p1uid : $p2uid);
-$theirName = ($playerID == 1 ? $p2uid : $p1uid);
-
 $response->badges = [];
 
 $response->amIActive = true; //Is the game waiting on me to do something?
@@ -73,7 +70,7 @@ else if ($playerID == 2 && $gameStatus >= $MGS_ReadyToStart) $response->amIActiv
 
 $contentCreator = ContentCreators::tryFrom(($playerID == 1 ? $p1ContentCreatorID : $p2ContentCreatorID));
 $response->nameColor = ($contentCreator != null ? $contentCreator->NameColor() : "");
-$response->displayName = ($yourName != "-" ? $yourName : "Player " . $playerID);
+$response->displayName = $playerName;
 
 
 
