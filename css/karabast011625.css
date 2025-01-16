@@ -100,6 +100,13 @@ button, input, select, textarea {
   font-size: 16px;
 }
 
+input:disabled {
+  border: 1px solid rgba(57, 68, 82, 0.38);
+  background-color: rgba(57, 68, 82, 0.12);
+  color: rgba(255, 255, 255, 0.38);
+  cursor: not-allowed;
+}
+
 button, .GameLobby_Button, .create-game-button, .ServerChecker_Button, .JoinGame_Button, .spectate-button {
   display: inline-block;
   text-align: center;
@@ -448,6 +455,26 @@ select {
   margin: 0 5px 22px 0;
 }
 
+.login-error-message {
+  margin-top: 24px; 
+  text-align: center;
+}
+
+/* CHANGE USERNAME -------------------------------------------------------------------------------------------------- */
+
+.change-username-form input {
+  width: 100%;
+}
+
+.change-username-form-form {
+  padding-bottom: 1px;
+}
+
+.changer-username-error-message {
+  margin-top: 24px; 
+  text-align: center;
+}
+
 /* SIGN UP -------------------------------------------------------------------------------------------------- */
 
 .signup-form input {
@@ -459,6 +486,11 @@ select {
 }
 
 /* PROFILE ------------------------------------------------------------------------------------------------- */
+
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+}
 
 .fav-decks {
   margin: 0 20px;

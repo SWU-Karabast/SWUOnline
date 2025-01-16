@@ -73,15 +73,10 @@ function AttemptPasswordLogin($username, $password, $rememberMe) {
 	$conn = GetLocalMySQLConnection();
 	$userData = LoadUserData($username);
 
-  if($userData != NULL)
-  {
-
-  }
-  else {
-		header("location: ../LoginPage.php");
+  if (!$userData){
+		header("location: ../LoginPage.php?error=invalidlogin");
 		exit();
   }
-
 
   try {
   	$passwordValid = password_verify($password, $userData["usersPwd"]);
@@ -120,7 +115,7 @@ function AttemptPasswordLogin($username, $password, $rememberMe) {
 		exit();
   }
   else {
-    header("location: ../LoginPage.php");
+    header("location: ../LoginPage.php?error=invalidlogin");
     exit();
   }
 }

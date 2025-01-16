@@ -60,8 +60,12 @@ include_once 'Header.php';
 <div class="core-wrapper">
 
 <div class='fav-decks container bg-black'>
-<h2>Welcome <?php echo $_SESSION['useruid'] ?>!</h2>
-
+<div style="display:flex; justify-content:space-between;">
+    <h2>Welcome <?php echo $_SESSION['useruid'] ?>!</h2>
+    <a href="ChangeUsername.php">
+        <button name="change-username" style="height: 40px">Change Username</button>
+    </a>
+</div>
 <?php
 DisplayPatreon();
 
