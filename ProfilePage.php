@@ -88,6 +88,8 @@ if (count($favoriteDecks) > 0) {
 </div>
 
 <div class='stats container bg-black'>
+    <p>For stats tracking, build or import your deck to <a href="https://swustats.net" target="_blank">swustats.net</a> and use the swustats deck link to play on karabast.</p>
+    <!--
 <form id="filterForm">
     <input type="date" name="startDate" value="<?php echo $startDate; ?>">
     <input type="date" name="endDate" value="<?php echo $endDate; ?>">
@@ -101,6 +103,7 @@ if (count($favoriteDecks) > 0) {
     <p id="loadingMessage" style="display:none;">Loading stats...</p>
     <?php include "zzGameStats.php"; ?>
 </div>
+-->
 </div>
 
 
