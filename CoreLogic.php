@@ -2601,6 +2601,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       MZChooseAndDestroy($currentPlayer, "MYRESOURCES", context:"Choose a resource to destroy");
       MZChooseAndDestroy($otherPlayer, "MYRESOURCES", context:"Choose a resource to destroy");
       PummelHit($currentPlayer);
+      PummelHit($currentPlayer);
+      PummelHit($otherPlayer);
       PummelHit($otherPlayer);
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "GUERILLAINSURGENCY");
       break;
