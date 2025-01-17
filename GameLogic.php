@@ -703,6 +703,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           return "MYALLY-" . count($allies)-AllyPieces();
         case "GETATTACK": return AttackValue($lastResult);
         case "DISCARDHAND": DiscardHand($player); return $lastResult;
+        case "DISCARDRANDOM": DiscardRandom($player, isset($paramArr[1]) ? $paramArr[1] : ''); return $lastResult;
         case "MILL": return Mill($player, $lastResult);
         case "DEFEATUPGRADE":
           $upgradeID = $lastResult;

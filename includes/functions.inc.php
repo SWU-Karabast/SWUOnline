@@ -2,6 +2,12 @@
 
 use SendGrid\Mail\Mail;
 
+// Check for empty input change username
+function emptyInputChangeUsername($username, $newUsername, $confirmNewUsername)
+{
+	return empty($username) || empty($newUsername) || empty($confirmNewUsername);
+}
+
 // Check for empty input signup
 function emptyInputSignup($username, $email, $pwd, $pwdRepeat)
 {
@@ -71,6 +77,26 @@ function uidExists($conn, $username)
 	}
 	mysqli_stmt_close($stmt);
 	mysqli_close($conn);
+}
+
+// Change username in database
+function changeUsername($conn, $username, $newUsername)
+{
+	$conn = GetDBConnection();
+	$sql = "UPDATE users SET usersUid = ? WHERE usersUid = ?;";
+
+	$stmt = mysqli_stmt_init($conn);
+	if (!mysqli_stmt_prepare($stmt, $sql)) {
+		header("location: ../ChangeUsername.php?error=stmtfailed");
+		exit();
+	}
+
+	mysqli_stmt_bind_param($stmt, "ss", $newUsername, $username);
+	mysqli_stmt_execute($stmt);
+	mysqli_stmt_close($stmt);
+	mysqli_close($conn);
+	header("location: ../ChangeUsername.php?error=none");
+	exit();
 }
 
 // Insert new user into database
