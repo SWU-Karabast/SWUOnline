@@ -256,7 +256,7 @@ function RaidAmount($cardID, $player, $index, $reportMode = false)
     case "3487311898": $amount += 3; break;//Clan Challengers
     case "5977238053": $amount += 2; break;//Sundari Peacekeeper
     case "1805986989": $amount += 2; break;//Modded Cohort
-    case "415bde775d": $amount += 1; break;//Hondo Ohnaka
+    case "415bde775d": $amount += 1; break;//Hondo Ohnaka Leader Unit
     case "724979d608": $amount += !LeaderAbilitiesIgnored() ? 2 : 0; break;//Cad Bane Leader Unit
     case "5818136044": $amount += 2; break;//Xanadu Blood
     case "8991513192": $amount += SearchCount(SearchAllies($player, aspect:"Aggression")) > 1 ? 2 : 0; break;//Hunting Nexu
@@ -427,7 +427,7 @@ function HasGrit($cardID, $player, $index)
     case "4383889628"://Wroshyr Tree Tender
     case "0252207505"://Synara San
     case "4783554451"://First Light
-    case "4aa0804b2b"://Qi'Ra
+    case "4aa0804b2b"://Qi'Ra Leader Unit
     case "1477806735"://Wookiee Warrior
     case "9195624101"://Heroic Renegade
     case "5169472456"://Chewbacca Pykesbane
@@ -489,10 +489,13 @@ function HasOverwhelm($cardID, $player, $index)
     {
       case "4484318969"://Moff Gideon Leader Unit
         if(CardCost($cardID) <= 3 && IsAllyAttackTarget()) return !LeaderAbilitiesIgnored();
+        else break;
       case "40b649e6f6"://Maul Leader Unit
         if($index != $i) return !LeaderAbilitiesIgnored();
+        else break;
       case "9017877021"://Clone Commander Cody
         if($index != $i && IsCoordinateActive($player)) return true;
+        else break;
       default: break;
     }
   }
@@ -513,14 +516,14 @@ function HasOverwhelm($cardID, $player, $index)
     if($upgrades[$i] == "4886127868") return true;//Nameless Valor
   }
   switch($cardID)
-  {//TODO: overwhelm comments
-    case "6072239164":
-    case "6577517407":
-    case "6718924441":
-    case "9097316363":
-    case "3232845719":
-    case "4631297392":
-    case "6432884726":
+  {
+    case "6072239164"://AT-ST
+    case "6577517407"://Wampa
+    case "6718924441"://Mercenary Company
+    case "9097316363"://Emperor Palpatine (Master of the Dark Side)
+    case "3232845719"://K-2SO (Cassian's Counterpart)
+    case "4631297392"://Devastator (Inescapable)
+    case "6432884726"://Steadfast Battalion
     case "5557494276"://Death Watch Loyalist
     case "2470093702"://Wrecker
     case "4721657243"://Kihraxz Heavy Fighter
@@ -1829,9 +1832,9 @@ function LeaderUndeployed($cardID) {
     //Shadows of the Galaxy
     case "8def61a58e"://Kylo Ren
       return "1480894253";
-    case "4484318969"://Moff Gideon Leader
+    case "4484318969"://Moff Gideon Leader Unit
       return "2503039837";
-    case "415bde775d"://Hondo Ohnaka
+    case "415bde775d"://Hondo Ohnaka Leader Unit
       return "3045538805";
     case "d2bbda6982"://Bossk
       return "2526288781";
