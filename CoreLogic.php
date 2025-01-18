@@ -2601,6 +2601,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       MZChooseAndDestroy($currentPlayer, "MYRESOURCES", context:"Choose a resource to destroy");
       MZChooseAndDestroy($otherPlayer, "MYRESOURCES", context:"Choose a resource to destroy");
       PummelHit($currentPlayer);
+      PummelHit($currentPlayer);
+      PummelHit($otherPlayer);
       PummelHit($otherPlayer);
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "GUERILLAINSURGENCY");
       break;
@@ -3113,7 +3115,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "7366340487"://Outmaneuver
-      $options = "Ground;Space";
+      $options = "Space;Ground";
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an arena");
       AddDecisionQueue("CHOOSEOPTION", $currentPlayer, "$cardID&$options");
       AddDecisionQueue("SHOWOPTIONS", $currentPlayer, "$cardID&$options");
@@ -3157,7 +3159,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "7916724925"://Bombing Run
-      $options = "Ground;Space";
+      $options = "Space;Ground";
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an arena to deal 3 damage to each unit");
       AddDecisionQueue("CHOOSEOPTION", $currentPlayer, "$cardID&$options");
       AddDecisionQueue("SHOWOPTIONS", $currentPlayer, "$cardID&$options");

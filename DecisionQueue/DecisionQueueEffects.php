@@ -18,7 +18,7 @@ function ModalAbilities($player, $card, $lastResult)
       }
       return $lastResult;
     case "OUTMANEUVER":
-      $arena = $lastResult == 0 ? "Ground" : "Space";
+      $arena = $lastResult == 0 ? "Space" : "Ground";
       ExhaustAllAllies($arena, 1);
       ExhaustAllAllies($arena, 2);
       return $lastResult;
@@ -51,7 +51,7 @@ function ModalAbilities($player, $card, $lastResult)
       }
       return $lastResult;
     case "BOMBINGRUN":
-      $arena = $lastResult == 0 ? "Ground" : "Space";
+      $arena = $lastResult == 0 ? "Space" : "Ground";
       DamageAllAllies(3, "7916724925", arena:$arena);
       return 1;
     case "VIGILANCE":
