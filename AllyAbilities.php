@@ -483,13 +483,13 @@ function AllyPlayableExhausted(Ally $ally) {
   $cardID = $ally->CardID();
   switch($cardID) {
     case "5630404651"://MagnaGuard Wing Leader
+    case "040a3e81f3"://Lando Leader Unit
       return $ally->NumUses() > 0;
     case "4300219753"://Fett's Firespray
     case "2471223947"://Frontline Shuttle
     case "1885628519"://Crosshair
-    case "040a3e81f3"://Lando Leader Unit
-    case "2b13cefced"://Fennec Shand Unit
-    case "a742dea1f1"://Han Solo Red Unit
+    case "2b13cefced"://Fennec Shand Leader Unit
+    case "a742dea1f1"://Han Solo Red Leader Unit
       return true;
     default: return false;
   }
@@ -516,9 +516,9 @@ function AllyDoesAbilityExhaust($cardID, $abilityIndex) {
       return $abilityIndex == 1 || $abilityIndex == 2;
     case "040a3e81f3"://Lando Leader Unit
       return $abilityIndex == 1;
-    case "2b13cefced"://Fennec Shand Unit
+    case "2b13cefced"://Fennec Shand Leader Unit
       return $abilityIndex == 1;
-    case "a742dea1f1"://Han Solo Red Unit
+    case "a742dea1f1"://Han Solo Red Leader Unit
       return $abilityIndex == 1;
     default: return true;
   }
@@ -1846,7 +1846,7 @@ function SpecificAllyAttackAbilities($attackID)
         AddDecisionQueue("PASSPARAMETER", $mainPlayer, "THEIRCHAR-0", 1);
         AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,1,$mainPlayer,1", 1);
       }
-      break;      
+      break;
     case "2585318816"://Resolute
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY");
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 2 damage to");
