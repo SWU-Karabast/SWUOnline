@@ -5286,14 +5286,23 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1,$currentPlayer", 1);
       break;
     case "0026166404"://Chancellor Palpatine Leader
-      AddDecisionQueue("YESNO", $currentPlayer, "if a Heroism unit died this turn");
-      AddDecisionQueue("NOPASS", $currentPlayer, "-");
-      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "TWI_PALPATINE_HERO", 1);
+      if (SearchCount(SearchAlliesDestroyed($currentPlayer, aspect:"Heroism")) > 0) {
+        Draw($currentPlayer);
+        Restore(2, $currentPlayer);
+        $char = &GetPlayerCharacter($currentPlayer);
+        $char[CharacterPieces()] = "ad86d54e97";
+        $char[CharacterPieces() + 1] = 1; // Ehxaust the flipped Leader. It's necessary to manually exhaust the Leader only if the Leader was flipped.
+      }
       break;
     case "ad86d54e97"://Darth Sidious Leader
-      AddDecisionQueue("YESNO", $currentPlayer, "if you played a Villainy unit this turn");
-      AddDecisionQueue("NOPASS", $currentPlayer, "-");
-      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "TWI_DARTHSIDIOUS_HERO", 1);
+      global $CS_NumVillainyPlayed;
+      if (GetClassState($currentPlayer, $CS_NumVillainyPlayed) > 0) {
+        CreateCloneTrooper($currentPlayer);
+        DealDamageAsync(($currentPlayer == 1 ? 2 : 1), 2, "DAMAGE", "ad86d54e97");
+        $char = &GetPlayerCharacter($currentPlayer);
+        $char[CharacterPieces()] = "0026166404"; // Chancellor Palpatine Leader
+        $char[CharacterPieces() + 1] = 1; // Ehxaust the flipped Leader. It's necessary to manually exhaust the Leader only if the Leader was flipped.
+      }
       break;
     case "7734824762"://Captain Rex
       global $CS_NumAttacks;

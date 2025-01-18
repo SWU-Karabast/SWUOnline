@@ -238,6 +238,21 @@ function PlayerHasAlly($player, $cardID)
   return false;
 }
 
+function SearchAlliesDestroyed($player, $definedType = "", $aspect = "") {
+  global $CS_AlliesDestroyed;
+
+  $cards = [];
+  $allies = $CS_AlliesDestroyed == "-" ? [] : explode(",", GetClassState($player, $CS_AlliesDestroyed));
+
+  foreach ($allies as $ally) {
+    if ($definedType != "" && !DefinedTypesContains($ally, $definedType)) continue;
+    if ($aspect != "" && !AspectContains($ally, $aspect, $player)) continue;
+    $cards[] = $ally;
+  }
+
+  return implode(",", $cards);
+}
+
 function SearchAlliesForCard($player, $card1, $card2 = "", $card3 = "")
 {
   $allies = &GetAllies($player);

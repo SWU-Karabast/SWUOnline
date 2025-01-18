@@ -765,18 +765,6 @@ function SpecificCardLogic($player, $parameter, $lastResult)
     case "LETHALCRACKDOWN":
       DealDamageAsync($player, CardPower($lastResult), "DAMAGE", "1389085256");
       break;
-    case "TWI_PALPATINE_HERO":
-      Draw($player);
-      Restore(2, $player);
-      $char = &GetPlayerCharacter($player);
-      $char[CharacterPieces()] = "ad86d54e97";
-      break;
-    case "TWI_DARTHSIDIOUS_HERO":
-      CreateCloneTrooper($player);
-      DealDamageAsync(($player == 1 ? 2 : 1), 2, "DAMAGE", "ad86d54e97");
-      $char = &GetPlayerCharacter($player);
-      $char[CharacterPieces()] = "0026166404"; // Chancellor Palpatine Leader
-      break;
     case "LUXBONTERI":
       $ally = new Ally($lastResult, MZPlayerID($player, $lastResult));
       if($ally->IsExhausted()) $ally->Ready();

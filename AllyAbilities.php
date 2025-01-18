@@ -310,7 +310,7 @@ function GivesWhenDestroyedToAllies($cardID) {
 
 function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false, $skipRescue = false)
 {
-  global $mainPlayer, $combatChainState, $CS_NumAlliesDestroyed, $CS_NumLeftPlay, $CCS_CachedLastDestroyed;
+  global $mainPlayer, $combatChainState, $CS_AlliesDestroyed, $CS_NumAlliesDestroyed, $CS_NumLeftPlay, $CCS_CachedLastDestroyed;
 
   $allies = &GetAllies($player);
   $ally = new Ally("MYALLY-" . $index, $player);
@@ -354,6 +354,7 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false,
       LayerTheirsDestroyedTriggers($player, $triggers);
     }
     IncrementClassState($player, $CS_NumAlliesDestroyed);
+    AppendClassState($player, $CS_AlliesDestroyed, $cardID);
   }
 
   IncrementClassState($player, $CS_NumLeftPlay);
