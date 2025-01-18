@@ -238,7 +238,7 @@ function PlayerHasAlly($player, $cardID)
   return false;
 }
 
-function SearchAlliesDestroyed($player, $definedType = "", $aspect = "") {
+function SearchAlliesDestroyed($player, $definedType = "", $aspect = "", $ignoreDuplicates = false) {
   global $CS_AlliesDestroyed;
 
   $cards = [];
@@ -247,6 +247,7 @@ function SearchAlliesDestroyed($player, $definedType = "", $aspect = "") {
   foreach ($allies as $ally) {
     if ($definedType != "" && !DefinedTypesContains($ally, $definedType)) continue;
     if ($aspect != "" && !AspectContains($ally, $aspect, $player)) continue;
+    if ($ignoreDuplicates && in_array($ally, $cards)) continue;
     $cards[] = $ally;
   }
 

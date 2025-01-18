@@ -1460,6 +1460,17 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         }
       }
       return $lastResult;
+    case "GETITEMBYINDEX": // Get item by index, separated by comma. If the index is negative, it will be counted from the end of the array (e.g. -1 is the last item).
+      if ($lastResult == "PASS" || $lastResult == "") return "PASS";
+      $items = explode(",", $lastResult);
+      $index = (int) $parameter;
+      if ($index < 0) {
+        $index = count($items) + $index;
+      }
+      if ($index >= count($items)) {
+        return "PASS";
+      }
+      return $items[$index];
     case "PREPENDLASTRESULT":
       $rv = $lastResult == "PASS" ? $parameter : $parameter . $lastResult;
       $rv = rtrim($rv, ",");
