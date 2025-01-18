@@ -566,7 +566,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   }
 
   if (($turn[0] == "OPT" || $turn[0] == "CHOOSETOP" || $turn[0] == "MAYCHOOSETOP" || $turn[0] == "CHOOSEBOTTOM" || $turn[0] == "CHOOSECARD" || $turn[0] == "MAYCHOOSECARD") && $turn[1] == $playerID) {
-    $content = "<table><tr>";
+    $content = "<table style='margin: 0 auto;'><tr>";
     $options = explode(",", $turn[2]);
     for ($i = 0; $i < count($options); ++$i) {
       $content .= "<td>";
