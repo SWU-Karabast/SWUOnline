@@ -1422,7 +1422,9 @@ function AllyPlayCardAbility($cardID, $player="", $from="-", $abilityID="-", $un
       DealDamageAsync($player, 2, "DAMAGE", "5555846790");
       break;
     case "4935319539"://Krayt Dragon
-      AddLayer("TRIGGER", $currentPlayer, "4935319539", $cardID);
+      if ($cardID != "0345124206") { //Clone - When Clone is played, Krayt Dragon's ability is not triggered. It'll be triggered later after the Clone's resolution with the new printed attributes.
+        AddLayer("TRIGGER", $currentPlayer, "4935319539", $cardID);
+      }
       break;
     case "0199085444"://Lux Bonteri
       AddLayer("TRIGGER", $currentPlayer, "0199085444", $cardID);
