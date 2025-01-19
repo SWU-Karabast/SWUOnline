@@ -327,6 +327,12 @@ function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
             $costModifier -= 99;
             $remove = true;
             break;
+          case "4113123883"://Unnatural Life
+            if($from != "PLAY") {
+              $costModifier -= 2;
+              $remove = true;
+            }
+            break;
           case "3426168686"://Sneak Attack
             if($from != "PLAY") {
               $costModifier -= 3;
@@ -629,6 +635,7 @@ function CurrentEffectEndTurnAbilities()
       AddNextTurnEffect($currentTurnEffects[$i], $currentTurnEffects[$i + 1]);
     }
     switch($cardID) {
+      case "4113123883-2"://Unnatural Life
       case "3426168686-2"://Sneak Attack
       case "7270736993-2"://Unrefusable Offer
         $ally = new Ally("MYALLY-" . SearchAlliesForUniqueID($currentTurnEffects[$i+2], $currentTurnEffects[$i+1]), $currentTurnEffects[$i+1]);

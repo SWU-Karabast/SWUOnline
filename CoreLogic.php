@@ -3537,6 +3537,38 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, "6954704048", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
       break;
+    case "4113123883"://Unnatural Life
+      global $CS_AfterPlayedBy;
+      $alliesDestroyed = SearchAlliesDestroyed($currentPlayer, ignoreDuplicates:true);
+
+      if (SearchCount($alliesDestroyed) > 0) {
+        $alliesDestroyedIDs = explode(",", $alliesDestroyed);
+        $filteredCardIDs = "";
+
+        // Filter out cards that are not in the discard pile
+        foreach ($alliesDestroyedIDs as $allyDestroyedID) {
+          if (SearchCount(SearchDiscardForCard($currentPlayer, $allyDestroyedID)) > 0) {
+            if ($filteredCardIDs != "") $filteredCardIDs .= ",";
+            $filteredCardIDs .= $allyDestroyedID;
+          }
+        }
+
+        if (SearchCount($filteredCardIDs) > 0) {
+          AddDecisionQueue("PASSPARAMETER", $currentPlayer, $filteredCardIDs);
+          AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit (make sure it was defeated this phase)");        
+          AddDecisionQueue("MAYCHOOSECARD", $currentPlayer, "<-", 1);
+          AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+          AddDecisionQueue("PASSPARAMETER", $currentPlayer, $cardID, 1);
+          AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_AfterPlayedBy, 1);
+          AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, $cardID, 1);
+          AddDecisionQueue("FINDINDICES", $currentPlayer, "MYDISCARD,{0}", 1); // Find the indexes of the card in the discard pile
+          AddDecisionQueue("GETITEMBYINDEX", $currentPlayer, "-1", 1); // Get the last matching card in the discard pile
+          AddDecisionQueue("SETDQVAR", $currentPlayer, "1", 1);
+          AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYDISCARD-{1}", 1);
+          AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
+        }
+      }
+      break;
     case "3426168686"://Sneak Attack
       global $CS_AfterPlayedBy;
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to put into play");
@@ -5286,14 +5318,23 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1,$currentPlayer", 1);
       break;
     case "0026166404"://Chancellor Palpatine Leader
-      AddDecisionQueue("YESNO", $currentPlayer, "if a Heroism unit died this turn");
-      AddDecisionQueue("NOPASS", $currentPlayer, "-");
-      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "TWI_PALPATINE_HERO", 1);
+      if (SearchCount(SearchAlliesDestroyed($currentPlayer, aspect:"Heroism")) > 0) {
+        Draw($currentPlayer);
+        Restore(2, $currentPlayer);
+        $char = &GetPlayerCharacter($currentPlayer);
+        $char[CharacterPieces()] = "ad86d54e97";
+        $char[CharacterPieces() + 1] = 1; // Ehxaust the flipped Leader. It's necessary to manually exhaust the Leader only if the Leader was flipped.
+      }
       break;
     case "ad86d54e97"://Darth Sidious Leader
-      AddDecisionQueue("YESNO", $currentPlayer, "if you played a Villainy unit this turn");
-      AddDecisionQueue("NOPASS", $currentPlayer, "-");
-      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "TWI_DARTHSIDIOUS_HERO", 1);
+      global $CS_NumVillainyPlayed;
+      if (GetClassState($currentPlayer, $CS_NumVillainyPlayed) > 0) {
+        CreateCloneTrooper($currentPlayer);
+        DealDamageAsync(($currentPlayer == 1 ? 2 : 1), 2, "DAMAGE", "ad86d54e97");
+        $char = &GetPlayerCharacter($currentPlayer);
+        $char[CharacterPieces()] = "0026166404"; // Chancellor Palpatine Leader
+        $char[CharacterPieces() + 1] = 1; // Ehxaust the flipped Leader. It's necessary to manually exhaust the Leader only if the Leader was flipped.
+      }
       break;
     case "7734824762"://Captain Rex
       global $CS_NumAttacks;
@@ -5750,6 +5791,7 @@ function AfterPlayedByAbility($cardID) {
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{1}", 1);
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "GALACTICAMBITION", 1);
       break;
+    case "4113123883"://Unnatural Life
     case "7270736993"://Unrefusable Offer
     case "3426168686"://Sneak Attack
       AddDecisionQueue("OP", $currentPlayer, "GETLASTALLYMZ");

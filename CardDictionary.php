@@ -16,6 +16,13 @@ function CardName($cardID) {
   return CardTitle($cardID) . " " . CardSubtitle($cardID);
 }
 
+// 0: portrait, 1: landscape
+function CardOrientation($cardID): int {
+  if (DefinedCardType($cardID) == "Base") return 1;
+  if (DefinedCardType($cardID) == "Leader" && DefinedCardType2($cardID) != "Unit") return 1;
+  return 0;
+}
+
 function CardType($cardID)
 {
   if(!$cardID) return "";
@@ -1159,8 +1166,11 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
     $char = &GetPlayerCharacter($currentPlayer);
     if($char[CharacterPieces() + 1] == 1) $abilityTypes = "";
     if($char[CharacterPieces() + 2] == 0) {
-      if($abilityTypes != "") $abilityTypes .= ",";
-      $abilityTypes .= "A";
+      //Chancellor Palpatine Leader + Darth Sidious Leader
+      if($char[CharacterPieces()] != "0026166404" && $char[CharacterPieces()] != "ad86d54e97") {
+        if($abilityTypes != "") $abilityTypes .= ",";
+        $abilityTypes .= "A";
+      }
     }
   }
 

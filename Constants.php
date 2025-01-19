@@ -282,6 +282,7 @@ $CS_OppIndex = 68;
 $CS_OppCardActive = 69;
 $CS_PlayedWithExploit = 70;
 $CS_SeparatistUnitsThatAttacked = 71;
+$CS_AlliesDestroyed = 72; // List of allies (CardID) destroyed concatenated with a comma
 
 function SetAfterPlayedBy($player, $cardID)
 {
@@ -476,7 +477,7 @@ function ResetClassState($player)
   global $CS_NumPhantasmAADestroyed, $CS_NumEventsPlayed, $CS_MaxQuellUsed, $CS_DamageDealt, $CS_ArcaneTargetsSelected, $CS_NumDragonAttacks, $CS_NumIllusionistAttacks;
   global $CS_LastDynCost, $CS_NumIllusionistActionCardAttacks, $CS_ArcaneDamageDealt, $CS_LayerPlayIndex, $CS_NumCardsPlayed, $CS_NamesOfCardsPlayed, $CS_NumBoostPlayed;
   global $CS_PlayedAsInstant, $CS_AnotherWeaponGainedGoAgain, $CS_NumContractsCompleted, $CS_HitsWithSword, $CS_NumMelodyPlayed,
-    $CS_NumClonesPlayed, $CS_UnitsThatAttackedBase, $CS_PlayedWithExploit;
+    $CS_NumClonesPlayed, $CS_UnitsThatAttackedBase, $CS_PlayedWithExploit, $CS_AlliesDestroyed;
 
   $classState = &GetPlayerClassState($player);
   $classState[$CS_NumVillainyPlayed] = 0;
@@ -551,6 +552,7 @@ function ResetClassState($player)
   $classState[$CS_OppIndex] = -1;
   $classState[$CS_OppCardActive] = 0;
   $classState[$CS_PlayedWithExploit] = 0;
+  $classState[$CS_AlliesDestroyed] = "-";
 }
 
 function ResetCharacterEffects()

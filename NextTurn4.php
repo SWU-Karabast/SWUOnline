@@ -370,7 +370,7 @@
                   folder = "WebpImages2";
                   if (zone == "myChar") {
                       positionStyle = "fixed;";
-                      id = type == "W" ? "P<?php echo ($playerID); ?>BASE" : "P<?php echo ($playerID); ?>LEADER";
+                      id = type == "W" ? "P<?php echo ($playerID == 1 ? 2 : 1); ?>BASE" : "P<?php echo ($playerID == 1 ? 2 : 1); ?>LEADER";
                       className = type == "W" ? "my-base" : "my-leader";
                   } else if (zone == "theirChar") {
                       positionStyle = "fixed;";
@@ -399,12 +399,14 @@
                       var fontColor = "#DDD";
                       var borderColor = "#1a1a1a";
                       var backgroundColor = "#DDD";
-                      newHTML += "<div class='player-name p<?= $playerID ?>-label'>" + p<?= $playerID ?>uid + "</div>";
+                      <?php $playerVars = $playerID == 1 ? ["p1-label", "p1uid"] : ["p2-label", "p2uid"] ?>
+                      newHTML += "<div class='player-name <?= $playerVars[0] ?>'>" + <?php echo $playerVars[1]; ?> + "</div>";
                   } else if (zone == "theirChar") {
                       var fontColor = "#DDD";
                       var borderColor = "#1a1a1a";
                       var backgroundColor = "#DDD";
-                      newHTML += "<div class='player-name p<?= $otherPlayerID ?>-label'>" + p<?= $otherPlayerID ?>uid + "</div>";
+                      <?php $playerVars = $playerID == 1 ? ["p2-label", "p2uid"] : ["p1-label", "p1uid"] ?>
+                      newHTML += "<div class='player-name <?= $playerVars[0] ?>'>" + <?php echo $playerVars[1]; ?> + "</div>";
                   }
               }
               var restriction = cardArr[12];

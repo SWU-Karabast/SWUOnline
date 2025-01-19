@@ -310,7 +310,7 @@ function GivesWhenDestroyedToAllies($cardID) {
 
 function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false, $skipRescue = false)
 {
-  global $mainPlayer, $combatChainState, $CS_NumAlliesDestroyed, $CS_NumLeftPlay, $CCS_CachedLastDestroyed;
+  global $mainPlayer, $combatChainState, $CS_AlliesDestroyed, $CS_NumAlliesDestroyed, $CS_NumLeftPlay, $CCS_CachedLastDestroyed;
 
   $allies = &GetAllies($player);
   $ally = new Ally("MYALLY-" . $index, $player);
@@ -354,6 +354,7 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false,
       LayerTheirsDestroyedTriggers($player, $triggers);
     }
     IncrementClassState($player, $CS_NumAlliesDestroyed);
+    AppendClassState($player, $CS_AlliesDestroyed, $cardID);
   }
 
   IncrementClassState($player, $CS_NumLeftPlay);
@@ -1421,7 +1422,9 @@ function AllyPlayCardAbility($cardID, $player="", $from="-", $abilityID="-", $un
       DealDamageAsync($player, 2, "DAMAGE", "5555846790");
       break;
     case "4935319539"://Krayt Dragon
-      AddLayer("TRIGGER", $currentPlayer, "4935319539", $cardID);
+      if ($cardID != "0345124206") { //Clone - When Clone is played, Krayt Dragon's ability is not triggered. It'll be triggered later after the Clone's resolution with the new printed attributes.
+        AddLayer("TRIGGER", $currentPlayer, "4935319539", $cardID);
+      }
       break;
     case "0199085444"://Lux Bonteri
       AddLayer("TRIGGER", $currentPlayer, "0199085444", $cardID);
