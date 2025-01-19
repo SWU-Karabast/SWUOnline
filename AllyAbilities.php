@@ -2136,7 +2136,7 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("PASSPARAMETER", $mainPlayer, $targetMZIndex);
       AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,2,$mainPlayer,1");
       break;
-    case "8414572243"://Enfys Nest
+    case "8414572243"://Enfys Nest (Champion of Justice)
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY:maxAttack=" . $attackerAlly->CurrentPower() - 1);
       AddDecisionQueue("MZFILTER", $mainPlayer, "definedType=Leader");
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to bounce");

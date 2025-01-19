@@ -3555,7 +3555,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
 
         if (SearchCount($filteredCardIDs) > 0) {
           AddDecisionQueue("PASSPARAMETER", $currentPlayer, $filteredCardIDs);
-          AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit (make sure it was defeated this phase)");        
+          AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit (make sure it was defeated this phase)");
           AddDecisionQueue("MAYCHOOSECARD", $currentPlayer, "<-", 1);
           AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
           AddDecisionQueue("PASSPARAMETER", $currentPlayer, $cardID, 1);
@@ -5657,8 +5657,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         CreateBattleDroid($currentPlayer);
       }
       break;
-    case "8414572243"://Enfys Nest
-      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:maxAttack=4");
+    case "8414572243"://Enfys Nest (Champion of Justice)
+      $enfyAlly = new Ally($uniqueId);
+      $enfyBouncePower = $enfyAlly->CurrentPower() - 1;
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:maxAttack=$enfyBouncePower");
       AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to bounce");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
