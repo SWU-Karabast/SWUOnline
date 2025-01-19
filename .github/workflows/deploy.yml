@@ -1,0 +1,28 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches:
+      - main  # Trigger on push to the main branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Clone the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Set up SSH to access the server
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/github-actions
+          chmod 600 ~/.ssh/github-actions
+          ssh-keyscan -H 142.11.213.202 >> ~/.ssh/known_hosts
+
+      # Synchronize the project files with the server
+      - name: Deploy code
+        run: |
+          rsync -avz --delete ./ root@142.11.213.202:~/staging
