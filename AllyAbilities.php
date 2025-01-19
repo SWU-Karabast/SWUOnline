@@ -1225,7 +1225,7 @@ function AllyHasPlayCardAbility($playedCardID, $playedCardUniqueID, $from, $card
   $thisIsNewlyPlayedAlly = $thisAlly->UniqueID() == $playedCardUniqueID;
   if($player == $currentPlayer) {
     switch($cardID) {
-      case "415bde775d"://Hondo Ohnaka
+      case "415bde775d"://Hondo Ohnaka Leader Unit
         return $from == "RESOURCES";
       case "3434956158"://Fives
       case "0052542605"://Bossk
@@ -1279,7 +1279,7 @@ function AllyPlayCardAbility($cardID, $player="", $from="-", $abilityID="-", $un
   $index = SearchAlliesForUniqueID($uniqueID, $player);
   switch($abilityID)
   {
-    case "415bde775d"://Hondo Ohnaka
+    case "415bde775d"://Hondo Ohnaka Leader Unit
       if($from == "RESOURCES") {
         AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
         AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to give an experience token", 1);
@@ -1812,7 +1812,7 @@ function SpecificAllyAttackAbilities($attackID)
     case "9115773123"://Coruscant Dissident
       ReadyResource($mainPlayer);
       break;
-    case "e091d2a983"://Rey
+    case "e091d2a983"://Rey Leader Unit
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:maxAttack=2");
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to give an experience");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);

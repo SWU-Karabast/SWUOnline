@@ -317,7 +317,7 @@ class Ally {
         case "4339330745"://Wedge Antilles
           if(TraitContains($this->CardID(), "Vehicle", $this->PlayerID())) $power += 1;
           break;
-        case "4484318969"://Moff Gideon Leader
+        case "4484318969"://Moff Gideon Leader Unit
           global $mainPlayer;
           //As defined on NetworkingLibraries.Attack, $mainPlayer is always the attacker
           if(CardCost($this->CardID()) <= 3 && $mainPlayer == $this->playerID && AttackIndex() == $this->index && IsAllyAttackTarget()) {
