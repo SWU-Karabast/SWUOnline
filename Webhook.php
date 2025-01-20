@@ -12,7 +12,9 @@
   }
 
   // Execute `git pull` in the current directory
-  exec('git pull origin main 2>&1', $output, $result);
+  // Ensure that sudo is configured to allow the "daemon" user to run git pull without a password prompt
+  // by adding the following line to the sudoers file: "daemon ALL=(ALL) NOPASSWD: /usr/bin/git"
+  exec('sudo git pull origin main 2>&1', $output, $result);
 
   // Respond with the output of the `git pull` command
   http_response_code($result === 0 ? 200 : 500); // 200 OK if success, 500 Internal Server Error if failure
