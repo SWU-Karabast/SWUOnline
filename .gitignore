@@ -12,3 +12,4 @@ vendor/
 .phpunit.result.cache
 
 includes/dbh.inc.php
+Database/ConnectionManager.php
