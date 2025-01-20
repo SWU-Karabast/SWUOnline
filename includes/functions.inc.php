@@ -298,6 +298,27 @@ function logCompletedGameStats()
 	mysqli_close($conn);
 }
 
+function changePassword($conn, $userID, $newPwd)
+{
+	$conn = GetDBConnection();
+	$sql = "UPDATE users SET usersPwd = ? WHERE usersId = ?;";
+
+	$stmt = mysqli_stmt_init($conn);
+	if (!mysqli_stmt_prepare($stmt, $sql)) {
+		header("location: ../ChangePassword.php?error=stmtfailed");
+		exit();
+	}
+
+	$hashedPwd = password_hash($newPwd, PASSWORD_DEFAULT);
+
+	mysqli_stmt_bind_param($stmt, "si", $hashedPwd, $userID);
+	mysqli_stmt_execute($stmt);
+	mysqli_stmt_close($stmt);
+	mysqli_close($conn);
+	header("location: ../ChangePassword.php?error=none");
+	exit();
+}
+
 function LogChallengeResult($conn, $gameResultID, $playerID, $result)
 {
 	WriteLog("Writing challenge result for player " . $playerID);
