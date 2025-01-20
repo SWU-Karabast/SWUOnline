@@ -63,6 +63,7 @@ https://docs.google.com/document/d/10u3qGpxr1ddvwobq8__lVZfYCgqtanZShHEaYljiA1M/
 
 This guide explains how to set up CI/CD, including deploying with GitHub, securing webhooks, and configuring environment variables.
 
+
 #### 1. Set Up a Deploy Key
 - On the server, generate an SSH key pair by running:  
   ```bash
@@ -144,5 +145,5 @@ The `Webhook.php` script will execute using the `daemon` user, so it must have p
   daemon ALL=(ALL) NOPASSWD: /usr/bin/git
   ```
 
-#### Final Steps
+#### Final Steps #1
 Your project is now configured for CI/CD. Any commit pushed to the `main` branch will trigger the webhook, which executes a `git pull` on the server to update the project files automatically.
