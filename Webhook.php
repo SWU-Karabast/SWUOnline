@@ -12,7 +12,7 @@
   }
 
   // Execute `git pull` in the current directory
-  exec('git fetch --all && git reset --hard origin/main 2>&1', $output, $result);
+  exec('git pull origin main 2>&1', $output, $result);
 
   // Respond with the output of the `git pull` command
   http_response_code($result === 0 ? 200 : 500); // 200 OK if success, 500 Internal Server Error if failure
