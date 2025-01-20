@@ -63,7 +63,6 @@ https://docs.google.com/document/d/10u3qGpxr1ddvwobq8__lVZfYCgqtanZShHEaYljiA1M/
 
 This guide explains how to set up CI/CD, including deploying with GitHub, securing webhooks, and configuring environment variables.
 
-
 #### 1. Set Up a Deploy Key
 - On the server, generate an SSH key pair by running:  
   ```bash
