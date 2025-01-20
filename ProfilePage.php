@@ -65,6 +65,9 @@ include_once 'Header.php';
     <a href="ChangeUsername.php">
         <button name="change-username" style="height: 40px">Change Username</button>
     </a>
+    <a href="ChangePassword.php">
+        <button name="change-password" style="height: 40px">Change Password</button>
+    </a>
 </div>
 <?php
 DisplayPatreon();
