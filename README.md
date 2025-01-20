@@ -89,7 +89,7 @@ This guide explains how to set up CI/CD, including deploying with GitHub, securi
 
 - In your GitHub repository, go to **Settings > Webhooks** and create a new webhook with the following settings:
   - **Payload URL**: `https://karabast.net/SWUOnline/Webhook.php`
-  - **Content Type**: `application/x-www-form-urlencoded`
+  - **Content Type**: `application/json`
   - **Secret**: `<webhook-secret>` (use the secret generated earlier)
   - **SSL Verification**: Enabled
   - **Events**: Select "Just the push event" to trigger the webhook on push events.
@@ -145,5 +145,5 @@ The `Webhook.php` script will execute using the `daemon` user, so it must have p
   daemon ALL=(ALL) NOPASSWD: /usr/bin/git
   ```
 
-#### Final Steps #1
+#### Final Steps
 Your project is now configured for CI/CD. Any commit pushed to the `main` branch will trigger the webhook, which executes a `git pull` on the server to update the project files automatically.
