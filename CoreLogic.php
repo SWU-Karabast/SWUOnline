@@ -5738,6 +5738,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MULTIADDHAND", $currentPlayer, "-", 1);
       AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
       break;
+    case "0425156332"://Planetary Bombardment
+      $hasCapitalShip = SearchCount(SearchAllies($currentPlayer, trait:"Capital Ship")) > 0;
+      $indirectAmount = $hasCapitalShip ? 12 : 8;
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      IndirectDamage($otherPlayer, $indirectAmount);
+      break;
     //PlayAbility End
     default: break;
   }

@@ -1131,3 +1131,15 @@ function UIDIsAffectedByMalevolence($uniqueID) {
 
   return $found;
 }
+
+function IndirectDamage($player, $amount)
+{
+  for($i=0; $i<$amount; ++$i) {
+    AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY", $i == 0 ? 0 : 1);
+    AddDecisionQueue("PREPENDLASTRESULT", $player, "MYCHAR-0,", $i == 0 ? 0 : 1);
+    AddDecisionQueue("SETDQCONTEXT", $player, "Choose a card to deal an indirect damage (Remaining: " . ($amount-$i) . ")", $i == 0 ? 0 : 1);
+    AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+    AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1,$player,0,0", 1);
+  }
+}
+

@@ -502,8 +502,10 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           // 2. Damage amount
           // 3. Player causing the damage
           // 4. Indicates if the damage is caused by unit effects (1 = yes, 0 = no)
+          // 5. Indicates if the damage is preventable (1 = yes, 0 = no)
           $targetArr = explode("-", $lastResult);
           $targetPlayer = ($targetArr[0] == "MYCHAR" || $targetArr[0] == "MYALLY" ? $player : ($player == 1 ? 2 : 1));
+          $preventable = count($parameterArr) > 4 ? $parameterArr[4] == 1 : 1;
           if($targetArr[0] == "MYALLY" || $targetArr[0] == "THEIRALLY") {
             $isAttackTarget = GetAttackTarget() == $lastResult;
             $isAttacker = AttackerMZID($player) == $lastResult;
@@ -511,7 +513,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             $attackerHasOverwhelm = HasOverwhelm($ally->CardID(), $ally->Controller(), $ally->Index());
             $destroyed = $ally->DealDamage($parameterArr[1],
                 enemyDamage:(count($parameterArr) > 2 && $parameterArr[2] != $targetPlayer),
-                fromUnitEffect: count($parameterArr) > 3 && (bool)$parameterArr[3]);
+                fromUnitEffect: count($parameterArr) > 3 && (bool)$parameterArr[3],
+                preventable: $preventable);
 
             if($destroyed) {
               if(($isAttackTarget || $isAttacker) && !$attackerHasOverwhelm) CloseCombatChain();
