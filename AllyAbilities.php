@@ -2192,6 +2192,9 @@ function SpecificAllyAttackAbilities($attackID)
         }
       }
       break;
+    case "2778554011"://General Draven
+      PlayAlly("9415311381", $mainPlayer); //X-Wing
+      break;
     default: break;
   }
   //SpecificAllyAttackAbilities End

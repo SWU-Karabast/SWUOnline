@@ -5744,6 +5744,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
       IndirectDamage($otherPlayer, $indirectAmount);
       break;
+    case "2778554011"://General Draven
+      PlayAlly("9415311381", $currentPlayer); //X-Wing
+      break;
     //PlayAbility End
     default: break;
   }
