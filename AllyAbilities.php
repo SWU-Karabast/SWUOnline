@@ -2195,6 +2195,9 @@ function SpecificAllyAttackAbilities($attackID)
     case "2778554011"://General Draven
       PlayAlly("9415311381", $mainPlayer); //X-Wing
       break;
+    case "2657417747"://Quasar TIE Carrier
+      PlayAlly("7268926664", $mainPlayer); //TIE Fighter
+      break;
     default: break;
   }
   //SpecificAllyAttackAbilities End
