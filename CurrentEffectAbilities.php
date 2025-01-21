@@ -46,7 +46,6 @@ function FinalizeChainLinkEffects()
         PrependDecisionQueue("SWAPTURN", $mainPlayer, "-");
         PrependDecisionQueue("ELSE", $mainPlayer, "-");
         PrependDecisionQueue("MZOP", $mainPlayer, "ATTACK", 1);
-        PrependDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
         PrependDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
         PrependDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to attack with");
         PrependDecisionQueue("MZFILTER", $mainPlayer, "status=1");
