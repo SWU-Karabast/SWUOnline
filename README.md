@@ -57,4 +57,93 @@ We have a Google Doc with instructions for setting up the environment. Some step
 
 https://docs.google.com/document/d/10u3qGpxr1ddvwobq8__lVZfYCgqtanZShHEaYljiA1M/edit?usp=sharing
 
-#### Testing CI/CD #1
+---
+
+### CI/CD Configuration Guide
+
+This guide explains how to set up CI/CD, including deploying with GitHub, securing webhooks, and configuring environment variables.
+
+
+#### 1. Set Up a Deploy Key
+- On the server, generate an SSH key pair by running:  
+  ```bash
+  ssh-keygen -t rsa -b 4096 -C "deploy-key"
+  ```
+  This will create two files:
+  - **Private Key**: `~/.ssh/id_rsa`
+  - **Public Key**: `~/.ssh/id_rsa.pub`
+
+- In your GitHub repository, go to **Settings > Deploy Keys** and add the content of `~/.ssh/id_rsa.pub` as a new deploy key.
+
+- Test the SSH connection to GitHub:  
+  ```bash
+  ssh -T git@github.com
+  ```
+
+#### 2. Configure a Webhook
+- Generate a secret key to secure the webhook:  
+  ```bash
+  openssl rand -hex 32
+  ```
+  Save this secret for later use.
+
+- In your GitHub repository, go to **Settings > Webhooks** and create a new webhook with the following settings:
+  - **Payload URL**: `https://karabast.net/SWUOnline/Webhook.php`
+  - **Content Type**: `application/json`
+  - **Secret**: `<webhook-secret>` (use the secret generated earlier)
+  - **SSL Verification**: Enabled
+  - **Events**: Select "Just the push event" to trigger the webhook on push events.
+
+#### 3. Configure `.htaccess`
+To secure your project and set environment variables:
+- Navigate to your project directory: `/opt/lampp/htdocs/SWUOnline`
+- Create or edit an `.htaccess` file with the following content:
+  ```apache
+  RedirectMatch 404 /\.git
+  SetEnv MYSQL_SERVER_NAME localhost
+  SetEnv MYSQL_SERVER_USER_NAME root
+  SetEnv MYSQL_ROOT_PASSWORD <mysql-root-password>
+  SetEnv WEBHOOK_SECRET <webhook-secret>
+  ```
+
+This configuration ensures that the `.git` folder is inaccessible and adds environment variables for your project.
+
+#### 4. Connect the Project to GitHub
+If your project is not yet connected to GitHub, follow these steps:
+
+- Initialize the project as a Git repository:
+  ```bash
+  git init
+  ```
+
+- Add the GitHub repository as the remote origin:
+  ```bash
+  git remote add origin git@github.com:SWU-Karabast/SWUOnline.git
+  ```
+
+- Sync the project with the remote repository:
+  ```bash
+  git fetch --all
+  ```
+
+- Ensure the server files match the repository by running:
+  ```bash
+  git reset --hard origin/main
+  ```
+  **Note**: Files listed in `.gitignore` will remain unaffected. Back up important files before running this command to avoid accidental data loss.
+
+#### 5. Grant Permissions to the `daemon` User
+The `Webhook.php` script will execute using the `daemon` user, so it must have permissions to run `git pull`.
+
+- Edit the sudoers file:
+  ```bash
+  sudo visudo
+  ```
+
+- Add the following line to grant limited permissions:
+  ```text
+  daemon ALL=(ALL) NOPASSWD: /usr/bin/git
+  ```
+
+#### Final Steps
+Your project is now configured for CI/CD. Any commit pushed to the `main` branch will trigger the webhook, which executes a `git pull` on the server to update the project files automatically.
