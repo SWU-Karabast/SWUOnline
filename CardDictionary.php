@@ -2178,6 +2178,17 @@ function SmuggleAdditionalCosts($cardID, $player = ""): bool {
   }
 }
 
+function PilotingCost($cardID, $player = "") {
+  global $currentPlayer;
+  if($player == "") $player = $currentPlayer;
+  $minCost = -1;
+  switch($cardID) {
+    case "3874382333": $minCost = 2; break;//Academy Graduate
+    default: break;
+  }
+  return $minCost;
+}
+
 function isBountyRecollectable($cardID) {
   switch ($cardID) {
     case "7642980906"://Stolen Landspeeder
