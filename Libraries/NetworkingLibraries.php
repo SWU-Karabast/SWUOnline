@@ -1500,8 +1500,8 @@ function PlayCardSkipCosts($cardID, $from)
 
 function GetLayerTarget($cardID)
 {
-  global $currentPlayer;
-  if(DefinedTypesContains($cardID, "Upgrade", $currentPlayer))
+  global $currentPlayer, $CS_PlayedAsUpgrade;
+  if(DefinedTypesContains($cardID, "Upgrade", $currentPlayer) || GetClassState($currentPlayer, $CS_PlayedAsUpgrade) > 0)
   {
     $upgradeFilter = UpgradeFilter($cardID);
     AddDecisionQueue("PASSPARAMETER", $currentPlayer, $cardID);
@@ -1564,7 +1564,9 @@ function AddPrePitchDecisionQueue($cardID, $from, $index = -1, $skipAbilityType 
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose if you want to play this unit as a pilot?");
       AddDecisionQueue("YESNO", $currentPlayer, "if you want to play this unit as a pilot");
       AddDecisionQueue("NOPASS", $currentPlayer, "-");
-      AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_PlayedAsUpgrade);//Change to something else
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, 1, 1);
+      AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_PlayedAsUpgrade, 1);
+      AddDecisionQueue("GETLAYERTARGET", $currentPlayer, $cardID, 1);
     }
   }
   switch ($cardID) {

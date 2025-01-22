@@ -1802,6 +1802,9 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       PrependDecisionQueue("BUTTONINPUTNOPASS", $player, GetIndices($parameter[0] + 1));
       PrependDecisionQueue("SETDQCONTEXT", $player, "Choose an amount of damage to deal to " . CardLink($theirAllies[$index], $theirAllies[$index]));
       return $lastResult;
+    case "GETLAYERTARGET":
+      GetLayerTarget($parameter);
+      return $lastResult;
     default:
       return "NOTSTATIC";
   }

@@ -1554,9 +1554,9 @@ function HasAlternativeCost($cardID) {
 //Preserve
 function GoesWhereAfterResolving($cardID, $from = null, $player = "", $playedFrom="", $resourcesPaid="", $additionalCosts="")
 {
-  global $currentPlayer, $mainPlayer;
+  global $currentPlayer, $mainPlayer, $CS_PlayedAsUpgrade;
   if($player == "") $player = $currentPlayer;
-  if(DefinedTypesContains($cardID, "Upgrade", $currentPlayer)) return "ATTACHTARGET";
+  if(DefinedTypesContains($cardID, "Upgrade", $currentPlayer) || GetClassState($player, $CS_PlayedAsUpgrade) > 0) return "ATTACHTARGET";
   if(IsAlly($cardID)) return "ALLY";
   switch($cardID) {
     case "2703877689": return "RESOURCE";//Resupply
@@ -1567,6 +1567,7 @@ function GoesWhereAfterResolving($cardID, $from = null, $player = "", $playedFro
 
 function UpgradeFilter($cardID)
 {
+  if(PilotingCost($cardID) > 0) return "trait!=Vehicle";
   switch($cardID) {
     case "0160548661"://Fallen Lightsaber
     case "8495694166"://Jedi Lightsaber
