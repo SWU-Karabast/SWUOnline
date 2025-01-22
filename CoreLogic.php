@@ -5747,6 +5747,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "2778554011"://General Draven
       PlayAlly("9415311381", $currentPlayer); //X-Wing
       break;
+    case "1303370295"://Death Space Skirmisher
+      if (SearchCount(SearchAllies($currentPlayer, arena: "Space")) > 1) {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to exhaust");
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
+      }
+      break;
     //PlayAbility End
     default: break;
   }
