@@ -1134,6 +1134,8 @@ function UIDIsAffectedByMalevolence($uniqueID) {
 
 function IndirectDamage($player, $amount)
 {
+  $sourcePlayer = $player == 1 ? 2 : 1;
+  $amount += SearchCount(SearchAlliesForCard($sourcePlayer, "4560739921"));
   for($i=0; $i<$amount; ++$i) {
     AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY", $i == 0 ? 0 : 1);
     AddDecisionQueue("PREPENDLASTRESULT", $player, "MYCHAR-0,", $i == 0 ? 0 : 1);
