@@ -5870,8 +5870,8 @@ function ExhaustAllAllies($arena, $player)
   $allies = &GetAllies($player);
   for($i=0; $i<count($allies); $i+=AllyPieces())
   {
-    if(CardArenas($allies[$i]) == $arena) {
-      $ally = new Ally("MYALLY-" . $i, $player);
+    $ally = new Ally("MYALLY-" . $i, $player);
+    if($ally->CurrentArena() == $arena) {
       $ally->Exhaust();
     }
   }
