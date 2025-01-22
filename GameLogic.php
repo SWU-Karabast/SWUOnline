@@ -652,11 +652,20 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             WriteLog(CardLink($cardID, $cardID) . " resisted capture.");
             return $cardID;
           }
+
           $capturedCardID = $captured->CardID();
           $capturedUniqueID = $captured->UniqueID();
           $capturedExhausted = $captured->IsExhausted();
           $capturedOwner = $captured->Owner();
           $capturedUpgrades = $captured->GetUpgrades();
+
+          if(IsToken($cardID)) {
+            // token unit cannot be captured, when they should they are removed from play but bounties can be collected
+            CollectBounties($targetPlayer, $capturedCardID, $capturedUniqueID, $capturedExhausted, $capturedOwner, $capturedUpgrades, capturerUniqueID:$uniqueID);
+            RemoveAlly($targetPlayer, explode("-", $lastResult)[1]);
+            return $cardID;
+          }
+
           $index = SearchAlliesForUniqueID($uniqueID, $player);
           if($index >= 0) {
             $ally = new Ally("MYALLY-" . $index, $player);
