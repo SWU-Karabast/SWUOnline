@@ -29,7 +29,7 @@ function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null,
   $allies[] = 0; //Turns in play
   $allies[] = $cloned ? 1 : 0; //Cloned
   $allies[] = 0; //Healed this turn
-  $allies[] = 0; //Unused
+  $allies[] = "NA";//Arena Override
   $allies[] = 0; //Unused
   $index = count($allies) - AllyPieces();
   CurrentEffectAllyEntersPlay($player, $index);

@@ -130,7 +130,7 @@ function ResourcePieces() { return ArsenalPieces(); }
 //12 - Turns in play
 //13 - Cloned - 0 = no, 1 = yes
 //14 - Healed
-//15 - Unused
+//15 - Arena Override
 //16 - Unused
 function AllyPieces()
 {
