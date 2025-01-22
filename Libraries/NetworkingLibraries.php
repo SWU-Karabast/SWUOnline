@@ -1531,7 +1531,7 @@ function GetLayerTarget($cardID)
 
 function AddPrePitchDecisionQueue($cardID, $from, $index = -1, $skipAbilityType = false)
 {
-  global $currentPlayer, $CS_AdditionalCosts, $CS_OppCardActive;
+  global $currentPlayer, $CS_AdditionalCosts, $CS_OppCardActive, $CS_PlayedAsUpgrade;
   $oppCardActive = GetClassState($currentPlayer, $CS_OppCardActive) > 0;
   if (!$skipAbilityType && IsStaticType(CardType($cardID), $from, $cardID)) {
     $names = $oppCardActive ? GetOpponentControlledAbilityNames($cardID) : GetAbilityNames($cardID, $index, validate: true);
@@ -1558,6 +1558,13 @@ function AddPrePitchDecisionQueue($cardID, $from, $index = -1, $skipAbilityType 
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, $cardID,1);
       AddDecisionQueue("SETDQVAR", $currentPlayer, 1);
       AddDecisionQueue("MZOP", $currentPlayer, "EXPLOIT", 1);
+    }
+    $pilotCost = PilotingCost($cardID, $currentPlayer);
+    if($pilotCost > 0) {
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose if you want to play this unit as a pilot?");
+      AddDecisionQueue("YESNO", $currentPlayer, "if you want to play this unit as a pilot");
+      AddDecisionQueue("NOPASS", $currentPlayer, "-");
+      AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_PlayedAsUpgrade);//Change to something else
     }
   }
   switch ($cardID) {

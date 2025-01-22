@@ -316,6 +316,7 @@ function HasSentinel($cardID, $player, $index)
   {
     if($upgrades[$i] == "4550121827") return true;//Protector
     if($upgrades[$i] == "4991712618") return true;//Unshakeable Will
+    if($upgrades[$i] == "3874382333") return true;//Academy Graduate
   }
   switch($cardID)
   {
@@ -343,6 +344,7 @@ function HasSentinel($cardID, $player, $index)
     case "6409922374"://Niima Outpost Constables
     case "0315522200"://Black Sun Starfighter
     case "8228196561"://Clan Saxon Gauntlet
+    case "3874382333"://Academy Graduate
       return true;
     case "2739464284"://Gamorrean Guards
       return SearchCount(SearchAllies($player, aspect:"Cunning")) > 1;
@@ -877,7 +879,7 @@ function BlockValue($cardID)
 
 function AttackValue($cardID)
 {
-  global $combatChainState, $CCS_NumBoosted, $mainPlayer, $currentPlayer;
+  global $combatChainState, $mainPlayer, $currentPlayer;
   if(!$cardID) return "";
   switch($cardID)
   {
@@ -2326,7 +2328,6 @@ function DefinedCardType2Wrapper($cardID)
 function HasDominate($cardID)
 {
   global $mainPlayer, $combatChainState;
-  global $CS_NumAuras, $CCS_NumBoosted;
   switch ($cardID)
   {
 
