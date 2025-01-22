@@ -1136,12 +1136,22 @@ function IndirectDamage($player, $amount)
 {
   $sourcePlayer = $player == 1 ? 2 : 1;
   $amount += SearchCount(SearchAlliesForCard($sourcePlayer, "4560739921"));
-  for($i=0; $i<$amount; ++$i) {
-    AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY", $i == 0 ? 0 : 1);
-    AddDecisionQueue("PREPENDLASTRESULT", $player, "MYCHAR-0,", $i == 0 ? 0 : 1);
-    AddDecisionQueue("SETDQCONTEXT", $player, "Choose a card to deal an indirect damage (Remaining: " . ($amount-$i) . ")", $i == 0 ? 0 : 1);
-    AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-    AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1,$player,0,0", 1);
+  if(SearchCount(SearchAlliesForCard($sourcePlayer, "1330473789")) > 0) { //Devastator
+    for($i=0; $i<$amount; ++$i) {
+      AddDecisionQueue("MULTIZONEINDICES", $sourcePlayer, "THEIRALLY", $i == 0 ? 0 : 1);
+      AddDecisionQueue("PREPENDLASTRESULT", $sourcePlayer, "THEIRCHAR-0,", $i == 0 ? 0 : 1);
+      AddDecisionQueue("SETDQCONTEXT", $sourcePlayer, "Choose a card to deal an indirect damage (Remaining: " . ($amount-$i) . ")", $i == 0 ? 0 : 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $sourcePlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $sourcePlayer, "DEALDAMAGE,1,$sourcePlayer,0,0", 1);
+    }
+  } else {
+    for($i=0; $i<$amount; ++$i) {
+      AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY", $i == 0 ? 0 : 1);
+      AddDecisionQueue("PREPENDLASTRESULT", $player, "MYCHAR-0,", $i == 0 ? 0 : 1);
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a card to deal an indirect damage (Remaining: " . ($amount-$i) . ")", $i == 0 ? 0 : 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+      AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1,$player,0,0", 1);
+    }
   }
 }
 
