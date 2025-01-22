@@ -478,8 +478,8 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       PrependDecisionQueue("SETDQCONTEXT", $player, "Do you want to continue? (Damage: " . $dqVars[1] . ")");
       return $lastResult;
     case "ADMIRALACKBAR":
-      $targetCard = GetMZCard($player, $lastResult);
-      $damage = SearchCount(SearchAllies($player, arena:CardArenas($targetCard)));
+      $targetAlly = new Ally($lastResult, MZPlayerID($player, $lastResult));
+      $damage = SearchCount(SearchAllies($player, arena:$targetAlly->CurrentArena()));
       AddDecisionQueue("PASSPARAMETER", $player, $lastResult);
       AddDecisionQueue("MZOP", $player, "DEALDAMAGE," . $damage, 1);
       return $lastResult;
