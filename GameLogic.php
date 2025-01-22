@@ -652,6 +652,13 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             WriteLog(CardLink($cardID, $cardID) . " resisted capture.");
             return $cardID;
           }
+
+          if(IsToken($cardID)) {
+            // token unit cannot be captured, when they should they are removed from play
+            RemoveAlly($otherPlayer, explode("-", $lastResult)[1]);
+            return $cardID;
+          }
+
           $capturedCardID = $captured->CardID();
           $capturedUniqueID = $captured->UniqueID();
           $capturedExhausted = $captured->IsExhausted();
