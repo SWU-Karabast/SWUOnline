@@ -2198,6 +2198,14 @@ function SpecificAllyAttackAbilities($attackID)
     case "2657417747"://Quasar TIE Carrier
       PlayAlly("7268926664", $mainPlayer); //TIE Fighter
       break;
+    case "6390089966"://Banshee
+      $damage = $attackerAlly->Damage();
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("MZFILTER", $mainPlayer, "index=MYALLY-" . $attackerAlly->Index());
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal " . $damage . "damage to");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE," . $damage, 1);
+      break;
     default: break;
   }
   //SpecificAllyAttackAbilities End
