@@ -347,6 +347,7 @@ function HasSentinel($cardID, $player, $index)
     case "0315522200"://Black Sun Starfighter
     case "8228196561"://Clan Saxon Gauntlet
     case "3874382333"://Academy Graduate
+    case "0235116526"://Fleet Interdictor
       return true;
     case "2739464284"://Gamorrean Guards
       return SearchCount(SearchAllies($player, aspect:"Cunning")) > 1;
@@ -2322,6 +2323,7 @@ function DefinedCardType2Wrapper($cardID)
     case "0622803599"://Jabba the Hutt
     case "9596662994"://Finn
     case "8777351722"://Anakin Skywalker
+    case "4179470615"://Asajj Ventress
       return "";
     case "8752877738":
     case "2007868442":

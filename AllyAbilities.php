@@ -778,6 +778,9 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities,
         AddDecisionQueue("MZOP", $player, "GETUNIQUEID", 1);
         AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $player, "0249398533,PLAY", 1);
         break;
+      case "0235116526"://Fleet Interdictor
+        MZChooseAndDestroy($player, "MYALLY:maxCost=3;arena=Space&THEIRALLY:maxCost=3;arena=Space");
+        break;
       default: break;
     }
 
