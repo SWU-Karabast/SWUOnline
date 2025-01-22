@@ -5760,6 +5760,15 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
       IndirectDamage($otherPlayer, 4);
       break;
+    case "2388374331"://Blue Leader
+      AddDecisionQueue("YESNO", $currentPlayer, "Do you want to pay 2 to gain 2 experience tokens?", 1);
+      AddDecisionQueue("NOPASS", $currentPlayer, "-", 1);
+      AddDecisionQueue("PAYRESOURCES", $currentPlayer, "2", 1);
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYALLY-" . $playAlly->Index(), 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "ADDEXPERIENCE", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "ADDEXPERIENCE", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "MOVEARENA,Ground", 1);
+      break;
     //PlayAbility End
     default: break;
   }

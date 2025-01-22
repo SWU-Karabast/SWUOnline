@@ -265,6 +265,20 @@ class Ally {
     $this->DefeatIfNoRemainingHP();
   }
 
+  function MoveArena($arena) {
+    if($this->index == -1) return;
+    $this->allies[$this->index+15] = $arena;
+  }
+
+  function ArenaOverride() {
+    return $this->allies[$this->index+15];
+  }
+
+  function CurrentArena() {
+    if($this->ArenaOverride() != "NA") return $this->ArenaOverride();
+    return CardArenas($this->CardID());
+  }
+
   function NumAttacks() {
     return $this->allies[$this->index+10];
   }

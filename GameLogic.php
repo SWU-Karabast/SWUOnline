@@ -567,6 +567,10 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $ally = new Ally($lastResult);
           $ally->Attach("2007868442");//Experience token
           break;
+        case "MOVEARENA":
+          $ally = new Ally($lastResult);
+          $ally->MoveArena($parameterArr[1]);
+          break;
         case "ADDSHIELD":
           $ally = new Ally($lastResult);
           $ally->Attach("8752877738");//Shield Token

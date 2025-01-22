@@ -1003,7 +1003,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         'overlay' => $theirAllies[$i + 1] != 2 ? 1 : 0,
         'cloned' => $theirAllies[$i + 13] == 1,
       );
-      $cardArena = CardArenas($theirAllies[$i]);
+      $cardArena = $ally->CurrentArena();
       //Their Unit Spacing
       if($cardArena == "Ground") $cardText = '<div id="unique-' . $theirAllies[$i+5] . '" class="cardContainer ' . ($theirAllies[$i + 1] != 2 ? 'exhausted' : '') . '">';
       else $cardText = '<div id="unique-' . $theirAllies[$i+5] . '" class="cardContainer ' . ($theirAllies[$i + 1] != 2 ? 'exhausted' : '') . '">';
@@ -1140,7 +1140,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         'overlay' => $myAllies[$i + 1] != 2 ? 1 : 0,
         'cloned' => $myAllies[$i + 13] == 1,
       );
-      $cardArena = CardArenas($myAllies[$i]);
+      $cardArena = $ally->CurrentArena();
       //My Unit Spacing
       if($cardArena == "Ground") $cardText = '<div id="unique-' . $myAllies[$i+5] . '" class="cardContainer ' . ($myAllies[$i + 1] != 2 ? 'exhausted' : '') . '">';
       else $cardText = '<div id="unique-' . $myAllies[$i+5] . '" class="cardContainer ' . ($myAllies[$i + 1] != 2 ? 'exhausted' : '') . '">';
