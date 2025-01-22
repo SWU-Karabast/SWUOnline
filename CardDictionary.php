@@ -236,7 +236,7 @@ function RaidAmount($cardID, $player, $index, $reportMode = false)
       case "1208707254"://Rallying Cry
         $amount += 2;
         break;
-      case "8719468890"://Sword and Shielf Maneuver
+      case "8719468890"://Sword and Shield Maneuver
         $amount += TraitContains($cardID, "Trooper", $player) ? 1 : 0;
         break;
       default: break;
@@ -246,6 +246,7 @@ function RaidAmount($cardID, $player, $index, $reportMode = false)
   for($i=0; $i<count($upgrades); ++$i)
   {
     if($upgrades[$i] == "2007876522") $amount += 2;//Clone Cohort
+    if($upgrades[$i] == "0587196584") $amount += 1;//Independent Smuggler
   }
   switch($cardID)
   {
@@ -277,6 +278,7 @@ function RaidAmount($cardID, $player, $index, $reportMode = false)
     case "0683052393": $amount += IsCoordinateActive($player) ? 2 : 0; break;//Hevy
     case "9964112400": $amount += 2; break;//Rush Clovis
     case "0249398533": $amount += 1; break;//Obedient Vanguard
+    case "0587196584": $amount += 1; break;//Independent Smuggler
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
@@ -2187,6 +2189,7 @@ function PilotingCost($cardID, $player = "") {
   $minCost = -1;
   switch($cardID) {
     case "3874382333": $minCost = 2; break;//Academy Graduate
+    case "0587196584": $minCost = 1; break;//Independent Smuggler
     default: break;
   }
   return $minCost;
