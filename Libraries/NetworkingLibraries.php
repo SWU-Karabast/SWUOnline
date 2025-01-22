@@ -1626,7 +1626,8 @@ function GetTargetsForAttack(Ally $attacker, bool $canAttackBase) {
   $allies = &GetAllies($defPlayer);
   for($i = 0; $i < count($allies); $i += AllyPieces()) {
     // Check if the target is in the same arena, except for Strafing Gunship, Swoop Down
-    if (CardArenas($attacker->CardID()) != CardArenas($allies[$i]) && $attacker->CardID() != "5464125379" && !SearchCurrentTurnEffects("4663781580", $mainPlayer)) {
+    $defAlly = new Ally("MYALLY-" . $i, $defPlayer);
+    if($attacker->CurrentArena() != $defAlly->CurrentArena() && $attacker->CardID() != "5464125379" && !SearchCurrentTurnEffects("4663781580", $mainPlayer)) {
       continue;
     }
 
@@ -1640,7 +1641,7 @@ function GetTargetsForAttack(Ally $attacker, bool $canAttackBase) {
     $targets .= "THEIRALLY-" . $i;
 
     // If the target is a sentinel, append it to the sentinel targets
-    if (HasSentinel($allies[$i], $defPlayer, $i) && CardArenas($attacker->CardID()) == CardArenas($allies[$i])) {
+    if (HasSentinel($allies[$i], $defPlayer, $i) && $attacker->CurrentArena() == $defAlly->CurrentArena()) {
       if ($sentinelTargets != "") $sentinelTargets .= ",";
       $sentinelTargets .= "THEIRALLY-" . $i;
     }
