@@ -186,6 +186,7 @@ function ModalAbilities($player, $card, $lastResult)
           AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to attack with");
           AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
           AddDecisionQueue("MZOP", $player, "READY", 1);
+          AddDecisionQueue("MZALLCARDTRAITORPASS", $player, "Wookiee", 1);
           AddDecisionQueue("MZOP", $player, "ADDEFFECT,7578472075", 1);
           AddDecisionQueue("MZOP", $player, "ATTACK", 1);
           break;
