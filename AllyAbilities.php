@@ -2206,6 +2206,9 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE," . $damage, 1);
       break;
+    case "7831643253"://Red Squadron Y-Wing
+      IndirectDamage($defPlayer, 3);
+      break;
     default: break;
   }
   //SpecificAllyAttackAbilities End
