@@ -27,7 +27,7 @@ function EffectHitEffect($cardID)
       break;
     case "5630404651-1"://MagnaGuard Wing Leader
       AddCurrentTurnEffectFromCombat("5630404651-2", $mainPlayer);
-      break;      
+      break;
     default:
       break;
   }
@@ -356,7 +356,7 @@ function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
             $costModifier -= 1;
             $remove = true;
             break;
-          case "8506660490"://Darth Vader
+          case "8506660490"://Darth Vader (Commanding the First Legion)
             $costModifier -= 99;
             $remove = true;
             break;

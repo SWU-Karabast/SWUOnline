@@ -198,7 +198,7 @@ function ExploitAmount($cardID, $player, $reportMode=true) {
     case "2565830105": $amount += 4; break;//Invastion of Christophsis
     case "2041344712": $amount += 3; break;//Osi Sobeck
     case "3381931079": $amount += 4; break;//Malevolence
-    case "3556557330": $amount += 2; break;//Asajj Ventress
+    case "3556557330": $amount += 2; break;//Asajj Ventress (Count Dooku's Assassin)
     case "3589814405": $amount += 2; break;//Tactical Droid Commander
     case "1167572655": $amount += 3; break;//Planetary Invasion
     default: break;
@@ -499,8 +499,8 @@ function HasOverwhelm($cardID, $player, $index)
   {
     switch($allies[$i])
     {
-      case "4484318969"://Moff Gideon Leader Unit
-        if(CardCost($cardID) <= 3 && IsAllyAttackTarget()) return !LeaderAbilitiesIgnored();
+      case "4484318969"://Moff Gideon Leader Unit //TODO: make a similar function for AttackerUID
+        if(CardCost($cardID) <= 3 && IsAllyAttackTarget() && AttackerMZID($mainPlayer) == "MYALLY-" . $index) return !LeaderAbilitiesIgnored();
         else break;
       case "40b649e6f6"://Maul Leader Unit
         if($index != $i) return !LeaderAbilitiesIgnored();
@@ -635,7 +635,7 @@ function HasAmbush($cardID, $player, $index, $from)
     case "1862616109"://Snowspeeder
     case "3684950815"://Bounty Hunter Crew
     case "9500514827"://Han Solo (Reluctant Hero)
-    case "8506660490"://Darth Vader unit
+    case "8506660490"://Darth Vader (Commanding the First Legion)
     case "1805986989"://Modded Cohort
     case "7171636330"://Chain Code Collector
     case "7982524453"://Fennec Shand
@@ -687,7 +687,7 @@ function HasShielded($cardID, $player, $index)
     case "9950828238"://Seventh Fleet Defender
     case "9459170449"://Cargo Juggernaut
     case "6931439330"://The Ghost
-    case "9624333142"://Count Dooku
+    case "9624333142"://Count Dooku (Darth Tyranus)
     case "3280523224"://Rukh
     case "7728042035"://Chimaera
     case "7870435409"://Bib Fortuna

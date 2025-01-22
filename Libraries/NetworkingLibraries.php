@@ -1119,6 +1119,14 @@ function CleanUpCombatEffects($weaponSwap=false)
   }
 }
 
+function LayersHaveTriggersToResolve() {
+  global $layers;
+  for($i=0;$i<count($layers);$i+=LayerPieces()) {
+    if($layers[$i] == "TRIGGER") return true;
+  }
+  return false;
+}
+
 function BeginRoundPass()
 {
   global $mainPlayer;
@@ -1672,7 +1680,7 @@ function Attack($attackerCardID)
 
   if (SearchCount($targets) > 1) {
     switch($attackerCardID) {
-      case "8613680163"://Darth Maul - Revenge At Last
+      case "8613680163"://Darth Maul (Revenge At Last)
         if(str_contains($targets, "THEIRCHAR-")) {
           AddDecisionQueue("PASSPARAMETER", $mainPlayer, $targets, 1);
           AddDecisionQueue("SETDQVAR", $mainPlayer, 0, 1);

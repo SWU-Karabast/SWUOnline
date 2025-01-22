@@ -2728,12 +2728,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "9568000754"://R2-D2
       PlayerOpt($currentPlayer, 1);
       break;
-    case "9624333142"://Count Dooku
+    case "9624333142"://Count Dooku (Darth Tyranus)
       if($from != "PLAY") {
         MZChooseAndDestroy($currentPlayer, "MYALLY:maxHealth=4&THEIRALLY:maxHealth=4", may:true, filter:"index=MYALLY-" . $playAlly->Index());
       }
       break;
-    case "9097316363"://Emperor Palpatine
+    case "9097316363"://Emperor Palpatine (Master of the Dark Side)
       if($from != "PLAY") {
         AddDecisionQueue("FINDINDICES", $currentPlayer, "ALLTHEIRUNITSMULTI");
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose units to damage", 1);
@@ -3713,7 +3713,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("SPECIFICCARD", $currentPlayer, "LTCHILDSEN", 1);
       }
       break;
-    case "8506660490"://Darth Vader Unit
+    case "8506660490"://Darth Vader (Commanding the First Legion)
       if($from != "PLAY") {
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose any number of units with combined cost 3 or less.");
         AddDecisionQueue("SEARCHDECKTOPX", $currentPlayer, "10;99;include-definedType-Unit&include-maxCost-3&include-aspect-Villainy");
