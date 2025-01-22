@@ -254,7 +254,7 @@ function NameBasedHealthModifiers($cardID, $index, $player, $stackingBuff = fals
   for($i=count($allies)-AllyPieces(); $i>=0; $i-=AllyPieces()) {
     if($foundBuff && !$stackingBuff) break;
     switch($allies[$i]) {
-      case "9097316363"://Emperor Palpatine (Red Unit)
+      case "9097316363"://Emperor Palpatine (Master of the Dark Side)
       case "6c5b96c7ef"://Emperor Palpatine (Deployed Leader Unit)
         if($cardID == "1780978508") { //Emperor's Royal Guard
           $foundBuff = true;
@@ -2073,7 +2073,7 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "fb7af4616c,HAND", 1);
       break;
-    case "3556557330"://Asajj Ventress
+    case "3556557330"://Asajj Ventress (Count Dooku's Assassin)
       if(AnotherSeparatistUnitHasAttacked($attackerAlly->UniqueID(), $mainPlayer)) {
         AddDecisionQueue("PASSPARAMETER", $mainPlayer, $attackerAlly->UniqueID(), 1);
         AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "3556557330,PLAY", 1);

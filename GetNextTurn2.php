@@ -479,7 +479,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
           $content .= "<div class='tile' style='max-width:{$cardSize}px;'>" . Card($cardId, "concat", $cardSize, 0, 1, 0, $layerColor, $counters, controller: $layerController);
 
           // Add reorder buttons for ability layers if applicable
-          if (IsAbilityLayer($layers[$i]) && $dqState[8] >= $i && $playerID == $mainPlayer) {
+          if (IsAbilityLayer($layers[$i]) && ($dqState[8] >= $i || LayersHaveTriggersToResolve()) && $playerID == $mainPlayer) {
               if ($i < $dqState[8]) {
                   $content .= "<span class='reorder-button'>" . CreateButton($playerID, ">", 31, $i, "18px", useInput:true) . "</span>";
               }
@@ -828,7 +828,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.5) 70%);
       }
     </style>";
-    
+
     $content .= "<div class='card-container'>";
     for ($i = 0; $i < count($options); ++$i) {
       $submitLink = ProcessInputLink($playerID, 36, $i, "onclick");

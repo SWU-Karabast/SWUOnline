@@ -318,6 +318,13 @@ function CardIDOverride($cardID) {
     case "TWI_174": return "SOR_172"; //Open Fire
     case "TWI_226": return "SOR_222"; //Waylay
     case "TWI_254": return "SOR_248"; //Volunteer Soldier
+    case "C24_001": return "SOR_038"; //Count Dooku (Darth Tyranus)
+    case "C24_002": return "SOR_087"; //Darth Vader (Commanding the First Legion)
+    case "C24_003": return "SOR_135"; //Emperor Palpatine (Master of the Dark Side)
+    case "C24_004": return "SHD_141"; //Kylo Ren (Killing the Past)
+    case "C24_005": return "TWI_134"; //Asajj Ventress (Count Dooku's Assassin)
+    case "C24_006": return "TWI_135"; //Darth Maul (Revenge at Last)
+
     default: return $cardID;
   }
 }
@@ -326,6 +333,19 @@ function CardUUIDOverride($cardID)
 {
   switch ($cardID) {
     case "1706333706": return "8380936981";//Jabba's Rancor
+    //TODO: left here just in case we need these IDs
+    //case "1401885853"://con exclusive 2024 Count Dooku (Darth Tyranus)
+      //return "9624333142";
+    //case "8292269690"://con exclusive 2024 Darth Vader (Commanding the First Legion)
+      //return "8506660490";
+    //case "9954244145"://con exclusive 2024 Emperor Palpatine (Master of the Dark Side)
+      //return "9097316363";
+    //case "3038397952"://con exclusive 2024 Kylo Ren (Killing the Past)
+      //return "6263178121";
+    //case "7315203824"://con exclusive 2024 Asajj Ventress (Count Dooku's Assassin)
+      //return "3556557330";
+    //case "5866567543"://con exclusive 2024 Darth Maul (Revenge at Last)
+      //return "8613680163";
     default: return $cardID;
   }
 }
