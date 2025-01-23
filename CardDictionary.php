@@ -2226,6 +2226,7 @@ function PilotingCost($cardID, $player = "") {
   switch($cardID) {
     case "3874382333": $minCost = 2; break;//Academy Graduate
     case "0587196584": $minCost = 1; break;//Independent Smuggler
+    case "7420426716": $minCost = 1; break;//Dagger Squadron Pilot
     default: break;
   }
   return $minCost;
