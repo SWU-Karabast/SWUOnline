@@ -5769,6 +5769,21 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, "ADDEXPERIENCE", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "MOVEARENA,Ground", 1);
       break;
+    case "4179470615"://Asajj Ventress
+      $abilityName = GetResolvedAbilityName($cardID, $from);
+      if($abilityName == "Damage") {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY", 1);
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a friendly unit to damage", 1);
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1", 1);
+        AddDecisionQueue("SETDQVAR", $currentPlayer, "1", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "GETARENA", 1);
+        AddDecisionQueue("SETDQVAR", $currentPlayer, "2", 1);
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:arena={2}", 1);
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an opposing unit to damage", 1);
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1", 1);
+      }
     //PlayAbility End
     default: break;
   }

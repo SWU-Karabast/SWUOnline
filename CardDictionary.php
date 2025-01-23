@@ -1138,6 +1138,10 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
     case "8709191884"://Hunter (Outcast Sergeant)
       $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
       break;
+    //Jump to Lightspeed
+     case "4179470615"://Asajj Ventress
+      $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
+      break;
     default: break;
   }
   if(IsAlly($cardID, $currentPlayer)) {
@@ -1412,6 +1416,10 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
     case "8709191884"://Hunter (Outcast Sergeant)
       $abilityNames = LeaderAbilitiesIgnored() ? "" : "Replace Resource";
       break;
+    //Jump to Lightspeed
+    case "4179470615"://Asajj Ventress
+      $abilityNames = LeaderAbilitiesIgnored() ? "" : "Damage";
+      break;
     default: break;
   }
   if(IsAlly($cardID, $currentPlayer)) {
@@ -1449,6 +1457,9 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       if($char[CharacterPieces()] != "0026166404" && $char[CharacterPieces()] != "ad86d54e97") {
         if($abilityNames != "") $abilityNames .= ",";
         $abilityNames .= "Deploy";
+        if(LeaderCanPilot($char[CharacterPieces()])) {
+          $abilityNames .= ",Pilot";
+        }
       }
     }
   }
@@ -1803,6 +1814,9 @@ function LeaderUnit($cardID) {
       return "fb7af4616c";
     case "2870878795"://Padme Amidala
       return "4ae6d91ddc";
+    //Jump to Lightspeed
+    case "4179470615"://Asajj Ventress
+      return "3f0b5622a7";
     default: return "";
   }
 }
@@ -1918,7 +1932,18 @@ function LeaderUndeployed($cardID) {
       return "2872203891";
     case "4ae6d91ddc"://Padme Amidala
       return "2870878795";
+    //Jump to Lightspeed
+    case "3f0b5622a7"://Asajj Ventress
+      return "4179470615";
     default: return "";
+  }
+}
+
+function LeaderCanPilot($cardID) {
+  switch($cardID) {
+    case "4179470615"://Asajj Ventress
+      return true;
+    default: return false;
   }
 }
 
