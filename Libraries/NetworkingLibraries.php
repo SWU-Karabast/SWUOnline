@@ -1028,7 +1028,7 @@ function FinalizeChainLink($chainClosed = false)
 {
   global $turn, $actionPoints, $combatChain, $mainPlayer, $currentTurnEffects, $currentPlayer, $combatChainState, $actionPoints, $CCS_DamageDealt;
   global $mainClassState, $CS_AtksWWeapon, $CCS_GoesWhereAfterLinkResolves, $CS_LastAttack, $CCS_LinkTotalAttack, $CS_NumSwordAttacks, $chainLinks, $chainLinkSummary;
-  global $CS_AnotherWeaponGainedGoAgain, $CCS_HitThisLink, $initiativeTaken;
+  global $CS_AnotherWeaponGainedGoAgain, $CCS_HitThisLink, $initiativeTaken, $CS_PlayedAsUpgrade;
   $chainClosed = true;
   UpdateGameState($currentPlayer);
   BuildMainPlayerGameState();
@@ -1041,6 +1041,7 @@ function FinalizeChainLink($chainClosed = false)
     $cardType = CardType($combatChain[$i - 1]);
     if ($cardType != "W" || $cardType != "E" || $cardType != "C") {
       $params = explode(",", GoesWhereAfterResolving($combatChain[$i - 1], "COMBATCHAIN", $combatChain[$i]));
+      SetClassState($currentPlayer, $CS_PlayedAsUpgrade, 0);
       $goesWhere = $params[0];
       $modifier = (count($params) > 1 ? $params[1] : "NA");
       if ($i == 1 && $combatChainState[$CCS_GoesWhereAfterLinkResolves] != "GY") {

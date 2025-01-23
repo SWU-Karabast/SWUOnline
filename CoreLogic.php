@@ -1953,6 +1953,10 @@ function SelfCostModifier($cardID, $from, $reportMode=false)
     case "2443835595"://Republic Attack Pod
       if(SearchCount(SearchAllies($currentPlayer)) >= 3) $modifier -= 1;
       break;
+    case "1356826899"://Home One
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      if(SearchCount(SearchAllies($otherPlayer, arena:"Space")) >= 3) $modifier -= 3;
+      break;
     default: break;
   }
   //Target cost modifier
@@ -2258,8 +2262,7 @@ function IsClassBonusActive($player, $class)
 
 function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalCosts = "-", $theirCard = false, $uniqueId = "")
 {
-  global $currentPlayer, $layers, $CS_PlayIndex, $CS_OppIndex, $initiativePlayer, $CCS_CantAttackBase, $CS_NumAlliesDestroyed, $CS_PlayedAsUpgrade;
-  SetClassState($currentPlayer, $CS_PlayedAsUpgrade, 0);//Unset this so it doesn't try to make the next pilot an upgrade
+  global $currentPlayer, $layers, $CS_PlayIndex, $CS_OppIndex, $initiativePlayer, $CCS_CantAttackBase, $CS_NumAlliesDestroyed;
   $index = GetClassState($currentPlayer, $CS_PlayIndex);
 
   if($from == "PLAY" && IsAlly($cardID, $currentPlayer)) {
