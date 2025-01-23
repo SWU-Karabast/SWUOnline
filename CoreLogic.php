@@ -5787,6 +5787,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AsajjVentressIWorkAlone($currentPlayer);
       }
       break;
+    case "0926549684"://Resupply Carrier
+      AddTopDeckAsResource($currentPlayer);
+      break;
     //PlayAbility End
     default: break;
   }
