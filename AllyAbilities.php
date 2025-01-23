@@ -2243,6 +2243,15 @@ function SpecificAllyAttackAbilities($attackID)
     case "3504944818"://Tie Bomber
       IndirectDamage($defPlayer, 3);
       break;
+    case "1990020761"://Shuttle Tidirium
+      $card = Mill($mainPlayer, 1);
+      if(CardCost($card) % 2 == 1) {
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to give an experience");
+        AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "ADDEXPERIENCE", 1);
+      }
+      break;
     default: break;
   }
   //SpecificAllyAttackAbilities End
