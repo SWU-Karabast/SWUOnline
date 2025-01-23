@@ -912,7 +912,7 @@ function SearchMultizone($player, $searches)
             $hasUpgradeOnly = $condition[1];
             break;
           case "trait":
-            $trait = $condition[1];
+            $trait = str_replace("_", " ", $condition[1]);
             break;
           case "keyword":
             $keyword = $condition[1];

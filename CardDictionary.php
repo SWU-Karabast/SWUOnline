@@ -1149,6 +1149,9 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
      case "4179470615"://Asajj Ventress
       $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
       break;
+    case "4030832630"://Admiral Piett
+      $abilityTypes = LeaderAbilitiesIgnored() ? "" : "A";
+      break;
     default: break;
   }
   if(IsAlly($cardID, $currentPlayer)) {
@@ -1429,6 +1432,9 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
     //Jump to Lightspeed
     case "4179470615"://Asajj Ventress
       $abilityNames = LeaderAbilitiesIgnored() ? "" : "Damage";
+      break;
+    case "4030832630"://Admiral Piett
+      $abilityNames = LeaderAbilitiesIgnored() ? "" : "Play";
       break;
     default: break;
   }
@@ -1827,6 +1833,8 @@ function LeaderUnit($cardID) {
     //Jump to Lightspeed
     case "4179470615"://Asajj Ventress
       return "3f0b5622a7";
+    case "4030832630"://Admiral Piett
+      return "649c6a9dbd";
     default: return "";
   }
 }
@@ -1945,6 +1953,8 @@ function LeaderUndeployed($cardID) {
     //Jump to Lightspeed
     case "3f0b5622a7"://Asajj Ventress
       return "4179470615";
+    case "649c6a9dbd"://Admiral Piett
+      return "4030832630";
     default: return "";
   }
 }

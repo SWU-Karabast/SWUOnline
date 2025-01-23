@@ -1989,6 +1989,9 @@ function SelfCostModifier($cardID, $from, $reportMode=false)
       case "5035052619"://Jabba the Hutt
         if(DefinedTypesContains($cardID, "Event", $currentPlayer) && TraitContains($cardID, "Trick", $currentPlayer)) $modifier -= 1;
         break;
+      case "649c6a9dbd"://Jabba the Hutt
+        if(TraitContains($cardID, "Capital Ship", $currentPlayer)) $modifier -= 2;
+        break;
       default: break;
     }
   }
@@ -5813,6 +5816,15 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal $damageAmount damage to");
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,$damageAmount,$currentPlayer,1", 1);
+      break;
+    case "4030832630"://Admiral Piett
+      if(GetResolvedAbilityName($cardID) == "Play") {
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to play");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND:trait=Capital_Ship");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, $cardID, 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
+      }
       break;
     //PlayAbility End
     default: break;
