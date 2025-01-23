@@ -5790,6 +5790,27 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "0926549684"://Resupply Carrier
       AddTopDeckAsResource($currentPlayer);
       break;
+    case "8833191722"://Never Tell Me the Odds
+      $damageAmount = 0;
+      $cards = Mill(1, 3);
+      if($cards != "") {
+        $cards = explode(",", $cards);
+        for($i=0; $i<count($cards); ++$i) {
+          if(CardCost($cards[$i]) % 2 == 1) ++$damageAmount;
+        }
+      }
+      $cards = Mill(2, 3);
+      if($cards != "") {
+        $cards = explode(",", $cards);
+        for($i=0; $i<count($cards); ++$i) {
+          if(CardCost($cards[$i]) % 2 == 1) ++$damageAmount;
+        }
+      }
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal $damageAmount damage to");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,$damageAmount,$currentPlayer,1", 1);
+      break;
     //PlayAbility End
     default: break;
   }
