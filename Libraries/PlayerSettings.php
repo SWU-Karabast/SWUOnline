@@ -298,14 +298,18 @@ function GetSettingsUI($player)
   $rv .= CreateRadioButton($SET_Cardback . "-" . 12, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "RVA SWU");
   $rv .= CreateRadioButton($SET_Cardback . "-" . 13, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Baddest Batch");
 
-  foreach(PatreonCampaign::cases() as $campaign) {
-    if(isset($_SESSION[$campaign->SessionID()]) || (isset($_SESSION["useruid"]) && $campaign->IsTeamMember($_SESSION["useruid"]))) {
-      $hasCardBacks = true;
-      $cardBacks = $campaign->CardBacks();
-      $cardBacks = explode(",", $cardBacks);
-      for($i = 0; $i < count($cardBacks); ++$i) {
-        $name = $campaign->CampaignName() . (count($cardBacks) > 1 ? " " . $i + 1 : "");
-        $rv .= CreateRadioButton($SET_Cardback . "-" . $cardBacks[$i], str_replace(' ', '', $name), 26, $SET_Cardback . "-" . $settings[$SET_Cardback], $name);
+  $stage = getenv('STAGE') ?: 'prod';
+  $isDev = $stage === 'dev';
+  if(!$isDev) {
+    foreach(PatreonCampaign::cases() as $campaign) {
+      if(isset($_SESSION[$campaign->SessionID()]) || (isset($_SESSION["useruid"]) && $campaign->IsTeamMember($_SESSION["useruid"]))) {
+        $hasCardBacks = true;
+        $cardBacks = $campaign->CardBacks();
+        $cardBacks = explode(",", $cardBacks);
+        for($i = 0; $i < count($cardBacks); ++$i) {
+          $name = $campaign->CampaignName() . (count($cardBacks) > 1 ? " " . $i + 1 : "");
+          $rv .= CreateRadioButton($SET_Cardback . "-" . $cardBacks[$i], str_replace(' ', '', $name), 26, $SET_Cardback . "-" . $settings[$SET_Cardback], $name);
+        }
       }
     }
   }
@@ -330,11 +334,11 @@ function GetSettingsUI($player)
   if($settings[$SET_MuteChat] == 0) $rv .= CreateCheckbox($SET_MuteChat . "-1", "Disable Chat", 26, false, "Disable Chat", true);
   else $rv .= CreateCheckbox($SET_MuteChat . "-0", "Disable Chat", 26, true, "Disable Chat", true);
   $rv .= "<BR>";
-  
+
   if($settings[$SET_DisableStats] == 0) $rv .= CreateCheckbox($SET_DisableStats . "-1", "Disable Stats", 26, false, "Disable Stats", true);
   else $rv .= CreateCheckbox($SET_DisableStats . "-0", "Disable Stats", 26, true, "Disable Stats", true);
   $rv .= "<BR>";
-  
+
   if($settings[$SET_DisableAnimations] == 0) $rv .= CreateCheckbox($SET_DisableAnimations . "-1", "Disable Animations", 26, false, "Disable Animations", true);
   else $rv .= CreateCheckbox($SET_DisableAnimations . "-0", "Disable Animations", 26, true, "Disable Animations", true);
   $rv .= "<BR>";
