@@ -2258,7 +2258,8 @@ function IsClassBonusActive($player, $class)
 
 function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalCosts = "-", $theirCard = false, $uniqueId = "")
 {
-  global $currentPlayer, $layers, $CS_PlayIndex, $CS_OppIndex, $initiativePlayer, $CCS_CantAttackBase, $CS_NumAlliesDestroyed;
+  global $currentPlayer, $layers, $CS_PlayIndex, $CS_OppIndex, $initiativePlayer, $CCS_CantAttackBase, $CS_NumAlliesDestroyed, $CS_PlayedAsUpgrade;
+  SetClassState($currentPlayer, $CS_PlayedAsUpgrade, 0);//Unset this so it doesn't try to make the next pilot an upgrade
   $index = GetClassState($currentPlayer, $CS_PlayIndex);
 
   if($from == "PLAY" && IsAlly($cardID, $currentPlayer)) {
@@ -2321,7 +2322,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         }
         PlayAbility(LeaderUnit($cardID), "CHAR", 0, "-", "-", false, $uniqueId);
       } else if($abilityName == "Pilot") {
-        
+
       }
       //On Deploy ability / When Deployed ability
       if(!LeaderAbilitiesIgnored()) {
