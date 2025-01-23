@@ -1569,7 +1569,7 @@ function AddPrePitchDecisionQueue($cardID, $from, $index = -1, $skipAbilityType 
       AddDecisionQueue("MZOP", $currentPlayer, "EXPLOIT", 1);
     }
     $pilotCost = PilotingCost($cardID, $currentPlayer);
-    if($pilotCost > 0) {
+    if($pilotCost >= 0) {
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose if you want to play this unit as a pilot?");
       AddDecisionQueue("YESNO", $currentPlayer, "if you want to play this unit as a pilot");
       AddDecisionQueue("NOPASS", $currentPlayer, "-");

@@ -1598,7 +1598,7 @@ function GoesWhereAfterResolving($cardID, $from = null, $player = "", $playedFro
 
 function UpgradeFilter($cardID)
 {
-  if(PilotingCost($cardID) > 0) return "trait!=Vehicle";
+  if(PilotingCost($cardID) >= 0) return "trait!=Vehicle";
   switch($cardID) {
     case "0160548661"://Fallen Lightsaber
     case "8495694166"://Jedi Lightsaber

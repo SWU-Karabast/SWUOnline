@@ -173,6 +173,13 @@ function AttackModifier($cardID, $player, $index)
       $otherPlayer = $player == 1 ? 2 : 1;
       if(GetClassState($otherPlayer, $CS_NumAlliesDestroyed) > 0) $modifier += 1;
       break;
+    case "8845408332"://Millennium Falcon
+      $ally = new Ally("MYALLY-" . $index, $player);
+      $upgrades = $ally->GetUpgrades();
+      for($i = 0; $i < count($upgrades); ++$i) {
+        if(TraitContains($upgrades[$i], "Pilot", $player)) $modifier += 1;
+      }
+      break;
     default: break;
   }
 
