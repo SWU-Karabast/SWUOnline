@@ -10,6 +10,8 @@
   $costTrie = [];
   $hpTrie = [];
   $powerTrie = [];
+  $upgradeHPTrie = [];
+  $upgradePowerTrie = [];
   $aspectsTrie = [];
   $traitsTrie = [];
   $arenasTrie = [];
@@ -101,6 +103,8 @@
   GenerateFunction($costTrie, $handler, "CardCost", false, -1);
   GenerateFunction($hpTrie, $handler, "CardHPDictionary", false, -1);
   GenerateFunction($powerTrie, $handler, "CardPower", false, -1);
+  GenerateFunction($upgradeHPTrie, $handler, "CardUpgradeHPDictionary", false, -1);
+  GenerateFunction($upgradePowerTrie, $handler, "CardUpgradePower", false, -1);
   GenerateFunction($aspectsTrie, $handler, "CardAspects", true, "");
   GenerateFunction($traitsTrie, $handler, "CardTraits", true, "");
   GenerateFunction($arenasTrie, $handler, "CardArenas", true, "");
@@ -133,7 +137,7 @@
 
   function AddToTries($cardID, $uuid)
   {
-    global $uuidLookupTrie, $titleTrie, $subtitleTrie, $costTrie, $hpTrie, $powerTrie, $typeTrie, $type2Trie, $uniqueTrie, $card;
+    global $uuidLookupTrie, $titleTrie, $subtitleTrie, $costTrie, $hpTrie, $powerTrie, $upgradeHPTrie, $upgradePowerTrie, $typeTrie, $type2Trie, $uniqueTrie, $card;
     global $aspectsTrie, $traitsTrie, $arenasTrie, $hasPlayTrie, $hasDestroyedTrie, $setTrie, $cardIDTrie;
     if($uuid != "8752877738" && $uuid != "2007868442") {
       AddToTrie($uuidLookupTrie, $cardID, 0, $uuid);
@@ -147,6 +151,8 @@
     AddToTrie($typeTrie, $uuid, 0, $definedType);
     AddToTrie($hpTrie, $uuid, 0, $definedType == "Upgrade" ? $card->upgradeHp : $card->hp);
     AddToTrie($powerTrie, $uuid, 0, $definedType == "Upgrade" ? $card->upgradePower : $card->power);
+    AddToTrie($upgradeHPTrie, $uuid, 0, $card->upgradeHp);
+    AddToTrie($upgradePowerTrie, $uuid, 0, $card->upgradePower);
     AddToTrie($setTrie, $uuid, 0, $card->expansion->data->attributes->code);
     AddToTrie($cardIDTrie, $uuid, 0, $cardID);
     if($card->type2->data != null) {
