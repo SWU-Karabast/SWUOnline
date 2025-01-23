@@ -416,6 +416,11 @@ function HasGrit($cardID, $player, $index)
       }
     }
   }
+  $upgrades = $ally->GetUpgrades();
+  for($i=0; $i<count($upgrades); ++$i)
+  {
+    if($upgrades[$i] == "3f0b5622a7") return true;//Asajj Leader Unit
+  }
   for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnPieces()) {
     if($currentTurnEffects[$i+1] != $player) continue;
     if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
@@ -446,6 +451,7 @@ function HasGrit($cardID, $player, $index)
     case "8552292852"://Kashyyyk Defender
     case "6787851182"://Dwarf Spider Droid
     case "2761325938"://Devastating Gunship
+    case "3f0b5622a7"://Asajj Leader Unit
       return true;
     case "9832122703"://Luminara Unduli
       return IsCoordinateActive($player);
