@@ -2322,7 +2322,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         }
         PlayAbility(LeaderUnit($cardID), "CHAR", 0, "-", "-", false, $uniqueId);
       } else if($abilityName == "Pilot") {
-
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, $cardID);
+        AddDecisionQueue("SETDQVAR", $currentPlayer, "0");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Vehicle");
+        AddDecisionQueue("PASSREVERT", $currentPlayer, "-");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to attach <0>");
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("SHOWSELECTEDTARGET", $currentPlayer, "-", 1);
+        AddDecisionQueue("DEPLOYLEADERASUPGRADE", $currentPlayer, $cardID, 1);
       }
       //On Deploy ability / When Deployed ability
       if(!LeaderAbilitiesIgnored()) {

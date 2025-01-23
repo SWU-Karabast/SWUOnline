@@ -4,6 +4,7 @@ include "Search.php";
 include "CardLogic.php";
 include "AuraAbilities.php";
 include "ItemAbilities.php";
+include "LeaderAbilities.php";
 include "AllyAbilities.php";
 include "PermanentAbilities.php";
 include "CharacterAbilities.php";
@@ -1584,7 +1585,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $ability = implode(" ", explode("_", $names[$index]));
       WriteLog("<b><span style='color:Gray'>{$ability}</span></b> ability was chosen.");
       return $lastResult;
-      case "SETABILITYTYPEOPP"://For activating opponent's cards
+    case "SETABILITYTYPEOPP"://For activating opponent's cards
         global $CS_OppIndex, $CS_OppCardActive;
         $lastPlayed[2] = $lastResult;
         $otherPlayer = ($player == 1 ? 2 : 1);
@@ -1817,6 +1818,9 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       return $lastResult;
     case "GETLAYERTARGET":
       GetLayerTarget($parameter);
+      return $lastResult;
+    case "DEPLOYLEADERASUPGRADE":
+      LeaderPilotDeploy($player, $parameter, $lastResult);
       return $lastResult;
     default:
       return "NOTSTATIC";
