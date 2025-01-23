@@ -790,6 +790,10 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities,
       case "1164297413"://Onyx Squadron Brute
         Restore(2, $player);
         break;
+      case "6861397107"://First Order Stormtrooper
+        $otherPlayer = $player == 1 ? 2 : 1;
+        IndirectDamage($otherPlayer, 1);
+        break;
       default: break;
     }
 
@@ -2223,6 +2227,9 @@ function SpecificAllyAttackAbilities($attackID)
       break;
     case "7831643253"://Red Squadron Y-Wing
       IndirectDamage($defPlayer, 3);
+      break;
+    case "6861397107"://First Order Stormtrooper
+      IndirectDamage($defPlayer, 1);
       break;
     default: break;
   }
