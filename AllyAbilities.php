@@ -798,6 +798,10 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities,
         $otherPlayer = $player == 1 ? 2 : 1;
         IndirectDamage($otherPlayer, 3);
         break;
+      case "7389195577"://Zyggerian Starhopper
+        $otherPlayer = $player == 1 ? 2 : 1;
+        IndirectDamage($otherPlayer, 2);
+        break;
       //AllyDestroyedAbility End
       default: break;
     }
