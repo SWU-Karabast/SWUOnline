@@ -2236,6 +2236,9 @@ function SpecificAllyAttackAbilities($attackID)
     case "6861397107"://First Order Stormtrooper
       IndirectDamage($defPlayer, 1);
       break;
+    case "3504944818"://Tie Bomber
+      IndirectDamage($defPlayer, 3);
+      break;
     default: break;
   }
   //SpecificAllyAttackAbilities End
