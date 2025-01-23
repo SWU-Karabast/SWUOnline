@@ -794,6 +794,11 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities,
         $otherPlayer = $player == 1 ? 2 : 1;
         IndirectDamage($otherPlayer, 1);
         break;
+      case "8287246260"://Droid Missile Platform
+        $otherPlayer = $player == 1 ? 2 : 1;
+        IndirectDamage($otherPlayer, 3);
+        break;
+      //AllyDestroyedAbility End
       default: break;
     }
 
