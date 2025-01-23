@@ -114,7 +114,9 @@ class Ally {
     // Upgrades buffs
     for($i=0; $i<count($upgrades); ++$i) {
       if ($upgrades[$i] != "-") {
-        $max += CardHP($upgrades[$i]);
+        $upgradeHP = CardUpgradeHPDictionary($upgrades[$i]);
+        if($upgradeHP != -1) $max += $upgradeHP;
+        else $max += CardHP($upgrades[$i]);
       }
 
       switch ($upgrades[$i]) {
@@ -302,7 +304,9 @@ class Ally {
     // Upgrades buffs
     for ($i=0; $i<count($upgrades); ++$i) {
       if ($upgrades[$i] != "-") {
-        $power += AttackValue($upgrades[$i]);
+        $upgradePower = CardUpgradePower($upgrades[$i]);
+        if($upgradePower != -1) $power += $upgradePower;
+        else $power += AttackValue($upgrades[$i]);
       }
 
       switch ($upgrades[$i]) {
