@@ -2307,18 +2307,22 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
   }
   if($from == "EQUIP" && DefinedTypesContains($cardID, "Leader", $currentPlayer)) {
     $abilityName = GetResolvedAbilityName($cardID, $from);
-    if($abilityName == "Deploy" || $abilityName == "") {
+    if($abilityName == "Deploy" || $abilityName == "Pilot" || $abilityName == "") {
       if(NumResources($currentPlayer) < CardCost($cardID)) {
         WriteLog("You don't control enough resources to deploy that leader; reverting the game state.");
         RevertGamestate();
         return "";
       }
-      $playIndex = PlayAlly(LeaderUnit($cardID), $currentPlayer);
-      if(HasShielded(LeaderUnit($cardID), $currentPlayer, $playIndex)) {
-        $allies = &GetAllies($currentPlayer);
-        AddLayer("TRIGGER", $currentPlayer, "SHIELDED", "-", "-", $allies[$playIndex + 5]);
+      if($abilityName == "Deploy" || $abilityName == "") {
+        $playIndex = PlayAlly(LeaderUnit($cardID), $currentPlayer);
+        if(HasShielded(LeaderUnit($cardID), $currentPlayer, $playIndex)) {
+          $allies = &GetAllies($currentPlayer);
+          AddLayer("TRIGGER", $currentPlayer, "SHIELDED", "-", "-", $allies[$playIndex + 5]);
+        }
+        PlayAbility(LeaderUnit($cardID), "CHAR", 0, "-", "-", false, $uniqueId);
+      } else if($abilityName == "Pilot") {
+        
       }
-      PlayAbility(LeaderUnit($cardID), "CHAR", 0, "-", "-", false, $uniqueId);
       //On Deploy ability / When Deployed ability
       if(!LeaderAbilitiesIgnored()) {
         switch($cardID) {

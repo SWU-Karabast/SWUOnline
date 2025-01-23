@@ -1180,6 +1180,9 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
       if($char[CharacterPieces()] != "0026166404" && $char[CharacterPieces()] != "ad86d54e97") {
         if($abilityTypes != "") $abilityTypes .= ",";
         $abilityTypes .= "A";
+        if(LeaderCanPilot($char[CharacterPieces()])) {
+          $abilityTypes .= ",A";
+        }
       }
     }
   }
