@@ -1502,6 +1502,9 @@ function SpecificAllyAttackAbilities($attackID)
           if(TraitContains($ally->CardID(), "Mandalorian", $mainPlayer, $j)) $ally->Attach("2007868442");//Experience token
         }
         break;
+      case "3f0b5622a7"://Asajj Leader Unit
+        AsajjVentressIWorkAlone($mainPlayer);
+        break;
       case "1938453783"://Armed to the Teeth
         //Adapted from Benthic Two-Tubes
         AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");

@@ -5784,18 +5784,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "4179470615"://Asajj Ventress
       $abilityName = GetResolvedAbilityName($cardID, $from);
       if($abilityName == "Damage") {
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY", 1);
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a friendly unit to damage", 1);
-        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1", 1);
-        AddDecisionQueue("SETDQVAR", $currentPlayer, "1", 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "GETARENA", 1);
-        AddDecisionQueue("SETDQVAR", $currentPlayer, "2", 1);
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:arena={2}", 1);
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an opposing unit to damage", 1);
-        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1", 1);
+        AsajjVentressIWorkAlone($currentPlayer);
       }
+      break;
     //PlayAbility End
     default: break;
   }
