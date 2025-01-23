@@ -781,6 +781,12 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities,
       case "0235116526"://Fleet Interdictor
         MZChooseAndDestroy($player, "MYALLY:maxCost=3;arena=Space&THEIRALLY:maxCost=3;arena=Space");
         break;
+      case "0596500013"://Landing Shuttle
+        AddDecisionQueue("SETDQCONTEXT", $player, "Do you want to draw a card?");
+        AddDecisionQueue("YESNO", $player, "-");
+        AddDecisionQueue("NOPASS", $player, "-");
+        AddDecisionQueue("DRAW", $player, "-", 1);
+        break;
       default: break;
     }
 
