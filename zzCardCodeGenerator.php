@@ -151,8 +151,8 @@
     AddToTrie($typeTrie, $uuid, 0, $definedType);
     AddToTrie($hpTrie, $uuid, 0, $definedType == "Upgrade" ? $card->upgradeHp : $card->hp);
     AddToTrie($powerTrie, $uuid, 0, $definedType == "Upgrade" ? $card->upgradePower : $card->power);
-    AddToTrie($upgradeHPTrie, $uuid, 0, $card->upgradeHp);
-    AddToTrie($upgradePowerTrie, $uuid, 0, $card->upgradePower);
+    AddToTrie($upgradeHPTrie, $uuid, 0, $card->upgradeHp == null ? -1 : $card->upgradeHp);
+    AddToTrie($upgradePowerTrie, $uuid, 0, $card->upgradePower == null ? -1 : $card->upgradePower);
     AddToTrie($setTrie, $uuid, 0, $card->expansion->data->attributes->code);
     AddToTrie($cardIDTrie, $uuid, 0, $cardID);
     if($card->type2->data != null) {
