@@ -631,6 +631,8 @@ class Ally {
     return $mainPlayer != $this->playerID
       && !$this->LostAbilities()
       && ($this->CardID() == "1810342362"//Lurking TIE Phantom
+        || $this->CardID() == "7208848194"//Chewbacca
+        || $this->HasUpgrade("7208848194")//Chewbacca
         || $this->HasUpgrade("9003830954"))//Shadowed Intentions
     ;
   }
@@ -654,7 +656,9 @@ class Ally {
     global $mainPlayer;
     return $mainPlayer != $this->playerID
       && !$this->LostAbilities()
-      && $this->HasUpgrade("9003830954")//Shadowed Intentions
+      && ($this->HasUpgrade("9003830954")//Shadowed Intentions
+      || $this->CardID() == "7208848194"//Chewbacca
+      || $this->HasUpgrade("7208848194"))//Chewbacca
     ;
   }
 }

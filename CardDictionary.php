@@ -2239,6 +2239,7 @@ function PilotingCost($cardID, $player = "") {
     case "0587196584": $minCost = 1; break;//Independent Smuggler
     case "7420426716": $minCost = 1; break;//Dagger Squadron Pilot
     case "5375722883": $minCost = 0; break;//R2-D2
+    case "7208848194": $minCost = 3; break;//Chewbacca
     default: break;
   }
   return $minCost;
