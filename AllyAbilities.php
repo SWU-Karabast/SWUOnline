@@ -787,6 +787,9 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities,
         AddDecisionQueue("NOPASS", $player, "-");
         AddDecisionQueue("DRAW", $player, "-", 1);
         break;
+      case "1164297413"://Onyx Squadron Brute
+        Restore(2, $player);
+        break;
       default: break;
     }
 
