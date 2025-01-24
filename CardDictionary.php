@@ -1074,64 +1074,44 @@ function CheckSHDAbilityTypes($cardID) {
       return LeaderAbilitiesIgnored() ? "" : "A";
     case "6722700037"://Doctor Pershing
       return "A,AA";
-      break;
     case "6536128825"://Grogu
       return "A,AA";
-      break;
     case "1090660242"://The Client
       return "A,AA";
-      break;
     case "1885628519"://Crosshair
       return "A,A,AA";
-      break;
     case "2503039837"://Moff Gideon
       return LeaderAbilitiesIgnored() ? "" : "A";
-      break;
     case "2526288781"://Bossk
       return LeaderAbilitiesIgnored() ? "" : "A";
-      break;
     case "7424360283"://Bo-Katan Kryze
       return LeaderAbilitiesIgnored() ? "" : "A";
-      break;
     case "5440730550"://Lando Calrissian
       return LeaderAbilitiesIgnored() ? "" : "A";
-      break;
     case "040a3e81f3"://Lando Leader Unit
       return LeaderAbilitiesIgnored() ? "AA": "A,AA";
-      break;
     case "2432897157"://Qi'Ra
       return LeaderAbilitiesIgnored() ? "" : "A";
-      break;
     case "4352150438"://Rey
       return LeaderAbilitiesIgnored() ? "" : "A";
-      break;
     case "0911874487"://Fennec Shand
       return LeaderAbilitiesIgnored() ? "" : "A";
-      break;
     case "2b13cefced"://Fennec Shand Leader Unit
       return LeaderAbilitiesIgnored() ? "AA" : "A,AA";
-      break;
     case "9226435975"://Han Solo Red
       return LeaderAbilitiesIgnored() ? "" : "A";
-      break;
     case "a742dea1f1"://Han Solo Red Leader Unit
       return LeaderAbilitiesIgnored() ? "AA" : "A,AA";
-      break;
     case "0622803599"://Jabba the Hutt
       return LeaderAbilitiesIgnored() ? "" : "A";
-      break;
     case "f928681d36"://Jabba the Hutt Leader Unit
       return LeaderAbilitiesIgnored()? "AA" : "A,AA";
-      break;
     case "9596662994"://Finn
       return LeaderAbilitiesIgnored() ? "" : "A";
-      break;
     case "8709191884"://Hunter (Outcast Sergeant)
       return LeaderAbilitiesIgnored() ? "" : "A";
-      break;
     case "2744523125"://Salacious Crumb
       return "A,AA";
-      break;
 
     default: return "";
   }
@@ -1324,15 +1304,15 @@ function CheckSHDAbilityNames($cardID, $index, $validate) {
     case "6536128825"://Grogu
       return "Exhaust,Attack";
     case "1090660242"://The Client
-        return "Bounty,Attack";
+      return "Bounty,Attack";
     case "1885628519"://Crosshair
-        return "Buff,Snipe,Attack";
+      return "Buff,Snipe,Attack";
     case "2503039837"://Moff Gideon
-        return LeaderAbilitiesIgnored() ? "" : "Attack";
+      return LeaderAbilitiesIgnored() ? "" : "Attack";
     case "2526288781"://Bossk
-        return LeaderAbilitiesIgnored() ? "" : "Deal Damage/Buff";
+      return LeaderAbilitiesIgnored() ? "" : "Deal Damage/Buff";
     case "7424360283"://Bo-Katan Kryze
-        return LeaderAbilitiesIgnored() ? "" : "Deal Damage";
+      return LeaderAbilitiesIgnored() ? "" : "Deal Damage";
     case "5440730550"://Lando Calrissian
       return LeaderAbilitiesIgnored() ? "" : "Smuggle";
     case "040a3e81f3"://Lando Leader Unit
@@ -1352,10 +1332,8 @@ function CheckSHDAbilityNames($cardID, $index, $validate) {
       return LeaderAbilitiesIgnored() ? "" : "Shield";
     case "4352150438"://Rey
       return LeaderAbilitiesIgnored() ? "" : "Experience";
-      break;
     case "0911874487"://Fennec Shand Leader Unit
       return LeaderAbilitiesIgnored() ? "" : "Ambush";
-      break;
     case "2b13cefced"://Fennec Shand Leader Unit
       $abilityNames = "";
       if($validate) {
@@ -1394,7 +1372,6 @@ function CheckSHDAbilityNames($cardID, $index, $validate) {
       return LeaderAbilitiesIgnored() ? "" : "Replace Resource";
     case "2744523125"://Salacious Crumb
       return "Bounce,Attack";
-      break;
 
     default: return "";
   }
