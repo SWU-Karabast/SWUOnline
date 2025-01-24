@@ -1361,7 +1361,7 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
         "RESOURCES" => SmuggleCost($cardID, $currentPlayer, $index) + SelfCostModifier($cardID, $from),
         "PLAY", "EQUIP" => AbilityCost($cardID, $index, $oppCardActive),
         "HAND" => GetClassState($currentPlayer, $CS_PlayedAsUpgrade) == "1" && PilotingCost($cardID) > -1
-          ? (min(CardCost($cardID), PilotingCost($cardID))) + SelfCostModifier($cardID, $from)
+          ? PilotingCost($cardID) + SelfCostModifier($cardID, $from)
           : CardCost($cardID) + SelfCostModifier($cardID, $from),
         default => CardCost($cardID) + SelfCostModifier($cardID, $from)
       };
