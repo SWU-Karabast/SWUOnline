@@ -1517,7 +1517,7 @@ function IsPlayable($cardID, $phase, $from, $index = -1, &$restriction = null, $
     + CharacterCostModifier($cardID, $from);
   if($from == "HAND"
     && $potentialCost > NumResourcesAvailable($currentPlayer)
-    && $potentialPilotingCost > NumResourcesAvailable($currentPlayer)
+    && ($potentialPilotingCost == -1 || $potentialPilotingCost > NumResourcesAvailable($currentPlayer))
     && !HasAlternativeCost($cardID)) return false;
   if($from == "RESOURCES") {
     if(!PlayableFromResources($cardID, index:$index)) return false;
