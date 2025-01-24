@@ -148,20 +148,21 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
         WriteLog("Player " . $playerID . " put a card on the bottom of the deck.");
       }
       break;
-    case 14: //Banish
-      $index = $cardID;
-      $banish = &GetBanish($playerID);
-      $theirChar = &GetPlayerCharacter($playerID == 1 ? 2 : 1);
-      if($index < 0 || $index >= count($banish))
-      {
-        echo("Banish Index " . $index . " Invalid Input<BR>");
-        return false;
-      }
-      $cardID = $banish[$index];
-      if($banish[$index + 1] == "INST") SetClassState($currentPlayer, $CS_NextNAAInstant, 1);
-      if($banish[$index + 1] == "MON212" && TalentContains($theirChar[0], "LIGHT", $currentPlayer)) AddCurrentTurnEffect("MON212", $currentPlayer);
-      SetClassState($currentPlayer, $CS_PlayIndex, $index);
-      PlayCard($cardID, "BANISH", -1, $index, $banish[$index + 2]);
+    case 14: //Banish - can be reused for something else
+      //FAB
+      // $index = $cardID;
+      // $banish = &GetBanish($playerID);
+      // $theirChar = &GetPlayerCharacter($playerID == 1 ? 2 : 1);
+      // if($index < 0 || $index >= count($banish))
+      // {
+      //   echo("Banish Index " . $index . " Invalid Input<BR>");
+      //   return false;
+      // }
+      // $cardID = $banish[$index];
+      // if($banish[$index + 1] == "INST") SetClassState($currentPlayer, $CS_NextNAAInstant, 1);
+      // if($banish[$index + 1] == "MON212" && TalentContains($theirChar[0], "LIGHT", $currentPlayer)) AddCurrentTurnEffect("MON212", $currentPlayer);
+      // SetClassState($currentPlayer, $CS_PlayIndex, $index);
+      // PlayCard($cardID, "BANISH", -1, $index, $banish[$index + 2]);
       break;
 
     case 16: case 18: //Decision Queue (15 and 18 deprecated)
@@ -1054,9 +1055,9 @@ function FinalizeChainLink($chainClosed = false)
         case "HAND":
           AddPlayerHand($combatChain[$i - 1], $mainPlayer, "CC");
           break;
-        case "SOUL":
-          AddSoul($combatChain[$i - 1], $combatChain[$i], "CC");
-          break;
+        // case "SOUL"://FAB
+        //   AddSoul($combatChain[$i - 1], $combatChain[$i], "CC");
+        //   break;
         case "GY": /*AddGraveyard($combatChain[$i-1], $combatChain[$i], "CC");*/
           break; //Things that would go to the GY stay on till the end of the chain
         case "BANISH":
@@ -1184,8 +1185,9 @@ function PlayerSuppress($player)
     if($banish[$i + 1] == "SUPPRESS") {
       $cardID = $banish[$i];
       if(IsAlly($cardID)) PlayAlly($cardID, $player);
-      else if(CardTypeContains($cardID, "ITEM")) PutItemIntoPlayForPlayer($cardID, $player);
-      else if(CardTypeContains($cardID, "WEAPON")) AddCharacter($cardID, $player);
+      //FAB
+      // else if(CardTypeContains($cardID, "ITEM")) PutItemIntoPlayForPlayer($cardID, $player);
+      // else if(CardTypeContains($cardID, "WEAPON")) AddCharacter($cardID, $player);
       RemoveBanish($player, $i);
     }
   }
@@ -1195,7 +1197,7 @@ function EndStep()
 {
   global $mainPlayer, $turn;
   FinishTurnPass();
-  AuraBeginEndPhaseTriggers();
+  //AuraBeginEndPhaseTriggers();//FAB
   BeginEndPhaseEffectTriggers();
   PlayerSuppress(1);
   PlayerSuppress(2);
@@ -1207,8 +1209,8 @@ function FinishTurnPass()
   global $mainPlayer;
   ClearLog();
   ResetCombatChainState();
-  ItemEndTurnAbilities();
-  AuraBeginEndPhaseAbilities();
+  //ItemEndTurnAbilities();//FAB
+  //AuraBeginEndPhaseAbilities();//FAB
   //BeginEndPhaseEffects();
   PermanentBeginEndPhaseEffects();
   AddDecisionQueue("PASSTURN", $mainPlayer, "-");
@@ -1243,7 +1245,7 @@ function FinalizeTurn()
     }
   }
 
-  AuraEndTurnAbilities();
+  //AuraEndTurnAbilities();//FAB
 
   ArsenalEndTurn($mainPlayer);
   ArsenalEndTurn($defPlayer);
@@ -1262,7 +1264,7 @@ function FinalizeTurn()
 
   ResetCharacterEffects();
   UnsetTurnBanish();
-  AuraEndTurnCleanup();
+  //AuraEndTurnCleanup();//FAB
 
   DoGamestateUpdate();
 
@@ -1317,7 +1319,7 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
   global $playerID, $turn, $currentPlayer, $actionPoints, $layers, $currentTurnEffects;
   global $layerPriority, $lastPlayed;
   global $decisionQueue, $CS_PlayIndex, $CS_OppIndex, $CS_OppCardActive, $CS_PlayUniqueID, $CS_LayerPlayIndex, $CS_LastDynCost, $CS_NumCardsPlayed;
-  global $CS_DynCostResolved, $CS_NumVillainyPlayed, $CS_NumEventsPlayed, $CS_NumClonesPlayed;
+  global $CS_DynCostResolved, $CS_NumVillainyPlayed, $CS_NumEventsPlayed, $CS_NumClonesPlayed, $CS_PlayedAsUpgrade;
   $resources = &GetResources($currentPlayer);
   $dynCostResolved = intval($dynCostResolved);
   $layerPriority[0] = ShouldHoldPriority(1);
@@ -1357,19 +1359,26 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
   if($turn[0] != "P") {
     if($dynCostResolved >= 0 || $oppCardActive) {
       SetClassState($currentPlayer, $CS_DynCostResolved, $dynCostResolved);
-      $baseCost = ($from == "RESOURCES")
-        ? SmuggleCost($cardID, $currentPlayer, $index) + SelfCostModifier($cardID, $from)
-        : ($from == "PLAY" || $from == "EQUIP" ? AbilityCost($cardID, $index, $oppCardActive) : (CardCost($cardID) + SelfCostModifier($cardID, $from)));
+      $baseCost = match ($from) {
+        "RESOURCES" => SmuggleCost($cardID, $currentPlayer, $index) + SelfCostModifier($cardID, $from),
+        "PLAY", "EQUIP" => AbilityCost($cardID, $index, $oppCardActive),
+        "HAND" => GetClassState($currentPlayer, $CS_PlayedAsUpgrade) == "1" && PilotingCost($cardID) > -1
+          ? PilotingCost($cardID) + SelfCostModifier($cardID, $from)
+          : CardCost($cardID) + SelfCostModifier($cardID, $from),
+        default => CardCost($cardID) + SelfCostModifier($cardID, $from)
+      };
+
       if(!$playingCard) $resources[1] += $dynCostResolved;
       else {
-        $frostbitesPaid = AuraCostModifier($cardID);
+        //$frostbitesPaid = AuraCostModifier($cardID);//FAB
         $isAlternativeCostPaid = IsAlternativeCostPaid($cardID, $from);
         if($isAlternativeCostPaid)
         {
           $baseCost = 0;
           AddAdditionalCost($currentPlayer, "ALTERNATIVECOST");
         }
-        $resources[1] += ($dynCostResolved > 0 ? $dynCostResolved : $baseCost) + CurrentEffectCostModifiers($cardID, $from) + $frostbitesPaid + CharacterCostModifier($cardID, $from) + BanishCostModifier($from, $index) + ItemCostModifiers($cardID);
+        //$resources[1] += ($dynCostResolved > 0 ? $dynCostResolved : $baseCost) + CurrentEffectCostModifiers($cardID, $from) + $frostbitesPaid + CharacterCostModifier($cardID, $from) + BanishCostModifier($from, $index) + ItemCostModifiers($cardID);//FAB
+        $resources[1] += ($dynCostResolved > 0 ? $dynCostResolved : $baseCost) + CurrentEffectCostModifiers($cardID, $from) + CharacterCostModifier($cardID, $from);
         if($isAlternativeCostPaid && $resources[1] > 0) WriteLog("<span style='color:red;'>Alternative costs do not offset additional costs.</span>");
       }
       if($resources[1] < 0) $resources[1] = 0;
@@ -1455,26 +1464,26 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
   PlayerMacrosCardPlayed();
   //We've paid resources, now pay action points if applicable
   if($playingCard) {
-    $canPlayAsInstant = CanPlayAsInstant($cardID, $index, $from);
+    //$canPlayAsInstant = CanPlayAsInstant($cardID, $index, $from);
     if(IsStaticType($cardType, $from, $cardID)) {
       $playType = GetResolvedAbilityType($cardID, $from, $oppCardActive);
       $abilityType = $playType;
-      if($abilityType == "A" && !$canPlayAsInstant) ResetCombatChainState();
+      //if($abilityType == "A" && !$canPlayAsInstant) ResetCombatChainState();//FAB
+      if($abilityType == "A") ResetCombatChainState();
       PayAbilityAdditionalCosts($cardID);
       ActivateAbilityEffects();
     } else {
-      if($cardType == "A" && !$canPlayAsInstant) {
-        ResetCombatChainState();
-      }
-      CombatChainPlayAbility($cardID);
-      ItemPlayAbilities($cardID, $from);
+      //if($cardType == "A" && !$canPlayAsInstant) ResetCombatChainState();
+      if($cardType == "A") ResetCombatChainState();
+      //CombatChainPlayAbility($cardID);//FAB
+      //ItemPlayAbilities($cardID, $from);//FAB
       if(AspectContains($cardID, "Villainy", $currentPlayer)) IncrementClassState($currentPlayer, $CS_NumVillainyPlayed);
       IncrementClassState($currentPlayer, $CS_NumCardsPlayed);
       if(DefinedTypesContains($cardID, "Event", $currentPlayer)) IncrementClassState($currentPlayer, $CS_NumEventsPlayed);
       if(TraitContains($cardID, "Clone", $currentPlayer)) IncrementClassState($currentPlayer, $CS_NumClonesPlayed);
     }
     if ($playType == "A" || $playType == "AA") {
-      if (!$canPlayAsInstant) --$actionPoints;
+      //if (!$canPlayAsInstant) --$actionPoints;//FAB
       if ($cardType == "A" && $abilityType == "") {
       }
     }
@@ -1499,10 +1508,10 @@ function PlayCardSkipCosts($cardID, $from)
   $cardType = CardType($cardID);
   if (($turn[0] == "M" || $turn[0] == "ATTACKWITHIT") && $cardType == "AA") Attack($cardID);
   if ($turn[0] != "B" || (count($layers) > 0 && $layers[0] != "")) {
-    if (HasBoost($cardID)) Boost();
+    //if (HasBoost($cardID)) Boost();//FAB
     GetLayerTarget($cardID);
     MainCharacterPlayCardAbilities($cardID, $from);
-    AuraPlayAbilities($cardID, $from);
+    //AuraPlayAbilities($cardID, $from);//FAB
   }
   PlayCardEffect($cardID, $from, 0);
 }
@@ -1510,13 +1519,17 @@ function PlayCardSkipCosts($cardID, $from)
 function GetLayerTarget($cardID)
 {
   global $currentPlayer, $CS_PlayedAsUpgrade;
-  if(DefinedTypesContains($cardID, "Upgrade", $currentPlayer) || GetClassState($currentPlayer, $CS_PlayedAsUpgrade) > 0)
+
+  $piloting = PilotingCost($cardID) >= 0 && GetClassState($currentPlayer, $CS_PlayedAsUpgrade) > 0;
+  if(DefinedTypesContains($cardID, "Upgrade", $currentPlayer) || $piloting)
   {
+    $upgradeTargets = $piloting ? "MYALLY" : "MYALLY&THEIRALLY";
     $upgradeFilter = UpgradeFilter($cardID);
     AddDecisionQueue("PASSPARAMETER", $currentPlayer, $cardID);
     AddDecisionQueue("SETDQVAR", $currentPlayer, "0");
-    AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+    AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, $upgradeTargets);
     if($upgradeFilter != "") AddDecisionQueue("MZFILTER", $currentPlayer, $upgradeFilter);
+    if($piloting) AddDecisionQueue("MZFILTER", $currentPlayer, "canAddPilot=0");
     AddDecisionQueue("PASSREVERT", $currentPlayer, "-");
     AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to attach <0>");
     AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
@@ -1570,10 +1583,14 @@ function AddPrePitchDecisionQueue($cardID, $from, $index = -1, $skipAbilityType 
     }
     $pilotCost = PilotingCost($cardID, $currentPlayer);
     if($pilotCost >= 0) {
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose if you want to play this unit as a pilot?");
-      AddDecisionQueue("YESNO", $currentPlayer, "if you want to play this unit as a pilot");
-      AddDecisionQueue("NOPASS", $currentPlayer, "-");
-      AddDecisionQueue("PASSPARAMETER", $currentPlayer, 1, 1);
+      if(!SearchCurrentTurnEffects("0011262813", $currentPlayer)) {//Wedge Antilles Leader
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose if you want to play this unit as a pilot?");
+        AddDecisionQueue("YESNO", $currentPlayer, "if you want to play this unit as a pilot");
+        AddDecisionQueue("NOPASS", $currentPlayer, "-");
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, 1, 1);
+      } else {
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, 1, 1);
+      }
       AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_PlayedAsUpgrade, 1);
       AddDecisionQueue("GETLAYERTARGET", $currentPlayer, $cardID, 1);
     }
@@ -1826,7 +1843,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
         OnAttackEffects($cardID);
       }
       if (!$chainClosed || $definedCardType == "AA") {
-        AuraAttackAbilities($cardID);
+        //AuraAttackAbilities($cardID);//FAB
         if ($from == "PLAY" && IsAlly($cardID))
         {
           AllyAttackAbilities($cardID);
@@ -1852,9 +1869,9 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
         case "GY":
           AddGraveyard($cardID, $currentPlayer, $from);
           break;
-        case "SOUL":
-          AddSoul($cardID, $currentPlayer, $from);
-          break;
+        // case "SOUL"://FAB
+        //   AddSoul($cardID, $currentPlayer, $from);
+        //   break;
         case "BANISH":
           BanishCardForPlayer($cardID, $currentPlayer, $from, "NA");
           break;
@@ -1923,7 +1940,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
       }
       else {
         MainCharacterPlayCardAbilities($cardID, $from);
-        AuraPlayAbilities($cardID, $from);
+        //AuraPlayAbilities($cardID, $from);//FAB
         PermanentPlayAbilities($cardID, $from);
 
         $abilityIndex = GetClassState($currentPlayer, $CS_AbilityIndex);
@@ -1955,9 +1972,9 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
     CopyCurrentTurnEffectsFromAfterResolveEffects();
   }
 
-  if ($CS_CharacterIndex != -1 && CanPlayAsInstant($cardID)) {
-    RemoveCharacterEffects($currentPlayer, GetClassState($currentPlayer, $CS_CharacterIndex), "INSTANT");
-  }
+  // if ($CS_CharacterIndex != -1 && CanPlayAsInstant($cardID)) {//FAB
+  //   RemoveCharacterEffects($currentPlayer, GetClassState($currentPlayer, $CS_CharacterIndex), "INSTANT");
+  // }
   //Now determine what needs to happen next
   SetClassState($currentPlayer, $CS_PlayIndex, -1);
   SetClassState($currentPlayer, $CS_CharacterIndex, -1);
@@ -1996,11 +2013,11 @@ function ProcessAttackTarget()
   $target = explode("-", GetAttackTarget());
   if ($target[0] == "THEIRAURAS") {
     $auras = &GetAuras($defPlayer);
-    if (HasSpectra($auras[$target[1]])) {
-      DestroyAura($defPlayer, $target[1]);
-      CloseCombatChain();
-      return true;
-    }
+    // if (HasSpectra($auras[$target[1]])) {//FAB
+    //   DestroyAura($defPlayer, $target[1]);
+    //   CloseCombatChain();
+    //   return true;
+    // }
   }
   else if($target[0] == "THEIRALLY") {
     $ally = new Ally($target[0] . "-" . $target[1], $defPlayer);

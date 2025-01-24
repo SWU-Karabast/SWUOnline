@@ -206,7 +206,11 @@ function AllyStaticHealthModifier($cardID, $index, $player, $myCardID, $myIndex,
       }
       break;
     case "3731235174"://Supreme Leader Snoke
-      return $player != $myPlayer && !IsLeader($cardID, $player) ? -2 : 0;
+      if($player != $myPlayer) {
+        $ally = new Ally("MYALLY-" . $index, $player);
+        return !$ally->IsLeader() ? -2 : 0;
+      }
+      break;
     case "8418001763"://Huyang
       if ($player == $myPlayer) {
         $ally = new Ally("MYALLY-" . $index, $player);
@@ -272,7 +276,8 @@ function BaseHealthModifiers($cardID, $index, $player, $stackingBuff = false) {
   $char = &GetPlayerCharacter($player);
   switch($char[0]) {
     case "6594935791"://Pau City
-      $modifier += IsLeader($cardID) ? 1 : 0;
+      $ally = new Ally("MYALLY-" . $index, $player);
+      $modifier += $ally->IsLeader() ? 1 : 0;
       break;
     default: break;
   }
@@ -1133,22 +1138,23 @@ function AllyEnduranceCounters($cardID)
   }
 }
 
-function AllyDamagePrevention($player, $index, $damage)
-{
-  $allies = &GetAllies($player);
-  $canBePrevented = CanDamageBePrevented($player, $damage, "");
-  if($damage > $allies[$index+6])
-  {
-    if($canBePrevented) $damage -= $allies[$index+6];
-    $allies[$index+6] = 0;
-  }
-  else
-  {
-    $allies[$index+6] -= $damage;
-    if($canBePrevented) $damage = 0;
-  }
-  return $damage;
-}
+//FAB
+// function AllyDamagePrevention($player, $index, $damage)
+// {
+//   $allies = &GetAllies($player);
+//   $canBePrevented = CanDamageBePrevented($player, $damage, "");
+//   if($damage > $allies[$index+6])
+//   {
+//     if($canBePrevented) $damage -= $allies[$index+6];
+//     $allies[$index+6] = 0;
+//   }
+//   else
+//   {
+//     $allies[$index+6] -= $damage;
+//     if($canBePrevented) $damage = 0;
+//   }
+//   return $damage;
+// }
 
 //NOTE: This is for ally abilities that trigger when any ally attacks
 function AllyAttackAbilities($attackID)
@@ -2324,7 +2330,7 @@ function AllyTakeDamageAbilities($player, $index, $damage, $preventable)
   $otherPlayer = ($player == 1 ? 2 : 1);
   //CR 2.1 6.4.10f If an effect states that a prevention effect can not prevent the damage of an event, the prevention effect still applies to the event but its prevention amount is not reduced. Any additional modifications to the event by the prevention effect still occur.
   $type = "-";//Add this if it ever matters
-  $preventable = CanDamageBePrevented($otherPlayer, $damage, $type);
+  // $preventable = CanDamageBePrevented($otherPlayer, $damage, $type);//FAB
   for($i = count($allies) - AllyPieces(); $i >= 0; $i -= AllyPieces()) {
     $remove = false;
     switch($allies[$i]) {

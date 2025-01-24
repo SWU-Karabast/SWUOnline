@@ -202,8 +202,9 @@ function EventPieces()
 
 //0 - cardId
 //1 - ownerId
+//2 - isPilot
 function SubcardPieces(){
-  return 2;
+  return 3;
 }
 
 $SHMOP_CURRENTPLAYER = 9;
@@ -394,8 +395,8 @@ function ResetCombatChainState()
         case "HAND":
           AddPlayerHand($chainLinks[$i][$j], $mainPlayer, "CC");
           break;
-        case "SOUL":
-          AddSoul($chainLinks[$i][$j], $chainLinks[$i][$j + 1], "CC");
+        // case "SOUL"://FAB
+        //   AddSoul($chainLinks[$i][$j], $chainLinks[$i][$j + 1], "CC");
           break;
         default:
           break;

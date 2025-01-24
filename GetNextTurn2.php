@@ -457,7 +457,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
 
           // Count the number of tiles with the same name if the layer is tileable
           $nbTiles = IsTileable($layerName) ? array_reduce($layers, function($count, $layer, $index) use ($layerName, $layerPieces) {
-              $name = ($layer == "LAYER" || IsAbilityLayer($layer)) ? $layers[$index + 2] : $layer;
+              $name = ($layer == "LAYER" || IsAbilityLayer($layer)) ? $layers[$index + 2] : $layer;//TODO: look into hoow this gets called
               return $name == $layerName ? $count + 1 : $count;
           }, 0) : 0;
 
@@ -671,8 +671,8 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       else if ($option[0] == "THEIRPITCH") $source = $theirPitch;
       else if ($option[0] == "MYDECK") $source = $myDeck;
       else if ($option[0] == "THEIRDECK") $source = $theirDeck;
-      else if ($option[0] == "MYMATERIAL") $source = $myMaterial;
-      else if ($option[0] == "THEIRMATERIAL") $source = $theirMaterial;
+      // else if ($option[0] == "MYMATERIAL") $source = $myMaterial;//FAB
+      // else if ($option[0] == "THEIRMATERIAL") $source = $theirMaterial;//FAB
       else if ($option[0] == "MYRESOURCES") $source = &GetMemory($playerID);
       else if ($option[0] == "THEIRRESOURCES") $source = &GetMemory($playerID == 1 ? 2 : 1);
       else if ($option[0] == "LANDMARK") $source = $landmarks;

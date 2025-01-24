@@ -37,17 +37,23 @@ if (isset($_SESSION["isPatron"]) && isset($_SESSION['useruid']) && !in_array($_S
 //This is the code for Contributor's icon.
 if (isset($_SESSION['useruid']) && in_array($_SESSION['useruid'], $contributors)) $displayName = "<img title='Contributor' style='margin-bottom:-2px; margin-right:-4px; height:18px;' src='./images/copper.webp' /> " . $displayName;
 //profanity filter
-$filteredChatText = $chatText;
-$naughtyWords = ["shit", "piss", "fuck", "cunt", "cock", "cocksucker", "motherfucker", "tits", "fart", "turd", "twat", "bitch", "retard", "fag", "faggot", "kill yourself", "die in a fire", "skank", "hoe", "whore", "sh!t", "p!ss", "c0ck", "c0cksucker", "f@g", "f@ggot", ];
-for($i=0; $i<count($naughtyWords); ++$i) {
-    $regexBuilder = "/";
-    for($j=0; $j<count(str_split($naughtyWords[$i])); ++$j) {
-      $letter = $naughtyWords[$i][$j];
-      $regexBuilder = $regexBuilder . "[" . $upperLetter = strtoupper($letter) . $letter . "](\s|\.{1,2})?";
-    }
-    $regexBuilder = $regexBuilder . "/";
+$filteredChatText = explode(" ", $chatText);
+$naughtyWords = ["shit", "piss", "fuck", "cunt", "cock", "cocksucker", "motherfucker", "tit", "tits", "fart", "turd", "twat", "bitch", "retard", "fag", "faggot", "skank", "hoe", "whore", "sh!t", "p!ss", "c0ck", "c0cksucker", "f@g", "f@ggot", "pussy", "dildo", "ass", "asshole", "dick", "dicks", ];
+$meanPhrases = ["kill yourself", "die in a fire", "can you just die irl", ];
 
-    $filteredChatText = preg_replace($regexBuilder, "****", $filteredChatText);
+for($i=0; $i<count($filteredChatText);++$i) {
+  $chatWord = $filteredChatText[$i];
+  if(in_array(strtolower($chatWord), $naughtyWords)) {
+    $filteredChatText[$i] = "*****";
+  }
+}
+
+$filteredChatText = implode(" ", $filteredChatText);
+
+for($i=0;$i<count($meanPhrases);++$i) {
+  if(str_contains($filteredChatText, $meanPhrases[$i])) {
+    $filteredChatText = str_replace($meanPhrases[$i], "*****", $filteredChatText);
+  }
 }
 
 if (GetCachePiece($gameName, 11) >= 3) {

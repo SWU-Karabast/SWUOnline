@@ -439,7 +439,7 @@ function ContinueDecisionQueue($lastResult = "")
         if($cardID == "ENDTURN") EndStep();
         else if($cardID == "ENDSTEP") FinishTurnPass();
         else if($cardID == "RESUMETURN") $turn[0] = "M";
-        else if($cardID == "LAYER") ProcessLayer($player, $parameter);
+        // else if($cardID == "LAYER") ProcessLayer($player, $parameter);
         else if($cardID == "FINALIZECHAINLINK") FinalizeChainLink($parameter);
         else if($cardID == "DEFENDSTEP") { $turn[0] = "A"; $currentPlayer = $mainPlayer; }
         else if(IsAbilityLayer($cardID)) {
@@ -578,15 +578,16 @@ function ProcessAfterCombatLayer() {
   }
 }
 
-function ProcessLayer($player, $parameter)
-{
-  switch ($parameter) {
-    case "PHANTASM":
-      PhantasmLayer();
-      break;
-    default: break;
-  }
-}
+//FAB
+// function ProcessLayer($player, $parameter)
+// {
+//   switch ($parameter) {
+//     case "PHANTASM":
+//       PhantasmLayer();
+//       break;
+//     default: break;
+//   }
+// }
 
 function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $target="-")
 {

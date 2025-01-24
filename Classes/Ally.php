@@ -165,6 +165,26 @@ class Ally {
     return $this->Damage() > 0;
   }
 
+  function CanAddPilot() {
+    $maxPilots = 1;
+    $currentPilots = 0;
+    $maxPilots += match ($this->CardID()) {
+      "8845408332" => 1,//Millennium Falcon (Get Out and Push)
+      default => 0
+    };
+
+    $subcards = $this->GetUpgrades(withMetadata:true);
+    for($i=0; $i<count($subcards); $i+=SubcardPieces()) {
+      $maxPilots += match ($subcards[$i]) {
+        "5375722883" => 1,//R2-D2 (Artooooooooo!)
+        default => 0
+      };
+      $currentPilots += $subcards[$i+2] == "1" ? 1 : 0;
+    }
+
+    return $currentPilots < $maxPilots;
+  }
+
   function IsExhausted() {
     return $this->allies[$this->index+1] == 1;
   }
@@ -198,6 +218,7 @@ class Ally {
       for($i=0; $i<count($subcards); $i+=SubcardPieces()) {
         if($subcards[$i] == "8752877738") {
           //Shield Token
+          unset($subcards[$i+2]);
           unset($subcards[$i+1]);
           unset($subcards[$i]);
           $subcards = array_values($subcards);
@@ -429,10 +450,10 @@ class Ally {
     $this->allies[$this->index+1] = 1;
   }
 
-  function AddSubcard($cardID, $ownerID = null) {
+  function AddSubcard($cardID, $ownerID = null, $asPilot = false) {
     $ownerID = $ownerID ?? $this->playerID;
-    if($this->allies[$this->index+4] == "-") $this->allies[$this->index+4] = $cardID . "," . $ownerID;
-    else $this->allies[$this->index+4] = $this->allies[$this->index+4] . "," . $cardID . "," . $ownerID;
+    if($this->allies[$this->index+4] == "-") $this->allies[$this->index+4] = $cardID . "," . $ownerID . "," . ($asPilot ? "1" : "0");
+    else $this->allies[$this->index+4] = $this->allies[$this->index+4] . "," . $cardID . "," . $ownerID . "," . ($asPilot ? "1" : "0");
   }
 
   function RemoveSubcard($subcardID) {
@@ -441,6 +462,7 @@ class Ally {
     for($i=0; $i<count($subcards); $i+=SubcardPieces()) {
       if($subcards[$i] == $subcardID) {
         $ownerId = $subcards[$i+1];
+        unset($subcards[$i+2]);
         unset($subcards[$i+1]);
         unset($subcards[$i]);
         $subcards = array_values($subcards);
@@ -469,26 +491,26 @@ class Ally {
     return explode(",", $subcards);
   }
 
-  function GetUpgrades($withOwnerData = false) {
+  function GetUpgrades($withMetadata = false) {
     if($this->allies[$this->index + 4] == "-") return [];
     $subcards = $this->GetSubcards();
     $upgrades = [];
     for($i=0; $i<count($subcards); $i+=SubcardPieces()) {
       if(DefinedTypesContains($subcards[$i], "Upgrade", $this->PlayerID()) || DefinedTypesContains($subcards[$i], "Token Upgrade", $this->PlayerID()) || $subcards[$i+1] == $this->PlayerID()) {
-        if($withOwnerData) array_push($upgrades, $subcards[$i], $subcards[$i+1]);
+        if($withMetadata) array_push($upgrades, $subcards[$i], $subcards[$i+1], $subcards[$i+2]);
         else $upgrades[] = $subcards[$i];
       }
     }
     return $upgrades;
   }
 
-  function GetCaptives($withOwnerData = false) {
+  function GetCaptives($withMetadata = false) {
     if($this->allies[$this->index + 4] == "-") return [];
     $subcards = $this->GetSubcards();
     $capturedUnits = [];
     for($i=0; $i<count($subcards); $i+=SubcardPieces()) {
       if(DefinedTypesContains($subcards[$i], "Unit", $this->PlayerID()) && $subcards[$i+1] != $this->PlayerID()) {
-        if($withOwnerData) array_push($capturedUnits, $subcards[$i], $subcards[$i+1]);
+        if($withMetadata) array_push($capturedUnits, $subcards[$i], $subcards[$i+1], $subcards[$i+2]);
         else $capturedUnits[] = $subcards[$i];
       }
     }
@@ -602,7 +624,16 @@ class Ally {
   }
 
   function IsLeader() {
-    return IsLeader($this->CardID());
+    return CardIDIsLeader($this->CardID())
+      || $this->HasPilotLeaderUpgrade();
+  }
+
+  function HasPilotLeaderUpgrade() {
+    $upgrades = $this->GetUpgrades(withMetadata:true);
+    for($i=0; $i<count($upgrades); $i+=SubcardPieces()) {
+      if(CardIDIsLeader($upgrades[$i]) && $upgrades[$i+2] == "1") return true;//TODO: test attached unit can't be Vanquished
+    }
+    return false;
   }
 
   function IsUpgraded(): bool {
