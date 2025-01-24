@@ -10,7 +10,7 @@ $response = new stdClass();
 
 $_POST = json_decode(file_get_contents('php://input'), true);
 
-if ($_POST == NULL) {
+if($_POST == NULL) {
   $response->error = "Parameters were not passed";
   echo json_encode($response);
   exit;
@@ -18,12 +18,9 @@ if ($_POST == NULL) {
 
 $gameName = $_POST["gameName"];
 $playerID = $_POST["playerID"];
-if ($playerID == 1 && isset($_SESSION["p1AuthKey"]))
-  $authKey = $_SESSION["p1AuthKey"];
-else if ($playerID == 2 && isset($_SESSION["p2AuthKey"]))
-  $authKey = $_SESSION["p2AuthKey"];
-else if (isset($_POST["authKey"]))
-  $authKey = $_POST["authKey"];
+if ($playerID == 1 && isset($_SESSION["p1AuthKey"])) $authKey = $_SESSION["p1AuthKey"];
+else if ($playerID == 2 && isset($_SESSION["p2AuthKey"])) $authKey = $_SESSION["p2AuthKey"];
+else if (isset($_POST["authKey"])) $authKey = $_POST["authKey"];
 $action = $_POST["action"]; //"Go First" to choose to go first, anything else will choose to go second
 
 if (!IsGameNameValid($gameName)) {
@@ -41,8 +38,12 @@ if ($authKey != $targetAuth) {
   exit;
 }
 
-$firstPlayer = $action == "Go First" ? $playerName : $otherPlayerName;
-WriteLog(FmtPlayer($firstPlayer, $playerID) . " will go first.", path: "../");
+if ($action == "Go First") {
+  $firstPlayer = $playerID;
+} else {
+  $firstPlayer = ($playerID == 1 ? 2 : 1);
+}
+WriteLog(FmtPlayer($playerName, $playerID) . " will go first.", path: "../");
 $gameStatus = $MGS_P2Sideboard;
 SetCachePiece($gameName, 14, $gameStatus);
 GamestateUpdated($gameName);
