@@ -1807,12 +1807,20 @@ function LeaderUnit($cardID) {
     case "2870878795"://Padme Amidala
       return "4ae6d91ddc";
     //Jump to Lightspeed
-    case "4179470615"://Asajj Ventress
-      return "3f0b5622a7";
-    case "4030832630"://Admiral Piett
-      return "649c6a9dbd";
     case "0011262813"://Wedge Antilles
       return "6414788e89";
+    case "0616724418"://Han Solo
+      return "a015eb5c5e";
+    case "3658069276"://Lando Calrissian
+      return "3064aff14f";
+    case "4179470615"://Asajj Ventress
+      return "3f0b5622a7";
+    case "7514405173"://Admiral Ackbar
+      return "36859e7ec4";
+    case "9831674351"://Boba Fett
+      return "f6eb711cf3";
+    case "4030832630"://Admiral Piett
+      return "649c6a9dbd";
     default: return "";
   }
 }
@@ -1929,20 +1937,33 @@ function LeaderUndeployed($cardID) {
     case "4ae6d91ddc"://Padme Amidala
       return "2870878795";
     //Jump to Lightspeed
-    case "3f0b5622a7"://Asajj Ventress
-      return "4179470615";
-    case "649c6a9dbd"://Admiral Piett
-      return "4030832630";
     case "6414788e89"://Wedge Antilles
       return "0011262813";
+    case "a015eb5c5e"://Han Solo
+      return "0616724418";
+    case "3064aff14f"://Lando Calrissian
+      return "3658069276";
+    case "3f0b5622a7"://Asajj Ventress
+      return "4179470615";
+    case "36859e7ec4"://Admiral Ackbar
+      return "7514405173";
+    case "f6eb711cf3"://Boba Fett
+      return "9831674351";
+    case "649c6a9dbd"://Admiral Piett
+      return "4030832630";
+
     default: return "";
   }
 }
 
 function LeaderCanPilot($cardID) {
   switch($cardID) {
-    case "4179470615"://Asajj Ventress
     case "0011262813"://Wedge Antilles
+    case "0616724418"://Han Solo
+    case "3658069276"://Lando Calrissian
+    case "4179470615"://Asajj Ventress
+    case "7514405173"://Admiral Ackbar
+    case "9831674351"://Boba Fett
       return true;
     default: return false;
   }
