@@ -6157,81 +6157,81 @@ function PlayRequiresTarget($cardID)
   // 6: Any unit
   // 7: Friendly unit
   // 8: Any Non-Leader + Non-Vehicle unit
-  // function GetArcaneTargetIndices($player, $target)
-  // {
-  //   global $CS_ArcaneTargetsSelected;
-  //   $otherPlayer = ($player == 1 ? 2 : 1);
+  function GetArcaneTargetIndices($player, $target)
+  {
+    global $CS_ArcaneTargetsSelected;
+    $otherPlayer = ($player == 1 ? 2 : 1);
 
-  //   if ($target == 8) {
-  //     $rvArr = [];
-  //     $theirAllies = &GetAllies($otherPlayer);
-  //     for($i=0; $i<count($theirAllies); $i+=AllyPieces()) {
-  //       $cardID = $theirAllies[$i];
-  //       if (IsLeader($cardID) || TraitContains($cardID, "Vehicle")) {
-  //         continue;
-  //       }
+    if ($target == 8) {
+      $rvArr = [];
+      $theirAllies = &GetAllies($otherPlayer);
+      for($i=0; $i<count($theirAllies); $i+=AllyPieces()) {
+        $cardID = $theirAllies[$i];
+        if (CardIDIsLeader($cardID) || TraitContains($cardID, "Vehicle")) {
+          continue;
+        }
 
-  //       $rvArr[] = "THEIRALLY-" . $i;
-  //     }
+        $rvArr[] = "THEIRALLY-" . $i;
+      }
 
-  //     $myAllies = &GetAllies($player);
-  //     for($i=0; $i<count($myAllies); $i+=AllyPieces()) {
-  //       $cardID = $myAllies[$i];
-  //       if (IsLeader($cardID) || TraitContains($cardID, "Vehicle")) {
-  //         continue;
-  //       }
-  //       $rvArr[] = "MYALLY-" . $i;
-  //     }
+      $myAllies = &GetAllies($player);
+      for($i=0; $i<count($myAllies); $i+=AllyPieces()) {
+        $cardID = $myAllies[$i];
+        if (CardIDIsLeader($cardID) || TraitContains($cardID, "Vehicle")) {
+          continue;
+        }
+        $rvArr[] = "MYALLY-" . $i;
+      }
 
-  //     return implode(",", $rvArr);
-  //   } else if ($target == 4) return "MYCHAR-0";
+      return implode(",", $rvArr);
+    } else if ($target == 4) return "MYCHAR-0";
 
-  //   if($target != 3 && $target != 6 && $target != 7) $rv = "THEIRCHAR-0";
-  //   else $rv = "";
+    if($target != 3 && $target != 6 && $target != 7) $rv = "THEIRCHAR-0";
+    else $rv = "";
 
-  //   if(($target == 0 && !ShouldAutotargetOpponent($player)) || $target == 2)
-  //   {
-  //     $rv .= ",MYCHAR-0";
-  //   }
-  //   if($target == 2 || $target == 6)
-  //   {
-  //     $theirAllies = &GetAllies($otherPlayer);
-  //     for($i=0; $i<count($theirAllies); $i+=AllyPieces())
-  //     {
-  //       if($rv != "") $rv .= ",";
-  //       $rv .= "THEIRALLY-" . $i;
-  //     }
-  //     $myAllies = &GetAllies($player);
-  //     for($i=0; $i<count($myAllies); $i+=AllyPieces())
-  //     {
-  //       if($rv != "") $rv .= ",";
-  //       $rv .= "MYALLY-" . $i;
-  //     }
-  //   }
-  //   elseif($target == 3 || $target == 5)
-  //   {
-  //     $theirAllies = &GetAllies($otherPlayer);
-  //     for($i=0; $i<count($theirAllies); $i+=AllyPieces())
-  //     {
-  //       if($rv != "") $rv .= ",";
-  //       $rv .= "THEIRALLY-" . $i;
-  //     }
-  //   } else if($target == 7) {
-  //     $myAllies = &GetAllies($player);
-  //     for($i=0; $i<count($myAllies); $i+=AllyPieces())
-  //     {
-  //       if($rv != "") $rv .= ",";
-  //       $rv .= "MYALLY-" . $i;
-  //     }
-  //   }
-  //   $targets = explode(",", $rv);
-  //   $targetsSelected = GetClassState($player, $CS_ArcaneTargetsSelected);
-  //   for($i=count($targets)-1; $i>=0; --$i)
-  //   {
-  //     if(DelimStringContains($targetsSelected, $targets[$i])) unset($targets[$i]);
-  //   }
-  //   return implode(",", $targets);
-  // }
+    if(($target == 0 && !ShouldAutotargetOpponent($player)) || $target == 2)
+    {
+      $rv .= ",MYCHAR-0";
+    }
+    if($target == 2 || $target == 6)
+    {
+      $theirAllies = &GetAllies($otherPlayer);
+      for($i=0; $i<count($theirAllies); $i+=AllyPieces())
+      {
+        if($rv != "") $rv .= ",";
+        $rv .= "THEIRALLY-" . $i;
+      }
+      $myAllies = &GetAllies($player);
+      for($i=0; $i<count($myAllies); $i+=AllyPieces())
+      {
+        if($rv != "") $rv .= ",";
+        $rv .= "MYALLY-" . $i;
+      }
+    }
+    elseif($target == 3 || $target == 5)
+    {
+      $theirAllies = &GetAllies($otherPlayer);
+      for($i=0; $i<count($theirAllies); $i+=AllyPieces())
+      {
+        if($rv != "") $rv .= ",";
+        $rv .= "THEIRALLY-" . $i;
+      }
+    } else if($target == 7) {
+      $myAllies = &GetAllies($player);
+      for($i=0; $i<count($myAllies); $i+=AllyPieces())
+      {
+        if($rv != "") $rv .= ",";
+        $rv .= "MYALLY-" . $i;
+      }
+    }
+    $targets = explode(",", $rv);
+    $targetsSelected = GetClassState($player, $CS_ArcaneTargetsSelected);
+    for($i=count($targets)-1; $i>=0; --$i)
+    {
+      if(DelimStringContains($targetsSelected, $targets[$i])) unset($targets[$i]);
+    }
+    return implode(",", $targets);
+  }
 
 function CountPitch(&$pitch, $min = 0, $max = 9999)
 {

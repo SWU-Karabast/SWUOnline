@@ -95,8 +95,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           }
           break;
         case "GETINDICES": $rv = GetIndices($subparam); break;
-        //case "ARCANETARGET": $rv = GetArcaneTargetIndices($player, $subparam); break;//FAB
-        // case "DAMAGEPREVENTION":
+        case "ARCANETARGET": $rv = GetArcaneTargetIndices($player, $subparam); break;
+        // case "DAMAGEPREVENTION"://FAB
         //   $rv = GetDamagePreventionIndices($player);
         //   break;
         case "DAMAGEPREVENTIONTARGET": $rv = GetDamagePreventionTargetIndices(); break;
