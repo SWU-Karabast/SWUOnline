@@ -27,7 +27,7 @@ function EffectHitEffect($cardID)
       break;
     case "5630404651-1"://MagnaGuard Wing Leader
       AddCurrentTurnEffectFromCombat("5630404651-2", $mainPlayer);
-      break;      
+      break;
     default:
       break;
   }
@@ -46,6 +46,7 @@ function FinalizeChainLinkEffects()
         PrependDecisionQueue("SWAPTURN", $mainPlayer, "-");
         PrependDecisionQueue("ELSE", $mainPlayer, "-");
         PrependDecisionQueue("MZOP", $mainPlayer, "ATTACK", 1);
+        PrependDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
         PrependDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
         PrependDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to attack with");
         PrependDecisionQueue("MZFILTER", $mainPlayer, "status=1");
@@ -111,8 +112,8 @@ function FinalizeChainLinkEffects()
         SearchCurrentTurnEffects("9560139036", $mainPlayer, remove:true);
         $options = "Play it;Discard it;Leave it on top of your deck";
         PrependDecisionQueue("MODAL", $mainPlayer, "EZRABRIDGER");
-        PrependDecisionQueue("SHOWOPTIONS", $mainPlayer, "$cardID-$options");
-        PrependDecisionQueue("CHOOSEOPTION", $mainPlayer, "$cardID-$options");
+        PrependDecisionQueue("SHOWOPTIONS", $mainPlayer, "$cardID&$options");
+        PrependDecisionQueue("CHOOSEOPTION", $mainPlayer, "$cardID&$options");
         PrependDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose one for <0>");
         PrependDecisionQueue("SETDQVAR", $mainPlayer, "0");
         PrependDecisionQueue("DECKCARDS", $mainPlayer, "0");
@@ -319,6 +320,10 @@ function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
             $costModifier -= 1;
             $remove = true;
             break;
+          case "4030832630"://Admiral Piett
+            $costModifier -= 1;
+            $remove = true;
+            break;
           case "3509161777"://You're My Only Hope
             $costModifier -= PlayerRemainingHealth($currentPlayer) <= 5 ? 99 : 5;
             $remove = true;
@@ -326,6 +331,12 @@ function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
           case "5494760041"://Galactic Ambition
             $costModifier -= 99;
             $remove = true;
+            break;
+          case "4113123883"://Unnatural Life
+            if($from != "PLAY") {
+              $costModifier -= 2;
+              $remove = true;
+            }
             break;
           case "3426168686"://Sneak Attack
             if($from != "PLAY") {
@@ -349,7 +360,7 @@ function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
             $costModifier -= 1;
             $remove = true;
             break;
-          case "8506660490"://Darth Vader
+          case "8506660490"://Darth Vader (Commanding the First Legion)
             $costModifier -= 99;
             $remove = true;
             break;
@@ -629,6 +640,7 @@ function CurrentEffectEndTurnAbilities()
       AddNextTurnEffect($currentTurnEffects[$i], $currentTurnEffects[$i + 1]);
     }
     switch($cardID) {
+      case "4113123883-2"://Unnatural Life
       case "3426168686-2"://Sneak Attack
       case "7270736993-2"://Unrefusable Offer
         $ally = new Ally("MYALLY-" . SearchAlliesForUniqueID($currentTurnEffects[$i+2], $currentTurnEffects[$i+1]), $currentTurnEffects[$i+1]);

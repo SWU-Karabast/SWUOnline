@@ -482,7 +482,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
           $content .= "<div class='tile' style='max-width:{$cardSize}px;'>" . Card($cardId, "concat", $cardSize, 0, 1, 0, $layerColor, $counters, controller: $layerController);
 
           // Add reorder buttons for ability layers if applicable
-          if (IsAbilityLayer($layers[$i]) && $dqState[8] >= $i && $playerID == $mainPlayer) {
+          if (IsAbilityLayer($layers[$i]) && ($dqState[8] >= $i || LayersHaveTriggersToResolve()) && $playerID == $mainPlayer) {
               if ($i < $dqState[8]) {
                   $content .= "<span class='reorder-button'>" . CreateButton($playerID, ">", 31, $i, "18px", useInput:true) . "</span>";
               }
@@ -518,6 +518,8 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       if ($playerID != 3) {
         $time = ($playerID == 1 ? $p1TotalTime : $p2TotalTime);
         $totalTime = $p1TotalTime + $p2TotalTime;
+        $content .= "<BR><BR><b style='font-size: 24px;'>Import your deck on <a href='https://swustats.net'>swustats.net</a> to track your deck stats over time!</b><BR>";
+        $content .= "<i>(You will need to use the SWU Stats link to play for stats to track)</i><br>";
         $content .= "<BR><span class='Time-Span'>Your Play Time: " . intval($time / 60) . "m" . $time % 60 . "s - Game Time: " . intval($totalTime / 60) . "m" . $totalTime % 60 . "s</span>";
       }
     }
@@ -567,7 +569,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   }
 
   if (($turn[0] == "OPT" || $turn[0] == "CHOOSETOP" || $turn[0] == "MAYCHOOSETOP" || $turn[0] == "CHOOSEBOTTOM" || $turn[0] == "CHOOSECARD" || $turn[0] == "MAYCHOOSECARD") && $turn[1] == $playerID) {
-    $content = "<table><tr>";
+    $content = "<table style='margin: 0 auto;'><tr>";
     $options = explode(",", $turn[2]);
     for ($i = 0; $i < count($options); ++$i) {
       $content .= "<td>";
@@ -766,7 +768,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   if (($turn[0] == "CHOOSEOPTION" || $turn[0] == "MAYCHOOSEOPTION") && $currentPlayer == $playerID) {
     $caption = "<div>Choose " . TypeToPlay($turn[0]) .  "</div>";
     if (GetDQHelpText() != "-") $caption = "<div>" . implode(" ", explode("_", GetDQHelpText())) . "</div>";
-    $params = explode("-", $turn[2]);
+    $params = explode("&", $turn[2]);
     $cardID = $params[0];
     $options = explode(";", $params[1]);
     $hiddenOptions = isset($params[2]) && $params[2] != "" ? explode(",", $params[2]) : [];
@@ -829,7 +831,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.5) 70%);
       }
     </style>";
-    
+
     $content .= "<div class='card-container'>";
     for ($i = 0; $i < count($options); ++$i) {
       $submitLink = ProcessInputLink($playerID, 36, $i, "onclick");
@@ -842,7 +844,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       $content .= "</div>";
     }
     $content .= "</div>";
-    echo CreatePopup("CHOOSEOPTION", [], 0, 1, $caption, 1, $content, height:"35%", width:"44%");
+    echo CreatePopup("CHOOSEOPTION", [], 0, 1, $caption, 1, $content, height:"35%", width:"50%");
   }
 
   // MULTICHOOSETEXT and MAYMULTICHOOSETEXT are deprecated, use MULTICHOOSE and MAYMULTICHOOSE instead
@@ -1004,7 +1006,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         'overlay' => $theirAllies[$i + 1] != 2 ? 1 : 0,
         'cloned' => $theirAllies[$i + 13] == 1,
       );
-      $cardArena = CardArenas($theirAllies[$i]);
+      $cardArena = $ally->CurrentArena();
       //Their Unit Spacing
       if($cardArena == "Ground") $cardText = '<div id="unique-' . $theirAllies[$i+5] . '" class="cardContainer ' . ($theirAllies[$i + 1] != 2 ? 'exhausted' : '') . '">';
       else $cardText = '<div id="unique-' . $theirAllies[$i+5] . '" class="cardContainer ' . ($theirAllies[$i + 1] != 2 ? 'exhausted' : '') . '">';
@@ -1141,7 +1143,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         'overlay' => $myAllies[$i + 1] != 2 ? 1 : 0,
         'cloned' => $myAllies[$i + 13] == 1,
       );
-      $cardArena = CardArenas($myAllies[$i]);
+      $cardArena = $ally->CurrentArena();
       //My Unit Spacing
       if($cardArena == "Ground") $cardText = '<div id="unique-' . $myAllies[$i+5] . '" class="cardContainer ' . ($myAllies[$i + 1] != 2 ? 'exhausted' : '') . '">';
       else $cardText = '<div id="unique-' . $myAllies[$i+5] . '" class="cardContainer ' . ($myAllies[$i + 1] != 2 ? 'exhausted' : '') . '">';

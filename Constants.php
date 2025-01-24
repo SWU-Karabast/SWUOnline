@@ -130,7 +130,7 @@ function ResourcePieces() { return ArsenalPieces(); }
 //12 - Turns in play
 //13 - Cloned - 0 = no, 1 = yes
 //14 - Healed
-//15 - Unused
+//15 - Arena Override
 //16 - Unused
 function AllyPieces()
 {
@@ -211,7 +211,7 @@ $SHMOP_ISREPLAY = 10;//0 = not replay, 1 = replay
 
 //Class State (one for each player)
 $CS_NumVillainyPlayed = 0;
-$CS_NumBoosted = 1;
+$CS_PlayedAsUpgrade = 1;
 $CS_AtksWWeapon = 2;
 $CS_HitsWDawnblade = 3;
 $CS_DamagePrevention = 4;
@@ -281,6 +281,8 @@ $CS_UnitsThatAttackedBase = 67;
 $CS_OppIndex = 68;
 $CS_OppCardActive = 69;
 $CS_PlayedWithExploit = 70;
+$CS_SeparatistUnitsThatAttacked = 71;
+$CS_AlliesDestroyed = 72; // List of allies (CardID) destroyed concatenated with a comma
 
 function SetAfterPlayedBy($player, $cardID)
 {
@@ -464,22 +466,22 @@ function ResetChainLinkState()
 
 function ResetClassState($player)
 {
-  global $CS_NumVillainyPlayed, $CS_NumBoosted, $CS_AtksWWeapon, $CS_HitsWDawnblade, $CS_DamagePrevention, $CS_CardsDrawn;
+  global $CS_NumVillainyPlayed, $CS_PlayedAsUpgrade, $CS_AtksWWeapon, $CS_HitsWDawnblade, $CS_DamagePrevention, $CS_CardsDrawn;
   global $CS_DamageTaken, $CS_NumActionsPlayed, $CS_CharacterIndex, $CS_PlayIndex, $CS_OppIndex, $CS_OppCardActive, $CS_NumNonAttackCards;
   global $CS_PreparationCounters, $CS_NextNAACardGoAgain, $CS_NumAlliesDestroyed, $CS_Num6PowBan, $CS_ResolvingLayerUniqueID, $CS_NextWizardNAAInstant;
   global $CS_ArcaneDamageTaken, $CS_NextNAAInstant, $CS_NextDamagePrevented, $CS_LastAttack, $CS_PlayCCIndex;
   global $CS_NumLeftPlay, $CS_NumMaterializations, $CS_NumFusedLightning, $CS_AfterPlayedBy, $CS_NumAttackCards, $CS_NumPlayedFromBanish;
-  global $CS_NumAttacks, $CS_DieRoll, $CS_NumMandalorianAttacks, $CS_NumWizardNonAttack, $CS_LayerTarget, $CS_NumSwordAttacks;
+  global $CS_NumAttacks, $CS_DieRoll, $CS_NumMandalorianAttacks, $CS_SeparatistUnitsThatAttacked, $CS_NumWizardNonAttack, $CS_LayerTarget, $CS_NumSwordAttacks;
   global $CS_HitsWithWeapon, $CS_ArcaneDamagePrevention, $CS_DynCostResolved, $CS_CardsEnteredGY, $CS_CachedCharacterLevel, $CS_ArsenalFacing;
   global $CS_HighestRoll, $CS_NumAuras, $CS_AbilityIndex, $CS_AdditionalCosts, $CS_NumRedPlayed, $CS_PlayUniqueID, $CS_AlluvionUsed;
   global $CS_NumPhantasmAADestroyed, $CS_NumEventsPlayed, $CS_MaxQuellUsed, $CS_DamageDealt, $CS_ArcaneTargetsSelected, $CS_NumDragonAttacks, $CS_NumIllusionistAttacks;
   global $CS_LastDynCost, $CS_NumIllusionistActionCardAttacks, $CS_ArcaneDamageDealt, $CS_LayerPlayIndex, $CS_NumCardsPlayed, $CS_NamesOfCardsPlayed, $CS_NumBoostPlayed;
   global $CS_PlayedAsInstant, $CS_AnotherWeaponGainedGoAgain, $CS_NumContractsCompleted, $CS_HitsWithSword, $CS_NumMelodyPlayed,
-    $CS_NumClonesPlayed, $CS_UnitsThatAttackedBase, $CS_PlayedWithExploit;
+    $CS_NumClonesPlayed, $CS_UnitsThatAttackedBase, $CS_PlayedWithExploit, $CS_AlliesDestroyed;
 
   $classState = &GetPlayerClassState($player);
   $classState[$CS_NumVillainyPlayed] = 0;
-  $classState[$CS_NumBoosted] = 0;
+  $classState[$CS_PlayedAsUpgrade] = 0;
   $classState[$CS_AtksWWeapon] = 0;
   $classState[$CS_HitsWDawnblade] = 0;
   $classState[$CS_DamagePrevention] = 0;
@@ -511,6 +513,7 @@ function ResetClassState($player)
   $classState[$CS_NumAttacks] = 0;
   $classState[$CS_DieRoll] = 0;
   $classState[$CS_NumMandalorianAttacks] = 0;
+  $classState[$CS_SeparatistUnitsThatAttacked] = "-";
   $classState[$CS_NumWizardNonAttack] = 0;
   $classState[$CS_LayerTarget] = "-";
   $classState[$CS_NumSwordAttacks] = 0;
@@ -549,6 +552,7 @@ function ResetClassState($player)
   $classState[$CS_OppIndex] = -1;
   $classState[$CS_OppCardActive] = 0;
   $classState[$CS_PlayedWithExploit] = 0;
+  $classState[$CS_AlliesDestroyed] = "-";
 }
 
 function ResetCharacterEffects()

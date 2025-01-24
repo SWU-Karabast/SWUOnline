@@ -238,6 +238,22 @@ function PlayerHasAlly($player, $cardID)
   return false;
 }
 
+function SearchAlliesDestroyed($player, $definedType = "", $aspect = "", $ignoreDuplicates = false) {
+  global $CS_AlliesDestroyed;
+
+  $cards = [];
+  $allies = $CS_AlliesDestroyed == "-" ? [] : explode(",", GetClassState($player, $CS_AlliesDestroyed));
+
+  foreach ($allies as $ally) {
+    if ($definedType != "" && !DefinedTypesContains($ally, $definedType)) continue;
+    if ($aspect != "" && !AspectContains($ally, $aspect, $player)) continue;
+    if ($ignoreDuplicates && in_array($ally, $cards)) continue;
+    $cards[] = $ally;
+  }
+
+  return implode(",", $cards);
+}
+
 function SearchAlliesForCard($player, $card1, $card2 = "", $card3 = "")
 {
   $allies = &GetAllies($player);
@@ -896,7 +912,7 @@ function SearchMultizone($player, $searches)
             $hasUpgradeOnly = $condition[1];
             break;
           case "trait":
-            $trait = $condition[1];
+            $trait = str_replace("_", " ", $condition[1]);
             break;
           case "keyword":
             $keyword = $condition[1];
@@ -1060,6 +1076,16 @@ function ControlsNamedCard($player, $name) {
   return false;
 }
 
+function FindLeaderInPlay($player) {
+  $char = &GetPlayerCharacter($player);
+  if(count($char) > CharacterPieces()) return $char[CharacterPieces()];
+  $units = &GetAllies($player);
+  for($i=0; $i<count($units); $i+=AllyPieces()) {
+    if(IsLeader($units[$i], $player)) return LeaderUndeployed($units[$i]);
+  }
+  return -1;
+}
+
 function SearchGetLast($search) {
   $indices = explode(",", $search);
   return $indices[count($indices) - 1];
@@ -1087,4 +1113,16 @@ function GetUnitsThatAttackedBaseMZIndices($player) {//$player is the owner of t
     $unitsThatAttackedBaseMZIndices .= "THEIRALLY-" . $index;
   }
   return $unitsThatAttackedBaseMZIndices;
+}
+
+function AnotherSeparatistUnitHasAttacked($uniqueID, $player) {
+  global $CS_SeparatistUnitsThatAttacked;
+
+  $separatistUnitsThatAttacked = explode(",", GetClassState($player, $CS_SeparatistUnitsThatAttacked));
+
+  for($i = 0; $i < count($separatistUnitsThatAttacked); ++$i) {
+    if($separatistUnitsThatAttacked[$i] == "-") continue;
+    if($separatistUnitsThatAttacked[$i] != $uniqueID) return true;
+  }
+  return false;
 }

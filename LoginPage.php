@@ -28,11 +28,22 @@ include_once 'Header.php';
       <input type="checkbox" checked='checked' id="rememberMe" name="rememberMe" value="rememberMe">
       <label for="rememberMe">Remember Me</label>
       </div>
-      <button type="submit" name="submit">Submit</button>
+      <div style="text-align:center;">
+        <button type="submit" name="submit">Submit</button>
+      </div>
     </form>
     <form action="ResetPassword.php" method="post" style='text-align:center;'>
       <!-- <button type="submit" name="reset-password">Forgot Password?</button> -->
     </form>
+
+    <?php
+    // Error messages
+    if (isset($_GET["error"])) {
+      if ($_GET["error"] == "invalidlogin") {
+        echo "<h3 class='login-error-message'>Incorrect username or password.</h3>";
+      }
+    }
+    ?>
   </div>
 
   <div class="container bg-blue">

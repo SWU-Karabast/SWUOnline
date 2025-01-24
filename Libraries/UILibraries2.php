@@ -1050,7 +1050,8 @@ function CardLink($caption, $cardNumber, $recordMenu = false)
   */
   //if (function_exists("IsColorblindMode") && !IsColorblindMode($playerID)) $pitchText = "";
   $file = "'./" . "WebpImages2" . "/" . $cardNumber . ".webp'";
-  return "<b><span style='color:" . $color . "; cursor:default;' onmouseover=\"ShowDetail(event," . $file . ")\" onmouseout='HideCardDetail()'>" . $name . "</span></b>";
+  $dataOrientation = CardOrientation($cardNumber) == 0 ? "portrait" : "landscape";
+  return "<b><span data-orientation='$dataOrientation' style='color:" . $color . "; cursor:default;' onmouseover=\"ShowDetail(event," . $file . ")\" onmouseout='HideCardDetail()'>" . $name . "</span></b>";
 }
 
 function MainMenuUI()

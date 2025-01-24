@@ -38,14 +38,12 @@ if (isset($_SESSION["isPatron"]) && isset($_SESSION['useruid']) && !in_array($_S
 if (isset($_SESSION['useruid']) && in_array($_SESSION['useruid'], $contributors)) $displayName = "<img title='Contributor' style='margin-bottom:-2px; margin-right:-4px; height:18px;' src='./images/copper.webp' /> " . $displayName;
 //profanity filter
 $filteredChatText = $chatText;
-$naughtyWords = ["shit", "piss", "fuck", "cunt", "cock", "cocksucker", "motherfucker", "tit", "tits", "fart", "turd", "twat", "bitch", "retard", "fag", "faggot", "kill yourself", "die in a fire", "skank", "hoe", "whore", "sh!t", "p!ss", "c0ck", "c0cksucker", "f@g", "f@ggot", ];
+$naughtyWords = ["shit", "piss", "fuck", "cunt", "cock", "cocksucker", "motherfucker", "tits", "fart", "turd", "twat", "bitch", "retard", "fag", "faggot", "kill yourself", "die in a fire", "skank", "hoe", "whore", "sh!t", "p!ss", "c0ck", "c0cksucker", "f@g", "f@ggot", ];
 for($i=0; $i<count($naughtyWords); ++$i) {
     $regexBuilder = "/";
     for($j=0; $j<count(str_split($naughtyWords[$i])); ++$j) {
       $letter = $naughtyWords[$i][$j];
-      $upperLetter = strtoupper($letter);
-      $twoLetters = $upperLetter . $letter;
-      $regexBuilder = $regexBuilder . "[" . $twoLetters . "](\s|\.{1,2})?";
+      $regexBuilder = $regexBuilder . "[" . $upperLetter = strtoupper($letter) . $letter . "](\s|\.{1,2})?";
     }
     $regexBuilder = $regexBuilder . "/";
 

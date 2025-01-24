@@ -10,7 +10,7 @@ if (!isset($_SESSION["useruid"])) {
   exit;
 }
 $useruid = $_SESSION["useruid"];
-if ($useruid != "OotTheMonk" && $useruid != "love" && $useruid != "Cazargar") {
+if ($useruid != "OotTheMonk" && $useruid != "love" && $useruid != "ninin" && $useruid != "Brubraz") {
   echo ("You must log in to use this page.");
   exit;
 }
@@ -80,6 +80,14 @@ fclose($banfileHandler);
   <label for="gameToClose" style='font-weight:bolder; margin-left:10px;'>Game to close:</label>
   <input type="text" id="gameToClose" name="gameToClose" value="">
   <input type="submit" value="Close Game">
+</form>
+
+<form action='./BootPlayer.php'>
+  <label for="gameToClose" style='font-weight:bolder; margin-left:10px;'>Game:</label>
+  <input type="text" id="gameToClose" name="gameToClose" value="">
+  <label for="playerToBoot" style='font-weight:bolder; margin-left:10px;'>Player to boot:</label>
+  <input type="text" id="playerToBoot" name="playerToBoot" value="">
+  <input type="submit" value="Boot Player">
 </form>
 
 </div>

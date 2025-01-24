@@ -1032,7 +1032,7 @@ function FinalizeChainLink($chainClosed = false)
 {
   global $turn, $actionPoints, $combatChain, $mainPlayer, $currentTurnEffects, $currentPlayer, $combatChainState, $actionPoints, $CCS_DamageDealt;
   global $mainClassState, $CS_AtksWWeapon, $CCS_GoesWhereAfterLinkResolves, $CS_LastAttack, $CCS_LinkTotalAttack, $CS_NumSwordAttacks, $chainLinks, $chainLinkSummary;
-  global $CS_AnotherWeaponGainedGoAgain, $CCS_HitThisLink, $initiativeTaken;
+  global $CS_AnotherWeaponGainedGoAgain, $CCS_HitThisLink, $initiativeTaken, $CS_PlayedAsUpgrade;
   $chainClosed = true;
   UpdateGameState($currentPlayer);
   BuildMainPlayerGameState();
@@ -1045,6 +1045,7 @@ function FinalizeChainLink($chainClosed = false)
     $cardType = CardType($combatChain[$i - 1]);
     if ($cardType != "W" || $cardType != "E" || $cardType != "C") {
       $params = explode(",", GoesWhereAfterResolving($combatChain[$i - 1], "COMBATCHAIN", $combatChain[$i]));
+      SetClassState($currentPlayer, $CS_PlayedAsUpgrade, 0);
       $goesWhere = $params[0];
       $modifier = (count($params) > 1 ? $params[1] : "NA");
       if ($i == 1 && $combatChainState[$CCS_GoesWhereAfterLinkResolves] != "GY") {
@@ -1121,6 +1122,14 @@ function CleanUpCombatEffects($weaponSwap=false)
       if ($currentTurnEffects[$i + 3] == 0) RemoveCurrentTurnEffect($i);
     }
   }
+}
+
+function LayersHaveTriggersToResolve() {
+  global $layers;
+  for($i=0;$i<count($layers);$i+=LayerPieces()) {
+    if($layers[$i] == "TRIGGER") return true;
+  }
+  return false;
 }
 
 function BeginRoundPass()
@@ -1390,14 +1399,6 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
       //Right now only units in play can attack
       if (!$oppCardActive) {
         if($from == "PLAY") {
-          for($i = 0; $i < count($currentTurnEffects); $i += CurrentTurnPieces()) {
-            if($currentTurnEffects[$i] == "3381931079" && $currentTurnEffects[$i+2] == $uniqueID) {//Malevolence
-              WriteLog("Cannot attack with this unit. Reverting gamestate.");
-              RevertGamestate();
-              return;
-            }
-          }
-
           AddDecisionQueue("ATTACK", $currentPlayer, $cardID . "," . $from);
         }
         if($dynCost == "") AddDecisionQueue("PASSPARAMETER", $currentPlayer, "0");
@@ -1514,8 +1515,8 @@ function PlayCardSkipCosts($cardID, $from)
 
 function GetLayerTarget($cardID)
 {
-  global $currentPlayer;
-  if(DefinedTypesContains($cardID, "Upgrade", $currentPlayer))
+  global $currentPlayer, $CS_PlayedAsUpgrade;
+  if(DefinedTypesContains($cardID, "Upgrade", $currentPlayer) || GetClassState($currentPlayer, $CS_PlayedAsUpgrade) > 0)
   {
     $upgradeFilter = UpgradeFilter($cardID);
     AddDecisionQueue("PASSPARAMETER", $currentPlayer, $cardID);
@@ -1545,7 +1546,7 @@ function GetLayerTarget($cardID)
 
 function AddPrePitchDecisionQueue($cardID, $from, $index = -1, $skipAbilityType = false)
 {
-  global $currentPlayer, $CS_AdditionalCosts, $CS_OppCardActive;
+  global $currentPlayer, $CS_AdditionalCosts, $CS_OppCardActive, $CS_PlayedAsUpgrade;
   $oppCardActive = GetClassState($currentPlayer, $CS_OppCardActive) > 0;
   if (!$skipAbilityType && IsStaticType(CardType($cardID), $from, $cardID)) {
     $names = $oppCardActive ? GetOpponentControlledAbilityNames($cardID) : GetAbilityNames($cardID, $index, validate: true);
@@ -1572,6 +1573,15 @@ function AddPrePitchDecisionQueue($cardID, $from, $index = -1, $skipAbilityType 
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, $cardID,1);
       AddDecisionQueue("SETDQVAR", $currentPlayer, 1);
       AddDecisionQueue("MZOP", $currentPlayer, "EXPLOIT", 1);
+    }
+    $pilotCost = PilotingCost($cardID, $currentPlayer);
+    if($pilotCost >= 0) {
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose if you want to play this unit as a pilot?");
+      AddDecisionQueue("YESNO", $currentPlayer, "if you want to play this unit as a pilot");
+      AddDecisionQueue("NOPASS", $currentPlayer, "-");
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, 1, 1);
+      AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_PlayedAsUpgrade, 1);
+      AddDecisionQueue("GETLAYERTARGET", $currentPlayer, $cardID, 1);
     }
   }
   switch ($cardID) {
@@ -1631,7 +1641,8 @@ function GetTargetsForAttack(Ally $attacker, bool $canAttackBase) {
   $allies = &GetAllies($defPlayer);
   for($i = 0; $i < count($allies); $i += AllyPieces()) {
     // Check if the target is in the same arena, except for Strafing Gunship, Swoop Down
-    if (CardArenas($attacker->CardID()) != CardArenas($allies[$i]) && $attacker->CardID() != "5464125379" && !SearchCurrentTurnEffects("4663781580", $mainPlayer)) {
+    $defAlly = new Ally("MYALLY-" . $i, $defPlayer);
+    if($attacker->CurrentArena() != $defAlly->CurrentArena() && $attacker->CardID() != "5464125379" && !SearchCurrentTurnEffects("4663781580", $mainPlayer)) {
       continue;
     }
 
@@ -1645,7 +1656,7 @@ function GetTargetsForAttack(Ally $attacker, bool $canAttackBase) {
     $targets .= "THEIRALLY-" . $i;
 
     // If the target is a sentinel, append it to the sentinel targets
-    if (HasSentinel($allies[$i], $defPlayer, $i) && CardArenas($attacker->CardID()) == CardArenas($allies[$i])) {
+    if (HasSentinel($allies[$i], $defPlayer, $i) && $attacker->CurrentArena() == $defAlly->CurrentArena()) {
       if ($sentinelTargets != "") $sentinelTargets .= ",";
       $sentinelTargets .= "THEIRALLY-" . $i;
     }
@@ -1676,7 +1687,7 @@ function Attack($attackerCardID)
 
   if (SearchCount($targets) > 1) {
     switch($attackerCardID) {
-      case "8613680163"://Darth Maul - Revenge At Last
+      case "8613680163"://Darth Maul (Revenge At Last)
         if(str_contains($targets, "THEIRCHAR-")) {
           AddDecisionQueue("PASSPARAMETER", $mainPlayer, $targets, 1);
           AddDecisionQueue("SETDQVAR", $mainPlayer, 0, 1);
@@ -1763,7 +1774,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
   global $CS_CharacterIndex, $CS_NumNonAttackCards, $CS_PlayCCIndex, $CS_NumAttacks, $CCS_LinkBaseAttack;
   global $CCS_WeaponIndex, $EffectContext, $CCS_AttackUniqueID, $CS_NumEventsPlayed, $CS_AfterPlayedBy, $layers;
   global $CS_NumDragonAttacks, $CS_NumIllusionistAttacks, $CS_NumIllusionistActionCardAttacks, $CCS_IsBoosted;
-  global $SET_PassDRStep, $CS_AbilityIndex, $CS_NumMandalorianAttacks, $CCS_MultiAttackTargets;
+  global $SET_PassDRStep, $CS_AbilityIndex, $CS_NumMandalorianAttacks, $CCS_MultiAttackTargets, $CS_SeparatistUnitsThatAttacked;
 
   $oppCardActive = GetClassState($currentPlayer, $CS_OppCardActive) > 0;
 
@@ -1816,6 +1827,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
       if (!$chainClosed) {
         IncrementClassState($currentPlayer, $CS_NumAttacks);
         if(TraitContains($cardID, "Mandalorian", $currentPlayer, $index)) IncrementClassState($currentPlayer, $CS_NumMandalorianAttacks);
+        if(TraitContains($cardID, "Separatist", $currentPlayer, $index)) AppendClassState($currentPlayer, $CS_SeparatistUnitsThatAttacked, $ally->UniqueID(), false);
         ArsenalAttackAbilities();
         OnAttackEffects($cardID);
       }

@@ -60,8 +60,15 @@ include_once 'Header.php';
 <div class="core-wrapper">
 
 <div class='fav-decks container bg-black'>
-<h2>Welcome <?php echo $_SESSION['useruid'] ?>!</h2>
-
+<div style="display:flex; justify-content:space-between;">
+    <h2>Welcome <?php echo $_SESSION['useruid'] ?>!</h2>
+    <a href="ChangeUsername.php">
+        <button name="change-username" style="height: 40px">Change Username</button>
+    </a>
+    <a href="ChangePassword.php">
+        <button name="change-password" style="height: 40px">Change Password</button>
+    </a>
+</div>
 <?php
 DisplayPatreon();
 
@@ -88,6 +95,8 @@ if (count($favoriteDecks) > 0) {
 </div>
 
 <div class='stats container bg-black'>
+    <p>For stats tracking, build or import your deck to <a href="https://swustats.net" target="_blank">swustats.net</a> and use the swustats deck link to play on karabast.</p>
+    <!--
 <form id="filterForm">
     <input type="date" name="startDate" value="<?php echo $startDate; ?>">
     <input type="date" name="endDate" value="<?php echo $endDate; ?>">
@@ -101,6 +110,7 @@ if (count($favoriteDecks) > 0) {
     <p id="loadingMessage" style="display:none;">Loading stats...</p>
     <?php include "zzGameStats.php"; ?>
 </div>
+-->
 </div>
 
 

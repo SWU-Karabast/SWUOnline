@@ -4,6 +4,7 @@ include "Search.php";
 include "CardLogic.php";
 include "AuraAbilities.php";
 include "ItemAbilities.php";
+include "LeaderAbilities.php";
 include "AllyAbilities.php";
 include "PermanentAbilities.php";
 include "CharacterAbilities.php";
@@ -502,8 +503,10 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           // 2. Damage amount
           // 3. Player causing the damage
           // 4. Indicates if the damage is caused by unit effects (1 = yes, 0 = no)
+          // 5. Indicates if the damage is preventable (1 = yes, 0 = no)
           $targetArr = explode("-", $lastResult);
           $targetPlayer = ($targetArr[0] == "MYCHAR" || $targetArr[0] == "MYALLY" ? $player : ($player == 1 ? 2 : 1));
+          $preventable = count($parameterArr) > 4 ? $parameterArr[4] == 1 : 1;
           if($targetArr[0] == "MYALLY" || $targetArr[0] == "THEIRALLY") {
             $isAttackTarget = GetAttackTarget() == $lastResult;
             $isAttacker = AttackerMZID($player) == $lastResult;
@@ -511,7 +514,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             $attackerHasOverwhelm = HasOverwhelm($ally->CardID(), $ally->Controller(), $ally->Index());
             $destroyed = $ally->DealDamage($parameterArr[1],
                 enemyDamage:(count($parameterArr) > 2 && $parameterArr[2] != $targetPlayer),
-                fromUnitEffect: count($parameterArr) > 3 && (bool)$parameterArr[3]);
+                fromUnitEffect: count($parameterArr) > 3 && (bool)$parameterArr[3],
+                preventable: $preventable);
 
             if($destroyed) {
               if(($isAttackTarget || $isAttacker) && !$attackerHasOverwhelm) CloseCombatChain();
@@ -563,6 +567,10 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         case "ADDEXPERIENCE":
           $ally = new Ally($lastResult);
           $ally->Attach("2007868442");//Experience token
+          break;
+        case "MOVEARENA":
+          $ally = new Ally($lastResult);
+          $ally->MoveArena($parameterArr[1]);
           break;
         case "ADDSHIELD":
           $ally = new Ally($lastResult);
@@ -645,11 +653,20 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             WriteLog(CardLink($cardID, $cardID) . " resisted capture.");
             return $cardID;
           }
+
           $capturedCardID = $captured->CardID();
           $capturedUniqueID = $captured->UniqueID();
           $capturedExhausted = $captured->IsExhausted();
           $capturedOwner = $captured->Owner();
           $capturedUpgrades = $captured->GetUpgrades();
+
+          if(IsToken($cardID)) {
+            // token unit cannot be captured, when they should they are removed from play but bounties can be collected
+            CollectBounties($targetPlayer, $capturedCardID, $capturedUniqueID, $capturedExhausted, $capturedOwner, $capturedUpgrades, capturerUniqueID:$uniqueID);
+            RemoveAlly($targetPlayer, explode("-", $lastResult)[1]);
+            return $cardID;
+          }
+
           $index = SearchAlliesForUniqueID($uniqueID, $player);
           if($index >= 0) {
             $ally = new Ally("MYALLY-" . $index, $player);
@@ -703,6 +720,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           return "MYALLY-" . count($allies)-AllyPieces();
         case "GETATTACK": return AttackValue($lastResult);
         case "DISCARDHAND": DiscardHand($player); return $lastResult;
+        case "DISCARDRANDOM": DiscardRandom($player, isset($paramArr[1]) ? $paramArr[1] : ''); return $lastResult;
         case "MILL": return Mill($player, $lastResult);
         case "DEFEATUPGRADE":
           $upgradeID = $lastResult;
@@ -1025,7 +1043,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       }
       return ($rv == "" ? "PASS" : $rv);
     case "SHOWOPTIONS":
-      $params = explode("-", $parameter);
+      $params = explode("&", $parameter);
       $cardID = $params[0];
       $options = explode(";", $params[1]);
       $selectedOption = str_replace("_", " ", $options[$lastResult]);
@@ -1461,6 +1479,17 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         }
       }
       return $lastResult;
+    case "GETITEMBYINDEX": // Get item by index, separated by comma. If the index is negative, it will be counted from the end of the array (e.g. -1 is the last item).
+      if ($lastResult == "PASS" || $lastResult == "") return "PASS";
+      $items = explode(",", $lastResult);
+      $index = (int) $parameter;
+      if ($index < 0) {
+        $index = count($items) + $index;
+      }
+      if ($index >= count($items)) {
+        return "PASS";
+      }
+      return $items[$index];
     case "PREPENDLASTRESULT":
       $rv = $lastResult == "PASS" ? $parameter : $parameter . $lastResult;
       $rv = rtrim($rv, ",");
@@ -1558,7 +1587,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $ability = implode(" ", explode("_", $names[$index]));
       WriteLog("<b><span style='color:Gray'>{$ability}</span></b> ability was chosen.");
       return $lastResult;
-      case "SETABILITYTYPEOPP"://For activating opponent's cards
+    case "SETABILITYTYPEOPP"://For activating opponent's cards
         global $CS_OppIndex, $CS_OppCardActive;
         $lastPlayed[2] = $lastResult;
         $otherPlayer = ($player == 1 ? 2 : 1);
@@ -1788,6 +1817,12 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       PrependDecisionQueue("SETDQVAR", $player, "1");
       PrependDecisionQueue("BUTTONINPUTNOPASS", $player, GetIndices($parameter[0] + 1));
       PrependDecisionQueue("SETDQCONTEXT", $player, "Choose an amount of damage to deal to " . CardLink($theirAllies[$index], $theirAllies[$index]));
+      return $lastResult;
+    case "GETLAYERTARGET":
+      GetLayerTarget($parameter);
+      return $lastResult;
+    case "DEPLOYLEADERASUPGRADE":
+      LeaderPilotDeploy($player, $parameter, $lastResult);
       return $lastResult;
     default:
       return "NOTSTATIC";

@@ -226,7 +226,6 @@ function ItemEndTurnAbilities()
 
 function SteamCounterLogic($item, $playerID, $uniqueID)
 {
-  global $CS_NumBoosted;
   $counters = ETASteamCounters($item);
   return $counters;
 }

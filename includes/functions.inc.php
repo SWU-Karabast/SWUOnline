@@ -2,6 +2,12 @@
 
 use SendGrid\Mail\Mail;
 
+// Check for empty input change username
+function emptyInputChangeUsername($username, $newUsername, $confirmNewUsername)
+{
+	return empty($username) || empty($newUsername) || empty($confirmNewUsername);
+}
+
 // Check for empty input signup
 function emptyInputSignup($username, $email, $pwd, $pwdRepeat)
 {
@@ -71,6 +77,26 @@ function uidExists($conn, $username)
 	}
 	mysqli_stmt_close($stmt);
 	mysqli_close($conn);
+}
+
+// Change username in database
+function changeUsername($conn, $username, $newUsername)
+{
+	$conn = GetDBConnection();
+	$sql = "UPDATE users SET usersUid = ? WHERE usersUid = ?;";
+
+	$stmt = mysqli_stmt_init($conn);
+	if (!mysqli_stmt_prepare($stmt, $sql)) {
+		header("location: ../ChangeUsername.php?error=stmtfailed");
+		exit();
+	}
+
+	mysqli_stmt_bind_param($stmt, "ss", $newUsername, $username);
+	mysqli_stmt_execute($stmt);
+	mysqli_stmt_close($stmt);
+	mysqli_close($conn);
+	header("location: ../ChangeUsername.php?error=none");
+	exit();
 }
 
 // Insert new user into database
@@ -237,6 +263,7 @@ function logCompletedGameStats()
 	global $winner, $currentRound, $gameName; //gameName is assumed by ParseGamefile.php
 	global $p1id, $p2id, $p1IsChallengeActive, $p2IsChallengeActive, $p1DeckLink, $p2DeckLink, $firstPlayer;
 	global $p1deckbuilderID, $p2deckbuilderID;
+	/*
 	$loser = ($winner == 1 ? 2 : 1);
 	$columns = "WinningHero, LosingHero, NumTurns, WinnerDeck, LoserDeck, WinnerHealth, FirstPlayer, WinningPlayer";
 	$values = "?, ?, ?, ?, ?, ?, ?, ?";
@@ -270,6 +297,28 @@ function logCompletedGameStats()
 	if ($p2IsChallengeActive == "1" && $p2id != "-") LogChallengeResult($conn, $gameResultID, $p2id, ($winner == 2 ? 1 : 0));
 
 	mysqli_close($conn);
+	*/
+}
+
+function changePassword($conn, $userID, $newPwd)
+{
+	$conn = GetDBConnection();
+	$sql = "UPDATE users SET usersPwd = ? WHERE usersId = ?;";
+
+	$stmt = mysqli_stmt_init($conn);
+	if (!mysqli_stmt_prepare($stmt, $sql)) {
+		header("location: ../ChangePassword.php?error=stmtfailed");
+		exit();
+	}
+
+	$hashedPwd = password_hash($newPwd, PASSWORD_DEFAULT);
+
+	mysqli_stmt_bind_param($stmt, "si", $hashedPwd, $userID);
+	mysqli_stmt_execute($stmt);
+	mysqli_stmt_close($stmt);
+	mysqli_close($conn);
+	header("location: ../ChangePassword.php?error=none");
+	exit();
 }
 
 function LogChallengeResult($conn, $gameResultID, $playerID, $result)

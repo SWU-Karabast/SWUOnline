@@ -18,7 +18,7 @@ function ModalAbilities($player, $card, $lastResult)
       }
       return $lastResult;
     case "OUTMANEUVER":
-      $arena = $lastResult == 0 ? "Ground" : "Space";
+      $arena = $lastResult == 0 ? "Space" : "Ground";
       ExhaustAllAllies($arena, 1);
       ExhaustAllAllies($arena, 2);
       return $lastResult;
@@ -51,7 +51,7 @@ function ModalAbilities($player, $card, $lastResult)
       }
       return $lastResult;
     case "BOMBINGRUN":
-      $arena = $lastResult == 0 ? "Ground" : "Space";
+      $arena = $lastResult == 0 ? "Space" : "Ground";
       DamageAllAllies(3, "7916724925", arena:$arena);
       return 1;
     case "VIGILANCE":
@@ -102,7 +102,17 @@ function ModalAbilities($player, $card, $lastResult)
           AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
           AddDecisionQueue("MZOP", $player, "{0}", 1);
           break;
-        case 2: // Resource (Handled Elsewhere)
+        case 2: // Resource
+          $discard = &GetDiscard($player);
+          $discardIndex = 0;
+          for ($i = count($discard) - 1; $i >= 0; --$i) {
+            if ($discard[$i] == "0073206444") { //Command
+              $discardIndex = $i;
+              break;
+            }
+          }
+          RemoveDiscard($player, $discardIndex);
+          AddResources("0073206444", $player, "GY", "DOWN", isExhausted:1); //Command
           break;
         case 3: // Return a unit
           MZMoveCard($player, "MYDISCARD:definedType=Unit", "MYHAND", may:false);
@@ -120,25 +130,24 @@ function ModalAbilities($player, $card, $lastResult)
           AddDecisionQueue("MZOP", $player, "BOUNCE", 1);
           break;
         case 1: // Buff unit
-          AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
+          AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
           AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to buff", 1);
           AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
           AddDecisionQueue("MZOP", $player, "GETUNIQUEID", 1);
           AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $player, "3789633661,HAND");
           break;
         case 2: // Exhaust units
-          AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
-          AddDecisionQueue("SETDQCONTEXT", $player, "Choose a card to exhaust");
-          AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-          AddDecisionQueue("MZOP", $player, "REST", 1);
-          AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY", 1);
-          AddDecisionQueue("SETDQCONTEXT", $player, "Choose a card to exhaust");
-          AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-          AddDecisionQueue("MZOP", $player, "REST", 1);
+          for ($i = 0; $i < 2; $i++) {
+            AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
+            AddDecisionQueue("MZFILTER", $player, "status=1");
+            AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to exhaust");
+            AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+            AddDecisionQueue("MZOP", $player, "REST", 1);
+          }
           break;
         case 3: // Discard a card
           $otherPlayer = ($player == 1 ? 2 : 1);
-          DiscardRandom($otherPlayer, "3789633661");
+          AddDecisionQueue("OP", $otherPlayer, "DISCARDRANDOM,3789633661");
           break;
         default: break;
       }
@@ -177,6 +186,7 @@ function ModalAbilities($player, $card, $lastResult)
           AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to attack with");
           AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
           AddDecisionQueue("MZOP", $player, "READY", 1);
+          AddDecisionQueue("MZALLCARDTRAITORPASS", $player, "Wookiee", 1);
           AddDecisionQueue("MZOP", $player, "ADDEFFECT,7578472075", 1);
           AddDecisionQueue("MZOP", $player, "ATTACK", 1);
           break;
@@ -266,10 +276,11 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       break;
     case "CLEARTHEFIELD":
       $otherPlayer = $player == 1 ? 2 : 1;
-      $cardID = GetMZCard($player, $lastResult);
-      $cardTitle = CardTitle($cardID);
+      $ally = new Ally($lastResult);
+      $cardTitle = CardTitle($ally->CardID());
+      MZBounce($player, $ally->MZIndex());
       $targetCards = SearchAlliesUniqueIDForTitle($otherPlayer, $cardTitle);
-      $targetCardsArr = explode(",", $targetCards);
+      $targetCardsArr = $targetCards ? explode(",", $targetCards) : [];
 
       for ($i = 0; $i < count($targetCardsArr); ++$i) {
         $targetAlly = new Ally($targetCardsArr[$i]);
@@ -467,8 +478,8 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       PrependDecisionQueue("SETDQCONTEXT", $player, "Do you want to continue? (Damage: " . $dqVars[1] . ")");
       return $lastResult;
     case "ADMIRALACKBAR":
-      $targetCard = GetMZCard($player, $lastResult);
-      $damage = SearchCount(SearchAllies($player, arena:CardArenas($targetCard)));
+      $targetAlly = new Ally($lastResult, MZPlayerID($player, $lastResult));
+      $damage = SearchCount(SearchAllies($player, arena:$targetAlly->CurrentArena()));
       AddDecisionQueue("PASSPARAMETER", $player, $lastResult);
       AddDecisionQueue("MZOP", $player, "DEALDAMAGE," . $damage, 1);
       return $lastResult;
@@ -753,18 +764,6 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       break;
     case "LETHALCRACKDOWN":
       DealDamageAsync($player, CardPower($lastResult), "DAMAGE", "1389085256");
-      break;
-    case "TWI_PALPATINE_HERO":
-      Draw($player);
-      Restore(2, $player);
-      $char = &GetPlayerCharacter($player);
-      $char[CharacterPieces()] = "ad86d54e97";
-      break;
-    case "TWI_DARTHSIDIOUS_HERO":
-      CreateCloneTrooper($player);
-      DealDamageAsync(($player == 1 ? 2 : 1), 2, "DAMAGE", "ad86d54e97");
-      $char = &GetPlayerCharacter($player);
-      $char[CharacterPieces()] = "0026166404"; // Chancellor Palpatine Leader
       break;
     case "LUXBONTERI":
       $ally = new Ally($lastResult, MZPlayerID($player, $lastResult));

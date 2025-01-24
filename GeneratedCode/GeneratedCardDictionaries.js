@@ -964,6 +964,36 @@ default: return "";
 }
 default: return "";
 }
+case "7":
+switch(cardID[3]) {
+case "8":
+switch(cardID[4]) {
+case "5":
+switch(cardID[5]) {
+case "5":
+switch(cardID[6]) {
+case "4":
+switch(cardID[7]) {
+case "0":
+switch(cardID[8]) {
+case "1":
+switch(cardID[9]) {
+case "1":
+return "General Draven";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 case "9":
@@ -1714,6 +1744,32 @@ default: return "";
 }
 default: return "";
 }
+case "7":
+switch(cardID[4]) {
+case "4":
+switch(cardID[5]) {
+case "1":
+switch(cardID[6]) {
+case "7":
+switch(cardID[7]) {
+case "7":
+switch(cardID[8]) {
+case "4":
+switch(cardID[9]) {
+case "7":
+return "Quasar TIE Carrier";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 case "6":
@@ -1796,6 +1852,32 @@ case "9":
 switch(cardID[9]) {
 case "8":
 return "Death Star Stormtrooper";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "8":
+switch(cardID[4]) {
+case "3":
+switch(cardID[5]) {
+case "7":
+switch(cardID[6]) {
+case "4":
+switch(cardID[7]) {
+case "3":
+switch(cardID[8]) {
+case "3":
+switch(cardID[9]) {
+case "1":
+return "Blue Leader";
 default: return "";
 }
 default: return "";
@@ -2620,6 +2702,36 @@ default: return "";
 }
 default: return "";
 }
+case "2":
+switch(cardID[3]) {
+case "5":
+switch(cardID[4]) {
+case "1":
+switch(cardID[5]) {
+case "5":
+switch(cardID[6]) {
+case "6":
+switch(cardID[7]) {
+case "3":
+switch(cardID[8]) {
+case "3":
+switch(cardID[9]) {
+case "2":
+return "Planetary Bombardment";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 case "5":
@@ -2830,6 +2942,62 @@ case "4":
 switch(cardID[9]) {
 case "8":
 return "Disaffected Senator";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "6":
+switch(cardID[4]) {
+case "5":
+switch(cardID[5]) {
+case "0":
+switch(cardID[6]) {
+case "0":
+switch(cardID[7]) {
+case "0":
+switch(cardID[8]) {
+case "1":
+switch(cardID[9]) {
+case "3":
+return "Landing Shuttle";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "8":
+switch(cardID[3]) {
+case "7":
+switch(cardID[4]) {
+case "1":
+switch(cardID[5]) {
+case "9":
+switch(cardID[6]) {
+case "6":
+switch(cardID[7]) {
+case "5":
+switch(cardID[8]) {
+case "8":
+switch(cardID[9]) {
+case "4":
+return "Independent Smuggler";
 default: return "";
 }
 default: return "";
@@ -3484,6 +3652,36 @@ default: return "";
 }
 default: return "";
 }
+case "1":
+switch(cardID[3]) {
+case "1":
+switch(cardID[4]) {
+case "2":
+switch(cardID[5]) {
+case "6":
+switch(cardID[6]) {
+case "2":
+switch(cardID[7]) {
+case "8":
+switch(cardID[8]) {
+case "1":
+switch(cardID[9]) {
+case "3":
+return "Wedge Antilles";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 case "1":
@@ -3752,6 +3950,32 @@ default: return "";
 }
 default: return "";
 }
+case "4":
+switch(cardID[4]) {
+case "3":
+switch(cardID[5]) {
+case "1":
+switch(cardID[6]) {
+case "2":
+switch(cardID[7]) {
+case "0":
+switch(cardID[8]) {
+case "6":
+switch(cardID[9]) {
+case "5":
+return "It's a Trap";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 case "3":
@@ -3860,6 +4084,36 @@ case "3":
 switch(cardID[9]) {
 case "1":
 return "Unmasking the Conspiracy";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "2":
+switch(cardID[3]) {
+case "6":
+switch(cardID[4]) {
+case "5":
+switch(cardID[5]) {
+case "4":
+switch(cardID[6]) {
+case "9":
+switch(cardID[7]) {
+case "6":
+switch(cardID[8]) {
+case "8":
+switch(cardID[9]) {
+case "4":
+return "Resupply Carrier";
 default: return "";
 }
 default: return "";
@@ -4156,6 +4410,36 @@ case "3":
 switch(cardID[9]) {
 case "3":
 return "Obedient Vanguard";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "3":
+switch(cardID[3]) {
+case "5":
+switch(cardID[4]) {
+case "1":
+switch(cardID[5]) {
+case "1":
+switch(cardID[6]) {
+case "6":
+switch(cardID[7]) {
+case "5":
+switch(cardID[8]) {
+case "2":
+switch(cardID[9]) {
+case "6":
+return "Fleet Interdictor";
 default: return "";
 }
 default: return "";
@@ -5246,6 +5530,32 @@ default: return "";
 }
 default: return "";
 }
+case "1":
+switch(cardID[4]) {
+case "0":
+switch(cardID[5]) {
+case "0":
+switch(cardID[6]) {
+case "6":
+switch(cardID[7]) {
+case "7":
+switch(cardID[8]) {
+case "5":
+switch(cardID[9]) {
+case "3":
+return "The Mandalorian";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 case "1":
@@ -5328,6 +5638,32 @@ default: return "";
 }
 default: return "";
 }
+case "4":
+switch(cardID[4]) {
+case "7":
+switch(cardID[5]) {
+case "8":
+switch(cardID[6]) {
+case "8":
+switch(cardID[7]) {
+case "e":
+switch(cardID[8]) {
+case "8":
+switch(cardID[9]) {
+case "9":
+return "Wedge Antilles";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 case "6":
@@ -5372,6 +5708,36 @@ case "7":
 switch(cardID[9]) {
 case "2":
 return "Maul";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "9":
+switch(cardID[3]) {
+case "c":
+switch(cardID[4]) {
+case "6":
+switch(cardID[5]) {
+case "a":
+switch(cardID[6]) {
+case "9":
+switch(cardID[7]) {
+case "d":
+switch(cardID[8]) {
+case "b":
+switch(cardID[9]) {
+case "d":
+return "Admiral Piett";
 default: return "";
 }
 default: return "";
@@ -6302,6 +6668,36 @@ default: return "";
 }
 default: return "";
 }
+case "6":
+switch(cardID[3]) {
+case "1":
+switch(cardID[4]) {
+case "3":
+switch(cardID[5]) {
+case "9":
+switch(cardID[6]) {
+case "7":
+switch(cardID[7]) {
+case "1":
+switch(cardID[8]) {
+case "0":
+switch(cardID[9]) {
+case "7":
+return "First Order Stormtrooper";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 case "2":
@@ -6658,6 +7054,96 @@ default: return "";
 }
 default: return "";
 }
+case "1":
+switch(cardID[3]) {
+case "1":
+switch(cardID[4]) {
+case "6":
+switch(cardID[5]) {
+case "6":
+switch(cardID[6]) {
+case "2":
+switch(cardID[7]) {
+case "4":
+switch(cardID[8]) {
+case "4":
+switch(cardID[9]) {
+case "2":
+return "Director Krennic";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "9":
+switch(cardID[3]) {
+case "0":
+switch(cardID[4]) {
+case "0":
+switch(cardID[5]) {
+case "8":
+switch(cardID[6]) {
+case "9":
+switch(cardID[7]) {
+case "9":
+switch(cardID[8]) {
+case "6":
+switch(cardID[9]) {
+case "6":
+return "Banshee";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "0":
+switch(cardID[3]) {
+case "0":
+switch(cardID[4]) {
+case "5":
+switch(cardID[5]) {
+case "5":
+switch(cardID[6]) {
+case "2":
+switch(cardID[7]) {
+case "4":
+switch(cardID[8]) {
+case "3":
+switch(cardID[9]) {
+case "4":
+return "Gold Leader";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 case "c":
@@ -6880,6 +7366,36 @@ case "7":
 switch(cardID[9]) {
 case "4":
 return "Sundari";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "1":
+switch(cardID[3]) {
+case "0":
+switch(cardID[4]) {
+case "5":
+switch(cardID[5]) {
+case "5":
+switch(cardID[6]) {
+case "3":
+switch(cardID[7]) {
+case "0":
+switch(cardID[8]) {
+case "8":
+switch(cardID[9]) {
+case "7":
+return "Nien Nunb";
 default: return "";
 }
 default: return "";
@@ -7666,6 +8182,36 @@ default: return "";
 }
 default: return "";
 }
+case "6":
+switch(cardID[3]) {
+case "4":
+switch(cardID[4]) {
+case "a":
+switch(cardID[5]) {
+case "f":
+switch(cardID[6]) {
+case "f":
+switch(cardID[7]) {
+case "1":
+switch(cardID[8]) {
+case "4":
+switch(cardID[9]) {
+case "f":
+return "Lando Calrissian";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 case "5":
@@ -7760,6 +8306,28 @@ case "7":
 switch(cardID[9]) {
 case "5":
 return "Warrior Drone";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "9":
+switch(cardID[5]) {
+case "4":
+switch(cardID[6]) {
+case "4":
+switch(cardID[7]) {
+case "8":
+switch(cardID[8]) {
+case "1":
+switch(cardID[9]) {
+case "8":
+return "TIE Bomber";
 default: return "";
 }
 default: return "";
@@ -8216,6 +8784,36 @@ default: return "";
 }
 default: return "";
 }
+case "3":
+switch(cardID[3]) {
+case "3":
+switch(cardID[4]) {
+case "3":
+switch(cardID[5]) {
+case "2":
+switch(cardID[6]) {
+case "2":
+switch(cardID[7]) {
+case "0":
+switch(cardID[8]) {
+case "0":
+switch(cardID[9]) {
+case "3":
+return "Rose Tico";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 case "7":
@@ -8408,6 +9006,66 @@ case "0":
 switch(cardID[9]) {
 case "5":
 return "Prisoner of War";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "1":
+switch(cardID[3]) {
+case "1":
+switch(cardID[4]) {
+case "8":
+switch(cardID[5]) {
+case "9":
+switch(cardID[6]) {
+case "1":
+switch(cardID[7]) {
+case "7":
+switch(cardID[8]) {
+case "5":
+switch(cardID[9]) {
+case "6":
+return "Red Leader";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "2":
+switch(cardID[3]) {
+case "2":
+switch(cardID[4]) {
+case "4":
+switch(cardID[5]) {
+case "9":
+switch(cardID[6]) {
+case "3":
+switch(cardID[7]) {
+case "1":
+switch(cardID[8]) {
+case "9":
+switch(cardID[9]) {
+case "1":
+return "IG-2000";
 default: return "";
 }
 default: return "";
@@ -8644,6 +9302,54 @@ case "4":
 switch(cardID[9]) {
 case "2":
 return "General's Guardian";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "4":
+switch(cardID[5]) {
+case "7":
+switch(cardID[6]) {
+case "0":
+switch(cardID[7]) {
+case "1":
+switch(cardID[8]) {
+case "0":
+switch(cardID[9]) {
+case "2":
+return "Hound's Tooth";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "4":
+switch(cardID[4]) {
+case "3":
+switch(cardID[5]) {
+case "8":
+switch(cardID[6]) {
+case "2":
+switch(cardID[7]) {
+case "3":
+switch(cardID[8]) {
+case "3":
+switch(cardID[9]) {
+case "3":
+return "Academy Graduate";
 default: return "";
 }
 default: return "";
@@ -9112,6 +9818,32 @@ default: return "";
 }
 default: return "";
 }
+case "5":
+switch(cardID[4]) {
+case "4":
+switch(cardID[5]) {
+case "7":
+switch(cardID[6]) {
+case "1":
+switch(cardID[7]) {
+case "5":
+switch(cardID[8]) {
+case "4":
+switch(cardID[9]) {
+case "0":
+return "Cassian Andor";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 case "5":
@@ -9386,6 +10118,32 @@ default: return "";
 }
 default: return "";
 }
+case "5":
+switch(cardID[4]) {
+case "9":
+switch(cardID[5]) {
+case "e":
+switch(cardID[6]) {
+case "7":
+switch(cardID[7]) {
+case "e":
+switch(cardID[8]) {
+case "c":
+switch(cardID[9]) {
+case "4":
+return "Admiral Ackbar";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 case "7":
@@ -9508,6 +10266,36 @@ default: return "";
 }
 default: return "";
 }
+case "5":
+switch(cardID[3]) {
+case "8":
+switch(cardID[4]) {
+case "0":
+switch(cardID[5]) {
+case "6":
+switch(cardID[6]) {
+case "9":
+switch(cardID[7]) {
+case "2":
+switch(cardID[8]) {
+case "7":
+switch(cardID[9]) {
+case "6":
+return "Lando Calrissian";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 case "c":
@@ -9562,6 +10350,32 @@ case "2":
 switch(cardID[9]) {
 case "4":
 return "Rukh";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "2":
+switch(cardID[4]) {
+case "7":
+switch(cardID[5]) {
+case "1":
+switch(cardID[6]) {
+case "3":
+switch(cardID[7]) {
+case "5":
+switch(cardID[8]) {
+case "4":
+switch(cardID[9]) {
+case "7":
+return "Dengar";
 default: return "";
 }
 default: return "";
@@ -10656,6 +11470,32 @@ case "3":
 switch(cardID[9]) {
 case "8":
 return "Poggle the Lesser";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "1":
+switch(cardID[4]) {
+case "5":
+switch(cardID[5]) {
+case "9":
+switch(cardID[6]) {
+case "6":
+switch(cardID[7]) {
+case "7":
+switch(cardID[8]) {
+case "0":
+switch(cardID[9]) {
+case "3":
+return "Allegiant General Pryde";
 default: return "";
 }
 default: return "";
@@ -13080,6 +13920,32 @@ default: return "";
 }
 default: return "";
 }
+case "b":
+switch(cardID[4]) {
+case "6":
+switch(cardID[5]) {
+case "3":
+switch(cardID[6]) {
+case "8":
+switch(cardID[7]) {
+case "b":
+switch(cardID[8]) {
+case "1":
+switch(cardID[9]) {
+case "8":
+return "Rose Tico";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 case "5":
@@ -13438,6 +14304,36 @@ default: return "";
 }
 default: return "";
 }
+case "8":
+switch(cardID[3]) {
+case "4":
+switch(cardID[4]) {
+case "5":
+switch(cardID[5]) {
+case "0":
+switch(cardID[6]) {
+case "5":
+switch(cardID[7]) {
+case "5":
+switch(cardID[8]) {
+case "7":
+switch(cardID[9]) {
+case "0":
+return "Chimaera";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 case "3":
@@ -13630,6 +14526,66 @@ case "8":
 switch(cardID[9]) {
 case "4":
 return "Take Captive";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "2":
+switch(cardID[3]) {
+case "0":
+switch(cardID[4]) {
+case "7":
+switch(cardID[5]) {
+case "e":
+switch(cardID[6]) {
+case "4":
+switch(cardID[7]) {
+case "1":
+switch(cardID[8]) {
+case "3":
+switch(cardID[9]) {
+case "1":
+return "Grand Admiral Thrawn";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "7":
+switch(cardID[3]) {
+case "5":
+switch(cardID[4]) {
+case "7":
+switch(cardID[5]) {
+case "2":
+switch(cardID[6]) {
+case "2":
+switch(cardID[7]) {
+case "8":
+switch(cardID[8]) {
+case "8":
+switch(cardID[9]) {
+case "3":
+return "R2-D2";
 default: return "";
 }
 default: return "";
@@ -14480,6 +15436,36 @@ default: return "";
 }
 default: return "";
 }
+case "4":
+switch(cardID[3]) {
+case "6":
+switch(cardID[4]) {
+case "3":
+switch(cardID[5]) {
+case "2":
+switch(cardID[6]) {
+case "2":
+switch(cardID[7]) {
+case "0":
+switch(cardID[8]) {
+case "8":
+switch(cardID[9]) {
+case "1":
+return "Grand Admiral Thrawn";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 case "6":
@@ -14698,6 +15684,36 @@ case "5":
 switch(cardID[9]) {
 case "0":
 return "Heroes on Both Sides";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "7":
+switch(cardID[3]) {
+case "3":
+switch(cardID[4]) {
+case "1":
+switch(cardID[5]) {
+case "0":
+switch(cardID[6]) {
+case "0":
+switch(cardID[7]) {
+case "7":
+switch(cardID[8]) {
+case "5":
+switch(cardID[9]) {
+case "9":
+return "BoShek";
 default: return "";
 }
 default: return "";
@@ -14938,6 +15954,32 @@ case "5":
 switch(cardID[9]) {
 case "1":
 return "Enfys Nest";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "5":
+switch(cardID[4]) {
+case "6":
+switch(cardID[5]) {
+case "9":
+switch(cardID[6]) {
+case "8":
+switch(cardID[7]) {
+case "3":
+switch(cardID[8]) {
+case "7":
+switch(cardID[9]) {
+case "4":
+return "Commandeer";
 default: return "";
 }
 default: return "";
@@ -15200,6 +16242,36 @@ case "3":
 switch(cardID[9]) {
 case "8":
 return "Droid Manufactory";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "2":
+switch(cardID[3]) {
+case "3":
+switch(cardID[4]) {
+case "4":
+switch(cardID[5]) {
+case "1":
+switch(cardID[6]) {
+case "5":
+switch(cardID[7]) {
+case "8":
+switch(cardID[8]) {
+case "3":
+switch(cardID[9]) {
+case "0":
+return "Anakin Skywalker";
 default: return "";
 }
 default: return "";
@@ -16356,6 +17428,36 @@ case "0":
 switch(cardID[9]) {
 case "5":
 return "Squadron of Vultures";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "8":
+switch(cardID[3]) {
+case "7":
+switch(cardID[4]) {
+case "2":
+switch(cardID[5]) {
+case "4":
+switch(cardID[6]) {
+case "6":
+switch(cardID[7]) {
+case "2":
+switch(cardID[8]) {
+case "6":
+switch(cardID[9]) {
+case "0":
+return "Droid Missile Platform";
 default: return "";
 }
 default: return "";
@@ -17962,6 +19064,36 @@ case "6":
 switch(cardID[9]) {
 case "8":
 return "Nameless Valor";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "1":
+switch(cardID[3]) {
+case "9":
+switch(cardID[4]) {
+case "1":
+switch(cardID[5]) {
+case "9":
+switch(cardID[6]) {
+case "6":
+switch(cardID[7]) {
+case "5":
+switch(cardID[8]) {
+case "8":
+switch(cardID[9]) {
+case "8":
+return "Electromagnetic Pulse";
 default: return "";
 }
 default: return "";
@@ -19912,6 +21044,32 @@ default: return "";
 }
 default: return "";
 }
+case "0":
+switch(cardID[4]) {
+case "8":
+switch(cardID[5]) {
+case "3":
+switch(cardID[6]) {
+case "2":
+switch(cardID[7]) {
+case "6":
+switch(cardID[8]) {
+case "3":
+switch(cardID[9]) {
+case "0":
+return "Admiral Piett";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 case "3":
 switch(cardID[4]) {
 case "6":
@@ -20230,6 +21388,36 @@ case "5":
 switch(cardID[9]) {
 case "5":
 return "Cell Block Guard";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "1":
+switch(cardID[3]) {
+case "9":
+switch(cardID[4]) {
+case "8":
+switch(cardID[5]) {
+case "3":
+switch(cardID[6]) {
+case "7":
+switch(cardID[7]) {
+case "7":
+switch(cardID[8]) {
+case "6":
+switch(cardID[9]) {
+case "3":
+return "Shuttle ST-149";
 default: return "";
 }
 default: return "";
@@ -20654,6 +21842,32 @@ default: return "";
 }
 default: return "";
 }
+case "0":
+switch(cardID[4]) {
+case "0":
+switch(cardID[5]) {
+case "2":
+switch(cardID[6]) {
+case "0":
+switch(cardID[7]) {
+case "7":
+switch(cardID[8]) {
+case "6":
+switch(cardID[9]) {
+case "1":
+return "Shuttle Tydirium";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 case "1":
@@ -20672,6 +21886,36 @@ case "2":
 switch(cardID[9]) {
 case "7":
 return "Final Showdown";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "6":
+switch(cardID[3]) {
+case "5":
+switch(cardID[4]) {
+case "6":
+switch(cardID[5]) {
+case "4":
+switch(cardID[6]) {
+case "7":
+switch(cardID[7]) {
+case "3":
+switch(cardID[8]) {
+case "9":
+switch(cardID[9]) {
+case "1":
+return "Blade Squadron B-Wing";
 default: return "";
 }
 default: return "";
@@ -20792,6 +22036,32 @@ case "9":
 switch(cardID[9]) {
 case "1":
 return "Volunteer Soldier";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "6":
+switch(cardID[4]) {
+case "8":
+switch(cardID[5]) {
+case "2":
+switch(cardID[6]) {
+case "6":
+switch(cardID[7]) {
+case "8":
+switch(cardID[8]) {
+case "9":
+switch(cardID[9]) {
+case "9":
+return "Home One";
 default: return "";
 }
 default: return "";
@@ -21142,6 +22412,36 @@ case "6":
 switch(cardID[9]) {
 case "0":
 return "B1 Attack Platform";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "3":
+switch(cardID[3]) {
+case "0":
+switch(cardID[4]) {
+case "4":
+switch(cardID[5]) {
+case "7":
+switch(cardID[6]) {
+case "3":
+switch(cardID[7]) {
+case "7":
+switch(cardID[8]) {
+case "8":
+switch(cardID[9]) {
+case "9":
+return "Devastator";
 default: return "";
 }
 default: return "";
@@ -21770,6 +23070,36 @@ default: return "";
 }
 default: return "";
 }
+case "6":
+switch(cardID[3]) {
+case "3":
+switch(cardID[4]) {
+case "4":
+switch(cardID[5]) {
+case "1":
+switch(cardID[6]) {
+case "8":
+switch(cardID[7]) {
+case "6":
+switch(cardID[8]) {
+case "6":
+switch(cardID[9]) {
+case "9":
+return "IG-88";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 case "0":
@@ -21876,6 +23206,32 @@ case "8":
 switch(cardID[9]) {
 case "5":
 return "Level 1313";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "9":
+switch(cardID[4]) {
+case "9":
+switch(cardID[5]) {
+case "7":
+switch(cardID[6]) {
+case "8":
+switch(cardID[7]) {
+case "8":
+switch(cardID[8]) {
+case "9":
+switch(cardID[9]) {
+case "9":
+return "Colossus";
 default: return "";
 }
 default: return "";
@@ -22318,6 +23674,32 @@ default: return "";
 }
 default: return "";
 }
+case "4":
+switch(cardID[4]) {
+case "2":
+switch(cardID[5]) {
+case "9":
+switch(cardID[6]) {
+case "7":
+switch(cardID[7]) {
+case "4":
+switch(cardID[8]) {
+case "1":
+switch(cardID[9]) {
+case "3":
+return "Onyx Squadron Brute";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 default: return "";
@@ -22452,6 +23834,28 @@ case "0":
 switch(cardID[9]) {
 case "3":
 return "Barriss Offee";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "4":
+switch(cardID[5]) {
+case "6":
+switch(cardID[6]) {
+case "1":
+switch(cardID[7]) {
+case "6":
+switch(cardID[8]) {
+case "8":
+switch(cardID[9]) {
+case "1":
+return "Leia Organa";
 default: return "";
 }
 default: return "";
@@ -23264,6 +24668,32 @@ default: return "";
 }
 default: return "";
 }
+case "4":
+switch(cardID[4]) {
+case "4":
+switch(cardID[5]) {
+case "0":
+switch(cardID[6]) {
+case "5":
+switch(cardID[7]) {
+case "1":
+switch(cardID[8]) {
+case "7":
+switch(cardID[9]) {
+case "3":
+return "Admiral Ackbar";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 case "3":
@@ -23556,6 +24986,32 @@ default: return "";
 }
 default: return "";
 }
+case "0":
+switch(cardID[4]) {
+case "4":
+switch(cardID[5]) {
+case "2":
+switch(cardID[6]) {
+case "6":
+switch(cardID[7]) {
+case "7":
+switch(cardID[8]) {
+case "1":
+switch(cardID[9]) {
+case "6":
+return "Dagger Squadron Pilot";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 case "3":
@@ -23754,6 +25210,36 @@ case "9":
 switch(cardID[9]) {
 case "6":
 return "Mister Bones";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "0":
+switch(cardID[3]) {
+case "0":
+switch(cardID[4]) {
+case "9":
+switch(cardID[5]) {
+case "3":
+switch(cardID[6]) {
+case "2":
+switch(cardID[7]) {
+case "3":
+switch(cardID[8]) {
+case "7":
+switch(cardID[9]) {
+case "1":
+return "Boba Fett";
 default: return "";
 }
 default: return "";
@@ -24248,6 +25734,36 @@ default: return "";
 }
 default: return "";
 }
+case "3":
+switch(cardID[3]) {
+case "8":
+switch(cardID[4]) {
+case "4":
+switch(cardID[5]) {
+case "0":
+switch(cardID[6]) {
+case "0":
+switch(cardID[7]) {
+case "3":
+switch(cardID[8]) {
+case "6":
+switch(cardID[9]) {
+case "5":
+return "The Invisible Hand";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
 default: return "";
 }
 case "8":
@@ -24436,6 +25952,36 @@ case "0":
 switch(cardID[9]) {
 case "4":
 return "For The Republic";
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+default: return "";
+}
+case "3":
+switch(cardID[3]) {
+case "1":
+switch(cardID[4]) {
+case "6":
+switch(cardID[5]) {
+case "4":
+switch(cardID[6]) {
+case "3":
+switch(cardID[7]) {
+case "2":
+switch(cardID[8]) {
+case "5":
+switch(cardID[9]) {
+case "3":
+return "Red Squadron Y-Wing";
 default: return "";
 }
 default: return "";
