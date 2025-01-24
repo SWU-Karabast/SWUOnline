@@ -263,6 +263,7 @@ function logCompletedGameStats()
 	global $winner, $currentRound, $gameName; //gameName is assumed by ParseGamefile.php
 	global $p1id, $p2id, $p1IsChallengeActive, $p2IsChallengeActive, $p1DeckLink, $p2DeckLink, $firstPlayer;
 	global $p1deckbuilderID, $p2deckbuilderID;
+	/*
 	$loser = ($winner == 1 ? 2 : 1);
 	$columns = "WinningHero, LosingHero, NumTurns, WinnerDeck, LoserDeck, WinnerHealth, FirstPlayer, WinningPlayer";
 	$values = "?, ?, ?, ?, ?, ?, ?, ?";
@@ -296,6 +297,7 @@ function logCompletedGameStats()
 	if ($p2IsChallengeActive == "1" && $p2id != "-") LogChallengeResult($conn, $gameResultID, $p2id, ($winner == 2 ? 1 : 0));
 
 	mysqli_close($conn);
+	*/
 }
 
 function changePassword($conn, $userID, $newPwd)
