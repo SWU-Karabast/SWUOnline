@@ -1645,28 +1645,22 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $inGameStatus = "1";
       $MakeStartTurnBackup = true;
       $MakeStartGameBackup = true;
-      $player1StartingHandSize = 6;
-      $player2StartingHandSize = 6;
-      $player1Base = GetPlayerCharacter(1)[0];
-      switch($player1Base) {
-        case "1029978899":
-          $player1StartingHandSize -= 1;
-          break;
-        default: break;
+
+      foreach ([1, 2] as $p) {
+        $startingHandSize = 6;
+        $base = GetPlayerCharacter($p)[0];
+
+        switch($base) {
+          case "1029978899"://Colossus
+            $startingHandSize -= 1;
+          default: break;
+        }
+
+        for($i=0; $i<$startingHandSize; ++$i) {
+          Draw($p);
+        }
       }
-      $player2Base = GetPlayerCharacter(2)[0];
-      switch($player2Base) {
-        case "1029978899":
-          $player2StartingHandSize -= 1;
-          break;
-        default: break;
-      }
-      for($i=0; $i<$player1StartingHandSize; ++$i) {
-        Draw(1);
-      }
-      for($i=0; $i<$player2StartingHandSize; ++$i) {
-        Draw(2);
-      }
+
       if(!IsPlayerAI($initiativePlayer)) {
         AddDecisionQueue("SETDQCONTEXT", $initiativePlayer, "Would you like to mulligan?");
         AddDecisionQueue("YESNO", $initiativePlayer, "-");
