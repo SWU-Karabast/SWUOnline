@@ -1510,11 +1510,13 @@ function IsPlayable($cardID, $phase, $from, $index = -1, &$restriction = null, $
     if($char[1] != 2) return false;//Can't attack if rested
   }
   $otherPlayer = ($player == 1 ? 2 : 1);
+  $potentialExploitAllies = GetAllyCount($currentPlayer);
   $potentialCost = (CardCost($cardID)
     + SelfCostModifier($cardID, $from, reportMode: true)
     + CurrentEffectCostModifiers($cardID, $from, reportMode:true)
     + CharacterCostModifier($cardID, $from)
-    - ExploitAmount($cardID, $currentPlayer) * 2);
+    - 2*min(ExploitAmount($cardID, $currentPlayer), $potentialExploitAllies)
+  );
   $potentialPilotingCost = PilotingCost($cardID)
     + SelfCostModifier($cardID, $from, reportMode: true)
     + CurrentEffectCostModifiers($cardID, $from, reportMode:true)
