@@ -2075,16 +2075,33 @@ function PlayerAspects($player)
       $aspects["Heroism"] = 0;
     }
   }
+
+  $allies = &GetAllies($player);
   $leaderIndices = explode(",", SearchAllies($player, definedType:"Leader"));
   if($leaderIndices[0] != "") {
     for($i=0; $i<count($leaderIndices); ++$i) {
-      $allies = &GetAllies($player);
       $cardAspects = explode(",", CardAspects($allies[$leaderIndices[$i]]));
       for($j=0; $j<count($cardAspects); ++$j) {
         ++$aspects[$cardAspects[$j]];
       }
     }
   }
+  //check Leader upgrades for aspects
+  for($i=0; $i<count($allies); $i+=AllyPieces())
+  {
+    $ally = new Ally("MYALLY-" . $i, $player);
+    $allyUpgrades = $ally->GetUpgrades();
+    for($j=0; $j<count($allyUpgrades); ++$j)
+    {
+      if(CardIDIsLeader($allyUpgrades[$j])) {
+        $cardAspects = explode(",", CardAspects($allyUpgrades[$j]));
+        for($k=0; $k<count($cardAspects); ++$k) {
+          ++$aspects[$cardAspects[$k]];
+        }
+      }
+    }
+  }
+
   return $aspects;
 }
 
