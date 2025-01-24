@@ -465,26 +465,27 @@ function CurrentEffectPreventDamagePrevention($player, $type, $damage, $source)
   return $damage;
 }
 
-function CurrentEffectDamagePrevention($player, $type, $damage, $source, $preventable, $uniqueID=-1)
-{
-  global $currentPlayer, $currentTurnEffects;
-  for($i = count($currentTurnEffects) - CurrentTurnEffectPieces(); $i >= 0 && $damage > 0; $i -= CurrentTurnEffectPieces()) {
-    if($uniqueID != -1 && $currentTurnEffects[$i + 2] != $uniqueID) continue;
-    $remove = false;
-    if($currentTurnEffects[$i + 1] == $player || $uniqueID != -1) {
-      $effects = explode("-", $currentTurnEffects[$i]);
-      switch($effects[0]) {
-        case "pv4n1n3gyg"://Cleric's Robe
-          if($preventable) $damage -= 1;
-          $remove = true;
-          break;
-        default: break;
-      }
-      if($remove) RemoveCurrentTurnEffect($i);
-    }
-  }
-  return $damage;
-}
+//FAB
+// function CurrentEffectDamagePrevention($player, $type, $damage, $source, $preventable, $uniqueID=-1)
+// {
+//   global $currentPlayer, $currentTurnEffects;
+//   for($i = count($currentTurnEffects) - CurrentTurnEffectPieces(); $i >= 0 && $damage > 0; $i -= CurrentTurnEffectPieces()) {
+//     if($uniqueID != -1 && $currentTurnEffects[$i + 2] != $uniqueID) continue;
+//     $remove = false;
+//     if($currentTurnEffects[$i + 1] == $player || $uniqueID != -1) {
+//       $effects = explode("-", $currentTurnEffects[$i]);
+//       switch($effects[0]) {
+//         case "pv4n1n3gyg"://Cleric's Robe
+//           if($preventable) $damage -= 1;
+//           $remove = true;
+//           break;
+//         default: break;
+//       }
+//       if($remove) RemoveCurrentTurnEffect($i);
+//     }
+//   }
+//   return $damage;
+// }
 
 function CurrentEffectAttackAbility()
 {

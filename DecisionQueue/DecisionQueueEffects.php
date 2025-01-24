@@ -9,10 +9,10 @@ function ModalAbilities($player, $card, $lastResult)
       $otherPlayer = ($player == 1 ? 2 : 1);
       switch($lastResult) {
         case 0: // Deal damage
-          DealDamageAsync($otherPlayer, 3, "DAMAGE", "3232845719"); 
+          DealDamageAsync($otherPlayer, 3, "DAMAGE", "3232845719");
           break;
         case 1: // Discard a card
-          PummelHit($otherPlayer); 
+          PummelHit($otherPlayer);
           break;
         default: break;
       }
@@ -29,7 +29,7 @@ function ModalAbilities($player, $card, $lastResult)
           MZPlayCard($player, "MYDECK-0");
           break;
         case 1: // Discard it
-          Mill($player, 1); 
+          Mill($player, 1);
           break;
         case 2: // Leave it
           break;
@@ -39,7 +39,7 @@ function ModalAbilities($player, $card, $lastResult)
     case "LEIAORGANA":
       switch($lastResult) {
         case 0: // Ready a resource
-          ReadyResource($player); 
+          ReadyResource($player);
           break;
         case 1: // Exhaust a unit
           AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
@@ -499,7 +499,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       if($lastResult == "PASS") {
         return $lastResult;
       }
-      
+
       for($i=0; $i<count($lastResult); ++$i) {
         $ally = new Ally("MYALLY-" . $lastResult[$i], $player);
         $ally->Ready();
@@ -719,7 +719,8 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       $opponent = $player == 1 ? 2: 1;
       for($i = 0; $i < count($unitsThatAttackedBase); ++$i) {
         $targetMZIndex = "THEIRALLY-" . SearchAlliesForUniqueID($unitsThatAttackedBase[$i], $opponent);
-        if($targetMZIndex == "THEIRALLY--1" || IsLeader(GetMZCard($player, $targetMZIndex))) continue;
+        $ally = new Ally($targetMZIndex, $player);
+        if($targetMZIndex == "THEIRALLY--1" || $ally->IsLeader()) continue;
         DecisionQueueStaticEffect("MZOP", $player, "CAPTURE," . $lastResult, $targetMZIndex);
       }
       return 1;

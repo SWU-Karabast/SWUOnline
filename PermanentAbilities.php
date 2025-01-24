@@ -48,9 +48,9 @@ function PermanentDestroyed($player, $cardID, $isToken = false)
     case "GY":
       AddGraveyard($cardID, $player, "PLAY");
       break;
-    case "SOUL":
-      AddSoul($cardID, $player, "PLAY");
-      break;
+    // case "SOUL"://FAB
+    //   AddSoul($cardID, $player, "PLAY");
+    //   break;
     case "BANISH":
       BanishCardForPlayer($cardID, $player, "PLAY", "NA");
       break;
@@ -85,48 +85,49 @@ function PermanentBeginEndPhaseEffects()
   }
 }
 
-function PermanentTakeDamageAbilities($player, $damage, $type)
-{
-  $permanents = &GetPermanents($player);
-  $otherPlayer = $player == 1 ? 1 : 2;
-  //CR 2.1 6.4.10f If an effect states that a prevention effect can not prevent the damage of an event, the prevention effect still applies to the event but its prevention amount is not reduced. Any additional modifications to the event by the prevention effect still occur.
-  $preventable = CanDamageBePrevented($otherPlayer, $damage, $type);
-  for ($i = count($permanents) - PermanentPieces(); $i >= 0; $i -= PermanentPieces()) {
-    $remove = 0;
-    switch ($permanents[$i]) {
-      case "UPR439":
-        if ($damage > 0) {
-          if ($preventable) $damage -= 4;
-          $remove = 1;
-        }
-        break;
-      case "UPR440":
-        if ($damage > 0) {
-          if ($preventable) $damage -= 3;
-          $remove = 1;
-        }
-        break;
-      case "UPR441":
-        if ($damage > 0) {
-          if ($preventable) $damage -= 2;
-          $remove = 1;
-        }
-        break;
-      default:
-        break;
-    }
-    if ($remove == 1) {
-      if (HasWard($permanents[$i]) && SearchCharacterActive($player, "DYN213") && CardType($permanents[$i]) != "T") {
-        $index = FindCharacterIndex($player, "DYN213");
-        $char[$index + 1] = 1;
-        GainResources($player, 1);
-      }
-      DestroyPermanent($player, $i);
-    }
-  }
-  if ($damage <= 0) $damage = 0;
-  return $damage;
-}
+//FAB
+// function PermanentTakeDamageAbilities($player, $damage, $type)
+// {
+//   $permanents = &GetPermanents($player);
+//   $otherPlayer = $player == 1 ? 1 : 2;
+//   //CR 2.1 6.4.10f If an effect states that a prevention effect can not prevent the damage of an event, the prevention effect still applies to the event but its prevention amount is not reduced. Any additional modifications to the event by the prevention effect still occur.
+//   $preventable = CanDamageBePrevented($otherPlayer, $damage, $type);
+//   for ($i = count($permanents) - PermanentPieces(); $i >= 0; $i -= PermanentPieces()) {
+//     $remove = 0;
+//     switch ($permanents[$i]) {
+//       case "UPR439":
+//         if ($damage > 0) {
+//           if ($preventable) $damage -= 4;
+//           $remove = 1;
+//         }
+//         break;
+//       case "UPR440":
+//         if ($damage > 0) {
+//           if ($preventable) $damage -= 3;
+//           $remove = 1;
+//         }
+//         break;
+//       case "UPR441":
+//         if ($damage > 0) {
+//           if ($preventable) $damage -= 2;
+//           $remove = 1;
+//         }
+//         break;
+//       default:
+//         break;
+//     }
+//     if ($remove == 1) {
+//       if (HasWard($permanents[$i]) && SearchCharacterActive($player, "DYN213") && CardType($permanents[$i]) != "T") {
+//         $index = FindCharacterIndex($player, "DYN213");
+//         $char[$index + 1] = 1;
+//         GainResources($player, 1);
+//       }
+//       DestroyPermanent($player, $i);
+//     }
+//   }
+//   if ($damage <= 0) $damage = 0;
+//   return $damage;
+// }
 
 function PermanentStartTurnAbilities()
 {
