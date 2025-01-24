@@ -2050,19 +2050,21 @@ function PlayerAspects($player)
       ++$aspects[$cardAspects[$j]];
     }
 
-    // Special case
+    // Special case //TODO: look into Twin Suns rules around Flipatine leader
     if ($char[$i] == '0026166404') { //Chancellor Palpatine Leader
       $aspects["Villainy"] = 0;
     } else if ($char[$i] == 'ad86d54e97') { //Darth Sidious Leader
       $aspects["Heroism"] = 0;
     }
   }
-  $leaderIndex = SearchAllies($player, definedType:"Leader");
-  if($leaderIndex != "") {
-    $allies = &GetAllies($player);
-    $cardAspects = explode(",", CardAspects($allies[$leaderIndex]));
-    for($j=0; $j<count($cardAspects); ++$j) {
-      ++$aspects[$cardAspects[$j]];
+  $leaderIndices = explode(",", SearchAllies($player, definedType:"Leader"));
+  if($leaderIndices[0] != "") {
+    for($i=0; $i<count($leaderIndices); ++$i) {
+      $allies = &GetAllies($player);
+      $cardAspects = explode(",", CardAspects($allies[$leaderIndices[$i]]));
+      for($j=0; $j<count($cardAspects); ++$j) {
+        ++$aspects[$cardAspects[$j]];
+      }
     }
   }
   return $aspects;
