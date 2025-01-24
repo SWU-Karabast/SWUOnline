@@ -1291,6 +1291,7 @@ function HasKeyword($cardID, $keyword, $player="", $index=-1){
     case "Ambush": return HasAmbush($cardID, $player, $index,"");
     case "Coordinate": return HasCoordinate($cardID, $player, $index);
     case "Exploit": return ExploitAmount($cardID, $player, true) > 0;
+    case "Piloting": return PilotingCost($cardID) > -1;//TODO: test Boba Daimyo trigger when piloting as upgrade
     case "Any":
       return SmuggleCost($cardID, $player, $index) > -1 ||
         RaidAmount($cardID, $player, $index, true) > 0 ||
@@ -5757,6 +5758,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MULTIADDHAND", $currentPlayer, "-", 1);
       AddDecisionQueue("REVEALCARDS", $currentPlayer, "-", 1);
       break;
+    //Jump to Lightspeed
     case "0425156332"://Planetary Bombardment
       $hasCapitalShip = SearchCount(SearchAllies($currentPlayer, trait:"Capital Ship")) > 0;
       $indirectAmount = $hasCapitalShip ? 12 : 8;
@@ -5817,10 +5819,23 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,$damageAmount,$currentPlayer,1", 1);
       break;
-    case "4030832630"://Admiral Piett
+    case "4030832630"://Admiral Piett Leader
       if(GetResolvedAbilityName($cardID) == "Play") {
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to play");
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND:trait=Capital_Ship");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, $cardID, 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
+      }
+      break;
+    case "0011262813"://Wedge Antilles Leader
+      if(GetResolvedAbilityName($cardID) == "Play") {
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a vehicle to add a pilot");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Vehicle");
+        AddDecisionQueue("PASSREVERT", $currentPlayer, "-");
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to play");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND:keyword=Piloting");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, $cardID, 1);
         AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);

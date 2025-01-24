@@ -1189,11 +1189,12 @@ function CheckTWIAbilityTypes($cardID) {
 
 function CheckJTLAbilityTypes($cardID) {
   switch($cardID) {
-    case "4179470615"://Asajj Ventress
+    case "4179470615"://Asajj Ventress Leader
       return LeaderAbilitiesIgnored() ? "" : "A";
-    case "4030832630"://Admiral Piett
+    case "4030832630"://Admiral Piett Leader
       return LeaderAbilitiesIgnored() ? "" : "A";
-
+    case "0011262813"://Wedge Antilles Leader
+      return LeaderAbilitiesIgnored() ? "" : "A";
     default: return "";
   }
 }
@@ -1459,6 +1460,8 @@ function CheckJTLAbilityNames($cardID) {
       return LeaderAbilitiesIgnored() ? "" : "Damage";
     case "4030832630"://Admiral Piett
       return LeaderAbilitiesIgnored() ? "" : "Play";
+    case "0011262813"://Wedge Antilles Leader
+      return LeaderAbilitiesIgnored() ? "" : "Play";
     default: return "";
   }
 }
@@ -1526,7 +1529,19 @@ function IsPlayable($cardID, $phase, $from, $index = -1, &$restriction = null, $
     if($char[1] != 2) return false;//Can't attack if rested
   }
   $otherPlayer = ($player == 1 ? 2 : 1);
-  if($from == "HAND" && ((CardCost($cardID) + SelfCostModifier($cardID, $from, reportMode: true) + CurrentEffectCostModifiers($cardID, $from, reportMode:true) + CharacterCostModifier($cardID, $from) - ExploitAmount($cardID, $currentPlayer) * 2) > NumResourcesAvailable($currentPlayer)) && !HasAlternativeCost($cardID)) return false;
+  $potentialCost = (CardCost($cardID)
+    + SelfCostModifier($cardID, $from, reportMode: true)
+    + CurrentEffectCostModifiers($cardID, $from, reportMode:true)
+    + CharacterCostModifier($cardID, $from)
+    - ExploitAmount($cardID, $currentPlayer) * 2);
+  $potentialPilotingCost = PilotingCost($cardID)
+    + SelfCostModifier($cardID, $from, reportMode: true)
+    + CurrentEffectCostModifiers($cardID, $from, reportMode:true)
+    + CharacterCostModifier($cardID, $from);
+  if($from == "HAND"
+    && $potentialCost > NumResourcesAvailable($currentPlayer)
+    && $potentialPilotingCost > NumResourcesAvailable($currentPlayer)
+    && !HasAlternativeCost($cardID)) return false;
   if($from == "RESOURCES") {
     if(!PlayableFromResources($cardID, index:$index)) return false;
     if((SmuggleCost($cardID, index:$index) + SelfCostModifier($cardID, $from, reportMode:true)) > NumResourcesAvailable($currentPlayer) && !HasAlternativeCost($cardID)) return false;
@@ -1815,6 +1830,8 @@ function LeaderUnit($cardID) {
       return "3f0b5622a7";
     case "4030832630"://Admiral Piett
       return "649c6a9dbd";
+    case "0011262813"://Wedge Antilles
+      return "6414788e89";
     default: return "";
   }
 }
@@ -1935,6 +1952,8 @@ function LeaderUndeployed($cardID) {
       return "4179470615";
     case "649c6a9dbd"://Admiral Piett
       return "4030832630";
+    case "6414788e89"://Wedge Antilles
+      return "0011262813";
     default: return "";
   }
 }
@@ -1942,6 +1961,7 @@ function LeaderUndeployed($cardID) {
 function LeaderCanPilot($cardID) {
   switch($cardID) {
     case "4179470615"://Asajj Ventress
+    case "0011262813"://Wedge Antilles
       return true;
     default: return false;
   }

@@ -1317,7 +1317,7 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
   global $playerID, $turn, $currentPlayer, $actionPoints, $layers, $currentTurnEffects;
   global $layerPriority, $lastPlayed;
   global $decisionQueue, $CS_PlayIndex, $CS_OppIndex, $CS_OppCardActive, $CS_PlayUniqueID, $CS_LayerPlayIndex, $CS_LastDynCost, $CS_NumCardsPlayed;
-  global $CS_DynCostResolved, $CS_NumVillainyPlayed, $CS_NumEventsPlayed, $CS_NumClonesPlayed;
+  global $CS_DynCostResolved, $CS_NumVillainyPlayed, $CS_NumEventsPlayed, $CS_NumClonesPlayed, $CS_PlayedAsUpgrade;
   $resources = &GetResources($currentPlayer);
   $dynCostResolved = intval($dynCostResolved);
   $layerPriority[0] = ShouldHoldPriority(1);
@@ -1357,9 +1357,15 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
   if($turn[0] != "P") {
     if($dynCostResolved >= 0 || $oppCardActive) {
       SetClassState($currentPlayer, $CS_DynCostResolved, $dynCostResolved);
-      $baseCost = ($from == "RESOURCES")
-        ? SmuggleCost($cardID, $currentPlayer, $index) + SelfCostModifier($cardID, $from)
-        : ($from == "PLAY" || $from == "EQUIP" ? AbilityCost($cardID, $index, $oppCardActive) : (CardCost($cardID) + SelfCostModifier($cardID, $from)));
+      $baseCost = match ($from) {
+        "RESOURCES" => SmuggleCost($cardID, $currentPlayer, $index) + SelfCostModifier($cardID, $from),
+        "PLAY", "EQUIP" => AbilityCost($cardID, $index, $oppCardActive),
+        "HAND" => GetClassState($currentPlayer, $CS_PlayedAsUpgrade) == "1" && PilotingCost($cardID) > -1
+          ? (min(CardCost($cardID), PilotingCost($cardID))) + SelfCostModifier($cardID, $from)
+          : CardCost($cardID) + SelfCostModifier($cardID, $from),
+        default => CardCost($cardID) + SelfCostModifier($cardID, $from)
+      };
+
       if(!$playingCard) $resources[1] += $dynCostResolved;
       else {
         $frostbitesPaid = AuraCostModifier($cardID);
@@ -1570,10 +1576,14 @@ function AddPrePitchDecisionQueue($cardID, $from, $index = -1, $skipAbilityType 
     }
     $pilotCost = PilotingCost($cardID, $currentPlayer);
     if($pilotCost >= 0) {
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose if you want to play this unit as a pilot?");
-      AddDecisionQueue("YESNO", $currentPlayer, "if you want to play this unit as a pilot");
-      AddDecisionQueue("NOPASS", $currentPlayer, "-");
-      AddDecisionQueue("PASSPARAMETER", $currentPlayer, 1, 1);
+      if(!SearchCurrentTurnEffects("0011262813", $currentPlayer)) {//Wedge Antilles Leader
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose if you want to play this unit as a pilot?");
+        AddDecisionQueue("YESNO", $currentPlayer, "if you want to play this unit as a pilot");
+        AddDecisionQueue("NOPASS", $currentPlayer, "-");
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, 1, 1);
+      } else {
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, 1, 1);
+      }
       AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_PlayedAsUpgrade, 1);
       AddDecisionQueue("GETLAYERTARGET", $currentPlayer, $cardID, 1);
     }
