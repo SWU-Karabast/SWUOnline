@@ -374,7 +374,7 @@
                       className = type == "W" ? "my-base" : "my-leader";
                   } else if (zone == "theirChar") {
                       positionStyle = "fixed;";
-                      id = type == "W" ? "P<?php echo ($playerID == 1 ? 2 : 1); ?>BASE" : "P<?php echo ($playerID == 1 ? 2 : 1); ?>LEADER";
+                      id = type == "W" ? "P<?= $otherPlayerID ?>BASE" : "P<?= $otherPlayerID ?>LEADER";
                       className = type == "W" ? "their-base" : "their-leader";
                   }
               }

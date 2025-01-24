@@ -53,11 +53,11 @@ include "HostFiles/Redirector.php";
 include "CardDictionary.php";
 include "MenuFiles/ParseGamefile.php";
 include "MenuFiles/WriteGamefile.php";
-if($playerID == 2 && isset($_SESSION["userid"])) {
+if ($playerID == 2 && isset($_SESSION["userid"])) {
   $isBlocked = false;
   $blockedPlayers = LoadBlockedPlayers($_SESSION["userid"]);
-  for($i=0; $i<count($blockedPlayers); ++$i) {
-    if($blockedPlayers[$i] == $p1id) {
+  for ($i = 0; $i < count($blockedPlayers); ++$i) {
+    if ($blockedPlayers[$i] == $p1id) {
       $isBlocked = true;
       break;
     }
@@ -77,15 +77,16 @@ if($playerID == 2 && isset($_SESSION["userid"])) {
 
 if ($decklink == "" && $deck == "" && $favoriteDeckLink == "0") {
   $starterDeck = true;
-  switch($decksToTry) {
+  switch ($decksToTry) {
 
     default:
-        $deck = "./test.txt";
+      $deck = "./test.txt";
       break;
   }
 }
 
-if ($favoriteDeckLink != "0" && $decklink == "") $decklink = $favoriteDeckLink;
+if ($favoriteDeckLink != "0" && $decklink == "")
+  $decklink = $favoriteDeckLink;
 
 if ($deck == "" && !IsDeckLinkValid($decklink)) {
   echo '<b>' . "⚠️ Deck URL is not valid: " . $decklink . '</b>';
@@ -105,13 +106,15 @@ if ($matchup == "" && $playerID == 2 && $gameStatus >= $MGS_Player2Joined) {
 $usesUuid = false;
 
 if ($decklink != "") {
-  if ($playerID == 1) $p1DeckLink = $decklink;
-  else if ($playerID == 2) $p2DeckLink = $decklink;
+  if ($playerID == 1)
+    $p1DeckLink = $decklink;
+  else if ($playerID == 2)
+    $p2DeckLink = $decklink;
   $originalLink = $decklink;
 
-  if(str_contains($decklink, "swustats.net")) {
+  if (str_contains($decklink, "swustats.net")) {
     $decklinkArr = explode("gameName=", $decklink);
-    if(count($decklinkArr) > 1) {
+    if (count($decklinkArr) > 1) {
       $deckLinkArr = explode("&", $decklinkArr[1]);
       $deckID = $deckLinkArr[0];
       $decklink = "https://swustats.net/TCGEngine/APIs/LoadDeck.php?deckID=" . $deckID . "&format=json";
@@ -123,11 +126,10 @@ if ($decklink != "") {
       $errorMessage = curl_error($curl);
       curl_close($curl);
       $json = $apiDeck;
-      echo($json);
+      echo ($json);
       $usesUuid = true;
     }
-  }
-  else if(str_contains($decklink, "swudb.com/deck")) {
+  } else if (str_contains($decklink, "swudb.com/deck")) {
     $decklinkArr = explode("/", $decklink);
     $decklink = "https://swudb.com/deck/view/" . trim($decklinkArr[count($decklinkArr) - 1]) . "?handler=JsonFile";
     $curl = curl_init();
@@ -138,11 +140,10 @@ if ($decklink != "") {
     $errorMessage = curl_error($curl);
     curl_close($curl);
     $json = $apiDeck;
-    echo($json);
-  }
-  else if(str_contains($decklink, "sw-unlimited-db.com/decks")) {
+    echo ($json);
+  } else if (str_contains($decklink, "sw-unlimited-db.com/decks")) {
     $decklinkArr = explode("/", $decklink);
-	  $deckId = trim($decklinkArr[count($decklinkArr) - 1]);
+    $deckId = trim($decklinkArr[count($decklinkArr) - 1]);
     $curl = curl_init();
     curl_setopt($curl, CURLOPT_URL, "https://sw-unlimited-db.com/umbraco/api/deckapi/get?id=" . $deckId);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
@@ -151,11 +152,11 @@ if ($decklink != "") {
     $errorMessage = curl_error($curl);
     curl_close($curl);
     $json = $apiDeck;
-    echo($json);
-  }
-  else $json = $decklink;
+    echo ($json);
+  } else
+    $json = $decklink;
 
-  if($json == "") {
+  if ($json == "") {
     echo "Failed to retrieve deck from API. Check to make sure you have a valid deckbuilder link. If it's a SWUDB link, make sure it's not a private deck.<BR>";
     echo "Your link: " . $originalLink . "<BR>";
     echo "API link: " . $decklink . "<BR>";
@@ -173,30 +174,34 @@ if ($decklink != "") {
   $cards = "";
   $bannedSet = "JTL";
   $hasBannedCard = false;
-  for($i=0; $i<count($deck); ++$i) {
-    if($usesUuid) $deck[$i]->id = CardIDLookup($deck[$i]->id);
+  for ($i = 0; $i < count($deck); ++$i) {
+    if ($usesUuid)
+      $deck[$i]->id = CardIDLookup($deck[$i]->id);
     $deck[$i]->id = CardIDOverride($deck[$i]->id);
     $cardID = UUIDLookup($deck[$i]->id);
     $cardID = CardUUIDOverride($cardID);
-    if(CardSet($cardID) == $bannedSet) {
+    if (CardSet($cardID) == $bannedSet) {
       $hasBannedCard = true;
     }
-    for($j=0; $j<$deck[$i]->count; ++$j) {
-      if($cards != "") $cards .= " ";
+    for ($j = 0; $j < $deck[$i]->count; ++$j) {
+      if ($cards != "")
+        $cards .= " ";
       $cards .= $cardID;
     }
   }
   $sideboard = $deckObj->sideboard ?? [];
   $sideboardCards = "";
-  for($i=0; $i<count($sideboard); ++$i) {
-    if($usesUuid) $sideboard[$i]->id = CardIDLookup($sideboard[$i]->id);
+  for ($i = 0; $i < count($sideboard); ++$i) {
+    if ($usesUuid)
+      $sideboard[$i]->id = CardIDLookup($sideboard[$i]->id);
     $sideboard[$i]->id = CardIDOverride($sideboard[$i]->id);
     $cardID = CardUUIDOverride(UUIDLookup($sideboard[$i]->id));
-    if(CardSet($cardID) == $bannedSet) {
+    if (CardSet($cardID) == $bannedSet) {
       $hasBannedCard = true;
     }
-    for($j=0; $j<$sideboard[$i]->count; ++$j) {
-      if($sideboardCards != "") $sideboardCards .= " ";
+    for ($j = 0; $j < $sideboard[$i]->count; ++$j) {
+      if ($sideboardCards != "")
+        $sideboardCards .= " ";
       $sideboardCards .= $cardID;
     }
   }
@@ -248,7 +253,8 @@ if ($matchup == "") {
   if ($playerID == 2) {
 
     $gameStatus = $MGS_Player2Joined;
-    if (file_exists("./Games/" . $gameName . "/gamestate.txt")) unlink("./Games/" . $gameName . "/gamestate.txt");
+    if (file_exists("./Games/" . $gameName . "/gamestate.txt"))
+      unlink("./Games/" . $gameName . "/gamestate.txt");
 
     $firstPlayerChooser = 1;
     $p1roll = 0;
@@ -267,7 +273,8 @@ if ($matchup == "") {
     $joinerIP = $_SERVER['REMOTE_ADDR'];
   }
 
-  if ($playerID == 2) $p2Key = hash("sha256", rand() . rand() . rand());
+  if ($playerID == 2)
+    $p2Key = hash("sha256", rand() . rand() . rand());
 
   WriteGameFile();
   SetCachePiece($gameName, $playerID + 1, strval(round(microtime(true) * 1000)));
@@ -291,62 +298,97 @@ if ($matchup == "") {
 session_write_close();
 header("Location: " . $redirectPath . "/GameLobby.php?gameName=$gameName&playerID=$playerID");
 
-function CardIDOverride($cardID) {
-  switch($cardID) {
-    case "SHD_030": return "SOR_033"; //Death Trooper
-    case "SHD_063": return "SOR_066"; //System Patrol Craft
-    case "SHD_066": return "SOR_068"; //Cargo Juggernaut
-    case "SHD_070": return "SOR_069"; //Resilient
-    case "SHD_081": return "SOR_080"; //General Tagge
-    case "SHD_085": return "SOR_083"; //Superlaser Technician
-    case "SHD_083": return "SOR_081"; //Seasoned Shoretrooper
-    case "SHD_166": return "SOR_162"; //Disabling Fang Fighter
-    case "SHD_223": return "SOR_215"; //Snapshot Reflexes
-    case "SHD_231": return "SOR_220"; //Surprise Strike
-    case "SHD_236": return "SOR_227"; //Snowtrooper Lieutenant
-    case "SHD_238": return "SOR_229"; //Cell Block Guard
-    case "SHD_257": return "SOR_247"; //Underworld Thug
-    case "SHD_262": return "SOR_251"; //Confiscate
-    case "SHD_121": return "SOR_117"; //Mercenary Company
-    case "TWI_077": return "SOR_078"; //Vanquish
-    case "TWI_107": return "SOR_111"; //Patrolling V-Wing
-    case "TWI_123": return "SHD_128"; //Outflank
-    case "TWI_124": return "SOR_124"; //Tactical Advantage
-    case "TWI_127": return "SOR_126"; //Resupply
-    case "TWI_128": return "SHD_131"; //Take Captive
-    case "TWI_170": return "SHD_178"; //Daring Raid
-    case "TWI_174": return "SOR_172"; //Open Fire
-    case "TWI_226": return "SOR_222"; //Waylay
-    case "TWI_254": return "SOR_248"; //Volunteer Soldier
-    case "C24_001": return "SOR_038"; //Count Dooku (Darth Tyranus)
-    case "C24_002": return "SOR_087"; //Darth Vader (Commanding the First Legion)
-    case "C24_003": return "SOR_135"; //Emperor Palpatine (Master of the Dark Side)
-    case "C24_004": return "SHD_141"; //Kylo Ren (Killing the Past)
-    case "C24_005": return "TWI_134"; //Asajj Ventress (Count Dooku's Assassin)
-    case "C24_006": return "TWI_135"; //Darth Maul (Revenge at Last)
+function CardIDOverride($cardID)
+{
+  switch ($cardID) {
+    case "SHD_030":
+      return "SOR_033"; //Death Trooper
+    case "SHD_063":
+      return "SOR_066"; //System Patrol Craft
+    case "SHD_066":
+      return "SOR_068"; //Cargo Juggernaut
+    case "SHD_070":
+      return "SOR_069"; //Resilient
+    case "SHD_081":
+      return "SOR_080"; //General Tagge
+    case "SHD_085":
+      return "SOR_083"; //Superlaser Technician
+    case "SHD_083":
+      return "SOR_081"; //Seasoned Shoretrooper
+    case "SHD_166":
+      return "SOR_162"; //Disabling Fang Fighter
+    case "SHD_223":
+      return "SOR_215"; //Snapshot Reflexes
+    case "SHD_231":
+      return "SOR_220"; //Surprise Strike
+    case "SHD_236":
+      return "SOR_227"; //Snowtrooper Lieutenant
+    case "SHD_238":
+      return "SOR_229"; //Cell Block Guard
+    case "SHD_257":
+      return "SOR_247"; //Underworld Thug
+    case "SHD_262":
+      return "SOR_251"; //Confiscate
+    case "SHD_121":
+      return "SOR_117"; //Mercenary Company
+    case "TWI_077":
+      return "SOR_078"; //Vanquish
+    case "TWI_107":
+      return "SOR_111"; //Patrolling V-Wing
+    case "TWI_123":
+      return "SHD_128"; //Outflank
+    case "TWI_124":
+      return "SOR_124"; //Tactical Advantage
+    case "TWI_127":
+      return "SOR_126"; //Resupply
+    case "TWI_128":
+      return "SHD_131"; //Take Captive
+    case "TWI_170":
+      return "SHD_178"; //Daring Raid
+    case "TWI_174":
+      return "SOR_172"; //Open Fire
+    case "TWI_226":
+      return "SOR_222"; //Waylay
+    case "TWI_254":
+      return "SOR_248"; //Volunteer Soldier
+    case "C24_001":
+      return "SOR_038"; //Count Dooku (Darth Tyranus)
+    case "C24_002":
+      return "SOR_087"; //Darth Vader (Commanding the First Legion)
+    case "C24_003":
+      return "SOR_135"; //Emperor Palpatine (Master of the Dark Side)
+    case "C24_004":
+      return "SHD_141"; //Kylo Ren (Killing the Past)
+    case "C24_005":
+      return "TWI_134"; //Asajj Ventress (Count Dooku's Assassin)
+    case "C24_006":
+      return "TWI_135"; //Darth Maul (Revenge at Last)
 
-    default: return $cardID;
+    default:
+      return $cardID;
   }
 }
 
 function CardUUIDOverride($cardID)
 {
   switch ($cardID) {
-    case "1706333706": return "8380936981";//Jabba's Rancor
+    case "1706333706":
+      return "8380936981";//Jabba's Rancor
     //TODO: left here just in case we need these IDs
     //case "1401885853"://con exclusive 2024 Count Dooku (Darth Tyranus)
-      //return "9624333142";
+    //return "9624333142";
     //case "8292269690"://con exclusive 2024 Darth Vader (Commanding the First Legion)
-      //return "8506660490";
+    //return "8506660490";
     //case "9954244145"://con exclusive 2024 Emperor Palpatine (Master of the Dark Side)
-      //return "9097316363";
+    //return "9097316363";
     //case "3038397952"://con exclusive 2024 Kylo Ren (Killing the Past)
-      //return "6263178121";
+    //return "6263178121";
     //case "7315203824"://con exclusive 2024 Asajj Ventress (Count Dooku's Assassin)
-      //return "3556557330";
+    //return "3556557330";
     //case "5866567543"://con exclusive 2024 Darth Maul (Revenge at Last)
-      //return "8613680163";
-    default: return $cardID;
+    //return "8613680163";
+    default:
+      return $cardID;
   }
 }
 
@@ -357,18 +399,31 @@ function IsBanned($cardID, $format)
     case "compblitz":
       switch ($cardID) {
         case "WTR152":
-        case "ARC076": case "ARC077": //Viserai
-        case "ARC129": case "ARC130": case "ARC131":
+        case "ARC076":
+        case "ARC077": //Viserai
+        case "ARC129":
+        case "ARC130":
+        case "ARC131":
         case "ELE006":
-        case "ELE186": case "ELE187": case "ELE188":
+        case "ELE186":
+        case "ELE187":
+        case "ELE188":
         case "ELE223":
         case "CRU141":
-        case "CRU174": case "CRU175": case "CRU176":
+        case "CRU174":
+        case "CRU175":
+        case "CRU176":
         case "MON239":
-        case "MON183": case "MON184": case "MON185":
+        case "MON183":
+        case "MON184":
+        case "MON185":
         case "EVR037":
         case "EVR123": // Aether Wildfire
-        case "UPR103": case "EVR120": case "ELE002": case "ELE003": case "EVR121":
+        case "UPR103":
+        case "EVR120":
+        case "ELE002":
+        case "ELE003":
+        case "EVR121":
           return true;
         default:
           return false;
@@ -377,20 +432,28 @@ function IsBanned($cardID, $format)
     case "cc":
     case "compcc":
       switch ($cardID) {
-        case "WTR164": case "WTR165": case "WTR166": //Drone of Brutality
-        case "ARC170": case "ARC171": case "ARC172": //Plunder Run
+        case "WTR164":
+        case "WTR165":
+        case "WTR166": //Drone of Brutality
+        case "ARC170":
+        case "ARC171":
+        case "ARC172": //Plunder Run
         case "CRU141":
         case "MON001": //Prism
         case "MON003": //Luminaris
         case "MON153":
         case "MON155":
         case "MON239":
-        case "MON266": case "MON267": case "MON268": //Belittle
+        case "MON266":
+        case "MON267":
+        case "MON268": //Belittle
         case "ELE003":
         case "ELE006":
         case "ELE114":
         case "ELE172":
-        case "ELE186": case "ELE187": case "ELE188":
+        case "ELE186":
+        case "ELE187":
+        case "ELE188":
         case "ELE223":
         case "EVR017":
         case "UPR139":

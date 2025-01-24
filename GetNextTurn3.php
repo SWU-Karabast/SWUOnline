@@ -47,11 +47,15 @@ $opponentInactive = false;
 $currentTime = round(microtime(true) * 1000);
 if ($isGamePlayer) {
   $playerStatus = intval(GetCachePiece($gameName, $playerID + 3));
-  if ($playerStatus == "-1") WriteLog("Player $playerID has connected.");
+  if ($playerStatus == "-1") {
+    include "MenuFiles/ParseGamefile.php";
+    WriteLog("$playerName has connected.");
+  }
   SetCachePiece($gameName, $playerID + 1, $currentTime);
   SetCachePiece($gameName, $playerID + 3, "0");
   if ($playerStatus > 0) {
-    WriteLog("Player $playerID has reconnected.");
+    include "MenuFiles/ParseGamefile.php";
+    WriteLog("$playerName has reconnected.");
     SetCachePiece($gameName, $playerID + 3, "0");
   }
 }
@@ -171,8 +175,8 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       $errorOutput = "Rematch failsafe hit for game $gameName at $errorDate";
       fwrite($errorHandler, $errorOutput . "\r\n");
       fclose($errorHandler);
-
-      WriteLog("Player $firstPlayerChooser lost and will choose first player for the rematch.");
+      $playerName = $playerNames[$firstPlayerChooser];
+      WriteLog("$playerName lost and will choose first player for the rematch.");
     }
     WriteGameFile();
     $currentTime = round(microtime(true) * 1000);
@@ -202,8 +206,8 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   if ($lastUpdate == 0) {
     include "MenuFiles/ParseGamefile.php";
     $initialLoad = new stdClass();
-    $initialLoad->playerName = $playerID == 1 ? $p1uid : $p2uid;
-    $initialLoad->opponentName = $playerID == 1 ? $p2uid : $p1uid;
+    $initialLoad->playerName = $playerName;
+    $initialLoad->opponentName = $otherPlayerName;
     $contributors = array("sugitime", "OotTheMonk", "Launch", "LaustinSpayce", "Star_Seraph", "Tower", "Etasus", "scary987", "Celenar");
     $initialLoad->playerIsPatron = ($playerID == 1 ? $p1IsPatron : $p2IsPatron);
     $initialLoad->playerIsContributor = in_array($initialLoad->playerName, $contributors);
