@@ -40,10 +40,12 @@ if ($authKey != $targetAuth) {
 
 if ($action == "Go First") {
   $firstPlayer = $playerID;
+  $firstPlayerName = $playerName;
 } else {
   $firstPlayer = ($playerID == 1 ? 2 : 1);
+  $firstPlayerName = $otherPlayerName;
 }
-WriteLog(FmtPlayer($playerName, $playerID) . " will go first.", path: "../");
+WriteLog(FmtPlayer($firstPlayerName, $firstPlayer) . " will go first.", path: "../");
 $gameStatus = $MGS_P2Sideboard;
 SetCachePiece($gameName, 14, $gameStatus);
 GamestateUpdated($gameName);
