@@ -1,1 +1,1 @@
-docker compose up -d
+STAGE=dev docker compose up -d
