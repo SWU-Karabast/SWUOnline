@@ -728,7 +728,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $allyPlayer = $mzArr[0] == "MYALLY" ? $player : ($player == 1 ? 2 : 1);
           $ally = new Ally($dqVars[0], $allyPlayer);
           $ownerId = $ally->DefeatUpgrade($upgradeID);
-          if(!IsToken($upgradeID)) AddGraveyard($upgradeID, $ownerId, "PLAY");
+          if(!IsToken($upgradeID) && !CardIDIsLeader($upgradeID)) AddGraveyard($upgradeID, $ownerId, "PLAY");
           return $lastResult;
         case "BOUNCEUPGRADE":
           $upgradeID = $lastResult;

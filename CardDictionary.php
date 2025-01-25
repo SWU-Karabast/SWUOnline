@@ -1420,10 +1420,8 @@ function CheckTWIAbilityNames($cardID, $index, $validate) {
       $ally = new Ally("MYALLY-" . $index, $currentPlayer);
       if($validate) return $ally->IsExhausted() ? "Droid Attack" : "Droid Attack,Attack";
       else return "Droid Attack,Attack";
-      break;
     case "0595607848"://Disaffected Senator
       return "Deal Damage,Attack";
-      break;
     case "3258646001"://Steadfast Senator
       return "Buff,Attack";
     case "9262288850"://Independent Senator
@@ -2252,7 +2250,7 @@ function PilotingCost($cardID, $player = "") {
     case "4573745395": $minCost = 2; break;//Bossk
     case "5673100759": $minCost = 2; break;//Boshek
     case "6421006753": $minCost = 2; break;//The Mandalorian
-    case "6610553087": $minCost = 2; break;//Nien Nunb
+    case "6610553087": $minCost = 1; break;//Nien Nunb
     case "7700932371": $minCost = 2; break;//Boba Fett
     case "8523415830": $minCost = 2; break;//Anakin Skywalker
     default: break;

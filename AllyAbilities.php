@@ -367,7 +367,8 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false,
   for($i=0; $i<count($upgradesWithOwnerData); $i+=SubcardPieces()) {
     if($upgradesWithOwnerData[$i] == "8752877738" || $upgradesWithOwnerData[$i] == "2007868442") continue; // Skip Shield and Experience tokens
     if($upgradesWithOwnerData[$i] == "6911505367") $discardPileModifier = "TTFREE";//Second Chance
-    AddGraveyard($upgradesWithOwnerData[$i], $upgradesWithOwnerData[$i+1], "PLAY");
+    if(!CardIdIsLeader($upgradesWithOwnerData[$i]))
+      AddGraveyard($upgradesWithOwnerData[$i], $upgradesWithOwnerData[$i+1], "PLAY");
   }
   $captives = $ally->GetCaptives(true);
   if(!$skipDestroy) {
@@ -560,6 +561,17 @@ function AllyLeavesPlayAbility($player, $index)
   if($leaderUndeployed != "") {
     AddCharacter($leaderUndeployed, $player, counters:1, status:1);
   }
+  //Pilot leader upgrades
+  $subcardsArr = explode(",", $allies[$index + 4]);
+  for($i=0;$i<count($subcardsArr);$i+=SubcardPieces()) {
+    if(CardIDIsLeader($subcardsArr[$i])) {
+      $leaderUndeployed = LeaderUndeployed($subcardsArr[$i]);
+      if($leaderUndeployed != "") {
+        AddCharacter($leaderUndeployed, $player, counters:1, status:1);
+      }
+    }
+  }
+
   switch($cardID)
   {
     case "3401690666"://Relentless

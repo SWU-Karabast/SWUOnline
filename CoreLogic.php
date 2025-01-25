@@ -4593,8 +4593,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $p1Captives = [];
       for($i=count($p1Allies)-AllyPieces(); $i>=0; $i-=AllyPieces()) {
         $ally = new Ally("MYALLY-" . $i, 1);
-        if($ally->IsLeader()) {
-          $p1Captives = $ally->GetCaptives();
+        if(!$ally->IsLeader()) {
+          $p1Captives = array_merge($p1Captives, $ally->GetCaptives());
           MZBounce(1, "MYALLY-" . $i);
         }
       }
