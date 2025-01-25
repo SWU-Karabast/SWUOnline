@@ -523,7 +523,7 @@ class Ally {
     $subcards = $this->GetSubcards();
     $capturedUnits = [];
     for($i=0; $i<count($subcards); $i+=SubcardPieces()) {
-      if(DefinedTypesContains($subcards[$i], "Unit", $this->PlayerID()) && $subcards[$i+1] != $this->PlayerID()) {
+      if(DefinedTypesContains($subcards[$i], "Unit", $this->PlayerID()) && $subcards[$i+1] != $this->PlayerID() && $subcards[$i+2] != "1") {
         if($withMetadata) array_push($capturedUnits, $subcards[$i], $subcards[$i+1], $subcards[$i+2]);
         else $capturedUnits[] = $subcards[$i];
       }
