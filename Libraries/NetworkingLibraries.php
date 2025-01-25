@@ -1593,6 +1593,7 @@ function AddPrePitchDecisionQueue($cardID, $from, $index = -1, $skipAbilityType 
         AddDecisionQueue("PASSPARAMETER", $currentPlayer, 1, 1);
       }
       AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_PlayedAsUpgrade, 1);
+      AddDecisionQueue("GETLAYERTARGET", $currentPlayer, $cardID, 1);
     }
   }
   switch ($cardID) {

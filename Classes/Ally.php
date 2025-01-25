@@ -473,9 +473,7 @@ class Ally {
         unset($subcards[$i]);
         $subcards = array_values($subcards);
         $this->allies[$this->index + 4] = count($subcards) > 0 ? implode(",", $subcards) : "-";
-        if(DefinedTypesContains($subcardID, "Upgrade")) {
-          UpgradeDetached($subcardID, $this->playerID, "MYALLY-" . $this->index);
-        }
+        if(DefinedTypesContains($subcardID, "Upgrade")) UpgradeDetached($subcardID, $this->playerID, "MYALLY-" . $this->index);
         if(CardIDIsLeader($subcardID)) {
           $leaderUndeployed = LeaderUndeployed($subcardID);
           if($leaderUndeployed != "") {
@@ -510,7 +508,12 @@ class Ally {
     $subcards = $this->GetSubcards();
     $upgrades = [];
     for($i=0; $i<count($subcards); $i+=SubcardPieces()) {
-      if(DefinedTypesContains($subcards[$i], "Upgrade", $this->PlayerID()) || DefinedTypesContains($subcards[$i], "Token Upgrade", $this->PlayerID())) {
+      if(
+        DefinedTypesContains($subcards[$i], "Upgrade", $this->PlayerID())
+        || DefinedTypesContains($subcards[$i], "Token Upgrade", $this->PlayerID())
+        || (DefinedTypesContains($subcards[$i], "Unit", $this->PlayerID()) && $subcards[$i+2] == "1")
+      )
+      {
         if($withMetadata) array_push($upgrades, $subcards[$i], $subcards[$i+1], $subcards[$i+2]);
         else $upgrades[] = $subcards[$i];
       }
