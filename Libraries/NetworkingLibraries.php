@@ -1891,6 +1891,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
           AddMemory($cardID, $currentPlayer, $from, "DOWN");
           break;
         case "ATTACHTARGET":
+          global $CS_PlayedAsUpgrade;
           MZAttach($currentPlayer, $target, $cardID);
           //When you play an upgrade on this unit (e.g. Fenn Rau)
           $mzArr = explode("-", $target);
@@ -1914,6 +1915,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
               default: break;
             }
           }
+          SetClassState($currentPlayer, $CS_PlayedAsUpgrade, 0);
           break;
         default:
           break;

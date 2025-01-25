@@ -92,29 +92,30 @@ while ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     $oppStatus = $cacheArr[$otherP + 2];
     $timeDiff = $currentTime - $oppLastTime;
     $otherPlayerDisconnectStatus = GetCachePiece($gameName, $otherP + 14);
+    $gameState = intval($cacheArr[13]);
     $lastActionTime = intval($cacheArr[16]);
     $lastActionWarning = intval($cacheArr[17]);
     $finalWarning = intval($cacheArr[18]);
-    if (GetCachePiece($gameName, 14) == 6 && $timeDiff > 10_000 && $oppStatus == "0") {
+    if ($gameState == 6 && $timeDiff > 10_000 && $oppStatus == "0") {
       WriteLog("Player $otherP has disconnected.");
       $opponentDisconnected = true;
       SetCachePiece($gameName, $otherP + 3, "2");
       SetCachePiece($gameName, 14, 7);//$MGS_StatsLoggedIrreversible
       GamestateUpdated($gameName);
     } else {
-      if ($timeDiff > $DisconnectFirstWarningMS && $otherPlayerDisconnectStatus == 0 && ($oppStatus == "0")) {
+      if ($gameState == 5 && $timeDiff > $DisconnectFirstWarningMS && $otherPlayerDisconnectStatus == 0 && ($oppStatus == "0")) {
         $warningSeconds = ($DisconnectTimeoutMS - $DisconnectFirstWarningMS) / 1000;
         WriteLog("<span style='font-weight:bold; color:plum'>Karabot: </span>Player $otherP, are you still there? Your opponent will be allowed to claim victory in $warningSeconds seconds if no activity is detected.");
         IncrementCachePiece($gameName, $otherP + 14);
         GamestateUpdated($gameName);
       }
-      if ($timeDiff > $DisconnectFinalWarningMS && $otherPlayerDisconnectStatus == 1 && ($oppStatus == "0")) {
+      if ($gameState == 5 && $timeDiff > $DisconnectFinalWarningMS && $otherPlayerDisconnectStatus == 1 && ($oppStatus == "0")) {
         $finalWarningSeconds = ($DisconnectTimeoutMS - $DisconnectFinalWarningMS) / 1000;
         WriteLog("<span style='font-weight:bold; color:plum'>Karabot: </span>$finalWarningSeconds seconds left, Player $otherP...");
         IncrementCachePiece($gameName, $otherP + 14);
         GamestateUpdated($gameName);
       }
-      if ($timeDiff > $DisconnectTimeoutMS && $otherPlayerDisconnectStatus == 2 && ($oppStatus == "0")) {
+      if ($gameState == 5 && $timeDiff > $DisconnectTimeoutMS && $otherPlayerDisconnectStatus == 2 && ($oppStatus == "0")) {
         WriteLog("Player $otherP has disconnected.");
         $opponentDisconnected = true;
         SetCachePiece($gameName, $otherP + 3, "2");
@@ -130,7 +131,7 @@ while ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         $lastUpdate = 0;
       }
 
-      if ($lastCurrentPlayer == $playerID && ($currentTime - $lastActionTime) > $InputWarningMS && $lastActionWarning === 0 && $finalWarning == 0) {
+      if ($gameState == 5 && $lastCurrentPlayer == $playerID && ($currentTime - $lastActionTime) > $InputWarningMS && $lastActionWarning === 0 && $finalWarning == 0) {
         $inputWarningSeconds = $InputWarningMS / 1000;
         $inputWarningSecondsLeft = ($InputTimeoutMS - $InputWarningMS) / 1000;
         WriteLog("<span style='font-weight:bold; color:plum'>Karabot: </span>No input in over $inputWarningSeconds seconds; Player $playerID has $inputWarningSecondsLeft more seconds to take an action or the turn will be passed");
@@ -138,10 +139,10 @@ while ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         GamestateUpdated($gameName);
       }
 
-      if ($lastCurrentPlayer == $playerID && ($currentTime - $lastActionTime) > $InputTimeoutMS && $lastActionWarning > 0) {
+      if ($gameState == 5 && $lastCurrentPlayer == $playerID && ($currentTime - $lastActionTime) > $InputTimeoutMS && $lastActionWarning > 0) {
         $currentPlayerInputTimeout = true;
         $lastUpdate = 0;
-      } else if ($lastCurrentPlayer == $otherP && ($currentTime - $lastActionTime) > $InputTimeoutMS && $lastActionWarning == $otherP && $finalWarning == $otherP) {
+      } else if ($gameState == 5 && $lastCurrentPlayer == $otherP && ($currentTime - $lastActionTime) > $InputTimeoutMS && $lastActionWarning == $otherP && $finalWarning == $otherP) {
         WriteLog("Player $otherP has disconnected.");
         $opponentDisconnected = true;
         SetCachePiece($gameName, $otherP + 3, "2");
