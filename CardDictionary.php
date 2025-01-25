@@ -1420,10 +1420,8 @@ function CheckTWIAbilityNames($cardID, $index, $validate) {
       $ally = new Ally("MYALLY-" . $index, $currentPlayer);
       if($validate) return $ally->IsExhausted() ? "Droid Attack" : "Droid Attack,Attack";
       else return "Droid Attack,Attack";
-      break;
     case "0595607848"://Disaffected Senator
       return "Deal Damage,Attack";
-      break;
     case "3258646001"://Steadfast Senator
       return "Buff,Attack";
     case "9262288850"://Independent Senator

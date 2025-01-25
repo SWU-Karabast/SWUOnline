@@ -185,6 +185,12 @@ class Ally {
     return $currentPilots < $maxPilots;
   }
 
+  function ReceivingPilot($cardID, $player = "") {
+    global $CS_PlayedAsUpgrade;
+    if($player == "") $player = $this->PlayerID();
+    return PilotingCost($cardID) >= 0 && GetClassState($player, $CS_PlayedAsUpgrade) == "1";
+  }
+
   function IsExhausted() {
     return $this->allies[$this->index+1] == 1;
   }
@@ -467,7 +473,15 @@ class Ally {
         unset($subcards[$i]);
         $subcards = array_values($subcards);
         $this->allies[$this->index + 4] = count($subcards) > 0 ? implode(",", $subcards) : "-";
-        if(DefinedTypesContains($subcardID, "Upgrade")) UpgradeDetached($subcardID, $this->playerID, "MYALLY-" . $this->index);
+        if(DefinedTypesContains($subcardID, "Upgrade")) {
+          UpgradeDetached($subcardID, $this->playerID, "MYALLY-" . $this->index);
+        }
+        if(CardIDIsLeader($subcardID)) {
+          $leaderUndeployed = LeaderUndeployed($subcardID);
+          if($leaderUndeployed != "") {
+            AddCharacter($leaderUndeployed, $this->playerID, counters:1, status:1);
+          }
+        }
         return $ownerId;
       }
     }
@@ -479,7 +493,7 @@ class Ally {
   }
 
   function Attach($cardID, $ownerID = null) {
-    $this->AddSubcard($cardID, $ownerID);
+    $this->AddSubcard($cardID, $ownerID, asPilot: $this->ReceivingPilot($cardID));
     if (CardIsUnique($cardID)) {
       $this->CheckUniqueUpgrade($cardID);
     }

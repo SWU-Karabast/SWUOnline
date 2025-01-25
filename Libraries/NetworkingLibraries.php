@@ -1529,7 +1529,8 @@ function GetLayerTarget($cardID)
     AddDecisionQueue("SETDQVAR", $currentPlayer, "0");
     AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, $upgradeTargets);
     if($upgradeFilter != "") AddDecisionQueue("MZFILTER", $currentPlayer, $upgradeFilter);
-    if($piloting) AddDecisionQueue("MZFILTER", $currentPlayer, "canAddPilot=0");
+    if($piloting && $cardID != "5375722883") //R2-D2 pilot can be added and count as the extra pilot
+      AddDecisionQueue("MZFILTER", $currentPlayer, "canAddPilot=0");
     AddDecisionQueue("PASSREVERT", $currentPlayer, "-");
     AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to attach <0>");
     AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
@@ -1592,7 +1593,6 @@ function AddPrePitchDecisionQueue($cardID, $from, $index = -1, $skipAbilityType 
         AddDecisionQueue("PASSPARAMETER", $currentPlayer, 1, 1);
       }
       AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_PlayedAsUpgrade, 1);
-      AddDecisionQueue("GETLAYERTARGET", $currentPlayer, $cardID, 1);
     }
   }
   switch ($cardID) {
