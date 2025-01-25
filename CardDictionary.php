@@ -1517,10 +1517,12 @@ function IsPlayable($cardID, $phase, $from, $index = -1, &$restriction = null, $
     + CharacterCostModifier($cardID, $from)
     - 2*min(ExploitAmount($cardID, $currentPlayer), $potentialExploitAllies)
   );
-  $potentialPilotingCost = PilotingCost($cardID)
-    + SelfCostModifier($cardID, $from, reportMode: true)
-    + CurrentEffectCostModifiers($cardID, $from, reportMode:true)
-    + CharacterCostModifier($cardID, $from);
+  $potentialPilotingCost = PilotingCost($cardID) == -1
+    ? -1
+    : PilotingCost($cardID)
+      + SelfCostModifier($cardID, $from, reportMode: true)
+      + CurrentEffectCostModifiers($cardID, $from, reportMode:true)
+      + CharacterCostModifier($cardID, $from);
   if($from == "HAND"
     && $potentialCost > NumResourcesAvailable($currentPlayer)
     && ($potentialPilotingCost == -1 || $potentialPilotingCost > NumResourcesAvailable($currentPlayer))
