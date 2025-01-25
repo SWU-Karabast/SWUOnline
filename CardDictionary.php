@@ -1420,10 +1420,8 @@ function CheckTWIAbilityNames($cardID, $index, $validate) {
       $ally = new Ally("MYALLY-" . $index, $currentPlayer);
       if($validate) return $ally->IsExhausted() ? "Droid Attack" : "Droid Attack,Attack";
       else return "Droid Attack,Attack";
-      break;
     case "0595607848"://Disaffected Senator
       return "Deal Damage,Attack";
-      break;
     case "3258646001"://Steadfast Senator
       return "Buff,Attack";
     case "9262288850"://Independent Senator
@@ -1517,10 +1515,12 @@ function IsPlayable($cardID, $phase, $from, $index = -1, &$restriction = null, $
     + CharacterCostModifier($cardID, $from)
     - 2*min(ExploitAmount($cardID, $currentPlayer), $potentialExploitAllies)
   );
-  $potentialPilotingCost = PilotingCost($cardID)
-    + SelfCostModifier($cardID, $from, reportMode: true)
-    + CurrentEffectCostModifiers($cardID, $from, reportMode:true)
-    + CharacterCostModifier($cardID, $from);
+  $potentialPilotingCost = PilotingCost($cardID) == -1
+    ? -1
+    : PilotingCost($cardID)
+      + SelfCostModifier($cardID, $from, reportMode: true)
+      + CurrentEffectCostModifiers($cardID, $from, reportMode:true)
+      + CharacterCostModifier($cardID, $from);
   if($from == "HAND"
     && $potentialCost > NumResourcesAvailable($currentPlayer)
     && ($potentialPilotingCost == -1 || $potentialPilotingCost > NumResourcesAvailable($currentPlayer))
@@ -2250,7 +2250,7 @@ function PilotingCost($cardID, $player = "") {
     case "4573745395": $minCost = 2; break;//Bossk
     case "5673100759": $minCost = 2; break;//Boshek
     case "6421006753": $minCost = 2; break;//The Mandalorian
-    case "6610553087": $minCost = 2; break;//Nien Nunb
+    case "6610553087": $minCost = 1; break;//Nien Nunb
     case "7700932371": $minCost = 2; break;//Boba Fett
     case "8523415830": $minCost = 2; break;//Anakin Skywalker
     default: break;

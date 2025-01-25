@@ -1529,7 +1529,8 @@ function GetLayerTarget($cardID)
     AddDecisionQueue("SETDQVAR", $currentPlayer, "0");
     AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, $upgradeTargets);
     if($upgradeFilter != "") AddDecisionQueue("MZFILTER", $currentPlayer, $upgradeFilter);
-    if($piloting) AddDecisionQueue("MZFILTER", $currentPlayer, "canAddPilot=0");
+    if($piloting && $cardID != "5375722883") //R2-D2 pilot can be added and count as the extra pilot
+      AddDecisionQueue("MZFILTER", $currentPlayer, "canAddPilot=0");
     AddDecisionQueue("PASSREVERT", $currentPlayer, "-");
     AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to attach <0>");
     AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
@@ -1890,6 +1891,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
           AddMemory($cardID, $currentPlayer, $from, "DOWN");
           break;
         case "ATTACHTARGET":
+          global $CS_PlayedAsUpgrade;
           MZAttach($currentPlayer, $target, $cardID);
           //When you play an upgrade on this unit (e.g. Fenn Rau)
           $mzArr = explode("-", $target);
@@ -1913,6 +1915,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
               default: break;
             }
           }
+          SetClassState($currentPlayer, $CS_PlayedAsUpgrade, 0);
           break;
         default:
           break;

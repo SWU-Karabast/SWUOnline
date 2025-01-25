@@ -185,6 +185,12 @@ class Ally {
     return $currentPilots < $maxPilots;
   }
 
+  function ReceivingPilot($cardID, $player = "") {
+    global $CS_PlayedAsUpgrade;
+    if($player == "") $player = $this->PlayerID();
+    return PilotingCost($cardID) >= 0 && GetClassState($player, $CS_PlayedAsUpgrade) == "1";
+  }
+
   function IsExhausted() {
     return $this->allies[$this->index+1] == 1;
   }
@@ -468,6 +474,12 @@ class Ally {
         $subcards = array_values($subcards);
         $this->allies[$this->index + 4] = count($subcards) > 0 ? implode(",", $subcards) : "-";
         if(DefinedTypesContains($subcardID, "Upgrade")) UpgradeDetached($subcardID, $this->playerID, "MYALLY-" . $this->index);
+        if(CardIDIsLeader($subcardID)) {
+          $leaderUndeployed = LeaderUndeployed($subcardID);
+          if($leaderUndeployed != "") {
+            AddCharacter($leaderUndeployed, $this->playerID, counters:1, status:1);
+          }
+        }
         return $ownerId;
       }
     }
@@ -479,7 +491,7 @@ class Ally {
   }
 
   function Attach($cardID, $ownerID = null) {
-    $this->AddSubcard($cardID, $ownerID);
+    $this->AddSubcard($cardID, $ownerID, asPilot: $this->ReceivingPilot($cardID));
     if (CardIsUnique($cardID)) {
       $this->CheckUniqueUpgrade($cardID);
     }
@@ -496,7 +508,12 @@ class Ally {
     $subcards = $this->GetSubcards();
     $upgrades = [];
     for($i=0; $i<count($subcards); $i+=SubcardPieces()) {
-      if(DefinedTypesContains($subcards[$i], "Upgrade", $this->PlayerID()) || DefinedTypesContains($subcards[$i], "Token Upgrade", $this->PlayerID()) || $subcards[$i+1] == $this->PlayerID()) {
+      if(
+        DefinedTypesContains($subcards[$i], "Upgrade", $this->PlayerID())
+        || DefinedTypesContains($subcards[$i], "Token Upgrade", $this->PlayerID())
+        || (DefinedTypesContains($subcards[$i], "Unit", $this->PlayerID()) && $subcards[$i+2] == "1")
+      )
+      {
         if($withMetadata) array_push($upgrades, $subcards[$i], $subcards[$i+1], $subcards[$i+2]);
         else $upgrades[] = $subcards[$i];
       }
@@ -509,7 +526,7 @@ class Ally {
     $subcards = $this->GetSubcards();
     $capturedUnits = [];
     for($i=0; $i<count($subcards); $i+=SubcardPieces()) {
-      if(DefinedTypesContains($subcards[$i], "Unit", $this->PlayerID()) && $subcards[$i+1] != $this->PlayerID()) {
+      if(DefinedTypesContains($subcards[$i], "Unit", $this->PlayerID()) && $subcards[$i+1] != $this->PlayerID() && $subcards[$i+2] != "1") {
         if($withMetadata) array_push($capturedUnits, $subcards[$i], $subcards[$i+1], $subcards[$i+2]);
         else $capturedUnits[] = $subcards[$i];
       }
