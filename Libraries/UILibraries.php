@@ -222,29 +222,29 @@
     }
   }
 
-  function BanishUI($from="")
-  {
-    global $turn, $currentPlayer, $playerID, $cardSize;
-    $rv = "";
-    $size = ($from == "HAND" ? $cardSize : 180);
-    $banish = GetBanish($playerID);
-    for($i=0; $i<count($banish); $i+=BanishPieces()) {
-      $action = $currentPlayer == $playerID && IsPlayable($banish[$i], $turn[0], "BANISH", $i) ? 14 : 0;
-      $border = CardBorderColor($banish[$i], "BANISH", $action > 0);
-      $mod = explode("-", $banish[$i+1])[0];
-      if($mod == "INT") $rv .= Card($banish[$i], "CardImages", $size, 0, 1, 1);//Display intimidated cards grayed out and unplayable
-      else if($mod == "TCL" || $mod == "TT" || $mod == "TCC" || $mod == "NT" || $mod == "INST" || $mod == "MON212" || $mod == "ARC119")
-        $rv .= Card($banish[$i], "CardImages", $size, $action, 1, 0, $border, 0, strval($i));//Display banished cards that are playable
-      else if($from != "HAND")
-      {
-        if(PlayableFromBanish($banish[$i], $banish[$i+1]) || AbilityPlayableFromBanish($banish[$i]))
-          $rv .= Card($banish[$i], "CardImages", $size, $action, 1, 0, $border, 0, strval($i));
-        else
-          $rv .= Card($banish[$i], "CardImages", $size, 0, 1, 0, $border);
-      }
-    }
-    return $rv;
-  }
+  // function BanishUI($from="")//FAB
+  // {
+  //   global $turn, $currentPlayer, $playerID, $cardSize;
+  //   $rv = "";
+  //   $size = ($from == "HAND" ? $cardSize : 180);
+  //   $banish = GetBanish($playerID);
+  //   for($i=0; $i<count($banish); $i+=BanishPieces()) {
+  //     $action = $currentPlayer == $playerID && IsPlayable($banish[$i], $turn[0], "BANISH", $i) ? 14 : 0;
+  //     $border = CardBorderColor($banish[$i], "BANISH", $action > 0);
+  //     $mod = explode("-", $banish[$i+1])[0];
+  //     if($mod == "INT") $rv .= Card($banish[$i], "CardImages", $size, 0, 1, 1);//Display intimidated cards grayed out and unplayable
+  //     else if($mod == "TCL" || $mod == "TT" || $mod == "TCC" || $mod == "NT" || $mod == "INST" || $mod == "MON212" || $mod == "ARC119")
+  //       $rv .= Card($banish[$i], "CardImages", $size, $action, 1, 0, $border, 0, strval($i));//Display banished cards that are playable
+  //     else if($from != "HAND")
+  //     {
+  //       if(PlayableFromBanish($banish[$i], $banish[$i+1]) || AbilityPlayableFromBanish($banish[$i]))
+  //         $rv .= Card($banish[$i], "CardImages", $size, $action, 1, 0, $border, 0, strval($i));
+  //       else
+  //         $rv .= Card($banish[$i], "CardImages", $size, 0, 1, 0, $border);
+  //     }
+  //   }
+  //   return $rv;
+  // }
 
   function CardBorderColor($cardID, $from, $isPlayable)
   {
@@ -253,7 +253,8 @@
     if($turn[0] == "B") return ($isPlayable ? 6 : 0);
     if($from == "BANISH")
     {
-      if($isPlayable || PlayableFromBanish($cardID)) return 4;
+      //if($isPlayable || PlayableFromBanish($cardID)) return 4;//FAB
+      if($isPlayable) return 4;
       return 0;
     }
     if($isPlayable && ComboActive($cardID)) return 3;

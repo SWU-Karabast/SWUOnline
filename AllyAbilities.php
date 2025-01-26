@@ -819,6 +819,9 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities,
         $otherPlayer = $player == 1 ? 2 : 1;
         IndirectDamage($otherPlayer, 2);
         break;
+      case "1519837763":
+        ShuttleST149($player);
+        break;
       //AllyDestroyedAbility End
       default: break;
     }
@@ -1243,6 +1246,9 @@ function AllyAttackedAbility($attackTarget, $index) {
       break;
     case "3876951742"://General's Guardian
       CreateBattleDroid($defPlayer);
+      break;
+    case "6300552434"://Gold Leader
+      AddCurrentTurnEffect("6300552434", $mainPlayer, from:"PLAY");
       break;
     default: break;
   }

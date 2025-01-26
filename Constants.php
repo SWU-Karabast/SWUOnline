@@ -227,7 +227,7 @@ $CS_CachedCharacterLevel = 12;
 $CS_PreparationCounters = 13;
 $CS_NextNAACardGoAgain = 14;
 $CS_NumAlliesDestroyed = 15;
-$CS_Num6PowBan = 16;
+$CS_NumWhenDefeatedPlayed = 16;
 $CS_ResolvingLayerUniqueID = 17;
 $CS_NextWizardNAAInstant = 18;
 $CS_ArcaneDamageTaken = 19;
@@ -469,7 +469,7 @@ function ResetClassState($player)
 {
   global $CS_NumVillainyPlayed, $CS_PlayedAsUpgrade, $CS_AtksWWeapon, $CS_HitsWDawnblade, $CS_DamagePrevention, $CS_CardsDrawn;
   global $CS_DamageTaken, $CS_NumActionsPlayed, $CS_CharacterIndex, $CS_PlayIndex, $CS_OppIndex, $CS_OppCardActive, $CS_NumNonAttackCards;
-  global $CS_PreparationCounters, $CS_NextNAACardGoAgain, $CS_NumAlliesDestroyed, $CS_Num6PowBan, $CS_ResolvingLayerUniqueID, $CS_NextWizardNAAInstant;
+  global $CS_PreparationCounters, $CS_NextNAACardGoAgain, $CS_NumAlliesDestroyed, $CS_NumWhenDefeatedPlayed, $CS_ResolvingLayerUniqueID, $CS_NextWizardNAAInstant;
   global $CS_ArcaneDamageTaken, $CS_NextNAAInstant, $CS_NextDamagePrevented, $CS_LastAttack, $CS_PlayCCIndex;
   global $CS_NumLeftPlay, $CS_NumMaterializations, $CS_NumFusedLightning, $CS_AfterPlayedBy, $CS_NumAttackCards, $CS_NumPlayedFromBanish;
   global $CS_NumAttacks, $CS_DieRoll, $CS_NumMandalorianAttacks, $CS_SeparatistUnitsThatAttacked, $CS_NumWizardNonAttack, $CS_LayerTarget, $CS_NumSwordAttacks;
@@ -497,7 +497,7 @@ function ResetClassState($player)
   $classState[$CS_PreparationCounters] = 0;
   $classState[$CS_NextNAACardGoAgain] = 0;
   $classState[$CS_NumAlliesDestroyed] = 0;
-  $classState[$CS_Num6PowBan] = 0;
+  $classState[$CS_NumWhenDefeatedPlayed] = 0;
   $classState[$CS_ResolvingLayerUniqueID] = -1;
   $classState[$CS_NextWizardNAAInstant] = 0;
   $classState[$CS_ArcaneDamageTaken] = 0;
