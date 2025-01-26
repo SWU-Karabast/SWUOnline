@@ -110,7 +110,7 @@ function AttackModifier($cardID, $player, $index)
       break;
     case "8def61a58e"://Kylo Ren
       $hand = &GetHand($player);
-      $modifier -= count($hand)/HandPieces();
+      $modifier -= LeaderAbilitiesIgnored() ? 0 : count($hand)/HandPieces();
       break;
     case "7486516061"://Concord Dawn Interceptors
       if($player == $defPlayer && GetAttackTarget() == "THEIRALLY-" . $index) $modifier += 2;
