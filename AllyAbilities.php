@@ -1878,8 +1878,7 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MZOP", $mainPlayer, "ADDSHIELD", 1);
       break;
     case "4595532978"://Ketsu Onyo
-      //TODO ADD OVERWHELM
-      if(GetAttackTarget() == "THEIRCHAR-0") {
+      if (GetAttackTarget() == "THEIRCHAR-0") {
         DefeatUpgrade($mainPlayer, true, upgradeFilter: "maxCost=2");
       }
       break;

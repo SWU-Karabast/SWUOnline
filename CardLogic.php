@@ -29,7 +29,7 @@ function PummelHit($player = -1, $passable = false, $fromDQ = false, $context=""
   }
 }
 
-function DefeatUpgrade($player, $may = false, $search="MYALLY&THEIRALLY", $upgradeFilter="", $to="DISCARD", $passable=false) {
+function DefeatUpgrade($player, $may = false, $search="MYALLY:hasUpgradeOnly=true&THEIRALLY:hasUpgradeOnly=true", $upgradeFilter="", $to="DISCARD", $passable=false) {
   $verb = "";
   switch($to) {
     case "DISCARD": $verb = "defeat"; break;
