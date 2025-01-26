@@ -54,6 +54,26 @@ function ModalAbilities($player, $card, $lastResult)
       $arena = $lastResult == 0 ? "Space" : "Ground";
       DamageAllAllies(3, "7916724925", arena:$arena);
       return 1;
+    case "POEDAMERON":
+      switch($lastResult) {
+        case 0: // Deal damage
+          $otherPlayer = ($player == 1 ? 2 : 1);
+          AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
+          AddDecisionQueue("PREPENDLASTRESULT", $player, "MYCHAR-0,THEIRCHAR-0,");
+          AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit or base to deal 2 damage to");
+          AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-");
+          AddDecisionQueue("MZOP", $player, "DEALDAMAGE,2,$player");
+          break;
+        case 1: // Defeat an upgrade
+          DefeatUpgrade($player);
+          break;
+        case 2: // Discard a card
+          $otherPlayer = ($player == 1 ? 2 : 1);
+          PummelHit($otherPlayer);
+          break;
+        default: break;
+      }
+      return $lastResult;
     case "VIGILANCE":
       switch($lastResult) {
         case 0: // Mill opponent

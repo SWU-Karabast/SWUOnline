@@ -1568,8 +1568,8 @@ function SpecificAllyAttackAbilities($attackID)
     }
   }
   if($attackerAlly->LostAbilities()) return;
-  $allies = &GetAllies($mainPlayer);
-  switch($allies[$attackerIndex]) {
+  $attackerCardID = $attackerAlly->CardID();
+  switch($attackerCardID) {
     case "0256267292"://Benthic 'Two Tubes'
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:aspect=Aggression");
       AddDecisionQueue("MZFILTER", $mainPlayer, "index=MYALLY-" . $attackerIndex);
@@ -1917,17 +1917,28 @@ function SpecificAllyAttackAbilities($attackID)
       }
       break;
     case "5966087637"://Poe Dameron
-      PummelHit($mainPlayer, may:true, context:"Choose a card to discard to defeat an upgrade (or pass)");
-      DefeatUpgrade($mainPlayer, passable:true);
-      PummelHit($mainPlayer, may:true, context:"Choose a card to discard to deal damage (or pass)");
-      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY", 1);
-      AddDecisionQueue("PREPENDLASTRESULT", $mainPlayer, "THEIRCHAR-0,", 1);
-      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to deal 2 damage to", 1);
-      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
-      AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,2,$mainPlayer,1", 1);
-      PummelHit($mainPlayer, may:true, context:"Choose a card to discard to make opponent discard (or pass)");
-      PummelHit($defPlayer, passable:true);
-      break;
+      $cardsText = ["up to 3 cards", "up to 2 cards", "1 card"];
+      AddDecisionQueue("PASSPARAMETER", $mainPlayer, "0");
+      AddDecisionQueue("SETDQVAR", $mainPlayer, "0");
+      for ($i = 1; $i <= 3; $i++) {
+        PummelHit($mainPlayer, true, may:true, context:"Choose " . $cardsText[$i - 1] . " to discard or pass");
+        AddDecisionQueue("PASSPARAMETER", $mainPlayer, $i, 1);
+        AddDecisionQueue("SETDQVAR", $mainPlayer, "0", 1);
+      }
+
+      $optionsOrder = ["First", "Second", "Third"];
+      $options = "Deal 2 damage to a unit or base;Defeat an upgrade;An opponent discards a card from their hand";
+      AddDecisionQueue("PASSPARAMETER", $mainPlayer, "-");
+      AddDecisionQueue("SETDQVAR", $mainPlayer, "1");
+      for ($i = 1; $i <= 3; ++$i) {
+        AddDecisionQueue("PASSPARAMETER", $mainPlayer, $i, 1);
+        AddDecisionQueue("GREATERTHANPASS", $mainPlayer, "{0}", 1);
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose Poe Dameron's " . $optionsOrder[$i - 1] . " Ability", 1);
+        AddDecisionQueue("CHOOSEOPTION", $mainPlayer, "$attackerCardID&$options&{1}", 1);
+        AddDecisionQueue("APPENDDQVAR", $mainPlayer, "1", 1);
+        AddDecisionQueue("SHOWOPTIONS", $mainPlayer, "$attackerCardID&$options", 1);
+        AddDecisionQueue("MODAL", $mainPlayer, "POEDAMERON", 1);
+      }
     case "1320229479"://Multi-Troop Transport
       CreateBattleDroid($mainPlayer);
       break;
