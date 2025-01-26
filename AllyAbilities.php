@@ -819,6 +819,9 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities,
         $otherPlayer = $player == 1 ? 2 : 1;
         IndirectDamage($otherPlayer, 2);
         break;
+      case "1519837763":
+        ShuttleST149($player);
+        break;
       //AllyDestroyedAbility End
       default: break;
     }

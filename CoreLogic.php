@@ -1852,7 +1852,9 @@ function IgnoreAspectPenalty($cardID, $player, $reportMode) {
 
 function SelfCostModifier($cardID, $from, $reportMode=false)
 {
-  global $currentPlayer, $CS_LastAttack, $CS_LayerTarget, $CS_NumClonesPlayed, $CS_PlayedAsUpgrade, $layers;
+  global $currentPlayer, $layers;
+  global $CS_LastAttack, $CS_LayerTarget, $CS_NumClonesPlayed, $CS_PlayedAsUpgrade, $CS_NumWhenDefeatedPlayed;
+
   $modifier = 0;
   //Aspect Penalty
   $playerAspects = PlayerAspects($currentPlayer);
@@ -2003,13 +2005,18 @@ function SelfCostModifier($cardID, $from, $reportMode=false)
   $allies = &GetAllies($currentPlayer);
   for($i=0; $i<count($allies); $i+=AllyPieces())
   {
+    //SHD
     if($allies[$i+1] == 0) continue;
     switch($allies[$i]) {
       case "5035052619"://Jabba the Hutt
         if(DefinedTypesContains($cardID, "Event", $currentPlayer) && TraitContains($cardID, "Trick", $currentPlayer)) $modifier -= 1;
         break;
-      case "649c6a9dbd"://Jabba the Hutt
+      //JTL
+      case "649c6a9dbd"://Admiral Piet
         if(TraitContains($cardID, "Capital Ship", $currentPlayer)) $modifier -= 2;
+        break;
+      case "6311662442"://Director Krennic
+        if(GetClassState($currentPlayer, $CS_NumWhenDefeatedPlayed) == 0 && HasWhenDestroyed($cardID)) $modifier -= 1;
         break;
       default: break;
     }
@@ -5881,6 +5888,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
       }
       break;
+    case "1519837763"://Shuttle ST-149
+      if($from != "PLAY") {
+        ShuttleST149($currentPlayer);
+      }
     //PlayAbility End
     default: break;
   }

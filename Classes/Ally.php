@@ -222,8 +222,7 @@ class Ally {
     if($preventable) {
       $subcards = $this->GetSubcards();
       for($i=0; $i<count($subcards); $i+=SubcardPieces()) {
-        if($subcards[$i] == "8752877738") {
-          //Shield Token
+        if($subcards[$i] == "8752877738") {//Shield Token
           unset($subcards[$i+2]);
           unset($subcards[$i+1]);
           unset($subcards[$i]);

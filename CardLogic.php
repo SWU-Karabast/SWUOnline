@@ -1127,6 +1127,22 @@ function AsajjVentressIWorkAlone($player) {
   AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1", 1);
 }
 
+function ShuttleST149($player) {
+  AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:hasUpgradeOnly=token&THEIRALLY:hasUpgradeOnly=token");
+  AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to move a token upgrade from.", 1);
+  AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+  AddDecisionQueue("SETDQVAR", $player, "1", 1);
+  AddDecisionQueue("MZOP", $player, "GETUPGRADES", 1);
+  AddDecisionQueue("FILTER", $player, "LastResult-include-isToken-true", 1);
+  AddDecisionQueue("SETDQCONTEXT", $player, "Choose a token upgrade to move.", 1);
+  AddDecisionQueue("CHOOSECARD", $player, "<-", 1);
+  AddDecisionQueue("SETDQVAR", $player, "0", 1);
+  AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY", 1);
+  AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to move <0> to.", 1);
+  AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
+  AddDecisionQueue("MZOP", $player, "MOVEUPGRADE", 1);
+}
+
 function ObiWansAethersprite($player, $index) {
   AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:arena=Space&THEIRALLY:arena=Space", 1);
   AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal 2 damage to (or pass)", 1);

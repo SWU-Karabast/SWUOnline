@@ -673,7 +673,7 @@ function CurrentEffectEndTurnAbilities()
         $allyIndex = SearchAlliesForUniqueID($currentTurnEffects[$i+2], $currentTurnEffects[$i+1]);
         if($allyIndex > -1) {
           $ally = new Ally("MYALLY-" . $allyIndex, $currentTurnEffects[$i+1]);
-          $ally->DefeatUpgrade("8752877738");
+          $ally->DefeatUpgrade("8752877738");//Shield Token
         }
         break;
       case "8418001763"://Huyang

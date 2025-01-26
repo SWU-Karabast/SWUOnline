@@ -275,8 +275,8 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
     position:absolute; z-index: 10;
     background: rgba(0, 0, 0, 0.8);
     line-height: 1.2;
-    font-size: 24px; 
-    font-weight:700; 
+    font-size: 24px;
+    font-weight:700;
     color: #fff;
     user-select: none;'>" . $counters . "</div>";
   }
@@ -286,8 +286,8 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
   if ($shieldCount > 0) {
     for ($i = 0; $i < $shieldCount; $i++) {
       $rv .= "<div style='margin: 0px;
-      top: 11px; 
-      right: calc(" . ($i * 31) . "px - 15px); 
+      top: 11px;
+      right: calc(" . ($i * 31) . "px - 15px);
       border-radius: 0%;
       width:" . $iconSize . "px;
       height:" . $iconSize . "px;
@@ -300,7 +300,7 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
       background-size: contain;
       line-height: 1.2;
       font-size: 1px;
-      font-weight:700; 
+      font-weight:700;
       color: #fff;
       filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.50));
       user-select: none;'>" . $shieldCount . "</div>";
@@ -310,7 +310,7 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
   // Sentinel Icon Style
   if (isset($opts['hasSentinel']) && $opts['hasSentinel']) {
     $rv .= "<div style='margin: 0px;
-    top: 42px; 
+    top: 42px;
     left: 89px;
     margin-right: -50%;
     border-radius: 0%;
@@ -330,7 +330,7 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
   // Clone Icon Style
   if (isset($opts['cloned']) && $opts['cloned']) {
     $rv .= "<div style='margin: 0px;
-    top: 42px; 
+    top: 42px;
     left: 11px;
     border-radius: 0%;
     width:" . $iconSize . "px;
@@ -360,14 +360,14 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
     align-items: center;
     justify-content: center;
     transform: translate(-50%, -50%);
-    position:absolute; 
+    position:absolute;
     z-index: 1;
     background: linear-gradient(90deg, rgba(255, 0, 0, 0.00) 0%, rgba(255, 0, 0, 0.90) 50%, #F00 100%), linear-gradient(270deg, rgba(0, 0, 0, 0.90) 0%, rgba(0, 0, 0, 0.90) 45%, rgba(0, 0, 0, 0.00) 100%);
     line-height: 30px;
     text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.60);
     padding: 0 0 1px 4px;
-    font-size: 24px; 
-    font-weight:700; 
+    font-size: 24px;
+    font-weight:700;
     color: #fff;
     user-select: none;'>" . ($opts['maxHP'] - $opts['currentHP']) . "</div>";
   }
@@ -379,7 +379,7 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
     $right = "-2px";
     $top = "67px";
     $lineHeight = 30;
-    $rv .= "<div style='position:absolute; top: " . $top . "; right:" . $right . "; width:" . $iconSize . "px; height:32px; line-height:" . $lineHeight . "px; 
+    $rv .= "<div style='position:absolute; top: " . $top . "; right:" . $right . "; width:" . $iconSize . "px; height:32px; line-height:" . $lineHeight . "px;
     z-index: 5; text-align: center; font-size:" . $imgCounterFontSize . "px; font-weight: 700; font-family: Barlow, Gemunu Libre, sans-serif; color: #fff;   text-shadow:
       1px 1px 0 #176395,
       -1px 1px 0 #176395,
@@ -395,7 +395,7 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
     $left = "-2px";
     $top = "67px";
     $lineHeight = 30;
-    $rv .= "<div style='position:absolute; top: " . $top . "; left:" . $left . "; width:" . $iconSize . "px; height:32px; line-height:" . $lineHeight . "px; 
+    $rv .= "<div style='position:absolute; top: " . $top . "; left:" . $left . "; width:" . $iconSize . "px; height:32px; line-height:" . $lineHeight . "px;
     z-index: 5; text-align: center; font-size:" . $imgCounterFontSize . "px; font-weight: 700; font-family: Barlow, Gemunu Libre, sans-serif; color: #fff; text-shadow:
       1px 1px 0 #760F12,
       -1px 1px 0 #760F12,
@@ -423,9 +423,9 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
         background: url(./Images/upgrade-" . getSubcardAspect($opts['subcards'][$i]) . ".png) no-repeat;
         background-size: contain;
         line-height: 1.2;
-        font-size: 7px; 
+        font-size: 7px;
         font-family: Barlow, sans-serif;
-        font-weight:800; 
+        font-weight:800;
         text-transform: uppercase;
         color: #1D1D1D;
         user-select: none;'
@@ -440,7 +440,7 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
 function getSubcardAspect($subcardID)
 {
   $aspectList = explode(",", CardAspects($subcardID))[0];
-  
+
   switch ($aspectList) {
     case "Aggression":
       return "red";
@@ -490,7 +490,7 @@ function CreateButton($playerID, $caption, $mode, $input, $size = "", $image = "
     $onClick = "SubmitInput(\"" . $mode . "\", \"&buttonInput=" . $input . "\", " . $fullRefresh . ");";
 
   if ($customOnClick != "") {
-    $onClick = $customOnClick;  
+    $onClick = $customOnClick;
   }
 
   // If a prompt is given, surround the code with a "confirm()" call
@@ -932,9 +932,10 @@ function BanishUI($from = "")
       $rv .= Card($banish[$i], "concat", $size, $action, 1, 0, $border, 0, strval($i)); //Display banished cards that are playable
     else // if($from != "HAND")
     {
-      if (PlayableFromBanish($banish[$i], $banish[$i + 1]) || AbilityPlayableFromBanish($banish[$i]))
-        $rv .= Card($banish[$i], "concat", $size, $action, 1, 0, $border, 0, strval($i));
-      else if ($from != "HAND")
+      // if (PlayableFromBanish($banish[$i], $banish[$i + 1]) || AbilityPlayableFromBanish($banish[$i]))
+      //   $rv .= Card($banish[$i], "concat", $size, $action, 1, 0, $border, 0, strval($i));
+      // else //FAB
+      if ($from != "HAND")
         $rv .= Card($banish[$i], "concat", $size, 0, 1, 0, $border);
     }
   }
@@ -1008,11 +1009,11 @@ function CardBorderColor($cardID, $from, $isPlayable, $mod = "-")
       return $mod == "THEIRS" ? 2 : 6; // red border for opponent's cards
     else return 0;
   }
-  else if ($from == "BANISH") {
-    if ($isPlayable || PlayableFromBanish($cardID, $mod))
-      return 7;
-    return 0;
-  }
+  // else if ($from == "BANISH") {//FAB
+  //   if ($isPlayable || PlayableFromBanish($cardID, $mod))
+  //     return 7;
+  //   return 0;
+  // }
   else if ($isPlayable)
     return $mod == "THEIRS" ? 2 : 6; // red border for opponent's cards
   return 0;

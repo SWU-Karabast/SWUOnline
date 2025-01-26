@@ -1060,9 +1060,9 @@ function FinalizeChainLink($chainClosed = false)
         //   break;
         case "GY": /*AddGraveyard($combatChain[$i-1], $combatChain[$i], "CC");*/
           break; //Things that would go to the GY stay on till the end of the chain
-        case "BANISH":
-          BanishCardForPlayer($combatChain[$i - 1], $mainPlayer, "CC", $modifier);
-          break;
+        // case "BANISH"://FAB
+        //   BanishCardForPlayer($combatChain[$i - 1], $mainPlayer, "CC", $modifier);
+        //   break;
         case "MEMORY":
           AddMemory($combatChain[$i - 1], $mainPlayer, "CC", "DOWN");
           break;
@@ -1319,7 +1319,7 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
   global $playerID, $turn, $currentPlayer, $actionPoints, $layers, $currentTurnEffects;
   global $layerPriority, $lastPlayed;
   global $decisionQueue, $CS_PlayIndex, $CS_OppIndex, $CS_OppCardActive, $CS_PlayUniqueID, $CS_LayerPlayIndex, $CS_LastDynCost, $CS_NumCardsPlayed;
-  global $CS_DynCostResolved, $CS_NumVillainyPlayed, $CS_NumEventsPlayed, $CS_NumClonesPlayed, $CS_PlayedAsUpgrade;
+  global $CS_DynCostResolved, $CS_NumVillainyPlayed, $CS_NumEventsPlayed, $CS_NumClonesPlayed, $CS_PlayedAsUpgrade, $CS_NumWhenDefeatedPlayed;
   $resources = &GetResources($currentPlayer);
   $dynCostResolved = intval($dynCostResolved);
   $layerPriority[0] = ShouldHoldPriority(1);
@@ -1378,7 +1378,7 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
           AddAdditionalCost($currentPlayer, "ALTERNATIVECOST");
         }
         //$resources[1] += ($dynCostResolved > 0 ? $dynCostResolved : $baseCost) + CurrentEffectCostModifiers($cardID, $from) + $frostbitesPaid + CharacterCostModifier($cardID, $from) + BanishCostModifier($from, $index) + ItemCostModifiers($cardID);//FAB
-        $resources[1] += ($dynCostResolved > 0 ? $dynCostResolved : $baseCost) + CurrentEffectCostModifiers($cardID, $from) + CharacterCostModifier($cardID, $from);
+        $resources[1] += ($dynCostResolved > 0 ? $dynCostResolved : $baseCost) + CurrentEffectCostModifiers($cardID, $from);
         if($isAlternativeCostPaid && $resources[1] > 0) WriteLog("<span style='color:red;'>Alternative costs do not offset additional costs.</span>");
       }
       if($resources[1] < 0) $resources[1] = 0;
@@ -1478,6 +1478,7 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
       //CombatChainPlayAbility($cardID);//FAB
       //ItemPlayAbilities($cardID, $from);//FAB
       if(AspectContains($cardID, "Villainy", $currentPlayer)) IncrementClassState($currentPlayer, $CS_NumVillainyPlayed);
+      if(HasWhenDestroyed($cardID)) IncrementClassState($currentPlayer, $CS_NumWhenDefeatedPlayed);
       IncrementClassState($currentPlayer, $CS_NumCardsPlayed);
       if(DefinedTypesContains($cardID, "Event", $currentPlayer)) IncrementClassState($currentPlayer, $CS_NumEventsPlayed);
       if(TraitContains($cardID, "Clone", $currentPlayer)) IncrementClassState($currentPlayer, $CS_NumClonesPlayed);
@@ -1873,9 +1874,9 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
         // case "SOUL"://FAB
         //   AddSoul($cardID, $currentPlayer, $from);
         //   break;
-        case "BANISH":
-          BanishCardForPlayer($cardID, $currentPlayer, $from, "NA");
-          break;
+        // case "BANISH"://FAB
+        //   BanishCardForPlayer($cardID, $currentPlayer, $from, "NA");
+        //   break;
         case "ALLY":
           $index = PlayAlly($cardID, $currentPlayer);
           $uniqueID = &GetAllies($currentPlayer)[$index+5];
