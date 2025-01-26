@@ -2376,7 +2376,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       } else if($abilityName == "Pilot") {
         AddDecisionQueue("PASSPARAMETER", $currentPlayer, $cardID);
         AddDecisionQueue("SETDQVAR", $currentPlayer, "0");
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Vehicle");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Vehicle;canAddPilot=1");
         AddDecisionQueue("PASSREVERT", $currentPlayer, "-");
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to attach <0>");
         AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
