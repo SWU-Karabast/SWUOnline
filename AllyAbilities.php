@@ -1247,6 +1247,9 @@ function AllyAttackedAbility($attackTarget, $index) {
     case "3876951742"://General's Guardian
       CreateBattleDroid($defPlayer);
       break;
+    case "6300552434"://Gold Leader
+      AddCurrentTurnEffect("6300552434", $mainPlayer, from:"PLAY");
+      break;
     default: break;
   }
 }

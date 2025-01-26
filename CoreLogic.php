@@ -2012,7 +2012,7 @@ function SelfCostModifier($cardID, $from, $reportMode=false)
         if(DefinedTypesContains($cardID, "Event", $currentPlayer) && TraitContains($cardID, "Trick", $currentPlayer)) $modifier -= 1;
         break;
       //JTL
-      case "649c6a9dbd"://Admiral Piet
+      case "649c6a9dbd"://Admiral Piett
         if(TraitContains($cardID, "Capital Ship", $currentPlayer)) $modifier -= 2;
         break;
       case "6311662442"://Director Krennic
