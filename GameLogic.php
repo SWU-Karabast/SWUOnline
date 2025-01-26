@@ -44,7 +44,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
 
       if(substr_count($paramArray[2], "|") > 0) { //OR: Any card that matches at least one filter should be selectable.
         $filterArray = explode("|", $paramArray[2]);
-        $chooseableDeckIndices = [];
+        $chooseableDeckIndices = "";
         foreach($filterArray as $filter) {
           $chooseableDeckIndices .= DecisionQueueStaticEffect("FILTER", $player, "Deck-" . $filter, $deckIndicesToShow) . ",";
         }
@@ -849,6 +849,13 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         $match = false;
         switch($params[0]) {
           case "index": if($arr[$i] == $params[1]) $match = true; break;
+          case "uniqueID": 
+            $mzArr = explode("-", $arr[$i]);
+            if ($mzArr[0] == "MYALLY" || $mzArr[0] == "THEIRALLY") {
+              $ally = new Ally($arr[$i]);
+              $match = $ally->UniqueID() == $params[1];
+            }
+            break;
           case "trait": if(TraitContains(GetMZCard($player, $arr[$i]), $params[1], $player)) $match = true; break;
           case "aspect": if(AspectContains(GetMZCard($player, $arr[$i]), $params[1],$player)) $match = true; break;
           case "definedType": if(DefinedTypesContains(GetMZCard($player, $arr[$i]), $params[1], $player)) $match = true; break;
