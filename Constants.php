@@ -34,6 +34,8 @@ function CharacterPieces()
   return 11;
 }
 
+//TODO(TwinSuns): look into how many places are calling charArr[CharacterPieces()] to get the leader cardID
+
 //0 - Card ID
 //1 - Mods (INT == Intimidated)
 //2 - Unique ID?

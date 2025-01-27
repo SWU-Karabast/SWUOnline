@@ -2252,6 +2252,7 @@ function SpecificAllyAttackAbilities($attackID)
         }
       }
       break;
+    //Jump to Lightspeed
     case "2778554011"://General Draven
       CreateXWing($mainPlayer);
       break;
@@ -2283,6 +2284,10 @@ function SpecificAllyAttackAbilities($attackID)
         AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $mainPlayer, "ADDEXPERIENCE", 1);
       }
+      break;
+    case "6648978613"://Fett's Firespray (Feared Silhouettte)
+      $damage = ControlsNamedCard($mainPlayer, "Boba Fett") ? 2 : 1;
+      IndirectDamage($defPlayer, $damage);
       break;
     default: break;
   }
@@ -2318,7 +2323,7 @@ function AllyDamageTakenAbilities($player, $index, $damage, $fromCombat=false, $
       default: break;
     }
   }
-  
+
   // Enemy unit abilities
   $otherPlayer = $player == 1 ? 2 : 1;
   $theirAllies = &GetAllies($otherPlayer);

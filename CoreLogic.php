@@ -5920,6 +5920,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         ShuttleST149($currentPlayer);
       }
       break;
+    case "6648978613"://Fett's Firespray (Feared Silhouettte)
+      $damage = ControlsNamedCard($currentPlayer, "Boba Fett") ? 2 : 1;
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      IndirectDamage($otherPlayer, $damage);
+      break;
     //PlayAbility End
     default: break;
   }
