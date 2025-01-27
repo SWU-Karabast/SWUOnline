@@ -2295,13 +2295,16 @@ function AllyHitEffects() {
   }
 }
 
-function AllyDamageTakenAbilities($player, $index, $survived, $damage, $fromCombat=false, $enemyDamage=false, $fromUnitEffect=false/*, $indirectDamage=false*/)
+function AllyDamageTakenAbilities($player, $index, $damage, $fromCombat=false, $enemyDamage=false, $fromUnitEffect=false/*, $indirectDamage=false*/)
 {
+  $damagedAlly = new Ally("MYALLY-" . $index, $player);
+
+  // Friendly unit abilities
   $allies = &GetAllies($player);
   for($i=0; $i<count($allies); $i+=AllyPieces()) {
     switch($allies[$i]) {
       case "7022736145"://Tarfful
-        if($survived && $fromCombat && TraitContains($allies[$index], "Wookiee", $player)) {
+        if ($fromCombat && TraitContains($damagedAlly->CardID(), "Wookiee", $player)) {
           AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:arena=Ground");
           AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal " . $damage . " damage to");
           AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
@@ -2311,15 +2314,14 @@ function AllyDamageTakenAbilities($player, $index, $survived, $damage, $fromComb
       default: break;
     }
   }
-  switch($allies[$index]) {
-    default: break;
-  }
+  
+  // Enemy unit abilities
   $otherPlayer = $player == 1 ? 2 : 1;
   $theirAllies = &GetAllies($otherPlayer);
   for($i=0; $i<count($theirAllies); $i+=AllyPieces()) {
     switch($theirAllies[$i]) {
       case "cfdcbd005a"://Jango Fett Leader Unit
-        if(!LeaderAbilitiesIgnored() && ($fromCombat || ($enemyDamage && $fromUnitEffect))) {
+        if(!LeaderAbilitiesIgnored() && !$damagedAlly->IsExhausted() && ($fromCombat || ($enemyDamage && $fromUnitEffect))) {
           PrependDecisionQueue("MZOP", $player, "REST", 1);
           PrependDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $index, 1);
           PrependDecisionQueue("NOPASS", $otherPlayer, "-");
@@ -2329,11 +2331,13 @@ function AllyDamageTakenAbilities($player, $index, $survived, $damage, $fromComb
       default: break;
     }
   }
+
+  // Enemy leader abilities
   $theirCharacter = &GetPlayerCharacter($otherPlayer);
   for($i=0; $i<count($theirCharacter); $i+=CharacterPieces()) {
     switch($theirCharacter[$i]) {
       case "9155536481"://Jango Fett Leader
-        if(!LeaderAbilitiesIgnored() && ($theirCharacter[$i+1] == 2 && ($fromCombat || ($enemyDamage && $fromUnitEffect)))) {
+        if(!LeaderAbilitiesIgnored() && !$damagedAlly->IsExhausted() && $theirCharacter[$i+1] == 2 && ($fromCombat || ($enemyDamage && $fromUnitEffect))) {
           PrependDecisionQueue("MZOP", $player, "REST", 1);
           PrependDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $index, 1);
           PrependDecisionQueue("EXHAUSTCHARACTER", $otherPlayer, FindCharacterIndex($otherPlayer, "9155536481"), 1);
