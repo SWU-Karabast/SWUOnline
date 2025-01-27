@@ -5817,7 +5817,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       IndirectDamage($otherPlayer, $indirectAmount);
       break;
     case "2778554011"://General Draven
-      PlayAlly("9415311381", $currentPlayer); //X-Wing
+      CreateXWing($currentPlayer);
       break;
     case "1303370295"://Death Space Skirmisher
       if (SearchCount(SearchAllies($currentPlayer, arena: "Space")) > 1) {

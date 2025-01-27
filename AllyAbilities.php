@@ -9,6 +9,14 @@ function CreateBattleDroid($player, $from = "-") {
   return PlayAlly("3463348370", $player, from:$from); //Battle Droid
 }
 
+function CreateXWing($player, $from = "-") {
+  return PlayAlly("9415311381", $player, from:$from); //X-Wing
+}
+
+function CreateTieFighter($player, $from = "-") {
+  return PlayAlly("7268926664", $player, from:$from); //Tie Fighter
+}
+
 function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null, $cloned = false, $playCardEffect = false)
 {
   $uniqueID = GetUniqueId();
@@ -2245,10 +2253,10 @@ function SpecificAllyAttackAbilities($attackID)
       }
       break;
     case "2778554011"://General Draven
-      PlayAlly("9415311381", $mainPlayer); //X-Wing
+      CreateXWing($mainPlayer);
       break;
     case "2657417747"://Quasar TIE Carrier
-      PlayAlly("7268926664", $mainPlayer); //TIE Fighter
+      CreateTieFighter($mainPlayer);
       break;
     case "6390089966"://Banshee
       $damage = $attackerAlly->Damage();
