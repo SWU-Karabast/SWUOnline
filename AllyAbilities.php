@@ -1945,6 +1945,7 @@ function SpecificAllyAttackAbilities($attackID)
         AddDecisionQueue("SHOWOPTIONS", $mainPlayer, "$attackerCardID&$options", 1);
         AddDecisionQueue("MODAL", $mainPlayer, "POEDAMERON", 1);
       }
+      break;
     case "1320229479"://Multi-Troop Transport
       CreateBattleDroid($mainPlayer);
       break;
