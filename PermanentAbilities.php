@@ -51,9 +51,9 @@ function PermanentDestroyed($player, $cardID, $isToken = false)
     // case "SOUL"://FAB
     //   AddSoul($cardID, $player, "PLAY");
     //   break;
-    case "BANISH":
-      BanishCardForPlayer($cardID, $player, "PLAY", "NA");
-      break;
+    // case "BANISH"://FAB
+    //   BanishCardForPlayer($cardID, $player, "PLAY", "NA");
+    //   break;
     default:
       break;
   }

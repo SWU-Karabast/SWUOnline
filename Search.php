@@ -124,7 +124,18 @@ function SearchInner(&$array, $player, $zone, $count, $type, $definedType, $maxC
           $ally = new Ally("MYALLY-" . $i, $player);
           if(!$ally->HasBounty()) continue;
         }
-        if($hasUpgradeOnly && $zone == "ALLY") {
+        if($hasUpgradeOnly == "token" && $zone == "ALLY") {
+          $ally = new Ally("MYALLY-" . $i, $player);
+          $upgrades = $ally->GetUpgrades();
+          $hasTokenUpgrade = false;
+          foreach($upgrades as $upgrade) {
+            if(IsToken($upgrade)) {
+              $hasTokenUpgrade = true;
+              break;
+            }
+          }
+          if(!$hasTokenUpgrade) continue;
+        } else if($hasUpgradeOnly && $zone == "ALLY") {
           $ally = new Ally("MYALLY-" . $i, $player);
           if(!$ally->IsUpgraded()) continue;
         }

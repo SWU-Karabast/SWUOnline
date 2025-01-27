@@ -268,19 +268,19 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       return $lastResult;
     case "DRAW":
       return Draw($player);
-    case "MULTIBANISH":
-      if($lastResult == "") return $lastResult;
-      $cards = explode(",", $lastResult);
-      $params = explode(",", $parameter);
-      if(count($params) < 3) $params[] = "";
-      $mzIndices = "";
-      for ($i = 0; $i < count($cards); ++$i) {
-        $index = BanishCardForPlayer($cards[$i], $player, $params[0], $params[1], $params[2]);
-        if ($mzIndices != "") $mzIndices .= ",";
-        $mzIndices .= "BANISH-" . $index;
-      }
-      $dqState[5] = $mzIndices;
-      return $lastResult;
+    // case "MULTIBANISH"://FAB
+    //   if($lastResult == "") return $lastResult;
+    //   $cards = explode(",", $lastResult);
+    //   $params = explode(",", $parameter);
+    //   if(count($params) < 3) $params[] = "";
+    //   $mzIndices = "";
+    //   for ($i = 0; $i < count($cards); ++$i) {
+    //     $index = BanishCardForPlayer($cards[$i], $player, $params[0], $params[1], $params[2]);
+    //     if ($mzIndices != "") $mzIndices .= ",";
+    //     $mzIndices .= "BANISH-" . $index;
+    //   }
+    //   $dqState[5] = $mzIndices;
+    //   return $lastResult;
     case "REMOVECOMBATCHAIN":
       $cardID = $combatChain[$lastResult];
       RemoveCombatChain($lastResult);
@@ -460,7 +460,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           CollectBounties($mzArr[0] == "MYALLY" ? $player : ($player == 1 ? 2 : 1), $ally->CardID(), $ally->UniqueID(), $ally->IsExhausted(), $ally->Owner(), $ally->GetUpgrades());
           return $lastResult;
         case "SINK": MZSink($player, $lastResult); return $lastResult;
-        case "SUPPRESS": MZSuppress($player, $lastResult); return $lastResult;
+        //case "SUPPRESS": MZSuppress($player, $lastResult); return $lastResult;//FAB
         case "REST": MZRest($player, $lastResult); return $lastResult;
         case "READY": MZWakeUp($player, $lastResult); return $lastResult;
         case "PLAYCARD": return MZPlayCard($player, $lastResult);
@@ -834,6 +834,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             if(DefinedTypesContains($inputArr[0], $compareValue, $player)) $passFilter = !$passFilter; break;
           case "aspect": if(AspectContains($inputArr[0], $compareValue, $player)) $passFilter = !$passFilter; break;
           case "maxCost": if(CardCost($inputArr[0]) <= $compareValue) $passFilter = !$passFilter; break;
+          case "isToken": if(IsToken($inputArr[0])) $passFilter = !$passFilter; break;
           default: break;
         }
         if($passFilter) $output[] = $inputArr[1];
@@ -849,7 +850,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         $match = false;
         switch($params[0]) {
           case "index": if($arr[$i] == $params[1]) $match = true; break;
-          case "uniqueID": 
+          case "uniqueID":
             $mzArr = explode("-", $arr[$i]);
             if ($mzArr[0] == "MYALLY" || $mzArr[0] == "THEIRALLY") {
               $ally = new Ally($arr[$i]);

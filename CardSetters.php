@@ -1,31 +1,31 @@
 <?php
 
-function BanishCardForPlayer($cardID, $player, $from, $modifier = "-", $banishedBy = "")
-{
-  global $currentPlayer, $mainPlayer, $mainPlayerGamestateStillBuilt;
-  global $myBanish, $theirBanish, $mainBanish, $defBanish;
-  global $myClassState, $theirClassState, $mainClassState, $defClassState;
-  global $myStateBuiltFor;
-  if ($mainPlayerGamestateStillBuilt) {
-    if ($player == $mainPlayer) return BanishCard($mainBanish, $mainClassState, $cardID, $modifier, $player, $from, $banishedBy);
-    else return BanishCard($defBanish, $defClassState, $cardID, $modifier, $player, $from, $banishedBy);
-  } else {
-    if ($player == $myStateBuiltFor) return BanishCard($myBanish, $myClassState, $cardID, $modifier, $player, $from, $banishedBy);
-    else return BanishCard($theirBanish, $theirClassState, $cardID, $modifier, $player, $from, $banishedBy);
-  }
-}
+// function BanishCardForPlayer($cardID, $player, $from, $modifier = "-", $banishedBy = "")//FAB
+// {
+//   global $currentPlayer, $mainPlayer, $mainPlayerGamestateStillBuilt;
+//   global $myBanish, $theirBanish, $mainBanish, $defBanish;
+//   global $myClassState, $theirClassState, $mainClassState, $defClassState;
+//   global $myStateBuiltFor;
+//   if ($mainPlayerGamestateStillBuilt) {
+//     if ($player == $mainPlayer) return BanishCard($mainBanish, $mainClassState, $cardID, $modifier, $player, $from, $banishedBy);
+//     else return BanishCard($defBanish, $defClassState, $cardID, $modifier, $player, $from, $banishedBy);
+//   } else {
+//     if ($player == $myStateBuiltFor) return BanishCard($myBanish, $myClassState, $cardID, $modifier, $player, $from, $banishedBy);
+//     else return BanishCard($theirBanish, $theirClassState, $cardID, $modifier, $player, $from, $banishedBy);
+//   }
+// }
 
-function BanishCard(&$banish, &$classState, $cardID, $modifier, $player = "", $from = "", $banishedBy = "")
-{
-  global $actionPoints, $CS_Num6PowBan, $currentPlayer, $mainPlayer;
-  $rv = -1;
-  if ($player == "") $player = $currentPlayer;
-  if(CardType($cardID) != "T") { //If you banish a token, the token ceases to exist.
-    $rv = count($banish);
-    array_push($banish, $cardID, $modifier, GetUniqueId());
-  }
-  return $rv;
-}
+// function BanishCard(&$banish, &$classState, $cardID, $modifier, $player = "", $from = "", $banishedBy = "")//FAB
+// {
+//   global $actionPoints, $CS_Num6PowBan, $currentPlayer, $mainPlayer;
+//   $rv = -1;
+//   if ($player == "") $player = $currentPlayer;
+//   if(CardType($cardID) != "T") { //If you banish a token, the token ceases to exist.
+//     $rv = count($banish);
+//     array_push($banish, $cardID, $modifier, GetUniqueId());
+//   }
+//   return $rv;
+// }
 
 function RemoveBanish($player, $index)
 {

@@ -690,6 +690,7 @@ function HasShielded($cardID, $player, $index)
 {
   switch($cardID)
   {
+    //SOR
     case "b0dbca5c05"://Iden Versio Leader Unit
       return !LeaderAbilitiesIgnored();
     case "0700214503"://Crafty Smuggler
@@ -701,6 +702,13 @@ function HasShielded($cardID, $player, $index)
     case "3280523224"://Rukh
     case "7728042035"://Chimaera
     case "7870435409"://Bib Fortuna
+      return true;
+    //SHD
+    case "0088477218"://Privateer Scyk
+      return SearchCount(SearchAllies($player, aspect:"Cunning")) > 1;
+    case "6939947927"://Hunter of the Haxion Brood
+      $otherPlayer = $player == 1 ? 2 : 1;
+      return SearchCount(SearchAllies($otherPlayer, hasBountyOnly:true)) > 0;
     case "6135081953"://Doctor Evazan
     case "1747533523"://Village Protectors
     case "1090660242"://The Client
@@ -709,11 +717,11 @@ function HasShielded($cardID, $player, $index)
     case "6635692731"://Hutt's Henchman
     case "4341703515"://Supercommando Squad
       return true;
-    case "6939947927"://Hunter of the Haxion Brood
-      $otherPlayer = $player == 1 ? 2 : 1;
-      return SearchCount(SearchAllies($otherPlayer, hasBountyOnly:true)) > 0;
-    case "0088477218"://Privateer Scyk
-      return SearchCount(SearchAllies($player, aspect:"Cunning")) > 1;
+    //JTL
+    case "6311662442"://Director Krennic
+    case "1519837763"://Shuttle ST-149
+    case "6300552434"://Gold Leader
+      return true;
     default: return false;
   }
 }
@@ -1512,15 +1520,13 @@ function IsPlayable($cardID, $phase, $from, $index = -1, &$restriction = null, $
   $potentialCost = (CardCost($cardID)
     + SelfCostModifier($cardID, $from, reportMode: true)
     + CurrentEffectCostModifiers($cardID, $from, reportMode:true)
-    + CharacterCostModifier($cardID, $from)
     - 2*min(ExploitAmount($cardID, $currentPlayer), $potentialExploitAllies)
   );
   $potentialPilotingCost = PilotingCost($cardID) == -1
     ? -1
     : PilotingCost($cardID)
       + SelfCostModifier($cardID, $from, reportMode: true)
-      + CurrentEffectCostModifiers($cardID, $from, reportMode:true)
-      + CharacterCostModifier($cardID, $from);
+      + CurrentEffectCostModifiers($cardID, $from, reportMode:true);
   if($from == "HAND"
     && $potentialCost > NumResourcesAvailable($currentPlayer)
     && ($potentialPilotingCost == -1 || $potentialPilotingCost > NumResourcesAvailable($currentPlayer))
@@ -1631,8 +1637,8 @@ function IsCloned($uniqueID) {
 function IsToken($cardID)
 {
   switch($cardID) {
-    case "8752877738": return true;
-    case "2007868442": return true;
+    case "8752877738": return true;//Shield
+    case "2007868442": return true;//Experience
     case "3463348370": return true;//Battle Droid
     case "3941784506": return true;//Clone Trooper
     default: return false;
@@ -1693,7 +1699,7 @@ function IsStaticType($cardType, $from = "", $cardID = "")
 {
   if($cardType == "C" || $cardType == "E" || $cardType == "W") return true;
   if($from == "PLAY") return true;
-  if($cardID != "" && $from == "BANISH" && AbilityPlayableFromBanish($cardID)) return true;
+  //if($cardID != "" && $from == "BANISH" && AbilityPlayableFromBanish($cardID)) return true;//FAB
   return false;
 }
 
@@ -2267,16 +2273,16 @@ function isBountyRecollectable($cardID) {
   }
 }
 
-function PlayableFromBanish($cardID, $mod="")
-{
-  global $currentPlayer, $CS_NumNonAttackCards, $CS_Num6PowBan;
-  $mod = explode("-", $mod)[0];
-  if($mod == "TCL" || $mod == "TT" || $mod == "TTFREE" || $mod == "TCC" || $mod == "NT" || $mod == "INST") return true;
-  switch($cardID) {
+// function PlayableFromBanish($cardID, $mod="")//FAB
+// {
+//   global $currentPlayer, $CS_NumNonAttackCards, $CS_Num6PowBan;
+//   $mod = explode("-", $mod)[0];
+//   if($mod == "TCL" || $mod == "TT" || $mod == "TTFREE" || $mod == "TCC" || $mod == "NT" || $mod == "INST") return true;
+//   switch($cardID) {
 
-    default: return false;
-  }
-}
+//     default: return false;
+//   }
+// }
 
 function PlayableFromResources($cardID, $player="", $index="") {
   global $currentPlayer;
@@ -2287,13 +2293,13 @@ function PlayableFromResources($cardID, $player="", $index="") {
   }
 }
 
-function AbilityPlayableFromBanish($cardID)
-{
-  global $currentPlayer, $mainPlayer;
-  switch($cardID) {
-    default: return false;
-  }
-}
+// function AbilityPlayableFromBanish($cardID)//FAB
+// {
+//   global $currentPlayer, $mainPlayer;
+//   switch($cardID) {
+//     default: return false;
+//   }
+// }
 
 function RequiresDieRoll($cardID, $from, $player)
 {
@@ -2386,8 +2392,8 @@ function DefinedCardType2Wrapper($cardID)
     case "8777351722"://Anakin Skywalker
     case "4179470615"://Asajj Ventress
       return "";
-    case "8752877738":
-    case "2007868442":
+    case "8752877738"://Shield Token
+    case "2007868442"://Experience Token
       return "Upgrade";
     default: return DefinedCardType2($cardID);
   }

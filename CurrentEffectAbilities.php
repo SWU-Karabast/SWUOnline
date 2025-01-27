@@ -138,7 +138,9 @@ function EffectAttackModifier($cardID, $playerID="")
     case "8022262805": return 2;//Bold Resistance
     case "2587711125": return -4;//Disarm
     case "2569134232": return -4;//Jedha City
-    case "1323728003": return -1;//Electrostaff
+    case "6300552434"://Gold Leader
+    case "1323728003"://Electrostaff
+      return -1;
     case "2651321164": return 2;//Tactical Advantage
     case "1701265931": return 4;//Moment of Glory
     case "1900571801": return 2;//Overwhelming Barrage
@@ -673,7 +675,7 @@ function CurrentEffectEndTurnAbilities()
         $allyIndex = SearchAlliesForUniqueID($currentTurnEffects[$i+2], $currentTurnEffects[$i+1]);
         if($allyIndex > -1) {
           $ally = new Ally("MYALLY-" . $allyIndex, $currentTurnEffects[$i+1]);
-          $ally->DefeatUpgrade("8752877738");
+          $ally->DefeatUpgrade("8752877738");//Shield Token
         }
         break;
       case "8418001763"://Huyang
@@ -790,7 +792,9 @@ function IsCombatEffectActive($cardID)
   {
     case "2587711125": return true;//Disarm
     case "2569134232": return true;//Jedha City
-    case "1323728003": return true;//Electrostaff
+    case "6300552434"://Gold Leader
+    case "1323728003"://Electrostaff
+      return true;
     case "3809048641": return true;//Surprise Strike
     case "9757839764": return true;//Adelphi Patrol Wing
     case "3038238423": return true;//Fleet Lieutenant

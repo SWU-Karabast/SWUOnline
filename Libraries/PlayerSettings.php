@@ -105,6 +105,7 @@ function GetCardBack($player)
     case 11: return "PadawanUnlimited";
     case 12: return "RVA_SWU";
     case 13: return "BBCardBack";
+    case 14: return "CBForceFam";
     default: return "CardBack";
   }
 }
@@ -297,6 +298,7 @@ function GetSettingsUI($player)
   $rv .= CreateRadioButton($SET_Cardback . "-" . 11, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Padawan Unlimited");
   $rv .= CreateRadioButton($SET_Cardback . "-" . 12, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "RVA SWU");
   $rv .= CreateRadioButton($SET_Cardback . "-" . 13, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Baddest Batch");
+  $rv .= CreateRadioButton($SET_Cardback . "-" . 14, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Force Fam");
 
   $stage = getenv('STAGE') ?: 'prod';
   $isDev = $stage === 'dev';
