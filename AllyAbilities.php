@@ -1250,14 +1250,14 @@ function AllyAttackedAbility($attackTarget, $index) {
 
 function AddAllyPlayAbilityLayers($cardID, $from, $uniqueID = "-", $resourcesPaid=-1) {
   global $currentPlayer;
-  $allies = &GetAllies($currentPlayer);
-  for($i=0; $i<count($allies); $i+=AllyPieces()) {
-    if(AllyHasPlayCardAbility($cardID, $uniqueID, $from, $allies[$i], $currentPlayer, $i, $resourcesPaid)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $allies[$i] . "," . $allies[$i+5]);
-  }
-  $otherPlayer = $currentPlayer == 1 ? 2 : 1;
-  $theirAllies = &GetAllies($otherPlayer);
-  for($i=0; $i<count($theirAllies); $i+=AllyPieces()) {
-    if(AllyHasPlayCardAbility($cardID, $uniqueID, $from, $theirAllies[$i], $otherPlayer, $i, $resourcesPaid)) AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $theirAllies[$i] . "," . $allies[$i+5]);
+
+  foreach ([1, 2] as $p) {
+    $allies = &GetAllies($p);
+    for ($i = 0; $i < count($allies); $i += AllyPieces()) {
+      if (AllyHasPlayCardAbility($cardID, $uniqueID, $from, $allies[$i], $p, $i, $resourcesPaid)) {
+        AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $cardID, $from, $allies[$i] . "," . $allies[$i+5]);
+      }
+    }
   }
 }
 
@@ -1267,6 +1267,8 @@ function AllyHasPlayCardAbility($playedCardID, $playedCardUniqueID, $from, $card
   $thisAlly = new Ally("MYALLY-" . $index, $player);
   if($thisAlly->LostAbilities($playedCardID)) return false;
   $thisIsNewlyPlayedAlly = $thisAlly->UniqueID() == $playedCardUniqueID;
+
+  // When a friendly unit is played
   if($player == $currentPlayer) {
     switch($cardID) {
       case "415bde775d"://Hondo Ohnaka Leader Unit
@@ -1299,7 +1301,7 @@ function AllyHasPlayCardAbility($playedCardID, $playedCardUniqueID, $from, $card
         return !$thisIsNewlyPlayedAlly && DefinedTypesContains($playedCardID, "Unit") && TraitContains($playedCardID, "Separatist", $player);
       default: break;
     }
-  } else {
+  } else { // When an enemy unit is played
     switch ($cardID) {
       case "5555846790"://Saw Gerrera
         return DefinedTypesContains($playedCardID, "Event", $currentPlayer);
@@ -1312,13 +1314,14 @@ function AllyHasPlayCardAbility($playedCardID, $playedCardUniqueID, $from, $card
       default: break;
     }
   }
+
   return false;
 }
 
-function AllyPlayCardAbility($cardID, $player="", $from="-", $abilityID="-", $uniqueID='-')
+function AllyPlayCardAbility($cardID, $player, $from, $abilityID, $uniqueID)
 {
   global $currentPlayer;
-  if($player == "") $player = $currentPlayer;
+  if ($player == "") $player = $currentPlayer;
   $allies = &GetAllies($player);
   $index = SearchAlliesForUniqueID($uniqueID, $player);
   switch($abilityID)
@@ -1457,9 +1460,13 @@ function AllyPlayCardAbility($cardID, $player="", $from="-", $abilityID="-", $un
   switch($abilityID)
   {
     case "7200475001"://Ki-Adi Mundi
-      $opponent = $currentPlayer == 1 ? 2 : 1;
-      Draw($opponent);
-      Draw($opponent);
+      if (GetClassState($currentPlayer, $CS_NumCardsPlayed) == 2) {
+        $opponent = $currentPlayer == 1 ? 2 : 1;
+        AddDecisionQueue("YESNO", $opponent, "if you want use Ki-Adi Mundi's ability");
+        AddDecisionQueue("NOPASS", $opponent, "-");
+        AddDecisionQueue("DRAW", $opponent, "-", 1);
+        AddDecisionQueue("DRAW", $opponent, "-", 1);
+      }
       break;
     case "5555846790"://Saw Gerrera
       DealDamageAsync($player, 2, "DAMAGE", "5555846790");
