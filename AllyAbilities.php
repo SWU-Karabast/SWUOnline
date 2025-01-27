@@ -1209,7 +1209,7 @@ function AllyAttackAbilities($attackID)
         break;
       case "3693364726"://Aurra Sing
         if(GetAttackTarget() == "THEIRCHAR-0" && CardArenas($attackID) == "Ground") {
-          $me = new Ally("MYALLIES-" . $i, $defPlayer);
+          $me = new Ally("MYALLY-" . $i, $defPlayer);
           $me->Ready();
         }
         break;
@@ -1574,8 +1574,8 @@ function SpecificAllyAttackAbilities($attackID)
     }
   }
   if($attackerAlly->LostAbilities()) return;
-  $allies = &GetAllies($mainPlayer);
-  switch($allies[$attackerIndex]) {
+  $attackerCardID = $attackerAlly->CardID();
+  switch($attackerCardID) {
     case "0256267292"://Benthic 'Two Tubes'
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:aspect=Aggression");
       AddDecisionQueue("MZFILTER", $mainPlayer, "index=MYALLY-" . $attackerIndex);
@@ -1884,8 +1884,7 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MZOP", $mainPlayer, "ADDSHIELD", 1);
       break;
     case "4595532978"://Ketsu Onyo
-      //TODO ADD OVERWHELM
-      if(GetAttackTarget() == "THEIRCHAR-0") {
+      if (GetAttackTarget() == "THEIRCHAR-0") {
         DefeatUpgrade($mainPlayer, true, upgradeFilter: "maxCost=2");
       }
       break;
@@ -1924,17 +1923,28 @@ function SpecificAllyAttackAbilities($attackID)
       }
       break;
     case "5966087637"://Poe Dameron
-      PummelHit($mainPlayer, may:true, context:"Choose a card to discard to defeat an upgrade (or pass)");
-      DefeatUpgrade($mainPlayer, passable:true);
-      PummelHit($mainPlayer, may:true, context:"Choose a card to discard to deal damage (or pass)");
-      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY", 1);
-      AddDecisionQueue("PREPENDLASTRESULT", $mainPlayer, "THEIRCHAR-0,", 1);
-      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to deal 2 damage to", 1);
-      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
-      AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,2,$mainPlayer,1", 1);
-      PummelHit($mainPlayer, may:true, context:"Choose a card to discard to make opponent discard (or pass)");
-      PummelHit($defPlayer, passable:true);
-      break;
+      $cardsText = ["up to 3 cards", "up to 2 cards", "1 card"];
+      AddDecisionQueue("PASSPARAMETER", $mainPlayer, "0");
+      AddDecisionQueue("SETDQVAR", $mainPlayer, "0");
+      for ($i = 1; $i <= 3; $i++) {
+        PummelHit($mainPlayer, true, may:true, context:"Choose " . $cardsText[$i - 1] . " to discard or pass");
+        AddDecisionQueue("PASSPARAMETER", $mainPlayer, $i, 1);
+        AddDecisionQueue("SETDQVAR", $mainPlayer, "0", 1);
+      }
+
+      $optionsOrder = ["First", "Second", "Third"];
+      $options = "Deal 2 damage to a unit or base;Defeat an upgrade;An opponent discards a card from their hand";
+      AddDecisionQueue("PASSPARAMETER", $mainPlayer, "-");
+      AddDecisionQueue("SETDQVAR", $mainPlayer, "1");
+      for ($i = 1; $i <= 3; ++$i) {
+        AddDecisionQueue("PASSPARAMETER", $mainPlayer, $i, 1);
+        AddDecisionQueue("GREATERTHANPASS", $mainPlayer, "{0}", 1);
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose Poe Dameron's " . $optionsOrder[$i - 1] . " Ability", 1);
+        AddDecisionQueue("CHOOSEOPTION", $mainPlayer, "$attackerCardID&$options&{1}", 1);
+        AddDecisionQueue("APPENDDQVAR", $mainPlayer, "1", 1);
+        AddDecisionQueue("SHOWOPTIONS", $mainPlayer, "$attackerCardID&$options", 1);
+        AddDecisionQueue("MODAL", $mainPlayer, "POEDAMERON", 1);
+      }
     case "1320229479"://Multi-Troop Transport
       CreateBattleDroid($mainPlayer);
       break;
@@ -2291,13 +2301,16 @@ function AllyHitEffects() {
   }
 }
 
-function AllyDamageTakenAbilities($player, $index, $survived, $damage, $fromCombat=false, $enemyDamage=false, $fromUnitEffect=false/*, $indirectDamage=false*/)
+function AllyDamageTakenAbilities($player, $index, $damage, $fromCombat=false, $enemyDamage=false, $fromUnitEffect=false/*, $indirectDamage=false*/)
 {
+  $damagedAlly = new Ally("MYALLY-" . $index, $player);
+
+  // Friendly unit abilities
   $allies = &GetAllies($player);
   for($i=0; $i<count($allies); $i+=AllyPieces()) {
     switch($allies[$i]) {
       case "7022736145"://Tarfful
-        if($survived && $fromCombat && TraitContains($allies[$index], "Wookiee", $player)) {
+        if ($fromCombat && TraitContains($damagedAlly->CardID(), "Wookiee", $player)) {
           AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:arena=Ground");
           AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal " . $damage . " damage to");
           AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
@@ -2307,15 +2320,14 @@ function AllyDamageTakenAbilities($player, $index, $survived, $damage, $fromComb
       default: break;
     }
   }
-  switch($allies[$index]) {
-    default: break;
-  }
+  
+  // Enemy unit abilities
   $otherPlayer = $player == 1 ? 2 : 1;
   $theirAllies = &GetAllies($otherPlayer);
   for($i=0; $i<count($theirAllies); $i+=AllyPieces()) {
     switch($theirAllies[$i]) {
       case "cfdcbd005a"://Jango Fett Leader Unit
-        if(!LeaderAbilitiesIgnored() && ($fromCombat || ($enemyDamage && $fromUnitEffect))) {
+        if(!LeaderAbilitiesIgnored() && !$damagedAlly->IsExhausted() && ($fromCombat || ($enemyDamage && $fromUnitEffect))) {
           PrependDecisionQueue("MZOP", $player, "REST", 1);
           PrependDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $index, 1);
           PrependDecisionQueue("NOPASS", $otherPlayer, "-");
@@ -2325,11 +2337,13 @@ function AllyDamageTakenAbilities($player, $index, $survived, $damage, $fromComb
       default: break;
     }
   }
+
+  // Enemy leader abilities
   $theirCharacter = &GetPlayerCharacter($otherPlayer);
   for($i=0; $i<count($theirCharacter); $i+=CharacterPieces()) {
     switch($theirCharacter[$i]) {
       case "9155536481"://Jango Fett Leader
-        if(!LeaderAbilitiesIgnored() && ($theirCharacter[$i+1] == 2 && ($fromCombat || ($enemyDamage && $fromUnitEffect)))) {
+        if(!LeaderAbilitiesIgnored() && !$damagedAlly->IsExhausted() && $theirCharacter[$i+1] == 2 && ($fromCombat || ($enemyDamage && $fromUnitEffect))) {
           PrependDecisionQueue("MZOP", $player, "REST", 1);
           PrependDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $index, 1);
           PrependDecisionQueue("EXHAUSTCHARACTER", $otherPlayer, FindCharacterIndex($otherPlayer, "9155536481"), 1);
