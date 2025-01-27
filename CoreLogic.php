@@ -5888,10 +5888,35 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
       }
       break;
+    case "590b638b18"://Rose Tico Leader
+      if(GetResolvedAbilityName($cardID) == "Heal") {
+        WriteLog(CardLink($cardID, $cardID) . " ability is not implemented yet. Reverting gamestate");
+        RevertGamestate();
+      }
+      break;
+    case "0616724418"://Han Solo Leader
+      if(GetResolvedAbilityName($cardID) == "Odds") {
+        WriteLog(CardLink($cardID, $cardID) . " ability is not implemented yet. Reverting gamestate");
+        RevertGamestate();
+      }
+      break;
+    case "3658069276"://Lando Calrissian Leader
+      if(GetResolvedAbilityName($cardID) == "Play") {
+        WriteLog(CardLink($cardID, $cardID) . " ability is not implemented yet. Reverting gamestate");
+        RevertGamestate();
+      }
+      break;
+    case "7514405173"://Admiral Ackbar Leader
+      if(GetResolvedAbilityName($cardID) == "Exhaust") {
+        WriteLog(CardLink($cardID, $cardID) . " ability is not implemented yet. Reverting gamestate");
+        RevertGamestate();
+      }
+      break;
     case "1519837763"://Shuttle ST-149
       if($from != "PLAY") {
         ShuttleST149($currentPlayer);
       }
+      break;
     //PlayAbility End
     default: break;
   }

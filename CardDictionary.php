@@ -1187,6 +1187,14 @@ function CheckJTLAbilityTypes($cardID) {
       return LeaderAbilitiesIgnored() ? "" : "A";
     case "0011262813"://Wedge Antilles Leader
       return LeaderAbilitiesIgnored() ? "" : "A";
+    case "590b638b18"://Rose Tico Leader
+      return LeaderAbilitiesIgnored() ? "" : "A";
+    case "0616724418"://Han Solo Leader
+      return LeaderAbilitiesIgnored() ? "" : "A";
+    case "3658069276"://Lando Calrissian Leader
+      return LeaderAbilitiesIgnored() ? "" : "A";
+    case "7514405173"://Admiral Ackbar Leader
+      return LeaderAbilitiesIgnored() ? "" : "A";
     default: return "";
   }
 }
@@ -1449,6 +1457,15 @@ function CheckJTLAbilityNames($cardID) {
       return LeaderAbilitiesIgnored() ? "" : "Play";
     case "0011262813"://Wedge Antilles Leader
       return LeaderAbilitiesIgnored() ? "" : "Play";
+    case "590b638b18"://Rose Tico Leader
+      return LeaderAbilitiesIgnored() ? "" : "Heal";
+    case "0616724418"://Han Solo Leader
+      return LeaderAbilitiesIgnored() ? "" : "Odds";
+    case "3658069276"://Lando Calrissian Leader
+      return LeaderAbilitiesIgnored() ? "" : "Play";
+    case "7514405173"://Admiral Ackbar Leader
+      return LeaderAbilitiesIgnored() ? "" : "Exhaust";
+
     default: return "";
   }
 }
@@ -1831,6 +1848,8 @@ function LeaderUnit($cardID) {
       return "649c6a9dbd";
     case "5846322081"://Grand Admiral Thrawn
       return "53207e4131";
+    case "3933322003"://Rose Tico
+      return "590b638b18";
     default: return "";
   }
 }
@@ -1963,6 +1982,8 @@ function LeaderUndeployed($cardID) {
       return "4030832630";
     case "53207e4131"://Grand Admiral Thrawn
       return "5846322081";
+    case "590b638b18"://Rose Tico
+      return "3933322003";
     default: return "";
   }
 }
