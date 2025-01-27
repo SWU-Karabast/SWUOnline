@@ -1187,7 +1187,7 @@ function CheckJTLAbilityTypes($cardID) {
       return LeaderAbilitiesIgnored() ? "" : "A";
     case "0011262813"://Wedge Antilles Leader
       return LeaderAbilitiesIgnored() ? "" : "A";
-    case "590b638b18"://Rose Tico Leader
+    case "3933322003"://Rose Tico Leader
       return LeaderAbilitiesIgnored() ? "" : "A";
     case "0616724418"://Han Solo Leader
       return LeaderAbilitiesIgnored() ? "" : "A";
@@ -1457,7 +1457,7 @@ function CheckJTLAbilityNames($cardID) {
       return LeaderAbilitiesIgnored() ? "" : "Play";
     case "0011262813"://Wedge Antilles Leader
       return LeaderAbilitiesIgnored() ? "" : "Play";
-    case "590b638b18"://Rose Tico Leader
+    case "3933322003"://Rose Tico Leader
       return LeaderAbilitiesIgnored() ? "" : "Heal";
     case "0616724418"://Han Solo Leader
       return LeaderAbilitiesIgnored() ? "" : "Odds";

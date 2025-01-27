@@ -5888,10 +5888,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
       }
       break;
-    case "590b638b18"://Rose Tico Leader
+    case "3933322003"://Rose Tico Leader
       if(GetResolvedAbilityName($cardID) == "Heal") {
-        WriteLog(CardLink($cardID, $cardID) . " ability is not implemented yet. Reverting gamestate");
-        RevertGamestate();
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Vehicle&THEIRALLY:trait=Vehicle");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "numAttacks=0");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a vehicle unit to heal");
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "RESTORE,2", 1);
       }
       break;
     case "0616724418"://Han Solo Leader
