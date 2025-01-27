@@ -57,19 +57,22 @@ function ModalAbilities($player, $card, $lastResult)
     case "POEDAMERON":
       switch($lastResult) {
         case 0: // Deal damage
+          PummelHit($player, may:true, context:"Discard a card to deal 2 damage to a unit or base");
           $otherPlayer = ($player == 1 ? 2 : 1);
-          AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
-          AddDecisionQueue("PREPENDLASTRESULT", $player, "MYCHAR-0,THEIRCHAR-0,");
-          AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit or base to deal 2 damage to");
-          AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-");
-          AddDecisionQueue("MZOP", $player, "DEALDAMAGE,2,$player");
+          AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY", 1);
+          AddDecisionQueue("PREPENDLASTRESULT", $player, "MYCHAR-0,THEIRCHAR-0,", 1);
+          AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit or base to deal 2 damage to", 1);
+          AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
+          AddDecisionQueue("MZOP", $player, "DEALDAMAGE,2,$player", 1);
           break;
         case 1: // Defeat an upgrade
-          DefeatUpgrade($player);
+          PummelHit($player, may:true, context:"Discard a card to defeat an upgrade");
+          DefeatUpgrade($player, passable:true);
           break;
-        case 2: // Discard a card
+        case 2: // Opponent discards a card
+          PummelHit($player, may:true, context:"Discard a card to force your opponent to discard a card");
           $otherPlayer = ($player == 1 ? 2 : 1);
-          PummelHit($otherPlayer);
+          PummelHit($otherPlayer, passable:true);
           break;
         default: break;
       }
