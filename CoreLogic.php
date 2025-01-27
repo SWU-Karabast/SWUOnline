@@ -2005,13 +2005,13 @@ function SelfCostModifier($cardID, $from, $reportMode=false)
   $allies = &GetAllies($currentPlayer);
   for($i=0; $i<count($allies); $i+=AllyPieces())
   {
-    //SHD
+    //Shadows of the Galaxy
     if($allies[$i+1] == 0) continue;
     switch($allies[$i]) {
       case "5035052619"://Jabba the Hutt
         if(DefinedTypesContains($cardID, "Event", $currentPlayer) && TraitContains($cardID, "Trick", $currentPlayer)) $modifier -= 1;
         break;
-      //JTL
+      //Jump to Lightspeed
       case "649c6a9dbd"://Admiral Piett
         if(TraitContains($cardID, "Capital Ship", $currentPlayer)) $modifier -= 2;
         break;
@@ -5829,7 +5829,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "1330473789"://Devastator
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
-      IndirectDamage($otherPlayer, 4);
+      IndirectDamage($otherPlayer, 4, true);
       break;
     case "2388374331"://Blue Leader
       AddDecisionQueue("YESNO", $currentPlayer, "Do you want to pay 2 to gain 2 experience tokens?", 1);
@@ -5923,7 +5923,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "6648978613"://Fett's Firespray (Feared Silhouettte)
       $damage = ControlsNamedCard($currentPlayer, "Boba Fett") ? 2 : 1;
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
-      IndirectDamage($otherPlayer, $damage);
+      IndirectDamage($otherPlayer, $damage, true);
       break;
     //PlayAbility End
     default: break;

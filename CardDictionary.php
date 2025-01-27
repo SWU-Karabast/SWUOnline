@@ -690,7 +690,7 @@ function HasShielded($cardID, $player, $index)
 {
   switch($cardID)
   {
-    //SOR
+    //Spark of Rebellion
     case "b0dbca5c05"://Iden Versio Leader Unit
       return !LeaderAbilitiesIgnored();
     case "0700214503"://Crafty Smuggler
@@ -703,7 +703,7 @@ function HasShielded($cardID, $player, $index)
     case "7728042035"://Chimaera
     case "7870435409"://Bib Fortuna
       return true;
-    //SHD
+    //Shadows of the Galaxy
     case "0088477218"://Privateer Scyk
       return SearchCount(SearchAllies($player, aspect:"Cunning")) > 1;
     case "6939947927"://Hunter of the Haxion Brood
@@ -717,7 +717,7 @@ function HasShielded($cardID, $player, $index)
     case "6635692731"://Hutt's Henchman
     case "4341703515"://Supercommando Squad
       return true;
-    //JTL
+    //Jump to Lightspeed
     case "6311662442"://Director Krennic
     case "1519837763"://Shuttle ST-149
     case "6300552434"://Gold Leader

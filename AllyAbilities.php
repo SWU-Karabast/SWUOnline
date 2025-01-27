@@ -817,17 +817,17 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities,
         break;
       case "6861397107"://First Order Stormtrooper
         $otherPlayer = $player == 1 ? 2 : 1;
-        IndirectDamage($otherPlayer, 1);
+        IndirectDamage($otherPlayer, 1, true);
         break;
       case "8287246260"://Droid Missile Platform
         $otherPlayer = $player == 1 ? 2 : 1;
-        IndirectDamage($otherPlayer, 3);
+        IndirectDamage($otherPlayer, 3, true);
         break;
-      case "7389195577"://Zyggerian Starhopper
+      case "7389195577"://Zygerrian Starhopper
         $otherPlayer = $player == 1 ? 2 : 1;
-        IndirectDamage($otherPlayer, 2);
+        IndirectDamage($otherPlayer, 2, true);
         break;
-      case "1519837763":
+      case "1519837763"://Shuttle ST-149
         ShuttleST149($player);
         break;
       //AllyDestroyedAbility End
@@ -2268,13 +2268,13 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE," . $damage, 1);
       break;
     case "7831643253"://Red Squadron Y-Wing
-      IndirectDamage($defPlayer, 3);
+      IndirectDamage($defPlayer, 3, true);
       break;
     case "6861397107"://First Order Stormtrooper
-      IndirectDamage($defPlayer, 1);
+      IndirectDamage($defPlayer, 1, true);
       break;
     case "3504944818"://Tie Bomber
-      IndirectDamage($defPlayer, 3);
+      IndirectDamage($defPlayer, 3, true);
       break;
     case "1990020761"://Shuttle Tidirium
       $card = Mill($mainPlayer, 1);
@@ -2287,7 +2287,7 @@ function SpecificAllyAttackAbilities($attackID)
       break;
     case "6648978613"://Fett's Firespray (Feared Silhouettte)
       $damage = ControlsNamedCard($mainPlayer, "Boba Fett") ? 2 : 1;
-      IndirectDamage($defPlayer, $damage);
+      IndirectDamage($defPlayer, $damage, true);
       break;
     default: break;
   }
