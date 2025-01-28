@@ -18,11 +18,11 @@ jobs:
         options: --privileged    
 
     steps:
-    # 1. Clone the main repository
+    # Clone the main repository
     - name: Checkout Main Repository
       uses: actions/checkout@v3
 
-    # 3. Start Docker Compose
+    # Start Docker Compose
     - name: Start Docker Compose
       run: |
         docker compose up -d
@@ -31,19 +31,19 @@ jobs:
       run: |
         sleep 10 
 
-    # 4. Create a sibling directory for the E2E project
+    # Create a sibling directory for the E2E project
     - name: Clone E2E Repository
       run: |
         cd ..
         git clone https://github.com/brubraz/SWUOnline-Automation.git SWUOnline-Automation
 
-    # 6. Set up Node.js environment for E2E tests
+    # Set up Node.js environment for E2E tests
     - name: Setup Node.js
       uses: actions/setup-node@v3
       with:
         node-version: '18'
 
-    # 7. Install dependencies for the E2E project
+    # Install dependencies for the E2E project
     - name: Install Dependencies for E2E
       run: |
         cd ../SWUOnline-Automation
@@ -53,13 +53,13 @@ jobs:
     - name: Install xvfb
       run: sudo apt-get install -y xvfb
 
-    # 8. Run E2E tests
+    # Run E2E tests
     - name: Run E2E Tests
       run: |
         cd ../SWUOnline-Automation
-        xvfb-run --auto-servernum npm test -- --env chrome
+        xvfb-run --auto-servernum npm test:headless
 
-    # 9. Stop Docker Compose
+    # Stop Docker Compose
     - name: Stop Docker Compose
       run: |
         docker-compose down
