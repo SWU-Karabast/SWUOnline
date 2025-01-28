@@ -2005,13 +2005,13 @@ function SelfCostModifier($cardID, $from, $reportMode=false)
   $allies = &GetAllies($currentPlayer);
   for($i=0; $i<count($allies); $i+=AllyPieces())
   {
-    //SHD
+    //Shadows of the Galaxy
     if($allies[$i+1] == 0) continue;
     switch($allies[$i]) {
       case "5035052619"://Jabba the Hutt
         if(DefinedTypesContains($cardID, "Event", $currentPlayer) && TraitContains($cardID, "Trick", $currentPlayer)) $modifier -= 1;
         break;
-      //JTL
+      //Jump to Lightspeed
       case "649c6a9dbd"://Admiral Piett
         if(TraitContains($cardID, "Capital Ship", $currentPlayer)) $modifier -= 2;
         break;
@@ -5817,7 +5817,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       IndirectDamage($otherPlayer, $indirectAmount);
       break;
     case "2778554011"://General Draven
-      PlayAlly("9415311381", $currentPlayer); //X-Wing
+      CreateXWing($currentPlayer);
       break;
     case "1303370295"://Death Space Skirmisher
       if (SearchCount(SearchAllies($currentPlayer, arena: "Space")) > 1) {
@@ -5829,7 +5829,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "1330473789"://Devastator
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
-      IndirectDamage($otherPlayer, 4);
+      IndirectDamage($otherPlayer, 4, true);
       break;
     case "2388374331"://Blue Leader
       AddDecisionQueue("YESNO", $currentPlayer, "Do you want to pay 2 to gain 2 experience tokens?", 1);
@@ -5888,10 +5888,43 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
       }
       break;
+    case "3933322003"://Rose Tico Leader
+      if(GetResolvedAbilityName($cardID) == "Heal") {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Vehicle&THEIRALLY:trait=Vehicle");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "numAttacks=0");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a vehicle unit to heal");
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "RESTORE,2", 1);
+      }
+      break;
+    case "0616724418"://Han Solo Leader
+      if(GetResolvedAbilityName($cardID) == "Odds") {
+        WriteLog(CardLink($cardID, $cardID) . " ability is not implemented yet. Reverting gamestate");
+        RevertGamestate();
+      }
+      break;
+    case "3658069276"://Lando Calrissian Leader
+      if(GetResolvedAbilityName($cardID) == "Play") {
+        WriteLog(CardLink($cardID, $cardID) . " ability is not implemented yet. Reverting gamestate");
+        RevertGamestate();
+      }
+      break;
+    case "7514405173"://Admiral Ackbar Leader
+      if(GetResolvedAbilityName($cardID) == "Exhaust") {
+        WriteLog(CardLink($cardID, $cardID) . " ability is not implemented yet. Reverting gamestate");
+        RevertGamestate();
+      }
+      break;
     case "1519837763"://Shuttle ST-149
       if($from != "PLAY") {
         ShuttleST149($currentPlayer);
       }
+      break;
+    case "6648978613"://Fett's Firespray (Feared Silhouettte)
+      $damage = ControlsNamedCard($currentPlayer, "Boba Fett") ? 2 : 1;
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      IndirectDamage($otherPlayer, $damage, true);
+      break;
     //PlayAbility End
     default: break;
   }

@@ -31,11 +31,11 @@
       exit;
     }
     ?>
-    
+
     <style>
       <?php include 'PlayerColors.php' ?>
     </style>
-    
+
     <?php
     if (!file_exists("./Games/" . $gameName . "/")) {
       echo ("Game does not exist");
@@ -104,7 +104,7 @@
       function Hotkeys(event) {
         if (event.keyCode === 32) { if(document.getElementById("passConfirm").innerText == "false" || confirm("Do you want to skip arsenal?")) SubmitInput(99, ""); } //Space = pass
         if (event.keyCode === 117) SubmitInput(10000, ""); //U = undo
-        if (event.keyCode === 104) SubmitInput(3, "&cardID=0"); //H = hero ability
+        //if (event.keyCode === 104) SubmitInput(3, "&cardID=0"); //H = hero ability//FAB
         if (event.keyCode === 109) TogglePopup("menuPopup"); //M = open menu
         <?php
         if (count($myCharacter) > CharacterPieces() && CardType($myCharacter[CharacterPieces()]) == "W") echo ("if(event.keyCode === 108) SubmitInput(3, '&cardID=" . CharacterPieces() . "');"); //L = left weapon

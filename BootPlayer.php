@@ -20,7 +20,8 @@ if ($useruid != "OotTheMonk" && $useruid != "love") {
 $gameToken = TryGET("gameToClose", "");
 $playerToBoot = TryGET("playerToBoot", "");
 
-SetCachePiece($gameToken, $playerToBoot+3, 2);
+SetCachePiece($gameToken, $playerToBoot+3, 2);//internet connection status
+SetCachePiece($gameToken, $playerToBoot+14, 3);//forced disconnect status
 
 header("Location: ./zzModPage.php");
 

@@ -143,11 +143,8 @@ while ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         $currentPlayerInputTimeout = true;
         $lastUpdate = 0;
       } else if ($gameState == 5 && $lastCurrentPlayer == $otherP && ($currentTime - $lastActionTime) > $InputTimeoutMS && $lastActionWarning == $otherP && $finalWarning == $otherP) {
-        WriteLog("Player $otherP has disconnected.");
-        $opponentDisconnected = true;
-        SetCachePiece($gameName, $otherP + 3, "2");
+        WriteLog("Player $otherP is inactive.");
         SetCachePiece($gameName, $otherP + 14, 3);
-        SetCachePiece($gameName, 18, 0);
         GamestateUpdated($gameName);
       }
     }
@@ -156,7 +153,7 @@ while ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   if ($count == 100) break;
 }
 $otherP = ($playerID == 1 ? 2 : 1);
-$opponentDisconnected = GetCachePiece($gameName, $otherP + 3) == "2";
+$opponentDisconnected = GetCachePiece($gameName, $otherP + 3) == "2" || GetCachePiece($gameName, $otherP + 14) == "3";
 
 if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   echo "0";
@@ -470,7 +467,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
 
           // Add the card to the content
           $cardId = $layerName;
-          if($cardId == "AFTERPLAYABILITY") $cardId = explode(',', $layers[$i+5])[0];
+          if($cardId == "AFTERPLAYABILITY") $cardId = explode(',', $layers[$i+3])[0];
           if($cardId == "AFTERDESTROYABILITY") $cardId = $layers[$i+3];
           if($cardId == "AFTERDESTROYFRIENDLYABILITY") $cardId = explode(",", $layers[$i+3])[0];
           if($cardId == "AFTERDESTROYTHEIRSABILITY") {
@@ -552,8 +549,10 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   }
 
   if ($turn[0] == "YESNO" && $turn[1] == $playerID) {
-    $content = CreateButton($playerID, "Yes", 20, "YES", "20px");
+    $content = "<div style='display:flex;justify-content:center;margin-top:24px;'>";
+    $content .= CreateButton($playerID, "Yes", 20, "YES", "20px");
     $content .= CreateButton($playerID, "No", 20, "NO", "20px");
+    $content .= "</div>";
     if (GetDQHelpText() != "-") $caption = implode(" ", explode("_", GetDQHelpText()));
     else $caption = "Choose " . TypeToPlay($turn[0]);
     echo CreatePopup("YESNO", [], 0, 1, $caption, 1, $content);
