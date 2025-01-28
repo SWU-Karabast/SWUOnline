@@ -60,7 +60,7 @@ jobs:
         xvfb-run --auto-servernum npm test -- --env headless
 
     - name: Upload Debug Artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: debug-screenshots
         path: /home/runner/work/SWUOnline/SWUOnline-Automation/screenshots/
