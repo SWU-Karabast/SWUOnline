@@ -14,29 +14,41 @@ jobs:
     - name: Checkout Main Repository
       uses: actions/checkout@v3
 
-    # 2. Create a sibling directory for the E2E project
+    # 2. Debug Directory Structure
+    - name: Debug Main Repository Directory Structure
+      run: ls -R .
+
+    # 3. Create a sibling directory for the E2E project
     - name: Clone E2E Repository
       run: |
         cd ..
         git clone https://github.com/brubraz/SWUOnline-Automation.git SWUOnline-Automation
 
-    # 3. Set up Node.js environment
+    # 4. Debug E2E Repository Directory Structure
+    - name: Debug E2E Repository Directory Structure
+      run: |
+        cd ../SWUOnline-Automation
+        ls -R .
+
+    # 5. Set up Node.js environment
     - name: Setup Node.js
       uses: actions/setup-node@v3
       with:
         node-version: '18' # Replace with the required Node.js version.
 
-    # 4. Install dependencies for the main repository
+    # 6. Install dependencies for the main repository
     - name: Install Dependencies for Server
-      run: npm install
+      run: |
+        cd SWUOnline
+        npm install
 
-    # 5. Install dependencies for the E2E project
+    # 7. Install dependencies for the E2E project
     - name: Install Dependencies for E2E
       run: |
         cd ../SWUOnline-Automation
         npm install
 
-    # 6. Run E2E tests
+    # 8. Run E2E tests
     - name: Run E2E Tests
       run: |
         cd ../SWUOnline-Automation
