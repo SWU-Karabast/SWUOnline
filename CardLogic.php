@@ -612,13 +612,15 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       }
       break;
     case "SHIELDED":
-      $ally = new Ally($uniqueID, $player);
+      $index = SearchAlliesForUniqueID($uniqueID, $player);
+      $ally = new Ally("MYALLY-" . $index, $player);
       $ally->Attach("8752877738");//Shield Token
       break;
     case "AFTERPLAYABILITY":
-      $data = explode(",",$target);
-      $ally = new Ally($uniqueID);
-      AllyPlayCardAbility($ally, $data[1], from:$additionalCosts);
+      $arr = explode(",", $uniqueID);
+      $abilityID = $arr[0];
+      $uniqueID = $arr[1];
+      AllyPlayCardAbility($target, $player, from: $additionalCosts, abilityID:$abilityID, uniqueID:$uniqueID);
       break;
     case "AFTERDESTROYTHEIRSABILITY":
       $data=explode(",",$target);
@@ -793,6 +795,18 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       AddDecisionQueue("PASSPARAMETER", $player, "{0}", 1);
       AddDecisionQueue("MZOP", $player, "PLAYCARD", 1);
       break;
+    case "724979d608"://Cad Bane Leader Unit
+      $cadIndex = SearchAlliesForCard($player, "724979d608");
+      $otherPlayer = ($player == 1 ? 2 : 1);
+      AddDecisionQueue("YESNO", $player, "if you want use Cad Bane's ability");
+      AddDecisionQueue("NOPASS", $player, "-");
+      AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $cadIndex, 1);
+      AddDecisionQueue("ADDMZUSES", $player, "-1", 1);
+      AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY", 1);
+      AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a unit to deal 2 damage to", 1);
+      AddDecisionQueue("CHOOSEMULTIZONE", $otherPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $otherPlayer, "DEALDAMAGE,2", 1);
+      break;
     case "1384530409"://Cad Bane Leader ability
       $otherPlayer = ($player == 1 ? 2 : 1);
       AddDecisionQueue("YESNO", $player, "if you want use Cad Bane's ability");
@@ -803,12 +817,24 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       AddDecisionQueue("CHOOSEMULTIZONE", $otherPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $otherPlayer, "DEALDAMAGE,1", 1);
       break;
+    case "4088c46c4d"://Mandalorian Leader Unit
+      AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:maxHealth=6");
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to exhaust", 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+      AddDecisionQueue("MZOP", $player, "REST", 1);
+      break;
     case "9005139831"://Mandalorian Leader Ability
       AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:maxHealth=4");
       AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to exhaust", 1);
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
       AddDecisionQueue("MZOP", $player, "REST", 1);
       AddDecisionQueue("EXHAUSTCHARACTER", $player, FindCharacterIndex($player, "9005139831"), 1);
+      break;
+    case "3589814405"://tactical droid commander
+      AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:maxCost=".$target);
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to exhaust", 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+      AddDecisionQueue("MZOP", $player, "REST", 1);
       break;
     case "2358113881"://Quinlan Vos
       $allies = &GetAllies($player);
@@ -819,6 +845,22 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
       AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1", 1);
       AddDecisionQueue("EXHAUSTCHARACTER", $player, FindCharacterIndex($player, "2358113881"), 1);
+      break;
+    case "4935319539"://Krayt Dragon
+      $otherPlayer = ($player == 1 ? 2 : 1);
+      $damage = CardCost($target);
+      AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "THEIRALLY:arena=Ground");
+      AddDecisionQueue("PREPENDLASTRESULT", $otherPlayer, "THEIRCHAR-0,");
+      AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a card to deal " . $damage . " damage to");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $otherPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $otherPlayer, "DEALDAMAGE," . $damage, 1);
+      break;
+    case "0199085444"://Lux Bonteri
+      $otherPlayer = ($player == 1 ? 2 : 1);
+      AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a unit to ready or exhaust");
+      AddDecisionQueue("CHOOSEMULTIZONE", $otherPlayer, "<-", 1);
+      AddDecisionQueue("SPECIFICCARD", $otherPlayer, "LUXBONTERI", 1);
       break;
     case "3045538805"://Hondo Ohnaka Leader
       AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
@@ -834,6 +876,16 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       PrependDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
       PrependDecisionQueue("SETDQCONTEXT", $player, "Choose a card to give +1 power");
       PrependDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
+      break;
+    case "3952758746"://Toro Calican
+      $toroIndex = SearchAlliesForCard($player, "3952758746");
+      AddDecisionQueue("YESNO", $player, "if you want to use Toro Calican's ability");
+      AddDecisionQueue("NOPASS", $player, "-");
+      AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . LastAllyIndex($player), 1);
+      AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1", 1);
+      AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $toroIndex, 1);
+      AddDecisionQueue("MZOP", $player, "READY", 1);
+      AddDecisionQueue("ADDMZUSES", $player, "-1", 1);
       break;
     case "0754286363"://The Mandalorian's Rifle
       AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY");
