@@ -20,7 +20,7 @@ jobs:
     # 3. Start Docker Compose
     - name: Start Docker Compose
       run: |
-        docker-compose up -d
+        docker compose up -d --build
       # Wait for services to be ready. Adjust the sleep duration based on the time your services take to initialize.
     - name: Wait for Services
       run: |
