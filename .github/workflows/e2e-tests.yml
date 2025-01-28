@@ -22,6 +22,15 @@ jobs:
     - name: Checkout Main Repository
       uses: actions/checkout@v3
 
+    # Generate .env file with DOCKER_USER
+    - name: Configure .env File
+      run: |
+        echo "Generating .env file..."
+        userId=$(id -u)
+        groupId=$(id -g)
+        echo "DOCKER_USER=${userId}:${groupId}" > .env
+        cat .env # Debugging: Confirm .env contents      
+
     # Start Docker Compose
     - name: Start Docker Compose
       run: |
