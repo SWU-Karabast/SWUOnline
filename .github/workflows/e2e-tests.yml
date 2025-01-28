@@ -12,6 +12,11 @@ jobs:
   e2e-tests:
     runs-on: ubuntu-latest
 
+    services:
+      docker:
+        image: docker:20.10.7
+        options: --privileged    
+
     steps:
     # 1. Clone the main repository
     - name: Checkout Main Repository
@@ -20,11 +25,11 @@ jobs:
     # 3. Start Docker Compose
     - name: Start Docker Compose
       run: |
-        docker compose up -d --build
+        docker compose up -d
       # Wait for services to be ready. Adjust the sleep duration based on the time your services take to initialize.
     - name: Wait for Services
       run: |
-        sleep 30 
+        sleep 10 
 
     # 4. Create a sibling directory for the E2E project
     - name: Clone E2E Repository
@@ -42,13 +47,17 @@ jobs:
     - name: Install Dependencies for E2E
       run: |
         cd ../SWUOnline-Automation
-        npm install
+        npm ci
+
+    # Install xvfb for Headless Browser Testing
+    - name: Install xvfb
+      run: sudo apt-get install -y xvfb
 
     # 8. Run E2E tests
     - name: Run E2E Tests
       run: |
         cd ../SWUOnline-Automation
-        npm run test
+        xvfb-run --auto-servernum npm test -- --env chrome
 
     # 9. Stop Docker Compose
     - name: Stop Docker Compose
