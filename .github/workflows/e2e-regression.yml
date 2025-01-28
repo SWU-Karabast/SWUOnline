@@ -1,9 +1,6 @@
-name: E2E PR Testing
+name: E2E Regression Testing
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
       - main
