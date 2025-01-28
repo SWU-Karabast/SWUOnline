@@ -690,7 +690,7 @@ function HasShielded($cardID, $player, $index)
 {
   switch($cardID)
   {
-    //SOR
+    //Spark of Rebellion
     case "b0dbca5c05"://Iden Versio Leader Unit
       return !LeaderAbilitiesIgnored();
     case "0700214503"://Crafty Smuggler
@@ -703,7 +703,7 @@ function HasShielded($cardID, $player, $index)
     case "7728042035"://Chimaera
     case "7870435409"://Bib Fortuna
       return true;
-    //SHD
+    //Shadows of the Galaxy
     case "0088477218"://Privateer Scyk
       return SearchCount(SearchAllies($player, aspect:"Cunning")) > 1;
     case "6939947927"://Hunter of the Haxion Brood
@@ -717,7 +717,7 @@ function HasShielded($cardID, $player, $index)
     case "6635692731"://Hutt's Henchman
     case "4341703515"://Supercommando Squad
       return true;
-    //JTL
+    //Jump to Lightspeed
     case "6311662442"://Director Krennic
     case "1519837763"://Shuttle ST-149
     case "6300552434"://Gold Leader
@@ -1187,6 +1187,14 @@ function CheckJTLAbilityTypes($cardID) {
       return LeaderAbilitiesIgnored() ? "" : "A";
     case "0011262813"://Wedge Antilles Leader
       return LeaderAbilitiesIgnored() ? "" : "A";
+    case "3933322003"://Rose Tico Leader
+      return LeaderAbilitiesIgnored() ? "" : "A";
+    case "0616724418"://Han Solo Leader
+      return LeaderAbilitiesIgnored() ? "" : "A";
+    case "3658069276"://Lando Calrissian Leader
+      return LeaderAbilitiesIgnored() ? "" : "A";
+    case "7514405173"://Admiral Ackbar Leader
+      return LeaderAbilitiesIgnored() ? "" : "A";
     default: return "";
   }
 }
@@ -1449,6 +1457,15 @@ function CheckJTLAbilityNames($cardID) {
       return LeaderAbilitiesIgnored() ? "" : "Play";
     case "0011262813"://Wedge Antilles Leader
       return LeaderAbilitiesIgnored() ? "" : "Play";
+    case "3933322003"://Rose Tico Leader
+      return LeaderAbilitiesIgnored() ? "" : "Heal";
+    case "0616724418"://Han Solo Leader
+      return LeaderAbilitiesIgnored() ? "" : "Odds";
+    case "3658069276"://Lando Calrissian Leader
+      return LeaderAbilitiesIgnored() ? "" : "Play";
+    case "7514405173"://Admiral Ackbar Leader
+      return LeaderAbilitiesIgnored() ? "" : "Exhaust";
+
     default: return "";
   }
 }
@@ -1829,6 +1846,10 @@ function LeaderUnit($cardID) {
       return "f6eb711cf3";
     case "4030832630"://Admiral Piett
       return "649c6a9dbd";
+    case "5846322081"://Grand Admiral Thrawn
+      return "53207e4131";
+    case "3933322003"://Rose Tico
+      return "590b638b18";
     default: return "";
   }
 }
@@ -1959,7 +1980,10 @@ function LeaderUndeployed($cardID) {
       return "9831674351";
     case "649c6a9dbd"://Admiral Piett
       return "4030832630";
-
+    case "53207e4131"://Grand Admiral Thrawn
+      return "5846322081";
+    case "590b638b18"://Rose Tico
+      return "3933322003";
     default: return "";
   }
 }

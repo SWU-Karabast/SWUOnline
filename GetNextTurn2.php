@@ -143,11 +143,8 @@ while ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         $currentPlayerInputTimeout = true;
         $lastUpdate = 0;
       } else if ($gameState == 5 && $lastCurrentPlayer == $otherP && ($currentTime - $lastActionTime) > $InputTimeoutMS && $lastActionWarning == $otherP && $finalWarning == $otherP) {
-        WriteLog("Player $otherP has disconnected.");
-        $opponentDisconnected = true;
-        SetCachePiece($gameName, $otherP + 3, "2");
+        WriteLog("Player $otherP is inactive.");
         SetCachePiece($gameName, $otherP + 14, 3);
-        SetCachePiece($gameName, 18, 0);
         GamestateUpdated($gameName);
       }
     }
@@ -156,7 +153,7 @@ while ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   if ($count == 100) break;
 }
 $otherP = ($playerID == 1 ? 2 : 1);
-$opponentDisconnected = GetCachePiece($gameName, $otherP + 3) == "2";
+$opponentDisconnected = GetCachePiece($gameName, $otherP + 3) == "2" || GetCachePiece($gameName, $otherP + 14) == "3";
 
 if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   echo "0";

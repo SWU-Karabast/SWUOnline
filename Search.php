@@ -297,6 +297,22 @@ function SearchAlliesForTitle($player, $title)
   return $cardList;
 }
 
+function SearchUpgradesForTitle($player, $title) {
+  $allies = &GetAllies($player);
+  $cardList = "";
+  for ($i = 0; $i < count($allies); $i += AllyPieces()) {
+    $ally = new Ally("MYALLY-" . $i, $player);
+    $upgrades = $ally->GetUpgrades(withMetadata:true);
+    for ($j = 0; $j < count($upgrades); $j+=SubcardPieces()) {
+      if (CardTitle($upgrades[$j]) == $title) {
+        if ($cardList != "") $cardList = $cardList . ",";
+        $cardList = $cardList . $i . "," . $j;
+      }
+    }
+  }
+  return $cardList;
+}
+
 function SearchAlliesUniqueIDForTrait($player, $trait) {
   $allies = &GetAllies($player);
   $cardList = [];
@@ -1093,6 +1109,8 @@ function ControlsNamedCard($player, $name) {
   $char = &GetPlayerCharacter($player);
   if(count($char) > CharacterPieces() && CardTitle($char[CharacterPieces()]) == $name) return true;
   if(SearchCount(SearchAlliesForTitle($player, $name)) > 0) return true;
+  if(SearchCount(SearchUpgradesForTitle($player, $name) > 0)) return true;
+
   return false;
 }
 
