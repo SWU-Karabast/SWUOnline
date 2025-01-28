@@ -616,9 +616,8 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       $ally->Attach("8752877738");//Shield Token
       break;
     case "AFTERPLAYABILITY":
-      $data = explode(",",$target);
-      $ally = new Ally($uniqueID);
-      AllyPlayCardAbility($ally, $data[1], from:$additionalCosts);
+      $data = explode(",",$target); // $cardID, $player, $numUses, $playedCardID
+      AllyPlayCardAbility($data[1], $data[0], $uniqueID, $data[2], $data[3], from:$additionalCosts);
       break;
     case "AFTERDESTROYTHEIRSABILITY":
       $data=explode(",",$target);

@@ -1261,7 +1261,8 @@ function AddAllyPlayAbilityLayers($cardID, $from, $uniqueID = "-", $resourcesPai
     $allies = &GetAllies($p);
     for ($i = 0; $i < count($allies); $i += AllyPieces()) {
       if (AllyHasPlayCardAbility($cardID, $uniqueID, $from, $allies[$i], $p, $i, $resourcesPaid)) {
-        AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $allies[$i] . "," . $cardID, $from, $allies[$i+5]);
+        $targetData = implode(",", [$allies[$i], $p, $allies[$i + 8], $cardID]); // $cardID, $player, $numUses, $playedCardID
+        AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $targetData, $from, $allies[$i + 5]);
       }
     }
   }
@@ -1329,14 +1330,14 @@ function AllyHasPlayCardAbility($playedCardID, $playedCardUniqueID, $from, $card
   return false;
 }
 
-function AllyPlayCardAbility(Ally $ally, $playedCardID, $from) {
+function AllyPlayCardAbility($player, $cardID, $uniqueID, $numUses, $playedCardID, $from) {
   global $currentPlayer;
-  $player = $ally->Controller();
   $otherPlayer = $player == 1 ? 2 : 1;
+  $ally = new Ally($uniqueID, $player); // Important: ally could be defeated by the time this function is called. So, use $ally->Exists() to check if the ally still exists.
 
   // When you play a card
   if ($player == $currentPlayer) {
-    switch($ally->CardID()) {
+    switch($cardID) {
       case "415bde775d"://Hondo Ohnaka Leader Unit
         if($from == "RESOURCES") {
           AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
@@ -1372,7 +1373,7 @@ function AllyPlayCardAbility(Ally $ally, $playedCardID, $from) {
         AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1,$player", 1);
         break;
       case "9850906885"://Maz Kanata
-        if (DefinedTypesContains($playedCardID, "Unit", $player)) {
+        if ($ally->Exists() && DefinedTypesContains($playedCardID, "Unit", $player)) {
           $ally->Attach("2007868442");//Experience token
         }
         break;
@@ -1383,7 +1384,7 @@ function AllyPlayCardAbility(Ally $ally, $playedCardID, $from) {
         }
         break;
       case "9610332938"://Poggle the Lesser
-        if (!$ally->IsExhausted()) {
+        if ($ally->Exists() && !$ally->IsExhausted()) {
           AddDecisionQueue("SETDQCONTEXT", $player, "Choose if you want to create a Battle Droid token");
           AddDecisionQueue("YESNO", $player, "-");
           AddDecisionQueue("NOPASS", $player, "-");
@@ -1394,7 +1395,7 @@ function AllyPlayCardAbility(Ally $ally, $playedCardID, $from) {
         }
         break;
       case "0142631581"://Mas Amedda
-        if(!$ally->IsExhausted()) {
+        if($ally->Exists() && !$ally->IsExhausted()) {
           AddDecisionQueue("SETDQCONTEXT", $player, "Choose if you want to search for a unit");
           AddDecisionQueue("YESNO", $player, "-");
           AddDecisionQueue("NOPASS", $player, "-");
@@ -1409,7 +1410,7 @@ function AllyPlayCardAbility(Ally $ally, $playedCardID, $from) {
         if(DefinedTypesContains($playedCardID, "Upgrade", $player)) {
           global $CS_LayerTarget;
           $target = GetClassState($player, $CS_LayerTarget);
-          AddDecisionQueue("YESNO", $player, "if you want to deal 1 damage from " . CardLink($ally->CardID(), $ally->CardID()) . "?");
+          AddDecisionQueue("YESNO", $player, "if you want to deal 1 damage from " . CardLink($cardID, $cardID) . "?");
           AddDecisionQueue("NOPASS", $player, "-");
           AddDecisionQueue("PASSPARAMETER", $player, $target, 1);
           AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1,$player,1", 1);
@@ -1430,15 +1431,18 @@ function AllyPlayCardAbility(Ally $ally, $playedCardID, $from) {
         }
         break;
       case "724979d608"://Cad Bane Leader Unit
-        if(!LeaderAbilitiesIgnored() && $from != 'PLAY' && $ally->NumUses() > 0 && TraitContains($playedCardID, "Underworld", $player)) {
+        if (!LeaderAbilitiesIgnored() && $from != 'PLAY' && $numUses > 0 && TraitContains($playedCardID, "Underworld", $player)) {
           AddDecisionQueue("YESNO", $player, "if you want use Cad Bane's ability");
           AddDecisionQueue("NOPASS", $player, "-");
-          AddDecisionQueue("PASSPARAMETER", $player, $ally->MZIndex(), 1);
-          AddDecisionQueue("ADDMZUSES", $player, "-1", 1);
           AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY", 1);
           AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a unit to deal 2 damage to", 1);
           AddDecisionQueue("CHOOSEMULTIZONE", $otherPlayer, "<-", 1);
           AddDecisionQueue("MZOP", $otherPlayer, "DEALDAMAGE,2", 1);
+
+          if ($ally->Exists()) {
+            AddDecisionQueue("PASSPARAMETER", $player, $ally->MZIndex(), 1);
+            AddDecisionQueue("ADDMZUSES", $player, "-1", 1);
+          }
         }
         break;
       case "4088c46c4d"://The Mandalorian Leader Unit
@@ -1450,40 +1454,49 @@ function AllyPlayCardAbility(Ally $ally, $playedCardID, $from) {
         }
         break;
       case "3952758746"://Toro Calican
-        if(TraitContains($playedCardID, "Bounty Hunter", $player) && $ally->NumUses() > 0){
+        if (TraitContains($playedCardID, "Bounty Hunter", $player) && $numUses > 0){
           AddDecisionQueue("YESNO", $player, "if you want to use Toro Calican's ability");
           AddDecisionQueue("NOPASS", $player, "-");
           AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . LastAllyIndex($player), 1);
           AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1", 1);
-          AddDecisionQueue("PASSPARAMETER", $player, $ally->MZIndex(), 1);
-          AddDecisionQueue("MZOP", $player, "READY", 1);
-          AddDecisionQueue("ADDMZUSES", $player, "-1", 1);
+
+          if ($ally->Exists()) {
+            AddDecisionQueue("PASSPARAMETER", $player, $ally->MZIndex(), 1);
+            AddDecisionQueue("MZOP", $player, "READY", 1);
+            AddDecisionQueue("ADDMZUSES", $player, "-1", 1);
+          }
         }
         break;
       case "3010720738"://Tobias Beckett
-        if($ally->NumUses() > 0 && !DefinedTypesContains($playedCardID, "Unit", $player)) {
+        if ($numUses > 0 && !DefinedTypesContains($playedCardID, "Unit", $player)) {
           $playedCardCost = CardCost($playedCardID);
           AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:maxCost=" . $playedCardCost . "&THEIRALLY:maxCost=" . $playedCardCost);
           AddDecisionQueue("MZFILTER", $player, "status=1", 1);
           AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to exhaust with Tobias Beckett", 1);
           AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
           AddDecisionQueue("MZOP", $player, "REST", 1);
-          AddDecisionQueue("PASSPARAMETER", $player, $ally->MZIndex(), 1);
-          AddDecisionQueue("ADDMZUSES", $player, -1, 1);
+
+          if ($ally->Exists()) {
+            AddDecisionQueue("PASSPARAMETER", $player, $ally->MZIndex(), 1);
+            AddDecisionQueue("ADDMZUSES", $player, "-1", 1);
+          }
         }
         break;
       default: break;
     }
   } else { // When an oponent plays a card
-    switch($ally->CardID()) {
+    switch($cardID) {
       case "7200475001"://Ki-Adi Mundi
-        if ($ally->NumUses() > 0) {
+        if ($numUses > 0) {
           AddDecisionQueue("YESNO", $player, "if you want use Ki-Adi Mundi's ability");
           AddDecisionQueue("NOPASS", $player, "-");
           AddDecisionQueue("DRAW", $player, "-", 1);
           AddDecisionQueue("DRAW", $player, "-", 1);
-          AddDecisionQueue("PASSPARAMETER", $player, $ally->MZIndex(), 1);
-          AddDecisionQueue("ADDMZUSES", $player, "-1", 1);
+
+          if ($ally->Exists()) {
+            AddDecisionQueue("PASSPARAMETER", $player, $ally->MZIndex(), 1);
+            AddDecisionQueue("ADDMZUSES", $player, "-1", 1);
+          }
         }
         break;
       case "5555846790"://Saw Gerrera
@@ -1509,7 +1522,7 @@ function AllyPlayCardAbility(Ally $ally, $playedCardID, $from) {
   }
 
   // When anyone plays a card
-  switch($ally->CardID()) {
+  switch($cardID) {
     default: break;
   }
 }
