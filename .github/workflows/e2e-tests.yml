@@ -63,7 +63,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: debug-screenshots
-        path: ${{ github.workspace }}/SWUOnline-Automation/screenshots/
+        path: /home/runner/work/SWUOnline/SWUOnline-Automation/screenshots/
 
     # Stop Docker Compose
     - name: Stop Docker Compose
