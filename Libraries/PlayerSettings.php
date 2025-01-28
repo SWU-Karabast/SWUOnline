@@ -306,7 +306,7 @@ function GetSettingsUI($player)
   $rv .= CreateRadioButton($SET_Cardback . "-" . 12, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "RVA SWU");
   $rv .= CreateRadioButton($SET_Cardback . "-" . 13, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Baddest Batch");
   $rv .= CreateRadioButton($SET_Cardback . "-" . 14, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Force Fam");
-  $rv .= CreateRadioButton($SET_Cardback . "-" . 15, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Holocron Card Club");
+  $rv .= CreateRadioButton($SET_Cardback . "-" . 15, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Holocron Card Hub");
   $rv .= CreateRadioButton($SET_Cardback . "-" . 16, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Maclunky Gaming");
   $rv .= CreateRadioButton($SET_Cardback . "-" . 17, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "The Cantina Crew");
   $rv .= CreateRadioButton($SET_Cardback . "-" . 18, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Rajeux TCG");
