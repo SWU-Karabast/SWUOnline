@@ -41,9 +41,7 @@ jobs:
 
     # 6. Install dependencies for the main repository
     - name: Install Dependencies for Server
-      run: |
-        cd SWUOnline
-        npm install
+      run: npm install
 
     # 7. Install dependencies for the E2E project
     - name: Install Dependencies for E2E
