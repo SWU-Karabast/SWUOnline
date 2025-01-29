@@ -5925,6 +5925,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
       IndirectDamage($otherPlayer, $damage, true);
       break;
+    case "4819196588"://Electromagnetic Pulse
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Vehicle&THEIRALLY:trait=Vehicle&THEIRALLY:trait=Droid&THEIRALLY:trait=Droid");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a DROID or VEHICLE unit to deal 2 damage and exhaust");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,2,$currentPlayer", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
+      break;
     //PlayAbility End
     default: break;
   }
