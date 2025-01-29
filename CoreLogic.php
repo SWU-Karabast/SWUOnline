@@ -4628,11 +4628,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "a742dea1f1"://Han Solo Red Unit
     case "9226435975"://Han Solo Red
       $abilityName = GetResolvedAbilityName($cardID, $from);
+      $choosePhase = $cardID == "9226435975" ? "MAYCHOOSEMULTIZONE" : "CHOOSEMULTIZONE";
       if($abilityName == "Play") {
         global $CS_AfterPlayedBy;
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND:definedType=Unit");
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to play");
-        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue($choosePhase, $currentPlayer, "<-", 1);
         AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
         AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, "9226435975", 1);
         AddDecisionQueue("PASSPARAMETER", $currentPlayer, $cardID, 1);
