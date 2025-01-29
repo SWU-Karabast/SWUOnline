@@ -65,7 +65,7 @@ jobs:
         cd ../SWUOnline-Automation
         xvfb-run --auto-servernum npm test -- --env headless
       env:
-        SKIP_FULL_REGRESSION: 0
+        FULL_REGRESSION: true
 
     # - name: Upload Debug Artifacts
     #   uses: actions/upload-artifact@v4
