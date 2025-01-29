@@ -265,6 +265,15 @@ function SpecificCardLogic($player, $parameter, $lastResult)
   $card = $parameterArr[0];
   switch($card)
   {
+    case "SABINEWREN_TWI":
+      $card = Mill($player, 1);
+      if (!SharesAspect($card, GetPlayerBase($player))) {
+        AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:arena=Ground&THEIRALLY:arena=Ground");
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal 2 damage");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+        AddDecisionQueue("MZOP", $player, "DEALDAMAGE,2,$player,1", 1);
+      }
+      break;
     case "CAUGHTINTHECROSSFIRE":
       $cardArr = explode(",", $dqVars[0]);
       rsort($cardArr); // Sort the cards by index, with the highest first, to prevent errors caused by index changes after defeat.
