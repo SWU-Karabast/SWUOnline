@@ -767,6 +767,17 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       PrependDecisionQueue("NOPASS", $owner, "-", 1);
       PrependDecisionQueue("YESNO", $owner, "if you want to play " . CardLink($cardID, $cardID) . " for free");
       return 1;
+    case "FLEETLIEUTENANT":
+      $ally = new Ally($lastResult, $player);
+
+      if (TraitContains($ally->CardID(), "Rebel", $player)) {
+        AddDecisionQueue("PASSPARAMETER", $player, $ally->UniqueID());
+        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $player, "3038238423,HAND"); //Fleet Lieutenant
+      }
+
+      AddDecisionQueue("PASSPARAMETER", $player, $ally->MZIndex());
+      AddDecisionQueue("MZOP", $player, "ATTACK");
+      break;      
     case "YODAOLDMASTER":
       if($lastResult == "Both") {
         WriteLog("Both player drew a card from Yoda, Old Master");
