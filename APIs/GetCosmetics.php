@@ -58,6 +58,27 @@ $response->cardBacks[] = $cardBack;
 $cardBack->name = "Force Fam";
 $cardBack->id = 14;
 $response->cardBacks[] = $cardBack;
+$cardBack->name = "Holocron Card Hub";
+$cardBack->id = 15;
+$response->cardBacks[] = $cardBack;
+$cardBack->name = "Maclunky Gaming";
+$cardBack->id = 16;
+$response->cardBacks[] = $cardBack;
+$cardBack->name = "The Cantina Crew";
+$cardBack->id = 17;
+$response->cardBacks[] = $cardBack;
+$cardBack->name = "Rajeux TCG";
+$cardBack->id = 18;
+$response->cardBacks[] = $cardBack;
+$cardBack->name = "Under The Twin Suns";
+$cardBack->id = 19;
+$response->cardBacks[] = $cardBack;
+$cardBack->name = "Too Many Hans";
+$cardBack->id = 20;
+$response->cardBacks[] = $cardBack;
+$cardBack->name = "Porg Depot";
+$cardBack->id = 21;
+$response->cardBacks[] = $cardBack;
 
 $response->playmats = [];
 if(IsUserLoggedIn()) {

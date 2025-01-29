@@ -106,6 +106,13 @@ function GetCardBack($player)
     case 12: return "RVA_SWU";
     case 13: return "BBCardBack";
     case 14: return "CBForceFam";
+    case 15: return "holocron_card_club";
+    case 16: return "maclunky_gaming";
+    case 17: return "cantina_crew";
+    case 18: return "Rajeux_TCG";
+    case 19: return "under_the_twin_suns";
+    case 20: return "too_many_hans";
+    case 21: return "porg_depot";
     default: return "CardBack";
   }
 }
@@ -299,6 +306,13 @@ function GetSettingsUI($player)
   $rv .= CreateRadioButton($SET_Cardback . "-" . 12, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "RVA SWU");
   $rv .= CreateRadioButton($SET_Cardback . "-" . 13, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Baddest Batch");
   $rv .= CreateRadioButton($SET_Cardback . "-" . 14, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Force Fam");
+  $rv .= CreateRadioButton($SET_Cardback . "-" . 15, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Holocron Card Hub");
+  $rv .= CreateRadioButton($SET_Cardback . "-" . 16, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Maclunky Gaming");
+  $rv .= CreateRadioButton($SET_Cardback . "-" . 17, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "The Cantina Crew");
+  $rv .= CreateRadioButton($SET_Cardback . "-" . 18, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Rajeux TCG");
+  $rv .= CreateRadioButton($SET_Cardback . "-" . 19, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Under The Twin Suns");
+  $rv .= CreateRadioButton($SET_Cardback . "-" . 20, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Too Many Hans");
+  $rv .= CreateRadioButton($SET_Cardback . "-" . 21, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Porg Depot");
 
   $stage = getenv('STAGE') ?: 'prod';
   $isDev = $stage === 'dev';
