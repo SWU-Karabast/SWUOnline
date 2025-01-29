@@ -66,14 +66,18 @@ function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null,
 }
 
 function CheckHealthAllAllies() {
-  for ($player = 1; $player <= 2; $player++) {
+  foreach ([1, 2] as $player) {
     $allies = &GetAllies($player);
-    for ($i = 0; $i < count($allies); $i += AllyPieces()) {
+
+    $i = 0;
+    while ($i < count($allies)) {
       $ally = new Ally("MYALLY-" . $i, $player);
       $defeated = $ally->DefeatIfNoRemainingHP();
 
-      if ($defeated) {
-        $i -= AllyPieces(); // Decrement to account for the removed ally
+      if ($defeated) { // If the ally was defeated, start over from the beginning
+        $i = 0;
+      } else {
+        $i += AllyPieces();
       }
     }
   }
@@ -176,6 +180,11 @@ function AllyHasStaticHealthModifier($cardID)
 
 function AllyStaticHealthModifier($cardID, $index, $player, $myCardID, $myIndex, $myPlayer)
 {
+  $ally = new Ally("MYALLY-" . $index, $player);
+  if (!$ally->Exists() || $ally->LostAbilities()) {
+    return 0;
+  }
+
   switch($myCardID)
   {
     case "1557302740"://General Veers
@@ -2070,12 +2079,14 @@ function SpecificAllyAttackAbilities($attackID)
       }
       break;
     case "0ee1e18cf4"://Obi-wan Kenobi
-      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY");
-      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to heal");
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:damagedOnly=true&THEIRALLY:damagedOnly=true");
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to heal 1 damage", 1);
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("SETDQVAR", $mainPlayer, "0", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "RESTORE,1", 1);
-      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY");
-      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 1 damage");
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY", 1);
+      AddDecisionQueue("MZFILTER", $mainPlayer, "index={0}", 1);
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 1 damage", 1);
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,1,$mainPlayer,1", 1);
       break;

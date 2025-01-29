@@ -343,10 +343,13 @@ class Ally {
       }
     }
 
-    //Other ally buffs
-    $otherAllies = &GetAllies($this->playerID);
-    for($i=0; $i<count($otherAllies); $i+=AllyPieces()) {
-      switch($otherAllies[$i]) {
+    // Friendly ally buffs
+    $allies = &GetAllies($this->playerID);
+    for ($i = 0; $i < count($allies); $i += AllyPieces()) {
+      $ally = new Ally("MYALLY-" . $i, $this->playerID);
+      if ($ally->LostAbilities()) continue;
+
+      switch($allies[$i]) {
         case "6097248635"://4-LOM
           if(CardTitle($this->CardID()) == "Zuckuss") $power += 1;
           break;
@@ -390,10 +393,15 @@ class Ally {
         default: break;
       }
     }
-    //Their ally modifiers
-    $theirAllies = &GetAllies($this->playerID == 1 ? 2 : 1);
-    for($i=0; $i<count($theirAllies); $i+=AllyPieces()) {
-      switch($theirAllies[$i]) {
+
+    // Enemy ally buffs
+    $otherPlayer = $this->playerID == 1 ? 2 : 1;
+    $theirAllies = &GetAllies($otherPlayer);
+    for ($i = 0; $i < count($theirAllies); $i += AllyPieces()) {
+      $ally = new Ally("MYALLY-" . $i, $otherPlayer);
+      if ($ally->LostAbilities()) continue;
+
+      switch ($theirAllies[$i]) {
         case "3731235174"://Supreme Leader Snoke
           if (!$this->IsLeader()) {
             $power -= 2;
@@ -402,27 +410,36 @@ class Ally {
         default: break;
       }
     }
-    //Character buffs
+
+    // Leader buffs
     $myChar = &GetPlayerCharacter($this->playerID);
     for($i=0; $i<count($myChar); $i+=CharacterPieces()) {
+      if (LeaderAbilitiesIgnored()) continue;
+
       switch($myChar[$i]) {
         case "8560666697"://Director Krennic Leader
-          if($this->IsDamaged() && !LeaderAbilitiesIgnored()) $power += 1;
+          if ($this->IsDamaged()) $power += 1;
           break;
         case "9794215464"://Gar Saxon Leader
-          if($this->IsUpgraded() && !LeaderAbilitiesIgnored()) $power += 1;
+          if ($this->IsUpgraded()) $power += 1;
           break;
         default: break;
       }
     }
-    //Current effect buffs
-    for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnEffectPieces()) {
-      if($currentTurnEffects[$i+1] != $this->playerID) continue;
-      if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $this->UniqueID()) continue;
-      $power += EffectAttackModifier($currentTurnEffects[$i], $this->PlayerID());
+
+    // Current effect buffs
+    for ($i = 0; $i < count($currentTurnEffects); $i += CurrentTurnEffectPieces()) {
+      $effectCardID = $currentTurnEffects[$i];
+      $effectPlayerID = $currentTurnEffects[$i + 1];
+      $effectUniqueID = $currentTurnEffects[$i + 2];
+
+      if ($effectPlayerID != $this->PlayerID()) continue;
+      if ($effectUniqueID != -1 && $effectUniqueID != $this->UniqueID()) continue;
+
+      $power += EffectAttackModifier($effectCardID, $this->PlayerID());
     }
-    if($power < 0) $power = 0;
-    return $power;
+
+    return max($power, 0);
   }
 
   //All the things that should happen at the end of a round
@@ -612,25 +629,40 @@ class Ally {
 
   function LostAbilities($ignoreFirstCardId = ""): bool {
     global $currentTurnEffects;
-    for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnEffectPieces()) {
-      if($currentTurnEffects[$i+1] != $this->PlayerID()) continue;
-      if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $this->UniqueID()) continue;
-      if($currentTurnEffects[$i] == "2639435822") return true;
+
+    // Check for effects that prevent abilities
+    for ($i = 0; $i < count($currentTurnEffects); $i += CurrentTurnEffectPieces()) {
+      $effectCardID = $currentTurnEffects[$i];
+      $effectPlayerID = $currentTurnEffects[$i + 1];
+      $effectUniqueID = $currentTurnEffects[$i + 2];
+
+      if ($effectPlayerID != $this->PlayerID()) continue;
+      if ($effectUniqueID != -1 && $effectUniqueID != $this->UniqueID()) continue;
+
+      switch ($effectCardID) {
+        case "2639435822": //Force Lightning
+          return true;
+        default: break;
+      }
     }
+
+    // Check for upgrades that prevent abilities
     $upgrades = $this->GetUpgrades();
     $ignoredUpgrade = 0;
-    for($i=0; $i<count($upgrades); ++$i) {
+    for ($i = 0; $i < count($upgrades); $i++) {
       //in case of imprisoned, upgrade are added before all triggers, we need to ignore it for krayt
       if($ignoreFirstCardId != "" && $upgrades[$i] == $ignoreFirstCardId && $ignoredUpgrade == 0) {
         $ignoredUpgrade++;
         continue;
       }
-      switch($upgrades[$i]) {
+
+      switch ($upgrades[$i]) {
         case "1368144544"://Imprisoned
           return true;
         default: break;
       }
     }
+
     if ($this->IsLeader() && LeaderAbilitiesIgnored()) {
       return true;
     }
