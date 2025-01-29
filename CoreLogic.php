@@ -5932,6 +5932,16 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,2,$currentPlayer", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
       break;
+    case "3722493191"://IG-2000
+       if($from != "PLAY") {
+        for ($j = 0; $j < 3; $j++) {
+          AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+          AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 1 damage to");
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+          AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1,$currentPlayer,1", 1);
+        }
+      }
+        break;
     //PlayAbility End
     default: break;
   }
