@@ -66,14 +66,18 @@ function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null,
 }
 
 function CheckHealthAllAllies() {
-  for ($player = 1; $player <= 2; $player++) {
+  foreach ([1, 2] as $player) {
     $allies = &GetAllies($player);
-    for ($i = 0; $i < count($allies); $i += AllyPieces()) {
+
+    $i = 0;
+    while ($i < count($allies)) {
       $ally = new Ally("MYALLY-" . $i, $player);
       $defeated = $ally->DefeatIfNoRemainingHP();
 
-      if ($defeated) {
-        $i -= AllyPieces(); // Decrement to account for the removed ally
+      if ($defeated) { // If the ally was defeated, start over from the beginning
+        $i = 0;
+      } else {
+        $i += AllyPieces();
       }
     }
   }
@@ -176,6 +180,11 @@ function AllyHasStaticHealthModifier($cardID)
 
 function AllyStaticHealthModifier($cardID, $index, $player, $myCardID, $myIndex, $myPlayer)
 {
+  $ally = new Ally("MYALLY-" . $index, $player);
+  if (!$ally->Exists() || $ally->LostAbilities()) {
+    return 0;
+  }
+
   switch($myCardID)
   {
     case "1557302740"://General Veers
