@@ -1,0 +1,77 @@
+name: E2E Regression Testing
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  e2e-tests:
+    runs-on: ubuntu-latest
+
+    services:
+      docker:
+        image: docker:20.10.7
+        options: --privileged    
+
+    steps:
+    # Clone the main repository
+    - name: Checkout Main Repository
+      uses: actions/checkout@v3
+
+    # Generate .env file with DOCKER_USER
+    - name: Configure .env File
+      run: |
+        echo "Generating .env file..."
+        userId=$(id -u)
+        groupId=$(id -g)
+        echo "DOCKER_USER=${userId}:${groupId}" > .env
+        cat .env # Debugging: Confirm .env contents      
+
+    # Start Docker Compose
+    - name: Start Docker Compose
+      run: |
+        docker compose up -d
+      # Wait for services to be ready. Adjust the sleep duration based on the time your services take to initialize.
+    - name: Wait for Services
+      run: |
+        sleep 10 
+
+    # Create a sibling directory for the E2E project
+    - name: Clone E2E Repository
+      run: |
+        cd ..
+        git clone https://github.com/SWU-Karabast/SWUOnline-Automation.git SWUOnline-Automation
+
+    # Set up Node.js environment for E2E tests
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    # Install dependencies for the E2E project
+    - name: Install Dependencies for E2E
+      run: |
+        cd ../SWUOnline-Automation
+        npm ci
+
+    # Install xvfb for Headless Browser Testing
+    - name: Install xvfb
+      run: sudo apt-get install -y xvfb
+
+    # Run E2E Tests
+    - name: Run E2E Tests
+      run: |
+        cd ../SWUOnline-Automation
+        xvfb-run --auto-servernum npm test -- --env headless
+
+    # - name: Upload Debug Artifacts
+    #   uses: actions/upload-artifact@v4
+    #   with:
+    #     name: debug-screenshots
+    #     path: /home/runner/work/SWUOnline/SWUOnline-Automation/screenshots/
+
+    # Stop Docker Compose
+    - name: Stop Docker Compose
+      run: |
+        docker compose down

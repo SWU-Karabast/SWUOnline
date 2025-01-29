@@ -139,7 +139,7 @@ function RestoreAmount($cardID, $player, $index)
     case "4327133297": $amount += 2; break;//Moisture Farmer
     case "5977238053": $amount += 2; break;//Sundari Peacekeeper
     case "9503028597": $amount += 1; break;//Clone Deserter
-    case "5511838014": $amount += 1; break;//Kuil
+    case "5511838014": $amount += 1; break;//Kuiil
     case "e091d2a983": $amount += 3; break;//Rey
     case "7022736145": $amount += 2; break;//Tarfful
     case "6870437193": $amount += 2; break;//Twin Pod Cloud Car
