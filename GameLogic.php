@@ -1289,6 +1289,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       }
       return $damage;
     case "TAKEDAMAGE":
+      global $mainPlayer;
       $params = explode("-", $parameter);
       $damage = intval($params[0]);
       $source = (count($params) > 1 ? $params[1] : "-");
@@ -1300,6 +1301,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         $dqState[6] = $damage;
       }
       $damage = DealDamageAsync($player, $damage, $type, $source);
+      CheckBobaFettJTL($player, $mainPlayer != $player, $type == "COMBAT");
       return $damage;
     // case "AFTERQUELL"://FAB
     //   $maxQuell = GetClassState($player, $CS_MaxQuellUsed);

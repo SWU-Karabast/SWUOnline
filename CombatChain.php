@@ -92,6 +92,7 @@ function AttackModifier($cardID, $player, $index)
     default: break;
   }
   switch($cardID) {
+    //Spark of Rebellion
     case "3988315236"://Seasoned Shoretrooper
       $modifier += NumResources($player) >= 6 ? 2 : 0;
       break;
@@ -108,6 +109,7 @@ function AttackModifier($cardID, $player, $index)
     case "7648077180"://97th Legion
       $modifier += NumResources($player);
       break;
+    //Shadows of the Galaxy
     case "8def61a58e"://Kylo Ren
       $hand = &GetHand($player);
       $modifier -= LeaderAbilitiesIgnored() ? 0 : count($hand)/HandPieces();
@@ -125,6 +127,19 @@ function AttackModifier($cardID, $player, $index)
       $ally = new Ally("MYALLY-" . $index, $player);
       if($ally->IsUpgraded()) $modifier += 1;
       break;
+    case "58f9f2d4a0"://Dr. Aphra
+      $discard = &GetDiscard($player);
+      $costs = [];
+      for($i = 0; $i < count($discard); $i += DiscardPieces()) {
+        $cost = CardCost($discard[$i]);
+        $costs[$cost] = true;
+      }
+      if(count($costs) >= 5) $modifier += 3;
+      break;
+    case "8305828130"://Warbird Stowaway
+      $modifier += $initiativePlayer == $player ? 2 : 0;
+      break;
+    //Twilight of the Republic
     case "2265363405"://Echo
       if(IsCoordinateActive($player)) $modifier += 2;
       break;
@@ -144,18 +159,6 @@ function AttackModifier($cardID, $player, $index)
       $hand = &GetHand($player);
       if(count($hand)/HandPieces() >= 6) $modifier += 2;
       break;
-    case "58f9f2d4a0"://Dr. Aphra
-      $discard = &GetDiscard($player);
-      $costs = [];
-      for($i = 0; $i < count($discard); $i += DiscardPieces()) {
-        $cost = CardCost($discard[$i]);
-        $costs[$cost] = true;
-      }
-      if(count($costs) >= 5) $modifier += 3;
-      break;
-    case "8305828130"://Warbird Stowaway
-        $modifier += $initiativePlayer == $player ? 2 : 0;
-        break;
     case "24a81d97b5"://Anakin Skywalker Leader Unit
       if(LeaderAbilitiesIgnored()) break;
       $modifier += floor(GetHealth($player)/5);
@@ -174,6 +177,7 @@ function AttackModifier($cardID, $player, $index)
       $otherPlayer = $player == 1 ? 2 : 1;
       if(GetClassState($otherPlayer, $CS_NumAlliesDestroyed) > 0) $modifier += 1;
       break;
+    //Jump to Lightspeed
     case "8845408332"://Millennium Falcon (Get Out and Push)
       $ally = new Ally("MYALLY-" . $index, $player);
       $upgrades = $ally->GetUpgrades();
@@ -181,6 +185,8 @@ function AttackModifier($cardID, $player, $index)
         if(TraitContains($upgrades[$i], "Pilot", $player)) $modifier += 1;
       }
       break;
+    case "1463418669"://IG-88
+      $modifier += SearchCount(SearchAllies($player%2+1, damagedOnly:true)) > 0 ? 3 : 0;
     default: break;
   }
 
