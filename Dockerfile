@@ -3,11 +3,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends libbz2-dev \
     libc-client-dev \
     libkrb5-dev \
     libxslt-dev \
-    libzip-dev && \
+    libzip-dev \
+    libfreetype6-dev libjpeg62-turbo-dev libpng-dev \
+    && \
     rm -r /var/lib/apt/lists/*
 
 RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
-    && docker-php-ext-install imap
+    && docker-php-ext-install imap \
+    && docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ --with-webp=/usr/include \
+    && docker-php-ext-install gd
 
 RUN pecl install -o -f redis \
     &&  rm -rf /tmp/pear \
