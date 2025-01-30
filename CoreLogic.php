@@ -5435,9 +5435,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "7013591351"://Admiral Trench
-      MZMoveCard($currentPlayer, "MYDISCARD:definedType=Unit", "MYHAND", may:true, context:"Choose ONLY units defeated this phase then pass");
-      MZMoveCard($currentPlayer, "MYDISCARD:definedType=Unit", "MYHAND", may:true, context:"Choose ONLY units defeated this phase then pass");
-      MZMoveCard($currentPlayer, "MYDISCARD:definedType=Unit", "MYHAND", may:true, context:"Choose ONLY units defeated this phase then pass");
+      MZMoveCard($currentPlayer, "MYDISCARD:definedType=Unit;defeatedThisPhase=true", "MYHAND", may:true, context:"Return up to 3 units that were defeated this phase");
+      MZMoveCard($currentPlayer, "MYDISCARD:definedType=Unit;defeatedThisPhase=true", "MYHAND", may:true, context:"Return up to 2 units that were defeated this phase", isSubsequent:1);
+      MZMoveCard($currentPlayer, "MYDISCARD:definedType=Unit;defeatedThisPhase=true", "MYHAND", may:true, context:"Return 1 unit that was defeated this phase", isSubsequent:1);
       break;
     case "6648824001":
       ObiWansAethersprite($currentPlayer, $playAlly->Index());
