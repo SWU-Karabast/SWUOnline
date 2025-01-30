@@ -816,6 +816,18 @@ function SpecificCardLogic($player, $parameter, $lastResult)
     case "BOBA_FETT_LEADER_JTL":
       IndirectDamage($otherPlayer, 1);
       break;
+    case "HAN_SOLO_LEADER_JTL":
+      $ally = new Ally($lastResult, $player);
+      $attackerCost = CardCost($ally->CardID());
+      $attackerCostIsOdd = $attackerCost % 2 == 1;
+      $odds = $dqVars[0];
+      $oddsIsOdd = $odds % 2 == 1;
+      if($attackerCostIsOdd && $oddsIsOdd && $attackerCost != $odds) {
+        AddCurrentTurnEffect("0616724418", $player);
+      }
+      AddDecisionQueue("MZOP", $player, "ATTACK", 1);
+      return $lastResult;
+      break;
     default: return "";
   }
 }

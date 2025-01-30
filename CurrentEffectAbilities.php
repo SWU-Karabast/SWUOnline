@@ -155,6 +155,7 @@ function EffectAttackModifier($cardID, $playerID="")
     case "6432884726": return 2;//Steadfast Battalion
     case "8244682354": return -1;//Jyn Erso
     case "8600121285": return 1;//IG-88
+    case "0616724418": return 1;//Han Solo Leader JTL
     case "6954704048": return 2;//Heroic Sacrifice
     case "20f21b4948": return -1;//Jyn Erso
     case "9097690846": return 2;//Snowtrooper Lieutenant
@@ -800,6 +801,7 @@ function IsCombatEffectActive($cardID)
     case "3038238423": return true;//Fleet Lieutenant
     case "8244682354": return true;//Jyn Erso
     case "8600121285": return true;//IG-88
+    case "0616724418": return true;//Han Solo Leader JTL
     case "6954704048": return true;//Heroic Sacrifice
     case "20f21b4948": return true;//Jyn Erso
     case "9097690846": return true;//Snowtrooper Lieutenant
