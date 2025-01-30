@@ -81,6 +81,7 @@ enum PatreonCampaign : string
   case SecondCycle = "7";
   case KTOD = "11987758";
   case Karabast = "12163989";
+  case ForceFam = "12636483";
 
   public function SessionID(): string
   {
@@ -88,6 +89,7 @@ enum PatreonCampaign : string
     {
       case "12163989": return "isPatron";
       case "11987758": return "isKTODPatron";
+      case "12636483": return "isForceFamPatron";
       default: return "";
     }
   }
@@ -104,6 +106,7 @@ enum PatreonCampaign : string
       case "5": return "FAB-LAB";
       case "6": return "OnHit";
       case "7": return "Second Cycle";
+      case "12636483": return "Force Fam";
       case "12163989": return "Karabast";
       case "11987758": return "KTOD";
       default: return "";
@@ -122,6 +125,7 @@ enum PatreonCampaign : string
       case "5": return ($userName == "XIR");
       case "6": return ($userName == "wackzitt" || $userName == "RainyDays" || $userName == "HelpMeJace2");
       case "7": return IsTeamSecondCycle($userName);
+      case "12636483": return ($userName == "DealerZ");
       case "12163989": return ($userName == "OotTheMonk");
       case "11987758": return ($userName == "Chrono" || $userName == "BobbySapphire" || $userName == "Reflex" || $userName == "Allstarz97" || $userName == "wooooo" || $userName == "Brunas" || $userName == "Matty");
       default: return "";
@@ -140,8 +144,9 @@ enum PatreonCampaign : string
       case "5": return "46";
       case "6": return "48";
       case "7": return "49";
-      case "7198186": return "1,2,3,4,5,6,7,8";
+      //case "7198186": return "1,2,3,4,5,6,7,8";
       case "11987758": return "2";
+      case "12636483": return "14";
       default: return "";
     }
   }
