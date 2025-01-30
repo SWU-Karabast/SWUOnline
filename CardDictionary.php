@@ -555,6 +555,7 @@ function HasOverwhelm($cardID, $player, $index)
     case "3803148745"://Ruthless Assassin
     case "1743599390"://Trandoshan Hunters
     case "c9ff9863d7"://Hunter (Outcast Sergeant)
+    case "3722493191"://IG-2000
     case "9752523457"://Finalizer
       return true;
     case "4619930426"://First Legion Snowtrooper
