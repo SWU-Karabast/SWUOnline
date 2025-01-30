@@ -341,6 +341,9 @@ class Ally {
         case "3292172753"://Squad Support
           $power += SearchCount(SearchAlliesUniqueIDForTrait($this->Controller(), "Trooper"));
           break;
+        //Jump to Lightspeed
+        case "1463418669"://IG-88
+          $power += SearchCount(SearchAllies($this->Controller()%2+1, damagedOnly:true)) > 0 ? 3 : 0;
         default:
           break;
       }
