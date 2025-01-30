@@ -1,0 +1,1 @@
+docker exec -it $(docker ps -aqf 'name=swuonline-web-server-1') bash
