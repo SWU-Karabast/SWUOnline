@@ -265,6 +265,15 @@ function SpecificCardLogic($player, $parameter, $lastResult)
   $card = $parameterArr[0];
   switch($card)
   {
+    case "SABINEWREN_TWI":
+      $card = Mill($player, 1);
+      if (!SharesAspect($card, GetPlayerBase($player))) {
+        AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:arena=Ground&THEIRALLY:arena=Ground");
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal 2 damage");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+        AddDecisionQueue("MZOP", $player, "DEALDAMAGE,2,$player,1", 1);
+      }
+      break;
     case "CAUGHTINTHECROSSFIRE":
       $cardArr = explode(",", $dqVars[0]);
       rsort($cardArr); // Sort the cards by index, with the highest first, to prevent errors caused by index changes after defeat.
@@ -758,6 +767,17 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       PrependDecisionQueue("NOPASS", $owner, "-", 1);
       PrependDecisionQueue("YESNO", $owner, "if you want to play " . CardLink($cardID, $cardID) . " for free");
       return 1;
+    case "FLEETLIEUTENANT":
+      $ally = new Ally($lastResult, $player);
+
+      if (TraitContains($ally->CardID(), "Rebel", $player)) {
+        AddDecisionQueue("PASSPARAMETER", $player, $ally->UniqueID());
+        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $player, "3038238423,HAND"); //Fleet Lieutenant
+      }
+
+      AddDecisionQueue("PASSPARAMETER", $player, $ally->MZIndex());
+      AddDecisionQueue("MZOP", $player, "ATTACK");
+      break;      
     case "YODAOLDMASTER":
       if($lastResult == "Both") {
         WriteLog("Both player drew a card from Yoda, Old Master");

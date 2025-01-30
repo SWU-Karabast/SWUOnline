@@ -2196,14 +2196,11 @@ function SpecificAllyAttackAbilities($attackID)
       global $CS_NumEventsPlayed;
       if(GetClassState($mainPlayer, $CS_NumEventsPlayed) > 0) AddCurrentTurnEffect("f8e0c65364", $mainPlayer, "PLAY");
       break;
-    case "2843644198"://Sabine Wren
-      $card = Mill($mainPlayer, 1);
-      if(!SharesAspect($card, GetPlayerBase($mainPlayer))) {
-        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:arena=Ground&THEIRALLY:arena=Ground");
-        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 2 damage");
-        AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
-        AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,2,$mainPlayer,1", 1);
-      }
+    case "2843644198"://Sabine Wren (You Can Count On Me)
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Do you want to discard a card from your deck?");
+      AddDecisionQueue("YESNO", $mainPlayer, "-");
+      AddDecisionQueue("NOPASS", $mainPlayer, "-");
+      AddDecisionQueue("SPECIFICCARD", $mainPlayer, "SABINEWREN_TWI", 1);
       break;
     case "0693815329"://Cad Bane (Hostage Taker)
       RescueUnit($mainPlayer == 1 ? 2 : 1, "THEIRALLY-" . $attackerIndex, may:true);

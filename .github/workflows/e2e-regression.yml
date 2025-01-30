@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  e2e-tests:
+  e2e-regression:
     runs-on: ubuntu-latest
 
     services:

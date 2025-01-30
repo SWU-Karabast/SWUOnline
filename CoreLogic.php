@@ -3388,14 +3388,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       if($from != "PLAY") {
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
         AddDecisionQueue("MZFILTER", $currentPlayer, "status=1");
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to attack and give +2");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to attack with");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-        AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
-        AddDecisionQueue("MZALLCARDTRAITORPASS", $currentPlayer, "Rebel", 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
-        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "3038238423,HAND", 1);
-        AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
+        AddDecisionQueue("SPECIFICCARD", $currentPlayer, "FLEETLIEUTENANT", 1);
       }
       break;
     case "3208391441"://Make an Opening
@@ -4628,11 +4623,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "a742dea1f1"://Han Solo Red Unit
     case "9226435975"://Han Solo Red
       $abilityName = GetResolvedAbilityName($cardID, $from);
+      $choosePhase = $cardID == "9226435975" ? "MAYCHOOSEMULTIZONE" : "CHOOSEMULTIZONE";
       if($abilityName == "Play") {
         global $CS_AfterPlayedBy;
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND:definedType=Unit");
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to play");
-        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue($choosePhase, $currentPlayer, "<-", 1);
         AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
         AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, "9226435975", 1);
         AddDecisionQueue("PASSPARAMETER", $currentPlayer, $cardID, 1);
