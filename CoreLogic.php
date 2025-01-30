@@ -5206,11 +5206,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "8777351722"://Anakin Skywalker
       DealDamageAsync($currentPlayer, 2, "DAMAGE", "8777351722");
-      AddCurrentTurnEffect("8777351722", $currentPlayer, "PLAY");
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
       AddDecisionQueue("MZFILTER", $currentPlayer, "status=1", 1);
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to attack with");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to attack with", 1);
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, $cardID, 1);
       AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
       break;
     case "6410481716"://Mace Windu's Lightsaber
