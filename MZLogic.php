@@ -498,13 +498,17 @@ function MZStartTurnAbility($player, $MZIndex)
   }
 }
 
-function MZMoveCard($player, $search, $where, $may=false, $isReveal=false, $silent=false, $isSubsequent=false, $context="", $filter="")
+function MZMoveCard($player, $search, $where, $may=false, $isReveal=false, $silent=false, $isSubsequent=false, $context="", $filter="", $mzIndex="")
 {
-  AddDecisionQueue("MULTIZONEINDICES", $player, $search, ($isSubsequent ? 1 : 0));
-  if($filter != "") AddDecisionQueue("MZFILTER", $player, $filter);
-  if($context != "") AddDecisionQueue("SETDQCONTEXT", $player, $context);
-  if($may) AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-  else AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
+  if ($mzIndex == "") {
+    AddDecisionQueue("MULTIZONEINDICES", $player, $search, ($isSubsequent ? 1 : 0));
+    if($filter != "") AddDecisionQueue("MZFILTER", $player, $filter);
+    if($context != "") AddDecisionQueue("SETDQCONTEXT", $player, $context);
+    if($may) AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+    else AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
+  } else {
+    AddDecisionQueue("PASSPARAMETER", $player, $mzIndex, ($isSubsequent ? 1 : 0));
+  }
   AddDecisionQueue("MZADDZONE", $player, $where, 1);
   AddDecisionQueue("MZREMOVE", $player, "-", 1);
   AddDecisionQueue("SETDQVAR", $player, "0", 1);
