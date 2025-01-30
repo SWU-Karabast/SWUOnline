@@ -13,9 +13,13 @@ function HandPieces()
   return 1;
 }
 
+//0 - Card ID
+//1 - Discard Pile Modifier (e.g. TTFREE). Default: "-".
+//2 - From (HAND, DECK, PLAY, RESOURCES)
+//3 - Round discarded
 function DiscardPieces()
 {
-  return 2;
+  return 4;
 }
 
 //0 - Card ID
