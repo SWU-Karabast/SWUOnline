@@ -270,6 +270,9 @@ class Ally {
     if($damageDealt != NULL) $damageDealt = $amount;
     $this->AddDamage($amount);
     AddEvent("DAMAGE", $this->UniqueID() . "!" . $amount);
+
+    CheckBobaFettJTL($this->PlayerID(), $enemyDamage, $fromCombat);
+
     if($this->Health() <= 0 && ($this->CardID() != "d1a7b76ae7" || $this->LostAbilities())//Chirrut Imwe
         && (!AllyIsMultiAttacker($this->CardID()) || !IsMultiTargetAttackActive())) {
       DestroyAlly($this->playerID, $this->index, fromCombat:$fromCombat);

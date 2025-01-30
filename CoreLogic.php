@@ -5895,8 +5895,17 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "0616724418"://Han Solo Leader
       if(GetResolvedAbilityName($cardID) == "Odds") {
-        WriteLog(CardLink($cardID, $cardID) . " ability is not implemented yet. Reverting gamestate");
-        RevertGamestate();
+        $deck = new Deck($currentPlayer);
+        if($deck->Reveal()) {
+          $cardCost = CardCost($deck->Top());
+        }
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, $cardCost);
+        AddDecisionQueue("SETDQVAR", $currentPlayer, "0");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "status=1");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to attack with");
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("SPECIFICCARD", $currentPlayer, "HAN_SOLO_LEADER_JTL", 1);
       }
       break;
     case "3658069276"://Lando Calrissian Leader
