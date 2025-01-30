@@ -74,7 +74,8 @@ switch ($popupType) {
       $totalTime = $p1TotalTime + $p2TotalTime;
       $content .= "<BR><span class='Time-Span'>Your Play Time: " . intval($time / 60) . "m" . $time % 60 . "s - Game Time: " . intval($totalTime / 60) . "m" . $totalTime % 60 . "s</span>";
       $content .= CardStats($playerID);
-      echo CreatePopup("OVER", [], 1, 1, "Player " . $winner . " Won! ", 1, $content, "./", true);
+      $verb = $playerID == $winner ? "Won!" : "Lost";
+      echo CreatePopup("OVER", [], 1, 1, "You {$verb}", 1, $content, "./", true);
     } else {
       echo (CreatePopup("menuPopup", [], 1, 0, "Main Menu", 1, MainMenuUI(), "./", true));
     }

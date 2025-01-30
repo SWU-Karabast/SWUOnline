@@ -521,7 +521,8 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
 
     $content .= "</div>";
     $content .= CardStats($playerID);
-    echo CreatePopup("OVER", [], 1, 1, "Player " . $winner . " Won! ", 1, $content, "./", true);
+    $verb = $playerID == $winner ? "Won!" : "Lost";
+    echo CreatePopup("OVER", [], 1, 1, "You {$verb}", 1, $content, "./", true);
   }
 
   if ($turn[0] == "DYNPITCH" && $turn[1] == $playerID) {
