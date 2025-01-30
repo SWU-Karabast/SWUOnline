@@ -4,8 +4,8 @@
 
   // Fake key for development / test
   $adsenseClientId = "";
-  $patreonClientID = "";
-  $patreonClientSecret = "";
+  $patreonClientID = getenv("PATREON_CLIENT_ID") ?: "";
+  $patreonClientSecret = getenv("PATREON_CLIENT_SECRET") ?: "";
 
   $fabraryOutgoingKey = "eKj9PbXqA3oG5fHdR6ZtLsUyVcN4wxm";
 ?>

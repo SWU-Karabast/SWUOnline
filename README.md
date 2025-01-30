@@ -104,6 +104,8 @@ To secure your project and set environment variables:
   SetEnv MYSQL_SERVER_USER_NAME root
   SetEnv MYSQL_ROOT_PASSWORD <mysql-root-password>
   SetEnv WEBHOOK_SECRET <webhook-secret>
+  SetEnv PATREON_CLIENT_ID <patreon-client-id>
+  SetEnv PATREON_CLIENT_SECRET <patreon-client-secret>
   ```
 
 This configuration ensures that the `.git` folder is inaccessible and adds environment variables for your project.
