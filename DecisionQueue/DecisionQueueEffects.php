@@ -263,6 +263,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
   global $dqVars;
   $parameterArr = explode(",", $parameter);
   $card = $parameterArr[0];
+  $otherPlayer = ($player == 1 ? 2 : 1);
   switch($card)
   {
     case "SABINEWREN_TWI":
@@ -307,7 +308,6 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       AddDecisionQueue("MZOP", $player, "PLAYCARD", 1);
       break;
     case "CLEARTHEFIELD":
-      $otherPlayer = $player == 1 ? 2 : 1;
       $ally = new Ally($lastResult);
       $cardTitle = CardTitle($ally->CardID());
       MZBounce($player, $ally->MZIndex());
@@ -322,7 +322,6 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       }
       break;
     case "RESOLUTE":
-      $otherPlayer = $player == 1 ? 2 : 1;
       $cardID = GetMZCard($player, $lastResult);
       $cardTitle = CardTitle($cardID);
       $targetCards = SearchAlliesUniqueIDForTitle($otherPlayer, $cardTitle);
@@ -777,18 +776,16 @@ function SpecificCardLogic($player, $parameter, $lastResult)
 
       AddDecisionQueue("PASSPARAMETER", $player, $ally->MZIndex());
       AddDecisionQueue("MZOP", $player, "ATTACK");
-      break;      
+      break;
     case "YODAOLDMASTER":
       if($lastResult == "Both") {
         WriteLog("Both player drew a card from Yoda, Old Master");
-        $otherPlayer = $player == 1 ? 2 : 1;
         Draw($player);
         Draw($otherPlayer);
       } else if($lastResult == "Yourself") {
         WriteLog("Player $player drew a card from Yoda, Old Master");
         Draw($player);
       } else {
-        $otherPlayer = $player == 1 ? 2 : 1;
         WriteLog("Player $otherPlayer drew a card from Yoda, Old Master");
         Draw($otherPlayer);
       }
@@ -814,6 +811,10 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       $ally = new Ally($lastResult, MZPlayerID($player, $lastResult));
       if($ally->IsExhausted()) $ally->Ready();
       else $ally->Exhaust();
+      break;
+    //JTL
+    case "BOBA_FETT_LEADER_JTL":
+      IndirectDamage($otherPlayer, 1);
       break;
     default: return "";
   }

@@ -1110,6 +1110,29 @@ function UIDIsAffectedByMalevolence($uniqueID) {
   return $found;
 }
 
+function CheckBobaFettJTL($targetPlayer, $enemyDamage, $fromCombat) {
+  if($fromCombat) {
+    return;
+  }
+  $playerToCheck = $enemyDamage
+    ? ($targetPlayer == 1 ? 2 : 1)
+    : $targetPlayer;
+  $charArr = &GetPlayerCharacter($playerToCheck);
+    for($i=0; $i<count($charArr); $i+=CharacterPieces()) {
+      switch($charArr[$i]) {
+        case "9831674351"://Boba Fett Leader
+          if(!LeaderAbilitiesIgnored() && $charArr[$i+1] == 2) {
+            AddDecisionQueue("YESNO", $playerToCheck, "if you want use Boba Fett's ability");
+            AddDecisionQueue("NOPASS", $playerToCheck, "-");
+            AddDecisionQueue("EXHAUSTCHARACTER", $playerToCheck, FindCharacterIndex($playerToCheck, "9831674351"), 1);
+            AddDecisionQueue("SPECIFICCARD", $playerToCheck, "BOBA_FETT_LEADER_JTL", 1);
+          }
+          break;
+        default: break;
+      }
+    }
+}
+
 function IndirectDamage($player, $amount, $fromUnitEffect=false)
 {
   $sourcePlayer = $player == 1 ? 2 : 1;
