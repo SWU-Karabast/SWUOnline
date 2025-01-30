@@ -56,12 +56,6 @@ function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null,
   // Check if any units will be destroyed due to cascading effects
   CheckHealthAllAllies();
   
-  // Verify if the Token has enough HP, accounting for other abilities in play.
-  // Non-token units are excluded as they are validated elsewhere.
-  if (IsToken($cardID)) {
-    $ally = new Ally("MYALLY-" . $index, $player);
-    $ally->DefeatIfNoRemainingHP();
-  }
   return $index;
 }
 
@@ -69,15 +63,13 @@ function CheckHealthAllAllies() {
   foreach ([1, 2] as $player) {
     $allies = &GetAllies($player);
 
-    $i = 0;
-    while ($i < count($allies)) {
+    for ($i = 0; $i < count($allies); $i += AllyPieces()) {
       $ally = new Ally("MYALLY-" . $i, $player);
       $defeated = $ally->DefeatIfNoRemainingHP();
-
-      if ($defeated) { // If the ally was defeated, start over from the beginning
-        $i = 0;
-      } else {
-        $i += AllyPieces();
+      
+      // If an ally was defeated, we don't need to check the rest of the allies because the DefeatAlly function will call this function again.
+      if ($defeated) {
+        break; 
       }
     }
   }
