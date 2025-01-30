@@ -3598,35 +3598,15 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "4113123883"://Unnatural Life
       global $CS_AfterPlayedBy;
-      $alliesDestroyed = SearchAlliesDestroyed($currentPlayer, ignoreDuplicates:true);
-
-      if (SearchCount($alliesDestroyed) > 0) {
-        $alliesDestroyedIDs = explode(",", $alliesDestroyed);
-        $filteredCardIDs = "";
-
-        // Filter out cards that are not in the discard pile
-        foreach ($alliesDestroyedIDs as $allyDestroyedID) {
-          if (SearchCount(SearchDiscardForCard($currentPlayer, $allyDestroyedID)) > 0) {
-            if ($filteredCardIDs != "") $filteredCardIDs .= ",";
-            $filteredCardIDs .= $allyDestroyedID;
-          }
-        }
-
-        if (SearchCount($filteredCardIDs) > 0) {
-          AddDecisionQueue("PASSPARAMETER", $currentPlayer, $filteredCardIDs);
-          AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit (make sure it was defeated this phase)");
-          AddDecisionQueue("MAYCHOOSECARD", $currentPlayer, "<-", 1);
-          AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
-          AddDecisionQueue("PASSPARAMETER", $currentPlayer, $cardID, 1);
-          AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_AfterPlayedBy, 1);
-          AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, $cardID, 1);
-          AddDecisionQueue("FINDINDICES", $currentPlayer, "MYDISCARD,{0}", 1); // Find the indexes of the card in the discard pile
-          AddDecisionQueue("GETITEMBYINDEX", $currentPlayer, "-1", 1); // Get the last matching card in the discard pile
-          AddDecisionQueue("SETDQVAR", $currentPlayer, "1", 1);
-          AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYDISCARD-{1}", 1);
-          AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
-        }
-      }
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYDISCARD:definedType=Unit;defeatedThisPhase=true");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to put into play");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, $cardID, 1);
+      AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_AfterPlayedBy, 1);
+      AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, $cardID, 1);
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
       break;
     case "3426168686"://Sneak Attack
       global $CS_AfterPlayedBy;
@@ -4580,7 +4560,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
       }
       break;
-    case "9828896088"://Spark Of Hope
+    case "9828896088"://Spark of Hope
       MZMoveCard($currentPlayer, "MYDISCARD:definedType=Unit;defeatedThisPhase=true", "MYRESOURCES", may:true);
       AddDecisionQueue("PAYRESOURCES", $currentPlayer, "1,1", 1);
       break;
