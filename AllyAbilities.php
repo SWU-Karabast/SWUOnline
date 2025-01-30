@@ -373,13 +373,18 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false,
 
   IncrementClassState($player, $CS_NumLeftPlay);
   AllyLeavesPlayAbility($player, $index);
+
+  // Discard upgrades
   for($i=0; $i<count($upgradesWithOwnerData); $i+=SubcardPieces()) {
     if($upgradesWithOwnerData[$i] == "8752877738" || $upgradesWithOwnerData[$i] == "2007868442") continue; // Skip Shield and Experience tokens
     if($upgradesWithOwnerData[$i] == "6911505367") $discardPileModifier = "TTFREE";//Second Chance
     if(!CardIdIsLeader($upgradesWithOwnerData[$i]))
       AddGraveyard($upgradesWithOwnerData[$i], $upgradesWithOwnerData[$i+1], "PLAY");
   }
+
   $captives = $ally->GetCaptives(true);
+
+  // Discard the ally
   if(!$skipDestroy) {
     if(DefinedTypesContains($cardID, "Leader", $player)) ;//If it's a leader it doesn't go in the discard
     else if(isToken($cardID)) ; // If it's a token, it doesn't go in the discard
@@ -389,6 +394,8 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false,
       AddGraveyard($graveyardCardID, $owner, "PLAY", $discardPileModifier);
     }
   }
+
+  // Rescue captives
   for($j = $index + AllyPieces() - 1; $j >= $index; --$j) unset($allies[$j]);
   $allies = array_values($allies);
   if(!$skipRescue) {

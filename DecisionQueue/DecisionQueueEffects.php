@@ -409,8 +409,13 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       }
       break;
     case "THEEMPERORSLEGION":
-      MZMoveCard($player, "MYDISCARD:definedType=Unit", "MYHAND", may:true, context:"Choose ONLY units defeated this phase then pass");
-      AddDecisionQueue("SPECIFICCARD", $player, "THEEMPERORSLEGION", 1);
+      $search = SearchDiscard($player, definedType:"Unit", defeatedThisPhase:true);
+      if (SearchCount($search) > 0) {
+        $indices = explode(",", $search);
+        for ($i = count($indices) - 1; $i >= 0; $i--) {
+          MZMoveCard($player, "", "MYHAND", mzIndex:"MYDISCARD-" . $indices[$i]);
+        }
+      }
       break;
     case "UWINGREINFORCEMENT":
       $totalCost = 0;
