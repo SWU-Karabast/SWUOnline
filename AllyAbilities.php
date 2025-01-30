@@ -53,9 +53,9 @@ function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null,
     PlayAbility($cardID, $from, 0, uniqueId:$uniqueID);
   }
 
-  if (AllyHasStaticHealthModifier($cardID)) {
-    CheckHealthAllAllies();
-  }
+  // Check if any units will be destroyed due to cascading effects
+  CheckHealthAllAllies();
+  
   // Verify if the Token has enough HP, accounting for other abilities in play.
   // Non-token units are excluded as they are validated elsewhere.
   if (IsToken($cardID)) {
@@ -404,9 +404,10 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false,
       PlayAlly($captives[$i], $captives[$i+1], from:"CAPTIVE");
     }
   }
-  if(AllyHasStaticHealthModifier($cardID)) {
-    CheckHealthAllAllies();
-  }
+  
+  // Check if any units will be destroyed due to cascading effects (e.g. Coordinate)
+  CheckHealthAllAllies();
+  
   if($player == $mainPlayer) UpdateAttacker();
   else UpdateAttackTarget();
   return $cardID;
