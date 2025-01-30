@@ -2813,8 +2813,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZFILTER", $currentPlayer, "trait=Vehicle");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 5 damage to");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "FORCECHOKE", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,5,$currentPlayer", 1);
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "FORCECHOKE", 1);
       break;
     case "1047592361"://Ruthless Raider
       if($from != "PLAY") {
