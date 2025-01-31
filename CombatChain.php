@@ -187,6 +187,10 @@ function AttackModifier($cardID, $player, $index)
       break;
     case "1463418669"://IG-88
       $modifier += SearchCount(SearchAllies($otherPlayer, damagedOnly:true)) > 0 ? 3 : 0;
+      break;
+    case "6610553087"://Nien Nunb
+      $modifier += CountPilotUnitsAndPilotUpgrades($player, other: true);
+      break;
     default: break;
   }
 
