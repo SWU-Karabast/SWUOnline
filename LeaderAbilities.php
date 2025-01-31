@@ -25,12 +25,12 @@ function HanSoloPilotLeaderJTL($player) {
   $allies = GetAllies($player);
   for($i=0; $i<count($allies); $i+=AllyPieces()) {
     $ally = new Ally($allies[$i+5], $player);
-    if(CardCost($ally->CardID()) % 2 == 1) {
+    if(CardCostIsOdd($ally->CardID())) {
       $odds++;
     }
     $upgrades = $ally->GetUpgrades(withMetadata:false);
     for($j=0; $j<count($upgrades); ++$j) {
-      if(CardCost($upgrades[$j]) % 2 == 1) {
+      if(CardCostIsOdd($upgrades[$j])) {
         $odds++;
       }
     }
