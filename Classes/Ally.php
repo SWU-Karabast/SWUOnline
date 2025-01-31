@@ -711,7 +711,7 @@ class Ally {
   function HasPilotLeaderUpgrade() {
     $upgrades = $this->GetUpgrades(withMetadata:true);
     for($i=0; $i<count($upgrades); $i+=SubcardPieces()) {
-      if(CardIDIsLeader($upgrades[$i]) && $upgrades[$i+2] == "1") return true;//TODO: test attached unit can't be Vanquished
+      if(CardIDIsLeader($upgrades[$i]) && $upgrades[$i+2] == "1") return true;
     }
     return false;
   }

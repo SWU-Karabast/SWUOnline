@@ -691,6 +691,13 @@ function CurrentEffectEndTurnAbilities()
       case "3503494534"://Regional Governor
         AddNextTurnEffect($currentTurnEffects[$i], $currentTurnEffects[$i + 1], $currentTurnEffects[$i + 2]);
         break;
+      //Jump to Lightspeed
+      case "8105698374"://Commandeer
+        $ally = new Ally($currentTurnEffects[$i+2]);
+        if ($ally->Exists()) {
+          MZBounce($ally->Controller(), "MYALLY-" . $ally->Index());
+        }
+        break;
       default: break;
     }
     if($remove) RemoveCurrentTurnEffect($i);

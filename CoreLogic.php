@@ -5898,6 +5898,17 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("SPECIFICCARD", $currentPlayer, "LEIA_JTL", 1);
       }
       break;
+    case "8105698374"://Commandeer
+      //TODO: maybe allow control your own to not ready. but still bounce: MYALLY:trait=Vehicle;maxCost=6;hasPilot=0&
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:trait=Vehicle;maxCost=6;hasPilot=0");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to take control of", 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "8105698374,HAND", 1);
+      //MZFILTER".*Leader //TODO: test search for definedType=Leader checks on non-leader units
+      break;
     //PlayAbility End
     default: break;
   }

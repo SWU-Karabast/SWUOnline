@@ -1662,13 +1662,16 @@ function IsCloned($uniqueID) {
 
 function IsToken($cardID)
 {
-  switch($cardID) {
-    case "8752877738": return true;//Shield
-    case "2007868442": return true;//Experience
-    case "3463348370": return true;//Battle Droid
-    case "3941784506": return true;//Clone Trooper
-    default: return false;
-  }
+  return match($cardID) {
+    "8752877738"//Shield
+    , "2007868442"//Experience
+    , "3463348370"//Battle Droid
+    , "3941784506"//Clone Trooper
+    , "9415311381"//X-Wing
+    , "7268926664"//Tie Fighter
+            => true,
+    default => false
+  };
 }
 
 function IsPitchRestricted($cardID, &$restriction, $from = "", $index = -1)
