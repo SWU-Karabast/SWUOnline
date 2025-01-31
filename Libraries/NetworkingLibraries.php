@@ -1969,10 +1969,10 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
       }
     }
     if($from != "PLAY") {
-      if(HasShielded($cardID, $currentPlayer, $index)) {
+      if(HasShielded($cardID, $currentPlayer, $index) && $target == "-") {
         AddLayer("TRIGGER", $currentPlayer, "SHIELDED", "-", "-", $uniqueID);
       }
-      if(HasAmbush($cardID, $currentPlayer, $index, $from)) {
+      if(HasAmbush($cardID, $currentPlayer, $index, $from) && $target = "-") {
         AddLayer("TRIGGER", $currentPlayer, "AMBUSH", "-", "-", $uniqueID);
       }
     }

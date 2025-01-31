@@ -5775,14 +5775,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       if($cards != "") {
         $cards = explode(",", $cards);
         for($i=0; $i<count($cards); ++$i) {
-          if(CardCost($cards[$i]) % 2 == 1) ++$damageAmount;
+          if(CardCostIsOdd($cards[$i])) ++$damageAmount;
         }
       }
       $cards = Mill(2, 3);
       if($cards != "") {
         $cards = explode(",", $cards);
         for($i=0; $i<count($cards); ++$i) {
-          if(CardCost($cards[$i]) % 2 == 1) ++$damageAmount;
+          if(CardCostIsOdd($cards[$i])) ++$damageAmount;
         }
       }
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
@@ -5871,17 +5871,24 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
         break;
     case "0964312065"://It's A Trap!
-      if($from != "PLAY") {
-        $spaceAllies = SearchAllies($currentPlayer, arena:"Space");
-        $spaceEnemiesCount = SearchCount(SearchAllies($otherPlayer, arena:"Space"));
-        if(SearchCount($spaceAllies) < $spaceEnemiesCount) {
-          $spaceAllies = explode(",", $spaceAllies);
-          for($i=0;$i<count($spaceAllies);++$i) {
-            $ally = new Ally("MYALLY-" . $spaceAllies[$i]);
-            $ally->Ready();
-          }
+      $spaceAllies = SearchAllies($currentPlayer, arena:"Space");
+      $spaceEnemiesCount = SearchCount(SearchAllies($otherPlayer, arena:"Space"));
+      if(SearchCount($spaceAllies) < $spaceEnemiesCount) {
+        $spaceAllies = explode(",", $spaceAllies);
+        for($i=0;$i<count($spaceAllies);++$i) {
+          $ally = new Ally("MYALLY-" . $spaceAllies[$i]);
+          $ally->Ready();
         }
       }
+    case "6421006753"://The Mandalorian
+      for ($i = 0; $i < 2; $i++) {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:arena=Ground&THEIRALLY:arena=Ground");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "status=1");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to exhaust");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
+      }
+      break;
     //PlayAbility End
     default: break;
   }

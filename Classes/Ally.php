@@ -496,6 +496,10 @@ class Ally {
     $ownerID = $ownerID ?? $this->playerID;
     if($this->allies[$this->index+4] == "-") $this->allies[$this->index+4] = $cardID . "," . $ownerID . "," . ($asPilot ? "1" : "0");
     else $this->allies[$this->index+4] = $this->allies[$this->index+4] . "," . $cardID . "," . $ownerID . "," . ($asPilot ? "1" : "0");
+
+    if($asPilot) {
+      AllyPlayedAsUpgradeAbility($cardID, $ownerID, $this);
+    }
   }
 
   function RemoveSubcard($subcardID) {

@@ -1176,3 +1176,6 @@ function IndirectDamage($player, $amount, $fromUnitEffect=false)
   }
 }
 
+function CardCostIsOdd($cardID) {
+  return CardCost($cardID) % 2 == 1;
+}

@@ -722,6 +722,7 @@ function HasShielded($cardID, $player, $index)
     case "6311662442"://Director Krennic
     case "1519837763"://Shuttle ST-149
     case "6300552434"://Gold Leader
+    case "7700932371"://Boba Fett
       return true;
     default: return false;
   }
