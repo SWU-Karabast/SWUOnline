@@ -165,6 +165,10 @@ class Ally {
     return $this->Damage() > 0;
   }
 
+  function IsUnique() {
+    return CardIsUnique($this->CardID());
+  }
+
   function CanAddPilot() {
     $maxPilots = 1;
     $currentPilots = 0;
