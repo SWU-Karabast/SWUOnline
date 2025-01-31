@@ -108,9 +108,6 @@ function RestoreAmount($cardID, $player, $index)
       case "1272825113"://In Defense of Kamino
         if(TraitContains($ally->CardID(), "Republic", $player, $index)) $amount += 2;
         break;
-      case "7924461681"://Leia Organa
-        $amount += 1;
-        break;
       default: break;
     }
   }
@@ -138,7 +135,6 @@ function RestoreAmount($cardID, $player, $index)
     case "9412277544": $amount += 1; break;//Del Meeko
     case "e2c6231b35": $amount += !LeaderAbilitiesIgnored() ? 2 : 0; break;//Director Krennic Leader Unit
     case "7109944284": $amount += 3; break;//Luke Skywalker unit
-    //Shadows of the Galaxy
     case "8142386948": $amount += 2; break;//Razor Crest
     case "4327133297": $amount += 2; break;//Moisture Farmer
     case "5977238053": $amount += 2; break;//Sundari Peacekeeper
@@ -148,7 +144,6 @@ function RestoreAmount($cardID, $player, $index)
     case "7022736145": $amount += 2; break;//Tarfful
     case "6870437193": $amount += 2; break;//Twin Pod Cloud Car
     case "3671559022": $amount += 2; break;//Echo
-    //Twilight of the Republic
     case "9185282472": $amount += 2; break;//ETA-2 Light Interceptor
     case "5350889336": $amount += 3; break;//AT-TE Vanguard
     case "3420865217": $amount += $ally->IsDamaged() ? 0 : 2; break;//Daughter of Dathomir
@@ -157,8 +152,6 @@ function RestoreAmount($cardID, $player, $index)
     case "e71f6f766c": $amount += 2; break;//Yoda
     case "3381931079": $amount += 2; break;//Malevolence
     case "4ae6d91ddc": $amount += 1; break;//Padme Amidala
-    //Jump to Lightspeed
-    case "7924461681": $amount += 1; break;//Leia Organa
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
@@ -1662,16 +1655,13 @@ function IsCloned($uniqueID) {
 
 function IsToken($cardID)
 {
-  return match($cardID) {
-    "8752877738"//Shield
-    , "2007868442"//Experience
-    , "3463348370"//Battle Droid
-    , "3941784506"//Clone Trooper
-    , "9415311381"//X-Wing
-    , "7268926664"//Tie Fighter
-            => true,
-    default => false
-  };
+  switch($cardID) {
+    case "8752877738": return true;//Shield
+    case "2007868442": return true;//Experience
+    case "3463348370": return true;//Battle Droid
+    case "3941784506": return true;//Clone Trooper
+    default: return false;
+  }
 }
 
 function IsPitchRestricted($cardID, &$restriction, $from = "", $index = -1)
