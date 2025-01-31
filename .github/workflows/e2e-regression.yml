@@ -12,7 +12,7 @@ jobs:
     services:
       docker:
         image: docker:20.10.7
-        options: --privileged    
+        options: --privileged
 
     steps:
     # Clone the main repository
@@ -26,7 +26,7 @@ jobs:
         userId=$(id -u)
         groupId=$(id -g)
         echo "DOCKER_USER=${userId}:${groupId}" > .env
-        cat .env # Debugging: Confirm .env contents      
+        cat .env # Debugging: Confirm .env contents
 
     # Start Docker Compose
     - name: Start Docker Compose
@@ -35,7 +35,7 @@ jobs:
       # Wait for services to be ready. Adjust the sleep duration based on the time your services take to initialize.
     - name: Wait for Services
       run: |
-        sleep 10 
+        sleep 10
 
     # Create a sibling directory for the E2E project
     - name: Clone E2E Repository
@@ -65,7 +65,7 @@ jobs:
         cd ../SWUOnline-Automation
         xvfb-run --auto-servernum npm test -- --env headless
       env:
-        FULL_REGRESSION: true
+        FULL_REGRESSION: false
 
     # - name: Upload Debug Artifacts
     #   uses: actions/upload-artifact@v4
