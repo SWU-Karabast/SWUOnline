@@ -316,7 +316,14 @@ function MZWakeUp($player, $target)
   }
 
   if(!$canReady) return;
-  $targetAlly->Ready();
+
+  switch($pieces[0]) {
+    case "MYCHAR": case "THEIRCHAR":
+    case "THEIRALLY": case "MYALLY":
+      $zone[$pieces[1]+1] = 2;
+      break;
+    default: break;
+  }
 }
 
 function MZBounce($player, $target)
