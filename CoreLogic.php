@@ -5386,7 +5386,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
       break;
-    case "2565830105"://Invastion of Christophsis
+    case "2565830105"://Invasion of Christophsis
       DestroyAllAllies($otherPlayer);
       break;
     case "2535372432"://Aggrieved Parliamentarian
@@ -6008,13 +6008,29 @@ function DestroyAllAllies($player="")
   }
 
   //Destroy all those allies.
+  $cacheTriggers = [];
+
   foreach ($currentPlayerAlliesUniqueIDs as $UID) {
-    $ally = new Ally("MYALLY-" . SearchAlliesForUniqueID($UID, $currentPlayer), $currentPlayer);
+    $ally = new Ally($UID, $currentPlayer);
+    $triggers = GetAllyWhenDestroyTheirsEffects($player, $otherPlayer, $ally->UniqueID(), $ally->IsUnique(), $ally->IsUpgraded(), $ally->GetUpgrades(withMetadata:true));
+    if(count($triggers) > 0) {
+      $cacheTriggers[] = $triggers;
+    }
+  }
+
+  foreach ($otherPlayerAlliesUniqueIDs as $UID) {
+    $ally = new Ally($UID, $otherPlayer);
     $ally->Destroy();
   }
-  foreach ($otherPlayerAlliesUniqueIDs as $UID) {
-    $ally = new Ally("MYALLY-" . SearchAlliesForUniqueID($UID, $otherPlayer), $otherPlayer);
+  foreach ($currentPlayerAlliesUniqueIDs as $UID) {
+    $ally = new Ally($UID, $currentPlayer);
     $ally->Destroy();
+  }
+
+  if(count($cacheTriggers) > 0) {
+    foreach ($cacheTriggers as $triggers) {
+      LayerTheirsDestroyedTriggers($otherPlayer, $triggers);
+    }
   }
 }
 
