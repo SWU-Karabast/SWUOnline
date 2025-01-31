@@ -832,7 +832,14 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       }
       AddDecisionQueue("MZOP", $player, "ATTACK", 1);
       return $lastResult;
+    case "LEIA_JTL":
+      $ally = new Ally($lastResult, $player);
+      AddDecisionQueue("PASSPARAMETER", $player, $ally->UniqueID());
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $player, "7924461681,HAND");
+      AddDecisionQueue("PASSPARAMETER", $player, $ally->MZIndex());
+      AddDecisionQueue("MZOP", $player, "ATTACK");
       break;
+    //SpecificCardLogic End
     default: return "";
   }
 }
