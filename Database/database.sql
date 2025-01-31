@@ -9,6 +9,20 @@
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
+CREATE TABLE `game` (
+  `id` int(22) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `format` int(11) DEFAULT NULL,
+  `p1UserID` int(11) NOT NULL,
+  `p2UserID` int(11) DEFAULT NULL,
+  `p1Leader` char(15) NOT NULL,
+  `p2Leader` char(15) DEFAULT NULL,
+  `visibility` varchar(1000) DEFAULT NULL,
+  `lastAuthKey` varchar(128) DEFAULT NULL
+  `createdAt` timestamp NOT NULL DEFAULT current_timestamp(),
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
+
+
 CREATE TABLE `completedgame` (
   `CompletionTime` timestamp NOT NULL DEFAULT current_timestamp(),
   `WinningHero` char(15) NOT NULL,
