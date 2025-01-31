@@ -55,7 +55,7 @@ function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null,
 
   // Check if any units will be destroyed due to cascading effects
   CheckHealthAllAllies();
-  
+
   return $index;
 }
 
@@ -66,10 +66,10 @@ function CheckHealthAllAllies() {
     for ($i = 0; $i < count($allies); $i += AllyPieces()) {
       $ally = new Ally("MYALLY-" . $i, $player);
       $defeated = $ally->DefeatIfNoRemainingHP();
-      
+
       // If an ally was defeated, we don't need to check the rest of the allies because the DefeatAlly function will call this function again.
       if ($defeated) {
-        break; 
+        break;
       }
     }
   }
@@ -403,10 +403,10 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false,
       PlayAlly($captives[$i], $captives[$i+1], from:"CAPTIVE");
     }
   }
-  
+
   // Check if any units will be destroyed due to cascading effects (e.g. Coordinate)
   CheckHealthAllAllies();
-  
+
   if($player == $mainPlayer) UpdateAttacker();
   else UpdateAttackTarget();
   return $cardID;
@@ -1610,9 +1610,6 @@ function SpecificAllyAttackAbilities($attackID)
           if(TraitContains($ally->CardID(), "Mandalorian", $mainPlayer, $j)) $ally->Attach("2007868442");//Experience token
         }
         break;
-      case "3f0b5622a7"://Asajj Leader Unit
-        AsajjVentressIWorkAlone($mainPlayer);
-        break;
       case "1938453783"://Armed to the Teeth
         //Adapted from Benthic Two-Tubes
         AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
@@ -1631,6 +1628,14 @@ function SpecificAllyAttackAbilities($attackID)
         break;
       case "0414253215"://General's Blade
         if(TraitContains($attackerAlly->CardID(), "Jedi", $mainPlayer)) AddCurrentTurnEffect($upgrades[$i], $mainPlayer, from:"PLAY");
+        break;
+      //Jump to Lightspeed
+      case "3f0b5622a7"://Asajj Leader Unit
+        AsajjVentressIWorkAlone($mainPlayer);
+        break;
+      case "3282713547"://Dengar pilot
+        $damage = TraitContains($attackerAlly->CardID(), "Underworld", $mainPlayer) ? 3 : 2;
+        IndirectDamage($defPlayer, $damage, true);
         break;
       default: break;
     }
@@ -2329,7 +2334,7 @@ function SpecificAllyAttackAbilities($attackID)
     case "3504944818"://Tie Bomber
       IndirectDamage($defPlayer, 3, true);
       break;
-    case "1990020761"://Shuttle Tidirium
+    case "1990020761"://Shuttle Tydirium
       $card = Mill($mainPlayer, 1);
       if(CardCost($card) % 2 == 1) {
         AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");

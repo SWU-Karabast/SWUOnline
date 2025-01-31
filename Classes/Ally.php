@@ -322,7 +322,7 @@ class Ally {
     $power = ((int) (AttackValue($this->CardID() ?? 0))) + ((int) $this->allies[$this->index+7]);
     $power += AttackModifier($this->CardID(), $this->playerID, $this->index);
     $upgrades = $this->GetUpgrades();
-
+    $otherPlayer = $this->playerID == 1 ? 2 : 1;
     // Grit buff
     if(HasGrit($this->CardID(), $this->playerID, $this->index)) {
       $damage = $this->Damage();
@@ -343,7 +343,7 @@ class Ally {
           break;
         //Jump to Lightspeed
         case "1463418669"://IG-88
-          $power += SearchCount(SearchAllies($this->Controller()%2+1, damagedOnly:true)) > 0 ? 3 : 0;
+          $power += SearchCount(SearchAllies($otherPlayer, damagedOnly:true)) > 0 ? 3 : 0;
         default:
           break;
       }
@@ -401,7 +401,6 @@ class Ally {
     }
 
     // Enemy ally buffs
-    $otherPlayer = $this->playerID == 1 ? 2 : 1;
     $theirAllies = &GetAllies($otherPlayer);
     for ($i = 0; $i < count($theirAllies); $i += AllyPieces()) {
       $ally = new Ally("MYALLY-" . $i, $otherPlayer);

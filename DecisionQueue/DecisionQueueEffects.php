@@ -817,7 +817,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       if($ally->IsExhausted()) $ally->Ready();
       else $ally->Exhaust();
       break;
-    //JTL
+    //Jump to Lightspeed
     case "BOBA_FETT_LEADER_JTL":
       IndirectDamage($otherPlayer, 1);
       break;
