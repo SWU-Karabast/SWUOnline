@@ -189,6 +189,14 @@ class Ally {
     return $currentPilots < $maxPilots;
   }
 
+  function HasPilot() {
+    $subcards = $this->GetUpgrades(withMetadata:true);
+    for($i=0; $i<count($subcards); $i+=SubcardPieces()) {
+      if($subcards[$i+2] == "1") return true;
+    }
+    return false;
+  }
+
   function ReceivingPilot($cardID, $player = "") {
     global $CS_PlayedAsUpgrade;
     if($player == "") $player = $this->PlayerID();
