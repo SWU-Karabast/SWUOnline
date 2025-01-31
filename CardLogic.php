@@ -842,6 +842,13 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
       AddDecisionQueue("MZOP", $player, "CAPTURE," . $uniqueID, 1);
       break;
+    //Jump to Lightspeed
+    case "9831674351":
+      AddDecisionQueue("YESNO", $player, "if you want use Boba Fett's ability");
+      AddDecisionQueue("NOPASS", $player, "-");
+      AddDecisionQueue("EXHAUSTCHARACTER", $player, FindCharacterIndex($player, "9831674351"), 1);
+      AddDecisionQueue("SPECIFICCARD", $player, "BOBA_FETT_LEADER_JTL", 1);
+      break;
     default: break;
   }
 }
@@ -1122,10 +1129,9 @@ function CheckBobaFettJTL($targetPlayer, $enemyDamage, $fromCombat) {
       switch($charArr[$i]) {
         case "9831674351"://Boba Fett Leader
           if(!LeaderAbilitiesIgnored() && $charArr[$i+1] == 2) {
-            AddDecisionQueue("YESNO", $playerToCheck, "if you want use Boba Fett's ability");
-            AddDecisionQueue("NOPASS", $playerToCheck, "-");
-            AddDecisionQueue("EXHAUSTCHARACTER", $playerToCheck, FindCharacterIndex($playerToCheck, "9831674351"), 1);
-            AddDecisionQueue("SPECIFICCARD", $playerToCheck, "BOBA_FETT_LEADER_JTL", 1);
+            if(!SearchCurrentLayers("TRIGGER", $playerToCheck, "9831674351")) {
+              AddLayer("TRIGGER", $playerToCheck, "9831674351");
+            }
           }
           break;
         default: break;

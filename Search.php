@@ -492,6 +492,16 @@ function SearchLimitedCurrentTurnEffects($cardID, $player, $uniqueID = -1, $remo
   return -1;
 }
 
+function SearchCurrentLayers($type, $player, $cardID)
+{
+  global $layers;
+  for ($i = 0; $i < count($layers); $i += LayerPieces()) {
+    if($layers[$i] == $type && $layers[$i+1] == $player && $layers[$i+2] == $cardID) return true;
+  }
+
+  return false;
+}
+
 function AnyPlayerHasAlly($cardID){
   return PlayerHasAlly(1, $cardID) || PlayerHasAlly(2, $cardID);
 }

@@ -76,6 +76,7 @@ function AttackModifier($cardID, $player, $index)
     $CS_NumLeftPlay, $CCS_MultiAttackTargets;
 
   $modifier = 0;
+  $otherPlayer = $player == 1 ? 2 : 1;
   if($player == $mainPlayer) {
     //Raid is only for attackers
     $attacker = AttackerMZID($mainPlayer);
@@ -174,7 +175,6 @@ function AttackModifier($cardID, $player, $index)
       break;
     case "7099699830"://Jyn Erso
       global $CS_NumAlliesDestroyed;
-      $otherPlayer = $player == 1 ? 2 : 1;
       if(GetClassState($otherPlayer, $CS_NumAlliesDestroyed) > 0) $modifier += 1;
       break;
     //Jump to Lightspeed
@@ -186,7 +186,7 @@ function AttackModifier($cardID, $player, $index)
       }
       break;
     case "1463418669"://IG-88
-      $modifier += SearchCount(SearchAllies($player%2+1, damagedOnly:true)) > 0 ? 3 : 0;
+      $modifier += SearchCount(SearchAllies($otherPlayer, damagedOnly:true)) > 0 ? 3 : 0;
     default: break;
   }
 
