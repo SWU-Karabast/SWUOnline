@@ -5899,7 +5899,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "8105698374"://Commandeer
-      //TODO: maybe allow control your own to not ready. but still bounce: MYALLY:trait=Vehicle;maxCost=6;hasPilot=0&
+      //TODO: maybe allow control your own to not ready. but still bounce
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:trait=Vehicle;maxCost=6;hasPilot=0");
       AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to take control of", 1);
@@ -5907,8 +5907,20 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "8105698374,HAND", 1);
-      //MZFILTER".*Leader //TODO: test search for definedType=Leader checks on non-leader units
       break;
+    // case "4334684518"://Tandem Assault
+    //   AddCurrentTurnEffect($cardID . "-1", $currentPlayer);
+    //   AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:arena=Space");
+    //   AddDecisionQueue("MZFILTER", $currentPlayer, "status=1");
+    //   AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a space unit to attack with");
+    //   AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+    //   AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
+    //   AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:arena=Ground", 1);
+    //   AddDecisionQueue("MZFILTER", $currentPlayer, "status=1", 1);
+    //   AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a ground unit to attack with", 1);
+    //   AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+    //   AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
+    //   break;
     //PlayAbility End
     default: break;
   }
