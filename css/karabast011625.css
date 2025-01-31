@@ -375,6 +375,7 @@ select {
 }
 
 .save-deck {
+  margin-top: 3px;
   margin-bottom: 20px;
   display: block;
 }
@@ -719,4 +720,57 @@ select {
   font-size: 12px;
   font-weight: 300;
   text-align: center;
+}
+
+
+
+/* CREATE GAME TABS ---------------------------------------------------------------------------------------------- */
+/* Tabs specific to the create-game-wrapper */
+.create-game-tabs {
+  display: flex;
+  width: 100%; /* Ensure tabs take up full width */
+  border-bottom: 2px solid #394452; /* Bottom border for the tabs container */
+  margin-bottom: 20px;
+}
+
+.create-game-tab {
+  flex: 1; /* Each tab takes up equal space */
+  text-align: center; /* Center the text */
+  padding: 10px 0; /* Padding for better spacing */
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 600;
+  color: #aaaaaa; /* Inactive tab color */
+  transition: color 0.3s, border-bottom 0.3s;
+  border-bottom: 2px solid transparent; /* Transparent border by default */
+}
+
+.create-game-tab.active {
+  color: white; /* Active tab color */
+  border-bottom: 2px solid #bddbff; /* Bottom border for the active tab */
+}
+
+.create-game-tab:hover {
+  color: white; /* Hover color */
+}
+
+.create-game-tab-content {
+  display: none; /* Hide all tab content by default */
+}
+
+.create-game-tab-content.active {
+  display: block; /* Show active tab content */
+}
+
+/* Dropdown styling */
+.create-game-wrapper select {
+  width: 100%;
+  margin: 10px 0 20px 0;
+  background: #394452 url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg' fill='%23eceff4'%3E%3Cpath d='M5 6l5 5 5-5 2 1-7 7-7-7 2-1z'/%3E%3C/svg%3E") no-repeat right 5px center;
+  border-radius: 5px;
+  appearance: none;
+  border: none;
+  padding: 10px 15px;
+  font-size: 16px;
+  color: white;
 }
