@@ -1976,9 +1976,13 @@ function SelfCostModifier($cardID, $from, $reportMode=false)
     case "2443835595"://Republic Attack Pod
       if(SearchCount(SearchAllies($currentPlayer)) >= 3) $modifier -= 1;
       break;
+    //Jump to Lightspeed
     case "1356826899"://Home One
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
       if(SearchCount(SearchAllies($otherPlayer, arena:"Space")) >= 3) $modifier -= 3;
+      break;
+    case "3711891756"://Red Leader
+      $modifier -= CountPilotUnitsAndPilotUpgrades($currentPlayer);
       break;
     default: break;
   }

@@ -1097,6 +1097,20 @@ function ShuttleST149($player) {
   AddDecisionQueue("MZOP", $player, "MOVEUPGRADE", 1);
 }
 
+function CountPilotUnitsAndPilotUpgrades($player, $other=false) {
+  $count = $other ? -1 : 0;
+  $count += SearchCount(SearchAllies($player, trait:"Pilot"));
+  $alliesWithUpgrades = explode(",", SearchAllies($player, hasUpgradeOnly:true));
+  for($i=0; $i<count($alliesWithUpgrades); ++$i) {
+    $ally = new Ally("MYALLY-" . $alliesWithUpgrades[$i], $player);
+    $upgrades = $ally->GetUpgrades();
+    for($j=0; $j<count($upgrades); ++$j) {
+      if(TraitContains($upgrades[$j], "Pilot", $player)) $count += 1;
+    }
+  }
+  return $count;
+}
+
 function ObiWansAethersprite($player, $index) {
   AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:arena=Space&THEIRALLY:arena=Space", 1);
   AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal 2 damage to (or pass)", 1);

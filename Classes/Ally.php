@@ -192,6 +192,14 @@ class Ally {
   function ReceivingPilot($cardID, $player = "") {
     global $CS_PlayedAsUpgrade;
     if($player == "") $player = $this->PlayerID();
+    //Pilot attach side effects
+    switch($this->CardID()) {
+      //Jump to Lightspeed
+      case "3711891756"://Red Leader
+        CreateXWing($player);
+      default: break;
+    }
+
     return PilotingCost($cardID) >= 0 && GetClassState($player, $CS_PlayedAsUpgrade) == "1";
   }
 
@@ -348,6 +356,10 @@ class Ally {
         //Jump to Lightspeed
         case "1463418669"://IG-88
           $power += SearchCount(SearchAllies($otherPlayer, damagedOnly:true)) > 0 ? 3 : 0;
+          break;
+        case "6610553087"://Nien Nunb
+          $power += CountPilotUnitsAndPilotUpgrades($this->PlayerID(), other: true);
+          break;
         default:
           break;
       }
