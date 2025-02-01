@@ -14,35 +14,22 @@ We provide a docker environment for local run with built-in xdebug support for l
 #### Step 0. Install docker
 If you are on Windows, please follow the instructions for installing Docker Desktop on Windows (either WSL or Hyper-V backend should work but we have only tested with WSL): https://docs.docker.com/desktop/install/windows-install/
 
-#### Step 1. User Configuration (optional in Docker for Windows)
-_(Docker Desktop for Windows will handle user permissions automatically without this step.)_
-
-Create a .env file in the root directory with the contents of the .env.dist file.
-And set the value of the DOCKER_USER with the result of these commands:
-
-```bash
-bash id -u  # user id
-bash id -g  # group id
-```
-
-Use the format `DOCKER_USER=$userId:$groupId`. For example, `DOCKER_USER=1000:1000`.
-
-#### Step 2. Starting / stopping the service
+#### Step 1. Starting / stopping the service
 
 Run the following commands to start / stop the service
 ```bash
-bash STAGE=dev docker compose up -d   # start
-bash docker compose down    # stop
-bash docker compose restart # restart
+bash karabast.sh start
+bash karabast.sh stop
+bash karabast.sh restart
 ```
 
-#### Step 3. Accessing the application
+#### Step 2. Accessing the application
 
 Open this address in your browser: http://localhost:8080/SWUOnline/MainMenu.php
 
 If you want to play a game against yourself, open multiple windows / tabs and connect.
 
-#### Step 4. Run debugger in VSCode (optional)
+#### Step 3. Run debugger in VSCode (optional)
 Xdebug is already running in the service, you can use these steps to do live debugging with breakpoints in Visual Studio Code:
 
 1. Install an extension that supports PHP debugging, such as https://marketplace.visualstudio.com/items?itemName=DEVSENSE.phptools-vscode
