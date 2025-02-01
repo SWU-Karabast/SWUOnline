@@ -1663,13 +1663,12 @@ function IsCloned($uniqueID) {
 function IsToken($cardID)
 {
   return match($cardID) {
-    "8752877738"//Shield
-    , "2007868442"//Experience
-    , "3463348370"//Battle Droid
-    , "3941784506"//Clone Trooper
-    , "9415311381"//X-Wing
-    , "7268926664"//Tie Fighter
-            => true,
+    "8752877738",//Shield
+    "2007868442",//Experience
+    "3463348370",//Battle Droid
+    "3941784506",//Clone Trooper
+    "9415311381",//X-Wing
+    "7268926664" => true,//Tie Fighter
     default => false
   };
 }
