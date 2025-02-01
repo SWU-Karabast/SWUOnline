@@ -418,7 +418,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $ally = new Ally($lastResult);
           if ($ally->Exists() && $ally->Controller() != $ally->Owner()) {
             $owner = $ally->Owner();
-            AllyTakeControl($owner, $ally->Index());
+            AllyTakeControl($owner, $ally->Index(), $ally->Controller());
             WriteLog("Reverted control of " . CardLink($ally->CardID(), $ally->CardID()) . "back to player $owner");
           } else {
             return "PASS";
@@ -627,8 +627,9 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         //   return MemoryCost($zone[$mzArr[1]], $player);
         case "TAKECONTROL":
           $mzArr = explode("-", $lastResult);
+          $controller = $mzArr[0] == "MYALLY" ? $player : ($player == 1 ? 2 : 1);
           $index = $mzArr[1];
-          $uniqueID = AllyTakeControl($player, $index);
+          $uniqueID = AllyTakeControl($player, $index, $controller);
           return $uniqueID;
         case "CAPTURE":
           $uniqueID = $parameterArr[1];
@@ -918,7 +919,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             $mzArr = explode("-", $arr[$i]);
             if($mzArr[0] == "MYALLY" || $mzArr[0] == "THEIRALLY") {
               $ally = new Ally($arr[$i]);//TODO: see how this is called; might need to add Pilot leader check
-              $isLeader = DefinedTypesContains($ally->CardID(), "Leader", $player);
+              $isLeader = $ally->IsLeader();
               if($params[1] == 1 && $isLeader) $match = true;
               else if($params[1] == 0 && !$isLeader) $match = true;
             }
