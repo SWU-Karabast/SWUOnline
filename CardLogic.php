@@ -722,6 +722,7 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
             case "ALLYDESTROY":
               $dd=DeserializeAllyDestroyData($arr[1]);
               AllyDestroyedAbility($player, $target, $dd["UniqueID"], $dd["LostAbilities"],$dd["IsUpgraded"],$dd["Upgrades"],$dd["UpgradesWithOwnerData"]);
+              CheckThrawnJTL($player, $arr[$i], $target);
               break;
             case "ALLYRESOURCE":
               $rd=DeserializeResourceData($arr[1]);
@@ -1151,6 +1152,35 @@ function CheckBobaFettJTL($targetPlayer, $enemyDamage, $fromCombat) {
         default: break;
       }
     }
+}
+
+function CheckThrawnJTL($player, $serializedAllyDestroyData, $target) {
+  $charArr = &GetPlayerCharacter($player);
+  for($i=0; $i<count($charArr); $i+=CharacterPieces()) {
+    if($charArr[$i] == "5846322081") {//Grand Admiral Thrawn
+      if(!LeaderAbilitiesIgnored() && $charArr[$i+1] == 2) {
+        AddDecisionQueue("YESNO", $player, "if you want use Thrawn's ability for " . CardLink($target, $target));
+        AddDecisionQueue("NOPASS", $player, "-");
+        AddDecisionQueue("EXHAUSTCHARACTER", $player, FindCharacterIndex($player, "5846322081"), 1);
+        AddDecisionQueue("PASSPARAMETER", $player, "$target,0,$serializedAllyDestroyData", 1);
+        AddDecisionQueue("SETDQVAR", $player, "1", 1);
+        AddDecisionQueue("SPECIFICCARD", $player, "THRAWN_JTL", 1);
+      }
+    }
+  }
+  $allies = &GetAllies($player);
+  for($i=0; $i<count($allies); $i+=AllyPieces()) {
+    if($allies[$i] == "53207e4131") {
+      $ally = new Ally("MYALLY-" . $i, $player);
+      if(!LeaderAbilitiesIgnored() && $ally->NumUses() > 0) {//doubly check num uses
+        AddDecisionQueue("YESNO", $player, "if you want use Thrawn's ability for " . CardLink($target, $target));
+        AddDecisionQueue("NOPASS", $player, "-");
+        AddDecisionQueue("PASSPARAMETER", $player, "$target,1,$serializedAllyDestroyData", 1);
+        AddDecisionQueue("SETDQVAR", $player, "1", 1);
+        AddDecisionQueue("SPECIFICCARD", $player, "THRAWN_JTL", 1);
+      }
+    }
+  }
 }
 
 function IndirectDamage($player, $amount, $fromUnitEffect=false)
