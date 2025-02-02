@@ -37,6 +37,9 @@ if ($cacheVal > 10000000) {
   SetCachePiece($gameName, 1, 1);
   $lastUpdate = 0;
 }
+
+include "MenuFiles/ParseGamefile.php";
+
 $kickPlayerTwo = false;
 while ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   usleep(100000); //100 milliseconds
@@ -51,7 +54,7 @@ while ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
 
   if ($oppStatus != "-1" && $oppLastTime != "") {
     if (($currentTime - $oppLastTime) > 8000 && $oppStatus == "0") {
-      WriteLog("Player $otherP has disconnected.");
+      WriteLog("$otherPlayerName has disconnected.");
       GamestateUpdated($gameName);
       SetCachePiece($gameName, $otherP + 3, "-1");
       if($otherP == 2) SetCachePiece($gameName, $otherP + 6, "");
@@ -60,7 +63,6 @@ while ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   }
 }
 
-include "MenuFiles/ParseGamefile.php";
 include "MenuFiles/WriteGamefile.php";
 
 $targetAuth = ($playerID == 1 ? $p1Key : $p2Key);
@@ -144,10 +146,9 @@ if ($lastUpdate != 0 && $cacheVal < $lastUpdate) {
     $otherBase = $otherCharacter[0];
     fclose($handler);
   }
-  $theirName = ($playerID == 1 ? $p2uid : $p1uid);
   $contentCreator = ContentCreators::tryFrom(($playerID == 1 ? $p2ContentCreatorID : $p1ContentCreatorID));
   $nameColor = ($contentCreator != null ? $contentCreator->NameColor() : "");
-  $theirDisplayName = "<span style='color:" . $nameColor . "'>" . ($theirName != "-" ? $theirName : "Player " . ($playerID == 1 ? 2 : 1)) . "</span>";
+  $theirDisplayName = "<span style='color:$nameColor'>$otherPlayerName</span>";
   $overlayURL = ($contentCreator != null ? $contentCreator->HeroOverlayURL($otherHero) : "");
   $channelLink = ($contentCreator != null ? $contentCreator->ChannelLink() : "");
 
