@@ -452,23 +452,22 @@ function UpgradesContainBounty($upgrades) {
   return false;
 }
 
-function AllyTakeControl($player, $index, $controller) {
+function AllyTakeControl($player, $index) {
   global $currentTurnEffects;
   if($index == "") return -1;
   $otherPlayer = $player == 1 ? 2 : 1;
   $myAllies = &GetAllies($player);
   $theirAllies = &GetAllies($otherPlayer);
-  $takingSelf = $controller == $player;
-  $uniqueID = ($takingSelf ? $myAllies : $theirAllies)[$index+5];
+  $uniqueID = $theirAllies[$index+5];
   for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnEffectPieces()) {
     if($currentTurnEffects[$i+2] == -1 || $currentTurnEffects[$i+2] != $uniqueID) continue;
     $currentTurnEffects[$i+1] = $currentTurnEffects[$i+1] == 1 ? 2 : 1; // Swap players
   }
   for($i=$index; $i<$index+AllyPieces(); ++$i) {
-    if(!$takingSelf) $myAllies[] = $theirAllies[$i];
+    $myAllies[] = $theirAllies[$i];
   }
   for ($i=$index+AllyPieces()-1; $i>=$index; $i--) {
-    if(!$takingSelf)unset($theirAllies[$i]);
+    unset($theirAllies[$i]);
   }
   $theirAllies = array_values($theirAllies); // Reindex the array
 

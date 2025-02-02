@@ -418,7 +418,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $ally = new Ally($lastResult);
           if ($ally->Exists() && $ally->Controller() != $ally->Owner()) {
             $owner = $ally->Owner();
-            AllyTakeControl($owner, $ally->Index(), $ally->Controller());
+            AllyTakeControl($owner, $ally->Index());
             WriteLog("Reverted control of " . CardLink($ally->CardID(), $ally->CardID()) . "back to player $owner");
           } else {
             return "PASS";
@@ -629,7 +629,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $mzArr = explode("-", $lastResult);
           $controller = $mzArr[0] == "MYALLY" ? $player : ($player == 1 ? 2 : 1);
           $index = $mzArr[1];
-          $uniqueID = AllyTakeControl($player, $index, $controller);
+          $uniqueID = AllyTakeControl($player, $index);
           return $uniqueID;
         case "CAPTURE":
           $uniqueID = $parameterArr[1];

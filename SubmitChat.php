@@ -38,8 +38,8 @@ if (isset($_SESSION["isPatron"]) && isset($_SESSION['useruid']) && !in_array($_S
 if (isset($_SESSION['useruid']) && in_array($_SESSION['useruid'], $contributors)) $displayName = "<img title='Contributor' style='margin-bottom:-2px; margin-right:-4px; height:18px;' src='./images/copper.webp' /> " . $displayName;
 //profanity filter
 $filteredChatText = explode(" ", $chatText);
-$naughtyWords = ["shit", "piss", "fuck", "cunt", "cock", "cocksucker", "motherfucker", "tit", "tits", "fart", "turd", "twat", "bitch", "retard", "fag", "faggot", "skank", "hoe", "whore", "sh!t", "p!ss", "c0ck", "c0cksucker", "f@g", "f@ggot", "pussy", "dildo", "ass", "asshole", "dick", "dicks", ];
-$meanPhrases = ["kill yourself", "die in a fire", "can you just die irl", ];
+$naughtyWords = ["shit", "piss", "fuck", "cunt", "cock", "cocksucker", "motherfucker", "tit", "tits", "fart", "turd", "twat", "bitch", "bitches", "retard", "retarded", "fag", "faggot", "skank", "hoe", "whore", "sh!t", "p!ss", "c0ck", "c0cksucker", "f@g", "f@ggot", "pussy", "dildo", "ass", "asshole", "dick", "dicks", "nigga", "nigger", "nonce", ];
+$meanPhrases = ["kill yourself", "die in a fire", "can you just die irl", "hit by a bus"];
 
 for($i=0; $i<count($filteredChatText);++$i) {
   $chatWord = $filteredChatText[$i];
