@@ -240,7 +240,7 @@ function PrependLayer($cardID, $player, $parameter, $target = "-", $additionalCo
 
 function IsAbilityLayer($cardID)
 {
-  return $cardID == "TRIGGER" || $cardID == "PLAYABILITY" || $cardID == "ATTACKABILITY" || $cardID == "ACTIVATEDABILITY" || $cardID == "AFTERPLAYABILITY";
+  return $cardID == "TRIGGER" || $cardID == "PLAYABILITY" || $cardID == "ATTACKABILITY" || $cardID == "ACTIVATEDABILITY" || $cardID == "ALLYPLAYCARDABILITY";
 }
 
 function AddLayer($cardID, $player, $parameter, $target = "-", $additionalCosts = "-", $uniqueID = "-", $append = false)
@@ -614,8 +614,8 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
     case "SHIELDED":
       $ally = new Ally($uniqueID, $player);
       $ally->Attach("8752877738");//Shield Token
-      break;
-    case "AFTERPLAYABILITY":
+      break;   
+    case "ALLYPLAYCARDABILITY":
       $data = explode(",",$target); // $cardID, $player, $numUses, $playedCardID
       AllyPlayCardAbility($data[1], $data[0], $uniqueID, $data[2], $data[3], from:$additionalCosts);
       break;
@@ -794,13 +794,15 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       break;
     case "1384530409"://Cad Bane Leader ability
       $otherPlayer = ($player == 1 ? 2 : 1);
-      AddDecisionQueue("YESNO", $player, "if you want use Cad Bane's ability");
-      AddDecisionQueue("NOPASS", $player, "-");
-      AddDecisionQueue("EXHAUSTCHARACTER", $player, FindCharacterIndex($player, "1384530409"), 1);
-      AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY", 1);
-      AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a unit to deal 1 damage to", 1);
-      AddDecisionQueue("CHOOSEMULTIZONE", $otherPlayer, "<-", 1);
-      AddDecisionQueue("MZOP", $otherPlayer, "DEALDAMAGE,1", 1);
+      if (SearchCount(SearchAllies($otherPlayer)) > 0) {
+        AddDecisionQueue("YESNO", $player, "if you want use Cad Bane's ability");
+        AddDecisionQueue("NOPASS", $player, "-");
+        AddDecisionQueue("EXHAUSTCHARACTER", $player, FindCharacterIndex($player, "1384530409"), 1);
+        AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY", 1);
+        AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a unit to deal 1 damage to", 1);
+        AddDecisionQueue("CHOOSEMULTIZONE", $otherPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $otherPlayer, "DEALDAMAGE,1", 1);
+      }
       break;
     case "9005139831"://Mandalorian Leader Ability
       AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:maxHealth=4");

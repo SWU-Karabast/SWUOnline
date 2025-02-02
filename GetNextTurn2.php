@@ -454,7 +454,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
           }
 
           // Count the number of tiles with the same name if the layer is tileable
-          $nbTiles = IsTileable($layerName) ? array_reduce($layers, function($count, $layer, $index) use ($layerName, $layerPieces) {
+          $nbTiles = IsTileable($layerName) ? array_reduce($layers, function($count, $layer, $index) use ($layerName, $layers) {
               $name = ($layer == "LAYER" || IsAbilityLayer($layer)) ? $layers[$index + 2] : $layer;//TODO: look into hoow this gets called
               return $name == $layerName ? $count + 1 : $count;
           }, 0) : 0;
@@ -467,7 +467,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
 
           // Add the card to the content
           $cardId = $layerName;
-          if($cardId == "AFTERPLAYABILITY") $cardId = explode(',', $layers[$i+3])[0];
+          if($cardId == "ALLYPLAYCARDABILITY") $cardId = explode(',', $layers[$i+3])[0];
           if($cardId == "AFTERDESTROYABILITY") $cardId = $layers[$i+3];
           if($cardId == "AFTERDESTROYFRIENDLYABILITY") $cardId = explode(",", $layers[$i+3])[0];
           if($cardId == "AFTERDESTROYTHEIRSABILITY") {

@@ -316,7 +316,8 @@ function MainCharacterPlayCardAbilities($cardID, $from)
         }
         break;
       case "1384530409"://Cad Bane
-        if($from != 'PLAY' && $from != 'EQUIP' && TraitContains($cardID, "Underworld", $currentPlayer)) {
+        $otherPlayer = ($player == 1 ? 2 : 1);
+        if ($from != 'PLAY' && $from != 'EQUIP' && TraitContains($cardID, "Underworld", $currentPlayer) && SearchCount(SearchAllies($otherPlayer)) > 0) {
           // Note - this is a bit of a hack by sending the index in as the unique ID
           AddLayer("TRIGGER", $currentPlayer, "1384530409");
         }
@@ -2355,9 +2356,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
        $playAlly = new Ally("MYALLY-" . LastAllyIndex($currentPlayer));
      }
   }
-  if($from != "PLAY" && $from != "EQUIP" && $from != "CHAR") {
-    AddAllyPlayAbilityLayers($cardID, $from, isset($playAlly) ? $playAlly->UniqueID() : "-", $resourcesPaid);
-  }
+
   if($from == "EQUIP" && DefinedTypesContains($cardID, "Leader", $currentPlayer)) {
     $abilityName = GetResolvedAbilityName($cardID, $from);
     if($abilityName == "Deploy" || $abilityName == "Pilot" || $abilityName == "") {
@@ -2541,8 +2540,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose which unit you want to clone", 1);
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "GETCARDID", 1);
-      $playCardEffect = $from != "CAPTIVE" ? "true" : "false";
-      AddDecisionQueue("PLAYALLY", $currentPlayer, "cloned=true;from=" . $from . ";playCardEffect=" . $playCardEffect, 1);
+      $playAbility = $from != "CAPTIVE" ? "true" : "false";
+      AddDecisionQueue("PLAYALLY", $currentPlayer, "cloned=true;from=" . $from . ";playAbility=" . $playAbility, 1);
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, $mzIndex, 1);
       AddDecisionQueue("MZREMOVE", $currentPlayer, "-", 1);
       break;
