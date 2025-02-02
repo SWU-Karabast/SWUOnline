@@ -542,9 +542,11 @@ function LoseHealth($amount, $player)
   PlayerLoseHealth($player, $amount);
 }
 
-function Restore($amount, $player)
+function Restore($amount, $playerID)
 {
-  if(SearchCurrentTurnEffects("7533529264", $player)) {
+  global $gameName;
+
+  if(SearchCurrentTurnEffects("7533529264", $playerID)) {
     WriteLog("<span style='color:red;'>Wolffe prevents the healing</span>");
     return false;
   }
@@ -553,11 +555,12 @@ function Restore($amount, $player)
     return false;
   }
 
-  $health = &GetHealth($player);
-  WriteLog("Player " . $player . " gained " . $amount . " health.");
+  include "./MenuFiles/ParseGamefile.php";
+  $health = &GetHealth($playerID);
+  WriteLog(FmtPlayer($playerName, $playerID) . " gained " . $amount . " health.");
   if($amount > $health) $amount = $health;
   $health -= $amount;
-  AddEvent("RESTORE", "P" . $player . "BASE!" . $amount);
+  AddEvent("RESTORE", "P" . $playerID . "BASE!" . $amount);
   return true;
 }
 
@@ -593,12 +596,8 @@ function PlayerWon($playerID)
   global $winner, $turn, $gameName, $p1id, $p2id, $p1uid, $p2uid, $p1IsChallengeActive, $p2IsChallengeActive, $conceded, $currentRound;
   global $p1DeckLink, $p2DeckLink, $inGameStatus, $GameStatus_Over, $firstPlayer, $p1deckbuilderID, $p2deckbuilderID;
   if($turn[0] == "OVER") return;
-  include_once "./MenuFiles/ParseGamefile.php";
-
-  $winner = $playerID;
-  if ($playerID == 1 && $p1uid != "") WriteLog($p1uid . " wins!", $playerID);
-  elseif ($playerID == 2 && $p2uid != "") WriteLog($p2uid . " wins!", $playerID);
-  else WriteLog("Player " . $winner . " wins!");
+  include "./MenuFiles/ParseGamefile.php";
+  WriteLog(FmtPlayer($playerName, $playerID) . " wins!");
 
   $inGameStatus = $GameStatus_Over;
   $turn[0] = "OVER";
@@ -6324,7 +6323,10 @@ function Draw($player, $mainPhase = true, $fromCardEffect = true)
   $hand = &GetHand($player);
   if(count($deck) == 0) {
     $char = &GetPlayerCharacter($player);
-    if(count($char) > CharacterPieces() && $char[CharacterPieces()] != "DUMMY") WriteLog("Player " . $player . " took 3 damage for having no cards left in their deck.");
+    if(count($char) > CharacterPieces() && $char[CharacterPieces()] != "DUMMY") {
+      include "./MenuFiles/ParseGamefile.php";
+      WriteLog(FmtPlayer($playerName, $player) . " took 3 damage for having no cards left in their deck.");
+    }
     DealDamageAsync($player, 3, "DAMAGE", "DRAW");
     return -1;
   }
