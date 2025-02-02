@@ -165,6 +165,10 @@ class Ally {
     return $this->Damage() > 0;
   }
 
+  function IsUnique() {
+    return CardIsUnique($this->CardID());
+  }
+
   function CanAddPilot() {
     $maxPilots = 1;
     $currentPilots = 0;
@@ -185,9 +189,25 @@ class Ally {
     return $currentPilots < $maxPilots;
   }
 
+  function HasPilot() {
+    $subcards = $this->GetUpgrades(withMetadata:true);
+    for($i=0; $i<count($subcards); $i+=SubcardPieces()) {
+      if($subcards[$i+2] == "1") return true;
+    }
+    return false;
+  }
+
   function ReceivingPilot($cardID, $player = "") {
     global $CS_PlayedAsUpgrade;
     if($player == "") $player = $this->PlayerID();
+    //Pilot attach side effects
+    switch($this->CardID()) {
+      //Jump to Lightspeed
+      case "3711891756"://Red Leader
+        CreateXWing($player);
+      default: break;
+    }
+
     return PilotingCost($cardID) >= 0 && GetClassState($player, $CS_PlayedAsUpgrade) == "1";
   }
 
@@ -322,7 +342,7 @@ class Ally {
     $power = ((int) (AttackValue($this->CardID() ?? 0))) + ((int) $this->allies[$this->index+7]);
     $power += AttackModifier($this->CardID(), $this->playerID, $this->index);
     $upgrades = $this->GetUpgrades();
-
+    $otherPlayer = $this->playerID == 1 ? 2 : 1;
     // Grit buff
     if(HasGrit($this->CardID(), $this->playerID, $this->index)) {
       $damage = $this->Damage();
@@ -340,6 +360,13 @@ class Ally {
       switch ($upgrades[$i]) {
         case "3292172753"://Squad Support
           $power += SearchCount(SearchAlliesUniqueIDForTrait($this->Controller(), "Trooper"));
+          break;
+        //Jump to Lightspeed
+        case "1463418669"://IG-88
+          $power += SearchCount(SearchAllies($otherPlayer, damagedOnly:true)) > 0 ? 3 : 0;
+          break;
+        case "6610553087"://Nien Nunb
+          $power += CountPilotUnitsAndPilotUpgrades($this->PlayerID(), other: true);
           break;
         default:
           break;
@@ -398,7 +425,6 @@ class Ally {
     }
 
     // Enemy ally buffs
-    $otherPlayer = $this->playerID == 1 ? 2 : 1;
     $theirAllies = &GetAllies($otherPlayer);
     for ($i = 0; $i < count($theirAllies); $i += AllyPieces()) {
       $ally = new Ally("MYALLY-" . $i, $otherPlayer);
@@ -478,6 +504,10 @@ class Ally {
     $ownerID = $ownerID ?? $this->playerID;
     if($this->allies[$this->index+4] == "-") $this->allies[$this->index+4] = $cardID . "," . $ownerID . "," . ($asPilot ? "1" : "0");
     else $this->allies[$this->index+4] = $this->allies[$this->index+4] . "," . $cardID . "," . $ownerID . "," . ($asPilot ? "1" : "0");
+
+    if($asPilot) {
+      AllyPlayedAsUpgradeAbility($cardID, $ownerID, $this);
+    }
   }
 
   function RemoveSubcard($subcardID) {
@@ -683,7 +713,7 @@ class Ally {
   function HasPilotLeaderUpgrade() {
     $upgrades = $this->GetUpgrades(withMetadata:true);
     for($i=0; $i<count($upgrades); $i+=SubcardPieces()) {
-      if(CardIDIsLeader($upgrades[$i]) && $upgrades[$i+2] == "1") return true;//TODO: test attached unit can't be Vanquished
+      if(CardIDIsLeader($upgrades[$i]) && $upgrades[$i+2] == "1") return true;
     }
     return false;
   }

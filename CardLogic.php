@@ -844,6 +844,13 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
       AddDecisionQueue("MZOP", $player, "CAPTURE," . $uniqueID, 1);
       break;
+    //Jump to Lightspeed
+    case "9831674351":
+      AddDecisionQueue("YESNO", $player, "if you want use Boba Fett's ability");
+      AddDecisionQueue("NOPASS", $player, "-");
+      AddDecisionQueue("EXHAUSTCHARACTER", $player, FindCharacterIndex($player, "9831674351"), 1);
+      AddDecisionQueue("SPECIFICCARD", $player, "BOBA_FETT_LEADER_JTL", 1);
+      break;
     default: break;
   }
 }
@@ -1092,6 +1099,20 @@ function ShuttleST149($player) {
   AddDecisionQueue("MZOP", $player, "MOVEUPGRADE", 1);
 }
 
+function CountPilotUnitsAndPilotUpgrades($player, $other=false) {
+  $count = $other ? -1 : 0;
+  $count += SearchCount(SearchAllies($player, trait:"Pilot"));
+  $alliesWithUpgrades = explode(",", SearchAllies($player, hasUpgradeOnly:true));
+  for($i=0; $i<count($alliesWithUpgrades); ++$i) {
+    $ally = new Ally("MYALLY-" . $alliesWithUpgrades[$i], $player);
+    $upgrades = $ally->GetUpgrades();
+    for($j=0; $j<count($upgrades); ++$j) {
+      if(TraitContains($upgrades[$j], "Pilot", $player)) $count += 1;
+    }
+  }
+  return $count;
+}
+
 function ObiWansAethersprite($player, $index) {
   AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:arena=Space&THEIRALLY:arena=Space", 1);
   AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal 2 damage to (or pass)", 1);
@@ -1124,10 +1145,9 @@ function CheckBobaFettJTL($targetPlayer, $enemyDamage, $fromCombat) {
       switch($charArr[$i]) {
         case "9831674351"://Boba Fett Leader
           if(!LeaderAbilitiesIgnored() && $charArr[$i+1] == 2) {
-            AddDecisionQueue("YESNO", $playerToCheck, "if you want use Boba Fett's ability");
-            AddDecisionQueue("NOPASS", $playerToCheck, "-");
-            AddDecisionQueue("EXHAUSTCHARACTER", $playerToCheck, FindCharacterIndex($playerToCheck, "9831674351"), 1);
-            AddDecisionQueue("SPECIFICCARD", $playerToCheck, "BOBA_FETT_LEADER_JTL", 1);
+            if(!SearchCurrentLayers("TRIGGER", $playerToCheck, "9831674351")) {
+              AddLayer("TRIGGER", $playerToCheck, "9831674351");
+            }
           }
           break;
         default: break;
@@ -1158,3 +1178,6 @@ function IndirectDamage($player, $amount, $fromUnitEffect=false)
   }
 }
 
+function CardCostIsOdd($cardID) {
+  return CardCost($cardID) % 2 == 1;
+}

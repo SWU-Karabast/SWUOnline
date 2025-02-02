@@ -627,6 +627,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         //   return MemoryCost($zone[$mzArr[1]], $player);
         case "TAKECONTROL":
           $mzArr = explode("-", $lastResult);
+          $controller = $mzArr[0] == "MYALLY" ? $player : ($player == 1 ? 2 : 1);
           $index = $mzArr[1];
           $uniqueID = AllyTakeControl($player, $index);
           return $uniqueID;
@@ -918,7 +919,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             $mzArr = explode("-", $arr[$i]);
             if($mzArr[0] == "MYALLY" || $mzArr[0] == "THEIRALLY") {
               $ally = new Ally($arr[$i]);//TODO: see how this is called; might need to add Pilot leader check
-              $isLeader = DefinedTypesContains($ally->CardID(), "Leader", $player);
+              $isLeader = $ally->IsLeader();
               if($params[1] == 1 && $isLeader) $match = true;
               else if($params[1] == 0 && !$isLeader) $match = true;
             }
@@ -1289,6 +1290,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       }
       return $damage;
     case "TAKEDAMAGE":
+      global $mainPlayer;
       $params = explode("-", $parameter);
       $damage = intval($params[0]);
       $source = (count($params) > 1 ? $params[1] : "-");
@@ -1300,6 +1302,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         $dqState[6] = $damage;
       }
       $damage = DealDamageAsync($player, $damage, $type, $source);
+      CheckBobaFettJTL($player, $mainPlayer != $player, $type == "COMBAT");
       return $damage;
     // case "AFTERQUELL"://FAB
     //   $maxQuell = GetClassState($player, $CS_MaxQuellUsed);

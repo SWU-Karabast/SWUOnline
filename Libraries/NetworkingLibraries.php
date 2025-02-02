@@ -931,12 +931,13 @@ function ResolveSingleTarget($mainPlayer, $defPlayer, $target, $attackerPrefix, 
     //Construct defender
     $defender = new Ally($target, $defPlayer);
     //Resolve the combat
+    $shootsFirst = ShouldCombatDamageFirst();
     $defenderPower = $defender->CurrentPower();
     if($defenderPower < 0) $defenderPower = 0;
     $excess = $totalAttack - $defender->Health();
     $destroyed = $defender->DealDamage($totalAttack, bypassShield:HasSaboteur($attackerID, $mainPlayer, $attacker->Index()), fromCombat:true, damageDealt:$combatChainState[$CCS_DamageDealt]);
     if($destroyed) ClearAttackTarget();
-    if($attackerPrefix == "MYALLY" && (!$destroyed || !ShouldCombatDamageFirst())) {
+    if($attackerPrefix == "MYALLY" && (!$destroyed || !$shootsFirst)) {
       $attackerDestroyed = $attacker->DealDamage($defenderPower, fromCombat:true);
       if($attackerDestroyed) {
         ClearAttacker();
@@ -966,10 +967,13 @@ function ResolveSingleTarget($mainPlayer, $defPlayer, $target, $attackerPrefix, 
 }
 
 function ShouldCombatDamageFirst() {
-  global $combatChain, $mainPlayer, $CS_NumEventsPlayed;
+  global $combatChain, $mainPlayer, $defPlayer, $CS_NumEventsPlayed;
+  $target = GetAttackTarget();
+  $targetAlly = new Ally($target, $defPlayer);
   if($combatChain[0] == "9500514827" || $combatChain[0] == "4328408486") return true;//Han Solo shoots first; also Incinerator Trooper
   if(SearchCurrentTurnEffects("8297630396", $mainPlayer)) return true;
   if($combatChain[0] == "f8e0c65364" && GetClassState($mainPlayer, $CS_NumEventsPlayed) > 0) return true;//Asajj Ventress
+  if($combatChain[0] == "3876470102" && $targetAlly->IsExhausted() && $targetAlly->TurnsInPlay() > 0) return true;//Hound's Tooth
   return false;
 }
 
@@ -1962,10 +1966,10 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
       }
     }
     if($from != "PLAY") {
-      if(HasShielded($cardID, $currentPlayer, $index)) {
+      if(HasShielded($cardID, $currentPlayer, $index) && $target == "-") {
         AddLayer("TRIGGER", $currentPlayer, "SHIELDED", "-", "-", $uniqueID);
       }
-      if(HasAmbush($cardID, $currentPlayer, $index, $from)) {
+      if(HasAmbush($cardID, $currentPlayer, $index, $from) && $target = "-") {
         AddLayer("TRIGGER", $currentPlayer, "AMBUSH", "-", "-", $uniqueID);
       }
       AddAllyPlayCardAbilityLayers($cardID, $from, $uniqueID, $resourcesPaid);

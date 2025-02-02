@@ -28,6 +28,9 @@ function EffectHitEffect($cardID)
     case "5630404651-1"://MagnaGuard Wing Leader
       AddCurrentTurnEffectFromCombat("5630404651-2", $mainPlayer);
       break;
+    // case "4334684518-1"://Tandem Assault
+    //   AddCurrentTurnEffectFromCombat("4334684518-2", $mainPlayer);
+    //  break;
     default:
       break;
   }
@@ -118,6 +121,16 @@ function FinalizeChainLinkEffects()
         PrependDecisionQueue("SETDQVAR", $mainPlayer, "0");
         PrependDecisionQueue("DECKCARDS", $mainPlayer, "0");
         return true;
+      // case "4334684518-2"://Tandem Assault
+      //   PrependDecisionQueue("REMOVECURRENTEFFECT", $mainPlayer, $currentTurnEffects[$i]);
+      //   PrependDecisionQueue("SWAPTURN", $mainPlayer, "-");
+      //   PrependDecisionQueue("ELSE", $mainPlayer, "-");
+      //   PrependDecisionQueue("MZOP", $mainPlayer, "ATTACK", 1);
+      //   PrependDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      //   PrependDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a ground unit to attack with");
+      //   PrependDecisionQueue("MZFILTER", $mainPlayer, "status=1");
+      //   PrependDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:arena=Ground");
+      //  return true;
       default: break;
     }
   }
@@ -138,9 +151,7 @@ function EffectAttackModifier($cardID, $playerID="")
     case "8022262805": return 2;//Bold Resistance
     case "2587711125": return -4;//Disarm
     case "2569134232": return -4;//Jedha City
-    case "6300552434"://Gold Leader
-    case "1323728003"://Electrostaff
-      return -1;
+    case "1323728003": return -1;//Electrostaff
     case "2651321164": return 2;//Tactical Advantage
     case "1701265931": return 4;//Moment of Glory
     case "1900571801": return 2;//Overwhelming Barrage
@@ -227,6 +238,9 @@ function EffectAttackModifier($cardID, $playerID="")
     case "3596811933": return -1;//Disruptive Burst
     case "7979348081": return 1;//Kraken
     case "6406254252": return 2;//Soulless One
+    //Jump to Lightspeed
+    case "6300552434": return -1;//Gold Leader
+    case "7924461681": return 1;//Leia Organa
     default: return 0;
   }
 }
@@ -690,6 +704,13 @@ function CurrentEffectEndTurnAbilities()
       case "3503494534"://Regional Governor
         AddNextTurnEffect($currentTurnEffects[$i], $currentTurnEffects[$i + 1], $currentTurnEffects[$i + 2]);
         break;
+      //Jump to Lightspeed
+      case "8105698374"://Commandeer
+        $ally = new Ally($currentTurnEffects[$i+2]);
+        if ($ally->Exists()) {
+          MZBounce($ally->Controller(), "MYALLY-" . $ally->Index());
+        }
+        break;
       default: break;
     }
     if($remove) RemoveCurrentTurnEffect($i);
@@ -791,50 +812,52 @@ function IsCombatEffectActive($cardID)
   $cardID = $effectArr[0];
   switch($cardID)
   {
-    case "2587711125": return true;//Disarm
-    case "2569134232": return true;//Jedha City
-    case "6300552434"://Gold Leader
+    case "2587711125"://Disarm
+    case "2569134232"://Jedha City
     case "1323728003"://Electrostaff
-      return true;
-    case "3809048641": return true;//Surprise Strike
-    case "9757839764": return true;//Adelphi Patrol Wing
-    case "3038238423": return true;//Fleet Lieutenant
-    case "8244682354": return true;//Jyn Erso
-    case "8600121285": return true;//IG-88
-    case "0616724418": return true;//Han Solo Leader JTL
-    case "6954704048": return true;//Heroic Sacrifice
-    case "20f21b4948": return true;//Jyn Erso
-    case "9097690846": return true;//Snowtrooper Lieutenant
-    case "9210902604": return true;//Precision Fire
-    case "8297630396": return true;//Shoot First
-    case "5464125379": return true;//Strafing Gunship
-    case "5445166624": return true;//Clone Dive Trooper
-    case "8495694166": return true;//Jedi Lightsaber
-    case "3789633661": return true;//Cunning
-    case "8988732248": return true;//Rebel Assault
-    case "7922308768": return true;//Valiant Assault Ship
-    case "6514927936": return true;//Leia Organa
-    case "5630404651": return true;//MagnaGuard Wing Leader
-    case "0802973415": return true;//Outflank
-    case "1480894253": return true;//Kylo Ren
-    case "2503039837": return true;//Moff Gideon Leader
-    case "4721657243": return true;//Kihraxz Heavy Fighter
-    case "7171636330": return true;//Chain Code Collector
-    case "8107876051": return true;//Enfys Nest
-    case "7578472075": return true;//Let the Wookie Win
-    case "4663781580": return true;//Swoop Down
-    case "4085341914": return true;//Heroic Resolve
-    case "5896817672": return true;//Headhunting
-    case "6962053552": return true;//Desperate attack
+    case "3809048641"://Surprise Strike
+    case "9757839764"://Adelphi Patrol Wing
+    case "3038238423"://Fleet Lieutenant
+    case "8244682354"://Jyn Erso
+    case "8600121285"://IG-88
+    case "6954704048"://Heroic Sacrifice
+    case "20f21b4948"://Jyn Erso
+    case "9097690846"://Snowtrooper Lieutenant
+    case "9210902604"://Precision Fire
+    case "8297630396"://Shoot First
+    case "5464125379"://Strafing Gunship
+    case "5445166624"://Clone Dive Trooper
+    case "8495694166"://Jedi Lightsaber
+    case "3789633661"://Cunning
+    case "8988732248"://Rebel Assault
+    case "7922308768"://Valiant Assault Ship
+    case "6514927936"://Leia Organa
+    case "5630404651"://MagnaGuard Wing Leader
+    case "0802973415"://Outflank
+    case "1480894253"://Kylo Ren
+    case "2503039837"://Moff Gideon Leader
+    case "4721657243"://Kihraxz Heavy Fighter
+    case "7171636330"://Chain Code Collector
+    case "8107876051"://Enfys Nest
+    case "7578472075"://Let the Wookie Win
+    case "4663781580"://Swoop Down
+    case "4085341914"://Heroic Resolve
+    case "5896817672"://Headhunting
+    case "6962053552"://Desperate attack
     case "3399023235"://Fenn Rau
     case "8777351722"://Anakin Skywalker Leader
     case "4910017138"://Breaking In
-    case "8929774056"://Asajj Ventress (undeployed)
-    case "f8e0c65364"://Asajj Ventress (deployed)
+    case "8929774056"://Asajj Ventress TWI (undeployed)
+    case "f8e0c65364"://Asajj Ventress TWI (deployed)
     case "2155351882"://Ahsoka Tano
     case "6669050232"://Grim Resolve
     case "2395430106"://Republic Tactical Officer
     case "6406254252"://Soulless One
+    //Jump to Lightspeed
+    case "0616724418"://Han Solo Leader
+    case "6300552434"://Gold Leader
+    case "7924461681"://Leia Organa
+    //case "4334684518"://Tandem Assault
       return true;
     default: return false;
   }
