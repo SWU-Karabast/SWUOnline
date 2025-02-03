@@ -1977,7 +1977,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
             AddAllyPlayCardAbilityLayers($cardID, $from, $uniqueID, $resourcesPaid);
           }
           return;
-        } else if (HasWhenPlayed($cardID) && !IsExploitWhenPlayed($cardID)) { // TODO: fix Dooku trigger choice and remove IsExploitWhenPlayed
+        } else if ((HasWhenPlayed($cardID) && !IsExploitWhenPlayed($cardID)) || $cardID == "8055390529") { // TODO: Fix Dooku and Traitorous hack.
           AddLayer($layerName, $currentPlayer, $cardID, $from . "!" . $resourcesPaid . "!" . $target . "!" . $additionalCosts . "!" . $abilityIndex . "!" . $playIndex, "-", $uniqueID, append:true);
         }
       }
