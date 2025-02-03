@@ -5921,6 +5921,15 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     //   AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
     //   AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
     //   break;
+    case "5093056978"://Direct Hit
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:trait=Vehicle&MYALLY:trait=Vehicle");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a vehicle unit to defeat");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "DESTROY", 1);
+      break;
+    case "5345999887"://Kijimi patrollers
+        CreateTieFighter($currentPlayer);
+        break;
     //PlayAbility End
     default: break;
   }

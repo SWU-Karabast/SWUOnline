@@ -2396,6 +2396,13 @@ function SpecificAllyAttackAbilities($attackID)
         $ally->DealDamage(1, fromUnitEffect:true);
       }
       break;
+    case "7192849828"://Mist Hunter
+      global $CS_NumBountyHuntersPlayed;
+      global $CS_NumPilotsPlayed;
+      if(GetClassState($mainPlayer, $CS_NumPilotsPlayed) > 0 || GetClassState($mainPlayer, $CS_NumBountyHuntersPlayed) > 0) {
+        Draw($mainPlayer);
+      }
+      break;
     default: break;
   }
   //SpecificAllyAttackAbilities End
