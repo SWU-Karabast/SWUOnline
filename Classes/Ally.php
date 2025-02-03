@@ -229,7 +229,9 @@ class Ally {
   }
 
   //Returns true if the ally is destroyed
-  function DealDamage($amount, $bypassShield = false, $fromCombat = false, &$damageDealt = NULL, $enemyDamage = false, $fromUnitEffect=false, $preventable=true) {
+  function DealDamage($amount, $bypassShield = false, $fromCombat = false, &$damageDealt = NULL,
+      $enemyDamage = false, $fromUnitEffect=false, $preventable=true, $indirectDamage=false)
+  {
     global $currentTurnEffects;
     if($this->index == -1 || $amount <= 0) return false;
     if(!$preventable) $bypassShield = true;
@@ -298,7 +300,8 @@ class Ally {
       DestroyAlly($this->playerID, $this->index, fromCombat:$fromCombat);
       return true;
     }
-    AllyDamageTakenAbilities($this->playerID, $this->index, damage:$amount, fromCombat:$fromCombat, enemyDamage:$enemyDamage, fromUnitEffect:$fromUnitEffect);
+    AllyDamageTakenAbilities($this->playerID, $this->index, damage:$amount, fromCombat:$fromCombat,
+      enemyDamage:$enemyDamage, fromUnitEffect:$fromUnitEffect, indirectDamage:$indirectDamage);
     switch($this->CardID())
     {
       case "4843225228"://Phase-III Dark Trooper

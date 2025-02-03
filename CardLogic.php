@@ -29,19 +29,25 @@ function PummelHit($player = -1, $passable = false, $fromDQ = false, $context=""
   }
 }
 
-function DefeatUpgrade($player, $may = false, $search="MYALLY:hasUpgradeOnly=true&THEIRALLY:hasUpgradeOnly=true", $upgradeFilter="", $to="DISCARD", $passable=false) {
+function DefeatUpgrade($player, $may = false, $search="MYALLY:hasUpgradeOnly=true&THEIRALLY:hasUpgradeOnly=true",
+  $upgradeFilter="", $to="DISCARD", $passable=false, $mzIndex="-")
+{
   $verb = "";
   switch($to) {
     case "DISCARD": $verb = "defeat"; break;
     case "HAND": $verb = "bounce"; break;
   }
-  if($passable) {
-    AddDecisionQueue("MULTIZONEINDICES", $player, $search, 1);
-    AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to " . $verb . " an upgrade from", 1);
-  }
-  else {
-    AddDecisionQueue("MULTIZONEINDICES", $player, $search);
-    AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to " . $verb . " an upgrade from");
+  if($mzIndex == "-") {
+    if($passable) {
+      AddDecisionQueue("MULTIZONEINDICES", $player, $search, 1);
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to " . $verb . " an upgrade from", 1);
+    }
+    else {
+      AddDecisionQueue("MULTIZONEINDICES", $player, $search);
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to " . $verb . " an upgrade from");
+    }
+  } else {
+    AddDecisionQueue("PASSPARAMETER", $player, $mzIndex);
   }
   if($may) AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
   else AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
@@ -612,7 +618,7 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       }
       break;
     case "SHIELDED":
-      $ally = new Ally($uniqueID, $player);
+      $ally = new Ally($uniqueID);
       $ally->Attach("8752877738");//Shield Token
       break;
     case "AFTERPLAYABILITY":
@@ -849,6 +855,10 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       AddDecisionQueue("NOPASS", $player, "-");
       AddDecisionQueue("EXHAUSTCHARACTER", $player, FindCharacterIndex($player, "9831674351"), 1);
       AddDecisionQueue("SPECIFICCARD", $player, "BOBA_FETT_LEADER_JTL", 1);
+      break;
+    case "9611596703"://Allegiant General Pryde
+      $targetAlly = new Ally($target);
+      DefeatUpgrade($player, may:true, upgradeFilter:"unique=1", mzIndex:$targetAlly->MZIndex());
       break;
     default: break;
   }
@@ -1193,7 +1203,7 @@ function IndirectDamage($player, $amount, $fromUnitEffect=false)
       AddDecisionQueue("PREPENDLASTRESULT", $sourcePlayer, "THEIRCHAR-0,", $i == 0 ? 0 : 1);
       AddDecisionQueue("SETDQCONTEXT", $sourcePlayer, "Choose a card to deal an indirect damage (Remaining: " . ($amount-$i) . ")", $i == 0 ? 0 : 1);
       AddDecisionQueue("CHOOSEMULTIZONE", $sourcePlayer, "<-", 1);
-      AddDecisionQueue("MZOP", $sourcePlayer, "DEALDAMAGE,1,$sourcePlayer," . ($fromUnitEffect ? "1" : "0") . ",0", 1);
+      AddDecisionQueue("MZOP", $sourcePlayer, "DEALDAMAGE,1,$sourcePlayer," . ($fromUnitEffect ? "1" : "0") . ",0,1", 1);
     }
   } else {
     for($i=0; $i<$amount; ++$i) {
@@ -1201,7 +1211,7 @@ function IndirectDamage($player, $amount, $fromUnitEffect=false)
       AddDecisionQueue("PREPENDLASTRESULT", $player, "MYCHAR-0,", $i == 0 ? 0 : 1);
       AddDecisionQueue("SETDQCONTEXT", $player, "Choose a card to deal an indirect damage (Remaining: " . ($amount-$i) . ")", $i == 0 ? 0 : 1);
       AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
-      AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1,$sourcePlayer," . ($fromUnitEffect ? "1" : "0") . ",0", 1);
+      AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1,$sourcePlayer," . ($fromUnitEffect ? "1" : "0") . ",0,1", 1);
     }
   }
 }

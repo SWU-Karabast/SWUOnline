@@ -1383,7 +1383,7 @@ function AllyHasPlayCardAbility($playedCardID, $playedCardUniqueID, $from, $card
 function AllyPlayCardAbility($player, $cardID, $uniqueID, $numUses, $playedCardID, $from) {
   global $currentPlayer;
   $otherPlayer = $player == 1 ? 2 : 1;
-  $ally = new Ally($uniqueID, $player); // Important: ally could be defeated by the time this function is called. So, use $ally->Exists() to check if the ally still exists.
+  $ally = new Ally($uniqueID); // Important: ally could be defeated by the time this function is called. So, use $ally->Exists() to check if the ally still exists.
 
   // When you play a card
   if ($player == $currentPlayer) {
@@ -2403,6 +2403,10 @@ function SpecificAllyAttackAbilities($attackID)
         Draw($mainPlayer);
       }
       break;
+    case "9611596703"://Allegiant General Pryde
+      if($initiativePlayer == $mainPlayer) {
+        IndirectDamage($defPlayer, 2, true);
+      }
     default: break;
   }
   //SpecificAllyAttackAbilities End
@@ -2418,7 +2422,8 @@ function AllyHitEffects() {
   }
 }
 
-function AllyDamageTakenAbilities($player, $index, $damage, $fromCombat=false, $enemyDamage=false, $fromUnitEffect=false/*, $indirectDamage=false*/)
+function AllyDamageTakenAbilities($player, $index, $damage, $fromCombat=false, $enemyDamage=false,
+  $fromUnitEffect=false, $indirectDamage=false)
 {
   $damagedAlly = new Ally("MYALLY-" . $index, $player);
 
@@ -2449,6 +2454,18 @@ function AllyDamageTakenAbilities($player, $index, $damage, $fromCombat=false, $
           PrependDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $index, 1);
           PrependDecisionQueue("NOPASS", $otherPlayer, "-");
           PrependDecisionQueue("YESNO", $otherPlayer, "if you want use Jango Fett's ability");
+        }
+        break;
+      //Jump to Lightspeed
+      case "9611596703"://Allegiant General Pryde
+        if($indirectDamage) {
+          global $layers;
+          $skipLayer = false;
+          for($i=0; $i<count($layers); $i+=LayerPieces()) {
+            if($layers[$i] == "TRIGGER" && $layers[$i+1] == $otherPlayer && $layers[$i+2] == "9611596703"
+                && $layers[$i+3] == $damagedAlly->UniqueID()) $skipLayer = true;
+          }
+          if(!$skipLayer) AddLayer("TRIGGER", $otherPlayer, "9611596703", $damagedAlly->UniqueID());
         }
         break;
       default: break;
