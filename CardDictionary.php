@@ -2033,6 +2033,7 @@ function HasAttackAbility($cardID) {
     case "8240629990"://Avenger
     case "6931439330"://The Ghost
     case "3468546373"://General Rieekan
+    case "7192849828"://Mist Hunter
       return true;
     default: return false;
   }

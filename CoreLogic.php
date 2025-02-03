@@ -5907,19 +5907,23 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "8105698374,HAND", 1);
       break;
-    // case "4334684518"://Tandem Assault
-    //   AddCurrentTurnEffect($cardID . "-1", $currentPlayer);
-    //   AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:arena=Space");
-    //   AddDecisionQueue("MZFILTER", $currentPlayer, "status=1");
-    //   AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a space unit to attack with");
-    //   AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-    //   AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
-    //   AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:arena=Ground", 1);
-    //   AddDecisionQueue("MZFILTER", $currentPlayer, "status=1", 1);
-    //   AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a ground unit to attack with", 1);
-    //   AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-    //   AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
-    //   break;
+    case "4334684518"://Tandem Assault
+      AddCurrentTurnEffect($cardID . "-1", $currentPlayer);
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:arena=Space");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "status=1");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a space unit to attack with");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
+      break;
+    case "5093056978"://Direct Hit
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:trait=Vehicle&MYALLY:trait=Vehicle");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a vehicle unit to defeat");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "DESTROY", 1);
+      break;
+    case "5345999887"://Kijimi patrollers
+        CreateTieFighter($currentPlayer);
+        break;
     //PlayAbility End
     default: break;
   }
