@@ -291,7 +291,7 @@ $CS_PlayedWithExploit = 70;
 $CS_SeparatistUnitsThatAttacked = 71;
 $CS_AlliesDestroyed = 72; // List of allies (CardID) destroyed concatenated with a comma
 $CS_NumBountyHuntersPlayed = 73;
-$CS_NumPilotPlayed = 74;
+$CS_NumPilotsPlayed = 74;
 
 
 function SetAfterPlayedBy($player, $cardID)
@@ -563,8 +563,8 @@ function ResetClassState($player)
   $classState[$CS_OppCardActive] = 0;
   $classState[$CS_PlayedWithExploit] = 0;
   $classState[$CS_AlliesDestroyed] = "-";
-  $classState[$CS_NumBountyHunterPlayed] = 0;
-  $classState[$CS_NumPilotPlayed] = 0;
+  $classState[$CS_NumBountysHunterPlayed] = 0;
+  $classState[$CS_NumPilotsPlayed] = 0;
 }
 
 function ResetCharacterEffects()
