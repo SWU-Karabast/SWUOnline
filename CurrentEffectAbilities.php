@@ -28,9 +28,9 @@ function EffectHitEffect($cardID)
     case "5630404651-1"://MagnaGuard Wing Leader
       AddCurrentTurnEffectFromCombat("5630404651-2", $mainPlayer);
       break;
-    // case "4334684518-1"://Tandem Assault
-    //   AddCurrentTurnEffectFromCombat("4334684518-2", $mainPlayer);
-    //  break;
+    case "4334684518-1"://Tandem Assault
+      AddCurrentTurnEffectFromCombat("4334684518-2", $mainPlayer);
+     break;
     default:
       break;
   }
@@ -121,16 +121,18 @@ function FinalizeChainLinkEffects()
         PrependDecisionQueue("SETDQVAR", $mainPlayer, "0");
         PrependDecisionQueue("DECKCARDS", $mainPlayer, "0");
         return true;
-      // case "4334684518-2"://Tandem Assault
-      //   PrependDecisionQueue("REMOVECURRENTEFFECT", $mainPlayer, $currentTurnEffects[$i]);
-      //   PrependDecisionQueue("SWAPTURN", $mainPlayer, "-");
-      //   PrependDecisionQueue("ELSE", $mainPlayer, "-");
-      //   PrependDecisionQueue("MZOP", $mainPlayer, "ATTACK", 1);
-      //   PrependDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
-      //   PrependDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a ground unit to attack with");
-      //   PrependDecisionQueue("MZFILTER", $mainPlayer, "status=1");
-      //   PrependDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:arena=Ground");
-      //  return true;
+      case "4334684518-2"://Tandem Assault
+        PrependDecisionQueue("REMOVECURRENTEFFECT", $mainPlayer, "4334684518+2");
+        PrependDecisionQueue("REMOVECURRENTEFFECT", $mainPlayer, $currentTurnEffects[$i]);
+        PrependDecisionQueue("SWAPTURN", $mainPlayer, "-");
+        PrependDecisionQueue("ELSE", $mainPlayer, "-");
+        PrependDecisionQueue("MZOP", $mainPlayer, "ATTACK", 1);
+        PrependDecisionQueue("ADDCURRENTEFFECT", $mainPlayer, "4334684518+2", 1);
+        PrependDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        PrependDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a ground unit to attack with");
+        PrependDecisionQueue("MZFILTER", $mainPlayer, "status=1");
+        PrependDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:arena=Ground");
+       return true;
       default: break;
     }
   }
@@ -241,6 +243,7 @@ function EffectAttackModifier($cardID, $playerID="")
     //Jump to Lightspeed
     case "6300552434": return -1;//Gold Leader
     case "7924461681": return 1;//Leia Organa
+    case "4334684518+2": return 2;//Tandem Assault
     default: return 0;
   }
 }
@@ -857,7 +860,8 @@ function IsCombatEffectActive($cardID)
     case "0616724418"://Han Solo Leader
     case "6300552434"://Gold Leader
     case "7924461681"://Leia Organa
-    //case "4334684518"://Tandem Assault
+    case "4334684518"://Tandem Assault
+    case "4334684518+2"://Tandem Assault
       return true;
     default: return false;
   }
