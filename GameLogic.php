@@ -393,7 +393,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         case "MYCHAR": case "THEIRCHAR": AddCharacterUses($player, $lrArr[1], $parameter); break;
         case "MYALLY": case "THEIRALLY":
           $ally = new Ally($lastResult, $player);
-          $ally->ModifyUses($parameter);
+          $ally->SumNumUses($parameter);
           break;
         default: break;
       }

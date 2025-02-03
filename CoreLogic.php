@@ -4773,8 +4773,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "6117103324"://Jetpack
       $ally = new Ally($target, $currentPlayer);
-      $ally->AddEffect("6117103324");
-      $ally->Attach("8752877738");//Shield Token
+      if ($ally->Exists()) {
+        $upgradeUniqueID = $ally->Attach("8752877738");//Shield Token
+        AddCurrentTurnEffect("6117103324", $currentPlayer, uniqueID:$upgradeUniqueID);
+      }
       break;
     case "1386874723"://Omega (Part of the Squad)
       if($from != "PLAY") {

@@ -209,8 +209,9 @@ function EventPieces()
 //0 - cardId
 //1 - ownerId
 //2 - isPilot
+//3 - subcard uniqueId
 function SubcardPieces(){
-  return 3;
+  return 4;
 }
 
 $SHMOP_CURRENTPLAYER = 9;
