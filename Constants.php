@@ -563,7 +563,7 @@ function ResetClassState($player)
   $classState[$CS_OppCardActive] = 0;
   $classState[$CS_PlayedWithExploit] = 0;
   $classState[$CS_AlliesDestroyed] = "-";
-  $classState[$CS_NumBountysHunterPlayed] = 0;
+  $classState[$CS_NumBountyHuntersPlayed] = 0;
   $classState[$CS_NumPilotsPlayed] = 0;
 }
 
