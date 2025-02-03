@@ -17,7 +17,8 @@ function CreateTieFighter($player, $from = "-") {
   return PlayAlly("7268926664", $player, from:$from); //Tie Fighter
 }
 
-function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null, $cloned = false, $playCardEffect = false)
+// This function put an ally into play for a player, which means no when played abilities are triggered.
+function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null, $cloned = false, $playAbility = false)
 {
   $uniqueID = GetUniqueId();
   $allies = &GetAllies($player);
@@ -43,13 +44,14 @@ function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null,
   CurrentEffectAllyEntersPlay($player, $index);
   CheckUniqueAlly($uniqueID);
 
-  if ($playCardEffect || $cardID == "0345124206") { //Clone - Ensure that the Clone will always choose a unit to clone whenever it enters play.
+  if ($playAbility || $cardID == "0345124206") { //Clone - Ensure that the Clone will always choose a unit to clone whenever it enters play.
     if(HasShielded($cardID, $player, $index)) {
       AddLayer("TRIGGER", $player, "SHIELDED", "-", "-", $uniqueID);
     }
     if(HasAmbush($cardID, $player, $index, $from)) {
       AddLayer("TRIGGER", $player, "AMBUSH", "-", "-", $uniqueID);
     }
+
     PlayAbility($cardID, $from, 0, uniqueId:$uniqueID);
   }
 
@@ -1304,7 +1306,7 @@ function AllyAttackedAbility($attackTarget, $index) {
   }
 }
 
-function AddAllyPlayAbilityLayers($cardID, $from, $uniqueID = "-", $resourcesPaid=-1) {
+function AddAllyPlayCardAbilityLayers($cardID, $from, $uniqueID = "-", $resourcesPaid=-1) {
   global $currentPlayer;
 
   foreach ([1, 2] as $p) {
@@ -1312,7 +1314,7 @@ function AddAllyPlayAbilityLayers($cardID, $from, $uniqueID = "-", $resourcesPai
     for ($i = 0; $i < count($allies); $i += AllyPieces()) {
       if (AllyHasPlayCardAbility($cardID, $uniqueID, $from, $allies[$i], $p, $i, $resourcesPaid)) {
         $targetData = implode(",", [$allies[$i], $p, $allies[$i + 8], $cardID]); // $cardID, $player, $numUses, $playedCardID
-        AddLayer("TRIGGER", $currentPlayer, "AFTERPLAYABILITY", $targetData, $from, $allies[$i + 5]);
+        AddLayer("TRIGGER", $currentPlayer, "ALLYPLAYCARDABILITY", $targetData, $from, $allies[$i + 5]);
       }
     }
   }

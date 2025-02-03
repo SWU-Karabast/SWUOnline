@@ -246,22 +246,23 @@ function PrependLayer($cardID, $player, $parameter, $target = "-", $additionalCo
 
 function IsAbilityLayer($cardID)
 {
-  return $cardID == "TRIGGER" || $cardID == "PLAYABILITY" || $cardID == "ATTACKABILITY" || $cardID == "ACTIVATEDABILITY" || $cardID == "AFTERPLAYABILITY";
+  return $cardID == "TRIGGER" || $cardID == "PLAYABILITY" || $cardID == "ATTACKABILITY" || $cardID == "ACTIVATEDABILITY" || $cardID == "ALLYPLAYCARDABILITY";
 }
 
 function AddLayer($cardID, $player, $parameter, $target = "-", $additionalCosts = "-", $uniqueID = "-", $append = false)
 {
   global $layers, $dqState;
-  //Layers are on a stack, so you need to push things on in reverse order
-  if($append || $cardID == "TRIGGER") {
+
+  if ($append || $cardID == "TRIGGER") {
     array_push($layers, $cardID, $player, $parameter, $target, $additionalCosts, $uniqueID, GetUniqueId());
-    if(IsAbilityLayer($cardID))
-    {
+    if(IsAbilityLayer($cardID)) {
       $orderableIndex = intval($dqState[8]);
       if($orderableIndex == -1) $dqState[8] = LayerPieces();
     }
     return LayerPieces();
   }
+
+  //Layers are on a stack, so you need to push things on in reverse order
   array_unshift($layers, GetUniqueId());
   array_unshift($layers, $uniqueID);
   array_unshift($layers, $additionalCosts);
@@ -269,13 +270,13 @@ function AddLayer($cardID, $player, $parameter, $target = "-", $additionalCosts 
   array_unshift($layers, $parameter);
   array_unshift($layers, $player);
   array_unshift($layers, $cardID);
-  if(IsAbilityLayer($cardID))
-  {
+
+  if (IsAbilityLayer($cardID)) {
     $orderableIndex = intval($dqState[8]);
     if($orderableIndex == -1) $dqState[8] = 0;
     else $dqState[8] += LayerPieces();
-  }
-  else $dqState[8] = -1;//If it's not a trigger, it's not orderable
+  } else $dqState[8] = -1; //If it's not a trigger, it's not orderable
+
   return count($layers);//How far it is from the end
 }
 
@@ -620,8 +621,8 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
     case "SHIELDED":
       $ally = new Ally($uniqueID);
       $ally->Attach("8752877738");//Shield Token
-      break;
-    case "AFTERPLAYABILITY":
+      break;   
+    case "ALLYPLAYCARDABILITY":
       $data = explode(",",$target); // $cardID, $player, $numUses, $playedCardID
       AllyPlayCardAbility($data[1], $data[0], $uniqueID, $data[2], $data[3], from:$additionalCosts);
       break;
@@ -801,13 +802,15 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       break;
     case "1384530409"://Cad Bane Leader ability
       $otherPlayer = ($player == 1 ? 2 : 1);
-      AddDecisionQueue("YESNO", $player, "if you want use Cad Bane's ability");
-      AddDecisionQueue("NOPASS", $player, "-");
-      AddDecisionQueue("EXHAUSTCHARACTER", $player, FindCharacterIndex($player, "1384530409"), 1);
-      AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY", 1);
-      AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a unit to deal 1 damage to", 1);
-      AddDecisionQueue("CHOOSEMULTIZONE", $otherPlayer, "<-", 1);
-      AddDecisionQueue("MZOP", $otherPlayer, "DEALDAMAGE,1", 1);
+      if (SearchCount(SearchAllies($otherPlayer)) > 0) {
+        AddDecisionQueue("YESNO", $player, "if you want use Cad Bane's ability");
+        AddDecisionQueue("NOPASS", $player, "-");
+        AddDecisionQueue("EXHAUSTCHARACTER", $player, FindCharacterIndex($player, "1384530409"), 1);
+        AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY", 1);
+        AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a unit to deal 1 damage to", 1);
+        AddDecisionQueue("CHOOSEMULTIZONE", $otherPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $otherPlayer, "DEALDAMAGE,1", 1);
+      }
       break;
     case "9005139831"://Mandalorian Leader Ability
       AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:maxHealth=4");

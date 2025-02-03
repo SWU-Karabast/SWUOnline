@@ -252,7 +252,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $from = "-";
       $owner = null;
       $cloned = false;
-      $playCardEffect = false;
+      $playAbility = false;
       for ($i = 0; $i < count($params); $i++) {
         $param = explode("=", $params[$i]);
         switch ($param[0]) {
@@ -260,11 +260,11 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           case "from": $from = $param[1]; break;
           case "owner": $owner = $param[1]; break;
           case "cloned": $cloned = in_array($param[1], [1, "true"]); break;
-          case "playCardEffect": $playCardEffect = in_array($param[1], [1, "true"]); break;
+          case "playAbility": $playAbility = in_array($param[1], [1, "true"]); break;
           default: break;
         }
       }
-      PlayAlly($lastResult, $player, $subCards, $from, $owner, $cloned, $playCardEffect);
+      PlayAlly($lastResult, $player, $subCards, $from, $owner, $cloned, $playAbility);
       return $lastResult;
     case "DRAW":
       return Draw($player);

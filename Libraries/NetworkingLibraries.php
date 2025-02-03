@@ -1959,24 +1959,37 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
         if($from == "PLAY" || $from == "EQUIP") {
           $layerName = (GetResolvedAbilityType($cardID, $oppCardActive) == "A" || ($oppCardActive == true)) ? "ACTIVATEDABILITY" : "ATTACKABILITY";
         }
-        if($layerName == "ATTACKABILITY") { if(HasAttackAbility($cardID)) PlayAbility($cardID, "PLAY", "0"); }
-        //TODO: Fix this Relentless and first light and The Mandalorian hack
-        //TODO: fix Dooku trigger choice
-        else if($from == "PLAY" || $from == "EQUIP" || (HasWhenPlayed($cardID) && !IsExploitWhenPlayed($cardID)) || $cardID == "3401690666" || $cardID == "4783554451" || $cardID == "4088c46c4d" || DefinedTypesContains($cardID, "Event", $currentPlayer) || DefinedTypesContains($cardID, "Upgrade", $currentPlayer)) {
-          AddLayer($layerName, $currentPlayer, $cardID, $from . "!" . $resourcesPaid . "!" . $target . "!" . $additionalCosts . "!" . $abilityIndex . "!" . $playIndex, "-", $uniqueID, append:true);
+        if($layerName == "ATTACKABILITY") { 
+          if(HasAttackAbility($cardID)) {
+            PlayAbility($cardID, "PLAY", "0");
+          }
         }
-        else if($from != "PLAY" && $from != "EQUIP") {
-          AddAllyPlayAbilityLayers($cardID, $from, $uniqueID, $resourcesPaid);
+        //TODO: Fix this Relentless and first light and The Mandalorian hack
+        // Events and abilities that are not played should be resolved before any ally abilities
+        else if ($from == "PLAY" || $from == "EQUIP" || $cardID == "3401690666" || $cardID == "4783554451" || $cardID == "4088c46c4d" || DefinedTypesContains($cardID, "Event", $currentPlayer)) {
+          AddLayer($layerName, $currentPlayer, $cardID, $from . "!" . $resourcesPaid . "!" . $target . "!" . $additionalCosts . "!" . $abilityIndex . "!" . $playIndex, "-", $uniqueID, append:true);        
+          if (!$openedChain) ResolveGoAgain($cardID, $currentPlayer, $from);
+          CopyCurrentTurnEffectsFromAfterResolveEffects();
+          SetClassState($currentPlayer, $CS_PlayIndex, -1);
+          SetClassState($currentPlayer, $CS_CharacterIndex, -1);
+          ProcessDecisionQueue();
+          if ($from != "PLAY" && $from != "EQUIP" && $from != "CHAR") {
+            AddAllyPlayCardAbilityLayers($cardID, $from, $uniqueID, $resourcesPaid);
+          }
+          return;
+        } else if ((HasWhenPlayed($cardID) && !IsExploitWhenPlayed($cardID)) || $cardID == "8055390529") { // TODO: Fix Dooku and Traitorous hack.
+          AddLayer($layerName, $currentPlayer, $cardID, $from . "!" . $resourcesPaid . "!" . $target . "!" . $additionalCosts . "!" . $abilityIndex . "!" . $playIndex, "-", $uniqueID, append:true);
         }
       }
     }
-    if($from != "PLAY") {
-      if(HasShielded($cardID, $currentPlayer, $index) && $target == "-") {
+    if ($from != "PLAY" && $from != "EQUIP" && $from != "CHAR") {
+      if (HasShielded($cardID, $currentPlayer, $index) && $target == "-") {
         AddLayer("TRIGGER", $currentPlayer, "SHIELDED", "-", "-", $uniqueID);
       }
-      if(HasAmbush($cardID, $currentPlayer, $index, $from) && $target = "-") {
+      if (HasAmbush($cardID, $currentPlayer, $index, $from) && $target = "-") {
         AddLayer("TRIGGER", $currentPlayer, "AMBUSH", "-", "-", $uniqueID);
       }
+      AddAllyPlayCardAbilityLayers($cardID, $from, $uniqueID, $resourcesPaid);
     }
     if (!$openedChain) ResolveGoAgain($cardID, $currentPlayer, $from);
     CopyCurrentTurnEffectsFromAfterResolveEffects();
