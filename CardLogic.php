@@ -243,19 +243,25 @@ function IsAbilityLayer($cardID)
   return $cardID == "TRIGGER" || $cardID == "PLAYABILITY" || $cardID == "ATTACKABILITY" || $cardID == "ACTIVATEDABILITY" || $cardID == "ALLYPLAYCARDABILITY";
 }
 
-function AddLayer($cardID, $player, $parameter, $target = "-", $additionalCosts = "-", $uniqueID = "-", $append = false)
+function AddLayer($cardID, $player, $parameter, $target = "-", $additionalCosts = "-", $uniqueID = "-", $append = false, $preventOrdering = false)
 {
   global $layers, $dqState;
-  //Layers are on a stack, so you need to push things on in reverse order
-  if($append || $cardID == "TRIGGER") {
+
+  if ($append || $cardID == "TRIGGER") {
     array_push($layers, $cardID, $player, $parameter, $target, $additionalCosts, $uniqueID, GetUniqueId());
-    if(IsAbilityLayer($cardID))
-    {
+    if(IsAbilityLayer($cardID)) {
       $orderableIndex = intval($dqState[8]);
       if($orderableIndex == -1) $dqState[8] = LayerPieces();
     }
+
+    if ($preventOrdering) {
+      $dqState[8] = -1;
+    }
+
     return LayerPieces();
   }
+
+  //Layers are on a stack, so you need to push things on in reverse order
   array_unshift($layers, GetUniqueId());
   array_unshift($layers, $uniqueID);
   array_unshift($layers, $additionalCosts);
@@ -263,13 +269,17 @@ function AddLayer($cardID, $player, $parameter, $target = "-", $additionalCosts 
   array_unshift($layers, $parameter);
   array_unshift($layers, $player);
   array_unshift($layers, $cardID);
-  if(IsAbilityLayer($cardID))
-  {
+
+  if (IsAbilityLayer($cardID)) {
     $orderableIndex = intval($dqState[8]);
     if($orderableIndex == -1) $dqState[8] = 0;
     else $dqState[8] += LayerPieces();
+  } else $dqState[8] = -1; //If it's not a trigger, it's not orderable
+
+  if ($preventOrdering) {
+    $dqState[8] = -1;
   }
-  else $dqState[8] = -1;//If it's not a trigger, it's not orderable
+
   return count($layers);//How far it is from the end
 }
 
