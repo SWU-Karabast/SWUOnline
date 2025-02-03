@@ -243,7 +243,7 @@ function IsAbilityLayer($cardID)
   return $cardID == "TRIGGER" || $cardID == "PLAYABILITY" || $cardID == "ATTACKABILITY" || $cardID == "ACTIVATEDABILITY" || $cardID == "ALLYPLAYCARDABILITY";
 }
 
-function AddLayer($cardID, $player, $parameter, $target = "-", $additionalCosts = "-", $uniqueID = "-", $append = false, $preventOrdering = false)
+function AddLayer($cardID, $player, $parameter, $target = "-", $additionalCosts = "-", $uniqueID = "-", $append = false)
 {
   global $layers, $dqState;
 
@@ -253,11 +253,6 @@ function AddLayer($cardID, $player, $parameter, $target = "-", $additionalCosts 
       $orderableIndex = intval($dqState[8]);
       if($orderableIndex == -1) $dqState[8] = LayerPieces();
     }
-
-    if ($preventOrdering) {
-      $dqState[8] = -1;
-    }
-
     return LayerPieces();
   }
 
@@ -275,10 +270,6 @@ function AddLayer($cardID, $player, $parameter, $target = "-", $additionalCosts 
     if($orderableIndex == -1) $dqState[8] = 0;
     else $dqState[8] += LayerPieces();
   } else $dqState[8] = -1; //If it's not a trigger, it's not orderable
-
-  if ($preventOrdering) {
-    $dqState[8] = -1;
-  }
 
   return count($layers);//How far it is from the end
 }

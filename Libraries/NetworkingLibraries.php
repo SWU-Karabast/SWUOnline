@@ -1958,12 +1958,23 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
           $layerName = (GetResolvedAbilityType($cardID, $oppCardActive) == "A" || ($oppCardActive == true)) ? "ACTIVATEDABILITY" : "ATTACKABILITY";
         }
         if($layerName == "ATTACKABILITY") { 
-          if(HasAttackAbility($cardID)) 
-            PlayAbility($cardID, "PLAY", "0"); 
+          if(HasAttackAbility($cardID)) {
+            PlayAbility($cardID, "PLAY", "0");
+          }
         }
         //TODO: Fix this Relentless and first light and The Mandalorian hack
+        // Events and abilities that are not played should be resolved before any ally abilities
         else if ($from == "PLAY" || $from == "EQUIP" || $cardID == "3401690666" || $cardID == "4783554451" || $cardID == "4088c46c4d" || DefinedTypesContains($cardID, "Event", $currentPlayer)) {
-          AddLayer($layerName, $currentPlayer, $cardID, $from . "!" . $resourcesPaid . "!" . $target . "!" . $additionalCosts . "!" . $abilityIndex . "!" . $playIndex, "-", $uniqueID, append:true, preventOrdering:true);
+          AddLayer($layerName, $currentPlayer, $cardID, $from . "!" . $resourcesPaid . "!" . $target . "!" . $additionalCosts . "!" . $abilityIndex . "!" . $playIndex, "-", $uniqueID, append:true);        
+          if (!$openedChain) ResolveGoAgain($cardID, $currentPlayer, $from);
+          CopyCurrentTurnEffectsFromAfterResolveEffects();
+          SetClassState($currentPlayer, $CS_PlayIndex, -1);
+          SetClassState($currentPlayer, $CS_CharacterIndex, -1);
+          ProcessDecisionQueue();
+          if ($from != "PLAY" && $from != "EQUIP" && $from != "CHAR") {
+            AddAllyPlayCardAbilityLayers($cardID, $from, $uniqueID, $resourcesPaid);
+          }
+          return;
         } else if (HasWhenPlayed($cardID) && !IsExploitWhenPlayed($cardID)) { // TODO: fix Dooku trigger choice and remove IsExploitWhenPlayed
           AddLayer($layerName, $currentPlayer, $cardID, $from . "!" . $resourcesPaid . "!" . $target . "!" . $additionalCosts . "!" . $abilityIndex . "!" . $playIndex, "-", $uniqueID, append:true);
         }
