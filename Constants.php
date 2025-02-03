@@ -290,6 +290,9 @@ $CS_OppCardActive = 69;
 $CS_PlayedWithExploit = 70;
 $CS_SeparatistUnitsThatAttacked = 71;
 $CS_AlliesDestroyed = 72; // List of allies (CardID) destroyed concatenated with a comma
+$CS_NumBountyHuntersPlayed = 73;
+$CS_NumPilotPlayed = 74;
+
 
 function SetAfterPlayedBy($player, $cardID)
 {
@@ -473,7 +476,7 @@ function ResetChainLinkState()
 
 function ResetClassState($player)
 {
-  global $CS_NumVillainyPlayed, $CS_PlayedAsUpgrade, $CS_AtksWWeapon, $CS_HitsWDawnblade, $CS_DamagePrevention, $CS_CardsDrawn;
+  global $CS_NumVillainyPlayed, $CS_PlayedAsUpgrade, $CS_AtksWWeapon, $CS_HitsWDawnblade, $CS_DamagePrevention, $CS_CardsDrawn, $CS_NumBountyHuntersPlayed, $CS_NumPilotsPlayed;
   global $CS_DamageTaken, $CS_NumActionsPlayed, $CS_CharacterIndex, $CS_PlayIndex, $CS_OppIndex, $CS_OppCardActive, $CS_NumNonAttackCards;
   global $CS_PreparationCounters, $CS_NextNAACardGoAgain, $CS_NumAlliesDestroyed, $CS_NumWhenDefeatedPlayed, $CS_ResolvingLayerUniqueID, $CS_NextWizardNAAInstant;
   global $CS_ArcaneDamageTaken, $CS_NextNAAInstant, $CS_NextDamagePrevented, $CS_LastAttack, $CS_PlayCCIndex;
@@ -560,6 +563,8 @@ function ResetClassState($player)
   $classState[$CS_OppCardActive] = 0;
   $classState[$CS_PlayedWithExploit] = 0;
   $classState[$CS_AlliesDestroyed] = "-";
+  $classState[$CS_NumBountyHunterPlayed] = 0;
+  $classState[$CS_NumPilotPlayed] = 0;
 }
 
 function ResetCharacterEffects()
