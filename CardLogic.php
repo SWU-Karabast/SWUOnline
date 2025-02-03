@@ -246,7 +246,7 @@ function PrependLayer($cardID, $player, $parameter, $target = "-", $additionalCo
 
 function IsAbilityLayer($cardID)
 {
-  return $cardID == "TRIGGER" || $cardID == "PLAYABILITY" || $cardID == "ATTACKABILITY" || $cardID == "ACTIVATEDABILITY" || $cardID == "ALLYPLAYCARDABILITY";
+  return $cardID == "TRIGGER" || $cardID == "PLAYABILITY" || $cardID == "PLAYCARDABILITY" || $cardID == "ATTACKABILITY" || $cardID == "ACTIVATEDABILITY" || $cardID == "ALLYPLAYCARDABILITY";
 }
 
 function AddLayer($cardID, $player, $parameter, $target = "-", $additionalCosts = "-", $uniqueID = "-", $append = false)
@@ -472,6 +472,13 @@ function ContinueDecisionQueue($lastResult = "")
               $playIndex = count($subparamArr) > 5 ? $subparamArr[5] : -1;
               SetClassState($player, $CS_AbilityIndex, $abilityIndex);
               SetClassState($player, $CS_PlayIndex, $playIndex);
+
+              // PLAYCARDABILITY already adds ally play card ability layers at the same window.
+              // Other layers like PLAYABILITY should be resolved before ally play card ability layers.
+              if ($cardID != "PLAYCARDABILITY" && $from != "PLAY" && $from != "EQUIP" && $from != "CHAR") {
+                AddAllyPlayCardAbilityLayers($cardID, $from, $uniqueID, $resourcesPaid);
+              }
+
               $playText = PlayAbility($cardID, $from, $resourcesPaid, $target, $additionalCosts, $oppCardActive, uniqueId: $uniqueID);
               if($from != "PLAY") WriteLog("Resolving play ability of " . CardLink($cardID, $cardID) . ($playText != "" ? ": " : ".") . $playText);
               if($from == "EQUIP") EquipPayAdditionalCosts(FindCharacterIndex($player, $cardID), "EQUIP");
