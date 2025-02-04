@@ -461,7 +461,7 @@ function ContinueDecisionQueue($lastResult = "")
             }
             else {
               $oppCardActive = GetClassState($currentPlayer, $CS_OppCardActive) > 0;
-
+              $layerName = $cardID;
               $cardID = $parameter;
               $subparamArr = explode("!", $target);
               $from = $subparamArr[0];
@@ -475,7 +475,7 @@ function ContinueDecisionQueue($lastResult = "")
 
               // PLAYCARDABILITY already adds ally play card ability layers at the same window.
               // Other layers like PLAYABILITY should be resolved before ally play card ability layers.
-              if ($cardID != "PLAYCARDABILITY" && $from != "PLAY" && $from != "EQUIP" && $from != "CHAR") {
+              if ($layerName != "PLAYCARDABILITY" && $from != "PLAY" && $from != "EQUIP" && $from != "CHAR") {
                 AddAllyPlayCardAbilityLayers($cardID, $from, $uniqueID, $resourcesPaid);
               }
 

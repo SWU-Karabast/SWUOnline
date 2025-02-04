@@ -2018,7 +2018,8 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
         //   BanishCardForPlayer($cardID, $currentPlayer, $from, "NA");
         //   break;
         case "ALLY":
-          PlayAlly($cardID, $currentPlayer);
+          $index = PlayAlly($cardID, $currentPlayer);
+          $uniqueID = &GetAllies($currentPlayer)[$index + 5];
           break;
         case "RESOURCE":
           AddResources($cardID, $currentPlayer, $from, "DOWN", isExhausted: "1");
