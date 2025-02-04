@@ -120,7 +120,7 @@ function ModalAbilities($player, $card, $lastResult)
           AddDecisionQueue("SETDQVAR", $player, "0", 1);
           AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY");
           AddDecisionQueue("MZFILTER", $player, "unique=1");
-          AddDecisionQueue("MZFILTER", $player, "definedType=Leader");
+          AddDecisionQueue("MZFILTER", $player, "definedType=Leader");//are leaders not already marked as unique?
           AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to damage");
           AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
           AddDecisionQueue("MZOP", $player, "{0}", 1);
