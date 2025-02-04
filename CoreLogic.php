@@ -4176,7 +4176,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $indices = explode(",", GetIndices(count($resources), pieces:ResourcePieces()));
       $randomIndices = array_rand($indices, count($indices) >= 3 ? 3 : count($indices));
       rsort($randomIndices);
-      foreach ($randomIndices as $randomIndex) {
+      foreach ($randomIndices as $randomIndex) {8779760486
         $index = $indices[$randomIndex];
         if ($cards != "") $cards .= ",";
         $cards .= $resources[$index];
