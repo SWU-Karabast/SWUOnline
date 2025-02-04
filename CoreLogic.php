@@ -2420,14 +2420,16 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
             AddDecisionQueue("SPECIFICCARD", $currentPlayer, "DOCTORAPHRA", 1);
             break;
           case "0622803599"://Jabba the Hutt Leader flip
-            AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
-            AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
+            $jabbaMzIndex = explode(",", "MYALLY-" . SearchAlliesForCard($currentPlayer, "f928681d36"));//Jabba the Hutt leader unit
+            $allyMzIndices = explode(",", SearchMultizone($currentPlayer, "MYALLY"));
+            $alliesNotJabba = implode(",", array_diff($allyMzIndices, $jabbaMzIndex));
+            AddDecisionQueue("PASSPARAMETER", $currentPlayer, $alliesNotJabba);
             AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to capture another unit");
             AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
             AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
             AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
             AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY", 1);
-            AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader", 1);
+            AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1", 1);
             AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to capture", 1);
             AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
             AddDecisionQueue("MZOP", $currentPlayer, "CAPTURE,{0}", 1);
@@ -2572,7 +2574,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "6253392993"://Bright Hope
       if($from != "PLAY") {
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:arena=Ground");
-        AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to bounce");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "BOUNCE", 1);
@@ -2748,7 +2750,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "6472095064"://Vanquish
-      MZChooseAndDestroy($currentPlayer, "MYALLY&THEIRALLY", filter:"definedType=Leader");
+      MZChooseAndDestroy($currentPlayer, "MYALLY&THEIRALLY", filter:"leader=1");
       break;
     case "6663619377"://AT-AT Suppressor
       if($from != "PLAY"){
@@ -2915,7 +2917,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "8240629990"://Avenger
       if(!$playAlly->LostAbilities()) {
-        MZChooseAndDestroy($otherPlayer, "MYALLY", filter: "definedType=Leader", context: "Choose a unit to destroy");
+        MZChooseAndDestroy($otherPlayer, "MYALLY", filter: "leader=1", context: "Choose a unit to destroy");
       }
       break;
     case "8294130780"://Gladiator Star Destroyer
@@ -5017,12 +5019,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "4412828936"://Merciless Contest
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
-      AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to destroy");
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "DESTROY", 1);
       AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY");
-      AddDecisionQueue("MZFILTER", $otherPlayer, "definedType=Leader");
+      AddDecisionQueue("MZFILTER", $otherPlayer, "leader=1");
       AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a unit to destroy");
       AddDecisionQueue("CHOOSEMULTIZONE", $otherPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $otherPlayer, "DESTROY", 1);

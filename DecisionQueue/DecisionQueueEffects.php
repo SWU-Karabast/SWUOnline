@@ -147,7 +147,7 @@ function ModalAbilities($player, $card, $lastResult)
       switch($lastResult) {
         case 0: // Return unit
           AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:maxAttack=4&THEIRALLY:maxAttack=4");
-          AddDecisionQueue("MZFILTER", $player, "definedType=Leader");
+          AddDecisionQueue("MZFILTER", $player, "leader=1");
           AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to return", 1);
           AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
           AddDecisionQueue("MZOP", $player, "BOUNCE", 1);
