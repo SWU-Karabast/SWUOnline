@@ -853,7 +853,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
         }
       }
       break;
-    case "PROFUDITY":
+    case "PROFUNDITY":
       if($lastResult == "Yourself") {
         WriteLog("Player $player discarded a card from Profundity");
         PummelHit($player);
