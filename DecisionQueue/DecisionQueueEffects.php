@@ -853,6 +853,20 @@ function SpecificCardLogic($player, $parameter, $lastResult)
         }
       }
       break;
+    case "PROFUNDITY":
+      if($lastResult == "Yourself") {
+        WriteLog("Player $player discarded a card from Profundity");
+        PummelHit($player);
+      } else {
+        WriteLog("Player $otherPlayer discarded a card from Profundity");
+        PummelHit($otherPlayer);
+      }
+      $p1Hand = &GetHand(1);
+      $p2Hand = &GetHand(2);
+      if((count($p1Hand)/HandPieces()) < (count($p2Hand)/HandPieces())) {
+        PummelHit($otherPlayer);
+      }
+      break;
     //SpecificCardLogic End
     default: return "";
   }
