@@ -1296,7 +1296,7 @@ function HasKeyword($cardID, $keyword, $player="", $index=-1){
     case "Bounty": return CollectBounty($player, $cardID, $cardID, false, $player, true) > 0; // Since we don't have information about "exhausted" and "owner," this data may be imprecise in very rare cases.
     case "Overwhelm": return HasOverwhelm($cardID, $player, $index);
     case "Saboteur": return HasSaboteur($cardID, $player, $index);
-    case "Shielded": return HasShielded($cardID, $player, $index);
+    case "Shielded": return HasShielded($cardID, $player);
     case "Sentinel": return HasSentinel($cardID, $player, $index);
     case "Ambush": return HasAmbush($cardID, $player, $index,"");
     case "Coordinate": return HasCoordinate($cardID, $player, $index);
@@ -1310,7 +1310,7 @@ function HasKeyword($cardID, $keyword, $player="", $index=-1){
         CollectBounty($player, $cardID, $cardID, false, $player, true) > 0 || // Since we don't have information about "exhausted" and "owner," this data may be imprecise in very rare cases.
         HasOverwhelm($cardID, $player, $index) ||
         HasSaboteur($cardID, $player, $index) ||
-        HasShielded($cardID, $player, $index) ||
+        HasShielded($cardID, $player) ||
         HasSentinel($cardID, $player, $index) ||
         HasAmbush($cardID, $player, $index, "") ||
         HasCoordinate($cardID, $player, $index) ||
@@ -2371,10 +2371,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         return "";
       }
       if($abilityName == "Deploy" || $abilityName == "") {
-        $playIndex = PlayAlly(LeaderUnit($cardID), $currentPlayer);
-        if(HasShielded(LeaderUnit($cardID), $currentPlayer, $playIndex)) {
-          $allies = &GetAllies($currentPlayer);
-          AddLayer("TRIGGER", $currentPlayer, "SHIELDED", "-", "-", $allies[$playIndex + 5]);
+        $playUniqueID = PlayAlly(LeaderUnit($cardID), $currentPlayer);
+        if (HasShielded(LeaderUnit($cardID), $currentPlayer)) {
+          AddLayer("TRIGGER", $currentPlayer, "SHIELDED", "-", "-", $playUniqueID);
         }
         PlayAbility(LeaderUnit($cardID), "CHAR", 0, "-", "-", false, $uniqueId);
       } else if($abilityName == "Pilot") {

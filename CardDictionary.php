@@ -694,7 +694,7 @@ function HasAmbush($cardID, $player, $index, $from)
   }
 }
 
-function HasShielded($cardID, $player, $index)
+function HasShielded($cardID, $player)
 {
   switch($cardID)
   {

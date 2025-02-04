@@ -2018,8 +2018,9 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
         //   BanishCardForPlayer($cardID, $currentPlayer, $from, "NA");
         //   break;
         case "ALLY":
-          $index = PlayAlly($cardID, $currentPlayer);
-          $uniqueID = &GetAllies($currentPlayer)[$index + 5];
+          $uniqueID = PlayAlly($cardID, $currentPlayer);
+          $ally = new Ally($uniqueID, $currentPlayer);
+          $index = $ally->Index();
           break;
         case "RESOURCE":
           AddResources($cardID, $currentPlayer, $from, "DOWN", isExhausted: "1");
@@ -2113,7 +2114,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
       }
     }
     if ($from != "PLAY" && $from != "EQUIP" && $from != "CHAR") {
-      if (HasShielded($cardID, $currentPlayer, $index) && $target == "-") {
+      if (HasShielded($cardID, $currentPlayer) && $target == "-") {
         AddLayer("TRIGGER", $currentPlayer, "SHIELDED", "-", "-", $uniqueID);
       }
       if (HasAmbush($cardID, $currentPlayer, $index, $from) && $target = "-") {
