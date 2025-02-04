@@ -5923,6 +5923,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "5345999887"://Kijimi patrollers
         CreateTieFighter($currentPlayer);
         break;
+    case "7072861308"://Profundity
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose player to draw 1 card");
+      AddDecisionQueue("BUTTONINPUT", $currentPlayer, "Yourself,Opponent");
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "PROFUDITY", 1);
+      break;
     //PlayAbility End
     default: break;
   }
