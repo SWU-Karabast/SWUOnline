@@ -628,7 +628,7 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
     case "SHIELDED":
       $ally = new Ally($uniqueID);
       $ally->Attach("8752877738");//Shield Token
-      break;   
+      break;
     case "ALLYPLAYCARDABILITY":
       $data = explode(",",$target); // $cardID, $player, $numUses, $playedCardID
       AllyPlayCardAbility($data[1], $data[0], $uniqueID, $data[2], $data[3], from:$additionalCosts);
@@ -853,7 +853,7 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       break;
     case "0754286363"://The Mandalorian's Rifle
       AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY");
-      AddDecisionQueue("MZFILTER", $player, "definedType=Leader");
+      AddDecisionQueue("MZFILTER", $player, "leader=1");
       AddDecisionQueue("MZFILTER", $player, "status=0");
       AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to capture");
       AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
