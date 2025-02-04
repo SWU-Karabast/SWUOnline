@@ -45,7 +45,7 @@ function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null,
   CheckUniqueAlly($uniqueID);
 
   if ($playAbility || $cardID == "0345124206") { //Clone - Ensure that the Clone will always choose a unit to clone whenever it enters play.
-    if(HasShielded($cardID, $player, $index)) {
+    if(HasShielded($cardID, $player)) {
       AddLayer("TRIGGER", $player, "SHIELDED", "-", "-", $uniqueID);
     }
     if(HasAmbush($cardID, $player, $index, $from)) {
@@ -58,7 +58,7 @@ function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null,
   // Check if any units will be destroyed due to cascading effects
   CheckHealthAllAllies();
 
-  return $index;
+  return $uniqueID;
 }
 
 function CheckHealthAllAllies() {

@@ -694,7 +694,7 @@ function HasAmbush($cardID, $player, $index, $from)
   }
 }
 
-function HasShielded($cardID, $player, $index)
+function HasShielded($cardID, $player)
 {
   switch($cardID)
   {
@@ -2254,7 +2254,7 @@ function SmuggleCost($cardID, $player="", $index="")
   {
     switch($allies[$i]) {
       case "3881257511"://Tech
-        $techAlly = new Ally("MYALLY-" . $allies[$i], $player);
+        $techAlly = new Ally("MYALLY-" . $i, $player);
         if(!$techAlly->LostAbilities()) {
           $cost = CardCost($cardID)+2;
           if($minCost == -1 || $minCost > $cost) $minCost = $cost;
