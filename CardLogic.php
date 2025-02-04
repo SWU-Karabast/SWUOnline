@@ -143,7 +143,18 @@ function AddAfterResolveEffect($cardID, $player, $from = "", $uniqueID = -1)
 }
 
 function HasLeader($player) {
-  return SearchCount(SearchAllies($player, definedType:"Leader")) > 0;
+  return SearchCount(SearchAllies($player, definedType:"Leader")) > 0
+    || HasLeaderPilotInPlay($player);
+}
+
+function HasLeaderPilotInPlay($player) {
+  $allies = GetAllies($player);
+  for($i = 0; $i < count($allies); $i+=AllyPieces()) {
+    $ally = new Ally($allies[$i+5]);
+    if($ally->HasPilotLeaderUpgrade()) return true;
+  }
+
+  return false;
 }
 
 function HasMoreUnits($player) {
