@@ -316,7 +316,7 @@ function MainCharacterPlayCardAbilities($cardID, $from)
         }
         break;
       case "1384530409"://Cad Bane
-        $otherPlayer = ($player == 1 ? 2 : 1);
+        $otherPlayer = ($currentPlayer == 1 ? 2 : 1);
         if ($from != 'PLAY' && $from != 'EQUIP' && TraitContains($cardID, "Underworld", $currentPlayer) && SearchCount(SearchAllies($otherPlayer)) > 0) {
           // Note - this is a bit of a hack by sending the index in as the unique ID
           AddLayer("TRIGGER", $currentPlayer, "1384530409");

@@ -2018,12 +2018,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
         //   BanishCardForPlayer($cardID, $currentPlayer, $from, "NA");
         //   break;
         case "ALLY":
-          $index = PlayAlly($cardID, $currentPlayer);
-          $uniqueID = &GetAllies($currentPlayer)[$index + 5];
-          $ally = new Ally("MYALLY-" . $index, $currentPlayer);
-          if ($ally->MaxHealth() <= 0 && $ally->CardID() != "0345124206") { //Clone - Ensure that Clone remains in play while resolving it's the ability
-            $ally->Destroy();
-          }
+          PlayAlly($cardID, $currentPlayer);
           break;
         case "RESOURCE":
           AddResources($cardID, $currentPlayer, $from, "DOWN", isExhausted: "1");
