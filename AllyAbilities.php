@@ -2175,7 +2175,7 @@ function SpecificAllyAttackAbilities($attackID)
       break;
     case "0038286155"://Chancellor Palpatine
       global $CS_NumLeftPlay;
-      if(GetClassState($mainPlayer, $CS_NumLeftPlay) > 0) {
+      if(GetClassState($mainPlayer, $CS_NumLeftPlay) > 0 || GetClassState($otherPlayer, $CS_NumLeftPlay) > 0) {
         CreateCloneTrooper($mainPlayer);
       }
       break;
