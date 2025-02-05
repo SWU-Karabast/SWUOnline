@@ -1539,7 +1539,7 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
   $resourceCards = &GetResourceCards($currentPlayer);
   $resourcesPaid = 0;
 
-  if ($prepaidResources > 0) {
+  if ($prepaidResources > 0 && $resources[1] > 0) {
     $resourcesPaid = $prepaidResources;
     $resources[1] -= $prepaidResources;
   }
