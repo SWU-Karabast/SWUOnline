@@ -467,9 +467,21 @@ td {
 
 .spaceAlliesContainer, .groundAlliesContainer,
 .spaceEnemiesContainer, .groundEnemiesContainer {
+  max-height: 260px;
   display: flex;
   flex-wrap: wrap;
-  column-gap: 15px;
+  column-gap: 16px;
+}
+
+@media screen and (max-device-width: 600px) {
+  .spaceAlliesContainer, .groundAlliesContainer,
+  .spaceEnemiesContainer, .groundEnemiesContainer {
+    max-height: 40vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: start !important;
+    justify-content: center;
+  }
 }
 
 .spaceAlliesContainer, .spaceEnemiesContainer {
