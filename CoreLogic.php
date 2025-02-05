@@ -2389,14 +2389,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       //On Deploy ability / When Deployed ability
       if(!LeaderAbilitiesIgnored()) {
         switch($cardID) {
-          case "5784497124"://Emperor Palpatine Leader Unit
+          case "5784497124"://Emperor Palpatine Leader flip
             AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:damagedOnly=true");
-            AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
+            AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
             AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a damaged unit to take control of", 1);
             AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
             AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL", 1);
             break;
-          case "2432897157"://Qi'Ra Leader Unit
+          case "2432897157"://Qi'Ra Leader flip
             $myAllies = &GetAllies($currentPlayer);
             for($i=0; $i<count($myAllies); $i+=AllyPieces())
             {
@@ -2412,27 +2412,29 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
               $ally->DealDamage(floor($ally->MaxHealth()/2));
             }
             break;
-          case "0254929700"://Doctor Aphra Leader Unit
+          case "0254929700"://Doctor Aphra Leader flip
             AddDecisionQueue("FINDINDICES", $currentPlayer, "GY");
             AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "3-", 1);
             AddDecisionQueue("APPENDLASTRESULT", $currentPlayer, "-3", 1);
             AddDecisionQueue("MULTICHOOSEDISCARD", $currentPlayer, "<-", 1);
             AddDecisionQueue("SPECIFICCARD", $currentPlayer, "DOCTORAPHRA", 1);
             break;
-          case "0622803599"://Jabba the Hutt Leader Unit
-            AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
-            AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
+          case "0622803599"://Jabba the Hutt Leader flip
+            $jabbaMzIndex = explode(",", "MYALLY-" . SearchAlliesForCard($currentPlayer, "f928681d36"));//Jabba the Hutt leader unit
+            $allyMzIndices = explode(",", SearchMultizone($currentPlayer, "MYALLY"));
+            $alliesNotJabba = implode(",", array_diff($allyMzIndices, $jabbaMzIndex));
+            AddDecisionQueue("PASSPARAMETER", $currentPlayer, $alliesNotJabba);
             AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to capture another unit");
             AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
             AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
             AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
             AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY", 1);
-            AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader", 1);
+            AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1", 1);
             AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to capture", 1);
             AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
             AddDecisionQueue("MZOP", $currentPlayer, "CAPTURE,{0}", 1);
             break;
-          case "4628885755"://Mace Windu Leader Unit
+          case "4628885755"://Mace Windu Leader flip
             $theirAllies = &GetAllies($otherPlayer);
             for($i=count($theirAllies)-AllyPieces(); $i>=0; $i-=AllyPieces())
             {
@@ -2442,10 +2444,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
               }
             }
             break;
-          case "7734824762"://Captain Rex Leader Unit
+          case "7734824762"://Captain Rex Leader flip
             CreateCloneTrooper($currentPlayer);
             break;
-          case "2847868671"://Yoda Leader Unit
+          case "2847868671"://Yoda Leader flip
           $deck = &GetDeck($currentPlayer);
           if(count($deck) > 0) {
             AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose if you want to discard a card to Yoda");
@@ -2456,7 +2458,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
             AddDecisionQueue("MZOP", $currentPlayer, "GETCARDCOST", 1);
             AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
             AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:maxCost={0}", 1);
-            AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
+            AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
             AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to destroy");
             AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
             AddDecisionQueue("MZOP", $currentPlayer, "DESTROY", 1);
@@ -2536,7 +2538,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $mzIndex = "MYALLY-" . $playAlly->Index();
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
       AddDecisionQueue("MZFILTER", $currentPlayer, "trait=Vehicle");
-      AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
       AddDecisionQueue("MZFILTER", $currentPlayer, "index=" . $mzIndex);
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose which unit you want to clone", 1);
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
@@ -2572,7 +2574,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "6253392993"://Bright Hope
       if($from != "PLAY") {
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:arena=Ground");
-        AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to bounce");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "BOUNCE", 1);
@@ -2668,14 +2670,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "7202133736"://Waylay
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
-      AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to return to hand");
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "BOUNCE", 1);
       break;
     case "5283722046"://Spare the Target
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
-      AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to return to hand");
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("SETDQVAR", $currentPlayer, "1", 1);
@@ -2714,7 +2716,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "1021495802"://Cantina Bouncer
       if($from != "PLAY") {
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY&MYALLY");
-        AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "BOUNCE", 1);
       }
@@ -2748,7 +2750,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "6472095064"://Vanquish
-      MZChooseAndDestroy($currentPlayer, "MYALLY&THEIRALLY", filter:"definedType=Leader");
+      MZChooseAndDestroy($currentPlayer, "MYALLY&THEIRALLY", filter:"leader=1");
       break;
     case "6663619377"://AT-AT Suppressor
       if($from != "PLAY"){
@@ -2847,7 +2849,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "3613174521"://Outer Rim Headhunter
       if($from == "PLAY" && HasLeader($currentPlayer)) {
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
-        AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to exhaust");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
@@ -2915,7 +2917,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "8240629990"://Avenger
       if(!$playAlly->LostAbilities()) {
-        MZChooseAndDestroy($otherPlayer, "MYALLY", filter: "definedType=Leader", context: "Choose a unit to destroy");
+        MZChooseAndDestroy($otherPlayer, "MYALLY", filter: "leader=1", context: "Choose a unit to destroy");
       }
       break;
     case "8294130780"://Gladiator Star Destroyer
@@ -3013,7 +3015,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "1393827469"://Tarkintown
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 3 damage to");
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:damagedOnly=true&THEIRALLY:damagedOnly=true");
-      AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,3,$currentPlayer", 1);
       break;
@@ -4078,7 +4080,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "0931441928"://Ma Klounkee
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Underworld");
-      AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to bounce");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "BOUNCE", 1);
@@ -4089,7 +4091,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "0302968596"://Calculated Lethality
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:maxCost=3&THEIRALLY:maxCost=3");
-      AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to defeat");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "CALCULATEDLETHALITY", 1);
@@ -4209,7 +4211,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "9765804063"://Discerning Veteran
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:arena=Ground");
-      AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to capture");
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "CAPTURE," . $playAlly->UniqueID(), 1);
@@ -4217,7 +4219,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "3765912000"://Take Captive
       $targetAlly = new Ally($target, $currentPlayer);
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:arena=" . CardArenas($targetAlly->CardID()));
-      AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to capture");
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "CAPTURE," . $targetAlly->UniqueID(), 1);
@@ -4225,7 +4227,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "8877249477"://Legal Authority
       $targetAlly = new Ally($target, $currentPlayer);
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:maxAttack=" . ($targetAlly->CurrentPower()-1));
-      AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to capture");
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "CAPTURE," . $targetAlly->UniqueID(), 1);
@@ -4367,7 +4369,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "4717189843"://A New Adventure
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:maxCost=6&THEIRALLY:maxCost=6");
-      AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to return to hand");
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, $cardID, 1);
@@ -4416,7 +4418,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $ally = new Ally($target, $currentPlayer);
       if(TraitContains($ally->CardID(), "Bounty Hunter", $currentPlayer)) $ally->Attach("8752877738");//Shield Token
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:maxCost=" . (CardCost($ally->CardID())));
-      AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to capture");
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "CAPTURE," . $ally->UniqueID(), 1);
@@ -4481,12 +4483,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "2346145249"://Choose Sides
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
-      AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a friendly unit to swap");
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $otherPlayer, "TAKECONTROL", 1);
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY", 1);
-      AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader", 1);
+      AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1", 1);
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an enemy unit to swap", 1);
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL", 1);
@@ -4858,7 +4860,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       for($i=0; $i<count($allies); $i+=AllyPieces()) {
         $ally = new Ally("MYALLY-" . $i, $currentPlayer);
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
-        AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader", 1);
+        AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1", 1);
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit for " . CardLink($ally->CardID(), $ally->CardID()) . " to capture (must be in same arena)", 1);
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "CAPTURE," . $ally->UniqueID(), 1);
@@ -5017,12 +5019,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "4412828936"://Merciless Contest
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
-      AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to destroy");
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "DESTROY", 1);
       AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY");
-      AddDecisionQueue("MZFILTER", $otherPlayer, "definedType=Leader");
+      AddDecisionQueue("MZFILTER", $otherPlayer, "leader=1");
       AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a unit to destroy");
       AddDecisionQueue("CHOOSEMULTIZONE", $otherPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $otherPlayer, "DESTROY", 1);
@@ -5133,7 +5135,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "3348783048"://Geonosis Patrol Fighter
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:maxCost=3&THEIRALLY:maxCost=3");
-      AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to bounce");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "BOUNCE", 1);
@@ -5176,7 +5178,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY", 1);
-      AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader", 1);
+      AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1", 1);
       AddDecisionQueue("MZFILTER", $currentPlayer, "trait=Vehicle");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to capture", 1);
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
@@ -5264,7 +5266,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "9620454519"://Clear the Field
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:maxCost=3&THEIRALLY:maxCost=3");
-      AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to return to hand");
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "CLEARTHEFIELD", 1);
@@ -5275,7 +5277,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "1882027961"://Wolf Pack Escort
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
-      AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
       AddDecisionQueue("MZFILTER", $currentPlayer, "trait=Vehicle");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to return to hand");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
@@ -5283,7 +5285,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "1389085256"://Lethal Crackdown
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
-      AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to destroy");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "DESTROY", 1);
@@ -5348,7 +5350,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "4512764429"://Sanctioner's Shuttle
       if(IsCoordinateActive($currentPlayer)) {
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:maxCost=3");
-        AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to capture");
         AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "CAPTURE," . $playAlly->UniqueID(), 1);
@@ -5379,7 +5381,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "6669050232"://Grim Resolve
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
       AddDecisionQueue("MZFILTER", $currentPlayer, "status=1");
-      AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to attack and give Grit");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
@@ -5417,7 +5419,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "2041344712"://Osi Sobeck
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:arena=Ground;maxCost=" . $resourcesPaid);
-      AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to capture");
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "CAPTURE," . $playAlly->UniqueID(), 1);
@@ -5453,14 +5455,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "1302133998"://Impropriety Among Thieves
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
-      AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
       AddDecisionQueue("MZFILTER", $currentPlayer, "status=1");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose their unit to take control of", 1);
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "1302133998", 1);
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
-      AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
       AddDecisionQueue("MZFILTER", $currentPlayer, "status=1");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to give control of", 1);
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
@@ -5515,7 +5517,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("SETDQVAR", $currentPlayer, "0");
       for($i=0; $i<3; ++$i) {
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:maxHealth={0}");
-        AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to capture (Max HP: {0})");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("SETDQVAR", $currentPlayer, "1", 1);
@@ -5653,7 +5655,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $enfyAlly = new Ally($uniqueId);
       $enfyBouncePower = $enfyAlly->CurrentPower() - 1;
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:maxAttack=$enfyBouncePower");
-      AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Leader");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to bounce");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "BOUNCE", 1);
@@ -5928,6 +5930,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "5345999887"://Kijimi patrollers
         CreateTieFighter($currentPlayer);
         break;
+    case "7072861308"://Profundity
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose player to draw 1 card");
+      AddDecisionQueue("BUTTONINPUT", $currentPlayer, "Yourself,Opponent");
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "PROFUNDITY", 1);
+      break;
     //PlayAbility End
     default: break;
   }

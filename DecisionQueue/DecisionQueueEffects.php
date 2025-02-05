@@ -120,7 +120,7 @@ function ModalAbilities($player, $card, $lastResult)
           AddDecisionQueue("SETDQVAR", $player, "0", 1);
           AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY");
           AddDecisionQueue("MZFILTER", $player, "unique=1");
-          AddDecisionQueue("MZFILTER", $player, "definedType=Leader");
+          AddDecisionQueue("MZFILTER", $player, "definedType=Leader");//are leaders not already marked as unique?
           AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to damage");
           AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
           AddDecisionQueue("MZOP", $player, "{0}", 1);
@@ -147,7 +147,7 @@ function ModalAbilities($player, $card, $lastResult)
       switch($lastResult) {
         case 0: // Return unit
           AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:maxAttack=4&THEIRALLY:maxAttack=4");
-          AddDecisionQueue("MZFILTER", $player, "definedType=Leader");
+          AddDecisionQueue("MZFILTER", $player, "leader=1");
           AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to return", 1);
           AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
           AddDecisionQueue("MZOP", $player, "BOUNCE", 1);
@@ -851,6 +851,20 @@ function SpecificCardLogic($player, $parameter, $lastResult)
         if($thrawnLeaderUnit->Exists()) {
           $thrawnLeaderUnit->ModifyUses(-1);
         }
+      }
+      break;
+    case "PROFUNDITY":
+      if($lastResult == "Yourself") {
+        WriteLog("Player $player discarded a card from Profundity");
+        PummelHit($player);
+      } else {
+        WriteLog("Player $otherPlayer discarded a card from Profundity");
+        PummelHit($otherPlayer);
+      }
+      $p1Hand = &GetHand(1);
+      $p2Hand = &GetHand(2);
+      if((count($p1Hand)/HandPieces()) < (count($p2Hand)/HandPieces())) {
+        PummelHit($otherPlayer);
       }
       break;
     //SpecificCardLogic End

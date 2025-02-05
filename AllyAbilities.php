@@ -1500,6 +1500,7 @@ function AllyPlayCardAbility($player, $cardID, $uniqueID, $numUses, $playedCardI
       case "4088c46c4d"://The Mandalorian Leader Unit
         if(!LeaderAbilitiesIgnored() && DefinedTypesContains($playedCardID, "Upgrade", $player)) {
           AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:maxHealth=6");
+          AddDecisionQueue("MZFILTER", $player, "status=1");
           AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to exhaust", 1);
           AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
           AddDecisionQueue("MZOP", $player, "REST", 1);
@@ -2111,7 +2112,7 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("SETDQVAR", $mainPlayer, "0", 1);
-      AddDecisionQueue("PASSPARAMETER", $mainPlayer, "{1}", 1);
+      AddDecisionQueue("PASSPARAMETER", $mainPlayer, "{1}", 1);//TODO: this is bugged. sending "Ground" instead of "THEIRALLY-*"
       AddDecisionQueue("MZOP", $mainPlayer, "CAPTURE,{0}", 1);
       break;
     case "7922308768"://Valiant Assault Ship
@@ -2175,7 +2176,8 @@ function SpecificAllyAttackAbilities($attackID)
       break;
     case "0038286155"://Chancellor Palpatine
       global $CS_NumLeftPlay;
-      if(GetClassState($mainPlayer, $CS_NumLeftPlay) > 0) {
+      $otherPlayer = $mainPlayer == 1 ? 2 : 1;
+      if(GetClassState($mainPlayer, $CS_NumLeftPlay) > 0 || GetClassState($otherPlayer, $CS_NumLeftPlay) > 0) {
         CreateCloneTrooper($mainPlayer);
       }
       break;
@@ -2299,7 +2301,7 @@ function SpecificAllyAttackAbilities($attackID)
       break;
     case "8414572243"://Enfys Nest (Champion of Justice)
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY:maxAttack=" . $attackerAlly->CurrentPower() - 1);
-      AddDecisionQueue("MZFILTER", $mainPlayer, "definedType=Leader");
+      AddDecisionQueue("MZFILTER", $mainPlayer, "leader=1");
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to bounce");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "BOUNCE", 1);
