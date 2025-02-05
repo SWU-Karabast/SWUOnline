@@ -853,6 +853,10 @@ function SpecificCardLogic($player, $parameter, $lastResult)
         }
       }
       break;
+    case "ACKBAR_JTL":
+      $ally = new Ally($lastResult);
+      CreateXWing($ally->PlayerID());
+      break;
     case "PROFUNDITY":
       if($lastResult == "Yourself") {
         WriteLog("Player $player discarded a card from Profundity");

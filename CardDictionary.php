@@ -839,6 +839,7 @@ function AbilityCost($cardID, $index=-1, $theirCard = false)
   $abilityName = $theirCard ? GetOpponentControlledAbilityNames($cardID) : GetResolvedAbilityName($cardID);
   if($abilityName == "Heroic Resolve") return 2;
   switch($cardID) {
+    //Spark of Rebellion
     case "2579145458"://Luke Skywalker
       return $abilityName == "Give Shield" ? 1 : 0;
     case "2912358777"://Grand Moff Tarkin
@@ -847,16 +848,13 @@ function AbilityCost($cardID, $index=-1, $theirCard = false)
       return $abilityName == "Draw Card" ? 1 : 0;
     case "4300219753"://Fett's Firespray
       return $abilityName == "Exhaust" ? 2 : 0;
-    case "3258646001"://Steadfast Senator
-      return $abilityName == "Buff" ? 2 : 0;
-    case "0595607848"://Disaffected Senator
-      return $abilityName == "Deal Damage" ? 2 : 0;
     case "5784497124"://Emperor Palpatine
       return $abilityName == "Deal Damage" ? 1 : 0;
     case "6088773439"://Darth Vader
       return $abilityName == "Deal Damage" ? 1 : 0;
     case "1951911851"://Grand Admiral Thrawn
       return $abilityName == "Exhaust" ? 1 : 0;
+    //Shadows of the Galaxy
     case "1885628519"://Crosshair
       return $abilityName == "Buff" ? 2 : 0;
     case "2432897157"://Qi'Ra
@@ -869,6 +867,11 @@ function AbilityCost($cardID, $index=-1, $theirCard = false)
       return $abilityName == "Replace Resource" ? 1 : 0;
     case "3577961001"://Mercenary Gunship
       return $abilityName == "Take Control" ? 4 : 0;
+    //Twilight of the Republic
+    case "3258646001"://Steadfast Senator
+      return $abilityName == "Buff" ? 2 : 0;
+    case "0595607848"://Disaffected Senator
+      return $abilityName == "Deal Damage" ? 2 : 0;
     case "5157630261"://Compassionate Senator
       return $abilityName == "Heal" ? 2 : 0;
     case "9262288850"://Independent Senator
@@ -881,6 +884,11 @@ function AbilityCost($cardID, $index=-1, $theirCard = false)
       return $abilityName == "Clone" ? 2 : 0;
     case "2870878795"://Padme Amidala
       return $abilityName == "Draw" ? 1 : 0;
+    //Jump to Lightspeed
+    case "3658069276"://Lando Calrissian
+      return $abilityName == "Play" ? 1 : 0;
+    case "7514405173":
+      return $abilityName == "Exhaust" ? 1 : 0;
     default: break;
   }
   if(IsAlly($cardID)) return 0;

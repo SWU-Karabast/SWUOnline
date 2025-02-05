@@ -5839,14 +5839,27 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "3658069276"://Lando Calrissian Leader
       if(GetResolvedAbilityName($cardID) == "Play") {
-        WriteLog(CardLink($cardID, $cardID) . " ability is not implemented yet. Reverting gamestate");
-        RevertGamestate();
+        global $CS_AfterPlayedBy;
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to play");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND:definedType=Unit");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, $cardID, 1);
+        AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_AfterPlayedBy, 1);
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
       }
       break;
     case "7514405173"://Admiral Ackbar Leader
       if(GetResolvedAbilityName($cardID) == "Exhaust") {
-        WriteLog(CardLink($cardID, $cardID) . " ability is not implemented yet. Reverting gamestate");
-        RevertGamestate();
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "status=1");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a non-leader unit to exhaust");
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+        AddDecisionQueue("SPECIFICCARD", $currentPlayer, "ACKBAR_JTL", 1);
       }
       break;
     case "1519837763"://Shuttle ST-149
@@ -6007,10 +6020,19 @@ function AfterPlayedByAbility($cardID) {
       AddDecisionQueue("MZOP", $otherPlayer, "READY", 1);
       break;
     case "5696041568"://Triple Dark Raid
-      AddDecisionQueue("OP", $currentPlayer, "GETLASTALLYMZ", 1);
+      AddDecisionQueue("OP", $currentPlayer, "GETLASTALLYMZ", 1);//TODO: this is breaking for Grievous Wheel Bike
       AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "5696041568-2,HAND", 1);
+      break;
+    //Jump to Lightspeed
+    case "3658069276"://Lando Calrissian Leader
+      if(SearchCount(SearchAllies($currentPlayer, arena:"Space")) > 0 && SearchCount(SearchAllies($currentPlayer, arena:"Ground")) > 0) {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to give a shield", 1);
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "ADDSHIELD", 1);
+      }
       break;
     default: break;
   }
