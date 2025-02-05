@@ -6186,7 +6186,10 @@ function AddTopDeckAsResource($player, $isExhausted=true)
   if(count($deck) > 0) {
     $card = array_shift($deck);
     AddResources($card, $player, "DECK", "DOWN", isExhausted:($isExhausted ? 1 : 0));
+    return true;
   }
+
+  return false;
 }
 
 //target type return values

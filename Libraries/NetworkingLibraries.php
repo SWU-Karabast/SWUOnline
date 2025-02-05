@@ -45,8 +45,9 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
         $isExhausted = $arsenal[$index + 4] == 1;
         $uniqueID = $arsenal[$index + 5];
         RemoveArsenal($playerID, $index);
-        AddTopDeckAsResource($playerID, isExhausted: $isExhausted);
-        PlayCard($cardToPlay, "RESOURCES", -1, -1, $uniqueID);
+        $resourcesAdded = AddTopDeckAsResource($playerID, isExhausted: $isExhausted);
+        $prepaidResources = $resourcesAdded ? 0 : 1; // If the deck was empty, we need use the smuggled card as a prepaid resource
+        PlayCard($cardToPlay, "RESOURCES", -1, -1, $uniqueID, prepaidResources: $prepaidResources);
       } else {
         echo ("Play from arsenal " . $turn[0] . " Invalid Input<BR>");
         return false;
@@ -1421,12 +1422,12 @@ function SwapTurn()
   BuildMainPlayerGameState();
 }
 
-function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID = -1, $skipAbilityType = false)
+function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID = -1, $skipAbilityType = false, $prepaidResources = 0)
 {
   global $playerID, $turn, $currentPlayer, $actionPoints, $layers, $currentTurnEffects;
   global $layerPriority, $lastPlayed;
   global $decisionQueue, $CS_PlayIndex, $CS_OppIndex, $CS_OppCardActive, $CS_PlayUniqueID, $CS_LayerPlayIndex, $CS_LastDynCost, $CS_NumCardsPlayed;
-  global $CS_DynCostResolved, $CS_NumVillainyPlayed, $CS_NumEventsPlayed, $CS_NumClonesPlayed, $CS_PlayedAsUpgrade, $CS_NumWhenDefeatedPlayed, $CS_NumBountyHuntersPlayed, $CS_NumPilostPlayed;
+  global $CS_DynCostResolved, $CS_NumVillainyPlayed, $CS_NumEventsPlayed, $CS_NumClonesPlayed, $CS_PlayedAsUpgrade, $CS_NumWhenDefeatedPlayed, $CS_NumBountyHuntersPlayed, $CS_NumPilotsPlayed;
   $resources = &GetResources($currentPlayer);
   $dynCostResolved = intval($dynCostResolved);
   $layerPriority[0] = ShouldHoldPriority(1);
@@ -1522,7 +1523,7 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
           AddDecisionQueue("PASSPARAMETER", $currentPlayer, "0");
         else
           AddDecisionQueue("GETCLASSSTATE", $currentPlayer, $CS_LastDynCost);
-        AddDecisionQueue("RESUMEPAYING", $currentPlayer, $cardID . "-" . $from . "-" . $index);
+        AddDecisionQueue("RESUMEPAYING", $currentPlayer, $cardID . "-" . $from . "-" . $index . "-" . $prepaidResources);
       }
       $decisionQueue = array_merge($decisionQueue, $dqCopy);
       ProcessDecisionQueue();
@@ -1537,6 +1538,12 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
   }
   $resourceCards = &GetResourceCards($currentPlayer);
   $resourcesPaid = 0;
+
+  if ($prepaidResources > 0) {
+    $resourcesPaid = $prepaidResources;
+    $resources[1] -= $prepaidResources;
+  }
+
   for ($j = 0; $j <= 1; $j++) {
     for ($i = 0; $i < count($resourceCards); $i += ResourcePieces()) {
       if ($resources[1] == 0)
