@@ -129,7 +129,7 @@ if ($decklink != "") {
   }
   else if(str_contains($decklink, "swudb.com/deck")) {
     $decklinkArr = explode("/", $decklink);
-    $decklink = "https://swudb.com/api/getDeckJson/" . trim($decklinkArr[count($decklinkArr) - 1]);
+    $decklink = "https://swudb.com/deck/view/" . trim($decklinkArr[count($decklinkArr) - 1]) . "?handler=JsonFile";
     $curl = curl_init();
     curl_setopt($curl, CURLOPT_URL, $decklink);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
@@ -144,7 +144,7 @@ if ($decklink != "") {
     $decklinkArr = explode("/", $decklink);
 	  $deckId = trim($decklinkArr[count($decklinkArr) - 1]);
     $curl = curl_init();
-    $decklink = "https://swudb.com/deck/view/" . trim($decklinkArr[count($decklinkArr) - 1]) . "?handler=JsonFile";
+    curl_setopt($curl, CURLOPT_URL, "https://sw-unlimited-db.com/umbraco/api/deckapi/get?id=" . $deckId);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
     $apiDeck = curl_exec($curl);
     $apiInfo = curl_getinfo($curl);
