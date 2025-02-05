@@ -106,7 +106,7 @@ function RestoreAmount($cardID, $player, $index)
     if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
     switch($currentTurnEffects[$i]) {
       case "1272825113"://In Defense of Kamino
-        if(TraitContains($ally->CardID(), "Republic", $player, $index)) $amount += 2;
+        $amount += 2;
         break;
       case "7924461681"://Leia Organa
         $amount += 1;
@@ -563,6 +563,7 @@ function HasOverwhelm($cardID, $player, $index)
     case "1743599390"://Trandoshan Hunters
     case "c9ff9863d7"://Hunter (Outcast Sergeant)
     case "3722493191"://IG-2000
+    case "7072861308"://Profundity
     case "9752523457"://Finalizer
       return true;
     case "4619930426"://First Legion Snowtrooper
@@ -694,7 +695,7 @@ function HasAmbush($cardID, $player, $index, $from)
   }
 }
 
-function HasShielded($cardID, $player, $index)
+function HasShielded($cardID, $player)
 {
   switch($cardID)
   {
@@ -748,6 +749,8 @@ function HasSaboteur($cardID, $player, $index)
       case "9210902604": return true;//Precision Fire
       case "4910017138": return true;//Breaking In
       case "5610901450": return true;//Heroes on Both Sides
+      //Jump to Lightspeed
+      case "8656409691": return true;//Rio Durant
       default: break;
     }
   }
@@ -838,6 +841,7 @@ function AbilityCost($cardID, $index=-1, $theirCard = false)
   $abilityName = $theirCard ? GetOpponentControlledAbilityNames($cardID) : GetResolvedAbilityName($cardID);
   if($abilityName == "Heroic Resolve") return 2;
   switch($cardID) {
+    //Spark of Rebellion
     case "2579145458"://Luke Skywalker
       return $abilityName == "Give Shield" ? 1 : 0;
     case "2912358777"://Grand Moff Tarkin
@@ -846,16 +850,13 @@ function AbilityCost($cardID, $index=-1, $theirCard = false)
       return $abilityName == "Draw Card" ? 1 : 0;
     case "4300219753"://Fett's Firespray
       return $abilityName == "Exhaust" ? 2 : 0;
-    case "3258646001"://Steadfast Senator
-      return $abilityName == "Buff" ? 2 : 0;
-    case "0595607848"://Disaffected Senator
-      return $abilityName == "Deal Damage" ? 2 : 0;
     case "5784497124"://Emperor Palpatine
       return $abilityName == "Deal Damage" ? 1 : 0;
     case "6088773439"://Darth Vader
       return $abilityName == "Deal Damage" ? 1 : 0;
     case "1951911851"://Grand Admiral Thrawn
       return $abilityName == "Exhaust" ? 1 : 0;
+    //Shadows of the Galaxy
     case "1885628519"://Crosshair
       return $abilityName == "Buff" ? 2 : 0;
     case "2432897157"://Qi'Ra
@@ -868,6 +869,11 @@ function AbilityCost($cardID, $index=-1, $theirCard = false)
       return $abilityName == "Replace Resource" ? 1 : 0;
     case "3577961001"://Mercenary Gunship
       return $abilityName == "Take Control" ? 4 : 0;
+    //Twilight of the Republic
+    case "3258646001"://Steadfast Senator
+      return $abilityName == "Buff" ? 2 : 0;
+    case "0595607848"://Disaffected Senator
+      return $abilityName == "Deal Damage" ? 2 : 0;
     case "5157630261"://Compassionate Senator
       return $abilityName == "Heal" ? 2 : 0;
     case "9262288850"://Independent Senator
@@ -880,6 +886,15 @@ function AbilityCost($cardID, $index=-1, $theirCard = false)
       return $abilityName == "Clone" ? 2 : 0;
     case "2870878795"://Padme Amidala
       return $abilityName == "Draw" ? 1 : 0;
+    //Jump to Lightspeed
+    case "3658069276"://Lando Calrissian
+      return $abilityName == "Play" ? 1 : 0;
+    case "7514405173":
+      return $abilityName == "Exhaust" ? 1 : 0;
+    case "8656409691"://Rio Durant
+      return $abilityName == "Attack" ? 1 : 0;
+    case "8943696478"://Admiral Holdo
+      return $abilityName == "Buff" ? 1 : 0;
     default: break;
   }
   if(IsAlly($cardID)) return 0;
@@ -1204,6 +1219,10 @@ function CheckJTLAbilityTypes($cardID) {
       return LeaderAbilitiesIgnored() ? "" : "A";
     case "7514405173"://Admiral Ackbar Leader
       return LeaderAbilitiesIgnored() ? "" : "A";
+    case "8656409691"://Rio Durant
+      return LeaderAbilitiesIgnored() ? "" : "A";
+    case "8943696478"://Admiral Holdo
+      return LeaderAbilitiesIgnored() ? "" : "A";
     default: return "";
   }
 }
@@ -1474,7 +1493,10 @@ function CheckJTLAbilityNames($cardID) {
       return LeaderAbilitiesIgnored() ? "" : "Play";
     case "7514405173"://Admiral Ackbar Leader
       return LeaderAbilitiesIgnored() ? "" : "Exhaust";
-
+    case "8656409691"://Rio Durant
+      return LeaderAbilitiesIgnored() ? "" : "Attack";
+    case "8943696478"://Admiral Holdo
+      return LeaderAbilitiesIgnored() ? "" : "Buff";
     default: return "";
   }
 }
@@ -1559,7 +1581,7 @@ function IsPlayable($cardID, $phase, $from, $index = -1, &$restriction = null, $
     && !HasAlternativeCost($cardID)) return false;
   if($from == "RESOURCES") {
     if(!PlayableFromResources($cardID, index:$index)) return false;
-    if((SmuggleCost($cardID, index:$index) + SelfCostModifier($cardID, $from, reportMode:true)) > NumResourcesAvailable($currentPlayer) && !HasAlternativeCost($cardID)) return false;
+    if((SmuggleCost($cardID, index:$index) + SelfCostModifier($cardID, $from, reportMode:true) + CurrentEffectCostModifiers($cardID, $from, reportMode:true)) > NumResourcesAvailable($currentPlayer) && !HasAlternativeCost($cardID)) return false;
     if(!SmuggleAdditionalCosts($cardID)) return false;
   }
   if(DefinedTypesContains($cardID, "Upgrade", $player) && SearchCount(SearchAllies($player)) == 0 && SearchCount(SearchAllies($otherPlayer)) == 0) return false;
@@ -1861,6 +1883,10 @@ function LeaderUnit($cardID) {
       return "53207e4131";
     case "3933322003"://Rose Tico
       return "590b638b18";
+    case "8656409691"://Rio Durant's Leader unit
+      return "81a416eb1f";
+    case "8943696478"://Admiral Holdo
+      return "ccf9474416";
     default: return "";
   }
 }
@@ -1995,6 +2021,10 @@ function LeaderUndeployed($cardID) {
       return "5846322081";
     case "590b638b18"://Rose Tico
       return "3933322003";
+    case "81a416eb1f"://Rio Durant
+      return "8656409691";
+    case "ccf9474416"://Admiral Holdo
+      return "8943696478";
     default: return "";
   }
 }
@@ -2007,6 +2037,7 @@ function LeaderCanPilot($cardID) {
     case "4179470615"://Asajj Ventress
     case "7514405173"://Admiral Ackbar
     case "9831674351"://Boba Fett
+    case "8656409691"://Rio Durant
       return true;
     default: return false;
   }
@@ -2254,7 +2285,7 @@ function SmuggleCost($cardID, $player="", $index="")
   {
     switch($allies[$i]) {
       case "3881257511"://Tech
-        $techAlly = new Ally("MYALLY-" . $allies[$i], $player);
+        $techAlly = new Ally("MYALLY-" . $i, $player);
         if(!$techAlly->LostAbilities()) {
           $cost = CardCost($cardID)+2;
           if($minCost == -1 || $minCost > $cost) $minCost = $cost;

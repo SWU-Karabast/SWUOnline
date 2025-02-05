@@ -340,6 +340,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $arsenal = array_values($arsenal);
       return $cardToReturn;
     case "MULTIADDHAND":
+      global $CS_CardsDrawn;
       $cards = explode(",", $lastResult);
       $hand = &GetHand($player);
       $log = "";
@@ -350,6 +351,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $log .= CardLink($cards[$i], $cards[$i]);
         }
         $hand[] = $cards[$i];
+        IncrementClassState($player, $CS_CardsDrawn);
       }
       if($log != "") WriteLog($log . " added to hand");
       return $lastResult;

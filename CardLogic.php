@@ -143,7 +143,18 @@ function AddAfterResolveEffect($cardID, $player, $from = "", $uniqueID = -1)
 }
 
 function HasLeader($player) {
-  return SearchCount(SearchAllies($player, definedType:"Leader")) > 0;
+  return SearchCount(SearchAllies($player, definedType:"Leader")) > 0
+    || HasLeaderPilotInPlay($player);
+}
+
+function HasLeaderPilotInPlay($player) {
+  $allies = GetAllies($player);
+  for($i = 0; $i < count($allies); $i+=AllyPieces()) {
+    $ally = new Ally($allies[$i+5]);
+    if($ally->HasPilotLeaderUpgrade()) return true;
+  }
+
+  return false;
 }
 
 function HasMoreUnits($player) {
@@ -246,7 +257,7 @@ function PrependLayer($cardID, $player, $parameter, $target = "-", $additionalCo
 
 function IsAbilityLayer($cardID)
 {
-  return $cardID == "TRIGGER" || $cardID == "PLAYABILITY" || $cardID == "ATTACKABILITY" || $cardID == "ACTIVATEDABILITY" || $cardID == "ALLYPLAYCARDABILITY";
+  return $cardID == "TRIGGER" || $cardID == "PLAYABILITY" || $cardID == "PLAYCARDABILITY" || $cardID == "ATTACKABILITY" || $cardID == "ACTIVATEDABILITY" || $cardID == "ALLYPLAYCARDABILITY";
 }
 
 function AddLayer($cardID, $player, $parameter, $target = "-", $additionalCosts = "-", $uniqueID = "-", $append = false)
@@ -461,7 +472,7 @@ function ContinueDecisionQueue($lastResult = "")
             }
             else {
               $oppCardActive = GetClassState($currentPlayer, $CS_OppCardActive) > 0;
-
+              $layerName = $cardID;
               $cardID = $parameter;
               $subparamArr = explode("!", $target);
               $from = $subparamArr[0];
@@ -472,6 +483,13 @@ function ContinueDecisionQueue($lastResult = "")
               $playIndex = count($subparamArr) > 5 ? $subparamArr[5] : -1;
               SetClassState($player, $CS_AbilityIndex, $abilityIndex);
               SetClassState($player, $CS_PlayIndex, $playIndex);
+
+              // PLAYCARDABILITY already adds ally play card ability layers at the same window.
+              // Other layers like PLAYABILITY should be resolved before ally play card ability layers.
+              if ($layerName != "PLAYCARDABILITY" && $from != "PLAY" && $from != "EQUIP" && $from != "CHAR") {
+                AddAllyPlayCardAbilityLayers($cardID, $from, $uniqueID, $resourcesPaid);
+              }
+
               $playText = PlayAbility($cardID, $from, $resourcesPaid, $target, $additionalCosts, $oppCardActive, uniqueId: $uniqueID);
               if($from != "PLAY") WriteLog("Resolving play ability of " . CardLink($cardID, $cardID) . ($playText != "" ? ": " : ".") . $playText);
               if($from == "EQUIP") EquipPayAdditionalCosts(FindCharacterIndex($player, $cardID), "EQUIP");
@@ -511,7 +529,7 @@ function ContinueDecisionQueue($lastResult = "")
       }
     } else if(count($decisionQueue) > 0 && $decisionQueue[0] == "RESUMEPAYING") {
       $player = $decisionQueue[1];
-      $params = explode("-", $decisionQueue[2]); //Parameter
+      $params = explode("!", $decisionQueue[2]); //Parameter
       if($lastResult == "") $lastResult = 0;
       CloseDecisionQueue();
       if($currentPlayer != $player) {
@@ -519,7 +537,8 @@ function ContinueDecisionQueue($lastResult = "")
         $otherPlayer = $currentPlayer == 1 ? 2 : 1;
         BuildMyGamestate($currentPlayer);
       }
-      PlayCard($params[0], $params[1], $lastResult, $params[2]);
+      $prepaidResources = $params[3] ?? 0;
+      PlayCard($params[0], $params[1], $lastResult, $params[2], prepaidResources: $prepaidResources);
     } else if(count($decisionQueue) > 0 && $decisionQueue[0] == "RESOLVECHAINLINK") {
       CloseDecisionQueue();
       ResolveChainLink();
@@ -621,7 +640,7 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
     case "SHIELDED":
       $ally = new Ally($uniqueID);
       $ally->Attach("8752877738");//Shield Token
-      break;   
+      break;
     case "ALLYPLAYCARDABILITY":
       $data = explode(",",$target); // $cardID, $player, $numUses, $playedCardID
       AllyPlayCardAbility($data[1], $data[0], $uniqueID, $data[2], $data[3], from:$additionalCosts);
@@ -846,7 +865,7 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       break;
     case "0754286363"://The Mandalorian's Rifle
       AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY");
-      AddDecisionQueue("MZFILTER", $player, "definedType=Leader");
+      AddDecisionQueue("MZFILTER", $player, "leader=1");
       AddDecisionQueue("MZFILTER", $player, "status=0");
       AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to capture");
       AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);

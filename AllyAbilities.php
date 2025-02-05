@@ -45,7 +45,7 @@ function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null,
   CheckUniqueAlly($uniqueID);
 
   if ($playAbility || $cardID == "0345124206") { //Clone - Ensure that the Clone will always choose a unit to clone whenever it enters play.
-    if(HasShielded($cardID, $player, $index)) {
+    if(HasShielded($cardID, $player)) {
       AddLayer("TRIGGER", $player, "SHIELDED", "-", "-", $uniqueID);
     }
     if(HasAmbush($cardID, $player, $index, $from)) {
@@ -58,7 +58,7 @@ function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null,
   // Check if any units will be destroyed due to cascading effects
   CheckHealthAllAllies();
 
-  return $index;
+  return $uniqueID;
 }
 
 
@@ -372,7 +372,7 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false,
         && !$isSuperlaserTech
         && !GivesWhenDestroyedToAllies($cardID))
         || UpgradesContainWhenDefeated($upgrades)
-        || CurrentEffectsContainWhenDefeated($player))
+        || CurrentEffectsContainWhenDefeated($player, $uniqueID))
       $whenDestroyData=SerializeAllyDestroyData($uniqueID,$lostAbilities,$isUpgraded,$upgrades,$upgradesWithOwnerData);
     if($isSuperlaserTech && !$lostAbilities)
       $whenResourceData=SerializeResourceData("PLAY","DOWN",0,"0","-1");
@@ -438,13 +438,15 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false,
   return $cardID;
 }
 
-function CurrentEffectsContainWhenDefeated($player) {
+function CurrentEffectsContainWhenDefeated($player, $uniqueID) {
   global $currentTurnEffects;
   for($i=0;$i<count($currentTurnEffects); $i+=CurrentTurnEffectPieces()) {
+    if ($currentTurnEffects[$i+1] != $player) continue;
+    if ($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $uniqueID) continue;
     switch($currentTurnEffects[$i]) {
       case "1272825113"://In Defense of Kamino
       case "9415708584": //Pyrrhic Assault
-        return $currentTurnEffects[$i+1] == $player;
+        return true;
       default: return false;
     }
   }
@@ -670,8 +672,7 @@ function AllyLeavesPlayAbility($player, $index)
   }
 }
 
-function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities,
-  $isUpgraded, $upgrades, $upgradesWithOwnerData)
+function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities, $isUpgraded, $upgrades, $upgradesWithOwnerData)
 {
   global $initiativePlayer, $currentTurnEffects;
 
@@ -869,20 +870,26 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities,
       default: break;
     }
 
-    for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnPieces()) {
+    for($i=count($currentTurnEffects)-CurrentTurnPieces(); $i>=0; $i-=CurrentTurnPieces()) {
       if($currentTurnEffects[$i+1] != $player) continue;//each friendly unit
       if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $uniqueID) continue;
+      $remove = false;
       switch($currentTurnEffects[$i]) {
         case "1272825113"://In Defense of Kamino
-          if(TraitContains($cardID, "Republic", $player)) CreateCloneTrooper($player);
+          $remove = true;
+          CreateCloneTrooper($player);
           break;
         case "9415708584"://Pyrrhic Assault
+          $remove = true;
           AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY");
           AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal 2 damage to");
           AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
           AddDecisionQueue("MZOP", $player, "DEALDAMAGE,2,$player,1", 1);
           break;
         default: break;
+      }
+      if ($remove) {
+        RemoveCurrentTurnEffect($i);
       }
     }
 
@@ -1524,6 +1531,7 @@ function AllyPlayCardAbility($player, $cardID, $uniqueID, $numUses, $playedCardI
       case "4088c46c4d"://The Mandalorian Leader Unit
         if(!LeaderAbilitiesIgnored() && DefinedTypesContains($playedCardID, "Upgrade", $player)) {
           AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:maxHealth=6");
+          AddDecisionQueue("MZFILTER", $player, "status=1");
           AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to exhaust", 1);
           AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
           AddDecisionQueue("MZOP", $player, "REST", 1);
@@ -2135,7 +2143,7 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("SETDQVAR", $mainPlayer, "0", 1);
-      AddDecisionQueue("PASSPARAMETER", $mainPlayer, "{1}", 1);
+      AddDecisionQueue("PASSPARAMETER", $mainPlayer, "{1}", 1);//TODO: this is bugged. sending "Ground" instead of "THEIRALLY-*"
       AddDecisionQueue("MZOP", $mainPlayer, "CAPTURE,{0}", 1);
       break;
     case "7922308768"://Valiant Assault Ship
@@ -2199,7 +2207,8 @@ function SpecificAllyAttackAbilities($attackID)
       break;
     case "0038286155"://Chancellor Palpatine
       global $CS_NumLeftPlay;
-      if(GetClassState($mainPlayer, $CS_NumLeftPlay) > 0) {
+      $otherPlayer = $mainPlayer == 1 ? 2 : 1;
+      if(GetClassState($mainPlayer, $CS_NumLeftPlay) > 0 || GetClassState($otherPlayer, $CS_NumLeftPlay) > 0) {
         CreateCloneTrooper($mainPlayer);
       }
       break;
@@ -2323,7 +2332,7 @@ function SpecificAllyAttackAbilities($attackID)
       break;
     case "8414572243"://Enfys Nest (Champion of Justice)
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY:maxAttack=" . $attackerAlly->CurrentPower() - 1);
-      AddDecisionQueue("MZFILTER", $mainPlayer, "definedType=Leader");
+      AddDecisionQueue("MZFILTER", $mainPlayer, "leader=1");
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to bounce");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "BOUNCE", 1);
