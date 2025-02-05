@@ -348,7 +348,7 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false,
         && !$isSuperlaserTech
         && !GivesWhenDestroyedToAllies($cardID))
         || UpgradesContainWhenDefeated($upgrades)
-        || CurrentEffectsContainWhenDefeated($player))
+        || CurrentEffectsContainWhenDefeated($player, $uniqueID))
       $whenDestroyData=SerializeAllyDestroyData($uniqueID,$lostAbilities,$isUpgraded,$upgrades,$upgradesWithOwnerData);
     if($isSuperlaserTech && !$lostAbilities)
       $whenResourceData=SerializeResourceData("PLAY","DOWN",0,"0","-1");
@@ -414,13 +414,15 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false,
   return $cardID;
 }
 
-function CurrentEffectsContainWhenDefeated($player) {
+function CurrentEffectsContainWhenDefeated($player, $uniqueID) {
   global $currentTurnEffects;
   for($i=0;$i<count($currentTurnEffects); $i+=CurrentTurnEffectPieces()) {
+    if ($currentTurnEffects[$i+1] != $player) continue;
+    if ($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $uniqueID) continue;
     switch($currentTurnEffects[$i]) {
       case "1272825113"://In Defense of Kamino
       case "9415708584": //Pyrrhic Assault
-        return $currentTurnEffects[$i+1] == $player;
+        return true;
       default: return false;
     }
   }
@@ -646,8 +648,7 @@ function AllyLeavesPlayAbility($player, $index)
   }
 }
 
-function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities,
-  $isUpgraded, $upgrades, $upgradesWithOwnerData)
+function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities, $isUpgraded, $upgrades, $upgradesWithOwnerData)
 {
   global $initiativePlayer, $currentTurnEffects;
 
@@ -845,20 +846,26 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities,
       default: break;
     }
 
-    for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnPieces()) {
+    for($i=count($currentTurnEffects)-CurrentTurnPieces(); $i>=0; $i-=CurrentTurnPieces()) {
       if($currentTurnEffects[$i+1] != $player) continue;//each friendly unit
       if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $uniqueID) continue;
+      $remove = false;
       switch($currentTurnEffects[$i]) {
         case "1272825113"://In Defense of Kamino
+          $remove = true;
           CreateCloneTrooper($player);
           break;
         case "9415708584"://Pyrrhic Assault
+          $remove = true;
           AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY");
           AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal 2 damage to");
           AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
           AddDecisionQueue("MZOP", $player, "DEALDAMAGE,2,$player,1", 1);
           break;
         default: break;
+      }
+      if ($remove) {
+        RemoveCurrentTurnEffect($i);
       }
     }
 
