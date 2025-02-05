@@ -5228,19 +5228,19 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       if(IsCoordinateActive($currentPlayer)) CreateCloneTrooper($currentPlayer);
       break;
     case "6461101372"://Maul
-      AddCurrentTurnEffect("6461101372", $currentPlayer, "PLAY");
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
       AddDecisionQueue("MZFILTER", $currentPlayer, "status=1", 1);
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to attack with");
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, "6461101372", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
       break;
     case "2155351882"://Ahsoka Tano
-      AddCurrentTurnEffect("2155351882", $currentPlayer, "PLAY");
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
       AddDecisionQueue("MZFILTER", $currentPlayer, "status=1", 1);
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to attack with");
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, "2155351882", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
       break;
     case "5081383630"://Pre Viszla
@@ -5960,11 +5960,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "8656409691"://Rio Durant
       if(GetResolvedAbilityName($cardID) == "Attack") {
-        AddCurrentTurnEffect("8656409691", $currentPlayer, "PLAY");
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:arena=Space");
         AddDecisionQueue("MZFILTER", $currentPlayer, "status=1", 1);
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to attack with");
         AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, "8656409691", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
       }
       break;

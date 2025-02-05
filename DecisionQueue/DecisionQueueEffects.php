@@ -855,7 +855,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       break;
     case "ACKBAR_JTL":
       $ally = new Ally($lastResult);
-      CreateXWing($ally->PlayerID());
+      CreateXWing($ally->Controller());
       break;
     case "PROFUNDITY":
       if($lastResult == "Yourself") {
