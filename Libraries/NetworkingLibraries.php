@@ -42,11 +42,11 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
         $cardToPlay = $arsenal[$index];
         if (!IsPlayable($cardToPlay, $turn[0], "RESOURCES", $index))
           break;
-        $uniqueID = $arsenal[$index + 5];
-        PlayCard($cardToPlay, "RESOURCES", -1, -1, $uniqueID);
         $isExhausted = $arsenal[$index + 4] == 1;
+        $uniqueID = $arsenal[$index + 5];
         RemoveArsenal($playerID, $index);
         AddTopDeckAsResource($playerID, isExhausted: $isExhausted);
+        PlayCard($cardToPlay, "RESOURCES", -1, -1, $uniqueID);
       } else {
         echo ("Play from arsenal " . $turn[0] . " Invalid Input<BR>");
         return false;
