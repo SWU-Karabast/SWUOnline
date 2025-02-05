@@ -1287,6 +1287,16 @@ function TraitContains($cardID, $trait, $player="", $index=-1) {
   return DelimStringContains($cardTrait, $trait);
 }
 
+function AllyTraitContainsOrUpgradeTraitContains($allyUniqueID, $trait) {
+  $ally = new Ally($allyUniqueID);
+  $upgrades = $ally->GetUpgrades();
+  for($i=0; $i<count($upgrades); ++$i) {
+    if (TraitContains($upgrades[$i], $trait)) return true;
+  }
+
+  return TraitContains($ally->CardID(), $trait);
+}
+
 function HasKeyword($cardID, $keyword, $player="", $index=-1){
   switch($keyword){
     case "Smuggle": return SmuggleCost($cardID, $player, $index) > -1;
@@ -5218,19 +5228,19 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       if(IsCoordinateActive($currentPlayer)) CreateCloneTrooper($currentPlayer);
       break;
     case "6461101372"://Maul
-      AddCurrentTurnEffect("6461101372", $currentPlayer, "PLAY");
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
       AddDecisionQueue("MZFILTER", $currentPlayer, "status=1", 1);
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to attack with");
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, "6461101372", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
       break;
     case "2155351882"://Ahsoka Tano
-      AddCurrentTurnEffect("2155351882", $currentPlayer, "PLAY");
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
       AddDecisionQueue("MZFILTER", $currentPlayer, "status=1", 1);
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to attack with");
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, "2155351882", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
       break;
     case "5081383630"://Pre Viszla
@@ -5950,6 +5960,39 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose player to draw 1 card");
       AddDecisionQueue("BUTTONINPUT", $currentPlayer, "Yourself,Opponent");
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "PROFUNDITY", 1);
+      break;
+    case "8656409691"://Rio Durant
+      if(GetResolvedAbilityName($cardID) == "Attack") {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:arena=Space");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "status=1", 1);
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to attack with");
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, "8656409691", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
+      }
+      break;
+    case "8943696478";//Admiral Holdo
+      if(GetResolvedAbilityName($cardID) == "Buff") {
+        $indices = [];
+        $myAllies = GetAllies($currentPlayer);
+        $theirAllies = GetAllies($otherPlayer);
+        for($i=0; $i<count($myAllies); $i+=AllyPieces()) {
+          if(AllyTraitContainsOrUpgradeTraitContains($myAllies[$i+5], "Resistance")) {
+            $indices[] = "MYALLY-" . $i;
+          }
+        }
+        for($i=0; $i<count($theirAllies); $i+=AllyPieces()) {
+          if(AllyTraitContainsOrUpgradeTraitContains($theirAllies[$i+5], "Resistance")) {
+            $indices[] = "THEIRALLY-" . $i;
+          }
+        }
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, implode(",", $indices));
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to give +2/+2");
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "ADDHEALTH,2", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "8943696478,PLAY", 1);
+      }
       break;
     //PlayAbility End
     default: break;

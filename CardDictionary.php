@@ -749,6 +749,8 @@ function HasSaboteur($cardID, $player, $index)
       case "9210902604": return true;//Precision Fire
       case "4910017138": return true;//Breaking In
       case "5610901450": return true;//Heroes on Both Sides
+      //Jump to Lightspeed
+      case "8656409691": return true;//Rio Durant
       default: break;
     }
   }
@@ -889,6 +891,10 @@ function AbilityCost($cardID, $index=-1, $theirCard = false)
       return $abilityName == "Play" ? 1 : 0;
     case "7514405173":
       return $abilityName == "Exhaust" ? 1 : 0;
+    case "8656409691"://Rio Durant
+      return $abilityName == "Attack" ? 1 : 0;
+    case "8943696478"://Admiral Holdo
+      return $abilityName == "Buff" ? 1 : 0;
     default: break;
   }
   if(IsAlly($cardID)) return 0;
@@ -1213,6 +1219,10 @@ function CheckJTLAbilityTypes($cardID) {
       return LeaderAbilitiesIgnored() ? "" : "A";
     case "7514405173"://Admiral Ackbar Leader
       return LeaderAbilitiesIgnored() ? "" : "A";
+    case "8656409691"://Rio Durant
+      return LeaderAbilitiesIgnored() ? "" : "A";
+    case "8943696478"://Admiral Holdo
+      return LeaderAbilitiesIgnored() ? "" : "A";
     default: return "";
   }
 }
@@ -1483,7 +1493,10 @@ function CheckJTLAbilityNames($cardID) {
       return LeaderAbilitiesIgnored() ? "" : "Play";
     case "7514405173"://Admiral Ackbar Leader
       return LeaderAbilitiesIgnored() ? "" : "Exhaust";
-
+    case "8656409691"://Rio Durant
+      return LeaderAbilitiesIgnored() ? "" : "Attack";
+    case "8943696478"://Admiral Holdo
+      return LeaderAbilitiesIgnored() ? "" : "Buff";
     default: return "";
   }
 }
@@ -1870,6 +1883,10 @@ function LeaderUnit($cardID) {
       return "53207e4131";
     case "3933322003"://Rose Tico
       return "590b638b18";
+    case "8656409691"://Rio Durant's Leader unit
+      return "81a416eb1f";
+    case "8943696478"://Admiral Holdo
+      return "ccf9474416";
     default: return "";
   }
 }
@@ -2004,6 +2021,10 @@ function LeaderUndeployed($cardID) {
       return "5846322081";
     case "590b638b18"://Rose Tico
       return "3933322003";
+    case "81a416eb1f"://Rio Durant
+      return "8656409691";
+    case "ccf9474416"://Admiral Holdo
+      return "8943696478";
     default: return "";
   }
 }
@@ -2016,6 +2037,7 @@ function LeaderCanPilot($cardID) {
     case "4179470615"://Asajj Ventress
     case "7514405173"://Admiral Ackbar
     case "9831674351"://Boba Fett
+    case "8656409691"://Rio Durant
       return true;
     default: return false;
   }

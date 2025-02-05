@@ -244,6 +244,8 @@ function EffectAttackModifier($cardID, $playerID="")
     case "6300552434": return -1;//Gold Leader
     case "7924461681": return 1;//Leia Organa
     case "4334684518+2": return 2;//Tandem Assault
+    case "8656409691": return 1;//Rio Durant
+    case "8943696478": return 2;//Admiral Holdo
     default: return 0;
   }
 }
@@ -862,6 +864,7 @@ function IsCombatEffectActive($cardID)
     case "7924461681"://Leia Organa
     case "4334684518"://Tandem Assault
     case "4334684518+2"://Tandem Assault
+    case "8656409691"://Rio Durant
       return true;
     default: return false;
   }
