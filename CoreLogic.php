@@ -5666,14 +5666,17 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "1272825113"://In Defense of Kamino
       $allies = &GetAllies($currentPlayer);
-      for ($i = 0; $i < count($currentPlayer); $i += AllyPieces()) {
+      for ($i = 0; $i < count($allies); $i += AllyPieces()) {
         if (TraitContains($allies[$i], "Republic")) {
           AddCurrentTurnEffect("1272825113", $currentPlayer, "PLAY", $allies[$i+5]);
         }
       }
       break;
     case "9415708584"://Pyrrhic Assault
-      AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, $cardID, 1);
+      $allies = &GetAllies($currentPlayer);
+      for ($i = 0; $i < count($allies); $i += AllyPieces()) {
+        AddCurrentTurnEffect("9415708584", $currentPlayer, "PLAY", $allies[$i+5]);        
+      }
       break;
     case "9399634203"://I Have the High Ground
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
