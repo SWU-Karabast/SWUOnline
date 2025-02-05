@@ -1523,7 +1523,7 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
           AddDecisionQueue("PASSPARAMETER", $currentPlayer, "0");
         else
           AddDecisionQueue("GETCLASSSTATE", $currentPlayer, $CS_LastDynCost);
-        AddDecisionQueue("RESUMEPAYING", $currentPlayer, $cardID . "-" . $from . "-" . $index . "-" . $prepaidResources);
+        AddDecisionQueue("RESUMEPAYING", $currentPlayer, $cardID . "!" . $from . "!" . $index . "!" . $prepaidResources);
       }
       $decisionQueue = array_merge($decisionQueue, $dqCopy);
       ProcessDecisionQueue();

@@ -529,7 +529,7 @@ function ContinueDecisionQueue($lastResult = "")
       }
     } else if(count($decisionQueue) > 0 && $decisionQueue[0] == "RESUMEPAYING") {
       $player = $decisionQueue[1];
-      $params = explode("-", $decisionQueue[2]); //Parameter
+      $params = explode("!", $decisionQueue[2]); //Parameter
       if($lastResult == "") $lastResult = 0;
       CloseDecisionQueue();
       if($currentPlayer != $player) {
