@@ -144,7 +144,7 @@ if ($decklink != "") {
     $decklinkArr = explode("/", $decklink);
 	  $deckId = trim($decklinkArr[count($decklinkArr) - 1]);
     $curl = curl_init();
-    curl_setopt($curl, CURLOPT_URL, "https://sw-unlimited-db.com/umbraco/api/deckapi/get?id=" . $deckId);
+    $decklink = "https://swudb.com/deck/view/" . trim($decklinkArr[count($decklinkArr) - 1]) . "?handler=JsonFile";
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
     $apiDeck = curl_exec($curl);
     $apiInfo = curl_getinfo($curl);
