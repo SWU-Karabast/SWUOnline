@@ -850,7 +850,7 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities,
       if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $uniqueID) continue;
       switch($currentTurnEffects[$i]) {
         case "1272825113"://In Defense of Kamino
-          if(TraitContains($cardID, "Republic", $player)) CreateCloneTrooper($player);
+          CreateCloneTrooper($player);
           break;
         case "9415708584"://Pyrrhic Assault
           AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY");

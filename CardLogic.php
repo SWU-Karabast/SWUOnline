@@ -529,7 +529,7 @@ function ContinueDecisionQueue($lastResult = "")
       }
     } else if(count($decisionQueue) > 0 && $decisionQueue[0] == "RESUMEPAYING") {
       $player = $decisionQueue[1];
-      $params = explode("-", $decisionQueue[2]); //Parameter
+      $params = explode("!", $decisionQueue[2]); //Parameter
       if($lastResult == "") $lastResult = 0;
       CloseDecisionQueue();
       if($currentPlayer != $player) {
@@ -537,7 +537,8 @@ function ContinueDecisionQueue($lastResult = "")
         $otherPlayer = $currentPlayer == 1 ? 2 : 1;
         BuildMyGamestate($currentPlayer);
       }
-      PlayCard($params[0], $params[1], $lastResult, $params[2]);
+      $prepaidResources = $params[3] ?? 0;
+      PlayCard($params[0], $params[1], $lastResult, $params[2], prepaidResources: $prepaidResources);
     } else if(count($decisionQueue) > 0 && $decisionQueue[0] == "RESOLVECHAINLINK") {
       CloseDecisionQueue();
       ResolveChainLink();
