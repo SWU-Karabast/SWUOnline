@@ -1134,12 +1134,12 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   echo ("</div>");
 
   //Their Space Allies
-  echo ("<div class='spaceEnemiesContainer' style='max-height:" . $permHeight . "px;'>");
+  echo ("<div class='spaceEnemiesContainer'>");
   echo ($spaceAllies);
   echo ("</div>");
 
   //Their Ground Allies
-  echo ("<div class='groundEnemiesContainer' style='max-height:" . $permHeight . "px;'>");
+  echo ("<div class='groundEnemiesContainer'>");
   echo ($groundAllies);
   echo ("</div>");
 
@@ -1261,12 +1261,12 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   }
 
   //Space allies
-  echo ("<div class='spaceAlliesContainer' style='max-height:" . $permHeight . "px;'>");
+  echo ("<div class='spaceAlliesContainer'>");
   echo ($spaceAllies);
   echo ("</div>");
 
   //Ground allies
-  echo ("<div class='groundAlliesContainer' style='max-height:" . $permHeight . "px;'>");
+  echo ("<div class='groundAlliesContainer'>");
   echo ($groundAllies);
   echo ("</div>");
 
