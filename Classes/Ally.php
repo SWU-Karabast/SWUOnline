@@ -569,10 +569,14 @@ class Ally {
         DefinedTypesContains($subcards[$i], "Upgrade", $this->PlayerID())
         || DefinedTypesContains($subcards[$i], "Token Upgrade", $this->PlayerID())
         || (DefinedTypesContains($subcards[$i], "Unit", $this->PlayerID()) && $isPilot)
-      )
-      {
-        if($withMetadata) array_push($upgrades, $subcards[$i], $subcards[$i+1], $subcards[$i+2]);
-        else $upgrades[] = $subcards[$i];
+      ) {
+        if ($withMetadata) {
+          for ($j = 0; $j < SubcardPieces(); $j++) {
+            array_push($upgrades, $subcards[$i + $j]);
+          }
+        } else {
+          $upgrades[] = $subcards[$i];
+        }
       }
     }
     return $upgrades;
@@ -585,8 +589,13 @@ class Ally {
     for($i=0; $i<count($subcards); $i+=SubcardPieces()) {
       $isPilot = $subcards[$i+2] == "1";
       if(DefinedTypesContains($subcards[$i], "Unit") && !$isPilot) {
-        if($withMetadata) array_push($capturedUnits, $subcards[$i], $subcards[$i+1], $subcards[$i+2]);
-        else $capturedUnits[] = $subcards[$i];
+        if ($withMetadata) {
+          for ($j = 0; $j < SubcardPieces(); $j++) {
+            array_push($capturedUnits, $subcards[$i + $j]);
+          }
+        } else {
+          $capturedUnits[] = $subcards[$i];
+        }
       }
     }
     return $capturedUnits;
