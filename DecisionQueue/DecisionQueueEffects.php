@@ -849,7 +849,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       if($leaderUnitSide == "1") {
         $thrawnLeaderUnit = new Ally("MYALLY-" . SearchAlliesForCard($player, "53207e4131"));
         if($thrawnLeaderUnit->Exists()) {
-          $thrawnLeaderUnit->ModifyUses(-1);
+          $thrawnLeaderUnit->SumNumUses(-1);
         }
       }
       break;

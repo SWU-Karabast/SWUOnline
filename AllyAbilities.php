@@ -61,6 +61,30 @@ function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null,
   return $uniqueID;
 }
 
+
+function DefeatUpgradeForUniqueID($subcardUniqueID, $player = "") {
+  $initialPlayer = ($player == 1 || $player == 2) ? $player : 1;
+  $players = [$initialPlayer, ($initialPlayer % 2) + 1];
+  foreach ($players as $p) {
+    $allies = &GetAllies($p);
+    for ($i = 0; $i < count($allies); $i += AllyPieces()) {
+      $allySubcardsDelimited = $allies[$i + 4];
+      if ($allySubcardsDelimited == null || $allySubcardsDelimited == "" || $allySubcardsDelimited == "-") {
+        continue;
+      }
+
+      $allySubcards = explode(",", $allySubcardsDelimited);
+      for ($j = 0; $j < count($allySubcards); $j += SubcardPieces()) {
+        if ($allySubcards[$j + 3] == $subcardUniqueID) {
+          $ally = new Ally("MYALLY-" . $i, $p);
+          $ally->DefeatUpgrade($allySubcards[$j], $subcardUniqueID);
+          break;
+        }
+      }
+    }
+  }
+}
+
 function CheckHealthAllAllies() {
   foreach ([1, 2] as $player) {
     $allies = &GetAllies($player);
