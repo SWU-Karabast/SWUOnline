@@ -591,7 +591,7 @@ class Ally {
       if(DefinedTypesContains($subcards[$i], "Unit") && !$isPilot) {
         if ($withMetadata) {
           for ($j = 0; $j < SubcardPieces(); $j++) {
-            array_push($upgrades, $subcards[$i + $j]);
+            array_push($capturedUnits, $subcards[$i + $j]);
           }
         } else {
           $capturedUnits[] = $subcards[$i];
