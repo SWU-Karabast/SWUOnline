@@ -2312,18 +2312,21 @@ function PilotingCost($cardID, $player = "") {
   if($player == "") $player = $currentPlayer;
   $minCost = -1;
   switch($cardID) {
-    case "3874382333": $minCost = 2; break;//Academy Graduate
+    case "0524529055": $minCost = 2; break;//Snap Wexley
     case "0587196584": $minCost = 1; break;//Independent Smuggler
-    case "7420426716": $minCost = 1; break;//Dagger Squadron Pilot
-    case "5375722883": $minCost = 0; break;//R2-D2
-    case "7208848194": $minCost = 3; break;//Chewbacca
+    case "1039444094": $minCost = 2; break;//Paige Tico
     case "1463418669": $minCost = 2; break;//IG-88
+    case "2283726359": $minCost = 1; break;//BB-8
     case "3282713547": $minCost = 2; break;//Dengar
     case "3475471540": $minCost = 2; break;//Cassian Andor
+    case "3874382333": $minCost = 2; break;//Academy Graduate
     case "4573745395": $minCost = 2; break;//Bossk
+    case "5375722883": $minCost = 0; break;//R2-D2
     case "5673100759": $minCost = 2; break;//Boshek
     case "6421006753": $minCost = 2; break;//The Mandalorian
     case "6610553087": $minCost = 1; break;//Nien Nunb
+    case "7208848194": $minCost = 3; break;//Chewbacca
+    case "7420426716": $minCost = 1; break;//Dagger Squadron Pilot
     case "7700932371": $minCost = 2; break;//Boba Fett
     case "8523415830": $minCost = 2; break;//Anakin Skywalker
     default: break;
