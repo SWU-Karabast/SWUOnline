@@ -1879,7 +1879,7 @@ function LeaderUnit($cardID) {
       return "f6eb711cf3";
     case "4030832630"://Admiral Piett
       return "649c6a9dbd";
-    case "5846322081"://Grand Admiral Thrawn
+    case "5846322081"://Grand Admiral Thrawn JTL
       return "53207e4131";
     case "3933322003"://Rose Tico
       return "590b638b18";
@@ -2017,7 +2017,7 @@ function LeaderUndeployed($cardID) {
       return "9831674351";
     case "649c6a9dbd"://Admiral Piett
       return "4030832630";
-    case "53207e4131"://Grand Admiral Thrawn
+    case "53207e4131"://Grand Admiral Thrawn JTL
       return "5846322081";
     case "590b638b18"://Rose Tico
       return "3933322003";
