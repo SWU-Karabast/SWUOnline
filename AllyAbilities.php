@@ -2032,6 +2032,7 @@ function SpecificAllyAttackAbilities($attackID)
       break;
     case "0398102006"://The Invisible Hand
       $totalUnits = SearchCount(SearchAllies($mainPlayer, trait:"Separatist"));
+      AddDecisionQueue("PASSPARAMETER", $mainPlayer, "-");
       for ($i = 0; $i < $totalUnits; $i++) {
         AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:trait=Separatist",1 );
         AddDecisionQueue("MZFILTER", $mainPlayer, "index=MYALLY-" . $attackerAlly->Index(), 1);
