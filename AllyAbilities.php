@@ -748,6 +748,10 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities, $isUp
         AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
         AddDecisionQueue("SPECIFICCARD", $player, "OBIWANKENOBI", 1);
         break;
+      case "5184505570"://Chimaera JTL
+        CreateTieFighter($player);
+        CreateTieFighter($player);
+        break;
       case "0474909987"://Val
         AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
         AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to add two experience");

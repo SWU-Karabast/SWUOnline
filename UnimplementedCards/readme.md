@@ -12,7 +12,6 @@ The images below show cards that are _**not yet**_ implemented. If you are havin
 ![](./3666212779.webp)
 ![](./36859e7ec4.webp)
 ![](./4334684518.webp)
-![](./5184505570.webp)
 ![](./5422802110.webp)
 ![](./5751831621.webp)
 ![](./590b638b18.webp)

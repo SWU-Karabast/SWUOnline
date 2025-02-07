@@ -1189,7 +1189,7 @@ function CheckBobaFettJTL($targetPlayer, $enemyDamage, $fromCombat) {
 function CheckThrawnJTL($player, $serializedAllyDestroyData, $target) {
   $charArr = &GetPlayerCharacter($player);
   for($i=0; $i<count($charArr); $i+=CharacterPieces()) {
-    if($charArr[$i] == "5846322081") {//Grand Admiral Thrawn
+    if($charArr[$i] == "5846322081") {//Grand Admiral Thrawn JTL
       if(!LeaderAbilitiesIgnored() && $charArr[$i+1] == 2) {
         AddDecisionQueue("YESNO", $player, "if you want use Thrawn's ability for " . CardLink($target, $target));
         AddDecisionQueue("NOPASS", $player, "-");

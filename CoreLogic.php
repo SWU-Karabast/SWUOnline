@@ -5414,6 +5414,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         $deck->Add(RemoveDiscard($otherPlayer, $i));
       }
       break;
+    case "5184505570"://Chimaera JTL
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:hasWhenDefeatedOnly=true");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "index=MYALLY-" . $playAlly->Index());
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to use a When Defeated ability");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("USEWHENDEFEATED", $currentPlayer, "-", 1);
+      break;
     case "0398102006"://The Invisible Hand
       CreateBattleDroid($currentPlayer);
       CreateBattleDroid($currentPlayer);

@@ -1859,6 +1859,12 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
     case "DEPLOYLEADERASUPGRADE":
       LeaderPilotDeploy($player, $parameter, $lastResult);
       return $lastResult;
+    case "USEWHENDEFEATED":
+      $ally = new Ally($lastResult, $player);
+      if ($ally->Exists()) {
+        AllyDestroyedAbility($player, $ally->CardID(), $ally->UniqueID(), $ally->LostAbilities(), $ally->IsUpgraded(), $ally->GetUpgrades(), $ally->GetUpgrades(true));
+      }
+      break;
     default:
       return "NOTSTATIC";
   }
