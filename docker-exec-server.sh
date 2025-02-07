@@ -1,1 +1,1 @@
-docker exec -it $(docker ps -aqf 'name=swuonline-web-server-1') bash
+docker exec -u 0 -it $(docker ps -aqf 'name=swuonline-web-server-1') bash

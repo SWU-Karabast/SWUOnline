@@ -366,6 +366,9 @@ class Ally {
           break;
         //Jump to Lightspeed
         case "1463418669"://IG-88
+          //workaround for some reason it doesn't like that the pilot has 0 power
+          $power -= 4;
+          //end workaround
           $power += SearchCount(SearchAllies($otherPlayer, damagedOnly:true)) > 0 ? 3 : 0;
           break;
         case "6610553087"://Nien Nunb
@@ -525,7 +528,7 @@ class Ally {
         for ($j = SubcardPieces() - 1; $j >= 0; $j--) {
           unset($subcards[$i+$j]);
         }
-        
+
         $subcards = array_values($subcards);
         $this->allies[$this->index + 4] = count($subcards) > 0 ? implode(",", $subcards) : "-";
         if(DefinedTypesContains($subcardID, "Upgrade")) UpgradeDetached($subcardID, $this->playerID, "MYALLY-" . $this->index);
