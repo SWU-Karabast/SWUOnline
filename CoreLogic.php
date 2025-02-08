@@ -303,7 +303,7 @@ function CharacterPlayCardAbilities($cardID, $from)
 
 function MainCharacterPlayCardAbilities($cardID, $from)
 {
-  global $currentPlayer, $mainPlayer, $CS_NumNonAttackCards, $CS_NumBoostPlayed;
+  global $currentPlayer, $mainPlayer, $CS_NumNonAttackCards;
   if(LeaderAbilitiesIgnored()) return;
 
   $character = &GetPlayerCharacter($currentPlayer);
@@ -2329,7 +2329,7 @@ function ClearGameFiles($gameName)
 function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalCosts = "-", $theirCard = false, $uniqueId = "")
 {
   global $currentPlayer, $layers, $CS_PlayIndex, $CS_OppIndex, $initiativePlayer, $CCS_CantAttackBase, $CS_NumAlliesDestroyed;
-  global $CS_NumFighterAttacks, $CS_NumNonTokenVehicleAttacks;
+  global $CS_NumFighterAttacks, $CS_NumNonTokenVehicleAttacks, $CS_NumFirstOrderPlayed;
   $index = GetClassState($currentPlayer, $CS_PlayIndex);
   $otherPlayer = $currentPlayer == 1 ? 2 : 1;
   if($from == "PLAY" && IsAlly($cardID, $currentPlayer)) {
@@ -5877,14 +5877,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "7514405173"://Admiral Ackbar Leader
       if(GetResolvedAbilityName($cardID) == "Exhaust") {
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
-        AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
-        AddDecisionQueue("MZFILTER", $currentPlayer, "status=1");
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a non-leader unit to exhaust");
-        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
-        AddDecisionQueue("SPECIFICCARD", $currentPlayer, "ACKBAR_JTL", 1);
+        AdmiralAckbarItsATrap($currentPlayer, flipped:false);
       }
       break;
     case "1519837763"://Shuttle ST-149
@@ -5983,25 +5976,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "8943696478";//Admiral Holdo
       if(GetResolvedAbilityName($cardID) == "Buff") {
-        $indices = [];
-        $myAllies = GetAllies($currentPlayer);
-        $theirAllies = GetAllies($otherPlayer);
-        for($i=0; $i<count($myAllies); $i+=AllyPieces()) {
-          if(AllyTraitContainsOrUpgradeTraitContains($myAllies[$i+5], "Resistance")) {
-            $indices[] = "MYALLY-" . $i;
-          }
-        }
-        for($i=0; $i<count($theirAllies); $i+=AllyPieces()) {
-          if(AllyTraitContainsOrUpgradeTraitContains($theirAllies[$i+5], "Resistance")) {
-            $indices[] = "THEIRALLY-" . $i;
-          }
-        }
-        AddDecisionQueue("PASSPARAMETER", $currentPlayer, implode(",", $indices));
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to give +2/+2");
-        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "ADDHEALTH,2", 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
-        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "8943696478,PLAY", 1);
+        AdmiralHoldoWereNotAlone($currentPlayer, flipped:false);
       }
       break;
     case "9695562265"://Koiogran Turn
@@ -6035,6 +6010,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "7661383869"://Darth Vader
       if(GetResolvedAbilityName($cardID) == "TIE Fighter" && GetClassState($currentPlayer, $CS_NumNonTokenVehicleAttacks) > 0) {
         CreateTieFighter($currentPlayer);
+      }
+      break;
+    case "3132453342"://Captain Phasma
+      if(GetResolvedAbilityName($cardID) == "Deal Damage" && GetClassState($currentPlayer, $CS_NumFirstOrderPlayed) > 0) {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYCHAR:definedType=Base&THEIRCHAR:definedType=Base");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a base to deal 1 damage to", 1);
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1,$currentPlayer,1", 1);
       }
       break;
     //PlayAbility End

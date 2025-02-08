@@ -279,7 +279,7 @@ $CS_ArcaneDamageDealt = 57;           //free//number
 $CS_LayerPlayIndex = 58;
 $CS_NumCardsPlayed = 59; //Amulet of Ignition
 $CS_NamesOfCardsPlayed = 60;          //free//string;default "-"
-$CS_NumBoostPlayed = 61;              //free//number
+$CS_NumFirstOrderPlayed = 61;
 $CS_PlayedAsInstant = 62; //If the card was played as an instant -- some things like banish we lose memory of as soon as it is removed from the zone
 $CS_AnotherWeaponGainedGoAgain = 63;  //free//string;default "-"
 $CS_NumContractsCompleted = 64;       //free//number
@@ -486,9 +486,9 @@ function ResetClassState($player)
   global $CS_HitsWithWeapon, $CS_ArcaneDamagePrevention, $CS_DynCostResolved, $CS_CardsEnteredGY, $CS_CachedCharacterLevel, $CS_ArsenalFacing;
   global $CS_HighestRoll, $CS_NumAuras, $CS_AbilityIndex, $CS_AdditionalCosts, $CS_NumRedPlayed, $CS_PlayUniqueID, $CS_AlluvionUsed;
   global $CS_NumPhantasmAADestroyed, $CS_NumEventsPlayed, $CS_MaxQuellUsed, $CS_DamageDealt, $CS_ArcaneTargetsSelected, $CS_NumDragonAttacks, $CS_NumIllusionistAttacks;
-  global $CS_LastDynCost, $CS_NumIllusionistActionCardAttacks, $CS_ArcaneDamageDealt, $CS_LayerPlayIndex, $CS_NumCardsPlayed, $CS_NamesOfCardsPlayed, $CS_NumBoostPlayed;
+  global $CS_LastDynCost, $CS_NumIllusionistActionCardAttacks, $CS_ArcaneDamageDealt, $CS_LayerPlayIndex, $CS_NumCardsPlayed, $CS_NamesOfCardsPlayed;
   global $CS_PlayedAsInstant, $CS_AnotherWeaponGainedGoAgain, $CS_NumContractsCompleted, $CS_HitsWithSword, $CS_NumMelodyPlayed,
-    $CS_NumClonesPlayed, $CS_UnitsThatAttackedBase, $CS_PlayedWithExploit, $CS_AlliesDestroyed;
+    $CS_NumClonesPlayed, $CS_UnitsThatAttackedBase, $CS_PlayedWithExploit, $CS_AlliesDestroyed, $CS_NumFirstOrderPlayed;
 
   $classState = &GetPlayerClassState($player);
   $classState[$CS_NumVillainyPlayed] = 0;
@@ -553,7 +553,7 @@ function ResetClassState($player)
   $classState[$CS_LayerPlayIndex] = -1;
   $classState[$CS_NumCardsPlayed] = 0;
   $classState[$CS_NamesOfCardsPlayed] = "-";
-  $classState[$CS_NumBoostPlayed] = 0;
+  $classState[$CS_NumFirstOrderPlayed] = 0;
   $classState[$CS_PlayedAsInstant] = 0;
   $classState[$CS_AnotherWeaponGainedGoAgain] = "-";
   $classState[$CS_NumContractsCompleted] = 0;

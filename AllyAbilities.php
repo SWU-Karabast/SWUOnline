@@ -1723,7 +1723,7 @@ function SpecificAllyAttackAbilities($attackID)
         if(TraitContains($attackerAlly->CardID(), "Jedi", $mainPlayer)) AddCurrentTurnEffect($upgrades[$i], $mainPlayer, from:"PLAY");
         break;
       //Jump to Lightspeed
-      case "3f0b5622a7"://Asajj Leader Unit
+      case "3f0b5622a7"://Asajj pilot Leader Unit
         AsajjVentressIWorkAlone($mainPlayer);
         break;
       case "3282713547"://Dengar pilot
@@ -1738,14 +1738,14 @@ function SpecificAllyAttackAbilities($attackID)
           $ally->DealDamage(1, fromUnitEffect:true);
         }
         break;
-      case "6414788e89"://Wedged Antilles Leader Unit
+      case "6414788e89"://Wedged Antilles pilot Leader Unit
         AddCurrentTurnEffect($upgrades[$i], $mainPlayer, from:"PLAY");
         break;
       case "3475471540"://Cassian Andor
         $discarded = Mill($defPlayer, 1);
         if($discarded != "" && CardCost($discarded) <= 3) Draw($mainPlayer);
         break;
-      case "11e54776e9"://Luke Skywalker Leader Unit
+      case "11e54776e9"://Luke Skywalker pilot Leader Unit
         if(TraitContains($attackerAlly->CardID(), "Fighter", $mainPlayer)) {
           AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY");
           AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 3 damage to");
@@ -2491,7 +2491,32 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "RESTORE,2", 1);
       break;
+    case "8500401413"://Red Five
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:damagedOnly=1&THEIRALLY:damagedOnly=1");
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 2 damage");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,2,$mainPlayer,1", 1);
+      break;
+    case "36859e7ec4"://Admiral Ackbar leader unit
+      AdmiralAckbarItsATrap($mainPlayer, flipped:true);
+      break;
+    case "ccf9474416"://Admiral Holdo leader unit
+      AdmiralHoldoWereNotAlone($mainPlayer, flipped:true);
+      break;
     default: break;
+    case "fda7bdc316"://Captain Phasma
+      global $CS_NumFirstOrderPlayed;
+      if(GetClassState($mainPlayer, $CS_NumFirstOrderPlayed) > 0) {
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY");
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 1 damage to");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,1,$mainPlayer,1", 1);
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYCHAR:definedType=Base&THEIRCHAR:definedType=Base");
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a base to deal 1 damage to", 1);
+        AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,1,$mainPlayer,1", 1);
+      }
+      break;
   }
   //SpecificAllyAttackAbilities End
 }
