@@ -6044,6 +6044,31 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "6854247423"://Tantive IV
       CreateXWing($currentPlayer);
       break;
+    case "3427170256"://Captain Phasma Unit
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=First_Order&THEIRALLY:trait=First_Order");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "index=MYALLY-" . $playAlly->Index());
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a First Order unit to give +2/+2");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "ADDHEALTH,2", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1); 
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "3427170256,PLAY", 1);
+      break;
+    case "3885807284"://Fight Fire With Fire
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY"); 
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a friendly unit");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETARENA", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "1", 1);
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:arena={1}", 1);
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an enemy unit in the same arena", 1);
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "2", 1);
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,3", 1);
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{2}", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,3", 1);
+      break;
     //PlayAbility End
     default: break;
   }

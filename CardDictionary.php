@@ -2104,6 +2104,7 @@ function HasAttackAbility($cardID) {
     case "6931439330"://The Ghost
     case "3468546373"://General Rieekan
     case "7192849828"://Mist Hunter
+    case "3427170256"://Captain Phasma Unit
       return true;
     default: return false;
   }

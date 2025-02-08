@@ -247,6 +247,7 @@ function EffectAttackModifier($cardID, $playerID="")
     case "8656409691": return 1;//Rio Durant
     case "8943696478": return 2;//Admiral Holdo
     case "1397553238": return -1;//Desperate Commando
+    case "3427170256": return 2;//Captain Phasma Unit
     default: return 0;
   }
 }
