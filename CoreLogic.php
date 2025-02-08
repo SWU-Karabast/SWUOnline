@@ -2562,6 +2562,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       if($from != "PLAY") Draw($currentPlayer);
       break;
     case "2050990622"://Spark of Rebellion
+      AddDecisionQueue("REVEALHANDCARDS", $otherPlayer, "-");
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRHAND");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose which card you want your opponent to discard", 1);
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
@@ -2608,6 +2609,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "8986035098"://Viper Probe Droid
       if($from != "PLAY") {
+        AddDecisionQueue("REVEALHANDCARDS", $otherPlayer, "-");
         AddDecisionQueue("LOOKHAND", $currentPlayer, "-");
       }
       break;
@@ -2625,7 +2627,6 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "7257556541"://Bodhi Rook
       if($from != "PLAY") {
-        AddDecisionQueue("FINDINDICES", $otherPlayer, "HAND");
         AddDecisionQueue("REVEALHANDCARDS", $otherPlayer, "-");
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRHAND");
         AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Unit");
@@ -3358,16 +3359,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "7728042035"://Chimaera
       if($from == "PLAY") {
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Name the card in chat");
-        AddDecisionQueue("OK", $currentPlayer, "-");
-        AddDecisionQueue("PASSPARAMETER", $currentPlayer, "1");
-        AddDecisionQueue("FINDINDICES", $otherPlayer, "HAND");
-        AddDecisionQueue("REVEALHANDCARDS", $otherPlayer, "-");
-        AddDecisionQueue("FINDINDICES", $otherPlayer, "HAND");
-        AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "If you have the named card, you must discard it", 1);
-        AddDecisionQueue("MAYCHOOSEHAND", $otherPlayer, "<-", 1);
-        AddDecisionQueue("MULTIREMOVEHAND", $otherPlayer, "-", 1);
-        AddDecisionQueue("ADDDISCARD", $otherPlayer, "HAND", 1);
+        AddDecisionQueue("INPUTCARDNAME", $currentPlayer, "<-");
+        AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+        AddDecisionQueue("REVEALHANDCARDS", $otherPlayer, "-", 1);
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRHAND:cardTitle={0}", 1);
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to discard", 1);
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZDESTROY", $currentPlayer, "-", 1);
       }
       break;
     case "3809048641"://Surprise Strike
@@ -4264,6 +4263,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       MZMoveCard($currentPlayer, "MYDISCARD:trait=Underworld", "MYHAND", may:true, context:"Choose an underworld card to return with " . CardLink("2090698177", "2090698177"));
       break;
     case "7964782056"://Qi'Ra unit
+      AddDecisionQueue("REVEALHANDCARDS", $otherPlayer, "-");
       AddDecisionQueue("LOOKHAND", $currentPlayer, "-");
       AddDecisionQueue("INPUTCARDNAME", $currentPlayer, "<-");
       AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
@@ -4295,6 +4295,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       MZMoveCard($currentPlayer, "MYDISCARD:trait=Republic;definedType=Unit", "MYHAND", may:true, context:"Choose a Republic unit to return to your hand");
       break;
     case "5830140660"://Bazine Netal
+      AddDecisionQueue("REVEALHANDCARDS", $otherPlayer, "-");
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRHAND");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to discard");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
@@ -4784,8 +4785,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "6117103324"://Jetpack
       $ally = new Ally($target, $currentPlayer);
-      $ally->AddEffect("6117103324");
-      $ally->Attach("8752877738");//Shield Token
+      if ($ally->Exists()) {
+        $upgradeUniqueID = $ally->Attach("8752877738");//Shield Token
+        AddCurrentTurnEffect("6117103324", $currentPlayer, uniqueID:$upgradeUniqueID);
+      }
       break;
     case "1386874723"://Omega (Part of the Squad)
       if($from != "PLAY") {
@@ -5085,8 +5088,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "0959549331"://Unmasking the Conspiracy
       $hand = &GetHand($currentPlayer);
-      PummelHit($currentPlayer);
       if(count($hand) > 0) {
+        PummelHit($currentPlayer);
+        AddDecisionQueue("REVEALHANDCARDS", $otherPlayer, "-");
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRHAND");
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose which card you want your opponent to discard", 1);
         AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
@@ -5409,6 +5413,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       for($i=count($theirDiscard) - DiscardPieces(); $i>=0; $i-=DiscardPieces()) {
         $deck->Add(RemoveDiscard($otherPlayer, $i));
       }
+      break;
+    case "5184505570"://Chimaera JTL
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:hasWhenDefeatedOnly=true");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "index=MYALLY-" . $playAlly->Index());
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to use a When Defeated ability");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("USEWHENDEFEATED", $currentPlayer, "-", 1);
       break;
     case "0398102006"://The Invisible Hand
       CreateBattleDroid($currentPlayer);

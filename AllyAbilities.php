@@ -61,6 +61,30 @@ function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null,
   return $uniqueID;
 }
 
+
+function DefeatUpgradeForUniqueID($subcardUniqueID, $player = "") {
+  $initialPlayer = ($player == 1 || $player == 2) ? $player : 1;
+  $players = [$initialPlayer, ($initialPlayer % 2) + 1];
+  foreach ($players as $p) {
+    $allies = &GetAllies($p);
+    for ($i = 0; $i < count($allies); $i += AllyPieces()) {
+      $allySubcardsDelimited = $allies[$i + 4];
+      if ($allySubcardsDelimited == null || $allySubcardsDelimited == "" || $allySubcardsDelimited == "-") {
+        continue;
+      }
+
+      $allySubcards = explode(",", $allySubcardsDelimited);
+      for ($j = 0; $j < count($allySubcards); $j += SubcardPieces()) {
+        if ($allySubcards[$j + 3] == $subcardUniqueID) {
+          $ally = new Ally("MYALLY-" . $i, $p);
+          $ally->DefeatUpgrade($allySubcards[$j], $subcardUniqueID);
+          break;
+        }
+      }
+    }
+  }
+}
+
 function CheckHealthAllAllies() {
   foreach ([1, 2] as $player) {
     $allies = &GetAllies($player);
@@ -723,6 +747,10 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities, $isUp
         AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
         AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
         AddDecisionQueue("SPECIFICCARD", $player, "OBIWANKENOBI", 1);
+        break;
+      case "5184505570"://Chimaera JTL
+        CreateTieFighter($player);
+        CreateTieFighter($player);
         break;
       case "0474909987"://Val
         AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
@@ -2008,6 +2036,7 @@ function SpecificAllyAttackAbilities($attackID)
       break;
     case "0398102006"://The Invisible Hand
       $totalUnits = SearchCount(SearchAllies($mainPlayer, trait:"Separatist"));
+      AddDecisionQueue("PASSPARAMETER", $mainPlayer, "-");
       for ($i = 0; $i < $totalUnits; $i++) {
         AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:trait=Separatist",1 );
         AddDecisionQueue("MZFILTER", $mainPlayer, "index=MYALLY-" . $attackerAlly->Index(), 1);

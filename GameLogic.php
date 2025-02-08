@@ -395,7 +395,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         case "MYCHAR": case "THEIRCHAR": AddCharacterUses($player, $lrArr[1], $parameter); break;
         case "MYALLY": case "THEIRALLY":
           $ally = new Ally($lastResult, $player);
-          $ally->ModifyUses($parameter);
+          $ally->SumNumUses($parameter);
           break;
         default: break;
       }
@@ -1092,12 +1092,11 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $revealed = RevealCards($cards, $player);
       return ($revealed ? $lastResult : "PASS");
     case "REVEALHANDCARDS":
-      $indices = (is_array($lastResult) ? $lastResult : explode(",", $lastResult));
       $hand = &GetHand($player);
       $cards = "";
-      for($i = 0; $i < count($indices); ++$i) {
+      for($i = 0; $i < count($hand); $i += HandPieces()) {
         if($cards != "") $cards .= ",";
-        $cards .= $hand[$indices[$i]];
+        $cards .= $hand[$i];
       }
       $revealed = RevealCards($cards, $player);
       return ($revealed ? $cards : "PASS");
@@ -1860,6 +1859,12 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
     case "DEPLOYLEADERASUPGRADE":
       LeaderPilotDeploy($player, $parameter, $lastResult);
       return $lastResult;
+    case "USEWHENDEFEATED":
+      $ally = new Ally($lastResult, $player);
+      if ($ally->Exists()) {
+        AllyDestroyedAbility($player, $ally->CardID(), $ally->UniqueID(), $ally->LostAbilities(), $ally->IsUpgraded(), $ally->GetUpgrades(), $ally->GetUpgrades(true));
+      }
+      break;
     default:
       return "NOTSTATIC";
   }
