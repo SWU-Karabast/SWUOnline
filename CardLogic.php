@@ -1100,6 +1100,18 @@ function IsExploitWhenPlayed($cardID) {
   }
 }
 
+function AdmiralAckbarItsATrap($player, $flipped) {
+  AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
+  if(!$flipped) AddDecisionQueue("MZFILTER", $player, "leader=1");
+  AddDecisionQueue("MZFILTER", $player, "status=1");
+  AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to exhaust");
+  if(!$flipped) AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
+  else AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+  AddDecisionQueue("MZOP", $player, "REST", 1);
+  AddDecisionQueue("MZOP", $player, "GETUNIQUEID", 1);
+  AddDecisionQueue("SPECIFICCARD", $player, "ACKBAR_JTL", 1);
+}
+
 function AsajjVentressIWorkAlone($player) {
   AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY", 1);
   AddDecisionQueue("SETDQCONTEXT", $player, "Choose a friendly unit to damage", 1);

@@ -5877,14 +5877,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "7514405173"://Admiral Ackbar Leader
       if(GetResolvedAbilityName($cardID) == "Exhaust") {
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
-        AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
-        AddDecisionQueue("MZFILTER", $currentPlayer, "status=1");
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a non-leader unit to exhaust");
-        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
-        AddDecisionQueue("SPECIFICCARD", $currentPlayer, "ACKBAR_JTL", 1);
+        AdmiralAckbarItsATrap($currentPlayer, flipped:false);
       }
       break;
     case "1519837763"://Shuttle ST-149

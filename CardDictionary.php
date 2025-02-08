@@ -2060,7 +2060,6 @@ function LeaderCanPilot($cardID) {
     case "0616724418"://Han Solo
     case "3658069276"://Lando Calrissian
     case "4179470615"://Asajj Ventress
-    case "7514405173"://Admiral Ackbar
     case "9831674351"://Boba Fett
     case "8656409691"://Rio Durant
     case "0766281795"://Luke Skywalker
