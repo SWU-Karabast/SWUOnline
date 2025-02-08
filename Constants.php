@@ -220,69 +220,69 @@ $SHMOP_ISREPLAY = 10;//0 = not replay, 1 = replay
 //Class State (one for each player)
 $CS_NumVillainyPlayed = 0;
 $CS_PlayedAsUpgrade = 1;
-$CS_AtksWWeapon = 2;
-$CS_HitsWDawnblade = 3;
+$CS_AtksWWeapon = 2;                    //free//number
+$CS_NumNonTokenVehicleAttacks = 3;
 $CS_DamagePrevention = 4;
 $CS_CardsDrawn = 5;
 $CS_DamageTaken = 6;
-$CS_NumActionsPlayed = 7;
-$CS_ArsenalFacing = 8;//Deprecated
+$CS_NumActionsPlayed = 7;               //free//number
+$CS_ArsenalFacing = 8;                  //free//number
 $CS_CharacterIndex = 9;
 $CS_PlayIndex = 10;
-$CS_NumNonAttackCards = 11;
-$CS_CachedCharacterLevel = 12;
-$CS_PreparationCounters = 13;
-$CS_NextNAACardGoAgain = 14;
+$CS_NumNonAttackCards = 11;             //free//number
+$CS_CachedCharacterLevel = 12;          //free//number
+$CS_PreparationCounters = 13;           //free//number
+$CS_NextNAACardGoAgain = 14;            //free//number
 $CS_NumAlliesDestroyed = 15;
 $CS_NumWhenDefeatedPlayed = 16;
-$CS_ResolvingLayerUniqueID = 17;
-$CS_NextWizardNAAInstant = 18;
-$CS_ArcaneDamageTaken = 19;
-$CS_NextNAAInstant = 20;
-$CS_NextDamagePrevented = 21;
+$CS_ResolvingLayerUniqueID = 17;        //free//number
+$CS_NextWizardNAAInstant = 18;          //free//number
+$CS_ArcaneDamageTaken = 19;             //free//number
+$CS_NextNAAInstant = 20;                //free//number
+$CS_NextDamagePrevented = 21;           //free//number
 $CS_LastAttack = 22;
 $CS_NumLeftPlay = 23;
-$CS_NumMaterializations = 24;
-$CS_NumFusedLightning = 25;
+$CS_NumMaterializations = 24;           //free//number
+$CS_NumFusedLightning = 25;             //free/number
 $CS_AfterPlayedBy = 26;
-$CS_PlayCCIndex = 27;
-$CS_NumAttackCards = 28; //Played or blocked
-$CS_NumPlayedFromBanish = 29;
+$CS_PlayCCIndex = 27;                   //free//number
+$CS_NumAttackCards = 28;                //free/number
+$CS_NumPlayedFromBanish = 29;           //free//number
 $CS_NumAttacks = 30;
 $CS_DieRoll = 31;
 $CS_NumMandalorianAttacks = 32;
-$CS_NumWizardNonAttack = 33;
+$CS_NumFighterAttacks = 33;
 $CS_LayerTarget = 34;
-$CS_NumSwordAttacks = 35;
+$CS_NumSwordAttacks = 35;               //free//number
 $CS_HitsWithWeapon = 36;
-$CS_ArcaneDamagePrevention = 37;
+$CS_ArcaneDamagePrevention = 37;        //free//number
 $CS_DynCostResolved = 38;
 $CS_CardsEnteredGY = 39;
 $CS_HighestRoll = 40;
-$CS_NumMelodyPlayed = 41;
-$CS_NumAuras = 42;
+$CS_NumMelodyPlayed = 41;               //free//number
+$CS_NumAuras = 42;                      //free//number
 $CS_AbilityIndex = 43;
 $CS_AdditionalCosts = 44;
 $CS_NumRedPlayed = 45;
 $CS_PlayUniqueID = 46;
-$CS_NumPhantasmAADestroyed = 47;
+$CS_NumPhantasmAADestroyed = 47;        //free//number
 $CS_NumEventsPlayed = 48;
 $CS_AlluvionUsed = 49;
-$CS_MaxQuellUsed = 50;
+$CS_MaxQuellUsed = 50;                  //free//number
 $CS_DamageDealt = 51; //Only includes damage dealt by the hero. CR 2.1 8.2.8f If an ally deals damage, the controlling player and their hero are not considered to have dealt damage.
 $CS_ArcaneTargetsSelected = 52;
-$CS_NumDragonAttacks = 53;
-$CS_NumIllusionistAttacks = 54;
+$CS_NumDragonAttacks = 53;             //free//number
+$CS_NumIllusionistAttacks = 54;       //free//number
 $CS_LastDynCost = 55;
-$CS_NumIllusionistActionCardAttacks = 56;
-$CS_ArcaneDamageDealt = 57;
+$CS_NumIllusionistActionCardAttacks = 56;//free//number
+$CS_ArcaneDamageDealt = 57;           //free//number
 $CS_LayerPlayIndex = 58;
 $CS_NumCardsPlayed = 59; //Amulet of Ignition
-$CS_NamesOfCardsPlayed = 60; //Amulet of Echoes
-$CS_NumBoostPlayed = 61; //Hanabi Blaster
+$CS_NamesOfCardsPlayed = 60;          //free//string;default "-"
+$CS_NumBoostPlayed = 61;              //free//number
 $CS_PlayedAsInstant = 62; //If the card was played as an instant -- some things like banish we lose memory of as soon as it is removed from the zone
-$CS_AnotherWeaponGainedGoAgain = 63;
-$CS_NumContractsCompleted = 64;
+$CS_AnotherWeaponGainedGoAgain = 63;  //free//string;default "-"
+$CS_NumContractsCompleted = 64;       //free//number
 $CS_HitsWithSword = 65;
 $CS_NumClonesPlayed = 66;
 $CS_UnitsThatAttackedBase = 67;
@@ -477,12 +477,12 @@ function ResetChainLinkState()
 
 function ResetClassState($player)
 {
-  global $CS_NumVillainyPlayed, $CS_PlayedAsUpgrade, $CS_AtksWWeapon, $CS_HitsWDawnblade, $CS_DamagePrevention, $CS_CardsDrawn, $CS_NumBountyHuntersPlayed, $CS_NumPilotsPlayed;
+  global $CS_NumVillainyPlayed, $CS_PlayedAsUpgrade, $CS_AtksWWeapon, $CS_NumNonTokenVehicleAttacks, $CS_DamagePrevention, $CS_CardsDrawn, $CS_NumBountyHuntersPlayed, $CS_NumPilotsPlayed;
   global $CS_DamageTaken, $CS_NumActionsPlayed, $CS_CharacterIndex, $CS_PlayIndex, $CS_OppIndex, $CS_OppCardActive, $CS_NumNonAttackCards;
   global $CS_PreparationCounters, $CS_NextNAACardGoAgain, $CS_NumAlliesDestroyed, $CS_NumWhenDefeatedPlayed, $CS_ResolvingLayerUniqueID, $CS_NextWizardNAAInstant;
   global $CS_ArcaneDamageTaken, $CS_NextNAAInstant, $CS_NextDamagePrevented, $CS_LastAttack, $CS_PlayCCIndex;
   global $CS_NumLeftPlay, $CS_NumMaterializations, $CS_NumFusedLightning, $CS_AfterPlayedBy, $CS_NumAttackCards, $CS_NumPlayedFromBanish;
-  global $CS_NumAttacks, $CS_DieRoll, $CS_NumMandalorianAttacks, $CS_SeparatistUnitsThatAttacked, $CS_NumWizardNonAttack, $CS_LayerTarget, $CS_NumSwordAttacks;
+  global $CS_NumAttacks, $CS_DieRoll, $CS_NumMandalorianAttacks, $CS_SeparatistUnitsThatAttacked, $CS_NumFighterAttacks, $CS_LayerTarget, $CS_NumSwordAttacks;
   global $CS_HitsWithWeapon, $CS_ArcaneDamagePrevention, $CS_DynCostResolved, $CS_CardsEnteredGY, $CS_CachedCharacterLevel, $CS_ArsenalFacing;
   global $CS_HighestRoll, $CS_NumAuras, $CS_AbilityIndex, $CS_AdditionalCosts, $CS_NumRedPlayed, $CS_PlayUniqueID, $CS_AlluvionUsed;
   global $CS_NumPhantasmAADestroyed, $CS_NumEventsPlayed, $CS_MaxQuellUsed, $CS_DamageDealt, $CS_ArcaneTargetsSelected, $CS_NumDragonAttacks, $CS_NumIllusionistAttacks;
@@ -494,7 +494,7 @@ function ResetClassState($player)
   $classState[$CS_NumVillainyPlayed] = 0;
   $classState[$CS_PlayedAsUpgrade] = 0;
   $classState[$CS_AtksWWeapon] = 0;
-  $classState[$CS_HitsWDawnblade] = 0;
+  $classState[$CS_NumNonTokenVehicleAttacks] = 0;
   $classState[$CS_DamagePrevention] = 0;
   $classState[$CS_CardsDrawn] = 0;
   $classState[$CS_DamageTaken] = 0;
@@ -525,7 +525,7 @@ function ResetClassState($player)
   $classState[$CS_DieRoll] = 0;
   $classState[$CS_NumMandalorianAttacks] = 0;
   $classState[$CS_SeparatistUnitsThatAttacked] = "-";
-  $classState[$CS_NumWizardNonAttack] = 0;
+  $classState[$CS_NumFighterAttacks] = 0;
   $classState[$CS_LayerTarget] = "-";
   $classState[$CS_NumSwordAttacks] = 0;
   $classState[$CS_HitsWithWeapon] = 0;

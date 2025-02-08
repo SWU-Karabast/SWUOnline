@@ -1928,7 +1928,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
   global $turn, $combatChain, $currentPlayer, $defPlayer, $combatChainState, $CCS_AttackPlayedFrom, $CS_PlayIndex, $CS_OppIndex, $CS_OppCardActive;
   global $CS_CharacterIndex, $CS_NumNonAttackCards, $CS_PlayCCIndex, $CS_NumAttacks, $CCS_LinkBaseAttack;
   global $CCS_WeaponIndex, $EffectContext, $CCS_AttackUniqueID, $CS_NumEventsPlayed, $CS_AfterPlayedBy, $layers;
-  global $CS_NumDragonAttacks, $CS_NumIllusionistAttacks, $CS_NumIllusionistActionCardAttacks, $CCS_IsBoosted;
+  global $CS_NumFighterAttacks, $CS_NumNonTokenVehicleAttacks, $CS_NumIllusionistActionCardAttacks, $CCS_IsBoosted;
   global $SET_PassDRStep, $CS_AbilityIndex, $CS_NumMandalorianAttacks, $CCS_MultiAttackTargets, $CS_SeparatistUnitsThatAttacked;
 
   $oppCardActive = GetClassState($currentPlayer, $CS_OppCardActive) > 0;
@@ -1985,10 +1985,16 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
       }
       if (!$chainClosed) {
         IncrementClassState($currentPlayer, $CS_NumAttacks);
+        //increment Trait attacks
         if (TraitContains($cardID, "Mandalorian", $currentPlayer, $index))
           IncrementClassState($currentPlayer, $CS_NumMandalorianAttacks);
         if (TraitContains($cardID, "Separatist", $currentPlayer, $index))
           AppendClassState($currentPlayer, $CS_SeparatistUnitsThatAttacked, $ally->UniqueID(), false);
+        if(TraitContains($cardID, "Fighter", $currentPlayer, $index))
+          IncrementClassState($currentPlayer, $CS_NumFighterAttacks);
+        if(TraitContains($cardID, "Vehicle", $currentPlayer, $index) && !IsToken($cardID))
+          IncrementClassState($currentPlayer, $CS_NumNonTokenVehicleAttacks);
+        //end increment Trait attacks
         ArsenalAttackAbilities();
         OnAttackEffects($cardID);
       }

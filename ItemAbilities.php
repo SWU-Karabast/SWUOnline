@@ -192,21 +192,21 @@ function ItemStartTurnAbilities()
   }
 }
 
-function ItemBeginRecollectionAbilities() {
-  global $mainPlayer, $defPlayer, $CS_NumMaterializations;
-  $mainItems = &GetItems($mainPlayer);
-  for($i=0; $i<count($mainItems); $i+=ItemPieces()) {
-    switch($mainItems[$i]) {
-      default: break;
-    }
-  }
-  $defItems = &GetItems($defPlayer);
-  for($i=0; $i<count($defItems); $i+=ItemPieces()) {
-    switch($defItems[$i]) {
-      default: break;
-    }
-  }
-}
+// function ItemBeginRecollectionAbilities() {//FAB
+//   global $mainPlayer, $defPlayer, $CS_NumMaterializations;
+//   $mainItems = &GetItems($mainPlayer);
+//   for($i=0; $i<count($mainItems); $i+=ItemPieces()) {
+//     switch($mainItems[$i]) {
+//       default: break;
+//     }
+//   }
+//   $defItems = &GetItems($defPlayer);
+//   for($i=0; $i<count($defItems); $i+=ItemPieces()) {
+//     switch($defItems[$i]) {
+//       default: break;
+//     }
+//   }
+// }
 
 //FAB
 // function ItemEndTurnAbilities()

@@ -1232,6 +1232,10 @@ function CheckJTLAbilityTypes($cardID) {
       return LeaderAbilitiesIgnored() ? "" : "A";
     case "8943696478"://Admiral Holdo
       return LeaderAbilitiesIgnored() ? "" : "A";
+    case "0766281795"://Luke Skywalker
+      return LeaderAbilitiesIgnored() ? "" : "A";
+    case "7661383869"://Darth Vader
+      return LeaderAbilitiesIgnored() ? "" : "A";
     default: return "";
   }
 }
@@ -1506,6 +1510,10 @@ function CheckJTLAbilityNames($cardID) {
       return LeaderAbilitiesIgnored() ? "" : "Attack";
     case "8943696478"://Admiral Holdo
       return LeaderAbilitiesIgnored() ? "" : "Buff";
+    case "0766281795"://Luke Skywalker
+      return LeaderAbilitiesIgnored() ? "" : "Deal Damage";
+    case "7661383869"://Darth Vader
+      return LeaderAbilitiesIgnored() ? "" : "TIE Fighter";
     default: return "";
   }
 }
