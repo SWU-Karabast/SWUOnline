@@ -6005,6 +6005,26 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "8943696478,PLAY", 1);
       }
       break;
+    case "9695562265"://Koiogran Turn
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Fighter;maxCost=6&MYALLY:trait=Transport;maxCost=6&THEIRALLY:trait=Fighter;maxCost=6&THEIRALLY:trait=Transport;maxCost=6");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a Fighter or Transport to ready");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
+      break;
+
+    case "1965647391"://Blade Squadron B-Wing
+      $theirAllies = &GetAllies($otherPlayer);
+      $numExhausted = 0;
+      for($i=0; $i<count($theirAllies); $i+=AllyPieces()) {
+      if($theirAllies[$i+1] == 1) ++$numExhausted;
+      }
+      if($numExhausted >= 3) {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to give a shield to");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "ADDSHIELD", 1);
+      }
+      break;
     //PlayAbility End
     default: break;
   }

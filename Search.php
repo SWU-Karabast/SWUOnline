@@ -1208,3 +1208,8 @@ function AnotherSeparatistUnitHasAttacked($uniqueID, $player) {
   }
   return false;
 }
+
+function CountHand($player) {
+  $hand = &GetHand($player);
+  return count($hand)/HandPieces();
+}
