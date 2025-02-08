@@ -1731,6 +1731,10 @@ function SpecificAllyAttackAbilities($attackID)
       case "6414788e89"://Wedged Antilles Leader Unit
         AddCurrentTurnEffect($upgrades[$i], $mainPlayer, from:"PLAY");
         break;
+      case "3475471540"://Cassian Andor
+        $discarded = Mill($defPlayer, 1);
+        if($discarded != "" && CardCost($discarded) <= 3) Draw($mainPlayer);
+        break;
       default: break;
     }
   }
