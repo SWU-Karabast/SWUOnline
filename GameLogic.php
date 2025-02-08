@@ -1080,10 +1080,11 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         $modes[] = $lastResult;
       }
       $text = "";
-      for($i = 0; $i < count($modes); ++$i) {
-        if($text != "") $text .= ", ";
-        if($i > 0 && $i == count($modes)-1) $text .= " and ";
-        $text .= implode(" ", explode("_", $modes[$i]));
+      if (count($modes) > 0) {
+        $fmodes = array_map('FmtKeyword', $modes);
+        $text = implode(", ", array_slice($fmodes, 0, count($fmodes) - 1));
+        $text = implode(" and ", array($text, end($fmodes)));
+        $text = implode(" ", explode("_", $text));
       }
       WriteLog("Selected mode" . (count($modes) > 1 ? "s" : "") . " for " . CardLink($parameter, $parameter) . (count($modes) > 1 ? " are" : " is") . ": " . $text);
       return $lastResult;
@@ -1355,7 +1356,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
     //   $damage = DealDamageAsync($player, $damage - $lastResult, "ARCANE", $source);
     //   if($damage < 0) $damage = 0;
     //   if($damage > 0) IncrementClassState($playerSource, $CS_ArcaneDamageDealt, $damage);
-    //   WriteLog("Player " . $player . " took $damage arcane damage from " . CardLink($source, $source), $player);
+    //   include "MenuFiles/ParseGamefile.php";
+    //   WriteLog(FmtPlayer($playerName, $player) . " took $damage arcane damage from " . CardLink($source, $source), $player);
     //   if(DelimStringContains(CardSubType($source), "Ally") && $damage > 0) ProcessDealDamageEffect($source); // Interaction with Burn Them All! + Nekria
     //   $dqVars[0] = $damage;
     //   return $damage;
