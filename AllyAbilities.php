@@ -880,6 +880,17 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities, $isUp
       case "1519837763"://Shuttle ST-149
         ShuttleST149($player);
         break;
+      case "1397553238"://Desperate Commando
+        $otherPlayer = $player == 1 ? 2 : 1;
+        AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose a card to give -1/-1", 1);
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+        AddDecisionQueue("SETDQVAR", $player, 0, 1);
+        AddDecisionQueue("MZOP", $player, "GETUNIQUEID", 1);
+        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $player, "1397553238,PLAY", 1);
+        AddDecisionQueue("PASSPARAMETER", $player, "{0}", 1);
+        AddDecisionQueue("MZOP", $player, "REDUCEHEALTH,1", 1); 
+        break;
       //AllyDestroyedAbility End
       default: break;
     }
