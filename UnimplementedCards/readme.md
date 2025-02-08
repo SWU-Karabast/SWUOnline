@@ -8,7 +8,6 @@ The images below show cards that are _**not yet**_ implemented. If you are havin
 ![](./1397553238.webp)
 ![](./2633842896.webp)
 ![](./2995807621.webp)
-![](./3132453342.webp)
 ![](./3388566378.webp)
 ![](./3427170256.webp)
 ![](./3475471540.webp)
@@ -35,4 +34,3 @@ The images below show cards that are _**not yet**_ implemented. If you are havin
 ![](./9720757803.webp)
 ![](./9811031405.webp)
 ![](./9921128444.webp)
-![](./fda7bdc316.webp)

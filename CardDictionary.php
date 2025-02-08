@@ -1236,6 +1236,8 @@ function CheckJTLAbilityTypes($cardID) {
       return LeaderAbilitiesIgnored() ? "" : "A";
     case "7661383869"://Darth Vader
       return LeaderAbilitiesIgnored() ? "" : "A";
+    case "3132453342"://Captain Phasma
+      return LeaderAbilitiesIgnored() ? "" : "A";
     default: return "";
   }
 }
@@ -1514,6 +1516,8 @@ function CheckJTLAbilityNames($cardID) {
       return LeaderAbilitiesIgnored() ? "" : "Deal Damage";
     case "7661383869"://Darth Vader
       return LeaderAbilitiesIgnored() ? "" : "TIE Fighter";
+    case "3132453342"://Captain Phasma
+      return LeaderAbilitiesIgnored() ? "" : "Deal Damage";
     default: return "";
   }
 }
@@ -1908,6 +1912,8 @@ function LeaderUnit($cardID) {
       return "11e54776e9";
     case "7661383869"://Darth Vader
       return "fb0da8985e";
+    case "3132453342"://Captain Phasma
+      return "fda7bdc316";
     default: return "";
   }
 }
@@ -2050,6 +2056,8 @@ function LeaderUndeployed($cardID) {
       return "0766281795";
     case "fb0da8985e"://Darth Vader
       return "7661383869";
+    case "fda7bdc316"://Captain Phasma Leader Unit
+      return "3132453342";
     default: return "";
   }
 }
