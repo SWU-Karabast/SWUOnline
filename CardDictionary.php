@@ -316,7 +316,7 @@ function HasSentinel($cardID, $player, $index)
       case "fb7af4616c": $hasSentinel = true; break;//General Grievous
       case "1039828081": if ($cardID == "1039828081") {$hasSentinel = true;} break;//Calculating MagnaGuard
       case "3033790509": $hasSentinel = true; break;//Captain Typho
-      case "8719468890"://Sword and Shielf Maneuver
+      case "8719468890"://Sword and Shield Maneuver
         if(TraitContains($cardID, "Jedi", $player)) $hasSentinel = true;
         break;
       default: break;
@@ -326,26 +326,33 @@ function HasSentinel($cardID, $player, $index)
   $upgrades = $ally->GetUpgrades();
   for($i=0; $i<count($upgrades); ++$i)
   {
-    if($upgrades[$i] == "4550121827") return true;//Protector
-    if($upgrades[$i] == "4991712618") return true;//Unshakeable Will
-    if($upgrades[$i] == "3874382333") return true;//Academy Graduate
+    switch($upgrades[$i]) {
+      case "4550121827"://Protector
+      case "4991712618"://Unshakeable Will
+      case "3874382333"://Academy Graduate
+      case "3064aff14f"://Lando Calrissian leader unit
+        return true;
+      default: break;
+    }
   }
   switch($cardID)
   {
-    case "2524528997":
-    case "6385228745":
-    case "6912684909":
-    case "7751685516":
-    case "9702250295":
-    case "6253392993":
-    case "7596515127":
-    case "5707383130":
-    case "8918765832":
-    case "4631297392":
-    case "8301e8d7ef":
-    case "4786320542":
-    case "3896582249":
-    case "2855740390":
+    //Spark of Rebellion
+    case "2524528997"://Cell Block Guard
+    case "6385228745"://Correllian Freighter
+    case "6912684909"://Echo Base Defender
+    case "7751685516"://System Patrol Craft
+    case "9702250295"://Cloud City Wing Guard
+    case "6253392993"://Bright Hope
+    case "7596515127"://Academy Defense Walker
+    case "5707383130"://Bendu
+    case "8918765832"://Chewbacca
+    case "4631297392"://Devastator
+    case "8301e8d7ef"://Chewbacca Leader
+    case "4786320542"://Obi-Wan Kenobi
+    case "3896582249"://Redemption
+    case "2855740390"://Lieutenant Childsen
+    //Shadows of the Galaxy
     case "1982478444"://Vigilant Pursuit Craft
     case "1747533523"://Village Protectors
     case "6585115122"://The Mandalorian unit
@@ -356,8 +363,10 @@ function HasSentinel($cardID, $player, $index)
     case "6409922374"://Niima Outpost Constables
     case "0315522200"://Black Sun Starfighter
     case "8228196561"://Clan Saxon Gauntlet
+    //Jump to Lightspeed
     case "3874382333"://Academy Graduate
     case "0235116526"://Fleet Interdictor
+    case "3064aff14f"://Lando Calrissian leader unit
       return true;
     case "2739464284"://Gamorrean Guards
       return SearchCount(SearchAllies($player, aspect:"Cunning")) > 1;

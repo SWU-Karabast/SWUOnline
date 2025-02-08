@@ -1171,6 +1171,18 @@ function AllyPlayedAsUpgradeAbility($cardID, $player, $targetAlly) {
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
       AddDecisionQueue("MZOP", $player, "DEALDAMAGE,$damage,$player,1", 1);
       break;
+    case "2283726359"://BB-8
+      if(GetResources($player) >= 2) {
+        AddDecisionQueue("SETDQCONTEXT", $player, "Pay 2 resources to ready a Resistance unit?", 1);
+        AddDecisionQueue("YESNO", $player, "-", 1);
+        AddDecisionQueue("NOPASS", $player, "-", 1);
+        AddDecisionQueue("PAYRESOURCES", $player, "2", 1);
+        AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:trait=Resistance&THEIRALLY:trait=Resistance", 1);
+        AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
+        AddDecisionQueue("MZOP", $player, "READY", 1);
+      }
+      break;
+    default: break;
   }
 }
 
@@ -1715,6 +1727,13 @@ function SpecificAllyAttackAbilities($attackID)
           $ally->Exhaust();
           $ally->DealDamage(1, fromUnitEffect:true);
         }
+        break;
+      case "6414788e89"://Wedged Antilles Leader Unit
+        AddCurrentTurnEffect($upgrades[$i], $mainPlayer, from:"PLAY");
+        break;
+      case "3475471540"://Cassian Andor
+        $discarded = Mill($defPlayer, 1);
+        if($discarded != "" && CardCost($discarded) <= 3) Draw($mainPlayer);
         break;
       default: break;
     }
@@ -2447,6 +2466,13 @@ function SpecificAllyAttackAbilities($attackID)
       if($initiativePlayer == $mainPlayer) {
         IndirectDamage($defPlayer, 2, true);
       }
+      break;
+    case "590b638b18"://Rose Tico leader unit
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:trait=Vehicle&THEIRALLY:trait=Vehicle");
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a Vehicle unit to heal 2 damage");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "RESTORE,2", 1);
+      break;
     default: break;
   }
   //SpecificAllyAttackAbilities End

@@ -16,6 +16,13 @@ function LeaderPilotDeploy($player, $leader, $target) {
     case "a015eb5c5e"://Han Solo
       HanSoloPilotLeaderJTL($player);
       break;
+    case "3064aff14f"://Lando Calrissian
+      $otherArena = $targetUnit->CurrentArena() == "Ground" ? "Space" : "Ground";
+      AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:arena=$otherArena");
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to give a Shield token");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+      AddDecisionQueue("MZOP", $player, "ADDSHIELD", 1);
+      break;
     default: break;
   }
 }
