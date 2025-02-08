@@ -367,6 +367,8 @@ class Ally {
         case "6610553087"://Nien Nunb
           $power += CountPilotUnitsAndPilotUpgrades($this->PlayerID(), other: true);
           break;
+        case "81a416eb1f":
+          $power += TraitContains($this->CardID(), "Transport") ? 1 : 0;
         default:
           break;
       }
