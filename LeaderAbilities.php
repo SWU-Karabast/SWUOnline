@@ -23,6 +23,10 @@ function LeaderPilotDeploy($player, $leader, $target) {
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
       AddDecisionQueue("MZOP", $player, "ADDSHIELD", 1);
       break;
+    case "fb0da8985e"://Darth Vader
+      CreateTieFighter($player);
+      CreateTieFighter($player);
+      break;
     default: break;
   }
 }

@@ -310,35 +310,35 @@ function ClearNextCardArcaneBuffs($player, $playedCard="", $from="")
   }
 }
 
-function ConsumeArcaneBonus($player)
-{
-  global $currentTurnEffects, $CS_ResolvingLayerUniqueID;
-  $uniqueID = GetClassState($player, $CS_ResolvingLayerUniqueID);
-  $totalBonus = 0;
-  for ($i = count($currentTurnEffects) - CurrentTurnPieces(); $i >= 0; $i -= CurrentTurnPieces())
-  {
-    $remove = 0;
-    if ($currentTurnEffects[$i + 1] == $player && $currentTurnEffects[$i+2] == $uniqueID)
-    {
-      $bonus = EffectArcaneBonus($currentTurnEffects[$i]);
-      if($bonus > 0)
-      {
-        $totalBonus += $bonus;
-        $remove = 1;
-      }
-    }
-    if ($remove == 1) RemoveCurrentTurnEffect($i);
-  }
-  return $totalBonus;
-}
+// function ConsumeArcaneBonus($player)
+// {
+//   global $currentTurnEffects, $CS_ResolvingLayerUniqueID;
+//   $uniqueID = GetClassState($player, $CS_ResolvingLayerUniqueID);
+//   $totalBonus = 0;
+//   for ($i = count($currentTurnEffects) - CurrentTurnPieces(); $i >= 0; $i -= CurrentTurnPieces())
+//   {
+//     $remove = 0;
+//     if ($currentTurnEffects[$i + 1] == $player && $currentTurnEffects[$i+2] == $uniqueID)
+//     {
+//       $bonus = EffectArcaneBonus($currentTurnEffects[$i]);
+//       if($bonus > 0)
+//       {
+//         $totalBonus += $bonus;
+//         $remove = 1;
+//       }
+//     }
+//     if ($remove == 1) RemoveCurrentTurnEffect($i);
+//   }
+//   return $totalBonus;
+// }
 
-function ConsumeDamagePrevention($player)
-{
-  global $CS_NextDamagePrevented;
-  $prevention = GetClassState($player, $CS_NextDamagePrevented);
-  SetClassState($player, $CS_NextDamagePrevented, 0);
-  return $prevention;
-}
+// function ConsumeDamagePrevention($player)//FAB
+// {
+//   global $CS_NextDamagePrevented;
+//   $prevention = GetClassState($player, $CS_NextDamagePrevented);
+//   SetClassState($player, $CS_NextDamagePrevented, 0);
+//   return $prevention;
+// }
 
 function IncrementClassState($player, $piece, $amount = 1)
 {

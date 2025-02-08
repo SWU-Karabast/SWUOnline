@@ -1735,6 +1735,14 @@ function SpecificAllyAttackAbilities($attackID)
         $discarded = Mill($defPlayer, 1);
         if($discarded != "" && CardCost($discarded) <= 3) Draw($mainPlayer);
         break;
+      case "11e54776e9"://Luke Skywalker Leader Unit
+        if(TraitContains($attackerAlly->CardID(), "Fighter", $mainPlayer)) {
+          AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY");
+          AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 3 damage to");
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+          AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,3,$mainPlayer,1", 1);
+        }
+        break;
       default: break;
     }
   }

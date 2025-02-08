@@ -200,13 +200,6 @@ class Ally {
   function ReceivingPilot($cardID, $player = "") {
     global $CS_PlayedAsUpgrade;
     if($player == "") $player = $this->PlayerID();
-    //Pilot attach side effects
-    switch($this->CardID()) {
-      //Jump to Lightspeed
-      case "3711891756"://Red Leader
-        CreateXWing($player);
-      default: break;
-    }
 
     return PilotingCost($cardID) >= 0 && GetClassState($player, $CS_PlayedAsUpgrade) == "1";
   }
@@ -549,10 +542,21 @@ class Ally {
   }
 
   function Attach($cardID, $ownerID = null) {
-    $subcardUniqueID = $this->AddSubcard($cardID, $ownerID, asPilot: $this->ReceivingPilot($cardID));
+    $receivingPilot = $this->ReceivingPilot($cardID);
+    $subcardUniqueID = $this->AddSubcard($cardID, $ownerID, asPilot: $receivingPilot);
     if (CardIsUnique($cardID)) {
       $this->CheckUniqueUpgrade($cardID);
     }
+    //Pilot attach side effects
+    if($receivingPilot) {
+      switch($this->CardID()) {
+        //Jump to Lightspeed
+        case "3711891756"://Red Leader
+          CreateXWing($this->Controller());
+        default: break;
+      }
+    }
+    //end Pilot attach side effects
     return $subcardUniqueID;
   }
 
@@ -650,6 +654,10 @@ class Ally {
   }
 
   function DefeatUpgrade($upgradeID, $subcardUniqueID = "") {
+    if($upgradeID == "11e54776e9") {//Luke Skywalker leader pilot
+      WriteLog(CardLink($upgradeID, $upgradeID) . " cannot be defeated.");
+      return;
+    }
     $uniqueID = $this->UniqueID();
     $ownerId = $this->RemoveSubcard($upgradeID, $subcardUniqueID);
     $updatedAlly = new Ally($uniqueID); // Refresh the ally, as the index or controller may have changed

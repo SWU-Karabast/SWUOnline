@@ -70,11 +70,11 @@ function EvaluateCombatChain(&$totalAttack, &$totalDefense, &$attackModifiers=[]
     }
 }
 
-function CharacterLevel($player)
-{
-  global $CS_CachedCharacterLevel;
-  return GetClassState($player, $CS_CachedCharacterLevel);
-}
+// function CharacterLevel($player)//FAB
+// {
+//   global $CS_CachedCharacterLevel;
+//   return GetClassState($player, $CS_CachedCharacterLevel);
+// }
 
 function AddAttack(&$totalAttack, $amount)
 {
@@ -2329,6 +2329,7 @@ function ClearGameFiles($gameName)
 function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalCosts = "-", $theirCard = false, $uniqueId = "")
 {
   global $currentPlayer, $layers, $CS_PlayIndex, $CS_OppIndex, $initiativePlayer, $CCS_CantAttackBase, $CS_NumAlliesDestroyed;
+  global $CS_NumFighterAttacks, $CS_NumNonTokenVehicleAttacks;
   $index = GetClassState($currentPlayer, $CS_PlayIndex);
   $otherPlayer = $currentPlayer == 1 ? 2 : 1;
   if($from == "PLAY" && IsAlly($cardID, $currentPlayer)) {
@@ -5696,7 +5697,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "9415708584"://Pyrrhic Assault
       $allies = &GetAllies($currentPlayer);
       for ($i = 0; $i < count($allies); $i += AllyPieces()) {
-        AddCurrentTurnEffect("9415708584", $currentPlayer, "PLAY", $allies[$i+5]);        
+        AddCurrentTurnEffect("9415708584", $currentPlayer, "PLAY", $allies[$i+5]);
       }
       break;
     case "9399634203"://I Have the High Ground
@@ -6025,6 +6026,19 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "ADDSHIELD", 1);
       }
       break;
+    case "0766281795"://Luke Skywalker
+      if(GetResolvedAbilityName($cardID) == "Deal Damage" && GetClassState($currentPlayer, $CS_NumFighterAttacks) > 0) {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 1 damage to");
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1,$currentPlayer", 1);
+      }
+      break;
+    case "7661383869"://Darth Vader
+      if(GetResolvedAbilityName($cardID) == "TIE Fighter" && GetClassState($currentPlayer, $CS_NumNonTokenVehicleAttacks) > 0) {
+        CreateTieFighter($currentPlayer);
+      }
+      break;
     //PlayAbility End
     default: break;
   }
@@ -6240,11 +6254,11 @@ function DamageAllAllies($amount, $source, $alsoRest=false, $alsoFreeze=false, $
 
 
 
-function IsHarmonizeActive($player)
-{
-  global $CS_NumMelodyPlayed;
-  return GetClassState($player, $CS_NumMelodyPlayed) > 0;
-}
+// function IsHarmonizeActive($player)//FAB
+// {
+//   global $CS_NumMelodyPlayed;
+//   return GetClassState($player, $CS_NumMelodyPlayed) > 0;
+// }
 
 function IsMultiTargetAttackActive() {
   global $combatChainState, $CCS_MultiAttackTargets;
