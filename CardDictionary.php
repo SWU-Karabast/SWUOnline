@@ -1896,6 +1896,10 @@ function LeaderUnit($cardID) {
       return "81a416eb1f";
     case "8943696478"://Admiral Holdo
       return "ccf9474416";
+    case "0766281795"://Luke Skywalker
+      return "11e54776e9";
+    case "7661383869"://Darth Vader
+      return "fb0da8985e";
     default: return "";
   }
 }
@@ -2034,6 +2038,10 @@ function LeaderUndeployed($cardID) {
       return "8656409691";
     case "ccf9474416"://Admiral Holdo
       return "8943696478";
+    case "11e54776e9"://Luke Skywalker
+      return "0766281795";
+    case "fb0da8985e"://Darth Vader
+      return "7661383869";
     default: return "";
   }
 }
@@ -2047,6 +2055,8 @@ function LeaderCanPilot($cardID) {
     case "7514405173"://Admiral Ackbar
     case "9831674351"://Boba Fett
     case "8656409691"://Rio Durant
+    case "0766281795"://Luke Skywalker
+    case "7661383869"://Darth Vader
       return true;
     default: return false;
   }
@@ -2321,11 +2331,14 @@ function PilotingCost($cardID, $player = "") {
   if($player == "") $player = $currentPlayer;
   $minCost = -1;
   switch($cardID) {
+    //Jump to Lightspeed
+    case "0514089787": $minCost = 2; break;//Frisk
     case "0524529055": $minCost = 2; break;//Snap Wexley
     case "0587196584": $minCost = 1; break;//Independent Smuggler
     case "1039444094": $minCost = 2; break;//Paige Tico
     case "1463418669": $minCost = 2; break;//IG-88
     case "2283726359": $minCost = 1; break;//BB-8
+    case "2633842896": $minCost = 1; break;//Briggs Darklighter
     case "3282713547": $minCost = 2; break;//Dengar
     case "3475471540": $minCost = 2; break;//Cassian Andor
     case "3874382333": $minCost = 2; break;//Academy Graduate
@@ -2334,6 +2347,7 @@ function PilotingCost($cardID, $player = "") {
     case "5673100759": $minCost = 2; break;//Boshek
     case "6421006753": $minCost = 2; break;//The Mandalorian
     case "6610553087": $minCost = 1; break;//Nien Nunb
+    case "6720065735": $minCost = 2; break;//Han Solo unit
     case "7208848194": $minCost = 3; break;//Chewbacca
     case "7420426716": $minCost = 1; break;//Dagger Squadron Pilot
     case "7700932371": $minCost = 2; break;//Boba Fett
