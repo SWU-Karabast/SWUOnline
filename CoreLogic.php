@@ -303,7 +303,7 @@ function CharacterPlayCardAbilities($cardID, $from)
 
 function MainCharacterPlayCardAbilities($cardID, $from)
 {
-  global $currentPlayer, $mainPlayer, $CS_NumNonAttackCards, $CS_NumBoostPlayed;
+  global $currentPlayer, $mainPlayer, $CS_NumNonAttackCards;
   if(LeaderAbilitiesIgnored()) return;
 
   $character = &GetPlayerCharacter($currentPlayer);
@@ -5976,25 +5976,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "8943696478";//Admiral Holdo
       if(GetResolvedAbilityName($cardID) == "Buff") {
-        $indices = [];
-        $myAllies = GetAllies($currentPlayer);
-        $theirAllies = GetAllies($otherPlayer);
-        for($i=0; $i<count($myAllies); $i+=AllyPieces()) {
-          if(AllyTraitContainsOrUpgradeTraitContains($myAllies[$i+5], "Resistance")) {
-            $indices[] = "MYALLY-" . $i;
-          }
-        }
-        for($i=0; $i<count($theirAllies); $i+=AllyPieces()) {
-          if(AllyTraitContainsOrUpgradeTraitContains($theirAllies[$i+5], "Resistance")) {
-            $indices[] = "THEIRALLY-" . $i;
-          }
-        }
-        AddDecisionQueue("PASSPARAMETER", $currentPlayer, implode(",", $indices));
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to give +2/+2");
-        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "ADDHEALTH,2", 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
-        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "8943696478,PLAY", 1);
+        AdmiralHoldoWereNotAlone($currentPlayer, flipped:false);
       }
       break;
     case "9695562265"://Koiogran Turn

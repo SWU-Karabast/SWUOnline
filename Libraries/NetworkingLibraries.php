@@ -1427,7 +1427,8 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
   global $playerID, $turn, $currentPlayer, $actionPoints, $layers, $currentTurnEffects;
   global $layerPriority, $lastPlayed;
   global $decisionQueue, $CS_PlayIndex, $CS_OppIndex, $CS_OppCardActive, $CS_PlayUniqueID, $CS_LayerPlayIndex, $CS_LastDynCost, $CS_NumCardsPlayed;
-  global $CS_DynCostResolved, $CS_NumVillainyPlayed, $CS_NumEventsPlayed, $CS_NumClonesPlayed, $CS_PlayedAsUpgrade, $CS_NumWhenDefeatedPlayed, $CS_NumBountyHuntersPlayed, $CS_NumPilotsPlayed;
+  global $CS_DynCostResolved, $CS_NumVillainyPlayed, $CS_NumEventsPlayed, $CS_NumClonesPlayed;
+  global $CS_PlayedAsUpgrade, $CS_NumWhenDefeatedPlayed, $CS_NumBountyHuntersPlayed, $CS_NumPilotsPlayed, $CS_NumFirstOrderPlayed;
   $resources = &GetResources($currentPlayer);
   $dynCostResolved = intval($dynCostResolved);
   $layerPriority[0] = ShouldHoldPriority(1);
@@ -1606,6 +1607,8 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
         ResetCombatChainState();
       //CombatChainPlayAbility($cardID);//FAB
       //ItemPlayAbilities($cardID, $from);//FAB
+      IncrementClassState($currentPlayer, $CS_NumCardsPlayed);
+      //increment NumPlayed traits
       if (AspectContains($cardID, "Villainy", $currentPlayer))
         IncrementClassState($currentPlayer, $CS_NumVillainyPlayed);
       if (TraitContains($cardID, "Bounty Hunter", $currentPlayer))
@@ -1614,11 +1617,13 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
         IncrementClassState($currentPlayer, $CS_NumPilotsPlayed);
       if (HasWhenDestroyed($cardID))
         IncrementClassState($currentPlayer, $CS_NumWhenDefeatedPlayed);
-      IncrementClassState($currentPlayer, $CS_NumCardsPlayed);
       if (DefinedTypesContains($cardID, "Event", $currentPlayer))
         IncrementClassState($currentPlayer, $CS_NumEventsPlayed);
       if (TraitContains($cardID, "Clone", $currentPlayer))
         IncrementClassState($currentPlayer, $CS_NumClonesPlayed);
+      if (TraitContains($cardID, "First Order", $currentPlayer))
+        IncrementClassState($currentPlayer, $CS_NumFirstOrderPlayed);
+      //end increment NumPlayed traits
     }
     if ($playType == "A" || $playType == "AA") {
       //if (!$canPlayAsInstant) --$actionPoints;//FAB

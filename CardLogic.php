@@ -1100,6 +1100,30 @@ function IsExploitWhenPlayed($cardID) {
   }
 }
 
+function AdmiralHoldoWereNotAlone($player, $flipped) {
+  $otherPlayer = $player == 1 ? 2 : 1;
+  $indices = [];
+  $myAllies = GetAllies($player);
+  $theirAllies = GetAllies($otherPlayer);
+  for($i=0; $i<count($myAllies); $i+=AllyPieces()) {
+    if(AllyTraitContainsOrUpgradeTraitContains($myAllies[$i+5], "Resistance")) {
+      $indices[] = "MYALLY-" . $i;
+    }
+  }
+  for($i=0; $i<count($theirAllies); $i+=AllyPieces()) {
+    if(AllyTraitContainsOrUpgradeTraitContains($theirAllies[$i+5], "Resistance")) {
+      $indices[] = "THEIRALLY-" . $i;
+    }
+  }
+  AddDecisionQueue("PASSPARAMETER", $player, implode(",", $indices));
+  AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to give +2/+2");
+  if(!$flipped) AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
+  else AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+  AddDecisionQueue("MZOP", $player, "ADDHEALTH,2", 1);
+  AddDecisionQueue("MZOP", $player, "GETUNIQUEID", 1);
+  AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $player, "8943696478,PLAY", 1);
+}
+
 function AdmiralAckbarItsATrap($player, $flipped) {
   AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
   if(!$flipped) AddDecisionQueue("MZFILTER", $player, "leader=1");

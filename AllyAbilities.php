@@ -2500,6 +2500,9 @@ function SpecificAllyAttackAbilities($attackID)
     case "36859e7ec4"://Admiral Ackbar leader unit
       AdmiralAckbarItsATrap($mainPlayer, flipped:true);
       break;
+    case "ccf9474416"://Admiral Holdo leader unit
+      AdmiralHoldoWereNotAlone($mainPlayer, flipped:true);
+      break;
     default: break;
   }
   //SpecificAllyAttackAbilities End
