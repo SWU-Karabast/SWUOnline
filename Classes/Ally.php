@@ -421,6 +421,9 @@ class Ally {
         case "7924172103"://Bariss Offee
           if($this->WasHealed()) $power += 1;
           break;
+        case "9811031405"://Victor Leader
+          if($i != $this->index && CardArenas($this->CardID()) == "Space") $power += 1;
+          break;
         default: break;
       }
     }

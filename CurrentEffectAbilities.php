@@ -246,6 +246,7 @@ function EffectAttackModifier($cardID, $playerID="")
     case "4334684518+2": return 2;//Tandem Assault
     case "8656409691": return 1;//Rio Durant
     case "8943696478": return 2;//Admiral Holdo
+    case "1397553238": return -1;//Desperate Commando
     default: return 0;
   }
 }

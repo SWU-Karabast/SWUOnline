@@ -6032,6 +6032,18 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:arena={0}");
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "TURBOLASERSALVO", 1);
       break;
+    case "9595057518"://Special Forces TIE Fighter
+      if($from != "PLAY") {
+        $theirSpaceCount = SearchCount(SearchAllies($otherPlayer, arena:"Space")); 
+        $mySpaceCount = SearchCount(SearchAllies($currentPlayer, arena:"Space"));
+        if($theirSpaceCount > $mySpaceCount) {
+          $playAlly->Ready();
+        } 
+      }
+      break;
+    case "6854247423"://Tantive IV
+      CreateXWing($currentPlayer);
+      break;
     //PlayAbility End
     default: break;
   }
