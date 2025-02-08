@@ -859,13 +859,19 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       break;
     case "PROFUNDITY":
       $playerChosen = $lastResult == "Yourself" ? $player : $otherPlayer;
-      WriteLog("Player $playerChosen discarded a card from Profundity"); 
+      WriteLog("Player $playerChosen discarded a card from Profundity");
       PummelHit($playerChosen);
-        
+
       if($playerChosen == $otherPlayer && (CountHand($player) < (CountHand($otherPlayer) - 1))) {
-        WriteLog("Player $otherPlayer discarded another card from Profundity"); 
+        WriteLog("Player $otherPlayer discarded another card from Profundity");
         PummelHit($otherPlayer);
       }
+      break;
+    case "TURBOLASERSALVO":
+      $arena = $dqVars[0];
+      $damage = $dqVars[1];
+      $otherPlayer = $player == 1 ? 2 : 1;
+      DamagePlayerAllies($otherPlayer, $damage, "8174214418", arena:$arena);
       break;
     //SpecificCardLogic End
     default: return "";

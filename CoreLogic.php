@@ -6020,6 +6020,18 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1,$currentPlayer,1", 1);
       }
       break;
+    case "8174214418"://Turbolaser Salvo
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an arena to blast. ");
+      AddDecisionQueue("BUTTONINPUT", $currentPlayer, "Ground,Space");
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "0");
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:arena=Space");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an attacking unit");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-");
+      AddDecisionQueue("MZOP", $currentPlayer, "POWER");
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "1");
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:arena={0}");
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "TURBOLASERSALVO", 1);
+      break;
     //PlayAbility End
     default: break;
   }
@@ -6185,7 +6197,7 @@ function DestroyAllAllies($player="")
   }
 }
 
-function DamagePlayerAllies($player, $damage, $source, $type, $arena="")
+function DamagePlayerAllies($player, $damage, $source, $type="-", $arena="")
 {
   $enemyDamage = false;
   $fromUnitEffect = false;
