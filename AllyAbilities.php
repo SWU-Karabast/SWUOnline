@@ -2462,6 +2462,13 @@ function SpecificAllyAttackAbilities($attackID)
       if($initiativePlayer == $mainPlayer) {
         IndirectDamage($defPlayer, 2, true);
       }
+      break;
+    case "590b638b18"://Rose Tico leader unit
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:trait=Vehicle&THEIRALLY:trait=Vehicle");
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a Vehicle unit to heal 2 damage");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "RESTORE,2", 1);
+      break;
     default: break;
   }
   //SpecificAllyAttackAbilities End
