@@ -5696,7 +5696,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "9415708584"://Pyrrhic Assault
       $allies = &GetAllies($currentPlayer);
       for ($i = 0; $i < count($allies); $i += AllyPieces()) {
-        AddCurrentTurnEffect("9415708584", $currentPlayer, "PLAY", $allies[$i+5]);        
+        AddCurrentTurnEffect("9415708584", $currentPlayer, "PLAY", $allies[$i+5]);
       }
       break;
     case "9399634203"://I Have the High Ground
@@ -5904,12 +5904,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "3722493191"://IG-2000
        if($from != "PLAY") {
-        for ($j = 0; $j < 3; $j++) {
-          AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
-          AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 1 damage to");
-          AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-          AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1,$currentPlayer,1", 1);
-        }
+        AddDecisionQueue("FINDINDICES", $currentPlayer, "ALLTHEIRUNITSMULTI");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose units to damage", 1);
+        AddDecisionQueue("MULTICHOOSETHEIRUNIT", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MULTIDISTRIBUTEDAMAGE", $currentPlayer, "3,1,1", 1);
       }
         break;
     case "0964312065"://It's A Trap!
