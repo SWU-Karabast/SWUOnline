@@ -6038,8 +6038,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         $mySpaceCount = SearchCount(SearchAllies($currentPlayer, arena:"Space"));
         if($theirSpaceCount > $mySpaceCount) {
           $playAlly->Ready();
-        }
+        } 
       }
+      break;
+    case "6854247423"://Tantive IV
+      CreateXWing($currentPlayer);
       break;
     //PlayAbility End
     default: break;

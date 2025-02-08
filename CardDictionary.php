@@ -415,6 +415,8 @@ function HasSentinel($cardID, $player, $index)
       return true;
     case "0ee1e18cf4"://Obi-wan Kenobi
       return true;
+    case "6854247423"://Tantive IV
+      return true;
     default: return false;
   }
 }
