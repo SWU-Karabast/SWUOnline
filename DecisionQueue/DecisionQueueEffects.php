@@ -858,16 +858,12 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       CreateXWing($ally->Controller());
       break;
     case "PROFUNDITY":
-      if($lastResult == "Yourself") {
-        WriteLog("Player $player discarded a card from Profundity");
-        PummelHit($player);
-      } else {
-        WriteLog("Player $otherPlayer discarded a card from Profundity");
-        PummelHit($otherPlayer);
-      }
-      $p1Hand = &GetHand(1);
-      $p2Hand = &GetHand(2);
-      if((count($p1Hand)/HandPieces()) < (count($p2Hand)/HandPieces())) {
+      $playerChosen = $lastResult == "Yourself" ? $player : $otherPlayer;
+      WriteLog("Player $playerChosen discarded a card from Profundity"); 
+      PummelHit($playerChosen);
+        
+      if($playerChosen == $otherPlayer && (CountHand($player) < (CountHand($otherPlayer) - 1))) {
+        WriteLog("Player $otherPlayer discarded another card from Profundity"); 
         PummelHit($otherPlayer);
       }
       break;
