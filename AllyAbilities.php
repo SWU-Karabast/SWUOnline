@@ -1192,6 +1192,13 @@ function AllyPlayedAsUpgradeAbility($cardID, $player, $targetAlly) {
         AddDecisionQueue("MZOP", $player, "READY", 1);
       }
       break;
+    case "6720065735"://Han Solo (Has His Moments)
+      AddDecisionQueue("YESNO", $player, "Do you want to attack with " . CardLink($targetAlly->CardID(), $targetAlly->CardID()) . "?");
+      AddDecisionQueue("NOPASS", $player, "-");
+      AddDecisionQueue("PASSPARAMETER", $player, $targetAlly->MZIndex(), 1);
+      AddDecisionQueue("ADDCURRENTEFFECT", $player, "6720065735", 1);
+      AddDecisionQueue("MZOP", $player, "ATTACK", 1);
+      break;
     default: break;
   }
 }
@@ -1752,6 +1759,10 @@ function SpecificAllyAttackAbilities($attackID)
           AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
           AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,3,$mainPlayer,1", 1);
         }
+        break;
+      case "1039444094"://Paige Tico pilot
+        $attackerAlly->Attach("2007868442");//Experience token
+        $attackerAlly->DealDamage(1, enemyDamage:false, fromUnitEffect:true);
         break;
       default: break;
     }

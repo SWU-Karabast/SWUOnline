@@ -1068,6 +1068,9 @@ function ShouldCombatDamageFirst()
     return true;//Asajj Ventress
   if ($combatChain[0] == "3876470102" && $targetAlly->IsExhausted() && $targetAlly->TurnsInPlay() > 0)
     return true;//Hound's Tooth
+  if (CardTitle($combatChain[0]) == "Millennium Falcon" && SearchCurrentTurnEffects("6720065735", $mainPlayer))
+    return true;//Han Solo (Has His Moments) pilot
+
   return false;
 }
 
