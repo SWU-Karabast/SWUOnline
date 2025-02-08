@@ -867,6 +867,7 @@ function IsCombatEffectActive($cardID)
     case "4334684518"://Tandem Assault
     case "4334684518+2"://Tandem Assault
     case "8656409691"://Rio Durant
+    case "6720065735"://Han Solo (Has His Moments)
       return true;
     default: return false;
   }
