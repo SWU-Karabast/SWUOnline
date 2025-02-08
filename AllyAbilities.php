@@ -1171,6 +1171,18 @@ function AllyPlayedAsUpgradeAbility($cardID, $player, $targetAlly) {
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
       AddDecisionQueue("MZOP", $player, "DEALDAMAGE,$damage,$player,1", 1);
       break;
+    case "2283726359"://BB-8
+      if(GetResources($player) >= 2) {
+        AddDecisionQueue("SETDQCONTEXT", $player, "Pay 2 resources to ready a Resistance unit?", 1);
+        AddDecisionQueue("YESNO", $player, "-", 1);
+        AddDecisionQueue("NOPASS", $player, "-", 1);
+        AddDecisionQueue("PAYRESOURCES", $player, "2", 1);
+        AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:trait=Resistance&THEIRALLY:trait=Resistance", 1);
+        AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
+        AddDecisionQueue("MZOP", $player, "READY", 1);
+      }
+      break;
+    default: break;
   }
 }
 
