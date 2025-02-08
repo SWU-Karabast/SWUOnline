@@ -330,7 +330,7 @@ function HasSentinel($cardID, $player, $index)
       case "4550121827"://Protector
       case "4991712618"://Unshakeable Will
       case "3874382333"://Academy Graduate
-      case "3064aff14f"://Lando Calrissian
+      case "3064aff14f"://Lando Calrissian leader unit
         return true;
       default: break;
     }
@@ -366,7 +366,7 @@ function HasSentinel($cardID, $player, $index)
     //Jump to Lightspeed
     case "3874382333"://Academy Graduate
     case "0235116526"://Fleet Interdictor
-    case "3064aff14f"://Lando Calrissian
+    case "3064aff14f"://Lando Calrissian leader unit
       return true;
     case "2739464284"://Gamorrean Guards
       return SearchCount(SearchAllies($player, aspect:"Cunning")) > 1;

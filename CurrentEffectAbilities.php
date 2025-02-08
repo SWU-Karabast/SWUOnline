@@ -462,6 +462,12 @@ function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
             $costModifier -= 1;
             $remove = true;
             break;
+          case "6414788e89"://Wedge Antillies Leader unit
+            if ($from != "PLAY" && $from != "EQUIP" && TraitContains($cardID, "Pilot", $currentPlayer)) {
+              $costModifier -= 1;
+              $remove = true;
+            }
+            break;
           default: break;
         }
       }

@@ -1716,6 +1716,9 @@ function SpecificAllyAttackAbilities($attackID)
           $ally->DealDamage(1, fromUnitEffect:true);
         }
         break;
+      case "6414788e89"://Wedged Antilles Leader Unit
+        AddCurrentTurnEffect($upgrades[$i], $mainPlayer, from:"PLAY");
+        break;
       default: break;
     }
   }
