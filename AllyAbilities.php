@@ -112,8 +112,18 @@ function CheckUniqueAlly($uniqueID) {
     $uniqueAllyInPlay = false;
     for ($i = 0; $i < count($allies); $i += AllyPieces()) {
       $otherAlly = new Ally("MYALLY-" . $i, $player);
-      if ($otherAlly->CardID() == $cardID && $otherAlly->UniqueID() != $uniqueID && !$otherAlly->IsCloned()) {
-        $uniqueAllyInPlay = true;
+      if ($otherAlly->UniqueID() != $uniqueID) {
+        if($otherAlly->CardID() == $cardID && !$otherAlly->IsCloned()) $uniqueAllyInPlay = true;
+        else {//check for pilots
+          $upgrades = $otherAlly->GetUpgrades(withMetadata:true);
+          for ($j = 0; $j < count($upgrades); $j+=SubcardPieces()) {
+            if ($upgrades[$j] == $cardID) {
+              WriteLog(CardLink($cardID, $cardID) . " upgrade has been defeated due to unique rule.");
+              DefeatUpgradeForUniqueID($upgrades[$j + 3]);
+              return;
+            }
+          }
+        }
         break;
       }
     }

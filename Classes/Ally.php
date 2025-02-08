@@ -546,6 +546,9 @@ class Ally {
     $subcardUniqueID = $this->AddSubcard($cardID, $ownerID, asPilot: $receivingPilot);
     if (CardIsUnique($cardID)) {
       $this->CheckUniqueUpgrade($cardID);
+      if($receivingPilot) {
+        $this->CheckUniqueAllyForPilot($cardID);
+      }
     }
     //Pilot attach side effects
     if($receivingPilot) {
@@ -639,6 +642,18 @@ class Ally {
       $ownerId = $otherAlly->DefeatUpgrade($cardID);
       AddGraveyard($cardID, $ownerId, "PLAY");
       WriteLog("Existing copy of upgrade defeated due to unique rule.");
+    }
+  }
+
+  function CheckUniqueAllyForPilot($attachedPilotCardID) {
+    if(!CardIsUnique($attachedPilotCardID)) return;
+    for($i=0; $i<count($this->allies); $i+=AllyPieces()) {
+      if($i == $this->index) continue;
+      $ally = new Ally("MYALLY-" . $i);
+      if($ally->CardID() == $attachedPilotCardID) {
+        WriteLog(CardLink($attachedPilotCardID, $attachedPilotCardID) . " unit was defeated due to unique rule.");
+        $ally->Destroy();
+      }
     }
   }
 
