@@ -426,7 +426,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     $content .= "<div class='trigger-order'><h2>Choose Trigger Order</h2></div>";
 
     // Function to get the caption based on layer type
-    function getCaption($layer)
+    function getCaption($layer, $cardID)
     {
       $captions = [
         "PLAYABILITY" => "When Played",
@@ -434,6 +434,21 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         "ATTACKABILITY" => "On Attack",
         "ACTIVATEDABILITY" => "Ability"
       ];
+
+      if ($layer == "TRIGGER") {
+        switch ($cardID) {
+          case "AFTERDESTROYABILITY":
+          case "AFTERDESTROYFRIENDLYABILITY":
+          case "AFTERDESTROYTHEIRSABILITY":
+            return "When Defeated";
+          case "ALLYPLAYCARDABILITY":
+          case "AMBUSH":
+          case "SHIELDED":
+            return "When Played";
+          default: break;
+        }
+      }
+
       return $captions[$layer] ?? ""; // Return the caption if it exists, otherwise return an empty string
     }
 
@@ -477,7 +492,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       }, 0) : 0;
 
       // Get the caption for the current layer
-      $caption = getCaption($layers[$i]);
+      $caption = getCaption($layers[$i], $layers[$i + 2]);
 
       // Determine counters for the card, using number of tiles if tileable, otherwise using the caption
       $counters = IsTileable($layerName) && $nbTiles > 1 ? $nbTiles : ($caption ?: 0);

@@ -293,14 +293,13 @@ function MZRest($player, $target)
   }
 }
 
-function MZWakeUp($player, $target)
+function MZWakeUp($player, $mzIndexOrUniqueID)
 {
-  $pieces = explode("-", $target);
+  $pieces = explode("-", $mzIndexOrUniqueID);
   $player = (str_starts_with($pieces[0], "MY") ? $player : ($player == 1 ? 2 : 1));
-  $zone = &GetMZZone($player, $pieces[0]);
-  $targetAlly = new Ally($target, $player);
+  $targetAlly = new Ally($mzIndexOrUniqueID, $player);
 
-  if(SearchLimitedCurrentTurnEffects("8800836530", $player) == $targetAlly->UniqueID()) { // No Good to me Dead
+  if (SearchLimitedCurrentTurnEffects("8800836530", $targetAlly->Controller(), $targetAlly->UniqueID()) != -1) { // No Good to me Dead
     return;
   }
 
