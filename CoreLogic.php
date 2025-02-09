@@ -5941,7 +5941,6 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "8105698374"://Commandeer
-      //TODO: maybe allow control your own to not ready. but still bounce
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Vehicle;maxCost=6;hasPilot=0&THEIRALLY:trait=Vehicle;maxCost=6;hasPilot=0");
       AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to take control of", 1);
