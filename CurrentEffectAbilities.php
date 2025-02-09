@@ -28,9 +28,9 @@ function EffectHitEffect($cardID)
     case "5630404651-1"://MagnaGuard Wing Leader
       AddCurrentTurnEffectFromCombat("5630404651-2", $mainPlayer);
       break;
-    // case "4334684518-1"://Tandem Assault
-    //   AddCurrentTurnEffectFromCombat("4334684518-2", $mainPlayer);
-    //  break;
+    case "4334684518-1"://Tandem Assault
+      AddCurrentTurnEffectFromCombat("4334684518-2", $mainPlayer);
+     break;
     default:
       break;
   }
@@ -121,16 +121,18 @@ function FinalizeChainLinkEffects()
         PrependDecisionQueue("SETDQVAR", $mainPlayer, "0");
         PrependDecisionQueue("DECKCARDS", $mainPlayer, "0");
         return true;
-      // case "4334684518-2"://Tandem Assault
-      //   PrependDecisionQueue("REMOVECURRENTEFFECT", $mainPlayer, $currentTurnEffects[$i]);
-      //   PrependDecisionQueue("SWAPTURN", $mainPlayer, "-");
-      //   PrependDecisionQueue("ELSE", $mainPlayer, "-");
-      //   PrependDecisionQueue("MZOP", $mainPlayer, "ATTACK", 1);
-      //   PrependDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
-      //   PrependDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a ground unit to attack with");
-      //   PrependDecisionQueue("MZFILTER", $mainPlayer, "status=1");
-      //   PrependDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:arena=Ground");
-      //  return true;
+      case "4334684518-2"://Tandem Assault
+        PrependDecisionQueue("REMOVECURRENTEFFECT", $mainPlayer, "4334684518+2");
+        PrependDecisionQueue("REMOVECURRENTEFFECT", $mainPlayer, $currentTurnEffects[$i]);
+        PrependDecisionQueue("SWAPTURN", $mainPlayer, "-");
+        PrependDecisionQueue("ELSE", $mainPlayer, "-");
+        PrependDecisionQueue("MZOP", $mainPlayer, "ATTACK", 1);
+        PrependDecisionQueue("ADDCURRENTEFFECT", $mainPlayer, "4334684518+2", 1);
+        PrependDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        PrependDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a ground unit to attack with");
+        PrependDecisionQueue("MZFILTER", $mainPlayer, "status=1");
+        PrependDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:arena=Ground");
+       return true;
       default: break;
     }
   }
@@ -241,6 +243,11 @@ function EffectAttackModifier($cardID, $playerID="")
     //Jump to Lightspeed
     case "6300552434": return -1;//Gold Leader
     case "7924461681": return 1;//Leia Organa
+    case "4334684518+2": return 2;//Tandem Assault
+    case "8656409691": return 1;//Rio Durant
+    case "8943696478": return 2;//Admiral Holdo
+    case "1397553238": return -1;//Desperate Commando
+    case "3427170256": return 2;//Captain Phasma Unit
     default: return 0;
   }
 }
@@ -443,7 +450,7 @@ function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
             }
             break;
           case "0414253215"://General's Blade
-            if($from != "PLAY" && DefinedTypesContains($cardID, "Unit", $currentPlayer)) {
+            if ($from != "PLAY" && $from != "EQUIP" && DefinedTypesContains($cardID, "Unit", $currentPlayer)) {
               $costModifier -= 2;
               $remove = true;
             }
@@ -456,6 +463,12 @@ function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
           case "0011262813"://Wedge Antilles Leader
             $costModifier -= 1;
             $remove = true;
+            break;
+          case "6414788e89"://Wedge Antillies Leader unit
+            if ($from != "PLAY" && $from != "EQUIP" && TraitContains($cardID, "Pilot", $currentPlayer)) {
+              $costModifier -= 1;
+              $remove = true;
+            }
             break;
           default: break;
         }
@@ -687,11 +700,7 @@ function CurrentEffectEndTurnAbilities()
         DealDamageAsync($currentTurnEffects[$i+1], 999999);
         break;
       case "6117103324"://Jetpack
-        $allyIndex = SearchAlliesForUniqueID($currentTurnEffects[$i+2], $currentTurnEffects[$i+1]);
-        if($allyIndex > -1) {
-          $ally = new Ally("MYALLY-" . $allyIndex, $currentTurnEffects[$i+1]);
-          $ally->DefeatUpgrade("8752877738");//Shield Token
-        }
+        DefeatUpgradeForUniqueID($currentTurnEffects[$i+2], $currentTurnEffects[$i+1]);
         break;
       case "8418001763"://Huyang
         if(SearchAlliesForCard($currentTurnEffects[$i+1], "8418001763") != "") {
@@ -857,7 +866,10 @@ function IsCombatEffectActive($cardID)
     case "0616724418"://Han Solo Leader
     case "6300552434"://Gold Leader
     case "7924461681"://Leia Organa
-    //case "4334684518"://Tandem Assault
+    case "4334684518"://Tandem Assault
+    case "4334684518+2"://Tandem Assault
+    case "8656409691"://Rio Durant
+    case "6720065735"://Han Solo (Has His Moments)
       return true;
     default: return false;
   }

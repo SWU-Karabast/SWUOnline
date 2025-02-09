@@ -34,6 +34,26 @@ function ProcessHitEffect($cardID)
 
 function CompletesAttackEffect($cardID) {
   global $mainPlayer, $defPlayer, $CS_NumLeftPlay;
+
+  //uogrades
+  $mzId = AttackerMZID($mainPlayer);
+  $attackerAlly = new Ally($mzId, $mainPlayer);
+  $upgrades = $attackerAlly->GetUpgrades();
+  for($i=0; $i<count($upgrades); ++$i) {
+    switch($upgrades[$i]) {
+      //Jump to Lightspeed
+      case "8523415830"://Anakin Skywalker pilot
+        AddDecisionQueue("YESNO", $mainPlayer, "Do you want to return Anakin Skywalker pilot to your hand?");
+        AddDecisionQueue("NOPASS", $mainPlayer, "-");
+        AddDecisionQueue("PASSPARAMETER", $mainPlayer, $mzId, 1);
+        AddDecisionQueue("SETDQVAR", $mainPlayer, "0", 1);
+        AddDecisionQueue("PASSPARAMETER", $mainPlayer, "8523415830", 1);
+        AddDecisionQueue("OP", $mainPlayer, "BOUNCEUPGRADE", 1);
+        break;
+      default: break;
+    }
+  }
+
   switch($cardID)
   {
     case "9560139036"://Ezra Bridger

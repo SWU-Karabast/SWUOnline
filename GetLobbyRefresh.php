@@ -37,9 +37,6 @@ if ($cacheVal > 10000000) {
   SetCachePiece($gameName, 1, 1);
   $lastUpdate = 0;
 }
-
-include "MenuFiles/ParseGamefile.php";
-
 $kickPlayerTwo = false;
 while ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   usleep(100000); //100 milliseconds
@@ -54,6 +51,7 @@ while ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
 
   if ($oppStatus != "-1" && $oppLastTime != "") {
     if (($currentTime - $oppLastTime) > 8000 && $oppStatus == "0") {
+      include "MenuFiles/ParseGamefile.php";
       WriteLog("$otherPlayerName has disconnected.");
       GamestateUpdated($gameName);
       SetCachePiece($gameName, $otherP + 3, "-1");
@@ -63,6 +61,7 @@ while ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   }
 }
 
+include "MenuFiles/ParseGamefile.php";
 include "MenuFiles/WriteGamefile.php";
 
 $targetAuth = ($playerID == 1 ? $p1Key : $p2Key);
