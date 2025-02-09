@@ -764,14 +764,19 @@ function HasSaboteur($cardID, $player, $index)
       case "4910017138": return true;//Breaking In
       case "5610901450": return true;//Heroes on Both Sides
       //Jump to Lightspeed
-      case "8656409691": return true;//Rio Durant
+      case "8656409691": return true;//Rio Durant leader
       default: break;
     }
   }
   $upgrades = $ally->GetUpgrades();
   for($i=0; $i<count($upgrades); ++$i)
   {
-    if($upgrades[$i] == "0797226725") return true;//Infiltrator's Skill
+    switch($upgrades[$i]) {
+      case "0797226725"://Infiltrator's Skill
+      case "81a416eb1f"://Rio Durant pilot leader
+        return true;
+      default: break;
+    }
   }
   $allies = &GetAllies($player);
   for($i=0; $i<count($allies); $i+=AllyPieces())
@@ -786,6 +791,7 @@ function HasSaboteur($cardID, $player, $index)
   }
   switch($cardID)
   {
+    //Spark of Rebellion
     case "1017822723"://Rogue Operative
     case "9859536518"://Jawa Scavenger
     case "0046930738"://Rebel Pathfinder
@@ -795,6 +801,7 @@ function HasSaboteur($cardID, $player, $index)
     case "0828695133"://Seventh Sister
     case "9250443409"://Lando Calrissian (Responsible Businessman)
     case "3c60596a7a"://Cassian Andor (Dedicated to the Rebellion)
+    //Shadows of the Galaxy
     case "1690726274"://Zuckuss
     case "4595532978"://Ketsu Onyo
     case "3786602643"://House Kast Soldier
@@ -803,6 +810,7 @@ function HasSaboteur($cardID, $player, $index)
     case "2151430798"://Guavian Antagonizer
     case "2556508706"://Resourceful Pursuers
     case "2965702252"://Unlicensed Headhunter
+    //Twilight of the Republic
     case "6404471739"://Senatorial Corvette
     case "4050810437"://Droid Starfighter
     case "3600744650"://Bold Recon Commando
@@ -810,7 +818,11 @@ function HasSaboteur($cardID, $player, $index)
     case "1641175580"://Kit Fisto
     case "8414572243"://Enfys Nest (Champion of Justice)
     case "3434956158"://Fives
+    //Jump to Lightspeed
+    case "81a416eb1f"://Rio Durant leader unit
       return true;
+
+    //conditional saboteur
     case "8187818742"://Republic Commando
       return IsCoordinateActive($player);
     case "11299cc72f"://Pre Viszla
