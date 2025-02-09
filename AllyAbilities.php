@@ -113,8 +113,10 @@ function CheckUniqueAlly($uniqueID) {
     for ($i = 0; $i < count($allies); $i += AllyPieces()) {
       $otherAlly = new Ally("MYALLY-" . $i, $player);
       if ($otherAlly->UniqueID() != $uniqueID) {
-        if($otherAlly->CardID() == $cardID && !$otherAlly->IsCloned()) $uniqueAllyInPlay = true;
-        else {//check for pilots
+        if($otherAlly->CardID() == $cardID && !$otherAlly->IsCloned()) {
+          $uniqueAllyInPlay = true;
+          break;
+        } else {//check for pilots
           $upgrades = $otherAlly->GetUpgrades(withMetadata:true);
           for ($j = 0; $j < count($upgrades); $j+=SubcardPieces()) {
             if ($upgrades[$j] == $cardID) {
@@ -124,7 +126,6 @@ function CheckUniqueAlly($uniqueID) {
             }
           }
         }
-        break;
       }
     }
 
