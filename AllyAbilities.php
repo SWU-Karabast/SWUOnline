@@ -103,6 +103,7 @@ function CheckHealthAllAllies() {
 
 function CheckUniqueAlly($uniqueID) {
   $ally = new Ally($uniqueID);
+  if (!$ally->Exists()) return;
   $cardID = $ally->CardID();
   $player = $ally->PlayerID();
 
@@ -495,21 +496,48 @@ function UpgradesContainBounty($upgrades) {
   return false;
 }
 
-function AllyTakeControl($player, $index) {
+function AllyTakeControl($player, $uniqueID) {
   global $currentTurnEffects;
-  if($index == "") return -1;
+  if ($uniqueID == "" || $uniqueID == -1) return -1;
+  
   $otherPlayer = $player == 1 ? 2 : 1;
+  $ally = new Ally($uniqueID, $otherPlayer);
+  if (!$ally->Exists()) return -1;
+  $allyIndex = $ally->Index();
+  $allyController = $ally->Controller();
+
+  // Return if the ally is already controlled by the player
+  if ($allyController == $player) {
+    return $uniqueID;
+  }
+
   $myAllies = &GetAllies($player);
   $theirAllies = &GetAllies($otherPlayer);
-  $uniqueID = $theirAllies[$index+5];
+
+  // Swap current turn effects
   for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnEffectPieces()) {
     if($currentTurnEffects[$i+2] == -1 || $currentTurnEffects[$i+2] != $uniqueID) continue;
+    $effectCardID = explode("_", $currentTurnEffects[$i])[0];
+
+    // Skip the swap for specific cards
+    $skipSwap = false;
+    switch($effectCardID) {
+      case "3503494534"://Regional Governor
+      case "7964782056"://Qi'Ra unit
+        $skipSwap = true;
+        break;
+      default: break;
+    }
+
+    if ($skipSwap) continue;
     $currentTurnEffects[$i+1] = $currentTurnEffects[$i+1] == 1 ? 2 : 1; // Swap players
   }
-  for($i=$index; $i<$index+AllyPieces(); ++$i) {
+
+  // Swap ally
+  for ($i = $allyIndex; $i < $allyIndex + AllyPieces(); $i++) {
     $myAllies[] = $theirAllies[$i];
   }
-  for ($i=$index+AllyPieces()-1; $i>=$index; $i--) {
+  for ($i= $allyIndex + AllyPieces() - 1; $i >= $allyIndex; $i--) {
     unset($theirAllies[$i]);
   }
   $theirAllies = array_values($theirAllies); // Reindex the array

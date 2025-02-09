@@ -209,7 +209,7 @@ function RemoveCurrentTurnEffect($index)
 
 function CurrentTurnEffectPieces()
 {
-  return 4;
+  return CurrentTurnPieces();
 }
 
 function CurrentTurnEffectUses($cardID)
@@ -628,7 +628,7 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
   switch ($parameter) {
     case "AMBUSH":
       $ally = new Ally($uniqueID);
-      if (SearchCount(GetTargetsForAttack($ally, false)) > 0) {
+      if (SearchCount(GetTargetsForAttack($ally, false)) > 0 && $ally->Exists() && $ally->Controller() == $player) {
         AddDecisionQueue("YESNO", $player, "if_you_want_to_resolve_the_ambush_attack");
         AddDecisionQueue("NOPASS", $player, "-");
         AddDecisionQueue("PASSPARAMETER", $player, 1, 1);

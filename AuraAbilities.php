@@ -34,7 +34,7 @@ function UpgradeDetached($upgradeCardID, $player, $formerBearerMZIndex) {
   switch($upgradeCardID) {
     case "8055390529"://Traitorous
       $formerBearer = new Ally($formerBearerMZIndex, $player);
-      if($formerBearer->Owner() != $formerBearer->Controller()) AllyTakeControl($formerBearer->Owner(), $formerBearer->Index());
+      if($formerBearer->Owner() != $formerBearer->Controller()) AllyTakeControl($formerBearer->Owner(), $formerBearer->UniqueID());
       break;
     default:
       break;

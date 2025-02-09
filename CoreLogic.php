@@ -2362,12 +2362,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     if($targetArr[0] == "LAYERUID") { $targetArr[0] = "LAYER"; $targetArr[1] = SearchLayersForUniqueID($targetArr[1]); }
     $target = count($targetArr) > 1 ? $targetArr[0] . "-" . $targetArr[1] : "-";
   }
-  if($from != "PLAY" && IsAlly($cardID, $currentPlayer)) {
+  if ($from != "PLAY" && IsAlly($cardID, $currentPlayer)) {
     //LastAllyIndex does not work well when you play multiple unit on same times (Vader, U-Wing, Endless Legion ...)
-     if($uniqueId != "") {
-       $lastAllyUniqueId = SearchAlliesForUniqueID($uniqueId, $currentPlayer);
-       $lastAllyUniqueId = $lastAllyUniqueId == -1 ? LastAllyIndex($currentPlayer) : $lastAllyUniqueId;
-       $playAlly = new Ally("MYALLY-" . $lastAllyUniqueId);
+     if ($uniqueId != "") {
+       $playAlly = new Ally($uniqueId, $currentPlayer);
      } else {
        $playAlly = new Ally("MYALLY-" . LastAllyIndex($currentPlayer));
      }
@@ -2405,6 +2403,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
             AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
             AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a damaged unit to take control of", 1);
             AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+            AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
             AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL", 1);
             break;
           case "2432897157"://Qi'Ra Leader flip
@@ -3549,6 +3548,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $mzArr = explode("-", $target);
       if($mzArr[0] == "THEIRALLY") {
         AddDecisionQueue("PASSPARAMETER", $currentPlayer, $target);
+        AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID");
         AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL");
       }
       break;
@@ -3731,6 +3731,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1", 1);
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to take control of", 1);
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "1626462639", 1);
       break;
@@ -4488,9 +4489,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "THEMARAUDER", 1);
       break;
     case "7642980906"://Stolen Landspeeder
-      if($from == "HAND") {
-        AddDecisionQueue("PASSPARAMETER", $otherPlayer, "THEIRALLY-" . $playAlly->Index(), 1);
-        AddDecisionQueue("MZOP", $otherPlayer, "TAKECONTROL", 1);
+      if ($from == "HAND" && $playAlly->Exists()) {
+        AddDecisionQueue("PASSPARAMETER", $otherPlayer, $playAlly->UniqueID());
+        AddDecisionQueue("MZOP", $otherPlayer, "TAKECONTROL");
       }
       break;
     case "2346145249"://Choose Sides
@@ -4498,11 +4499,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a friendly unit to swap");
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("MZOP", $otherPlayer, "TAKECONTROL", 1);
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY", 1);
       AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1", 1);
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an enemy unit to swap", 1);
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL", 1);
       break;
     case "0598830553"://Dryden Vos
@@ -4972,7 +4975,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
           global $CS_OppCardActive;
           $oppIndex = GetClassState($currentPlayer, $CS_OppIndex);
           $ally = new Ally("THEIRALLY-" . $oppIndex, $otherPlayer);
-          AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYALLY-" . $ally->Index(), 1);
+          AddDecisionQueue("PASSPARAMETER", $currentPlayer, $ally->UniqueID(), 1);
           AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL", 1);
           AddDecisionQueue("PASSPARAMETER", $currentPlayer, -1, 1);
           AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_OppCardActive, 1);
@@ -5481,14 +5484,18 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZFILTER", $currentPlayer, "status=1");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose their unit to take control of", 1);
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-      AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL", 1);
-      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "1302133998", 1);
-      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
-      AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
-      AddDecisionQueue("MZFILTER", $currentPlayer, "status=1");
+      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY", 1);
+      AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1", 1);
+      AddDecisionQueue("MZFILTER", $currentPlayer, "status=1", 1);
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to give control of", 1);
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-      AddDecisionQueue("MZOP", $currentPlayer == 1 ? 2 : 1, "TAKECONTROL", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("MZOP", $otherPlayer, "TAKECONTROL", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $otherPlayer, "1302133998", 1);
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "1302133998", 1);
       break;
     case "2847868671"://Yoda Leader
@@ -5748,6 +5755,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to take control of", 1);
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "7732981122", 1);
       break;
@@ -5934,10 +5942,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "8105698374"://Commandeer
       //TODO: maybe allow control your own to not ready. but still bounce
-      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:trait=Vehicle;maxCost=6;hasPilot=0");
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Vehicle;maxCost=6;hasPilot=0&THEIRALLY:trait=Vehicle;maxCost=6;hasPilot=0");
       AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to take control of", 1);
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "8105698374,HAND", 1);
