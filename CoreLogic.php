@@ -6065,9 +6065,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("SETDQVAR", $currentPlayer, "2", 1);
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
-      AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,3", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,3," . $currentPlayer . ",0,1,0" , 1);
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{2}", 1);
-      AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,3", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,3," . $currentPlayer . ",0,1,0" , 1);
       break;
     //PlayAbility End
     default: break;
