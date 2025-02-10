@@ -23,12 +23,7 @@ $livingLegendsCCLinks = "";
 // TODO: Have as a global variable.
 $reactFE = "https://fe.talishar.net/game/play";
 
-$isShadowBanned = false;
-if (isset($_SESSION["isBanned"]))
-  $isShadowBanned = intval($_SESSION["isBanned"]) == 1;
-else if (isset($_SESSION["useruid"]))
-  $isShadowBanned = IsBanned($_SESSION["useruid"]);
-
+$isUserBanned = isset($_SESSION["userid"]) ? IsBanned($_SESSION["userid"]) : false;
 $canSeeQueue = isset($_SESSION["useruid"]);
 
 echo ("<div class='SpectatorContainer'>");
@@ -146,7 +141,7 @@ if ($handle = opendir($path)) {
       $link .= "<input type='hidden' name='playerID' value='2' />";
       $link .= "</form>";
 
-      if (!$isShadowBanned) {
+      if (!$isUserBanned) {
         switch ($format) {
           case "blitz":
             $blitzLinks .= $link;

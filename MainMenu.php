@@ -5,6 +5,13 @@ include "HostFiles/Redirector.php";
 include_once "Libraries/PlayerSettings.php";
 include_once 'Assets/patreon-php-master/src/PatreonDictionary.php';
 include_once "APIKeys/APIKeys.php";
+include_once './AccountFiles/AccountDatabaseAPI.php';
+
+// Check if the user is banned
+if (isset($_SESSION["userid"]) && IsBanned($_SESSION["userid"])) {
+  header("Location: ./PlayerBanned.php");
+  exit;
+}
 
 if (!empty($_SESSION['error'])) {
   $error = $_SESSION['error'];

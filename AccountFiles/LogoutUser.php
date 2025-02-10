@@ -1,5 +1,14 @@
 <?php
 include_once './AccountSessionAPI.php';
+include_once './AccountDatabaseAPI.php';
+
+session_start();
+
+// Check if the user is banned
+if (isset($_SESSION["userid"]) && IsBanned($_SESSION["userid"])) {
+  header("Location: ./PlayerBanned.php");
+  exit;
+}
 
 ClearLoginSession();
 

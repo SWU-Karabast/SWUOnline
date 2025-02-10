@@ -48,9 +48,11 @@ if (!isset($_SESSION["userid"])) {
   }
 }
 
-$isShadowBanned = false;
-if(isset($_SESSION["isBanned"])) $isShadowBanned = intval($_SESSION["isBanned"]) == 1;
-else if(isset($_SESSION["userid"])) $isShadowBanned = IsBanned($_SESSION["userid"]);
+$isUserBanned = isset($_SESSION["userid"]) ? IsBanned($_SESSION["userid"]) : false;
+if ($isUserBanned) {
+  header("Location: PlayerBanned.php");
+  exit;
+}
 
 if($visibility == "public" && $deckTestMode != "" && !isset($_SESSION["userid"])) {
   //Must be logged in to use matchmaking
@@ -75,7 +77,7 @@ if(isset($_SESSION["userid"]))
 }
 
 session_write_close();
-if($isShadowBanned) {
+if($isUserBanned) {
   if($format == "cc" || $format == "livinglegendscc") $format = "shadowcc";
   else if($format == "compcc") $format = "shadowcompcc";
   else if($format == "blitz" || $format == "compblitz" || $format == "commoner") $format = "shadowblitz";
