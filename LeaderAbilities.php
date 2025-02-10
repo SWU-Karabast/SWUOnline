@@ -3,7 +3,7 @@
 function LeaderPilotDeploy($player, $leader, $target) {
   $targetUnit = new Ally($target, $player);
   $cardID = LeaderUnit($leader);
-  $targetUnit->AddSubcard($cardID, $player, asPilot: true);
+  $targetUnit->Attach($cardID, $player);
 
   switch($cardID) {
     //Jump to Lightspeed

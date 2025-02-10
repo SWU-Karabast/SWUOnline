@@ -2135,10 +2135,10 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
       }
     }
     if ($from != "PLAY" && $from != "EQUIP" && $from != "CHAR") {
-      if (HasShielded($cardID, $currentPlayer) && $target == "-") {
+      if (HasShielded($cardID, $currentPlayer)) {
         AddLayer("TRIGGER", $currentPlayer, "SHIELDED", "-", "-", $uniqueID);
       }
-      if (HasAmbush($cardID, $currentPlayer, $index, $from) && $target = "-") {
+      if (HasAmbush($cardID, $currentPlayer, $index, $from)) {
         AddLayer("TRIGGER", $currentPlayer, "AMBUSH", "-", "-", $uniqueID);
       }
       AddAllyPlayCardAbilityLayers($cardID, $from, $uniqueID, $resourcesPaid);
