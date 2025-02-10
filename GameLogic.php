@@ -770,7 +770,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $mzArr = explode("-", $dqVars[0]);
           $allyPlayer = $mzArr[0] == "MYALLY" ? $player : ($player == 1 ? 2 : 1);
           $ally = new Ally($dqVars[0], $allyPlayer);
-          $ally->RescueCaptive($captiveID, $player);
+          $ally->RemoveSubcard($captiveID);
+          PlayCardSkipCosts($captiveID, "CAPTIVE");
           return $lastResult;
         case "DISCARDCAPTIVE":
           $captiveID = $lastResult;

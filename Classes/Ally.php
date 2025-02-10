@@ -689,8 +689,9 @@ class Ally {
     $ownerId = $this->RemoveSubcard($captiveID);
     if($ownerId != -1) {
       if($newController == -1) $newController = $ownerId;
-      PlayAlly($captiveID, $newController, from:"CAPTIVE", owner:$ownerId);
+      return PlayAlly($captiveID, $newController, from:"CAPTIVE", owner:$ownerId);
     }
+    return -1;
   }
 
   function DiscardCaptive($captiveID) {
