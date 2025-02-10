@@ -1,9 +1,16 @@
 <?php
 include_once 'MenuBar.php';
+include_once './AccountFiles/AccountDatabaseAPI.php';
 
 if (!isset($_SESSION['userid'])) {
   header('Location: ./MainMenu.php');
   die();
+}
+
+// Check if the user is banned
+if (isset($_SESSION["userid"]) && IsBanned($_SESSION["userid"])) {
+  header("Location: ./PlayerBanned.php");
+  exit;
 }
 ?>
 

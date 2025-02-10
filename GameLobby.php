@@ -8,9 +8,16 @@ include_once "Libraries/PlayerSettings.php";
 include_once "Libraries/HTTPLibraries.php";
 include_once "Assets/patreon-php-master/src/PatreonDictionary.php";
 include_once "WriteLog.php";
+include_once './AccountFiles/AccountDatabaseAPI.php';
 ob_end_clean();
 
 session_start();
+
+// Check if the user is banned
+if (isset($_SESSION["userid"]) && IsBanned($_SESSION["userid"])) {
+  header("Location: ./PlayerBanned.php");
+  exit;
+}
 
 $authKey = "";
 $gameName = TryGET("gameName", "");

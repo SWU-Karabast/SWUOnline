@@ -28,10 +28,6 @@ $response->openGames = [];
 $canSeeQueue = IsUserLoggedIn();
 $response->canSeeQueue = $canSeeQueue;
 
-$isShadowBanned = false;
-if(isset($_SESSION["isBanned"])) $isShadowBanned = intval($_SESSION["isBanned"]) == 1;
-else if(IsUserLoggedIn()) $isShadowBanned = IsBanned(LoggedInUserName());
-
 if(IsUserLoggedIn()) {
   $lastGameName = SessionLastGameName();
   if($lastGameName != "") {

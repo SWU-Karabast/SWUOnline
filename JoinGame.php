@@ -3,6 +3,13 @@ include_once 'MenuBar.php';
 include "HostFiles/Redirector.php";
 include_once "Libraries/PlayerSettings.php";
 include_once 'Assets/patreon-php-master/src/PatreonDictionary.php';
+include_once './AccountFiles/AccountDatabaseAPI.php';
+
+// Check if the user is banned
+if (isset($_SESSION["userid"]) && IsBanned($_SESSION["userid"])) {
+  header("Location: ./PlayerBanned.php");
+  exit;
+}
 
 $gameName = $_GET["gameName"];
 if (!IsGameNameValid($gameName)) {
