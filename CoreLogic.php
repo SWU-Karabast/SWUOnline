@@ -6373,7 +6373,7 @@ function PlayRequiresTarget($cardID)
     case "3765912000": return 7;//Take Captive
     case "5778949819": return 7;//Relentless Pursuit
     case "1973545191": return 6;//Unexpected Escape
-    case "0598830553": return 6;//Dryden Vos
+    case "0598830553": return 7;//Dryden Vos
     case "8576088385": return 6;//Detention Block Rescue
     default: return -1;
   }
