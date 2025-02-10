@@ -576,7 +576,7 @@ class Ally {
   }
 
   function GetUpgrades($withMetadata = false) {
-    if($this->allies[$this->index + 4] == "-") return [];
+    if(!$this->Exists() || $this->allies[$this->index + 4] == "-") return [];
     $subcards = $this->GetSubcards();
     $upgrades = [];
     for($i=0; $i<count($subcards); $i+=SubcardPieces()) {
@@ -718,6 +718,8 @@ class Ally {
 
   function LostAbilities($ignoreFirstCardId = ""): bool {
     global $currentTurnEffects;
+
+    if (!$this->Exists()) return false;
 
     // Check for effects that prevent abilities
     for ($i = 0; $i < count($currentTurnEffects); $i += CurrentTurnEffectPieces()) {

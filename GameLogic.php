@@ -431,6 +431,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $parameterArr = explode(",", $parameter);
       switch ($parameterArr[0])
       {
+        case "CHECKUNIQUEALLY": return CheckUniqueAlly($lastResult, reportMode:true) ? "YES" : "NO";
         case "FREEZE": MZFreeze($lastResult); break;
         case "GAINCONTROL": MZGainControl($player, $lastResult); break;
         case "GETCARDID": return GetMZCard($player, $lastResult);
