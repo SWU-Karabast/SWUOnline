@@ -141,6 +141,7 @@ function CheckUniqueAlly($uniqueID, $reportMode = false) {
       PrependDecisionQueue("NOPASS", $player, "-");
       // Double check that there is more than one unique unit in play, in case any were defeated during the resolution.
       PrependDecisionQueue("MZOP", $player, "CHECKUNIQUEALLY");
+      PrependDecisionQueue("PASSPARAMETER", $player, $uniqueID);
     }
 
     return $uniqueAllyInPlay;
