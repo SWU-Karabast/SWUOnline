@@ -1169,6 +1169,7 @@ function CountPilotUnitsAndPilotUpgrades($player, $other=false) {
   $count = $other ? -1 : 0;
   $count += SearchCount(SearchAllies($player, trait:"Pilot"));
   $alliesWithUpgrades = explode(",", SearchAllies($player, hasUpgradeOnly:true));
+  if($alliesWithUpgrades[0] == "") return $count;
   for($i=0; $i<count($alliesWithUpgrades); ++$i) {
     $ally = new Ally("MYALLY-" . $alliesWithUpgrades[$i], $player);
     $upgrades = $ally->GetUpgrades();

@@ -200,8 +200,9 @@ class Ally {
   function ReceivingPilot($cardID, $player = "") {
     global $CS_PlayedAsUpgrade;
     if($player == "") $player = $this->PlayerID();
+    $isLeaderPilot = CardIDIsLeader($cardID) && LeaderCanPilot(LeaderUndeployed($cardID));
 
-    return PilotingCost($cardID) >= 0 && GetClassState($player, $CS_PlayedAsUpgrade) == "1";
+    return $isLeaderPilot || PilotingCost($cardID) >= 0 && GetClassState($player, $CS_PlayedAsUpgrade) == "1";
   }
 
   function IsExhausted() {

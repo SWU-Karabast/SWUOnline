@@ -6042,11 +6042,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "9595057518"://Special Forces TIE Fighter
       if($from != "PLAY") {
-        $theirSpaceCount = SearchCount(SearchAllies($otherPlayer, arena:"Space")); 
+        $theirSpaceCount = SearchCount(SearchAllies($otherPlayer, arena:"Space"));
         $mySpaceCount = SearchCount(SearchAllies($currentPlayer, arena:"Space"));
         if($theirSpaceCount > $mySpaceCount) {
           $playAlly->Ready();
-        } 
+        }
       }
       break;
     case "6854247423"://Tantive IV
@@ -6058,11 +6058,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a First Order unit to give +2/+2");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "ADDHEALTH,2", 1);
-      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1); 
+      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "3427170256,PLAY", 1);
       break;
     case "3885807284"://Fight Fire With Fire
-      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY"); 
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a friendly unit");
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
