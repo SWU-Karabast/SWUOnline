@@ -5545,9 +5545,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "8");
       AddDecisionQueue("SETDQVAR", $currentPlayer, "0");
       for($i=0; $i<3; ++$i) {
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:maxHealth={0}");
-        AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to capture (Max HP: {0})");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:maxHealth={0}", 1);
+        AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1", 1);
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to capture (Max HP: {0})", 1);
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("SETDQVAR", $currentPlayer, "1", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "GETHEALTH", 1);
