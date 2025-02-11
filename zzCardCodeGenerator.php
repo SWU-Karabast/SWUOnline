@@ -62,6 +62,8 @@
           break;
       }
 
+      AddToArrays($cardID, $card->cardUid);
+
       $definedType = $card->type->data->attributes->name;
       if($definedType == "Token Unit") $definedType = "Unit";
       $imageUrl = $card->artFront->data->attributes->formats->card->url;
@@ -78,9 +80,7 @@
         $uuid = $arr[0];
         CheckImage($uuid, $imageUrl, $definedType, isBack:true, set:$set);
         AddToArrays($cardID, $uuid);
-      }     
-      
-      AddToArrays($cardID, $card->cardUid); 
+      }      
     }
 
     echo("Page: " . $meta->pagination->page . "/" . $meta->pagination->pageCount . "<BR>");
@@ -184,7 +184,7 @@
     global $DEFAULT_CARD_UNIQUE, $DEFAULT_CARD_HAS_WHEN_PLAYED, $DEFAULT_CARD_HAS_WHEN_DESTROYED, $DEFAULT_CARD_SET, $DEFAULT_CARD_UUID;
 
     // UUID Lookup
-    if($uuid != "8752877738" && $uuid != "2007868442" && $uuid != $DEFAULT_CARD_UUID) {
+    if ($uuid != "8752877738" && $uuid != "2007868442" && $uuid != $DEFAULT_CARD_UUID && !isset($uuidLookupArray[$cardID])) {
       $uuidLookupArray[$cardID] = $uuid;
     }
 
