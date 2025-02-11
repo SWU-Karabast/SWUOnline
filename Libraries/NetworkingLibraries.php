@@ -182,35 +182,18 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
     case 19: //MULTICHOOSE X
       if (!str_starts_with($turn[0], "MULTICHOOSE") && !str_starts_with($turn[0], "MAYMULTICHOOSE"))
         break;
-      $params = explode("-", $turn[2]);
-      $maxSelect = intval($params[0]);
-      $options = explode(",", $params[1]);
-      if (count($params) > 2)
-        $minSelect = intval($params[2]);
-      else
-        $minSelect = -1;
-      if (count($chkInput) > $maxSelect) {
-        WriteLog("You selected " . count($chkInput) . " items, but a maximum of " . $maxSelect . " is allowed. Reverting gamestate prior to that effect.");
-        RevertGamestate();
-        $skipWriteGamestate = true;
-        break;
-      }
-      if ($minSelect != -1 && count($chkInput) < $minSelect && count($chkInput) < count($options)) {
-        WriteLog("You selected " . count($chkInput) . " items, but a minimum of " . $minSelect . " is requested. Reverting gamestate prior to that effect.");
-        RevertGamestate();
-        $skipWriteGamestate = true;
-        break;
-      }
       $input = [];
-      for ($i = 0; $i < count($chkInput); ++$i) {
-        if ($chkInput[$i] < 0 || $chkInput[$i] >= count($options)) {
-          WriteLog("You selected option " . $chkInput[$i] . " but that was not one of the original options. Reverting gamestate prior to that effect.");
-          RevertGamestate();
-          $skipWriteGamestate = true;
-          break;
-        } else {
-          $input[] = $options[$chkInput[$i]];
+      if ($turn[0] == "MULTICHOOSEOURUNITS") {
+        $input[0] = [];
+        $input[1] = [];
+        $sets = explode("&", $turn[2]);
+        for($i=0; $i<count($sets); ++$i)
+        {
+          $skipWriteGamestate = ResolveMultichooseXSet($sets[$i], $chkInput[$i], $input[$i]);
+          if($skipWriteGamestate) break;
         }
+      } else {
+        $skipWriteGamestate = ResolveMultichooseXSet($turn[2], $chkInput, $input);
       }
       if (!$skipWriteGamestate) {
         ContinueDecisionQueue($input);
@@ -1125,6 +1108,37 @@ function ResolveCombatDamage($damageDone)
   }
   $currentPlayer = $mainPlayer;
   ProcessDecisionQueue(); //Any combat related decision queue logic should be main player gamestate
+}
+
+function ResolveMultichooseXSet($data, $chkInput, &$input) {
+  $params = explode("-", $data);
+  $maxSelect = intval($params[0]);
+  $options = explode(",", $params[1]);
+  if (count($params) > 2)
+    $minSelect = intval($params[2]);
+  else
+    $minSelect = -1;
+  if (count($chkInput) > $maxSelect) {
+    WriteLog("You selected " . count($chkInput) . " items, but a maximum of " . $maxSelect . " is allowed. Reverting gamestate prior to that effect.");
+    RevertGamestate();
+    return true;
+  }
+  if ($minSelect != -1 && count($chkInput) < $minSelect && count($chkInput) < count($options)) {
+    WriteLog("You selected " . count($chkInput) . " items, but a minimum of " . $minSelect . " is requested. Reverting gamestate prior to that effect.");
+    RevertGamestate();
+    return true;
+  }
+
+  for ($i = 0; $i < count($chkInput); ++$i) {
+    if ($chkInput[$i] < 0 || $chkInput[$i] >= count($options)) {
+      WriteLog("You selected option " . $chkInput[$i] . " but that was not one of the original options. Reverting gamestate prior to that effect.");
+      RevertGamestate();
+      return true;
+    } else {
+      $input[] = $options[$chkInput[$i]];
+    }
+  }
+  return false;
 }
 
 function FinalizeChainLink($chainClosed = false)

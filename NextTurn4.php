@@ -703,6 +703,23 @@
         SubmitInput(mode, input);
       }
 
+      function chkSubmitBoth(mode, countTheirs, countMine) {
+        var input = "";
+        input += "&gameName=" + document.getElementById("gameName").value;
+        input += "&playerID=" + document.getElementById("playerID").value;
+        input += "&chkCountTheirs=" + countTheirs;
+        input += "&chkCountMine=" + countMine;
+        for (var i = 0; i < countTheirs; ++i) {
+          var el = document.getElementById("chkt" + i);
+          if (el.checked) input += "&chkt" + i + "=" + el.value;
+        }
+        for (var i = 0; i < countMine; ++i) {
+          var el = document.getElementById("chkm" + i);
+          if (el.checked) input += "&chkm" + i + "=" + el.value;
+        }
+        SubmitInput(mode, input);
+      }
+
       function textSubmit(mode) {
         var input = "";
         input += "&gameName=" + document.getElementById("gameName").value;
