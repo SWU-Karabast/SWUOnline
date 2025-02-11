@@ -114,9 +114,7 @@ class Ally {
     // Upgrades buffs
     for($i=0; $i<count($upgrades); ++$i) {
       if ($upgrades[$i] != "-") {
-        $upgradeHP = CardUpgradeHPDictionary($upgrades[$i]);
-        if($upgradeHP != -1) $max += $upgradeHP;
-        else $max += CardHP($upgrades[$i]);
+        $max += CardUpgradeHPDictionary($upgrades[$i]);
       }
 
       switch ($upgrades[$i]) {
@@ -349,9 +347,7 @@ class Ally {
     // Upgrades buffs
     for ($i=0; $i<count($upgrades); ++$i) {
       if ($upgrades[$i] != "-") {
-        $upgradePower = CardUpgradePower($upgrades[$i]);
-        if($upgradePower != -1) $power += $upgradePower;
-        else $power += AttackValue($upgrades[$i]);
+        $power += CardUpgradePower($upgrades[$i]);
       }
 
       switch ($upgrades[$i]) {
@@ -360,8 +356,6 @@ class Ally {
           break;
         //Jump to Lightspeed
         case "1463418669"://IG-88
-          //workaround for some reason it doesn't like that the pilot has 0 power
-          $power -= 4;
           //end workaround
           $power += SearchCount(SearchAllies($otherPlayer, damagedOnly:true)) > 0 ? 3 : 0;
           break;
@@ -769,7 +763,9 @@ class Ally {
   function HasPilotLeaderUpgrade() {
     $upgrades = $this->GetUpgrades(withMetadata:true);
     for($i=0; $i<count($upgrades); $i+=SubcardPieces()) {
-      if(CardIDIsLeader($upgrades[$i]) && $upgrades[$i+2] == "1") return true;
+      if (CardIDIsLeader($upgrades[$i]) && $upgrades[$i+2] == "1") {
+        return true;
+      }
     }
     return false;
   }
