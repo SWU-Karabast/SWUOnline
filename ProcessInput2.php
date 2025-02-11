@@ -36,11 +36,16 @@ $mode = $inputMode;
 $buttonInput = $_GET["buttonInput"] ?? ""; //The player that is the target of the command - e.g. for changing health total
 $cardID = $_GET["cardID"] ?? "";
 $chkCount = $_GET["chkCount"] ?? 0;
+$chkCountTheirs = $_GET["chkCountTheirs"] ?? 0;
+$chkCountMine = $_GET["chkCountMine"] ?? 0;
 $chkInput = [];
+$chkInputTheirs = [];
+$chkInputMine = [];
 for ($i = 0; $i < $chkCount; ++$i) {
   $chk = $_GET[("chk" . $i)] ?? "";
   if ($chk != "") $chkInput[] = $chk;
 }
+
 $inputText = $_GET["inputText"] ?? "";
 
 SetHeaders();
@@ -123,7 +128,20 @@ if(GetCachePiece($gameName, 14) === 7 && $mode != 100001) {
   return;
 }
 //Now we can process the command
-ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkInput, false, $inputText);
+if($chkCountTheirs > 0 || $chkCountMine > 0) {
+  for ($i = 0; $i < $chkCountTheirs; ++$i) {
+    $chk = $_GET[("chkt" . $i)] ?? "";
+    if ($chk != "") $chkInputTheirs[] = $chk;
+  }
+  for ($i = 0; $i < $chkCountMine; ++$i) {
+    $chk = $_GET[("chkm" . $i)] ?? "";
+    if ($chk != "") $chkInputMine[] = $chk;
+  }
+  ProcessInput($playerID, $mode, $buttonInput, $cardID, [$chkCountTheirs, $chkCountMine], [$chkInputTheirs, $chkInputMine], false, $inputText);
+}
+else
+  ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkInput, false, $inputText);
+
 
 ProcessMacros();
 if ($inGameStatus == $GameStatus_Rematch) {

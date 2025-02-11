@@ -10,8 +10,8 @@ function LeaderPilotDeploy($player, $leader, $target) {
     case "f6eb711cf3"://Boba Fett
       AddDecisionQueue("FINDINDICES", $player, "ALLTHEIRUNITSMULTI");
       AddDecisionQueue("SETDQCONTEXT", $player, "Choose units to damage", 1);
-      AddDecisionQueue("MULTICHOOSETHEIRUNIT", $player, "<-", 1);
-      AddDecisionQueue("MULTIDISTRIBUTEDAMAGE", $player, "4,1", 1);
+      AddDecisionQueue("MULTICHOOSETHEIRUNIT", $player, "<-", 1);//TODO: choose from all
+      AddDecisionQueue("MULTIDISTRIBUTEDAMAGE", $player, "4,1", 1);//TODO: damage all
       break;
     case "a015eb5c5e"://Han Solo
       HanSoloPilotLeaderJTL($player);

@@ -510,7 +510,7 @@ function UpgradesContainBounty($upgrades) {
 function AllyTakeControl($player, $uniqueID) {
   global $currentTurnEffects;
   if ($uniqueID == "" || $uniqueID == -1) return -1;
-  
+
   $otherPlayer = $player == 1 ? 2 : 1;
   $ally = new Ally($uniqueID, $otherPlayer);
   if (!$ally->Exists()) return -1;
@@ -933,7 +933,7 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities, $isUp
         AddDecisionQueue("MZOP", $player, "GETUNIQUEID", 1);
         AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $player, "1397553238,PLAY", 1);
         AddDecisionQueue("PASSPARAMETER", $player, "{0}", 1);
-        AddDecisionQueue("MZOP", $player, "REDUCEHEALTH,1", 1); 
+        AddDecisionQueue("MZOP", $player, "REDUCEHEALTH,1", 1);
         break;
       //AllyDestroyedAbility End
       default: break;

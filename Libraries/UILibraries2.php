@@ -541,15 +541,27 @@ function ProcessInputLink($player, $mode, $input, $event = 'onmousedown', $fullR
   return " " . $event . "='" . $jsCode . "'";
 }
 
-function CreateForm($playerID, $caption, $mode, $count)
+function CreateForm($playerID, $caption, $mode, $count, $countOthers=0)
 {
   global $gameName;
   $rv = "<form>";
-  $rv .= "<input type='button' onclick='chkSubmit(" . $mode . ", " . $count . ")' value='" . $caption . "'>";
+  if($countOthers > 0) {
+    $rv .= "<input type='button' onclick='chkSubmitBoth(" . $mode . ", " . $count . ", " . $countOthers . ")' value='" . $caption . "'>";
+  }
+  else {
+    $rv .= "<input type='button' onclick='chkSubmit(" . $mode . ", " . $count . ")' value='" . $caption . "'>";
+  }
   $rv .= "<input type='hidden' id='gameName' name='gameName' value='" . $gameName . "'>";
   $rv .= "<input type='hidden' id='playerID' name='playerID' value='" . $playerID . "'>";
   $rv .= "<input type='hidden' id='mode' name='mode' value='" . $mode . "'>";
-  $rv .= "<input type='hidden' id='chkCount' name='chkCount' value='" . $count . "'>";
+  if($countOthers > 0) {
+    $rv .= "<input type='hidden' id='chkCountTheirs' name='chkCountTheirs' value='" . $count . "'>";
+    $rv .= "<input type='hidden' id='chkCountMine' name='chkCountMine' value='" . $countOthers . "'>";
+  }
+  else {
+    $rv .= "<input type='hidden' id='chkCount' name='chkCount' value='" . $count . "'>";
+  }
+
   return $rv;
 }
 

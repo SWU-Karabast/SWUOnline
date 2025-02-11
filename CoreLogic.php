@@ -1586,6 +1586,7 @@ function NumEquipBlock()
       case "MULTICHOOSEHAND": return 0;
       case "MULTICHOOSEUNIT": return 0;
       case "MULTICHOOSETHEIRUNIT": return 0;
+      case "MULTICHOOSEOURUNITS": return 0;
       case "CHOOSEMULTIZONE": return 0;
       case "CHOOSEBANISH": return 0;
       case "BUTTONINPUTNOPASS": return 0;
@@ -3306,10 +3307,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         $ally = new Ally($target);
         $ally->AddRoundHealthModifier(2);
         AddCurrentTurnEffect($cardID, $currentPlayer, "PLAY", $ally->UniqueID());
-        AddDecisionQueue("FINDINDICES", $currentPlayer, "ALLTHEIRUNITSMULTI");
+        AddDecisionQueue("FINDINDICES", $currentPlayer, "ALLOURUNITSMULTI");
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose units to damage", 1);
-        AddDecisionQueue("MULTICHOOSETHEIRUNIT", $currentPlayer, "<-", 1);
-        AddDecisionQueue("MULTIDISTRIBUTEDAMAGE", $currentPlayer, $ally->CurrentPower() . ",1", 1);
+        AddDecisionQueue("MULTICHOOSEOURUNITS", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MULTIDISTRIBUTEDAMAGE", $currentPlayer, $ally->CurrentPower() . ",1,0,$currentPlayer,1,OURALLIES", 1);
       }
       break;
     case "3974134277"://Prepare for Takeoff
