@@ -161,12 +161,11 @@ include_once 'Header.php';
     <div style="position: relative;">
       <div style='vertical-align:middle; text-align:center;'>
         <a href="https://swustats.net" target="_blank">
-          <img src="./Images/SWUStats.webp" alt="SHD" style="max-width: 100%; border-radius: 5px;">
+          <img src="./Images/SWUStatsHypergeo.png" alt="SHD" style="max-width: 100%; border-radius: 5px;">
         </a>
         <div style="text-align: left;">
         <h3 style="margin: 15px 0; display: block;">SWU Stats</h3>
-        <p>The amazing deck stat tracking you may know from other game sites like Fabrary has finally come to SWU!</p>
-        <p>Announcing SWU Stats! This is a deckbuilder particularly focused on tracking your game stats over time to help you train for upcoming organized play tournaments or even game night at your local LGS. If you'd prefer to deckbuild on another site, you can use the Import function. Just use the deck link from swustats to make sure you can view the stats for your deck. <a target="_blank" href="https://discord.gg/5ZHXyVvVFC">Join our Discord</a> for the latest progress updates.</p>
+        <p>Are you tired of missing with Triple Dark Raid? Curious exactly how unlucky you got when you missed with Vader? Wonder no more! Now you can automatically calculate your odds of hitting with Search top X effects based on your deck composition at SWU Stats!</p>
       </div>
     </div>
     <?php
