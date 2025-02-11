@@ -1,28 +1,28 @@
 <?php
 
   include './zzImageConverter.php';
-  include './Libraries/Trie.php';
 
   $hasMoreData = true;
   $page = 1;
-  $titleTrie = [];
-  $subtitleTrie = [];
-  $costTrie = [];
-  $hpTrie = [];
-  $powerTrie = [];
-  $upgradeHPTrie = [];
-  $upgradePowerTrie = [];
-  $aspectsTrie = [];
-  $traitsTrie = [];
-  $arenasTrie = [];
-  $uuidLookupTrie = [];
-  $typeTrie = [];
-  $type2Trie = [];
-  $uniqueTrie = [];
-  $hasPlayTrie = [];
-  $hasDestroyedTrie = [];
-  $setTrie = [];
-  $cardIDTrie = [];
+  $titleArray = [];
+  $subtitleArray = [];
+  $costArray = [];
+  $hpArray = [];
+  $powerArray = [];
+  $upgradeHPArray = [];
+  $upgradePowerArray = [];
+  $aspectsArray = [];
+  $traitsArray = [];
+  $arenasArray = [];
+  $uuidLookupArray = [];
+  $typeArray = [];
+  $type2Array = [];
+  $uniqueArray = [];
+  $hasPlayArray = [];
+  $hasDestroyedArray = [];
+  $setArray = [];
+  $cardIDArray = [];
+
   while ($hasMoreData)
   {
     $jsonUrl = "https://admin.starwarsunlimited.com/api/cards?locale=en&pagination[page]=" . $page . "&pagination[pageSize]=100&filters[variantOf][id][\$null]=true";
@@ -61,7 +61,6 @@
           $cardID = "TWI_T02";
           break;
       }
-      AddToTries($cardID, $card->cardUid);
 
       $definedType = $card->type->data->attributes->name;
       if($definedType == "Token Unit") $definedType = "Unit";
@@ -78,8 +77,10 @@
         $arr = explode(".", $arr[count($arr)-1]);
         $uuid = $arr[0];
         CheckImage($uuid, $imageUrl, $definedType, isBack:true, set:$set);
-        AddToTries($cardID, $uuid);
-      }
+        AddToArrays($cardID, $uuid);
+      }     
+      
+      AddToArrays($cardID, $card->cardUid); 
     }
 
     echo("Page: " . $meta->pagination->page . "/" . $meta->pagination->pageCount . "<BR>");
@@ -98,24 +99,43 @@
 
   fwrite($handler, "<?php\r\n");
 
-  GenerateFunction($titleTrie, $handler, "CardTitle", true, "");
-  GenerateFunction($subtitleTrie, $handler, "CardSubtitle", true, "");
-  GenerateFunction($costTrie, $handler, "CardCost", false, -1);
-  GenerateFunction($hpTrie, $handler, "CardHPDictionary", false, -1);
-  GenerateFunction($powerTrie, $handler, "CardPower", false, -1);
-  GenerateFunction($upgradeHPTrie, $handler, "CardUpgradeHPDictionary", false, -1);
-  GenerateFunction($upgradePowerTrie, $handler, "CardUpgradePower", false, -1);
-  GenerateFunction($aspectsTrie, $handler, "CardAspects", true, "");
-  GenerateFunction($traitsTrie, $handler, "CardTraits", true, "");
-  GenerateFunction($arenasTrie, $handler, "CardArenas", true, "");
-  GenerateFunction($typeTrie, $handler, "DefinedCardType", true, "");
-  GenerateFunction($type2Trie, $handler, "DefinedCardType2", true, "");
-  GenerateFunction($uniqueTrie, $handler, "CardIsUnique", false, 0);
-  GenerateFunction($hasPlayTrie, $handler, "HasWhenPlayed", false, "false", 1);
-  GenerateFunction($hasDestroyedTrie, $handler, "HasWhenDestroyed", false, "false", 1);
-  GenerateFunction($setTrie, $handler, "CardSet", true, "");
-  GenerateFunction($uuidLookupTrie, $handler, "UUIDLookup", true, "");
-  GenerateFunction($cardIDTrie, $handler, "CardIDLookup", true, "");
+  $DEFAULT_CARD_TITLE = "";
+  $DEFAULT_CARD_SUBTITLE = "";
+  $DEFAULT_CARD_COST = 0;
+  $DEFAULT_CARD_HP = 0;
+  $DEFAULT_CARD_POWER = 0;
+  $DEFAULT_CARD_UPGRADE_HP = 0;
+  $DEFAULT_CARD_UPGRADE_POWER = 0;
+  $DEFAULT_CARD_ASPECTS = "";
+  $DEFAULT_CARD_TRAITS = "";
+  $DEFAULT_CARD_ARENAS = "";
+  $DEFAULT_CARD_TYPE = "Unit";
+  $DEFAULT_CARD_TYPE2 = "";
+  $DEFAULT_CARD_UNIQUE = 0;
+  $DEFAULT_CARD_HAS_WHEN_PLAYED = false;
+  $DEFAULT_CARD_HAS_WHEN_DESTROYED = false;
+  $DEFAULT_CARD_SET = "";
+  $DEFAULT_CARD_UUID = "";
+
+  GenerateFunction($titleArray, $handler, "CardTitle", true, $DEFAULT_CARD_TITLE);
+  GenerateFunction($subtitleArray, $handler, "CardSubtitle", true, $DEFAULT_CARD_SUBTITLE);
+  GenerateFunction($costArray, $handler, "CardCost", false, $DEFAULT_CARD_COST);
+  GenerateFunction($hpArray, $handler, "CardHPDictionary", false, $DEFAULT_CARD_HP);
+  GenerateFunction($powerArray, $handler, "CardPower", false, $DEFAULT_CARD_POWER);
+  GenerateFunction($upgradeHPArray, $handler, "CardUpgradeHPDictionary", false, $DEFAULT_CARD_UPGRADE_HP);
+  GenerateFunction($upgradePowerArray, $handler, "CardUpgradePower", false, $DEFAULT_CARD_UPGRADE_POWER);
+  GenerateFunction($aspectsArray, $handler, "CardAspects", true, $DEFAULT_CARD_ASPECTS);
+  GenerateFunction($traitsArray, $handler, "CardTraits", true, $DEFAULT_CARD_TRAITS);
+  GenerateFunction($arenasArray, $handler, "CardArenas", true, $DEFAULT_CARD_ARENAS);
+  GenerateFunction($typeArray, $handler, "DefinedCardType", true, $DEFAULT_CARD_TYPE);
+  GenerateFunction($type2Array, $handler, "DefinedCardType2", true, $DEFAULT_CARD_TYPE2);
+  GenerateFunction($uniqueArray, $handler, "CardIsUnique", false, $DEFAULT_CARD_UNIQUE);
+  GenerateFunction($hasPlayArray, $handler, "HasWhenPlayed", false, $DEFAULT_CARD_HAS_WHEN_PLAYED);
+  GenerateFunction($hasDestroyedArray, $handler, "HasWhenDestroyed", false, $DEFAULT_CARD_HAS_WHEN_DESTROYED);
+  GenerateFunction($setArray, $handler, "CardSet", true, $DEFAULT_CARD_SET);
+  GenerateFunction($uuidLookupArray, $handler, "UUIDLookup", true, $DEFAULT_CARD_UUID);
+  GenerateFunction($cardIDArray, $handler, "CardIDLookup", true, $DEFAULT_CARD_UUID);
+  GenerateCardTitles($titleArray, $handler);
 
   fwrite($handler, "?>");
 
@@ -124,74 +144,168 @@
 
   $generateFilename = "./GeneratedCode/GeneratedCardDictionaries.js";
   $handler = fopen($generateFilename, "w");
-  GenerateFunction($titleTrie, $handler, "CardTitle", true, "", language:"js");
+  GenerateFunction($titleArray, $handler, "CardTitle", true, "", language:"js");
   fclose($handler);
 
-  function GenerateFunction($cardArray, $handler, $functionName, $isString, $defaultValue, $dataType = 0, $language = "PHP")
-  {
-    if($language == "PHP") fwrite($handler, "function " . $functionName . "(\$cardID) {\r\n  if(strlen(\$cardID) < 6) return \"\";\r\n");
-    else if($language = "js") fwrite($handler, "function " . $functionName . "(cardID) {\r\n");
-    TraverseTrie($cardArray, "", $handler, $isString, $defaultValue, $dataType, $language);
+  function GenerateCardTitles($titleArray, $handler) {
+    echo "Generating CardTitles<br>";
+    $uniqueTitles = array_unique($titleArray);
+    sort($uniqueTitles);
+    $strTitles = implode("|", $uniqueTitles);
+    fwrite($handler, "function CardTitles() {\r\n");
+    fwrite($handler, "  return " . var_export($strTitles, true) . ";\r\n");
     fwrite($handler, "}\r\n\r\n");
   }
-
-  function AddToTries($cardID, $uuid)
+  
+  function GenerateFunction($cardArray, $handler, $functionName, $isString, $defaultValue, $language = "PHP")
   {
-    global $uuidLookupTrie, $titleTrie, $subtitleTrie, $costTrie, $hpTrie, $powerTrie, $upgradeHPTrie, $upgradePowerTrie, $typeTrie, $type2Trie, $uniqueTrie, $card;
-    global $aspectsTrie, $traitsTrie, $arenasTrie, $hasPlayTrie, $hasDestroyedTrie, $setTrie, $cardIDTrie;
-    if($uuid != "8752877738" && $uuid != "2007868442") {
-      AddToTrie($uuidLookupTrie, $cardID, 0, $uuid);
+    echo "Generating " . $functionName . " (" . $language . ")<br>";
+    
+    if($language == "PHP") {
+      fwrite($handler, "function " . $functionName . "(\$cardID) {\r\n");
+      fwrite($handler, "  \$data = " . var_export($cardArray, true) . ";\r\n");
+      fwrite($handler, "  return isset(\$data[\$cardID]) ? \$data[\$cardID] : " . ($isString ? "\"" . $defaultValue . "\"" : var_export($defaultValue, true)) . ";\r\n");
+      fwrite($handler, "}\r\n\r\n");
+    } else if($language == "js") {
+      fwrite($handler, "function " . $functionName . "(cardID) {\r\n");
+      fwrite($handler, "  const data = " . json_encode($cardArray) . ";\r\n");
+      fwrite($handler, "  return data[cardID] !== undefined ? data[cardID] : " . ($isString ? "\"" . $defaultValue . "\"" : var_export($defaultValue, true)) . ";\r\n");
+      fwrite($handler, "}\r\n\r\n");
     }
-    AddToTrie($titleTrie, $uuid, 0, str_replace('"', "'", $card->title));
-    AddToTrie($subtitleTrie, $uuid, 0, str_replace('"', "'", $card->subtitle));
-    AddToTrie($costTrie, $uuid, 0, $card->cost);
+  }
+
+  function AddToArrays($cardID, $uuid)
+  {
+    global $uuidLookupArray, $titleArray, $subtitleArray, $costArray, $hpArray, $powerArray, $upgradeHPArray, $upgradePowerArray;
+    global $typeArray, $type2Array, $uniqueArray, $card, $aspectsArray, $traitsArray, $arenasArray, $hasPlayArray;
+    global $hasDestroyedArray, $setArray, $cardIDArray;
+    global $DEFAULT_CARD_TITLE, $DEFAULT_CARD_SUBTITLE, $DEFAULT_CARD_COST, $DEFAULT_CARD_HP, $DEFAULT_CARD_POWER, $DEFAULT_CARD_UPGRADE_HP; 
+    global $DEFAULT_CARD_UPGRADE_POWER, $DEFAULT_CARD_ASPECTS, $DEFAULT_CARD_TRAITS, $DEFAULT_CARD_ARENAS, $DEFAULT_CARD_TYPE, $DEFAULT_CARD_TYPE2;
+    global $DEFAULT_CARD_UNIQUE, $DEFAULT_CARD_HAS_WHEN_PLAYED, $DEFAULT_CARD_HAS_WHEN_DESTROYED, $DEFAULT_CARD_SET, $DEFAULT_CARD_UUID;
+
+    // UUID Lookup
+    if($uuid != "8752877738" && $uuid != "2007868442" && $uuid != $DEFAULT_CARD_UUID) {
+      $uuidLookupArray[$cardID] = $uuid;
+    }
+
+    // Title
+    if ($card->title && $card->title != $DEFAULT_CARD_TITLE) {
+      $titleArray[$uuid] = str_replace('"', "'", $card->title);
+    }
+
+    // Subtitle
+    if ($card->subtitle && $card->subtitle != $DEFAULT_CARD_SUBTITLE) {
+      $subtitleArray[$uuid] = str_replace('"', "'", $card->subtitle);
+    }
+
+    // Cost
+    if ($card->cost && $card->cost != $DEFAULT_CARD_COST) {
+      $costArray[$uuid] = $card->cost;
+    }
+
+    // HP
+    if ($card->hp && $card->hp != $DEFAULT_CARD_HP) {
+      $hpArray[$uuid] = $card->hp;
+    }
+
+    // Power
+    if ($card->power && $card->power != $DEFAULT_CARD_POWER) {
+      $powerArray[$uuid] = $card->power;
+    }
+
+    // Upgrade HP
+    if ($card->upgradeHp && $card->upgradeHp != $DEFAULT_CARD_UPGRADE_HP) {
+      $upgradeHPArray[$uuid] = $card->upgradeHp;
+    }
+
+    // Upgrade Power
+    if ($card->upgradePower && $card->upgradePower != $DEFAULT_CARD_UPGRADE_POWER) {
+      $upgradePowerArray[$uuid] = $card->upgradePower;
+    }
+
+    // Type
     $definedType = $card->type->data->attributes->name;
-    if($definedType == "Token Unit") $definedType = "Unit";
+    if ($definedType == "Token Unit") $definedType = "Unit";
     else if($definedType == "Token Upgrade") $definedType = "Upgrade";
-    AddToTrie($typeTrie, $uuid, 0, $definedType);
-    AddToTrie($hpTrie, $uuid, 0, $definedType == "Upgrade" ? $card->upgradeHp : $card->hp);
-    AddToTrie($powerTrie, $uuid, 0, $definedType == "Upgrade" ? $card->upgradePower : $card->power);
-    AddToTrie($upgradeHPTrie, $uuid, 0, $card->upgradeHp == null ? -1 : $card->upgradeHp);
-    AddToTrie($upgradePowerTrie, $uuid, 0, $card->upgradePower == null ? -1 : $card->upgradePower);
-    AddToTrie($setTrie, $uuid, 0, $card->expansion->data->attributes->code);
-    AddToTrie($cardIDTrie, $uuid, 0, $cardID);
-    if($card->type2->data != null) {
-      $type2 = $card->type2->data->attributes->name;
-      if($type2 == "Leader Unit") $type2 = "Unit";
-      AddToTrie($type2Trie, $uuid, 0, $type2);
+    if ($definedType && $definedType != $DEFAULT_CARD_TYPE) {
+      $typeArray[$uuid] = $definedType;
     }
-    AddToTrie($uniqueTrie, $uuid, 0, $card->unique == "true" ? 1 : 0);
-    if($card->text != null && (str_contains($card->text, "When Played") || str_contains($card->text, "When played"))) AddToTrie($hasPlayTrie, $uuid, 0, true);
-    if($card->text != null && (str_contains($card->text, "When Defeated:") || str_contains($card->text, "When defeated:"))) AddToTrie($hasDestroyedTrie, $uuid, 0, true);
 
-    $aspects = "";
-    for($j = 0; $j < count($card->aspects->data); ++$j)
-    {
-      if($aspects != "") $aspects .= ",";
-      $aspects .= $card->aspects->data[$j]->attributes->name;
+    // Type 2
+    $definedType2 = $card->type2->data ? $card->type2->data->attributes->name : "";
+    if ($definedType2 == "Leader Unit") $definedType2 = "Unit";
+    if ($definedType2 && $definedType2 != $DEFAULT_CARD_TYPE2) {
+      $type2Array[$uuid] = $definedType2;
     }
-    for($j = 0; $j < count($card->aspectDuplicates->data); ++$j)
-    {
-      if($aspects != "") $aspects .= ",";
-      $aspects .= $card->aspectDuplicates->data[$j]->attributes->name;
-    }
-    AddToTrie($aspectsTrie, $uuid, 0, $aspects);
 
-    $traits = "";
-    for($j = 0; $j < count($card->traits->data); ++$j)
-    {
-      if($traits != "") $traits .= ",";
-      $traits .= $card->traits->data[$j]->attributes->name;
+    // Set
+    $set = $card->expansion->data->attributes->code;
+    if ($set && $set != $DEFAULT_CARD_SET) {
+      $setArray[$uuid] = $set;
     }
-    AddToTrie($traitsTrie, $uuid, 0, $traits);
 
-    $arenas = "";
-    for($j = 0; $j < count($card->arenas->data); ++$j)
-    {
-      if($arenas != "") $arenas .= ",";
-      $arenas .= $card->arenas->data[$j]->attributes->name;
+    // Card ID
+    if ($cardID && $cardID != $DEFAULT_CARD_UUID) {
+      $cardIDArray[$uuid] = $cardID;
     }
-    AddToTrie($arenasTrie, $uuid, 0, $arenas);
+
+    // Unique
+    $unique = $card->unique == "true" ? 1 : 0;
+    if ($unique != $DEFAULT_CARD_UNIQUE) {
+      $uniqueArray[$uuid] = $unique;
+    }
+
+    // Has When Played
+    if ($card->text && (str_contains($card->text, "When Played") || str_contains($card->text, "When played"))) {
+      $hasPlayArray[$uuid] = true;
+    }
+
+    // Has When Destroyed
+    if ($card->text && (str_contains($card->text, "When Defeated:") || str_contains($card->text, "When defeated:"))) {
+      $hasDestroyedArray[$uuid] = true;
+    }
+
+    // Aspects
+    $aspects = [];
+    foreach ($card->aspects->data as $aspect) {
+      $name = $aspect->attributes->name;
+      if ($name && $name != $DEFAULT_CARD_ASPECTS) {
+        $aspects[] = $name;
+      }
+    }
+    foreach ($card->aspectDuplicates->data as $aspect) {
+      $name = $aspect->attributes->name;
+      if ($name && $name != $DEFAULT_CARD_ASPECTS) {
+        $aspects[] = $name;
+      }
+    }
+    if (count($aspects) > 0) {
+      $aspectsArray[$uuid] = implode(",", $aspects);
+    }
+
+    // Traits
+    $traits = [];
+    foreach ($card->traits->data as $trait) {
+      $name = $trait->attributes->name;
+      if ($name && $name != $DEFAULT_CARD_TRAITS) {
+        $traits[] = $name;
+      }
+    }
+    if (count($traits) > 0) {
+      $traitsArray[$uuid] = implode(",", $traits);
+    }
+
+    // Arenas
+    $arenas = [];
+    foreach ($card->arenas->data as $arena) {
+      $name = $arena->attributes->name;
+      if ($name && $name != $DEFAULT_CARD_ARENAS) {
+        $arenas[] = $name;
+      }
+    }
+    if (count($arenas) > 0) {
+      $arenasArray[$uuid] = implode(",", $arenas);
+    }
   }
 
 ?>
