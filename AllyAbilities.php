@@ -101,7 +101,8 @@ function CheckHealthAllAllies() {
   }
 }
 
-function CheckUniqueAlly($uniqueID) {
+// Returns true if there is more than one unique unit in play, false otherwise.
+function CheckUniqueAlly($uniqueID, $reportMode = false) {
   $ally = new Ally($uniqueID);
   if (!$ally->Exists()) return;
   $cardID = $ally->CardID();
@@ -113,7 +114,7 @@ function CheckUniqueAlly($uniqueID) {
     $uniqueAllyInPlay = false;
     for ($i = 0; $i < count($allies); $i += AllyPieces()) {
       $otherAlly = new Ally("MYALLY-" . $i, $player);
-      if ($otherAlly->UniqueID() != $uniqueID) {
+      if ($otherAlly->Exists() && $otherAlly->UniqueID() != $uniqueID) {
         if($otherAlly->CardID() == $cardID && !$otherAlly->IsCloned()) {
           $uniqueAllyInPlay = true;
           break;
@@ -121,21 +122,29 @@ function CheckUniqueAlly($uniqueID) {
           $upgrades = $otherAlly->GetUpgrades(withMetadata:true);
           for ($j = 0; $j < count($upgrades); $j+=SubcardPieces()) {
             if ($upgrades[$j] == $cardID) {
-              WriteLog(CardLink($cardID, $cardID) . " upgrade has been defeated due to unique rule.");
-              DefeatUpgradeForUniqueID($upgrades[$j + 3]);
-              return;
+              if (!$reportMode) {
+                WriteLog(CardLink($cardID, $cardID) . " upgrade has been defeated due to unique rule.");
+                DefeatUpgradeForUniqueID($upgrades[$j + 3]);
+              }
+              return true;
             }
           }
         }
       }
     }
 
-    if ($uniqueAllyInPlay) {
+    if (!$reportMode && $uniqueAllyInPlay) {
       PrependDecisionQueue("MZDESTROY", $player, "-", 1);
       PrependDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
-      PrependDecisionQueue("SETDQCONTEXT", $player, "You have two of this unique unit; choose one to destroy");
-      PrependDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:cardID=" . $cardID);
+      PrependDecisionQueue("SETDQCONTEXT", $player, "You have two of this unique unit; choose one to destroy", 1);
+      PrependDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:cardID=" . $cardID, 1);
+      PrependDecisionQueue("NOPASS", $player, "-");
+      // Double check that there is more than one unique unit in play, in case any were defeated during the resolution.
+      PrependDecisionQueue("MZOP", $player, "CHECKUNIQUEALLY");
+      PrependDecisionQueue("PASSPARAMETER", $player, $uniqueID);
     }
+
+    return $uniqueAllyInPlay;
   }
 }
 
@@ -437,8 +446,10 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false,
     }
   }
 
-  // Rescue captives
+  // Remove the ally from the allies array
   for($j = $index + AllyPieces() - 1; $j >= $index; --$j) unset($allies[$j]);
+
+  // Rescue captives
   $allies = array_values($allies);
   if(!$skipRescue) {
     for($i=0; $i<count($captives); $i+=SubcardPieces()) {

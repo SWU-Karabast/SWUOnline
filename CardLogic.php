@@ -61,8 +61,7 @@ function DefeatUpgrade($player, $may = false, $search="MYALLY:hasUpgradeOnly=tru
   else if($to == "HAND") AddDecisionQueue("OP", $player, "BOUNCEUPGRADE", 1);
 }
 
-function PlayCaptive($player, $target="")
-{
+function PlayCaptive($player, $target) {
   AddDecisionQueue("PASSPARAMETER", $player, $target);
   AddDecisionQueue("SETDQVAR", $player, 0);
   AddDecisionQueue("MZOP", $player, "GETCAPTIVES");
