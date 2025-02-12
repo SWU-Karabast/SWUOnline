@@ -199,6 +199,7 @@ function AllyHasStaticHealthModifier($cardID)
   {
     case "1557302740"://General Veers
     case "9799982630"://General Dodonna
+    case "3666212779"://Captain Tarkin
     case "4339330745"://Wedge Antilles
     case "4511413808"://Follower of the Way
     case "3731235174"://Supreme Leader Snoke

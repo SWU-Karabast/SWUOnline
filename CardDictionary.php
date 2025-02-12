@@ -538,14 +538,17 @@ function HasOverwhelm($cardID, $player, $index)
     switch($allies[$i])
     {
       case "4484318969"://Moff Gideon Leader Unit //TODO: make a similar function for AttackerUID
-        if(CardCost($cardID) <= 3 && IsAllyAttackTarget() && AttackerMZID($mainPlayer) == "MYALLY-" . $index) return !LeaderAbilitiesIgnored();
-        else break;
+        if(CardCost($cardID) <= 3 && IsAllyAttackTarget() && AttackerMZID($mainPlayer && !LeaderAbilitiesIgnored()) == "MYALLY-" . $index) return true;
+        break;
       case "40b649e6f6"://Maul Leader Unit
-        if($index != $i) return !LeaderAbilitiesIgnored();
-        else break;
+        if($index != $i && !LeaderAbilitiesIgnored()) return true;
+        break;
       case "9017877021"://Clone Commander Cody
         if($index != $i && IsCoordinateActive($player)) return true;
-        else break;
+        break;      
+      case "3666212779"://Captain Tarkin
+        if(TraitContains($cardID, "Vehicle", $player)) return true;
+        break;
       default: break;
     }
   }
