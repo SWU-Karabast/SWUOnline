@@ -289,6 +289,7 @@ function RaidAmount($cardID, $player, $index, $reportMode = false)
     case "9964112400": $amount += 2; break;//Rush Clovis
     case "0249398533": $amount += 1; break;//Obedient Vanguard
     case "0587196584": $amount += 1; break;//Independent Smuggler
+    case "1034181657": $amount += SearchCount(SearchAllies($player, tokenOnly: true)) > 0 ? 1 : 0;//First Order TIE Fighter
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;

@@ -3,7 +3,6 @@ The images below show cards that are _**not yet**_ implemented. If you are havin
 
 ![](./0514089787.webp)
 ![](./0524529055.webp)
-![](./1034181657.webp)
 ![](./1397553238.webp)
 ![](./2995807621.webp)
 ![](./3388566378.webp)
@@ -27,7 +26,6 @@ The images below show cards that are _**not yet**_ implemented. If you are havin
 ![](./7312183744.webp)
 ![](./8779760486.webp)
 ![](./9595057518.webp)
-![](./9720757803.webp)
 ![](./9811031405.webp)
 ![](./9921128444.webp)
 ![](./0753794638.webp)
