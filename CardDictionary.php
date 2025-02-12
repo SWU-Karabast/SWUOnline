@@ -952,7 +952,7 @@ function BlockValue($cardID)
 
 function AttackValue($cardID) {
   switch ($cardID) {
-    default: 
+    default:
       return CardPower($cardID);
   }
 }
@@ -2114,7 +2114,7 @@ function HasAttackAbility($cardID) {
 
 function CardHP($cardID) {
   switch($cardID) {
-    default: 
+    default:
       return CardHPDictionary($cardID);
   }
 }

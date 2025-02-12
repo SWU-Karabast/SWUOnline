@@ -5994,7 +5994,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "9695562265"://Koiogran Turn
-      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Fighter;maxCost=6&MYALLY:trait=Transport;maxCost=6&THEIRALLY:trait=Fighter;maxCost=6&THEIRALLY:trait=Transport;maxCost=6");
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Fighter;maxAttack=6&MYALLY:trait=Transport;maxAttack=6&THEIRALLY:trait=Fighter;maxAttack=6&THEIRALLY:trait=Transport;maxAttack=6");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a Fighter or Transport to ready");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
