@@ -1955,7 +1955,10 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
     case "USEWHENDEFEATED":
       $ally = new Ally($lastResult, $player);
       if ($ally->Exists()) {
-        AllyDestroyedAbility($player, $ally->CardID(), $ally->UniqueID(), $ally->LostAbilities(), $ally->IsUpgraded(), $ally->GetUpgrades(), $ally->GetUpgrades(true));
+        AllyDestroyedAbility($player, $ally->CardID(), $ally->UniqueID(), $ally->LostAbilities(), $ally->IsUpgraded(),
+          $ally->GetUpgrades(), $ally->GetUpgrades(true), $ally->CurrentPower(), $ally->Health());
+        CheckThrawnJTL($player, SerializeAllyDestroyData($ally->UniqueID(), $ally->LostAbilities(), $ally->IsUpgraded(),
+          $ally->GetUpgrades(), $ally->GetUpgrades(true), $ally->CurrentPower(), $ally->Health()), $ally->CardID());
       }
       break;
     default:
