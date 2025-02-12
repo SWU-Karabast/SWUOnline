@@ -429,7 +429,7 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
         text-transform: uppercase;
         color: #1D1D1D;
         user-select: none;'
-        data-subcard-id='" . $opts['subcards'][$i] . "'>" . CardName($opts['subcards'][$i]) . "</div>";
+        data-subcard-id='" . $opts['subcards'][$i] . "'>" . CardTitle($opts['subcards'][$i]) . "</div>";
       }
     }
   }
