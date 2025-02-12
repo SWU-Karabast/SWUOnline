@@ -1724,9 +1724,11 @@ function IsAlly($cardID, $player="")
 //NOTE: This is for the actual attack abilities that allies have
 function SpecificAllyAttackAbilities($attackID)
 {
-  global $mainPlayer, $defPlayer, $combatChainState, $CCS_WeaponIndex, $initiativePlayer;
+  global $mainPlayer, $defPlayer, $combatChainState, $CCS_WeaponIndex, $initiativePlayer, $currentTurnEffects;
   $attackerIndex = $combatChainState[$CCS_WeaponIndex];
   $attackerAlly = new Ally(AttackerMZID($mainPlayer), $mainPlayer);
+
+  // Upgrade Abilities
   $upgrades = $attackerAlly->GetUpgrades();
   for($i=0; $i<count($upgrades); ++$i) {
     switch($upgrades[$i]) {
@@ -1837,6 +1839,8 @@ function SpecificAllyAttackAbilities($attackID)
       default: break;
     }
   }
+
+  // Ally Abilities
   if($attackerAlly->LostAbilities()) return;
   $attackerCardID = $attackerAlly->CardID();
   switch($attackerCardID) {
@@ -2599,6 +2603,26 @@ function SpecificAllyAttackAbilities($attackID)
       }
       break;
   }
+
+  // Current Effect Abilities
+  for ($i =  0; $i < count($currentTurnEffects); $i += CurrentTurnEffectPieces()) {
+    switch ($currentTurnEffects[$i]) {
+      case "2995807621"://Trench Run
+        $cardIDs = Mill($defPlayer, 2);
+        $cardIDs = explode(",", $cardIDs);
+        if (count($cardIDs) > 0) {
+          $damage = CardCost($cardIDs[0]);
+          if (count($cardIDs) > 1) {
+            $damage = abs($damage - CardCost($cardIDs[1]));
+          }
+        }
+        AddDecisionQueue("PASSPARAMETER", $mainPlayer, $attackerAlly->MZIndex());
+        AddDecisionQueue("MZOP", $mainPlayer, DamageStringBuilder($damage, $mainPlayer, isUnitEffect:true, isPreventable:false));
+        break;
+      default: break;
+    }
+  }
+
   //SpecificAllyAttackAbilities End
 }
 

@@ -8,6 +8,9 @@
 // 4? - Indicates if the damage is preventable (1 = yes, 0 = no)
 // 5? - Indicates if the damage came from indirect damage (1 = yes, 0 = no)
 function DamageStringBuilder($damage, $player, $isUnitEffect = 0, $isPreventable = 1, $isIndirect = 0) {
+  $isUnitEffect = $isUnitEffect ? 1 : 0;
+  $isPreventable = $isPreventable ? 1 : 0;
+  $isIndirect = $isIndirect ? 1 : 0;
   return "DEALDAMAGE,$damage,$player,$isUnitEffect,$isPreventable,$isIndirect";
 }
 
@@ -20,6 +23,10 @@ function DamageStringBuilder($damage, $player, $isUnitEffect = 0, $isPreventable
 //5 - indirect damage (1 = yes, 0 = no); default is no
 //6 - zones (THEIRALLY, MYALLY, OURALLIES, OURALLIESANDBASES, MYALLIESANDBASE, THEIRALLIESANDBASE); default is THEIRALLY
 function MultiDistributeDamageStringBuilder($totalDamage, $sourcePlayer, $isUnitEffect = 0, $maxDamagePerTarget = 0, $isPreventable = 1, $isIndirect = 0, $zones = "THEIRALLY") {
+  $isUnitEffect = $isUnitEffect ? 1 : 0;
+  $maxDamagePerTarget = $maxDamagePerTarget ? $maxDamagePerTarget : 0;
+  $isPreventable = $isPreventable ? 1 : 0;
+  $isIndirect = $isIndirect ? 1 : 0;
   return "$totalDamage,$isUnitEffect,$maxDamagePerTarget,$sourcePlayer,$isPreventable,$isIndirect,$zones";
 }
 
