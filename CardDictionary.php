@@ -159,6 +159,7 @@ function RestoreAmount($cardID, $player, $index)
     case "4ae6d91ddc": $amount += 1; break;//Padme Amidala
     //Jump to Lightspeed
     case "7924461681": $amount += 1; break;//Leia Organa
+    case "0753794638": $amount += 2; break;//Corvus
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;

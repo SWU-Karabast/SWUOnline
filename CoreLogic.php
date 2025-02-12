@@ -5960,7 +5960,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "8105698374"://Commandeer
-      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Vehicle;maxCost=6;hasPilot=0&THEIRALLY:trait=Vehicle;maxCost=6;hasPilot=0");
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Vehicle;maxCost=6;hasPilotOnly=0&THEIRALLY:trait=Vehicle;maxCost=6;hasPilotOnly=0");
       AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to take control of", 1);
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
@@ -6095,6 +6095,24 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,3," . $currentPlayer . ",0,1,0" , 1);
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{2}", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,3," . $currentPlayer . ",0,1,0" , 1);
+      break;
+    case "0524529055"://Snap Wexley
+      if($target == "-") AddCurrentTurnEffect("0524529055-P", $currentPlayer, from:$from);
+      break;
+    case "3567283316":
+      if($from != "PLAY") {
+        IndirectDamage($otherPlayer, 5, true);
+      }
+      break;
+    case "0753794638"://Corvus
+      if($from != "PLAY" && CountPilotUnitsAndPilotUpgrades($currentPlayer) > 0) {
+        $options = "Move Pilot unit;Move Pilot upgrade;Pass";
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, $uniqueId, 1);
+        AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+        AddDecisionQueue("CHOOSEOPTION", $currentPlayer, "$cardID&$options", 1);
+        AddDecisionQueue("SHOWOPTIONS", $currentPlayer, "$cardID&$options", 1);
+        AddDecisionQueue("MODAL", $currentPlayer, "CORVUS", 1);
+      }
       break;
     //PlayAbility End
     default: break;
