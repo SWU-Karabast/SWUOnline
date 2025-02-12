@@ -948,6 +948,9 @@ function EndTurnProcedure($player) {
   $allies = &GetAllies($player);
   for($i = 0; $i < count($allies); $i += AllyPieces()) {
     $ally = new Ally("MYALLY-" . $i, $player);
+    if($ally->CardID() == "9720757803" && $ally->CurrentPower() < 4)//Rampart
+      continue;
+
     $ally->Ready();
   }
   $resources = &GetResourceCards($player);
