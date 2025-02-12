@@ -289,6 +289,7 @@ function RaidAmount($cardID, $player, $index, $reportMode = false)
     case "9964112400": $amount += 2; break;//Rush Clovis
     case "0249398533": $amount += 1; break;//Obedient Vanguard
     case "0587196584": $amount += 1; break;//Independent Smuggler
+    case "1034181657": $amount += SearchCount(SearchAllies($player, tokenOnly: true)) > 0 ? 1 : 0;//First Order TIE Fighter
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
@@ -417,6 +418,8 @@ function HasSentinel($cardID, $player, $index)
       return true;
     case "6854247423"://Tantive IV
       return true;
+    case "8779760486"://Raddus
+      return SearchCount(SearchAllies($player, trait:"Resistance")) > 1;
     default: return false;
   }
 }
@@ -440,7 +443,14 @@ function HasGrit($cardID, $player, $index)
   $upgrades = $ally->GetUpgrades();
   for($i=0; $i<count($upgrades); ++$i)
   {
-    if($upgrades[$i] == "3f0b5622a7") return true;//Asajj Leader Unit
+    switch($upgrades[$i]) {
+      case "3f0b5622a7"://Asajj Leader Unit
+      case "3878744555"://Interceptor Ace
+        return true;
+      case "2633842896"://Biggs Darklighter
+        if(TraitContains($cardID, "Speeder", $player)) return true;
+      default: break;
+    }
   }
   for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnPieces()) {
     if($currentTurnEffects[$i+1] != $player) continue;
@@ -473,6 +483,7 @@ function HasGrit($cardID, $player, $index)
     case "6787851182"://Dwarf Spider Droid
     case "2761325938"://Devastating Gunship
     case "3f0b5622a7"://Asajj Leader Unit
+    case "3878744555"://Interceptor Ace
       return true;
     case "9832122703"://Luminara Unduli
       return IsCoordinateActive($player);
@@ -551,8 +562,14 @@ function HasOverwhelm($cardID, $player, $index)
   // Check upgrades
   $upgrades = $ally->GetUpgrades();
   for($i=0; $i<count($upgrades); ++$i) {
-    if($upgrades[$i] == "0875550518") return true;//Grievous's Wheel Bike
-    if($upgrades[$i] == "4886127868") return true;//Nameless Valor
+    switch($upgrades[$i]) {
+      case "0875550518"://Grievous's Wheel Bike
+      case "4886127868"://Nameless Valor
+        return true;
+      case "2633842896"://Biggs Darklighter
+        if(TraitContains($cardID, "Fighter", $player)) return true;
+      default: break;
+    }
   }
   switch($cardID)
   {
@@ -745,6 +762,7 @@ function HasShielded($cardID, $player)
     case "1519837763"://Shuttle ST-149
     case "6300552434"://Gold Leader
     case "7700932371"://Boba Fett
+    case "9325037410"://Iden Versio
       return true;
     default: return false;
   }
@@ -952,7 +970,7 @@ function BlockValue($cardID)
 
 function AttackValue($cardID) {
   switch ($cardID) {
-    default: 
+    default:
       return CardPower($cardID);
   }
 }
@@ -2114,7 +2132,7 @@ function HasAttackAbility($cardID) {
 
 function CardHP($cardID) {
   switch($cardID) {
-    default: 
+    default:
       return CardHPDictionary($cardID);
   }
 }
@@ -2358,7 +2376,9 @@ function PilotingCost($cardID, $player = "") {
     case "3282713547": $minCost = 2; break;//Dengar
     case "3475471540": $minCost = 2; break;//Cassian Andor
     case "3874382333": $minCost = 2; break;//Academy Graduate
+    case "3878744555": $minCost = 3; break;//Interceptor Ace
     case "4573745395": $minCost = 2; break;//Bossk
+    case "4921363233": $minCost = 1; break;//Wingman Victor Two
     case "5375722883": $minCost = 0; break;//R2-D2
     case "5673100759": $minCost = 2; break;//Boshek
     case "6421006753": $minCost = 2; break;//The Mandalorian
@@ -2368,6 +2388,7 @@ function PilotingCost($cardID, $player = "") {
     case "7420426716": $minCost = 1; break;//Dagger Squadron Pilot
     case "7700932371": $minCost = 2; break;//Boba Fett
     case "8523415830": $minCost = 2; break;//Anakin Skywalker
+    case "9325037410": $minCost = 3; break;//Iden Versio
     default: break;
   }
   return $minCost;

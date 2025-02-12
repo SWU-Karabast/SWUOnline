@@ -1,4 +1,9 @@
 <?php
+  //EN : English
+  //ES : Spanish
+  //DE : German
+  //FR : French
+  //IT : Italian
 
   include './zzImageConverter.php';
 
@@ -22,10 +27,19 @@
   $hasDestroyedArray = [];
   $setArray = [];
   $cardIDArray = [];
+  
+  $languagesArray = [
+    "EN" => "English",
+    "ES" => "Spanish",
+    "DE" => "German",
+    "FR" => "French",
+    "IT" => "Italian"
+  ];
+  $language = "FR";//Testing
 
   while ($hasMoreData)
   {
-    $jsonUrl = "https://admin.starwarsunlimited.com/api/cards?locale=en&pagination[page]=" . $page . "&pagination[pageSize]=100&filters[variantOf][id][\$null]=true";
+    $jsonUrl = "https://admin.starwarsunlimited.com/api/cards?locale=" . $language. "&pagination[page]=" . $page . "&pagination[pageSize]=100&filters[variantOf][id][\$null]=true";
     $curl = curl_init();
     $headers = array(
       "Content-Type: application/json",
@@ -70,7 +84,8 @@
 
       //$imageUrl = "https://swudb.com/cards/" . $set . "/" . $cardNumber . ".png";
 
-      CheckImage($card->cardUid, $imageUrl, $definedType, set:$set);
+
+      CheckImage($card->cardUid, $imageUrl, $language,  $definedType, set:$set); 
       if($card->artBack->data != null) {
         $type2 = $card->type2->data == null ? "" : $card->type2->data->attributes->name;
         if($type2 == "Leader Unit") $definedType = "Unit";
@@ -78,7 +93,7 @@
         $arr = explode("_", $imageUrl);
         $arr = explode(".", $arr[count($arr)-1]);
         $uuid = $arr[0];
-        CheckImage($uuid, $imageUrl, $definedType, isBack:true, set:$set);
+        CheckImage($uuid, $imageUrl, $language, $definedType, isBack:true, set:$set );
         AddToArrays($cardID, $uuid);
       }      
     }
@@ -92,7 +107,7 @@
   */
 
 
-  if (!is_dir("./GeneratedCode")) mkdir("./GeneratedCode", 777, true);
+  if (!is_dir("./GeneratedCode") && $language = "EN") mkdir("./GeneratedCode", 777, true);
 
   $generateFilename = "./GeneratedCode/GeneratedCardDictionaries.php";
   $handler = fopen($generateFilename, "w");

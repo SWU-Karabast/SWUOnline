@@ -1,7 +1,6 @@
 <?php
 
 
-$directory = './WebpImages2/KR/';
 
 // Get all files and directories in the specified directory
 $files = scandir($directory);

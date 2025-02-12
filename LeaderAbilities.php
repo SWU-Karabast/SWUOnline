@@ -8,10 +8,12 @@ function LeaderPilotDeploy($player, $leader, $target) {
   switch($cardID) {
     //Jump to Lightspeed
     case "f6eb711cf3"://Boba Fett
-      AddDecisionQueue("FINDINDICES", $player, "ALLTHEIRUNITSMULTI");
+      include_once "Libraries/MZOpHelpers.php";
+      AddDecisionQueue("FINDINDICES", $player, "ALLOURUNITSMULTI");
       AddDecisionQueue("SETDQCONTEXT", $player, "Choose units to damage", 1);
-      AddDecisionQueue("MULTICHOOSETHEIRUNIT", $player, "<-", 1);
-      AddDecisionQueue("MULTIDISTRIBUTEDAMAGE", $player, "4,1", 1);
+      AddDecisionQueue("MULTICHOOSEOURUNITS", $player, "<-", 1);
+      AddDecisionQueue("MULTIDISTRIBUTEDAMAGE", $player,
+        MultiDistributeDamageStringBuilder(4,$player,zones:"OURALLIES"), 1);
       break;
     case "a015eb5c5e"://Han Solo
       HanSoloPilotLeaderJTL($player);

@@ -388,6 +388,8 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false,
   $upgradesWithOwnerData = $ally->GetUpgrades(true);
   $isExhausted = $ally->IsExhausted();
   $hasBounty = $ally->HasBounty();
+  $lastPower = $ally->CurrentPower();
+  $lastRemainingHP = $ally->Health();
   $isSuperlaserTech = $cardID === "8954587682";
   $discardPileModifier = "-";
   if(!$skipDestroy) {
@@ -398,7 +400,7 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false,
         && !GivesWhenDestroyedToAllies($cardID))
         || UpgradesContainWhenDefeated($upgrades)
         || CurrentEffectsContainWhenDefeated($player, $uniqueID))
-      $whenDestroyData=SerializeAllyDestroyData($uniqueID,$lostAbilities,$isUpgraded,$upgrades,$upgradesWithOwnerData);
+      $whenDestroyData=SerializeAllyDestroyData($uniqueID,$lostAbilities,$isUpgraded,$upgrades,$upgradesWithOwnerData,$lastPower,$lastRemainingHP);
     if($isSuperlaserTech && !$lostAbilities)
       $whenResourceData=SerializeResourceData("PLAY","DOWN",0,"0","-1");
     if(($hasBounty && !$lostAbilities) || UpgradesContainBounty($upgrades))
@@ -510,7 +512,7 @@ function UpgradesContainBounty($upgrades) {
 function AllyTakeControl($player, $uniqueID) {
   global $currentTurnEffects;
   if ($uniqueID == "" || $uniqueID == -1) return -1;
-  
+
   $otherPlayer = $player == 1 ? 2 : 1;
   $ally = new Ally($uniqueID, $otherPlayer);
   if (!$ally->Exists()) return -1;
@@ -726,7 +728,7 @@ function AllyLeavesPlayAbility($player, $index)
   }
 }
 
-function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities, $isUpgraded, $upgrades, $upgradesWithOwnerData)
+function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities, $isUpgraded, $upgrades, $upgradesWithOwnerData, $lastPower, $lastRemainingHp)
 {
   global $initiativePlayer, $currentTurnEffects;
 
@@ -933,8 +935,13 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities, $isUp
         AddDecisionQueue("MZOP", $player, "GETUNIQUEID", 1);
         AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $player, "1397553238,PLAY", 1);
         AddDecisionQueue("PASSPARAMETER", $player, "{0}", 1);
-        AddDecisionQueue("MZOP", $player, "REDUCEHEALTH,1", 1); 
+        AddDecisionQueue("MZOP", $player, "REDUCEHEALTH,1", 1);
         break;
+      case "8779760486"://Raddus
+        AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY");
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal " . $lastPower . " damage");
+        AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
+        AddDecisionQueue("MZOP", $player, DamageStringBuilder($lastPower, $player, isUnitEffect:1), 1);
       //AllyDestroyedAbility End
       default: break;
     }
@@ -1253,6 +1260,14 @@ function AllyPlayedAsUpgradeAbility($cardID, $player, $targetAlly) {
       AddDecisionQueue("PASSPARAMETER", $player, $targetAlly->MZIndex(), 1);
       AddDecisionQueue("ADDCURRENTEFFECT", $player, "6720065735", 1);
       AddDecisionQueue("MZOP", $player, "ATTACK", 1);
+      break;
+    case "4921363233"://Wingman Victor Two
+      CreateTieFighter($player);
+      break;
+    case "9325037410"://Iden Versio
+      $targetAlly->Attach("8752877738");//Shield Token
+    case "0514089787"://Frisk
+      DefeatUpgrade($player, true, upgradeFilter:"maxCost=2");
       break;
     default: break;
   }

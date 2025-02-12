@@ -2,6 +2,7 @@
 
 include "CardDictionary.php";
 include "CoreLogic.php";
+include "Libraries/MZOpHelpers.php";
 
 function PummelHit($player = -1, $passable = false, $fromDQ = false, $context="", $may=false)
 {
@@ -746,7 +747,8 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
           switch($arr[0]) {
             case "ALLYDESTROY":
               $dd=DeserializeAllyDestroyData($arr[1]);
-              AllyDestroyedAbility($player, $target, $dd["UniqueID"], $dd["LostAbilities"],$dd["IsUpgraded"],$dd["Upgrades"],$dd["UpgradesWithOwnerData"]);
+              AllyDestroyedAbility($player, $target, $dd["UniqueID"], $dd["LostAbilities"],$dd["IsUpgraded"],$dd["Upgrades"],$dd["UpgradesWithOwnerData"],
+                $dd["LastPower"],$dd["LastRemainingHP"]);
               CheckThrawnJTL($player, $arr[$i], $target);
               break;
             case "ALLYRESOURCE":
@@ -947,6 +949,9 @@ function EndTurnProcedure($player) {
   $allies = &GetAllies($player);
   for($i = 0; $i < count($allies); $i += AllyPieces()) {
     $ally = new Ally("MYALLY-" . $i, $player);
+    if($ally->CardID() == "9720757803" && $ally->CurrentPower() < 4)//Rampart
+      continue;
+
     $ally->Ready();
   }
   $resources = &GetResourceCards($player);
@@ -1230,7 +1235,8 @@ function CheckThrawnJTL($player, $serializedAllyDestroyData, $target) {
         AddDecisionQueue("YESNO", $player, "if you want use Thrawn's ability for " . CardLink($target, $target));
         AddDecisionQueue("NOPASS", $player, "-");
         AddDecisionQueue("EXHAUSTCHARACTER", $player, FindCharacterIndex($player, "5846322081"), 1);
-        AddDecisionQueue("PASSPARAMETER", $player, "$target,0,$serializedAllyDestroyData", 1);
+        //using semi-colin (;) since comma (,) is used for upgrade data
+        AddDecisionQueue("PASSPARAMETER", $player, "$target;0;$serializedAllyDestroyData", 1);
         AddDecisionQueue("SETDQVAR", $player, "1", 1);
         AddDecisionQueue("SPECIFICCARD", $player, "THRAWN_JTL", 1);
       }
@@ -1256,21 +1262,17 @@ function IndirectDamage($player, $amount, $fromUnitEffect=false)
   $sourcePlayer = $player == 1 ? 2 : 1;
   $amount += SearchCount(SearchAlliesForCard($sourcePlayer, "4560739921"));//Hunting Aggressor
   if(SearchCount(SearchAlliesForCard($sourcePlayer, "1330473789")) > 0) { //Devastator
-    for($i=0; $i<$amount; ++$i) {
-      AddDecisionQueue("MULTIZONEINDICES", $sourcePlayer, "THEIRALLY", $i == 0 ? 0 : 1);
-      AddDecisionQueue("PREPENDLASTRESULT", $sourcePlayer, "THEIRCHAR-0,", $i == 0 ? 0 : 1);
-      AddDecisionQueue("SETDQCONTEXT", $sourcePlayer, "Choose a card to deal an indirect damage (Remaining: " . ($amount-$i) . ")", $i == 0 ? 0 : 1);
-      AddDecisionQueue("CHOOSEMULTIZONE", $sourcePlayer, "<-", 1);
-      AddDecisionQueue("MZOP", $sourcePlayer, "DEALDAMAGE,1,$sourcePlayer," . ($fromUnitEffect ? "1" : "0") . ",0,1", 1);
-    }
+    AddDecisionQueue("FINDINDICES", $sourcePlayer, "THEIRUNITSANDBASE");
+    AddDecisionQueue("SETDQCONTEXT", $sourcePlayer, "Choose units and/or base to damage (any remaining will go to base)", 1);
+    AddDecisionQueue("MULTICHOOSETHEIRUNITSANDBASE", $sourcePlayer, "<-", 1);
+    AddDecisionQueue("MULTIDISTRIBUTEDAMAGE", $sourcePlayer,
+      MultiDistributeDamageStringBuilder($amount, $sourcePlayer, $fromUnitEffect ? 1 : 0, isPreventable: 0, isIndirect: 1, zones:"THEIRALLIESANDBASE"), 1);
   } else {
-    for($i=0; $i<$amount; ++$i) {
-      AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY", $i == 0 ? 0 : 1);
-      AddDecisionQueue("PREPENDLASTRESULT", $player, "MYCHAR-0,", $i == 0 ? 0 : 1);
-      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a card to deal an indirect damage (Remaining: " . ($amount-$i) . ")", $i == 0 ? 0 : 1);
-      AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
-      AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1,$sourcePlayer," . ($fromUnitEffect ? "1" : "0") . ",0,1", 1);
-    }
+    AddDecisionQueue("FINDINDICES", $player, "UNITSANDBASE");
+    AddDecisionQueue("SETDQCONTEXT", $player, "Choose units and/or base to damage (any remaining will go to base)", 1);
+    AddDecisionQueue("MULTICHOOSEMYUNITSANDBASE", $player, "<-", 1);
+    AddDecisionQueue("MULTIDISTRIBUTEDAMAGE", $player,
+      MultiDistributeDamageStringBuilder($amount, $sourcePlayer, $fromUnitEffect ? 1 : 0, isPreventable: 0, isIndirect: 1, zones:"MYALLIESANDBASE"), 1);
   }
 }
 

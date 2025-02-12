@@ -849,12 +849,13 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       AddDecisionQueue("MZOP", $player, "ATTACK");
       break;
     case "THRAWN_JTL":
-      $data = explode(",", $dqVars[1]);
+      $data = explode(";", $dqVars[1]);
       $target = $data[0];
       $leaderUnitSide = $data[1];
       $trigger = $data[2];
       $dd=DeserializeAllyDestroyData($trigger);
-      AllyDestroyedAbility($player, $target, $dd["UniqueID"], $dd["LostAbilities"],$dd["IsUpgraded"],$dd["Upgrades"],$dd["UpgradesWithOwnerData"]);
+      AllyDestroyedAbility($player, $target, $dd["UniqueID"], $dd["LostAbilities"],$dd["IsUpgraded"],$dd["Upgrades"],$dd["UpgradesWithOwnerData"],
+        $dd["LastPower"], $dd["LastRemainingHP"]);
       if($leaderUnitSide == "1") {
         $thrawnLeaderUnit = new Ally("MYALLY-" . SearchAlliesForCard($player, "53207e4131"));
         if($thrawnLeaderUnit->Exists()) {
