@@ -39,7 +39,7 @@
 
   while ($hasMoreData)
   {
-    $jsonUrl = "https://admin.starwarsunlimited.com/api/cards?locale=" . $language. "ES&pagination[page]=" . $page . "&pagination[pageSize]=100&filters[variantOf][id][\$null]=true";
+    $jsonUrl = "https://admin.starwarsunlimited.com/api/cards?locale=" . $language. "&pagination[page]=" . $page . "&pagination[pageSize]=100&filters[variantOf][id][\$null]=true";
     $curl = curl_init();
     $headers = array(
       "Content-Type: application/json",
