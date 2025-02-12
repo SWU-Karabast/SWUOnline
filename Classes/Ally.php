@@ -121,6 +121,10 @@ class Ally {
         case "3292172753"://Squad Support
           $max += SearchCount(SearchAlliesUniqueIDForTrait($this->Controller(), "Trooper"));
           break;
+        case "2633842896"://Biggs Darklighter
+          $max += TraitContains($this->CardID(), "Transport", $this->Controller()) ? 1 : 0;
+          break;
+
         default:
           break;
       }

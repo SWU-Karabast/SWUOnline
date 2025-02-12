@@ -1254,6 +1254,11 @@ function AllyPlayedAsUpgradeAbility($cardID, $player, $targetAlly) {
       AddDecisionQueue("ADDCURRENTEFFECT", $player, "6720065735", 1);
       AddDecisionQueue("MZOP", $player, "ATTACK", 1);
       break;
+    case "4921363233"://Wingman Victor Two
+      CreateTieFighter($player);
+      break;
+    case "9325037410"://Iden Versio
+      $targetAlly->Attach("8752877738");//Shield Token
     default: break;
   }
 }
