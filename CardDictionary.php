@@ -418,6 +418,8 @@ function HasSentinel($cardID, $player, $index)
       return true;
     case "6854247423"://Tantive IV
       return true;
+    case "8779760486"://Raddus
+      return SearchCount(SearchAllies($player, trait:"Resistance")) > 1;
     default: return false;
   }
 }

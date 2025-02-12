@@ -747,7 +747,8 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
           switch($arr[0]) {
             case "ALLYDESTROY":
               $dd=DeserializeAllyDestroyData($arr[1]);
-              AllyDestroyedAbility($player, $target, $dd["UniqueID"], $dd["LostAbilities"],$dd["IsUpgraded"],$dd["Upgrades"],$dd["UpgradesWithOwnerData"]);
+              AllyDestroyedAbility($player, $target, $dd["UniqueID"], $dd["LostAbilities"],$dd["IsUpgraded"],$dd["Upgrades"],$dd["UpgradesWithOwnerData"],
+                $dd["LastPower"],$dd["LastRemainingHP"]);
               CheckThrawnJTL($player, $arr[$i], $target);
               break;
             case "ALLYRESOURCE":
@@ -1234,7 +1235,8 @@ function CheckThrawnJTL($player, $serializedAllyDestroyData, $target) {
         AddDecisionQueue("YESNO", $player, "if you want use Thrawn's ability for " . CardLink($target, $target));
         AddDecisionQueue("NOPASS", $player, "-");
         AddDecisionQueue("EXHAUSTCHARACTER", $player, FindCharacterIndex($player, "5846322081"), 1);
-        AddDecisionQueue("PASSPARAMETER", $player, "$target,0,$serializedAllyDestroyData", 1);
+        //using semi-colin (;) since comma (,) is used for upgrade data
+        AddDecisionQueue("PASSPARAMETER", $player, "$target;0;$serializedAllyDestroyData", 1);
         AddDecisionQueue("SETDQVAR", $player, "1", 1);
         AddDecisionQueue("SPECIFICCARD", $player, "THRAWN_JTL", 1);
       }
