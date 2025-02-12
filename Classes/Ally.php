@@ -395,6 +395,7 @@ class Ally {
         case "9799982630"://General Dodonna
           if($i != $this->index && TraitContains($this->CardID(), "Rebel", $this->PlayerID())) $power += 1;
           break;
+        case "3666212779"://Captain Tarkin
         case "4339330745"://Wedge Antilles
           if(TraitContains($this->CardID(), "Vehicle", $this->PlayerID())) $power += 1;
           break;

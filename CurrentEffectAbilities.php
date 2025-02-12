@@ -203,6 +203,7 @@ function EffectAttackModifier($cardID, $playerID="")
     case "8107876051": return -3;//Enfys Nest
     case "9334480612": return 1;//Boba Fett (Daimyo)
     case "6962053552": return 2;//Desperate Attack
+    case "2995807621": return 4;//Trench Run
     case "4085341914": return 4;//Heroic Resolve
     case "1938453783": return 2;//Armed to the Teeth
     case "6263178121": return 2;//Kylo Ren (Killing the Past)
@@ -866,6 +867,7 @@ function IsCombatEffectActive($cardID)
     case "8107876051"://Enfys Nest
     case "7578472075"://Let the Wookie Win
     case "4663781580"://Swoop Down
+    case "2995807621"://Trench Run
     case "4085341914"://Heroic Resolve
     case "5896817672"://Headhunting
     case "6962053552"://Desperate attack
