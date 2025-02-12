@@ -211,6 +211,10 @@ function AttackModifier($cardID, $player, $index)
     case "6610553087"://Nien Nunb
       $modifier += CountPilotUnitsAndPilotUpgrades($player, other: true);
       break;
+    case "5422802110"://D'Qar Cargo Frigate
+      $ally = new Ally("MYALLY-" . $index, $player);
+      $modifier -= $ally->Damage();
+      break;
     default: break;
   }
 

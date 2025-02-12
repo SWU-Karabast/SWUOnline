@@ -6086,6 +6086,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "0524529055"://Snap Wexley
       if($target == "-") AddCurrentTurnEffect("0524529055-P", $currentPlayer, from:$from);
       break;
+    case "3567283316":
+      if($from != "PLAY") {
+        IndirectDamage($otherPlayer, 5, true);
+      }
+      break;
     //PlayAbility End
     default: break;
   }
