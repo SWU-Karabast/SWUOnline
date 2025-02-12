@@ -309,7 +309,7 @@ function CurrentEffectBaseAttackSet($cardID)
 
 function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
 {
-  global $currentTurnEffects, $currentPlayer, $CS_PlayUniqueID;
+  global $currentTurnEffects, $currentPlayer, $CS_PlayUniqueID, $CS_PlayedAsUpgrade;
   $costModifier = 0;
   $uniqueEffectsActivated = [];
   for($i = count($currentTurnEffects) - CurrentTurnPieces(); $i >= 0; $i -= CurrentTurnPieces()) {
@@ -470,6 +470,22 @@ function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
               $remove = true;
             }
             break;
+          case "0524529055-P"://Snap Wexly on Play
+            if ($from != "PLAY" && $from != "EQUIP" && TraitContains($cardID, "Resistance", $currentPlayer)) {
+              $costModifier -= 1;
+              $remove = true;
+            }
+            break;
+          case "0524529055-A"://Snap Wexly on Attack
+            if ($from != "PLAY" && $from != "EQUIP" && TraitContains($cardID, "Resistance", $currentPlayer)) {
+              $costModifier -= 1;
+              $remove = true;
+            }
+            break;
+          case "7312183744"://Moff Gideon
+            if ($from != "PLAY" && $from != "EQUIP" && DefinedTypesContains($cardID, "Unit", $currentPlayer) && GetClassState($currentPlayer, $CS_PlayedAsUpgrade) == "0") {
+              $costModifier += 1;
+            }
           default: break;
         }
       }

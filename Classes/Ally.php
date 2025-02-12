@@ -439,6 +439,11 @@ class Ally {
             $power -= 2;
           }
           break;
+        case "3567283316"://Radiant VII
+          if (!$this->IsLeader()) {
+            $power -= $this->Damage();
+          }
+          break;
         default: break;
       }
     }

@@ -358,9 +358,9 @@ function DealAllyDamage($targetPlayer, $index, $damage, $type="")
   if($allies[$index+2] <= 0) DestroyAlly($targetPlayer, $index, fromCombat: $type == "COMBAT");
 }
 
-function RemoveAlly($player, $index)
+function RemoveAlly($player, $index, $removedFromPlay = true)
 {
-  return DestroyAlly($player, $index, true);
+  return DestroyAlly($player, $index, true, removedFromPlay: $removedFromPlay);
 }
 
 function GivesWhenDestroyedToAllies($cardID) {
@@ -373,7 +373,7 @@ function GivesWhenDestroyedToAllies($cardID) {
   }
 }
 
-function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false, $skipRescue = false)
+function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false, $skipRescue = false, $removedFromPlay = true)
 {
   global $mainPlayer, $combatChainState, $CS_AlliesDestroyed, $CS_NumAlliesDestroyed, $CS_NumLeftPlay, $CCS_CachedLastDestroyed;
 
@@ -424,8 +424,10 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false,
     AppendClassState($player, $CS_AlliesDestroyed, $cardID);
   }
 
-  IncrementClassState($player, $CS_NumLeftPlay);
-  AllyLeavesPlayAbility($player, $index);
+  if($removedFromPlay) {
+    IncrementClassState($player, $CS_NumLeftPlay);
+    AllyLeavesPlayAbility($player, $index);
+  }
 
   // Discard upgrades
   for($i=0; $i<count($upgradesWithOwnerData); $i+=SubcardPieces()) {
@@ -1269,6 +1271,10 @@ function AllyPlayedAsUpgradeAbility($cardID, $player, $targetAlly) {
     case "0514089787"://Frisk
       DefeatUpgrade($player, true, upgradeFilter:"maxCost=2");
       break;
+    case "0524529055"://Snap Wexley
+      AddDecisionQueue("SEARCHDECKTOPX", $player, "5;1;include-trait-Resistance");
+      AddDecisionQueue("MULTIADDHAND", $player, "-", 1);
+      AddDecisionQueue("REVEALCARDS", $player, "-", 1);
     default: break;
   }
 }
@@ -2147,11 +2153,6 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "ADDSHIELD", 1);
       break;
-    case "4595532978"://Ketsu Onyo
-      if (GetAttackTarget() == "THEIRCHAR-0") {
-        DefeatUpgrade($mainPlayer, true, upgradeFilter: "maxCost=2");
-      }
-      break;
     case "0398102006"://The Invisible Hand
       $totalUnits = SearchCount(SearchAllies($mainPlayer, trait:"Separatist"));
       AddDecisionQueue("PASSPARAMETER", $mainPlayer, "-");
@@ -2597,6 +2598,9 @@ function SpecificAllyAttackAbilities($attackID)
         AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,1,$mainPlayer,1", 1);
       }
+      break;
+    case "0524529055"://Snap Wexley
+      AddCurrentTurnEffect("0524529055-A", $mainPlayer, from:"PLAY");
       break;
   }
   //SpecificAllyAttackAbilities End
