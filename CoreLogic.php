@@ -4315,6 +4315,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       PummelHit($otherPlayer);
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "AHSOKATANOJTL", 1);
       break;
+    case "5751831621"://Red Squadron X-Wing
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Do you want to deal 2 damage to Red Squadron X-Wing to draw a card?");
+      AddDecisionQueue("YESNO", $currentPlayer, "-");
+      AddDecisionQueue("NOPASS", $currentPlayer, "-");
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYALLY-" . $playAlly->Index(), 1);
+      AddDecisionQueue("MZOP", $currentPlayer, DamageStringBuilder(2, $currentPlayer, isUnitEffect:true), 1);
+      AddDecisionQueue("DRAW", $currentPlayer, "-", 1);
+      break;
     case "5830140660"://Bazine Netal
       AddDecisionQueue("REVEALHANDCARDS", $otherPlayer, "-");
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRHAND");
