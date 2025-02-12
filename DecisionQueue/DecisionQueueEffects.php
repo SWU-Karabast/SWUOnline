@@ -417,6 +417,15 @@ function SpecificCardLogic($player, $parameter, $lastResult)
         }
       }
       break;
+    case "AHSOKATANOJTL":
+      if (DefinedTypesContains($lastResult, "Unit")) {
+        AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
+        AddDecisionQueue("MZFILTER", $player, "status=1");
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to exhaust");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+        AddDecisionQueue("MZOP", $player, "REST", 1);
+      }
+      break;
     case "UWINGREINFORCEMENT":
       $totalCost = 0;
       $cardArr = explode(",", $lastResult);

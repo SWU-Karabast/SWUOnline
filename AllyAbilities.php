@@ -730,7 +730,7 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities, $isUp
 {
   global $initiativePlayer, $currentTurnEffects;
 
-  if(!$lostAbilities) {
+  if (!$lostAbilities) {
     switch($cardID) {
       case "4405415770"://Yoda (Old Master)
         AddDecisionQueue("SETDQCONTEXT", $player, "Choose player to draw 1 card");
