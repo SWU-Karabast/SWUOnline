@@ -1587,6 +1587,9 @@ function NumEquipBlock()
       case "MULTICHOOSEUNIT": return 0;
       case "MULTICHOOSETHEIRUNIT": return 0;
       case "MULTICHOOSEOURUNITS": return 0;
+      case "MULTICHOOSEMYUNITSANDBASE": return 0;
+      case "MULTICHOOSETHEIRUNITSANDBASE": return 0;
+      case "MULTICHOOSEOURUNITSANDBASE": return 0;
       case "CHOOSEMULTIZONE": return 0;
       case "CHOOSEBANISH": return 0;
       case "BUTTONINPUTNOPASS": return 0;

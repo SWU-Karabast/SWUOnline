@@ -17,9 +17,10 @@ function DamageStringBuilder($damage, $player, $isUnitEffect = 0, $isPreventable
 //2 - max damage per target (0 means no max)
 //3 - source player
 //4 - preventable (1 = yes, 0 = no); default is yes
-//5 - zones (THEIRALLY, MYALLY, OURALLIES, OURALLIESANDBASES); default is THEIRALLY
-function MultiDistributeDamageStringBuilder($totalDamage, $sourcePlayer, $isUnitEffect = 0, $maxDamagePerTarget = 0, $isPreventable = 1, $zones = "THEIRALLY") {
-  return "$totalDamage,$isUnitEffect,$maxDamagePerTarget,$sourcePlayer,$isPreventable,$zones";
+//5 - indirect damage (1 = yes, 0 = no); default is no
+//6 - zones (THEIRALLY, MYALLY, OURALLIES, OURALLIESANDBASES, MYALLIESANDBASE, THEIRALLIESANDBASE); default is THEIRALLY
+function MultiDistributeDamageStringBuilder($totalDamage, $sourcePlayer, $isUnitEffect = 0, $maxDamagePerTarget = 0, $isPreventable = 1, $isIndirect = 0, $zones = "THEIRALLY") {
+  return "$totalDamage,$isUnitEffect,$maxDamagePerTarget,$sourcePlayer,$isPreventable,$isIndirect,$zones";
 }
 
 ?>

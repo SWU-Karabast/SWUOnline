@@ -928,17 +928,48 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   }
 
   // MULTICHOOSETEXT and MAYMULTICHOOSETEXT are deprecated, use MULTICHOOSE and MAYMULTICHOOSE instead
-  if (($turn[0] == "MULTICHOOSETHEIRDISCARD" || $turn[0] == "MULTICHOOSEDISCARD" || $turn[0] == "MULTICHOOSEHAND" || $turn[0] == "MAYMULTICHOOSEHAND" || $turn[0] == "MULTICHOOSEUNIT" || $turn[0] == "MULTICHOOSETHEIRUNIT" || $turn[0] == "MULTICHOOSEOURUNITS" || $turn[0] == "MULTICHOOSEDECK" || $turn[0] == "MULTICHOOSETEXT" || $turn[0] == "MAYMULTICHOOSETEXT" || $turn[0] == "MULTICHOOSETHEIRDECK" || $turn[0] == "MAYMULTICHOOSEAURAS") && $currentPlayer == $playerID) {
+  if (($turn[0] == "MULTICHOOSETHEIRDISCARD" || $turn[0] == "MULTICHOOSEDISCARD"
+      || $turn[0] == "MULTICHOOSEHAND" || $turn[0] == "MAYMULTICHOOSEHAND"
+      || $turn[0] == "MULTICHOOSEUNIT" || $turn[0] == "MULTICHOOSETHEIRUNIT" || $turn[0] == "MULTICHOOSEOURUNITS"
+      || $turn[0] == "MULTICHOOSEDECK" || $turn[0] == "MULTICHOOSETEXT" || $turn[0] == "MAYMULTICHOOSETEXT" || $turn[0] == "MULTICHOOSETHEIRDECK"
+      || $turn[0] == "MULTICHOOSEMYUNITSANDBASE" || $turn[0] == "MULTICHOOSETHEIRUNITSANDBASE" || $turn[0] == "MULTICHOOSEOURUNITSANDBASE"
+      || $turn[0] == "MAYMULTICHOOSEAURAS") && $currentPlayer == $playerID) {
     $content = "";
     $multiTheirAllies = &GetAllies($playerID == 1 ? 2 : 1);
     $multiAllies = &GetAllies($playerID);
+    $theirBaseCardID = "";
+    $myBaseCardID = "";
     echo ("<div 'display:inline; width: 100%;'>");
     $sets = explode("&", $turn[2]);
     $all = count($sets) == 2;
+    $options = [];
     if(!$all) {
       $params = explode("-", $sets[0]);
-      $options = explode(",", $params[1]);
+      if($turn[0] == "MULTICHOOSEMYUNITSANDBASE") {
+        if($params[0] == "0;0") {
+          $options[] = "BASE";
+          $myBaseCardID = GetPlayerCharacter($playerID)[0];
+        } else {
+          $pieces = explode(";", $params[0]);
+          $options[] = "BASE";
+          $myBaseCardID = GetPlayerCharacter($playerID)[$pieces[0]];
+          $params[0] = $pieces[1];
+        }
+      }
+      if($turn[0] == "MULTICHOOSETHEIRUNITSANDBASE") {
+        if($params[0] == "0;0") {
+          $options[] = "BASE";
+          $theirBaseCardID = GetPlayerCharacter($playerID == 1 ? 2 : 1)[0];
+        } else {
+          $pieces = explode(";", $params[0]);
+          $options[] = "BASE";
+          $theirBaseCardID = GetPlayerCharacter($playerID == 1 ? 2 : 1)[$pieces[0]];
+          $params[0] = $pieces[1];
+        }
+      }
+      $options = array_merge($options, $params[1] != "" ? explode(",", $params[1]) : []);
     } else {
+      //TODO: Redemption
       $paramsTheirs = explode("-", $sets[0]);
       $paramsMine = explode("-", $sets[1]);
       $params = [$paramsTheirs, $paramsMine];
@@ -970,6 +1001,20 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
           $content .= "<label class='multichoose' for=chk" . $i . ">" . Card($multiAllies[$options[$i]], "concat", $cardSize, 0, 1) . "</label>";
         else if ($turn[0] == "MULTICHOOSETHEIRUNIT")
           $content .= "<label class='multichoose' for=chk" . $i . ">" . Card($multiTheirAllies[$options[$i]], "concat", $cardSize, 0, 1) . "</label>";
+        else if ($turn[0] == "MULTICHOOSEMYUNITSANDBASE")
+          $content .= "<label class='multichoose' for=chk" . $i . ">" . (
+            $options[$i] == "BASE"
+              ? Card($myBaseCardID, "concat", $cardSize, 0, 1)
+              : Card($multiAllies[$options[$i]], "concat", $cardSize, 0, 1)
+            )
+            . "</label>";
+        else if ($turn[0] == "MULTICHOOSETHEIRUNITSANDBASE")
+          $content .= "<label class='multichoose' for=chk" . $i . ">" . (
+            $options[$i] == "BASE"
+              ? Card($theirBaseCardID, "concat", $cardSize, 0, 1)
+              : Card($multiTheirAllies[$options[$i]], "concat", $cardSize, 0, 1)
+            )
+            . "</label>";
         else if ($turn[0] == "MULTICHOOSEDECK")
           $content .= "<label class='multichoose' for=chk" . $i . ">" . Card($myDeck[$options[$i]], "concat", $cardSize, 0, 1) . "</label>";
         else if ($turn[0] == "MULTICHOOSETHEIRDECK")
@@ -981,6 +1026,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       }
     }
     else {
+      //TODO: Redemption
       $content .= CreateForm($playerID, "Submit", 19, count($options[0]), count($options[1]));
       $content .= "<table class='table-border-a'><tr>";
       for($i = 0; $i < count($options[0]); ++$i) {
