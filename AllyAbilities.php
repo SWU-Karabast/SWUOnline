@@ -1269,6 +1269,10 @@ function AllyPlayedAsUpgradeAbility($cardID, $player, $targetAlly) {
     case "0514089787"://Frisk
       DefeatUpgrade($player, true, upgradeFilter:"maxCost=2");
       break;
+    case "0524529055"://Snap Wexley
+      AddDecisionQueue("SEARCHDECKTOPX", $player, "5;1;include-trait-Resistance");
+      AddDecisionQueue("MULTIADDHAND", $player, "-", 1);
+      AddDecisionQueue("REVEALCARDS", $player, "-", 1);
     default: break;
   }
 }
@@ -2597,6 +2601,9 @@ function SpecificAllyAttackAbilities($attackID)
         AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,1,$mainPlayer,1", 1);
       }
+      break;
+    case "0524529055"://Snap Wexley
+      AddCurrentTurnEffect("0524529055-A", $mainPlayer, from:"PLAY");
       break;
   }
   //SpecificAllyAttackAbilities End

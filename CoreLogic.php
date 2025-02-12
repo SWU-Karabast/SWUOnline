@@ -6083,6 +6083,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{2}", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,3," . $currentPlayer . ",0,1,0" , 1);
       break;
+    case "0524529055"://Snap Wexley
+      if($target == "-") AddCurrentTurnEffect("0524529055-P", $currentPlayer, from:$from);
+      break;
     //PlayAbility End
     default: break;
   }

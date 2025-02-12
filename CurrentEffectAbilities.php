@@ -470,6 +470,18 @@ function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
               $remove = true;
             }
             break;
+          case "0524529055-P"://Snap Wexly on Play
+            if ($from != "PLAY" && $from != "EQUIP" && TraitContains($cardID, "Resistance", $currentPlayer)) {
+              $costModifier -= 1;
+              $remove = true;
+            }
+            break;
+          case "0524529055-A"://Snap Wexly on Attack
+            if ($from != "PLAY" && $from != "EQUIP" && TraitContains($cardID, "Resistance", $currentPlayer)) {
+              $costModifier -= 1;
+              $remove = true;
+            }
+            break;
           default: break;
         }
       }
