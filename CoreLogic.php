@@ -5947,7 +5947,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "8105698374"://Commandeer
-      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Vehicle;maxCost=6;hasPilot=0&THEIRALLY:trait=Vehicle;maxCost=6;hasPilot=0");
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Vehicle;maxCost=6;hasPilotOnly=0&THEIRALLY:trait=Vehicle;maxCost=6;hasPilotOnly=0");
       AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to take control of", 1);
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
@@ -6089,6 +6089,16 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "3567283316":
       if($from != "PLAY") {
         IndirectDamage($otherPlayer, 5, true);
+      }
+      break;
+    case "0753794638"://Corvus
+      if($from != "PLAY" && CountPilotUnitsAndPilotUpgrades($currentPlayer) > 0) {
+        $options = "Move Pilot unit;Move Pilot upgrade;Pass";
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, $uniqueId, 1);
+        AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+        AddDecisionQueue("CHOOSEOPTION", $currentPlayer, "$cardID&$options", 1);
+        AddDecisionQueue("SHOWOPTIONS", $currentPlayer, "$cardID&$options", 1);
+        AddDecisionQueue("MODAL", $currentPlayer, "CORVUS", 1);
       }
       break;
     //PlayAbility End

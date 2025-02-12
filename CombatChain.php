@@ -7,6 +7,7 @@ function ProcessHitEffect($cardID)
   if(HitEffectsArePrevented()) return;
   switch($cardID)
   {
+    //Spark of Rebellion
     case "0828695133"://Seventh Sister
       if(GetAttackTarget() == "THEIRCHAR-0") {
         AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY:arena=Ground");
@@ -26,6 +27,18 @@ function ProcessHitEffect($cardID)
     case "87e8807695"://Leia Organa Leader Unit
       if(LeaderAbilitiesIgnored()) break;
       AddCurrentTurnEffect("87e8807695", $mainPlayer);
+      break;
+    //Shadows of the Galaxy
+    case "4595532978"://Ketsu Onyo
+      if (GetAttackTarget() == "THEIRCHAR-0") {
+        DefeatUpgrade($mainPlayer, true, upgradeFilter: "maxCost=2");
+      }
+      break;
+    //Jump to Lightspeed
+    case "7312183744"://Moff Gideon
+      if(GetAttackTarget() == "THEIRCHAR-0") {
+        AddCurrentTurnEffect("7312183744", $defPlayer, from: "PLAY");
+      }
       break;
     default: break;
   }

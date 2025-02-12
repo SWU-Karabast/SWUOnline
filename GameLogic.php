@@ -588,6 +588,15 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $ally = new Ally($lastResult);
           $ally->MoveArena($parameterArr[1]);
           break;
+        case "MOVEPILOTUNIT":
+          global $CS_PlayedAsUpgrade;
+          $uniqueIdRecipient = $dqVars[0];
+          $pilotUnitToMove = new Ally($lastResult, $player);
+          RemoveAlly($player, $pilotUnitToMove->Index(), removedFromPlay:false);
+          $ally = new Ally($uniqueIdRecipient, $player);
+          SetClassState($player, $CS_PlayedAsUpgrade, 1);
+          $ally->Attach($pilotUnitToMove->CardID(), $pilotUnitToMove->Owner());
+          break;
         case "ADDSHIELD":
           $ally = new Ally($lastResult);
           $ally->Attach("8752877738");//Shield Token

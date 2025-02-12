@@ -309,7 +309,7 @@ function CurrentEffectBaseAttackSet($cardID)
 
 function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
 {
-  global $currentTurnEffects, $currentPlayer, $CS_PlayUniqueID;
+  global $currentTurnEffects, $currentPlayer, $CS_PlayUniqueID, $CS_PlayedAsUpgrade;
   $costModifier = 0;
   $uniqueEffectsActivated = [];
   for($i = count($currentTurnEffects) - CurrentTurnPieces(); $i >= 0; $i -= CurrentTurnPieces()) {
@@ -482,6 +482,10 @@ function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
               $remove = true;
             }
             break;
+          case "7312183744"://Moff Gideon
+            if ($from != "PLAY" && $from != "EQUIP" && DefinedTypesContains($cardID, "Unit", $currentPlayer) && GetClassState($currentPlayer, $CS_PlayedAsUpgrade) == "0") {
+              $costModifier += 1;
+            }
           default: break;
         }
       }
