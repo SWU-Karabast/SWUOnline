@@ -2,6 +2,7 @@
 
 include "CardDictionary.php";
 include "CoreLogic.php";
+include "Libraries/MZOpHelpers.php";
 
 function PummelHit($player = -1, $passable = false, $fromDQ = false, $context="", $may=false)
 {
@@ -1256,21 +1257,17 @@ function IndirectDamage($player, $amount, $fromUnitEffect=false)
   $sourcePlayer = $player == 1 ? 2 : 1;
   $amount += SearchCount(SearchAlliesForCard($sourcePlayer, "4560739921"));//Hunting Aggressor
   if(SearchCount(SearchAlliesForCard($sourcePlayer, "1330473789")) > 0) { //Devastator
-    for($i=0; $i<$amount; ++$i) {
-      AddDecisionQueue("MULTIZONEINDICES", $sourcePlayer, "THEIRALLY", $i == 0 ? 0 : 1);
-      AddDecisionQueue("PREPENDLASTRESULT", $sourcePlayer, "THEIRCHAR-0,", $i == 0 ? 0 : 1);
-      AddDecisionQueue("SETDQCONTEXT", $sourcePlayer, "Choose a card to deal an indirect damage (Remaining: " . ($amount-$i) . ")", $i == 0 ? 0 : 1);
-      AddDecisionQueue("CHOOSEMULTIZONE", $sourcePlayer, "<-", 1);
-      AddDecisionQueue("MZOP", $sourcePlayer, "DEALDAMAGE,1,$sourcePlayer," . ($fromUnitEffect ? "1" : "0") . ",0,1", 1);
-    }
+    AddDecisionQueue("FINDINDICES", $sourcePlayer, "THEIRUNITSANDBASE");
+    AddDecisionQueue("SETDQCONTEXT", $sourcePlayer, "Choose units and/or base to damage (any remaining will go to base)", 1);
+    AddDecisionQueue("MULTICHOOSETHEIRUNITSANDBASE", $sourcePlayer, "<-", 1);
+    AddDecisionQueue("MULTIDISTRIBUTEDAMAGE", $sourcePlayer,
+      MultiDistributeDamageStringBuilder($amount, $sourcePlayer, $fromUnitEffect ? 1 : 0, isPreventable: 0, isIndirect: 1, zones:"THEIRALLIESANDBASE"), 1);
   } else {
-    for($i=0; $i<$amount; ++$i) {
-      AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY", $i == 0 ? 0 : 1);
-      AddDecisionQueue("PREPENDLASTRESULT", $player, "MYCHAR-0,", $i == 0 ? 0 : 1);
-      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a card to deal an indirect damage (Remaining: " . ($amount-$i) . ")", $i == 0 ? 0 : 1);
-      AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
-      AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1,$sourcePlayer," . ($fromUnitEffect ? "1" : "0") . ",0,1", 1);
-    }
+    AddDecisionQueue("FINDINDICES", $player, "UNITSANDBASE");
+    AddDecisionQueue("SETDQCONTEXT", $player, "Choose units and/or base to damage (any remaining will go to base)", 1);
+    AddDecisionQueue("MULTICHOOSEMYUNITSANDBASE", $player, "<-", 1);
+    AddDecisionQueue("MULTIDISTRIBUTEDAMAGE", $player,
+      MultiDistributeDamageStringBuilder($amount, $sourcePlayer, $fromUnitEffect ? 1 : 0, isPreventable: 0, isIndirect: 1, zones:"MYALLIESANDBASE"), 1);
   }
 }
 

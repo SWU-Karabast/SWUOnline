@@ -183,7 +183,7 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
       if (!str_starts_with($turn[0], "MULTICHOOSE") && !str_starts_with($turn[0], "MAYMULTICHOOSE"))
         break;
       $input = [];
-      if ($turn[0] == "MULTICHOOSEOURUNITS") {
+      if ($turn[0] == "MULTICHOOSEOURUNITS"/*|| $turn[0] == "MULTICHOOSEOURUNITSANDBASE"*/) {//TODO: Redemption
         $input[0] = [];
         $input[1] = [];
         $sets = explode("&", $turn[2]);
@@ -192,6 +192,15 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
           $skipWriteGamestate = ResolveMultichooseXSet($sets[$i], $chkInput[$i], $input[$i]);
           if($skipWriteGamestate) break;
         }
+      } else if ($turn[0] == "MULTICHOOSEMYUNITSANDBASE" || $turn[0] == "MULTICHOOSETHEIRUNITSANDBASE") {
+        $onlyUnits = substr($turn[2], 2, strlen($turn[2]) - 2);
+        $onlyUnitsChkInput = [];
+        $includeBase = in_array(0, $chkInput);
+        for($i=$includeBase ? 1 : 0; $i<count($chkInput); ++$i) {
+          $onlyUnitsChkInput[] = $chkInput[$i] - 1;
+        }
+        $skipWriteGamestate = ResolveMultichooseXSet($onlyUnits, $onlyUnitsChkInput, $input);
+        if ($includeBase) array_unshift($input, "BASE");
       } else {
         $skipWriteGamestate = ResolveMultichooseXSet($turn[2], $chkInput, $input);
       }
