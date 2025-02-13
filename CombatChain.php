@@ -211,6 +211,16 @@ function AttackModifier($cardID, $player, $index)
       if(GetClassState($otherPlayer, $CS_NumAlliesDestroyed) > 0) $modifier += 1;
       break;
     //Jump to Lightspeed
+    case "2177194044"://Swarming Vulture Droid
+      $allies = GetAllies($player);
+      $totalSwarmingVultureDroids = 0;
+      for ($i = 0; $i < count($allies); $i += AllyPieces()) {
+        if ($allies[$i] == "2177194044") {
+          $totalSwarmingVultureDroids++;
+        }
+      }
+      $modifier += $totalSwarmingVultureDroids;
+      break;    
     case "8845408332"://Millennium Falcon (Get Out and Push)
       $ally = new Ally("MYALLY-" . $index, $player);
       $upgrades = $ally->GetUpgrades();

@@ -208,6 +208,7 @@ function AllyHasStaticHealthModifier($cardID)
     case "1690726274"://Zuckuss
     case "2260777958"://41st Elite Corps
     case "2265363405"://Echo
+    case "2177194044"://Swarming Vulture Droid
     case "1209133362"://332nd Stalwart
     case "47557288d6"://Captain Rex
     case "0268657344"://Admiral Yularen
