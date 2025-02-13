@@ -51,7 +51,7 @@ function TextCounterColor($darkMode)
 function ClientRenderedCard($cardNumber, $action = 0, $overlay = 0, $borderColor = 0, $counters = 0, $actionDataOverride = "-", $lifeCounters = 0, $defCounters = 0, $atkCounters = 0, $controller = 0, $type = "", $sType = "", $restriction = "", $isBroken = 0, $onChain = 0, $isFrozen = 0, $gem = 0, $rotate = 0, $landscape = 0, $epicActionUsed = 0)
 {
   $rv = $cardNumber . " " . $action . " " . $overlay . " " . $borderColor . " " . $counters . " " . $actionDataOverride . " " . $lifeCounters . " " . $defCounters . " " . $atkCounters . " ";
-  $rv .= $controller . " " . $type . " " . $sType . " " . $restriction . " " . $isBroken . " " . $onChain . " " . $isFrozen . " " . $gem . " " . $rotate . " " . $landscape . " " . $epicActionUsed;
+  $rv .= $controller . " " . $type . " " . $sType . " " . $restriction . " " . $isBroken . " " . $onChain . " " . $isFrozen . " " . $gem . " " . $rotate . " " . $landscape . " " . $epicActionUsed . " " . IsUnimplemented($cardNumber);
   return $rv;
 }
 
@@ -305,6 +305,25 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
       filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.50));
       user-select: none;'>" . $shieldCount . "</div>";
     }
+  }
+
+  // Restricted Icon Style for unimplemented cards
+  if (IsUnimplemented($cardNumber)) {
+    $rv .= "<div style='margin: 0px;
+    top: 50%;
+    left: 50%;
+    border-radius: 0%;
+    width:40%;
+    height:40%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translate(-50%, -50%);
+    position:absolute; z-index: 10;
+    background: url(./Images/restricted.png) no-repeat;
+    background-size: contain;
+    filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.40));
+    user-select: none;'></div>";
   }
 
   // Sentinel Icon Style

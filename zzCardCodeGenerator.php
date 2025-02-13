@@ -35,7 +35,7 @@
     "FR" => "French",
     "IT" => "Italian"
   ];
-  $language = "FR";//Testing
+  $language = "EN";
 
   while ($hasMoreData)
   {
@@ -151,7 +151,7 @@
   GenerateFunction($uuidLookupArray, $handler, "UUIDLookup", true, $DEFAULT_CARD_UUID);
   GenerateFunction($cardIDArray, $handler, "CardIDLookup", true, $DEFAULT_CARD_UUID);
   GenerateCardTitles($titleArray, $handler);
-
+  GenerateUnimplementedCards($handler);
   fwrite($handler, "?>");
 
   fclose($handler);
@@ -162,6 +162,22 @@
   GenerateFunction($titleArray, $handler, "CardTitle", true, "", language:"js");
   fclose($handler);
 
+  function GenerateUnimplementedCards($handler) {
+    $unimplementedCards = [];
+    $files = glob('./UnimplementedCards/*.{jpg,jpeg,png,gif,webp}', GLOB_BRACE);
+    foreach($files as $file) {
+      $filename = basename($file);
+      $cardId = pathinfo($filename, PATHINFO_FILENAME);
+      $unimplementedCards[$cardId] = true;
+    }
+    
+    fwrite($handler, "function IsUnimplemented(\$cardID) {\r\n");
+    fwrite($handler, "  \$unimplementedCards = " . var_export($unimplementedCards, true) . ";\r\n");
+    fwrite($handler, "  return isset(\$unimplementedCards[\$cardID]);\r\n");
+    fwrite($handler, "}\r\n");
+  }
+
+  
   function GenerateCardTitles($titleArray, $handler) {
     echo "Generating CardTitles<br>";
     $uniqueTitles = array_unique($titleArray);
