@@ -1857,7 +1857,6 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $preventable = count($parameter) > 4 ? $parameter[4] : 1;
       $isIndirect = count($parameter) > 5 ? $parameter[5] : 0;
       $zones = count($parameter) > 6 ? $parameter[6] : "THEIRALLY";
-      $nextZones = $zones;
       $mineArr = [];
       if($zones == "OURALLIES") {
         $mineArr = $lastResult[1];
@@ -1873,6 +1872,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       }
       else if(isset($dqVars[2]) && $dqVars[2] != "") {
         $mineArr = explode(",", $dqVars[2]);
+        if(!is_numeric($mineArr[0])) $mineArr = [];
       }
 
       if($parameter[0] == "-") {
@@ -1922,6 +1922,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         }
         $damageIndices = implode(",", $damageIndicesArr);
       }
+      $nextZones = $zones;
       if(count($lastResult) == 1 && $lastResult[0] == "BASE") {
         $nextZones = $sourcePlayer == $player ? "THEIRCHAR" : "MYCHAR";
       }
