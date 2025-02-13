@@ -1,6 +1,9 @@
 # Cards yet to be Implemented
 The images below show cards that are _**not yet**_ implemented. If you are having issues with a card that is not on the list, please reach out in the discord or create a github issue.
 
+![](./8520821318.webp)
+![](./3eb545eb4b.webp)
+![](./9586661707.webp)
 ![](./1397553238.webp)
 ![](./3388566378.webp)
 ![](./3427170256.webp)
@@ -20,3 +23,8 @@ The images below show cards that are _**not yet**_ implemented. If you are havin
 ![](./9595057518.webp)
 ![](./9811031405.webp)
 ![](./9921128444.webp)
+![](./2711104544.webp)
+![](./3389903389.webp)
+![](./7325248681.webp)
+![](./8734471238.webp)
+![](./8993849612.webp)
