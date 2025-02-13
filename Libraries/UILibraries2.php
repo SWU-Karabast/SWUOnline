@@ -308,7 +308,7 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
   }
 
   // Restricted Icon Style for unimplemented cards
-  if (IsUnimplemented($cardNumber)) {
+  if (isset($opts['isUnimplemented']) && $opts['isUnimplemented']) {
     $rv .= "<div style='margin: 0px;
     top: 50%;
     left: 50%;
