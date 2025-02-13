@@ -1230,7 +1230,7 @@ function CheckBobaFettJTL($targetPlayer, $enemyDamage, $fromCombat) {
 function CheckThrawnJTL($player, $serializedAllyDestroyData, $target) {
   $charArr = &GetPlayerCharacter($player);
   for($i=0; $i<count($charArr); $i+=CharacterPieces()) {
-    if($charArr[$i] == "5846322081") {//Grand Admiral Thrawn JTL
+    if($charArr[$i] == "5846322081") {//Grand Admiral Thrawn leader
       if(!LeaderAbilitiesIgnored() && $charArr[$i+1] == 2) {
         AddDecisionQueue("YESNO", $player, "if you want use Thrawn's ability for " . CardLink($target, $target));
         AddDecisionQueue("NOPASS", $player, "-");
@@ -1244,12 +1244,12 @@ function CheckThrawnJTL($player, $serializedAllyDestroyData, $target) {
   }
   $allies = &GetAllies($player);
   for($i=0; $i<count($allies); $i+=AllyPieces()) {
-    if($allies[$i] == "53207e4131") {
+    if($allies[$i] == "53207e4131") {//Grand Admiral Thrawn leader unit
       $ally = new Ally("MYALLY-" . $i, $player);
       if(!LeaderAbilitiesIgnored() && $ally->NumUses() > 0) {//doubly check num uses
         AddDecisionQueue("YESNO", $player, "if you want use Thrawn's ability for " . CardLink($target, $target));
         AddDecisionQueue("NOPASS", $player, "-");
-        AddDecisionQueue("PASSPARAMETER", $player, "$target,1,$serializedAllyDestroyData", 1);
+        AddDecisionQueue("PASSPARAMETER", $player, "$target;1;$serializedAllyDestroyData", 1);
         AddDecisionQueue("SETDQVAR", $player, "1", 1);
         AddDecisionQueue("SPECIFICCARD", $player, "THRAWN_JTL", 1);
       }
