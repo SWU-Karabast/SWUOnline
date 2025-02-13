@@ -192,16 +192,12 @@ $isMobile = IsMobile();
             sort($deck);
             for ($i = 0; $i < count($deck); ++$i) {
               $id = "DECK-" . $count;
-              $actions = [];
-              $actions['isUnimplemented'] = IsUnimplemented($deck[$i]);
-              echo ("<span style='cursor:pointer; padding-bottom:5px; padding-left:3px;' onclick='CardClick(\"" . $id . "\")'>" . Card($deck[$i], "concat", $cardSize, $actions, 1, 0, 0, 0, "", $id) . "</span>");
+              echo ("<span style='cursor:pointer; padding-bottom:5px; padding-left:3px;' onclick='CardClick(\"" . $id . "\")'>" . Card($deck[$i], "concat", $cardSize, 0, 1, 0, 0, 0, "", $id) . "</span>");
               ++$count;
             }
             for ($i = 0; $i < count($deckSB); ++$i) {
               $id = "DECK-" . $count;
-              $actions = [];
-              $actions['isUnimplemented'] = IsUnimplemented($deck[$i]);
-              echo ("<span style='cursor:pointer; padding-bottom:5px; padding-left:3px;' onclick='CardClick(\"" . $id . "\")'>" . Card($deckSB[$i], "concat", $cardSize, $actions, 1, 1, 0, 0, "", $id) . "</span>");
+              echo ("<span style='cursor:pointer; padding-bottom:5px; padding-left:3px;' onclick='CardClick(\"" . $id . "\")'>" . Card($deckSB[$i], "concat", $cardSize, 0, 1, 1, 0, 0, "", $id) . "</span>");
               ++$count;
             }
           }
