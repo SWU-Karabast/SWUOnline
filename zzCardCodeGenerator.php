@@ -27,7 +27,7 @@
   $hasDestroyedArray = [];
   $setArray = [];
   $cardIDArray = [];
-  
+
   $languagesArray = [
     "EN" => "English",
     "ES" => "Spanish",
@@ -85,7 +85,7 @@
       //$imageUrl = "https://swudb.com/cards/" . $set . "/" . $cardNumber . ".png";
 
 
-      CheckImage($card->cardUid, $imageUrl, $language,  $definedType, set:$set); 
+      CheckImage($card->cardUid, $imageUrl, $language,  $definedType, set:$set);
       if($card->artBack->data != null) {
         $type2 = $card->type2->data == null ? "" : $card->type2->data->attributes->name;
         if($type2 == "Leader Unit") $definedType = "Unit";
@@ -95,7 +95,7 @@
         $uuid = $arr[0];
         CheckImage($uuid, $imageUrl, $language, $definedType, isBack:true, set:$set );
         AddToArrays($cardID, $uuid);
-      }      
+      }
     }
 
     echo("Page: " . $meta->pagination->page . "/" . $meta->pagination->pageCount . "<BR>");
@@ -171,11 +171,11 @@
     fwrite($handler, "  return " . var_export($strTitles, true) . ";\r\n");
     fwrite($handler, "}\r\n\r\n");
   }
-  
+
   function GenerateFunction($cardArray, $handler, $functionName, $isString, $defaultValue, $language = "PHP")
   {
     echo "Generating " . $functionName . " (" . $language . ")<br>";
-    
+
     if($language == "PHP") {
       fwrite($handler, "function " . $functionName . "(\$cardID) {\r\n");
       fwrite($handler, "  \$data = " . var_export($cardArray, true) . ";\r\n");
@@ -194,7 +194,7 @@
     global $uuidLookupArray, $titleArray, $subtitleArray, $costArray, $hpArray, $powerArray, $upgradeHPArray, $upgradePowerArray;
     global $typeArray, $type2Array, $uniqueArray, $card, $aspectsArray, $traitsArray, $arenasArray, $hasPlayArray;
     global $hasDestroyedArray, $setArray, $cardIDArray;
-    global $DEFAULT_CARD_TITLE, $DEFAULT_CARD_SUBTITLE, $DEFAULT_CARD_COST, $DEFAULT_CARD_HP, $DEFAULT_CARD_POWER, $DEFAULT_CARD_UPGRADE_HP; 
+    global $DEFAULT_CARD_TITLE, $DEFAULT_CARD_SUBTITLE, $DEFAULT_CARD_COST, $DEFAULT_CARD_HP, $DEFAULT_CARD_POWER, $DEFAULT_CARD_UPGRADE_HP;
     global $DEFAULT_CARD_UPGRADE_POWER, $DEFAULT_CARD_ASPECTS, $DEFAULT_CARD_TRAITS, $DEFAULT_CARD_ARENAS, $DEFAULT_CARD_TYPE, $DEFAULT_CARD_TYPE2;
     global $DEFAULT_CARD_UNIQUE, $DEFAULT_CARD_HAS_WHEN_PLAYED, $DEFAULT_CARD_HAS_WHEN_DESTROYED, $DEFAULT_CARD_SET, $DEFAULT_CARD_UUID;
 
