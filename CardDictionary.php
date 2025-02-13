@@ -888,6 +888,7 @@ function AbilityCost($cardID, $index=-1, $theirCard = false)
   global $currentPlayer;
   $abilityName = $theirCard ? GetOpponentControlledAbilityNames($cardID) : GetResolvedAbilityName($cardID);
   if($abilityName == "Heroic Resolve") return 2;
+  if($abilityName == "Move Poe Pilot") return 1;
   switch($cardID) {
     //Spark of Rebellion
     case "2579145458"://Luke Skywalker
@@ -943,6 +944,8 @@ function AbilityCost($cardID, $index=-1, $theirCard = false)
       return $abilityName == "Attack" ? 1 : 0;
     case "8943696478"://Admiral Holdo
       return $abilityName == "Buff" ? 1 : 0;
+    case "8520821318"://Poe Dameron
+      return $abilityName == "Pilot" ? 1 : 0;
     default: break;
   }
   if(IsAlly($cardID)) return 0;
@@ -1027,7 +1030,7 @@ function GetOpponentAbilityTypes($cardID, $index = -1, $from="-") {
 
 function GetAbilityTypes($cardID, $index = -1, $from="-")
 {
-  global $currentPlayer;
+  global $currentPlayer, $CS_NumUsesLeaderUpgrade1;
   $abilityTypes = "";
 
   $set = CardSet($cardID);
@@ -1044,8 +1047,7 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
     $ally = new Ally("MYALLY-" . $index, $currentPlayer);
 
     if(UIDIsAffectedByMalevolence($ally->UniqueID())) {
-      $abilityTypes = str_replace(",AA", "", $abilityTypes);
-      $abilityTypes = str_replace("AA", "", $abilityTypes);
+      $abilityTypes = FilterOutAttackAbilityType($abilityTypes);
     }
 
     $upgrades = $ally->GetUpgrades();
@@ -1058,6 +1060,11 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
         case "2397845395"://Strategic Acumen
           if($abilityTypes != "") $abilityTypes .= ",";
           $abilityTypes .= "A";
+          break;
+        case "3eb545eb4b"://Poe Dameron JTL leader
+          if(GetClassState($currentPlayer, $CS_NumUsesLeaderUpgrade1) > 0) {
+            $abilityTypes = "A,AA";
+          }
           break;
         default: break;
       }
@@ -1087,6 +1094,10 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
 
 function CardIDIsLeader($cardID, $playerID = "") {
   return DefinedTypesContains($cardID, "Leader", $playerID);
+}
+
+function FilterOutAttackAbilityType($abilityTypes) {
+  return str_replace("AA", "", str_replace(",AA", "", str_replace("AA,", "", $abilityTypes)));
 }
 
 function CheckSORAbilityTypes($cardID) {
@@ -1267,6 +1278,8 @@ function CheckJTLAbilityTypes($cardID) {
       return LeaderAbilitiesIgnored() ? "" : "A";
     case "3132453342"://Captain Phasma
       return LeaderAbilitiesIgnored() ? "" : "A";
+    case "8520821318"://Poe Dameron
+      return LeaderAbilitiesIgnored() ? "" : "A";
     default: return "";
   }
 }
@@ -1274,7 +1287,7 @@ function CheckJTLAbilityTypes($cardID) {
 
 function GetAbilityNames($cardID, $index = -1, $validate=false)
 {
-  global $currentPlayer;
+  global $currentPlayer, $CS_NumUsesLeaderUpgrade1;
   $abilityNames = "";
   $set = CardSet($cardID);
   switch($set) {
@@ -1299,6 +1312,12 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
           if($abilityNames != "") $abilityNames .= ",";
           $abilityNames .= "Strategic Acumen";
           break;
+        case "3eb545eb4b"://Poe Dameron JTL leader
+          if(GetClassState($currentPlayer, $CS_NumUsesLeaderUpgrade1) > 0) {
+            $abilityNames = "Move Poe Pilot,Attack";
+            if($ally->IsExhausted()) $abilityNames = FilterOutAttackAbilityName($abilityNames);
+          }
+          break;
         default: break;
       }
     }
@@ -1308,8 +1327,7 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
     }
 
     if(UIDIsAffectedByMalevolence($ally->UniqueID())) {
-      $abilityNames = str_replace(",Attack", "", $abilityNames);
-      $abilityNames = str_replace("Attack", "", $abilityNames);
+      $abilityNames = FilterOutAttackAbilityName($abilityNames);
     }
   }
   else if(DefinedTypesContains($cardID, "Leader", $currentPlayer)) {
@@ -1328,6 +1346,10 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
   }
 
   return $abilityNames;
+}
+
+function FilterOutAttackAbilityName($abilityNames) {
+  return str_replace("Attack", "", str_replace(",Attack", "", str_replace("Attack,", "", $abilityNames)));
 }
 
 function CheckSORAbilityNames($cardID, $index, $validate) {
@@ -1547,6 +1569,8 @@ function CheckJTLAbilityNames($cardID) {
       return LeaderAbilitiesIgnored() ? "" : "TIE Fighter";
     case "3132453342"://Captain Phasma
       return LeaderAbilitiesIgnored() ? "" : "Deal Damage";
+    case "8520821318"://Poe Dameron
+      return LeaderAbilitiesIgnored() ? "" : "Pilot";
     default: return "";
   }
 }
@@ -1943,6 +1967,8 @@ function LeaderUnit($cardID) {
       return "fb0da8985e";
     case "3132453342"://Captain Phasma
       return "fda7bdc316";
+    case "8520821318"://Poe Dameron
+      return "3eb545eb4b";
     default: return "";
   }
 }
@@ -2087,6 +2113,8 @@ function LeaderUndeployed($cardID) {
       return "7661383869";
     case "fda7bdc316"://Captain Phasma Leader Unit
       return "3132453342";
+    case "3eb545eb4b"://Poe Dameron
+      return "8520821318";
     default: return "";
   }
 }

@@ -1342,7 +1342,10 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         $actionDataOverride = $inOptions ? $mzIndex : 0;
         $border = CardBorderColor($myAllies[$i], "PLAY", $action == 16);
       } else {
-        $playable = IsPlayable($myAllies[$i], $turn[0], "PLAY", $i, $restriction) && ($myAllies[$i + 1] == 2 || AllyPlayableExhausted($ally));
+        if($ally->IsUpgraded()) {
+          CheckForLeaderUpgradeAbilities($ally);
+        }
+        $playable = IsPlayable($myAllies[$i], $turn[0], "PLAY", $i, $restriction) && (!$ally->IsExhausted() || AllyPlayableExhausted($ally));
         $border = CardBorderColor($myAllies[$i], "PLAY", $playable);
         $action = $currentPlayer == $playerID && $turn[0] != "P" && $playable ? 24 : 0;
         $actionDataOverride = strval($i);

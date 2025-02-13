@@ -2341,6 +2341,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
 {
   global $currentPlayer, $layers, $CS_PlayIndex, $CS_OppIndex, $initiativePlayer, $CCS_CantAttackBase, $CS_NumAlliesDestroyed;
   global $CS_NumFighterAttacks, $CS_NumNonTokenVehicleAttacks, $CS_NumFirstOrderPlayed;
+  global $CS_NumUsesLeaderUpgrade1, $CS_NumUsesLeaderUpgrade2;
   $index = GetClassState($currentPlayer, $CS_PlayIndex);
   $otherPlayer = $currentPlayer == 1 ? 2 : 1;
   if($from == "PLAY" && IsAlly($cardID, $currentPlayer)) {
@@ -2365,6 +2366,18 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $ally = new Ally("MYALLY-" . $index, $currentPlayer);
       Mill($otherPlayer, ceil($ally->Health()/2));
       return "";
+    } else if ($abilityName == "Move Poe Pilot") {
+      DecrementClassState($currentPlayer, $CS_NumUsesLeaderUpgrade1, 1);
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "3eb545eb4b", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYALLY-" . $index, 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "1", 1);
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "1", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "2", 1);//set movingPilotLeader to true
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Vehicle;canAddPilot=1", 1);
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to move <0> to.", 1);
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "MOVEUPGRADE", 1);
     }
   }
   if($target != "-")

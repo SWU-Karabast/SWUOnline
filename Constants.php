@@ -242,8 +242,8 @@ $CS_NextNAAInstant = 20;                //free//number
 $CS_NextDamagePrevented = 21;           //free//number
 $CS_LastAttack = 22;
 $CS_NumLeftPlay = 23;
-$CS_NumMaterializations = 24;           //free//number
-$CS_NumFusedLightning = 25;             //free/number
+$CS_NumUsesLeaderUpgrade1 = 24;
+$CS_NumUsesLeaderUpgrade2 = 25;
 $CS_AfterPlayedBy = 26;
 $CS_PlayCCIndex = 27;                   //free//number
 $CS_NumAttackCards = 28;                //free/number
@@ -281,8 +281,8 @@ $CS_NumCardsPlayed = 59; //Amulet of Ignition
 $CS_NamesOfCardsPlayed = 60;          //free//string;default "-"
 $CS_NumFirstOrderPlayed = 61;
 $CS_PlayedAsInstant = 62; //If the card was played as an instant -- some things like banish we lose memory of as soon as it is removed from the zone
-$CS_AnotherWeaponGainedGoAgain = 63;  //free//string;default "-"
-$CS_NumContractsCompleted = 64;       //free//number
+$CS_LeaderUpgradeAbilityID1 = 63;
+$CS_LeaderUpgradeAbilityID2 = 64;
 $CS_HitsWithSword = 65;
 $CS_NumClonesPlayed = 66;
 $CS_UnitsThatAttackedBase = 67;
@@ -481,13 +481,13 @@ function ResetClassState($player)
   global $CS_DamageTaken, $CS_NumActionsPlayed, $CS_CharacterIndex, $CS_PlayIndex, $CS_OppIndex, $CS_OppCardActive, $CS_NumNonAttackCards;
   global $CS_PreparationCounters, $CS_NextNAACardGoAgain, $CS_NumAlliesDestroyed, $CS_NumWhenDefeatedPlayed, $CS_ResolvingLayerUniqueID, $CS_NextWizardNAAInstant;
   global $CS_ArcaneDamageTaken, $CS_NextNAAInstant, $CS_NextDamagePrevented, $CS_LastAttack, $CS_PlayCCIndex;
-  global $CS_NumLeftPlay, $CS_NumMaterializations, $CS_NumFusedLightning, $CS_AfterPlayedBy, $CS_NumAttackCards, $CS_NumPlayedFromBanish;
+  global $CS_NumLeftPlay, $CS_NumUsesLeaderUpgrade1, $CS_NumUsesLeaderUpgrade2, $CS_AfterPlayedBy, $CS_NumAttackCards, $CS_NumPlayedFromBanish;
   global $CS_NumAttacks, $CS_DieRoll, $CS_NumMandalorianAttacks, $CS_SeparatistUnitsThatAttacked, $CS_NumFighterAttacks, $CS_LayerTarget, $CS_NumSwordAttacks;
   global $CS_HitsWithWeapon, $CS_ArcaneDamagePrevention, $CS_DynCostResolved, $CS_CardsEnteredGY, $CS_CachedCharacterLevel, $CS_ArsenalFacing;
   global $CS_HighestRoll, $CS_NumAuras, $CS_AbilityIndex, $CS_AdditionalCosts, $CS_NumRedPlayed, $CS_PlayUniqueID, $CS_AlluvionUsed;
   global $CS_NumPhantasmAADestroyed, $CS_NumEventsPlayed, $CS_MaxQuellUsed, $CS_DamageDealt, $CS_ArcaneTargetsSelected, $CS_NumDragonAttacks, $CS_NumIllusionistAttacks;
   global $CS_LastDynCost, $CS_NumIllusionistActionCardAttacks, $CS_ArcaneDamageDealt, $CS_LayerPlayIndex, $CS_NumCardsPlayed, $CS_NamesOfCardsPlayed;
-  global $CS_PlayedAsInstant, $CS_AnotherWeaponGainedGoAgain, $CS_NumContractsCompleted, $CS_HitsWithSword, $CS_NumMelodyPlayed,
+  global $CS_PlayedAsInstant, $CS_LeaderUpgradeAbilityID1, $CS_LeaderUpgradeAbilityID2, $CS_HitsWithSword, $CS_NumMelodyPlayed,
     $CS_NumClonesPlayed, $CS_UnitsThatAttackedBase, $CS_PlayedWithExploit, $CS_AlliesDestroyed, $CS_NumFirstOrderPlayed;
 
   $classState = &GetPlayerClassState($player);
@@ -515,8 +515,8 @@ function ResetClassState($player)
   $classState[$CS_NextDamagePrevented] = 0;
   $classState[$CS_LastAttack] = "NA";
   $classState[$CS_NumLeftPlay] = 0;
-  $classState[$CS_NumMaterializations] = 0;
-  $classState[$CS_NumFusedLightning] = 0;
+  $classState[$CS_NumUsesLeaderUpgrade1] = 1;
+  $classState[$CS_NumUsesLeaderUpgrade2] = 1;
   $classState[$CS_AfterPlayedBy] = "-";
   $classState[$CS_PlayCCIndex] = -1;
   $classState[$CS_NumAttackCards] = 0;
@@ -555,8 +555,8 @@ function ResetClassState($player)
   $classState[$CS_NamesOfCardsPlayed] = "-";
   $classState[$CS_NumFirstOrderPlayed] = 0;
   $classState[$CS_PlayedAsInstant] = 0;
-  $classState[$CS_AnotherWeaponGainedGoAgain] = "-";
-  $classState[$CS_NumContractsCompleted] = 0;
+  $classState[$CS_LeaderUpgradeAbilityID1] = "-";
+  $classState[$CS_LeaderUpgradeAbilityID2] = "-";
   $classState[$CS_HitsWithSword] = 0;
   $classState[$CS_NumClonesPlayed] = 0;
   $classState[$CS_UnitsThatAttackedBase] = "-";
