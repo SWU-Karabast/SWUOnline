@@ -1010,6 +1010,7 @@ function ResolveSingleTarget($mainPlayer, $defPlayer, $target, $attackerPrefix, 
     $defender = new Ally($target, $defPlayer);
     //Resolve the combat
     $shootsFirst = ShouldCombatDamageFirst();
+    $preventDamage = ShouldPreventCombatDamage();
     $defenderPower = $defender->CurrentPower();
     if ($defenderPower < 0)
       $defenderPower = 0;
@@ -1017,7 +1018,7 @@ function ResolveSingleTarget($mainPlayer, $defPlayer, $target, $attackerPrefix, 
     $destroyed = $defender->DealDamage($totalAttack, bypassShield: HasSaboteur($attackerID, $mainPlayer, $attacker->Index()), fromCombat: true, damageDealt: $combatChainState[$CCS_DamageDealt]);
     if ($destroyed)
       ClearAttackTarget();
-    if ($attackerPrefix == "MYALLY" && (!$destroyed || !$shootsFirst)) {
+    if ($attackerPrefix == "MYALLY" && (!$destroyed || !$shootsFirst) && !$preventDamage) {
       $attackerDestroyed = $attacker->DealDamage($defenderPower, fromCombat: true);
       if ($attackerDestroyed) {
         ClearAttacker();
@@ -1062,6 +1063,25 @@ function ShouldCombatDamageFirst()
     return true;//Hound's Tooth
   if (CardTitle($combatChain[0]) == "Millennium Falcon" && SearchCurrentTurnEffects("6720065735", $mainPlayer))
     return true;//Han Solo (Has His Moments) pilot
+
+  return false;
+}
+
+function ShouldPreventCombatDamage() {
+  global $currentTurnEffects, $mainPlayer;
+  $attacker = AttackerAlly();
+
+  for ($i = 0; $i < count($currentTurnEffects); $i += CurrentTurnPieces()) {
+    if ($currentTurnEffects[$i+1] != $mainPlayer) continue;
+    if ($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $attacker->UniqueID()) continue;
+
+    switch ($currentTurnEffects[$i]) {
+      case "5667308555"://I Have You Now
+        return true;
+      default:
+        break;
+    }
+  }
 
   return false;
 }
