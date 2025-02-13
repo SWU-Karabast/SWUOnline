@@ -546,7 +546,7 @@ function HasOverwhelm($cardID, $player, $index)
         break;
       case "9017877021"://Clone Commander Cody
         if($index != $i && IsCoordinateActive($player)) return true;
-        break;      
+        break;
       case "3666212779"://Captain Tarkin
         if(TraitContains($cardID, "Vehicle", $player)) return true;
         break;
@@ -2374,6 +2374,7 @@ function PilotingCost($cardID, $player = "") {
     case "0524529055": $minCost = 2; break;//Snap Wexley
     case "0587196584": $minCost = 1; break;//Independent Smuggler
     case "1039444094": $minCost = 2; break;//Paige Tico
+    case "1911230033": $minCost = 1; break;//Wingman Victor Three
     case "1463418669": $minCost = 2; break;//IG-88
     case "2283726359": $minCost = 1; break;//BB-8
     case "2633842896": $minCost = 1; break;//Briggs Darklighter
