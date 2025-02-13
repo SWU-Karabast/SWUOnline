@@ -851,6 +851,7 @@ function IsCombatEffectActive($cardID)
     case "9097690846"://Snowtrooper Lieutenant
     case "9210902604"://Precision Fire
     case "8297630396"://Shoot First
+    case "5667308555"://I Have You Now
     case "5464125379"://Strafing Gunship
     case "5445166624"://Clone Dive Trooper
     case "8495694166"://Jedi Lightsaber

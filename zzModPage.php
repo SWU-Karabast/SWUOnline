@@ -32,9 +32,14 @@ echo ("<br><br><form  action='./BanPlayer.php'>");
 <input type="submit" value="Ban">
 </form>
 
+<form action='./BanPlayer.php'>
+<label for="playerToUnban" style='font-weight:bolder; margin-left:10px;'>Player to unban:</label>
+<input type="text" id="playerToUnban" name="playerToUnban" value="">
+<input type="submit" value="Unban">
+</form>
+
+
 <?php
-
-
 $conn = GetDBConnection();
 $sql = "SELECT usersUid FROM users ORDER BY usersId DESC LIMIT 20";
 $stmt = mysqli_stmt_init($conn);

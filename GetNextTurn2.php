@@ -1205,6 +1205,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         'subcards' => $theirAllies[$i + 4] != "-" ? explode(",", $theirAllies[$i + 4]) : [],
         'currentPower' => $ally->CurrentPower(),
         'hasSentinel' => HasSentinel($theirAllies[$i], $otherPlayer, $i),
+        'isUnimplemented' => IsUnimplemented($theirAllies[$i]),
         'overlay' => $theirAllies[$i + 1] != 2 ? 1 : 0,
         'cloned' => $theirAllies[$i + 13] == 1,
       );
@@ -1355,6 +1356,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         'subcards' => $myAllies[$i + 4] != "-" ? explode(",", $myAllies[$i + 4]) : [],
         'currentPower' => $ally->CurrentPower(),
         'hasSentinel' => HasSentinel($myAllies[$i], $playerID, $i),
+        'isUnimplemented' => IsUnimplemented($myAllies[$i]),
         'action' => $action,
         'actionOverride' => $actionDataOverride,
         'border' => $border,

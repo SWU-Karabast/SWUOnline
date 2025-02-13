@@ -1691,6 +1691,13 @@ function NumEquipBlock()
     return true;
   }
 
+  function AttackerAlly() {
+    global $mainPlayer;
+    $attackerMZ = AttackerMZID($mainPlayer);
+    $ally = new Ally($attackerMZ, $mainPlayer);
+    return $ally;
+  }
+
   function AttackerMZID($player)
   {
     global $combatChainState, $CCS_WeaponIndex, $mainPlayer;
@@ -4104,6 +4111,19 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "2995807621,PLAY", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
       break;
+    case "5834478243"://You're All Clear Kid
+      MZChooseAndDestroy($currentPlayer, "THEIRALLY:arena=Space;maxHealth=3", context:"Choose a space unit with 3 or less HP to defeat");
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "YOUREALLCLEARKID", 1);
+      break;
+    case "5667308555"://I Have You Now
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Vehicle");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "status=1", 1);
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a vehicle to attack with", 1);
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "5667308555,PLAY", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
+      break;
     case "0931441928"://Ma Klounkee
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Underworld");
       AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
@@ -4314,6 +4334,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "3388566378"://Ahsoka Tano JTL
       PummelHit($otherPlayer);
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "AHSOKATANOJTL", 1);
+      break;
+    case "5751831621"://Red Squadron X-Wing
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Do you want to deal 2 damage to Red Squadron X-Wing to draw a card?");
+      AddDecisionQueue("YESNO", $currentPlayer, "-");
+      AddDecisionQueue("NOPASS", $currentPlayer, "-");
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYALLY-" . $playAlly->Index(), 1);
+      AddDecisionQueue("MZOP", $currentPlayer, DamageStringBuilder(2, $currentPlayer, isUnitEffect:true), 1);
+      AddDecisionQueue("DRAW", $currentPlayer, "-", 1);
       break;
     case "5830140660"://Bazine Netal
       AddDecisionQueue("REVEALHANDCARDS", $otherPlayer, "-");

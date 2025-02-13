@@ -443,6 +443,15 @@ function SpecificCardLogic($player, $parameter, $lastResult)
         }
       }
       break;
+    case "YOUREALLCLEARKID":
+      $totalEnemySpaceUnits = SearchCount(SearchAllies($otherPlayer, arena:"Space"));
+      if ($totalEnemySpaceUnits == 0) {
+        AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to give an experience token");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+        AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
+      }
+      break;
     case "AHSOKATANOJTL":
       if (DefinedTypesContains($lastResult, "Unit")) {
         AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
