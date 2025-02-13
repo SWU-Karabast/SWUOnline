@@ -1258,11 +1258,13 @@ function AllyPlayedAsUpgradeAbility($cardID, $player, $targetAlly) {
       }
       break;
     case "6720065735"://Han Solo (Has His Moments)
-      AddDecisionQueue("YESNO", $player, "Do you want to attack with " . CardLink($targetAlly->CardID(), $targetAlly->CardID()) . "?");
-      AddDecisionQueue("NOPASS", $player, "-");
-      AddDecisionQueue("PASSPARAMETER", $player, $targetAlly->MZIndex(), 1);
-      AddDecisionQueue("ADDCURRENTEFFECT", $player, "6720065735", 1);
-      AddDecisionQueue("MZOP", $player, "ATTACK", 1);
+      if(!$targetAlly->IsExhausted()) {
+        AddDecisionQueue("YESNO", $player, "Do you want to attack with " . CardLink($targetAlly->CardID(), $targetAlly->CardID()) . "?");
+        AddDecisionQueue("NOPASS", $player, "-");
+        AddDecisionQueue("PASSPARAMETER", $player, $targetAlly->MZIndex(), 1);
+        AddDecisionQueue("ADDCURRENTEFFECT", $player, "6720065735", 1);
+        AddDecisionQueue("MZOP", $player, "ATTACK", 1);
+      }
       break;
     case "4921363233"://Wingman Victor Two
       CreateTieFighter($player);
