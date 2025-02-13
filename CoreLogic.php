@@ -4104,6 +4104,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "2995807621,PLAY", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
       break;
+    case "5834478243"://You're All Clear Kid
+      MZChooseAndDestroy($currentPlayer, "THEIRALLY:arena=Space;maxHealth=3", context:"Choose a space unit with 3 or less HP to defeat");
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "YOUREALLCLEARKID", 1);
+      break;
     case "0931441928"://Ma Klounkee
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Underworld");
       AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
