@@ -626,13 +626,14 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $targetAlly = new Ally($lastResult);
           $upgradeID = $dqVars[0];
           $mzSource = $dqVars[1];
+          $movingPilotLeader = isset($dqVars[2]) ? $dqVars[2] == "1" : false;
           $mzSourceArr = explode("-", $mzSource);
           $upgradeOwnerID = null;
 
           switch ($mzSourceArr[0]) {
             case "MYALLY": case "THEIRALLY":
               $sourceAlly = new Ally($mzSource);
-              $upgradeOwnerID = $sourceAlly->RemoveSubcard($upgradeID);
+              $upgradeOwnerID = $sourceAlly->RemoveSubcard($upgradeID, movingPilotLeader: $movingPilotLeader);
               break;
             case "MYDISCARD": case "THEIRDISCARD":
               MZRemove($player, $mzSource);
@@ -1620,9 +1621,12 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $lastPlayed[2] = $lastResult;
       $index = GetAbilityIndex($parameter, GetClassState($player, $CS_PlayIndex), $lastResult);
       SetClassState($player, $CS_AbilityIndex, $index);
-      if(IsAlly($parameter, $player) && AllyDoesAbilityExhaust($parameter, $index)) {
+      if(IsAlly($parameter, $player)) {
         $ally = new Ally("MYALLY-" . GetClassState($player, $CS_PlayIndex), $player);
-        $ally->Exhaust();
+        if($ally->IsUpgraded()) {
+          CheckForLeaderUpgradeAbilities($ally);
+        }
+        if(AllyDoesAbilityExhaust($parameter, $index)) $ally->Exhaust();
       }
       $names = explode(",", GetAbilityNames($parameter, GetClassState($player, $CS_PlayIndex)));
       $ability = implode(" ", explode("_", $names[$index]));

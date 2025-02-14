@@ -202,7 +202,8 @@ class Ally {
   function ReceivingPilot($cardID, $player = "") {
     global $CS_PlayedAsUpgrade;
     if($player == "") $player = $this->PlayerID();
-    $isLeaderPilot = CardIDIsLeader($cardID) && LeaderCanPilot(LeaderUndeployed($cardID));
+    $isLeaderPilot = $cardID == "3eb545eb4b" //Poe Dameron JTL leader
+      || (CardIDIsLeader($cardID) && LeaderCanPilot(LeaderUndeployed($cardID)));
 
     return $isLeaderPilot || PilotingCost($cardID) >= 0 && GetClassState($player, $CS_PlayedAsUpgrade) == "1";
   }
@@ -521,7 +522,8 @@ class Ally {
     return $subCardUniqueID;
   }
 
-  function RemoveSubcard($subcardID, $subcardUniqueID = "") {
+  function RemoveSubcard($subcardID, $subcardUniqueID = "", $movingPilotLeader = false) {
+    global $CS_PlayIndex;
     if($this->index == -1) return false;
     $subcards = $this->GetSubcards();
     for($i=0; $i<count($subcards); $i+=SubcardPieces()) {
@@ -535,7 +537,7 @@ class Ally {
         $subcards = array_values($subcards);
         $this->allies[$this->index + 4] = count($subcards) > 0 ? implode(",", $subcards) : "-";
         if(DefinedTypesContains($subcardID, "Upgrade")) UpgradeDetached($subcardID, $this->playerID, "MYALLY-" . $this->index);
-        if(CardIDIsLeader($subcardID)) {
+        if(CardIDIsLeader($subcardID) && !$movingPilotLeader) {
           $leaderUndeployed = LeaderUndeployed($subcardID);
           if($leaderUndeployed != "") {
             AddCharacter($leaderUndeployed, $this->playerID, counters:1, status:1);
@@ -774,7 +776,7 @@ class Ally {
     $upgrades = $this->GetUpgrades(withMetadata:true);
     for($i=0; $i<count($upgrades); $i+=SubcardPieces()) {
       if (CardIDIsLeader($upgrades[$i]) && $upgrades[$i+2] == "1") {
-        return true;
+        return $upgrades[$i] != "3eb545eb4b";//Poe Dameron JTL leader (so far the only one)
       }
     }
     return false;

@@ -591,6 +591,8 @@ function AllyEntersPlayState($cardID, $player, $from="-")
 }
 
 function AllyPlayableExhausted(Ally $ally) {
+  global $CS_LeaderUpgradeAbilityID1, $CS_NumUsesLeaderUpgrade1;
+  //global $CS_LeaderUpgradeAbilityID2, $CS_NumUsesLeaderUpgrade2;//Twin Suns prep
   $cardID = $ally->CardID();
   switch($cardID) {
     case "5630404651"://MagnaGuard Wing Leader
@@ -602,8 +604,18 @@ function AllyPlayableExhausted(Ally $ally) {
     case "2b13cefced"://Fennec Shand Leader Unit
     case "a742dea1f1"://Han Solo Red Leader Unit
       return true;
-    default: return false;
+    default: break;
   }
+
+  $leaderUpgradeAbilityID = GetClassState($ally->Controller(), $CS_LeaderUpgradeAbilityID1);
+  $numUsesLeaderUpgradeUses = GetClassState($ally->Controller(), $CS_NumUsesLeaderUpgrade1);
+  switch($leaderUpgradeAbilityID) {
+    case "3eb545eb4b"://Poe Dameron JTL leader upgrade
+      return $ally->HasUpgrade("3eb545eb4b") && $numUsesLeaderUpgradeUses > 0;
+    default: break;
+  }
+
+  return false;
 }
 
 function TheirAllyPlayableExhausted($ally) {
@@ -616,6 +628,7 @@ function TheirAllyPlayableExhausted($ally) {
 }
 
 function AllyDoesAbilityExhaust($cardID, $abilityIndex) {
+  global $currentPlayer, $CS_LeaderUpgradeAbilityID1, $CS_LeaderUpgradeAbilityID2;
   switch($cardID) {
     case "5630404651"://MagnaGuard Wing Leader
       return $abilityIndex == 1;
@@ -631,8 +644,16 @@ function AllyDoesAbilityExhaust($cardID, $abilityIndex) {
       return $abilityIndex == 1;
     case "a742dea1f1"://Han Solo Red Leader Unit
       return $abilityIndex == 1;
-    default: return true;
+    default: break;
   }
+  $leaderUpgradeAbilityID = GetClassState($currentPlayer, $CS_LeaderUpgradeAbilityID1);
+  switch($leaderUpgradeAbilityID) {
+    case "3eb545eb4b"://Poe Dameron JTL leader upgrade
+      return $abilityIndex == 1;
+    default: break;
+  }
+
+  return true;
 }
 
 function TheirAllyDoesAbilityExhaust($cardID, $abilityIndex) {
