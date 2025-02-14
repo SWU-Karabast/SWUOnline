@@ -208,7 +208,6 @@ function AllyHasStaticHealthModifier($cardID)
     case "1690726274"://Zuckuss
     case "2260777958"://41st Elite Corps
     case "2265363405"://Echo
-    case "2177194044"://Swarming Vulture Droid
     case "1209133362"://332nd Stalwart
     case "47557288d6"://Captain Rex
     case "0268657344"://Admiral Yularen
@@ -1934,6 +1933,14 @@ function SpecificAllyAttackAbilities($attackID)
       break;
     case "51e8757e4c"://Sabine Wren Leader Unit
       DealDamageAsync($defPlayer, 1, "DAMAGE", "51e8757e4c");
+      break;
+    case "3389903389"://Black One JTL
+      if (ControlsNamedCard($mainPlayer, "Poe Dameron")) {
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY");
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 1 damage to");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $mainPlayer, DamageStringBuilder(1, $mainPlayer, isUnitEffect:true), 1);
+      }
       break;
     case "8395007579"://Fifth Brother
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Do you want to deal 1 damage to Fifth Brother?");
