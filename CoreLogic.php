@@ -4124,6 +4124,15 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "5667308555,PLAY", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
       break;
+    case "8734471238"://Stay On Target
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Vehicle");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "status=1", 1);
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a vehicle to attack with", 1);
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "8734471238,PLAY", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
+      break;
     case "0931441928"://Ma Klounkee
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Underworld");
       AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
@@ -6549,7 +6558,7 @@ function HandIntoMemory($player)
   AddDecisionQueue("MZREMOVE", $player, "-", 1);
 }
 
-function Draw($player, $mainPhase = true, $fromCardEffect = true)
+function Draw($player, $mainPhase = true)
 {
   global $EffectContext, $mainPlayer, $CS_CardsDrawn;
   $otherPlayer = ($player == 1 ? 2 : 1);

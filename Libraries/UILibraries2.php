@@ -151,7 +151,7 @@ function JSONRenderedCard(
 }
 
 //Rotate is deprecated
-function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $overlay = 0, $borderColor = 0, $counters = 0, $actionDataOverride = "", $id = "", $rotate = false, $lifeCounters = 0, $defCounters = 0, $atkCounters = -1, $from = "", $controller = 0, $subcardNum = 0, $isExhausted = false)
+function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $overlay = 0, $borderColor = 0, $counters = 0, $actionDataOverride = "", $id = "", $rotate = false, $lifeCounters = 0, $defCounters = 0, $atkCounters = -1, $from = "", $controller = 0, $subcardNum = 0, $isExhausted = false, $isUnimplemented = false)
 {
   global $playerID, $darkMode;
   $opts = [];
@@ -307,8 +307,8 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
     }
   }
 
-  // Restricted Icon Style for unimplemented cards
-  if (isset($opts['isUnimplemented']) && $opts['isUnimplemented']) {
+  // Unimplemented Icon Style
+  if ($isUnimplemented) {
     $rv .= "<div style='margin: 0px;
     top: 50%;
     left: 50%;

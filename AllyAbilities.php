@@ -1934,6 +1934,14 @@ function SpecificAllyAttackAbilities($attackID)
     case "51e8757e4c"://Sabine Wren Leader Unit
       DealDamageAsync($defPlayer, 1, "DAMAGE", "51e8757e4c");
       break;
+    case "3389903389"://Black One JTL
+      if (ControlsNamedCard($mainPlayer, "Poe Dameron")) {
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY");
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 1 damage to");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $mainPlayer, DamageStringBuilder(1, $mainPlayer, isUnitEffect:true), 1);
+      }
+      break;
     case "8395007579"://Fifth Brother
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Do you want to deal 1 damage to Fifth Brother?");
       AddDecisionQueue("YESNO", $mainPlayer, "-");

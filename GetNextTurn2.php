@@ -1205,10 +1205,10 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         'subcards' => $theirAllies[$i + 4] != "-" ? explode(",", $theirAllies[$i + 4]) : [],
         'currentPower' => $ally->CurrentPower(),
         'hasSentinel' => HasSentinel($theirAllies[$i], $otherPlayer, $i),
-        'isUnimplemented' => IsUnimplemented($theirAllies[$i]),
         'overlay' => $theirAllies[$i + 1] != 2 ? 1 : 0,
         'cloned' => $theirAllies[$i + 13] == 1,
       );
+      $isUnimplemented = IsUnimplemented($theirAllies[$i]);
       $cardArena = $ally->CurrentArena();
       //Their Unit Spacing
       if ($cardArena == "Ground")
@@ -1216,7 +1216,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       else
         $cardText = '<div id="unique-' . $theirAllies[$i + 5] . '" class="cardContainer ' . ($theirAllies[$i + 1] != 2 ? 'exhausted' : '') . '">';
       //card render their units
-      $cardText .= (Card($theirAllies[$i], "concat", $cardSizeAura, $opts));
+      $cardText .= (Card($theirAllies[$i], "concat", $cardSizeAura, $opts, isUnimplemented: $isUnimplemented));
       $cardText .= ("</div>");
       if ($cardArena == "Ground")
         $groundAllies .= $cardText;
@@ -1356,13 +1356,13 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         'subcards' => $myAllies[$i + 4] != "-" ? explode(",", $myAllies[$i + 4]) : [],
         'currentPower' => $ally->CurrentPower(),
         'hasSentinel' => HasSentinel($myAllies[$i], $playerID, $i),
-        'isUnimplemented' => IsUnimplemented($myAllies[$i]),
         'action' => $action,
         'actionOverride' => $actionDataOverride,
         'border' => $border,
         'overlay' => $myAllies[$i + 1] != 2 ? 1 : 0,
         'cloned' => $myAllies[$i + 13] == 1,
       );
+      $isUnimplemented = IsUnimplemented($myAllies[$i]);
       $cardArena = $ally->CurrentArena();
       //My Unit Spacing
       if ($cardArena == "Ground")
@@ -1375,7 +1375,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         $cardText .= CreateButton($playerID, "-", 10013, $i, "20px");
         $cardText .= "</div>";
       }
-      $cardText .= (Card($myAllies[$i], "concat", $cardSizeAura, $opts));
+      $cardText .= (Card($myAllies[$i], "concat", $cardSizeAura, $opts, isUnimplemented: $isUnimplemented));
       $cardText .= ("</div>");
       if ($cardArena == "Ground")
         $groundAllies .= $cardText;
