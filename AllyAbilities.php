@@ -966,6 +966,7 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities, $isUp
         AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal " . $lastPower . " damage");
         AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
         AddDecisionQueue("MZOP", $player, DamageStringBuilder($lastPower, $player, isUnitEffect:1), 1);
+        break;
       //AllyDestroyedAbility End
       default: break;
     }

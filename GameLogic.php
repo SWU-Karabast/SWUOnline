@@ -597,6 +597,13 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           SetClassState($player, $CS_PlayedAsUpgrade, 1);
           $ally->Attach($pilotUnitToMove->CardID(), $pilotUnitToMove->Owner());
           break;
+        case "MOVEPILOTUPGRADE":
+          $attachedAlly = new Ally($dqVars[0]);
+          $attachedAlly->RemoveSubcard($lastResult, movingPilot:true);
+          $newUID = PlayAlly($lastResult, $attachedAlly->Controller());
+          $newAlly = new Ally($newUID);
+          $newAlly->Exhaust();
+          break;
         case "ADDSHIELD":
           $ally = new Ally($lastResult);
           $ally->Attach("8752877738");//Shield Token
@@ -626,14 +633,14 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $targetAlly = new Ally($lastResult);
           $upgradeID = $dqVars[0];
           $mzSource = $dqVars[1];
-          $movingPilotLeader = isset($dqVars[2]) ? $dqVars[2] == "1" : false;
+          $movingPilot = isset($dqVars[2]) ? $dqVars[2] == "1" : false;
           $mzSourceArr = explode("-", $mzSource);
           $upgradeOwnerID = null;
 
           switch ($mzSourceArr[0]) {
             case "MYALLY": case "THEIRALLY":
               $sourceAlly = new Ally($mzSource);
-              $upgradeOwnerID = $sourceAlly->RemoveSubcard($upgradeID, movingPilotLeader: $movingPilotLeader);
+              $upgradeOwnerID = $sourceAlly->RemoveSubcard($upgradeID, movingPilot: $movingPilot);
               break;
             case "MYDISCARD": case "THEIRDISCARD":
               MZRemove($player, $mzSource);
