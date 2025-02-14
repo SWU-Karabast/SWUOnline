@@ -4352,6 +4352,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, DamageStringBuilder(2, $currentPlayer, isUnitEffect:true), 1);
       AddDecisionQueue("DRAW", $currentPlayer, "-", 1);
       break;
+    case "7157369742"://TIE Dagger Vanguard
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:damagedOnly=true&THEIRALLY:damagedOnly=true");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 2 damage to");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, DamageStringBuilder(2, $currentPlayer, isUnitEffect:true), 1);
+      break;
     case "5830140660"://Bazine Netal
       AddDecisionQueue("REVEALHANDCARDS", $otherPlayer, "-");
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRHAND");
