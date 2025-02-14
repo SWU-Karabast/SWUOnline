@@ -28,14 +28,7 @@
   $setArray = [];
   $cardIDArray = [];
 
-  $languagesArray = [
-    "EN" => "English",
-    "ES" => "Spanish",
-    "DE" => "German",
-    "FR" => "French",
-    "IT" => "Italian"
-  ];
-  $language = "EN";
+  $language = "FR";
 
   while ($hasMoreData)
   {
@@ -107,60 +100,62 @@
   */
 
 
-  if (!is_dir("./GeneratedCode") && $language = "EN") mkdir("./GeneratedCode", 777, true);
+  if (!is_dir("./GeneratedCode")) mkdir("./GeneratedCode", 777, true);
 
-  $generateFilename = "./GeneratedCode/GeneratedCardDictionaries.php";
-  $handler = fopen($generateFilename, "w");
+  if($language == "EN"){
+    $generateFilename = "./GeneratedCode/GeneratedCardDictionaries.php";
+    $handler = fopen($generateFilename, "w");
 
-  fwrite($handler, "<?php\r\n");
+    fwrite($handler, "<?php\r\n");
 
-  $DEFAULT_CARD_TITLE = "";
-  $DEFAULT_CARD_SUBTITLE = "";
-  $DEFAULT_CARD_COST = 0;
-  $DEFAULT_CARD_HP = 0;
-  $DEFAULT_CARD_POWER = 0;
-  $DEFAULT_CARD_UPGRADE_HP = 0;
-  $DEFAULT_CARD_UPGRADE_POWER = 0;
-  $DEFAULT_CARD_ASPECTS = "";
-  $DEFAULT_CARD_TRAITS = "";
-  $DEFAULT_CARD_ARENAS = "";
-  $DEFAULT_CARD_TYPE = "Unit";
-  $DEFAULT_CARD_TYPE2 = "";
-  $DEFAULT_CARD_UNIQUE = 0;
-  $DEFAULT_CARD_HAS_WHEN_PLAYED = false;
-  $DEFAULT_CARD_HAS_WHEN_DESTROYED = false;
-  $DEFAULT_CARD_SET = "";
-  $DEFAULT_CARD_UUID = "";
+    $DEFAULT_CARD_TITLE = "";
+    $DEFAULT_CARD_SUBTITLE = "";
+    $DEFAULT_CARD_COST = 0;
+    $DEFAULT_CARD_HP = 0;
+    $DEFAULT_CARD_POWER = 0;
+    $DEFAULT_CARD_UPGRADE_HP = 0;
+    $DEFAULT_CARD_UPGRADE_POWER = 0;
+    $DEFAULT_CARD_ASPECTS = "";
+    $DEFAULT_CARD_TRAITS = "";
+    $DEFAULT_CARD_ARENAS = "";
+    $DEFAULT_CARD_TYPE = "Unit";
+    $DEFAULT_CARD_TYPE2 = "";
+    $DEFAULT_CARD_UNIQUE = 0;
+    $DEFAULT_CARD_HAS_WHEN_PLAYED = false;
+    $DEFAULT_CARD_HAS_WHEN_DESTROYED = false;
+    $DEFAULT_CARD_SET = "";
+    $DEFAULT_CARD_UUID = "";
 
-  GenerateFunction($titleArray, $handler, "CardTitle", true, $DEFAULT_CARD_TITLE);
-  GenerateFunction($subtitleArray, $handler, "CardSubtitle", true, $DEFAULT_CARD_SUBTITLE);
-  GenerateFunction($costArray, $handler, "CardCost", false, $DEFAULT_CARD_COST);
-  GenerateFunction($hpArray, $handler, "CardHPDictionary", false, $DEFAULT_CARD_HP);
-  GenerateFunction($powerArray, $handler, "CardPower", false, $DEFAULT_CARD_POWER);
-  GenerateFunction($upgradeHPArray, $handler, "CardUpgradeHPDictionary", false, $DEFAULT_CARD_UPGRADE_HP);
-  GenerateFunction($upgradePowerArray, $handler, "CardUpgradePower", false, $DEFAULT_CARD_UPGRADE_POWER);
-  GenerateFunction($aspectsArray, $handler, "CardAspects", true, $DEFAULT_CARD_ASPECTS);
-  GenerateFunction($traitsArray, $handler, "CardTraits", true, $DEFAULT_CARD_TRAITS);
-  GenerateFunction($arenasArray, $handler, "CardArenas", true, $DEFAULT_CARD_ARENAS);
-  GenerateFunction($typeArray, $handler, "DefinedCardType", true, $DEFAULT_CARD_TYPE);
-  GenerateFunction($type2Array, $handler, "DefinedCardType2", true, $DEFAULT_CARD_TYPE2);
-  GenerateFunction($uniqueArray, $handler, "CardIsUnique", false, $DEFAULT_CARD_UNIQUE);
-  GenerateFunction($hasPlayArray, $handler, "HasWhenPlayed", false, $DEFAULT_CARD_HAS_WHEN_PLAYED);
-  GenerateFunction($hasDestroyedArray, $handler, "HasWhenDestroyed", false, $DEFAULT_CARD_HAS_WHEN_DESTROYED);
-  GenerateFunction($setArray, $handler, "CardSet", true, $DEFAULT_CARD_SET);
-  GenerateFunction($uuidLookupArray, $handler, "UUIDLookup", true, $DEFAULT_CARD_UUID);
-  GenerateFunction($cardIDArray, $handler, "CardIDLookup", true, $DEFAULT_CARD_UUID);
-  GenerateCardTitles($titleArray, $handler);
-  GenerateUnimplementedCards($handler);
-  fwrite($handler, "?>");
+    GenerateFunction($titleArray, $handler, "CardTitle", true, $DEFAULT_CARD_TITLE);
+    GenerateFunction($subtitleArray, $handler, "CardSubtitle", true, $DEFAULT_CARD_SUBTITLE);
+    GenerateFunction($costArray, $handler, "CardCost", false, $DEFAULT_CARD_COST);
+    GenerateFunction($hpArray, $handler, "CardHPDictionary", false, $DEFAULT_CARD_HP);
+    GenerateFunction($powerArray, $handler, "CardPower", false, $DEFAULT_CARD_POWER);
+    GenerateFunction($upgradeHPArray, $handler, "CardUpgradeHPDictionary", false, $DEFAULT_CARD_UPGRADE_HP);
+    GenerateFunction($upgradePowerArray, $handler, "CardUpgradePower", false, $DEFAULT_CARD_UPGRADE_POWER);
+    GenerateFunction($aspectsArray, $handler, "CardAspects", true, $DEFAULT_CARD_ASPECTS);
+    GenerateFunction($traitsArray, $handler, "CardTraits", true, $DEFAULT_CARD_TRAITS);
+    GenerateFunction($arenasArray, $handler, "CardArenas", true, $DEFAULT_CARD_ARENAS);
+    GenerateFunction($typeArray, $handler, "DefinedCardType", true, $DEFAULT_CARD_TYPE);
+    GenerateFunction($type2Array, $handler, "DefinedCardType2", true, $DEFAULT_CARD_TYPE2);
+    GenerateFunction($uniqueArray, $handler, "CardIsUnique", false, $DEFAULT_CARD_UNIQUE);
+    GenerateFunction($hasPlayArray, $handler, "HasWhenPlayed", false, $DEFAULT_CARD_HAS_WHEN_PLAYED);
+    GenerateFunction($hasDestroyedArray, $handler, "HasWhenDestroyed", false, $DEFAULT_CARD_HAS_WHEN_DESTROYED);
+    GenerateFunction($setArray, $handler, "CardSet", true, $DEFAULT_CARD_SET);
+    GenerateFunction($uuidLookupArray, $handler, "UUIDLookup", true, $DEFAULT_CARD_UUID);
+    GenerateFunction($cardIDArray, $handler, "CardIDLookup", true, $DEFAULT_CARD_UUID);
+    GenerateCardTitles($titleArray, $handler);
+    GenerateUnimplementedCards($handler);
+    fwrite($handler, "?>");
 
-  fclose($handler);
+    fclose($handler);
 
 
-  $generateFilename = "./GeneratedCode/GeneratedCardDictionaries.js";
-  $handler = fopen($generateFilename, "w");
-  GenerateFunction($titleArray, $handler, "CardTitle", true, "", language:"js");
-  fclose($handler);
+    $generateFilename = "./GeneratedCode/GeneratedCardDictionaries.js";
+    $handler = fopen($generateFilename, "w");
+    GenerateFunction($titleArray, $handler, "CardTitle", true, "", language:"js");
+    fclose($handler);
+  }
 
   function GenerateUnimplementedCards($handler) {
     $unimplementedCards = [];

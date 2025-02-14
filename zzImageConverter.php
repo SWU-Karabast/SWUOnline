@@ -11,7 +11,6 @@ function CheckImage($cardID, $url, $language, $definedType, $isBack=false, $set=
   }else{
     $filename = "./WebpImages/" . $language . "/" . $cardID . ".webp";
     $filename = "./WebpImages2/" . $language . "/" . $cardID . ".webp";
-    $filenameNew = "./UnimplementedCards/" . $language . "/" . $cardID . ".webp";
     $concatFilename = "./concat/" . $language . "/" . $cardID . ".webp";
     $cropFilename = "./crops/" . $language . "/" . $cardID . "_cropped.png";
   }
@@ -46,7 +45,7 @@ function CheckImage($cardID, $url, $language, $definedType, $isBack=false, $set=
     }
     $isNew = true;
   }
-  if($isNew && !file_exists($filenameNew)) {
+  if($language == "EN" && $isNew && !file_exists($filenameNew)) {
     echo("Converting image for " . $cardID . " to new format.<BR>");
     try {
       $image = imagecreatefromwebp($filename);
