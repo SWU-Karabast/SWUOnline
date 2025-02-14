@@ -2373,7 +2373,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYALLY-" . $index, 1);
       AddDecisionQueue("SETDQVAR", $currentPlayer, "1", 1);
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "1", 1);
-      AddDecisionQueue("SETDQVAR", $currentPlayer, "2", 1);//set movingPilotLeader to true
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "2", 1);//set movingPilot to true
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Vehicle;canAddPilot=1", 1);
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to move <0> to.", 1);
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
@@ -6169,6 +6169,19 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("SHOWOPTIONS", $currentPlayer, "$cardID&$options", 1);
         AddDecisionQueue("MODAL", $currentPlayer, "CORVUS", 1);
       }
+      break;
+    case "8993849612"://Eject
+      Draw($currentPlayer);
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to eject a pilot from.");
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:hasPilotOnly=1&THEIRALLY:hasPilotOnly=1");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETUPGRADES", 1);
+      AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Pilot", 1);
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a pilot to eject.", 1);
+      AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "MOVEPILOTUPGRADE", 1);
       break;
     //PlayAbility End
     default: break;

@@ -522,7 +522,7 @@ class Ally {
     return $subCardUniqueID;
   }
 
-  function RemoveSubcard($subcardID, $subcardUniqueID = "", $movingPilotLeader = false) {
+  function RemoveSubcard($subcardID, $subcardUniqueID = "", $movingPilot = false) {
     global $CS_PlayIndex;
     if($this->index == -1) return false;
     $subcards = $this->GetSubcards();
@@ -537,7 +537,7 @@ class Ally {
         $subcards = array_values($subcards);
         $this->allies[$this->index + 4] = count($subcards) > 0 ? implode(",", $subcards) : "-";
         if(DefinedTypesContains($subcardID, "Upgrade")) UpgradeDetached($subcardID, $this->playerID, "MYALLY-" . $this->index);
-        if(CardIDIsLeader($subcardID) && !$movingPilotLeader) {
+        if(CardIDIsLeader($subcardID) && !$movingPilot) {
           $leaderUndeployed = LeaderUndeployed($subcardID);
           if($leaderUndeployed != "") {
             AddCharacter($leaderUndeployed, $this->playerID, counters:1, status:1);
