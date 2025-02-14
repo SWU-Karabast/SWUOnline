@@ -1969,6 +1969,8 @@ function LeaderUnit($cardID) {
       return "fda7bdc316";
     case "8520821318"://Poe Dameron
       return "3eb545eb4b";
+    case "3905028200"://Admiral Trench
+      return "7c082aefc9";
     default: return "";
   }
 }
@@ -2115,6 +2117,8 @@ function LeaderUndeployed($cardID) {
       return "3132453342";
     case "3eb545eb4b"://Poe Dameron
       return "8520821318";
+    case "7c082aefc9"://Admiral Trench Leader Unit
+      return "3905028200";
     default: return "";
   }
 }

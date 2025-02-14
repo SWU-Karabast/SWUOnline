@@ -3,7 +3,8 @@
 function LeaderPilotDeploy($player, $leader, $target) {
   $targetUnit = new Ally($target, $player);
   $cardID = LeaderUnit($leader);
-  $targetUnit->Attach($cardID, $player);
+  $epicAction = $leader != "8520821318";
+  $targetUnit->Attach($cardID, $player, epicAction:$epicAction);
 
   switch($cardID) {
     //Jump to Lightspeed

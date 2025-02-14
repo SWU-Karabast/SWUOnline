@@ -208,6 +208,10 @@ class Ally {
     return $isLeaderPilot || PilotingCost($cardID) >= 0 && GetClassState($player, $CS_PlayedAsUpgrade) == "1";
   }
 
+  function FromEpicAction() {
+    return $this->allies[$this->index+16] == 1;
+  }
+
   function IsExhausted() {
     return $this->allies[$this->index+1] == 1;
   }
@@ -510,11 +514,11 @@ class Ally {
     $this->allies[$this->index+1] = 1;
   }
 
-  function AddSubcard($cardID, $ownerID = null, $asPilot = false) {
+  function AddSubcard($cardID, $ownerID = null, $asPilot = false, $epicAction = false) {
     $subCardUniqueID = GetUniqueId();
     $ownerID = $ownerID ?? $this->playerID;
-    if($this->allies[$this->index+4] == "-") $this->allies[$this->index+4] = $cardID . "," . $ownerID . "," . ($asPilot ? "1" : "0") . "," . $subCardUniqueID;
-    else $this->allies[$this->index+4] = $this->allies[$this->index+4] . "," . $cardID . "," . $ownerID . "," . ($asPilot ? "1" : "0") . "," . $subCardUniqueID;
+    if($this->allies[$this->index+4] == "-") $this->allies[$this->index+4] = $cardID . "," . $ownerID . "," . ($asPilot ? "1" : "0") . "," . $subCardUniqueID . "," . ($epicAction ? "1" : "0") . ",0,0,0";
+    else $this->allies[$this->index+4] = $this->allies[$this->index+4] . "," . $cardID . "," . $ownerID . "," . ($asPilot ? "1" : "0") . "," . $subCardUniqueID . "," . ($epicAction ? "1" : "0") . ",0,0,0";
 
     if($asPilot) {
       AllyPlayedAsUpgradeAbility($cardID, $ownerID, $this);
@@ -537,7 +541,7 @@ class Ally {
         $subcards = array_values($subcards);
         $this->allies[$this->index + 4] = count($subcards) > 0 ? implode(",", $subcards) : "-";
         if(DefinedTypesContains($subcardID, "Upgrade")) UpgradeDetached($subcardID, $this->playerID, "MYALLY-" . $this->index);
-        if(CardIDIsLeader($subcardID) && !$movingPilot) {
+        if(CardIDIsLeader($subcardID) && !$movingPilot && $subcards[$i+4] == 1) {
           $leaderUndeployed = LeaderUndeployed($subcardID);
           if($leaderUndeployed != "") {
             AddCharacter($leaderUndeployed, $this->playerID, counters:1, status:1);
@@ -553,9 +557,9 @@ class Ally {
     AddCurrentTurnEffect($effectID, $this->PlayerID(), from:$from, uniqueID:$this->UniqueID());
   }
 
-  function Attach($cardID, $ownerID = null) {
+  function Attach($cardID, $ownerID = null, $epicAction = false) {
     $receivingPilot = $this->ReceivingPilot($cardID);
-    $subcardUniqueID = $this->AddSubcard($cardID, $ownerID, asPilot: $receivingPilot);
+    $subcardUniqueID = $this->AddSubcard($cardID, $ownerID, $receivingPilot, $epicAction);
     if (CardIsUnique($cardID)) {
       $this->CheckUniqueUpgrade($cardID);
       if($receivingPilot) {
