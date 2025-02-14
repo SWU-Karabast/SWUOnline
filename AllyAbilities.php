@@ -2647,6 +2647,28 @@ function SpecificAllyAttackAbilities($attackID)
     case "0524529055"://Snap Wexley
       AddCurrentTurnEffect("0524529055-A", $mainPlayer, from:"PLAY");
       break;
+    case "7325248681"://Sabine's Masterpiece
+      if(SearchCount(SearchAllies($mainPlayer, aspect:"Vigilance")) > 0) {
+        Restore(2, $mainPlayer);
+      }
+      if(SearchCount(SearchAllies($mainPlayer, aspect:"Command")) > 0) {
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY");
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to give experience");
+        AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "ADDEXPERIENCE", 1);
+      }
+      if(SearchCount(SearchAllies($mainPlayer, aspect:"Aggression")) > 0) {
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY");
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 1 damage to");
+        AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $mainPlayer, DamageStringBuilder(1, $mainPlayer, 1), 1);
+      }
+      if(SearchCount(SearchAllies($mainPlayer, aspect:"Cunning")) > 0) {
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose one");
+        AddDecisionQueue("BUTTONINPUT", $mainPlayer, "Exhaust_Theirs,Ready_Mine", 1);
+        AddDecisionQueue("SPECIFICCARD", $mainPlayer, "SABINES_MP_CUNNING", 1);
+      }
+      break;
   }
 
   // Current Effect Abilities
