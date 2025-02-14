@@ -735,9 +735,13 @@ function ReplaceBanishModifier($player, $oldMod, $newMod)
 function UnsetTurnModifiers()
 {
   UnsetDiscardModifier(1, "TT");
+  UnsetDiscardModifier(1, "TTOP"); // TTOP is the same as TT, but for the opponent
   UnsetDiscardModifier(1, "TTFREE");
+  UnsetDiscardModifier(1, "TTOPFREE"); // TTOPFREE is the same as TTFREE, but for the opponent
   UnsetDiscardModifier(2, "TT");
+  UnsetDiscardModifier(2, "TTOP"); // TTOP is the same as TT, but for the opponent
   UnsetDiscardModifier(2, "TTFREE");
+  UnsetDiscardModifier(2, "TTOPFREE"); // TTOPFREE is the same as TTFREE, but for the opponent
 }
 
 function UnsetTurnBanish()
@@ -5109,9 +5113,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "3357486161"://Political Pressure
       $options = "Discard a random card from your hand;Opponent creates 2 Battle Droid tokens";
-      AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose one");
-      AddDecisionQueue("CHOOSEOPTION", $otherPlayer, "$cardID&$options");
-      AddDecisionQueue("SHOWOPTIONS", $otherPlayer, "$cardID&$options");
+      if (CountHand($otherPlayer) > 0) {
+        AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose one");
+        AddDecisionQueue("CHOOSEOPTION", $otherPlayer, "$cardID&$options");
+        AddDecisionQueue("SHOWOPTIONS", $otherPlayer, "$cardID&$options");
+      } else {
+        AddDecisionQueue("PASSPARAMETER", $otherPlayer, 1); // Create 2 Battle Droid tokens
+      }
       AddDecisionQueue("MODAL", $otherPlayer, "POLITICALPRESSURE");
       break;
     case "0511508627"://Captain Rex
