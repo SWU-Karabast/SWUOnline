@@ -12,6 +12,11 @@ function EffectHitEffect($cardID)
       WriteLog("Heroic Sacrifice defeated " . CardLink($ally->CardID(), $ally->CardID()));
       $ally->Destroy();
       break;
+    case "8734471238"://Stay On Target
+      if (GetAttackTarget() == "THEIRCHAR-0") {
+        Draw($mainPlayer);
+      }
+      break;      
     case "8988732248-1"://Rebel Assault
       AddCurrentTurnEffect("8988732248-2", $mainPlayer);
       break;
@@ -158,6 +163,7 @@ function EffectAttackModifier($cardID, $playerID="")
     case "1701265931": return 4;//Moment of Glory
     case "1900571801": return 2;//Overwhelming Barrage
     case "3809048641": return 3;//Surprise Strike
+    case "8734471238": return 2;//Stay On Target
     case "3038238423": return 2;//Fleet Lieutenant
     case "3258646001": return 2;//Steadfast Senator
     case "9757839764": return 2;//Adelphi Patrol Wing
@@ -842,6 +848,7 @@ function IsCombatEffectActive($cardID)
     case "2569134232"://Jedha City
     case "1323728003"://Electrostaff
     case "3809048641"://Surprise Strike
+    case "8734471238"://Stay On Target
     case "9757839764"://Adelphi Patrol Wing
     case "3038238423"://Fleet Lieutenant
     case "8244682354"://Jyn Erso
