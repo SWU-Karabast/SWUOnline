@@ -161,7 +161,7 @@ include_once 'Header.php';
     <div style="position: relative;">
       <div style='vertical-align:middle; text-align:center;'>
         <a href="https://swustats.net" target="_blank">
-          <img src="./Images/SWUStatsHypergeo.png" alt="SHD" style="max-width: 100%; border-radius: 5px;">
+          <img src="./Images/SWUStatsHypergeo.webp" alt="SHD" style="max-width: 100%; border-radius: 5px;">
         </a>
         <div style="text-align: left;">
         <h3 style="margin: 15px 0; display: block;">SWU Stats</h3>
