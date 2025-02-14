@@ -215,7 +215,7 @@ function AttackModifier($cardID, $player, $index)
       $allies = GetAllies($player);
       $totalSwarmingVultureDroids = 0;
       for ($i = 0; $i < count($allies); $i += AllyPieces()) {
-        if ($allies[$i] == "2177194044") {
+        if ($allies[$i] == "2177194044" && $i != $index) {
           $totalSwarmingVultureDroids++;
         }
       }
