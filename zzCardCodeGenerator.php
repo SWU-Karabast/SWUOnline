@@ -28,7 +28,7 @@
   $setArray = [];
   $cardIDArray = [];
 
-  $language = "DE";
+  $language = "EN";
 
   while ($hasMoreData)
   {
