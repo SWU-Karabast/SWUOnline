@@ -649,7 +649,7 @@ function AllyDoesAbilityExhaust($cardID, $abilityIndex) {
   $leaderUpgradeAbilityID = GetClassState($currentPlayer, $CS_LeaderUpgradeAbilityID1);
   switch($leaderUpgradeAbilityID) {
     case "3eb545eb4b"://Poe Dameron JTL leader upgrade
-      return $abilityIndex == 1;
+      return $abilityIndex == 0;
     default: break;
   }
 
