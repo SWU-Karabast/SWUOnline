@@ -27,8 +27,8 @@
   $hasDestroyedArray = [];
   $setArray = [];
   $cardIDArray = [];
-
-  $language = "FR";
+  
+  $language = "IT";
 
   while ($hasMoreData)
   {
@@ -261,7 +261,7 @@
 
     // Type 2
     $definedType2 = $card->type2->data ? $card->type2->data->attributes->name : "";
-    if ($definedType2 == "Leader Unit") $definedType2 = "Unit";
+    if ($definedType2 == "Leader Unit" || $definedType2 == "Leader Unité" || $definedType2 = "Unidad Líder" || $definedType2 == "Anführer-Einheit" || $definedType2 = "Unità Leader") $definedType2 = "Unit";
     if ($definedType2 && $definedType2 != $DEFAULT_CARD_TYPE2) {
       $type2Array[$uuid] = $definedType2;
     }
