@@ -202,9 +202,14 @@ class Ally {
   function ReceivingPilot($cardID, $player = "") {
     global $CS_PlayedAsUpgrade;
     if($player == "") $player = $this->PlayerID();
-    $isLeaderPilot = CardIDIsLeader($cardID) && LeaderCanPilot(LeaderUndeployed($cardID));
+    $isLeaderPilot = $cardID == "3eb545eb4b" //Poe Dameron JTL leader
+      || (CardIDIsLeader($cardID) && LeaderCanPilot(LeaderUndeployed($cardID)));
 
     return $isLeaderPilot || PilotingCost($cardID) >= 0 && GetClassState($player, $CS_PlayedAsUpgrade) == "1";
+  }
+
+  function FromEpicAction() {
+    return $this->allies[$this->index+16] == 1;
   }
 
   function IsExhausted() {
@@ -509,11 +514,11 @@ class Ally {
     $this->allies[$this->index+1] = 1;
   }
 
-  function AddSubcard($cardID, $ownerID = null, $asPilot = false) {
+  function AddSubcard($cardID, $ownerID = null, $asPilot = false, $epicAction = false) {
     $subCardUniqueID = GetUniqueId();
     $ownerID = $ownerID ?? $this->playerID;
-    if($this->allies[$this->index+4] == "-") $this->allies[$this->index+4] = $cardID . "," . $ownerID . "," . ($asPilot ? "1" : "0") . "," . $subCardUniqueID;
-    else $this->allies[$this->index+4] = $this->allies[$this->index+4] . "," . $cardID . "," . $ownerID . "," . ($asPilot ? "1" : "0") . "," . $subCardUniqueID;
+    if($this->allies[$this->index+4] == "-") $this->allies[$this->index+4] = $cardID . "," . $ownerID . "," . ($asPilot ? "1" : "0") . "," . $subCardUniqueID . "," . ($epicAction ? "1" : "0") . ",0,0,0";
+    else $this->allies[$this->index+4] = $this->allies[$this->index+4] . "," . $cardID . "," . $ownerID . "," . ($asPilot ? "1" : "0") . "," . $subCardUniqueID . "," . ($epicAction ? "1" : "0") . ",0,0,0";
 
     if($asPilot) {
       AllyPlayedAsUpgradeAbility($cardID, $ownerID, $this);
@@ -521,7 +526,8 @@ class Ally {
     return $subCardUniqueID;
   }
 
-  function RemoveSubcard($subcardID, $subcardUniqueID = "") {
+  function RemoveSubcard($subcardID, $subcardUniqueID = "", $movingPilot = false) {
+    global $CS_PlayIndex;
     if($this->index == -1) return false;
     $subcards = $this->GetSubcards();
     for($i=0; $i<count($subcards); $i+=SubcardPieces()) {
@@ -535,10 +541,11 @@ class Ally {
         $subcards = array_values($subcards);
         $this->allies[$this->index + 4] = count($subcards) > 0 ? implode(",", $subcards) : "-";
         if(DefinedTypesContains($subcardID, "Upgrade")) UpgradeDetached($subcardID, $this->playerID, "MYALLY-" . $this->index);
-        if(CardIDIsLeader($subcardID)) {
+        if(CardIDIsLeader($subcardID) && !$movingPilot) {
           $leaderUndeployed = LeaderUndeployed($subcardID);
           if($leaderUndeployed != "") {
-            AddCharacter($leaderUndeployed, $this->playerID, counters:1, status:1);
+            $epicAction = $subcards[$i+4] == 1;
+            AddCharacter($leaderUndeployed, $this->playerID, counters:$epicAction ? 1 : 0, status:1);
           }
         }
         return $ownerId;
@@ -551,9 +558,9 @@ class Ally {
     AddCurrentTurnEffect($effectID, $this->PlayerID(), from:$from, uniqueID:$this->UniqueID());
   }
 
-  function Attach($cardID, $ownerID = null) {
+  function Attach($cardID, $ownerID = null, $epicAction = false) {
     $receivingPilot = $this->ReceivingPilot($cardID);
-    $subcardUniqueID = $this->AddSubcard($cardID, $ownerID, asPilot: $receivingPilot);
+    $subcardUniqueID = $this->AddSubcard($cardID, $ownerID, $receivingPilot, $epicAction);
     if (CardIsUnique($cardID)) {
       $this->CheckUniqueUpgrade($cardID);
       if($receivingPilot) {
@@ -774,7 +781,7 @@ class Ally {
     $upgrades = $this->GetUpgrades(withMetadata:true);
     for($i=0; $i<count($upgrades); $i+=SubcardPieces()) {
       if (CardIDIsLeader($upgrades[$i]) && $upgrades[$i+2] == "1") {
-        return true;
+        return $upgrades[$i] != "3eb545eb4b";//Poe Dameron JTL leader (so far the only one)
       }
     }
     return false;

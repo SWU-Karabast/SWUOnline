@@ -18,7 +18,7 @@ function CreateTieFighter($player, $from = "-") {
 }
 
 // This function put an ally into play for a player, which means no when played abilities are triggered.
-function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null, $cloned = false, $playAbility = false)
+function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null, $cloned = false, $playAbility = false, $epicAction = false)
 {
   $uniqueID = GetUniqueId();
   $allies = &GetAllies($player);
@@ -29,8 +29,8 @@ function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null,
   $allies[] = 0; //Frozen
   $allies[] = $subCards; //Subcards
   $allies[] = $uniqueID; //Unique ID
-  $allies[] = AllyEnduranceCounters($cardID); //Endurance Counters
-  $allies[] = 0; //Buff Counters
+  $allies[] = 0;//Unused
+  $allies[] = 0; //Unused
   $allies[] = 1; //Ability/effect uses
   $allies[] = 0; //Round health modifier
   $allies[] = 0; //Times attacked
@@ -39,7 +39,7 @@ function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null,
   $allies[] = $cloned ? 1 : 0; //Cloned
   $allies[] = 0; //Healed this turn
   $allies[] = "NA";//Arena Override
-  $allies[] = 0; //Unused
+  $allies[] = $epicAction ? 1 : 0; //Epic Action
   $index = count($allies) - AllyPieces();
   CurrentEffectAllyEntersPlay($player, $index);
   CheckUniqueAlly($uniqueID);
@@ -591,6 +591,8 @@ function AllyEntersPlayState($cardID, $player, $from="-")
 }
 
 function AllyPlayableExhausted(Ally $ally) {
+  global $CS_LeaderUpgradeAbilityID1, $CS_NumUsesLeaderUpgrade1;
+  //global $CS_LeaderUpgradeAbilityID2, $CS_NumUsesLeaderUpgrade2;//Twin Suns prep
   $cardID = $ally->CardID();
   switch($cardID) {
     case "5630404651"://MagnaGuard Wing Leader
@@ -602,8 +604,18 @@ function AllyPlayableExhausted(Ally $ally) {
     case "2b13cefced"://Fennec Shand Leader Unit
     case "a742dea1f1"://Han Solo Red Leader Unit
       return true;
-    default: return false;
+    default: break;
   }
+
+  $leaderUpgradeAbilityID = GetClassState($ally->Controller(), $CS_LeaderUpgradeAbilityID1);
+  $numUsesLeaderUpgradeUses = GetClassState($ally->Controller(), $CS_NumUsesLeaderUpgrade1);
+  switch($leaderUpgradeAbilityID) {
+    case "3eb545eb4b"://Poe Dameron JTL leader upgrade
+      return $ally->HasUpgrade("3eb545eb4b") && $numUsesLeaderUpgradeUses > 0;
+    default: break;
+  }
+
+  return false;
 }
 
 function TheirAllyPlayableExhausted($ally) {
@@ -616,6 +628,7 @@ function TheirAllyPlayableExhausted($ally) {
 }
 
 function AllyDoesAbilityExhaust($cardID, $abilityIndex) {
+  global $currentPlayer, $CS_LeaderUpgradeAbilityID1, $CS_LeaderUpgradeAbilityID2;
   switch($cardID) {
     case "5630404651"://MagnaGuard Wing Leader
       return $abilityIndex == 1;
@@ -631,8 +644,16 @@ function AllyDoesAbilityExhaust($cardID, $abilityIndex) {
       return $abilityIndex == 1;
     case "a742dea1f1"://Han Solo Red Leader Unit
       return $abilityIndex == 1;
-    default: return true;
+    default: break;
   }
+  $leaderUpgradeAbilityID = GetClassState($currentPlayer, $CS_LeaderUpgradeAbilityID1);
+  switch($leaderUpgradeAbilityID) {
+    case "3eb545eb4b"://Poe Dameron JTL leader upgrade
+      return $abilityIndex == 0;
+    default: break;
+  }
+
+  return true;
 }
 
 function TheirAllyDoesAbilityExhaust($cardID, $abilityIndex) {
@@ -661,9 +682,10 @@ function AllyLeavesPlayAbility($player, $index)
   $allies = &GetAllies($player);
   $cardID = $allies[$index];
   $uniqueID = $allies[$index + 5];
+  $fromEpicAction = $allies[$index + 16];
   $leaderUndeployed = LeaderUndeployed($cardID);
   if($leaderUndeployed != "") {
-    AddCharacter($leaderUndeployed, $player, counters:1, status:1);
+    AddCharacter($leaderUndeployed, $player, counters:$fromEpicAction ? 1 : 0, status:1);
   }
   //Pilot leader upgrades
   $subcardsArr = explode(",", $allies[$index + 4]);
@@ -671,7 +693,7 @@ function AllyLeavesPlayAbility($player, $index)
     if(CardIDIsLeader($subcardsArr[$i])) {
       $leaderUndeployed = LeaderUndeployed($subcardsArr[$i]);
       if($leaderUndeployed != "") {
-        AddCharacter($leaderUndeployed, $player, counters:1, status:1);
+        AddCharacter($leaderUndeployed, $player, counters:$subcardsArr[$i+4] == 1 ? 1 : 0, status:1);
       }
     }
   }
@@ -903,7 +925,7 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities, $isUp
         AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $player, "0249398533,PLAY", 1);
         break;
       case "0235116526"://Fleet Interdictor
-        MZChooseAndDestroy($player, "MYALLY:maxCost=3;arena=Space&THEIRALLY:maxCost=3;arena=Space");
+        MZChooseAndDestroy($player, "MYALLY:maxCost=3;arena=Space&THEIRALLY:maxCost=3;arena=Space", may:true);
         break;
       case "0596500013"://Landing Shuttle
         AddDecisionQueue("SETDQCONTEXT", $player, "Do you want to draw a card?");
@@ -945,6 +967,7 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities, $isUp
         AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal " . $lastPower . " damage");
         AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
         AddDecisionQueue("MZOP", $player, DamageStringBuilder($lastPower, $player, isUnitEffect:1), 1);
+        break;
       //AllyDestroyedAbility End
       default: break;
     }
@@ -1348,13 +1371,13 @@ function AllyCanBeAttackTarget($player, $index, $cardID)
   }
 }
 
-function AllyEnduranceCounters($cardID)
-{
-  switch($cardID) {
-    case "UPR417": return 1;
-    default: return 0;
-  }
-}
+// function AllyEnduranceCounters($cardID)//FAB
+// {
+//   switch($cardID) {
+//     case "UPR417": return 1;
+//     default: return 0;
+//   }
+// }
 
 //FAB
 // function AllyDamagePrevention($player, $index, $damage)
@@ -2624,6 +2647,28 @@ function SpecificAllyAttackAbilities($attackID)
       break;
     case "0524529055"://Snap Wexley
       AddCurrentTurnEffect("0524529055-A", $mainPlayer, from:"PLAY");
+      break;
+    case "7325248681"://Sabine's Masterpiece
+      if(SearchCount(SearchAllies($mainPlayer, aspect:"Vigilance")) > 0) {
+        Restore(2, $mainPlayer);
+      }
+      if(SearchCount(SearchAllies($mainPlayer, aspect:"Command")) > 0) {
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY");
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to give experience");
+        AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "ADDEXPERIENCE", 1);
+      }
+      if(SearchCount(SearchAllies($mainPlayer, aspect:"Aggression")) > 0) {
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY&MYCHAR:definedType=Base&THEIRCHAR:definedType=Base");
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to deal 1 damage to");
+        AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $mainPlayer, DamageStringBuilder(1, $mainPlayer, 1), 1);
+      }
+      if(SearchCount(SearchAllies($mainPlayer, aspect:"Cunning")) > 0) {
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose one");
+        AddDecisionQueue("BUTTONINPUT", $mainPlayer, "Exhaust_Theirs,Ready_Mine", 1);
+        AddDecisionQueue("SPECIFICCARD", $mainPlayer, "SABINES_MP_CUNNING", 1);
+      }
       break;
   }
 

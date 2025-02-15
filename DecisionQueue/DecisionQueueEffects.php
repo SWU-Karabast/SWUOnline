@@ -918,6 +918,10 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       $otherPlayer = $player == 1 ? 2 : 1;
       DamagePlayerAllies($otherPlayer, $damage, "8174214418", arena:$arena);
       break;
+    case "SABINES_MP_CUNNING":
+      if($lastResult == "Exhaust_Theirs") ExhaustResource($otherPlayer, 1);
+      else if ($lastResult == "Ready_Mine") ReadyResource($player, 1);
+      break;
     //SpecificCardLogic End
     default: return "";
   }

@@ -342,12 +342,12 @@ function ClearNextCardArcaneBuffs($player, $playedCard="", $from="")
 
 function IncrementClassState($player, $piece, $amount = 1)
 {
-  SetClassState($player, $piece, (GetClassState($player, $piece) + $amount));
+  SetClassState($player, $piece, (intval(GetClassState($player, $piece)) + $amount));
 }
 
 function DecrementClassState($player, $piece, $amount = 1)
 {
-  SetClassState($player, $piece, (GetClassState($player, $piece) - $amount));
+  SetClassState($player, $piece, (intval(GetClassState($player, $piece)) - $amount));
 }
 
 function AppendClassState($player, $piece, $value, $allowRepeats = true)

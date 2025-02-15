@@ -3,7 +3,8 @@
 function LeaderPilotDeploy($player, $leader, $target) {
   $targetUnit = new Ally($target, $player);
   $cardID = LeaderUnit($leader);
-  $targetUnit->Attach($cardID, $player);
+  $epicAction = $leader != "8520821318";
+  $targetUnit->Attach($cardID, $player, epicAction:$epicAction);
 
   switch($cardID) {
     //Jump to Lightspeed
@@ -50,6 +51,19 @@ function HanSoloPilotLeaderJTL($player) {
   }
 
   ReadyResource($player, $odds);
+}
+
+function CheckForLeaderUpgradeAbilities($ally) {
+  global $CS_LeaderUpgradeAbilityID1;
+  $upgrades = $ally->GetUpgrades(withMetadata:false);
+  for($i=0; $i<count($upgrades); ++$i) {
+    switch($upgrades[$i]) {
+      case "3eb545eb4b":
+        SetClassState($ally->Controller(), $CS_LeaderUpgradeAbilityID1, $upgrades[$i]);
+        break;
+      default: break;
+    }
+  }
 }
 
 ?>

@@ -2345,6 +2345,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
 {
   global $currentPlayer, $layers, $CS_PlayIndex, $CS_OppIndex, $initiativePlayer, $CCS_CantAttackBase, $CS_NumAlliesDestroyed;
   global $CS_NumFighterAttacks, $CS_NumNonTokenVehicleAttacks, $CS_NumFirstOrderPlayed;
+  global $CS_NumUsesLeaderUpgrade1, $CS_NumUsesLeaderUpgrade2;
   $index = GetClassState($currentPlayer, $CS_PlayIndex);
   $otherPlayer = $currentPlayer == 1 ? 2 : 1;
   if($from == "PLAY" && IsAlly($cardID, $currentPlayer)) {
@@ -2369,6 +2370,20 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $ally = new Ally("MYALLY-" . $index, $currentPlayer);
       Mill($otherPlayer, ceil($ally->Health()/2));
       return "";
+    } else if ($abilityName == "Move Poe Pilot") {
+      DecrementClassState($currentPlayer, $CS_NumUsesLeaderUpgrade1, 1);
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "3eb545eb4b", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYALLY-" . $index, 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "1", 1);
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "1", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "2", 1);//set movingPilot to true
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Vehicle", 1);
+      AddDecisionQueue("MZFILTER", $currentPlayer, "hasPilot=1", 1);
+      AddDecisionQueue("PASSREVERT", $currentPlayer, "-");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to move <0> to.", 1);
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "MOVEUPGRADE", 1);
     }
   }
   if($target != "-")
@@ -2389,18 +2404,31 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
   if($from == "EQUIP" && DefinedTypesContains($cardID, "Leader", $currentPlayer)) {
     $abilityName = GetResolvedAbilityName($cardID, $from);
     if($abilityName == "Deploy" || $abilityName == "Pilot" || $abilityName == "") {
-      if(NumResources($currentPlayer) < CardCost($cardID)) {
+      if($cardID != "8520821318"//Poe Dameron JTL leader pilot
+          && NumResources($currentPlayer) < CardCost($cardID)) {
         WriteLog("You don't control enough resources to deploy that leader; reverting the game state.");
         RevertGamestate();
         return "";
       }
       if($abilityName == "Deploy" || $abilityName == "") {
-        $playUniqueID = PlayAlly(LeaderUnit($cardID), $currentPlayer);
+        $epicAction = $cardID != "3905028200";//Admiral Trench leader (so far the only one)
+        $playUniqueID = PlayAlly(LeaderUnit($cardID), $currentPlayer, epicAction:$epicAction);
         if (HasShielded(LeaderUnit($cardID), $currentPlayer)) {
           AddLayer("TRIGGER", $currentPlayer, "SHIELDED", "-", "-", $playUniqueID);
         }
         PlayAbility(LeaderUnit($cardID), "CHAR", 0, "-", "-", false, $uniqueId);
-      } else if($abilityName == "Pilot") {
+      } else if($abilityName == "Pilot" && $cardID == "8520821318") {
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, $cardID);
+        AddDecisionQueue("SETDQVAR", $currentPlayer, "0");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Vehicle");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "hasPilot=1");
+        AddDecisionQueue("PASSREVERT", $currentPlayer, "-");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to attach <0>");
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("SHOWSELECTEDTARGET", $currentPlayer, "-", 1);
+        AddDecisionQueue("DEPLOYLEADERASUPGRADE", $currentPlayer, $cardID, 1);
+      }
+      else if($abilityName == "Pilot") {
         AddDecisionQueue("PASSPARAMETER", $currentPlayer, $cardID);
         AddDecisionQueue("SETDQVAR", $currentPlayer, "0");
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Vehicle;canAddPilot=1");
@@ -4356,6 +4384,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, DamageStringBuilder(2, $currentPlayer, isUnitEffect:true), 1);
       AddDecisionQueue("DRAW", $currentPlayer, "-", 1);
       break;
+    case "7157369742"://TIE Dagger Vanguard
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:damagedOnly=true&THEIRALLY:damagedOnly=true");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 2 damage to");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, DamageStringBuilder(2, $currentPlayer, isUnitEffect:true), 1);
+      break;
     case "5830140660"://Bazine Netal
       AddDecisionQueue("REVEALHANDCARDS", $otherPlayer, "-");
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRHAND");
@@ -6005,8 +6039,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "8105698374"://Commandeer
-      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Vehicle;maxCost=6;hasPilotOnly=0&THEIRALLY:trait=Vehicle;maxCost=6;hasPilotOnly=0");
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Vehicle;maxCost=6&THEIRALLY:trait=Vehicle;maxCost=6");
       AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "hasPilot=1");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to take control of", 1);
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
@@ -6158,6 +6193,19 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("SHOWOPTIONS", $currentPlayer, "$cardID&$options", 1);
         AddDecisionQueue("MODAL", $currentPlayer, "CORVUS", 1);
       }
+      break;
+    case "8993849612"://Eject
+      Draw($currentPlayer);
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to eject a pilot from.");
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:hasPilotOnly=1&THEIRALLY:hasPilotOnly=1");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETUPGRADES", 1);
+      AddDecisionQueue("FILTER", $currentPlayer, "LastResult-include-trait-Pilot", 1);
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a pilot to eject.", 1);
+      AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "MOVEPILOTUPGRADE", 1);
       break;
     //PlayAbility End
     default: break;

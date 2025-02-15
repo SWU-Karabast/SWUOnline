@@ -16,7 +16,7 @@ function EffectHitEffect($cardID)
       if (GetAttackTarget() == "THEIRCHAR-0") {
         Draw($mainPlayer);
       }
-      break;      
+      break;
     case "8988732248-1"://Rebel Assault
       AddCurrentTurnEffect("8988732248-2", $mainPlayer);
       break;
@@ -836,10 +836,10 @@ function CurrentEffectStartTurnAbilities()
   }
 }
 
-function IsCombatEffectActive($cardID)
+function IsCombatEffectActive($cardID, $reportMode=false)
 {
   global $combatChain;
-  if(count($combatChain) == 0) return;
+  if(count($combatChain) == 0 && !$reportMode) return;
   $effectArr = explode("-", $cardID);
   $cardID = $effectArr[0];
   switch($cardID)
