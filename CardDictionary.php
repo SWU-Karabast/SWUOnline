@@ -1063,7 +1063,11 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
           break;
         case "3eb545eb4b"://Poe Dameron JTL leader
           if(GetClassState($currentPlayer, $CS_NumUsesLeaderUpgrade1) > 0) {
-            $abilityTypes = "A,AA";
+            if($abilityTypes != "") $abilityTypes .= ",";
+            $abilityTypes .= "A";
+            if($ally->IsExhausted() && !ResolvingCombatEffect()) {
+              $abilityTypes = FilterOutAttackAbilityType($abilityTypes);
+            }
           }
           break;
         default: break;
@@ -1314,8 +1318,11 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
           break;
         case "3eb545eb4b"://Poe Dameron JTL leader
           if(GetClassState($currentPlayer, $CS_NumUsesLeaderUpgrade1) > 0) {
-            $abilityNames = "Move Poe Pilot,Attack";
-            if($ally->IsExhausted()) $abilityNames = FilterOutAttackAbilityName($abilityNames);
+            if($abilityNames != "") $abilityNames .= ",";
+            $abilityNames .= "Move Poe Pilot";
+            if($ally->IsExhausted() && !ResolvingCombatEffect()) {
+              $abilityNames = FilterOutAttackAbilityName($abilityNames);
+            }
           }
           break;
         default: break;
