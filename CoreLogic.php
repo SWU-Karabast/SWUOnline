@@ -2374,7 +2374,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("SETDQVAR", $currentPlayer, "1", 1);
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "1", 1);
       AddDecisionQueue("SETDQVAR", $currentPlayer, "2", 1);//set movingPilot to true
-      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Vehicle;canAddPilot=1", 1);
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Vehicle", 1);
+      AddDecisionQueue("MZFILTER", $currentPlayer, "hasPilot=1", 1);
+      AddDecisionQueue("PASSREVERT", $currentPlayer, "-");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to move <0> to.", 1);
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "MOVEUPGRADE", 1);
@@ -2404,12 +2406,24 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         return "";
       }
       if($abilityName == "Deploy" || $abilityName == "") {
-        $playUniqueID = PlayAlly(LeaderUnit($cardID), $currentPlayer);
+        $epicAction = $cardID != "3905028200";//Admiral Trench leader (so far the only one)
+        $playUniqueID = PlayAlly(LeaderUnit($cardID), $currentPlayer, epicAction:$epicAction);
         if (HasShielded(LeaderUnit($cardID), $currentPlayer)) {
           AddLayer("TRIGGER", $currentPlayer, "SHIELDED", "-", "-", $playUniqueID);
         }
         PlayAbility(LeaderUnit($cardID), "CHAR", 0, "-", "-", false, $uniqueId);
-      } else if($abilityName == "Pilot") {
+      } else if($abilityName == "Pilot" && $cardID == "8520821318") {
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, $cardID);
+        AddDecisionQueue("SETDQVAR", $currentPlayer, "0");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Vehicle");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "hasPilot=1");
+        AddDecisionQueue("PASSREVERT", $currentPlayer, "-");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to attach <0>");
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("SHOWSELECTEDTARGET", $currentPlayer, "-", 1);
+        AddDecisionQueue("DEPLOYLEADERASUPGRADE", $currentPlayer, $cardID, 1);
+      }
+      else if($abilityName == "Pilot") {
         AddDecisionQueue("PASSPARAMETER", $currentPlayer, $cardID);
         AddDecisionQueue("SETDQVAR", $currentPlayer, "0");
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Vehicle;canAddPilot=1");
@@ -6016,8 +6030,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "8105698374"://Commandeer
-      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Vehicle;maxCost=6;hasPilotOnly=0&THEIRALLY:trait=Vehicle;maxCost=6;hasPilotOnly=0");
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Vehicle;maxCost=6&THEIRALLY:trait=Vehicle;maxCost=6");
       AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "hasPilot=1");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to take control of", 1);
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);

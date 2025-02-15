@@ -599,8 +599,19 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           break;
         case "MOVEPILOTUPGRADE":
           $attachedAlly = new Ally($dqVars[0]);
+          $subcardIsLeader = CardIDIsLeader($lastResult);
+          $fromEpicAction = false;
+          if($subcardIsLeader) {
+            $upgrades = $attachedAlly->GetUpgrades(withMetadata:true);
+            for($i=0; $i<count($upgrades); $i+=SubcardPieces()) {
+              if($upgrades[$i+4] == 1) {
+                $fromEpicAction = true;
+                break;
+              }
+            }
+          }
           $attachedAlly->RemoveSubcard($lastResult, movingPilot:true);
-          $newUID = PlayAlly($lastResult, $attachedAlly->Controller());
+          $newUID = PlayAlly($lastResult, $attachedAlly->Owner(), epicAction:$fromEpicAction);
           $newAlly = new Ally($newUID);
           $newAlly->Exhaust();
           break;
@@ -944,6 +955,15 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
               $ally = new Ally($arr[$i]);
               if($params[1] == 1 && $ally->CanAddPilot()) $match = true;
               else if($params[1] == 0 && !$ally->CanAddPilot()) $match = true;
+            }
+            break;
+          case "hasPilot":
+            $mzArr = explode("-", $arr[$i]);
+            if($mzArr[0] == "MYALLY" || $mzArr[0] == "THEIRALLY") {
+              $ally = new Ally($arr[$i]);
+              $hasPilot = $ally->HasPilot();
+              if($params[1] == 1 && $hasPilot) $match = true;
+              else if($params[1] == 0 && !$hasPilot) $match = true;
             }
             break;
           case "leader":

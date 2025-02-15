@@ -127,8 +127,8 @@ function ResourcePieces() { return ArsenalPieces(); }
 //3 - Frozen - 0 = no, 1 = yes
 //4 - Subcards , delimited
 //5 - Unique ID
-//6 - Counters
-//7 - Buff Counters
+//6 - Unused
+//7 - Unused
 //8 - Ability/effect Uses
 //9 - Round health modifier
 //10 - Times Attacked
@@ -137,7 +137,7 @@ function ResourcePieces() { return ArsenalPieces(); }
 //13 - Cloned - 0 = no, 1 = yes
 //14 - Healed
 //15 - Arena Override
-//16 - Unused
+//16 - From Epic Action (1 = yes, 0 = no)
 function AllyPieces()
 {
   return 17;
@@ -210,8 +210,12 @@ function EventPieces()
 //1 - ownerId
 //2 - isPilot
 //3 - subcard uniqueId
+//4 - attached as epic action
+//5 - unused
+//6 - unused
+//7 - unused
 function SubcardPieces(){
-  return 4;
+  return 8;
 }
 
 $SHMOP_CURRENTPLAYER = 9;

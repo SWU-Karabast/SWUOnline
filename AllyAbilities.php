@@ -18,7 +18,7 @@ function CreateTieFighter($player, $from = "-") {
 }
 
 // This function put an ally into play for a player, which means no when played abilities are triggered.
-function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null, $cloned = false, $playAbility = false)
+function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null, $cloned = false, $playAbility = false, $epicAction = false)
 {
   $uniqueID = GetUniqueId();
   $allies = &GetAllies($player);
@@ -29,8 +29,8 @@ function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null,
   $allies[] = 0; //Frozen
   $allies[] = $subCards; //Subcards
   $allies[] = $uniqueID; //Unique ID
-  $allies[] = AllyEnduranceCounters($cardID); //Endurance Counters
-  $allies[] = 0; //Buff Counters
+  $allies[] = 0;//Unused
+  $allies[] = 0; //Unused
   $allies[] = 1; //Ability/effect uses
   $allies[] = 0; //Round health modifier
   $allies[] = 0; //Times attacked
@@ -39,7 +39,7 @@ function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null,
   $allies[] = $cloned ? 1 : 0; //Cloned
   $allies[] = 0; //Healed this turn
   $allies[] = "NA";//Arena Override
-  $allies[] = 0; //Unused
+  $allies[] = $epicAction ? 1 : 0; //Epic Action
   $index = count($allies) - AllyPieces();
   CurrentEffectAllyEntersPlay($player, $index);
   CheckUniqueAlly($uniqueID);
@@ -682,9 +682,10 @@ function AllyLeavesPlayAbility($player, $index)
   $allies = &GetAllies($player);
   $cardID = $allies[$index];
   $uniqueID = $allies[$index + 5];
+  $fromEpicAction = $allies[$index + 16];
   $leaderUndeployed = LeaderUndeployed($cardID);
   if($leaderUndeployed != "") {
-    AddCharacter($leaderUndeployed, $player, counters:1, status:1);
+    AddCharacter($leaderUndeployed, $player, counters:$fromEpicAction ? 1 : 0, status:1);
   }
   //Pilot leader upgrades
   $subcardsArr = explode(",", $allies[$index + 4]);
@@ -692,7 +693,7 @@ function AllyLeavesPlayAbility($player, $index)
     if(CardIDIsLeader($subcardsArr[$i])) {
       $leaderUndeployed = LeaderUndeployed($subcardsArr[$i]);
       if($leaderUndeployed != "") {
-        AddCharacter($leaderUndeployed, $player, counters:1, status:1);
+        AddCharacter($leaderUndeployed, $player, counters:$subcardsArr[$i+4] == 1 ? 1 : 0, status:1);
       }
     }
   }
@@ -1370,13 +1371,13 @@ function AllyCanBeAttackTarget($player, $index, $cardID)
   }
 }
 
-function AllyEnduranceCounters($cardID)
-{
-  switch($cardID) {
-    case "UPR417": return 1;
-    default: return 0;
-  }
-}
+// function AllyEnduranceCounters($cardID)//FAB
+// {
+//   switch($cardID) {
+//     case "UPR417": return 1;
+//     default: return 0;
+//   }
+// }
 
 //FAB
 // function AllyDamagePrevention($player, $index, $damage)
@@ -2658,8 +2659,8 @@ function SpecificAllyAttackAbilities($attackID)
         AddDecisionQueue("MZOP", $mainPlayer, "ADDEXPERIENCE", 1);
       }
       if(SearchCount(SearchAllies($mainPlayer, aspect:"Aggression")) > 0) {
-        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY");
-        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 1 damage to");
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY&MYCHAR:definedType=Base&THEIRCHAR:definedType=Base");
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to deal 1 damage to");
         AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $mainPlayer, DamageStringBuilder(1, $mainPlayer, 1), 1);
       }
