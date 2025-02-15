@@ -30,6 +30,10 @@
       echo ("Invalid player ID.");
       exit;
     }
+    if (!isset($_SESSION['userid'])) {
+      header('Location: ./MainMenu.php');
+      die();
+    }
     ?>
 
     <style>
@@ -404,14 +408,24 @@
                       var fontColor = "#DDD";
                       var borderColor = "#1a1a1a";
                       var backgroundColor = "#DDD";
-                      <?php $playerVars = $playerID == 1 ? ["p1-label", "p1uid"] : ["p2-label", "p2uid"] ?>
-                      newHTML += "<div class='player-name <?= $playerVars[0] ?>'>" + <?php echo $playerVars[1]; ?> + "</div>";
+                      
+                      <?php $playerVars = $playerID == 1 ? ["p1-label", "p1uid"] : ["p2-label", "p2uid"] ?>                      
+                      <?php if($playerID != 3): ?> // Hide player names for spectators
+                        newHTML += "<div class='player-name <?= $playerVars[0] ?>'>" + <?php echo $playerVars[1]; ?> + "</div>";
+                      <?php else: ?>
+                        newHTML += "<div class='player-name p2-label'>Player 2</div>";
+                      <?php endif; ?>
                   } else if (zone == "theirChar") {
                       var fontColor = "#DDD";
                       var borderColor = "#1a1a1a";
                       var backgroundColor = "#DDD";
+
                       <?php $playerVars = $playerID == 1 ? ["p2-label", "p2uid"] : ["p1-label", "p1uid"] ?>
-                      newHTML += "<div class='player-name <?= $playerVars[0] ?>'>" + <?php echo $playerVars[1]; ?> + "</div>";
+                      <?php if($playerID != 3): ?> // Hide player names for spectators
+                        newHTML += "<div class='player-name <?= $playerVars[0] ?>'>" + <?php echo $playerVars[1]; ?> + "</div>";
+                      <?php else: ?>
+                        newHTML += "<div class='player-name p1-label'>Player 1</div>";
+                      <?php endif; ?>
                   }
               }
               var restriction = cardArr[12];
@@ -762,7 +776,7 @@
                     style='border: 1px solid #454545; color: #1a1a1a; padding: 0; box-shadow: none;'>
                 <img style='height:16px; width:16px; float:left; margin: 7px;' src='./Images/disable.png' />
             </button>
-        <?php else: ?>
+        <?php elseif ($playerID != 3): ?>
             <button title='Re-enable Chat'
                     <?= ProcessInputLink($playerID, 26, $SET_MuteChat . "-0", fullRefresh:true); ?>
                     style='border: 1px solid #454545; width: 100%; padding: 0 0 4px 0; height: 32px; font: inherit; box-shadow: none;'>

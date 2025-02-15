@@ -82,13 +82,21 @@ if ($handle = opendir($path)) {
           }
 
           $spectateLinks .= <<<HTML
-                    </div>
-                    <input class='spectate-button' type='submit' id='joinGame' value='Spectate' />
-                    <input type='hidden' name='gameName' value='$gameToken' />
-                    <input type='hidden' name='playerID' value='3' />
-                </div>
-            </form>
+            </div>
           HTML;
+
+          if (isset($_SESSION['userid'])) {
+            $spectateLinks .= <<<HTML
+              <input class='spectate-button' type='submit' id='joinGame' value='Spectate' />
+              <input type='hidden' name='gameName' value='$gameToken' />
+              <input type='hidden' name='playerID' value='3' />
+            HTML;
+          }
+
+          $spectateLinks .= <<<HTML
+            </div>
+          </form>
+          HTML;          
         }
       } else if ($currentTime - $lastGamestateUpdate > 900000) //~1 hour
       {

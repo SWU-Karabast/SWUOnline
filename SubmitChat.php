@@ -59,7 +59,7 @@ for($i=0;$i<count($meanPhrases);++$i) {
 if (GetCachePiece($gameName, 11) >= 3) {
   WriteLog("The lobby is reactivated");
 }
-WriteLog("<span class='p$playerID-label bold'>$displayName</span>: $filteredChatText");
+WriteLog("<span class='p$playerID-label bold'>Player $playerID</span>: $filteredChatText");
 
 GamestateUpdated($gameName);
 if ($playerID == 1) SetCachePiece($gameName, 11, 0);
