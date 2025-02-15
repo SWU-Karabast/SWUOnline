@@ -30,7 +30,7 @@
       echo ("Invalid player ID.");
       exit;
     }
-    if (!isset($_SESSION['userid'])) {
+    if ($playerID == 3 && !isset($_SESSION['userid'])) {
       header('Location: ./MainMenu.php');
       die();
     }
