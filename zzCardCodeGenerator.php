@@ -27,8 +27,8 @@
   $hasDestroyedArray = [];
   $setArray = [];
   $cardIDArray = [];
-
-  $language = "EN";
+  
+  $language = "FR";
 
   while ($hasMoreData)
   {
@@ -81,12 +81,14 @@
       CheckImage($card->cardUid, $imageUrl, $language,  $definedType, set:$set);
       if($card->artBack->data != null) {
         $type2 = $card->type2->data == null ? "" : $card->type2->data->attributes->name;
-        if($type2 == "Leader Unit") $definedType = "Unit";
+        if($type2 == "Leader Unit" || $type2 == "Leader Unité" || $type2 = "Unidad Líder" || $type2 == "Anführer-Einheit" || $type2 = "Unità Leader") $definedType = "Unit"; 
         $imageUrl = $card->artBack->data->attributes->formats->card->url;
+        echo("$imageUrl");
+        echo("  ");
         $arr = explode("_", $imageUrl);
         $arr = explode(".", $arr[count($arr)-1]);
         $uuid = $arr[0];
-        CheckImage($uuid, $imageUrl, $language, $definedType, isBack:true, set:$set );
+        CheckImage($uuid, $imageUrl, $language, $definedType, isBack:true, set:$set);
         AddToArrays($cardID, $uuid);
       }
     }
@@ -259,7 +261,7 @@
 
     // Type 2
     $definedType2 = $card->type2->data ? $card->type2->data->attributes->name : "";
-    if ($definedType2 == "Leader Unit") $definedType2 = "Unit";
+    if ($definedType2 == "Leader Unit" || $definedType2 == "Leader Unité" || $definedType2 = "Unidad Líder" || $definedType2 == "Anführer-Einheit" || $definedType2 = "Unità Leader") $definedType2 = "Unit";
     if ($definedType2 && $definedType2 != $DEFAULT_CARD_TYPE2) {
       $type2Array[$uuid] = $definedType2;
     }
