@@ -12,3 +12,4 @@ vendor/
 .phpunit.result.cache
 
 .htaccess
+Utils/LeaderImages/
