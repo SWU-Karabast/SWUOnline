@@ -541,10 +541,11 @@ class Ally {
         $subcards = array_values($subcards);
         $this->allies[$this->index + 4] = count($subcards) > 0 ? implode(",", $subcards) : "-";
         if(DefinedTypesContains($subcardID, "Upgrade")) UpgradeDetached($subcardID, $this->playerID, "MYALLY-" . $this->index);
-        if(CardIDIsLeader($subcardID) && !$movingPilot && $subcards[$i+4] == 1) {
+        if(CardIDIsLeader($subcardID) && !$movingPilot) {
           $leaderUndeployed = LeaderUndeployed($subcardID);
           if($leaderUndeployed != "") {
-            AddCharacter($leaderUndeployed, $this->playerID, counters:1, status:1);
+            $epicAction = $subcards[$i+4] == 1;
+            AddCharacter($leaderUndeployed, $this->playerID, counters:$epicAction ? 1 : 0, status:1);
           }
         }
         return $ownerId;
