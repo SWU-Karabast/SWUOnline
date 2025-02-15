@@ -1760,6 +1760,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       PassTurn();
       return 0;
     case "MULLIGAN":
+      WriteLog("Player $player took a mulligan");
       $hand = &GetHand($player);
       $deck = &GetDeck($player);
       for($i=0; $i<count($hand); $i+=HandPieces()) {
