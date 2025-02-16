@@ -1065,9 +1065,6 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
           if(GetClassState($currentPlayer, $CS_NumUsesLeaderUpgrade1) > 0) {
             if($abilityTypes != "") $abilityTypes .= ",";
             $abilityTypes .= "A";
-            if($ally->IsExhausted() && !ResolvingCombatEffect()) {
-              $abilityTypes = FilterOutAttackAbilityType($abilityTypes);
-            }
           }
           break;
         default: break;
@@ -1320,9 +1317,7 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
           if(GetClassState($currentPlayer, $CS_NumUsesLeaderUpgrade1) > 0) {
             if($abilityNames != "") $abilityNames .= ",";
             $abilityNames .= "Move Poe Pilot";
-            if($ally->IsExhausted() && !ResolvingCombatEffect()) {
-              $abilityNames = FilterOutAttackAbilityName($abilityNames);
-            }
+            if($validate && $ally->IsExhausted()) $abilityNames = FilterOutAttackAbilityName($abilityNames);
           }
           break;
         default: break;
