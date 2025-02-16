@@ -30,10 +30,6 @@
       echo ("Invalid player ID.");
       exit;
     }
-    if ($playerID == 3 && !isset($_SESSION['userid'])) {
-      header('Location: ./MainMenu.php');
-      die();
-    }
     ?>
 
     <style>
@@ -55,6 +51,11 @@
     if(($playerID == 1 || $playerID == 2) && $authKey == "")
     {
       if(isset($_COOKIE["lastAuthKey"])) $authKey = $_COOKIE["lastAuthKey"];
+    }
+
+    if ($playerID == 3 && !isset($_SESSION['userid'])) {
+      header('Location: ./MainMenu.php');
+      die();
     }
 
     //First we need to parse the game state from the file
