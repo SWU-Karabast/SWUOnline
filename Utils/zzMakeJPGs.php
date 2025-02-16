@@ -15,6 +15,7 @@ foreach ($sets as $set) {
         else if($i < 100) $number = "0" . $number;
         $setID = $set . "_" . $number;
         $uuid = UUIDLookup($setID);
+        if($uuid == "") continue;
         $concatOut = "./jpg/concat/{$uuid}.jpg";
         $fullOut   = "./jpg/fullsize/{$uuid}.jpg";
 
@@ -37,7 +38,7 @@ foreach ($sets as $set) {
 
         // Convert the fullsize image if it doesn't exist
         if (!file_exists($fullOut)) {
-            $srcFull = "../WebpImages/{$uuid}.webp";
+            $srcFull = "../WebpImages2/{$uuid}.webp";
             if (file_exists($srcFull)) {
                 $img = imagecreatefromwebp($srcFull);
                 if ($img) {
