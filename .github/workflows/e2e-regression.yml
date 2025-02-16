@@ -63,7 +63,7 @@ jobs:
     - name: Run E2E Tests
       run: |
         cd ../SWUOnline-Automation
-        xvfb-run --auto-servernum npm test -- --env headless --retries 3
+        xvfb-run --auto-servernum npm test
       env:
         FULL_REGRESSION: true
 

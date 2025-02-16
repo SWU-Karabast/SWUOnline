@@ -888,7 +888,7 @@ function AbilityCost($cardID, $index=-1, $theirCard = false)
   global $currentPlayer;
   $abilityName = $theirCard ? GetOpponentControlledAbilityNames($cardID) : GetResolvedAbilityName($cardID);
   if($abilityName == "Heroic Resolve") return 2;
-  if($abilityName == "Move Poe Pilot") return 1;
+  if($abilityName == "Poe Pilot") return 1;
   switch($cardID) {
     //Spark of Rebellion
     case "2579145458"://Luke Skywalker
@@ -1316,7 +1316,7 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
         case "3eb545eb4b"://Poe Dameron JTL leader
           if(GetClassState($currentPlayer, $CS_NumUsesLeaderUpgrade1) > 0) {
             if($abilityNames != "") $abilityNames .= ",";
-            $abilityNames .= "Move Poe Pilot";
+            $abilityNames .= "Poe Pilot";
             if($validate && $ally->IsExhausted()) $abilityNames = FilterOutAttackAbilityName($abilityNames);
           }
           break;

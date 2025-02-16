@@ -3,7 +3,7 @@
 function LeaderPilotDeploy($player, $leader, $target) {
   $targetUnit = new Ally($target, $player);
   $cardID = LeaderUnit($leader);
-  $epicAction = $leader != "8520821318";
+  $epicAction = $leader != "8520821318";//Poe Dameron JTL leader
   $targetUnit->Attach($cardID, $player, epicAction:$epicAction);
 
   switch($cardID) {
