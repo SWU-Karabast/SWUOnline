@@ -533,6 +533,7 @@ class Ally {
     for($i=0; $i<count($subcards); $i+=SubcardPieces()) {
       if($subcards[$i] == $subcardID && ($subcardUniqueID == "" || $subcards[$i+3] == $subcardUniqueID)) {
         $ownerId = $subcards[$i+1];
+        $epicAction = $subcards[$i+4] == 1;
 
         for ($j = SubcardPieces() - 1; $j >= 0; $j--) {
           unset($subcards[$i+$j]);
@@ -544,7 +545,6 @@ class Ally {
         if(CardIDIsLeader($subcardID) && !$movingPilot) {
           $leaderUndeployed = LeaderUndeployed($subcardID);
           if($leaderUndeployed != "") {
-            $epicAction = $subcards[$i+4] == 1;
             AddCharacter($leaderUndeployed, $this->playerID, counters:$epicAction ? 1 : 0, status:1);
           }
         }
