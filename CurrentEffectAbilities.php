@@ -836,10 +836,10 @@ function CurrentEffectStartTurnAbilities()
   }
 }
 
-function IsCombatEffectActive($cardID, $reportMode=false)
+function IsCombatEffectActive($cardID)
 {
   global $combatChain;
-  if(count($combatChain) == 0 && !$reportMode) return;
+  if(count($combatChain) == 0) return;
   $effectArr = explode("-", $cardID);
   $cardID = $effectArr[0];
   switch($cardID)
