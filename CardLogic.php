@@ -1205,15 +1205,6 @@ function UIDIsAffectedByMalevolence($uniqueID) {
   return $found;
 }
 
-function ResolvingCombatEffect() {
-  global $currentTurnEffects;
-  for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnPieces()) {
-    if(IsCombatEffectActive($currentTurnEffects[$i], reportMode:true)) return true;
-  }
-
-  return false;
-}
-
 function CheckBobaFettJTL($targetPlayer, $enemyDamage, $fromCombat) {
   if($fromCombat) {
     return;
