@@ -2370,7 +2370,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $ally = new Ally("MYALLY-" . $index, $currentPlayer);
       Mill($otherPlayer, ceil($ally->Health()/2));
       return "";
-    } else if ($abilityName == "Move Poe Pilot") {
+    } else if ($abilityName == "Poe Pilot") {
       DecrementClassState($currentPlayer, $CS_NumUsesLeaderUpgrade1, 1);
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "3eb545eb4b", 1);
       AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
@@ -2404,8 +2404,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
   if($from == "EQUIP" && DefinedTypesContains($cardID, "Leader", $currentPlayer)) {
     $abilityName = GetResolvedAbilityName($cardID, $from);
     if($abilityName == "Deploy" || $abilityName == "Pilot" || $abilityName == "") {
-      if($cardID != "8520821318"//Poe Dameron JTL leader pilot
-          && NumResources($currentPlayer) < CardCost($cardID)) {
+      $notEnoughResources = NumResources($currentPlayer) < CardCost($cardID);
+      if($cardID == "8520821318") {//Poe Dameron JTL leader
+        $notEnoughResources = $abilityName == "Deploy" && NumResources($currentPlayer) < 5;
+      }
+      if($notEnoughResources) {
         WriteLog("You don't control enough resources to deploy that leader; reverting the game state.");
         RevertGamestate();
         return "";
@@ -2417,7 +2420,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
           AddLayer("TRIGGER", $currentPlayer, "SHIELDED", "-", "-", $playUniqueID);
         }
         PlayAbility(LeaderUnit($cardID), "CHAR", 0, "-", "-", false, $uniqueId);
-      } else if($abilityName == "Pilot" && $cardID == "8520821318") {
+      }
+      else if($cardID == "8520821318" && $abilityName == "Pilot") {//Poe Dameron JTL leader
         AddDecisionQueue("PASSPARAMETER", $currentPlayer, $cardID);
         AddDecisionQueue("SETDQVAR", $currentPlayer, "0");
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Vehicle");
@@ -2516,7 +2520,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
             AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
             AddDecisionQueue("MZOP", $currentPlayer, "DESTROY", 1);
           }
-            break;
+          break;
           default: break;
         }
       }
