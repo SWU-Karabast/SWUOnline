@@ -1776,7 +1776,7 @@ function AddPrePitchDecisionQueue($cardID, $from, $index = -1, $skipAbilityType 
       AddDecisionQueue("MZOP", $currentPlayer, "EXPLOIT", 1);
     }
     $pilotCost = PilotingCost($cardID, $currentPlayer);
-    if ($pilotCost >= 0) {
+    if ($pilotCost >= 0 && !CurrentTurnEffectsPlayingUnit($currentPlayer)) {
       if (!SearchCurrentTurnEffects("0011262813", $currentPlayer)) {//Wedge Antilles Leader
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose if you want to play this unit as a pilot?");
         AddDecisionQueue("YESNO", $currentPlayer, "if you want to play this unit as a pilot");
@@ -2210,6 +2210,54 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
   SetClassState($currentPlayer, $CS_PlayIndex, -1);
   SetClassState($currentPlayer, $CS_CharacterIndex, -1);
   ProcessDecisionQueue();
+}
+
+function CurrentTurnEffectsPlayingUnit($player) {
+  global $currentTurnEffects, $CS_AfterPlayedBy;
+  switch(GetClassState($player, $CS_AfterPlayedBy)) {
+    //Spark of Rebellion
+    case "3572356139"://Chewbacca (Walking Carpet)
+    //Jump to Lightspeed
+    case "3658069276"://Lando Calrissian leader
+      return true;
+  }
+
+  for ($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnPieces()) {
+    switch($currentTurnEffects[$i]) {
+      //Spark of Rebellion
+      case "8506660490"://Darth Vader
+      case "2756312994"://Alliance Dispatcher
+      case "4919000710"://Home One
+      case "8968669390"://U-Wing Reinforcement
+      case "3426168686"://Sneak Attack
+      case "5494760041"://Galactic Ambition
+      //Shadows of the Galaxy
+      //TODO: look into if we have any TTFREE on upgrades..
+      case "4643489029"://Palpatine's Return
+      case "5576996578"://Endless Legions
+      case "9642863632"://Bounty Hunter's Quarry
+      case "2397845395"://Strategic Acumen
+      case "6847268098"://Timely Intervention
+      case "9226435975"://Han Solo leader
+      case "a742dea1f1"://Han Solo leader unit
+      case "0911874487"://Fennec Shand leader
+      case "2b13cefced"://Fennech Shand leader unit
+      case "0598830553"://Dryden Vos
+      case "4717189843"://A New Adventure
+      case "7270736993"://Unrefusable Offer
+      case "5351496853"://Gideon's Light Cruiser
+      //Twilight of the Republic
+      case "4895747419"://Consolidation of Power
+      case "4113123883"://Unnatural Life
+      case "6849037019"://Now There Are Two of Them
+      //Jump to Lightspeed
+      case "7138400365"://The Invisible Hand
+      case "TTFREE"://Second Chance,Cobb Vanth,
+        return true;
+    }
+  }
+
+  return false;
 }
 
 function IsUnitException($cardID) {

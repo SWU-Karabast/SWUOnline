@@ -2590,6 +2590,7 @@ function SpecificAllyAttackAbilities($attackID)
       $card = Mill($mainPlayer, 1);
       if(CardCostIsOdd($card)) {
         AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
+        AddDecisionQueue("MZFILTER", $mainPlayer, "index=" . $attackerAlly->MZIndex());
         AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to give an experience");
         AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $mainPlayer, "ADDEXPERIENCE", 1);
