@@ -115,6 +115,9 @@ function GetCardBack($player)
     case 21: return "porg_depot";
     case 22: return "darth_players";
     case 23: return "MainedoKaraSleeves";
+    case 24: return "galactic-gonks";
+    case 25: return "fallen-order";
+    case 26: return "mythic-force";
     default: return "CardBack";
   }
 }
@@ -316,6 +319,9 @@ function GetSettingsUI($player)
   $rv .= CreateRadioButton($SET_Cardback . "-" . 21, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Porg Depot");
   $rv .= CreateRadioButton($SET_Cardback . "-" . 22, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Darth Players");
   $rv .= CreateRadioButton($SET_Cardback . "-" . 23, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Mainedalorians");
+  $rv .= CreateRadioButton($SET_Cardback . "-" . 24, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Galactic Gonks");
+  $rv .= CreateRadioButton($SET_Cardback . "-" . 25, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Fallen Order");
+  $rv .= CreateRadioButton($SET_Cardback . "-" . 26, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Mythic Force");
 
   $stage = getenv('STAGE') ?: 'prod';
   $isDev = $stage === 'dev';
