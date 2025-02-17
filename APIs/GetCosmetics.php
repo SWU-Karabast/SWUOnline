@@ -108,6 +108,10 @@ $cardBack->name = "Mythic Force";
 $cardBack->id = 26;
 $response->cardBacks[] = $cardBack;
 $cardBack = new stdClass();
+$cardBack->name = "MoG TCG";
+$cardBack->id = 27;
+$response->cardBacks[] = $cardBack;
+$cardBack = new stdClass();
 
 $response->playmats = [];
 if(IsUserLoggedIn()) {
