@@ -118,6 +118,7 @@ function GetCardBack($player)
     case 24: return "galactic-gonks";
     case 25: return "fallen-order";
     case 26: return "mythic-force";
+    case 27: return "mog-tcg";
     default: return "CardBack";
   }
 }
@@ -322,6 +323,7 @@ function GetSettingsUI($player)
   $rv .= CreateRadioButton($SET_Cardback . "-" . 24, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Galactic Gonks");
   $rv .= CreateRadioButton($SET_Cardback . "-" . 25, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Fallen Order");
   $rv .= CreateRadioButton($SET_Cardback . "-" . 26, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Mythic Force");
+  $rv .= CreateRadioButton($SET_Cardback . "-" . 27, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "MoG TCG");
 
   $stage = getenv('STAGE') ?: 'prod';
   $isDev = $stage === 'dev';
