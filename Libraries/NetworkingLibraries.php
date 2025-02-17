@@ -2167,15 +2167,23 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
         }
         //TODO: Fix this Relentless and first light and The Mandalorian hack
         // Events and abilities that are not played should be resolved before any ally abilities
-        else if ($from == "PLAY" || $from == "EQUIP" || $cardID == "3401690666" || $cardID == "4783554451" || $cardID == "4088c46c4d" || DefinedTypesContains($cardID, "Event", $currentPlayer)) {
+        else if ($from == "PLAY" || $from == "EQUIP" || IsUnitException($cardID) || DefinedTypesContains($cardID, "Event", $currentPlayer)) {
           AddLayer($layerName, $currentPlayer, $cardID, $from . "!" . $resourcesPaid . "!" . $target . "!" . $additionalCosts . "!" . $abilityIndex . "!" . $playIndex, "-", $uniqueID, append: true);
           if (!$openedChain)
             ResolveGoAgain($cardID, $currentPlayer, $from);
           CopyCurrentTurnEffectsFromAfterResolveEffects();
           SetClassState($currentPlayer, $CS_PlayIndex, -1);
           SetClassState($currentPlayer, $CS_CharacterIndex, -1);
-          ProcessDecisionQueue();
-          return;
+          if(IsUnitException($cardID)) {
+            $ally = new Ally($uniqueID);
+            if(!HasAmbush($ally->CardID(), $ally->Controller(), $ally->Index(), $from)) {
+              ProcessDecisionQueue();
+              return;
+            }
+          } else {
+            ProcessDecisionQueue();
+            return;
+          }
         } else if ((HasWhenPlayed($cardID) && !IsExploitWhenPlayed($cardID)) || $cardID == "8055390529") { // TODO: Fix Dooku and Traitorous hack.
           AddLayer("PLAYCARDABILITY", $currentPlayer, $cardID, $from . "!" . $resourcesPaid . "!" . $target . "!" . $additionalCosts . "!" . $abilityIndex . "!" . $playIndex, "-", $uniqueID, append: true);
         }
@@ -2202,6 +2210,16 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
   SetClassState($currentPlayer, $CS_PlayIndex, -1);
   SetClassState($currentPlayer, $CS_CharacterIndex, -1);
   ProcessDecisionQueue();
+}
+
+function IsUnitException($cardID) {
+  return match($cardID) {
+    "3401690666" //Relentless
+    ,"4783554451" //First Light
+    ,"4088c46c4d" //The Mandalorian SHD leader unit
+      => true,
+    default => false
+  };
 }
 
 function RelentlessLostAbilities($player): bool
