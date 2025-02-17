@@ -70,25 +70,21 @@
       }
 
       AddToArrays($cardID, $card->cardUid);
-
-      $definedType = $card->type->data->attributes->name;
-      if($definedType == "Token Unit") $definedType = "Unit";
-      $imageUrl = $card->artFront->data->attributes->formats->card->url;
-
+      
       //$imageUrl = "https://swudb.com/cards/" . $set . "/" . $cardNumber . ".png";
+      $imageUrl = $card->artFront->data->attributes->formats->card->url;
+      $imageWidth = $card->artFront->data->attributes->width;
+      $imageHeight = $card->artFront->data->attributes->height;
+      $isLandscape = $imageWidth > $imageHeight;
+      $isBottomPosition = $card->hp === null && $card->power === null && $card->upgradeHp === null && $card->upgradePower === null; // Only Events are bottom position. This is a hack to check if the card is an event.
+      CheckImage($card->cardUid, $imageUrl, $language,  isLandscape:$isLandscape, isBottomPosition:$isBottomPosition);
 
-
-      CheckImage($card->cardUid, $imageUrl, $language,  $definedType, set:$set);
-      if($card->artBack->data != null) {
-        $type2 = $card->type2->data == null ? "" : $card->type2->data->attributes->name;
-        if($type2 == "Leader Unit" || $type2 == "Leader Unité" || $type2 = "Unidad Líder" || $type2 == "Anführer-Einheit" || $type2 == "Unità Leader") $definedType = "Unit"; 
+      if ($card->artBack->data != null) {
         $imageUrl = $card->artBack->data->attributes->formats->card->url;
-        echo("$imageUrl");
-        echo("  ");
         $arr = explode("_", $imageUrl);
         $arr = explode(".", $arr[count($arr)-1]);
         $uuid = $arr[0];
-        CheckImage($uuid, $imageUrl, $language, $definedType, isBack:true, set:$set);
+        CheckImage($uuid, $imageUrl, $language, isLandscape:false, isBottomPosition:false); // Back image is always portrait and top position
         AddToArrays($cardID, $uuid);
       }
     }
@@ -261,7 +257,7 @@
 
     // Type 2
     $definedType2 = $card->type2->data ? $card->type2->data->attributes->name : "";
-    if ($definedType2 == "Leader Unit" || $definedType2 == "Leader Unité" || $definedType2 == "Unidad Líder" || $definedType2 == "Anführer-Einheit" || $definedType2 == "Unità Leader") $definedType2 = "Unit";
+    if ($definedType2 == "Leader Unit") $definedType2 = "Unit";
     if ($definedType2 && $definedType2 != $DEFAULT_CARD_TYPE2) {
       $type2Array[$uuid] = $definedType2;
     }

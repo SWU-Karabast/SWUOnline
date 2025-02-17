@@ -1,6 +1,6 @@
 <?php
 
-function CheckImage($cardID, $url, $language, $definedType, $isBack=false, $set="SOR")
+function CheckImage($cardID, $url, $language, $isLandscape=false, $isBottomPosition=false)
 {
   if($language == "EN"){
     $filename = "./WebpImages/" . $cardID . ".webp";
@@ -31,10 +31,11 @@ function CheckImage($cardID, $url, $language, $definedType, $isBack=false, $set=
     if(file_exists($filename))
     {
       echo("Normalizing file size for " . $cardID . ".<BR>");
-      echo("Defined Type: " . $definedType . "<BR>");
+      echo("Is Landscape: " . $isLandscape . "<BR>");
+      echo("Is Bottom Position: " . $isBottomPosition . "<BR>");
       $image = imagecreatefrompng($filename);
       //$image = imagecreatefromjpeg($filename);
-      if($definedType == "Base" || $definedType == "Leader") {
+      if($isLandscape) {
         if(imagesy($image) > imagesx($image)) $image = imagerotate($image, -90, 0);
         $image = imagescale($image, 628, 450);
       }
@@ -65,15 +66,14 @@ function CheckImage($cardID, $url, $language, $definedType, $isBack=false, $set=
       $image = imagecreatefromwebp($filename);
       //$image = imagecreatefrompng($filename);
 
-      if($definedType == "Event") {
+      if($isBottomPosition) {
         $imageTop = imagecrop($image, ['x' => 0, 'y' => 0, 'width' => 450, 'height' => 110]);
         $imageBottom = imagecrop($image, ['x' => 0, 'y' => 320, 'width' => 450, 'height' => 628]);
 
         $dest = imagecreatetruecolor(450, 450);
         imagecopy($dest, $imageTop, 0, 0, 0, 0, 450, 110);
         imagecopy($dest, $imageBottom, 0, 111, 0, 0, 450, 404);
-      }
-      else {
+      } else {
         $imageTop = imagecrop($image, ['x' => 0, 'y' => 0, 'width' => 450, 'height' => 372]);
         $imageBottom = imagecrop($image, ['x' => 0, 'y' => 570, 'width' => 450, 'height' => 628]);
 
@@ -103,7 +103,7 @@ function CheckImage($cardID, $url, $language, $definedType, $isBack=false, $set=
         $image = imagecreatefrompng($filename);
       }
       //$image = imagecreatefrompng($filename);
-      if($definedType == "Event") $image = imagecrop($image, ['x' => 50, 'y' => 326, 'width' => 350, 'height' => 246]);
+      if($isBottomPosition) $image = imagecrop($image, ['x' => 50, 'y' => 326, 'width' => 350, 'height' => 246]);
       else $image = imagecrop($image, ['x' => 50, 'y' => 100, 'width' => 350, 'height' => 270]);
       imagepng($image, $cropFilename);
       imagedestroy($image);
