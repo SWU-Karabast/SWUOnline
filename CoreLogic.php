@@ -3595,7 +3595,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "8055390529"://Traitorous
       $mzArr = explode("-", $target);
-      if($mzArr[0] == "THEIRALLY") {
+      $ally = new Ally($target);
+      if($mzArr[0] == "THEIRALLY" && !$ally->IsLeader()) {
         AddDecisionQueue("PASSPARAMETER", $currentPlayer, $target);
         AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID");
         AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL");

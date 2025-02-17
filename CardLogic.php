@@ -1266,13 +1266,13 @@ function IndirectDamage($player, $amount, $fromUnitEffect=false)
     AddDecisionQueue("SETDQCONTEXT", $sourcePlayer, "Choose units and/or base to damage (any remaining will go to base)", 1);
     AddDecisionQueue("MULTICHOOSETHEIRUNITSANDBASE", $sourcePlayer, "<-", 1);
     AddDecisionQueue("MULTIDISTRIBUTEDAMAGE", $sourcePlayer,
-      MultiDistributeDamageStringBuilder($amount, $sourcePlayer, $fromUnitEffect ? 1 : 0, isPreventable: 0, isIndirect: 1, zones:"THEIRALLIESANDBASE"), 1);
+      MultiDistributeDamageStringBuilder($amount, $sourcePlayer, $fromUnitEffect ? 1 : 0, isPreventable: 0, zones:"THEIRALLIESANDBASE"), 1);
   } else {
     AddDecisionQueue("FINDINDICES", $player, "UNITSANDBASE");
     AddDecisionQueue("SETDQCONTEXT", $player, "Choose units and/or base to damage (any remaining will go to base)", 1);
     AddDecisionQueue("MULTICHOOSEMYUNITSANDBASE", $player, "<-", 1);
     AddDecisionQueue("MULTIDISTRIBUTEDAMAGE", $player,
-      MultiDistributeDamageStringBuilder($amount, $sourcePlayer, $fromUnitEffect ? 1 : 0, isPreventable: 0, isIndirect: 1, zones:"MYALLIESANDBASE"), 1);
+      MultiDistributeDamageStringBuilder($amount, $sourcePlayer, $fromUnitEffect ? 1 : 0, isPreventable: 0, zones:"MYALLIESANDBASE"), 1);
   }
 }
 

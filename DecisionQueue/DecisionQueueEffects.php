@@ -246,16 +246,17 @@ function ModalAbilities($player, $card, $lastResult)
     case "CORVUS":
       switch($lastResult) {
         case 0: // Move Pilot unit to Corvus
-          AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:trait=Pilot", 1);
-          AddDecisionQueue("SETDQCONTEXT", $player, "Choose a Pilot unit to attach", 1);
+          AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:trait=Pilot");
+          AddDecisionQueue("SETDQCONTEXT", $player, "Choose a Pilot unit to attach");
           AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
+          AddDecisionQueue("MZOP", $player, "GETUNIQUEID", 1);
           AddDecisionQueue("MZOP", $player, "MOVEPILOTUNIT", 1);
           break;
         case 1: // Move Pilot upgrade to Corvus
-          global $dqVars;
-          $uniqueId = $dqVars[0];
-          AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:hasPilotOnly=1", 1);
-          AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to move a Pilot from.", 1);
+          global $dqVars, $CS_PlayedAsUpgrade;
+          $uniqueID = $dqVars[0];
+          AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:hasPilotOnly=1");
+          AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to move a Pilot from.");
           AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
           AddDecisionQueue("SETDQVAR", $player, "1", 1);
           AddDecisionQueue("MZOP", $player, "GETUPGRADES", 1);
@@ -263,7 +264,9 @@ function ModalAbilities($player, $card, $lastResult)
           AddDecisionQueue("SETDQCONTEXT", $player, "Choose a pilot upgrade to move.", 1);
           AddDecisionQueue("CHOOSECARD", $player, "<-", 1);
           AddDecisionQueue("SETDQVAR", $player, "0", 1);
-          AddDecisionQueue("PASSPARAMETER", $player, $uniqueId, 1);
+          AddDecisionQueue("PASSPARAMETER", $player, "1", 1);
+          AddDecisionQueue("SETCLASSSTATE", $player, $CS_PlayedAsUpgrade, 1);
+          AddDecisionQueue("PASSPARAMETER", $player, $uniqueID, 1);
           AddDecisionQueue("MZOP", $player, "MOVEUPGRADE", 1);
           break;
         default: break;

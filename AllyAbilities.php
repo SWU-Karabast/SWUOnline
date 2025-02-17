@@ -1303,8 +1303,8 @@ function AllyPlayedAsUpgradeAbility($cardID, $player, $targetAlly) {
       AddDecisionQueue("REVEALCARDS", $player, "-", 1);
       break;
     case "1911230033"://Wingman Victor Three
-      AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
-      AddDecisionQueue("MZFILTER", $player, $targetAlly->MZIndex());
+      AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
+      AddDecisionQueue("MZFILTER", $player, "index=" . $targetAlly->MZIndex());
       AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to give an experience");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
       AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
@@ -2705,7 +2705,7 @@ function AllyHitEffects() {
 }
 
 function AllyDamageTakenAbilities($player, $index, $damage, $fromCombat=false, $enemyDamage=false,
-  $fromUnitEffect=false, $indirectDamage=false)
+  $fromUnitEffect=false, $preventable=true)
 {
   $damagedAlly = new Ally("MYALLY-" . $index, $player);
 
@@ -2740,7 +2740,7 @@ function AllyDamageTakenAbilities($player, $index, $damage, $fromCombat=false, $
         break;
       //Jump to Lightspeed
       case "9611596703"://Allegiant General Pryde
-        if($indirectDamage) {
+        if(!$preventable) {
           global $layers;
           $skipLayer = false;
           for($i=0; $i<count($layers); $i+=LayerPieces()) {
