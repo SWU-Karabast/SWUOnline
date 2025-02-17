@@ -96,6 +96,18 @@ $cardBack->name = "Mainedalorians";
 $cardBack->id = 23;
 $response->cardBacks[] = $cardBack;
 $cardBack = new stdClass();
+$cardBack->name = "Galactic Gonks";
+$cardBack->id = 24;
+$response->cardBacks[] = $cardBack;
+$cardBack = new stdClass();
+$cardBack->name = "Fallen Order";
+$cardBack->id = 25;
+$response->cardBacks[] = $cardBack;
+$cardBack = new stdClass();
+$cardBack->name = "Mythic Force";
+$cardBack->id = 26;
+$response->cardBacks[] = $cardBack;
+$cardBack = new stdClass();
 
 $response->playmats = [];
 if(IsUserLoggedIn()) {
