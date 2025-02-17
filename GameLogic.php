@@ -591,11 +591,13 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         case "MOVEPILOTUNIT":
           global $CS_PlayedAsUpgrade;
           $uniqueIdRecipient = $dqVars[0];
-          $pilotUnitToMove = new Ally($lastResult, $player);
+          $pilotUnitToMove = new Ally($lastResult);
+          $pilotUpgrade = $pilotUnitToMove->CardID();
+          $pilotUnitOwner = $pilotUnitToMove->Owner();
           RemoveAlly($player, $pilotUnitToMove->Index(), removedFromPlay:false);
-          $ally = new Ally($uniqueIdRecipient, $player);
+          $ally = new Ally($uniqueIdRecipient);
           SetClassState($player, $CS_PlayedAsUpgrade, 1);
-          $ally->Attach($pilotUnitToMove->CardID(), $pilotUnitToMove->Owner());
+          $ally->Attach($pilotUpgrade, $pilotUnitOwner);
           break;
         case "MOVEPILOTUPGRADE":
           $attachedAlly = new Ally($dqVars[0]);
