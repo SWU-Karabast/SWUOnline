@@ -1097,7 +1097,10 @@ function CollectBounty($player, $unitCardID, $bountyCardID, $isExhausted, $owner
     case "9108611319"://Cartel Turncoat
     case "6878039039"://Hylobon Enforcer
       if($reportMode) break;
-      Draw($opponent);
+      $deck = &GetDeck($player);
+      if(count($deck) > 0) {
+        Draw($opponent);
+      }
       break;
     case "8679638018"://Wanted Insurgents
       if($reportMode) break;
@@ -1146,8 +1149,11 @@ function CollectBounty($player, $unitCardID, $bountyCardID, $isExhausted, $owner
       break;
     case "0807120264"://Death Mark
       if($reportMode) break;
-      Draw($opponent);
-      Draw($opponent);
+      $deck = &GetDeck($player);
+      if(count($deck) > 0) {//bounties are optional
+        Draw($opponent);
+        Draw($opponent);
+      }
       break;
     case "2151430798."://Guavian Antagonizer
       if($reportMode) break;

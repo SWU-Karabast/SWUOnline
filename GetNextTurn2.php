@@ -480,7 +480,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       $layerName = IsAbilityLayer($layers[$i]) ? $layers[$i + 2] : $layers[$i]; // Get the layer name
       $layerController = $layers[$i + 1]; // Get the layer controller
       $layerColor = ($layerController == $playerID) ? 1 : 2; // Determine the color based on the controller
-
+      $layerColor = str_starts_with($layers[$i + 4], "ALLYBOUNTIES") ? ($layerColor == 1 ? 2 : 1) : $layerColor; // Special case for ally collect bounties
       if ($playerID == 3) { // Special case for playerID 3
         $layerColor = ($layerController == $otherPlayer) ? 2 : 1;
       }
