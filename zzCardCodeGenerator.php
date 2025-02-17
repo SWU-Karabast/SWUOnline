@@ -81,10 +81,13 @@
 
       if ($card->artBack->data != null) {
         $imageUrl = $card->artBack->data->attributes->formats->card->url;
+        $imageWidth = $card->artBack->data->attributes->width;
+        $imageHeight = $card->artBack->data->attributes->height;
+        $isLandscape = $imageWidth > $imageHeight;
         $arr = explode("_", $imageUrl);
         $arr = explode(".", $arr[count($arr)-1]);
         $uuid = $arr[0];
-        CheckImage($uuid, $imageUrl, $language, isLandscape:false, isBottomPosition:false); // Back image is always portrait and top position
+        CheckImage($uuid, $imageUrl, $language, isLandscape:$isLandscape, isBottomPosition:false);
         AddToArrays($cardID, $uuid);
       }
     }

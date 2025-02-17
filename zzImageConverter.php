@@ -1,14 +1,13 @@
 <?php
 
-function CheckImage($cardID, $url, $language, $isLandscape=false, $isBottomPosition=false)
-{
-  if($language == "EN"){
+function CheckImage($cardID, $url, $language, $isLandscape=false, $isBottomPosition=false) {
+  if ($language == "EN") {
     $filename = "./WebpImages/" . $cardID . ".webp";
     $filename = "./WebpImages2/" . $cardID . ".webp";
     $filenameNew = "./UnimplementedCards/" . $cardID . ".webp";
     $concatFilename = "./concat/" . $cardID . ".webp";
     $cropFilename = "./crops/" . $cardID . "_cropped.png";
-  }else{
+  } else {
     $filename = "./WebpImages/" . $language . "/" . $cardID . ".webp";
     $filename = "./WebpImages2/" . $language . "/" . $cardID . ".webp";
     $concatFilename = "./concat/" . $language . "/" . $cardID . ".webp";
@@ -16,10 +15,11 @@ function CheckImage($cardID, $url, $language, $isLandscape=false, $isBottomPosit
   }
 
   $isNew = false;
-  if(!file_exists($filename))
-  {
+
+  if (!file_exists($filename)) {
     $imageURL = $url;
-    echo("Image for " . $cardID . " does not exist.<BR>");
+    echo("Image for $cardID does not exist.<BR>");
+
     $handler = fopen($filename, "w");
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $imageURL);
@@ -27,26 +27,32 @@ function CheckImage($cardID, $url, $language, $isLandscape=false, $isBottomPosit
     curl_exec($ch);
     curl_close($ch);
     //if(filesize($filename) < 10000) { unlink($filename); return; }
-    if(file_exists($filename)) echo("Image for " . $cardID . " successfully retrieved.<BR>");
-    if(file_exists($filename))
-    {
+
+    if (file_exists($filename)) {
+      echo("Image for " . $cardID . " successfully retrieved.<BR>");
       echo("Normalizing file size for " . $cardID . ".<BR>");
       echo("Is Landscape: " . $isLandscape . "<BR>");
       echo("Is Bottom Position: " . $isBottomPosition . "<BR>");
       $image = imagecreatefrompng($filename);
       //$image = imagecreatefromjpeg($filename);
-      if($isLandscape) {
-        if(imagesy($image) > imagesx($image)) $image = imagerotate($image, -90, 0);
+
+      if ($isLandscape) {
+        if(imagesy($image) > imagesx($image)) {
+          $image = imagerotate($image, -90, 0);
+        }
         $image = imagescale($image, 628, 450);
+      } else {
+        $image = imagescale($image, 450, 628);
       }
-      else $image = imagescale($image, 450, 628);
       imagewebp($image, $filename);
       // Free up memory
       imagedestroy($image);
     }
+
     $isNew = true;
   }
-  if($language == "EN" && $isNew && !file_exists($filenameNew)) {
+
+  if ($language == "EN" && $isNew && !file_exists($filenameNew)) {
     echo("Converting image for " . $cardID . " to new format.<BR>");
     try {
       $image = imagecreatefromwebp($filename);
@@ -56,11 +62,11 @@ function CheckImage($cardID, $url, $language, $isLandscape=false, $isBottomPosit
     imagewebp($image, $filenameNew);
     imagedestroy($image);
   }
-  if(!file_exists($concatFilename))
-  {
+
+  if (!file_exists($concatFilename)) {
     echo("Concat image for " . $cardID . " does not exist. Converting: $filename<BR>");
-    if(file_exists($filename))
-    {
+
+    if (file_exists($filename)) {
       echo("Attempting to convert image for " . $cardID . " to concat.<BR>");
 
       $image = imagecreatefromwebp($filename);
@@ -88,14 +94,17 @@ function CheckImage($cardID, $url, $language, $isLandscape=false, $isBottomPosit
       imagedestroy($dest);
       imagedestroy($imageTop);
       imagedestroy($imageBottom);
-      if(file_exists($concatFilename)) echo("Image for " . $cardID . " successfully converted to concat.<BR>");
+
+      if (file_exists($concatFilename)) {
+        echo("Image for " . $cardID . " successfully converted to concat.<BR>");
+      }
     }
   }
-  if(!file_exists($cropFilename))
-  {
+
+  if (!file_exists($cropFilename)) {
     echo("Crop image for " . $cardID . " does not exist.<BR>");
-    if(file_exists($filename))
-    {
+
+    if (file_exists($filename)) {
       echo("Attempting to convert image for " . $cardID . " to crops.<BR>");
       try {
         $image = imagecreatefromwebp($filename);
