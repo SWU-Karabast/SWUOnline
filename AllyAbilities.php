@@ -2705,7 +2705,7 @@ function AllyHitEffects() {
 }
 
 function AllyDamageTakenAbilities($player, $index, $damage, $fromCombat=false, $enemyDamage=false,
-  $fromUnitEffect=false, $indirectDamage=false)
+  $fromUnitEffect=false, $preventable=true)
 {
   $damagedAlly = new Ally("MYALLY-" . $index, $player);
 
@@ -2740,7 +2740,7 @@ function AllyDamageTakenAbilities($player, $index, $damage, $fromCombat=false, $
         break;
       //Jump to Lightspeed
       case "9611596703"://Allegiant General Pryde
-        if($indirectDamage) {
+        if(!$preventable) {
           global $layers;
           $skipLayer = false;
           for($i=0; $i<count($layers); $i+=LayerPieces()) {

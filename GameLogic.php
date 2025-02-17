@@ -521,7 +521,6 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $sourcePlayer = count($parameterArr) > 2 ? $parameterArr[2] : ($targetPlayer == 1 ? 2 : 1);
           $fromUnitEffect = count($parameterArr) > 3 && (bool)$parameterArr[3];
           $preventable = count($parameterArr) > 4 ? $parameterArr[4] == 1 : 1;
-          $indirectDamage = count($parameterArr) > 5 ? $parameterArr[5] == 1 : 0;
           if($targetArr[0] == "MYALLY" || $targetArr[0] == "THEIRALLY") {
             $isAttackTarget = GetAttackTarget() == $lastResult;
             $isAttacker = AttackerMZID($player) == $lastResult;
@@ -530,8 +529,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             $destroyed = $ally->DealDamage($parameterArr[1],
                 enemyDamage:(count($parameterArr) > 2 && $sourcePlayer != $targetPlayer),
                 fromUnitEffect: $fromUnitEffect,
-                preventable: $preventable,
-                indirectDamage: $indirectDamage);
+                preventable: $preventable);
 
             if($destroyed) {
               if(($isAttackTarget || $isAttacker) && !$attackerHasOverwhelm) CloseCombatChain();
@@ -1889,8 +1887,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $maxPerTarget = count($parameter) > 2 ? $parameter[2] : 0;
       $sourcePlayer = count($parameter) > 3 ? $parameter[3] : $player;
       $preventable = count($parameter) > 4 ? $parameter[4] : 1;
-      $isIndirect = count($parameter) > 5 ? $parameter[5] : 0;
-      $zones = count($parameter) > 6 ? $parameter[6] : "THEIRALLY";
+      $zones = count($parameter) > 5 ? $parameter[5] : "THEIRALLY";
       $mineArr = [];
       if($zones == "OURALLIES") {
         $mineArr = $lastResult[1];
@@ -1915,7 +1912,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       }
       else {
         $dqVars[0] = $parameter[0];
-        if($isIndirect && $lastResult[0] != "BASE") array_unshift($lastResult, "BASE");
+        if(!$preventable && $lastResult[0] != "BASE") array_unshift($lastResult, "BASE");
       }
 
       $index = $lastResult[count($lastResult) - 1];
@@ -1943,7 +1940,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       unset($lastResult[count($lastResult) - 1]);
       $lastResult = array_values($lastResult);
       $damageIndices = GetIndices(($maxPerTarget == 0 ? $parameter[0] : min($parameter[0], $maxPerTarget)) + 1);
-      if($isIndirect) {
+      if(!$preventable) {
         $damageIndicesArr = explode(",", $damageIndices);
         if($zones == "MYALLY" || $zones == "THEIRALLY") {
           $ally = new Ally("MYALLY-" . $index, ($player != $sourcePlayer ? $player : ($player == 1 ? 2 : 1)));
@@ -1961,7 +1958,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         $nextZones = $sourcePlayer == $player ? "THEIRCHAR" : "MYCHAR";
       }
       if(count($lastResult) > 0) {
-        PrependDecisionQueue("MULTIDISTRIBUTEDAMAGE", $player, "-,$parameter[1],$maxPerTarget,$sourcePlayer,$preventable,$isIndirect,$nextZones");
+        PrependDecisionQueue("MULTIDISTRIBUTEDAMAGE", $player, "-,$parameter[1],$maxPerTarget,$sourcePlayer,$preventable,$nextZones");
         PrependDecisionQueue("PASSPARAMETER", $player, implode(",", $lastResult));
       }
 
@@ -1971,7 +1968,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       }
       $cardLink = str_contains($zones, "CHAR") ? CardLink($char[0], $char[0]) : CardLink($allies[$index], $allies[$index]);
       $dqContext = "Choose an amount of damage to deal to " . $cardLink;
-      PrependDecisionQueue("MZOP", $player, "DEALDAMAGE,{1},$sourcePlayer,$parameter[1],$preventable,$isIndirect");
+      PrependDecisionQueue("MZOP", $player, "DEALDAMAGE,{1},$sourcePlayer,$parameter[1],$preventable");
       PrependDecisionQueue("PASSPARAMETER", $player, "$zones-" . $index);
       PrependDecisionQueue("SETDQVAR", $player, "1");
       PrependDecisionQueue("BUTTONINPUTNOPASS", $player, $damageIndices);
@@ -1986,7 +1983,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           AddDecisionQueue("PASSPARAMETER", $player, implode(",", $mineArr));
           AddDecisionQueue("SETDQVAR", $player, "2");
           AddDecisionQueue("PASSPARAMETER", $player, implode(",", $lastResult));
-          AddDecisionQueue("MULTIDISTRIBUTEDAMAGE", $player, "-,$parameter[1],$maxPerTarget,$sourcePlayer,$preventable,$isIndirect,$nextZones");
+          AddDecisionQueue("MULTIDISTRIBUTEDAMAGE", $player, "-,$parameter[1],$maxPerTarget,$sourcePlayer,$preventable,$nextZones");
         }
       }
       return $lastResult;
