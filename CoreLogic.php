@@ -2345,7 +2345,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
 {
   global $currentPlayer, $layers, $CS_PlayIndex, $CS_OppIndex, $initiativePlayer, $CCS_CantAttackBase, $CS_NumAlliesDestroyed;
   global $CS_NumFighterAttacks, $CS_NumNonTokenVehicleAttacks, $CS_NumFirstOrderPlayed;
-  global $CS_NumUsesLeaderUpgrade1, $CS_NumUsesLeaderUpgrade2;
+  global $CS_PlayedAsUpgrade, $CS_NumUsesLeaderUpgrade1, $CS_NumUsesLeaderUpgrade2;
   $index = GetClassState($currentPlayer, $CS_PlayIndex);
   $otherPlayer = $currentPlayer == 1 ? 2 : 1;
   if($from == "PLAY" && IsAlly($cardID, $currentPlayer)) {
@@ -6026,12 +6026,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         }
       }
     case "6421006753"://The Mandalorian
-      for ($i = 0; $i < 2; $i++) {
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:arena=Ground&THEIRALLY:arena=Ground");
-        AddDecisionQueue("MZFILTER", $currentPlayer, "status=1");
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to exhaust");
-        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
+      if($from != "PLAY" && SearchCount(SearchAlliesForCard($currentPlayer, "6421006753")) > 0) {
+        for ($i = 0; $i < 2; $i++) {
+          AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:arena=Ground&THEIRALLY:arena=Ground");
+          AddDecisionQueue("MZFILTER", $currentPlayer, "status=1");
+          AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to exhaust");
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+          AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
+        }
       }
       break;
     case "7924461681"://Leia Organa
