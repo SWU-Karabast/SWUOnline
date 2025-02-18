@@ -2140,6 +2140,24 @@ function PlayerAspects($player)
       }
     }
   }
+  //check they have a leader upgrade for your aspects
+  $otherPlayer = $player == 1 ? 2 : 1;
+  $theirAllies = &GetAllies($otherPlayer);
+  for($i=0; $i<count($theirAllies); $i+=AllyPieces())
+  {
+    $ally = new Ally("MYALLY-" . $i, $otherPlayer);
+    if($ally->IsUpgraded()) {
+      $upgrades = $ally->GetUpgrades(withMetadata:true);
+      for($j=0; $j<count($upgrades); $j+=SubcardPieces()) {
+        if(CardIDIsLeader($upgrades[$j]) && $upgrades[$j+1 == $player]) {
+          $cardAspects = explode(",", CardAspects($upgrades[$j]));
+          for($k=0; $k<count($cardAspects); ++$k) {
+            ++$aspects[$cardAspects[$k]];
+          }
+        }
+      }
+    }
+  }
 
   return $aspects;
 }
