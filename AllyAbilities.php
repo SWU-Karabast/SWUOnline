@@ -519,6 +519,11 @@ function AllyTakeControl($player, $uniqueID) {
   $otherPlayer = $player == 1 ? 2 : 1;
   $ally = new Ally($uniqueID, $otherPlayer);
   if (!$ally->Exists()) return -1;
+  if($ally->IsLeader()) {
+    $ally->Destroy();
+    return $uniqueID;
+  }
+
   $allyIndex = $ally->Index();
   $allyController = $ally->Controller();
 
