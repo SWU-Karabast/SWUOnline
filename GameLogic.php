@@ -660,6 +660,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           }
 
           $targetAlly->Attach($upgradeID, $upgradeOwnerID);
+          CheckHealthAllAllies();
           return $lastResult;
         case "GETCAPTIVES":
           $ally = new Ally($lastResult);
@@ -1650,27 +1651,25 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       SetClassState($player, $CS_AbilityIndex, $index);
       if(IsAlly($parameter, $player)) {
         $ally = new Ally("MYALLY-" . GetClassState($player, $CS_PlayIndex), $player);
-        if($ally->IsUpgraded()) {
-          CheckForLeaderUpgradeAbilities($ally);
-        }
-        if(AllyDoesAbilityExhaust($parameter, $index)) $ally->Exhaust();
+        if(AllyDoesAbilityExhaust($parameter)) $ally->Exhaust();
       }
       $names = explode(",", GetAbilityNames($parameter, GetClassState($player, $CS_PlayIndex)));
       $ability = implode(" ", explode("_", $names[$index]));
       WriteLog("<b><span style='color:Gray'>{$ability}</span></b> ability was chosen.");
       return $lastResult;
     case "SETABILITYTYPEOPP"://For activating opponent's cards
-        global $CS_OppIndex, $CS_OppCardActive;
+        global $CS_OppIndex, $CS_OppCardActive, $CS_PlayIndex;
         $lastPlayed[2] = $lastResult;
         $otherPlayer = ($player == 1 ? 2 : 1);
         $index = GetAbilityIndex($parameter, GetClassState($player, $CS_OppIndex), $lastResult, theirCard:true);
         SetClassState($player, $CS_AbilityIndex, $index);
-        if(IsAlly($parameter, $otherPlayer) && TheirAllyDoesAbilityExhaust($parameter, $index)) {
-          $ally = new Ally("MYALLY-" . GetClassState($player, $CS_PlayIndex), $player);//TODO: look into how this gets called
+        if(IsAlly($parameter, $otherPlayer) && TheirAllyDoesAbilityExhaust($parameter)) {
+          $ally = new Ally("MYALLY-" . GetClassState($player, $CS_PlayIndex), $player);
           $ally->Exhaust();
         }
         $names = explode(",", GetOpponentControlledAbilityNames($parameter));
-        WriteLog(implode(" ", explode("_", $names[$index])) . " ability was chosen!");
+        $ability = implode(" ", explode("_", $names[$index]));
+        WriteLog("<b><span style='color:Gray'>{$ability}</span></b> ability was chosen.");
         return $lastResult;
     case "MZSTARTTURNABILITY":
       MZStartTurnAbility($player, $lastResult);

@@ -596,8 +596,8 @@ function AllyEntersPlayState($cardID, $player, $from="-")
 }
 
 function AllyPlayableExhausted(Ally $ally) {
-  global $CS_LeaderUpgradeAbilityID1, $CS_NumUsesLeaderUpgrade1;
-  //global $CS_LeaderUpgradeAbilityID2, $CS_NumUsesLeaderUpgrade2;//Twin Suns prep
+  $playable = false;
+
   $cardID = $ally->CardID();
   switch($cardID) {
     case "5630404651"://MagnaGuard Wing Leader
@@ -611,62 +611,83 @@ function AllyPlayableExhausted(Ally $ally) {
       return true;
     default: break;
   }
+  if($ally->IsUpgraded()) {
+    $playable = $playable || CheckForUpgradesPlayableExhausted($ally);
+  }
 
-  $leaderUpgradeAbilityID = GetClassState($ally->Controller(), $CS_LeaderUpgradeAbilityID1);
-  $numUsesLeaderUpgradeUses = GetClassState($ally->Controller(), $CS_NumUsesLeaderUpgrade1);
-  switch($leaderUpgradeAbilityID) {
-    case "3eb545eb4b"://Poe Dameron JTL leader upgrade
-      return $ally->HasUpgrade("3eb545eb4b") && $numUsesLeaderUpgradeUses > 0;
+  return $playable;
+}
+
+function TheirAllyPlayableExhausted(Ally $ally) {
+  $playable = false;
+
+  $cardID = $ally->CardID();
+  switch($cardID) {
+    case "3577961001"://Mercenary Gunship
+      return true;
     default: break;
+  }
+  if($ally->IsUpgraded()) {
+    $playable = $playable || CheckForUpgradesPlayableExhausted($ally);
+  }
+
+  return $playable;
+}
+
+function CheckForUpgradesPlayableExhausted(Ally $ally, $theirCard=false) {
+  global $currentPlayer, $CS_NumUsesLeaderUpgrade1, $CS_NumUsesLeaderUpgrade2;
+  $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+  $playableBy = $theirCard ? $otherPlayer : $currentPlayer;
+  if($ally->IsUpgraded()) {
+    $upgrades = $ally->GetUpgrades(withMetadata:true);
+    for($i=0; $i<count($upgrades); $i+=SubcardPieces()) {
+      switch($upgrades[$i]) {
+        case "3eb545eb4b"://Poe Dameron JTL leader
+          return $upgrades[$i+1] == $playableBy && GetClassState($playableBy, $CS_NumUsesLeaderUpgrade1) > 0;
+          break;
+        default: break;
+      }
+    }
   }
 
   return false;
 }
 
-function TheirAllyPlayableExhausted($ally) {
-  $cardID = $ally->CardID();
-  switch($cardID) {
-    case "3577961001"://Mercenary Gunship
-      return true;
-    default: return false;
-  }
-}
-
-function AllyDoesAbilityExhaust($cardID, $abilityIndex) {
-  global $currentPlayer, $CS_LeaderUpgradeAbilityID1, $CS_LeaderUpgradeAbilityID2;
+function AllyDoesAbilityExhaust($cardID) {
+  global $currentPlayer;
+  $abilityName = GetResolvedAbilityName($cardID);
+  if($abilityName == "Poe Pilot") return false;
   switch($cardID) {
     case "5630404651"://MagnaGuard Wing Leader
-      return $abilityIndex == 1;
+      return $abilityName != "Droid Attack";
     case "4300219753"://Fett's Firespray
-      return $abilityIndex == 1;
+      return $abilityName != "Exhaust";
     case "2471223947"://Frontline Shuttle
-      return $abilityIndex == 1;
+      return $abilityName != "Shuttle";
     case "1885628519"://Crosshair
-      return $abilityIndex == 1 || $abilityIndex == 2;
+      return $abilityName != "Buff";
     case "040a3e81f3"://Lando Leader Unit
-      return $abilityIndex == 1;
+      return $abilityName != "Smuggle";
     case "2b13cefced"://Fennec Shand Leader Unit
-      return $abilityIndex == 1;
+      return $abilityName != "Ambush";
     case "a742dea1f1"://Han Solo Red Leader Unit
-      return $abilityIndex == 1;
-    default: break;
-  }
-  $leaderUpgradeAbilityID = GetClassState($currentPlayer, $CS_LeaderUpgradeAbilityID1);
-  switch($leaderUpgradeAbilityID) {
-    case "3eb545eb4b"://Poe Dameron JTL leader upgrade
-      return $abilityIndex == 0;
+      return $abilityName != "Play";
     default: break;
   }
 
   return true;
 }
 
-function TheirAllyDoesAbilityExhaust($cardID, $abilityIndex) {
+function TheirAllyDoesAbilityExhaust($cardID) {
+  $abilityName = GetResolvedAbilityName($cardID);
+  if($abilityName == "Poe Pilot") return false;
   switch($cardID) {
     case "3577961001"://Mercenary Gunship
-      return false;
+      return $abilityName != "Take Control";
     default: return true;
   }
+
+
 }
 
 function AllyHealth($cardID, $playerID="")
@@ -2651,9 +2672,7 @@ function SpecificAllyAttackAbilities($attackID)
         AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 1 damage to");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,1,$mainPlayer,1", 1);
-        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYCHAR:definedType=Base&THEIRCHAR:definedType=Base");
-        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a base to deal 1 damage to", 1);
-        AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        AddDecisionQueue("PASSPARAMETER", $mainPlayer, "THEIRCHAR-0", 1);
         AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,1,$mainPlayer,1", 1);
       }
       break;
@@ -2671,7 +2690,8 @@ function SpecificAllyAttackAbilities($attackID)
         AddDecisionQueue("MZOP", $mainPlayer, "ADDEXPERIENCE", 1);
       }
       if(SearchCount(SearchAllies($mainPlayer, aspect:"Aggression")) > 0) {
-        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY&MYCHAR:definedType=Base&THEIRCHAR:definedType=Base");
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY");
+        AddDecisionQueue("PREPENDLASTRESULT", $mainPlayer, "THEIRCHAR-0,", 1);
         AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to deal 1 damage to");
         AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $mainPlayer, DamageStringBuilder(1, $mainPlayer, 1), 1);

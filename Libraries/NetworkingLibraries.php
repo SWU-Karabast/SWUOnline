@@ -1517,11 +1517,11 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
       $layers[count($layers) - LayerPieces()] = "RESUMETURN"; //Means the defending player played something, so the end turn attempt failed
   }
   if ($turn[0] != "P") {
-    if ($dynCostResolved >= 0 || $oppCardActive) {
+    if ($dynCostResolved >= 0) {
       SetClassState($currentPlayer, $CS_DynCostResolved, $dynCostResolved);
       $baseCost = match ($from) {
         "RESOURCES" => SmuggleCost($cardID, $currentPlayer, $index) + SelfCostModifier($cardID, $from),
-        "PLAY", "EQUIP" => AbilityCost($cardID, $index, $oppCardActive),
+        "PLAY", "EQUIP" => AbilityCost($cardID),
         "HAND" => GetClassState($currentPlayer, $CS_PlayedAsUpgrade) == "1" && PilotingCost($cardID) > -1
         ? PilotingCost($cardID) + SelfCostModifier($cardID, $from)
         : CardCost($cardID) + SelfCostModifier($cardID, $from),
@@ -1566,16 +1566,15 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
       if ($from != "PLAY" && ($turn[0] != "B" || (count($layers) > 0 && $layers[0] != "")))
         GetLayerTarget($cardID);
       //Right now only units in play can attack
-      if (!$oppCardActive) {
-        if ($from == "PLAY") {
-          AddDecisionQueue("ATTACK", $currentPlayer, $cardID . "," . $from);
-        }
-        if ($dynCost == "")
-          AddDecisionQueue("PASSPARAMETER", $currentPlayer, "0");
-        else
-          AddDecisionQueue("GETCLASSSTATE", $currentPlayer, $CS_LastDynCost);
-        AddDecisionQueue("RESUMEPAYING", $currentPlayer, $cardID . "!" . $from . "!" . $index . "!" . $prepaidResources);
+      if ($from == "PLAY" && !$oppCardActive) {
+        AddDecisionQueue("ATTACK", $currentPlayer, $cardID . "," . $from);
       }
+      if ($dynCost == "")
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, "0");
+      else
+        AddDecisionQueue("GETCLASSSTATE", $currentPlayer, $CS_LastDynCost);
+      AddDecisionQueue("RESUMEPAYING", $currentPlayer, $cardID . "!" . $from . "!" . $index . "!" . $prepaidResources);
+
       $decisionQueue = array_merge($decisionQueue, $dqCopy);
       ProcessDecisionQueue();
       //MISSING CR 5.1.3d Decide if action that can be played as instant will be
@@ -1757,6 +1756,8 @@ function AddPrePitchDecisionQueue($cardID, $from, $index = -1, $skipAbilityType 
         AddDecisionQueue("BUTTONINPUT", $currentPlayer, $names);
         AddDecisionQueue("SETABILITYTYPE", $currentPlayer, $cardID);
       } else {
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose which ability to activate");
+        AddDecisionQueue("BUTTONINPUT", $currentPlayer, $names);
         AddDecisionQueue("SETABILITYTYPEOPP", $currentPlayer, $cardID);
       }
     }
