@@ -53,17 +53,4 @@ function HanSoloPilotLeaderJTL($player) {
   ReadyResource($player, $odds);
 }
 
-function CheckForLeaderUpgradeAbilities($ally) {
-  global $CS_LeaderUpgradeAbilityID1;
-  $upgrades = $ally->GetUpgrades(withMetadata:false);
-  for($i=0; $i<count($upgrades); ++$i) {
-    switch($upgrades[$i]) {
-      case "3eb545eb4b":
-        SetClassState($ally->Controller(), $CS_LeaderUpgradeAbilityID1, $upgrades[$i]);
-        break;
-      default: break;
-    }
-  }
-}
-
 ?>

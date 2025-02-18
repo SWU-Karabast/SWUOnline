@@ -1186,7 +1186,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       $border = CardBorderColor($theirAllies[$i], "ALLY", $action == 16, "THEIRS");
 
       $ally = new Ally($mzIndex, $otherPlayer);
-      $playable = NumResourcesAvailable($currentPlayer) >= AbilityCost($ally->CardID(), $ally->Index(), true);
+      $playable = GetOpponentControlledAbilityNames($ally->CardID()) != "";
 
       if (!$mzChooseFromPlay && $playable && TheirAllyPlayableExhausted($ally)) {
         $border = CardBorderColor($theirAllies[$i], "PLAY", $playable);
@@ -1342,9 +1342,6 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         $actionDataOverride = $inOptions ? $mzIndex : 0;
         $border = CardBorderColor($myAllies[$i], "PLAY", $action == 16);
       } else {
-        if($ally->IsUpgraded()) {
-          CheckForLeaderUpgradeAbilities($ally);
-        }
         $playable = IsPlayable($myAllies[$i], $turn[0], "PLAY", $i, $restriction) && (!$ally->IsExhausted() || AllyPlayableExhausted($ally));
         $border = CardBorderColor($myAllies[$i], "PLAY", $playable);
         $action = $currentPlayer == $playerID && $turn[0] != "P" && $playable ? 24 : 0;
