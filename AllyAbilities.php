@@ -705,26 +705,28 @@ function AllyHealth($cardID, $playerID="")
 
 function AllyLeavesPlayAbility($player, $index)
 {
-  $allies = &GetAllies($player);
-  $cardID = $allies[$index];
-  $uniqueID = $allies[$index + 5];
-  $fromEpicAction = $allies[$index + 16];
-  $leaderUndeployed = LeaderUndeployed($cardID);
+  global $CS_CachedLeader1EpicAction, $CS_CachedLeader2EpicAction;
+  $cachedEpicAction1 = GetClassState($player, $CS_CachedLeader1EpicAction) == 1;
+  $ally = new Ally("MYALLY-" . $index, $player);
+  $leaderUndeployed = LeaderUndeployed($ally->CardID());
   if($leaderUndeployed != "") {
-    AddCharacter($leaderUndeployed, $player, counters:$fromEpicAction ? 1 : 0, status:1);
+    $usedEpicAction = $ally->FromEpicAction() || $cachedEpicAction1;
+    AddCharacter($leaderUndeployed, $ally->Owner(), counters:$usedEpicAction ? 1 : 0, status:1);
   }
   //Pilot leader upgrades
-  $subcardsArr = explode(",", $allies[$index + 4]);
+  $subcardsArr = $ally->GetSubcards();
   for($i=0;$i<count($subcardsArr);$i+=SubcardPieces()) {
-    if(CardIDIsLeader($subcardsArr[$i])) {
-      $leaderUndeployed = LeaderUndeployed($subcardsArr[$i]);
+    $subcard = new SubCard($ally, $i);
+    if(CardIDIsLeader($subcard->CardID())) {
+      $leaderUndeployed = LeaderUndeployed($subcard->CardID());
       if($leaderUndeployed != "") {
-        AddCharacter($leaderUndeployed, $player, counters:$subcardsArr[$i+4] == 1 ? 1 : 0, status:1);
+        $usedEpicAction = $subcard->FromEpicAction() || $cachedEpicAction1;
+        AddCharacter($leaderUndeployed, $subcard->Owner(), counters:$usedEpicAction ? 1 : 0, status:1);
       }
     }
   }
 
-  switch($cardID)
+  switch($ally->CardID())
   {
     case "3401690666"://Relentless
       $otherPlayer = ($player == 1 ? 2 : 1);
@@ -735,11 +737,11 @@ function AllyLeavesPlayAbility($player, $index)
       break;
     case "7964782056"://Qi'Ra unit
       $otherPlayer = $player == 1 ? 2 : 1;
-      SearchLimitedCurrentTurnEffects("7964782056", $otherPlayer, uniqueID:$uniqueID, remove:true);
+      SearchLimitedCurrentTurnEffects("7964782056", $otherPlayer, uniqueID:$ally->UniqueID(), remove:true);
       break;
     case "3503494534"://Regional Governor
       $otherPlayer = $player == 1 ? 2 : 1;
-      SearchLimitedCurrentTurnEffects("3503494534", $otherPlayer, uniqueID:$uniqueID, remove:true);
+      SearchLimitedCurrentTurnEffects("3503494534", $otherPlayer, uniqueID:$ally->UniqueID(), remove:true);
       break;
     case "4002861992"://DJ (Blatant Thief)
       $djAlly = new Ally("MYALLY-" . $index, $player);

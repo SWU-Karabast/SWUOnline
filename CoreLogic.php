@@ -2364,6 +2364,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
   global $currentPlayer, $layers, $CS_PlayIndex, $CS_OppIndex, $initiativePlayer, $CCS_CantAttackBase, $CS_NumAlliesDestroyed;
   global $CS_NumFighterAttacks, $CS_NumNonTokenVehicleAttacks, $CS_NumFirstOrderPlayed;
   global $CS_PlayedAsUpgrade, $CS_NumUsesLeaderUpgrade1, $CS_NumUsesLeaderUpgrade2;
+  global $CS_CachedLeader1EpicAction, $CS_CachedLeader2EpicAction;
   $index = GetClassState($currentPlayer, $CS_PlayIndex);
   $otherPlayer = $currentPlayer == 1 ? 2 : 1;
   if($from == "PLAY" && IsAlly($cardID, $currentPlayer)) {
@@ -2432,7 +2433,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         return "";
       }
       if($abilityName == "Deploy" || $abilityName == "") {
-        $epicAction = $cardID != "3905028200";//Admiral Trench leader (so far the only one)
+        $epicAction = $cardID != "3905028200" ? 1 : 0;//Admiral Trench leader (so far the only one)
         $playUniqueID = PlayAlly(LeaderUnit($cardID), $currentPlayer, epicAction:$epicAction);
         if (HasShielded(LeaderUnit($cardID), $currentPlayer)) {
           AddLayer("TRIGGER", $currentPlayer, "SHIELDED", "-", "-", $playUniqueID);
@@ -2543,6 +2544,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         }
       }
       RemoveCharacter($currentPlayer, CharacterPieces());
+      if($epicAction == 1) SetClassState($currentPlayer, $CS_CachedLeader1EpicAction, $epicAction);
       //Base deploy ability
       $char = &GetPlayerCharacter($currentPlayer);
       $baseID = $char[0];
