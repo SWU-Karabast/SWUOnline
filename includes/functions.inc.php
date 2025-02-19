@@ -224,7 +224,7 @@ function addFavoriteDeck($userID, $decklink, $deckName, $heroID, $format = "")
 	$conn = GetDBConnection();
 	$deckName = implode("", explode("\"", $deckName));
 	$deckName = implode("", explode("'", $deckName));
-	$values = "'" . $decklink . "'," . $userID . ",'" . $deckName . "','" . $heroID . "','" . $format . "'";
+	$values = "'" . $decklink . "'," . $userID . ",'" . $deckName . "','" . $heroID . "','" . FormatCode($format) . "'";
 	$sql = "INSERT IGNORE INTO favoritedeck (decklink, usersId, name, hero, format) VALUES (?, ?, ?, ?, ?);";
 	$stmt = mysqli_stmt_init($conn);
 	if (mysqli_stmt_prepare($stmt, $sql)) {

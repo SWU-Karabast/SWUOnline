@@ -99,7 +99,7 @@ $visibility = GetCachePiece($gameName, 9);
 $format = GetCachePiece($gameName, 13);
 $currentPlayer = 0;
 $isReplay = 0;
-WriteCache($gameName, ($currentUpdate + 1) . "!" . $currentTime . "!" . $currentTime . "!-1!-1!" . $currentTime . "!"  . $p1Hero . "!" . $p2Hero . "!" . $visibility . "!" . $isReplay . "!0!0!" . $format . "!" . $MGS_GameStarted . "!0!0!$currentTime!0!0"); //Initialize SHMOP cache for this game
+WriteCache($gameName, ($currentUpdate + 1) . "!" . $currentTime . "!" . $currentTime . "!-1!-1!" . $currentTime . "!"  . $p1Hero . "!" . $p2Hero . "!" . $visibility . "!" . $isReplay . "!0!0!" . FormatCode($format) . "!" . $MGS_GameStarted . "!0!0!$currentTime!0!0"); //Initialize SHMOP cache for this game
 
 ob_start();
 include "ParseGamestate.php";

@@ -118,10 +118,10 @@ include_once 'Header.php';
   echo ("<label for='format' class='SelectDeckInput'>Format</label>");
   echo ("<select name='format' id='format' onchange='toggleInfoBox()'>");
   if ($canSeeQueue) {
-    echo ("<option value='cc' " . ($defaultFormat == 0 ? " selected" : "") . ">Premier</option>");
-    echo ("<option value='compcc' " . ($defaultFormat == 1 ? " selected" : "") . ">Request-Undo Premier</option>");
+    echo ("<option value='premierf' " . ($defaultFormat == 0 ? " selected" : "") . ">Premier</option>");
+    echo ("<option value='reqsundo' " . ($defaultFormat == 1 ? " selected" : "") . ">Request-Undo Premier</option>");
   }
-  echo ("<option value='livinglegendscc'" . ($defaultFormat == 4 ? " selected" : "") . ">Open Format</option>");
+  echo ("<option value='openform'" . ($defaultFormat == 4 ? " selected" : "") . ">Open Format</option>");
   echo ("</select>");
   ?>
 
@@ -203,7 +203,7 @@ include_once 'Header.php';
   function toggleInfoBox() {
     var formatSelect = document.getElementById('format');
     var infoBox = document.getElementById('info-box');
-    if (formatSelect.value === 'livinglegendscc') {
+    if (formatSelect.value === 'openform') {
       infoBox.style.display = 'block';
     } else {
       infoBox.style.display = 'none';

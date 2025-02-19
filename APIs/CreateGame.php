@@ -89,8 +89,8 @@ if (file_exists("../Games/$gameName") || !mkdir("../Games/$gameName", 0700, true
 }
 
 if($isUserBanned) {
-  if($format == "cc" || $format == "livinglegendscc" || $format == "llcc") $format = "shadowcc";
-  else if($format == "compcc") $format = "shadowcompcc";
+  if($format == "premierf" || $format == "openform" || $format == "llcc") $format = "shadowcc";
+  else if($format == "reqsundo") $format = "shadowcompcc";
   else if($format == "blitz" || $format == "compblitz" || $format == "commoner" || $format == "llblitz") $format = "shadowblitz";
 }
 

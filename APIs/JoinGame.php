@@ -443,7 +443,7 @@ function IsCardBanned($cardID, $format)
 {
   $set = substr($cardID, 0, 3);
   //Ban spoiler cards in non-open-format
-  //if($format != "livinglegendscc" && ($set == "HVY")) return true;
+  //if($format != "openform" && ($set == "HVY")) return true;
   switch($format) {
     case "blitz": case "compblitz":
       switch($cardID) {
@@ -465,30 +465,15 @@ function IsCardBanned($cardID, $format)
           return true;
         default: return false;
       }
-    case "cc": case "compcc":
+    case "premierf": case "reqsundo":
       switch($cardID) {
-        case "MON001": case "MON003": // Prism Sculptor of Arc Light | Luminaris
-        case "EVR017": // Bravo, Star of the Show
-        case "MON153": case "MON155": // Chane, Bound by Shadow | Galaxxi Black
-        case "ELE006": // Awakening
-        case "ELE186": case "ELE187": case "ELE188": // Ball Lightning
-        case "WTR164": case "WTR165": case "WTR166": // Drone of Brutality
-        case "ELE223":  // Duskblade
-        case "ARC170": case "ARC171": case "ARC172": // Plunder Run
-        case "MON239": // Stubby Hammers
-        case "CRU141": // Bloodsheath Skeleta
-        case "ELE114": // Pulse of Isenloft
-        case "ELE031": case "ELE034": // Lexi, Livewire | Voltaire, Strike Twice
-        case "ELE062": case "ELE222": // Briar, Warden of Thorns | Rosetta Thorn
-        case "ELE001": case "ELE003": // Oldhim, Grandfather of Eternity | Winter's Wail
-        case "UPR102": case "EVR121": // Iyslander, Stormbind | Kraken's Aethervein
+        case "MON001": case "MON003": //TODO:look into this for Boba Fett leader
           return true;
         default: return false;
       }
     case "commoner":
       switch($cardID) {
-        case "ELE186": case "ELE187": case "ELE188": // Ball Lightning
-        case "MON266": case "MON267": case "MON268": // Belittle
+        case "ELE186": case "ELE187": case "ELE188": //TODO: look into implementing this for fun
           return true;
         default: return false;
       }

@@ -65,8 +65,8 @@ $deck = (isset($submission->deck) ? implode(" ", $submission->deck) : "");
 
 
 $playerDeck = $submission->deck;
-$deckCount = count($playerDeck);
-if($deckCount < 60 && ($format == "cc" || $format == "compcc" || $format == "llcc")) {
+$deckCount = count($playerDeck);//TODO: see if this gets called..
+if($deckCount < 60 && ($format == "premierf" || $format == "reqsundo" || $format == "llcc")) {
   $response->status = "FAIL";
   $response->deckError = "Unable to submit player " . $playerID . "'s deck. " . $deckCount . " cards selected is below the minimum.";
   echo json_encode($response);
@@ -173,7 +173,7 @@ if($p1SideboardSubmitted == "1" && $p2SideboardSubmitted == "1") {
   $format = GetCachePiece($gameName, 13);
   $currentPlayer = 0;
   $isReplay = 0;
-  WriteCache($gameName, ($currentUpdate + 1) . "!" . $currentTime . "!" . $currentTime . "!-1!-1!" . $currentTime . "!"  . $p1Hero . "!" . $p2Hero . "!" . $visibility . "!" . $isReplay . "!0!0!" . $format . "!" . $MGS_GameStarted . "!0!0!$currentTime!0!0"); //Initialize SHMOP cache for this game
+  WriteCache($gameName, ($currentUpdate + 1) . "!" . $currentTime . "!" . $currentTime . "!-1!-1!" . $currentTime . "!"  . $p1Hero . "!" . $p2Hero . "!" . $visibility . "!" . $isReplay . "!0!0!" . FormatCode($format) . "!" . $MGS_GameStarted . "!0!0!$currentTime!0!0"); //Initialize SHMOP cache for this game
 
   ob_start();
   $filename = "../Games/" . $gameName . "/gamestate.txt";

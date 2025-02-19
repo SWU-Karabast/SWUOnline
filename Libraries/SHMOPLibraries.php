@@ -44,7 +44,7 @@ function WriteCache($name, $data)
     $redis->set($name, $serData);
   }
   else {
-    $id = shmop_open($name, "c", 0644, 128);
+    $id = shmop_open($name, "c", 0644, 256);
     if($id == false) {
       exit;
      } else {
@@ -112,7 +112,7 @@ function DeleteCache($name)
     $redis->del($name . "GS");
   }
   //Always try to delete shmop
-  $id=shmop_open($name, "w", 0644, 128);
+  $id=shmop_open($name, "w", 0644, 256);
   if($id)
   {
     shmop_delete($id);

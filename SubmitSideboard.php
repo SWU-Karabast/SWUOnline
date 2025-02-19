@@ -38,8 +38,9 @@ if ($playerCharacter != "" && $playerDeck != "") //If they submitted before load
     if(DefinedCardType($char[$i]) == "Base") $base = $char[$i];
     else if(DefinedCardType($char[$i]) == "Leader") $leader = $char[$i];
   }
+  //TODO: look into this for Data Vault
   /*
-  if ($deckCount < 60 && ($format == "cc" || $format == "compcc")) {
+  if ($deckCount < 60 && ($format == "premierf" || $format == "reqsundo")) {
     WriteLog("Unable to submit player " . $playerID . "'s deck. " . $deckCount . " cards selected is under the legal minimum.");
     header("Location: " . $redirectPath . "/GameLobby.php?gameName=$gameName&playerID=$playerID");
     exit;
