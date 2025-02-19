@@ -2716,6 +2716,10 @@ function SpecificAllyAttackAbilities($attackID)
       CreateTieFighter($currentPlayer);
       CreateTieFighter($currentPlayer);
       break;
+    case "6228218834"://Tactical Heavy Bomber
+      AddCurrentTurnEffect("6228218834", $mainPlayer, 'PLAY');
+      IndirectDamage($defPlayer, $attackerAlly->CurrentPower(), true);
+      break;
   }
 
   // Current Effect Abilities
@@ -2977,4 +2981,11 @@ function JabbasRancor($player, $index=-1) {
   AddDecisionQueue("SETDQCONTEXT", $player, "Choose something to deal 3 damage to");
   AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
   AddDecisionQueue("MZOP", $player, "DEALDAMAGE,3,$player,1", 1);
+}
+
+function InvisibleHandJTL($player) {
+  AddDecisionQueue("SEARCHDECKTOPX", $player, "8;1;include-trait-Droid&include-definedType-Unit");
+  AddDecisionQueue("ADDHAND", $player, "-", 1);
+  AddDecisionQueue("REVEALCARDS", $player, "-", 1);
+  AddDecisionQueue("SPECIFICCARD", $player, "INVISIBLE_HAND_JTL", 1);
 }

@@ -925,6 +925,17 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       if($lastResult == "Exhaust_Theirs") ExhaustResource($otherPlayer, 1);
       else if ($lastResult == "Ready_Mine") ReadyResource($player, 1);
       break;
+    case "INVISIBLE_HAND_JTL":
+      $cardCost = CardCost($lastResult);
+      if($cardCost <= 2) {
+        AddDecisionQueue("SETDQCONTEXT", $player, "Do you want to play " . CardLink($lastResult, $lastResult) . " for free?");
+        AddDecisionQueue("YESNO", $player, "-", 1);
+        AddDecisionQueue("NOPASS", $player, "-", 1);
+        AddDecisionQueue("ADDCURRENTEFFECT", $player, "7138400365", 1);
+        AddDecisionQueue("FINDINDICES", $player, "MZLASTHAND", 1);
+        AddDecisionQueue("MZOP", $player, "PLAYCARD", 1);
+      }
+      break;
     //SpecificCardLogic End
     default: return "";
   }

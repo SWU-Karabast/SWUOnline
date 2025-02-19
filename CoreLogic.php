@@ -6250,6 +6250,16 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         CreateTieFighter($currentPlayer);
       }
       break;
+    case "2711104544"://Guerilla Soldier
+      if($from != "PLAY") {
+        AddCurrentTurnEffect("2711104544", $currentPlayer, $from, $uniqueId);
+        IndirectDamage($otherPlayer, 3, true);
+        AddDecisionQueue("REMOVECURRENTEFFECT", $currentPlayer, "2711104544", 1);
+      }
+      break;
+    case "7138400365"://The Invisible Hand JTL
+      if($from != "PLAY") InvisibleHandJTL($currentPlayer);
+      break;
     //PlayAbility End
     default: break;
   }

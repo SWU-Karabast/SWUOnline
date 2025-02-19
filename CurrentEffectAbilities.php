@@ -493,6 +493,11 @@ function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
             if ($from != "PLAY" && $from != "EQUIP" && DefinedTypesContains($cardID, "Unit", $currentPlayer) && GetClassState($currentPlayer, $CS_PlayedAsUpgrade) == "0") {
               $costModifier += 1;
             }
+            break;
+          case "7138400365"://The Invisible Hand
+            $costModifier -= 99;
+            $remove = true;
+            break;
           default: break;
         }
       }
@@ -896,6 +901,7 @@ function IsCombatEffectActive($cardID)
     case "4334684518+2"://Tandem Assault
     case "8656409691"://Rio Durant
     case "6720065735"://Han Solo (Has His Moments)
+    case "6228218834"://Tactival Heavy Bomber
       return true;
     default: return false;
   }
