@@ -1718,6 +1718,9 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         switch($base) {
           case "1029978899"://Colossus
             $startingHandSize -= 1;
+          case "9586661707"://Nabat Village
+            $startingHandSize += 3;
+            break;
           default: break;
         }
 
@@ -1726,13 +1729,13 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         }
       }
 
-      if(!IsPlayerAI($initiativePlayer)) {
+      if(!IsPlayerAI($initiativePlayer) && !PlayerIsUsingNabatVillage($initiativePlayer)) {
         AddDecisionQueue("SETDQCONTEXT", $initiativePlayer, "Would you like to mulligan?");
         AddDecisionQueue("YESNO", $initiativePlayer, "-");
         AddDecisionQueue("NOPASS", $initiativePlayer, "-");
         AddDecisionQueue("MULLIGAN", $initiativePlayer, "-", 1);
       }
-      if(!IsPlayerAI($secondPlayer)) {
+      if(!IsPlayerAI($secondPlayer) && !PlayerIsUsingNabatVillage($secondPlayer)) {
         AddDecisionQueue("SETDQCONTEXT", $secondPlayer, "Would you like to mulligan?");
         AddDecisionQueue("YESNO", $secondPlayer, "-");
         AddDecisionQueue("NOPASS", $secondPlayer, "-");
