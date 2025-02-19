@@ -220,14 +220,7 @@ function AttackModifier($cardID, $player, $index)
       if ($ally->IsUpgraded()) $modifier += 1;
       break;
     case "2177194044"://Swarming Vulture Droid
-      $allies = GetAllies($player);
-      $totalSwarmingVultureDroids = 0;
-      for ($i = 0; $i < count($allies); $i += AllyPieces()) {
-        if ($allies[$i] == "2177194044" && $i != $index) {
-          $totalSwarmingVultureDroids++;
-        }
-      }
-      $modifier += $totalSwarmingVultureDroids;
+      $modifier += (SearchCount(SearchAllies($player, cardTitle:"Swarming Vulture Droid")) - 1);
       break;
     case "8845408332"://Millennium Falcon (Get Out and Push)
       $ally = new Ally("MYALLY-" . $index, $player);
