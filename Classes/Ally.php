@@ -526,13 +526,14 @@ class Ally {
   }
 
   function RemoveSubcard($subcardID, $subcardUniqueID = "", $movingPilot = false) {
-    global $CS_PlayIndex;
+    global $CS_PlayIndex, $CS_CachedLeader1EpicAction, $CS_CachedLeader2EpicAction;
     if($this->index == -1) return false;
     $subcards = $this->GetSubcards();
     for($i=0; $i<count($subcards); $i+=SubcardPieces()) {
-      if($subcards[$i] == $subcardID && ($subcardUniqueID == "" || $subcards[$i+3] == $subcardUniqueID)) {
-        $ownerId = $subcards[$i+1];
-        $epicAction = $subcards[$i+4] == 1;
+      $subcard = new SubCard($this, $i);
+      if($subcard->CardID() == $subcardID && ($subcardUniqueID == "" || $subcards[$i+3] == $subcardUniqueID)) {
+        $ownerId = $subcard->Owner();
+        $epicAction = $subcard->FromEpicAction();
 
         for ($j = SubcardPieces() - 1; $j >= 0; $j--) {
           unset($subcards[$i+$j]);
@@ -544,7 +545,8 @@ class Ally {
         if(CardIDIsLeader($subcardID) && !$movingPilot) {
           $leaderUndeployed = LeaderUndeployed($subcardID);
           if($leaderUndeployed != "") {
-            AddCharacter($leaderUndeployed, $this->playerID, counters:$epicAction ? 1 : 0, status:1);
+            $usedEpicAction = $epicAction || (GetClassState($this->Owner(), $CS_CachedLeader1EpicAction) == 1);
+            AddCharacter($leaderUndeployed, $this->playerID, counters:$usedEpicAction ? 1 : 0, status:1);
           }
         }
         return $ownerId;
@@ -847,6 +849,42 @@ class Ally {
 function LastAllyIndex($player): int {
   $allies = &GetAllies($player);
   return count($allies) - AllyPieces();
+}
+
+//SubCard class to handle interactions involving subcards
+class SubCard {
+  // Properties
+  private $subcards = [];
+  private $index = -1;
+
+  function __construct(Ally $ally, int $index) {
+    $this->subcards = $ally->GetSubcards();
+    $this->index = $index;
+  }
+
+  function Index() {
+    return $this->index;
+  }
+
+  function CardID() {
+    return $this->subcards[$this->index];
+  }
+
+  function Owner() {
+    return $this->subcards[$this->index+1];
+  }
+
+  function IsPilot() {
+    return $this->subcards[$this->index+2] == "1";
+  }
+
+  function UniqueID() {
+    return $this->subcards[$this->index+3];
+  }
+
+  function FromEpicAction() {
+    return $this->subcards[$this->index+4] == "1";
+  }
 }
 
 ?>

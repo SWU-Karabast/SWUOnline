@@ -1,9 +1,11 @@
 <?php
 
 function LeaderPilotDeploy($player, $leader, $target) {
+  global $CS_CachedLeader1EpicAction;
   $targetUnit = new Ally($target, $player);
   $cardID = LeaderUnit($leader);
-  $epicAction = $leader != "8520821318";//Poe Dameron JTL leader
+  $epicAction = $leader != "8520821318" ? 1 : 0;//Poe Dameron JTL leader
+  if($epicAction == 1) SetClassState($player, $CS_CachedLeader1EpicAction, $epicAction);
   $targetUnit->Attach($cardID, $player, epicAction:$epicAction);
 
   switch($cardID) {
