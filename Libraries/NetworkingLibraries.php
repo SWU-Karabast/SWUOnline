@@ -934,6 +934,12 @@ function ResolveChainLink()
   $totalDefense = 0;
   $attackerMZ = AttackerMZID($mainPlayer);
   $attackerArr = explode("-", $attackerMZ);
+  if($attackerArr[1] == "") {
+    ClearAttackTarget();
+    CloseCombatChain(true);
+    ProcessDecisionQueue();
+    return;
+  }
   $attacker = new Ally($attackerMZ, $mainPlayer);
   $totalAttack = $attacker->CurrentPower();
   $combatChainState[$CCS_LinkTotalAttack] = $totalAttack;
