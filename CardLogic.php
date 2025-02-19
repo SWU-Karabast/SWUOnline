@@ -1279,3 +1279,7 @@ function IndirectDamage($player, $amount, $fromUnitEffect=false)
 function CardCostIsOdd($cardID) {
   return CardCost($cardID) % 2 == 1;
 }
+
+function PlayerIsUsingNabatVillage($player) {
+  return GetPlayerCharacter($player)[0] == "9586661707";//Nabat Village
+}

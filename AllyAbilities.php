@@ -996,6 +996,13 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities, $isUp
         AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
         AddDecisionQueue("MZOP", $player, DamageStringBuilder($lastPower, $player, isUnitEffect:1), 1);
         break;
+      case "0097256640"://TIE Ambush Squadron
+        CreateTieFighter($player);
+        break;
+      case "2870117979"://Executor
+        CreateTieFighter($player);
+        CreateTieFighter($player);
+        CreateTieFighter($player);
       //AllyDestroyedAbility End
       default: break;
     }
@@ -2703,6 +2710,11 @@ function SpecificAllyAttackAbilities($attackID)
         AddDecisionQueue("BUTTONINPUT", $mainPlayer, "Exhaust_Theirs,Ready_Mine", 1);
         AddDecisionQueue("SPECIFICCARD", $mainPlayer, "SABINES_MP_CUNNING", 1);
       }
+      break;
+    case "2870117979"://Executor
+      CreateTieFighter($currentPlayer);
+      CreateTieFighter($currentPlayer);
+      CreateTieFighter($currentPlayer);
       break;
   }
 

@@ -112,6 +112,15 @@ function CharacterTakeDamageAbility($player, $index, $damage, $preventable)
 
 function CharacterStartTurnAbility($player)
 {
+  global $currentRound;
+
+  if(PlayerIsUsingNabatVillage($player) && $currentRound == 1) {
+    WriteLog("Player $player is putting 3 cards on the bottom of their deck.");
+    MZMoveCard($player, "MYHAND", "MYBOTDECK", context:"Choose a card to put on the bottom of your deck", silent:true);
+    MZMoveCard($player, "MYHAND", "MYBOTDECK", context:"Choose a card to put on the bottom of your deck", silent:true);
+    MZMoveCard($player, "MYHAND", "MYBOTDECK", context:"Choose a card to put on the bottom of your deck", silent:true);
+  }
+
   $character = &GetPlayerCharacter($player);
   for($i = 0; $i < count($character); $i += CharacterPieces()) {
     if($character[$i + 1] == 0 || $character[$i + 1] == 1) continue; //Do not process ability if it is destroyed

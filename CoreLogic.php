@@ -6231,6 +6231,25 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "MOVEPILOTUPGRADE", 1);
       break;
+    case "0097256640"://TIE Ambush Squadron
+      if($from != "PLAY") CreateTieFighter($currentPlayer);
+      break;
+    case "9810057689"://No Glory, Only Results
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to take control of");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "DESTROY", 1);
+      break;
+    case "2870117979"://Executor
+      if($from != "PLAY") {
+        CreateTieFighter($currentPlayer);
+        CreateTieFighter($currentPlayer);
+        CreateTieFighter($currentPlayer);
+      }
+      break;
     //PlayAbility End
     default: break;
   }

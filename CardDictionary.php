@@ -117,13 +117,16 @@ function RestoreAmount($cardID, $player, $index)
   $upgrades = $ally->GetUpgrades();
   for($i=0; $i<count($upgrades); ++$i) {
     $upgradeCardID = $upgrades[$i];
-
     switch($upgradeCardID) {
       case "8788948272":
         $amount += 2;
         break;
       case "7884488904"://For The Republic
         $amount += IsCoordinateActive($player) ? 2 : 0;
+        break;
+      //Jump to Lightspeed
+      case "9430527677"://Hera Syndulla Pilot
+        $amount += 1;
         break;
     }
   }
@@ -160,6 +163,7 @@ function RestoreAmount($cardID, $player, $index)
     //Jump to Lightspeed
     case "7924461681": $amount += 1; break;//Leia Organa
     case "0753794638": $amount += 2; break;//Corvus
+    case "9430527677": $amount += 1; break;//Hera Syndulla
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
@@ -597,6 +601,7 @@ function HasOverwhelm($cardID, $player, $index)
     case "3722493191"://IG-2000
     case "7072861308"://Profundity
     case "9752523457"://Finalizer
+    case "2870117979"://Executor
       return true;
     case "4619930426"://First Legion Snowtrooper
       $target = GetAttackTarget();
@@ -708,6 +713,7 @@ function HasAmbush($cardID, $player, $index, $from)
     case "2388374331"://Blue Leader
     case "1356826899"://Home One
     case "6720065735"://Han Solo (Has His Moments)
+    case "0097256640"://TIE Ambush Squadron
       return true;
 
     //conditional ambush
@@ -2456,6 +2462,7 @@ function PilotingCost($cardID, $player = "") {
     case "7700932371": $minCost = 2; break;//Boba Fett
     case "8523415830": $minCost = 2; break;//Anakin Skywalker
     case "9325037410": $minCost = 3; break;//Iden Versio
+    case "9430527677": $minCost = 2; break;//Hera Syndulla
     default: break;
   }
   return $minCost;
