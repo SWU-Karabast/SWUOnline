@@ -912,14 +912,16 @@ function PitchColor($pitch)
   }
 }
 
-function DiscardUI()
+function DiscardUI($player)
 {
-  global $turn, $currentPlayer, $playerID, $cardSize;
+  global $turn, $currentPlayer;
   $rv = "";
   $size = 120;
-  $discard = GetDiscard($playerID);
+  $discard = GetDiscard($player);
   for ($i = 0; $i < count($discard); $i += DiscardPieces()) {
-    $action = $currentPlayer == $playerID && IsPlayable($discard[$i], $turn[0], "GY", $i) ? 35 : 0;
+    $action = $currentPlayer == $player
+      ? (IsPlayable($discard[$i], $turn[0], "GY", $i) ? 35 : 0)
+      : (IsPlayable($discard[$i], $turn[0], "TGY", $i, player:$player) ? 37 : 0);
     $border = CardBorderColor($discard[$i], "GY", $action > 0);
     if($action > 0)
       $rv .= Card($discard[$i], "concat", $size, $action, 1, 0, $border, 0, strval($i));

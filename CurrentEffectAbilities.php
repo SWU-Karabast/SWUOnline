@@ -325,7 +325,7 @@ function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
     $effectCardID = $currentTurnEffects[$i];
     if($currentTurnEffects[$i + 1] == $currentPlayer) {
       if (str_starts_with($effectCardID, "TT") && strlen($effectCardID) > 2) {
-        if ($effectCardID == "TTFREE") { //Free
+        if ($effectCardID == "TTFREE" || $effectCardID == "TTOPFREE") { //Free
           $costModifier -= 99;
           $remove = true;
         } else { // TT* modifier for dynamic cost adjustments. E.g TT-2 reduces the card's cost by 2, TT+3 increases it by 3.

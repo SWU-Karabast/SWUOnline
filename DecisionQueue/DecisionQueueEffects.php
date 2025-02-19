@@ -535,7 +535,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       $upgrades = $ally->GetUpgrades(true);
       for($i=0; $i<count($upgrades); $i+=SubcardPieces()) {
         $ally->RemoveSubcard($upgrades[$i]);
-        if(!IsToken($upgrades[$i])) AddHand($upgrades[$i+1], $upgrades[$i]);
+        if(!IsToken($upgrades[$i]) && !CardIDIsLeader($upgrades[$i])) AddHand($upgrades[$i+1], $upgrades[$i]);
       }
       /*$ally->ClearSubcards();
       for($i=0; $i<count($upgradesReturned); ++$i) {
