@@ -1718,6 +1718,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         switch($base) {
           case "1029978899"://Colossus
             $startingHandSize -= 1;
+            break;
           case "9586661707"://Nabat Village
             $startingHandSize += 3;
             break;
