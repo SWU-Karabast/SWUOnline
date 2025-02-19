@@ -6260,6 +6260,21 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "7138400365"://The Invisible Hand JTL
       if($from != "PLAY") InvisibleHandJTL($currentPlayer);
       break;
+    case "6600603122"://Massassi Tactical Officer
+      if(GetResolvedAbilityName($cardID, $from) == "Fighter Attack") {
+        AddCurrentTurnEffect($cardID, $currentPlayer);
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Fighter");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "status=1", 1);
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a Fighter to attack with", 1);
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
+      }
+      break;
+    case "9921128444"://General Hux
+      if(GetResolvedAbilityName($cardID, $from) == "Draw" && GetClassState($currentPlayer, $CS_NumFirstOrderPlayed) > 0) {
+        Draw($currentPlayer);
+      }
+      break;
     //PlayAbility End
     default: break;
   }

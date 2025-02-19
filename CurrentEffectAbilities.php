@@ -255,6 +255,7 @@ function EffectAttackModifier($cardID, $playerID="")
     case "8943696478": return 2;//Admiral Holdo
     case "1397553238": return -1;//Desperate Commando
     case "3427170256": return 2;//Captain Phasma Unit
+    case "6600603122": return 1;//Massassi Tactical Officer
     default: return 0;
   }
 }
@@ -902,6 +903,7 @@ function IsCombatEffectActive($cardID)
     case "8656409691"://Rio Durant
     case "6720065735"://Han Solo (Has His Moments)
     case "6228218834"://Tactival Heavy Bomber
+    case "6600603122"://Massassi Tactical Officer
       return true;
     default: return false;
   }

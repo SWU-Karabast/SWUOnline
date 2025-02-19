@@ -237,6 +237,9 @@ function RaidAmount($cardID, $player, $index, $reportMode = false)
       case "fb475d4ea4"://IG-88 Leader Unit
         if($index != $i) $amount += 1;
         break;
+      case "9921128444"://General Hux
+        if($index != $i && TraitContains($cardID, "First Order")) $amount += 1;
+        break;
       default: break;
     }
   }
@@ -1287,6 +1290,10 @@ function CheckJTLAbilityTypes($cardID) {
       return LeaderAbilitiesIgnored() ? "" : "A";
     case "8520821318"://Poe Dameron
       return LeaderAbilitiesIgnored() ? "" : "A";
+    case "6600603122"://Massassi Tactical Officer
+      return "A,AA";
+    case "9921128444"://General Hux
+      return "A,AA";
     default: return "";
   }
 }
@@ -1583,6 +1590,10 @@ function CheckJTLAbilityNames($cardID) {
       return LeaderAbilitiesIgnored() ? "" : "Deal Damage";
     case "8520821318"://Poe Dameron
       return LeaderAbilitiesIgnored() ? "" : "Pilot";
+    case "6600603122"://Massassi Tactical Officer
+      return "Fighter Attack,Attack";
+    case "9921128444"://General Hux
+      return "Draw,Attack";
     default: return "";
   }
 }
