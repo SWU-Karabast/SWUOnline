@@ -99,6 +99,10 @@ function CompletesAttackEffect($cardID) {
       AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "7244268162,PLAY", 1);
       break;
+    //Jump To Lightspeed
+    case "7138400365"://The Invisible Hand JTL
+      InvisibleHandJTL($mainPlayer);
+      break;
     default: break;
   }
 }
@@ -224,7 +228,7 @@ function AttackModifier($cardID, $player, $index)
         }
       }
       $modifier += $totalSwarmingVultureDroids;
-      break;    
+      break;
     case "8845408332"://Millennium Falcon (Get Out and Push)
       $ally = new Ally("MYALLY-" . $index, $player);
       $upgrades = $ally->GetUpgrades();

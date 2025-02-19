@@ -2499,16 +2499,18 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
             $jabbaMzIndex = explode(",", "MYALLY-" . SearchAlliesForCard($currentPlayer, "f928681d36"));//Jabba the Hutt leader unit
             $allyMzIndices = explode(",", SearchMultizone($currentPlayer, "MYALLY"));
             $alliesNotJabba = implode(",", array_diff($allyMzIndices, $jabbaMzIndex));
-            AddDecisionQueue("PASSPARAMETER", $currentPlayer, $alliesNotJabba);
-            AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to capture another unit");
-            AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-            AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
-            AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
-            AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY", 1);
-            AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1", 1);
-            AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to capture", 1);
-            AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-            AddDecisionQueue("MZOP", $currentPlayer, "CAPTURE,{0}", 1);
+            if($alliesNotJabba != "") {
+              AddDecisionQueue("PASSPARAMETER", $currentPlayer, $alliesNotJabba);
+              AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to capture another unit");
+              AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+              AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+              AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+              AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY", 1);
+              AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1", 1);
+              AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to capture", 1);
+              AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+              AddDecisionQueue("MZOP", $currentPlayer, "CAPTURE,{0}", 1);
+            }
             break;
           case "4628885755"://Mace Windu Leader flip
             $theirAllies = &GetAllies($otherPlayer);
@@ -6248,6 +6250,31 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         CreateTieFighter($currentPlayer);
         CreateTieFighter($currentPlayer);
         CreateTieFighter($currentPlayer);
+      }
+      break;
+    case "2711104544"://Guerilla Soldier
+      if($from != "PLAY") {
+        AddCurrentTurnEffect("2711104544", $currentPlayer, $from, $uniqueId);
+        IndirectDamage($otherPlayer, 3, true);
+        AddDecisionQueue("REMOVECURRENTEFFECT", $currentPlayer, "2711104544", 1);
+      }
+      break;
+    case "7138400365"://The Invisible Hand JTL
+      if($from != "PLAY") InvisibleHandJTL($currentPlayer);
+      break;
+    case "6600603122"://Massassi Tactical Officer
+      if(GetResolvedAbilityName($cardID, $from) == "Fighter Attack") {
+        AddCurrentTurnEffect($cardID, $currentPlayer);
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Fighter");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "status=1", 1);
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a Fighter to attack with", 1);
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
+      }
+      break;
+    case "9921128444"://General Hux
+      if(GetResolvedAbilityName($cardID, $from) == "Draw" && GetClassState($currentPlayer, $CS_NumFirstOrderPlayed) > 0) {
+        Draw($currentPlayer);
       }
       break;
     //PlayAbility End
