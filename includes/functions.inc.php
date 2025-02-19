@@ -221,6 +221,7 @@ function GetDeckBuilderId($uid, $decklink)
 
 function addFavoriteDeck($userID, $decklink, $deckName, $heroID, $format = "")
 {
+  include_once "./Libraries/PlayerSettings.php";
 	$conn = GetDBConnection();
 	$deckName = implode("", explode("\"", $deckName));
 	$deckName = implode("", explode("'", $deckName));
