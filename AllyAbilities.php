@@ -1336,6 +1336,7 @@ function AllyPlayedAsUpgradeAbility($cardID, $player, $targetAlly) {
       break;
     case "9325037410"://Iden Versio
       $targetAlly->Attach("8752877738");//Shield Token
+      break;
     case "0514089787"://Frisk
       DefeatUpgrade($player, true, upgradeFilter:"maxCost=2");
       break;
