@@ -26,7 +26,13 @@ function LayerDestroyTriggers($player, $cardID, $uniqueID,
   if($serializedDestroyData!=="") $dataBuilder = $dataBuilder . "ALLYDESTROY=$serializedDestroyData" . LAYER_PIECE_SEPARATOR;
   if($serializedResourceData!=="") $dataBuilder = $dataBuilder . "ALLYRESOURCE=$serializedResourceData" . LAYER_PIECE_SEPARATOR;
   if($serializedBountyData!=="") $dataBuilder = $dataBuilder . "ALLYBOUNTIES=$serializedBountyData" . LAYER_PIECE_SEPARATOR;
-  AddLayer("TRIGGER", $player, "AFTERDESTROYABILITY", $cardID, $dataBuilder, $uniqueID);
+  if($cardID == "0474909987") {//Val
+    $valSplitLayers = explode(LAYER_PIECE_SEPARATOR, $dataBuilder);
+    AddLayer("TRIGGER", $player, "AFTERDESTROYABILITY", $cardID, $valSplitLayers[1], $uniqueID);
+    AddLayer("TRIGGER", $player, "AFTERDESTROYABILITY", $cardID, $valSplitLayers[0], $uniqueID);
+  }
+  else
+    AddLayer("TRIGGER", $player, "AFTERDESTROYABILITY", $cardID, $dataBuilder, $uniqueID);
 }
 
 function LayerTheirsDestroyedTriggers($player, $arr) {

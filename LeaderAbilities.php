@@ -1,9 +1,11 @@
 <?php
 
 function LeaderPilotDeploy($player, $leader, $target) {
+  global $CS_CachedLeader1EpicAction;
   $targetUnit = new Ally($target, $player);
   $cardID = LeaderUnit($leader);
-  $epicAction = $leader != "8520821318";//Poe Dameron JTL leader
+  $epicAction = $leader != "8520821318" ? 1 : 0;//Poe Dameron JTL leader
+  if($epicAction == 1) SetClassState($player, $CS_CachedLeader1EpicAction, $epicAction);
   $targetUnit->Attach($cardID, $player, epicAction:$epicAction);
 
   switch($cardID) {
@@ -51,19 +53,6 @@ function HanSoloPilotLeaderJTL($player) {
   }
 
   ReadyResource($player, $odds);
-}
-
-function CheckForLeaderUpgradeAbilities($ally) {
-  global $CS_LeaderUpgradeAbilityID1;
-  $upgrades = $ally->GetUpgrades(withMetadata:false);
-  for($i=0; $i<count($upgrades); ++$i) {
-    switch($upgrades[$i]) {
-      case "3eb545eb4b":
-        SetClassState($ally->Controller(), $CS_LeaderUpgradeAbilityID1, $upgrades[$i]);
-        break;
-      default: break;
-    }
-  }
 }
 
 ?>

@@ -1517,11 +1517,11 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
       $layers[count($layers) - LayerPieces()] = "RESUMETURN"; //Means the defending player played something, so the end turn attempt failed
   }
   if ($turn[0] != "P") {
-    if ($dynCostResolved >= 0 || $oppCardActive) {
+    if ($dynCostResolved >= 0) {
       SetClassState($currentPlayer, $CS_DynCostResolved, $dynCostResolved);
       $baseCost = match ($from) {
         "RESOURCES" => SmuggleCost($cardID, $currentPlayer, $index) + SelfCostModifier($cardID, $from),
-        "PLAY", "EQUIP" => AbilityCost($cardID, $index, $oppCardActive),
+        "PLAY", "EQUIP" => AbilityCost($cardID),
         "HAND" => GetClassState($currentPlayer, $CS_PlayedAsUpgrade) == "1" && PilotingCost($cardID) > -1
         ? PilotingCost($cardID) + SelfCostModifier($cardID, $from)
         : CardCost($cardID) + SelfCostModifier($cardID, $from),
@@ -1566,16 +1566,15 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
       if ($from != "PLAY" && ($turn[0] != "B" || (count($layers) > 0 && $layers[0] != "")))
         GetLayerTarget($cardID);
       //Right now only units in play can attack
-      if (!$oppCardActive) {
-        if ($from == "PLAY") {
-          AddDecisionQueue("ATTACK", $currentPlayer, $cardID . "," . $from);
-        }
-        if ($dynCost == "")
-          AddDecisionQueue("PASSPARAMETER", $currentPlayer, "0");
-        else
-          AddDecisionQueue("GETCLASSSTATE", $currentPlayer, $CS_LastDynCost);
-        AddDecisionQueue("RESUMEPAYING", $currentPlayer, $cardID . "!" . $from . "!" . $index . "!" . $prepaidResources);
+      if ($from == "PLAY" && !$oppCardActive) {
+        AddDecisionQueue("ATTACK", $currentPlayer, $cardID . "," . $from);
       }
+      if ($dynCost == "")
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, "0");
+      else
+        AddDecisionQueue("GETCLASSSTATE", $currentPlayer, $CS_LastDynCost);
+      AddDecisionQueue("RESUMEPAYING", $currentPlayer, $cardID . "!" . $from . "!" . $index . "!" . $prepaidResources);
+
       $decisionQueue = array_merge($decisionQueue, $dqCopy);
       ProcessDecisionQueue();
       //MISSING CR 5.1.3d Decide if action that can be played as instant will be
@@ -1757,6 +1756,8 @@ function AddPrePitchDecisionQueue($cardID, $from, $index = -1, $skipAbilityType 
         AddDecisionQueue("BUTTONINPUT", $currentPlayer, $names);
         AddDecisionQueue("SETABILITYTYPE", $currentPlayer, $cardID);
       } else {
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose which ability to activate");
+        AddDecisionQueue("BUTTONINPUT", $currentPlayer, $names);
         AddDecisionQueue("SETABILITYTYPEOPP", $currentPlayer, $cardID);
       }
     }
@@ -1776,7 +1777,7 @@ function AddPrePitchDecisionQueue($cardID, $from, $index = -1, $skipAbilityType 
       AddDecisionQueue("MZOP", $currentPlayer, "EXPLOIT", 1);
     }
     $pilotCost = PilotingCost($cardID, $currentPlayer);
-    if ($pilotCost >= 0) {
+    if ($pilotCost >= 0 && !CurrentTurnEffectsPlayingUnit($currentPlayer)) {
       if (!SearchCurrentTurnEffects("0011262813", $currentPlayer)) {//Wedge Antilles Leader
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose if you want to play this unit as a pilot?");
         AddDecisionQueue("YESNO", $currentPlayer, "if you want to play this unit as a pilot");
@@ -2167,15 +2168,23 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
         }
         //TODO: Fix this Relentless and first light and The Mandalorian hack
         // Events and abilities that are not played should be resolved before any ally abilities
-        else if ($from == "PLAY" || $from == "EQUIP" || $cardID == "3401690666" || $cardID == "4783554451" || $cardID == "4088c46c4d" || DefinedTypesContains($cardID, "Event", $currentPlayer)) {
+        else if ($from == "PLAY" || $from == "EQUIP" || IsUnitException($cardID) || DefinedTypesContains($cardID, "Event", $currentPlayer)) {
           AddLayer($layerName, $currentPlayer, $cardID, $from . "!" . $resourcesPaid . "!" . $target . "!" . $additionalCosts . "!" . $abilityIndex . "!" . $playIndex, "-", $uniqueID, append: true);
           if (!$openedChain)
             ResolveGoAgain($cardID, $currentPlayer, $from);
           CopyCurrentTurnEffectsFromAfterResolveEffects();
           SetClassState($currentPlayer, $CS_PlayIndex, -1);
           SetClassState($currentPlayer, $CS_CharacterIndex, -1);
-          ProcessDecisionQueue();
-          return;
+          if(IsUnitException($cardID)) {
+            $ally = new Ally($uniqueID);
+            if(!HasAmbush($ally->CardID(), $ally->Controller(), $ally->Index(), $from)) {
+              ProcessDecisionQueue();
+              return;
+            }
+          } else {
+            ProcessDecisionQueue();
+            return;
+          }
         } else if ((HasWhenPlayed($cardID) && !IsExploitWhenPlayed($cardID)) || $cardID == "8055390529") { // TODO: Fix Dooku and Traitorous hack.
           AddLayer("PLAYCARDABILITY", $currentPlayer, $cardID, $from . "!" . $resourcesPaid . "!" . $target . "!" . $additionalCosts . "!" . $abilityIndex . "!" . $playIndex, "-", $uniqueID, append: true);
         }
@@ -2202,6 +2211,64 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
   SetClassState($currentPlayer, $CS_PlayIndex, -1);
   SetClassState($currentPlayer, $CS_CharacterIndex, -1);
   ProcessDecisionQueue();
+}
+
+function CurrentTurnEffectsPlayingUnit($player) {
+  global $currentTurnEffects, $CS_AfterPlayedBy;
+  switch(GetClassState($player, $CS_AfterPlayedBy)) {
+    //Spark of Rebellion
+    case "3572356139"://Chewbacca (Walking Carpet)
+    //Jump to Lightspeed
+    case "3658069276"://Lando Calrissian leader
+      return true;
+  }
+
+  for ($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnPieces()) {
+    switch($currentTurnEffects[$i]) {
+      //Spark of Rebellion
+      case "8506660490"://Darth Vader
+      case "2756312994"://Alliance Dispatcher
+      case "4919000710"://Home One
+      case "8968669390"://U-Wing Reinforcement
+      case "3426168686"://Sneak Attack
+      case "5494760041"://Galactic Ambition
+      //Shadows of the Galaxy
+      //TODO: look into if we have any TTFREE on upgrades..
+      case "4643489029"://Palpatine's Return
+      case "5576996578"://Endless Legions
+      case "9642863632"://Bounty Hunter's Quarry
+      case "2397845395"://Strategic Acumen
+      case "6847268098"://Timely Intervention
+      case "9226435975"://Han Solo leader
+      case "a742dea1f1"://Han Solo leader unit
+      case "0911874487"://Fennec Shand leader
+      case "2b13cefced"://Fennech Shand leader unit
+      case "0598830553"://Dryden Vos
+      case "4717189843"://A New Adventure
+      case "7270736993"://Unrefusable Offer
+      case "5351496853"://Gideon's Light Cruiser
+      //Twilight of the Republic
+      case "4895747419"://Consolidation of Power
+      case "4113123883"://Unnatural Life
+      case "6849037019"://Now There Are Two of Them
+      //Jump to Lightspeed
+      case "7138400365"://The Invisible Hand
+      case "TTFREE"://Second Chance,Cobb Vanth,
+        return true;
+    }
+  }
+
+  return false;
+}
+
+function IsUnitException($cardID) {
+  return match($cardID) {
+    "3401690666" //Relentless
+    ,"4783554451" //First Light
+    ,"4088c46c4d" //The Mandalorian SHD leader unit
+      => true,
+    default => false
+  };
 }
 
 function RelentlessLostAbilities($player): bool

@@ -2140,6 +2140,24 @@ function PlayerAspects($player)
       }
     }
   }
+  //check they have a leader upgrade for your aspects
+  $otherPlayer = $player == 1 ? 2 : 1;
+  $theirAllies = &GetAllies($otherPlayer);
+  for($i=0; $i<count($theirAllies); $i+=AllyPieces())
+  {
+    $ally = new Ally("MYALLY-" . $i, $otherPlayer);
+    if($ally->IsUpgraded()) {
+      $upgrades = $ally->GetUpgrades(withMetadata:true);
+      for($j=0; $j<count($upgrades); $j+=SubcardPieces()) {
+        if(CardIDIsLeader($upgrades[$j]) && $upgrades[$j+1 == $player]) {
+          $cardAspects = explode(",", CardAspects($upgrades[$j]));
+          for($k=0; $k<count($cardAspects); ++$k) {
+            ++$aspects[$cardAspects[$k]];
+          }
+        }
+      }
+    }
+  }
 
   return $aspects;
 }
@@ -2345,7 +2363,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
 {
   global $currentPlayer, $layers, $CS_PlayIndex, $CS_OppIndex, $initiativePlayer, $CCS_CantAttackBase, $CS_NumAlliesDestroyed;
   global $CS_NumFighterAttacks, $CS_NumNonTokenVehicleAttacks, $CS_NumFirstOrderPlayed;
-  global $CS_NumUsesLeaderUpgrade1, $CS_NumUsesLeaderUpgrade2;
+  global $CS_PlayedAsUpgrade, $CS_NumUsesLeaderUpgrade1, $CS_NumUsesLeaderUpgrade2;
+  global $CS_CachedLeader1EpicAction, $CS_CachedLeader2EpicAction;
   $index = GetClassState($currentPlayer, $CS_PlayIndex);
   $otherPlayer = $currentPlayer == 1 ? 2 : 1;
   if($from == "PLAY" && IsAlly($cardID, $currentPlayer)) {
@@ -2374,7 +2393,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       DecrementClassState($currentPlayer, $CS_NumUsesLeaderUpgrade1, 1);
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "3eb545eb4b", 1);
       AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
-      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYALLY-" . $index, 1);
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, ($theirCard ? "THEIRALLY-" : "MYALLY-") . $index, 1);
       AddDecisionQueue("SETDQVAR", $currentPlayer, "1", 1);
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "1", 1);
       AddDecisionQueue("SETDQVAR", $currentPlayer, "2", 1);//set movingPilot to true
@@ -2414,7 +2433,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         return "";
       }
       if($abilityName == "Deploy" || $abilityName == "") {
-        $epicAction = $cardID != "3905028200";//Admiral Trench leader (so far the only one)
+        $epicAction = $cardID != "3905028200" ? 1 : 0;//Admiral Trench leader (so far the only one)
         $playUniqueID = PlayAlly(LeaderUnit($cardID), $currentPlayer, epicAction:$epicAction);
         if (HasShielded(LeaderUnit($cardID), $currentPlayer)) {
           AddLayer("TRIGGER", $currentPlayer, "SHIELDED", "-", "-", $playUniqueID);
@@ -2525,6 +2544,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         }
       }
       RemoveCharacter($currentPlayer, CharacterPieces());
+      if($epicAction == 1) SetClassState($currentPlayer, $CS_CachedLeader1EpicAction, $epicAction);
       //Base deploy ability
       $char = &GetPlayerCharacter($currentPlayer);
       $baseID = $char[0];
@@ -5069,16 +5089,16 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "GENERALRIEEKAN", 1);
       break;
     case "3577961001"://Mercenary Gunship
-      $abilityName = $theirCard ? GetOpponentControlledAbilityNames($cardID) : GetResolvedAbilityName($cardID, $from);
-        if($abilityName == "Take Control") {
-          global $CS_OppCardActive;
-          $oppIndex = GetClassState($currentPlayer, $CS_OppIndex);
-          $ally = new Ally("THEIRALLY-" . $oppIndex, $otherPlayer);
-          AddDecisionQueue("PASSPARAMETER", $currentPlayer, $ally->UniqueID(), 1);
-          AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL", 1);
-          AddDecisionQueue("PASSPARAMETER", $currentPlayer, -1, 1);
-          AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_OppCardActive, 1);
-        }
+      $abilityName = GetResolvedAbilityName($cardID, $from);
+      if($abilityName == "Take Control") {
+        global $CS_OppCardActive;
+        $oppIndex = GetClassState($currentPlayer, $CS_OppIndex);
+        $ally = new Ally("THEIRALLY-" . $oppIndex, $otherPlayer);
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, $ally->UniqueID(), 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL", 1);
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, -1, 1);
+        AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_OppCardActive, 1);
+      }
       break;
     case "8552292852"://Kashyyyk Defender
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
@@ -5856,7 +5876,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
       AddDecisionQueue("MZFILTER", $currentPlayer, "token=0", 1);
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to take control of", 1);
-      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL", 1);
@@ -6026,12 +6046,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         }
       }
     case "6421006753"://The Mandalorian
-      for ($i = 0; $i < 2; $i++) {
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:arena=Ground&THEIRALLY:arena=Ground");
-        AddDecisionQueue("MZFILTER", $currentPlayer, "status=1");
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to exhaust");
-        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
+      if($from != "PLAY" && SearchCount(SearchAlliesForCard($currentPlayer, "6421006753")) > 0) {
+        for ($i = 0; $i < 2; $i++) {
+          AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:arena=Ground&THEIRALLY:arena=Ground");
+          AddDecisionQueue("MZFILTER", $currentPlayer, "status=1");
+          AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to exhaust");
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+          AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
+        }
       }
       break;
     case "7924461681"://Leia Organa
@@ -6126,10 +6148,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "3132453342"://Captain Phasma
       if(GetResolvedAbilityName($cardID) == "Deal Damage" && GetClassState($currentPlayer, $CS_NumFirstOrderPlayed) > 0) {
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYCHAR:definedType=Base&THEIRCHAR:definedType=Base");
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a base to deal 1 damage to", 1);
-        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1,$currentPlayer,1", 1);
+        DealDamageAsync($otherPlayer, 2, "DAMAGE", "3132453342");
       }
       break;
     case "8174214418"://Turbolaser Salvo

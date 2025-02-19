@@ -285,8 +285,8 @@ $CS_NumCardsPlayed = 59; //Amulet of Ignition
 $CS_NamesOfCardsPlayed = 60;          //free//string;default "-"
 $CS_NumFirstOrderPlayed = 61;
 $CS_PlayedAsInstant = 62; //If the card was played as an instant -- some things like banish we lose memory of as soon as it is removed from the zone
-$CS_LeaderUpgradeAbilityID1 = 63;
-$CS_LeaderUpgradeAbilityID2 = 64;
+$CS_CachedLeader1EpicAction = 63;
+$CS_CachedLeader2EpicAction = 64;
 $CS_HitsWithSword = 65;
 $CS_NumClonesPlayed = 66;
 $CS_UnitsThatAttackedBase = 67;
@@ -491,7 +491,7 @@ function ResetClassState($player)
   global $CS_HighestRoll, $CS_NumAuras, $CS_AbilityIndex, $CS_AdditionalCosts, $CS_NumRedPlayed, $CS_PlayUniqueID, $CS_AlluvionUsed;
   global $CS_NumPhantasmAADestroyed, $CS_NumEventsPlayed, $CS_MaxQuellUsed, $CS_DamageDealt, $CS_ArcaneTargetsSelected, $CS_NumDragonAttacks, $CS_NumIllusionistAttacks;
   global $CS_LastDynCost, $CS_NumIllusionistActionCardAttacks, $CS_ArcaneDamageDealt, $CS_LayerPlayIndex, $CS_NumCardsPlayed, $CS_NamesOfCardsPlayed;
-  global $CS_PlayedAsInstant, $CS_LeaderUpgradeAbilityID1, $CS_LeaderUpgradeAbilityID2, $CS_HitsWithSword, $CS_NumMelodyPlayed,
+  global $CS_PlayedAsInstant, $CS_HitsWithSword, $CS_NumMelodyPlayed,
     $CS_NumClonesPlayed, $CS_UnitsThatAttackedBase, $CS_PlayedWithExploit, $CS_AlliesDestroyed, $CS_NumFirstOrderPlayed;
 
   $classState = &GetPlayerClassState($player);
@@ -559,8 +559,8 @@ function ResetClassState($player)
   $classState[$CS_NamesOfCardsPlayed] = "-";
   $classState[$CS_NumFirstOrderPlayed] = 0;
   $classState[$CS_PlayedAsInstant] = 0;
-  $classState[$CS_LeaderUpgradeAbilityID1] = "-";
-  $classState[$CS_LeaderUpgradeAbilityID2] = "-";
+  //$classState[$CS_CachedLeader1EpicAction];//these persist
+  //$classState[$CS_CachedLeader2EpicAction];//these persist
   $classState[$CS_HitsWithSword] = 0;
   $classState[$CS_NumClonesPlayed] = 0;
   $classState[$CS_UnitsThatAttackedBase] = "-";

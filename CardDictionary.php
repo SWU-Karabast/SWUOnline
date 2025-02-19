@@ -883,10 +883,10 @@ function HasSaboteur($cardID, $player, $index)
 //   return $cost;
 // }
 
-function AbilityCost($cardID, $index=-1, $theirCard = false)
+function AbilityCost($cardID)
 {
   global $currentPlayer;
-  $abilityName = $theirCard ? GetOpponentControlledAbilityNames($cardID) : GetResolvedAbilityName($cardID);
+  $abilityName = GetResolvedAbilityName($cardID);
   if($abilityName == "Heroic Resolve") return 2;
   if($abilityName == "Poe Pilot") return 1;
   switch($cardID) {
@@ -1401,7 +1401,9 @@ function CheckSORAbilityNames($cardID, $index, $validate) {
     case "8117080217"://Admiral Ozzel
       return "Play Imperial Unit,Attack";
     case "2471223947"://Frontline Shuttle
-      return "Shuttle,Attack";
+      $ally = new Ally("MYALLY-" . $index, $currentPlayer);
+      if($validate) return $ally->IsExhausted() ? "Shuttle" : "Shuttle,Attack";
+      else return "Shuttle,Attack";
     case "1951911851"://Grand Admiral Thrawn
       return LeaderAbilitiesIgnored() ? "" : "Exhaust";
 
@@ -1422,7 +1424,9 @@ function CheckSHDAbilityNames($cardID, $index, $validate) {
     case "1090660242"://The Client
       return "Bounty,Attack";
     case "1885628519"://Crosshair
-      return "Buff,Snipe,Attack";
+      $ally = new Ally("MYALLY-" . $index, $currentPlayer);
+      if($validate) return $ally->IsExhausted() ? "Buff" : "Buff,Snipe,Attack";
+      else return "Buff,Snipe,Attack";
     case "2503039837"://Moff Gideon
       return LeaderAbilitiesIgnored() ? "" : "Attack";
     case "2526288781"://Bossk
@@ -1578,6 +1582,8 @@ function CheckJTLAbilityNames($cardID) {
 }
 
 function GetOpponentControlledAbilityNames($cardID) {
+  global $currentPlayer, $CS_NumUsesLeaderUpgrade1;
+  $otherPlayer = ($currentPlayer == 1 ? 2 : 1);
   $abilityNames = "";
 
   switch($cardID) {
@@ -1587,13 +1593,34 @@ function GetOpponentControlledAbilityNames($cardID) {
     default: break;
   }
 
+  $theirAlliesWithCardID = explode(",", SearchAlliesForCard($otherPlayer, $cardID));
+  for($i=0; $i<count($theirAlliesWithCardID); ++$i) {
+    $ally = new Ally("MYALLY-" . $theirAlliesWithCardID[$i], $otherPlayer);
+    if($ally->IsUpgraded()) {
+      $upgrades = $ally->GetUpgrades(withMetadata:true);
+      for($j=0; $j<count($upgrades); ++$j) {
+        switch($upgrades[$j]) {
+          case "3eb545eb4b"://Poe Dameron JTL leader
+            if($upgrades[$j+1] == $currentPlayer && GetClassState($currentPlayer, $CS_NumUsesLeaderUpgrade1) > 0) {
+              if($abilityNames != "") $abilityNames .= ",";
+              $abilityNames .= "Poe Pilot";
+            }
+            break;
+          default: break;
+        }
+      }
+    }
+  }
+
   return $abilityNames;
 }
 
 function GetAbilityIndex($cardID, $index, $abilityName, $theirCard = false)
 {
   $abilityName = str_replace("_", " ", $abilityName);
-  $names = explode(",", GetAbilityNames($cardID, $index));
+  $names = $theirCard
+    ? explode(",", GetOpponentControlledAbilityNames($cardID))
+    : explode(",", GetAbilityNames($cardID, $index));
   for($i = 0; $i < count($names); ++$i) {
     if($abilityName == $names[$i]) return $i;
   }
@@ -1615,10 +1642,11 @@ function GetResolvedAbilityType($cardID, $from="-", $theirCard = false)
 
 function GetResolvedAbilityName($cardID, $from="-")
 {
-  global $currentPlayer, $CS_AbilityIndex, $CS_PlayIndex;
+  global $currentPlayer, $CS_AbilityIndex, $CS_PlayIndex, $CS_OppCardActive;
+  $theirCard = GetClassState($currentPlayer, $CS_OppCardActive) == 1;
   if($from != "PLAY" && $from != "EQUIP" && $from != "-") return "";
   $abilityIndex = GetClassState($currentPlayer, $CS_AbilityIndex);
-  $abilityNames = GetAbilityNames($cardID, GetClassState($currentPlayer, $CS_PlayIndex));
+  $abilityNames = $theirCard ? GetOpponentControlledAbilityNames($cardID) : GetAbilityNames($cardID, GetClassState($currentPlayer, $CS_PlayIndex));
   if($abilityNames == "" || $abilityIndex == "-") return "";
   $abilityNames = explode(",", $abilityNames);
   return $abilityNames[$abilityIndex];
