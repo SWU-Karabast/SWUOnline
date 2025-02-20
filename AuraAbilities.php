@@ -36,6 +36,9 @@ function UpgradeDetached($upgradeCardID, $player, $formerBearerMZIndex) {
       $formerBearer = new Ally($formerBearerMZIndex, $player);
       if($formerBearer->Owner() != $formerBearer->Controller()) AllyTakeControl($formerBearer->Owner(), $formerBearer->UniqueID());
       break;
+    case "5942811090"://Luke Skywalker (You Still With Me?)
+      LukePilotPlotArmor($player);
+      break;
     default:
       break;
   }

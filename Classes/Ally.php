@@ -533,6 +533,7 @@ class Ally {
       $subcard = new SubCard($this, $i);
       if($subcard->CardID() == $subcardID && ($subcardUniqueID == "" || $subcards[$i+3] == $subcardUniqueID)) {
         $ownerId = $subcard->Owner();
+        $isPilot = $subcard->IsPilot();
         $epicAction = $subcard->FromEpicAction();
 
         for ($j = SubcardPieces() - 1; $j >= 0; $j--) {
@@ -541,7 +542,7 @@ class Ally {
 
         $subcards = array_values($subcards);
         $this->allies[$this->index + 4] = count($subcards) > 0 ? implode(",", $subcards) : "-";
-        if(DefinedTypesContains($subcardID, "Upgrade")) UpgradeDetached($subcardID, $this->playerID, "MYALLY-" . $this->index);
+        if(DefinedTypesContains($subcardID, "Upgrade") || $isPilot) UpgradeDetached($subcardID, $this->playerID, "MYALLY-" . $this->index);
         if(CardIDIsLeader($subcardID) && !$movingPilot) {
           $leaderUndeployed = LeaderUndeployed($subcardID);
           if($leaderUndeployed != "") {
@@ -549,6 +550,7 @@ class Ally {
             AddCharacter($leaderUndeployed, $this->playerID, counters:$usedEpicAction ? 1 : 0, status:1);
           }
         }
+
         return $ownerId;
       }
     }

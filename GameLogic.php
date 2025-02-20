@@ -611,9 +611,17 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             }
           }
           $attachedAlly->RemoveSubcard($lastResult, movingPilot:true);
-          $newUID = PlayAlly($lastResult, $attachedAlly->Owner(), epicAction:$fromEpicAction);
-          $newAlly = new Ally($newUID);
-          $newAlly->Exhaust();
+          return PlayAlly($lastResult, $attachedAlly->Owner(), epicAction:$fromEpicAction);//returns uniqueid
+          break;
+        case "FALLENPILOTUPGRADE":
+          $newUID = PlayAlly($lastResult, $player, epicAction:false);//so far only Luke Skywalker JTL
+          $discard = &GetDiscard($player);
+          for($i=0; $i<count($discard); $i+=DiscardPieces()) {
+            if($discard[$i] == $lastResult) {
+              RemoveDiscard($player, $i);
+              return $newUID;
+            }
+          }
           break;
         case "ADDSHIELD":
           $ally = new Ally($lastResult);

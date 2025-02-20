@@ -2478,6 +2478,7 @@ function PilotingCost($cardID, $player = "") {
     case "8523415830": $minCost = 2; break;//Anakin Skywalker
     case "9325037410": $minCost = 3; break;//Iden Versio
     case "9430527677": $minCost = 2; break;//Hera Syndulla
+    case "5942811090": $minCost = 3; break;//Luke Skywalker (You Still With Me?)
     default: break;
   }
   return $minCost;
