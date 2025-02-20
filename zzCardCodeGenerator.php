@@ -27,6 +27,7 @@
   $hasDestroyedArray = [];
   $setArray = [];
   $cardIDArray = [];
+  $pos = 1;
   
   $language = "EN";
 
@@ -81,12 +82,15 @@
 
       if ($card->artBack->data != null) {
         $imageUrl = $card->artBack->data->attributes->formats->card->url;
+      
         $imageWidth = $card->artBack->data->attributes->width;
         $imageHeight = $card->artBack->data->attributes->height;
         $isLandscape = $imageWidth > $imageHeight;
         $arr = explode("_", $imageUrl);
         $arr = explode(".", $arr[count($arr)-1]);
         $uuid = $arr[0];
+        if ($language != 'EN') { $uuid = getENUids($pos); $pos++; } //Other Language cards have different UIDS for leader flips
+        if ($language == 'EN') saveENUids($uuid);
         CheckImage($uuid, $imageUrl, $language, isLandscape:$isLandscape, isBottomPosition:false);
         AddToArrays($cardID, $uuid);
       }
@@ -334,5 +338,26 @@
       $arenasArray[$uuid] = implode(",", $arenas);
     }
   }
+
+  function saveENUids($uuid){
+    $file = fopen("leadersUID.txt", "a");
+    fwrite($file, $uuid . PHP_EOL);
+    fclose($file);
+  }
+
+  function getENUids($pos){
+    $file = fopen("leadersUID.txt", "r");
+    $lineNumber = 0;
+    while (($line = fgets($file)) !== false) {
+      $lineNumber++;
+      if ($lineNumber == $pos) {
+        fclose($file);
+        return trim($line);
+      }
+    }
+    fclose($file);
+    return null;
+  }
+
 
 ?>
