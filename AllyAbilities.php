@@ -2607,12 +2607,13 @@ function SpecificAllyAttackAbilities($attackID)
       CreateTieFighter($mainPlayer);
       break;
     case "6390089966"://Banshee
-      $damage = $attackerAlly->Damage();
+      AddDecisionQueue("PASSPARAMETER", $mainPlayer, $attackerAlly->MZIndex());
+      AddDecisionQueue("MZOP", $mainPlayer, "GETDAMAGE");
+      AddDecisionQueue("SETDQVAR", $mainPlayer, 0);
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY");
-      AddDecisionQueue("MZFILTER", $mainPlayer, "index=MYALLY-" . $attackerAlly->Index());
-      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal " . $damage . "damage to");
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal {0} damage to");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
-      AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE," . $damage, 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,{0}", 1);
       break;
     case "7831643253"://Red Squadron Y-Wing
       IndirectDamage($defPlayer, 3, true);
