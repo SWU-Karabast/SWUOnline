@@ -3876,14 +3876,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       if($abilityName == "Shuttle") {
         $ally = new Ally("MYALLY-" . $index);
         $ally->Destroy();
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY", 1);
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an ally to attack with");
-        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-        AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
-        AddDecisionQueue("PASSPARAMETER", $currentPlayer, 1, 1);
-        AddDecisionQueue("SETCOMBATCHAINSTATE", $currentPlayer, $CCS_CantAttackBase, 1);
-        AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
+        AttackWithMyUnitEvenIfExhaustedNoBases($currentPlayer);
       }
       break;
     case "8968669390"://U-Wing Reinforcement
@@ -6277,9 +6270,24 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         Draw($currentPlayer);
       }
       break;
+    case "3436482269"://Dogfight
+      AttackWithMyUnitEvenIfExhaustedNoBases($currentPlayer);
+      break;
     //PlayAbility End
     default: break;
   }
+}
+
+function AttackWithMyUnitEvenIfExhaustedNoBases($player) {
+  global $CCS_CantAttackBase;
+  AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY", 1);
+  AddDecisionQueue("SETDQCONTEXT", $player, "Choose an ally to attack with");
+  AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
+  AddDecisionQueue("SETDQVAR", $player, "0", 1);
+  AddDecisionQueue("PASSPARAMETER", $player, 1, 1);
+  AddDecisionQueue("SETCOMBATCHAINSTATE", $player, $CCS_CantAttackBase, 1);
+  AddDecisionQueue("PASSPARAMETER", $player, "{0}", 1);
+  AddDecisionQueue("MZOP", $player, "ATTACK", 1);
 }
 
 function ReadyResource($player, $amount=1) {

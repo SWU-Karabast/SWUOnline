@@ -438,6 +438,7 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false,
   for($i=0; $i<count($upgradesWithOwnerData); $i+=SubcardPieces()) {
     if($upgradesWithOwnerData[$i] == "8752877738" || $upgradesWithOwnerData[$i] == "2007868442") continue; // Skip Shield and Experience tokens
     if($upgradesWithOwnerData[$i] == "6911505367") $discardPileModifier = "TTFREE";//Second Chance
+    if($upgradesWithOwnerData[$i] == "5942811090") LukePilotPlotArmor($player, $uniqueID);//Luke Pilot Plot Armor
     if(!CardIdIsLeader($upgradesWithOwnerData[$i]))
       AddGraveyard($upgradesWithOwnerData[$i], $upgradesWithOwnerData[$i+1], "PLAY");
   }
@@ -2991,4 +2992,12 @@ function InvisibleHandJTL($player) {
   AddDecisionQueue("ADDHAND", $player, "-", 1);
   AddDecisionQueue("REVEALCARDS", $player, "-", 1);
   AddDecisionQueue("SPECIFICCARD", $player, "INVISIBLE_HAND_JTL", 1);
+}
+
+function LukePilotPlotArmor($player) {
+  AddDecisionQueue("SETDQCONTEXT", $player, "Move Luke to the ground arena?");
+  AddDecisionQueue("YESNO", $player, "-");
+  AddDecisionQueue("NOPASS", $player, "-");
+  AddDecisionQueue("PASSPARAMETER", $player, "5942811090", 1);
+  AddDecisionQueue("MZOP", $player, "FALLENPILOTUPGRADE", 1);
 }

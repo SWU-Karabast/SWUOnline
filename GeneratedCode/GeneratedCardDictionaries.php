@@ -11523,11 +11523,9 @@ function CardTitles() {
 
 function IsUnimplemented($cardID) {
   $unimplementedCards = array (
-  1672815328 => true,
   1935873883 => true,
   2614693321 => true,
   2922063712 => true,
-  3436482269 => true,
   3584805138 => true,
   3858069945 => true,
   3905028200 => true,
@@ -11538,7 +11536,6 @@ function IsUnimplemented($cardID) {
   5052103576 => true,
   5306772000 => true,
   5763330426 => true,
-  5942811090 => true,
   6196035152 => true,
   6354077246 => true,
   7489502985 => true,
