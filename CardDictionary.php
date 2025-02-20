@@ -427,7 +427,9 @@ function HasSentinel($cardID, $player, $index)
     case "6854247423"://Tantive IV
       return true;
     case "8779760486"://Raddus
-      return SearchCount(SearchAllies($player, trait:"Resistance")) > 1;
+      return SearchCount(SearchUpgrades($player, trait:"Resistance")) > 0
+        || SearchCount(SearchAllies($player, trait:"Resistance")) > 1
+        || SearchCount(SearchCharacter($player, trait:"Resistance")) > 0;
     default: return false;
   }
 }
@@ -2479,6 +2481,7 @@ function PilotingCost($cardID, $player = "") {
     case "9325037410": $minCost = 3; break;//Iden Versio
     case "9430527677": $minCost = 2; break;//Hera Syndulla
     case "5942811090": $minCost = 3; break;//Luke Skywalker (You Still With Me?)
+    case "8757741946": $minCost = 2; break;//Poe Dameron (One Hell of a Pilot)
     default: break;
   }
   return $minCost;

@@ -1271,10 +1271,11 @@ function TraitContainsAll($cardID, $traits, $player="", $index=-1) {
 
 function TraitContains($cardID, $trait, $player="", $index=-1) {
   $trait = str_replace("_", " ", $trait); //"MZALLCARDTRAITORPASS" and possibly other decision queue options call this function with $trait having been underscoreified, so I undo that here.
-  if($index != -1) {
+  $isLeaderSide = CardIDIsLeader($cardID) && LeaderUndeployed($cardID) == "";
+  if($index != -1 && !$isLeaderSide) {
     $ally = new Ally("MYALLY-" . $index, $player);
 
-    // Check for upgrades
+    // // Check for upgrades
     $upgrades = $ally->GetUpgrades();
     for($i=0; $i<count($upgrades); ++$i) {
       switch ($upgrades[$i]) {
@@ -6273,6 +6274,20 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "3436482269"://Dogfight
       AttackWithMyUnitEvenIfExhaustedNoBases($currentPlayer);
       break;
+    case "8757741946"://Poe Dameron (One Hell of a Pilot)
+      if($target == "-") {
+        CreateXWing($currentPlayer);
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Attach Poe to a Vehicle?");
+        AddDecisionQueue("YESNO", $currentPlayer, "-");
+        AddDecisionQueue("NOPASS", $currentPlayer, "-");
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Vehicle");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "hasPilot=1");
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+        AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, $uniqueId, 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "MOVEPILOTUNIT", 1);
+      }
     //PlayAbility End
     default: break;
   }
