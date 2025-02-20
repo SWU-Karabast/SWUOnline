@@ -482,7 +482,7 @@ function FinalizeDamage($player, $damage, $damageThreatened, $type, $source)
       $damage += CurrentEffectDamageModifiers($player, $source, $type);
     }
 
-    AllyDealDamageAbilities($otherPlayer, $damage);
+    AllyDealDamageAbilities($otherPlayer, $damage, $type);
     $classState[$CS_DamageTaken] += $damage;
     if($player == $defPlayer && $type == "COMBAT" || $type == "ATTACKHIT") $combatChainState[$CCS_AttackTotalDamage] += $damage;
     // if($type == "ARCANE") $classState[$CS_ArcaneDamageTaken] += $damage;//FAB
