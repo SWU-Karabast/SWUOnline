@@ -1643,8 +1643,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
     case "DQVARPASSIFSET":
       if ($dqVars[$parameter] == "1") return "PASS";
       return "PROCEED";
-    case "ADDCARDTOCHAIN":
-      AddCombatChain($lastResult, $player, $parameter, 0);
+    // case "ADDCARDTOCHAIN"://unused
+    //   AddCombatChain($lastResult, $player, $parameter, 0);
       return $lastResult;
     case "ATTACKWITHIT":
       PlayCardSkipCosts($lastResult, "DECK");

@@ -108,7 +108,7 @@ function BlockingCardDefense($index, $from="", $resourcesPaid=-1)
   return $defense;
 }
 
-function AddCombatChain($cardID, $player, $from, $resourcesPaid)
+function AddCombatChain($cardID, $player, $from, $resourcesPaid, $upgradesWithMetadata)
 {
   global $combatChain, $turn;
   $index = count($combatChain);
@@ -119,6 +119,7 @@ function AddCombatChain($cardID, $player, $from, $resourcesPaid)
   $combatChain[] = RepriseActive();
   $combatChain[] = 0;//Attack modifier
   $combatChain[] = 0;//Defense modifier
+  $combatChain[] = $upgradesWithMetadata;
   //if($turn[0] == "B" || CardType($cardID) == "DR") OnBlockEffects($index, $from);//FAB
   CurrentEffectAttackAbility();
   return $index;
@@ -341,7 +342,10 @@ function MainCharacterPlayCardAbilities($cardID, $from)
         }
         break;
       case "9005139831"://The Mandalorian Leader
-        if(DefinedTypesContains($cardID, "Upgrade", $currentPlayer)) {
+        global $CS_PlayedAsUpgrade;
+        $pilotWasPlayed = TraitContains($cardID, "Pilot", $currentPlayer)
+          && GetClassState($currentPlayer, $CS_PlayedAsUpgrade) == "1";
+        if(DefinedTypesContains($cardID, "Upgrade", $currentPlayer) || $pilotWasPlayed) {
           AddLayer("TRIGGER", $currentPlayer, "9005139831");
         }
         break;
@@ -2011,6 +2015,8 @@ function SelfCostModifier($cardID, $from, $reportMode=false)
     case "3711891756"://Red Leader
       $modifier -= CountPilotUnitsAndPilotUpgrades($currentPlayer);
       break;
+    case "9958088138"://Invincible
+      $modifier -= CountUniqueAlliesOfTrait($currentPlayer, "Separatist") > 0 ? 1 : 0;
     default: break;
   }
   //Target cost modifier
@@ -2562,6 +2568,23 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
           WriteLog("Shadow Collective Camp drew a card.");
           break;
         default: break;
+      }
+      //Ally when leader deployed effects
+      $allies = &GetAllies($currentPlayer);
+      for($i=0; $i<count($allies); $i+=AllyPieces())
+      {
+        $ally = new Ally("MYALLY-" . $i, $currentPlayer);
+        switch($ally->CardID()) {
+          //Jump to Lightspeed
+          case "9958088138"://Invincible
+            AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:maxCost=3&THEIRALLY:maxCost=3");
+            AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
+            AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a non-leader unit that costs 3 or less to bounce");
+            AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+            AddDecisionQueue("MZOP", $currentPlayer, "BOUNCE", 1);
+            break;
+          default: break;
+        }
       }
       return CardLink($cardID, $cardID) . " was deployed.";
     }

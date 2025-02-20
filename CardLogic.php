@@ -1185,6 +1185,18 @@ function CountPilotUnitsAndPilotUpgrades($player, $other=false) {
   return $count;
 }
 
+function CountUniqueAlliesOfTrait($player, $trait) {
+  $count = 0;
+  $traited = explode(",",SearchAllies($player, trait:$trait));
+  if($traited[0] == "") return $count;
+  for($i=0;$i<count($traited);++$i) {
+    $ally = new Ally("MYALLY-" . $traited[$i], $player);
+    if($ally->IsUnique()) $count += 1;
+  }
+
+  return $count;
+}
+
 function ObiWansAethersprite($player, $index) {
   AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:arena=Space&THEIRALLY:arena=Space", 1);
   AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal 2 damage to (or pass)", 1);

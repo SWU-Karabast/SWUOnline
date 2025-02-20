@@ -376,6 +376,8 @@ function HasSentinel($cardID, $player, $index)
     case "3874382333"://Academy Graduate
     case "0235116526"://Fleet Interdictor
     case "3064aff14f"://Lando Calrissian leader unit
+    case "3584805138"://Scouting Headhunter
+    case "9014161111"://Contracted Jumpmaster
       return true;
     case "2739464284"://Gamorrean Guards
       return SearchCount(SearchAllies($player, aspect:"Cunning")) > 1;
@@ -1791,6 +1793,8 @@ function UpgradeFilter($cardID)
       return "leader=1";
     case "4886127868"://Nameless Valor
       return "token=0";
+    case "9338356823"://Dorsal Turret
+      return "trait!=Vehicle";
     default: return "";
   }
 }
