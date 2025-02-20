@@ -6150,7 +6150,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "3132453342"://Captain Phasma
       if(GetResolvedAbilityName($cardID) == "Deal Damage" && GetClassState($currentPlayer, $CS_NumFirstOrderPlayed) > 0) {
-        DealDamageAsync($otherPlayer, 2, "DAMAGE", "3132453342");
+        DealDamageAsync($otherPlayer, 1, "DAMAGE", "3132453342");
       }
       break;
     case "8174214418"://Turbolaser Salvo
