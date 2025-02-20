@@ -2716,9 +2716,9 @@ function SpecificAllyAttackAbilities($attackID)
       }
       break;
     case "2870117979"://Executor
-      CreateTieFighter($currentPlayer);
-      CreateTieFighter($currentPlayer);
-      CreateTieFighter($currentPlayer);
+      CreateTieFighter($mainPlayer);
+      CreateTieFighter($mainPlayer);
+      CreateTieFighter($mainPlayer);
       break;
     case "6228218834"://Tactical Heavy Bomber
       AddCurrentTurnEffect("6228218834", $mainPlayer, 'PLAY');
