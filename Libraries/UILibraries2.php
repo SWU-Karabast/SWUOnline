@@ -723,7 +723,13 @@ function CreatePopup($id, $fromArr, $canClose, $defaultState = 0, $title = "", $
   }
 
   // Modals
-  $rv = "<div id='" . $id . "' style='overflow-y: auto; background-color:rgba(0, 0, 0, 0.825); border-radius: 10px; padding: 10px; font-weight: 500; scrollbar-color: #888888 rgba(0, 0, 0, 0); scrollbar-width: thin; z-index:" . $overCC . "; position: absolute; top:" . $top . "; left:" . $left . "; width:" . $width . "; height:" . $height . ";" . ($defaultState == 0 ? " display:none;" : "") . "'>";
+  $bg = match($id) {
+    "MULTICHOOSE", "INSTANT", "OPT", "CHOOSEOPTION", => "background: linear-gradient(180deg, rgba(0, 0, 0, 1) 0%, rgba(32, 32, 50, 0.5) 50%, rgba(0, 0, 0, 1) 100%);",
+    "YESNO", "BUTTONINPUT" => "background: linear-gradient(180deg, rgba(0, 0, 0, 1) 0%, rgba(32, 32, 50, 0) 100%);",
+    "OVER" => "background-color:rgba(0, 0, 0, 0.8); backdrop-filter: blur(30px);",
+    default => "background-color:rgba(0, 0, 0, 0.825);"
+  };
+  $rv = "<div id='" . $id . "' style='overflow-y: auto; " . $bg . " border-radius: 10px; padding: 10px; font-weight: 500; scrollbar-color: #888888 rgba(0, 0, 0, 0); scrollbar-width: thin; z-index:" . $overCC . "; position: absolute; top:" . $top . "; left:" . $left . "; width:" . $width . "; height:" . $height . ";" . ($defaultState == 0 ? " display:none;" : "") . "'>";
 
   if ($title != "")
     $rv .= "<h" . ($big ? "1" : "3") . " style=' font-weight: 500; margin-left: 10px; margin-top: 5px; margin-bottom: 15px; text-align: center; user-select: none;'>" . $title . "</h" . ($big ? "1" : "3") . ">";
