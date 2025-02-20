@@ -556,7 +556,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             return;
           }
           $numExploits = count($exploitedAllies);
-          $explotingCardID = $dqVars[1];
+          $exploitingCardID = $dqVars[1];
 
           for($i=0; $i<$numExploits; ++$i) {
             AddDecisionQueue("ADDCURRENTEFFECT", $player, "6772128891", 1);//Exploit effect
@@ -569,7 +569,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             AddDecisionQueue("DESTROYALLY", $player, "-", 1);
           }
 
-          if($explotingCardID == "8655450523") {//Count Dooku - Fallen Jedi
+          if($exploitingCardID == "8655450523") {//Count Dooku - Fallen Jedi
             $exploitedAlliesPowers = [];
             for($i=0;$i<$numExploits;++$i) {
               $ally = new Ally("MYALLY-" . $exploitedAllies[$i], $player);
@@ -611,7 +611,12 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             }
           }
           $attachedAlly->RemoveSubcard($lastResult, movingPilot:true);
-          return PlayAlly($lastResult, $attachedAlly->Owner(), epicAction:$fromEpicAction);//returns uniqueid
+          $newUID = PlayAlly($lastResult, $attachedAlly->Owner(), epicAction:$fromEpicAction);
+          if($subcardIsLeader) {
+            $newAlly = new Ally($newUID);
+            $newAlly->Exhaust();
+          }
+          return $newUID;
           break;
         case "FALLENPILOTUPGRADE":
           $newUID = PlayAlly($lastResult, $player, epicAction:false);//so far only Luke Skywalker JTL
