@@ -2147,7 +2147,6 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
                 break;
             }
           }
-          SetClassState($currentPlayer, $CS_PlayedAsUpgrade, 0);
           break;
         default:
           break;
@@ -2234,6 +2233,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
   //Now determine what needs to happen next
   SetClassState($currentPlayer, $CS_PlayIndex, -1);
   SetClassState($currentPlayer, $CS_CharacterIndex, -1);
+  SetClassState($currentPlayer, $CS_PlayedAsUpgrade, 0);
   ProcessDecisionQueue();
 }
 

@@ -341,7 +341,10 @@ function MainCharacterPlayCardAbilities($cardID, $from)
         }
         break;
       case "9005139831"://The Mandalorian Leader
-        if(DefinedTypesContains($cardID, "Upgrade", $currentPlayer)) {
+        global $CS_PlayedAsUpgrade;
+        $pilotWasPlayed = TraitContains($cardID, "Pilot", $currentPlayer)
+          && GetClassState($currentPlayer, $CS_PlayedAsUpgrade) == "1";
+        if(DefinedTypesContains($cardID, "Upgrade", $currentPlayer) || $pilotWasPlayed) {
           AddLayer("TRIGGER", $currentPlayer, "9005139831");
         }
         break;
