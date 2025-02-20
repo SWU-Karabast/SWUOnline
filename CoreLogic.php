@@ -108,7 +108,7 @@ function BlockingCardDefense($index, $from="", $resourcesPaid=-1)
   return $defense;
 }
 
-function AddCombatChain($cardID, $player, $from, $resourcesPaid)
+function AddCombatChain($cardID, $player, $from, $resourcesPaid, $upgradesWithMetadata)
 {
   global $combatChain, $turn;
   $index = count($combatChain);
@@ -119,6 +119,7 @@ function AddCombatChain($cardID, $player, $from, $resourcesPaid)
   $combatChain[] = RepriseActive();
   $combatChain[] = 0;//Attack modifier
   $combatChain[] = 0;//Defense modifier
+  $combatChain[] = $upgradesWithMetadata;
   //if($turn[0] == "B" || CardType($cardID) == "DR") OnBlockEffects($index, $from);//FAB
   CurrentEffectAttackAbility();
   return $index;

@@ -1793,6 +1793,8 @@ function UpgradeFilter($cardID)
       return "leader=1";
     case "4886127868"://Nameless Valor
       return "token=0";
+    case "9338356823"://Dorsal Turret
+      return "trait!=Vehicle";
     default: return "";
   }
 }
