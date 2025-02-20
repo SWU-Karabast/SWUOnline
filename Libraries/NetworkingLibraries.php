@@ -396,6 +396,24 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
         ContinueDecisionQueue($buttonInput);
       }
       break;
+    case 37://Play from their discard
+      MakeGamestateBackup();
+      $found = $cardID;
+      $otherP = ($playerID == 1 ? 2 : 1);
+      if ($found >= 0) {
+        $discard = &GetDiscard($otherP);
+        if ($found >= count($discard))
+          break;
+        $cardID = $discard[$found];
+        $modifier = $discard[$found + 1];
+        if (!IsPlayable($cardID, $turn[0], "TGY", $found, player: $otherP))
+          break;
+        if (str_starts_with($modifier, "TTOP") && strlen($modifier) > 2)
+          AddCurrentTurnEffect($modifier, $playerID);
+        RemoveDiscard($otherP, $found);
+        PlayCard($cardID, "TGY");
+      }
+      break;
     case 99: //Pass
       global $isPass, $initiativeTaken, $dqState;
       $isPass = true;
@@ -916,6 +934,12 @@ function ResolveChainLink()
   $totalDefense = 0;
   $attackerMZ = AttackerMZID($mainPlayer);
   $attackerArr = explode("-", $attackerMZ);
+  if($attackerArr[1] == "") {
+    ClearAttackTarget();
+    CloseCombatChain(true);
+    ProcessDecisionQueue();
+    return;
+  }
   $attacker = new Ally($attackerMZ, $mainPlayer);
   $totalAttack = $attacker->CurrentPower();
   $combatChainState[$CCS_LinkTotalAttack] = $totalAttack;
@@ -2087,7 +2111,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
         //   BanishCardForPlayer($cardID, $currentPlayer, $from, "NA");
         //   break;
         case "ALLY":
-          $uniqueID = PlayAlly($cardID, $currentPlayer);
+          $uniqueID = PlayAlly($cardID, $currentPlayer, from:$from);
           $ally = new Ally($uniqueID, $currentPlayer);
           $index = $ally->Index();
           break;

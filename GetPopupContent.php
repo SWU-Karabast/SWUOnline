@@ -41,7 +41,7 @@ switch ($popupType) {
     break;
   case "myDiscardPopup":
     if($playerID == 3) echo (CreatePopup("myDiscardPopup", $myDiscard, 1, 0, "Your Discard", DiscardPieces()));
-    else echo (CreatePopup("myDiscardPopup", [], 1, 0, "Your Discard", 1, DiscardUI()));
+    else echo (CreatePopup("myDiscardPopup", [], 1, 0, "Your Discard", 1, DiscardUI($playerID)));
     break;
   case "myBanishPopup":
     if ($playerID == 3) {
@@ -94,7 +94,10 @@ switch ($popupType) {
     echo (CreatePopup("theirPitchPopup", $theirPitch, 1, 0, "Opponent's Pitch Zone"));
     break;
   case "theirDiscardPopup":
-    echo (CreatePopup("theirDiscardPopup", $theirDiscard, 1, 0, "Opponent's Discard Zone", DiscardPieces()));
+    $otherPlayer = ($playerID == 1 ? 2 : 1);
+    if($playerID == 3) echo (CreatePopup("theirDiscardPopup", $theirDiscard, 1, 0, "Opponent's Discard Zone", DiscardPieces()));
+    else echo (CreatePopup("theirDiscardPopup", [], 1, 0, "Opponent's Discard", 1, DiscardUI($otherPlayer)));
+    break;
     break;
   case "theirSoulPopup":
     echo (CreatePopup("theirSoulPopup", $theirSoul, 1, 0, "Opponent's Soul"));

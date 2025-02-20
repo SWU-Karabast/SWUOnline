@@ -255,6 +255,7 @@ function EffectAttackModifier($cardID, $playerID="")
     case "8943696478": return 2;//Admiral Holdo
     case "1397553238": return -1;//Desperate Commando
     case "3427170256": return 2;//Captain Phasma Unit
+    case "6600603122": return 1;//Massassi Tactical Officer
     default: return 0;
   }
 }
@@ -324,7 +325,7 @@ function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
     $effectCardID = $currentTurnEffects[$i];
     if($currentTurnEffects[$i + 1] == $currentPlayer) {
       if (str_starts_with($effectCardID, "TT") && strlen($effectCardID) > 2) {
-        if ($effectCardID == "TTFREE") { //Free
+        if ($effectCardID == "TTFREE" || $effectCardID == "TTOPFREE") { //Free
           $costModifier -= 99;
           $remove = true;
         } else { // TT* modifier for dynamic cost adjustments. E.g TT-2 reduces the card's cost by 2, TT+3 increases it by 3.
@@ -493,6 +494,11 @@ function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
             if ($from != "PLAY" && $from != "EQUIP" && DefinedTypesContains($cardID, "Unit", $currentPlayer) && GetClassState($currentPlayer, $CS_PlayedAsUpgrade) == "0") {
               $costModifier += 1;
             }
+            break;
+          case "7138400365"://The Invisible Hand
+            $costModifier -= 99;
+            $remove = true;
+            break;
           default: break;
         }
       }
@@ -896,6 +902,8 @@ function IsCombatEffectActive($cardID)
     case "4334684518+2"://Tandem Assault
     case "8656409691"://Rio Durant
     case "6720065735"://Han Solo (Has His Moments)
+    case "6228218834"://Tactival Heavy Bomber
+    case "6600603122"://Massassi Tactical Officer
       return true;
     default: return false;
   }
