@@ -112,15 +112,6 @@ function CharacterTakeDamageAbility($player, $index, $damage, $preventable)
 
 function CharacterStartTurnAbility($player)
 {
-  global $currentRound;
-
-  if(PlayerIsUsingNabatVillage($player) && $currentRound == 1) {
-    WriteLog("Player $player is putting 3 cards on the bottom of their deck.");
-    MZMoveCard($player, "MYHAND", "MYBOTDECK", context:"Choose a card to put on the bottom of your deck", silent:true);
-    MZMoveCard($player, "MYHAND", "MYBOTDECK", context:"Choose a card to put on the bottom of your deck", silent:true);
-    MZMoveCard($player, "MYHAND", "MYBOTDECK", context:"Choose a card to put on the bottom of your deck", silent:true);
-  }
-
   $character = &GetPlayerCharacter($player);
   for($i = 0; $i < count($character); $i += CharacterPieces()) {
     if($character[$i + 1] == 0 || $character[$i + 1] == 1) continue; //Do not process ability if it is destroyed
@@ -365,7 +356,8 @@ function CharacterTriggerInGraveyard($cardID)
   }
 }
 
-function AllyDealDamageAbilities($player, $damage) {
+function AllyDealDamageAbilities($player, $damage, $type) {
+  global $currentTurnEffects;
   $allies = &GetAllies($player);
   for($i = count($allies) - AllyPieces(); $i >= 0; $i -= AllyPieces()) {
     switch($allies[$i]) {
@@ -382,5 +374,21 @@ function AllyDealDamageAbilities($player, $damage) {
         break;
     }
   }
+
+  //currentt turn effects from allies
+  for($i=0;$i<count($currentTurnEffects);$i+=CurrentTurnPieces()) {
+    switch($currentTurnEffects[$i]) {
+      case "6228218834"://Tactical Heavy Bomber
+        if($type != "COMBAT") Draw($currentTurnEffects[$i+1]);
+        break;
+      case "2711104544"://Guerilla Soldier
+        if($type != "COMBAT") {
+          $ally = new Ally($currentTurnEffects[$i+2]);
+          $ally->Ready();
+        }
+        break;
+      default: break;
+      }
+    }
 }
 ?>

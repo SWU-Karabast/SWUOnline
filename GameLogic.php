@@ -1718,7 +1718,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
     // case "TRANSFORMAURA":
     //   return "AURA-" . ResolveTransformAura($player, $lastResult, $parameter);
     case "STARTGAME":
-      global $initiativePlayer, $turn, $currentPlayer;
+      global $initiativePlayer, $turn, $currentPlayer, $currentRound;
       $secondPlayer = ($initiativePlayer == 1 ? 2 : 1);
       $inGameStatus = "1";
       $MakeStartTurnBackup = true;
@@ -1764,9 +1764,16 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       MZMoveCard($secondPlayer, "MYHAND", "MYRESOURCES", may:false, context:"Choose a card to resource", silent:true);
       AddDecisionQueue("AFTERRESOURCE", $secondPlayer, "HAND", 1);
       MZMoveCard($secondPlayer, "MYHAND", "MYRESOURCES", may:false, context:"Choose a card to resource", silent:true);
+      if(PlayerIsUsingNabatVillage($player) && $currentRound == 1) {
+        WriteLog("Player $player is putting 3 cards on the bottom of their deck.");
+        MZMoveCard($player, "MYHAND", "MYBOTDECK", context:"Choose a card to put on the bottom of your deck", silent:true);
+        MZMoveCard($player, "MYHAND", "MYBOTDECK", context:"Choose a card to put on the bottom of your deck", silent:true);
+        MZMoveCard($player, "MYHAND", "MYBOTDECK", context:"Choose a card to put on the bottom of your deck", silent:true);
+      }
       AddDecisionQueue("AFTERRESOURCE", $secondPlayer, "HAND", 1);
       AddDecisionQueue("STARTTURNABILITIES", $initiativePlayer, "-");
       AddDecisionQueue("SWAPFIRSTTURN", 1, "-");
+
       return 0;
     case "SWAPFIRSTTURN":
       global $isPass;
