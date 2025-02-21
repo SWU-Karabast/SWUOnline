@@ -132,20 +132,18 @@
         fileExt = ".png";
         folderPath = folder;
         var selectedLanguage = "<?php echo $selectedLanguage; ?>";
-        if (cardNumber == "ENDSTEP" || cardNumber == "ENDTURN" || cardNumber == "RESUMETURN" || cardNumber == "PHANTASM" || cardNumber == "FINALIZECHAINLINK" || cardNumber == "DEFENDSTEP") {
-          showHover = 0;
-          borderColor = 0;
-        } else if (folder == "concat") {
-          fileExt = ".webp";
-        } else if (folder == "WebpImages2") {
-          fileExt = ".webp";
+        fileExt = ".webp";
+        if (selectedLanguage != "EN" && folder == "concat") {
+          folder = + "concat/" + selectedLanguage;
+        }else if(selectedLanguage != "EN" && folder == "WebpImages2"){
+          folder = "WebpImages2/" + selectedLanguage;
         }
         var actionData = actionDataOverride != "" ? actionDataOverride : cardNumber;
         //Enforce 375x523 aspect ratio as exported (.71)
         margin = "margin:0px;";
         border = "";
         if (borderColor != -1) margin = borderColor > 0 ? "margin:0px;" : "margin:1px;";
-        if (folder == "crops") margin = "0px;";
+        if (folder == "crops/") margin = "0px;";
 
         var rv = "<a style='" + margin + " position:relative; display:inline-block;" + (action > 0 ? "cursor:pointer;" : "") + "'" + (showHover > 0 ? " onmouseover='ShowCardDetail(event, this)' onmouseout='HideCardDetail()'" : "") + (action > 0 ? " onclick='SubmitInput(\"" + action + "\", \"&cardID=" + actionData + "\");'" : "") + ">";
 
@@ -156,16 +154,15 @@
         } else {
           border = "border: 1px solid transparent;";
         }
-
         var orientation = landscape == 1 ? "data-orientation='landscape'" : "";
         if(rotate == 1 || landscape == 1) {
           height = (maxHeight);
           width = (maxHeight * 1.29);
         }
-        else if (folder == "crops") {
+        else if (folder.startsWith("crop")) {
           height = maxHeight;
           width = (height * 1.29);
-        } else if (folder == "concat") {
+        } else if (folder.startsWith("concat")) {
           height = maxHeight;
           width = maxHeight;
         } else {
@@ -373,6 +370,7 @@
               var substype = cardArr[11];
               var className = "";
               if (type != "") {
+                  folder = "WebpImages2";
                   if(selectedLanguage != "EN")folder = "WebpImages2" + "/" + selectedLanguage;
                   if (zone == "myChar") {
                       positionStyle = "fixed;";
@@ -394,6 +392,7 @@
               if (id != "-") newHTML += "<span id='" + id + "' " + styles + droppable + ">";
               else newHTML += "<span " + styles + droppable + ">";
               if (type == "C") {
+                  folder = "WebpImages2";
                   if(selectedLanguage != "EN")folder = "WebpImages2" + "/" + selectedLanguage;
                   <?php
                   echo ("var p1uid = '" . ($p1uid == "-" ? "Player 1" : $p1uid) . "';");
@@ -428,8 +427,8 @@
               var restriction = cardArr[12];
               if (typeof restriction != "string") restriction = "";
               restriction = restriction.replace(/_/g, ' ');
-              if(selectedLanguage != "EN") folder = "concat/" + selectedLanguage; + "/"// <--- GUILTY PARTY
-               console.log(folder);
+              folder = "concat";
+              if(selectedLanguage != "EN") folder = "concat/" + selectedLanguage;
               newHTML += Card(cardArr[0], folder, size, cardArr[1], 1, cardArr[2], cardArr[3], cardArr[4], cardArr[5], "", cardArr[17], cardArr[6], cardArr[7], cardArr[8], cardArr[9], restriction, cardArr[13], cardArr[14], cardArr[15], cardArr[16], cardArr[18], cardArr[19], cardArr[20]);
               newHTML += "</span>";
           }
