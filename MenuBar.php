@@ -52,26 +52,33 @@ $isMobile = IsMobile();
         </div>
 
         <div class='nav-bar-links'>
-            <ul>
-                <?php
-                echo '<li><a target="_blank" href="https://discord.gg/hKRaqHND4v"><img src="./Images/icons/discord.svg" alt="Discord"></a></li>';
-                echo '<li><a target="_blank" href="https://github.com/SWU-Karabast/SWUOnline"><img src="./Images/icons/github.svg" alt="GitHub"></a></li>';
-                echo '<li><a href="javascript:void(0);" onclick="toggleLanguages()"><img src="./Images/icons/globe.svg" alt="Languages"></a></li>';
-                echo '<ul id="languageList" style="display: none;">'; 
-                $languages = [
-                    'EN' => 'English',
-                    'DE' => 'German',
-                    'FR' => 'French',
-                    'ES' => 'Spanish',
-                    'IT' => 'Italian',
-                ];
-                foreach ($languages as $code => $lang) {
-                    echo "<li onclick=\"setLanguage('$code')\"><img src='./Images/icons/$code.svg' alt='$lang'></li>";  
-                }
-                echo '</ul>';
-                ?>
-            </ul>
-        </div>
+    <ul>
+        <?php
+        echo '<li><a target="_blank" href="https://discord.gg/hKRaqHND4v"><img src="./Images/icons/discord.svg" alt="Discord"></a></li>';
+        echo '<li><a target="_blank" href="https://github.com/SWU-Karabast/SWUOnline"><img src="./Images/icons/github.svg" alt="GitHub"></a></li>';
+        echo '<li>
+                <a href="javascript:void(0);" onclick="toggleLanguages()">
+                    <img src="./Images/icons/globe.svg" alt="Languages">
+                </a>
+                <ul id="languageList" style="display: none;">'; 
+                
+        $languages = [
+            'EN' => 'English',
+            'DE' => 'German',
+            'FR' => 'French',
+            'ES' => 'Spanish',
+            'IT' => 'Italian',
+        ];
+        
+        foreach ($languages as $code => $lang) {
+            echo "<li onclick=\"setLanguage('$code')\"><img src='./Images/icons/$code.svg' alt='$lang' class='language-icon'>   $lang</li>";  
+        }
+        
+        echo '</ul>
+              </li>';
+        ?>
+    </ul>
+</div>
     </div>
 
     <script>
