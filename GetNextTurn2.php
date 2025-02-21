@@ -33,6 +33,8 @@ if (!file_exists("./Games/" . $gameName . "/")) {
 
 if (isset($_COOKIE['selectedLanguage'])) {
   $selectedLanguage = $_COOKIE['selectedLanguage'];
+}else {
+  $selectedLanguage = 'EN';
 }
 
 $authKey = TryGet("authKey", 3);

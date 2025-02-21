@@ -154,6 +154,8 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
 {
   if (isset($_COOKIE['selectedLanguage'])) {
     $selectedLanguage = $_COOKIE['selectedLanguage'];
+  }else {
+    $selectedLanguage = 'EN';
   }
   global $playerID, $darkMode;
   $opts = [];

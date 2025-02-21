@@ -60,6 +60,8 @@
 
     if (isset($_COOKIE['selectedLanguage'])) {
       $selectedLanguage = $_COOKIE['selectedLanguage'];
+    }else {
+      $selectedLanguage = 'EN';
     }
     //First we need to parse the game state from the file
     include "Libraries/SHMOPLibraries.php";
