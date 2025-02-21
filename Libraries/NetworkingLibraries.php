@@ -2236,7 +2236,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
   //Now determine what needs to happen next
   SetClassState($currentPlayer, $CS_PlayIndex, -1);
   SetClassState($currentPlayer, $CS_CharacterIndex, -1);
-  if(count($layers) == 0) {
+  if(!LayersContainAnyWhenPlayAbilitiesForPlayer($currentPlayer)) {
     SetClassState($currentPlayer, $CS_PlayedAsUpgrade, 0);
   }
   ProcessDecisionQueue();
@@ -2324,6 +2324,16 @@ function ArquitensAssaultCruiser($player)
   $discard = &GetDiscard($defPlayer);
   $defeatedCard = RemoveDiscard($defPlayer, count($discard) - DiscardPieces());
   AddResources($defeatedCard, $player, "PLAY", "DOWN", isExhausted: true);
+}
+
+function LayersContainAnyWhenPlayAbilitiesForPlayer($player) {
+  global $layers;
+  for ($i=0; $i<count($layers); $i+=LayerPieces()) {
+    if ($layers[$i] == "TRIGGER" && $layers[$i+1] == $player && $layers[$i+2] == "ALLYPLAYCARDABILITY")
+      return true;
+  }
+
+  return false;
 }
 
 function ProcessAttackTarget()
