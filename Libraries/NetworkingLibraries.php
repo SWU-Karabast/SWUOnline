@@ -2236,7 +2236,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
   //Now determine what needs to happen next
   SetClassState($currentPlayer, $CS_PlayIndex, -1);
   SetClassState($currentPlayer, $CS_CharacterIndex, -1);
-  if(!LayersContainAnyWhenPlayAbilitiesForPlayer($currentPlayer)) {
+  if(GetClassState($currentPlayer, $CS_PlayedAsUpgrade) == 1 && !LayersContainAnyWhenPlayAbilitiesForPlayer($currentPlayer)) {
     SetClassState($currentPlayer, $CS_PlayedAsUpgrade, 0);
   }
   ProcessDecisionQueue();
