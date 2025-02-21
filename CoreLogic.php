@@ -2016,7 +2016,10 @@ function SelfCostModifier($cardID, $from, $reportMode=false)
       $modifier -= CountPilotUnitsAndPilotUpgrades($currentPlayer);
       break;
     case "9958088138"://Invincible
-      $modifier -= CountUniqueAlliesOfTrait($currentPlayer, "Separatist") > 0 ? 1 : 0;
+      $controlsSeparatist = CountUniqueAlliesOfTrait($currentPlayer, "Separatist") > 0;
+      $controlsSeparatist = $controlsSeparatist || SearchCount(SearchCharacter($currentPlayer, trait:"Separatist")) > 0;
+      $controlsSeparatist = $controlsSeparatist || SearchUpgrades($currentPlayer, trait:"Separatist", uniqueOnly:true) > 0;
+      $modifier -= $controlsSeparatist ? 1 : 0;
     default: break;
   }
   //Target cost modifier
