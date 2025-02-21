@@ -1175,10 +1175,9 @@ function SearchMultizone($player, $searches)
 }
 
 function ControlsNamedCard($player, $name) {
-  $char = &GetPlayerCharacter($player);
-  if(count($char) > CharacterPieces() && CardTitle($char[CharacterPieces()]) == $name) return true;
-  if(SearchCount(SearchAlliesForTitle($player, $name)) > 0) return true;
-  if(SearchCount(SearchUpgradesForTitle($player, $name) > 0)) return true;
+  if(SearchCount(SearchCharacter($player, cardTitle:$name)) > 0) return true;
+  if(SearchCount(SearchAllies($player, cardTitle:$name)) > 0) return true;
+  if(SearchCount(SearchUpgrades($player, cardTitle:$name) > 0)) return true;
 
   return false;
 }

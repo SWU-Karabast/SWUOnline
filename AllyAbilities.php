@@ -1601,7 +1601,7 @@ function AllyHasPlayCardAbility($playedCardID, $playedCardUniqueID, $from, $card
 }
 
 function AllyPlayCardAbility($player, $cardID, $uniqueID, $numUses, $playedCardID, $from) {
-  global $currentPlayer;
+  global $currentPlayer, $CS_PlayedAsUpgrade;
   $otherPlayer = $player == 1 ? 2 : 1;
   $ally = new Ally($uniqueID); // Important: ally could be defeated by the time this function is called. So, use $ally->Exists() to check if the ally still exists.
 
@@ -1677,7 +1677,7 @@ function AllyPlayCardAbility($player, $cardID, $uniqueID, $numUses, $playedCardI
         }
         break;
       case "8031540027"://Dengar
-        if(DefinedTypesContains($playedCardID, "Upgrade", $player)) {
+        if(DefinedTypesContains($playedCardID, "Upgrade", $player) || PilotWasPlayed($player, $playedCardID)) {
           global $CS_LayerTarget;
           $target = GetClassState($player, $CS_LayerTarget);
           AddDecisionQueue("YESNO", $player, "if you want to deal 1 damage from " . CardLink($cardID, $cardID) . "?");
@@ -1796,6 +1796,8 @@ function AllyPlayCardAbility($player, $cardID, $uniqueID, $numUses, $playedCardI
   switch($cardID) {
     default: break;
   }
+
+  SetClassState($player, $CS_PlayedAsUpgrade, 0);
 }
 
 function IsAlly($cardID, $player="")
