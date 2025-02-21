@@ -6335,11 +6335,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "3905028200"://Admiral Trench
-      if(GetResolvedAbilityName($cardID, $from) == "Rummage") {
+      if(GetResolvedAbilityName($cardID, $from) == "Rummage" && SearchCount(SearchHand($currentPlayer, minCost:3)) > 0) {
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND:minCost=3");
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card costing 3 or more to discard");
-        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-        AddDecisionQueue("MZDISCARD", $currentPlayer, "HAND," . $currentPlayer, 1);
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZDESTROY", $currentPlayer, "-", 1);
         AddDecisionQueue("DRAW", $currentPlayer, "-", 1);
       }
       break;
