@@ -1215,7 +1215,6 @@ function FinalizeChainLink($chainClosed = false)
     $cardType = CardType($combatChain[$i - 1]);
     if ($cardType != "W" || $cardType != "E" || $cardType != "C") {
       $params = explode(",", GoesWhereAfterResolving($combatChain[$i - 1], "COMBATCHAIN", $combatChain[$i]));
-      SetClassState($currentPlayer, $CS_PlayedAsUpgrade, 0);
       $goesWhere = $params[0];
       $modifier = (count($params) > 1 ? $params[1] : "NA");
       if ($i == 1 && $combatChainState[$CCS_GoesWhereAfterLinkResolves] != "GY") {
@@ -2237,7 +2236,9 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
   //Now determine what needs to happen next
   SetClassState($currentPlayer, $CS_PlayIndex, -1);
   SetClassState($currentPlayer, $CS_CharacterIndex, -1);
-  SetClassState($currentPlayer, $CS_PlayedAsUpgrade, 0);
+  if(count($layers) == 0) {
+    SetClassState($currentPlayer, $CS_PlayedAsUpgrade, 0);
+  }
   ProcessDecisionQueue();
 }
 

@@ -350,6 +350,7 @@ function ProcessDecisionQueue()
 function CloseDecisionQueue()
 {
   global $turn, $decisionQueue, $dqState, $combatChain, $currentPlayer, $mainPlayer;
+  global $CS_PlayedAsUpgrade;
   $dqState[0] = "0";
   $turn[0] = $dqState[1];
   $turn[1] = $dqState[2];
@@ -1215,6 +1216,11 @@ function UIDIsAffectedByMalevolence($uniqueID) {
   }
 
   return $found;
+}
+
+function PilotWasPlayed($player, $cardID) {
+  global $CS_PlayedAsUpgrade;
+  return TraitContains($cardID, "Pilot", $player) && GetClassState($player, $CS_PlayedAsUpgrade) == 1;
 }
 
 function CheckBobaFettJTL($targetPlayer, $enemyDamage, $fromCombat) {

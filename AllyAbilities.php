@@ -1540,7 +1540,7 @@ function AddAllyPlayCardAbilityLayers($cardID, $from, $uniqueID = "-", $resource
 
 function AllyHasPlayCardAbility($playedCardID, $playedCardUniqueID, $from, $cardID, $player, $index, $resourcesPaid): bool
 {
-  global $currentPlayer, $CS_NumCardsPlayed;
+  global $currentPlayer, $CS_NumCardsPlayed, $CS_PlayedAsUpgrade;
   $thisAlly = new Ally("MYALLY-" . $index, $player);
   if($thisAlly->LostAbilities($playedCardID)) return false;
   $thisIsNewlyPlayedAlly = $thisAlly->UniqueID() == $playedCardUniqueID;
@@ -1562,7 +1562,7 @@ function AllyHasPlayCardAbility($playedCardID, $playedCardUniqueID, $from, $card
         return !$thisIsNewlyPlayedAlly && TraitContains($playedCardID, "Underworld", $player);
       case "4088c46c4d"://The Mandalorian Leader Unit
       case "8031540027"://Dengar
-        return DefinedTypesContains($playedCardID, "Upgrade");
+        return DefinedTypesContains($playedCardID, "Upgrade") || PilotWasPlayed($currentPlayer, $playedCardID);
       case "0961039929"://Colonel Yularen
         return AspectContains($playedCardID, "Command") && DefinedTypesContains($playedCardID, "Unit");
       case "5907868016"://Fighters for Freedom
@@ -1716,7 +1716,7 @@ function AllyPlayCardAbility($player, $cardID, $uniqueID, $numUses, $playedCardI
         }
         break;
       case "4088c46c4d"://The Mandalorian Leader Unit
-        if(!LeaderAbilitiesIgnored() && DefinedTypesContains($playedCardID, "Upgrade", $player)) {
+        if(!LeaderAbilitiesIgnored() && DefinedTypesContains($playedCardID, "Upgrade", $player) || PilotWasPlayed($player, $playedCardID)) {
           AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:maxHealth=6");
           AddDecisionQueue("MZFILTER", $player, "status=1");
           AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to exhaust", 1);
