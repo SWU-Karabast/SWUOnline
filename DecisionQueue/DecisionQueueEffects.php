@@ -936,6 +936,23 @@ function SpecificCardLogic($player, $parameter, $lastResult)
         AddDecisionQueue("MZOP", $player, "PLAYCARD", 1);
       }
       break;
+    case "TRENCH_JTL_OPP":
+      $cards = explode(",",$dqVars[0]);
+      $index = array_search($lastResult, $cards);
+      unset($cards[$index]);
+      array_values($cards);
+      $dqVars[0] = implode(",", $cards);
+      AddGraveyard($lastResult, $player, "DECK");
+      break;
+    case "TRENCH_JTL":
+      $cards = explode(",",$dqVars[0]);
+      $index = array_search($lastResult, $cards);
+      unset($cards[$index]);
+      $cardLeft = array_values($cards)[0];
+      $dqVars[0] = implode(",", $cards);
+      AddHand($player, $lastResult);
+      AddGraveyard($cardLeft, $player, "DECK");
+      break;
     //SpecificCardLogic End
     default: return "";
   }

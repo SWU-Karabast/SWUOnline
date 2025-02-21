@@ -2549,6 +2549,24 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
             AddDecisionQueue("MZOP", $currentPlayer, "DESTROY", 1);
           }
           break;
+          case "3905028200"://Admiral Trench flip
+            $deck = new Deck($currentPlayer);
+            $deck->Reveal(4);
+            $cards = $deck->Top(remove:true, amount:4);
+            $cardArr = explode(",", $cards);
+            if($cards != "") {
+              AddDecisionQueue("PASSPARAMETER", $currentPlayer, $cards, 1);
+              AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+              AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Discard 2 cards.", 1);
+              AddDecisionQueue("CHOOSECARD", $otherPlayer, "{0}", 1);
+              AddDecisionQueue("SPECIFICCARD", $currentPlayer, "TRENCH_JTL_OPP", 1);
+              AddDecisionQueue("CHOOSECARD", $otherPlayer, "{0}", 1);
+              AddDecisionQueue("SPECIFICCARD", $currentPlayer, "TRENCH_JTL_OPP", 1);
+              AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose card to draw.", 1);
+              AddDecisionQueue("CHOOSECARD", $currentPlayer, "{0}", 1);
+              AddDecisionQueue("SPECIFICCARD", $currentPlayer, "TRENCH_JTL", 1);
+            }
+            break;
           default: break;
         }
       }
@@ -6311,6 +6329,16 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("PASSPARAMETER", $currentPlayer, $uniqueId, 1);
         AddDecisionQueue("MZOP", $currentPlayer, "MOVEPILOTUNIT", 1);
       }
+      break;
+    case "3905028200"://Admiral Trench
+      if(GetResolvedAbilityName($cardID, $from) == "Rummage") {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND:minCost=3");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card costing 3 or more to discard");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZDISCARD", $currentPlayer, "HAND," . $currentPlayer, 1);
+        AddDecisionQueue("DRAW", $currentPlayer, "-", 1);
+      }
+      break;
     //PlayAbility End
     default: break;
   }
