@@ -2554,19 +2554,20 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
           break;
           case "3905028200"://Admiral Trench flip
             $deck = new Deck($currentPlayer);
-            $deck->Reveal(4);
-            $cards = $deck->Top(remove:true, amount:4);
+            $cardsToReveal = min($deck->RemainingCards(), 4);
+            $deck->Reveal($cardsToReveal);
+            $cards = $deck->Top(remove:true, amount:$cardsToReveal);
             $cardArr = explode(",", $cards);
             if($cards != "") {
               AddDecisionQueue("PASSPARAMETER", $currentPlayer, $cards, 1);
               AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
               AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Discard 2 cards.", 1);
-              AddDecisionQueue("CHOOSECARD", $otherPlayer, "{0}", 1);
+              AddDecisionQueue("CHOOSECARD", $otherPlayer, "{0}", 1);//if there's one card, forced to choose
               AddDecisionQueue("SPECIFICCARD", $currentPlayer, "TRENCH_JTL_OPP", 1);
-              AddDecisionQueue("CHOOSECARD", $otherPlayer, "{0}", 1);
+              AddDecisionQueue("MAYCHOOSECARD", $otherPlayer, "{0}", 1);//this is a may to account for edge cases where <4 cards left
               AddDecisionQueue("SPECIFICCARD", $currentPlayer, "TRENCH_JTL_OPP", 1);
               AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose card to draw.", 1);
-              AddDecisionQueue("CHOOSECARD", $currentPlayer, "{0}", 1);
+              AddDecisionQueue("MAYCHOOSECARD", $currentPlayer, "{0}", 1);
               AddDecisionQueue("SPECIFICCARD", $currentPlayer, "TRENCH_JTL", 1);
             }
             break;

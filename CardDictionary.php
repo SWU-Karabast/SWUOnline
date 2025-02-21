@@ -1316,7 +1316,7 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
     case "SOR": $abilityNames = CheckSORAbilityNames($cardID, $index, $validate); break;
     case "SHD": $abilityNames = CheckSHDAbilityNames($cardID, $index, $validate); break;
     case "TWI": $abilityNames = CheckTWIAbilityNames($cardID, $index, $validate); break;
-    case "JTL": $abilityNames = CheckJTLAbilityNames($cardID, $index, $validate); break;
+    case "JTL": $abilityNames = CheckJTLAbilityNames($cardID); break;
     default: break;//maybe throw error?
   }
 
@@ -2539,7 +2539,7 @@ function IsNotFlipatine($char) {
 }
 
 function IsNotExhaustedTrench($char) {
-  return $char[CharacterPieces()] == "3905028200" && $char[CharacterPieces()+1] != "1";
+  return $char[CharacterPieces()] != "3905028200" || $char[CharacterPieces()+1] != "1";
 }
 
 function RequiresDieRoll($cardID, $from, $player)

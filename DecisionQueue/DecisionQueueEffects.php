@@ -937,6 +937,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       }
       break;
     case "TRENCH_JTL_OPP":
+      if($dqVars[0] == "") break;
       $cards = explode(",",$dqVars[0]);
       $index = array_search($lastResult, $cards);
       unset($cards[$index]);
@@ -945,6 +946,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       AddGraveyard($lastResult, $player, "DECK");
       break;
     case "TRENCH_JTL":
+      if($dqVars[0] == "") break;
       $cards = explode(",",$dqVars[0]);
       $index = array_search($lastResult, $cards);
       unset($cards[$index]);
