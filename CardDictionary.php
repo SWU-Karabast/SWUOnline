@@ -959,6 +959,8 @@ function AbilityCost($cardID)
       return $abilityName == "Buff" ? 1 : 0;
     case "8520821318"://Poe Dameron
       return $abilityName == "Pilot" ? 1 : 0;
+    case "3905028200"://Admiral Trench
+      return $abilityName == "Deploy" ? 3 : 0;
     default: break;
   }
   if(IsAlly($cardID)) return 0;
@@ -1093,7 +1095,7 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
     if($char[CharacterPieces() + 1] == 1) $abilityTypes = "";
     if($char[CharacterPieces() + 2] == 0) {
       //Chancellor Palpatine Leader + Darth Sidious Leader
-      if($char[CharacterPieces()] != "0026166404" && $char[CharacterPieces()] != "ad86d54e97") {
+      if(IsNotFlipatine($char) && IsNotExhaustedTrench($char)) {
         if($abilityTypes != "") $abilityTypes .= ",";
         $abilityTypes .= "A";
         if(LeaderCanPilot($char[CharacterPieces()])) {
@@ -1298,6 +1300,8 @@ function CheckJTLAbilityTypes($cardID) {
       return "A,AA";
     case "9921128444"://General Hux
       return "A,AA";
+    case "3905028200"://Admiral Trench
+      return LeaderAbilitiesIgnored() ? "" : "A";
     default: return "";
   }
 }
@@ -1353,8 +1357,7 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
     $char = &GetPlayerCharacter($currentPlayer);
     if($char[CharacterPieces() + 1] == 1) $abilityNames = "";
     if($char[CharacterPieces() + 2] == 0) {
-      //Chancellor Palpatine Leader + Darth Sidious Leader
-      if($char[CharacterPieces()] != "0026166404" && $char[CharacterPieces()] != "ad86d54e97") {
+      if(IsNotFlipatine($char) && IsNotExhaustedTrench($char)) {
         if($abilityNames != "") $abilityNames .= ",";
         $abilityNames .= "Deploy";
         if(LeaderCanPilot($char[CharacterPieces()])) {
@@ -1594,6 +1597,8 @@ function CheckJTLAbilityNames($cardID) {
       return LeaderAbilitiesIgnored() ? "" : "Deal Damage";
     case "8520821318"://Poe Dameron
       return LeaderAbilitiesIgnored() ? "" : "Pilot";
+    case "3905028200"://Admiral Trench
+      return LeaderAbilitiesIgnored() ? "" : "Rummage";
     case "6600603122"://Massassi Tactical Officer
       return "Fighter Attack,Attack";
     case "9921128444"://General Hux
@@ -2527,6 +2532,15 @@ function PlayableFromResources($cardID, $player="", $index="") {
 //     default: return false;
 //   }
 // }
+
+function IsNotFlipatine($char) {
+  //Chancellor Palpatine Leader + Darth Sidious Leader
+  return $char[CharacterPieces()] != "0026166404" && $char[CharacterPieces()] != "ad86d54e97";
+}
+
+function IsNotExhaustedTrench($char) {
+  return $char[CharacterPieces()] != "3905028200" || $char[CharacterPieces()+1] != "1";
+}
 
 function RequiresDieRoll($cardID, $from, $player)
 {
