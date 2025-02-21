@@ -256,6 +256,7 @@ select {
 
 .nav-bar-user, .nav-bar-links {
   background-color: rgb(0, 0, 0, 40%);
+
   backdrop-filter: blur(20px);
   padding: 10px 20px;
 }

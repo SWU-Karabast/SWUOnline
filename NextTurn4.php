@@ -58,6 +58,9 @@
       die();
     }
 
+    if (isset($_COOKIE['selectedLanguage'])) {
+      $selectedLanguage = $_COOKIE['selectedLanguage'];
+    }
     //First we need to parse the game state from the file
     include "Libraries/SHMOPLibraries.php";
     include "ParseGamestate.php";
@@ -128,19 +131,10 @@
         }
         fileExt = ".png";
         folderPath = folder;
-
-        var LanguageJP = <?php echo ((IsLanguageJP($playerID) ? "true" : "false")); ?>;
-        LanguageJP = LanguageJP && TranslationExist('JP', cardNumber);
-
+        var selectedLanguage = "<?php echo $selectedLanguage; ?>";
         if (cardNumber == "ENDSTEP" || cardNumber == "ENDTURN" || cardNumber == "RESUMETURN" || cardNumber == "PHANTASM" || cardNumber == "FINALIZECHAINLINK" || cardNumber == "DEFENDSTEP") {
           showHover = 0;
           borderColor = 0;
-        } else if (folder == "concat" && LanguageJP) { // Japanese
-          folderPath = "concat/JP";
-          fileExt = ".webp";
-        } else if (folder == "WebpImages2" && LanguageJP) { // Japanese
-          folderPath = "WebpImages/JP";
-          fileExt = ".webp";
         } else if (folder == "concat") {
           fileExt = ".webp";
         } else if (folder == "WebpImages2") {
@@ -364,6 +358,8 @@
 
       //Note: 96 = Card Size
       function PopulateZone(zone, size = 96, folder = "concat") {
+          var selectedLanguage = "<?php echo $selectedLanguage; ?>";
+          if(selectedLanguage != "EN" && folder == "concat")folder = "concat/" + selectedLanguage;
           var zoneEl = document.getElementById(zone);
           var zoneData = zoneEl.innerHTML;
           if (zoneData == "") return;
@@ -377,7 +373,7 @@
               var substype = cardArr[11];
               var className = "";
               if (type != "") {
-                  folder = "WebpImages2";
+                  if(selectedLanguage != "EN")folder = "WebpImages2" + "/" + selectedLanguage;
                   if (zone == "myChar") {
                       positionStyle = "fixed;";
                       id = type == "W" ? "P<?= $playerID ?>BASE" : "P<?= $playerID ?>LEADER";
@@ -398,7 +394,7 @@
               if (id != "-") newHTML += "<span id='" + id + "' " + styles + droppable + ">";
               else newHTML += "<span " + styles + droppable + ">";
               if (type == "C") {
-                  folder = "WebpImages2";
+                  if(selectedLanguage != "EN")folder = "WebpImages2" + "/" + selectedLanguage;
                   <?php
                   echo ("var p1uid = '" . ($p1uid == "-" ? "Player 1" : $p1uid) . "';");
                   echo ("var p2uid = '" . ($p2uid == "-" ? "Player 2" : $p2uid) . "';");
@@ -432,6 +428,8 @@
               var restriction = cardArr[12];
               if (typeof restriction != "string") restriction = "";
               restriction = restriction.replace(/_/g, ' ');
+              if(selectedLanguage != "EN") folder = "concat/" + selectedLanguage; + "/"// <--- GUILTY PARTY
+               console.log(folder);
               newHTML += Card(cardArr[0], folder, size, cardArr[1], 1, cardArr[2], cardArr[3], cardArr[4], cardArr[5], "", cardArr[17], cardArr[6], cardArr[7], cardArr[8], cardArr[9], restriction, cardArr[13], cardArr[14], cardArr[15], cardArr[16], cardArr[18], cardArr[19], cardArr[20]);
               newHTML += "</span>";
           }
