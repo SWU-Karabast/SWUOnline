@@ -31,6 +31,12 @@ if (!file_exists("./Games/" . $gameName . "/")) {
   exit;
 }
 
+if (isset($_COOKIE['selectedLanguage'])) {
+  $selectedLanguage = $_COOKIE['selectedLanguage'];
+}else {
+  $selectedLanguage = 'EN';
+}
+
 $authKey = TryGet("authKey", 3);
 $lastUpdate = intval(TryGet("lastUpdate", 0));
 $windowWidth = intval(TryGet("windowWidth", 0));

@@ -256,6 +256,7 @@ select {
 
 .nav-bar-user, .nav-bar-links {
   background-color: rgb(0, 0, 0, 40%);
+
   backdrop-filter: blur(20px);
   padding: 10px 20px;
 }
@@ -274,6 +275,46 @@ select {
   height: 25px;
 }
 
+
+/* Language List */
+#languageList {
+  display: none;
+  position: absolute;
+  top: 100%; /* Position it directly below the nav bar */
+  left: 0;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Add shadow for better appearance */
+  z-index: 1000; /* Ensure it stays on top of other elements */
+  width: 150px; /* Set width according to your design */
+  background-color: rgba(24, 50, 81, 0.60); /* Using the blue color background */
+  border-radius: 5px; /* Smooth the edges */
+}
+
+/* Style each language option */
+#languageList li {
+  padding: 8px 12px;
+  cursor: pointer;
+  list-style-type: none;
+  color: white; /* White text color */
+}
+
+/* Add hover effect for each item */
+#languageList li:hover {
+  background-color: #353739; /* Darken the background color on hover */
+  color: #bddbff; /* Light blue text color on hover */
+}
+
+/* Optional: Style the language dropdown button */
+#languageList a {
+  padding: 10px;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Style the icons (optional) */
+.language-icon {
+  margin-right: 8px; /* Adds space between the icon and the text */
+  vertical-align: middle; /* Aligns the icon with the text */
+}
 /* HOME ---------------------------------------------------------------------------------------------- */
 
 /* Game Browser */

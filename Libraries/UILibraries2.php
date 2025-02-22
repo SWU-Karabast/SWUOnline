@@ -149,10 +149,14 @@ function JSONRenderedCard(
 
   return $card;
 }
-
 //Rotate is deprecated
 function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $overlay = 0, $borderColor = 0, $counters = 0, $actionDataOverride = "", $id = "", $rotate = false, $lifeCounters = 0, $defCounters = 0, $atkCounters = -1, $from = "", $controller = 0, $subcardNum = 0, $isExhausted = false, $isUnimplemented = false)
 {
+  if (isset($_COOKIE['selectedLanguage'])) {
+    $selectedLanguage = $_COOKIE['selectedLanguage'];
+  }else {
+    $selectedLanguage = 'EN';
+  }
   global $playerID, $darkMode;
   $opts = [];
   if (is_array($action)) {
@@ -164,7 +168,6 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
     $overlay = $opts['overlay'] ?? 0;
   }
 
-  $LanguageJP = IsLanguageJP($playerID) && TranslationExist("JP", $cardNumber);
   if ($darkMode == null)
     $darkMode = false;
   if ($folder == "crops") {
@@ -172,25 +175,28 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
   }
   $fileExt = ".png";
   $folderPath = $folder;
-  if ($cardNumber == "ENDSTEP" || $cardNumber == "ENDTURN" || $cardNumber == "RESUMETURN" || $cardNumber == "PHANTASM" || $cardNumber == "FINALIZECHAINLINK" || $cardNumber == "DEFENDSTEP" || $cardNumber == "AIM_cropped") {
-    $folderPath = str_replace("CardImages", "Images", $folderPath);
-    $folderPath = str_replace("concat", "Images", $folderPath);
-    $showHover = 0;
-    $borderColor = 0;
-  } else if ($folder == "concat" && $LanguageJP) { // Japanese
-    $folderPath = "concat/JP";
-    $fileExt = ".webp";
-  } else if ($folder == "WebpImages2" && $LanguageJP) { // Japanese
-    $folderPath = "WebpImages/JP";
-    $fileExt = ".webp";
-  } else if ($folder == "WebpImages2") {
-    $fileExt = ".webp";
-  } else if (mb_strpos($folder, "CardImages") !== false) {
-    $folderPath = str_replace("CardImages", "WebpImages2", $folder);
-    $fileExt = ".webp";
-  } else if ($folder == "concat" || $folder == "./concat" || $folder == "../concat") {
-    //if (DelimStringContains(CardSubType($cardNumber), "Landmark")) $rotate = true;
-    $fileExt = ".webp";
+  if ($selectedLanguage == "EN") {
+    if ($folder == "concat" || $folder == "./concat" || $folder == "../concat") {
+        $folderPath = "concat";
+        $fileExt = ".webp";
+    } else if ($folder == "WebpImages2") {
+        $folderPath = "WebpImages2";
+        $fileExt = ".webp";
+    }else if (mb_strpos($folder, "CardImages") !== false) {
+      $folderPath = str_replace("CardImages", "WebpImages2", $folder); 
+      $fileExt = ".webp";
+    }
+  } else {
+    if ($folder == "concat" || $folder == "./concat" || $folder == "../concat") {
+        $folderPath = "concat/" . $selectedLanguage;
+        $fileExt = ".webp";
+    } else if ($folder == "WebpImages2") {
+        $folderPath = "WebpImages2/" . $selectedLanguage;
+        $fileExt = ".webp";
+    } else if (mb_strpos($folder, "CardImages") !== false) {
+        $folderPath = str_replace("CardImages", "WebpImages2/" . $selectedLanguage , $folder); 
+        $fileExt = ".webp";
+    }
   }
   $actionData = $actionDataOverride != "" ? $actionDataOverride : $cardNumber;
   //Enforce 375x523 aspect ratio as exported (.71)
