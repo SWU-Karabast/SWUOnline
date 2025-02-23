@@ -435,11 +435,11 @@ function TranslationExist($Language, $cardID)
 function FormatCode($format)
 {
   switch($format) {
-    case "cc": return 0;
-    case "compcc": return 1;
+    case "premierf": return 0;
+    case "reqsundo": return 1;
     case "blitz": return 2;
     case "compblitz": return 3;
-    case "livinglegendscc": return 4;
+    case "openform": return 4;
     case "commoner": return 5;
     case "sealed": return 6;
     case "draft": return 7;
@@ -451,11 +451,11 @@ function FormatName($formatCode)
 {
   switch($formatCode)
   {
-    case 0: return "cc";
-    case 1: return "compcc";
+    case 0: return "premierf";
+    case 1: return "reqsundo";
     case 2: return "blitz";
     case 3: return "compblitz";
-    case 4: return "livinglegendscc";
+    case 4: return "openform";
     case 5: return "commoner";
     case 6: return "sealed";
     case 7: return "draft";
