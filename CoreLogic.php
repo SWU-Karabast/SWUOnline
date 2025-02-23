@@ -633,11 +633,11 @@ function SendSWUStatsResults() {
   $winnerHealth = GetHealth($winner);
   $p1Char = &GetPlayerCharacter(1);
   $p1Hero = FindLeaderInPlay(1);
-  $p1Base = $p1Char[0];
+  $p1Base = DeduplicateBase($p1Char[0]);
   $p1BaseColor = AspectToColor(CardAspects($p1Base));
   $p2Char = &GetPlayerCharacter(2);
   $p2Hero = FindLeaderInPlay(2);
-  $p2Base = $p2Char[0];
+  $p2Base = DeduplicateBase($p2Char[0]);
   $p2BaseColor = AspectToColor(CardAspects($p2Base));
 	$winnerDeck = file_get_contents("./Games/" . $gameName . "/p" . $winner . "Deck.txt");
 	$loserDeck = file_get_contents("./Games/" . $gameName . "/p" . $loser . "Deck.txt");
@@ -680,6 +680,19 @@ function SendSWUStatsResults() {
 
   // Close cURL session
   curl_close($ch);
+}
+
+function DeduplicateBase($base)
+{
+  if(CardHP($base) != 30) return $base;//TODO: Add rarity check too?
+  $baseAspect = CardAspects($base);
+  switch($baseAspect) {
+    case "Command": return "2055904747";
+    case "Vigilance": return "7303722102";
+    case "Aggression": return "8659924257";
+    case "Cunning": return "4313706014";
+    default: return $base;
+  }
 }
 
 function AspectToColor($aspect)
