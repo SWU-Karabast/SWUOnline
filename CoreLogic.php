@@ -655,8 +655,8 @@ function SendSWUStatsResults() {
     'winnerHealth' => $winnerHealth,
     'winnerDeck' => $winnerDeck,
     'loserDeck' => $loserDeck,
-    'player1' => SerializeGameResult(1, "", file_get_contents("./Games/" . $gameName . "/p1Deck.txt"), $gameName, $p2Hero, "", "", $p2BaseColor),
-    'player2' => SerializeGameResult(2, "", file_get_contents("./Games/" . $gameName . "/p2Deck.txt"), $gameName, $p1Hero, "", "", $p1BaseColor)
+    'player1' => SerializeGameResult(1, "", file_get_contents("./Games/" . $gameName . "/p1Deck.txt"), $gameName, $p2Hero, "", "", $p2BaseColor, $p1Hero, $p1Base),
+    'player2' => SerializeGameResult(2, "", file_get_contents("./Games/" . $gameName . "/p2Deck.txt"), $gameName, $p1Hero, "", "", $p1BaseColor, $p2Hero, $p2Base)
   ]);
 
   // Initialize cURL session

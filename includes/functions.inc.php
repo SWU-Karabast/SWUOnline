@@ -335,7 +335,7 @@ function LogChallengeResult($conn, $gameResultID, $playerID, $result)
 	}
 }
 
-function SerializeGameResult($player, $DeckLink, $deckAfterSB, $gameID = "", $opposingHero = "", $gameName = "", $deckbuilderID = "", $opposingBaseColor = "")
+function SerializeGameResult($player, $DeckLink, $deckAfterSB, $gameID = "", $opposingHero = "", $gameName = "", $deckbuilderID = "", $opposingBaseColor = "", $myLeader = "", $myBase = "")
 {
 	global $winner, $currentRound, $CardStats_TimesPlayed, $CardStats_TimesActivated, $CardStats_TimesResourced, $firstPlayer;
 	global $TurnStats_DamageThreatened, $TurnStats_DamageDealt, $TurnStats_CardsPlayedOffense, $TurnStats_CardsPlayedDefense, $TurnStats_CardsPitched, $TurnStats_CardsBlocked;
@@ -349,6 +349,8 @@ function SerializeGameResult($player, $DeckLink, $deckAfterSB, $gameID = "", $op
 	if ($gameID != "") $deck["gameId"] = $gameID;
 	if ($gameName != "") $deck["gameName"] = $gameName;
 	$deck["deckId"] = $DeckLink;
+	$deck["leader"] = $myLeader;
+	$deck["base"] = $myBase;
 	$deck["turns"] = intval($currentRound);
 	$deck["result"] = ($player == $winner ? 1 : 0);
 	$deck["firstPlayer"] = ($player == $firstPlayer ? 1 : 0);
