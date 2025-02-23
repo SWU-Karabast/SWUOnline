@@ -67,6 +67,11 @@
     $playerName = $playerID == 1 ? $p1uid : ($playerID == 2 ? $p2uid : "Player $playerID");
     $otherPlayerName = $otherPlayerID == 1 ? $p1uid : ($otherPlayerID == 2 ? $p2uid : "Player $otherPlayerID");
 
+    // session_start();
+
+    $_SESSION["playerName"] = $playerName;
+    $_SESSION["otherPlayerName"] = $otherPlayerName;
+
     $playerNames = array(1 => $p1uid, 2 => $p2uid, 3 => "Spectator");
   }
 
