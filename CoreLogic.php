@@ -6333,10 +6333,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       if($target == "-") {
         CreateXWing($currentPlayer);
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Attach Poe to a Vehicle?");
-        AddDecisionQueue("YESNO", $currentPlayer, "-");
-        AddDecisionQueue("NOPASS", $currentPlayer, "-");
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Vehicle");
-        AddDecisionQueue("MZFILTER", $currentPlayer, "hasPilot=1");
+        AddDecisionQueue("YESNO", $currentPlayer, "-", 1);
+        AddDecisionQueue("NOPASS", $currentPlayer, "-", 1);
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Vehicle", 1);
+        AddDecisionQueue("MZFILTER", $currentPlayer, "hasPilot=1", 1);
         AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
         AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
