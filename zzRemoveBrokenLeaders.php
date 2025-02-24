@@ -1,6 +1,6 @@
 <?php
     $file = 'leadersUID.txt';
-    $folder = 'WebpImages2/FR';
+    $folder = 'crops/IT';
     
     // Read the leadersUID.txt file
     $lines = file($file, FILE_IGNORE_NEW_LINES);
@@ -11,8 +11,11 @@
         // Extract the value before the comma
         $value = explode(',', $line)[0];
 
-        // Construct the file path
-        $filePath = $folder . '/' . $value . '.webp';
+        // webpimages concat
+        // $filePath = $folder . '/' . $value . '.webp';
+        
+        //crops
+        $filePath = $folder . '/' . $value . '_cropped.png';
 
         // Check if the file exists and delete it
         if (file_exists($filePath)) {

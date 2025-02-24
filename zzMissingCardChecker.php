@@ -30,3 +30,6 @@ foreach ($folders as $folder) {
     $missingInFolder = array_diff($missingCards, scandir($folderPath));
     echo "Missing cards in $folder: " . implode(', ', $missingInFolder) . "\n";
 }
+
+
+
