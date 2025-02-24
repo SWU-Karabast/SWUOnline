@@ -1483,12 +1483,14 @@ function FinalizeTurn()
 function SwapTurn()
 {
   global $turn, $mainPlayer, $combatChain, $actionPoints, $defPlayer, $currentPlayer;
+  global $CS_PlayedAsUpgrade;
   $turn[0] = "M";
   //$turn[1] = $mainPlayer == 2 ? $turn[1] + 1 : $turn[1];
   $turn[2] = "";
   $turn[3] = "";
   $actionPoints = 1;
   $combatChain = []; //TODO: Add cards to the discard pile?...
+  SetClassState($currentPlayer, $CS_PlayedAsUpgrade, 0);
   $defPlayer = $mainPlayer;
   $mainPlayer = ($mainPlayer == 1 ? 2 : 1);
   $currentPlayer = $mainPlayer;

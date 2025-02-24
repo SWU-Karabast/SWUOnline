@@ -282,7 +282,6 @@ function BuildMainPlayerGameState()
 
 function UpdateGameState($activePlayer)
 {
-  SetClassState($activePlayer, 1, 0);
 }
 
 function UpdateGameStateInner()
