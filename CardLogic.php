@@ -1223,6 +1223,14 @@ function PilotWasPlayed($player, $cardID) {
   return TraitContains($cardID, "Pilot", $player) && GetClassState($player, $CS_PlayedAsUpgrade) == 1;
 }
 
+function TupleFirstUpgradeWithCardID($upgrades, $cardID) {
+  for($i=0; $i<count($upgrades); $i+=SubcardPieces()) {
+    if($upgrades[$i] == $cardID) {
+      return [$upgrades[$i+4] == 1, $upgrades[$i+5]];//tuple [epicAction, turnsInPlay]
+    }
+  }
+}
+
 function CheckBobaFettJTL($targetPlayer, $enemyDamage, $fromCombat) {
   if($fromCombat) {
     return;

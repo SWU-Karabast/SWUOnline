@@ -18,8 +18,9 @@ function CreateTieFighter($player, $from = "-") {
 }
 
 // This function put an ally into play for a player, which means no when played abilities are triggered.
-function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null, $cloned = false, $playAbility = false, $epicAction = false)
-{
+function PlayAlly($cardID, $player, $subCards = "-", $from = "-",
+  $owner = null, $cloned = false, $playAbility = false,
+  $epicAction = false, $playedAsUnit = true, $turnsInPlay = 0) {
   if($from == "TGY") {
     $owner = $player == 1 ? 2 : 1;
   }
@@ -32,13 +33,13 @@ function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null,
   $allies[] = 0; //Frozen
   $allies[] = $subCards; //Subcards
   $allies[] = $uniqueID; //Unique ID
-  $allies[] = 0;//Unused
+  $allies[] = $playedAsUnit ? 1 : 0;//Played as unit
   $allies[] = 0; //Unused
   $allies[] = 1; //Ability/effect uses
   $allies[] = 0; //Round health modifier
   $allies[] = 0; //Times attacked
   $allies[] = $owner ?? $player; //Owner
-  $allies[] = 0; //Turns in play
+  $allies[] = $turnsInPlay; //Turns in play
   $allies[] = $cloned ? 1 : 0; //Cloned
   $allies[] = 0; //Healed this turn
   $allies[] = "NA";//Arena Override
@@ -438,7 +439,10 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false,
   for($i=0; $i<count($upgradesWithOwnerData); $i+=SubcardPieces()) {
     if($upgradesWithOwnerData[$i] == "8752877738" || $upgradesWithOwnerData[$i] == "2007868442") continue; // Skip Shield and Experience tokens
     if($upgradesWithOwnerData[$i] == "6911505367") $discardPileModifier = "TTFREE";//Second Chance
-    if($upgradesWithOwnerData[$i] == "5942811090") LukePilotPlotArmor($player, $uniqueID);//Luke Pilot Plot Armor
+    if($upgradesWithOwnerData[$i] == "5942811090") {
+      $subcard = new SubCard($ally, $i);
+      LukePilotPlotArmor($player, $subcard->TurnsInPlay());
+    }
     if(!CardIdIsLeader($upgradesWithOwnerData[$i]))
       AddGraveyard($upgradesWithOwnerData[$i], $upgradesWithOwnerData[$i+1], "PLAY");
   }
@@ -1796,8 +1800,6 @@ function AllyPlayCardAbility($player, $cardID, $uniqueID, $numUses, $playedCardI
   switch($cardID) {
     default: break;
   }
-
-  SetClassState($player, $CS_PlayedAsUpgrade, 0);
 }
 
 function IsAlly($cardID, $player="")
@@ -2858,10 +2860,17 @@ function AllyBeginEndTurnEffects()
       $mainAllies[$i+10] = 0;//Reset times attacked
       ++$mainAllies[$i+12];//Increase number of turns in play
       $mainAllies[$i+14] = 0;//Reset was healed
+      $upgrades = $mainAllies[$i+4];
+      if($upgrades != "-") {
+        $upgrades = explode(",", $upgrades);
+        for($j=0; $j<count($upgrades); $j+=SubcardPieces()) {
+          $upgrades[$j+5]+=1;
+        }
+        $mainAllies[$i+4] = implode(",", $upgrades);
+      }
     }
     switch($mainAllies[$i])
     {
-
       default: break;
     }
   }
@@ -2996,10 +3005,10 @@ function InvisibleHandJTL($player) {
   AddDecisionQueue("SPECIFICCARD", $player, "INVISIBLE_HAND_JTL", 1);
 }
 
-function LukePilotPlotArmor($player) {
+function LukePilotPlotArmor($player, $turnsInPlay) {
   AddDecisionQueue("SETDQCONTEXT", $player, "Move Luke to the ground arena?");
   AddDecisionQueue("YESNO", $player, "-");
   AddDecisionQueue("NOPASS", $player, "-");
-  AddDecisionQueue("PASSPARAMETER", $player, "5942811090", 1);
+  AddDecisionQueue("PASSPARAMETER", $player, "5942811090,$turnsInPlay", 1);//Luke Skywalker (You Still With Me?)
   AddDecisionQueue("MZOP", $player, "FALLENPILOTUPGRADE", 1);
 }

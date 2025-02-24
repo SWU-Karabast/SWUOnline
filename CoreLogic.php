@@ -6142,12 +6142,16 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, "DESTROY", 1);
       break;
     case "5345999887"://Kijimi patrollers
+      if($from != "PLAY") {
         CreateTieFighter($currentPlayer);
-        break;
+      }
+      break;
     case "7072861308"://Profundity
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose player to draw 1 card");
-      AddDecisionQueue("BUTTONINPUT", $currentPlayer, "Yourself,Opponent");
-      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "PROFUNDITY", 1);
+      if($from != "PLAY") {
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose player to draw 1 card");
+        AddDecisionQueue("BUTTONINPUT", $currentPlayer, "Yourself,Opponent");
+        AddDecisionQueue("SPECIFICCARD", $currentPlayer, "PROFUNDITY", 1);
+      }
       break;
     case "8656409691"://Rio Durant
       if(GetResolvedAbilityName($cardID) == "Attack") {
@@ -6170,18 +6174,19 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
       break;
-
     case "1965647391"://Blade Squadron B-Wing
-      $theirAllies = &GetAllies($otherPlayer);
-      $numExhausted = 0;
-      for($i=0; $i<count($theirAllies); $i+=AllyPieces()) {
-      if($theirAllies[$i+1] == 1) ++$numExhausted;
-      }
-      if($numExhausted >= 3) {
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to give a shield to");
-        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "ADDSHIELD", 1);
+      if($from != "PLAY") {
+        $theirAllies = &GetAllies($otherPlayer);
+        $numExhausted = 0;
+        for($i=0; $i<count($theirAllies); $i+=AllyPieces()) {
+        if($theirAllies[$i+1] == 1) ++$numExhausted;
+        }
+        if($numExhausted >= 3) {
+          AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+          AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to give a shield to");
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+          AddDecisionQueue("MZOP", $currentPlayer, "ADDSHIELD", 1);
+        }
       }
       break;
     case "0766281795"://Luke Skywalker
@@ -6224,16 +6229,20 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "6854247423"://Tantive IV
-      CreateXWing($currentPlayer);
+      if($from != "PLAY") {
+        CreateXWing($currentPlayer);
+      }
       break;
     case "3427170256"://Captain Phasma Unit
-      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=First_Order&THEIRALLY:trait=First_Order");
-      AddDecisionQueue("MZFILTER", $currentPlayer, "index=MYALLY-" . $playAlly->Index());
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a First Order unit to give +2/+2");
-      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-      AddDecisionQueue("MZOP", $currentPlayer, "ADDHEALTH,2", 1);
-      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
-      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "3427170256,PLAY", 1);
+      if($from != "PLAY") {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=First_Order&THEIRALLY:trait=First_Order");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "index=MYALLY-" . $playAlly->Index());
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a First Order unit to give +2/+2");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "ADDHEALTH,2", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "3427170256,PLAY", 1);
+      }
       break;
     case "3885807284"://Fight Fire With Fire
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");

@@ -592,26 +592,19 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $pilotUnitToMove = new Ally($lastResult);
           $pilotUpgrade = $pilotUnitToMove->CardID();
           $pilotUnitOwner = $pilotUnitToMove->Owner();
+          $turnsInPlay = $pilotUnitToMove->TurnsInPlay();
           RemoveAlly($player, $pilotUnitToMove->Index(), removedFromPlay:false);
           $ally = new Ally($uniqueIdRecipient);
           SetClassState($player, $CS_PlayedAsUpgrade, 1);
-          $ally->Attach($pilotUpgrade, $pilotUnitOwner);
+          $ally->Attach($pilotUpgrade, $pilotUnitOwner, turnsInPlay: $turnsInPlay);
           break;
         case "MOVEPILOTUPGRADE":
           $attachedAlly = new Ally($dqVars[0]);
           $subcardIsLeader = CardIDIsLeader($lastResult);
-          $fromEpicAction = false;
-          if($subcardIsLeader) {
-            $upgrades = $attachedAlly->GetUpgrades(withMetadata:true);
-            for($i=0; $i<count($upgrades); $i+=SubcardPieces()) {
-              if($upgrades[$i+4] == 1) {
-                $fromEpicAction = true;
-                break;
-              }
-            }
-          }
+          $upgrades = $attachedAlly->GetUpgrades(withMetadata:true);
+          [$fromEpicAction, $turnsInPlay] = TupleFirstUpgradeWithCardID($upgrades, $lastResult);
           $attachedAlly->RemoveSubcard($lastResult, movingPilot:true);
-          $newUID = PlayAlly($lastResult, $attachedAlly->Owner(), epicAction:$fromEpicAction);
+          $newUID = PlayAlly($lastResult, $attachedAlly->Owner(), epicAction:$fromEpicAction, playedAsUnit:false, turnsInPlay: $turnsInPlay);
           if($subcardIsLeader) {
             $newAlly = new Ally($newUID);
             $newAlly->Exhaust();
@@ -619,10 +612,11 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           return $newUID;
           break;
         case "FALLENPILOTUPGRADE":
-          $newUID = PlayAlly($lastResult, $player, epicAction:false);//so far only Luke Skywalker JTL
+          $params = explode(",", $lastResult);
+          $newUID = PlayAlly($params[0], $player, epicAction:false, playedAsUnit:false, turnsInPlay:$params[1]);//so far only Luke Skywalker JTL
           $discard = &GetDiscard($player);
           for($i=0; $i<count($discard); $i+=DiscardPieces()) {
-            if($discard[$i] == $lastResult) {
+            if($discard[$i] == $params[0]) {
               RemoveDiscard($player, $i);
               return $newUID;
             }
@@ -660,6 +654,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $movingPilot = isset($dqVars[2]) ? $dqVars[2] == "1" : false;
           $mzSourceArr = explode("-", $mzSource);
           $upgradeOwnerID = null;
+          [$epicAction, $turnsInPlay] = TupleFirstUpgradeWithCardID($targetAlly->GetUpgrades(withMetadata:true), $upgradeID);
 
           switch ($mzSourceArr[0]) {
             case "MYALLY": case "THEIRALLY":
@@ -672,7 +667,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             default: break;
           }
 
-          $targetAlly->Attach($upgradeID, $upgradeOwnerID);
+          $targetAlly->Attach($upgradeID, $upgradeOwnerID, $epicAction ?? false, $turnsInPlay ?? 0);
           CheckHealthAllAllies();
           return $lastResult;
         case "GETCAPTIVES":
@@ -1995,6 +1990,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         PrependDecisionQueue("SETDQVAR", $player, "2");
         PrependDecisionQueue("PASSPARAMETER", $player, implode(",",$mineArr));
       }
+      if($dqVars[0] > 0) {
       $cardLink = str_contains($zones, "CHAR") ? CardLink($char[0], $char[0]) : CardLink($allies[$index], $allies[$index]);
       $dqContext = "Choose an amount of damage to deal to " . $cardLink;
       PrependDecisionQueue("MZOP", $player, "DEALDAMAGE,{1},$sourcePlayer,$parameter[1],$preventable");
@@ -2002,6 +1998,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       PrependDecisionQueue("SETDQVAR", $player, "1");
       PrependDecisionQueue("BUTTONINPUTNOPASS", $player, $damageIndices);
       PrependDecisionQueue("SETDQCONTEXT", $player, $dqContext);
+      }
 
       if(count($lastResult) == 0 && count($mineArr) > 0) {
         $lastResult = $mineArr;

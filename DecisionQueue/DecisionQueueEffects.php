@@ -537,10 +537,6 @@ function SpecificCardLogic($player, $parameter, $lastResult)
         $ally->RemoveSubcard($upgrades[$i]);
         if(!IsToken($upgrades[$i]) && !CardIDIsLeader($upgrades[$i])) AddHand($upgrades[$i+1], $upgrades[$i]);
       }
-      /*$ally->ClearSubcards();
-      for($i=0; $i<count($upgradesReturned); ++$i) {
-        UpgradeDetached($upgradesReturned[$i], $ally->PlayerID(), "MYALLY-" . $ally->Index());
-      }*/
       return $lastResult;
     case "DONTGETCOCKY":
       $deck = new Deck($player);
