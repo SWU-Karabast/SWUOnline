@@ -654,6 +654,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $movingPilot = isset($dqVars[2]) ? $dqVars[2] == "1" : false;
           $mzSourceArr = explode("-", $mzSource);
           $upgradeOwnerID = null;
+          [$epicAction, $turnsInPlay] = TupleFirstUpgradeWithCardID($targetAlly->GetUpgrades(withMetadata:true), $upgradeID);
 
           switch ($mzSourceArr[0]) {
             case "MYALLY": case "THEIRALLY":
@@ -666,7 +667,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             default: break;
           }
 
-          $targetAlly->Attach($upgradeID, $upgradeOwnerID);
+          $targetAlly->Attach($upgradeID, $upgradeOwnerID, $epicAction ?? false, $turnsInPlay ?? 0);
           CheckHealthAllAllies();
           return $lastResult;
         case "GETCAPTIVES":

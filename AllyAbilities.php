@@ -2861,7 +2861,7 @@ function AllyBeginEndTurnEffects()
       ++$mainAllies[$i+12];//Increase number of turns in play
       $mainAllies[$i+14] = 0;//Reset was healed
       $upgrades = $mainAllies[$i+4];
-      if($upgrades != "") {
+      if($upgrades != "-") {
         $upgrades = explode(",", $upgrades);
         for($j=0; $j<count($upgrades); $j+=SubcardPieces()) {
           $upgrades[$j+5]+=1;
