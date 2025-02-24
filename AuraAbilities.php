@@ -30,14 +30,14 @@ function PlayAura($cardID, $player, $number = 1, $isToken = false, $rogueHeronSp
   else if($cardID != "ELE111") IncrementClassState($player, $CS_NumAuras, $number);
 }
 
-function UpgradeDetached($upgradeCardID, $player, $formerBearerMZIndex) {
+function UpgradeDetached($upgradeCardID, $player, $formerBearerMZIndex, $turnsInPlay) {
   switch($upgradeCardID) {
     case "8055390529"://Traitorous
       $formerBearer = new Ally($formerBearerMZIndex, $player);
       if($formerBearer->Owner() != $formerBearer->Controller()) AllyTakeControl($formerBearer->Owner(), $formerBearer->UniqueID());
       break;
     case "5942811090"://Luke Skywalker (You Still With Me?)
-      LukePilotPlotArmor($player);
+      LukePilotPlotArmor($player, $turnsInPlay);
       break;
     default:
       break;

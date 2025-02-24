@@ -128,7 +128,7 @@ function ResourcePieces() { return ArsenalPieces(); }
 //3 - Frozen - 0 = no, 1 = yes
 //4 - Subcards , delimited
 //5 - Unique ID
-//6 - Unused
+//6 - Originally played as unit (1 = yes, 0 = no)
 //7 - Unused
 //8 - Ability/effect Uses
 //9 - Round health modifier
@@ -212,7 +212,7 @@ function EventPieces()
 //2 - isPilot
 //3 - subcard uniqueId
 //4 - attached as epic action
-//5 - unused
+//5 - turns in play
 //6 - unused
 //7 - unused
 function SubcardPieces(){
