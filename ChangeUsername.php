@@ -22,7 +22,7 @@ include_once 'Header.php';
 <div class="flex-padder"></div>
 
 <div class="flex-wrapper">
-<div class='container bg-black'>
+<div class='container bg-yellow'>
 
 <section class="change-username-form">
   <h2>Change Your Username</h2>

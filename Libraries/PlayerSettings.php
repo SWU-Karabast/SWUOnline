@@ -84,7 +84,60 @@ function GetPlaymat($player)
 {
   global $SET_Playmat;
   $settings = GetSettings($player);
-  return $settings[$SET_Playmat];
+  switch($settings[$SET_Playmat]) {
+    case 0: return "Default";
+    case 1: return "Death Star";
+    case 2: return "Echo Base";
+    case 3: return "AT-AT Sand";
+    case 4: return "Overwhelming Barrage";
+    case 5: return "The Darksaber";
+    case 101: return "SOR Starfield";
+    case 102: return "SHD Starfield";
+    case 103: return "TWI Starfield";
+    case 104: return "JTL Starfield";
+    case 201: return "SOR Artwork";
+    case 202: return "SHD Artwork";
+    case 203: return "TWI Artwork";
+    case 204: return "JTL Artwork";
+  }
+}
+
+function PlaymatCode($name) {
+  switch($name) {
+    case "Default": return 0;
+    case "Death Star": return 1;
+    case "Echo Base": return 2;
+    case "AT-AT Sand": return 3;
+    case "Overwhelming Barrage": return 4;
+    case "The Darksaber": return 5;
+    case "SOR Starfield": return 101;
+    case "SHD Starfield": return 102;
+    case "TWI Starfield": return 103;
+    case "JTL Starfield": return 104;
+    case "SOR Artwork": return 201;
+    case "SHD Artwork": return 202;
+    case "TWI Artwork": return 203;
+    case "JTL Artwork": return 204;
+  }
+}
+
+function GetGameBgSrc($code) {
+  switch($code) {
+    case 0: return "bg-battlefields.jpg";
+    case 1: return "bg-deathstar.jpg";
+    case 2: return "bg-echobase.jpg";
+    case 3: return "bg-atat-sand.jpg";
+    case 4: return "bg-ob.png";
+    case 5: return "bg-darksaber.png";
+    case 101: return "SWUKeyArt/SWH01_Starfield.png";
+    case 102: return "SWUKeyArt/SWH02_Starfield.jpg";
+    case 103: return "SWUKeyArt/SWH03_Starfield.jpg";
+    case 104: return "SWUKeyArt/SWH04_Starfield.jpg";
+    case 201: return "SWUKeyArt/SWH01_KeyArt.jpg";
+    case 202: return "SWUKeyArt/SWH02_KeyArt.jpg";
+    case 203: return "SWUKeyArt/SWH03_KeyArt.png";
+    case 204: return "SWUKeyArt/SWH04_KeyArt.jpg";
+  }
 }
 
 function GetCardBack($player)
@@ -284,7 +337,7 @@ function ChangeSetting($player, $setting, $value, $playerId = "")
 function GetSettingsUI($player)
 {
   global $SET_AlwaysHoldPriority, $SET_DarkMode, $SET_ManualMode, $SET_SkipARs, $SET_SkipDRs, $SET_AutotargetArcane, $SET_ColorblindMode;
-  global $SET_ShortcutAttackThreshold, $SET_EnableDynamicScaling, $SET_Mute, $SET_Cardback, $SET_MuteChat, $SET_DisableStats;
+  global $SET_ShortcutAttackThreshold, $SET_EnableDynamicScaling, $SET_Mute, $SET_Cardback, $SET_Playmat, $SET_MuteChat, $SET_DisableStats;
   global $SET_CasterMode, $SET_StreamerMode, $SET_DisableAnimations;
   $rv = "";
   $settings = GetSettings($player);
@@ -298,51 +351,77 @@ function GetSettingsUI($player)
   //$rv .= CreateRadioButton($SET_DarkMode . "-2", "Plain Mode", 26, $SET_DarkMode . "-" . $settings[$SET_DarkMode], "Plain Mode");
   //$rv .= CreateRadioButton($SET_DarkMode . "-3", "Dark Plain Mode", 26, $SET_DarkMode . "-" . $settings[$SET_DarkMode], "Dark Plain Mode");
 
-  $rv .= "<h3>Card Backs</h3>";
-  $hasCardBacks = false;
-  $rv .= CreateRadioButton($SET_Cardback . "-" . 0, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Default");
-  $rv .= CreateRadioButton($SET_Cardback . "-" . 3, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Rebel Resource");
-  $rv .= CreateRadioButton($SET_Cardback . "-" . 4, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Rebel Resource Dark");
-  $rv .= CreateRadioButton($SET_Cardback . "-" . 5, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Golden Dice Podcast");
-  $rv .= CreateRadioButton($SET_Cardback . "-" . 6, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "L8 Night Gaming");
-  $rv .= CreateRadioButton($SET_Cardback . "-" . 7, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Mobyus1 Simple");
-  $rv .= CreateRadioButton($SET_Cardback . "-" . 8, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Mobyus1 Titled");
-  $rv .= CreateRadioButton($SET_Cardback . "-" . 9, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Outmaneuver");
-  $rv .= CreateRadioButton($SET_Cardback . "-" . 10, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Bothan Network");
-  $rv .= CreateRadioButton($SET_Cardback . "-" . 11, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Padawan Unlimited");
-  $rv .= CreateRadioButton($SET_Cardback . "-" . 12, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "RVA SWU");
-  $rv .= CreateRadioButton($SET_Cardback . "-" . 13, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Baddest Batch");
-  $rv .= CreateRadioButton($SET_Cardback . "-" . 15, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Holocron Card Hub");
-  $rv .= CreateRadioButton($SET_Cardback . "-" . 16, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Maclunky Gaming");
-  $rv .= CreateRadioButton($SET_Cardback . "-" . 17, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "The Cantina Crew");
-  $rv .= CreateRadioButton($SET_Cardback . "-" . 18, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Rajeux TCG");
-  $rv .= CreateRadioButton($SET_Cardback . "-" . 19, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Under The Twin Suns");
-  $rv .= CreateRadioButton($SET_Cardback . "-" . 20, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Too Many Hans");
-  $rv .= CreateRadioButton($SET_Cardback . "-" . 21, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Porg Depot");
-  $rv .= CreateRadioButton($SET_Cardback . "-" . 22, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Darth Players");
-  $rv .= CreateRadioButton($SET_Cardback . "-" . 23, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Mainedalorians");
-  $rv .= CreateRadioButton($SET_Cardback . "-" . 24, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Galactic Gonks");
-  $rv .= CreateRadioButton($SET_Cardback . "-" . 25, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Fallen Order");
-  $rv .= CreateRadioButton($SET_Cardback . "-" . 26, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Mythic Force");
-  $rv .= CreateRadioButton($SET_Cardback . "-" . 27, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "MoG TCG");
-  $rv .= CreateRadioButton($SET_Cardback . "-" . 28, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "SWCGR");
+  $rv .= "<h3>Card Backs (public available: 25)</h3>";
+  $submitLink = ProcessInputLink($player, 26, "select", "onchange", true);
+  $rv .= "<select id='cardbacksSelect' class='settingsSelect'" . $submitLink . ">";
+  $rv .= CreateSelectOption($SET_Cardback . "-" . 0, "", $SET_Cardback . "-" . $settings[$SET_Cardback]);
+  $rv .= CreateSelectOption($SET_Cardback . "-" . 0, "Default", $SET_Cardback . "-" . $settings[$SET_Cardback]);
+  $rv .= CreateSelectOption($SET_Cardback . "-" . 3, "Rebel Resource", $SET_Cardback . "-" . $settings[$SET_Cardback]);
+  $rv .= CreateSelectOption($SET_Cardback . "-" . 4, "Rebel Resource Dark", $SET_Cardback . "-" . $settings[$SET_Cardback]);
+  $rv .= CreateSelectOption($SET_Cardback . "-" . 5, "Golden Dice Podcast", $SET_Cardback . "-" . $settings[$SET_Cardback]);
+  $rv .= CreateSelectOption($SET_Cardback . "-" . 6, "L8 Night Gaming", $SET_Cardback . "-" . $settings[$SET_Cardback]);
+  $rv .= CreateSelectOption($SET_Cardback . "-" . 7, "Mobyus1 Simple", $SET_Cardback . "-" . $settings[$SET_Cardback]);
+  $rv .= CreateSelectOption($SET_Cardback . "-" . 8, "Mobyus1 Titled", $SET_Cardback . "-" . $settings[$SET_Cardback]);
+  $rv .= CreateSelectOption($SET_Cardback . "-" . 9, "Outmaneuver", $SET_Cardback . "-" . $settings[$SET_Cardback]);
+  $rv .= CreateSelectOption($SET_Cardback . "-" . 10, "Bothan Network", $SET_Cardback . "-" . $settings[$SET_Cardback]);
+  $rv .= CreateSelectOption($SET_Cardback . "-" . 11, "Padawan Unlimited", $SET_Cardback . "-" . $settings[$SET_Cardback]);
+  $rv .= CreateSelectOption($SET_Cardback . "-" . 12, "RVA SWU", $SET_Cardback . "-" . $settings[$SET_Cardback]);
+  $rv .= CreateSelectOption($SET_Cardback . "-" . 13, "Baddest Batch", $SET_Cardback . "-" . $settings[$SET_Cardback]);
+  $rv .= CreateSelectOption($SET_Cardback . "-" . 15, "Holocron Card Hub", $SET_Cardback . "-" . $settings[$SET_Cardback]);
+  $rv .= CreateSelectOption($SET_Cardback . "-" . 16, "Maclunky Gaming", $SET_Cardback . "-" . $settings[$SET_Cardback]);
+  $rv .= CreateSelectOption($SET_Cardback . "-" . 17, "The Cantina Crew", $SET_Cardback . "-" . $settings[$SET_Cardback]);
+  $rv .= CreateSelectOption($SET_Cardback . "-" . 18, "Rajeux TCG", $SET_Cardback . "-" . $settings[$SET_Cardback]);
+  $rv .= CreateSelectOption($SET_Cardback . "-" . 19, "Under The Twin Suns", $SET_Cardback . "-" . $settings[$SET_Cardback]);
+  $rv .= CreateSelectOption($SET_Cardback . "-" . 20, "Too Many Hans", $SET_Cardback . "-" . $settings[$SET_Cardback]);
+  $rv .= CreateSelectOption($SET_Cardback . "-" . 21, "Porg Depot", $SET_Cardback . "-" . $settings[$SET_Cardback]);
+  $rv .= CreateSelectOption($SET_Cardback . "-" . 22, "Darth Players", $SET_Cardback . "-" . $settings[$SET_Cardback]);
+  $rv .= CreateSelectOption($SET_Cardback . "-" . 23, "Mainedalorians", $SET_Cardback . "-" . $settings[$SET_Cardback]);
+  $rv .= CreateSelectOption($SET_Cardback . "-" . 24, "Galactic Gonks", $SET_Cardback . "-" . $settings[$SET_Cardback]);
+  $rv .= CreateSelectOption($SET_Cardback . "-" . 25, "Fallen Order", $SET_Cardback . "-" . $settings[$SET_Cardback]);
+  $rv .= CreateSelectOption($SET_Cardback . "-" . 26, "Mythic Force", $SET_Cardback . "-" . $settings[$SET_Cardback]);
+  $rv .= CreateSelectOption($SET_Cardback . "-" . 27, "MoG TCG", $SET_Cardback . "-" . $settings[$SET_Cardback]);
+  $rv .= CreateSelectOption($SET_Cardback . "-" . 28, "SWCGR", $SET_Cardback . "-" . $settings[$SET_Cardback]);
+  $rv .= "</select>";
+  $rv .= "<BR>";
 
   $stage = getenv('STAGE') ?: 'prod';
   $isDev = $stage === 'dev';
-  if(!$isDev) {
-    foreach(PatreonCampaign::cases() as $campaign) {
-      if(isset($_SESSION[$campaign->SessionID()]) || (isset($_SESSION["useruid"]) && $campaign->IsTeamMember($_SESSION["useruid"]))) {
-        $hasCardBacks = true;
-        $cardBacks = $campaign->CardBacks();
-        $cardBacks = explode(",", $cardBacks);
-        for($i = 0; $i < count($cardBacks); ++$i) {
-          $name = $campaign->CampaignName() . (count($cardBacks) > 1 ? " " . $i + 1 : "");
-          $rv .= CreateRadioButton($SET_Cardback . "-" . $cardBacks[$i], str_replace(' ', '', $name), 26, $SET_Cardback . "-" . $settings[$SET_Cardback], $name);
-        }
+  $patreonCases = $isDev ? [PatreonCampaign::ForceFam] : PatreonCampaign::cases();
+  $rv .= "<h3>Patreon Card Backs</h3>";
+  $submitLink = ProcessInputLink($player, 26, "select", "onchange", true);
+  $rv .= "<select id='cardbacksPatreonSelect' class='settingsSelect'" . $submitLink . ">";
+  $rv .= CreateSelectOption($SET_Cardback . "-" . 0, "", $SET_Cardback . "-" . $settings[$SET_Cardback]);
+  foreach($patreonCases as $campaign) {
+    if(isset($_SESSION[$campaign->SessionID()]) || (isset($_SESSION["useruid"]) && $campaign->IsTeamMember($_SESSION["useruid"]))) {
+      $cardBacks = $campaign->CardBacks();
+      $cardBacks = explode(",", $cardBacks);
+      for($i = 0; $i < count($cardBacks); ++$i) {
+        $name = $campaign->CampaignName() . (count($cardBacks) > 1 ? " " . $i + 1 : "");
+        $rv .= CreateSelectOption($SET_Cardback . "-" . $cardBacks[$i], $name, $SET_Cardback . "-" . $settings[$SET_Cardback]);
       }
     }
   }
+  $rv .= "</select>";
+  $rv .= "<BR>";
 
+  $rv .= "<h3>Playmats (public available: 14)</h3>";
+  $submitLink = ProcessInputLink($player, 26, "select", "onchange", true);
+  $rv .= "<select id='playmatSelect' class='settingsSelect'" . $submitLink . ">";
+  $rv .= CreateSelectOption($SET_Playmat . "-" . 0, "Default", $SET_Playmat . "-" . $settings[$SET_Playmat]);
+  $rv .= CreateSelectOption($SET_Playmat . "-" . 1, "Death Star", $SET_Playmat . "-" . $settings[$SET_Playmat]);
+  $rv .= CreateSelectOption($SET_Playmat . "-" . 2, "Echo Base", $SET_Playmat . "-" . $settings[$SET_Playmat]);
+  $rv .= CreateSelectOption($SET_Playmat . "-" . 3, "AT-AT Sand", $SET_Playmat . "-" . $settings[$SET_Playmat]);
+  $rv .= CreateSelectOption($SET_Playmat . "-" . 4, "Overwhelming Barrage", $SET_Playmat . "-" . $settings[$SET_Playmat]);
+  $rv .= CreateSelectOption($SET_Playmat . "-" . 5, "The Darksaber", $SET_Playmat . "-" . $settings[$SET_Playmat]);
+  $rv .= CreateSelectOption($SET_Playmat . "-" . 101, "SOR Starfield", $SET_Playmat . "-" . $settings[$SET_Playmat]);
+  $rv .= CreateSelectOption($SET_Playmat . "-" . 102, "SHD Starfield", $SET_Playmat . "-" . $settings[$SET_Playmat]);
+  $rv .= CreateSelectOption($SET_Playmat . "-" . 103, "TWI Starfield", $SET_Playmat . "-" . $settings[$SET_Playmat]);
+  $rv .= CreateSelectOption($SET_Playmat . "-" . 104, "JTL Starfield", $SET_Playmat . "-" . $settings[$SET_Playmat]);
+  $rv .= CreateSelectOption($SET_Playmat . "-" . 201, "SOR Artwork", $SET_Playmat . "-" . $settings[$SET_Playmat]);
+  $rv .= CreateSelectOption($SET_Playmat . "-" . 202, "SHD Artwork", $SET_Playmat . "-" . $settings[$SET_Playmat]);
+  $rv .= CreateSelectOption($SET_Playmat . "-" . 203, "TWI Artwork", $SET_Playmat . "-" . $settings[$SET_Playmat]);
+  $rv .= CreateSelectOption($SET_Playmat . "-" . 204, "JTL Artwork", $SET_Playmat . "-" . $settings[$SET_Playmat]);
+  $rv .= "</select>";
   $rv .= "<BR>";
   if($settings[$SET_ManualMode] == 0) $rv .= CreateCheckbox($SET_ManualMode . "-1", "Manual Mode", 26, false, "Manual Mode");
   else $rv .= CreateCheckbox($SET_ManualMode . "-0", "Manual Mode", 26, true, "Manual Mode");

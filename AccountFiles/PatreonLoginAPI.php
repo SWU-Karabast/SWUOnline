@@ -17,7 +17,7 @@ SetHeaders();
 
 $client_id = $patreonClientIDReact;
 $client_secret = $patreonClientSecretReact;
-$redirect_uri = "https://www.karabast.net/SWUOnline/PatreonLogin.php";
+$redirect_uri = "https://www.petranaki.net/SWUOnline/PatreonLogin.php";
 
 
 // The below code snippet needs to be active wherever the the user is landing in $redirect_uri parameter above. It will grab the auth code from Patreon and get the tokens via the oAuth client

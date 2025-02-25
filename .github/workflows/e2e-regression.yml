@@ -41,7 +41,7 @@ jobs:
     - name: Clone E2E Repository
       run: |
         cd ..
-        git clone https://github.com/SWU-Karabast/SWUOnline-Automation.git SWUOnline-Automation
+        git clone https://github.com/SWU-Petranaki/SWUOnline-Automation.git SWUOnline-Automation
 
     # Set up Node.js environment for E2E tests
     - name: Setup Node.js

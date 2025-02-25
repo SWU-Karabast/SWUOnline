@@ -65,7 +65,7 @@ if (GetCachePiece($gameName, 11) >= 3) {
 WriteLog("<span class='p$playerID-label bold'>$displayName</span>: $filteredChatText");
 if(str_contains($filteredChatText, "*****")) {
   $sugarSpiceAndEverythingNice = GetKindQuote();
-  WriteLog(KarabotSpan() . "As a reminder, please be kind to each other and refrain from using hateful language. This is just a game, and there is no reason to display this level of toxic behavior.");
+  WriteLog(ArenabotSpan() . "As a reminder, please be kind to each other and refrain from using hateful language. This is just a game, and there is no reason to display this level of toxic behavior.");
   WriteLog($sugarSpiceAndEverythingNice);
 }
 
