@@ -88,7 +88,7 @@ if (count($favoriteDecks) > 0) {
         echo ("<tr>");
         echo ("<td>" . CardLink($favoriteDecks[$i + 2], $favoriteDecks[$i + 2], true) . "</td>");
         echo ("<td>" . $favoriteDecks[$i + 1] . "</td>");
-        echo ("<td><a style='text-underline-offset:5px;' href='./MenuFiles/DeleteDeck.php?decklink=" . $favoriteDecks[$i] . "'>Delete</a></td>");
+        echo ("<td><a style='text-underline-offset:5px;' href='./MenuFiles/DeleteDeck.php?decklink=" . urlencode($favoriteDecks[$i]) . "'>Delete</a></td>");
         echo ("</tr>");
     }
     echo ("</table>");
