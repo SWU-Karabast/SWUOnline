@@ -218,6 +218,7 @@ function AllyHasStaticHealthModifier($cardID)
     case "4718895864"://Padawan Starfighter
     case "9017877021"://Clone Commander Cody
     case "9811031405"://Victor Leader
+    case "5052103576"://Resistance X-Wing
       return true;
     default: return false;
   }
@@ -294,6 +295,12 @@ function AllyStaticHealthModifier($cardID, $index, $player, $myCardID, $myIndex,
       break;
     case "9811031405"://Victor Leader
       if($index != $myIndex && $player == $myPlayer && CardArenas($cardID) == "Space") return 1;
+      break;
+    case "5052103576"://Resistance X-Wing
+      if($index == $myIndex && $player == $myPlayer) {
+        $ally = new Ally("MYALLY-" . $index, $player);
+        if($ally->HasPilot()) return 1;
+      }
       break;
     default: break;
   }

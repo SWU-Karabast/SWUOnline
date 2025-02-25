@@ -247,6 +247,10 @@ function AttackModifier($cardID, $player, $index)
       $ally = new Ally("MYALLY-" . $index, $player);
       $modifier -= $ally->Damage();
       break;
+    case "5052103576"://Resistance X-Wing
+      $ally = new Ally("MYALLY-" . $index, $player);
+      if($ally->HasPilot()) $modifier += 1;
+      break;
     default: break;
   }
 

@@ -3751,7 +3751,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "WRITECHOICE", 1);
         AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $otherPlayer, "8800836530", 1);
         AddDecisionQueue("ADDLIMITEDNEXTTURNEFFECT", $otherPlayer, "8800836530", 1);
-        break;  
+        break;
     case "9097690846"://Snowtrooper Lieutenant
       if($from != "PLAY") {
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
@@ -6209,6 +6209,15 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         DealDamageAsync($otherPlayer, 1, "DAMAGE", "3132453342");
       }
       break;
+    case "4531112134"://Kazuda Xiono
+      if(GetResolvedAbilityName($cardID) == "Clear Abilities") {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to clear abilities from");
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "4531112134,PLAY", 1);
+      }
+      break;
     case "8174214418"://Turbolaser Salvo
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an arena to blast. ");
       AddDecisionQueue("BUTTONINPUT", $currentPlayer, "Ground,Space");
@@ -6364,6 +6373,17 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("DRAW", $currentPlayer, "-", 1);
       }
       break;
+    case "4019449999"://Cham Syndulla
+      if($from != "PLAY") {
+        $myResourcesCount = NumResourcesAvailable($currentPlayer);
+        $theirResourcesCount = NumResourcesAvailable($otherPlayer);
+        if($myResourcesCount < $theirResourcesCount && count(GetDeck($currentPlayer)) > 0) {
+          AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Put top deck into play as a resource?");
+          AddDecisionQueue("YESNO", $currentPlayer, "if you want to add a resource from the top of your deck", 1);
+          AddDecisionQueue("NOPASS", $currentPlayer, "-", 1);
+          AddDecisionQueue("OP", $currentPlayer, "ADDTOPDECKASRESOURCE", 1);
+        }
+      }
     //PlayAbility End
     default: break;
   }

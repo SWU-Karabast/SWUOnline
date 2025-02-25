@@ -1296,6 +1296,8 @@ function CheckJTLAbilityTypes($cardID) {
       return LeaderAbilitiesIgnored() ? "" : "A";
     case "8520821318"://Poe Dameron
       return LeaderAbilitiesIgnored() ? "" : "A";
+    case "4531112134"://Kazuda Xiono
+      return LeaderAbilitiesIgnored() ? "" : "A";
     case "6600603122"://Massassi Tactical Officer
       return "A,AA";
     case "9921128444"://General Hux
@@ -1599,6 +1601,8 @@ function CheckJTLAbilityNames($cardID) {
       return LeaderAbilitiesIgnored() ? "" : "Pilot";
     case "3905028200"://Admiral Trench
       return LeaderAbilitiesIgnored() ? "" : "Rummage";
+    case "4531112134"://Kazuda Xiono
+      return LeaderAbilitiesIgnored() ? "" : "Clear Abilities";
     case "6600603122"://Massassi Tactical Officer
       return "Fighter Attack,Attack";
     case "9921128444"://General Hux
@@ -2033,6 +2037,8 @@ function LeaderUnit($cardID) {
       return "3eb545eb4b";
     case "3905028200"://Admiral Trench
       return "7c082aefc9";
+    case "4531112134"://Kazuda Xiono
+      return "c1700fc85b";
     default: return "";
   }
 }
@@ -2181,6 +2187,8 @@ function LeaderUndeployed($cardID) {
       return "8520821318";
     case "7c082aefc9"://Admiral Trench Leader Unit
       return "3905028200";
+    case "c1700fc85b"://Kazuda Xiono Leader Unit
+      return "4531112134";
     default: return "";
   }
 }
@@ -2195,6 +2203,7 @@ function LeaderCanPilot($cardID) {
     case "8656409691"://Rio Durant
     case "0766281795"://Luke Skywalker
     case "7661383869"://Darth Vader
+    case "4531112134"://Kazuda Xiono
       return true;
     default: return false;
   }
