@@ -578,13 +578,6 @@ class Ally {
         //Jump to Lightspeed
         case "3711891756"://Red Leader
           CreateXWing($this->Controller());
-          break;
-        case "1935873883"://Razor Crest
-          global $currentPlayer;
-          AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose Exhaust or Bounce");
-          AddDecisionQueue("BUTTONINPUTNOPASS", $currentPlayer, "Exhaust, Bounce");
-          AddDecisionQueue("SPECIFICCARD", $currentPlayer, "RAZOR_CREST_JTL", 1);
-          break;
         default: break;
       }
     }
