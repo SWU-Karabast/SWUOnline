@@ -6607,7 +6607,7 @@ function DamageAllAllies($amount, $source, $alsoRest=false, $alsoFreeze=false, $
   $theirAllies = &GetAllies($otherPlayer);
   for($i=count($theirAllies) - AllyPieces(); $i>=0; $i-=AllyPieces())
   {
-    if(!ArenaContains($theirAllies[$i], $arena, $otherPlayer)) continue;
+    if(!ArenaContains($theirAllies[$i], $arena, $otherPlayer) && $theirAllies[$i+15] != $arena) continue;
     if($alsoRest) $theirAllies[$i+1] = 1;
     if($alsoFreeze) $theirAllies[$i+3] = 1;
     $ally = new Ally("THEIRALLY-$i");
@@ -6616,7 +6616,7 @@ function DamageAllAllies($amount, $source, $alsoRest=false, $alsoFreeze=false, $
   $allies = &GetAllies($currentPlayer);
   for($i=count($allies) - AllyPieces(); $i>=0; $i-=AllyPieces())
   {
-    if(!ArenaContains($allies[$i], $arena, $currentPlayer)) continue;
+    if(!ArenaContains($allies[$i], $arena, $currentPlayer) && $theirAllies[$i+15] != $arena) continue;
     if($except != "" && $except == ("MYALLY-" . $i)) continue;
     if($alsoRest) $allies[$i+1] = 1;
     if($alsoFreeze) $allies[$i+3] = 1;
