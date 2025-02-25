@@ -3751,7 +3751,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "WRITECHOICE", 1);
         AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $otherPlayer, "8800836530", 1);
         AddDecisionQueue("ADDLIMITEDNEXTTURNEFFECT", $otherPlayer, "8800836530", 1);
-        break;  
+        break;
     case "9097690846"://Snowtrooper Lieutenant
       if($from != "PLAY") {
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
@@ -6207,6 +6207,15 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "3132453342"://Captain Phasma
       if(GetResolvedAbilityName($cardID) == "Deal Damage" && GetClassState($currentPlayer, $CS_NumFirstOrderPlayed) > 0) {
         DealDamageAsync($otherPlayer, 1, "DAMAGE", "3132453342");
+      }
+      break;
+    case "4531112134"://Kazuda Xiono
+      if(GetResolvedAbilityName($cardID) == "Clear Abilities") {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to clear abilities from");
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "4531112134,PLAY", 1);
       }
       break;
     case "8174214418"://Turbolaser Salvo
