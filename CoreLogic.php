@@ -6373,6 +6373,17 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("DRAW", $currentPlayer, "-", 1);
       }
       break;
+    case "4019449999"://Cham Syndulla
+      if($from != "PLAY") {
+        $myResourcesCount = NumResourcesAvailable($currentPlayer);
+        $theirResourcesCount = NumResourcesAvailable($otherPlayer);
+        if($myResourcesCount < $theirResourcesCount && count(GetDeck($currentPlayer)) > 0) {
+          AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Put top deck into play as a resource?");
+          AddDecisionQueue("YESNO", $currentPlayer, "if you want to add a resource from the top of your deck", 1);
+          AddDecisionQueue("NOPASS", $currentPlayer, "-", 1);
+          AddDecisionQueue("OP", $currentPlayer, "ADDTOPDECKASRESOURCE", 1);
+        }
+      }
     //PlayAbility End
     default: break;
   }

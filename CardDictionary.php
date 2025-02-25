@@ -1296,7 +1296,7 @@ function CheckJTLAbilityTypes($cardID) {
       return LeaderAbilitiesIgnored() ? "" : "A";
     case "8520821318"://Poe Dameron
       return LeaderAbilitiesIgnored() ? "" : "A";
-    case "4531112134"://Kazu Xiono
+    case "4531112134"://Kazuda Xiono
       return LeaderAbilitiesIgnored() ? "" : "A";
     case "6600603122"://Massassi Tactical Officer
       return "A,AA";
