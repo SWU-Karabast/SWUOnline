@@ -112,6 +112,9 @@ $cardBack->name = "MoG TCG";
 $cardBack->id = 27;
 $response->cardBacks[] = $cardBack;
 $cardBack = new stdClass();
+$cardBack->name = "SWCGR";
+$cardBack->id = 28;
+$response->cardBacks[] = $cardBack;
 
 $response->playmats = [];
 if(IsUserLoggedIn()) {
