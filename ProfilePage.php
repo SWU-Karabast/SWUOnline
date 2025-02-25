@@ -66,7 +66,7 @@ include_once 'Header.php';
 
 <div class="core-wrapper">
 
-<div class='fav-decks container bg-black'>
+<div class='fav-decks container bg-yellow'>
 <div style="display:flex; gap: 16px;">
     <h2 style="flex-grow: 1;">Welcome <?php echo $_SESSION['useruid'] ?>!</h2>
     <a href="ChangeUsername.php">
@@ -101,8 +101,8 @@ if (count($favoriteDecks) > 0) {
 </form>
 </div>
 
-<div class='stats container bg-black'>
-    <p>For stats tracking, build or import your deck to <a href="https://swustats.net" target="_blank">swustats.net</a> and use the swustats deck link to play on karabast.</p>
+<div class='stats container bg-yellow'>
+    <p>For stats tracking, build or import your deck to <a href="https://swustats.net" target="_blank">swustats.net</a> and use the swustats deck link to play on Petranaki.</p>
     <!--
 <form id="filterForm">
     <input type="date" name="startDate" value="<?php echo $startDate; ?>">
@@ -131,10 +131,10 @@ function DisplayPatreon() {
     $client_id = $patreonClientID;
     $client_secret = $patreonClientSecret;
 
-    $redirect_uri = "https://www.karabast.net/SWUOnline/PatreonLogin.php";
+    $redirect_uri = "https://www.petranaki.net/SWUOnline/PatreonLogin.php";
     $href = 'https://www.patreon.com/oauth2/authorize?response_type=code&client_id=' . $client_id . '&redirect_uri=' . urlencode($redirect_uri);
     $state = array();
-    $state['final_page'] = 'https://karabast.net/SWUOnline/MainMenu.php';
+    $state['final_page'] = 'https://petranaki.net/SWUOnline/MainMenu.php';
     $state_parameters = '&state=' . urlencode(base64_encode(json_encode($state)));
     $href .= $state_parameters;
     $scope_parameters = '&scope=identity%20identity.memberships';

@@ -97,9 +97,9 @@
 
     <head>
       <meta charset="utf-8">
-      <title>Karabast</title>
-      <link rel="stylesheet" href="./css/chat.css">
-      <link rel="stylesheet" href="./css/gamestyle250205.css">
+      <title>Petranaki</title>
+      <link rel="stylesheet" href="./css/chat2.css">
+      <link rel="stylesheet" href="./css/gamestyle250225.css">
       <link rel="preconnect" href="https://fonts.googleapis.com">
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
       <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
@@ -406,8 +406,8 @@
                       var fontColor = "#DDD";
                       var borderColor = "#1a1a1a";
                       var backgroundColor = "#DDD";
-                      
-                      <?php $playerVars = $playerID == 1 ? ["p1-label", "p1uid"] : ["p2-label", "p2uid"] ?>                      
+
+                      <?php $playerVars = $playerID == 1 ? ["p1-label", "p1uid"] : ["p2-label", "p2uid"] ?>
                       <?php if($playerID != 3): ?> // Hide player names for spectators
                         newHTML += "<div class='player-name <?= $playerVars[0] ?>'>" + <?php echo $playerVars[1]; ?> + "</div>";
                       <?php else: ?>
@@ -670,7 +670,7 @@
         var dimensions = "&windowWidth=" + window.innerWidth + "&windowHeight=" + window.innerHeight;
         var lcpEl = document.getElementById("lastCurrentPlayer");
         var lastCurrentPlayer = "&lastCurrentPlayer=" + (!lcpEl ? "0" : lcpEl.innerHTML);
-        if (lastUpdate == "NaN") window.location.replace("https://www.karabast.net/game/MainMenu.php");
+        if (lastUpdate == "NaN") window.location.replace("https://www.petranaki.net/game/MainMenu.php");
         else xmlhttp.open("GET", "GetNextTurn2.php?gameName=<?php echo ($gameName); ?>&playerID=<?php echo ($playerID); ?>&lastUpdate=" + lastUpdate + lastCurrentPlayer + "&authKey=<?php echo ($authKey); ?>" + dimensions, true);
         xmlhttp.send();
       }
