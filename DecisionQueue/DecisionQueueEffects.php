@@ -951,6 +951,21 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       AddHand($player, $lastResult);
       AddGraveyard($cardLeft, $player, "DECK");
       break;
+    case "RAZOR_CREST_JTL":
+      if($lastResult == "Exhaust") {
+        AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:maxCost=4&THEIRALLY:maxCost=4");
+        AddDecisionQueue("MZFILTER", $player, "leader=1");
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to exhaust", 1);
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+        AddDecisionQueue("MZOP", $player, "REST", 1);
+      } else {
+        AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:maxCost=2&THEIRALLY:maxCost=2");
+        AddDecisionQueue("MZFILTER", $player, "leader=1");
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose a card to bounce");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+        AddDecisionQueue("MZOP", $player, "BOUNCE", 1);
+      }
+      break;
     //SpecificCardLogic End
     default: return "";
   }
