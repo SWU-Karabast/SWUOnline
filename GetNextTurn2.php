@@ -288,8 +288,8 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   //Choose Cardback
   $MyCardBack = GetCardBack($playerID);
   $TheirCardBack = GetCardBack($playerID == 1 ? 2 : 1);
-  $MyPlayMat = GetPlaymat($playerID);
-  $gameBgSrc = GetGameBgSrc(PlaymatCode($MyPlayMat));
+  $gameBackground = GetBackground($playerID);
+  $gameBgSrc = GetGameBgSrc(BackgroundCode($gameBackground));
   $otherPlayer = ($playerID == 1 ? 2 : 1);
 
   //Display background

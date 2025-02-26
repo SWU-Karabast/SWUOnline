@@ -28,9 +28,6 @@ if (isset($_SESSION["userid"])) {
   for ($i = 0; $i < count($savedSettings); $i += 2) {
     $settingArray[$savedSettings[intval($i)]] = $savedSettings[intval($i) + 1];
   }
-  if (isset($_GET['language'])) {
-    ChangeSetting("", $SET_Language, $language, $_SESSION["userid"]);
-  } else if (isset($settingArray[$SET_Language])) $language = $settingArray[$SET_Language];
   if (isset($settingArray[$SET_Format])) $defaultFormat = $settingArray[$SET_Format];
   if (isset($settingArray[$SET_GameVisibility])) $defaultVisibility = $settingArray[$SET_GameVisibility];
 }

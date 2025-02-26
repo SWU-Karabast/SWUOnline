@@ -25,14 +25,17 @@ $SET_CasterMode = 16; //Did this player enable caster mode
 $SET_DisableAnimations = 17; //Did this player disable animations
 
 //Menu settings
-$SET_Language = 17; //What language is this player using?
 $SET_Format = 18; //What format did this player create a game for last?
-$SET_Deprecated = 19; //Deprecated
+$SET_Background = 19; //Background settings
 $SET_FavoriteDeckIndex = 20; //What deck did this player play a game with last
 $SET_GameVisibility = 21; //The visibility of the last game you created
 
 $SET_StreamerMode = 22; //Did this player enable caster mode
-$SET_Playmat = 23; //Did this player enable caster mode
+$SET_Playmat = 23; //Playmat settings
+
+function PlayerSettingsPieces() {
+  return 24;
+}
 
 function HoldPrioritySetting($player)
 {
@@ -80,11 +83,11 @@ function IsLanguageJP($player)
   return false;
 }
 
-function GetPlaymat($player)
+function GetBackground($player)
 {
-  global $SET_Playmat;
+  global $SET_Background;
   $settings = GetSettings($player);
-  switch($settings[$SET_Playmat]) {
+  switch($settings[$SET_Background]) {
     case 0: return "Default";
     case 1: return "Death Star";
     case 2: return "Echo Base";
@@ -102,7 +105,7 @@ function GetPlaymat($player)
   }
 }
 
-function PlaymatCode($name) {
+function BackgroundCode($name) {
   switch($name) {
     case "Default": return 0;
     case "Death Star": return 1;
@@ -337,7 +340,7 @@ function ChangeSetting($player, $setting, $value, $playerId = "")
 function GetSettingsUI($player)
 {
   global $SET_AlwaysHoldPriority, $SET_DarkMode, $SET_ManualMode, $SET_SkipARs, $SET_SkipDRs, $SET_AutotargetArcane, $SET_ColorblindMode;
-  global $SET_ShortcutAttackThreshold, $SET_EnableDynamicScaling, $SET_Mute, $SET_Cardback, $SET_Playmat, $SET_MuteChat, $SET_DisableStats;
+  global $SET_ShortcutAttackThreshold, $SET_EnableDynamicScaling, $SET_Mute, $SET_Cardback, $SET_Playmat, $SET_Background, $SET_MuteChat, $SET_DisableStats;
   global $SET_CasterMode, $SET_StreamerMode, $SET_DisableAnimations;
   $rv = "";
   $settings = GetSettings($player);
@@ -404,23 +407,23 @@ function GetSettingsUI($player)
   $rv .= "</select>";
   $rv .= "<BR>";
 
-  $rv .= "<h3>Playmats (public available: 14)</h3>";
+  $rv .= "<h3>Backgrounds (public available: 14)</h3>";
   $submitLink = ProcessInputLink($player, 26, "select", "onchange", true);
-  $rv .= "<select id='playmatSelect' class='settingsSelect'" . $submitLink . ">";
-  $rv .= CreateSelectOption($SET_Playmat . "-" . 0, "Default", $SET_Playmat . "-" . $settings[$SET_Playmat]);
-  $rv .= CreateSelectOption($SET_Playmat . "-" . 1, "Death Star", $SET_Playmat . "-" . $settings[$SET_Playmat]);
-  $rv .= CreateSelectOption($SET_Playmat . "-" . 2, "Echo Base", $SET_Playmat . "-" . $settings[$SET_Playmat]);
-  $rv .= CreateSelectOption($SET_Playmat . "-" . 3, "AT-AT Sand", $SET_Playmat . "-" . $settings[$SET_Playmat]);
-  $rv .= CreateSelectOption($SET_Playmat . "-" . 4, "Overwhelming Barrage", $SET_Playmat . "-" . $settings[$SET_Playmat]);
-  $rv .= CreateSelectOption($SET_Playmat . "-" . 5, "The Darksaber", $SET_Playmat . "-" . $settings[$SET_Playmat]);
-  $rv .= CreateSelectOption($SET_Playmat . "-" . 101, "SOR Starfield", $SET_Playmat . "-" . $settings[$SET_Playmat]);
-  $rv .= CreateSelectOption($SET_Playmat . "-" . 102, "SHD Starfield", $SET_Playmat . "-" . $settings[$SET_Playmat]);
-  $rv .= CreateSelectOption($SET_Playmat . "-" . 103, "TWI Starfield", $SET_Playmat . "-" . $settings[$SET_Playmat]);
-  $rv .= CreateSelectOption($SET_Playmat . "-" . 104, "JTL Starfield", $SET_Playmat . "-" . $settings[$SET_Playmat]);
-  $rv .= CreateSelectOption($SET_Playmat . "-" . 201, "SOR Artwork", $SET_Playmat . "-" . $settings[$SET_Playmat]);
-  $rv .= CreateSelectOption($SET_Playmat . "-" . 202, "SHD Artwork", $SET_Playmat . "-" . $settings[$SET_Playmat]);
-  $rv .= CreateSelectOption($SET_Playmat . "-" . 203, "TWI Artwork", $SET_Playmat . "-" . $settings[$SET_Playmat]);
-  $rv .= CreateSelectOption($SET_Playmat . "-" . 204, "JTL Artwork", $SET_Playmat . "-" . $settings[$SET_Playmat]);
+  $rv .= "<select id='backgroundSelect' class='settingsSelect'" . $submitLink . ">";
+  $rv .= CreateSelectOption($SET_Background . "-" . 0, "Default", $SET_Background . "-" . $settings[$SET_Background]);
+  $rv .= CreateSelectOption($SET_Background . "-" . 1, "Death Star", $SET_Background . "-" . $settings[$SET_Background]);
+  $rv .= CreateSelectOption($SET_Background . "-" . 2, "Echo Base", $SET_Background . "-" . $settings[$SET_Background]);
+  $rv .= CreateSelectOption($SET_Background . "-" . 3, "AT-AT Sand", $SET_Background . "-" . $settings[$SET_Background]);
+  $rv .= CreateSelectOption($SET_Background . "-" . 4, "Overwhelming Barrage", $SET_Background . "-" . $settings[$SET_Background]);
+  $rv .= CreateSelectOption($SET_Background . "-" . 5, "The Darksaber", $SET_Background . "-" . $settings[$SET_Background]);
+  $rv .= CreateSelectOption($SET_Background . "-" . 101, "SOR Starfield", $SET_Background . "-" . $settings[$SET_Background]);
+  $rv .= CreateSelectOption($SET_Background . "-" . 102, "SHD Starfield", $SET_Background . "-" . $settings[$SET_Background]);
+  $rv .= CreateSelectOption($SET_Background . "-" . 103, "TWI Starfield", $SET_Background . "-" . $settings[$SET_Background]);
+  $rv .= CreateSelectOption($SET_Background . "-" . 104, "JTL Starfield", $SET_Background . "-" . $settings[$SET_Background]);
+  $rv .= CreateSelectOption($SET_Background . "-" . 201, "SOR Artwork", $SET_Background . "-" . $settings[$SET_Background]);
+  $rv .= CreateSelectOption($SET_Background . "-" . 202, "SHD Artwork", $SET_Background . "-" . $settings[$SET_Background]);
+  $rv .= CreateSelectOption($SET_Background . "-" . 203, "TWI Artwork", $SET_Background . "-" . $settings[$SET_Background]);
+  $rv .= CreateSelectOption($SET_Background . "-" . 204, "JTL Artwork", $SET_Background . "-" . $settings[$SET_Background]);
   $rv .= "</select>";
   $rv .= "<BR>";
   if($settings[$SET_ManualMode] == 0) $rv .= CreateCheckbox($SET_ManualMode . "-1", "Manual Mode", 26, false, "Manual Mode");
@@ -464,16 +467,15 @@ function GetSettingsUI($player)
 
 function SaveSettingInDatabase($setting)
 {
-  global $SET_DarkMode, $SET_ColorblindMode, $SET_Mute, $SET_Cardback, $SET_DisableStats, $SET_Language;
+  global $SET_DarkMode, $SET_ColorblindMode, $SET_Mute, $SET_Cardback, $SET_DisableStats;
   global $SET_Format, $SET_FavoriteDeckIndex, $SET_GameVisibility, $SET_AlwaysHoldPriority, $SET_ManualMode;
-  global $SET_StreamerMode, $SET_AutotargetArcane, $SET_Playmat, $SET_DisableAnimations;
+  global $SET_StreamerMode, $SET_AutotargetArcane, $SET_Playmat, $SET_Background, $SET_DisableAnimations;
   switch($setting) {
     case $SET_DarkMode:
     case $SET_ColorblindMode:
     case $SET_Mute:
     case $SET_Cardback:
     case $SET_DisableStats:
-    case $SET_Language:
     case $SET_Format:
     case $SET_FavoriteDeckIndex:
     case $SET_GameVisibility:
@@ -482,6 +484,7 @@ function SaveSettingInDatabase($setting)
     case $SET_StreamerMode:
     case $SET_AutotargetArcane:
     case $SET_Playmat:
+    case $SET_Background:
     case $SET_DisableAnimations:
       return true;
     default: return false;

@@ -114,9 +114,9 @@ switch ($popupType) {
   case "theirDiscardPopup":
     JSONPopup($response, $theirDiscard, DiscardPieces());
     break;
-  case "theirSoulPopup":
-    JSONPopup($response, $theirSoul, SoulPieces());
-    break;
+  // case "theirSoulPopup"://FAB
+  //   JSONPopup($response, $theirSoul, SoulPieces());
+  //   break;
   case "chainLinkPopup":
     $popupIndex = intval(($chainLinkIndex ?? $params[1]));
     $response = ChainLinkObject($popupIndex);
@@ -126,7 +126,7 @@ switch ($popupType) {
     global $SET_AlwaysHoldPriority, $SET_TryUI2, $SET_DarkMode, $SET_ManualMode, $SET_SkipARs, $SET_SkipDRs;
     global $SET_PassDRStep, $SET_AutotargetArcane, $SET_ColorblindMode, $SET_ShortcutAttackThreshold, $SET_EnableDynamicScaling;
     global $SET_Mute, $SET_Cardback, $SET_IsPatron, $SET_MuteChat, $SET_DisableStats, $SET_CasterMode, $SET_StreamerMode;
-    global $SET_Playmat, $SET_DisableAnimations;
+    global $SET_Playmat, $SET_DisableAnimations, $SET_Background;
     $response->Settings = array();
     AddSetting($response->Settings, "HoldPrioritySetting", $SET_AlwaysHoldPriority);
     AddSetting($response->Settings, "TryReactUI", $SET_TryUI2);
@@ -146,6 +146,7 @@ switch ($popupType) {
     AddSetting($response->Settings, "IsCasterMode", $SET_CasterMode);
     AddSetting($response->Settings, "IsStreamerMode", $SET_StreamerMode);
     AddSetting($response->Settings, "Playmat", $SET_Playmat);
+    AddSetting($response->Settings, "Background", $SET_Background);
     $response->isSpectatingEnabled = GetCachePiece($gameName, 9) == "1";
     break;
   default:
