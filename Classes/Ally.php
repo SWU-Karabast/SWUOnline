@@ -544,7 +544,7 @@ class Ally {
         $subcards = array_values($subcards);
         $this->allies[$this->index + 4] = count($subcards) > 0 ? implode(",", $subcards) : "-";
         if(DefinedTypesContains($subcardID, "Upgrade") || $isPilot)
-          UpgradeDetached($subcardID, $this->playerID, "MYALLY-" . $this->index, $turnsInPlay);
+          UpgradeDetached($subcardID, $this->playerID, "MYALLY-" . $this->index, $turnsInPlay, $ownerId);
         if(CardIDIsLeader($subcardID) && !$movingPilot) {
           $leaderUndeployed = LeaderUndeployed($subcardID);
           if($leaderUndeployed != "") {
