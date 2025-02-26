@@ -1490,7 +1490,6 @@ function SwapTurn()
   $turn[3] = "";
   $actionPoints = 1;
   $combatChain = []; //TODO: Add cards to the discard pile?...
-  SetClassState($currentPlayer, $CS_PlayedAsUpgrade, 0);
   $defPlayer = $mainPlayer;
   $mainPlayer = ($mainPlayer == 1 ? 2 : 1);
   $currentPlayer = $mainPlayer;
@@ -1579,8 +1578,10 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
         $dynCost = DynamicCost($cardID); //CR 5.1.3a Declare variable cost (CR 2.0)
       else
         $dynCost = "";
-      if ($playingCard)
+      if ($playingCard) {
+        SetClassState($currentPlayer, $CS_PlayedAsUpgrade, 0);
         AddPrePitchDecisionQueue($cardID, $from, $index, $skipAbilityType); //CR 5.1.3b,c Declare additional/optional costs (CR 2.0)
+      }
       if ($dynCost != "") {
         AddDecisionQueue("DYNPITCH", $currentPlayer, $dynCost);
         AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_LastDynCost);
