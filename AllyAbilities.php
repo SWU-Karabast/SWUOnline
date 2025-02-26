@@ -448,7 +448,7 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false,
     if($upgradesWithOwnerData[$i] == "6911505367") $discardPileModifier = "TTFREE";//Second Chance
     if($upgradesWithOwnerData[$i] == "5942811090") {
       $subcard = new SubCard($ally, $i);
-      LukePilotPlotArmor($player, $subcard->TurnsInPlay());
+      LukePilotPlotArmor($subcard->Owner(), $subcard->TurnsInPlay());
     }
     if(!CardIdIsLeader($upgradesWithOwnerData[$i]))
       AddGraveyard($upgradesWithOwnerData[$i], $upgradesWithOwnerData[$i+1], "PLAY");
