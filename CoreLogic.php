@@ -6236,6 +6236,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
   }
 }
 
+function ResetResources($player) {
+  $resourceCards = &GetResourceCards($player);
+  for($i=0; $i<count($resourceCards); $i+=ResourcePieces()) {
+    $resourceCards[$i + 4] = 0;
+  }
+}
+
 function ReadyResource($player, $amount=1) {
   $resourceCards = &GetResourceCards($player);
   $numReadied = 0;
@@ -6292,7 +6299,7 @@ function AfterPlayedByAbility($cardID) {
       AddDecisionQueue("OP", $currentPlayer, "GETLASTALLYMZ");
       AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
-      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, $cardID . "-2,PLAY", 1);
+      AddDecisionQueue("ADDLIMITEDNEXTTURNEFFECT", $currentPlayer, $cardID . "-2,PLAY", 1);
       break;
     case "8117080217"://Admiral Ozzel
       $ally->Ready();

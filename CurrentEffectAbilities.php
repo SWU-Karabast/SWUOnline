@@ -687,152 +687,114 @@ function CurrentEffectIntellectModifier()
   return $intellectModifier;
 }
 
-function CurrentEffectEndTurnAbilities()
-{
-  global $currentTurnEffects, $mainPlayer;
-  for($i = count($currentTurnEffects) - CurrentTurnPieces(); $i >= 0; $i -= CurrentTurnPieces()) {
-    $remove = false;
+function CurrentEffectStartRegroupPhaseAbilities() {
+  // To function correctly, use uniqueID instead of MZIndex
+  global $currentTurnEffects, $currentPlayer;
+
+  // Current turn effects
+  for ($i = count($currentTurnEffects) - CurrentTurnPieces(); $i >= 0; $i -= CurrentTurnPieces()) {
     $params = explode("_", $currentTurnEffects[$i]);
     $cardID = $params[0];
-    if(count($params) > 1) $subparam = $params[1];
-    if(SearchCurrentTurnEffects($cardID . "-UNDER", $currentTurnEffects[$i + 1])) {
-      AddNextTurnEffect($currentTurnEffects[$i], $currentTurnEffects[$i + 1]);
+    $player = $currentTurnEffects[$i+1];
+    $uniqueID = $currentTurnEffects[$i+2];
+    if (count($params) > 1) {
+      $subparam = $params[1];
     }
+
     switch($cardID) {
       case "4113123883-2"://Unnatural Life
       case "3426168686-2"://Sneak Attack
       case "7270736993-2"://Unrefusable Offer
-        $ally = new Ally("MYALLY-" . SearchAlliesForUniqueID($currentTurnEffects[$i+2], $currentTurnEffects[$i+1]), $currentTurnEffects[$i+1]);
-        $ally->Destroy(false);
+        $ally = new Ally($uniqueID, $player);
+        if ($ally->Exists()) {
+          $ally->Destroy(false);
+        }
         break;
       case "1302133998"://Impropriety Among Thieves
       case "7732981122"://Sly Moore
       case "1626462639"://Change of Heart
-        $player = $currentTurnEffects[$i+1];
-        $uniqueID = $currentTurnEffects[$i+2];
         AddDecisionQueue("PASSPARAMETER", $player , $uniqueID);
         AddDecisionQueue("UIDOP", $player , "REVERTCONTROL");
         break;
-      case "5696041568-2"://Triple Dark Raid
-        $ally = new Ally($currentTurnEffects[$i+2]);
-        if ($ally->Exists()) {
-          MZBounce($ally->Controller(), "MYALLY-" . $ally->Index());
-        }
-        break;
-      case "1910812527":
-        DealDamageAsync($currentTurnEffects[$i+1], 999999);
-        break;
       case "6117103324"://Jetpack
-        DefeatUpgradeForUniqueID($currentTurnEffects[$i+2], $currentTurnEffects[$i+1]);
+        DefeatUpgradeForUniqueID($uniqueID, $player);
+        break;        
+      case "2522489681"://Zorii Bliss
+        PummelHit($player);
         break;
-      case "8418001763"://Huyang
-        if(SearchAlliesForCard($currentTurnEffects[$i+1], "8418001763") != "") {
-          AddNextTurnEffect($currentTurnEffects[$i], $currentTurnEffects[$i + 1], $currentTurnEffects[$i + 2]);
-        }
-        break;
-      case "7964782056"://Qi'ra unit
-        AddNextTurnEffect($currentTurnEffects[$i], $currentTurnEffects[$i + 1], $currentTurnEffects[$i + 2]);
-        break;
-      case "3503494534"://Regional Governor
-        AddNextTurnEffect($currentTurnEffects[$i], $currentTurnEffects[$i + 1], $currentTurnEffects[$i + 2]);
+      case "1910812527"://Final Showdown
+        DealDamageAsync($player, 999999);
         break;
       //Jump to Lightspeed
       case "8105698374"://Commandeer
-        $ally = new Ally($currentTurnEffects[$i+2]);
-        if ($ally->Exists()) {
-          MZBounce($ally->Controller(), "MYALLY-" . $ally->Index());
-        }
+        AddDecisionQueue("PASSPARAMETER", $player , $uniqueID);
+        AddDecisionQueue("UIDOP", $player , "BOUNCE");
         break;
       default: break;
     }
-    if($remove) RemoveCurrentTurnEffect($i);
   }
 }
 
+function CurrentEffectEndRegroupPhaseAbilities() {
+  // To function correctly, use uniqueID instead of MZIndex
+}
 
-function CurrentEffectStartRegroupAbilities()
-{
-  global $currentTurnEffects, $mainPlayer, $currentPlayer;
-  for($i = count($currentTurnEffects) - CurrentTurnPieces(); $i >= 0; $i -= CurrentTurnPieces()) {
-    $remove = false;
+function CurrentEffectStartActionPhaseAbilities() {
+  // To function correctly, use uniqueID instead of MZIndex
+  global $currentTurnEffects;
+
+  for ($i = count($currentTurnEffects) - CurrentTurnPieces(); $i >= 0; $i -= CurrentTurnPieces()) {
     $params = explode("_", $currentTurnEffects[$i]);
     $cardID = $params[0];
-    if(count($params) > 1) $subparam = $params[1];
-    if(SearchCurrentTurnEffects($cardID . "-UNDER", $currentTurnEffects[$i + 1])) {
-      AddNextTurnEffect($currentTurnEffects[$i], $currentTurnEffects[$i + 1]);
-    }
-    switch($cardID) {
-      case "2522489681"://Zorii Bliss
-        PummelHit($currentTurnEffects[$i+1]);
-        break;
-      default: break;
-    }
-    if($remove) RemoveCurrentTurnEffect($i);
-  }
-
-  // Check allies abilities for both players
-  for ($player = 1; $player <= 2; $player++) {
-    $allies = &GetAllies($player);
-
-    for ($i = 0; $i < count($allies); $i += AllyPieces()) {
-      $ally = new Ally("MYALLY-$i", $player);
-
-      // Check upgrades abilities
-      $upgrades = $ally->GetUpgrades();
-      for($j=0; $j<count($upgrades); ++$j) {
-        $upgradeCardID = $upgrades[$j];
-        $processedUpgrades = [];
-
-        // Prevent duplicated upgrades
-        if (in_array($upgradeCardID, $processedUpgrades)) {
-          continue;
-        }
-
-        switch($upgradeCardID) {
-          case "3962135775"://Foresight
-            AddDecisionQueue("INPUTCARDNAME", $player, "<-");
-            AddDecisionQueue("SETDQVAR", $player, "0", 1);
-            AddDecisionQueue("PASSPARAMETER", $player, "MYDECK-0", 1);
-            AddDecisionQueue("MZOP", $player, "GETCARDID", 1);
-            AddDecisionQueue("SETDQVAR", $player, "1", 1);
-            AddDecisionQueue("MZOP", $player, "GETCARDTITLE", 1);
-            AddDecisionQueue("NOTEQUALPASS", $player, "{0}");
-            AddDecisionQueue("DRAW", $player, "-", 1);
-            AddDecisionQueue("REVEALCARDS", $player, "-", 1);
-            AddDecisionQueue("ELSE", $player, "-");
-            AddDecisionQueue("SETDQCONTEXT", $player, "The top card of your deck is <1>");
-            AddDecisionQueue("OK", $player, "-");
-            break;
-          default: break;
-        }
-
-        $processedUpgrades[] = $upgradeCardID;
-      }
-    }
-  }
-}
-
-function CurrentEffectStartTurnAbilities()
-{
-  global $currentTurnEffects, $mainPlayer;
-  for($i = count($currentTurnEffects) - CurrentTurnPieces(); $i >= 0; $i -= CurrentTurnPieces()) {
+    $player = $currentTurnEffects[$i+1];
+    $uniqueID = $currentTurnEffects[$i+2];
     $remove = false;
-    $cardID = substr($currentTurnEffects[$i], 0, 6);
-    if(SearchCurrentTurnEffects($cardID . "-UNDER", $currentTurnEffects[$i + 1])) {
-      AddNextTurnEffect($currentTurnEffects[$i], $currentTurnEffects[$i + 1]);
+    if (count($params) > 1) {
+      $subparam = $params[1];
     }
-    switch($currentTurnEffects[$i]) {
+
+    switch($cardID) {
       case "5954056864": case "5e90bd91b0"://Han Solo
-        MZChooseAndDestroy($currentTurnEffects[$i+1], "MYRESOURCES", context:"Choose a resource to destroy");
+        MZChooseAndDestroy($player, "MYRESOURCES", context:"Choose a resource to destroy");
+        $remove = true;
         break;
       case "8800836530"://No Good To Me Dead
-        $ally = new Ally("MYALLY-" . SearchAlliesForUniqueID($currentTurnEffects[$i+2], $currentTurnEffects[$i+1]), $currentTurnEffects[$i+1]);
+        $ally = new Ally($uniqueID, $player);
         $ally->Exhaust();
         $remove = true;
         break;
       default: break;
     }
-    if($remove) RemoveCurrentTurnEffect($i);
+
+    if ($remove) RemoveCurrentTurnEffect($i);
+  }
+}
+
+function CurrentEffectEndActionPhaseAbilities() {
+  // To function correctly, use uniqueID instead of MZIndex
+  global $currentTurnEffects;
+
+  for ($i = count($currentTurnEffects) - CurrentTurnPieces(); $i >= 0; $i -= CurrentTurnPieces()) {
+    $params = explode("_", $currentTurnEffects[$i]);
+    $cardID = $params[0];
+    $player = $currentTurnEffects[$i+1];
+    $uniqueID = $currentTurnEffects[$i+2];
+    if (count($params) > 1) {
+      $subparam = $params[1];
+    }
+
+    switch($cardID) {
+      case "5696041568-2"://Triple Dark Raid
+        AddDecisionQueue("PASSPARAMETER", $player , $uniqueID);
+        AddDecisionQueue("UIDOP", $player , "BOUNCE");
+        break;
+      case "8418001763"://Huyang
+      case "7964782056"://Qi'ra unit
+      case "3503494534"://Regional Governor
+        AddNextTurnEffect($currentTurnEffects[$i], $player, $uniqueID);
+        break;
+      default: break;
+    }
   }
 }
 

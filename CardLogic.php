@@ -460,6 +460,10 @@ function ContinueDecisionQueue($lastResult = "")
         // else if($cardID == "LAYER") ProcessLayer($player, $parameter);
         else if($cardID == "FINALIZECHAINLINK") FinalizeChainLink($parameter);
         else if($cardID == "DEFENDSTEP") { $turn[0] = "A"; $currentPlayer = $mainPlayer; }
+        else if($cardID == "STARTREGROUPPHASE") StartRegroupPhase();
+        else if($cardID == "ENDREGROUPPHASE") EndRegroupPhase();
+        else if($cardID == "STARTACTIONPHASE") StartActionPhase();
+        else if($cardID == "ENDACTIONPHASE") EndActionPhase();
         else if(IsAbilityLayer($cardID)) {
           if(count($combatChain) > 0) {
             AddAfterCombatLayer($cardID, $player, $parameter, $target, $additionalCosts, $uniqueID);
@@ -945,23 +949,117 @@ function ShouldHoldPriority($player, $layerCard = "")
   return 0;
 }
 
-function EndTurnProcedure($player) {
-  $allies = &GetAllies($player);
-  for($i = 0; $i < count($allies); $i += AllyPieces()) {
-    $ally = new Ally("MYALLY-" . $i, $player);
-    if($ally->CardID() == "9720757803" && $ally->CurrentPower() < 4)//Rampart
-      continue;
+function StartRegroupPhase() {
+  global $initiativePlayer, $mainPlayer;
 
-    $ally->Ready();
-  }
-  $resources = &GetResourceCards($player);
-  for($i=0; $i<count($resources); $i+=ResourcePieces()) {
-    $resources[$i+4] = "0";
-  }
-  Draw($player, false);
-  Draw($player, false);
-  MZMoveCard($player, "MYHAND", "MYRESOURCES", may:true, context:"Choose a card to resource", silent:true);
-  AddDecisionQueue("AFTERRESOURCE", $player, "HAND", 1);
+  // Reset class states
+  ResetClassState(1);
+  ResetClassState(2);
+
+  // Trigger abilities
+  CharacterStartRegroupPhaseAbilities(1);
+  CharacterStartRegroupPhaseAbilities(2);
+  AllyStartRegroupPhaseAbilities(1);
+  AllyStartRegroupPhaseAbilities(2);
+  CurrentEffectStartRegroupPhaseAbilities();
+
+  // Process decision queue
+  ProcessDecisionQueue();
+
+  // Draw cards and resource them
+  $otherPlayer = $initiativePlayer == 1 ? 2 : 1;
+  AddDecisionQueue("DRAW", $initiativePlayer, "0");
+  AddDecisionQueue("DRAW", $initiativePlayer, "0");
+  AddDecisionQueue("DRAW", $otherPlayer, "0");
+  AddDecisionQueue("DRAW", $otherPlayer, "0");
+  MZMoveCard($initiativePlayer, "MYHAND", "MYRESOURCES", may:true, context:"Choose a card to resource", silent:true);
+  MZMoveCard($otherPlayer, "MYHAND", "MYRESOURCES", may:true, context:"Choose a card to resource", silent:true);
+  AddDecisionQueue("AFTERRESOURCE", $initiativePlayer, "HAND", 1);
+  AddDecisionQueue("AFTERRESOURCE", $otherPlayer, "HAND", 1);
+
+  // Process decision queue
+  ProcessDecisionQueue();
+
+  // End regroup phase
+  AddLayer("ENDREGROUPPHASE", $mainPlayer, "-");
+
+  // Process decision queue
+  ProcessDecisionQueue();
+}
+
+function EndRegroupPhase() {
+  global $mainPlayer;
+
+  // Reset characters, allies, and resources
+  ResetCharacter(1);
+  ResetCharacter(2);
+  ResetAllies(1);
+  ResetAllies(2);
+  ResetResources(1);
+  ResetResources(2);
+
+  // Trigger abilities
+  CharacterEndRegroupPhaseAbilities(1);
+  CharacterEndRegroupPhaseAbilities(2);
+  AllyEndRegroupPhaseAbilities(1);
+  AllyEndRegroupPhaseAbilities(2);
+  CurrentEffectEndRegroupPhaseAbilities();
+
+  // Process decision queue
+  ProcessDecisionQueue();
+
+  // Start action phase
+  AddLayer("STARTACTIONPHASE", $mainPlayer, "-");
+
+  // Process decision queue
+  ProcessDecisionQueue();
+}
+
+function StartActionPhase() {
+  global $mainPlayer, $currentTurnEffects, $nextTurnEffects;
+
+  // Reset class states
+  ResetClassState(1);
+  ResetClassState(2);
+
+  // Reset turn modifiers
+  UnsetTurnModifiers();
+
+  // Trigger abilities
+  CharacterStartActionPhaseAbilities(1);
+  CharacterStartActionPhaseAbilities(2);
+  AllyStartActionPhaseAbilities(1);
+  AllyStartActionPhaseAbilities(2);
+  CurrentEffectStartActionPhaseAbilities();
+
+  // Resume round pass
+  AddDecisionQueue("RESUMEROUNDPASS", $mainPlayer, "-");
+
+  // Process decision queue
+  ProcessDecisionQueue();
+}
+
+function EndActionPhase() {
+  global $mainPlayer;
+
+  // Trigger abilities
+  CharacterEndActionPhaseAbilities(1);
+  CharacterEndActionPhaseAbilities(2);
+  AllyEndActionPhaseAbilities(1);
+  AllyEndActionPhaseAbilities(2);
+  CurrentEffectEndActionPhaseAbilities();
+
+  // End turn procedure
+  AddDecisionQueue("ENDTURN", $mainPlayer, "-");
+  
+  // Process decision queue
+  ProcessDecisionQueue();
+
+  // Start regroup phase
+  AddLayer("STARTREGROUPPHASE", $mainPlayer, "-");
+
+  // Process decision queue
+  ProcessDecisionQueue();
 }
 
 function TopDeckToArsenal($player)
