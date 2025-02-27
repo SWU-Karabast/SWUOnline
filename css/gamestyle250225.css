@@ -73,20 +73,20 @@ td {
   z-index: -6;
   left: 41px;
   opacity: .6;
-  background: rgba(64, 64, 64, 1);
+  background: rgba(70, 70, 70, 1);
 }
 
 #groundArena {
   z-index: -5;
   right: 278px;
-  opacity: .4;
+  opacity: .6;
 }
 
 .groundArena-dimmer {
   z-index: -6;
   right: 278px;
-  opacity: .6;
-  background: rgba(64, 64, 64, 1);
+  opacity: .4;
+  background: rgba(230,220,175, 1);
 }
 
 /* Player Names */
