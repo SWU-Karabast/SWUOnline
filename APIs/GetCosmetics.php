@@ -115,6 +115,10 @@ $cardBack = new stdClass();
 $cardBack->name = "SWCGR";
 $cardBack->id = 28;
 $response->cardBacks[] = $cardBack;
+$cardBack = new stdClass();
+$cardBack->name = "Galactic Shuffle";
+$cardBack->id = 29;
+$response->cardBacks[] = $cardBack;
 
 $response->playmats = [];
 if(IsUserLoggedIn()) {
