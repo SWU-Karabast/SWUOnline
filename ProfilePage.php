@@ -131,10 +131,10 @@ function DisplayPatreon() {
     $client_id = $patreonClientID;
     $client_secret = $patreonClientSecret;
 
-    $redirect_uri = "https://www.petranaki.net/SWUOnline/PatreonLogin.php";
+    $redirect_uri = "https://www.petranaki.net/Arena/PatreonLogin.php";
     $href = 'https://www.patreon.com/oauth2/authorize?response_type=code&client_id=' . $client_id . '&redirect_uri=' . urlencode($redirect_uri);
     $state = array();
-    $state['final_page'] = 'https://petranaki.net/SWUOnline/MainMenu.php';
+    $state['final_page'] = 'https://petranaki.net/Arena/MainMenu.php';
     $state_parameters = '&state=' . urlencode(base64_encode(json_encode($state)));
     $href .= $state_parameters;
     $scope_parameters = '&scope=identity%20identity.memberships';

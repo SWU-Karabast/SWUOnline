@@ -25,7 +25,7 @@ bash petranaki.sh restart
 
 #### Step 2. Accessing the application
 
-Open this address in your browser: http://localhost:8080/SWUOnline/MainMenu.php
+Open this address in your browser: http://localhost:8080/Arena/MainMenu.php
 
 If you want to play a game against yourself, open multiple windows / tabs and connect.
 
@@ -74,7 +74,7 @@ This guide explains how to set up CI/CD, including deploying with GitHub, securi
   Save this secret for later use.
 
 - In your GitHub repository, go to **Settings > Webhooks** and create a new webhook with the following settings:
-  - **Payload URL**: `https://petranaki.net/SWUOnline/Webhook.php`
+  - **Payload URL**: `https://petranaki.net/Arena/Webhook.php`
   - **Content Type**: `application/json`
   - **Secret**: `<webhook-secret>` (use the secret generated earlier)
   - **SSL Verification**: Enabled
@@ -82,7 +82,7 @@ This guide explains how to set up CI/CD, including deploying with GitHub, securi
 
 #### 3. Configure `.htaccess`
 To secure your project and set environment variables:
-- Navigate to your project directory: `/opt/lampp/htdocs/SWUOnline`
+- Navigate to your project directory: `/opt/lampp/htdocs/Arena`
 - Create or edit an `.htaccess` file with the following content:
   ```apache
   RedirectMatch 404 /\.git

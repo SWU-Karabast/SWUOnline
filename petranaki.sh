@@ -9,7 +9,7 @@ case $1 in
   "start")
     echo "Starting Petranaki..."
     docker compose up -d
-    echo "Petranaki is running at http://localhost:8080/SWUOnline/MainMenu.php"
+    echo "Petranaki is running at http://localhost:8080/Arena/MainMenu.php"
     ;;
   "stop")
     echo "Stopping Petranaki..."
