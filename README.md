@@ -2,7 +2,7 @@
 Star Wars Unlimited Sim
 
 ## Contact info
-If you need to contact us or would like to get involved in the dev work, please reach out in our [Discord server](https://discord.gg/hKRaqHND4v)!
+If you need to contact us or would like to get involved in the dev work, please reach out in our [Discord server](https://discord.gg/AN5GEXSu)!
 
 ## Dev Quickstart
 
@@ -51,7 +51,7 @@ https://docs.google.com/document/d/10u3qGpxr1ddvwobq8__lVZfYCgqtanZShHEaYljiA1M/
 This guide explains how to set up CI/CD, including deploying with GitHub, securing webhooks, and configuring environment variables.
 
 #### 1. Set Up a Deploy Key
-- On the server, generate an SSH key pair by running:  
+- On the server, generate an SSH key pair by running:
   ```bash
   ssh-keygen -t rsa -b 4096 -C "deploy-key"
   ```
@@ -61,13 +61,13 @@ This guide explains how to set up CI/CD, including deploying with GitHub, securi
 
 - In your GitHub repository, go to **Settings > Deploy Keys** and add the content of `~/.ssh/id_rsa.pub` as a new deploy key.
 
-- Test the SSH connection to GitHub:  
+- Test the SSH connection to GitHub:
   ```bash
   ssh -T git@github.com
   ```
 
 #### 2. Configure a Webhook
-- Generate a secret key to secure the webhook:  
+- Generate a secret key to secure the webhook:
   ```bash
   openssl rand -hex 32
   ```
