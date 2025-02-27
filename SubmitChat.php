@@ -33,10 +33,10 @@ $displayName = ($uid != "-" ? $uid : "Player " . $playerID);
 $contributors = array("sugitime", "OotTheMonk", "Launch", "LaustinSpayce", "Star_Seraph", "Tower", "Etasus", "scary987", "Celenar");
 
 //its sort of sloppy, but it this will fail if you're in the contributors array because we want to give you the contributor icon, not the patron icon.
-if (isset($_SESSION["isPatron"]) && isset($_SESSION['useruid']) && !in_array($_SESSION['useruid'], $contributors)) $displayName = "<img title='Patron' style='margin-bottom:-2px; margin-right:-4px; height:18px;' src='./images/patronHeart.webp' /> " . $displayName;
+if (isset($_SESSION["isPatron"]) && isset($_SESSION['useruid']) && !in_array($_SESSION['useruid'], $contributors)) $displayName = "<img style='margin-bottom:-4px; margin-right:-6px; height:18px;' src='./Images/greenPhaseMarker.png' /> " . $displayName;
 
 //This is the code for Contributor's icon.
-if (isset($_SESSION['useruid']) && in_array($_SESSION['useruid'], $contributors)) $displayName = "<img title='Contributor' style='margin-bottom:-2px; margin-right:-4px; height:18px;' src='./images/copper.webp' /> " . $displayName;
+if (isset($_SESSION['useruid']) && in_array($_SESSION['useruid'], $contributors)) $displayName = "<img title='Contributor' style='margin-bottom:-4px; margin-right:-4px; height:18px;' src='./Images/copper.webp' /> " . $displayName;
 //profanity filter
 $filteredChatText = explode(" ", $chatText);
 $meanPhrases = [
