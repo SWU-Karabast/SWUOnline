@@ -30,13 +30,14 @@ if (isset($_SESSION['useruid'])) $uid = $_SESSION['useruid'];
 $displayName = ($uid != "-" ? $uid : "Player " . $playerID);
 
 //array for contributors
-$contributors = array("sugitime", "OotTheMonk", "Launch", "LaustinSpayce", "Star_Seraph", "Tower", "Etasus", "scary987", "Celenar");
+$contributors = array("OotTheMonk", "love", "ninin", "Brubraz", "Mobyus1");
 
 //its sort of sloppy, but it this will fail if you're in the contributors array because we want to give you the contributor icon, not the patron icon.
-if (isset($_SESSION["isPatron"]) && isset($_SESSION['useruid']) && !in_array($_SESSION['useruid'], $contributors)) $displayName = "<img style='margin-bottom:-4px; margin-right:-6px; height:18px;' src='./Images/greenPhaseMarker.png' /> " . $displayName;
+//TODO: see about content creator icons for Patreon
+//if (isset($_SESSION["isPatron"]) && isset($_SESSION['useruid']) && !in_array($_SESSION['useruid'], $contributors)) $displayName = "<img style='margin-bottom:-4px; margin-right:-6px; height:18px;' src='./Images/greenPhaseMarker.png' /> " . $displayName;
 
 //This is the code for Contributor's icon.
-if (isset($_SESSION['useruid']) && in_array($_SESSION['useruid'], $contributors)) $displayName = "<img title='Contributor' style='margin-bottom:-4px; margin-right:-4px; height:18px;' src='./Images/copper.webp' /> " . $displayName;
+if (isset($_SESSION['useruid']) && in_array($_SESSION['useruid'], $contributors)) $displayName = "<img title='Contributor' style='margin-bottom:-4px; margin-right:-4px; height:18px;' src='./Images/beskar-tiny.png' /> " . $displayName;
 //profanity filter
 $filteredChatText = explode(" ", $chatText);
 $meanPhrases = [
