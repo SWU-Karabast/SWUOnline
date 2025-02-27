@@ -2,7 +2,7 @@
 Star Wars Unlimited Sim
 
 ## Contact info
-If you need to contact us or would like to get involved in the dev work, please reach out in our [Discord server](https://discord.gg/cCBUWVsnsV)!
+If you need to contact us or would like to get involved in the dev work, please reach out in our [Discord server](https://discord.gg/AN5GEXSu)!
 
 ## Dev Quickstart
 
