@@ -157,14 +157,9 @@ include_once 'Header.php';
     <h2>News</h2>
     <div style="position: relative;">
       <div style='vertical-align:middle; text-align:center;'>
-        <img src='WebpImages2/9652861741.webp'
-          alt='Petranaki Logo'
-          style='width: 300px; margin: 0 auto; display: block;'
-          object-fit='cover'
-          object-position='-20% 0'
-        >
+        <img src="./Images/TWI Starter.png" width="320">
         <h3 style="margin: 15px 0; display: block;">We got a new look!</h3>
-        <p>Some message about changing names and Karabast being the new engine, while Petranaki will remain for testing with undo</p>
+        <p>Petranaki.net will continue to be maintained by familiar devs OotTheMonk, Brubraz, ninin, and LVE while Karabast.net will be reserved for the new engine that Cazargar and team have been working on and making excellent progress with! This is to ensure we still have the engine available to those that have been enjoying it in its current state</p>
       </div>
     </div>
     <?php
