@@ -94,6 +94,7 @@ function GetBackground($player)
     case 3: return "AT-AT Sand";
     case 4: return "Overwhelming Barrage";
     case 5: return "The Darksaber";
+    case 6: return "Space/Ground Battlefield 1";
     case 101: return "SOR Starfield";
     case 102: return "SHD Starfield";
     case 103: return "TWI Starfield";
@@ -113,6 +114,7 @@ function BackgroundCode($name) {
     case "AT-AT Sand": return 3;
     case "Overwhelming Barrage": return 4;
     case "The Darksaber": return 5;
+    case "Space/Ground Battlefield 1": return 6;
     case "SOR Starfield": return 101;
     case "SHD Starfield": return 102;
     case "TWI Starfield": return 103;
@@ -126,12 +128,13 @@ function BackgroundCode($name) {
 
 function GetGameBgSrc($code) {
   switch($code) {
-    case 0: return "bg-battlefields.jpg";
+    case 0: return "gamebg.jpg";
     case 1: return "bg-deathstar.jpg";
     case 2: return "bg-echobase.jpg";
     case 3: return "bg-atat-sand.jpg";
     case 4: return "bg-ob.png";
     case 5: return "bg-darksaber.png";
+    case 6: return "bg-battlefields.jpg";
     case 101: return "SWUKeyArt/SWH01_Starfield.png";
     case 102: return "SWUKeyArt/SWH02_Starfield.jpg";
     case 103: return "SWUKeyArt/SWH03_Starfield.jpg";
@@ -422,6 +425,7 @@ function GetSettingsUI($player)
   $rv .= CreateSelectOption($SET_Background . "-" . 3, "AT-AT Sand", $SET_Background . "-" . $settings[$SET_Background]);
   $rv .= CreateSelectOption($SET_Background . "-" . 4, "Overwhelming Barrage", $SET_Background . "-" . $settings[$SET_Background]);
   $rv .= CreateSelectOption($SET_Background . "-" . 5, "The Darksaber", $SET_Background . "-" . $settings[$SET_Background]);
+  $rv .= CreateSelectOption($SET_Background . "-" . 6, "Space/Ground Battlefield 1", $SET_Background . "-" . $settings[$SET_Background]);
   $rv .= CreateSelectOption($SET_Background . "-" . 101, "SOR Starfield", $SET_Background . "-" . $settings[$SET_Background]);
   $rv .= CreateSelectOption($SET_Background . "-" . 102, "SHD Starfield", $SET_Background . "-" . $settings[$SET_Background]);
   $rv .= CreateSelectOption($SET_Background . "-" . 103, "TWI Starfield", $SET_Background . "-" . $settings[$SET_Background]);
