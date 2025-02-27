@@ -4,6 +4,7 @@ on:
   pull_request:
     branches:
       - main
+      - petranaki
 
 jobs:
   e2e-regression:
