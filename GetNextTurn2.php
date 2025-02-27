@@ -289,12 +289,12 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   $MyCardBack = GetCardBack($playerID);
   $TheirCardBack = GetCardBack($playerID == 1 ? 2 : 1);
   $gameBackground = GetBackground($playerID);
-  $gameBgSrc = GetGameBgSrc(BackgroundCode($gameBackground));
+  [$gameBgSrc, $noDim] = GetGameBgSrc(BackgroundCode($gameBackground));
   $otherPlayer = ($playerID == 1 ? 2 : 1);
 
   //Display background
   echo ("<div class='container game-bg'><img src='./Images/$gameBgSrc'/></div>");
-  echo ("<div class='game-bg-dimmer'>");
+  if(!$noDim) echo ("<div class='game-bg-dimmer'>");
   echo ("</div>");
 
   //Base Damage Numbers

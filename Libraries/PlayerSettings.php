@@ -128,21 +128,21 @@ function BackgroundCode($name) {
 
 function GetGameBgSrc($code) {
   switch($code) {
-    case 0: return "gamebg.jpg";
-    case 1: return "bg-deathstar.jpg";
-    case 2: return "bg-echobase.jpg";
-    case 3: return "bg-atat-sand.jpg";
-    case 4: return "bg-ob.png";
-    case 5: return "bg-darksaber.png";
-    case 6: return "bg-battlefields.jpg";
-    case 101: return "SWUKeyArt/SWH01_Starfield.png";
-    case 102: return "SWUKeyArt/SWH02_Starfield.jpg";
-    case 103: return "SWUKeyArt/SWH03_Starfield.jpg";
-    case 104: return "SWUKeyArt/SWH04_Starfield.jpg";
-    case 201: return "SWUKeyArt/SWH01_KeyArt.jpg";
-    case 202: return "SWUKeyArt/SWH02_KeyArt.jpg";
-    case 203: return "SWUKeyArt/SWH03_KeyArt.png";
-    case 204: return "SWUKeyArt/SWH04_KeyArt.jpg";
+    case 0: return ["gamebg.jpg", true];
+    case 1: return ["bg-deathstar.jpg", false];
+    case 2: return ["bg-echobase.jpg", false];
+    case 3: return ["bg-atat-sand.jpg", false];
+    case 4: return ["bg-ob.png", false];
+    case 5: return ["bg-darksaber.png", false];
+    case 6: return ["bg-battlefields.jpg", false];
+    case 101: return ["SWUKeyArt/SWH01_Starfield.png", false];
+    case 102: return ["SWUKeyArt/SWH02_Starfield.jpg", false];
+    case 103: return ["SWUKeyArt/SWH03_Starfield.jpg", false];
+    case 104: return ["SWUKeyArt/SWH04_Starfield.jpg", false];
+    case 201: return ["SWUKeyArt/SWH01_KeyArt.jpg", false];
+    case 202: return ["SWUKeyArt/SWH02_KeyArt.jpg", false];
+    case 203: return ["SWUKeyArt/SWH03_KeyArt.png", false];
+    case 204: return ["SWUKeyArt/SWH04_KeyArt.jpg", false];
   }
 }
 
