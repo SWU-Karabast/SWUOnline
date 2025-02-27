@@ -115,6 +115,14 @@ $cardBack = new stdClass();
 $cardBack->name = "SWCGR";
 $cardBack->id = 28;
 $response->cardBacks[] = $cardBack;
+$cardBack->name = "SWU-vic";
+$cardBack->id = 29;
+$response->cardBacks[] = $cardBack;
+$cardBack = new stdClass();
+$cardBack->name = "GonkGang";
+$cardBack->id = 30;
+$response->cardBacks[] = $cardBack;
+$cardBack = new stdClass();
 
 $response->playmats = [];
 if(IsUserLoggedIn()) {
