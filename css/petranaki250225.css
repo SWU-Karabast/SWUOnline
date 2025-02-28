@@ -152,7 +152,7 @@ select {
 }
 
 .bg-yellow {
-  background: rgba(70, 70, 30, 0.50);
+  background: rgba(90, 70, 30, 0.7);
 }
 
 .bg-blue {
@@ -204,8 +204,20 @@ select {
   margin-top: 10px;
 }
 
+.title-container {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  width: 30%;
+  margin-left: -16px;
+  padding: 8px 16px;
+  border-radius: 16px;
+}
+
 .home-header h1 {
-  margin-bottom: 16px;
+  font-size: 50px;
+  font-weight: 400;
+  margin-bottom: 4px;
 }
 
 .home-header p {
