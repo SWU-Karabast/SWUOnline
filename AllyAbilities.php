@@ -2735,6 +2735,12 @@ function SpecificAllyAttackAbilities($attackID)
       AddCurrentTurnEffect("6228218834", $mainPlayer, 'PLAY');
       IndirectDamage($defPlayer, $attackerAlly->CurrentPower(), true);
       break;
+    case "4147863169"://Relentless Firespray
+      if($attackerAlly->Exists() && $attackerAlly->NumUses() > 0) {
+        $attackerAlly->Ready();
+        $attackerAlly->SumNumUses(-1);
+      }
+      break;
   }
 
   // Current Effect Abilities
