@@ -768,10 +768,14 @@ select {
   position: absolute;
   bottom: 15px;
   width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .disclaimer p {
   font-size: 12px;
   font-weight: 300;
-  text-align: center;
+  margin: 0 auto;
+  padding: 2px 8px;
+  border-radius: 4px;
 }
