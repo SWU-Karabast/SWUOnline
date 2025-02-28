@@ -2203,7 +2203,7 @@ function SpecificAllyAttackAbilities($attackID)
       break;
     case "2522489681"://Zorii Bliss
       Draw($mainPlayer);
-      AddCurrentTurnEffect("2522489681", $mainPlayer, from:"PLAY");
+      AddNextTurnEffect("2522489681", $mainPlayer);
       break;
     case "4534554684"://Freetown Backup
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
