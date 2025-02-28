@@ -1,5 +1,5 @@
 <?php
-
+include "Libraries/Constants.php";
 include "Libraries/HTTPLibraries.php";
 include "Libraries/SHMOPLibraries.php";
 include "Libraries/NetworkingLibraries.php";
@@ -39,12 +39,14 @@ if (isset($_SESSION["isPatron"]) && isset($_SESSION['useruid']) && !in_array($_S
 if (isset($_SESSION['useruid']) && in_array($_SESSION['useruid'], $contributors)) $displayName = "<img title='Contributor' style='margin-bottom:-2px; margin-right:-4px; height:18px;' src='./images/copper.webp' /> " . $displayName;
 //profanity filter
 $filteredChatText = explode(" ", $chatText);
-$naughtyWords = ["shit", "piss", "fuck", "cunt", "cock", "cocksucker", "motherfucker", "tit", "tits", "fart", "turd", "twat", "bitch", "bitches", "retard", "retarded", "fag", "faggot", "skank", "hoe", "whore", "sh!t", "p!ss", "c0ck", "c0cksucker", "f@g", "f@ggot", "pussy", "dildo", "ass", "asshole", "dick", "dicks", "nigga", "nigger", "nonce", "fk", "wtf", "tf", "dogshit", ];
-$meanPhrases = ["kill yourself", "die in a fire", "can you just die irl", "hit by a bus", "fake and gay", ];
+$meanPhrases = [
+  "kill yourself", "die in a fire", "can you just die irl", "hit by a bus", "fake and gay", "ass monkey", "carpet muncher", "f u c k", "f u c k e r", "go to hell",
+  "motha fucker, motha fuker, motha fukkah, motha fukker, mother fucker, mother fukah, mother fuker, mother fukkah, mother fukker, mutha fucker, mutha fukah, mutha fuker, mutha fukkah, mutha fukker",
+];
 
 for($i=0; $i<count($filteredChatText);++$i) {
   $chatWord = $filteredChatText[$i];
-  if(in_array(strtolower($chatWord), $naughtyWords)) {
+  if(in_array(strtolower($chatWord), $PROFANITY_FILTER)) {
     $filteredChatText[$i] = "*****";
   }
 }

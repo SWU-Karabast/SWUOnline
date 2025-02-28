@@ -396,6 +396,24 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
         ContinueDecisionQueue($buttonInput);
       }
       break;
+    case 37://Play from their discard
+      MakeGamestateBackup();
+      $found = $cardID;
+      $otherP = ($playerID == 1 ? 2 : 1);
+      if ($found >= 0) {
+        $discard = &GetDiscard($otherP);
+        if ($found >= count($discard))
+          break;
+        $cardID = $discard[$found];
+        $modifier = $discard[$found + 1];
+        if (!IsPlayable($cardID, $turn[0], "TGY", $found, player: $otherP))
+          break;
+        if (str_starts_with($modifier, "TTOP") && strlen($modifier) > 2)
+          AddCurrentTurnEffect($modifier, $playerID);
+        RemoveDiscard($otherP, $found);
+        PlayCard($cardID, "TGY");
+      }
+      break;
     case 99: //Pass
       global $isPass, $initiativeTaken, $dqState;
       $isPass = true;
@@ -916,6 +934,12 @@ function ResolveChainLink()
   $totalDefense = 0;
   $attackerMZ = AttackerMZID($mainPlayer);
   $attackerArr = explode("-", $attackerMZ);
+  if($attackerArr[1] == "") {
+    ClearAttackTarget();
+    CloseCombatChain(true);
+    ProcessDecisionQueue();
+    return;
+  }
   $attacker = new Ally($attackerMZ, $mainPlayer);
   $totalAttack = $attacker->CurrentPower();
   $combatChainState[$CCS_LinkTotalAttack] = $totalAttack;
@@ -1191,7 +1215,6 @@ function FinalizeChainLink($chainClosed = false)
     $cardType = CardType($combatChain[$i - 1]);
     if ($cardType != "W" || $cardType != "E" || $cardType != "C") {
       $params = explode(",", GoesWhereAfterResolving($combatChain[$i - 1], "COMBATCHAIN", $combatChain[$i]));
-      SetClassState($currentPlayer, $CS_PlayedAsUpgrade, 0);
       $goesWhere = $params[0];
       $modifier = (count($params) > 1 ? $params[1] : "NA");
       if ($i == 1 && $combatChainState[$CCS_GoesWhereAfterLinkResolves] != "GY") {
@@ -1432,6 +1455,7 @@ function FinalizeTurn()
 function SwapTurn()
 {
   global $turn, $mainPlayer, $combatChain, $actionPoints, $defPlayer, $currentPlayer;
+  global $CS_PlayedAsUpgrade;
   $turn[0] = "M";
   //$turn[1] = $mainPlayer == 2 ? $turn[1] + 1 : $turn[1];
   $turn[2] = "";
@@ -1526,8 +1550,10 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
         $dynCost = DynamicCost($cardID); //CR 5.1.3a Declare variable cost (CR 2.0)
       else
         $dynCost = "";
-      if ($playingCard)
+      if ($playingCard) {
+        SetClassState($currentPlayer, $CS_PlayedAsUpgrade, 0);
         AddPrePitchDecisionQueue($cardID, $from, $index, $skipAbilityType); //CR 5.1.3b,c Declare additional/optional costs (CR 2.0)
+      }
       if ($dynCost != "") {
         AddDecisionQueue("DYNPITCH", $currentPlayer, $dynCost);
         AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_LastDynCost);
@@ -1954,7 +1980,7 @@ function UpdateLinkAttack()
 function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $additionalCosts = "-", $uniqueID = "-1", $layerIndex = -1)
 {
   global $turn, $combatChain, $currentPlayer, $defPlayer, $combatChainState, $CCS_AttackPlayedFrom, $CS_PlayIndex, $CS_OppIndex, $CS_OppCardActive;
-  global $CS_CharacterIndex, $CS_NumNonAttackCards, $CS_PlayCCIndex, $CS_NumAttacks, $CCS_LinkBaseAttack;
+  global $CS_CharacterIndex, $CS_PlayedAsUpgrade, $CS_PlayCCIndex, $CS_NumAttacks, $CCS_LinkBaseAttack;
   global $CCS_WeaponIndex, $EffectContext, $CCS_AttackUniqueID, $CS_NumEventsPlayed, $CS_AfterPlayedBy, $layers;
   global $CS_NumFighterAttacks, $CS_NumNonTokenVehicleAttacks, $CS_NumIllusionistActionCardAttacks, $CCS_IsBoosted;
   global $SET_PassDRStep, $CS_AbilityIndex, $CS_NumMandalorianAttacks, $CCS_MultiAttackTargets, $CS_SeparatistUnitsThatAttacked;
@@ -1983,7 +2009,12 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
       WriteLog(CardLink($cardID, $cardID) . " does not resolve because it is no longer in play.");
       return;
     }
-    $index = AddCombatChain($cardID, $currentPlayer, $from, $resourcesPaid);
+    $upgrades = "-";
+    if($uniqueID != "-1") {
+      $ally = new Ally($uniqueID);
+      $upgrades = implode(",", $ally->GetUpgrades(withMetadata:true));
+    }
+    $index = AddCombatChain($cardID, $currentPlayer, $from, $resourcesPaid, $upgrades);
     if ($index == 0) {
       ChangeSetting($defPlayer, $SET_PassDRStep, 0);
       $combatChainState[$CCS_AttackPlayedFrom] = $from;
@@ -2059,7 +2090,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
         //   BanishCardForPlayer($cardID, $currentPlayer, $from, "NA");
         //   break;
         case "ALLY":
-          $uniqueID = PlayAlly($cardID, $currentPlayer);
+          $uniqueID = PlayAlly($cardID, $currentPlayer, from:$from);
           $ally = new Ally($uniqueID, $currentPlayer);
           $index = $ally->Index();
           break;
@@ -2070,7 +2101,6 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
           AddMemory($cardID, $currentPlayer, $from, "DOWN");
           break;
         case "ATTACHTARGET":
-          global $CS_PlayedAsUpgrade;
           MZAttach($currentPlayer, $target, $cardID);
           //When you play an upgrade on this unit (e.g. Fenn Rau)
           $mzArr = explode("-", $target);
@@ -2095,7 +2125,6 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
                 break;
             }
           }
-          SetClassState($currentPlayer, $CS_PlayedAsUpgrade, 0);
           break;
         default:
           break;
@@ -2176,9 +2205,6 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
     CopyCurrentTurnEffectsFromAfterResolveEffects();
   }
 
-  // if ($CS_CharacterIndex != -1 && CanPlayAsInstant($cardID)) {//FAB
-  //   RemoveCharacterEffects($currentPlayer, GetClassState($currentPlayer, $CS_CharacterIndex), "INSTANT");
-  // }
   //Now determine what needs to happen next
   SetClassState($currentPlayer, $CS_PlayIndex, -1);
   SetClassState($currentPlayer, $CS_CharacterIndex, -1);
@@ -2225,7 +2251,6 @@ function CurrentTurnEffectsPlayingUnit($player) {
       case "6849037019"://Now There Are Two of Them
       //Jump to Lightspeed
       case "7138400365"://The Invisible Hand
-      case "TTFREE"://Second Chance,Cobb Vanth,
         return true;
     }
   }
@@ -2267,6 +2292,16 @@ function ArquitensAssaultCruiser($player)
   $discard = &GetDiscard($defPlayer);
   $defeatedCard = RemoveDiscard($defPlayer, count($discard) - DiscardPieces());
   AddResources($defeatedCard, $player, "PLAY", "DOWN", isExhausted: true);
+}
+
+function LayersContainAnyWhenPlayAbilitiesForPlayer($player) {
+  global $layers;
+  for ($i=0; $i<count($layers); $i+=LayerPieces()) {
+    if ($layers[$i] == "TRIGGER" && $layers[$i+1] == $player && $layers[$i+2] == "ALLYPLAYCARDABILITY")
+      return true;
+  }
+
+  return false;
 }
 
 function ProcessAttackTarget()

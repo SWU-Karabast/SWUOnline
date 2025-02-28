@@ -66,6 +66,31 @@ function SearchAllies($player, $type = "", $definedType = "", $maxCost = -1, $mi
   return SearchInner($allies, $player, "ALLY", AllyPieces(), $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $canAddPilot, $hasPilotOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $tokenOnly, $minAttack, $keyword, $defeatedThisPhase, $cardTitle, $hasWhenDefeatedOnly);
 }
 
+function SearchUpgrades($player, $maxCost=-1, $minCost=-1, $aspect="", $trait="", $maxUpgradeAttack=-1, $maxUpgradeHealth=-1, $tokenOnly=false, $cardTitle="", $uniqueOnly=false)
+{
+  $cardList = "";
+  $allies = &GetAllies($player);
+  for($i=0; $i< count($allies); $i+=AllyPieces()) {
+    $ally = new Ally("MYALLY-" . $i, $player);
+    $upgrades = $ally->GetUpgrades(withMetadata:true);
+    for($j=0;$j<count($upgrades);$j+=SubcardPieces()) {
+      if($maxCost > -1 && CardCost($upgrades[$j]) > $maxCost) continue;
+      if($minCost > -1 && CardCost($upgrades[$j]) < $minCost) continue;
+      if($aspect != "" && !AspectContains($upgrades[$j], $aspect, $player)) continue;
+      if($trait != "" && !TraitContains($upgrades[$j], $trait, $player)) continue;
+      if($maxUpgradeAttack > -1 && CardUpgradePower($upgrades[$j]) > $maxUpgradeAttack) continue;
+      if($maxUpgradeHealth > -1 && CardUpgradeHPDictionary($upgrades[$j]) > $maxUpgradeHealth) continue;
+      if($tokenOnly && !IsToken($upgrades[$j])) continue;
+      if($uniqueOnly && !CardIsUnique($upgrades[$j])) continue;
+      if($cardTitle != "" && CardTitle($upgrades[$j]) != GamestateUnsanitize($cardTitle)) continue;
+      if($cardList != "") $cardList = $cardList . ",";
+      $cardList = $cardList . $upgrades[$j];
+    }
+  }
+
+  return $cardList;
+}
+
 // function SearchPermanents($player, $type = "", $definedType = "", $maxCost = -1, $minCost = -1, $aspect = "", $arena = "", $hasBountyOnly = false, $hasUpgradeOnly = false, $trait = -1, $damagedOnly = false, $maxAttack = -1, $maxHealth = -1, $frozenOnly = false, $hasNegCounters = false, $hasEnergyCounters = false, $tokenOnly = false, $minAttack = false, $keyword = false, $defeatedThisPhase = null, $cardTitle = "", $hasWhenDefeatedOnly = false)
 // {
 //   $permanents = &GetPermanents($player);
@@ -88,7 +113,7 @@ function SearchLayer($player, $type = "", $definedType = "", $maxCost = -1, $min
 function SearchInner(&$array, $player, $zone, $count, $type, $definedType,
   $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait,
   $damagedOnly, $canAddPilot, $hasPilotOnly, $maxAttack, $maxHealth, $frozenOnly,
-  $hasNegCounters, $hasEnergyCounters, $tokenOnly, $minAttack, $keyword, $defeatedThisPhase, 
+  $hasNegCounters, $hasEnergyCounters, $tokenOnly, $minAttack, $keyword, $defeatedThisPhase,
   $cardTitle, $hasWhenDefeatedOnly)
 {
   global $currentRound;
@@ -1150,10 +1175,9 @@ function SearchMultizone($player, $searches)
 }
 
 function ControlsNamedCard($player, $name) {
-  $char = &GetPlayerCharacter($player);
-  if(count($char) > CharacterPieces() && CardTitle($char[CharacterPieces()]) == $name) return true;
-  if(SearchCount(SearchAlliesForTitle($player, $name)) > 0) return true;
-  if(SearchCount(SearchUpgradesForTitle($player, $name) > 0)) return true;
+  if(SearchCount(SearchCharacter($player, cardTitle:$name)) > 0) return true;
+  if(SearchCount(SearchAllies($player, cardTitle:$name)) > 0) return true;
+  if(SearchCount(SearchUpgrades($player, cardTitle:$name) > 0)) return true;
 
   return false;
 }

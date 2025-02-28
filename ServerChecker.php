@@ -19,7 +19,7 @@ $compBlitzLinks = "";
 $ccLinks = "";
 $compCCLinks = "";
 $otherFormatsLinks = "";
-$livingLegendsCCLinks = "";
+$livingLegendsCCLinks = "";//TODO:see how this is used..
 // TODO: Have as a global variable.
 $reactFE = "https://fe.talishar.net/game/play";
 
@@ -96,7 +96,7 @@ if ($handle = opendir($path)) {
           $spectateLinks .= <<<HTML
             </div>
           </form>
-          HTML;          
+          HTML;
         }
       } else if ($currentTime - $lastGamestateUpdate > 900000) //~1 hour
       {
@@ -130,7 +130,7 @@ if ($handle = opendir($path)) {
       $formatName = "";
       if ($format == "commoner")
         $formatName = "Commoner ";
-      else if ($format == "livinglegendscc")
+      else if ($format == "openform")
         $formatName = "Open Format ";
       else if ($format == "clash")
         $formatName = "Clash";
@@ -157,10 +157,10 @@ if ($handle = opendir($path)) {
           case "compblitz":
             $compBlitzLinks .= $link;
             break;
-          case "cc":
+          case "premierf":
             $ccLinks .= $link;
             break;
-          case "compcc":
+          case "reqsundo":
             $compCCLinks .= $link;
             break;
           default:

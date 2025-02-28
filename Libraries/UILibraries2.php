@@ -149,10 +149,14 @@ function JSONRenderedCard(
 
   return $card;
 }
-
 //Rotate is deprecated
 function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $overlay = 0, $borderColor = 0, $counters = 0, $actionDataOverride = "", $id = "", $rotate = false, $lifeCounters = 0, $defCounters = 0, $atkCounters = -1, $from = "", $controller = 0, $subcardNum = 0, $isExhausted = false, $isUnimplemented = false)
 {
+  if (isset($_COOKIE['selectedLanguage'])) {
+    $selectedLanguage = $_COOKIE['selectedLanguage'];
+  }else {
+    $selectedLanguage = 'EN';
+  }
   global $playerID, $darkMode;
   $opts = [];
   if (is_array($action)) {
@@ -164,7 +168,6 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
     $overlay = $opts['overlay'] ?? 0;
   }
 
-  $LanguageJP = IsLanguageJP($playerID) && TranslationExist("JP", $cardNumber);
   if ($darkMode == null)
     $darkMode = false;
   if ($folder == "crops") {
@@ -172,25 +175,28 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
   }
   $fileExt = ".png";
   $folderPath = $folder;
-  if ($cardNumber == "ENDSTEP" || $cardNumber == "ENDTURN" || $cardNumber == "RESUMETURN" || $cardNumber == "PHANTASM" || $cardNumber == "FINALIZECHAINLINK" || $cardNumber == "DEFENDSTEP" || $cardNumber == "AIM_cropped") {
-    $folderPath = str_replace("CardImages", "Images", $folderPath);
-    $folderPath = str_replace("concat", "Images", $folderPath);
-    $showHover = 0;
-    $borderColor = 0;
-  } else if ($folder == "concat" && $LanguageJP) { // Japanese
-    $folderPath = "concat/JP";
-    $fileExt = ".webp";
-  } else if ($folder == "WebpImages2" && $LanguageJP) { // Japanese
-    $folderPath = "WebpImages/JP";
-    $fileExt = ".webp";
-  } else if ($folder == "WebpImages2") {
-    $fileExt = ".webp";
-  } else if (mb_strpos($folder, "CardImages") !== false) {
-    $folderPath = str_replace("CardImages", "WebpImages2", $folder);
-    $fileExt = ".webp";
-  } else if ($folder == "concat" || $folder == "./concat" || $folder == "../concat") {
-    //if (DelimStringContains(CardSubType($cardNumber), "Landmark")) $rotate = true;
-    $fileExt = ".webp";
+  if ($selectedLanguage == "EN") {
+    if ($folder == "concat" || $folder == "./concat" || $folder == "../concat") {
+        $folderPath = "concat";
+        $fileExt = ".webp";
+    } else if ($folder == "WebpImages2") {
+        $folderPath = "WebpImages2";
+        $fileExt = ".webp";
+    }else if (mb_strpos($folder, "CardImages") !== false) {
+      $folderPath = str_replace("CardImages", "WebpImages2", $folder); 
+      $fileExt = ".webp";
+    }
+  } else {
+    if ($folder == "concat" || $folder == "./concat" || $folder == "../concat") {
+        $folderPath = "concat/" . $selectedLanguage;
+        $fileExt = ".webp";
+    } else if ($folder == "WebpImages2") {
+        $folderPath = "WebpImages2/" . $selectedLanguage;
+        $fileExt = ".webp";
+    } else if (mb_strpos($folder, "CardImages") !== false) {
+        $folderPath = str_replace("CardImages", "WebpImages2/" . $selectedLanguage , $folder); 
+        $fileExt = ".webp";
+    }
   }
   $actionData = $actionDataOverride != "" ? $actionDataOverride : $cardNumber;
   //Enforce 375x523 aspect ratio as exported (.71)
@@ -723,7 +729,13 @@ function CreatePopup($id, $fromArr, $canClose, $defaultState = 0, $title = "", $
   }
 
   // Modals
-  $rv = "<div id='" . $id . "' style='overflow-y: auto; background-color:rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); border-radius: 10px; padding: 10px; font-weight: 500; scrollbar-color: #888888 rgba(0, 0, 0, 0); scrollbar-width: thin; z-index:" . $overCC . "; position: absolute; top:" . $top . "; left:" . $left . "; width:" . $width . "; height:" . $height . ";" . ($defaultState == 0 ? " display:none;" : "") . "'>";
+  $bg = match($id) {
+    "MULTICHOOSE", "INSTANT", "OPT", "CHOOSEOPTION", => "background: linear-gradient(180deg, rgba(0, 0, 0, 1) 0%, rgba(32, 32, 50, 0.5) 50%, rgba(0, 0, 0, 1) 100%);",
+    "YESNO", "BUTTONINPUT" => "background: linear-gradient(180deg, rgba(0, 0, 0, 1) 0%, rgba(32, 32, 50, 0) 100%);",
+    "OVER" => "background-color:rgba(0, 0, 0, 0.8); backdrop-filter: blur(30px);",
+    default => "background-color:rgba(0, 0, 0, 0.825);"
+  };
+  $rv = "<div id='" . $id . "' style='overflow-y: auto; " . $bg . " border-radius: 10px; padding: 10px; font-weight: 500; scrollbar-color: #888888 rgba(0, 0, 0, 0); scrollbar-width: thin; z-index:" . $overCC . "; position: absolute; top:" . $top . "; left:" . $left . "; width:" . $width . "; height:" . $height . ";" . ($defaultState == 0 ? " display:none;" : "") . "'>";
 
   if ($title != "")
     $rv .= "<h" . ($big ? "1" : "3") . " style=' font-weight: 500; margin-left: 10px; margin-top: 5px; margin-bottom: 15px; text-align: center; user-select: none;'>" . $title . "</h" . ($big ? "1" : "3") . ">";
@@ -912,14 +924,16 @@ function PitchColor($pitch)
   }
 }
 
-function DiscardUI()
+function DiscardUI($player)
 {
-  global $turn, $currentPlayer, $playerID, $cardSize;
+  global $turn, $currentPlayer;
   $rv = "";
   $size = 120;
-  $discard = GetDiscard($playerID);
+  $discard = GetDiscard($player);
   for ($i = 0; $i < count($discard); $i += DiscardPieces()) {
-    $action = $currentPlayer == $playerID && IsPlayable($discard[$i], $turn[0], "GY", $i) ? 35 : 0;
+    $action = $currentPlayer == $player
+      ? (IsPlayable($discard[$i], $turn[0], "GY", $i) ? 35 : 0)
+      : (IsPlayable($discard[$i], $turn[0], "TGY", $i, player:$player) ? 37 : 0);
     $border = CardBorderColor($discard[$i], "GY", $action > 0);
     if($action > 0)
       $rv .= Card($discard[$i], "concat", $size, $action, 1, 0, $border, 0, strval($i));

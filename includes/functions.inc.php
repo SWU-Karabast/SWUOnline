@@ -221,10 +221,11 @@ function GetDeckBuilderId($uid, $decklink)
 
 function addFavoriteDeck($userID, $decklink, $deckName, $heroID, $format = "")
 {
+  include_once "./Libraries/PlayerSettings.php";
 	$conn = GetDBConnection();
 	$deckName = implode("", explode("\"", $deckName));
 	$deckName = implode("", explode("'", $deckName));
-	$values = "'" . $decklink . "'," . $userID . ",'" . $deckName . "','" . $heroID . "','" . $format . "'";
+	$values = "'" . $decklink . "'," . $userID . ",'" . $deckName . "','" . $heroID . "','" . FormatCode($format) . "'";
 	$sql = "INSERT IGNORE INTO favoritedeck (decklink, usersId, name, hero, format) VALUES (?, ?, ?, ?, ?);";
 	$stmt = mysqli_stmt_init($conn);
 	if (mysqli_stmt_prepare($stmt, $sql)) {
@@ -334,7 +335,7 @@ function LogChallengeResult($conn, $gameResultID, $playerID, $result)
 	}
 }
 
-function SerializeGameResult($player, $DeckLink, $deckAfterSB, $gameID = "", $opposingHero = "", $gameName = "", $deckbuilderID = "", $opposingBaseColor = "")
+function SerializeGameResult($player, $DeckLink, $deckAfterSB, $gameID = "", $opposingHero = "", $gameName = "", $deckbuilderID = "", $opposingBaseColor = "", $myLeader = "", $myBase = "")
 {
 	global $winner, $currentRound, $CardStats_TimesPlayed, $CardStats_TimesActivated, $CardStats_TimesResourced, $firstPlayer;
 	global $TurnStats_DamageThreatened, $TurnStats_DamageDealt, $TurnStats_CardsPlayedOffense, $TurnStats_CardsPlayedDefense, $TurnStats_CardsPitched, $TurnStats_CardsBlocked;
@@ -348,6 +349,8 @@ function SerializeGameResult($player, $DeckLink, $deckAfterSB, $gameID = "", $op
 	if ($gameID != "") $deck["gameId"] = $gameID;
 	if ($gameName != "") $deck["gameName"] = $gameName;
 	$deck["deckId"] = $DeckLink;
+	$deck["leader"] = $myLeader;
+	$deck["base"] = $myBase;
 	$deck["turns"] = intval($currentRound);
 	$deck["result"] = ($player == $winner ? 1 : 0);
 	$deck["firstPlayer"] = ($player == $firstPlayer ? 1 : 0);

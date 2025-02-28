@@ -119,6 +119,10 @@ function GetCardBack($player)
     case 25: return "fallen-order";
     case 26: return "mythic-force";
     case 27: return "mog-tcg";
+    case 28: return "CBSWCGR";
+    case 29: return "SWU-VIC";
+    case 30: return "GonkGang";
+    case 31: return "galactic-shuffle";
     default: return "CardBack";
   }
 }
@@ -324,6 +328,10 @@ function GetSettingsUI($player)
   $rv .= CreateRadioButton($SET_Cardback . "-" . 25, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Fallen Order");
   $rv .= CreateRadioButton($SET_Cardback . "-" . 26, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Mythic Force");
   $rv .= CreateRadioButton($SET_Cardback . "-" . 27, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "MoG TCG");
+  $rv .= CreateRadioButton($SET_Cardback . "-" . 28, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "SWCGR");
+  $rv .= CreateRadioButton($SET_Cardback . "-" . 29, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "SWU VIC");
+  $rv .= CreateRadioButton($SET_Cardback . "-" . 30, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "GonkGang");
+  $rv .= CreateRadioButton($SET_Cardback . "-" . 31, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Galactic Shuffle");
 
   $stage = getenv('STAGE') ?: 'prod';
   $isDev = $stage === 'dev';
@@ -435,11 +443,11 @@ function TranslationExist($Language, $cardID)
 function FormatCode($format)
 {
   switch($format) {
-    case "cc": return 0;
-    case "compcc": return 1;
+    case "premierf": return 0;
+    case "reqsundo": return 1;
     case "blitz": return 2;
     case "compblitz": return 3;
-    case "livinglegendscc": return 4;
+    case "openform": return 4;
     case "commoner": return 5;
     case "sealed": return 6;
     case "draft": return 7;
@@ -451,11 +459,11 @@ function FormatName($formatCode)
 {
   switch($formatCode)
   {
-    case 0: return "cc";
-    case 1: return "compcc";
+    case 0: return "premierf";
+    case 1: return "reqsundo";
     case 2: return "blitz";
     case 3: return "compblitz";
-    case 4: return "livinglegendscc";
+    case 4: return "openform";
     case 5: return "commoner";
     case 6: return "sealed";
     case 7: return "draft";

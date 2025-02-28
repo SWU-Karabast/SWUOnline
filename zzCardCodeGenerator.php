@@ -27,6 +27,7 @@
   $hasDestroyedArray = [];
   $setArray = [];
   $cardIDArray = [];
+  $pos = 1;
   
   $language = "EN";
 
@@ -79,27 +80,50 @@
       $isBottomPosition = $card->hp === null && $card->power === null && $card->upgradeHp === null && $card->upgradePower === null; // Only Events are bottom position. This is a hack to check if the card is an event.
       CheckImage($card->cardUid, $imageUrl, $language,  isLandscape:$isLandscape, isBottomPosition:$isBottomPosition);
 
-      if ($card->artBack->data != null) {
+      $twi_codes = [ //temp hardcode to skip over hyperspaces
+        'TWI_276',
+        'TWI_277',
+        'TWI_278',
+        'TWI_279',
+        'TWI_280',
+        'TWI_281',
+        'TWI_282',
+        'TWI_283',
+        'TWI_284',
+        'TWI_285',
+        'TWI_287',
+        'TWI_288',
+        'TWI_289',
+        'TWI_291',
+        'TWI_293',
+    ];
+      if ($card->artBack->data != null && !in_array($cardID, $twi_codes)) {
         $imageUrl = $card->artBack->data->attributes->formats->card->url;
+      
         $imageWidth = $card->artBack->data->attributes->width;
         $imageHeight = $card->artBack->data->attributes->height;
         $isLandscape = $imageWidth > $imageHeight;
         $arr = explode("_", $imageUrl);
         $arr = explode(".", $arr[count($arr)-1]);
         $uuid = $arr[0];
+        if ($language != 'EN'){ 
+          $uuid = getENUids($pos); 
+        } //Other Language cards have different UIDS for leader flips
+
+        //if ($language == 'EN') saveENUids($uuid, $cardID); <--- Needed for when new leaders are spoiled.  
+        
         CheckImage($uuid, $imageUrl, $language, isLandscape:$isLandscape, isBottomPosition:false);
         AddToArrays($cardID, $uuid);
       }
     }
 
-    echo("Page: " . $meta->pagination->page . "/" . $meta->pagination->pageCount . "<BR>");
+    //echo("Page: " . $meta->pagination->page . "/" . $meta->pagination->pageCount . "<BR>");
     ++$page;
     $hasMoreData = $page <= $meta->pagination->pageCount;
   }
   /*
   subtypes - array
   */
-
 
   if (!is_dir("./GeneratedCode")) mkdir("./GeneratedCode", 777, true);
 
@@ -334,5 +358,26 @@
       $arenasArray[$uuid] = implode(",", $arenas);
     }
   }
+
+  function saveENUids($uuid, $name) {
+    $file = fopen("leadersUID.txt", "a");
+    fwrite($file, $uuid . ',' . $name . PHP_EOL);
+    fclose($file);
+}
+
+function getENUids($pos) {
+    $file = fopen("leadersUID.txt", "r");
+    $lineNumber = 0;
+    while (($line = fgets($file)) !== false) {
+        $lineNumber++;
+        if ($lineNumber == $pos) {
+            fclose($file);
+            return trim(explode(',', $line)[0]); 
+        }
+    }
+    fclose($file);
+    return null;
+}
+
 
 ?>

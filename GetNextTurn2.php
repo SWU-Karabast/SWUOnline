@@ -31,6 +31,12 @@ if (!file_exists("./Games/" . $gameName . "/")) {
   exit;
 }
 
+if (isset($_COOKIE['selectedLanguage'])) {
+  $selectedLanguage = $_COOKIE['selectedLanguage'];
+}else {
+  $selectedLanguage = 'EN';
+}
+
 $authKey = TryGet("authKey", 3);
 $lastUpdate = intval(TryGet("lastUpdate", 0));
 $windowWidth = intval(TryGet("windowWidth", 0));
@@ -614,7 +620,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
 
   if (($turn[0] == "OPT" || $turn[0] == "CHOOSETOP" || $turn[0] == "MAYCHOOSETOP" || $turn[0] == "CHOOSEBOTTOM" || $turn[0] == "CHOOSECARD" || $turn[0] == "MAYCHOOSECARD") && $turn[1] == $playerID) {
     $content = "<table style='margin: 0 auto;'><tr>";
-    $options = explode(",", $turn[2]);
+    $options = isset($turn[2]) ? explode(",", $turn[2]) : [];
     for ($i = 0; $i < count($options); ++$i) {
       $content .= "<td>";
       $content .= "<table><tr><td>";

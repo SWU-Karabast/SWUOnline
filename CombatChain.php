@@ -3,8 +3,21 @@
 
 function ProcessHitEffect($cardID)
 {
-  global $mainPlayer, $combatChainState, $CCS_DamageDealt, $defPlayer;
+  global $mainPlayer, $combatChainState, $CCS_DamageDealt, $defPlayer, $combatChain;
   if(HitEffectsArePrevented()) return;
+
+  if($combatChain[7] != "-") {
+    $upgrades = explode(",", $combatChain[7]);
+    for($i = 0; $i < count($upgrades); $i+=SubcardPieces()) {
+      switch($upgrades[$i]) {
+        case "9338356823"://Dorsal Turret
+          AnyCombatDamageDefeats(includeLeaders:true);
+          break;
+        default: break;
+      }
+    }
+  }
+
   switch($cardID)
   {
     //Spark of Rebellion
@@ -17,12 +30,7 @@ function ProcessHitEffect($cardID)
       }
       break;
     case "3280523224"://Rukh
-      if(IsAllyAttackTarget() && $combatChainState[$CCS_DamageDealt] > 0) {
-        $ally = new Ally(GetAttackTarget(), $defPlayer);
-        if(!DefinedTypesContains($ally->CardID(), "Leader", $defPlayer)) {
-          DestroyAlly($defPlayer, $ally->Index(), fromCombat:true);
-        }
-      }
+      AnyCombatDamageDefeats();
       break;
     case "87e8807695"://Leia Organa Leader Unit
       if(LeaderAbilitiesIgnored()) break;
@@ -98,6 +106,10 @@ function CompletesAttackEffect($cardID) {
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "7244268162,PLAY", 1);
+      break;
+    //Jump To Lightspeed
+    case "7138400365"://The Invisible Hand JTL
+      InvisibleHandJTL($mainPlayer);
       break;
     default: break;
   }
@@ -216,15 +228,8 @@ function AttackModifier($cardID, $player, $index)
       if ($ally->IsUpgraded()) $modifier += 1;
       break;
     case "2177194044"://Swarming Vulture Droid
-      $allies = GetAllies($player);
-      $totalSwarmingVultureDroids = 0;
-      for ($i = 0; $i < count($allies); $i += AllyPieces()) {
-        if ($allies[$i] == "2177194044" && $i != $index) {
-          $totalSwarmingVultureDroids++;
-        }
-      }
-      $modifier += $totalSwarmingVultureDroids;
-      break;    
+      $modifier += (SearchCount(SearchAllies($player, cardTitle:"Swarming Vulture Droid")) - 1);
+      break;
     case "8845408332"://Millennium Falcon (Get Out and Push)
       $ally = new Ally("MYALLY-" . $index, $player);
       $upgrades = $ally->GetUpgrades();
@@ -241,6 +246,10 @@ function AttackModifier($cardID, $player, $index)
     case "5422802110"://D'Qar Cargo Frigate
       $ally = new Ally("MYALLY-" . $index, $player);
       $modifier -= $ally->Damage();
+      break;
+    case "5052103576"://Resistance X-Wing
+      $ally = new Ally("MYALLY-" . $index, $player);
+      if($ally->HasPilot()) $modifier += 1;
       break;
     default: break;
   }
@@ -443,6 +452,16 @@ function NumNonEquipmentDefended()
 //     }
 //   }
 // }
+
+function AnyCombatDamageDefeats($includeLeaders = false) {
+  global $combatChainState, $CCS_DamageDealt, $defPlayer;
+  if(IsAllyAttackTarget() && $combatChainState[$CCS_DamageDealt] > 0) {
+    $ally = new Ally(GetAttackTarget(), $defPlayer);
+    if($ally->Exists() && ($includeLeaders || !DefinedTypesContains($ally->CardID(), "Leader", $defPlayer))) {
+      DestroyAlly($defPlayer, $ally->Index(), fromCombat:true);
+    }
+  }
+}
 
 function IsDominateActive()
 {

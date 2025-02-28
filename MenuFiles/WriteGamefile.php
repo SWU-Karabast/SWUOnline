@@ -2,7 +2,6 @@
 
   //$filename = "./Games/" . $gameName . "/GameFile.txt";
   //$gameFileWriteHandler = fopen($filename, "w");
-
   if(!function_exists("WriteGameFile"))
   {
     function WriteGameFile()

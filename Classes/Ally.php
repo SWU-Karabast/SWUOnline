@@ -513,11 +513,11 @@ class Ally {
     $this->allies[$this->index+1] = 1;
   }
 
-  function AddSubcard($cardID, $ownerID = null, $asPilot = false, $epicAction = false) {
+  function AddSubcard($cardID, $ownerID = null, $asPilot = false, $epicAction = false, $turnsInPlay = 0) {
     $subCardUniqueID = GetUniqueId();
     $ownerID = $ownerID ?? $this->playerID;
-    if($this->allies[$this->index+4] == "-") $this->allies[$this->index+4] = $cardID . "," . $ownerID . "," . ($asPilot ? "1" : "0") . "," . $subCardUniqueID . "," . ($epicAction ? "1" : "0") . ",0,0,0";
-    else $this->allies[$this->index+4] = $this->allies[$this->index+4] . "," . $cardID . "," . $ownerID . "," . ($asPilot ? "1" : "0") . "," . $subCardUniqueID . "," . ($epicAction ? "1" : "0") . ",0,0,0";
+    if($this->allies[$this->index+4] == "-") $this->allies[$this->index+4] = $cardID . "," . $ownerID . "," . ($asPilot ? "1" : "0") . "," . $subCardUniqueID . "," . ($epicAction ? "1" : "0") . ",$turnsInPlay,0,0";
+    else $this->allies[$this->index+4] = $this->allies[$this->index+4] . "," . $cardID . "," . $ownerID . "," . ($asPilot ? "1" : "0") . "," . $subCardUniqueID . "," . ($epicAction ? "1" : "0") . ",$turnsInPlay,0,0";
 
     if($asPilot) {
       AllyPlayedAsUpgradeAbility($cardID, $ownerID, $this);
@@ -533,7 +533,9 @@ class Ally {
       $subcard = new SubCard($this, $i);
       if($subcard->CardID() == $subcardID && ($subcardUniqueID == "" || $subcards[$i+3] == $subcardUniqueID)) {
         $ownerId = $subcard->Owner();
+        $isPilot = $subcard->IsPilot();
         $epicAction = $subcard->FromEpicAction();
+        $turnsInPlay = $subcard->TurnsInPlay();
 
         for ($j = SubcardPieces() - 1; $j >= 0; $j--) {
           unset($subcards[$i+$j]);
@@ -541,7 +543,8 @@ class Ally {
 
         $subcards = array_values($subcards);
         $this->allies[$this->index + 4] = count($subcards) > 0 ? implode(",", $subcards) : "-";
-        if(DefinedTypesContains($subcardID, "Upgrade")) UpgradeDetached($subcardID, $this->playerID, "MYALLY-" . $this->index);
+        if(DefinedTypesContains($subcardID, "Upgrade") || $isPilot)
+          UpgradeDetached($subcardID, $this->playerID, "MYALLY-" . $this->index, $turnsInPlay, $ownerId);
         if(CardIDIsLeader($subcardID) && !$movingPilot) {
           $leaderUndeployed = LeaderUndeployed($subcardID);
           if($leaderUndeployed != "") {
@@ -549,6 +552,7 @@ class Ally {
             AddCharacter($leaderUndeployed, $this->playerID, counters:$usedEpicAction ? 1 : 0, status:1);
           }
         }
+
         return $ownerId;
       }
     }
@@ -559,9 +563,9 @@ class Ally {
     AddCurrentTurnEffect($effectID, $this->PlayerID(), from:$from, uniqueID:$this->UniqueID());
   }
 
-  function Attach($cardID, $ownerID = null, $epicAction = false) {
+  function Attach($cardID, $ownerID = null, $epicAction = false, $turnsInPlay = 0) {
     $receivingPilot = $this->ReceivingPilot($cardID);
-    $subcardUniqueID = $this->AddSubcard($cardID, $ownerID, $receivingPilot, $epicAction);
+    $subcardUniqueID = $this->AddSubcard($cardID, $ownerID, $receivingPilot, $epicAction, $turnsInPlay);
     if (CardIsUnique($cardID)) {
       $this->CheckUniqueUpgrade($cardID);
       if($receivingPilot) {
@@ -744,6 +748,7 @@ class Ally {
 
       switch ($effectCardID) {
         case "2639435822": //Force Lightning
+        case "4531112134": //Kazuda Xiono leader side
           return true;
         default: break;
       }
@@ -884,6 +889,10 @@ class SubCard {
 
   function FromEpicAction() {
     return $this->subcards[$this->index+4] == "1";
+  }
+
+  function TurnsInPlay() {
+    return $this->subcards[$this->index+5];
   }
 }
 

@@ -201,7 +201,7 @@ if ($decklink != "") {
     }
   }
 
-  if ($format != "livinglegendscc" && $hasBannedCard) {
+  if ($format != "openform" && $hasBannedCard) {//Open Format
     $_SESSION['error'] = '⚠️ Unreleased cards must be played in the open format.';
     header("Location: " . $redirectPath . "/MainMenu.php");
     WriteGameFile();
@@ -374,26 +374,10 @@ function IsBanned($cardID, $format)
           return false;
       }
       break;
-    case "cc":
-    case "compcc":
+    case "premierf":
+    case "reqsundo":
       switch ($cardID) {
-        case "WTR164": case "WTR165": case "WTR166": //Drone of Brutality
-        case "ARC170": case "ARC171": case "ARC172": //Plunder Run
-        case "CRU141":
-        case "MON001": //Prism
-        case "MON003": //Luminaris
-        case "MON153":
-        case "MON155":
-        case "MON239":
-        case "MON266": case "MON267": case "MON268": //Belittle
-        case "ELE003":
-        case "ELE006":
-        case "ELE114":
-        case "ELE172":
-        case "ELE186": case "ELE187": case "ELE188":
-        case "ELE223":
-        case "EVR017":
-        case "UPR139":
+        case "WTR152"://maybe add Boba Fett leader?
           return true;
         default:
           return false;
@@ -401,12 +385,7 @@ function IsBanned($cardID, $format)
       break;
     case "commoner":
       switch ($cardID) {
-        case "ELE186": //Ball Lightning
-        case "ELE187":
-        case "ELE188":
-        case "MON266": //Belittle
-        case "MON267":
-        case "MON268":
+        case "WTR152"://TODO: this could be a fun format to implement
           return true;
         default:
           return false;
