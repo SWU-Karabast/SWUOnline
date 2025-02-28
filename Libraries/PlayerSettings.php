@@ -122,6 +122,7 @@ function GetCardBack($player)
     case 28: return "CBSWCGR";
     case 29: return "SWU-vic";
     case 30: return "GonkGang";
+    case 31: return "galactic-shuffle";
     default: return "CardBack";
   }
 }
@@ -330,6 +331,7 @@ function GetSettingsUI($player)
   $rv .= CreateRadioButton($SET_Cardback . "-" . 28, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "SWCGR");
   $rv .= CreateRadioButton($SET_Cardback . "-" . 29, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "SWU-vic");
   $rv .= CreateRadioButton($SET_Cardback . "-" . 30, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "GonkGang");
+  $rv .= CreateRadioButton($SET_Cardback . "-" . 31, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Galactic Shuffle");
 
   $stage = getenv('STAGE') ?: 'prod';
   $isDev = $stage === 'dev';
