@@ -2741,6 +2741,9 @@ function SpecificAllyAttackAbilities($attackID)
         $attackerAlly->SumNumUses(-1);
       }
       break;
+    case "3427170256"://Captain Phasma Unit
+      CaptainPhasmaUnit($mainPlayer, $attackerAlly->Index());
+      break;
   }
 
   // Current Effect Abilities
