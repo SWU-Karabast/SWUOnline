@@ -120,7 +120,7 @@ function GetCardBack($player)
     case 26: return "mythic-force";
     case 27: return "mog-tcg";
     case 28: return "CBSWCGR";
-    case 29: return "SWU-vic";
+    case 29: return "SWU-VIC";
     case 30: return "GonkGang";
     case 31: return "galactic-shuffle";
     default: return "CardBack";
@@ -329,7 +329,7 @@ function GetSettingsUI($player)
   $rv .= CreateRadioButton($SET_Cardback . "-" . 26, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Mythic Force");
   $rv .= CreateRadioButton($SET_Cardback . "-" . 27, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "MoG TCG");
   $rv .= CreateRadioButton($SET_Cardback . "-" . 28, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "SWCGR");
-  $rv .= CreateRadioButton($SET_Cardback . "-" . 29, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "SWU-vic");
+  $rv .= CreateRadioButton($SET_Cardback . "-" . 29, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "SWU VIC");
   $rv .= CreateRadioButton($SET_Cardback . "-" . 30, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "GonkGang");
   $rv .= CreateRadioButton($SET_Cardback . "-" . 31, "Default", 26, $SET_Cardback . "-" . $settings[$SET_Cardback], "Galactic Shuffle");
 
