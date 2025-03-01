@@ -256,6 +256,7 @@ function EffectAttackModifier($cardID, $playerID="")
     case "1397553238": return -1;//Desperate Commando
     case "3427170256": return 2;//Captain Phasma Unit
     case "6600603122": return 1;//Massassi Tactical Officer
+    case "2922063712": return SearchCount(SearchAllies($defPlayer, damagedOnly:true));//Sith Trooper
     default: return 0;
   }
 }

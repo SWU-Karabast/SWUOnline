@@ -721,6 +721,8 @@ function HasAmbush($cardID, $player, $index, $from)
     case "1356826899"://Home One
     case "6720065735"://Han Solo (Has His Moments)
     case "0097256640"://TIE Ambush Squadron
+    case "4240570958"://Fireball
+    case "7489502985"://Contracted Hunter
       return true;
 
     //conditional ambush
