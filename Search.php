@@ -66,7 +66,7 @@ function SearchAllies($player, $type = "", $definedType = "", $maxCost = -1, $mi
   return SearchInner($allies, $player, "ALLY", AllyPieces(), $type, $definedType, $maxCost, $minCost, $aspect, $arena, $hasBountyOnly, $hasUpgradeOnly, $trait, $damagedOnly, $canAddPilot, $hasPilotOnly, $maxAttack, $maxHealth, $frozenOnly, $hasNegCounters, $hasEnergyCounters, $tokenOnly, $minAttack, $keyword, $defeatedThisPhase, $cardTitle, $hasWhenDefeatedOnly);
 }
 
-function SearchUpgrades($player, $maxCost=-1, $minCost=-1, $aspect="", $trait="", $maxUpgradeAttack=-1, $maxUpgradeHealth=-1, $tokenOnly=false, $cardTitle="")
+function SearchUpgrades($player, $maxCost=-1, $minCost=-1, $aspect="", $trait="", $maxUpgradeAttack=-1, $maxUpgradeHealth=-1, $tokenOnly=false, $cardTitle="", $uniqueOnly=false)
 {
   $cardList = "";
   $allies = &GetAllies($player);
@@ -81,6 +81,7 @@ function SearchUpgrades($player, $maxCost=-1, $minCost=-1, $aspect="", $trait=""
       if($maxUpgradeAttack > -1 && CardUpgradePower($upgrades[$j]) > $maxUpgradeAttack) continue;
       if($maxUpgradeHealth > -1 && CardUpgradeHPDictionary($upgrades[$j]) > $maxUpgradeHealth) continue;
       if($tokenOnly && !IsToken($upgrades[$j])) continue;
+      if($uniqueOnly && !CardIsUnique($upgrades[$j])) continue;
       if($cardTitle != "" && CardTitle($upgrades[$j]) != GamestateUnsanitize($cardTitle)) continue;
       if($cardList != "") $cardList = $cardList . ",";
       $cardList = $cardList . $upgrades[$j];
@@ -1174,10 +1175,9 @@ function SearchMultizone($player, $searches)
 }
 
 function ControlsNamedCard($player, $name) {
-  $char = &GetPlayerCharacter($player);
-  if(count($char) > CharacterPieces() && CardTitle($char[CharacterPieces()]) == $name) return true;
-  if(SearchCount(SearchAlliesForTitle($player, $name)) > 0) return true;
-  if(SearchCount(SearchUpgradesForTitle($player, $name) > 0)) return true;
+  if(SearchCount(SearchCharacter($player, cardTitle:$name)) > 0) return true;
+  if(SearchCount(SearchAllies($player, cardTitle:$name)) > 0) return true;
+  if(SearchCount(SearchUpgrades($player, cardTitle:$name) > 0)) return true;
 
   return false;
 }

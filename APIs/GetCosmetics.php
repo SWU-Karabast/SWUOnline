@@ -112,6 +112,21 @@ $cardBack->name = "MoG TCG";
 $cardBack->id = 27;
 $response->cardBacks[] = $cardBack;
 $cardBack = new stdClass();
+$cardBack->name = "SWCGR";
+$cardBack->id = 28;
+$response->cardBacks[] = $cardBack;
+$cardBack = new stdClass();
+$cardBack->name = "SWU VIC";
+$cardBack->id = 29;
+$response->cardBacks[] = $cardBack;
+$cardBack = new stdClass();
+$cardBack->name = "GonkGang";
+$cardBack->id = 30;
+$response->cardBacks[] = $cardBack;
+$cardBack = new stdClass();
+$cardBack->name = "Galactic Shuffle";
+$cardBack->id = 31;
+$response->cardBacks[] = $cardBack;
 
 $response->playmats = [];
 if(IsUserLoggedIn()) {

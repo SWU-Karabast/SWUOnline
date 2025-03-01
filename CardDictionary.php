@@ -722,6 +722,8 @@ function HasAmbush($cardID, $player, $index, $from)
     case "1356826899"://Home One
     case "6720065735"://Han Solo (Has His Moments)
     case "0097256640"://TIE Ambush Squadron
+    case "4240570958"://Fireball
+    case "7489502985"://Contracted Hunter
       return true;
 
     //conditional ambush
@@ -960,6 +962,8 @@ function AbilityCost($cardID)
       return $abilityName == "Buff" ? 1 : 0;
     case "8520821318"://Poe Dameron
       return $abilityName == "Pilot" ? 1 : 0;
+    case "3905028200"://Admiral Trench
+      return $abilityName == "Deploy" ? 3 : 0;
     default: break;
   }
   if(IsAlly($cardID)) return 0;
@@ -1094,7 +1098,7 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
     if($char[CharacterPieces() + 1] == 1) $abilityTypes = "";
     if($char[CharacterPieces() + 2] == 0) {
       //Chancellor Palpatine Leader + Darth Sidious Leader
-      if($char[CharacterPieces()] != "0026166404" && $char[CharacterPieces()] != "ad86d54e97") {
+      if(IsNotFlipatine($char) && IsNotExhaustedTrench($char)) {
         if($abilityTypes != "") $abilityTypes .= ",";
         $abilityTypes .= "A";
         if(LeaderCanPilot($char[CharacterPieces()])) {
@@ -1295,10 +1299,14 @@ function CheckJTLAbilityTypes($cardID) {
       return LeaderAbilitiesIgnored() ? "" : "A";
     case "8520821318"://Poe Dameron
       return LeaderAbilitiesIgnored() ? "" : "A";
+    case "4531112134"://Kazuda Xiono
+      return LeaderAbilitiesIgnored() ? "" : "A";
     case "6600603122"://Massassi Tactical Officer
       return "A,AA";
     case "9921128444"://General Hux
       return "A,AA";
+    case "3905028200"://Admiral Trench
+      return LeaderAbilitiesIgnored() ? "" : "A";
     default: return "";
   }
 }
@@ -1354,8 +1362,7 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
     $char = &GetPlayerCharacter($currentPlayer);
     if($char[CharacterPieces() + 1] == 1) $abilityNames = "";
     if($char[CharacterPieces() + 2] == 0) {
-      //Chancellor Palpatine Leader + Darth Sidious Leader
-      if($char[CharacterPieces()] != "0026166404" && $char[CharacterPieces()] != "ad86d54e97") {
+      if(IsNotFlipatine($char) && IsNotExhaustedTrench($char)) {
         if($abilityNames != "") $abilityNames .= ",";
         $abilityNames .= "Deploy";
         if(LeaderCanPilot($char[CharacterPieces()])) {
@@ -1595,6 +1602,10 @@ function CheckJTLAbilityNames($cardID) {
       return LeaderAbilitiesIgnored() ? "" : "Deal Damage";
     case "8520821318"://Poe Dameron
       return LeaderAbilitiesIgnored() ? "" : "Pilot";
+    case "3905028200"://Admiral Trench
+      return LeaderAbilitiesIgnored() ? "" : "Rummage";
+    case "4531112134"://Kazuda Xiono
+      return LeaderAbilitiesIgnored() ? "" : "Clear Abilities";
     case "6600603122"://Massassi Tactical Officer
       return "Fighter Attack,Attack";
     case "9921128444"://General Hux
@@ -2029,6 +2040,8 @@ function LeaderUnit($cardID) {
       return "3eb545eb4b";
     case "3905028200"://Admiral Trench
       return "7c082aefc9";
+    case "4531112134"://Kazuda Xiono
+      return "c1700fc85b";
     default: return "";
   }
 }
@@ -2177,6 +2190,8 @@ function LeaderUndeployed($cardID) {
       return "8520821318";
     case "7c082aefc9"://Admiral Trench Leader Unit
       return "3905028200";
+    case "c1700fc85b"://Kazuda Xiono Leader Unit
+      return "4531112134";
     default: return "";
   }
 }
@@ -2191,6 +2206,7 @@ function LeaderCanPilot($cardID) {
     case "8656409691"://Rio Durant
     case "0766281795"://Luke Skywalker
     case "7661383869"://Darth Vader
+    case "4531112134"://Kazuda Xiono
       return true;
     default: return false;
   }
@@ -2528,6 +2544,15 @@ function PlayableFromResources($cardID, $player="", $index="") {
 //     default: return false;
 //   }
 // }
+
+function IsNotFlipatine($char) {
+  //Chancellor Palpatine Leader + Darth Sidious Leader
+  return $char[CharacterPieces()] != "0026166404" && $char[CharacterPieces()] != "ad86d54e97";
+}
+
+function IsNotExhaustedTrench($char) {
+  return $char[CharacterPieces()] != "3905028200" || $char[CharacterPieces()+1] != "1";
+}
 
 function RequiresDieRoll($cardID, $from, $player)
 {

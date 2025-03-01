@@ -18,8 +18,9 @@ function CreateTieFighter($player, $from = "-") {
 }
 
 // This function put an ally into play for a player, which means no when played abilities are triggered.
-function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null, $cloned = false, $playAbility = false, $epicAction = false)
-{
+function PlayAlly($cardID, $player, $subCards = "-", $from = "-",
+  $owner = null, $cloned = false, $playAbility = false,
+  $epicAction = false, $playedAsUnit = true, $turnsInPlay = 0) {
   if($from == "TGY") {
     $owner = $player == 1 ? 2 : 1;
   }
@@ -32,13 +33,13 @@ function PlayAlly($cardID, $player, $subCards = "-", $from = "-", $owner = null,
   $allies[] = 0; //Frozen
   $allies[] = $subCards; //Subcards
   $allies[] = $uniqueID; //Unique ID
-  $allies[] = 0;//Unused
+  $allies[] = $playedAsUnit ? 1 : 0;//Played as unit
   $allies[] = 0; //Unused
   $allies[] = 1; //Ability/effect uses
   $allies[] = 0; //Round health modifier
   $allies[] = 0; //Times attacked
   $allies[] = $owner ?? $player; //Owner
-  $allies[] = 0; //Turns in play
+  $allies[] = $turnsInPlay; //Turns in play
   $allies[] = $cloned ? 1 : 0; //Cloned
   $allies[] = 0; //Healed this turn
   $allies[] = "NA";//Arena Override
@@ -217,6 +218,7 @@ function AllyHasStaticHealthModifier($cardID)
     case "4718895864"://Padawan Starfighter
     case "9017877021"://Clone Commander Cody
     case "9811031405"://Victor Leader
+    case "5052103576"://Resistance X-Wing
       return true;
     default: return false;
   }
@@ -293,6 +295,12 @@ function AllyStaticHealthModifier($cardID, $index, $player, $myCardID, $myIndex,
       break;
     case "9811031405"://Victor Leader
       if($index != $myIndex && $player == $myPlayer && CardArenas($cardID) == "Space") return 1;
+      break;
+    case "5052103576"://Resistance X-Wing
+      if($index == $myIndex && $player == $myPlayer) {
+        $ally = new Ally("MYALLY-" . $index, $player);
+        if($ally->HasPilot()) return 1;
+      }
       break;
     default: break;
   }
@@ -438,7 +446,10 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false,
   for($i=0; $i<count($upgradesWithOwnerData); $i+=SubcardPieces()) {
     if($upgradesWithOwnerData[$i] == "8752877738" || $upgradesWithOwnerData[$i] == "2007868442") continue; // Skip Shield and Experience tokens
     if($upgradesWithOwnerData[$i] == "6911505367") $discardPileModifier = "TTFREE";//Second Chance
-    if($upgradesWithOwnerData[$i] == "5942811090") LukePilotPlotArmor($player, $uniqueID);//Luke Pilot Plot Armor
+    if($upgradesWithOwnerData[$i] == "5942811090") {
+      $subcard = new SubCard($ally, $i);
+      LukePilotPlotArmor($subcard->Owner(), $subcard->TurnsInPlay());
+    }
     if(!CardIdIsLeader($upgradesWithOwnerData[$i]))
       AddGraveyard($upgradesWithOwnerData[$i], $upgradesWithOwnerData[$i+1], "PLAY");
   }
@@ -1548,7 +1559,7 @@ function AddAllyPlayCardAbilityLayers($cardID, $from, $uniqueID = "-", $resource
 
 function AllyHasPlayCardAbility($playedCardID, $playedCardUniqueID, $from, $cardID, $player, $index, $resourcesPaid): bool
 {
-  global $currentPlayer, $CS_NumCardsPlayed;
+  global $currentPlayer, $CS_NumCardsPlayed, $CS_PlayedAsUpgrade;
   $thisAlly = new Ally("MYALLY-" . $index, $player);
   if($thisAlly->LostAbilities($playedCardID)) return false;
   $thisIsNewlyPlayedAlly = $thisAlly->UniqueID() == $playedCardUniqueID;
@@ -1570,7 +1581,7 @@ function AllyHasPlayCardAbility($playedCardID, $playedCardUniqueID, $from, $card
         return !$thisIsNewlyPlayedAlly && TraitContains($playedCardID, "Underworld", $player);
       case "4088c46c4d"://The Mandalorian Leader Unit
       case "8031540027"://Dengar
-        return DefinedTypesContains($playedCardID, "Upgrade");
+        return DefinedTypesContains($playedCardID, "Upgrade") || PilotWasPlayed($currentPlayer, $playedCardID);
       case "0961039929"://Colonel Yularen
         return AspectContains($playedCardID, "Command") && DefinedTypesContains($playedCardID, "Unit");
       case "5907868016"://Fighters for Freedom
@@ -1609,7 +1620,7 @@ function AllyHasPlayCardAbility($playedCardID, $playedCardUniqueID, $from, $card
 }
 
 function AllyPlayCardAbility($player, $cardID, $uniqueID, $numUses, $playedCardID, $from) {
-  global $currentPlayer;
+  global $currentPlayer, $CS_PlayedAsUpgrade;
   $otherPlayer = $player == 1 ? 2 : 1;
   $ally = new Ally($uniqueID); // Important: ally could be defeated by the time this function is called. So, use $ally->Exists() to check if the ally still exists.
 
@@ -1685,7 +1696,7 @@ function AllyPlayCardAbility($player, $cardID, $uniqueID, $numUses, $playedCardI
         }
         break;
       case "8031540027"://Dengar
-        if(DefinedTypesContains($playedCardID, "Upgrade", $player)) {
+        if(DefinedTypesContains($playedCardID, "Upgrade", $player) || PilotWasPlayed($player, $playedCardID)) {
           global $CS_LayerTarget;
           $target = GetClassState($player, $CS_LayerTarget);
           AddDecisionQueue("YESNO", $player, "if you want to deal 1 damage from " . CardLink($cardID, $cardID) . "?");
@@ -1724,7 +1735,7 @@ function AllyPlayCardAbility($player, $cardID, $uniqueID, $numUses, $playedCardI
         }
         break;
       case "4088c46c4d"://The Mandalorian Leader Unit
-        if(!LeaderAbilitiesIgnored() && DefinedTypesContains($playedCardID, "Upgrade", $player)) {
+        if(!LeaderAbilitiesIgnored() && DefinedTypesContains($playedCardID, "Upgrade", $player) || PilotWasPlayed($player, $playedCardID)) {
           AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:maxHealth=6");
           AddDecisionQueue("MZFILTER", $player, "status=1");
           AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to exhaust", 1);
@@ -2724,14 +2735,26 @@ function SpecificAllyAttackAbilities($attackID)
       }
       break;
     case "2870117979"://Executor
-      CreateTieFighter($currentPlayer);
-      CreateTieFighter($currentPlayer);
-      CreateTieFighter($currentPlayer);
+      CreateTieFighter($mainPlayer);
+      CreateTieFighter($mainPlayer);
+      CreateTieFighter($mainPlayer);
       break;
     case "6228218834"://Tactical Heavy Bomber
       AddCurrentTurnEffect("6228218834", $mainPlayer, 'PLAY');
       IndirectDamage($defPlayer, $attackerAlly->CurrentPower(), true);
       break;
+    case "4147863169"://Relentless Firespray
+      if($attackerAlly->Exists() && $attackerAlly->NumUses() > 0) {
+        $attackerAlly->Ready();
+        $attackerAlly->SumNumUses(-1);
+      }
+      break;
+    case "3427170256"://Captain Phasma Unit
+      CaptainPhasmaUnit($mainPlayer, $attackerAlly->Index());
+      break;
+    case "2922063712"://Sith Trooper
+        AddCurrentTurnEffect("2922063712", $mainPlayer, 'PLAY', $attackerAlly->UniqueID());
+        break;
   }
 
   // Current Effect Abilities
@@ -2864,10 +2887,17 @@ function AllyBeginEndTurnEffects()
       $mainAllies[$i+10] = 0;//Reset times attacked
       ++$mainAllies[$i+12];//Increase number of turns in play
       $mainAllies[$i+14] = 0;//Reset was healed
+      $upgrades = $mainAllies[$i+4];
+      if($upgrades != "-") {
+        $upgrades = explode(",", $upgrades);
+        for($j=0; $j<count($upgrades); $j+=SubcardPieces()) {
+          $upgrades[$j+5]+=1;
+        }
+        $mainAllies[$i+4] = implode(",", $upgrades);
+      }
     }
     switch($mainAllies[$i])
     {
-
       default: break;
     }
   }
@@ -2903,6 +2933,13 @@ function AllyEndTurnAbilities($player)
       case "0216922902"://The Zillo Beast
         $ally->Heal(5);
         break;
+      case "4240570958"://Fireball
+          $ally->DealDamage(1);
+          break;
+      case "7489502985"://Contracted Hunter
+        $ally->Destroy();
+        break;
+            break;
       default: break;
     }
     $ally->EndRound();
@@ -3002,10 +3039,10 @@ function InvisibleHandJTL($player) {
   AddDecisionQueue("SPECIFICCARD", $player, "INVISIBLE_HAND_JTL", 1);
 }
 
-function LukePilotPlotArmor($player) {
+function LukePilotPlotArmor($player, $turnsInPlay) {
   AddDecisionQueue("SETDQCONTEXT", $player, "Move Luke to the ground arena?");
   AddDecisionQueue("YESNO", $player, "-");
   AddDecisionQueue("NOPASS", $player, "-");
-  AddDecisionQueue("PASSPARAMETER", $player, "5942811090", 1);
+  AddDecisionQueue("PASSPARAMETER", $player, "5942811090,$turnsInPlay", 1);//Luke Skywalker (You Still With Me?)
   AddDecisionQueue("MZOP", $player, "FALLENPILOTUPGRADE", 1);
 }

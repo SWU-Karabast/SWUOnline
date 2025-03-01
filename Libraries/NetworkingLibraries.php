@@ -1215,7 +1215,6 @@ function FinalizeChainLink($chainClosed = false)
     $cardType = CardType($combatChain[$i - 1]);
     if ($cardType != "W" || $cardType != "E" || $cardType != "C") {
       $params = explode(",", GoesWhereAfterResolving($combatChain[$i - 1], "COMBATCHAIN", $combatChain[$i]));
-      SetClassState($currentPlayer, $CS_PlayedAsUpgrade, 0);
       $goesWhere = $params[0];
       $modifier = (count($params) > 1 ? $params[1] : "NA");
       if ($i == 1 && $combatChainState[$CCS_GoesWhereAfterLinkResolves] != "GY") {
@@ -1484,6 +1483,7 @@ function FinalizeTurn()
 function SwapTurn()
 {
   global $turn, $mainPlayer, $combatChain, $actionPoints, $defPlayer, $currentPlayer;
+  global $CS_PlayedAsUpgrade;
   $turn[0] = "M";
   //$turn[1] = $mainPlayer == 2 ? $turn[1] + 1 : $turn[1];
   $turn[2] = "";
@@ -1578,8 +1578,10 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
         $dynCost = DynamicCost($cardID); //CR 5.1.3a Declare variable cost (CR 2.0)
       else
         $dynCost = "";
-      if ($playingCard)
+      if ($playingCard) {
+        SetClassState($currentPlayer, $CS_PlayedAsUpgrade, 0);
         AddPrePitchDecisionQueue($cardID, $from, $index, $skipAbilityType); //CR 5.1.3b,c Declare additional/optional costs (CR 2.0)
+      }
       if ($dynCost != "") {
         AddDecisionQueue("DYNPITCH", $currentPlayer, $dynCost);
         AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_LastDynCost);
@@ -2231,13 +2233,9 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
     CopyCurrentTurnEffectsFromAfterResolveEffects();
   }
 
-  // if ($CS_CharacterIndex != -1 && CanPlayAsInstant($cardID)) {//FAB
-  //   RemoveCharacterEffects($currentPlayer, GetClassState($currentPlayer, $CS_CharacterIndex), "INSTANT");
-  // }
   //Now determine what needs to happen next
   SetClassState($currentPlayer, $CS_PlayIndex, -1);
   SetClassState($currentPlayer, $CS_CharacterIndex, -1);
-  SetClassState($currentPlayer, $CS_PlayedAsUpgrade, 0);
   ProcessDecisionQueue();
 }
 
@@ -2281,7 +2279,6 @@ function CurrentTurnEffectsPlayingUnit($player) {
       case "6849037019"://Now There Are Two of Them
       //Jump to Lightspeed
       case "7138400365"://The Invisible Hand
-      case "TTFREE"://Second Chance,Cobb Vanth,
         return true;
     }
   }
@@ -2323,6 +2320,16 @@ function ArquitensAssaultCruiser($player)
   $discard = &GetDiscard($defPlayer);
   $defeatedCard = RemoveDiscard($defPlayer, count($discard) - DiscardPieces());
   AddResources($defeatedCard, $player, "PLAY", "DOWN", isExhausted: true);
+}
+
+function LayersContainAnyWhenPlayAbilitiesForPlayer($player) {
+  global $layers;
+  for ($i=0; $i<count($layers); $i+=LayerPieces()) {
+    if ($layers[$i] == "TRIGGER" && $layers[$i+1] == $player && $layers[$i+2] == "ALLYPLAYCARDABILITY")
+      return true;
+  }
+
+  return false;
 }
 
 function ProcessAttackTarget()

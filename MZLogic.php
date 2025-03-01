@@ -35,10 +35,10 @@ function MZDestroy($player, $lastResult)
         $ally = new Ally("MYALLY-" . $mzIndex[1], $otherPlayer);
         $lastResult = $ally->Destroy();
         break;
-      case "MYAURAS": $lastResult = DestroyAura($player, $mzIndex[1]); break;
-      case "THEIRAURAS": $lastResult = DestroyAura($otherPlayer, $mzIndex[1]); break;
-      case "MYITEMS": $lastResult = DestroyItemForPlayer($player, $mzIndex[1]); break;
-      case "THEIRITEMS": $lastResult = DestroyItemForPlayer($otherPlayer, $mzIndex[1]); break;
+      // case "MYAURAS": $lastResult = DestroyAura($player, $mzIndex[1]); break;
+      // case "THEIRAURAS": $lastResult = DestroyAura($otherPlayer, $mzIndex[1]); break;
+      // case "MYITEMS": $lastResult = DestroyItemForPlayer($player, $mzIndex[1]); break;
+      // case "THEIRITEMS": $lastResult = DestroyItemForPlayer($otherPlayer, $mzIndex[1]); break;
       case "MYARS": case "MYRESOURCES": $lastResult = DestroyArsenal($player, $mzIndex[1]); break;
       case "THEIRARS": $lastResult = DestroyArsenal($otherPlayer, $mzIndex[1]); break;
       default: break;
@@ -55,10 +55,10 @@ function MZRemove($player, $lastResult)
     $mzIndex = explode("-", $lastResultArr[$i]);
     switch($mzIndex[0]) {
       case "MYCHAR": $lastResult = RemoveCharacter($player, $mzIndex[1]); break;
-      case "MYITEMS": $lastResult = DestroyItemForPlayer($player, $mzIndex[1], true); break;
+      //case "MYITEMS": $lastResult = DestroyItemForPlayer($player, $mzIndex[1], true); break;
       case "MYDISCARD": $lastResult = RemoveGraveyard($player, $mzIndex[1]); break;
       case "THEIRDISCARD": $lastResult = RemoveGraveyard($otherPlayer, $mzIndex[1]); break;
-      case "THEIRITEMS": $lastResult = DestroyItemForPlayer($otherPlayer, $mzIndex[1], true); break;
+      //case "THEIRITEMS": $lastResult = DestroyItemForPlayer($otherPlayer, $mzIndex[1], true); break;
       case "MYBANISH": RemoveBanish($player, $mzIndex[1]); break;
       case "THEIRBANISH": RemoveBanish($otherPlayer, $mzIndex[1]); break;
       case "MYALLY": $lastResult = RemoveAlly($player, $mzIndex[1]); break;
@@ -70,8 +70,8 @@ function MZRemove($player, $lastResult)
       case "MYHAND": $lastResult = RemoveHand($player, $mzIndex[1]); break;
       case "THEIRHAND": $lastResult = RemoveHand($otherPlayer, $mzIndex[1]); break;
       case "THEIRAURAS": RemoveAura($otherPlayer, $mzIndex[1]); break;
-      case "MYMEMORY": RemoveMemory($player, $mzIndex[1]); break;
-      case "THEIRMEMORY": RemoveMemory($otherPlayer, $mzIndex[1]); break;
+      // case "MYMEMORY": RemoveMemory($player, $mzIndex[1]); break;
+      // case "THEIRMEMORY": RemoveMemory($otherPlayer, $mzIndex[1]); break;
       case "MYDECK":
         $deck = new Deck($player);
         return $deck->Remove($mzIndex[1]);

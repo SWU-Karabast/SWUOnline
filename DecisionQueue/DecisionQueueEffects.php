@@ -537,10 +537,6 @@ function SpecificCardLogic($player, $parameter, $lastResult)
         $ally->RemoveSubcard($upgrades[$i]);
         if(!IsToken($upgrades[$i]) && !CardIDIsLeader($upgrades[$i])) AddHand($upgrades[$i+1], $upgrades[$i]);
       }
-      /*$ally->ClearSubcards();
-      for($i=0; $i<count($upgradesReturned); ++$i) {
-        UpgradeDetached($upgradesReturned[$i], $ally->PlayerID(), "MYALLY-" . $ally->Index());
-      }*/
       return $lastResult;
     case "DONTGETCOCKY":
       $deck = new Deck($player);
@@ -935,6 +931,25 @@ function SpecificCardLogic($player, $parameter, $lastResult)
         AddDecisionQueue("FINDINDICES", $player, "MZLASTHAND", 1);
         AddDecisionQueue("MZOP", $player, "PLAYCARD", 1);
       }
+      break;
+    case "TRENCH_JTL_OPP":
+      if($dqVars[0] == "") break;
+      $cards = explode(",",$dqVars[0]);
+      $index = array_search($lastResult, $cards);
+      unset($cards[$index]);
+      array_values($cards);
+      $dqVars[0] = implode(",", $cards);
+      AddGraveyard($lastResult, $player, "DECK");
+      break;
+    case "TRENCH_JTL":
+      if($dqVars[0] == "") break;
+      $cards = explode(",",$dqVars[0]);
+      $index = array_search($lastResult, $cards);
+      unset($cards[$index]);
+      $cardLeft = array_values($cards)[0];
+      $dqVars[0] = implode(",", $cards);
+      AddHand($player, $lastResult);
+      AddGraveyard($cardLeft, $player, "DECK");
       break;
     //SpecificCardLogic End
     default: return "";

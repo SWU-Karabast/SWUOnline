@@ -247,6 +247,14 @@ function AttackModifier($cardID, $player, $index)
       $ally = new Ally("MYALLY-" . $index, $player);
       $modifier -= $ally->Damage();
       break;
+    case "5052103576"://Resistance X-Wing
+      $ally = new Ally("MYALLY-" . $index, $player);
+      if($ally->HasPilot()) $modifier += 1;
+      break;
+    case "4203363893"://War Juggernaut
+      $modifier += SearchCount(SearchAllies($player, damagedOnly:true));
+      $modifier += SearchCount(SearchAllies($otherPlayer, damagedOnly:true));
+      break;
     default: break;
   }
 
