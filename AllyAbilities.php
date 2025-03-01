@@ -2926,7 +2926,7 @@ function AllyEndTurnAbilities($player)
         $ally->Heal(5);
         break;
       case "4240570958"://Fireball
-          $ally->DealDamage(2);
+          $ally->DealDamage(1);
           break;
       case "7489502985"://Contracted Hunter
         $ally->Destroy();
