@@ -49,8 +49,9 @@ function PasswordLogin($username, $password, $rememberMe) {
 
 		if($rememberMe)
 		{
+      $domain = (!empty(getenv("DOMAIN")) ? getenv("DOMAIN") : "petranaki.net");
 			$cookie = hash("sha256", rand() . $_SESSION["userspwd"] . rand());
-			setcookie("rememberMeToken", $cookie, time() + (86400 * 90), "/");
+			setcookie("rememberMeToken", $cookie, time() + (86400 * 90), "/", $domain);
 			storeRememberMeCookie($conn, $_SESSION["useruid"], $cookie);
 		}
 		session_write_close();
@@ -108,7 +109,8 @@ function AttemptPasswordLogin($username, $password, $rememberMe) {
 				storeRememberMeCookie($conn, $_SESSION["useruid"], $cookie);
 			}
 			else $cookie = $rememberMeToken;
-			setcookie("rememberMeToken", $cookie, time() + (86400 * 90), "/");
+      $domain = (!empty(getenv("DOMAIN")) ? getenv("DOMAIN") : "petranaki.net");
+			setcookie("rememberMeToken", $cookie, time() + (86400 * 90), "/", $domain);
 		}
 		session_write_close();
 

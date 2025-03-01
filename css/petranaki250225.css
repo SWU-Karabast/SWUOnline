@@ -51,6 +51,7 @@ p a{
 }
 
 .secondary {
+  display: block;
   color: #aaaaaa;
 }
 
@@ -85,7 +86,7 @@ ul {
 body {
   background-size: cover;
   background-position: center;
-  background-image: url('../Images/gamebg.jpg');
+  background-image: url('../Images/arena-bg.webp');
   max-width: 100%;
   height: 100%;
   margin: 0;
@@ -93,11 +94,12 @@ body {
 
 button, input, select, textarea {
   padding: 10px 15px;
-  background: #394452;
+  background: rgba(115, 115, 115, 1);
   border: 0;
   border-radius: 5px;
   line-height: 1.125;
   font-size: 16px;
+  color: white;
 }
 
 input:disabled {
@@ -111,12 +113,13 @@ button, .GameLobby_Button, .create-game-button, .ServerChecker_Button, .JoinGame
   display: inline-block;
   text-align: center;
   white-space: nowrap;
-  background: #292929;
+  background: rgba(100, 100, 100, 1);
+  color: white;
   border: 0;
   cursor: pointer;
   font-weight: 600;
   transition: 150ms ease-in-out;
-  box-shadow: inset 0 0 0 1px #454545;
+  box-shadow: inset 0 0 0 1px rgba(100, 100, 40, 1);
 }
 
 button:hover, .GameLobby_Button:hover, .create-game-button:hover, .ServerChecker_Button:hover, .JoinGame_Button:hover, .spectate-button:hover {
@@ -128,23 +131,28 @@ input, select {
 }
 
 select {
-  background: #394452 url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg' fill='%23eceff4'%3E%3Cpath d='M5 6l5 5 5-5 2 1-7 7-7-7 2-1z'/%3E%3C/svg%3E") no-repeat right 5px center;
+  background: rgba(115, 115, 115, 1) url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg' fill='%23eceff4'%3E%3Cpath d='M5 6l5 5 5-5 2 1-7 7-7-7 2-1z'/%3E%3C/svg%3E") no-repeat right 5px center;
   width: 100%;
   border-radius: 5px;
   appearance: none;
   display: block;
   border: none;
-  }
+  color: rgba(255,255,240,1);
+}
 
 
 .container {
   flex: 1;
   border-radius: 10px;
   padding: 20px;
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(20px);
   scrollbar-color: #888888 rgba(0, 0, 0, 0);
   scrollbar-width: thin;
+}
+
+.bg-yellow {
+  background: rgba(90, 70, 30, 0.7);
 }
 
 .bg-blue {
@@ -196,14 +204,24 @@ select {
   margin-top: 10px;
 }
 
+.title-container {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  width: 30%;
+  margin-left: -16px;
+  padding: 8px 16px;
+  border-radius: 16px;
+}
+
 .home-header h1 {
   font-size: 50px;
   font-weight: 400;
-  margin-bottom: 5px;
+  margin-bottom: 4px;
 }
 
 .home-header p {
-  text-align: left;
+
 }
 
 .home-banner {
@@ -226,14 +244,9 @@ select {
   flex: 1;
 }
 
-.block-1 { background-image: url('../Images/leia-sor.jpg'); margin-right: -152px; }
-.block-2 { background-image: url('../Images/boba-shd.jpg'); }
-.block-3 { background-image: url('../Images/kylo-sor.jpg'); margin-left: -152px; }
-.block-4 { background-image: url('../Images/luke-sor.jpg'); margin-left: -152px; }
-
-@media screen and (max-width: 1600px) { .block-4 { display: none; } }
+/* @media screen and (max-width: 1600px) { .block-4 { display: none; } }
 @media screen and (max-width: 1200px) { .block-3 { display: none; } .block-2 { margin-left: -2px; } }
-@media screen and (max-width: 800px)  { .block-2 { display: none; } .block-1 { margin-right: 0; } }
+@media screen and (max-width: 800px)  { .block-2 { display: none; } .block-1 { margin-right: 0; } } */
 
 /* NAV BAR ---------------------------------------------------------------------------------------------- */
 
@@ -428,15 +441,16 @@ select {
 .create-game-button {
   margin: 20px 0 0 0;
   width: auto !important;
+  color: white;
 }
 
 .create-game-wrapper .login-notice {
   margin-bottom: 10px;
 }
 
-/* Karabast Info */
+/* Petranaki Info */
 
-.karabast-column {
+.petranaki-column {
   margin: 0 20px;
   display: flex;
   flex-direction: column;
@@ -447,22 +461,22 @@ select {
   border-radius: 10px;
 }
 
-.karabast-overview {
+.petranaki-overview {
   flex:0;
 }
 
-.karabast-news {
+.petranaki-news {
   margin-top: 20px;
 }
 
-.karabast-unimplemented-list {
+.petranaki-unimplemented-list {
   display: block;
   margin-bottom: 1rem;
   list-style-type: disc;
   list-style-position: inside;
 }
 
-.karabast-unimplemented-list li {
+.petranaki-unimplemented-list li {
   display: list-item;
 }
 
@@ -497,7 +511,7 @@ select {
 }
 
 .login-error-message {
-  margin-top: 24px; 
+  margin-top: 24px;
   text-align: center;
 }
 
@@ -512,7 +526,7 @@ select {
 }
 
 .changer-username-error-message {
-  margin-top: 24px; 
+  margin-top: 24px;
   text-align: center;
 }
 
@@ -754,10 +768,14 @@ select {
   position: absolute;
   bottom: 15px;
   width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .disclaimer p {
   font-size: 12px;
   font-weight: 300;
-  text-align: center;
+  margin: 0 auto;
+  padding: 2px 8px;
+  border-radius: 4px;
 }

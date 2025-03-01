@@ -183,7 +183,7 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
         $folderPath = "WebpImages2";
         $fileExt = ".webp";
     }else if (mb_strpos($folder, "CardImages") !== false) {
-      $folderPath = str_replace("CardImages", "WebpImages2", $folder); 
+      $folderPath = str_replace("CardImages", "WebpImages2", $folder);
       $fileExt = ".webp";
     }
   } else {
@@ -194,7 +194,7 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
         $folderPath = "WebpImages2/" . $selectedLanguage;
         $fileExt = ".webp";
     } else if (mb_strpos($folder, "CardImages") !== false) {
-        $folderPath = str_replace("CardImages", "WebpImages2/" . $selectedLanguage , $folder); 
+        $folderPath = str_replace("CardImages", "WebpImages2/" . $selectedLanguage , $folder);
         $fileExt = ".webp";
     }
   }
@@ -557,11 +557,14 @@ function CreateButtonAPI($playerID, $caption, $mode, $input, $size = null, $imag
 function ProcessInputLink($player, $mode, $input, $event = 'onmousedown', $fullRefresh = false, $prompt = "")
 {
   global $gameName;
-
-  $jsCode = "SubmitInput(\"" . $mode . "\", \"&buttonInput=" . $input . "\", " . $fullRefresh . ");";
-  // If a prompt is given, surround the code with a "confirm()" call
-  if ($prompt != "")
-    $jsCode = "if (confirm(\"" . $prompt . "\")) { " . $jsCode . " }";
+  if($input === "select") {
+    $jsCode = "SubmitInput(\"" . $mode . "\", \"&buttonInput=\" + event.target.value, " . $fullRefresh . ");";
+  } else {
+    $jsCode = "SubmitInput(\"" . $mode . "\", \"&buttonInput=" . $input . "\", " . $fullRefresh . ");";
+    // If a prompt is given, surround the code with a "confirm()" call
+    if ($prompt != "")
+      $jsCode = "if (confirm(\"" . $prompt . "\")) { " . $jsCode . " }";
+  }
 
   return " " . $event . "='" . $jsCode . "'";
 }
@@ -695,6 +698,16 @@ function CreateRadioButton($input, $value, $immediateSubmitMode, $currentInput, 
     $check = " checked='checked'";
   $rv = "<input type='radio' " . $submitLink . " id='radio" . $input . "' name='radio" . $input . "' value='" . $value . "' " . $check . ">";
   $rv .= "<label for='radio" . $input . "'>$label</label>";
+  return $rv;
+}
+
+function CreateSelectOption($input, $value, $currentInput)
+{
+  $submitLink = "";
+  $selected = "";
+  if ($currentInput == $input)
+    $selected = " selected='selected'";
+  $rv = "<option " . $submitLink . " id='option" . $input . "' " . $selected . "value=" . $input . ">" . $value . "</option>";
   return $rv;
 }
 
@@ -1116,7 +1129,7 @@ function MainMenuUI()
   $rv .= "<img style='width: 66vh; height: 33vh;' src='./Images/ShortcutMenu.png'>";
   $isSpectateEnabled = GetCachePiece($gameName, 9) == "1";
   if ($isSpectateEnabled)
-    $rv .= "<div><input class='GameLobby_Input' onclick='copyText()' style='width:40%;' type='text' id='gameLink' value='https://karabast.net/SWUOnline/NextTurn4.php?gameName=$gameName&playerID=3'>&nbsp;<button class='GameLobby_Button' style='margin-left:3px;' onclick='copyText()'>Copy Spectate Link</button></div><br>";
+    $rv .= "<div><input class='GameLobby_Input' onclick='copyText()' style='width:40%;' type='text' id='gameLink' value='https://petranaki.net/Arena/NextTurn4.php?gameName=$gameName&playerID=3'>&nbsp;<button class='GameLobby_Button' style='margin-left:3px;' onclick='copyText()'>Copy Spectate Link</button></div><br>";
   else
     $rv .= CreateButton($playerID, "Enable Spectating", 100013, 0, "24px", "", "Enable Spectating", 1) . "<BR>";
   if (isset($_SESSION["userid"])) {

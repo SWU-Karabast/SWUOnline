@@ -2,7 +2,7 @@
 Star Wars Unlimited Sim
 
 ## Contact info
-If you need to contact us or would like to get involved in the dev work, please reach out in our [Discord server](https://discord.gg/hKRaqHND4v)!
+If you need to contact us or would like to get involved in the dev work, please reach out in our [Discord server](https://discord.gg/AN5GEXSu)!
 
 ## Dev Quickstart
 
@@ -18,14 +18,14 @@ If you are on Windows, please follow the instructions for installing Docker Desk
 
 Run the following commands to start / stop the service
 ```bash
-bash karabast.sh start
-bash karabast.sh stop
-bash karabast.sh restart
+bash petranaki.sh start
+bash petranaki.sh stop
+bash petranaki.sh restart
 ```
 
 #### Step 2. Accessing the application
 
-Open this address in your browser: http://localhost:8080/SWUOnline/MainMenu.php
+Open this address in your browser: http://localhost:8080/Arena/MainMenu.php
 
 If you want to play a game against yourself, open multiple windows / tabs and connect.
 
@@ -51,7 +51,7 @@ https://docs.google.com/document/d/10u3qGpxr1ddvwobq8__lVZfYCgqtanZShHEaYljiA1M/
 This guide explains how to set up CI/CD, including deploying with GitHub, securing webhooks, and configuring environment variables.
 
 #### 1. Set Up a Deploy Key
-- On the server, generate an SSH key pair by running:  
+- On the server, generate an SSH key pair by running:
   ```bash
   ssh-keygen -t rsa -b 4096 -C "deploy-key"
   ```
@@ -61,20 +61,20 @@ This guide explains how to set up CI/CD, including deploying with GitHub, securi
 
 - In your GitHub repository, go to **Settings > Deploy Keys** and add the content of `~/.ssh/id_rsa.pub` as a new deploy key.
 
-- Test the SSH connection to GitHub:  
+- Test the SSH connection to GitHub:
   ```bash
   ssh -T git@github.com
   ```
 
 #### 2. Configure a Webhook
-- Generate a secret key to secure the webhook:  
+- Generate a secret key to secure the webhook:
   ```bash
   openssl rand -hex 32
   ```
   Save this secret for later use.
 
 - In your GitHub repository, go to **Settings > Webhooks** and create a new webhook with the following settings:
-  - **Payload URL**: `https://karabast.net/SWUOnline/Webhook.php`
+  - **Payload URL**: `https://petranaki.net/Arena/Webhook.php`
   - **Content Type**: `application/json`
   - **Secret**: `<webhook-secret>` (use the secret generated earlier)
   - **SSL Verification**: Enabled
@@ -82,7 +82,7 @@ This guide explains how to set up CI/CD, including deploying with GitHub, securi
 
 #### 3. Configure `.htaccess`
 To secure your project and set environment variables:
-- Navigate to your project directory: `/opt/lampp/htdocs/SWUOnline`
+- Navigate to your project directory: `/opt/lampp/htdocs/Arena`
 - Create or edit an `.htaccess` file with the following content:
   ```apache
   RedirectMatch 404 /\.git
@@ -106,7 +106,7 @@ If your project is not yet connected to GitHub, follow these steps:
 
 - Add the GitHub repository as the remote origin:
   ```bash
-  git remote add origin git@github.com:SWU-Karabast/SWUOnline.git
+  git remote add origin git@github.com:SWU-Petranaki/SWUOnline.git
   ```
 
 - Sync the project with the remote repository:
