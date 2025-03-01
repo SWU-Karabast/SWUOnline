@@ -2031,6 +2031,7 @@ function SelfCostModifier($cardID, $from, $reportMode=false)
       $controlsSeparatist = $controlsSeparatist || SearchCount(SearchCharacter($currentPlayer, trait:"Separatist")) > 0;
       $controlsSeparatist = $controlsSeparatist || SearchUpgrades($currentPlayer, trait:"Separatist", uniqueOnly:true) > 0;
       $modifier -= $controlsSeparatist ? 1 : 0;
+      break;
     default: break;
   }
   //Target cost modifier
