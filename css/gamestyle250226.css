@@ -66,27 +66,23 @@ td {
 #spaceArena {
   z-index: -5;
   left: 41px;
-  opacity: .6;
 }
 
 .spaceArena-dimmer {
   z-index: -6;
   left: 41px;
-  opacity: .6;
-  background: rgba(70, 70, 70, 1);
+  border: 2px solid rgba(90, 70, 30, 0.8);
 }
 
 #groundArena {
   z-index: -5;
   right: 278px;
-  opacity: .6;
 }
 
 .groundArena-dimmer {
   z-index: -6;
   right: 278px;
-  opacity: .4;
-  background: rgba(230,220,175, 1);
+  border: 2px solid rgba(90, 70, 30, 0.8);
 }
 
 /* Player Names */
