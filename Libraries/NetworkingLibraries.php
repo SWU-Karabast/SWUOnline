@@ -749,8 +749,8 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
   return true;
 }
 
-function KarabotSpan() {
-  return "<span style='font-weight:bold; color:plum'>Karabot: </span>";
+function ArenabotSpan() {
+  return "<span style='font-weight:bold; color:plum'>Arenabot: </span>";
 }
 
 function IsModeAsync($mode)

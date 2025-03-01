@@ -80,7 +80,7 @@ enum PatreonCampaign : string
   case OnHit = "6";
   case SecondCycle = "7";
   case KTOD = "11987758";
-  case Karabast = "12163989";
+  case Petranaki = "12163989";
   case ForceFam = "12636483";
 
   public function SessionID(): string
@@ -107,7 +107,7 @@ enum PatreonCampaign : string
       case "6": return "OnHit";
       case "7": return "Second Cycle";
       case "12636483": return "Force Fam";
-      case "12163989": return "Karabast";
+      case "12163989": return "Petranaki";
       case "11987758": return "KTOD";
       default: return "";
     }

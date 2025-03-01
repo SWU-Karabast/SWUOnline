@@ -7,16 +7,16 @@ export STAGE=dev
 
 case $1 in
   "start")
-    echo "Starting Karabast..."
+    echo "Starting Petranaki..."
     docker compose up -d
-    echo "Karabast is running at http://localhost:8080/SWUOnline/MainMenu.php"
+    echo "Petranaki is running at http://localhost:8080/Arena/MainMenu.php"
     ;;
   "stop")
-    echo "Stopping Karabast..."
+    echo "Stopping Petranaki..."
     docker compose down
     ;;
   "restart")
-    echo "Restarting Karabast..."
+    echo "Restarting Petranaki..."
     docker compose restart
     ;;
   *)
