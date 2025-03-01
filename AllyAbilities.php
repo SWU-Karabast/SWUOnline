@@ -2744,6 +2744,9 @@ function SpecificAllyAttackAbilities($attackID)
     case "3427170256"://Captain Phasma Unit
       CaptainPhasmaUnit($mainPlayer, $attackerAlly->Index());
       break;
+    case "2922063712"://Sith Trooper
+        AddCurrentTurnEffect("2922063712", $mainPlayer, 'PLAY', $attackerAlly->UniqueID());
+        break;
   }
 
   // Current Effect Abilities
@@ -2922,6 +2925,13 @@ function AllyEndTurnAbilities($player)
       case "0216922902"://The Zillo Beast
         $ally->Heal(5);
         break;
+      case "4240570958"://Fireball
+          $ally->DealDamage(2);
+          break;
+      case "7489502985"://Contracted Hunter
+        $ally->Destroy();
+        break;
+            break;
       default: break;
     }
     $ally->EndRound();
