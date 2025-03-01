@@ -111,6 +111,7 @@ function BlockingCardDefense($index, $from="", $resourcesPaid=-1)
 function AddCombatChain($cardID, $player, $from, $resourcesPaid, $upgradesWithMetadata)
 {
   global $combatChain, $turn;
+  if($upgradesWithMetadata == "") $upgradesWithMetadata = "-";
   $index = count($combatChain);
   $combatChain[] = $cardID;
   $combatChain[] = $player;
@@ -2585,7 +2586,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         }
       }
       RemoveCharacter($currentPlayer, CharacterPieces());
-      if($epicAction == 1) SetClassState($currentPlayer, $CS_CachedLeader1EpicAction, $epicAction);
+      if(isset($epicAction) && $epicAction == 1) SetClassState($currentPlayer, $CS_CachedLeader1EpicAction, $epicAction);
       //Base deploy ability
       $char = &GetPlayerCharacter($currentPlayer);
       $baseID = $char[0];

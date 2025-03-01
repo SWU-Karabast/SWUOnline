@@ -50,6 +50,7 @@ class Ally {
   }
 
   function CardID() {
+    if($this->index == -1) return "";
     return $this->allies[$this->index];
   }
 
