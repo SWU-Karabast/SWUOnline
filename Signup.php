@@ -10,7 +10,7 @@ include_once 'Header.php';
 <div class="flex-padder"></div>
 
 <div class="flex-wrapper">
-<div class='signup-wrapper container bg-black'>
+<div class='signup-wrapper container bg-yellow'>
 
 <section class="signup-form">
   <h2>Sign Up</h2>

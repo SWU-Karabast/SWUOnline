@@ -39,7 +39,7 @@ include_once 'Header.php';
 <div class="core-wrapper">
 <div class="flex-padder"></div>
 <div class="flex-wrapper">
-  <div class='game-invite container bg-black'>
+  <div class='game-invite container bg-yellow'>
     <h2>Join Game</h2>
     <?php
     echo ("<form action='" . $redirectPath . "/JoinGameInput.php'>");
@@ -74,7 +74,7 @@ include_once 'Header.php';
     */
 
     ?>
-    <label for="fabdb"><u><a style='color:lightblue;' href='https://www.swudb.com/' target='_blank'>SWUDB</a></u> or <u><a style='color:lightblue;' href='https://www.sw-unlimited-db.com/' target='_blank'>SW-Unlimited-DB</a></u> Deck Link <span class="secondary">(use the url or 'Deck Link' button)</span></label>
+    <label for="fabdb"><u><a style='color:darksalmon;' href='https://www.swudb.com/' target='_blank'>SWUDB</a></u> or <u><a style='color:darksalmon;' href='https://www.sw-unlimited-db.com/' target='_blank'>SW-Unlimited-DB</a></u> Deck Link <span class="secondary">(use the url or 'Deck Link' button)</span></label>
     <input type="text" id="fabdb" name="fabdb">
     <?php
     if (isset($_SESSION["userid"])) {
@@ -87,7 +87,7 @@ include_once 'Header.php';
     <div style='text-align:center;'><input class="JoinGame_Button" type="submit" value="Join Game"></div>
     </form>
   </div>
-  <div class="container bg-blue">
+  <div class="container bg-yellow">
       <h3>Instructions</h3>
       <p>Choose a deck, then click 'Join Game' to be taken to the game lobby.</p>
       <p>Once in the game lobby, the player who win the dice roll choose if the go first. Then the host can start the game.</p>

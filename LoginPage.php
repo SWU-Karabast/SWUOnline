@@ -15,7 +15,7 @@ include_once 'Header.php';
 <div class="flex-padder"></div>
 
 <div class="flex-wrapper">
-  <div class="login container bg-black">
+  <div class="login container bg-yellow">
     <h2>Log In</h2>
     <p class="login-message">Make sure to use your username, not your email!</i></p>
 
@@ -46,7 +46,7 @@ include_once 'Header.php';
     ?>
   </div>
 
-  <div class="container bg-blue">
+  <div class="container bg-yellow">
     <p>By using the Remember Me function, you consent to a cookie being stored in your browser for the purpose of identifying
       your account on future visits.</p>
     <a href='./MenuFiles/PrivacyPolicy.php'>Privacy Policy</a>

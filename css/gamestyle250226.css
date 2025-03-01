@@ -28,23 +28,33 @@ td {
 /* Game Background */
 
 .game-bg img {
-  object-fit: cover; 
-  height:100%; 
+  object-fit: cover;
+  height:100%;
   width:100%;
 }
 
 .game-bg {
-  position:absolute !important; 
-  z-index:-100; 
-  left:0px; 
-  top:0px; 
-  width:100%; 
+  position:absolute !important;
+  z-index:-100;
+  left:0px;
+  top:0px;
+  width:100%;
   height:100%;
+}
+
+.game-bg-dimmer {
+  position:absolute;
+  z-index:-99;
+  left:0px;
+  top:0px;
+  width:100%;
+  height:100%;
+  background: rgba(0, 0, 0, 0.57);
 }
 
 /* Arena BGs */
 
-#spaceArena, #groundArena, .groundArena-dimmer {
+#spaceArena, #groundArena, .groundArena-dimmer, .spaceArena-dimmer {
   position: absolute;
   top: 140px;
   width: calc(50% - 251px);
@@ -56,44 +66,43 @@ td {
 #spaceArena {
   z-index: -5;
   left: 41px;
-  opacity: .6;
-  background-position: 60% 50%;
-  background-image: url('../Images/bg-deathstar.jpg');
+}
+
+.spaceArena-dimmer {
+  z-index: -6;
+  left: 41px;
+  border: 2px solid rgba(90, 70, 30, 0.8);
 }
 
 #groundArena {
   z-index: -5;
   right: 278px;
-  opacity: .4;
-  background-position: 80% 50%;
-  background-image: url('../Images/bg-echobase.jpg');
 }
 
 .groundArena-dimmer {
   z-index: -6;
   right: 278px;
-  opacity: .6;
-  background: #131F2A;
+  border: 2px solid rgba(90, 70, 30, 0.8);
 }
 
 /* Player Names */
 
 .player-name {
-  cursor:default; 
-  margin: 0px; 
-  top: 85%; 
+  cursor:default;
+  margin: 0px;
+  top: 85%;
   left: 50%;
-  margin-right: -50%; 
-  border-radius: 5px 5px 0 0; 
-  text-align: center; 
-  line-height: 12px; 
-  height: 15px; 
-  padding: 5px; 
-  transform: translate(-50%, -50%); 
-  position: absolute; 
-  z-index: 10; 
-  background:black; 
-  font-size: 16px; 
+  margin-right: -50%;
+  border-radius: 5px 5px 0 0;
+  text-align: center;
+  line-height: 12px;
+  height: 15px;
+  padding: 5px;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  z-index: 10;
+  background:black;
+  font-size: 16px;
   font-weight: bold;
   user-select: none;
 }
@@ -101,48 +110,48 @@ td {
 /* Base Damage Counters */
 
 .base-dmg-wrapper {
-  position:absolute; 
-  z-index:1; 
-  left: calc(50% - 169px); 
+  position:absolute;
+  z-index:1;
+  left: calc(50% - 169px);
   width: 100px;
 }
 
 .base-dmg-position {
-  display: flex; 
+  display: flex;
   justify-content: center;
 }
 
 .base-my-dmg, .base-their-dmg {
   position:fixed;
   height: 30px;
-  padding: 0 10px; 
-  background: url('../Images/dmgbg-l.png') left no-repeat, url('../Images/dmgbg-r.png') right no-repeat; 
+  padding: 0 10px;
+  background: url('../Images/dmgbg-l.png') left no-repeat, url('../Images/dmgbg-r.png') right no-repeat;
   background-size: contain;
   filter: drop-shadow(1px 2px 1px rgba(0, 0, 0, 0.40));
-  font-weight: 700; 
-  font-size: 24px; 
-  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.30);  
+  font-weight: 700;
+  font-size: 24px;
+  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.30);
   user-select: none;
   pointer-events:none
 }
 
 .base-my-dmg {
   bottom: 365px;
-} 
+}
 
 .base-their-dmg {
   top: 305px;
-} 
+}
 
 .base-my-dmg-manual {
-  position:absolute; 
-  top:120px; 
+  position:absolute;
+  top:120px;
   left:65px;
 }
 
 .base-their-dmg-manual {
-  position:absolute; 
-  top:0px; 
+  position:absolute;
+  top:0px;
   left:65px;
 }
 
@@ -174,15 +183,15 @@ td {
 @media only screen and (max-height: 810px) {
   .my-leader {
     bottom: calc(50% - 185px);
-  } 
+  }
 
   .my-base {
     bottom: calc(50% - 75px);
-  } 
-  
+  }
+
   .their-leader {
     top: calc(50% - 248px);
-  } 
+  }
 
   .their-base {
     top: calc(50% - 138px);
@@ -190,25 +199,25 @@ td {
 
   .base-my-dmg {
     bottom: calc(50% - 40px);
-  } 
-  
+  }
+
   .base-their-dmg{
     top: calc(50% - 102px);
-  } 
+  }
 }
 
 @media only screen and (max-height: 760px) {
   .my-leader {
     bottom: calc(50% - 177px);
-  } 
+  }
 
   .my-base {
     bottom: calc(50% - 72px);
-  } 
-  
+  }
+
   .their-leader {
     top: calc(50% - 240px);
-  } 
+  }
 
   .their-base {
     top: calc(50% - 135px);
@@ -216,11 +225,11 @@ td {
 
   .base-my-dmg {
     bottom: calc(50% - 36px);
-  } 
-  
+  }
+
   .base-their-dmg{
     top: calc(50% - 99px);
-  } 
+  }
 
   #myHand {
     bottom: calc(50% - 296px) !important;
@@ -255,7 +264,7 @@ td {
   .display-game-screen {
     bottom: 0px !important;
   }
- 
+
   .status-wrapper {
     border-radius: 10px 10px 0 0;
     background-color: rgb(0, 0, 0, 0.60);
@@ -263,7 +272,7 @@ td {
     -webkit-backdrop-filter: blur(20px);
   }
 
-  #spaceArena, #groundArena, .groundArena-dimmer {
+  #spaceArena, #groundArena, .groundArena-dimmer, .spaceArena-dimmer{
     top: 130px;
     height: calc(100% - 320px);
   }
@@ -321,37 +330,37 @@ td {
 }
 
 .dmg-animation-a {
-  position:absolute; 
-  text-align:center; 
-  font-size:36px; 
-  top: 0px; 
-  left:-2px; 
-  width:100%; 
-  height: calc(100% - 8px); 
-  padding: 0 2px; 
-  border-radius:12px; 
+  position:absolute;
+  text-align:center;
+  font-size:36px;
+  top: 0px;
+  left:-2px;
+  width:100%;
+  height: calc(100% - 8px);
+  padding: 0 2px;
+  border-radius:12px;
   background-color:rgba(255,0,0,0.5); z-index:1000;
 }
 
 .dmg-animation-a-inner, .dmg-animation-a-label-inner {
-  padding: 25px 0; 
-  width:100%; 
+  padding: 25px 0;
+  width:100%;
   height:100%;
 }
 
 .dmg-animation-a-label {
-  position:absolute; 
-  text-align:center; 
-  animation-name: move; 
-  animation-duration: 0.6s; 
-  font-size:34px; 
-  font-weight: 600; 
-  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.60); 
-  top:0px; 
-  left:0px; 
-  width:100%; 
-  height:100%; 
-  background-color:rgba(0,0,0,0); 
+  position:absolute;
+  text-align:center;
+  animation-name: move;
+  animation-duration: 0.6s;
+  font-size:34px;
+  font-weight: 600;
+  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.60);
+  top:0px;
+  left:0px;
+  width:100%;
+  height:100%;
+  background-color:rgba(0,0,0,0);
   z-index:1000;
 }
 
@@ -366,8 +375,8 @@ td {
   border-radius: 20px;
   border-width: 2px;
   border-style: solid;
-  height: 30px; 
-  width: 92px; 
+  height: 30px;
+  width: 92px;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
 }
@@ -377,11 +386,11 @@ td {
 .my-initiative-taken span,
 .their-initiative-taken span {
   position: relative;
-  margin: 5px auto 0; 
-  text-align: center; 
+  margin: 5px auto 0;
+  text-align: center;
   display: block;
   z-index: 10;
-  font-size: 16px; 
+  font-size: 16px;
   font-weight: 600;
   user-select: none;
 }
@@ -426,21 +435,21 @@ td {
 /* Units */
 
 .spaceAlliesContainer, .groundAlliesContainer {
-  overflow-y:auto; 
-  padding: 5px 20px 12px 20px; 
-  position: fixed; 
-  bottom:200px; 
-  width: calc(50% - 291px); 
-  scrollbar-color: rgba(255, 255, 255, 0) rgba(0, 0, 0, 0); 
+  overflow-y:auto;
+  padding: 5px 20px 12px 20px;
+  position: fixed;
+  bottom:200px;
+  width: calc(50% - 291px);
+  scrollbar-color: rgba(255, 255, 255, 0) rgba(0, 0, 0, 0);
   scrollbar-width: thin;
 }
 
 .spaceAlliesContainer {
-  left:41px; 
+  left:41px;
 }
 
 .groundAlliesContainer {
-  right:278px; 
+  right:278px;
 }
 
 .cardContainer.exhausted {
@@ -448,21 +457,21 @@ td {
 }
 
 .spaceEnemiesContainer, .groundEnemiesContainer {
-  overflow-y:auto; 
-  padding: 20px 20px 15px 20px; 
-  position: fixed; 
-  top:140px; 
+  overflow-y:auto;
+  padding: 20px 20px 15px 20px;
+  position: fixed;
+  top:140px;
   width: calc(50% - 291px);
-  scrollbar-color: rgba(255, 255, 255, 0) rgba(0, 0, 0, 0); 
+  scrollbar-color: rgba(255, 255, 255, 0) rgba(0, 0, 0, 0);
   scrollbar-width: thin;
 }
 
-.spaceEnemiesContainer { 
-  left:41px; 
+.spaceEnemiesContainer {
+  left:41px;
 }
 
 .groundEnemiesContainer {
-  right:278px; 
+  right:278px;
 }
 
 .spaceAlliesContainer, .groundAlliesContainer,
@@ -506,9 +515,9 @@ td {
 }
 
 .my-units-manual {
-  position:relative; 
-  left:-15px; 
-  width:15px; 
+  position:relative;
+  left:-15px;
+  width:15px;
   height:100%;
 }
 
@@ -527,12 +536,12 @@ td {
 }
 
 .my-resources {
-  position:fixed; 
-  width:200px; 
-  height:96px; 
-  left: 20px; 
-  bottom:20px; 
-  z-index: 200; 
+  position:fixed;
+  width:200px;
+  height:96px;
+  left: 20px;
+  bottom:20px;
+  z-index: 200;
   border-radius: 5px;
   background: linear-gradient(var(--myColor1), var(--myColor2));
   transition: --myColor1 0.2s, --myColor2 0.2s;
@@ -544,32 +553,32 @@ td {
  }
 
 .my-resources .resources {
-  padding:28px 0; 
-  display: flex; 
-  justify-content: center; 
+  padding:28px 0;
+  display: flex;
+  justify-content: center;
   cursor:pointer;
 }
 
 .my-resources .resources img {
-  width:26px; 
-  height:34px; 
+  width:26px;
+  height:34px;
   margin-top:3px;
 }
 
 .my-resources .resources span {
-  color:white; 
-  font-size:32px; 
-  font-weight: 700; 
+  color:white;
+  font-size:32px;
+  font-weight: 700;
   margin: 0 0 0 10px;
 }
 
 /* My Discard & Deck */
 
 .my-discard {
-  position:fixed; 
-  right:364px; 
-  bottom:20px; 
-  border-radius:5px; 
+  position:fixed;
+  right:364px;
+  bottom:20px;
+  border-radius:5px;
 }
 
 .my-discard a, .my-deck a {
@@ -590,17 +599,17 @@ td {
 }
 
 .my-discard-empty-label {
-  position:absolute; 
-  margin: 0; 
-  top: 50%; 
-  left: 50%; 
-  transform: translate(-50%, -50%); 
+  position:absolute;
+  margin: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   user-select:none;
 }
 
 .my-deck {
-  position:fixed; 
-  right:256px; 
+  position:fixed;
+  right:256px;
   bottom:18px;
   border-radius: 5px;
 }
@@ -610,49 +619,49 @@ td {
 }
 
 .my-deck-empty-label {
-  position:absolute; 
-  margin: 0; 
-  top: 50%; 
-  left: 50%; 
-  transform: translate(-50%, -50%); 
+  position:absolute;
+  margin: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   user-select:none;
 }
 
 .my-deck-manual {
-  position:absolute; 
-  left:50%; 
-  -ms-transform: translateX(-50%); 
-  transform: translateX(-50%); 
-  bottom:0px; 
+  position:absolute;
+  left:50%;
+  -ms-transform: translateX(-50%);
+  transform: translateX(-50%);
+  bottom:0px;
   z-index:1000;
 }
 
 #myHand {
-  display:none; 
-  position:fixed; 
-  bottom: 80px; 
+  display:none;
+  position:fixed;
+  bottom: 80px;
   z-index:100;
 }
 
 /* Their Resources */
 
 .their-resources .resources {
-  padding:28px 0; 
-  display: flex; 
-  justify-content: center; 
+  padding:28px 0;
+  display: flex;
+  justify-content: center;
   cursor:default;
 }
 
 .their-resources .resources img {
-  width:26px; 
-  height:34px; 
+  width:26px;
+  height:34px;
   margin-top:3px;
 }
 
 .their-resources .resources span {
-  color:white; 
-  font-size:32px; 
-  font-weight: 700; 
+  color:white;
+  font-size:32px;
+  font-weight: 700;
   margin: 0 0 0 10px;
 }
 
@@ -665,27 +674,27 @@ td {
 }
 
 .their-resources {
-  position:fixed; 
-  width:200px; 
-  height:96px; 
-  left: 20px; 
-  top:20px; 
-  z-index: 200; 
+  position:fixed;
+  width:200px;
+  height:96px;
+  left: 20px;
+  top:20px;
+  z-index: 200;
   border-radius: 5px;
   background-color: rgba(0, 0, 0, 0.3);
 }
 
 .their-discard {
-  position:fixed; 
-  right:364px; 
-  top:21px; 
-  border-radius:5px; 
+  position:fixed;
+  right:364px;
+  top:21px;
+  border-radius:5px;
   background-color: rgba(0, 0, 0, 0.3);
 }
 
 .their-deck {
-  position:fixed; 
-  right:256px; 
+  position:fixed;
+  right:256px;
   top:19px;
   border-radius: 5px;
 }
@@ -693,8 +702,8 @@ td {
 /* Opponent Hand */
 
 .their-hand-wrapper {
-  display: flex; 
-  justify-content: center; 
+  display: flex;
+  justify-content: center;
 }
 
 .their-discard {
@@ -702,80 +711,80 @@ td {
 }
 
 .their-discard-empty {
-  position:absolute; 
-  margin: 0; 
-  position: absolute; 
-  top: 50%; 
-  left: 50%; 
-  transform: translate(-50%, -50%); 
+  position:absolute;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   user-select:none;
 }
 
 .their-deck-empty-pos {
-  position:fixed; 
+  position:fixed;
   background-color: rgba(0, 0, 0, 0.4);
 }
 
 .their-deck-empty {
-  position:absolute; 
-  margin: 0;  
-  top: 50%; 
-  left: 50%; 
-  transform: translate(-50%, -50%); 
+  position:absolute;
+  margin: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   user-select:none;
 }
 
 .their-deck-manual {
-  position:absolute; 
-  left:50%; 
-  -ms-transform: translateX(-50%); 
-  transform: translateX(-50%);  
-  bottom:0px; 
+  position:absolute;
+  left:50%;
+  -ms-transform: translateX(-50%);
+  transform: translateX(-50%);
+  bottom:0px;
   z-index:1000;
 }
 
 /* Effects UI */
 
 .opponent-effects {
-  position:absolute; 
-  width:90px; 
-  left:20px; 
+  position:absolute;
+  width:90px;
+  left:20px;
   top:150px;
 }
 
 .friendly-effects {
-  position:fixed; 
-  width:90px; 
-  left:20px; 
+  position:fixed;
+  width:90px;
+  left:20px;
   bottom:213px;
 }
 
 .last-played-card img {
   object-fit: contain;
-  background-color: rgba(37, 37, 37, 0.3); 
+  background-color: rgba(37, 37, 37, 0.3);
 }
 
 .effect-display {
-  width:56px; 
-  height:36px; 
-  margin:10px 0 7px 1px; 
+  width:56px;
+  height:36px;
+  margin:10px 0 7px 1px;
   border-radius: 5px;
 }
 
 .effect-display img {
-  width:54px !important; 
-  height:34px !important; 
+  width:54px !important;
+  height:34px !important;
   border-radius: 4px !important;
 }
 
 /* Pass Button */
 
 .passButton {
-  display: inline-block; 
-  z-index: 20; 
-  cursor:pointer; 
-  padding:8px 20px 10px; 
-  box-shadow:inset 0 0 0 1px #454545; 
+  display: inline-block;
+  z-index: 20;
+  cursor:pointer;
+  padding:8px 20px 10px;
+  box-shadow:inset 0 0 0 1px #454545;
   border-radius: 5px;
   background-color: #292929;
   transition: 150ms ease-in-out;
@@ -790,17 +799,17 @@ td {
 }
 
 .pass-label {
-  margin: 0 1px 0 0; 
+  margin: 0 1px 0 0;
   color:white;
-  font-size:18px; 
-  font-weight: 600; 
+  font-size:18px;
+  font-weight: 600;
   user-select: none;
 }
 
 .pass-tag {
-  bottom:2px; 
-  font-size:12px; 
-  color:#BDBDBD; 
+  bottom:2px;
+  font-size:12px;
+  color:#BDBDBD;
   user-select: none;
 }
 
@@ -811,31 +820,31 @@ td {
 }
 
 .playerpick-img {
-  height:16px; 
-  margin-right:8px; 
-  vertical-align: -2px; 
+  height:16px;
+  margin-right:8px;
+  vertical-align: -2px;
   user-select: none;
 }
 
 /* Display Game Screen */
 
 .display-game-screen {
-  position:fixed; 
-  left:0; 
-  right:238px; 
-  bottom:12px; 
-  display:inline-block; 
-  font-size:30px; 
-  text-align:center; 
+  position:fixed;
+  left:0;
+  right:238px;
+  bottom:12px;
+  display:inline-block;
+  font-size:30px;
+  text-align:center;
   min-height:45px;
 }
 
 .display-game-screen-manual {
-  position:relative; 
-  top: 5px; 
-  z-index:10; 
-  font-family:Helvetica; 
-  font-size:18px; 
+  position:relative;
+  top: 5px;
+  z-index:10;
+  font-family:Helvetica;
+  font-size:18px;
   font-weight: 550;
 }
 
@@ -844,11 +853,11 @@ td {
 }
 
 .manualAddCardToHand-button {
-  position:relative; 
-  font-size: 14px; 
-  top:0; 
-  left:0; 
-  bottom: 5px; 
+  position:relative;
+  font-size: 14px;
+  top:0;
+  left:0;
+  bottom: 5px;
   box-shadow: none;
 }
 
@@ -871,7 +880,7 @@ td {
 /* Trigger Order */
 
 .tiles-wrapper {
-display: flex; 
+display: flex;
 flex-wrap: wrap;
 }
 
@@ -951,20 +960,20 @@ margin: 0 0 0 10px;
 /* Log */
 
 #sidebarWrapper {
-  display:flex; 
-  flex-direction: column; 
-  background: rgba(0, 0, 0, 0.7); 
-  position:fixed; 
-  width:218px !important; 
-  top:0; 
-  right:0; 
-  height: 100%; 
+  display:flex;
+  flex-direction: column;
+  background: rgba(0, 0, 0, 0.7);
+  position:fixed;
+  width:218px !important;
+  top:0;
+  right:0;
+  height: 100%;
   padding-left:20px;
 }
 
 #chatPlaceholder {
-  flex-grow:0; 
-  flex-shrink:0; 
+  flex-grow:0;
+  flex-shrink:0;
   height:26px;
 }
 
@@ -977,78 +986,78 @@ margin: 0 0 0 10px;
 }
 
 .menu-buttons-wrapper-a {
-  flex-grow:0; 
+  flex-grow:0;
   flex-shrink:0;
-  position:relative; 
-  top: 6px; 
+  position:relative;
+  top: 6px;
   height:50px;
 }
 
 .menu-buttons-wrapper-b {
-  position:absolute; 
-  top:12px; 
+  position:absolute;
+  top:12px;
   right:20px;
 }
 
 .stats-icon, .menu-icon {
-  width:44px; 
+  width:44px;
   height:44px;
 }
 
 .settings-icon, .exit-icon {
-  width:20px; 
+  width:20px;
   height:20px;
 }
 
 .round-title {
-  flex-grow:0; 
-  flex-shrink:0; 
-  text-align:left; 
-  margin-top: -32px; 
-  width:100%; 
-  font-weight:bold; 
-  font-size:20px; 
-  text-transform: uppercase; 
-  font-weight: 600; 
-  color: white; 
+  flex-grow:0;
+  flex-shrink:0;
+  text-align:left;
+  margin-top: -32px;
+  width:100%;
+  font-weight:bold;
+  font-size:20px;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: white;
   user-select: none;
 }
 
 .last-played-title {
-  flex-grow:0; 
-  flex-shrink:0; 
-  text-align:left; 
-  width:100%; 
-  font-weight:bold; 
-  font-size:16px; 
-  font-weight: 600; 
-  color: white; 
-  margin-top: 5px; 
+  flex-grow:0;
+  flex-shrink:0;
+  text-align:left;
+  width:100%;
+  font-weight:bold;
+  font-size:16px;
+  font-weight: 600;
+  color: white;
+  margin-top: 5px;
   user-select: none;
 }
 
 .last-played-card {
-  flex-grow:0; 
-  flex-shrink:0; 
-  position:relative; 
+  flex-grow:0;
+  flex-shrink:0;
+  position:relative;
   margin:10px 0 14px 0;
 }
 
 #gamelog {
-  flex-grow:1; 
-  position:relative; 
-  overflow-y: scroll; 
-  margin: 0 0 36px 0; 
-  padding-right:10px; 
-  color: white; 
-  font-size: 15px; 
-  line-height: 21px; 
-  scrollbar-color: #888888 rgba(0, 0, 0, 0); 
+  flex-grow:1;
+  position:relative;
+  overflow-y: scroll;
+  margin: 0 0 36px 0;
+  padding-right:10px;
+  color: white;
+  font-size: 15px;
+  line-height: 21px;
+  scrollbar-color: #888888 rgba(0, 0, 0, 0);
   scrollbar-width: thin;
 }
 
 .choosepopup-table {
-  border-spacing:0; 
+  border-spacing:0;
   border-collapse: collapse;
 }
 
@@ -1057,16 +1066,16 @@ margin: 0 0 0 10px;
 }
 
 .tile-display {
-  position:relative; 
+  position:relative;
   display: inline-block;
 }
 
 .priority-gem{
-  position:absolute; 
-  display: inline-block; 
+  position:absolute;
+  display: inline-block;
   z-index:1001;
-  width:40px; 
-  height:40px; 
+  width:40px;
+  height:40px;
   cursor:pointer;
 }
 
@@ -1206,6 +1215,20 @@ margin: 0 0 0 10px;
   -ms-transform: translate(-50%, -50%);
   width: 100%;
   pointer-events: none;
+}
+
+/* Select/Options */
+select.settingsSelect {
+  margin: 10px auto;
+  padding: 0 16px;
+  width: 100%;
+  min-height: 5%;
+  max-width: 50%;
+  font-size: 18px;
+  border-radius: 5px;
+  appearance: none;
+  display: block;
+  border: none;
 }
 
 /* Radio Buttons */
@@ -1370,7 +1393,7 @@ input[type="button"]:focus {
 }
 
 .table-border-a {
-  border-spacing:0; 
+  border-spacing:0;
   border-collapse: collapse;
 }
 
@@ -1387,18 +1410,18 @@ input[type="button"]:focus {
 @media screen and (max-width: 1199px) {
 
   .their-discard {
-    right:258px; 
-    top:20px; 
+    right:258px;
+    top:20px;
   }
-  
+
   .their-deck {
-    right:256px; 
+    right:256px;
     top:124px;
   }
 
   .their-resources {
-    width:96px; 
-    height:96px; 
+    width:96px;
+    height:96px;
     display: flex;
     cursor: default;
     flex-direction: column;
@@ -1406,18 +1429,18 @@ input[type="button"]:focus {
   }
 
   .my-discard {
-    right:258px; 
-    bottom:20px; 
+    right:258px;
+    bottom:20px;
   }
 
   .my-deck {
-    right:256px; 
+    right:256px;
     bottom:124px;
   }
 
   .my-resources {
-    width:96px; 
-    height:96px; 
+    width:96px;
+    height:96px;
     display: flex;
     cursor: default;
     flex-direction: column;
@@ -1439,13 +1462,13 @@ input[type="button"]:focus {
   .resources span {
     margin: 0 !important;
   }
-  
+
   .my-initiative {
-    bottom:232px; 
+    bottom:232px;
   }
-  
+
   .their-initiative {
-    top:232px; 
+    top:232px;
   }
 
 }

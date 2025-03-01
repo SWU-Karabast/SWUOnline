@@ -30,13 +30,14 @@ if (isset($_SESSION['useruid'])) $uid = $_SESSION['useruid'];
 $displayName = ($uid != "-" ? $uid : "Player " . $playerID);
 
 //array for contributors
-$contributors = array("sugitime", "OotTheMonk", "Launch", "LaustinSpayce", "Star_Seraph", "Tower", "Etasus", "scary987", "Celenar");
+$contributors = array("OotTheMonk", "love", "ninin", "Brubraz", "Mobyus1");
 
 //its sort of sloppy, but it this will fail if you're in the contributors array because we want to give you the contributor icon, not the patron icon.
-if (isset($_SESSION["isPatron"]) && isset($_SESSION['useruid']) && !in_array($_SESSION['useruid'], $contributors)) $displayName = "<img title='Patron' style='margin-bottom:-2px; margin-right:-4px; height:18px;' src='./images/patronHeart.webp' /> " . $displayName;
+//TODO: see about content creator icons for Patreon
+//if (isset($_SESSION["isPatron"]) && isset($_SESSION['useruid']) && !in_array($_SESSION['useruid'], $contributors)) $displayName = "<img style='margin-bottom:-4px; margin-right:-6px; height:18px;' src='./Images/greenPhaseMarker.png' /> " . $displayName;
 
 //This is the code for Contributor's icon.
-if (isset($_SESSION['useruid']) && in_array($_SESSION['useruid'], $contributors)) $displayName = "<img title='Contributor' style='margin-bottom:-2px; margin-right:-4px; height:18px;' src='./images/copper.webp' /> " . $displayName;
+if (isset($_SESSION['useruid']) && in_array($_SESSION['useruid'], $contributors)) $displayName = "<img title='Contributor' style='margin-bottom:-4px; margin-right:-4px; height:18px;' src='./Images/beskar-tiny.png' /> " . $displayName;
 //profanity filter
 $filteredChatText = explode(" ", $chatText);
 $meanPhrases = [
@@ -65,7 +66,7 @@ if (GetCachePiece($gameName, 11) >= 3) {
 WriteLog("<span class='p$playerID-label bold'>$displayName</span>: $filteredChatText");
 if(str_contains($filteredChatText, "*****")) {
   $sugarSpiceAndEverythingNice = GetKindQuote();
-  WriteLog(KarabotSpan() . "As a reminder, please be kind to each other and refrain from using hateful language. This is just a game, and there is no reason to display this level of toxic behavior.");
+  WriteLog(ArenabotSpan() . "As a reminder, please be kind to each other and refrain from using hateful language. This is just a game, and there is no reason to display this level of toxic behavior.");
   WriteLog($sugarSpiceAndEverythingNice);
 }
 

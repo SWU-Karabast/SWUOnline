@@ -23,9 +23,9 @@ $isMobile = IsMobile();
 
 <head>
     <meta charset="utf-8">
-    <title>Karabast</title>
-    <link rel="shortcut icon" type="image/png" href="Images/karabastTiny.png" />
-    <link rel="stylesheet" href="./css/karabast011625.css">
+    <title>Petranaki</title>
+    <link rel="shortcut icon" type="image/png" href="Images/petranakiTiny.png" />
+    <link rel="stylesheet" href="./css/petranaki250225.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
@@ -54,14 +54,14 @@ $isMobile = IsMobile();
         <div class='nav-bar-links'>
     <ul>
         <?php
-        echo '<li><a target="_blank" href="https://discord.gg/hKRaqHND4v"><img src="./Images/icons/discord.svg" alt="Discord"></a></li>';
-        echo '<li><a target="_blank" href="https://github.com/SWU-Karabast/SWUOnline"><img src="./Images/icons/github.svg" alt="GitHub"></a></li>';
+        echo '<li><a target="_blank" href="https://discord.gg/AN5GEXSu"><img src="./Images/icons/discord.svg" alt="Discord"></a></li>';
+        echo '<li><a target="_blank" href="https://github.com/SWU-Petranaki/SWUOnline"><img src="./Images/icons/github.svg" alt="GitHub"></a></li>';
         echo '<li>
                 <a href="javascript:void(0);" onclick="toggleLanguages()">
                     <img src="./Images/icons/globe.svg" alt="Languages">
                 </a>
-                <ul id="languageList" style="display: none;">'; 
-                
+                <ul id="languageList" style="display: none;">';
+
         $languages = [
             'EN' => 'English',
             'DE' => 'German',
@@ -69,11 +69,11 @@ $isMobile = IsMobile();
             'ES' => 'Spanish',
             'IT' => 'Italian',
         ];
-        
+
         foreach ($languages as $code => $lang) {
-            echo "<li onclick=\"setLanguage('$code')\"><img src='./Images/icons/$code.svg' alt='$lang' class='language-icon'>   $lang</li>";  
+            echo "<li onclick=\"setLanguage('$code')\"><img src='./Images/icons/$code.svg' alt='$lang' class='language-icon'>   $lang</li>";
         }
-        
+
         echo '</ul>
               </li>';
         ?>
