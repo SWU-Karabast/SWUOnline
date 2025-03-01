@@ -289,7 +289,7 @@ function PlayerTargetedAbility($player, $card, $lastResult)
 
 function SpecificCardLogic($player, $parameter, $lastResult)
 {
-  global $dqVars;
+  global $dqVars, $gameName;
   $parameterArr = explode(",", $parameter);
   $card = $parameterArr[0];
   $otherPlayer = ($player == 1 ? 2 : 1);
@@ -826,16 +826,17 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       AddDecisionQueue("MZOP", $player, "ATTACK");
       break;
     case "YODAOLDMASTER":
-      if($lastResult == "Both") {
-        WriteLog("Both player drew a card from Yoda, Old Master");
+      if ($lastResult == "Both") {
+        WriteLog("Both players drew a card from Yoda, Old Master");
+        $otherPlayer = $player == 1 ? 2 : 1;
         Draw($player);
         Draw($otherPlayer);
-      } else if($lastResult == "Yourself") {
-        WriteLog("Player $player drew a card from Yoda, Old Master");
-        Draw($player);
       } else {
-        WriteLog("Player $otherPlayer drew a card from Yoda, Old Master");
-        Draw($otherPlayer);
+        include "../MenuFiles/ParseGamefile.php";
+        $chosenPlayer = $lastResult == "Yourself" ? $player : (3 - $player);
+        $playerName = $playerNames[$chosenPlayer];
+        Draw($chosenPlayer);
+        WriteLog("$playerName drew a card from Yoda, Old Master");
       }
       break;
     case "PRISONEROFWAR":
