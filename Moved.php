@@ -10,7 +10,7 @@
 </head>
 <body style="background: url(./Images/gamebg.jpg);">
   <div style="height:600px; width: 800px; padding: 32px; position:relative; top:10%; left: 25%; background-color: rgba(100,100,100,0.7);">
-    <p style="font-size: 80px; font-weight: 700;">We've Moved!</p>
+    <p style="font-size: 64px; font-weight: 700;">Big Things are on the Way!</p>
     <p style="font-size: 28px;">
       The Karabast team is getting ready to release the new engine under <a href="https://beta.karabast.net">public beta here</a> (available 2025-03-03).
       <br/><br/>
@@ -18,7 +18,6 @@
     </p>
     <p style="font-size: 28px;">
       There, you will still be able to test out your decks and strategies, preview the new set, and play with your friends as before.
-      <br/>We hope to see you there!
     </p>
     <br/><br/><br/>
     <p style="font-size: 18px;">Be sure to check out the <a href="https://discord.gg/hKRaqHND4v">Karabast</a> Discord for updates and announcements on the new engine.</p>
