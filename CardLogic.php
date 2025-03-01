@@ -1269,6 +1269,16 @@ function ShuttleST149($player) {
   AddDecisionQueue("MZOP", $player, "MOVEUPGRADE", 1);
 }
 
+function CaptainPhasmaUnit($player, $phasmaIndex) {
+  AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:trait=First_Order&THEIRALLY:trait=First_Order");
+  AddDecisionQueue("MZFILTER", $player, "index=MYALLY-" . $phasmaIndex);
+  AddDecisionQueue("SETDQCONTEXT", $player, "Choose a First Order unit to give +2/+2");
+  AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+  AddDecisionQueue("MZOP", $player, "ADDHEALTH,2", 1);
+  AddDecisionQueue("MZOP", $player, "GETUNIQUEID", 1);
+  AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $player, "3427170256,PLAY", 1);
+}
+
 function CountPilotUnitsAndPilotUpgrades($player, $other=false) {
   $count = $other ? -1 : 0;
   $count += SearchCount(SearchAllies($player, trait:"Pilot"));

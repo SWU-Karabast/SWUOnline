@@ -527,6 +527,19 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             AddDecisionQueue("PASSPARAMETER", $player, 0, 1);
           }
           break;
+        case "COMBINEMYANDTHEIRINDICIES"://to be used after "MULTICHOOSEOURUNITS"
+          $theirs=$lastResult[0];
+          $mine=$lastResult[1];
+          $theirs=array_map(function($x) {return "THEIRALLY-$x";}, $theirs);
+          $mine=array_map(function($x) {return "MYALLY-$x";}, $mine);
+          $lastResult=implode(",", array_merge($theirs, $mine));
+          break;
+        case "MAPTHEIRINDICES"://to be used after "MULTICHOOSETHEIRUNITS"
+          return implode(",", array_map(function($x) {return "THEIRALLY-$x";}, $lastResult));
+          break;
+        case "MAPMYINDICES"://to be used after "MULTICHOOSEUNIT"
+          return implode(",", array_map(function($x) {return "MYALLY-$x";}, $lastResult));
+          break;
         case "DEALDAMAGE":
           // Important: use MZOpHelpers.php DamageStringBuilder() function for param structure
           $targetArr = explode("-", $lastResult);
@@ -1958,6 +1971,13 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
     case "DRAWINTOMEMORY":
       DrawIntoMemory($player);
       return "";
+      break;
+    case "MULTIDAMAGE":
+      $lastResultArr = explode(",", $lastResult);
+      for($i=count($lastResultArr)-1; $i>=0; --$i) {
+        AddDecisionQueue("PASSPARAMETER", $player, $lastResultArr[$i]);
+        AddDecisionQueue("MZOP", $player, $parameter, 1);
+      }
       break;
     case "MULTIDISTRIBUTEDAMAGE":
       //see MZOpHelpers.php MultiDistributeDamageStringBuilder() function for param structure

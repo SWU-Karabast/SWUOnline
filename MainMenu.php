@@ -28,9 +28,6 @@ if (isset($_SESSION["userid"])) {
   for ($i = 0; $i < count($savedSettings); $i += 2) {
     $settingArray[$savedSettings[intval($i)]] = $savedSettings[intval($i) + 1];
   }
-  if (isset($_GET['language'])) {
-    ChangeSetting("", $SET_Language, $language, $_SESSION["userid"]);
-  } else if (isset($settingArray[$SET_Language])) $language = $settingArray[$SET_Language];
   if (isset($settingArray[$SET_Format])) $defaultFormat = $settingArray[$SET_Format];
   if (isset($settingArray[$SET_GameVisibility])) $defaultVisibility = $settingArray[$SET_GameVisibility];
 }
@@ -54,7 +51,7 @@ include_once 'Header.php';
 <div class="core-wrapper">
 
   <div class="game-browser-wrapper">
-    <div class="game-browser container bg-black" style='overflow-y:auto;'>
+    <div class="game-browser container bg-yellow" style='overflow-y:auto;'>
       <?php
       try {
         include "ServerChecker.php";
@@ -67,8 +64,8 @@ include_once 'Header.php';
   <div class='create-game-wrapper'>
   <?php
 
-  if (IsMobile()) echo ("<div class='create-game container bg-black' style='overflow-y:visible'>");
-  else echo ("<div class='create-game container bg-black' style='overflow-y:auto'>");
+  if (IsMobile()) echo ("<div class='create-game container bg-yellow' style='overflow-y:visible'>");
+  else echo ("<div class='create-game container bg-yellow' style='overflow-y:auto'>");
 
   ?>
 
@@ -101,7 +98,7 @@ include_once 'Header.php';
   */
 
   ?>
-  <label for="fabdb"><u><a style='color:lightblue;' href='https://swustats.net/' target='_blank'>SWU Stats</a></u> or <u><a style='color:lightblue;' href='https://www.swudb.com/' target='_blank'>SWUDB</a></u> or <u><a style='color:lightblue;' href='https://sw-unlimited-db.com/' target='_blank'>SW-Unlimited-DB</a></u> Deck Link <span class="secondary">(use the url or 'Deck Link' button)</span></label>
+  <label for="fabdb"><u><a style='color:darksalmon;' href='https://swustats.net/' target='_blank'>SWU Stats</a></u> or <u><a style='color:darksalmon;' href='https://www.swudb.com/' target='_blank'>SWUDB</a></u> or <u><a style='color:darksalmon;' href='https://sw-unlimited-db.com/' target='_blank'>SW-Unlimited-DB</a></u> Deck Link <span class="secondary">(use the url or 'Deck Link' button)</span></label>
   <input type="text" id="fabdb" name="fabdb" value='<?= $deckUrl ?>'>
   <?php
   if (isset($_SESSION["userid"])) {
@@ -149,23 +146,20 @@ include_once 'Header.php';
 </div>
 
 
-<div class="karabast-column" >
-  <div class="karabast-overview container bg-blue" >
-    <p><b>Karabast is an open-source, fan-made platform.</b></p>
+<div class="petranaki-column" >
+  <div class="petranaki-overview container bg-yellow" >
+    <p><b>Petranaki is an open-source, fan-made platform.</b></p>
     <p>It is an educational tool only, meant to facilitate researching decks and strategies that is supportive of in-person play. As such, direct competition through the form of automated tournaments or rankings will not be added.</p>
     <p>This tool is free to use and is published non-commercially. Payment is not required to access any functionality.</p>
   </div>
 
-  <div class="karabast-news container bg-black" style='<?php if (IsMobile()) echo ("display:none; "); ?>'>
+  <div class="petranaki-news container bg-yellow" style='<?php if (IsMobile()) echo ("display:none; "); ?>'>
     <h2>News</h2>
     <div style="position: relative;">
       <div style='vertical-align:middle; text-align:center;'>
-        <a href="https://swustats.net" target="_blank">
-          <img src="./Images/SWUStatsHypergeo.webp" alt="SHD" style="max-width: 100%; border-radius: 5px;">
-        </a>
-        <div style="text-align: left;">
-        <h3 style="margin: 15px 0; display: block;">SWU Stats</h3>
-        <p>Are you tired of missing with Triple Dark Raid? Curious exactly how unlucky you got when you missed with Vader? Wonder no more! Now you can automatically calculate your odds of hitting with Search top X effects based on your deck composition at SWU Stats!</p>
+        <img src="./Images/TWI Starter.png" width="320">
+        <h3 style="margin: 15px 0; display: block;">We got a new look!</h3>
+        <p>Petranaki.net will continue to be maintained by familiar devs OotTheMonk, Brubraz, ninin, and LVE while Karabast.net will be reserved for the New Engine Team and all the work they've been making excellent progress with! This is to ensure we still have the engine available to those who have been enjoying it in its current state</p>
       </div>
     </div>
     <?php

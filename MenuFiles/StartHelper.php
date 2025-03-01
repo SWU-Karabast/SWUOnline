@@ -6,7 +6,7 @@ function initializePlayerState($handler, $deckHandler, $player)
   global $p1IsPatron, $p2IsPatron, $p1IsChallengeActive, $p2IsChallengeActive, $p1id, $p2id;
   global $SET_AlwaysHoldPriority, $SET_TryUI2, $SET_DarkMode, $SET_ManualMode, $SET_SkipARs, $SET_SkipDRs, $SET_PassDRStep, $SET_AutotargetArcane;
   global $SET_ColorblindMode, $SET_EnableDynamicScaling, $SET_Mute, $SET_Cardback, $SET_IsPatron;
-  global $SET_MuteChat, $SET_DisableStats, $SET_CasterMode, $SET_Language, $SET_DisableAnimations;
+  global $SET_MuteChat, $SET_DisableStats, $SET_CasterMode, $SET_DisableAnimations;
   $materialDeck = GetArray($deckHandler);
   $deckCards = GetArray($deckHandler);
   $deckSize = count($deckCards);
@@ -60,7 +60,7 @@ function initializePlayerState($handler, $deckHandler, $player)
   $userId = ($player == 1 ? $p1id : $p2id);
   $savedSettings = LoadSavedSettings($userId);
   $settingArray = [];
-  for($i=0; $i<=23; ++$i)
+  for($i=0; $i<PlayerSettingsPieces(); ++$i)
   {
     $value = "";
     switch($i)
@@ -82,12 +82,13 @@ function SettingDefaultValue($setting, $hero)
 {
   global $SET_AlwaysHoldPriority, $SET_TryUI2, $SET_DarkMode, $SET_ManualMode, $SET_SkipARs, $SET_SkipDRs, $SET_PassDRStep, $SET_AutotargetArcane;
   global $SET_ColorblindMode, $SET_EnableDynamicScaling, $SET_Mute, $SET_Cardback, $SET_IsPatron;
-  global $SET_MuteChat, $SET_DisableStats, $SET_CasterMode, $SET_Language, $SET_Playmat, $SET_DisableAnimations;
+  global $SET_MuteChat, $SET_DisableStats, $SET_CasterMode, $SET_Playmat, $SET_Background, $SET_DisableAnimations;
   switch($setting)
   {
     case $SET_TryUI2: return "1";
     case $SET_AutotargetArcane: return "1";
     case $SET_Playmat: return ($hero == "DUMMY" ? 8 : 0);
+    case $SET_Background: return 0;
     default: return "0";
   }
 }

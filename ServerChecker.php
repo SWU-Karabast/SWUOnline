@@ -66,7 +66,7 @@ if ($handle = opendir($path)) {
 
             </style>
 
-            <form class='spectate-form' action='https://karabast.net/SWUOnline/NextTurn4.php?gameName=$gameToken&playerID=3'>
+            <form class='spectate-form' action='https://petranaki.net/Arena/NextTurn4.php?gameName=$gameToken&playerID=3'>
                 <div class='spectate-container'>
                     <div class='hero-container'>
           HTML;

@@ -164,6 +164,7 @@ function RestoreAmount($cardID, $player, $index)
     case "7924461681": $amount += 1; break;//Leia Organa
     case "0753794638": $amount += 2; break;//Corvus
     case "9430527677": $amount += 1; break;//Hera Syndulla
+    case "7610382003": $amount += 2; break;//CR90 Relief Runner
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
@@ -721,6 +722,8 @@ function HasAmbush($cardID, $player, $index, $from)
     case "1356826899"://Home One
     case "6720065735"://Han Solo (Has His Moments)
     case "0097256640"://TIE Ambush Squadron
+    case "4240570958"://Fireball
+    case "7489502985"://Contracted Hunter
       return true;
 
     //conditional ambush

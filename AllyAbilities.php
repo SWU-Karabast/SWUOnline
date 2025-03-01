@@ -1016,6 +1016,19 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities, $isUp
         CreateTieFighter($player);
         CreateTieFighter($player);
         break;
+      case "7610382003"://CR90 Relief Runner
+        AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
+        AddDecisionQueue("PREPENDLASTRESULT", $player, "MYCHAR-0,THEIRCHAR-0,");
+        AddDecisionQueue("MZFILTER", $player, "damaged=0");
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit or base to heal", 1);
+        AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
+        AddDecisionQueue("MZOP", $player, "RESTORE,3", 1);
+        break;
+      case "7072861308"://Profundity
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose player to draw 1 card");
+        AddDecisionQueue("BUTTONINPUT", $player, "Yourself,Opponent");
+        AddDecisionQueue("SPECIFICCARD", $player, "PROFUNDITY", 1);
+        break;
       //AllyDestroyedAbility End
       default: break;
     }
@@ -1218,7 +1231,6 @@ function CollectBounty($player, $unitCardID, $bountyCardID, $isExhausted, $owner
       $numBounties--;
       break;
   }
-
   if ($numBounties > 0 && isBountyRecollectable($bountyCardID) && !$reportMode) {
     $bosskIndex = SearchAlliesForCard($opponent, "d2bbda6982");
 
@@ -1385,6 +1397,12 @@ function AllyStartRegroupPhaseAbilities($player) {
         break;
       case "0216922902"://The Zillo Beast
         $ally->Heal(5);
+        break;
+      case "4240570958"://Fireball
+        $ally->DealDamage(1);
+        break;
+      case "7489502985"://Contracted Hunter
+        $ally->Destroy();
         break;
       default: break;
     }
@@ -2826,6 +2844,18 @@ function SpecificAllyAttackAbilities($attackID)
       AddCurrentTurnEffect("6228218834", $mainPlayer, 'PLAY');
       IndirectDamage($defPlayer, $attackerAlly->CurrentPower(), true);
       break;
+    case "4147863169"://Relentless Firespray
+      if($attackerAlly->Exists() && $attackerAlly->NumUses() > 0) {
+        $attackerAlly->Ready();
+        $attackerAlly->SumNumUses(-1);
+      }
+      break;
+    case "3427170256"://Captain Phasma Unit
+      CaptainPhasmaUnit($mainPlayer, $attackerAlly->Index());
+      break;
+    case "2922063712"://Sith Trooper
+        AddCurrentTurnEffect("2922063712", $mainPlayer, 'PLAY', $attackerAlly->UniqueID());
+        break;
   }
 
   // Current Effect Abilities
@@ -2966,7 +2996,6 @@ function ResetAllies($player) {
         }
         $allies[$i+4] = implode(",", $upgrades);
       }
-
 
       // Ready ally
       $ally = new Ally("MYALLY-" . $i, $player);

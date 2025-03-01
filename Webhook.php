@@ -17,7 +17,7 @@
   // Check if the push is to the 'main' branch
   if ($data['ref'] !== 'refs/heads/main') {
     http_response_code(200); // No action taken
-    die('Not a push to the main branch');
+    die('Not a push to the petranaki branch');
   }
 
   // Execute `git pull` in the current directory

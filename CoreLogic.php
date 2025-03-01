@@ -111,6 +111,7 @@ function BlockingCardDefense($index, $from="", $resourcesPaid=-1)
 function AddCombatChain($cardID, $player, $from, $resourcesPaid, $upgradesWithMetadata)
 {
   global $combatChain, $turn;
+  if($upgradesWithMetadata == "") $upgradesWithMetadata = "-";
   $index = count($combatChain);
   $combatChain[] = $cardID;
   $combatChain[] = $player;
@@ -2030,6 +2031,7 @@ function SelfCostModifier($cardID, $from, $reportMode=false)
       $controlsSeparatist = $controlsSeparatist || SearchCount(SearchCharacter($currentPlayer, trait:"Separatist")) > 0;
       $controlsSeparatist = $controlsSeparatist || SearchUpgrades($currentPlayer, trait:"Separatist", uniqueOnly:true) > 0;
       $modifier -= $controlsSeparatist ? 1 : 0;
+      break;
     default: break;
   }
   //Target cost modifier
@@ -2585,7 +2587,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         }
       }
       RemoveCharacter($currentPlayer, CharacterPieces());
-      if($epicAction == 1) SetClassState($currentPlayer, $CS_CachedLeader1EpicAction, $epicAction);
+      if(isset($epicAction) && $epicAction == 1) SetClassState($currentPlayer, $CS_CachedLeader1EpicAction, $epicAction);
       //Base deploy ability
       $char = &GetPlayerCharacter($currentPlayer);
       $baseID = $char[0];
@@ -6085,7 +6087,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("FINDINDICES", $currentPlayer, "ALLTHEIRUNITSMULTI");
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose units to damage", 1);
         AddDecisionQueue("MULTICHOOSETHEIRUNIT", $currentPlayer, "<-", 1);
-        AddDecisionQueue("MULTIDISTRIBUTEDAMAGE", $currentPlayer, "3,1,1", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "MAPTHEIRINDICES", 1);
+        AddDecisionQueue("MULTIDAMAGE", $currentPlayer, DamageStringBuilder(1, $currentPlayer, 1), 1);
       }
         break;
     case "0964312065"://It's A Trap!
@@ -6246,13 +6249,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "3427170256"://Captain Phasma Unit
       if($from != "PLAY") {
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=First_Order&THEIRALLY:trait=First_Order");
-        AddDecisionQueue("MZFILTER", $currentPlayer, "index=MYALLY-" . $playAlly->Index());
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a First Order unit to give +2/+2");
-        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "ADDHEALTH,2", 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
-        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "3427170256,PLAY", 1);
+        CaptainPhasmaUnit($currentPlayer, $playAlly->Index());
       }
       break;
     case "3885807284"://Fight Fire With Fire
@@ -6396,6 +6393,24 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
       break;
+    case "4203363893"://War Juggernaut
+      if($from != "PLAY") {
+        AddDecisionQueue("FINDINDICES", $currentPlayer, "ALLOURUNITSMULTI");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose units to damage", 1);
+        AddDecisionQueue("MULTICHOOSEOURUNITS", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "COMBINEMYANDTHEIRINDICIES", 1);
+        AddDecisionQueue("MULTIDAMAGE", $currentPlayer, DamageStringBuilder(1, $currentPlayer, 1), 1);
+      }
+      break;
+    case "6410144226"://Air Superiority
+        $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+        if(SearchCount(SearchAllies($currentPlayer, arena:"Space")) > SearchCount(SearchAllies($otherPlayer, arena:"Space"))){
+          AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:arena=Ground");
+          AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 4 damage to");
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+          AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,4,$currentPlayer", 1);
+        }
+        break;
     //PlayAbility End
     default: break;
   }
