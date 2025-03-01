@@ -1028,6 +1028,7 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities, $isUp
         AddDecisionQueue("SETDQCONTEXT", $player, "Choose player to draw 1 card");
         AddDecisionQueue("BUTTONINPUT", $player, "Yourself,Opponent");
         AddDecisionQueue("SPECIFICCARD", $player, "PROFUNDITY", 1);
+        break;
       //AllyDestroyedAbility End
       default: break;
     }
