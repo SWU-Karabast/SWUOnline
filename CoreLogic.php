@@ -2934,6 +2934,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "9097316363"://Emperor Palpatine (Master of the Dark Side)
       if($from != "PLAY") {
         AddDecisionQueue("FINDINDICES", $currentPlayer, "ALLTHEIRUNITSMULTI");
+        AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, SearchCount(SearchAllies($otherPlayer)) . "-", 1);
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose units to damage", 1);
         AddDecisionQueue("MULTICHOOSETHEIRUNIT", $currentPlayer, "<-", 1);
         AddDecisionQueue("MULTIDISTRIBUTEDAMAGE", $currentPlayer, "6,1", 1);
@@ -6085,7 +6086,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "3722493191"://IG-2000
        if($from != "PLAY") {
         AddDecisionQueue("FINDINDICES", $currentPlayer, "ALLTHEIRUNITSMULTI");
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose units to damage", 1);
+        AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "3-", 1);
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose up to 3 units to damage", 1);
         AddDecisionQueue("MULTICHOOSETHEIRUNIT", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "MAPTHEIRINDICES", 1);
         AddDecisionQueue("MULTIDAMAGE", $currentPlayer, DamageStringBuilder(1, $currentPlayer, 1), 1);

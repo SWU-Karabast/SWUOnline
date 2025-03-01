@@ -202,7 +202,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           break;
         case "ALLTHEIRUNITSMULTI":
           $allies = &GetAllies($player == 1 ? 2 : 1);
-          $rv = count($allies) . "-" . GetIndices(count($allies), 0 , AllyPieces());
+          $rv = GetIndices(count($allies), 0 , AllyPieces());
           break;
         case "ALLTHEIRGROUNDUNITSMULTI":
           $allies = &GetAllies($player == 1 ? 2 : 1);
