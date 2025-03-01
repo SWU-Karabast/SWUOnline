@@ -3,7 +3,6 @@ Games
 HostFiles
 .DS_Store
 .env
-.vscode
 
 .idea/
 composer.phar

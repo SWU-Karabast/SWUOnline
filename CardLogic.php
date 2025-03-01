@@ -334,7 +334,7 @@ function ProcessDecisionQueue()
   global $turn, $decisionQueue, $dqState;
   if($dqState[0] != "1") {
     $count = count($turn);
-    if(count($turn) < 3) $turn[2] = "-";
+    if($count < 3) $turn[2] = "-";
     $dqState[0] = "1"; //If the decision queue is currently active/processing
     $dqState[1] = $turn[0];
     $dqState[2] = $turn[1];
@@ -983,8 +983,6 @@ function StartRegroupPhase() {
 
   // End regroup phase
   AddLayer("ENDREGROUPPHASE", $mainPlayer, "-");
-
-  // Process decision queue
   ProcessDecisionQueue();
 }
 
@@ -1011,8 +1009,6 @@ function EndRegroupPhase() {
 
   // Start action phase
   AddLayer("STARTACTIONPHASE", $mainPlayer, "-");
-
-  // Process decision queue
   ProcessDecisionQueue();
 }
 
@@ -1052,14 +1048,10 @@ function EndActionPhase() {
 
   // End turn procedure
   AddDecisionQueue("ENDTURN", $mainPlayer, "-");
-  
-  // Process decision queue
   ProcessDecisionQueue();
 
   // Start regroup phase
   AddLayer("STARTREGROUPPHASE", $mainPlayer, "-");
-
-  // Process decision queue
   ProcessDecisionQueue();
 }
 

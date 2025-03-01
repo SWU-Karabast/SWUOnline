@@ -1317,7 +1317,10 @@ function BeginRoundPass()
 
 function ResumeRoundPass()
 {
-  global $MakeStartTurnBackup;
+  global $MakeStartTurnBackup, $mainPlayer, $initiativePlayer;
+  if ($mainPlayer == $initiativePlayer) {
+    $mainPlayer = $initiativePlayer == 1 ? 2 : 1; // Swap player
+  }
   $MakeStartTurnBackup = true;
 }
 
