@@ -12,7 +12,7 @@
   <div style="height:600px; width: 800px; padding: 32px; position:relative; top:10%; left: 25%; background-color: rgba(100,100,100,0.7);">
     <p style="font-size: 64px; font-weight: 700;">Big Things are on the Way!</p>
     <p style="font-size: 28px;">
-      The Karabast team is getting ready to release the new engine under <a href="https://beta.karabast.net">public beta here</a> (available 2025-03-03).
+      The Karabast team is getting ready to release the new engine under <a href="https://beta.karabast.net">public beta here</a>
       <br/><br/>
       To continue playing using the previous engine, please head on over to <a href="https://petranaki.net">Petranaki.net</a>!
     </p>
