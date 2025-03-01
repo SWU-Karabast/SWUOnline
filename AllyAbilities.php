@@ -1024,6 +1024,11 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities, $isUp
         AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
         AddDecisionQueue("MZOP", $player, "RESTORE,3", 1);
         break;
+      case "7072861308"://Profundity
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose player to draw 1 card");
+        AddDecisionQueue("BUTTONINPUT", $player, "Yourself,Opponent");
+        AddDecisionQueue("SPECIFICCARD", $player, "PROFUNDITY", 1);
+        break;
       //AllyDestroyedAbility End
       default: break;
     }
@@ -1226,7 +1231,6 @@ function CollectBounty($player, $unitCardID, $bountyCardID, $isExhausted, $owner
       $numBounties--;
       break;
   }
-
   if ($numBounties > 0 && isBountyRecollectable($bountyCardID) && !$reportMode) {
     $bosskIndex = SearchAlliesForCard($opponent, "d2bbda6982");
 
