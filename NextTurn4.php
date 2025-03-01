@@ -429,8 +429,8 @@
               var restriction = cardArr[12];
               if (typeof restriction != "string") restriction = "";
               restriction = restriction.replace(/_/g, ' ');
-              folder = "concat";
-              if(selectedLanguage != "EN") folder = "concat/" + selectedLanguage;
+              folder = zone == "myChar" || zone == "theirChar" ? "WebpImages2" : "concat";
+              if(selectedLanguage != "EN") folder = folder + "/" + selectedLanguage;
               newHTML += Card(cardArr[0], folder, size, cardArr[1], 1, cardArr[2], cardArr[3], cardArr[4], cardArr[5], "", cardArr[17], cardArr[6], cardArr[7], cardArr[8], cardArr[9], restriction, cardArr[13], cardArr[14], cardArr[15], cardArr[16], cardArr[18], cardArr[19], cardArr[20]);
               newHTML += "</span>";
           }
