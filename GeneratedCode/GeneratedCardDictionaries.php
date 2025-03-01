@@ -11538,7 +11538,6 @@ function IsUnimplemented($cardID) {
   6196035152 => true,
   6354077246 => true,
   7489502985 => true,
-  7610382003 => true,
   7962923506 => true,
   '7c082aefc9' => true,
   8323555870 => true,

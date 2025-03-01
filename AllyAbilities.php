@@ -1005,6 +1005,14 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities, $isUp
         CreateTieFighter($player);
         CreateTieFighter($player);
         break;
+      case "7610382003"://CR90 Relief Runner
+        AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
+        AddDecisionQueue("PREPENDLASTRESULT", $player, "MYCHAR-0,THEIRCHAR-0,");
+        AddDecisionQueue("MZFILTER", $player, "damaged=0");
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit or base to heal", 1);
+        AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
+        AddDecisionQueue("MZOP", $player, "RESTORE,3", 1);
+        break;
       //AllyDestroyedAbility End
       default: break;
     }
