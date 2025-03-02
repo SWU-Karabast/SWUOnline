@@ -123,7 +123,7 @@ function ModalAbilities($player, $card, $lastResult)
           AddDecisionQueue("MZFILTER", $player, "definedType=Leader");//are leaders not already marked as unique?
           AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to damage");
           AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-          AddDecisionQueue("MZOP", $player, "{0}", 1);
+          AddDecisionQueue("MZOP", $player, "{0},$player,1", 1);
           break;
         case 2: // Resource
           $discard = &GetDiscard($player);
@@ -194,7 +194,7 @@ function ModalAbilities($player, $card, $lastResult)
           AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
           AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal 4 damage to");
           AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-          AddDecisionQueue("MZOP", $player, "DEALDAMAGE,4", 1);
+          AddDecisionQueue("MZOP", $player, "DEALDAMAGE,4,$player", 1);
           break;
         default: break;
       }
@@ -366,7 +366,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
       AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal " . $damage . " damage to");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-      AddDecisionQueue("MZOP", $player, "DEALDAMAGE," . $damage, 1);
+      AddDecisionQueue("MZOP", $player, "DEALDAMAGE,$damage,$player", 1);
       break;
     case "REINFORCEMENTWALKER":
       if($lastResult == "YES") Draw($player);
@@ -548,7 +548,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
         WriteLog("<span style='color:goldenrod;'>Great Kid, Don't Get Cocky...</span>");
         return "";
       }
-      PrependDecisionQueue("MZOP", $player, "DEALDAMAGE," . $dqVars[1], 1);
+      PrependDecisionQueue("MZOP", $player, "DEALDAMAGE," . $dqVars[1] . ",$player", 1);
       PrependDecisionQueue("PASSPARAMETER", $player, $dqVars[0], 1);
       PrependDecisionQueue("ELSE", $player, "-");
       PrependDecisionQueue("SPECIFICCARD", $player, "DONTGETCOCKY", 1);
@@ -560,7 +560,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       $targetAlly = new Ally($lastResult, MZPlayerID($player, $lastResult));
       $damage = SearchCount(SearchAllies($player, arena:$targetAlly->CurrentArena()));
       AddDecisionQueue("PASSPARAMETER", $player, $lastResult);
-      AddDecisionQueue("MZOP", $player, "DEALDAMAGE," . $damage, 1);
+      AddDecisionQueue("MZOP", $player, DamageStringBuilder($damage,$player,isUnitEffect:1), 1);
       return $lastResult;
     case "GUERILLAINSURGENCY":
       DamageAllAllies(4, "7235023816", arena: "Ground");
@@ -850,7 +850,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY", 1);
       AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal " . $power . " damage to", 1);
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-      AddDecisionQueue("MZOP", $player, "DEALDAMAGE," . $power, 1);
+      AddDecisionQueue("MZOP", $player, DamageStringBuilder($power, $player, isUnitEffect:1), 1);
       break;
     case "LETHALCRACKDOWN":
       DealDamageAsync($player, CardPower($lastResult), "DAMAGE", "1389085256");
