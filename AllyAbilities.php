@@ -1460,8 +1460,11 @@ function AllyEndRegroupPhaseAbilities($player) {
         AddDecisionQueue("WRITELOG", $player, "Millennium Falcon bounced back to hand", 1);
         break;
       case "9720757803"://Rampart
-        AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $i);
-        AddDecisionQueue("MZOP", $player, "REST");
+        if($ally->CurrentPower() < 4) {
+          AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $i);
+          AddDecisionQueue("MZOP", $player, "REST");
+        }
+        break;
       default: break;
     }
   }
