@@ -6085,9 +6085,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "3722493191"://IG-2000
        if($from != "PLAY") {
-        AddDecisionQueue("FINDINDICES", $currentPlayer, "ALLTHEIRUNITSMULTI");
-        AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "3-", 1);
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose up to 3 units to damage", 1);
+        $dqVars[0] = "";
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, 3, 1);
+        AddDecisionQueue("SETDQVAR", $currentPlayer, 0, 1);
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose up to {0} units to damage", 1);
+        AddDecisionQueue("FINDINDICES", $currentPlayer, "ALLTHEIRUNITSMULTILIMITED", 1);
         AddDecisionQueue("MULTICHOOSETHEIRUNIT", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "MAPTHEIRINDICES", 1);
         AddDecisionQueue("MULTIDAMAGE", $currentPlayer, DamageStringBuilder(1, $currentPlayer, 1), 1);

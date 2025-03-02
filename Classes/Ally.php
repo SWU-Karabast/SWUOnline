@@ -595,10 +595,11 @@ class Ally {
           break;
         case "1935873883"://Razor Crest
           $player = $this->Controller();
-          AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:maxCost=2", 1);
+          $dqVars[0] = "";
+          AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:maxCost=2");
           AddDecisionQueue("MZFILTER", $player, "leader=1", 1);
           AddDecisionQueue("SETDQVAR", $player, 0, 1);
-          AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:maxCost=4", 1);
+          AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:maxCost=4");
           AddDecisionQueue("MZFILTER", $player, "leader=1", 1);
           AddDecisionQueue("MZFILTER", $player, "status=0", 1);
           AddDecisionQueue("PREPENDLASTRESULT", $player, "{0},", 1);

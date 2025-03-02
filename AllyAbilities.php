@@ -1448,7 +1448,7 @@ function AllyEndRegroupPhaseAbilities($player) {
   for($i = count($allies) - AllyPieces(); $i >= 0; $i -= AllyPieces()) {
     $ally = new Ally("MYALLY-" . $i, $player);
     if ($ally->LostAbilities()) continue;
-    
+
     switch($allies[$i]) {
       case "1785627279"://Millennium Falcon
         AddDecisionQueue("SETDQCONTEXT", $player, "Do you want to pay 1 to keep Millennium Falcon running?");
@@ -2040,6 +2040,18 @@ function SpecificAllyAttackAbilities($attackID)
         $attackerAlly->Attach("2007868442");//Experience token
         $attackerAlly->DealDamage(1, enemyDamage:false, fromUnitEffect:true);
         break;
+      case "9981313319"://Twin Laser Turret
+        $dqVars[0] = "";
+        $arena = $attackerAlly->CurrentArena();
+        $targetZones = "ALLTHEIRGROUNDUNITSMULTILIMITED";
+        if($arena == "Space") $targetZones = "ALLTHEIRSPACEUNITSMULTILIMITED";
+        AddDecisionQueue("PASSPARAMETER", $mainPlayer, 2, 1);
+        AddDecisionQueue("SETDQVAR", $mainPlayer, 0, 1);
+        AddDecisionQueue("FINDINDICES", $mainPlayer, $targetZones);
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose up to {0} units to damage", 1);
+        AddDecisionQueue("MULTICHOOSETHEIRUNIT", $mainPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "MAPTHEIRINDICES", 1);
+        AddDecisionQueue("MULTIDAMAGE", $mainPlayer, DamageStringBuilder(1, $mainPlayer, 1), 1);
       default: break;
     }
   }
