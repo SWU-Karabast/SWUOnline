@@ -408,15 +408,14 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false,
   if(!$skipDestroy) {
     OnKillAbility($player, $uniqueID);
     $whenDestroyData="";$whenResourceData="";$whenBountiedData="";
-    if((HasWhenDestroyed($cardID)
-        && !$isSuperlaserTech
-        && !GivesWhenDestroyedToAllies($cardID))
-        || UpgradesContainWhenDefeated($upgrades)
-        || CurrentEffectsContainWhenDefeated($player, $uniqueID))
+    $shouldLayerDestroyTriggers = (HasWhenDestroyed($cardID) && !$isSuperlaserTech && !GivesWhenDestroyedToAllies($cardID))
+      || UpgradesContainWhenDefeated($upgrades)
+      || CurrentEffectsContainWhenDefeated($player, $uniqueID);
+    if(!$lostAbilities && $shouldLayerDestroyTriggers)
       $whenDestroyData=SerializeAllyDestroyData($uniqueID,$lostAbilities,$isUpgraded,$upgrades,$upgradesWithOwnerData,$lastPower,$lastRemainingHP);
     if($isSuperlaserTech && !$lostAbilities)
       $whenResourceData=SerializeResourceData("PLAY","DOWN",0,"0","-1");
-    if(($hasBounty && !$lostAbilities) || UpgradesContainBounty($upgrades))
+    if(!$lostAbilities && ($hasBounty || UpgradesContainBounty($upgrades)))
       $whenBountiedData=SerializeBountiesData($uniqueID, $isExhausted, $owner, $upgrades);
     if($whenDestroyData || $whenResourceData || $whenBountiedData)
       LayerDestroyTriggers($player, $cardID, $uniqueID, $whenDestroyData, $whenResourceData, $whenBountiedData);
