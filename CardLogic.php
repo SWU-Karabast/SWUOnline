@@ -1252,6 +1252,15 @@ function AsajjVentressIWorkAlone($player) {
   AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1", 1);
 }
 
+function KazudaXionoBestPilotInTheGalaxy($player) {
+  AddDecisionQueue("SETDQCONTEXT", $player, "Choose units to lost abilities");
+  AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
+  AddDecisionQueue("OP", $player, "MZTONORMALINDICES", 1);
+  AddDecisionQueue("PREPENDLASTRESULT", $player, SearchCount(SearchAllies($player)) . "-", 1);
+  AddDecisionQueue("MULTICHOOSEUNIT", $player, "<-", 1);
+  AddDecisionQueue("SPECIFICCARD", $player, "KAZUDA_JTL", 1);
+}
+
 function ShuttleST149($player) {
   AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:hasUpgradeOnly=token&THEIRALLY:hasUpgradeOnly=token");
   AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to move a token upgrade from.", 1);

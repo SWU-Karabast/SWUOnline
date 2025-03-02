@@ -2048,6 +2048,10 @@ function SpecificAllyAttackAbilities($attackID)
         AddDecisionQueue("MULTICHOOSETHEIRUNIT", $mainPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $mainPlayer, "MAPTHEIRINDICES", 1);
         AddDecisionQueue("MULTIDAMAGE", $mainPlayer, DamageStringBuilder(1, $mainPlayer, isUnitEffect:1), 1);
+        break;
+      case "c1700fc85b"://Kazuda pilot Leader unit
+        KazudaXionoBestPilotInTheGalaxy($mainPlayer);
+        break;
       default: break;
     }
   }
@@ -2861,8 +2865,11 @@ function SpecificAllyAttackAbilities($attackID)
       CaptainPhasmaUnit($mainPlayer, $attackerAlly->Index());
       break;
     case "2922063712"://Sith Trooper
-        AddCurrentTurnEffect("2922063712", $mainPlayer, 'PLAY', $attackerAlly->UniqueID());
-        break;
+      AddCurrentTurnEffect("2922063712", $mainPlayer, 'PLAY', $attackerAlly->UniqueID());
+      break;
+    case "c1700fc85b"://Kazuda pilot Leader unit
+      KazudaXionoBestPilotInTheGalaxy($mainPlayer);
+      break;
   }
 
   // Current Effect Abilities
