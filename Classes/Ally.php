@@ -489,7 +489,7 @@ class Ally {
       $effectPlayerID = $currentTurnEffects[$i + 1];
       $effectUniqueID = $currentTurnEffects[$i + 2];
 
-      if ($effectPlayerID != $this->PlayerID()) continue;
+      if ($effectPlayerID != $this->PlayerID() && $effectUniqueID != $this->UniqueID()) continue;
       if ($effectUniqueID != -1 && $effectUniqueID != $this->UniqueID()) continue;
 
       $power += EffectAttackModifier($effectCardID, $this->PlayerID());
