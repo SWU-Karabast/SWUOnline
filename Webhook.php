@@ -25,6 +25,9 @@
   // by adding the following line to the sudoers file: "daemon ALL=(ALL) NOPASSWD: /usr/bin/git"
   exec('sudo git pull origin main 2>&1', $output, $result);
 
+  // SWUStats Webhook
+  file_get_contents('https://swustats.net/TCGEngine/Utils/SWUSimImplementationStatus.php');
+
   // Respond with the output of the `git pull` command
   http_response_code($result === 0 ? 200 : 500); // 200 OK if success, 500 Internal Server Error if failure
   echo implode("\n", $output);
