@@ -1311,41 +1311,16 @@ function BeginRoundPass()
 {
   global $mainPlayer;
   WriteLog("Both players have passed; ending the phase.");
-  CurrentEffectStartRegroupAbilities();
-  AddDecisionQueue("RESUMEROUNDPASS", $mainPlayer, "-");
+  AddLayer("ENDACTIONPHASE", $mainPlayer, "-");
   ProcessDecisionQueue();
 }
 
 function ResumeRoundPass()
 {
-  global $initiativeTaken, $mainPlayer, $currentRound, $currentTurnEffects, $nextTurnEffects, $initiativePlayer;
-  global $MakeStartTurnBackup;
-  ResetClassState(1);
-  ResetClassState(2);
-  AllyBeginEndTurnEffects();
-  AllyEndTurnAbilities(1);
-  AllyEndTurnAbilities(2);
-  LogEndTurnStats($mainPlayer);
-  CurrentEffectEndTurnAbilities();
-  ResetCharacter(1);
-  ResetCharacter(2);
-  CharacterEndTurnAbilities(1);
-  CharacterEndTurnAbilities(2);
-  UnsetTurnModifiers();
-  $currentTurnEffects = $nextTurnEffects;
-  $nextTurnEffects = [];
-  $mainPlayer = $initiativePlayer == 1 ? 2 : 1;
-  $initiativeTaken = 0;
-  EndTurnProcedure($initiativePlayer);
-  EndTurnProcedure($initiativePlayer == 1 ? 2 : 1);
-  $currentRound += 1;
-  WriteLog("<span style='color:#6E6DFF;'>A new round has begun</span>");
-  CharacterStartTurnAbility(1);
-  CharacterStartTurnAbility(2);
-  AllyBeginRoundAbilities(1);
-  AllyBeginRoundAbilities(2);
-  CurrentEffectStartTurnAbilities();
-  ProcessDecisionQueue();
+  global $MakeStartTurnBackup, $mainPlayer, $initiativePlayer;
+  if ($mainPlayer == $initiativePlayer) {
+    $mainPlayer = $initiativePlayer == 1 ? 2 : 1; // Swap player
+  }
   $MakeStartTurnBackup = true;
 }
 

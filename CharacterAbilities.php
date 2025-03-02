@@ -110,11 +110,32 @@ function CharacterTakeDamageAbility($player, $index, $damage, $preventable)
   return $damage;
 }
 
-function CharacterStartTurnAbility($player)
-{
+function CharacterStartRegroupPhaseAbilities($player) {
+  // To function correctly, use uniqueID instead of MZIndex
   $character = &GetPlayerCharacter($player);
+
+  for ($i = 0; $i < count($character); $i += CharacterPieces()) {
+    if ($character[$i + 1] == 0 || $character[$i + 1] == 1) continue; //Do not process ability if it is destroyed
+    switch($character[$i]) {
+      case "0254929700"://Doctor Aphra
+        Mill($player, 1);
+        break;
+      default:
+        break;
+    }
+  }
+}
+
+function CharacterEndRegroupPhaseAbilities($player) {
+  // To function correctly, use uniqueID instead of MZIndex
+}
+
+function CharacterStartActionPhaseAbilities($player) {
+  // To function correctly, use uniqueID instead of MZIndex
+  $character = &GetPlayerCharacter($player);
+
   for($i = 0; $i < count($character); $i += CharacterPieces()) {
-    if($character[$i + 1] == 0 || $character[$i + 1] == 1) continue; //Do not process ability if it is destroyed
+    if($character[$i + 1] == 0 || $character[$i + 1] == 1) continue; //Do not process ability if it is destroyed/exhausted
     switch($character[$i]) {
       case "1951911851"://Grand Admiral Thrawn
         AddDecisionQueue("PASSPARAMETER", $player, "MYDECK-0");
@@ -130,6 +151,10 @@ function CharacterStartTurnAbility($player)
         break;
     }
   }
+}
+
+function CharacterEndActionPhaseAbilities($player) {
+  // To function correctly, use uniqueID instead of MZIndex
 }
 
 function DefCharacterStartTurnAbilities()

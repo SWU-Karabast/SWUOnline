@@ -281,7 +281,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       PlayAlly($lastResult, $player, $subCards, $from, $owner, $cloned, $playAbility);
       return $lastResult;
     case "DRAW":
-      return Draw($player);
+      $mainPhase = $parameter != 0;
+      return Draw($player, $mainPhase);
     // case "MULTIBANISH"://FAB
     //   if($lastResult == "") return $lastResult;
     //   $cards = explode(",", $lastResult);
@@ -432,13 +433,24 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       switch ($parameterArr[0]) {
         case "REVERTCONTROL": // Revert control of a unit to its owner
           $ally = new Ally($lastResult);
-          if ($ally->Exists() && $ally->Controller() != $ally->Owner()) {
-            $owner = $ally->Owner();
-            AllyTakeControl($owner, $ally->UniqueID());
-            WriteLog("Reverted control of " . CardLink($ally->CardID(), $ally->CardID()) . "back to player $owner");
-          } else {
-            return "PASS";
-          }
+          if (!$ally->Exists() || $ally->Controller() == $ally->Owner()) return "PASS";
+          $owner = $ally->Owner();
+          AllyTakeControl($owner, $ally->UniqueID());
+          WriteLog("Reverted control of " . CardLink($ally->CardID(), $ally->CardID()) . "back to player $owner");
+          break;
+        case "DEFEATUPGRADE":
+          DefeatUpgradeForUniqueID($lastResult, $player);
+          break;
+        case "BOUNCE":
+          $ally = new Ally($lastResult);
+          if (!$ally->Exists()) return "PASS";
+          MZBounce($ally->Controller(), "MYALLY-" . $ally->Index());
+          break;
+        case "REST":
+          $ally = new Ally($lastResult);
+          if (!$ally->Exists()) return "PASS";
+          $ally->Exhaust();
+          break;
       }
       return $lastResult;
     case "MZOP":
@@ -479,6 +491,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         case "SINK": MZSink($player, $lastResult); return $lastResult;
         //case "SUPPRESS": MZSuppress($player, $lastResult); return $lastResult;//FAB
         case "REST": MZRest($player, $lastResult); return $lastResult;
+        case "HEAL": MZHealAlly($player, $lastResult, $parameterArr[1]); return $lastResult;
         case "READY": MZWakeUp($player, $lastResult); return $lastResult;
         case "PLAYCARD": return MZPlayCard($player, $lastResult);
         case "ATTACK": return MZAttack($player, $lastResult);
@@ -556,9 +569,10 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         case "REDUCEHEALTH":
           MZAddHealth($player, $lastResult, count($parameterArr) > 1 ? -1 * $parameterArr[1] : 1); return $lastResult;
         case "DESTROY":
+          $enemyEffects = count($parameterArr) > 1 ? $parameterArr[1] : "1";
           $ally = new Ally($lastResult);
           $id = $ally->CardID();
-          $ally->Destroy();
+          $ally->Destroy($enemyEffects);
           return $id;
         case "EXPLOIT":
           global $CS_PlayedWithExploit;
@@ -1204,7 +1218,20 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       UpdateLinkAttack();
       return $lastResult;
     case "ADDLIMITEDNEXTTURNEFFECT":
-      AddNextTurnEffect($parameter, $player, $lastResult);
+      $uniqueID = $lastResult;
+      $params = explode(",", $parameter);
+      $controller = UnitUniqueIDController($uniqueID);
+      $from = "";
+      if ($controller == -1) {
+        $controller = $player;
+      }
+      if (isset($params[1])) {
+        $from = $params[1];
+      }
+      if (isset($params[2])) {
+        $controller = $params[2]; // Override controller
+      }
+      AddNextTurnEffect($params[0], $controller, $lastResult);
       return $lastResult;
     case "ADDAIMCOUNTER":
       $arsenal = &GetArsenal($player);
@@ -1488,6 +1515,37 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
     case "STARTTURNABILITIES":
       StartTurnAbilities();
       return 1;
+    case "ENDTURN":
+      global $mainPlayer, $initiativePlayer, $currentRound, $initiativeTaken, $currentTurnEffects, $nextTurnEffects;
+
+      // Log end turn stats
+      LogEndTurnStats($mainPlayer);
+
+      // Reset turn effects
+      $currentTurnEffects = $nextTurnEffects;
+      $nextTurnEffects = [];
+
+      // Unset turn modifiers
+      UnsetTurnModifiers();
+
+      // End turn allies
+      foreach([1, 2] as $p) {
+        $allies = GetAllies($p);
+        for($i = count($allies) - AllyPieces(); $i >= 0; $i -= AllyPieces()) {
+          $ally = new Ally("MYALLY-" . $i, $p);
+          $ally->EndRound();
+        }
+      }
+
+      // Switch initiative
+      $mainPlayer = $initiativePlayer == 1 ? 2 : 1;
+      $initiativeTaken = 0;
+      $currentRound += 1;
+      WriteLog("<span style='color:#6E6DFF;'>A new round has begun</span>");
+      return 1;
+    case "RESUMEROUNDPASS":
+      ResumeRoundPass();
+      return 1;
     case "DRAWTOINTELLECT":
       $deck = &GetDeck($player);
       $hand = &GetHand($player);
@@ -1495,9 +1553,6 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       for($i = 0; $i < CharacterIntellect($char[0]); ++$i) {
         $hand[] = array_shift($deck);
       }
-      return 1;
-    case "RESUMEROUNDPASS":
-      ResumeRoundPass();
       return 1;
     case "ROLLDIE":
       $roll = RollDie($player, true, $parameter == "1");
@@ -1763,8 +1818,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         AddDecisionQueue("NOPASS", $secondPlayer, "-");
         AddDecisionQueue("MULLIGAN", $secondPlayer, "-", 1);
       }
-      CharacterStartTurnAbility($initiativePlayer);
-      CharacterStartTurnAbility($secondPlayer);
+      CharacterStartActionPhaseAbilities($initiativePlayer);
+      CharacterStartActionPhaseAbilities($secondPlayer);
       MZMoveCard($initiativePlayer, "MYHAND", "MYRESOURCES", may:false, context:"Choose a card to resource", silent:true);
       AddDecisionQueue("AFTERRESOURCE", $initiativePlayer, "HAND", 1);
       MZMoveCard($initiativePlayer, "MYHAND", "MYRESOURCES", may:false, context:"Choose a card to resource", silent:true);

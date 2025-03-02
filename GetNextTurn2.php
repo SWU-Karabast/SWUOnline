@@ -389,19 +389,22 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   //Deduplicate current turn effects
   $friendlyEffects = "";
   $opponentEffects = "";
-  for ($i = 0; $i < count($currentTurnEffects); $i += CurrentTurnPieces()) {
-    $cardID = explode("-", $currentTurnEffects[$i])[0];
-    $cardID = explode(",", $cardID)[0];
-    $cardID = explode("_", $cardID)[0];
-    $isFriendly = ($playerID == $currentTurnEffects[$i + 1] || $playerID == 3 && $otherPlayer != $currentTurnEffects[$i + 1]);
-    $color = ($isFriendly ? "#00BAFF" : "#FB0007"); // Me : Opponent
-    $effect = "<div class='effect-display' style='border:1px solid " . $color . ";'>";
-    $effect .= Card($cardID, "crops", 65, 0, 1);
-    $effect .= "</div>";
-    if ($isFriendly)
-      $friendlyEffects .= $effect;
-    else
-      $opponentEffects .= $effect;
+
+  foreach ([$currentTurnEffects, $nextTurnEffects] as $turnEffects) {
+    for ($i = 0; $i < count($turnEffects); $i += CurrentTurnPieces()) {
+      $cardID = explode("-", $turnEffects[$i])[0];
+      $cardID = explode(",", $cardID)[0];
+      $cardID = explode("_", $cardID)[0];
+      $isFriendly = ($playerID == $turnEffects[$i + 1] || $playerID == 3 && $otherPlayer != $turnEffects[$i + 1]);
+      $color = ($isFriendly ? "#00BAFF" : "#FB0007"); // Me : Opponent
+      $effect = "<div class='effect-display' style='border:1px solid " . $color . ";'>";
+      $effect .= Card($cardID, "crops", 65, 0, 1);
+      $effect .= "</div>";
+      if ($isFriendly)
+        $friendlyEffects .= $effect;
+      else
+        $opponentEffects .= $effect;
+    }
   }
 
   $groundLeft = "53%";
