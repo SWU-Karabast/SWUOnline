@@ -6133,7 +6133,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
-      AddDecisionQueue("ADDLIMITEDNEXTTURNEFFECT", $currentPlayer, "8105698374,HAND", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "8105698374,HAND", 1);
       break;
     case "4334684518"://Tandem Assault
       AddCurrentTurnEffect($cardID . "-1", $currentPlayer);
@@ -6497,7 +6497,7 @@ function AfterPlayedByAbility($cardID) {
       AddDecisionQueue("OP", $currentPlayer, "GETLASTALLYMZ");
       AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
-      AddDecisionQueue("ADDLIMITEDNEXTTURNEFFECT", $currentPlayer, $cardID . "-2,PLAY", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, $cardID . "-2,PLAY", 1);
       break;
     case "8117080217"://Admiral Ozzel
       $ally->Ready();
