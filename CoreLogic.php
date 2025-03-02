@@ -5986,7 +5986,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "0926549684"://Resupply Carrier
-      AddTopDeckAsResource($currentPlayer);
+      if($from != "PLAY" && count(GetDeck($currentPlayer)) > 0) {
+        AddDecisionQueue("YESNO", $currentPlayer, "if you want to add a resource from the top of your deck");
+        AddDecisionQueue("NOPASS", $currentPlayer, "-", 1);
+        AddDecisionQueue("OP", $currentPlayer, "ADDTOPDECKASRESOURCE", 1);
+      }
       break;
     case "8833191722"://Never Tell Me the Odds
       $damageAmount = 0;
