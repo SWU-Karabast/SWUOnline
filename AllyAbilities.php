@@ -2041,17 +2041,14 @@ function SpecificAllyAttackAbilities($attackID)
         $attackerAlly->DealDamage(1, enemyDamage:false, fromUnitEffect:true);
         break;
       case "9981313319"://Twin Laser Turret
-        $dqVars[0] = "";
         $arena = $attackerAlly->CurrentArena();
-        $targetZones = "ALLTHEIRGROUNDUNITSMULTILIMITED";
-        if($arena == "Space") $targetZones = "ALLTHEIRSPACEUNITSMULTILIMITED";
-        AddDecisionQueue("PASSPARAMETER", $mainPlayer, 2, 1);
-        AddDecisionQueue("SETDQVAR", $mainPlayer, 0, 1);
+        $targetZones = "ALLTHEIRGROUNDUNITSMULTILIMITED,2";
+        if($arena == "Space") $targetZones = "ALLTHEIRSPACEUNITSMULTILIMITED,2";
         AddDecisionQueue("FINDINDICES", $mainPlayer, $targetZones);
-        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose up to {0} units to damage", 1);
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose up to 2 units to damage", 1);
         AddDecisionQueue("MULTICHOOSETHEIRUNIT", $mainPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $mainPlayer, "MAPTHEIRINDICES", 1);
-        AddDecisionQueue("MULTIDAMAGE", $mainPlayer, DamageStringBuilder(1, $mainPlayer, 1), 1);
+        AddDecisionQueue("MULTIDAMAGE", $mainPlayer, DamageStringBuilder(1, $mainPlayer, isUnitEffect:1), 1);
       default: break;
     }
   }

@@ -206,7 +206,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           break;
         case "ALLTHEIRUNITSMULTILIMITED":
           $allies = &GetAllies($player == 1 ? 2 : 1);
-          $rv = $dqVars[0] . "-" . GetIndices(count($allies), 0 , AllyPieces());
+          $rv = $subparam . "-" . GetIndices(count($allies), 0 , AllyPieces());
           break;
         case "ALLTHEIRGROUNDUNITSMULTI":
           $allies = &GetAllies($player == 1 ? 2 : 1);
@@ -230,7 +230,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
               $groundAllies .= $i;
             }
           }
-          $rv = $dqVars[0] . "-" . $groundAllies;
+          $rv = $subparam . "-" . $groundAllies;
           break;
         case "ALLTHEIRSPACEUNITSMULTI":
           $allies = &GetAllies($player == 1 ? 2 : 1);
@@ -254,7 +254,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
               $spaceAllies .= $i;
             }
           }
-          $rv = $dqVars[0] . "-" . $spaceAllies;
+          $rv = $subparam . "-" . $spaceAllies;
           break;
         case "GYTYPE": $rv = SearchDiscard($player, $subparam); break;
         case "GYAA": $rv = SearchDiscard($player, "AA"); break;
@@ -1681,6 +1681,14 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       return $rv;
     case "APPENDLASTRESULT":
       return $lastResult . $parameter;
+    case "CLEANEMPTYINDICES":
+      $indices = explode(",", $lastResult);
+      $rv = "";
+      for($i = 0; $i < count($indices); ++$i) {
+        if($rv != "") $rv .= ",";
+        $rv .= $indices[$i];
+      }
+      return $rv;
     case "LASTRESULTPIECE":
       $pieces = explode("-", $lastResult);
       return $pieces[$parameter];
@@ -1733,6 +1741,9 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       return $lastResult;
     case "SETDQVAR":
       $dqVars[$parameter] = $lastResult;
+      return $lastResult;
+    case "CLEARDQVAR":
+      $dqVars[$parameter] = "";
       return $lastResult;
     case "INCDQVAR":
       $dqVars[$parameter] = intval($dqVars[$parameter]) + intval($lastResult);

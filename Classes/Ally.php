@@ -113,7 +113,7 @@ class Ally {
           AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:arena=Space&THEIRALLY:arena=Space");
           AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal 1 damage to");
           AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
-          AddDecisionQueue("MZOP", $player, DamageStringBuilder(1, $player, 1));
+          AddDecisionQueue("MZOP", $player, DamageStringBuilder(1, $player, isUnitEffect:1));
         }
         break;
       default: break;
@@ -595,7 +595,6 @@ class Ally {
           break;
         case "1935873883"://Razor Crest
           $player = $this->Controller();
-          $dqVars[0] = "";
           AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:maxCost=2");
           AddDecisionQueue("MZFILTER", $player, "leader=1", 1);
           AddDecisionQueue("SETDQVAR", $player, 0, 1);
@@ -603,6 +602,7 @@ class Ally {
           AddDecisionQueue("MZFILTER", $player, "leader=1", 1);
           AddDecisionQueue("MZFILTER", $player, "status=0", 1);
           AddDecisionQueue("PREPENDLASTRESULT", $player, "{0},", 1);
+          AddDecisionQueue("CLEANEMPTYINDICES", $player, 1);
           AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to bounce", 1);
           AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
           AddDecisionQueue("MZOP", $player, "BOUNCE", 1);
