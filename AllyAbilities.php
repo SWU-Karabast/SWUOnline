@@ -2105,6 +2105,9 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "ADDEXPERIENCE", 1);
       break;
+    case "8240629990"://Avenger
+      MZChooseAndDestroy($defPlayer, "MYALLY", filter: "leader=1", context: "Choose a unit to destroy");
+      break;
     case "5449704164"://2-1B Surgical Droid
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
       AddDecisionQueue("MZFILTER", $mainPlayer, "index=MYALLY-" . $attackerAlly->Index());
@@ -2875,16 +2878,18 @@ function SpecificAllyAttackAbilities($attackID)
   for ($i =  0; $i < count($currentTurnEffects); $i += CurrentTurnEffectPieces()) {
     switch ($currentTurnEffects[$i]) {
       case "2995807621"://Trench Run
-        $cardIDs = Mill($defPlayer, 2);
-        $cardIDs = explode(",", $cardIDs);
-        if (count($cardIDs) > 0) {
-          $damage = CardCost($cardIDs[0]);
-          if (count($cardIDs) > 1) {
-            $damage = abs($damage - CardCost($cardIDs[1]));
+        if(!$attackerAlly->LostAbilities()) {
+          $cardIDs = Mill($defPlayer, 2);
+          $cardIDs = explode(",", $cardIDs);
+          if (count($cardIDs) > 0) {
+            $damage = CardCost($cardIDs[0]);
+            if (count($cardIDs) > 1) {
+              $damage = abs($damage - CardCost($cardIDs[1]));
+            }
           }
+          AddDecisionQueue("PASSPARAMETER", $mainPlayer, $attackerAlly->MZIndex());
+          AddDecisionQueue("MZOP", $mainPlayer, DamageStringBuilder($damage, $mainPlayer, isUnitEffect:true, isPreventable:false));
         }
-        AddDecisionQueue("PASSPARAMETER", $mainPlayer, $attackerAlly->MZIndex());
-        AddDecisionQueue("MZOP", $mainPlayer, DamageStringBuilder($damage, $mainPlayer, isUnitEffect:true, isPreventable:false));
         break;
       default: break;
     }
