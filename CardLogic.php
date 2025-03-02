@@ -1238,14 +1238,14 @@ function AsajjVentressIWorkAlone($player) {
   AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY", 1);
   AddDecisionQueue("SETDQCONTEXT", $player, "Choose a friendly unit to damage", 1);
   AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-  AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1", 1);
+  AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1,$player", 1);
   AddDecisionQueue("SETDQVAR", $player, "1", 1);
   AddDecisionQueue("MZOP", $player, "GETARENA", 1);
   AddDecisionQueue("SETDQVAR", $player, "2", 1);
   AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:arena={2}", 1);
   AddDecisionQueue("SETDQCONTEXT", $player, "Choose an opposing unit to damage", 1);
   AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
-  AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1", 1);
+  AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1,$player", 1);
 }
 
 function KazudaXionoBestPilotInTheGalaxy($player) {
@@ -1314,9 +1314,9 @@ function ObiWansAethersprite($player, $index) {
   AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:arena=Space&THEIRALLY:arena=Space", 1);
   AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal 2 damage to (or pass)", 1);
   AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-  AddDecisionQueue("MZOP", $player, "DEALDAMAGE,2", 1);
+  AddDecisionQueue("MZOP", $player, "DEALDAMAGE,2,$player", 1);
   AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $index, 1);
-  AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1", 1);
+  AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1,$player", 1);
 }
 
 function UIDIsAffectedByMalevolence($uniqueID) {
