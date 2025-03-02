@@ -958,6 +958,9 @@ function StartRegroupPhase() {
   ResetClassState(2);
 
   // Trigger abilities
+  //5.5.1 A) Start of the regroup phase.
+  //Any lasting effects that expire when the regroup phase starts expire now.
+  //Any abilities or effects that trigger at the start of the regroup phase trigger now
   CharacterStartRegroupPhaseAbilities(1);
   CharacterStartRegroupPhaseAbilities(2);
   AllyStartRegroupPhaseAbilities(1);
@@ -1004,6 +1007,10 @@ function EndRegroupPhase() {
   AllyEndRegroupPhaseAbilities(2);
   CurrentEffectEndRegroupPhaseAbilities();
 
+  global $currentTurnEffects, $nextTurnEffects;
+  // Reset turn effects
+  $currentTurnEffects = $nextTurnEffects;
+  $nextTurnEffects = [];
   // Process decision queue
   ProcessDecisionQueue();
 
