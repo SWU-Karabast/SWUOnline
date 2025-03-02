@@ -3,8 +3,9 @@ Games
 HostFiles
 .DS_Store
 .env
-
+.vscode/settings.json
 .idea/
+
 composer.phar
 composer.lock
 vendor/
