@@ -834,7 +834,7 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
         AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY", 1);
         AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a unit to deal 1 damage to", 1);
         AddDecisionQueue("CHOOSEMULTIZONE", $otherPlayer, "<-", 1);
-        AddDecisionQueue("MZOP", $otherPlayer, "DEALDAMAGE,1", 1);
+        AddDecisionQueue("MZOP", $otherPlayer, DamageStringBuilder(1, $player), 1);
       }
       break;
     case "9005139831"://Mandalorian Leader Ability
@@ -851,7 +851,7 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:minCost=" . $cost . ";maxCost=" . $cost);
       AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal 1 damage", 1);
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-      AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1", 1);
+      AddDecisionQueue("MZOP", $player, DamageStringBuilder(1, $player), 1);
       AddDecisionQueue("EXHAUSTCHARACTER", $player, FindCharacterIndex($player, "2358113881"), 1);
       break;
     case "3045538805"://Hondo Ohnaka Leader
