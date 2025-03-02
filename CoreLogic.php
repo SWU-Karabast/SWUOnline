@@ -403,7 +403,7 @@ function DamageTrigger($player, $damage, $type, $source="NA", $canPass=false)
 
 function DealDamageAsync($player, $damage, $type="DAMAGE", $source="NA")
 {
-  global $CS_DamagePrevention, $combatChain;
+  global $CS_DamagePrevention, $combatChain, $currentPlayer;
   global $CS_ArcaneDamagePrevention, $dqVars, $dqState;
 
   $classState = &GetPlayerClassState($player);
@@ -455,6 +455,7 @@ function DealDamageAsync($player, $damage, $type="DAMAGE", $source="NA")
   {
     //AddDamagePreventionSelection($player, $damage, $preventable);//FAB
     AddDamagePreventionSelection($player, $damage, false);
+    CheckBobaFettJTL($player, $currentPlayer != $player, $type == "COMBAT");
   }
   return $damage;
 }
