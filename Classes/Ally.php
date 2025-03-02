@@ -105,6 +105,19 @@ class Ally {
     }
     $this->allies[$this->index+14] = 1;//Track that the ally was healed this round
     AddEvent("RESTORE", $this->UniqueID() . "!" . $healed);
+    //ally healed side effects
+    switch($this->CardID()) {
+      case "8352777268"://Silver Angel
+        if($healed > 0) {
+          $player = $this->Controller();
+          AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:arena=Space&THEIRALLY:arena=Space");
+          AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal 1 damage to");
+          AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
+          AddDecisionQueue("MZOP", $player, DamageStringBuilder(1, $player, 1));
+        }
+        break;
+      default: break;
+    }
     return $healed;
   }
 
