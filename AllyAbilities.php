@@ -1828,7 +1828,7 @@ function AllyPlayCardAbility($player, $cardID, $uniqueID, $numUses, $playedCardI
           AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY", 1);
           AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a unit to deal 2 damage to", 1);
           AddDecisionQueue("CHOOSEMULTIZONE", $otherPlayer, "<-", 1);
-          AddDecisionQueue("MZOP", $otherPlayer, DamageStringBuilder(1, $player, isUnitEffect:1), 1);
+          AddDecisionQueue("MZOP", $otherPlayer, DamageStringBuilder(2, $player, isUnitEffect:1), 1);
 
           if ($ally->Exists()) {
             AddDecisionQueue("PASSPARAMETER", $player, $ally->MZIndex(), 1);
