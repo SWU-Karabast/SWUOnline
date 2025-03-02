@@ -2934,7 +2934,6 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "9097316363"://Emperor Palpatine (Master of the Dark Side)
       if($from != "PLAY") {
         AddDecisionQueue("FINDINDICES", $currentPlayer, "ALLTHEIRUNITSMULTI");
-        AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, SearchCount(SearchAllies($otherPlayer)) . "-", 1);
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose units to damage", 1);
         AddDecisionQueue("MULTICHOOSETHEIRUNIT", $currentPlayer, "<-", 1);
         AddDecisionQueue("MULTIDISTRIBUTEDAMAGE", $currentPlayer, "6,1", 1);
@@ -6085,9 +6084,8 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "3722493191"://IG-2000
        if($from != "PLAY") {
-        AddDecisionQueue("FINDINDICES", $currentPlayer, "ALLTHEIRUNITSMULTI");
-        AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "3-", 1);
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose up to 3 units to damage", 1);
+        AddDecisionQueue("FINDINDICES", $currentPlayer, "ALLTHEIRUNITSMULTILIMITED,3", 1);
         AddDecisionQueue("MULTICHOOSETHEIRUNIT", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "MAPTHEIRINDICES", 1);
         AddDecisionQueue("MULTIDAMAGE", $currentPlayer, DamageStringBuilder(1, $currentPlayer, 1), 1);
@@ -6413,6 +6411,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
           AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,4,$currentPlayer", 1);
         }
         break;
+    case "6196035152"://Nebula Ignition
+      DestroyAllAllies(spareFilter:"upgraded");
+      break;
     //PlayAbility End
     default: break;
   }
@@ -6553,8 +6554,9 @@ function ExhaustAllAllies($arena, $player)
   }
 }
 
-function DestroyAllAllies($player="")
+function DestroyAllAllies($player="", $spareFilter="")
 {
+  $spareUpgraded = $spareFilter == "upgraded";
   //To avoid problems to do with allies entering play in the middle of things(i.e. captives), we first note the uniqueID of every ally in play and then destroy only those noted.
   global $currentPlayer;
   //Get all uniqueIDs of allies that are on board right now.
@@ -6579,6 +6581,7 @@ function DestroyAllAllies($player="")
 
   foreach ($currentPlayerAlliesUniqueIDs as $UID) {
     $ally = new Ally($UID, $currentPlayer);
+    if($spareUpgraded && $ally->IsUpgraded()) continue;
     $triggers = GetAllyWhenDestroyTheirsEffects($player, $otherPlayer, $ally->UniqueID(), $ally->IsUnique(), $ally->IsUpgraded(), $ally->GetUpgrades(withMetadata:true));
     if(count($triggers) > 0) {
       $cacheTriggers[] = $triggers;
@@ -6587,10 +6590,12 @@ function DestroyAllAllies($player="")
 
   foreach ($otherPlayerAlliesUniqueIDs as $UID) {
     $ally = new Ally($UID, $otherPlayer);
+    if($spareUpgraded && $ally->IsUpgraded()) continue;
     $ally->Destroy();
   }
   foreach ($currentPlayerAlliesUniqueIDs as $UID) {
     $ally = new Ally($UID, $currentPlayer);
+    if($spareUpgraded && $ally->IsUpgraded()) continue;
     $ally->Destroy();
   }
 

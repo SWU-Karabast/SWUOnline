@@ -188,21 +188,25 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           break;
         case "UNITSANDBASE":
           $allies = &GetAllies($player);
-          $rv = "0;" . count($allies) . "-" . GetIndices(count($allies), 0 , AllyPieces());
+          $rv = "0;" . (count($allies)/AllyPieces()) . "-" . GetIndices(count($allies), 0 , AllyPieces());
           break;
         case "THEIRUNITSANDBASE":
           $allies = &GetAllies($player == 1 ? 2 : 1);
-          $rv = "0;" . count($allies) . "-" . GetIndices(count($allies), 0 , AllyPieces());
+          $rv = "0;" . (count($allies)/AllyPieces()) . "-" . GetIndices(count($allies), 0 , AllyPieces());
           break;
         case "ALLOURUNITSMULTI":
           $theirAllies = &GetAllies($player == 1 ? 2 : 1);
           $myAllies = &GetAllies($player);
-          $rv = count($theirAllies) . "-" . GetIndices(count($theirAllies), 0 , AllyPieces())
-            . "&" . count($myAllies) . "-" . GetIndices(count($myAllies), 0 , AllyPieces());
+          $rv = (count($theirAllies)/AllyPieces()) . "-" . GetIndices(count($theirAllies), 0 , AllyPieces())
+            . "&" . (count($myAllies)/AllyPieces()) . "-" . GetIndices(count($myAllies), 0 , AllyPieces());
           break;
         case "ALLTHEIRUNITSMULTI":
           $allies = &GetAllies($player == 1 ? 2 : 1);
-          $rv = GetIndices(count($allies), 0 , AllyPieces());
+          $rv = (count($allies)/AllyPieces()) . "-" . GetIndices(count($allies), 0 , AllyPieces());
+          break;
+        case "ALLTHEIRUNITSMULTILIMITED":
+          $allies = &GetAllies($player == 1 ? 2 : 1);
+          $rv = $subparam . "-" . GetIndices(count($allies), 0 , AllyPieces());
           break;
         case "ALLTHEIRGROUNDUNITSMULTI":
           $allies = &GetAllies($player == 1 ? 2 : 1);
@@ -216,6 +220,41 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             }
           }
           $rv = $groundCount . "-" . $groundAllies;
+          break;
+        case "ALLTHEIRGROUNDUNITSMULTILIMITED":
+          $allies = &GetAllies($player == 1 ? 2 : 1);
+          $groundAllies = "";
+          for($i = 0; $i < count($allies); $i+=AllyPieces()) {
+            if(ArenaContains($allies[$i], "Ground", $player)) {
+              if($groundAllies != "") $groundAllies .= ",";
+              $groundAllies .= $i;
+            }
+          }
+          $rv = $subparam . "-" . $groundAllies;
+          break;
+        case "ALLTHEIRSPACEUNITSMULTI":
+          $allies = &GetAllies($player == 1 ? 2 : 1);
+          $spaceAllies = "";
+          $spaceCount = 0;
+          for($i = 0; $i < count($allies); $i+=AllyPieces()) {
+            if(ArenaContains($allies[$i], "Space", $player)) {
+              if($spaceAllies != "") $spaceAllies .= ",";
+              $spaceAllies .= $i;
+              $spaceCount++;
+            }
+          }
+          $rv = $spaceCount . "-" . $spaceAllies;
+          break;
+        case "ALLTHEIRSPACEUNITSMULTILIMITED":
+          $allies = &GetAllies($player == 1 ? 2 : 1);
+          $spaceAllies = "";
+          for($i = 0; $i < count($allies); $i+=AllyPieces()) {
+            if(ArenaContains($allies[$i], "Space", $player)) {
+              if($spaceAllies != "") $spaceAllies .= ",";
+              $spaceAllies .= $i;
+            }
+          }
+          $rv = $subparam . "-" . $spaceAllies;
           break;
         case "GYTYPE": $rv = SearchDiscard($player, $subparam); break;
         case "GYAA": $rv = SearchDiscard($player, "AA"); break;
@@ -1642,6 +1681,14 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       return $rv;
     case "APPENDLASTRESULT":
       return $lastResult . $parameter;
+    case "CLEANEMPTYINDICES":
+      $indices = explode(",", $lastResult);
+      $rv = "";
+      for($i = 0; $i < count($indices); ++$i) {
+        if($rv != "") $rv .= ",";
+        $rv .= $indices[$i];
+      }
+      return $rv;
     case "LASTRESULTPIECE":
       $pieces = explode("-", $lastResult);
       return $pieces[$parameter];
@@ -1694,6 +1741,9 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       return $lastResult;
     case "SETDQVAR":
       $dqVars[$parameter] = $lastResult;
+      return $lastResult;
+    case "CLEARDQVAR":
+      $dqVars[$parameter] = "";
       return $lastResult;
     case "INCDQVAR":
       $dqVars[$parameter] = intval($dqVars[$parameter]) + intval($lastResult);
