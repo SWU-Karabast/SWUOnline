@@ -2940,7 +2940,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "1208707254"://Rallying Cry
-      AddCurrentTurnEffect($cardID, $currentPlayer);
+      $allies = &GetAllies($currentPlayer);
+      for ($i = 0; $i < count($allies); $i += AllyPieces()) {
+        AddCurrentTurnEffect($cardID, $currentPlayer, "PLAY", $allies[$i+5]);
+      }
       break;
     case "1446471743"://Force Choke
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
