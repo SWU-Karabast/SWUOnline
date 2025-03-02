@@ -778,6 +778,7 @@ class Ally {
       switch ($effectCardID) {
         case "2639435822": //Force Lightning
         case "4531112134": //Kazuda Xiono leader side
+        case "c1700fc85b": //Kazuda Xiono pilot Leader Unit
           return true;
         default: break;
       }

@@ -1443,7 +1443,6 @@ function AllyStartRegroupPhaseAbilities($player) {
 
 function AllyEndRegroupPhaseAbilities($player) {
   // To function correctly, use uniqueID instead of MZIndex
-
   $allies = &GetAllies($player);
   for($i = count($allies) - AllyPieces(); $i >= 0; $i -= AllyPieces()) {
     $ally = new Ally("MYALLY-" . $i, $player);
@@ -1931,7 +1930,7 @@ function SpecificAllyAttackAbilities($attackID)
   global $mainPlayer, $defPlayer, $combatChainState, $CCS_WeaponIndex, $initiativePlayer, $currentTurnEffects;
   $attackerIndex = $combatChainState[$CCS_WeaponIndex];
   $attackerAlly = new Ally(AttackerMZID($mainPlayer), $mainPlayer);
-
+  if($attackerAlly->LostAbilities()) return;
   // Upgrade Abilities
   $upgrades = $attackerAlly->GetUpgrades();
   for($i=0; $i<count($upgrades); ++$i) {
@@ -2049,12 +2048,15 @@ function SpecificAllyAttackAbilities($attackID)
         AddDecisionQueue("MULTICHOOSETHEIRUNIT", $mainPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $mainPlayer, "MAPTHEIRINDICES", 1);
         AddDecisionQueue("MULTIDAMAGE", $mainPlayer, DamageStringBuilder(1, $mainPlayer, isUnitEffect:1), 1);
+        break;
+      case "c1700fc85b"://Kazuda pilot Leader unit
+        KazudaXionoBestPilotInTheGalaxy($mainPlayer);
+        break;
       default: break;
     }
   }
 
   // Ally Abilities
-  if($attackerAlly->LostAbilities()) return;
   $attackerCardID = $attackerAlly->CardID();
   switch($attackerCardID) {
     case "0256267292"://Benthic 'Two Tubes'
@@ -2251,7 +2253,7 @@ function SpecificAllyAttackAbilities($attackID)
       break;
     case "2522489681"://Zorii Bliss
       Draw($mainPlayer);
-      AddNextTurnEffect("2522489681", $mainPlayer);
+      AddCurrentTurnEffect("2522489681", $mainPlayer, from:"PLAY");
       break;
     case "4534554684"://Freetown Backup
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
@@ -2863,8 +2865,11 @@ function SpecificAllyAttackAbilities($attackID)
       CaptainPhasmaUnit($mainPlayer, $attackerAlly->Index());
       break;
     case "2922063712"://Sith Trooper
-        AddCurrentTurnEffect("2922063712", $mainPlayer, 'PLAY', $attackerAlly->UniqueID());
-        break;
+      AddCurrentTurnEffect("2922063712", $mainPlayer, 'PLAY', $attackerAlly->UniqueID());
+      break;
+    case "c1700fc85b"://Kazuda pilot Leader unit
+      KazudaXionoBestPilotInTheGalaxy($mainPlayer);
+      break;
   }
 
   // Current Effect Abilities
