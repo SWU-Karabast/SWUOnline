@@ -958,6 +958,9 @@ function StartRegroupPhase() {
   ResetClassState(2);
 
   // Trigger abilities
+  //5.5.1 A) Start of the regroup phase.
+  //Any lasting effects that expire when the regroup phase starts expire now.
+  //Any abilities or effects that trigger at the start of the regroup phase trigger now
   CharacterStartRegroupPhaseAbilities(1);
   CharacterStartRegroupPhaseAbilities(2);
   AllyStartRegroupPhaseAbilities(1);
@@ -1007,6 +1010,10 @@ function EndRegroupPhase() {
   // Process decision queue
   ProcessDecisionQueue();
 
+  // End turn procedure
+  AddDecisionQueue("ENDTURN", $mainPlayer, "-");
+  ProcessDecisionQueue();
+
   // Start action phase
   AddLayer("STARTACTIONPHASE", $mainPlayer, "-");
   ProcessDecisionQueue();
@@ -1045,10 +1052,6 @@ function EndActionPhase() {
   AllyEndActionPhaseAbilities(1);
   AllyEndActionPhaseAbilities(2);
   CurrentEffectEndActionPhaseAbilities();
-
-  // End turn procedure
-  AddDecisionQueue("ENDTURN", $mainPlayer, "-");
-  ProcessDecisionQueue();
 
   // Start regroup phase
   AddLayer("STARTREGROUPPHASE", $mainPlayer, "-");
@@ -1243,6 +1246,15 @@ function AsajjVentressIWorkAlone($player) {
   AddDecisionQueue("SETDQCONTEXT", $player, "Choose an opposing unit to damage", 1);
   AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
   AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1", 1);
+}
+
+function KazudaXionoBestPilotInTheGalaxy($player) {
+  AddDecisionQueue("SETDQCONTEXT", $player, "Choose units to lost abilities");
+  AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
+  AddDecisionQueue("OP", $player, "MZTONORMALINDICES", 1);
+  AddDecisionQueue("PREPENDLASTRESULT", $player, SearchCount(SearchAllies($player)) . "-", 1);
+  AddDecisionQueue("MULTICHOOSEUNIT", $player, "<-", 1);
+  AddDecisionQueue("SPECIFICCARD", $player, "KAZUDA_JTL", 1);
 }
 
 function ShuttleST149($player) {

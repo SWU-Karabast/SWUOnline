@@ -3867,7 +3867,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL", 1);
-      AddDecisionQueue("ADDLIMITEDNEXTTURNEFFECT", $currentPlayer, "1626462639", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "1626462639,PLAY", 1);
       break;
     case "2855740390"://Lieutenant Childsen
       if($from != "PLAY") {
@@ -4753,7 +4753,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "1910812527"://Final Showdown
-      AddNextTurnEffect("1910812527", $currentPlayer);
+      AddCurrentTurnEffect("1910812527", $currentPlayer);
       $myAllies = &GetAllies($currentPlayer);
       for($i=0; $i<count($myAllies); $i+=AllyPieces())
       {
@@ -4967,7 +4967,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $ally = new Ally($target, $currentPlayer);
       if ($ally->Exists()) {
         $upgradeUniqueID = $ally->Attach("8752877738");//Shield Token
-        AddNextTurnEffect("6117103324", $currentPlayer, uniqueID:$upgradeUniqueID);
+        AddCurrentTurnEffect("6117103324", $currentPlayer, uniqueID:$upgradeUniqueID);
       }
       break;
     case "1386874723"://Omega (Part of the Squad)
@@ -5673,10 +5673,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("MZOP", $otherPlayer, "TAKECONTROL", 1);
-      AddDecisionQueue("ADDLIMITEDNEXTTURNEFFECT", $otherPlayer, "1302133998", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $otherPlayer, "1302133998,PLAY", 1);
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL", 1);
-      AddDecisionQueue("ADDLIMITEDNEXTTURNEFFECT", $currentPlayer, "1302133998", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "1302133998,PLAY", 1);
       break;
     case "2847868671"://Yoda Leader
       global $CS_NumLeftPlay;
@@ -5938,7 +5938,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL", 1);
-      AddDecisionQueue("ADDLIMITEDNEXTTURNEFFECT", $currentPlayer, "7732981122", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "7732981122,PLAY", 1);
       break;
     case "8719468890"://Sword and Shield Maneuver
       AddCurrentTurnEffect("8719468890", $currentPlayer, "PLAY");
@@ -6086,7 +6086,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
       break;
     case "3722493191"://IG-2000
-       if($from != "PLAY") {
+       if($from != "PLAY" && SearchCount(SearchAllies($otherPlayer)) > 0) {
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose up to 3 units to damage", 1);
         AddDecisionQueue("FINDINDICES", $currentPlayer, "ALLTHEIRUNITSMULTILIMITED,3", 1);
         AddDecisionQueue("MULTICHOOSETHEIRUNIT", $currentPlayer, "<-", 1);
@@ -6133,7 +6133,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
-      AddDecisionQueue("ADDLIMITEDNEXTTURNEFFECT", $currentPlayer, "8105698374,HAND", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "8105698374,HAND", 1);
       break;
     case "4334684518"://Tandem Assault
       AddCurrentTurnEffect($cardID . "-1", $currentPlayer);
@@ -6222,6 +6222,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
         AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "4531112134,PLAY", 1);
+        AddDecisionQueue("SWAPTURN", $currentPlayer, "-");
       }
       break;
     case "8174214418"://Turbolaser Salvo
@@ -6497,7 +6498,7 @@ function AfterPlayedByAbility($cardID) {
       AddDecisionQueue("OP", $currentPlayer, "GETLASTALLYMZ");
       AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
-      AddDecisionQueue("ADDLIMITEDNEXTTURNEFFECT", $currentPlayer, $cardID . "-2,PLAY", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, $cardID . "-2,PLAY", 1);
       break;
     case "8117080217"://Admiral Ozzel
       $ally->Ready();
