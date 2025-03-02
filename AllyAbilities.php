@@ -462,7 +462,7 @@ function DestroyAlly($player, $index, $skipDestroy = false, $fromCombat = false,
     else if($isSuperlaserTech) ; //SLT is auto-added to resources
     else {
       $graveyardCardID = $ally->IsCloned() ? "0345124206" : $cardID; //Clone - Replace the cloned card with the original one in the graveyard
-      if($cardID == "6272475624") {//Stolen AT Hauler
+      if($cardID == "6272475624" && !$ally->LostAbilities()) {//Stolen AT Hauler
         $discardPileModifier = $owner == $controller ? "TTOPFREE" : "TTFREE";
       }
       AddGraveyard($graveyardCardID, $owner, "PLAY", $discardPileModifier);

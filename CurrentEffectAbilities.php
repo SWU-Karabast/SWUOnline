@@ -9,11 +9,14 @@ function EffectHitEffect($cardID)
   switch($cardID) {
     case "6954704048"://Heroic Sacrifice
       $ally = new Ally(AttackerMZID($mainPlayer), $mainPlayer);
-      WriteLog("Heroic Sacrifice defeated " . CardLink($ally->CardID(), $ally->CardID()));
-      $ally->Destroy();
+      if(!$ally->LostAbilities()) {
+        WriteLog("Heroic Sacrifice defeated " . CardLink($ally->CardID(), $ally->CardID()));
+        $ally->Destroy();
+      }
       break;
     case "8734471238"://Stay On Target
-      if (GetAttackTarget() == "THEIRCHAR-0") {
+      $ally = new Ally(AttackerMZID($mainPlayer), $mainPlayer);
+      if (GetAttackTarget() == "THEIRCHAR-0" && !$ally->LostAbilities()) {
         Draw($mainPlayer);
       }
       break;
@@ -725,7 +728,7 @@ function CurrentEffectStartRegroupPhaseAbilities() {
         break;
       case "6117103324"://Jetpack
         DefeatUpgradeForUniqueID($uniqueID, $player);
-        break;        
+        break;
       case "2522489681"://Zorii Bliss
         PummelHit($player);
         break;
