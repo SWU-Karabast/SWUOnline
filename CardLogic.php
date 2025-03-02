@@ -1007,11 +1007,11 @@ function EndRegroupPhase() {
   AllyEndRegroupPhaseAbilities(2);
   CurrentEffectEndRegroupPhaseAbilities();
 
-  global $currentTurnEffects, $nextTurnEffects;
-  // Reset turn effects
-  $currentTurnEffects = $nextTurnEffects;
-  $nextTurnEffects = [];
   // Process decision queue
+  ProcessDecisionQueue();
+
+  // End turn procedure
+  AddDecisionQueue("ENDTURN", $mainPlayer, "-");
   ProcessDecisionQueue();
 
   // Start action phase
@@ -1052,10 +1052,6 @@ function EndActionPhase() {
   AllyEndActionPhaseAbilities(1);
   AllyEndActionPhaseAbilities(2);
   CurrentEffectEndActionPhaseAbilities();
-
-  // End turn procedure
-  AddDecisionQueue("ENDTURN", $mainPlayer, "-");
-  ProcessDecisionQueue();
 
   // Start regroup phase
   AddLayer("STARTREGROUPPHASE", $mainPlayer, "-");

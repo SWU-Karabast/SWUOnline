@@ -1560,6 +1560,10 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       // Log end turn stats
       LogEndTurnStats($mainPlayer);
 
+      // Reset turn effects
+      $currentTurnEffects = $nextTurnEffects;
+      $nextTurnEffects = [];
+
       // Unset turn modifiers
       UnsetTurnModifiers();
 
