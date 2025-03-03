@@ -802,7 +802,7 @@ function HasShielded($cardID, $player)
     case "6300552434"://Gold Leader
     case "7700932371"://Boba Fett
     case "9325037410"://Iden Versio
-    case "9999999999"://Techno Union Transport
+    case "7385763727"://Techno Union Transport
     case "9999999999"://Outer Rim Outlaws
       return true;
     default: return false;
