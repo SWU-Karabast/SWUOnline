@@ -2528,7 +2528,7 @@ function PilotingCost($cardID, $player = "") {
     case "8757741946": $minCost = 2; break;//Poe Dameron (One Hell of a Pilot)
     case "9999999999": $minCost = 2; break;//Astromech Pilot
     case "9999999999": $minCost = 2; break;//Hopeful Volunteer
-    case "9999999999": $minCost = 1; break;//Sullustan Spacer
+    case "4164902248": $minCost = 1; break;//Sullustan Spacer
     default: break;
   }
   return $minCost;
