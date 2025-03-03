@@ -6449,7 +6449,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "WRITECHOICE", 1);
         break;
-    case "9999999999"://Dedicated Wingmen
+    case "8382691367"://Dedicated Wingmen
         CreateXWing($currentPlayer);
         CreateXWing($currentPlayer);
         break;
