@@ -301,7 +301,7 @@ function RaidAmount($cardID, $player, $index, $reportMode = false)
     case "1034181657": $amount += SearchCount(SearchAllies($player, tokenOnly: true)) > 0 ? 1 : 0;//First Order TIE Fighter
     case "9999999999": $amount += 1; break;//MC30 Assault Frigate 
     case "9999999999": $amount += SearchCount(SearchAllies($player, trait:"Fighter")) > 1 ? 2 : 0; break;//Fanking Fang Fighter
-    case "9999999999": $amount += 1;//Corporate Light Cruiser
+    case "9999999999": $amount += 1; break;//Corporate Light Cruiser
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
@@ -647,6 +647,7 @@ function HasOverwhelm($cardID, $player, $index)
     case "3693364726"://Aurra Sing
     case "3476041913"://Low Altitude Gunship
     case "8655450523"://Count Dooku (Fallen Jedi)
+    case "9999999999"://MC30 Assault Frigate
     case "9017877021"://Clone Commander Cody
       return true;
     case "4484318969"://Moff Gideon Leader Unit
@@ -656,7 +657,7 @@ function HasOverwhelm($cardID, $player, $index)
       return !LeaderAbilitiesIgnored();
     case "8139901441"://Bo-Katan Kryze
       return SearchCount(SearchAllies($player, trait:"Mandalorian")) > 1;
-    case "9999999999"://MC30 Assault Frigate
+
     default: return false;
   }
 }
