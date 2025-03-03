@@ -82,8 +82,8 @@ $isMobile = IsMobile();
   <meta http-equiv="content-type" content="text/html; charset=utf-8" >
   <title>Game Lobby</title>
   <link id="icon" rel="shortcut icon" type="image/png" href="./Images/<?= $icon ?>"/>
-  <link rel="stylesheet" href="./css/chat.css">
-  <link rel="stylesheet" href="./css/karabast011625.css">
+  <link rel="stylesheet" href="./css/chat2.css">
+  <link rel="stylesheet" href="./css/petranaki250301.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
@@ -105,7 +105,7 @@ $isMobile = IsMobile();
     <div class="lobby-wrapper">
       <div class="game-lobby">
         <div id='mainPanel' style='text-align:center;'>
-          <div class='game-set-up container bg-blue'>
+          <div class='game-set-up container bg-yellow'>
             <h2>Set Up</h2>
             <div id="setup-content"></div>
             <div id='submitForm' style='width:100%; text-align: center; display: none;'>
@@ -120,7 +120,7 @@ $isMobile = IsMobile();
             </div>
           </div>
         </div>
-        <div class='chat-log container bg-black'>
+        <div class='chat-log container bg-yellow'>
           <h2>Chat</h2>
           <div id='gamelog' class="gamelog"></div>
           <div id='chatbox' class="chatbox">
@@ -134,7 +134,7 @@ $isMobile = IsMobile();
         </div>
       </div>
 
-      <div class="player-info container bg-black">
+      <div class="player-info container bg-yellow">
 
         <h2>Players</h2>
         <div id="my-info">
@@ -175,7 +175,7 @@ $isMobile = IsMobile();
         </div>
       </div>
 
-      <div class="deck-info container bg-black">
+      <div class="deck-info container bg-yellow">
         <div id="deckTab" class="deck-header">
           <?php if (isset($deck)): ?>
             <h2 class='deck-title'>Your Deck</h2>

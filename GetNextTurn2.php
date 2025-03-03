@@ -113,13 +113,13 @@ while ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     } else {
       if ($gameState == 5 && $timeDiff > $DisconnectFirstWarningMS && $otherPlayerDisconnectStatus == 0 && ($oppStatus == "0")) {
         $warningSeconds = ($DisconnectTimeoutMS - $DisconnectFirstWarningMS) / 1000;
-        WriteLog(KarabotSpan() . "Player $otherP, are you still there? Your opponent will be allowed to claim victory in $warningSeconds seconds if no activity is detected.");
+        WriteLog(ArenabotSpan() . "Player $otherP, are you still there? Your opponent will be allowed to claim victory in $warningSeconds seconds if no activity is detected.");
         IncrementCachePiece($gameName, $otherP + 14);
         GamestateUpdated($gameName);
       }
       if ($gameState == 5 && $timeDiff > $DisconnectFinalWarningMS && $otherPlayerDisconnectStatus == 1 && ($oppStatus == "0")) {
         $finalWarningSeconds = ($DisconnectTimeoutMS - $DisconnectFinalWarningMS) / 1000;
-        WriteLog(KarabotSpan() . "$finalWarningSeconds seconds left, Player $otherP...");
+        WriteLog(ArenabotSpan() . "$finalWarningSeconds seconds left, Player $otherP...");
         IncrementCachePiece($gameName, $otherP + 14);
         GamestateUpdated($gameName);
       }
@@ -142,7 +142,7 @@ while ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       if ($gameState == 5 && $lastCurrentPlayer == $playerID && ($currentTime - $lastActionTime) > $InputWarningMS && $lastActionWarning === 0 && $finalWarning == 0) {
         $inputWarningSeconds = $InputWarningMS / 1000;
         $inputWarningSecondsLeft = ($InputTimeoutMS - $InputWarningMS) / 1000;
-        WriteLog(KarabotSpan() . "No input in over $inputWarningSeconds seconds; Player $playerID has $inputWarningSecondsLeft more seconds to take an action or the turn will be passed");
+        WriteLog(ArenabotSpan() . "No input in over $inputWarningSeconds seconds; Player $playerID has $inputWarningSecondsLeft more seconds to take an action or the turn will be passed");
         SetCachePiece($gameName, 18, $playerID);
         GamestateUpdated($gameName);
       }
@@ -288,10 +288,14 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   //Choose Cardback
   $MyCardBack = GetCardBack($playerID);
   $TheirCardBack = GetCardBack($playerID == 1 ? 2 : 1);
+  $gameBackground = GetBackground($playerID);
+  [$gameBgSrc, $noDim] = GetGameBgSrc(BackgroundCode($gameBackground));
   $otherPlayer = ($playerID == 1 ? 2 : 1);
 
   //Display background
-  echo ("<div class='container game-bg'><img src='./Images/gamebg.jpg'/></div>");
+  echo ("<div class='container game-bg'><img src='./Images/$gameBgSrc'/></div>");
+  if(!$noDim) echo ("<div class='game-bg-dimmer'>");
+  echo ("</div>");
 
   //Base Damage Numbers
   echo ("<div class='base-dmg-wrapper'><div class='base-dmg-position'><span class='base-my-dmg'>$myHealth</span>");
@@ -385,19 +389,22 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   //Deduplicate current turn effects
   $friendlyEffects = "";
   $opponentEffects = "";
-  for ($i = 0; $i < count($currentTurnEffects); $i += CurrentTurnPieces()) {
-    $cardID = explode("-", $currentTurnEffects[$i])[0];
-    $cardID = explode(",", $cardID)[0];
-    $cardID = explode("_", $cardID)[0];
-    $isFriendly = ($playerID == $currentTurnEffects[$i + 1] || $playerID == 3 && $otherPlayer != $currentTurnEffects[$i + 1]);
-    $color = ($isFriendly ? "#00BAFF" : "#FB0007"); // Me : Opponent
-    $effect = "<div class='effect-display' style='border:1px solid " . $color . ";'>";
-    $effect .= Card($cardID, "crops", 65, 0, 1);
-    $effect .= "</div>";
-    if ($isFriendly)
-      $friendlyEffects .= $effect;
-    else
-      $opponentEffects .= $effect;
+
+  foreach ([$currentTurnEffects, $nextTurnEffects] as $turnEffects) {
+    for ($i = 0; $i < count($turnEffects); $i += CurrentTurnPieces()) {
+      $cardID = explode("-", $turnEffects[$i])[0];
+      $cardID = explode(",", $cardID)[0];
+      $cardID = explode("_", $cardID)[0];
+      $isFriendly = ($playerID == $turnEffects[$i + 1] || $playerID == 3 && $otherPlayer != $turnEffects[$i + 1]);
+      $color = ($isFriendly ? "#00BAFF" : "#FB0007"); // Me : Opponent
+      $effect = "<div class='effect-display' style='border:1px solid " . $color . ";'>";
+      $effect .= Card($cardID, "crops", 65, 0, 1);
+      $effect .= "</div>";
+      if ($isFriendly)
+        $friendlyEffects .= $effect;
+      else
+        $opponentEffects .= $effect;
+    }
   }
 
   $groundLeft = "53%";
@@ -413,6 +420,10 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
 
   //Space Arena
   echo ("<div id='spaceArena'>");
+  echo ("</div>");
+
+  //Space Arena Dimmer
+  echo ("<div class='spaceArena-dimmer'>");
   echo ("</div>");
 
   //Ground Arena

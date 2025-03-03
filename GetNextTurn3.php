@@ -204,7 +204,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     $initialLoad = new stdClass();
     $initialLoad->playerName = $playerID == 1 ? $p1uid : $p2uid;
     $initialLoad->opponentName = $playerID == 1 ? $p2uid : $p1uid;
-    $contributors = array("sugitime", "OotTheMonk", "Launch", "LaustinSpayce", "Star_Seraph", "Tower", "Etasus", "scary987", "Celenar");
+    $contributors = array("OotTheMonk", "love", "ninin", "Brubraz");
     $initialLoad->playerIsPatron = ($playerID == 1 ? $p1IsPatron : $p2IsPatron);
     $initialLoad->playerIsContributor = in_array($initialLoad->playerName, $contributors);
     $initialLoad->opponentIsPatron = ($playerID == 1 ? $p2IsPatron : $p1IsPatron);
@@ -220,8 +220,8 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   $MyCardBack = GetCardBack($playerID);
   $TheirCardBack = GetCardBack($otherPlayer);
 
-  $response->MyPlaymat = (IsColorblindMode($playerID) ? 0 : GetPlaymat($playerID));
-  $response->TheirPlaymat = (IsColorblindMode($playerID) ? 0 : GetPlaymat($otherPlayer));
+  //$response->MyPlaymat = (IsColorblindMode($playerID) ? 0 : GetPlaymat($playerID));
+  //$response->TheirPlaymat = (IsColorblindMode($playerID) ? 0 : GetPlaymat($otherPlayer));
 
   //Display active chain link
   $activeChainLink = new stdClass();

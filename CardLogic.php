@@ -120,7 +120,8 @@ function AddCurrentTurnEffectNextAttack($cardID, $player, $from = "", $uniqueID 
   else AddCurrentTurnEffect($cardID, $player, $from, $uniqueID);
 }
 
-function AddCurrentTurnEffect($cardID, $player, $from = "", $uniqueID = -1)
+//4 - Lasting type (1 = phase, 2 = round, 3 = permanent). Default: 1 (phase).
+function AddCurrentTurnEffect($cardID, $player, $from = "", $uniqueID = -1, $lastingType = 1)
 {
   global $currentTurnEffects, $combatChain;
   $card = explode("-", $cardID)[0];
@@ -128,7 +129,44 @@ function AddCurrentTurnEffect($cardID, $player, $from = "", $uniqueID = -1)
     AddCurrentTurnEffectFromCombat($cardID, $player, $uniqueID);
     return;
   }
-  array_push($currentTurnEffects, $cardID, $player, $uniqueID, CurrentTurnEffectUses($cardID));
+  array_push($currentTurnEffects, $cardID, $player, $uniqueID, CurrentTurnEffectUses($cardID), $lastingType);
+}
+
+function RemovePhaseEffects() {
+  global $currentTurnEffects;
+  for ($i = count($currentTurnEffects) - CurrentTurnPieces(); $i >= 0; $i -= CurrentTurnPieces()) {
+    $lastingType = $currentTurnEffects[$i + 4];
+    if ($lastingType == 1) {
+      RemoveCurrentTurnEffect($i);
+    }
+  }
+}
+
+function SwapTurnEffects() {
+  global $currentTurnEffects, $nextTurnEffects;
+
+  // Copy permanent effects to next turn effects
+  for ($i = count($currentTurnEffects) - CurrentTurnPieces(); $i >= 0; $i -= CurrentTurnPieces()) {
+    $lastingType = $currentTurnEffects[$i + 4];
+    if ($lastingType == 3) {
+      for ($j = 0; $j < CurrentTurnEffectPieces(); $j++) {
+        array_push($nextTurnEffects, $currentTurnEffects[$i + $j]);
+      }
+    }
+  }
+
+  $currentTurnEffects = $nextTurnEffects;
+  $nextTurnEffects = [];
+}
+
+function AddRoundEffect($cardID, $player, $from = "", $uniqueID = -1)
+{
+  return AddCurrentTurnEffect($cardID, $player, $from, $uniqueID, 2);
+}
+
+function AddPermanentEffect($cardID, $player, $from = "", $uniqueID = -1)
+{
+  return AddCurrentTurnEffect($cardID, $player, $from, $uniqueID, 3);
 }
 
 function AddAfterResolveEffect($cardID, $player, $from = "", $uniqueID = -1)
@@ -139,7 +177,7 @@ function AddAfterResolveEffect($cardID, $player, $from = "", $uniqueID = -1)
     AddCurrentTurnEffectFromCombat($cardID, $player, $uniqueID);
     return;
   }
-  array_push($afterResolveEffects, $cardID, $player, $uniqueID, CurrentTurnEffectUses($cardID));
+  array_push($afterResolveEffects, $cardID, $player, $uniqueID, CurrentTurnEffectUses($cardID), 1);
 }
 
 function HasLeader($player) {
@@ -184,7 +222,7 @@ function CopyCurrentTurnEffectsFromAfterResolveEffects()
 function AddCurrentTurnEffectFromCombat($cardID, $player, $uniqueID = -1)
 {
   global $currentTurnEffectsFromCombat;
-  array_push($currentTurnEffectsFromCombat, $cardID, $player, $uniqueID, CurrentTurnEffectUses($cardID));
+  array_push($currentTurnEffectsFromCombat, $cardID, $player, $uniqueID, CurrentTurnEffectUses($cardID), 1);
 }
 
 function CopyCurrentTurnEffectsFromCombat()
@@ -227,10 +265,11 @@ function CurrentTurnEffectUses($cardID)
   }
 }
 
-function AddNextTurnEffect($cardID, $player, $uniqueID = -1)
+//4 - Lasting type (1 = phase, 2 = round, 3 = permanent). Default: 1 (phase).
+function AddNextTurnEffect($cardID, $player, $uniqueID = -1, $lastingType = 1)
 {
   global $nextTurnEffects;
-  array_push($nextTurnEffects, $cardID, $player, $uniqueID, CurrentTurnEffectUses($cardID));
+  array_push($nextTurnEffects, $cardID, $player, $uniqueID, CurrentTurnEffectUses($cardID), $lastingType);
 }
 
 function IsCombatEffectLimited($index)
@@ -334,7 +373,7 @@ function ProcessDecisionQueue()
   global $turn, $decisionQueue, $dqState;
   if($dqState[0] != "1") {
     $count = count($turn);
-    if(count($turn) < 3) $turn[2] = "-";
+    if($count < 3) $turn[2] = "-";
     $dqState[0] = "1"; //If the decision queue is currently active/processing
     $dqState[1] = $turn[0];
     $dqState[2] = $turn[1];
@@ -461,6 +500,10 @@ function ContinueDecisionQueue($lastResult = "")
         // else if($cardID == "LAYER") ProcessLayer($player, $parameter);
         else if($cardID == "FINALIZECHAINLINK") FinalizeChainLink($parameter);
         else if($cardID == "DEFENDSTEP") { $turn[0] = "A"; $currentPlayer = $mainPlayer; }
+        else if($cardID == "STARTREGROUPPHASE") StartRegroupPhase();
+        else if($cardID == "ENDREGROUPPHASE") EndRegroupPhase();
+        else if($cardID == "STARTACTIONPHASE") StartActionPhase();
+        else if($cardID == "ENDACTIONPHASE") EndActionPhase();
         else if(IsAbilityLayer($cardID)) {
           if(count($combatChain) > 0) {
             AddAfterCombatLayer($cardID, $player, $parameter, $target, $additionalCosts, $uniqueID);
@@ -830,7 +873,7 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
         AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY", 1);
         AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a unit to deal 1 damage to", 1);
         AddDecisionQueue("CHOOSEMULTIZONE", $otherPlayer, "<-", 1);
-        AddDecisionQueue("MZOP", $otherPlayer, "DEALDAMAGE,1", 1);
+        AddDecisionQueue("MZOP", $otherPlayer, DamageStringBuilder(1, $player), 1);
       }
       break;
     case "9005139831"://Mandalorian Leader Ability
@@ -847,7 +890,7 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:minCost=" . $cost . ";maxCost=" . $cost);
       AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal 1 damage", 1);
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-      AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1", 1);
+      AddDecisionQueue("MZOP", $player, DamageStringBuilder(1, $player), 1);
       AddDecisionQueue("EXHAUSTCHARACTER", $player, FindCharacterIndex($player, "2358113881"), 1);
       break;
     case "3045538805"://Hondo Ohnaka Leader
@@ -946,23 +989,115 @@ function ShouldHoldPriority($player, $layerCard = "")
   return 0;
 }
 
-function EndTurnProcedure($player) {
-  $allies = &GetAllies($player);
-  for($i = 0; $i < count($allies); $i += AllyPieces()) {
-    $ally = new Ally("MYALLY-" . $i, $player);
-    if($ally->CardID() == "9720757803" && $ally->CurrentPower() < 4)//Rampart
-      continue;
+function StartRegroupPhase() {
+  global $initiativePlayer, $mainPlayer;
 
-    $ally->Ready();
-  }
-  $resources = &GetResourceCards($player);
-  for($i=0; $i<count($resources); $i+=ResourcePieces()) {
-    $resources[$i+4] = "0";
-  }
-  Draw($player, false);
-  Draw($player, false);
-  MZMoveCard($player, "MYHAND", "MYRESOURCES", may:true, context:"Choose a card to resource", silent:true);
-  AddDecisionQueue("AFTERRESOURCE", $player, "HAND", 1);
+  // 5.5.1 A) Start of the regroup phase.
+  // Any lasting effects that expire when the regroup phase starts expire now.
+  // Any abilities or effects that trigger at the start of the regroup phase trigger now.
+
+  // Reset class states
+  ResetClassState(1);
+  ResetClassState(2);
+
+  // Trigger abilities
+  CharacterStartRegroupPhaseAbilities(1);
+  CharacterStartRegroupPhaseAbilities(2);
+  AllyStartRegroupPhaseAbilities(1);
+  AllyStartRegroupPhaseAbilities(2);
+  CurrentEffectStartRegroupPhaseAbilities();
+  ProcessDecisionQueue();
+
+  // Draw cards and resource them
+  $otherPlayer = $initiativePlayer == 1 ? 2 : 1;
+  AddDecisionQueue("DRAW", $initiativePlayer, "0");
+  AddDecisionQueue("DRAW", $initiativePlayer, "0");
+  AddDecisionQueue("DRAW", $otherPlayer, "0");
+  AddDecisionQueue("DRAW", $otherPlayer, "0");
+  MZMoveCard($initiativePlayer, "MYHAND", "MYRESOURCES", may:true, context:"Choose a card to resource", silent:true);
+  MZMoveCard($otherPlayer, "MYHAND", "MYRESOURCES", may:true, context:"Choose a card to resource", silent:true);
+  AddDecisionQueue("AFTERRESOURCE", $initiativePlayer, "HAND", 1);
+  AddDecisionQueue("AFTERRESOURCE", $otherPlayer, "HAND", 1);
+  ProcessDecisionQueue();
+
+  // End regroup phase
+  AddLayer("ENDREGROUPPHASE", $mainPlayer, "-");
+  ProcessDecisionQueue();
+}
+
+function EndRegroupPhase() {
+  global $mainPlayer;
+
+  // Reset characters, allies, and resources
+  ResetCharacter(1);
+  ResetCharacter(2);
+  ResetAllies(1);
+  ResetAllies(2);
+  ResetResources(1);
+  ResetResources(2);
+
+  // Trigger abilities
+  CharacterEndRegroupPhaseAbilities(1);
+  CharacterEndRegroupPhaseAbilities(2);
+  AllyEndRegroupPhaseAbilities(1);
+  AllyEndRegroupPhaseAbilities(2);
+  CurrentEffectEndRegroupPhaseAbilities();
+  ProcessDecisionQueue();
+
+  // End turn procedure
+  AddDecisionQueue("ENDTURN", $mainPlayer, "-");
+  ProcessDecisionQueue();
+
+  // Start action phase
+  AddLayer("STARTACTIONPHASE", $mainPlayer, "-");
+  ProcessDecisionQueue();
+}
+
+function StartActionPhase() {
+  global $mainPlayer, $currentTurnEffects, $nextTurnEffects;
+
+  // Reset class states
+  ResetClassState(1);
+  ResetClassState(2);
+
+  // Reset turn modifiers
+  UnsetTurnModifiers();
+
+  // Trigger abilities
+  CharacterStartActionPhaseAbilities(1);
+  CharacterStartActionPhaseAbilities(2);
+  AllyStartActionPhaseAbilities(1);
+  AllyStartActionPhaseAbilities(2);
+  CurrentEffectStartActionPhaseAbilities();
+  ProcessDecisionQueue();
+
+  // Resume round pass
+  AddDecisionQueue("RESUMEROUNDPASS", $mainPlayer, "-");
+  ProcessDecisionQueue();
+}
+
+function EndActionPhase() {
+  global $mainPlayer;
+
+  // 4.1 C) End of the action phase
+  // Any lasting effects that expire when the action phase ends expire now (e.g. “for this phase”).
+  // Any abilities or effects that trigger at the end of the action phase trigger now.
+
+  // Trigger abilities
+  CharacterEndActionPhaseAbilities(1);
+  CharacterEndActionPhaseAbilities(2);
+  AllyEndActionPhaseAbilities(1);
+  AllyEndActionPhaseAbilities(2);
+  CurrentEffectEndActionPhaseAbilities();
+  ProcessDecisionQueue();
+
+  // Remove phase effects
+  AddDecisionQueue("REMOVEPHASEEFFECTS", $mainPlayer, "-");
+  ProcessDecisionQueue();
+
+  // Start regroup phase
+  AddLayer("STARTREGROUPPHASE", $mainPlayer, "-");
+  ProcessDecisionQueue();
 }
 
 function TopDeckToArsenal($player)
@@ -1145,14 +1280,23 @@ function AsajjVentressIWorkAlone($player) {
   AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY", 1);
   AddDecisionQueue("SETDQCONTEXT", $player, "Choose a friendly unit to damage", 1);
   AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-  AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1", 1);
+  AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1,$player", 1);
   AddDecisionQueue("SETDQVAR", $player, "1", 1);
   AddDecisionQueue("MZOP", $player, "GETARENA", 1);
   AddDecisionQueue("SETDQVAR", $player, "2", 1);
   AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:arena={2}", 1);
   AddDecisionQueue("SETDQCONTEXT", $player, "Choose an opposing unit to damage", 1);
   AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
-  AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1", 1);
+  AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1,$player", 1);
+}
+
+function KazudaXionoBestPilotInTheGalaxy($player) {
+  AddDecisionQueue("SETDQCONTEXT", $player, "Choose units to lose abilities");
+  AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
+  AddDecisionQueue("OP", $player, "MZTONORMALINDICES", 1);
+  AddDecisionQueue("PREPENDLASTRESULT", $player, SearchCount(SearchAllies($player)) . "-", 1);
+  AddDecisionQueue("MULTICHOOSEUNIT", $player, "<-", 1);
+  AddDecisionQueue("SPECIFICCARD", $player, "KAZUDA_JTL", 1);
 }
 
 function ShuttleST149($player) {
@@ -1212,9 +1356,9 @@ function ObiWansAethersprite($player, $index) {
   AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:arena=Space&THEIRALLY:arena=Space", 1);
   AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal 2 damage to (or pass)", 1);
   AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-  AddDecisionQueue("MZOP", $player, "DEALDAMAGE,2", 1);
+  AddDecisionQueue("MZOP", $player, "DEALDAMAGE,2,$player", 1);
   AddDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $index, 1);
-  AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1", 1);
+  AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1,$player", 1);
 }
 
 function UIDIsAffectedByMalevolence($uniqueID) {

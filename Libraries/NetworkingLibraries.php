@@ -749,8 +749,8 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
   return true;
 }
 
-function KarabotSpan() {
-  return "<span style='font-weight:bold; color:plum'>Karabot: </span>";
+function ArenabotSpan() {
+  return "<span style='font-weight:bold; color:plum'>Arenabot: </span>";
 }
 
 function IsModeAsync($mode)
@@ -1006,7 +1006,7 @@ function ResolveMultiTarget(Ally $attacker, $mainPlayer, $defPlayer)
 function ResolveSingleTarget($mainPlayer, $defPlayer, $target, $attackerPrefix, Ally $attacker, $totalAttack, $totalDefense)
 {
   global $combatChain, $combatChainState, $mainPlayer, $defPlayer, $CCS_CombatDamageReplaced;
-  global $CCS_DamageDealt;
+  global $CCS_DamageDealt, $CCS_CachedLastDestroyed;
 
   $targetArr = explode("-", $target);
   $attackerID = $attacker->CardID();
@@ -1021,7 +1021,8 @@ function ResolveSingleTarget($mainPlayer, $defPlayer, $target, $attackerPrefix, 
       BlizzardAssaultATAT($mainPlayer, $totalAttack);
     }
     if ($attackerID == "1086021299") {
-      ArquitensAssaultCruiser($mainPlayer);
+      $lastDestroyed = explode(";",$combatChainState[$CCS_CachedLastDestroyed]);
+      ArquitensAssaultCruiser($mainPlayer, $lastDestroyed[0]);
     }
     ClearAttackTarget();
     CompletesAttackEffect($attackerID);
@@ -1040,6 +1041,7 @@ function ResolveSingleTarget($mainPlayer, $defPlayer, $target, $attackerPrefix, 
     $shootsFirst = ShouldCombatDamageFirst();
     $preventDamage = ShouldPreventCombatDamage();
     $defenderPower = $defender->CurrentPower();
+    $defenderCardID = $defender->CardID();
     if ($defenderPower < 0)
       $defenderPower = 0;
     $excess = $totalAttack - $defender->Health();
@@ -1071,7 +1073,7 @@ function ResolveSingleTarget($mainPlayer, $defPlayer, $target, $attackerPrefix, 
     CompletesAttackEffect($attackerID);
   }
   if ($attackerID == "1086021299") {
-    ArquitensAssaultCruiser($mainPlayer);
+    ArquitensAssaultCruiser($mainPlayer, $defenderCardID);
   }
   ProcessDecisionQueue();
 }
@@ -1311,41 +1313,16 @@ function BeginRoundPass()
 {
   global $mainPlayer;
   WriteLog("Both players have passed; ending the phase.");
-  CurrentEffectStartRegroupAbilities();
-  AddDecisionQueue("RESUMEROUNDPASS", $mainPlayer, "-");
+  AddLayer("ENDACTIONPHASE", $mainPlayer, "-");
   ProcessDecisionQueue();
 }
 
 function ResumeRoundPass()
 {
-  global $initiativeTaken, $mainPlayer, $currentRound, $currentTurnEffects, $nextTurnEffects, $initiativePlayer;
-  global $MakeStartTurnBackup;
-  ResetClassState(1);
-  ResetClassState(2);
-  AllyBeginEndTurnEffects();
-  AllyEndTurnAbilities(1);
-  AllyEndTurnAbilities(2);
-  LogEndTurnStats($mainPlayer);
-  CurrentEffectEndTurnAbilities();
-  ResetCharacter(1);
-  ResetCharacter(2);
-  CharacterEndTurnAbilities(1);
-  CharacterEndTurnAbilities(2);
-  UnsetTurnModifiers();
-  $currentTurnEffects = $nextTurnEffects;
-  $nextTurnEffects = [];
-  $mainPlayer = $initiativePlayer == 1 ? 2 : 1;
-  $initiativeTaken = 0;
-  EndTurnProcedure($initiativePlayer);
-  EndTurnProcedure($initiativePlayer == 1 ? 2 : 1);
-  $currentRound += 1;
-  WriteLog("<span style='color:#6E6DFF;'>A new round has begun</span>");
-  CharacterStartTurnAbility(1);
-  CharacterStartTurnAbility(2);
-  AllyBeginRoundAbilities(1);
-  AllyBeginRoundAbilities(2);
-  CurrentEffectStartTurnAbilities();
-  ProcessDecisionQueue();
+  global $MakeStartTurnBackup, $mainPlayer, $initiativePlayer;
+  if ($mainPlayer == $initiativePlayer) {
+    $mainPlayer = $initiativePlayer == 1 ? 2 : 1; // Swap player
+  }
   $MakeStartTurnBackup = true;
 }
 
@@ -2296,8 +2273,7 @@ function IsUnitException($cardID) {
   };
 }
 
-function RelentlessLostAbilities($player): bool
-{
+function RelentlessLostAbilities($player): bool {
   $relentlessIndex = SearchAlliesForCard($player, "3401690666");
   if ($relentlessIndex != "") {
     $ally = new Ally("MYALLY-" . $relentlessIndex, $player);
@@ -2306,20 +2282,25 @@ function RelentlessLostAbilities($player): bool
   return true;
 }
 
-function BlizzardAssaultATAT($player, $excess)
-{
+function BlizzardAssaultATAT($player, $excess) {
   AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal " . $excess . " damage to");
   AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:arena=Ground");
   AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-  AddDecisionQueue("MZOP", $player, "DEALDAMAGE," . $excess, 1);
+  AddDecisionQueue("MZOP", $player, "DEALDAMAGE,$excess,$player,1", 1);
 }
 
-function ArquitensAssaultCruiser($player)
-{
+function ArquitensAssaultCruiser($player, $cardID) {
   $defPlayer = $player == 1 ? 2 : 1;
-  $discard = &GetDiscard($defPlayer);
-  $defeatedCard = RemoveDiscard($defPlayer, count($discard) - DiscardPieces());
-  AddResources($defeatedCard, $player, "PLAY", "DOWN", isExhausted: true);
+  if(!IsToken($cardID)) {
+    $discard = GetDiscard($defPlayer);
+    for($i=0; $i<count($discard); $i+=DiscardPieces()) {
+      if($discard[$i] == $cardID) {
+        AddResources($cardID, $player, "PLAY", "DOWN", isExhausted: true);
+        RemoveDiscard($defPlayer, $i);
+        break;
+      }
+    }
+  }
 }
 
 function LayersContainAnyWhenPlayAbilitiesForPlayer($player) {

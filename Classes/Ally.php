@@ -50,6 +50,7 @@ class Ally {
   }
 
   function CardID() {
+    if($this->index == -1) return "";
     return $this->allies[$this->index];
   }
 
@@ -104,6 +105,19 @@ class Ally {
     }
     $this->allies[$this->index+14] = 1;//Track that the ally was healed this round
     AddEvent("RESTORE", $this->UniqueID() . "!" . $healed);
+    //ally healed side effects
+    switch($this->CardID()) {
+      case "8352777268"://Silver Angel
+        if($healed > 0) {
+          $player = $this->Controller();
+          AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:arena=Space&THEIRALLY:arena=Space");
+          AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal 1 damage to");
+          AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
+          AddDecisionQueue("MZOP", $player, DamageStringBuilder(1, $player, isUnitEffect:1));
+        }
+        break;
+      default: break;
+    }
     return $healed;
   }
 
@@ -475,7 +489,7 @@ class Ally {
       $effectPlayerID = $currentTurnEffects[$i + 1];
       $effectUniqueID = $currentTurnEffects[$i + 2];
 
-      if ($effectPlayerID != $this->PlayerID()) continue;
+      if ($effectPlayerID != $this->PlayerID() && $effectUniqueID != $this->UniqueID()) continue;
       if ($effectUniqueID != -1 && $effectUniqueID != $this->UniqueID()) continue;
 
       $power += EffectAttackModifier($effectCardID, $this->PlayerID());
@@ -578,6 +592,21 @@ class Ally {
         //Jump to Lightspeed
         case "3711891756"://Red Leader
           CreateXWing($this->Controller());
+          break;
+        case "1935873883"://Razor Crest
+          $player = $this->Controller();
+          AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:maxCost=2");
+          AddDecisionQueue("MZFILTER", $player, "leader=1", 1);
+          AddDecisionQueue("SETDQVAR", $player, 0, 1);
+          AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:maxCost=4");
+          AddDecisionQueue("MZFILTER", $player, "leader=1", 1);
+          AddDecisionQueue("MZFILTER", $player, "status=0", 1);
+          AddDecisionQueue("PREPENDLASTRESULT", $player, "{0},", 1);
+          AddDecisionQueue("CLEANEMPTYINDICES", $player, 1);
+          AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to bounce", 1);
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+          AddDecisionQueue("MZOP", $player, "BOUNCE", 1);
+          break;
         default: break;
       }
     }
@@ -749,6 +778,7 @@ class Ally {
       switch ($effectCardID) {
         case "2639435822": //Force Lightning
         case "4531112134": //Kazuda Xiono leader side
+        case "c1700fc85b": //Kazuda Xiono pilot Leader Unit
           return true;
         default: break;
       }

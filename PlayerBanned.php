@@ -20,10 +20,10 @@ if(!$isUserBanned) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>You Have Been Banned</title>
-  <link rel="stylesheet" href="./css/karabast011625.css">
+  <link rel="stylesheet" href="./css/petranaki250301.css">
   <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    body {  
+    body {
       background-size: cover;
       background-position: center;
       background-image: url('./Images/gamebg.jpg');

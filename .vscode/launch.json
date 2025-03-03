@@ -10,7 +10,7 @@
             "request": "launch",
             "port": 9003,
             "pathMappings": {
-                "/var/www/html/SWUOnline": "${workspaceFolder}",
+                "/var/www/html/Arena": "${workspaceFolder}",
             }
         }
     ]

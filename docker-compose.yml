@@ -6,8 +6,8 @@ services:
       context: .
     restart: always
     volumes:
-      - "./:/var/www/html/SWUOnline:Z"
-    command: bash "/var/www/html/SWUOnline/docker-entrypoint.sh"
+      - "./:/var/www/html/Arena:Z"
+    command: bash "/var/www/html/Arena/docker-entrypoint.sh"
     ports:
       - "8080:80"
     depends_on:

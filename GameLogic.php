@@ -188,21 +188,25 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           break;
         case "UNITSANDBASE":
           $allies = &GetAllies($player);
-          $rv = "0;" . count($allies) . "-" . GetIndices(count($allies), 0 , AllyPieces());
+          $rv = "0;" . (count($allies)/AllyPieces()) . "-" . GetIndices(count($allies), 0 , AllyPieces());
           break;
         case "THEIRUNITSANDBASE":
           $allies = &GetAllies($player == 1 ? 2 : 1);
-          $rv = "0;" . count($allies) . "-" . GetIndices(count($allies), 0 , AllyPieces());
+          $rv = "0;" . (count($allies)/AllyPieces()) . "-" . GetIndices(count($allies), 0 , AllyPieces());
           break;
         case "ALLOURUNITSMULTI":
           $theirAllies = &GetAllies($player == 1 ? 2 : 1);
           $myAllies = &GetAllies($player);
-          $rv = count($theirAllies) . "-" . GetIndices(count($theirAllies), 0 , AllyPieces())
-            . "&" . count($myAllies) . "-" . GetIndices(count($myAllies), 0 , AllyPieces());
+          $rv = (count($theirAllies)/AllyPieces()) . "-" . GetIndices(count($theirAllies), 0 , AllyPieces())
+            . "&" . (count($myAllies)/AllyPieces()) . "-" . GetIndices(count($myAllies), 0 , AllyPieces());
           break;
         case "ALLTHEIRUNITSMULTI":
           $allies = &GetAllies($player == 1 ? 2 : 1);
-          $rv = count($allies) . "-" . GetIndices(count($allies), 0 , AllyPieces());
+          $rv = (count($allies)/AllyPieces()) . "-" . GetIndices(count($allies), 0 , AllyPieces());
+          break;
+        case "ALLTHEIRUNITSMULTILIMITED":
+          $allies = &GetAllies($player == 1 ? 2 : 1);
+          $rv = $subparam . "-" . GetIndices(count($allies), 0 , AllyPieces());
           break;
         case "ALLTHEIRGROUNDUNITSMULTI":
           $allies = &GetAllies($player == 1 ? 2 : 1);
@@ -216,6 +220,41 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             }
           }
           $rv = $groundCount . "-" . $groundAllies;
+          break;
+        case "ALLTHEIRGROUNDUNITSMULTILIMITED":
+          $allies = &GetAllies($player == 1 ? 2 : 1);
+          $groundAllies = "";
+          for($i = 0; $i < count($allies); $i+=AllyPieces()) {
+            if(ArenaContains($allies[$i], "Ground", $player)) {
+              if($groundAllies != "") $groundAllies .= ",";
+              $groundAllies .= $i;
+            }
+          }
+          $rv = $subparam . "-" . $groundAllies;
+          break;
+        case "ALLTHEIRSPACEUNITSMULTI":
+          $allies = &GetAllies($player == 1 ? 2 : 1);
+          $spaceAllies = "";
+          $spaceCount = 0;
+          for($i = 0; $i < count($allies); $i+=AllyPieces()) {
+            if(ArenaContains($allies[$i], "Space", $player)) {
+              if($spaceAllies != "") $spaceAllies .= ",";
+              $spaceAllies .= $i;
+              $spaceCount++;
+            }
+          }
+          $rv = $spaceCount . "-" . $spaceAllies;
+          break;
+        case "ALLTHEIRSPACEUNITSMULTILIMITED":
+          $allies = &GetAllies($player == 1 ? 2 : 1);
+          $spaceAllies = "";
+          for($i = 0; $i < count($allies); $i+=AllyPieces()) {
+            if(ArenaContains($allies[$i], "Space", $player)) {
+              if($spaceAllies != "") $spaceAllies .= ",";
+              $spaceAllies .= $i;
+            }
+          }
+          $rv = $subparam . "-" . $spaceAllies;
           break;
         case "GYTYPE": $rv = SearchDiscard($player, $subparam); break;
         case "GYAA": $rv = SearchDiscard($player, "AA"); break;
@@ -281,7 +320,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       PlayAlly($lastResult, $player, $subCards, $from, $owner, $cloned, $playAbility);
       return $lastResult;
     case "DRAW":
-      return Draw($player);
+      $mainPhase = $parameter != 0;
+      return Draw($player, $mainPhase);
     // case "MULTIBANISH"://FAB
     //   if($lastResult == "") return $lastResult;
     //   $cards = explode(",", $lastResult);
@@ -432,13 +472,24 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       switch ($parameterArr[0]) {
         case "REVERTCONTROL": // Revert control of a unit to its owner
           $ally = new Ally($lastResult);
-          if ($ally->Exists() && $ally->Controller() != $ally->Owner()) {
-            $owner = $ally->Owner();
-            AllyTakeControl($owner, $ally->UniqueID());
-            WriteLog("Reverted control of " . CardLink($ally->CardID(), $ally->CardID()) . "back to player $owner");
-          } else {
-            return "PASS";
-          }
+          if (!$ally->Exists() || $ally->Controller() == $ally->Owner()) return "PASS";
+          $owner = $ally->Owner();
+          AllyTakeControl($owner, $ally->UniqueID());
+          WriteLog("Reverted control of " . CardLink($ally->CardID(), $ally->CardID()) . "back to player $owner");
+          break;
+        case "DEFEATUPGRADE":
+          DefeatUpgradeForUniqueID($lastResult, $player);
+          break;
+        case "BOUNCE":
+          $ally = new Ally($lastResult);
+          if (!$ally->Exists()) return "PASS";
+          MZBounce($ally->Controller(), "MYALLY-" . $ally->Index());
+          break;
+        case "REST":
+          $ally = new Ally($lastResult);
+          if (!$ally->Exists()) return "PASS";
+          $ally->Exhaust();
+          break;
       }
       return $lastResult;
     case "MZOP":
@@ -479,6 +530,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         case "SINK": MZSink($player, $lastResult); return $lastResult;
         //case "SUPPRESS": MZSuppress($player, $lastResult); return $lastResult;//FAB
         case "REST": MZRest($player, $lastResult); return $lastResult;
+        case "HEAL": MZHealAlly($player, $lastResult, $parameterArr[1]); return $lastResult;
         case "READY": MZWakeUp($player, $lastResult); return $lastResult;
         case "PLAYCARD": return MZPlayCard($player, $lastResult);
         case "ATTACK": return MZAttack($player, $lastResult);
@@ -556,9 +608,10 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         case "REDUCEHEALTH":
           MZAddHealth($player, $lastResult, count($parameterArr) > 1 ? -1 * $parameterArr[1] : 1); return $lastResult;
         case "DESTROY":
+          $enemyEffects = count($parameterArr) > 1 ? $parameterArr[1] : "1";
           $ally = new Ally($lastResult);
           $id = $ally->CardID();
-          $ally->Destroy();
+          $ally->Destroy($enemyEffects);
           return $id;
         case "EXPLOIT":
           global $CS_PlayedWithExploit;
@@ -1177,6 +1230,14 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       AddCurrentTurnEffect($parameter, $player);
       UpdateLinkAttack();
       return $lastResult;
+    case "ADDROUNDEFFECT":
+      AddRoundEffect($parameter, $player);
+      UpdateLinkAttack();
+      return $lastResult;
+    case "ADDPERMANENTEFFECT":
+      AddPermanentEffect($parameter, $player);
+      UpdateLinkAttack();
+      return $lastResult;
     case "REMOVECURRENTEFFECT":
       SearchCurrentTurnEffects($parameter, $player, true);
       UpdateLinkAttack();
@@ -1187,6 +1248,11 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       AddNextTurnEffect($parameter, $player);
       return "1";
     case "ADDLIMITEDCURRENTEFFECT":
+    case "ADDLIMITEDROUNDEFFECT":
+    case "ADDLIMITEDPERMANENTEFFECT":
+    case "ADDLIMITEDNEXTTURNEFFECT":
+    case "ADDLIMITEDNEXTROUNDEFFECT":
+    case "ADDLIMITEDNEXTPERMANENTEFFECT":
       $uniqueID = $lastResult;
       $params = explode(",", $parameter);
       $controller = UnitUniqueIDController($uniqueID);
@@ -1200,11 +1266,33 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       if (isset($params[2])) {
         $controller = $params[2]; // Override controller
       }
-      AddCurrentTurnEffect($params[0], $controller, $from, $uniqueID);
-      UpdateLinkAttack();
-      return $lastResult;
-    case "ADDLIMITEDNEXTTURNEFFECT":
-      AddNextTurnEffect($parameter, $player, $lastResult);
+
+      $lastingType = 1;
+      switch ($phase) {
+        case "ADDLIMITEDROUNDEFFECT":
+        case "ADDLIMITEDNEXTROUNDEFFECT":
+          $lastingType = 2;
+          break;
+        case "ADDLIMITEDPERMANENTEFFECT":
+        case "ADDLIMITEDNEXTPERMANENTEFFECT":
+          $lastingType = 3;
+          break;
+      }
+
+      switch ($phase) {
+        case "ADDLIMITEDCURRENTEFFECT":
+        case "ADDLIMITEDROUNDEFFECT":
+        case "ADDLIMITEDPERMANENTEFFECT":
+          AddCurrentTurnEffect($params[0], $controller, $from, $uniqueID, lastingType: $lastingType);
+          UpdateLinkAttack();
+          break;
+        case "ADDLIMITEDNEXTTURNEFFECT":
+        case "ADDLIMITEDNEXTROUNDEFFECT":
+        case "ADDLIMITEDNEXTPERMANENTEFFECT":
+          AddNextTurnEffect($params[0], $controller, $lastResult, lastingType: $lastingType);
+          break;
+      }
+
       return $lastResult;
     case "ADDAIMCOUNTER":
       $arsenal = &GetArsenal($player);
@@ -1488,6 +1576,39 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
     case "STARTTURNABILITIES":
       StartTurnAbilities();
       return 1;
+    case "ENDTURN":
+      global $mainPlayer, $initiativePlayer, $currentRound, $initiativeTaken, $currentTurnEffects, $nextTurnEffects;
+
+      // Log end turn stats
+      LogEndTurnStats($mainPlayer);
+
+      // Swap turn effects
+      SwapTurnEffects();
+
+      // Unset turn modifiers
+      UnsetTurnModifiers();
+
+      // End turn allies
+      foreach([1, 2] as $p) {
+        $allies = GetAllies($p);
+        for($i = count($allies) - AllyPieces(); $i >= 0; $i -= AllyPieces()) {
+          $ally = new Ally("MYALLY-" . $i, $p);
+          $ally->EndRound();
+        }
+      }
+
+      // Switch initiative
+      $mainPlayer = $initiativePlayer == 1 ? 2 : 1;
+      $initiativeTaken = 0;
+      $currentRound += 1;
+      WriteLog("<span style='color:#6E6DFF;'>A new round has begun</span>");
+      return 1;
+    case "REMOVEPHASEEFFECTS":
+      RemovePhaseEffects();
+      return 1;
+    case "RESUMEROUNDPASS":
+      ResumeRoundPass();
+      return 1;
     case "DRAWTOINTELLECT":
       $deck = &GetDeck($player);
       $hand = &GetHand($player);
@@ -1495,9 +1616,6 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       for($i = 0; $i < CharacterIntellect($char[0]); ++$i) {
         $hand[] = array_shift($deck);
       }
-      return 1;
-    case "RESUMEROUNDPASS":
-      ResumeRoundPass();
       return 1;
     case "ROLLDIE":
       $roll = RollDie($player, true, $parameter == "1");
@@ -1587,6 +1705,14 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       return $rv;
     case "APPENDLASTRESULT":
       return $lastResult . $parameter;
+    case "CLEANEMPTYINDICES":
+      $indices = explode(",", $lastResult);
+      $rv = "";
+      for($i = 0; $i < count($indices); ++$i) {
+        if($rv != "") $rv .= ",";
+        $rv .= $indices[$i];
+      }
+      return $rv;
     case "LASTRESULTPIECE":
       $pieces = explode("-", $lastResult);
       return $pieces[$parameter];
@@ -1639,6 +1765,9 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       return $lastResult;
     case "SETDQVAR":
       $dqVars[$parameter] = $lastResult;
+      return $lastResult;
+    case "CLEARDQVAR":
+      $dqVars[$parameter] = "";
       return $lastResult;
     case "INCDQVAR":
       $dqVars[$parameter] = intval($dqVars[$parameter]) + intval($lastResult);
@@ -1763,8 +1892,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         AddDecisionQueue("NOPASS", $secondPlayer, "-");
         AddDecisionQueue("MULLIGAN", $secondPlayer, "-", 1);
       }
-      CharacterStartTurnAbility($initiativePlayer);
-      CharacterStartTurnAbility($secondPlayer);
+      CharacterStartActionPhaseAbilities($initiativePlayer);
+      CharacterStartActionPhaseAbilities($secondPlayer);
       MZMoveCard($initiativePlayer, "MYHAND", "MYRESOURCES", may:false, context:"Choose a card to resource", silent:true);
       AddDecisionQueue("AFTERRESOURCE", $initiativePlayer, "HAND", 1);
       MZMoveCard($initiativePlayer, "MYHAND", "MYRESOURCES", may:false, context:"Choose a card to resource", silent:true);

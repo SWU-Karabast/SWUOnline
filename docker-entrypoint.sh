@@ -1,4 +1,4 @@
-mkdir SWUOnline/HostFiles
-cp SWUOnline/docker/* SWUOnline/HostFiles
-mkdir SWUOnline/Games
+mkdir Arena/HostFiles
+cp Arena/docker/* Arena/HostFiles
+mkdir Arena/Games
 apache2-foreground

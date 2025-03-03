@@ -127,6 +127,10 @@ $cardBack = new stdClass();
 $cardBack->name = "Galactic Shuffle";
 $cardBack->id = 31;
 $response->cardBacks[] = $cardBack;
+$cardBack = new stdClass();
+$cardBack->name = "Tropa do Boba";
+$cardBack->id = 32;
+$response->cardBacks[] = $cardBack;
 
 $response->playmats = [];
 if(IsUserLoggedIn()) {
@@ -161,38 +165,38 @@ function GetPlaymatName($id)
   switch ($id) {
     case 0:
       return "Plain";
-    case 1:
-      return "Demonastery";
-    case 2:
-      return "Metrix";
-    case 3:
-      return "Misteria";
-    case 4:
-      return "Pits";
-    case 5:
-      return "Savage";
-    case 6:
-      return "Solana";
-    case 7:
-      return "Volcor";
-    case 8:
-      return "Data-Doll";
-    case 9:
-      return "Aria";
-    case 10:
-      return "Bare-Fangs-AHS";
-    case 11:
-      return "Erase-Face-AHS";
-    case 12:
-      return "Dusk-Till-Dawn-AHS";
-    case 13:
-      return "Exude-Confidence-AHS";
-    case 14:
-      return "Command-and-Conquer-AHS";
-    case 15:
-      return "Swarming-Gloomveil-AHS";
-    case 16:
-      return "FindCenter";
+    // case 1:
+    //   return "Demonastery";
+    // case 2:
+    //   return "Metrix";
+    // case 3:
+    //   return "Misteria";
+    // case 4:
+    //   return "Pits";
+    // case 5:
+    //   return "Savage";
+    // case 6:
+    //   return "Solana";
+    // case 7:
+    //   return "Volcor";
+    // case 8:
+    //   return "Data-Doll";
+    // case 9:
+    //   return "Aria";
+    // case 10:
+    //   return "Bare-Fangs-AHS";
+    // case 11:
+    //   return "Erase-Face-AHS";
+    // case 12:
+    //   return "Dusk-Till-Dawn-AHS";
+    // case 13:
+    //   return "Exude-Confidence-AHS";
+    // case 14:
+    //   return "Command-and-Conquer-AHS";
+    // case 15:
+    //   return "Swarming-Gloomveil-AHS";
+    // case 16:
+    //   return "FindCenter";
     default:
       return "N/A";
   }

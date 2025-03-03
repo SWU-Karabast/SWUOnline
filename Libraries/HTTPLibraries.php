@@ -67,9 +67,9 @@ function SetHeaders()
 {
   // array holding allowed Origin domains
   $allowedOrigins = array(
-    "[0-9a-z\-]*\.karabast\.net",
-    "https\:\/\/karabast\.net",
-    "[0-9a-z\-]*\.karabast-fe\.pages\.dev"
+    "[0-9a-z\-]*\.petranaki\.net",
+    "https\:\/\/petranaki\.net",
+    "[0-9a-z\-]*\.petranaki-fe\.pages\.dev"
   );
 
   if (isset($_SERVER['HTTP_ORIGIN']) && $_SERVER['HTTP_ORIGIN'] != '') {
