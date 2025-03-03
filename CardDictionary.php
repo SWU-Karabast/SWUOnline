@@ -446,7 +446,7 @@ function HasSentinel($cardID, $player, $index)
       return SearchCount(SearchAllies($player, trait:"Vehicle")) > 1;
     case "6332346890"://Omicron Strike Craft
       return true;
-    case "999999999"://Rogue-Class Starfighter
+    case "1036605983"://Rogue-Class Starfighter
       return true;
     default: return false;
   }
