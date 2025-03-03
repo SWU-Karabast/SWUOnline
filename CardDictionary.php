@@ -436,7 +436,7 @@ function HasSentinel($cardID, $player, $index)
       return SearchCount(SearchUpgrades($player, trait:"Resistance")) > 0
         || SearchCount(SearchAllies($player, trait:"Resistance")) > 1
         || SearchCount(SearchCharacter($player, trait:"Resistance")) > 0;
-    case "9999999999"://Wing Guard Security Team
+    case "7508489374"://Wing Guard Security Team
       return true;
     case "9999999999"://Perimeter AT-RT
       return true;

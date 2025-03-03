@@ -6431,12 +6431,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZDESTROY", $currentPlayer, "-", 1);
       break;
-    case "9999999999"://Wing Guard Security Team
-      if($from != "PLAY") {
+    case "7508489374"://Wing Guard Security Team
+      if ($from != "PLAY") {
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Fringe");
-        AddDecisionQueue("OP", $currentPlayer, "MZTONORMALINDICES");
+        AddDecisionQueue("OP", $currentPlayer, "MZTONORMALINDICES", 1);
         AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "2-", 1);
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose up to 2 Fringe Units a shield");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose up to 2 Fringe units to give a shield", 1);
         AddDecisionQueue("MULTICHOOSEUNIT", $currentPlayer, "<-", 1);
         AddDecisionQueue("SPECIFICCARD", $currentPlayer, "MULTIGIVESHIELD", 1);
       }
