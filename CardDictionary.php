@@ -299,9 +299,9 @@ function RaidAmount($cardID, $player, $index, $reportMode = false)
     case "0249398533": $amount += 1; break;//Obedient Vanguard
     case "0587196584": $amount += 1; break;//Independent Smuggler
     case "1034181657": $amount += SearchCount(SearchAllies($player, tokenOnly: true)) > 0 ? 1 : 0;//First Order TIE Fighter
-    case "9999999999": $amount += 1; break;//MC30 Assault Frigate 
-    case "9999999999": $amount += SearchCount(SearchAllies($player, trait:"Fighter")) > 1 ? 2 : 0; break;//Flanking Fang Fighter
-    case "9999999999": $amount += 1; break;//Corporate Light Cruiser
+    case "0756051511": $amount += 1; break;//MC30 Assault Frigate 
+    case "0626954301": $amount += SearchCount(SearchAllies($player, trait:"Fighter")) > 1 ? 2 : 0; break;//Flanking Fang Fighter
+    case "7458361203": $amount += 1; break;//Corporate Light Cruiser
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
@@ -332,6 +332,7 @@ function HasSentinel($cardID, $player, $index)
       case "8719468890"://Sword and Shield Maneuver
         if(TraitContains($cardID, "Jedi", $player)) $hasSentinel = true;
         break;
+      case "7214707216": $hasSentinel = true; break;//Diversion        
       default: break;
     }
   }
@@ -436,17 +437,17 @@ function HasSentinel($cardID, $player, $index)
       return SearchCount(SearchUpgrades($player, trait:"Resistance")) > 0
         || SearchCount(SearchAllies($player, trait:"Resistance")) > 1
         || SearchCount(SearchCharacter($player, trait:"Resistance")) > 0;
-    case "9999999999"://Wing Guard Security Team
+    case "7508489374"://Wing Guard Security Team
       return true;
-    case "9999999999"://Perimeter AT-RT
+    case "9056204789"://Perimeter AT-RT
       return true;
-    case "9999999999"://Shadowed Hover Tank
+    case "8776260462"://Shadowed Hover Tank
       return true;
-    case "999999999"://Bunker Defender
+    case "8248876187"://Bunker Defender
       return SearchCount(SearchAllies($player, trait:"Vehicle")) > 1;
-    case "999999999"://Omicron Strike Craft
+    case "6332346890"://Omicron Strike Craft
       return true;
-    case "999999999"://Rogue-Class Starfighter
+    case "1036605983"://Rogue-Class Starfighter
       return true;
     default: return false;
   }
@@ -511,7 +512,7 @@ function HasGrit($cardID, $player, $index)
     case "6787851182"://Dwarf Spider Droid
     case "2761325938"://Devastating Gunship
     case "3f0b5622a7"://Asajj Leader Unit
-    case "9999999999"://Royal Security Fighter
+    case "5412384703"://Royal Security Fighter
     case "3878744555"://Interceptor Ace
       return true;
     case "9832122703"://Luminara Unduli
@@ -647,7 +648,7 @@ function HasOverwhelm($cardID, $player, $index)
     case "3693364726"://Aurra Sing
     case "3476041913"://Low Altitude Gunship
     case "8655450523"://Count Dooku (Fallen Jedi)
-    case "9999999999"://MC30 Assault Frigate
+    case "0756051511"://MC30 Assault Frigate
     case "9017877021"://Clone Commander Cody
       return true;
     case "4484318969"://Moff Gideon Leader Unit
@@ -741,8 +742,8 @@ function HasAmbush($cardID, $player, $index, $from)
     case "0097256640"://TIE Ambush Squadron
     case "4240570958"://Fireball
     case "7489502985"://Contracted Hunter
-    case "9999999999"://X-34 Landspeeder
-    case "9999999999"://Corporate Light Cruiser
+    case "7198833142"://X-34 Landspeeder
+    case "7458361203"://Corporate Light Cruiser
       return true;
 
     //conditional ambush
@@ -802,8 +803,8 @@ function HasShielded($cardID, $player)
     case "6300552434"://Gold Leader
     case "7700932371"://Boba Fett
     case "9325037410"://Iden Versio
-    case "9999999999"://Techno Union Transport
-    case "9999999999"://Outer Rim Outlaws
+    case "7385763727"://Techno Union Transport
+    case "3770706835"://Outer Rim Outlaws
       return true;
     default: return false;
   }
@@ -879,7 +880,7 @@ function HasSaboteur($cardID, $player, $index)
     case "3434956158"://Fives
     //Jump to Lightspeed
     case "81a416eb1f"://Rio Durant leader unit
-    case "9999999999"://Orbiting K-Wing
+    case "1107172562"://Orbiting K-Wing
       return true;
 
     //conditional saboteur
@@ -2526,9 +2527,9 @@ function PilotingCost($cardID, $player = "") {
     case "9430527677": $minCost = 2; break;//Hera Syndulla
     case "5942811090": $minCost = 3; break;//Luke Skywalker (You Still With Me?)
     case "8757741946": $minCost = 2; break;//Poe Dameron (One Hell of a Pilot)
-    case "9999999999": $minCost = 2; break;//Astromech Pilot
-    case "9999999999": $minCost = 2; break;//Hopeful Volunteer
-    case "9999999999": $minCost = 1; break;//Sullustan Spacer
+    case "0511138070": $minCost = 2; break;//Astromech Pilot
+    case "8930110877": $minCost = 2; break;//Hopeful Volunteer
+    case "4164902248": $minCost = 1; break;//Sullustan Spacer
     default: break;
   }
   return $minCost;

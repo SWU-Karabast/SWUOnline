@@ -1375,11 +1375,11 @@ function AllyPlayedAsUpgradeAbility($cardID, $player, $targetAlly) {
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
       AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
       break;
-    case "9999999999"://Astromech Pilot
-      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY");
-      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to heal");
-      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
-      AddDecisionQueue("MZOP", $mainPlayer, "RESTORE,2", 1);
+    case "0511138070"://Astromech Pilot
+      AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:damagedOnly=true&THEIRALLY:damagedOnly=true");
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a card to heal 2 damage");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+      AddDecisionQueue("MZOP", $player, "RESTORE,2", 1);
       break;
     default: break;
   }

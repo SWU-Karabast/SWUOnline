@@ -2755,6 +2755,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "7257556541"://Bodhi Rook
       if($from != "PLAY") {
+        AddDecisionQueue("LOOKHAND", $currentPlayer, "-");
         AddDecisionQueue("REVEALHANDCARDS", $otherPlayer, "-");
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRHAND");
         AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Unit");
@@ -6422,60 +6423,69 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "6196035152"://Nebula Ignition
       DestroyAllAllies(spareFilter:"upgraded");
       break;
-    case "9999999999"://Wing Guard Security Team
-      if($from != "PLAY") {
+    case "0391050270"://Jam Communications
+      AddDecisionQueue("LOOKHAND", $currentPlayer, "-");
+      AddDecisionQueue("REVEALHANDCARDS", $otherPlayer, "-");
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRHAND:definedType=Event");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an event to discard");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZDESTROY", $currentPlayer, "-", 1);
+      break;
+    case "7508489374"://Wing Guard Security Team
+      if ($from != "PLAY") {
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Fringe");
-        AddDecisionQueue("OP", $currentPlayer, "MZTONORMALINDICES");
+        AddDecisionQueue("OP", $currentPlayer, "MZTONORMALINDICES", 1);
         AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "2-", 1);
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose up to 2 Fringe Units a shield");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose up to 2 Fringe units to give a shield", 1);
         AddDecisionQueue("MULTICHOOSEUNIT", $currentPlayer, "<-", 1);
         AddDecisionQueue("SPECIFICCARD", $currentPlayer, "MULTIGIVESHIELD", 1);
       }
       break;
-    case "9999999999"://Evasive Maneuvers
+    case "5038195777"://Evasive Maneuver
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY&MYALLY");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "status=1");
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to exhaust");
-        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "WRITECHOICE", 1);
         break;
-    case "9999999999"://Dedicated Wingmen
+    case "8382691367"://Dedicated Wingmen
         CreateXWing($currentPlayer);
         CreateXWing($currentPlayer);
         break;
-    case "9999999999"://Punch It
+    case "6413979593"://Punch It
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Vehicle");
         AddDecisionQueue("MZFILTER", $currentPlayer, "status=1");
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a vehicle to attack and give +2");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
-        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "9999999999,HAND", 1);
+        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "6413979593,HAND", 1);
         AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
         break;
-    case "9999999999"://Apology Accepted
+    case "9283378702"://Apology Accepted
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a friendly unit to defeat");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a friendly unit to defeat", 1);
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "DESTROY", 1);
-      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY", 1);
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to give 2 experience tokens to", 1);
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "ADDEXPERIENCE", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "ADDEXPERIENCE", 1);
       break;
-    case "99999999999"://Dilapidated Ski Speeder
+    case "5012301077"://Dilapidated Ski Speeder
       $playAlly->DealDamage(3);
       break;
-    case "99999999999"://Diversion
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to give Sentinel for this phase");
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
-        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "WRITECHOICE", 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
-        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "99999999999,HAND", 1);
+    case "7214707216"://Diversion
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to give Sentinel for this phase");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "WRITECHOICE", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "7214707216,HAND", 1);
       break;
     //PlayAbility End
     default: break;
