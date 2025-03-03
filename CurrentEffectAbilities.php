@@ -747,6 +747,28 @@ function CurrentEffectStartRegroupPhaseAbilities() {
 
 function CurrentEffectEndRegroupPhaseAbilities() {
   // To function correctly, use uniqueID instead of MZIndex
+  global $currentTurnEffects;
+
+  for ($i = count($currentTurnEffects) - CurrentTurnPieces(); $i >= 0; $i -= CurrentTurnPieces()) {
+    $params = explode("_", $currentTurnEffects[$i]);
+    $cardID = $params[0];
+    $player = $currentTurnEffects[$i+1];
+    $uniqueID = $currentTurnEffects[$i+2];
+    $remove = false;
+    if (count($params) > 1) {
+      $subparam = $params[1];
+    }
+
+    switch($cardID) {
+      case "8800836530"://No Good To Me Dead
+        $ally = new Ally($uniqueID, $player);
+        $ally->Exhaust();
+        break;
+      default: break;
+    }
+
+    if ($remove) RemoveCurrentTurnEffect($i);
+  }
 }
 
 function CurrentEffectStartActionPhaseAbilities() {
@@ -766,11 +788,6 @@ function CurrentEffectStartActionPhaseAbilities() {
     switch($cardID) {
       case "5954056864": case "5e90bd91b0"://Han Solo
         MZChooseAndDestroy($player, "MYRESOURCES", context:"Choose a resource to destroy");
-        $remove = true;
-        break;
-      case "8800836530"://No Good To Me Dead
-        $ally = new Ally($uniqueID, $player);
-        $ally->Exhaust();
         $remove = true;
         break;
       default: break;
@@ -797,11 +814,6 @@ function CurrentEffectEndActionPhaseAbilities() {
       case "5696041568-2"://Triple Dark Raid
         AddDecisionQueue("PASSPARAMETER", $player , $uniqueID);
         AddDecisionQueue("UIDOP", $player , "BOUNCE");
-        break;
-      case "8418001763"://Huyang
-      case "7964782056"://Qi'ra unit
-      case "3503494534"://Regional Governor
-        AddNextTurnEffect($currentTurnEffects[$i], $player, $uniqueID);
         break;
       default: break;
     }

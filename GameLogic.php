@@ -1230,6 +1230,14 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       AddCurrentTurnEffect($parameter, $player);
       UpdateLinkAttack();
       return $lastResult;
+    case "ADDROUNDEFFECT":
+      AddRoundEffect($parameter, $player);
+      UpdateLinkAttack();
+      return $lastResult;
+    case "ADDPERMANENTEFFECT":
+      AddPermanentEffect($parameter, $player);
+      UpdateLinkAttack();
+      return $lastResult;
     case "REMOVECURRENTEFFECT":
       SearchCurrentTurnEffects($parameter, $player, true);
       UpdateLinkAttack();
@@ -1240,23 +1248,11 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       AddNextTurnEffect($parameter, $player);
       return "1";
     case "ADDLIMITEDCURRENTEFFECT":
-      $uniqueID = $lastResult;
-      $params = explode(",", $parameter);
-      $controller = UnitUniqueIDController($uniqueID);
-      $from = "";
-      if ($controller == -1) {
-        $controller = $player;
-      }
-      if (isset($params[1])) {
-        $from = $params[1];
-      }
-      if (isset($params[2])) {
-        $controller = $params[2]; // Override controller
-      }
-      AddCurrentTurnEffect($params[0], $controller, $from, $uniqueID);
-      UpdateLinkAttack();
-      return $lastResult;
+    case "ADDLIMITEDROUNDEFFECT":
+    case "ADDLIMITEDPERMANENTEFFECT":
     case "ADDLIMITEDNEXTTURNEFFECT":
+    case "ADDLIMITEDNEXTROUNDEFFECT":
+    case "ADDLIMITEDNEXTPERMANENTEFFECT":
       $uniqueID = $lastResult;
       $params = explode(",", $parameter);
       $controller = UnitUniqueIDController($uniqueID);
@@ -1270,7 +1266,33 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       if (isset($params[2])) {
         $controller = $params[2]; // Override controller
       }
-      AddNextTurnEffect($params[0], $controller, $lastResult);
+
+      $lastingType = 1;
+      switch ($phase) {
+        case "ADDLIMITEDROUNDEFFECT":
+        case "ADDLIMITEDNEXTROUNDEFFECT":
+          $lastingType = 2;
+          break;
+        case "ADDLIMITEDPERMANENTEFFECT":
+        case "ADDLIMITEDNEXTPERMANENTEFFECT":
+          $lastingType = 3;
+          break;
+      }
+
+      switch ($phase) {
+        case "ADDLIMITEDCURRENTEFFECT":
+        case "ADDLIMITEDROUNDEFFECT":
+        case "ADDLIMITEDPERMANENTEFFECT":
+          AddCurrentTurnEffect($params[0], $controller, $from, $uniqueID, lastingType: $lastingType);
+          UpdateLinkAttack();
+          break;
+        case "ADDLIMITEDNEXTTURNEFFECT":
+        case "ADDLIMITEDNEXTROUNDEFFECT":
+        case "ADDLIMITEDNEXTPERMANENTEFFECT":
+          AddNextTurnEffect($params[0], $controller, $lastResult, lastingType: $lastingType);
+          break;
+      }
+
       return $lastResult;
     case "ADDAIMCOUNTER":
       $arsenal = &GetArsenal($player);
@@ -1560,9 +1582,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       // Log end turn stats
       LogEndTurnStats($mainPlayer);
 
-      // Reset turn effects
-      $currentTurnEffects = $nextTurnEffects;
-      $nextTurnEffects = [];
+      // Swap turn effects
+      SwapTurnEffects();
 
       // Unset turn modifiers
       UnsetTurnModifiers();
@@ -1581,6 +1602,9 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $initiativeTaken = 0;
       $currentRound += 1;
       WriteLog("<span style='color:#6E6DFF;'>A new round has begun</span>");
+      return 1;
+    case "REMOVEPHASEEFFECTS":
+      RemovePhaseEffects();
       return 1;
     case "RESUMEROUNDPASS":
       ResumeRoundPass();
