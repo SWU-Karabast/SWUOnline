@@ -6441,10 +6441,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("SPECIFICCARD", $currentPlayer, "MULTIGIVESHIELD", 1);
       }
       break;
-    case "9999999999"://Evasive Maneuvers
+    case "5038195777"://Evasive Maneuver
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY&MYALLY");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "status=1");
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to exhaust");
-        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "WRITECHOICE", 1);
@@ -6475,16 +6476,16 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, "ADDEXPERIENCE", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "ADDEXPERIENCE", 1);
       break;
-    case "99999999999"://Dilapidated Ski Speeder
+    case "5012301077"://Dilapidated Ski Speeder
       $playAlly->DealDamage(3);
       break;
-    case "99999999999"://Diversion
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to give Sentinel for this phase");
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
-        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "WRITECHOICE", 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
-        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "99999999999,HAND", 1);
+    case "7214707216"://Diversion
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to give Sentinel for this phase");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "WRITECHOICE", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "7214707216,HAND", 1);
       break;
     //PlayAbility End
     default: break;

@@ -300,7 +300,7 @@ function RaidAmount($cardID, $player, $index, $reportMode = false)
     case "0587196584": $amount += 1; break;//Independent Smuggler
     case "1034181657": $amount += SearchCount(SearchAllies($player, tokenOnly: true)) > 0 ? 1 : 0;//First Order TIE Fighter
     case "0756051511": $amount += 1; break;//MC30 Assault Frigate 
-    case "9999999999": $amount += SearchCount(SearchAllies($player, trait:"Fighter")) > 1 ? 2 : 0; break;//Flanking Fang Fighter
+    case "0626954301": $amount += SearchCount(SearchAllies($player, trait:"Fighter")) > 1 ? 2 : 0; break;//Flanking Fang Fighter
     case "7458361203": $amount += 1; break;//Corporate Light Cruiser
     default: break;
   }
@@ -332,6 +332,7 @@ function HasSentinel($cardID, $player, $index)
       case "8719468890"://Sword and Shield Maneuver
         if(TraitContains($cardID, "Jedi", $player)) $hasSentinel = true;
         break;
+      case "7214707216": $hasSentinel = true; break;//Diversion        
       default: break;
     }
   }
