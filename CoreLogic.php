@@ -403,7 +403,7 @@ function DamageTrigger($player, $damage, $type, $source="NA", $canPass=false)
 
 function DealDamageAsync($player, $damage, $type="DAMAGE", $source="NA")
 {
-  global $CS_DamagePrevention, $combatChain;
+  global $CS_DamagePrevention, $combatChain, $mainPlayer;
   global $CS_ArcaneDamagePrevention, $dqVars, $dqState;
 
   $classState = &GetPlayerClassState($player);
@@ -455,6 +455,7 @@ function DealDamageAsync($player, $damage, $type="DAMAGE", $source="NA")
   {
     //AddDamagePreventionSelection($player, $damage, $preventable);//FAB
     AddDamagePreventionSelection($player, $damage, false);
+    CheckBobaFettJTL($player, $mainPlayer != $player, $type == "COMBAT");
   }
   return $damage;
 }
@@ -6647,7 +6648,7 @@ function DamageAllAllies($amount, $source, $alsoRest=false, $alsoFreeze=false, $
     if($alsoRest) $theirAllies[$i+1] = 1;
     if($alsoFreeze) $theirAllies[$i+3] = 1;
     $ally = new Ally("THEIRALLY-$i");
-    $ally->DealDamage($amount);
+    $ally->DealDamage($amount, enemyDamage:true);
   }
   $allies = &GetAllies($currentPlayer);
   for($i=count($allies) - AllyPieces(); $i>=0; $i-=AllyPieces())

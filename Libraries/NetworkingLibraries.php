@@ -2286,7 +2286,7 @@ function BlizzardAssaultATAT($player, $excess)
   AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal " . $excess . " damage to");
   AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:arena=Ground");
   AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-  AddDecisionQueue("MZOP", $player, "DEALDAMAGE," . $excess, 1);
+  AddDecisionQueue("MZOP", $player, "DEALDAMAGE,$excess,$player,1", 1);
 }
 
 function ArquitensAssaultCruiser($player)
