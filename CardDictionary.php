@@ -1605,7 +1605,7 @@ function CheckJTLAbilityNames($cardID) {
     case "3905028200"://Admiral Trench
       return LeaderAbilitiesIgnored() ? "" : "Rummage";
     case "4531112134"://Kazuda Xiono
-      return LeaderAbilitiesIgnored() ? "" : "Clear Abilities";
+      return LeaderAbilitiesIgnored() ? "" : "Lose Abilities";
     case "6600603122"://Massassi Tactical Officer
       return "Fighter Attack,Attack";
     case "9921128444"://General Hux

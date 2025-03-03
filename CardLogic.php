@@ -1291,7 +1291,7 @@ function AsajjVentressIWorkAlone($player) {
 }
 
 function KazudaXionoBestPilotInTheGalaxy($player) {
-  AddDecisionQueue("SETDQCONTEXT", $player, "Choose units to lost abilities");
+  AddDecisionQueue("SETDQCONTEXT", $player, "Choose units to lose abilities");
   AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
   AddDecisionQueue("OP", $player, "MZTONORMALINDICES", 1);
   AddDecisionQueue("PREPENDLASTRESULT", $player, SearchCount(SearchAllies($player)) . "-", 1);

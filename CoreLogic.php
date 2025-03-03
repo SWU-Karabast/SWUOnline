@@ -6220,12 +6220,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "4531112134"://Kazuda Xiono
-      if(GetResolvedAbilityName($cardID) == "Clear Abilities") {
+      if (GetResolvedAbilityName($cardID) == "Lose Abilities") {
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to clear abilities from");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to lose abilities");
         AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
-        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "4531112134,PLAY", 1);
+        AddDecisionQueue("ADDLIMITEDROUNDEFFECT", $currentPlayer, "4531112134,PLAY", 1);
         AddDecisionQueue("SWAPTURN", $currentPlayer, "-");
       }
       break;
