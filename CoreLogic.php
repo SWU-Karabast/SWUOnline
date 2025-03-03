@@ -2755,6 +2755,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "7257556541"://Bodhi Rook
       if($from != "PLAY") {
+        AddDecisionQueue("LOOKHAND", $currentPlayer, "-");
         AddDecisionQueue("REVEALHANDCARDS", $otherPlayer, "-");
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRHAND");
         AddDecisionQueue("MZFILTER", $currentPlayer, "definedType=Unit");
@@ -6421,6 +6422,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         break;
     case "6196035152"://Nebula Ignition
       DestroyAllAllies(spareFilter:"upgraded");
+      break;
+    case "0391050270"://Jam Communications
+      AddDecisionQueue("LOOKHAND", $currentPlayer, "-");
+      AddDecisionQueue("REVEALHANDCARDS", $otherPlayer, "-");
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRHAND:definedType=Event");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an event to discard");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZDESTROY", $currentPlayer, "-", 1);
       break;
     case "9999999999"://Wing Guard Security Team
       if($from != "PLAY") {
