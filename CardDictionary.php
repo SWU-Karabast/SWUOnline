@@ -440,7 +440,7 @@ function HasSentinel($cardID, $player, $index)
       return true;
     case "9999999999"://Perimeter AT-RT
       return true;
-    case "9999999999"://Shadowed Hover Tank
+    case "8776260462"://Shadowed Hover Tank
       return true;
     case "999999999"://Bunker Defender
       return SearchCount(SearchAllies($player, trait:"Vehicle")) > 1;
