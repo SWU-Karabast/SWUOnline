@@ -6649,7 +6649,7 @@ function DamageAllAllies($amount, $source, $alsoRest=false, $alsoFreeze=false, $
     if($alsoRest) $theirAllies[$i+1] = 1;
     if($alsoFreeze) $theirAllies[$i+3] = 1;
     $ally = new Ally("THEIRALLY-$i");
-    $ally->DealDamage($amount);
+    $ally->DealDamage($amount, enemyDamage:true);
   }
   $allies = &GetAllies($currentPlayer);
   for($i=count($allies) - AllyPieces(); $i>=0; $i-=AllyPieces())
