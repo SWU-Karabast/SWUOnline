@@ -96,9 +96,10 @@ function PitchPieces()
 //1 - Player ID
 //2 - Applies to Unique ID
 //3 - Number of uses remaining
+//4 - Lasting type (1 = phase, 2 = round, 3 = permanent). Default: 1 (phase).
 function CurrentTurnPieces()
 {
-  return 4;
+  return 5;
 }
 
 //0 - ?

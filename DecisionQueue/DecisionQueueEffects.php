@@ -954,7 +954,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
     case "KAZUDA_JTL":
       for($i=0; $i<count($lastResult); ++$i) {
         $ally = new Ally("MYALLY-" . $lastResult[$i], $player);
-        AddCurrentTurnEffect("c1700fc85b", $player, "c1700fc85b", $ally->UniqueID());
+        AddRoundEffect("c1700fc85b", $player, "c1700fc85b", $ally->UniqueID());
       }
       break;
     //SpecificCardLogic End

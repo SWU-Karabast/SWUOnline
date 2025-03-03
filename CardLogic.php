@@ -120,7 +120,8 @@ function AddCurrentTurnEffectNextAttack($cardID, $player, $from = "", $uniqueID 
   else AddCurrentTurnEffect($cardID, $player, $from, $uniqueID);
 }
 
-function AddCurrentTurnEffect($cardID, $player, $from = "", $uniqueID = -1)
+//4 - Lasting type (1 = phase, 2 = round, 3 = permanent). Default: 1 (phase).
+function AddCurrentTurnEffect($cardID, $player, $from = "", $uniqueID = -1, $lastingType = 1)
 {
   global $currentTurnEffects, $combatChain;
   $card = explode("-", $cardID)[0];
@@ -128,7 +129,44 @@ function AddCurrentTurnEffect($cardID, $player, $from = "", $uniqueID = -1)
     AddCurrentTurnEffectFromCombat($cardID, $player, $uniqueID);
     return;
   }
-  array_push($currentTurnEffects, $cardID, $player, $uniqueID, CurrentTurnEffectUses($cardID));
+  array_push($currentTurnEffects, $cardID, $player, $uniqueID, CurrentTurnEffectUses($cardID), $lastingType);
+}
+
+function RemovePhaseEffects() {
+  global $currentTurnEffects;
+  for ($i = count($currentTurnEffects) - CurrentTurnPieces(); $i >= 0; $i -= CurrentTurnPieces()) {
+    $lastingType = $currentTurnEffects[$i + 4];
+    if ($lastingType == 1) {
+      RemoveCurrentTurnEffect($i);
+    }
+  }
+}
+
+function SwapTurnEffects() {
+  global $currentTurnEffects, $nextTurnEffects;
+
+  // Copy permanent effects to next turn effects
+  for ($i = count($currentTurnEffects) - CurrentTurnPieces(); $i >= 0; $i -= CurrentTurnPieces()) {
+    $lastingType = $currentTurnEffects[$i + 4];
+    if ($lastingType == 3) {
+      for ($j = 0; $j < CurrentTurnEffectPieces(); $j++) {
+        array_push($nextTurnEffects, $currentTurnEffects[$i + $j]);
+      }
+    }
+  }
+
+  $currentTurnEffects = $nextTurnEffects;
+  $nextTurnEffects = [];
+}
+
+function AddRoundEffect($cardID, $player, $from = "", $uniqueID = -1)
+{
+  return AddCurrentTurnEffect($cardID, $player, $from, $uniqueID, 2);
+}
+
+function AddPermanentEffect($cardID, $player, $from = "", $uniqueID = -1)
+{
+  return AddCurrentTurnEffect($cardID, $player, $from, $uniqueID, 3);
 }
 
 function AddAfterResolveEffect($cardID, $player, $from = "", $uniqueID = -1)
@@ -139,7 +177,7 @@ function AddAfterResolveEffect($cardID, $player, $from = "", $uniqueID = -1)
     AddCurrentTurnEffectFromCombat($cardID, $player, $uniqueID);
     return;
   }
-  array_push($afterResolveEffects, $cardID, $player, $uniqueID, CurrentTurnEffectUses($cardID));
+  array_push($afterResolveEffects, $cardID, $player, $uniqueID, CurrentTurnEffectUses($cardID), 1);
 }
 
 function HasLeader($player) {
@@ -184,7 +222,7 @@ function CopyCurrentTurnEffectsFromAfterResolveEffects()
 function AddCurrentTurnEffectFromCombat($cardID, $player, $uniqueID = -1)
 {
   global $currentTurnEffectsFromCombat;
-  array_push($currentTurnEffectsFromCombat, $cardID, $player, $uniqueID, CurrentTurnEffectUses($cardID));
+  array_push($currentTurnEffectsFromCombat, $cardID, $player, $uniqueID, CurrentTurnEffectUses($cardID), 1);
 }
 
 function CopyCurrentTurnEffectsFromCombat()
@@ -227,10 +265,11 @@ function CurrentTurnEffectUses($cardID)
   }
 }
 
-function AddNextTurnEffect($cardID, $player, $uniqueID = -1)
+//4 - Lasting type (1 = phase, 2 = round, 3 = permanent). Default: 1 (phase).
+function AddNextTurnEffect($cardID, $player, $uniqueID = -1, $lastingType = 1)
 {
   global $nextTurnEffects;
-  array_push($nextTurnEffects, $cardID, $player, $uniqueID, CurrentTurnEffectUses($cardID));
+  array_push($nextTurnEffects, $cardID, $player, $uniqueID, CurrentTurnEffectUses($cardID), $lastingType);
 }
 
 function IsCombatEffectLimited($index)
@@ -953,21 +992,20 @@ function ShouldHoldPriority($player, $layerCard = "")
 function StartRegroupPhase() {
   global $initiativePlayer, $mainPlayer;
 
+  // 5.5.1 A) Start of the regroup phase.
+  // Any lasting effects that expire when the regroup phase starts expire now.
+  // Any abilities or effects that trigger at the start of the regroup phase trigger now.
+
   // Reset class states
   ResetClassState(1);
   ResetClassState(2);
 
   // Trigger abilities
-  //5.5.1 A) Start of the regroup phase.
-  //Any lasting effects that expire when the regroup phase starts expire now.
-  //Any abilities or effects that trigger at the start of the regroup phase trigger now
   CharacterStartRegroupPhaseAbilities(1);
   CharacterStartRegroupPhaseAbilities(2);
   AllyStartRegroupPhaseAbilities(1);
   AllyStartRegroupPhaseAbilities(2);
   CurrentEffectStartRegroupPhaseAbilities();
-
-  // Process decision queue
   ProcessDecisionQueue();
 
   // Draw cards and resource them
@@ -980,8 +1018,6 @@ function StartRegroupPhase() {
   MZMoveCard($otherPlayer, "MYHAND", "MYRESOURCES", may:true, context:"Choose a card to resource", silent:true);
   AddDecisionQueue("AFTERRESOURCE", $initiativePlayer, "HAND", 1);
   AddDecisionQueue("AFTERRESOURCE", $otherPlayer, "HAND", 1);
-
-  // Process decision queue
   ProcessDecisionQueue();
 
   // End regroup phase
@@ -1006,8 +1042,6 @@ function EndRegroupPhase() {
   AllyEndRegroupPhaseAbilities(1);
   AllyEndRegroupPhaseAbilities(2);
   CurrentEffectEndRegroupPhaseAbilities();
-
-  // Process decision queue
   ProcessDecisionQueue();
 
   // End turn procedure
@@ -1035,16 +1069,19 @@ function StartActionPhase() {
   AllyStartActionPhaseAbilities(1);
   AllyStartActionPhaseAbilities(2);
   CurrentEffectStartActionPhaseAbilities();
+  ProcessDecisionQueue();
 
   // Resume round pass
   AddDecisionQueue("RESUMEROUNDPASS", $mainPlayer, "-");
-
-  // Process decision queue
   ProcessDecisionQueue();
 }
 
 function EndActionPhase() {
   global $mainPlayer;
+
+  // 4.1 C) End of the action phase
+  // Any lasting effects that expire when the action phase ends expire now (e.g. “for this phase”).
+  // Any abilities or effects that trigger at the end of the action phase trigger now.
 
   // Trigger abilities
   CharacterEndActionPhaseAbilities(1);
@@ -1052,6 +1089,11 @@ function EndActionPhase() {
   AllyEndActionPhaseAbilities(1);
   AllyEndActionPhaseAbilities(2);
   CurrentEffectEndActionPhaseAbilities();
+  ProcessDecisionQueue();
+
+  // Remove phase effects
+  AddDecisionQueue("REMOVEPHASEEFFECTS", $mainPlayer, "-");
+  ProcessDecisionQueue();
 
   // Start regroup phase
   AddLayer("STARTREGROUPPHASE", $mainPlayer, "-");
@@ -1249,7 +1291,7 @@ function AsajjVentressIWorkAlone($player) {
 }
 
 function KazudaXionoBestPilotInTheGalaxy($player) {
-  AddDecisionQueue("SETDQCONTEXT", $player, "Choose units to lost abilities");
+  AddDecisionQueue("SETDQCONTEXT", $player, "Choose units to lose abilities");
   AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
   AddDecisionQueue("OP", $player, "MZTONORMALINDICES", 1);
   AddDecisionQueue("PREPENDLASTRESULT", $player, SearchCount(SearchAllies($player)) . "-", 1);
