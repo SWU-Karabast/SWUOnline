@@ -44,6 +44,7 @@ $isMobile = IsMobile();
                 <?php
                 if (isset($_SESSION["useruid"])) {
                     echo "<li><a href='UnimplementedCards.php' class='NavBarItem'>Preview Cards</a></li>";
+                    echo "<li><a href='https://swustats.net/TCGEngine/SharedUI/MainMenu.php' target='_blank' class='NavBarItem'>SWU Stats</a></li>";
                     echo "<li><a href='ProfilePage.php' class='NavBarItem'>Profile</a></li>";
                     echo "<li><a href='./AccountFiles/LogoutUser.php' class='NavBarItem'>Log Out</a></li>";
                 } else {
