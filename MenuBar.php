@@ -24,8 +24,11 @@ $isMobile = IsMobile();
 <head>
     <meta charset="utf-8">
     <title>Petranaki</title>
-    <link rel="shortcut icon" href="Images/favicon.ico" />
     <link rel="icon" type="image/png" href="Images/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="Images/favicon.svg" />
+    <link rel="shortcut icon" href="Images/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="Images/apple-touch-icon.png" />
+    <link rel="manifest" href="site.webmanifest" />
     <link rel="stylesheet" href="./css/petranaki250301.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
