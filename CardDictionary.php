@@ -299,7 +299,7 @@ function RaidAmount($cardID, $player, $index, $reportMode = false)
     case "0249398533": $amount += 1; break;//Obedient Vanguard
     case "0587196584": $amount += 1; break;//Independent Smuggler
     case "1034181657": $amount += SearchCount(SearchAllies($player, tokenOnly: true)) > 0 ? 1 : 0;//First Order TIE Fighter
-    case "9999999999": $amount += 1; break;//MC30 Assault Frigate 
+    case "0756051511": $amount += 1; break;//MC30 Assault Frigate 
     case "9999999999": $amount += SearchCount(SearchAllies($player, trait:"Fighter")) > 1 ? 2 : 0; break;//Flanking Fang Fighter
     case "9999999999": $amount += 1; break;//Corporate Light Cruiser
     default: break;
@@ -647,7 +647,7 @@ function HasOverwhelm($cardID, $player, $index)
     case "3693364726"://Aurra Sing
     case "3476041913"://Low Altitude Gunship
     case "8655450523"://Count Dooku (Fallen Jedi)
-    case "9999999999"://MC30 Assault Frigate
+    case "0756051511"://MC30 Assault Frigate
     case "9017877021"://Clone Commander Cody
       return true;
     case "4484318969"://Moff Gideon Leader Unit
