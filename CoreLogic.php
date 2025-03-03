@@ -6422,6 +6422,39 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "6196035152"://Nebula Ignition
       DestroyAllAllies(spareFilter:"upgraded");
       break;
+    case "9999999999"://Wing Guard Security Team
+      if($from != "PLAY") {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Fringe");
+        AddDecisionQueue("OP", $currentPlayer, "MZTONORMALINDICES");
+        AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "2-", 1);
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose up to 2 Fringe Units a shield");
+        AddDecisionQueue("MULTICHOOSEUNIT", $currentPlayer, "<-", 1);
+        AddDecisionQueue("SPECIFICCARD", $currentPlayer, "MULTIGIVESHIELD", 1);
+      }
+      break;
+    case "9999999999"://Evasive Maneuvers
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY&MYALLY");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to exhaust");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "WRITECHOICE", 1);
+        break;
+    case "9999999999"://Dedicated Wingmen
+        CreateXWing($currentPlayer);
+        CreateXWing($currentPlayer);
+        break;
+    case "9999999999"://Punch It
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Vehicle");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "status=1");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a vehicle to attack and give +2");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "3809048641,HAND", 1);
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
+        break;
     //PlayAbility End
     default: break;
   }
