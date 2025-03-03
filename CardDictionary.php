@@ -511,7 +511,7 @@ function HasGrit($cardID, $player, $index)
     case "6787851182"://Dwarf Spider Droid
     case "2761325938"://Devastating Gunship
     case "3f0b5622a7"://Asajj Leader Unit
-    case "9999999999"://Royal Security Fighter
+    case "5412384703"://Royal Security Fighter
     case "3878744555"://Interceptor Ace
       return true;
     case "9832122703"://Luminara Unduli
