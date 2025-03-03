@@ -300,7 +300,7 @@ function RaidAmount($cardID, $player, $index, $reportMode = false)
     case "0587196584": $amount += 1; break;//Independent Smuggler
     case "1034181657": $amount += SearchCount(SearchAllies($player, tokenOnly: true)) > 0 ? 1 : 0;//First Order TIE Fighter
     case "9999999999": $amount += 1; break;//MC30 Assault Frigate 
-    case "9999999999": $amount += SearchCount(SearchAllies($player, trait:"Fighter")) > 1 ? 2 : 0; break;//Fanking Fang Fighter
+    case "9999999999": $amount += SearchCount(SearchAllies($player, trait:"Fighter")) > 1 ? 2 : 0; break;//Flanking Fang Fighter
     case "9999999999": $amount += 1; break;//Corporate Light Cruiser
     default: break;
   }
@@ -657,7 +657,6 @@ function HasOverwhelm($cardID, $player, $index)
       return !LeaderAbilitiesIgnored();
     case "8139901441"://Bo-Katan Kryze
       return SearchCount(SearchAllies($player, trait:"Mandalorian")) > 1;
-
     default: return false;
   }
 }
