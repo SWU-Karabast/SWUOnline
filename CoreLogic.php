@@ -6453,14 +6453,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         CreateXWing($currentPlayer);
         CreateXWing($currentPlayer);
         break;
-    case "9999999999"://Punch It
+    case "6413979593"://Punch It
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Vehicle");
         AddDecisionQueue("MZFILTER", $currentPlayer, "status=1");
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a vehicle to attack and give +2");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
-        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "9999999999,HAND", 1);
+        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "6413979593,HAND", 1);
         AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
         break;

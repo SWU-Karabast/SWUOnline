@@ -260,7 +260,7 @@ function EffectAttackModifier($cardID, $playerID="")
     case "3427170256": return 2;//Captain Phasma Unit
     case "6600603122": return 1;//Massassi Tactical Officer
     case "2922063712": return SearchCount(SearchAllies($defPlayer, damagedOnly:true));//Sith Trooper
-    case "9999999999": return 2;//Punch it
+    case "6413979593": return 2;//Punch it
     default: return 0;
   }
 }
@@ -883,7 +883,7 @@ function IsCombatEffectActive($cardID)
     case "6720065735"://Han Solo (Has His Moments)
     case "6228218834"://Tactival Heavy Bomber
     case "6600603122"://Massassi Tactical Officer
-    case "9999999999"://Punch it
+    case "6413979593"://Punch it
       return true;
     default: return false;
   }
