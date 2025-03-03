@@ -550,11 +550,17 @@ select {
 .fav-decks {
   margin: 0 20px;
   overflow-y: auto;
+  flex-grow: 1.8;
 }
 
 .stats {
  margin: 0 20px 0 0;
  overflow-y: auto;
+ flex-grow: 1;
+}
+
+.stats-font-lg {
+  font-size: 28px;
 }
 
 .imgPatreon {

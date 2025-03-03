@@ -26,7 +26,7 @@ $isMobile = IsMobile();
     <title>Petranaki</title>
     <link rel="shortcut icon" href="Images/favicon.ico" />
     <link rel="icon" type="image/png" href="Images/favicon-96x96.png" sizes="96x96" />
-    <link rel="stylesheet" href="./css/petranaki250225.css">
+    <link rel="stylesheet" href="./css/petranaki250301.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link

@@ -83,11 +83,12 @@ echo ("<h2>Favorite Decks</h2>");
 $favoriteDecks = LoadFavoriteDecks($_SESSION["userid"]);
 if (count($favoriteDecks) > 0) {
     echo ("<table>");
-    echo ("<tr><td>Hero</td><td>Deck Name</td><td>Delete</td></tr>");
+    echo ("<tr><td>Hero</td><td>Deck Name</td><td>Link</td><td>Delete</td></tr>");
     for ($i = 0; $i < count($favoriteDecks); $i += 4) {
         echo ("<tr>");
         echo ("<td>" . CardLink($favoriteDecks[$i + 2], $favoriteDecks[$i + 2], true) . "</td>");
         echo ("<td>" . $favoriteDecks[$i + 1] . "</td>");
+        echo ("<td>" . ParseLink($favoriteDecks[$i]) . "</td>");
         echo ("<td><a style='text-underline-offset:5px;' href='./MenuFiles/DeleteDeck.php?decklink=" . urlencode($favoriteDecks[$i]) . "'>Delete</a></td>");
         echo ("</tr>");
     }
@@ -102,7 +103,7 @@ if (count($favoriteDecks) > 0) {
 </div>
 
 <div class='stats container bg-yellow'>
-    <p>For stats tracking, build or import your deck to <a href="https://swustats.net" target="_blank">swustats.net</a> and use the swustats deck link to play on Petranaki.</p>
+    <p class='stats-font-lg'>For stats tracking, build or import your deck to <a href="https://swustats.net" target="_blank">swustats.net</a> and use the swustats deck link to play on Petranaki.</p>
     <!--
 <form id="filterForm">
     <input type="date" name="startDate" value="<?php echo $startDate; ?>">
@@ -147,6 +148,18 @@ function DisplayPatreon() {
     } else {
         include './zzPatreonDebug.php';
     }
+}
+
+function ParseLink($link) {
+  if(strpos($link, "swustats.net") !== false) {
+    return "<a href='https://" . $link . "&playerID=1&folderPath=SWUDeck' target='_blank'>View on SWU Stats</a>";
+  } else if(strpos($link, "swudb.com") !== false) {
+    return "<a href='https://" . $link . "' target='_blank'>View on SWUDB</a>";
+  } else if(strpos($link, "sw-unlimited-db.com" !== false)) {
+    return "<a href='https://" . $link . "' target='_blank'>View on sw-unlimited-db.com</a>";
+  } else {
+    return "error: link not supported";
+  }
 }
 
 require "Disclaimer.php";
