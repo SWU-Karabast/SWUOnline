@@ -86,7 +86,6 @@ $cardsList = [
     "Unity of Purpose",
     "Veteran Fleet Officer",
     "Vonreg's TIE Interceptor, Ace of the First Order",
-    "War Juggernaut",
     "Wing Guard Security Team",
     "X-34 Landspeeder"
 ];
