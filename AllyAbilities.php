@@ -1380,6 +1380,7 @@ function AllyPlayedAsUpgradeAbility($cardID, $player, $targetAlly) {
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to heal");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "RESTORE,2", 1);
+      break;
     default: break;
   }
 }
