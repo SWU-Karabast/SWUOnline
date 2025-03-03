@@ -324,6 +324,20 @@ function CardIDOverride($cardID) {
     case "C24_004": return "SHD_141"; //Kylo Ren (Killing the Past)
     case "C24_005": return "TWI_134"; //Asajj Ventress (Count Dooku's Assassin)
     case "C24_006": return "TWI_135"; //Darth Maul (Revenge at Last)
+    case "J24_001": return "SOR_040"; //Avenger
+    case "J24_002": return "SOR_145"; //K-2SO
+    case "J24_003": return "SHD_037"; //Supreme Leader Snoke
+    case "J24_004": return "SHD_090"; //Maul
+    case "J24_005": return "SHD_154"; //Wrecker
+    case "J24_006": return "SHD_248"; //Tech
+    case "GG_001": return "SOR_021"; //Dagobah Swamp
+    case "GG_002": return "SOR_024"; //Echo Base
+    case "GG_003": return "SOR_026"; //Catacombs of Cadera
+    case "GG_004": return "SOR_026"; //Jabba's Palace
+    case "GG_005": return "SOR_001"; //Experience (Token Upgrade)
+    case "GG_006": return "SOR_002"; //Shield (Token Upgrade)
+    
+    
 
     default: return $cardID;
   }
