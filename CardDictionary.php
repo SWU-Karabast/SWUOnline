@@ -301,7 +301,7 @@ function RaidAmount($cardID, $player, $index, $reportMode = false)
     case "1034181657": $amount += SearchCount(SearchAllies($player, tokenOnly: true)) > 0 ? 1 : 0;//First Order TIE Fighter
     case "0756051511": $amount += 1; break;//MC30 Assault Frigate 
     case "9999999999": $amount += SearchCount(SearchAllies($player, trait:"Fighter")) > 1 ? 2 : 0; break;//Flanking Fang Fighter
-    case "9999999999": $amount += 1; break;//Corporate Light Cruiser
+    case "7458361203": $amount += 1; break;//Corporate Light Cruiser
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
@@ -742,7 +742,7 @@ function HasAmbush($cardID, $player, $index, $from)
     case "4240570958"://Fireball
     case "7489502985"://Contracted Hunter
     case "7198833142"://X-34 Landspeeder
-    case "9999999999"://Corporate Light Cruiser
+    case "7458361203"://Corporate Light Cruiser
       return true;
 
     //conditional ambush
