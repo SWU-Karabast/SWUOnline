@@ -741,7 +741,7 @@ function HasAmbush($cardID, $player, $index, $from)
     case "0097256640"://TIE Ambush Squadron
     case "4240570958"://Fireball
     case "7489502985"://Contracted Hunter
-    case "9999999999"://X-34 Landspeeder
+    case "7198833142"://X-34 Landspeeder
     case "9999999999"://Corporate Light Cruiser
       return true;
 
