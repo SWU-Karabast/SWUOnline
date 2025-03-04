@@ -131,6 +131,10 @@ $cardBack = new stdClass();
 $cardBack->name = "Tropa do Boba";
 $cardBack->id = 32;
 $response->cardBacks[] = $cardBack;
+$cardBack = new stdClass();
+$cardBack->name = "Outer Rim CCG";
+$cardBack->id = 33;
+$response->cardBacks[] = $cardBack;
 
 $response->playmats = [];
 if(IsUserLoggedIn()) {

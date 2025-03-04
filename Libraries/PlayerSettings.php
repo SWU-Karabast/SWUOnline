@@ -264,6 +264,8 @@ function GetCardBack($player)
       return "galactic-shuffle";
     case 32:
       return "tropa-do-boba";
+    case 33:
+      return "CB_OuterRimCCG";
     default:
       return "CardBack";
   }
@@ -490,6 +492,7 @@ function GetSettingsUI($player)
   $rv .= CreateSelectOption($SET_Cardback . "-" . 30, "GonkGang", $SET_Cardback . "-" . $settings[$SET_Cardback]);
   $rv .= CreateSelectOption($SET_Cardback . "-" . 31, "Galactic Shuffle", $SET_Cardback . "-" . $settings[$SET_Cardback]);
   $rv .= CreateSelectOption($SET_Cardback . "-" . 32, "Tropa do Boba", $SET_Cardback . "-" . $settings[$SET_Cardback]);
+  $rv .= CreateSelectOption($SET_Cardback . "-" . 33, "Outer Rim CCG", $SET_Cardback . "-" . $settings[$SET_Cardback]);
   $rv .= "</select>";
   $rv .= "<BR>";
 
