@@ -3579,6 +3579,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "ADDSHIELD", 1);
       break;
+    case "3622750563"://Dornean Gunship
+      $vehicleCount = SearchCount(SearchAllies($currentPlayer, trait:"Vehicle"));
+      IndirectDamage($otherPlayer, $vehicleCount, true);
+      break;
     case "7730475388"://Shoot Down
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:arena=Space");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a space unit to deal 3 damage to");
