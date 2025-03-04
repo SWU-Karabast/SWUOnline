@@ -902,7 +902,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
 
       AddDecisionQueue("PASSPARAMETER", $player, $ally->MZIndex());
       AddDecisionQueue("MZOP", $player, "ATTACK");
-      break;    
+      break;
     case "COMMENCEPATROL":
       if ($lastResult == "Yours") {
         $search = "MYDISCARD";
@@ -1062,6 +1062,18 @@ function SpecificCardLogic($player, $parameter, $lastResult)
         AddDecisionQueue("MZOP", $player, "MOVEPILOTUNIT", 1);
       } else if ($lastResult == "NO") {
         DestroyAlly($player, $L3Ally->Index(), skipSpecialCase:true);
+      }
+      break;
+    case "VADER_UNIT_JTL":
+      $pingedAlly = new Ally($lastResult);
+      $enemyDamage = str_starts_with($lastResult, "MYALLY-") ? false : true;
+      $defeated = $pingedAlly->DealDamage(1, $enemyDamage, fromUnitEffect:true);
+      if($defeated) {
+        AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
+        AddDecisionQueue("PREPENDLASTRESULT", $player, "MYCHAR-0,THEIRCHAR-0,");
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose something to deal 1 damage to");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+        AddDecisionQueue("MZOP", $player, DamageStringBuilder(1, $player, isUnitEffect:1), 1);
       }
       break;
     //SpecificCardLogic End
