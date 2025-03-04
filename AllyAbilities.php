@@ -2060,6 +2060,15 @@ function SpecificAllyAttackAbilities($attackID)
       case "c1700fc85b"://Kazuda pilot Leader unit
         KazudaXionoBestPilotInTheGalaxy($mainPlayer);
         break;
+      case "d8a5bf1a15"://Major Vonreg pilot Leader unit
+        $arena = $attackerAlly->CurrentArena();
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:arena=$arena&THEIRALLY:arena=$arena");
+        AddDecisionQueue("MZFILTER", $mainPlayer, "uniqueID=" . $attackerAlly->UniqueID());
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to give +1/+0");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
+        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "d8a5bf1a15,PLAY", 1);
+        break;
       default: break;
     }
   }

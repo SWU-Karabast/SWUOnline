@@ -261,6 +261,8 @@ function EffectAttackModifier($cardID, $playerID="")
     case "6600603122": return 1;//Massassi Tactical Officer
     case "2922063712": return SearchCount(SearchAllies($defPlayer, damagedOnly:true));//Sith Trooper
     case "6413979593": return 2;//Punch it
+    case "9763190770": return 1;//Major Vonreg
+    case "d8a5bf1a15": return 1;//Major Vonreg pilot
     default: return 0;
   }
 }
