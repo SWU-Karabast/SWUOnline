@@ -406,7 +406,7 @@ function DestroyAlly($player, $index,
   $lastPower = $ally->CurrentPower();
   $lastRemainingHP = $ally->Health();
   $isSuperlaserTech = $cardID === "8954587682";
-  $isL337JTL = $cardID = "6032641503";
+  $isL337JTL = $cardID == "6032641503";
   $discardPileModifier = "-";
   if(!$skipDestroy && !($isL337JTL && !$skipSpecialCase)) {
     OnKillAbility($player, $uniqueID);
@@ -442,10 +442,10 @@ function DestroyAlly($player, $index,
       AddDecisionQueue("SETDQCONTEXT", $player, "Move L3's brain to a vehicle?", 1);
       AddDecisionQueue("YESNO", $player, "-", 1);
       AddDecisionQueue("SPECIFICCARD", $player, "L337_JTL", 1);
-      return;
     } else {
       DestroyAlly($player, $index, skipSpecialCase:true);
     }
+    return;
   }
 
   if($removedFromPlay) {
