@@ -2125,6 +2125,12 @@ function SpecificAllyAttackAbilities($attackID)
           AddDecisionQueue("MZOP", $mainPlayer, "RESTORE,1", 1);
         }
         break;
+      case "6079255999"://Darth Vader pilot unit
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY");
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 1 damage to");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        AddDecisionQueue("SPECIFICCARD", $mainPlayer, "VADER_UNIT_JTL", 1);
+        break;
       default: break;
     }
   }
