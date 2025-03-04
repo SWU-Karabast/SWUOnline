@@ -3582,6 +3582,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MULTICHOOSEUNIT", $currentPlayer, "<-", 1);
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "ALLWINGSREPORTIN", 1);
       break;
+    case "3278986026"://Rafa Martez
+      RafaMartezJTL($currentPlayer);
+      break;
     case "2579248092"://Covering the Wing
       CreateXWing($currentPlayer);
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
