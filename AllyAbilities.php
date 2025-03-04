@@ -1028,6 +1028,13 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities, $isUp
         AddDecisionQueue("BUTTONINPUT", $player, "Yourself,Opponent");
         AddDecisionQueue("SPECIFICCARD", $player, "PROFUNDITY", 1);
         break;
+      case "5177897609"://Skyway Cloud Car
+        AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:maxAttack=2&THEIRALLY:maxAttack=2");
+        AddDecisionQueue("MZFILTER", $player, "leader=1");
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose a card to bounce");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+        AddDecisionQueue("MZOP", $player, "BOUNCE", 1);
+      break;
       //AllyDestroyedAbility End
       default: break;
     }
