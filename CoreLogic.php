@@ -3575,6 +3575,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
       IndirectDamage($otherPlayer, 5, false);
       break;
+    case "6938023363"://Piercing Shot
+      
+      break;
     case "2758597010"://Maximum Firepower
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "-", 1);
       AddDecisionQueue("SETDQVAR", $currentPlayer, 0, 1);
