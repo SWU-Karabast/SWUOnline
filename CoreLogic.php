@@ -4324,7 +4324,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         $tieFighterAlly = new Ally($tieFighterUniqueId, $otherPlayer);
         $tieFighterAlly->Ready();
       }
-      
+
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a vehicle unit to play (costs 3 less)");
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND:definedType=Unit&trait=Vehicle");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
@@ -6482,11 +6482,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "0979322247"://Sidon Ithano
       if(Ally::FromUniqueId($uniqueId)->Exists()) {
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Attach Sidon to a Vehicle?");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Attach Sidon to an enemy Vehicle?");
         AddDecisionQueue("YESNO", $currentPlayer, "-", 1);
         AddDecisionQueue("NOPASS", $currentPlayer, "-", 1);
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:trait=Vehicle", 1);
         AddDecisionQueue("MZFILTER", $currentPlayer, "hasPilot=1", 1);
+        AddDecisionQueue("PASSREVERT", $currentPlayer, "-", 1);
         AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
         AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
@@ -6629,7 +6630,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "4159101997"://Crackshot V-Wing
       if($from != "PLAY" && SearchCount(SearchAllies($currentPlayer, trait:"Fighter")) <= 1) {
-        $playAlly->DealDamage(1); 
+        $playAlly->DealDamage(1);
       }
       break;
     case "9595202461"://Coordinated Front
@@ -6640,7 +6641,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, "ADDHEALTH,2", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "9595202461,HAND", 1);
-      //Space unit 
+      //Space unit
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:arena=Space&THEIRALLY:arena=Space");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a space unit to give +2/+2", 1);
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
@@ -6777,7 +6778,7 @@ function AfterPlayedByAbility($cardID) {
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "9763190770,PLAY", 1);
-      break; 
+      break;
     default: break;
   }
 }

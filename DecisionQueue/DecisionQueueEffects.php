@@ -1028,6 +1028,22 @@ function SpecificCardLogic($player, $parameter, $lastResult)
         AddRoundEffect("c1700fc85b", $player, "c1700fc85b", $ally->UniqueID());
       }
       break;
+    case "L337_JTL":
+      $L3Ally = Ally::FromMyIndex(SearchAlliesForCard($player, "6032641503"), $player);
+      if($lastResult == "YES") {
+        AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:trait=Vehicle");
+        AddDecisionQueue("MZFILTER", $player, "hasPilot=1");
+        AddDecisionQueue("PASSREVERT", $player, "-");
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose a vehicle to move L3's brain to");
+        AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
+        AddDecisionQueue("MZOP", $player, "GETUNIQUEID", 1);
+        AddDecisionQueue("SETDQVAR", $player, "0", 1);
+        AddDecisionQueue("PASSPARAMETER", $player, $L3Ally->UniqueID());
+        AddDecisionQueue("MZOP", $player, "MOVEPILOTUNIT", 1);
+      } else if ($lastResult == "NO") {
+        DestroyAlly($player, $L3Ally->Index(), skipSpecialCase:true);
+      }
+      break;
     //SpecificCardLogic End
     default: return "";
   }
