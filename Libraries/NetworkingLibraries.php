@@ -2256,6 +2256,7 @@ function CurrentTurnEffectsPlayingUnit($player) {
       case "6849037019"://Now There Are Two of Them
       //Jump to Lightspeed
       case "7138400365"://The Invisible Hand
+      case "7461173274"://They Hate That Ship
         return true;
     }
   }

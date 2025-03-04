@@ -4268,6 +4268,35 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "8734471238,PLAY", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
       break;
+    case "7461173274"://They Hate That Ship
+      global $CS_AfterPlayedBy;
+      for ($i = 0; $i < 2; $i++) {
+        $tieFighterUniqueId = CreateTieFighter($otherPlayer);
+        $tieFighterAlly = new Ally($tieFighterUniqueId, $otherPlayer);
+        $tieFighterAlly->Ready();
+      }
+      
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a vehicle unit to play (costs 3 less)");
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND:definedType=Unit&trait=Vehicle");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, $cardID, 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
+      break;
+    case "4942377291"://Face Off
+      global $initiativeTaken;
+      if (!$initiativeTaken) {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an enemy unit to ready");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "GETARENA", 1);
+        AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:arena={0}", 1);
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a friendly unit in the same arena to ready", 1);
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
+      }
+      break;
     case "0931441928"://Ma Klounkee
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Underworld");
       AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
