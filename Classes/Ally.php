@@ -354,10 +354,10 @@ class Ally {
     ++$this->allies[$this->index+10];
   }
 
-  function CurrentPower() {
+  function CurrentPower($reportMode = false) {
     global $currentTurnEffects;
     $power = ((int) (AttackValue($this->CardID() ?? 0))) + ((int) $this->allies[$this->index+7]);
-    $power += AttackModifier($this->CardID(), $this->playerID, $this->index);
+    $power += AttackModifier($this->CardID(), $this->playerID, $this->index, $reportMode);
     $upgrades = $this->GetUpgrades();
     $otherPlayer = $this->playerID == 1 ? 2 : 1;
     // Grit buff
