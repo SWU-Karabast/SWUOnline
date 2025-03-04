@@ -2076,6 +2076,17 @@ function SpecificAllyAttackAbilities($attackID)
         AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
         AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "d8a5bf1a15,PLAY", 1);
         break;
+      case "0086781673"://Tam Ryvora pilot
+        $arena = $attackerAlly->CurrentArena();
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY:arena=$arena");
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to give -1/-1", 1);
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        AddDecisionQueue("SETDQVAR", $mainPlayer, 0, 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
+        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "0086781673,PLAY", 1);
+        AddDecisionQueue("PASSPARAMETER", $mainPlayer, "{0}", 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "REDUCEHEALTH,1", 1);
+        break;
       default: break;
     }
   }
