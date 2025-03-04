@@ -489,6 +489,13 @@ function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
             $costModifier -= 1;
             $remove = true;
             break;
+          case "5329736697"://Jump to Lightspeed card
+            $discountedID = $currentTurnEffects[$i + 2];
+            if($from != "PLAY" && $discountedID == $cardID) {
+              $costModifier -= 99;
+              $remove = true;
+            }
+            break;
           case "0011262813"://Wedge Antilles Leader
             $costModifier -= 1;
             $remove = true;
