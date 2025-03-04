@@ -39,6 +39,9 @@ function EffectHitEffect($cardID)
     case "4334684518-1"://Tandem Assault
       AddCurrentTurnEffectFromCombat("4334684518-2", $mainPlayer);
      break;
+    case "1355075014"://Attack Run
+      AddCurrentTurnEffect("1355075014-1", $mainPlayer);
+      break;
     default:
       break;
   }
@@ -141,6 +144,16 @@ function FinalizeChainLinkEffects()
         PrependDecisionQueue("MZFILTER", $mainPlayer, "status=1");
         PrependDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:arena=Ground");
        return true;
+      case "1355075014-1"://Attack Run
+        PrependDecisionQueue("REMOVECURRENTEFFECT", $mainPlayer, $currentTurnEffects[$i]);
+        PrependDecisionQueue("SWAPTURN", $mainPlayer, "-");
+        PrependDecisionQueue("ELSE", $mainPlayer, "-");
+        PrependDecisionQueue("MZOP", $mainPlayer, "ATTACK", 1);
+        PrependDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        PrependDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to attack with");
+        PrependDecisionQueue("MZFILTER", $mainPlayer, "status=1");
+        PrependDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:arena=Space");
+        return true;
       default: break;
     }
   }
@@ -257,10 +270,14 @@ function EffectAttackModifier($cardID, $playerID="")
     case "8656409691": return 1;//Rio Durant
     case "8943696478": return 2;//Admiral Holdo
     case "1397553238": return -1;//Desperate Commando
+    case "0086781673": return -1;//Tam Ryvora
     case "3427170256": return 2;//Captain Phasma Unit
     case "6600603122": return 1;//Massassi Tactical Officer
     case "2922063712": return SearchCount(SearchAllies($defPlayer, damagedOnly:true));//Sith Trooper
     case "6413979593": return 2;//Punch it
+    case "9763190770": return 1;//Major Vonreg
+    case "d8a5bf1a15": return 1;//Major Vonreg pilot
+    case "3782661648": return -5;//Out the Airlock
     default: return 0;
   }
 }
@@ -478,6 +495,13 @@ function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
           case "4030832630"://Admiral Piett
             $costModifier -= 1;
             $remove = true;
+            break;
+          case "5329736697"://Jump to Lightspeed card
+            $discountedID = $currentTurnEffects[$i + 2];
+            if($from != "PLAY" && $discountedID == $cardID) {
+              $costModifier -= 99;
+              $remove = true;
+            }
             break;
           case "0011262813"://Wedge Antilles Leader
             $costModifier -= 1;
@@ -890,6 +914,7 @@ function IsCombatEffectActive($cardID)
     case "6228218834"://Tactival Heavy Bomber
     case "6600603122"://Massassi Tactical Officer
     case "6413979593"://Punch it
+    case "1355075014"://Air Assault
       return true;
     default: return false;
   }

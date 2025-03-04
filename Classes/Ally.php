@@ -42,6 +42,10 @@ class Ally {
 
     $this->playerID = $player;
   }
+  //static functional constructors
+  public static function FromMyIndex($index, $player) { return new Ally("MYALLY-" . $index, $player); }
+  public static function FromTheirIndex($index, $player) { return new Ally("THEIRALLY-" . $index, $player); }
+  public static function FromUniqueId($uniqueId) { return new Ally($uniqueId); }
 
   // Methods
   function MZIndex() {
@@ -354,10 +358,10 @@ class Ally {
     ++$this->allies[$this->index+10];
   }
 
-  function CurrentPower() {
+  function CurrentPower($reportMode = false) {
     global $currentTurnEffects;
     $power = ((int) (AttackValue($this->CardID() ?? 0))) + ((int) $this->allies[$this->index+7]);
-    $power += AttackModifier($this->CardID(), $this->playerID, $this->index);
+    $power += AttackModifier($this->CardID(), $this->playerID, $this->index, $reportMode);
     $upgrades = $this->GetUpgrades();
     $otherPlayer = $this->playerID == 1 ? 2 : 1;
     // Grit buff
@@ -578,12 +582,13 @@ class Ally {
   }
 
   function Attach($cardID, $ownerID = null, $epicAction = false, $turnsInPlay = 0) {
-    $receivingPilot = $this->ReceivingPilot($cardID);
+    $receivingPilot = $this->ReceivingPilot($cardID) || $cardID == "0979322247";//Sidon Ithano
     $subcardUniqueID = $this->AddSubcard($cardID, $ownerID, $receivingPilot, $epicAction, $turnsInPlay);
     if (CardIsUnique($cardID)) {
       $this->CheckUniqueUpgrade($cardID);
       if($receivingPilot) {
         $this->CheckUniqueAllyForPilot($cardID);
+        if($cardID == "0979322247") $this->DefeatIfNoRemainingHP();
       }
     }
     //Pilot attach side effects

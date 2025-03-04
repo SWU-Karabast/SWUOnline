@@ -289,6 +289,7 @@ function RaidAmount($cardID, $player, $index, $reportMode = false)
     case "8991513192": $amount += SearchCount(SearchAllies($player, aspect:"Aggression")) > 1 ? 2 : 0; break;//Hunting Nexu
     case "1810342362": $amount += 2; break;//Lurking TIE Phantom
     case "8426882030": $amount += 1; break;//Ryloth Militia
+    case "8247495024": $amount += 1; break;//Seasoned Fleet Admiral
     case "5936350569": $amount += 1; break;//Jesse
     case "2800918480": $amount += 1; break;//Soldier of the 501st
     case "7494987248": $amount += IsCoordinateActive($player) ? 3 : 0; break;//Plo Koon
@@ -299,9 +300,10 @@ function RaidAmount($cardID, $player, $index, $reportMode = false)
     case "0249398533": $amount += 1; break;//Obedient Vanguard
     case "0587196584": $amount += 1; break;//Independent Smuggler
     case "1034181657": $amount += SearchCount(SearchAllies($player, tokenOnly: true)) > 0 ? 1 : 0;//First Order TIE Fighter
-    case "0756051511": $amount += 1; break;//MC30 Assault Frigate 
+    case "0756051511": $amount += 1; break;//MC30 Assault Frigate
     case "0626954301": $amount += SearchCount(SearchAllies($player, trait:"Fighter")) > 1 ? 2 : 0; break;//Flanking Fang Fighter
     case "7458361203": $amount += 1; break;//Corporate Light Cruiser
+    case "2948071304": $amount += $ally->CurrentPower(reportMode:true) >= 6 ? 1 : 0; break;//Vonreg's TIE Interceptor
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
@@ -332,7 +334,7 @@ function HasSentinel($cardID, $player, $index)
       case "8719468890"://Sword and Shield Maneuver
         if(TraitContains($cardID, "Jedi", $player)) $hasSentinel = true;
         break;
-      case "7214707216": $hasSentinel = true; break;//Diversion        
+      case "7214707216": $hasSentinel = true; break;//Diversion
       default: break;
     }
   }
@@ -658,6 +660,8 @@ function HasOverwhelm($cardID, $player, $index)
       return !LeaderAbilitiesIgnored();
     case "8139901441"://Bo-Katan Kryze
       return SearchCount(SearchAllies($player, trait:"Mandalorian")) > 1;
+    case "2948071304"://Vonreg's TIE Interceptor
+      return $ally->CurrentPower(reportMode:true) >= 4;
     default: return false;
   }
 }
@@ -880,6 +884,7 @@ function HasSaboteur($cardID, $player, $index)
     case "3434956158"://Fives
     //Jump to Lightspeed
     case "81a416eb1f"://Rio Durant leader unit
+    case "3310100725"://Insurgent Saboteurs
     case "1107172562"://Orbiting K-Wing
       return true;
 
@@ -1330,6 +1335,8 @@ function CheckJTLAbilityTypes($cardID) {
       return "A,AA";
     case "3905028200"://Admiral Trench
       return LeaderAbilitiesIgnored() ? "" : "A";
+    case "9763190770"://Major Vonreg
+      return LeaderAbilitiesIgnored() ? "" : "A";
     default: return "";
   }
 }
@@ -1633,6 +1640,8 @@ function CheckJTLAbilityNames($cardID) {
       return "Fighter Attack,Attack";
     case "9921128444"://General Hux
       return "Draw,Attack";
+    case "9763190770"://Major Vonreg
+      return LeaderAbilitiesIgnored() ? "" : "Play";
     default: return "";
   }
 }
@@ -2066,6 +2075,8 @@ function LeaderUnit($cardID) {
       return "7c082aefc9";
     case "4531112134"://Kazuda Xiono
       return "c1700fc85b";
+    case "9763190770"://Major Vonreg
+      return "d8a5bf1a15";
     default: return "";
   }
 }
@@ -2216,6 +2227,8 @@ function LeaderUndeployed($cardID) {
       return "3905028200";
     case "c1700fc85b"://Kazuda Xiono Leader Unit
       return "4531112134";
+    case "d8a5bf1a15"://Major Vonreg
+      return "9763190770";
     default: return "";
   }
 }
@@ -2231,6 +2244,7 @@ function LeaderCanPilot($cardID) {
     case "0766281795"://Luke Skywalker
     case "7661383869"://Darth Vader
     case "4531112134"://Kazuda Xiono
+    case "9763190770"://Major Vonreg
       return true;
     default: return false;
   }
@@ -2530,6 +2544,14 @@ function PilotingCost($cardID, $player = "") {
     case "0511138070": $minCost = 2; break;//Astromech Pilot
     case "8930110877": $minCost = 2; break;//Hopeful Volunteer
     case "4164902248": $minCost = 1; break;//Sullustan Spacer
+    case "0086781673": $minCost = 2; break;//Tam Ryvora
+    case "2532510371": $minCost = 1; break;//Trace Martez
+    case "3261127126": $minCost = 2; break;//Clone Pilot
+    case "3287404938": $minCost = 2; break;//Determined Recruit
+    case "3356393152": $minCost = 1; break;//Idoctrinated Conscript
+    case "6032641503": $minCost = 3; break;//L3-37
+    case "6079255999": $minCost = 3; break;//Darth Vader pilot unit
+    case "9706341387": $minCost = 2; break;//Jarek Yeager
     default: break;
   }
   return $minCost;

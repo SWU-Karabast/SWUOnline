@@ -1028,6 +1028,13 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities, $isUp
         AddDecisionQueue("BUTTONINPUT", $player, "Yourself,Opponent");
         AddDecisionQueue("SPECIFICCARD", $player, "PROFUNDITY", 1);
         break;
+      case "5177897609"://Skyway Cloud Car
+        AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:maxAttack=2&THEIRALLY:maxAttack=2");
+        AddDecisionQueue("MZFILTER", $player, "leader=1");
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose a card to bounce");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+        AddDecisionQueue("MZOP", $player, "BOUNCE", 1);
+      break;
       //AllyDestroyedAbility End
       default: break;
     }
@@ -2060,6 +2067,26 @@ function SpecificAllyAttackAbilities($attackID)
       case "c1700fc85b"://Kazuda pilot Leader unit
         KazudaXionoBestPilotInTheGalaxy($mainPlayer);
         break;
+      case "d8a5bf1a15"://Major Vonreg pilot Leader unit
+        $arena = $attackerAlly->CurrentArena();
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:arena=$arena&THEIRALLY:arena=$arena");
+        AddDecisionQueue("MZFILTER", $mainPlayer, "uniqueID=" . $attackerAlly->UniqueID());
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to give +1/+0");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
+        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "d8a5bf1a15,PLAY", 1);
+        break;
+      case "0086781673"://Tam Ryvora pilot
+        $arena = $attackerAlly->CurrentArena();
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY:arena=$arena");
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to give -1/-1", 1);
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        AddDecisionQueue("SETDQVAR", $mainPlayer, 0, 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
+        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "0086781673,PLAY", 1);
+        AddDecisionQueue("PASSPARAMETER", $mainPlayer, "{0}", 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "REDUCEHEALTH,1", 1);
+        break;
       default: break;
     }
   }
@@ -2881,6 +2908,9 @@ function SpecificAllyAttackAbilities($attackID)
     case "c1700fc85b"://Kazuda pilot Leader unit
       KazudaXionoBestPilotInTheGalaxy($mainPlayer);
       break;
+    case "3310100725"://Insurgent Saboteurs
+      DefeatUpgrade($mainPlayer, true);
+      break;
   }
 
   // Current Effect Abilities
@@ -2979,6 +3009,21 @@ function AllyDamageTakenAbilities($player, $index, $damage, $fromCombat=false, $
           PrependDecisionQueue("NOPASS", $otherPlayer, "-");
           PrependDecisionQueue("YESNO", $otherPlayer, "if you want use Jango Fett's ability");
         }
+        break;
+      default: break;
+    }
+  }
+}
+
+function OpponentUnitDrawEffects($player) {
+  $allies = &GetAllies($player);
+  for($i=0; $i<count($allies); $i+=AllyPieces()) {
+    switch($allies[$i]) {
+      case "8247495024"://Seasoned Fleet Admiral
+        AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to add an experience");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+        AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
         break;
       default: break;
     }

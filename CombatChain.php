@@ -115,7 +115,7 @@ function CompletesAttackEffect($cardID) {
   }
 }
 
-function AttackModifier($cardID, $player, $index)
+function AttackModifier($cardID, $player, $index, $reportMode = false)
 {
   global $mainPlayer, $defPlayer, $initiativePlayer, $combatChain, $combatChainState, $currentTurnEffects,
     $CS_NumLeftPlay, $CCS_MultiAttackTargets;
@@ -126,7 +126,7 @@ function AttackModifier($cardID, $player, $index)
     //Raid is only for attackers
     $attacker = AttackerMZID($mainPlayer);
     $mzArr = explode("-", $attacker);
-    if($mzArr[1] == $index) $modifier = RaidAmount($cardID, $mainPlayer, $mzArr[1]);
+    if($mzArr[1] == $index && !$reportMode) $modifier = RaidAmount($cardID, $mainPlayer, $mzArr[1]);
   }
   //Base attack modifiers
   $char = &GetPlayerCharacter($player);
