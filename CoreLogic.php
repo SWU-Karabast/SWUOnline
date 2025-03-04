@@ -6535,6 +6535,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $ally->AddRoundHealthModifier(-5);
       AddCurrentTurnEffect($cardID, $currentPlayer, "PLAY", $ally->UniqueID());
       break;
+    case "4159101997"://Crackshot V-Wing
+      if($from != "PLAY" && SearchCount(SearchAllies($currentPlayer, trait:"Fighter")) <= 1) {
+        $playAlly->DealDamage(1); 
+      }
+      break;
     //PlayAbility End
     default: break;
   }
