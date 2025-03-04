@@ -6520,7 +6520,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         $playAlly->DealDamage(1); 
       }
       break;
-    case "9595202461"://Coordinate Front
+    case "9595202461"://Coordinated Front
       //Ground unit
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:arena=Ground&THEIRALLY:arena=Ground");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a ground unit to give +2/+2");
