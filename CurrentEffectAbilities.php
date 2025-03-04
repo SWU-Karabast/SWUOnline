@@ -279,6 +279,7 @@ function EffectAttackModifier($cardID, $playerID="")
     case "d8a5bf1a15": return 1;//Major Vonreg pilot
     case "3782661648": return -5;//Out the Airlock
     case "9595202461": return 2;//Coordinated Front
+    case "3858069945": return $subparam;//Power From Pain
     default: return 0;
   }
 }
