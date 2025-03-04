@@ -931,7 +931,6 @@ function IsCombatEffectActive($cardID)
     case "6413979593"://Punch it
     case "1355075014"://Air Assault
     case "7660822254"://Barrel Roll
-
       return true;
     default: return false;
   }

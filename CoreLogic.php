@@ -3539,18 +3539,18 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, $cardID, 1);
       AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
       break;
-      case "1996597848"://Cloaked StarViper
-        if($from != "PLAY") {
-          $playAlly->Attach("8752877738");//Shield Token
-          $playAlly->Attach("8752877738");//Shield Token
-        }
-        break;
-      case "8382691367"://Dedicated Wingmen
-        if($from != "PLAY") {
-          CreateXWing($currentPlayer);
-          CreateXWing($currentPlayer);
-        }
-        break;
+    case "1996597848"://Cloaked StarViper
+      if($from != "PLAY") {
+        $playAlly->Attach("8752877738");//Shield Token
+        $playAlly->Attach("8752877738");//Shield Token
+      }
+      break;
+    case "8382691367"://Dedicated Wingmen
+      if($from != "PLAY") {
+        CreateXWing($currentPlayer);
+        CreateXWing($currentPlayer);
+      }
+      break;
     case "3208391441"://Make an Opening
       Restore(2, $currentPlayer);
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
