@@ -4282,6 +4282,21 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, $cardID, 1);
       AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
       break;
+    case "4942377291"://Face Off
+      global $initiativeTaken;
+      if (!$initiativeTaken) {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an enemy unit to ready");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "GETARENA", 1);
+        AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:arena={0}", 1);
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a friendly unit in the same arena to ready", 1);
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
+      }
+      break;
     case "0931441928"://Ma Klounkee
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Underworld");
       AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
