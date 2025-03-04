@@ -1046,6 +1046,10 @@ function GetAbilityType($cardID, $index = -1, $from="-")
     if(isset($myAllies[$index]) && UIDIsAffectedByMalevolence($myAllies[$index + 5])) {
       return "";
     }
+    if($cardID == "4332645242") {
+      $ally = new Ally("MYALLY-" . $index, $currentPlayer);
+      if(!$ally->LostAbilities()) return "";//Corporate Defense Shuttle can't attack
+    }
     return "AA";
   }
   switch($cardID)
@@ -1093,8 +1097,13 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
   }
 
   if(IsAlly($cardID, $currentPlayer)) {
-    if($abilityTypes == "") $abilityTypes = "AA";
     $ally = new Ally("MYALLY-" . $index, $currentPlayer);
+    if($abilityTypes == "") $abilityTypes = "AA";
+    if($cardID == "4332645242") {
+      if(!$ally->LostAbilities()) {
+        $abilityTypes = "";//Corporate Defense Shuttle can't attack
+      }
+    }
 
     if(UIDIsAffectedByMalevolence($ally->UniqueID())) {
       $abilityTypes = FilterOutAttackAbilityType($abilityTypes);
@@ -1360,8 +1369,13 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
   }
 
   if(IsAlly($cardID, $currentPlayer)) {
-    if($abilityNames == "") $abilityNames = "Attack";
     $ally = new Ally("MYALLY-" . $index, $currentPlayer);
+    if($abilityNames == "") $abilityNames = "Attack";
+    if($cardID == "4332645242") {
+      if(!$ally->LostAbilities()) {
+        $abilityNames = "";//Corporate Defense Shuttle can't attack
+      }
+    }
     $upgrades = $ally->GetUpgrades();
     for($i=0; $i<count($upgrades); ++$i) {
       switch($upgrades[$i]) {
@@ -1773,6 +1787,7 @@ function IsPlayable($cardID, $phase, $from, $index = -1, &$restriction = null, $
     $cardType = GetAbilityType($cardID, $index, $from);
     if($cardType == "") {
       $abilityTypes = GetAbilityTypes($cardID, $index);
+      if($abilityTypes == "") return false;
       $typeArr = explode(",", $abilityTypes);
       $cardType = $typeArr[0];
     }

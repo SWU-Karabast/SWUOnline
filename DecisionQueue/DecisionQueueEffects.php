@@ -633,6 +633,13 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       $power = $ally->CurrentPower();
       IndirectDamage(($player == 1 ? 2 : 1), $power, false);
       return $lastResult;
+    case "ALLWINGSREPORTIN":
+      foreach ($lastResult as $index) {
+        $ally = new Ally("MYALLY-" . $index, $player);
+        $ally->Exhaust();
+        CreateXWing($player);
+      }
+      return $lastResult;
     case "GUERILLAINSURGENCY":
       DamageAllAllies(4, "7235023816", arena: "Ground");
       return $lastResult;
