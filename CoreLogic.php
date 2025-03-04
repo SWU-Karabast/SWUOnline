@@ -3576,7 +3576,25 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       IndirectDamage($otherPlayer, 5, false);
       break;
     case "6938023363"://Piercing Shot
-      
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 3 damage to");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "PIERCINGSHOT", 1);
+      break;
+    case "5540797366"://Rebellious Hammerhand
+      $hand = &GetHand($currentPlayer);
+      $numCards = count($hand)/HandPieces();
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal " . $numCards . " damage to");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE," . $numCards . ",$currentPlayer,1", 1);
+      break;
+    case "5941636047"://Resistance Blue Squadron
+      $spaceUnits = SearchCount(SearchAllies($currentPlayer, "arena=Space")) + 1;//+1 for the card itself
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal " . $spaceUnits . " damage to");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE," . $spaceUnits . ",$currentPlayer,1", 1);
       break;
     case "2758597010"://Maximum Firepower
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "-", 1);

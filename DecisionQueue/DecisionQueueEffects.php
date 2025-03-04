@@ -557,6 +557,21 @@ function SpecificCardLogic($player, $parameter, $lastResult)
         DealDamageAsync($player == 1 ? 2 : 1, 2, "DAMAGE", "7730475388");
       }
       break;
+    case "PIERCINGSHOT":
+      $owner = MZPlayerID($player, $lastResult);
+      $ally = new Ally($lastResult, $owner);
+      foreach ($ally->GetUpgrades(true) as $upgrade) {
+        if ($upgrade == "8752877738") { // Shield token
+          $ally->DefeatUpgrade($upgrade);
+        }
+      }
+      $ally->DealDamage(3);
+      break;
+    case "SUPERHEAVYIONCANNON":
+      $owner = MZPlayerID($player, $lastResult);
+      $ally = new Ally($lastResult, $owner);
+      IndirectDamage($owner, $ally->CurrentPower(), true);
+      break;
     case "DONTGETCOCKY":
       $deck = new Deck($player);
       $deck->Reveal();
