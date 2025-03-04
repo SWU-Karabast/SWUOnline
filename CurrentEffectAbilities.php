@@ -39,6 +39,9 @@ function EffectHitEffect($cardID)
     case "4334684518-1"://Tandem Assault
       AddCurrentTurnEffectFromCombat("4334684518-2", $mainPlayer);
      break;
+    case "1355075014"://Attack Run
+      AddCurrentTurnEffect("1355075014-1", $mainPlayer);
+      break;
     default:
       break;
   }
@@ -141,6 +144,16 @@ function FinalizeChainLinkEffects()
         PrependDecisionQueue("MZFILTER", $mainPlayer, "status=1");
         PrependDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:arena=Ground");
        return true;
+      case "1355075014-1"://Attack Run
+        PrependDecisionQueue("REMOVECURRENTEFFECT", $mainPlayer, $currentTurnEffects[$i]);
+        PrependDecisionQueue("SWAPTURN", $mainPlayer, "-");
+        PrependDecisionQueue("ELSE", $mainPlayer, "-");
+        PrependDecisionQueue("MZOP", $mainPlayer, "ATTACK", 1);
+        PrependDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        PrependDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to attack with");
+        PrependDecisionQueue("MZFILTER", $mainPlayer, "status=1");
+        PrependDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:arena=Space");
+        return true;
       default: break;
     }
   }
@@ -886,6 +899,7 @@ function IsCombatEffectActive($cardID)
     case "6228218834"://Tactival Heavy Bomber
     case "6600603122"://Massassi Tactical Officer
     case "6413979593"://Punch it
+    case "1355075014"://Air Assault
       return true;
     default: return false;
   }
