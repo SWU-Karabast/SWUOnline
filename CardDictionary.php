@@ -302,6 +302,7 @@ function RaidAmount($cardID, $player, $index, $reportMode = false)
     case "0756051511": $amount += 1; break;//MC30 Assault Frigate
     case "0626954301": $amount += SearchCount(SearchAllies($player, trait:"Fighter")) > 1 ? 2 : 0; break;//Flanking Fang Fighter
     case "7458361203": $amount += 1; break;//Corporate Light Cruiser
+    case "2948071304": $amount += $ally->CurrentPower(reportMode:true) >= 6 ? 1 : 0; break;//Vonreg's TIE Interceptor
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
@@ -353,7 +354,7 @@ function HasSentinel($cardID, $player, $index)
   {
     //Spark of Rebellion
     case "2524528997"://Cell Block Guard
-    case "6385228745"://Correllian Freighter
+    case "6385228745"://Corellian Freighter
     case "6912684909"://Echo Base Defender
     case "7751685516"://System Patrol Craft
     case "9702250295"://Cloud City Wing Guard
@@ -658,6 +659,8 @@ function HasOverwhelm($cardID, $player, $index)
       return !LeaderAbilitiesIgnored();
     case "8139901441"://Bo-Katan Kryze
       return SearchCount(SearchAllies($player, trait:"Mandalorian")) > 1;
+    case "2948071304"://Vonreg's TIE Interceptor
+      return $ally->CurrentPower(reportMode:true) >= 4;
     default: return false;
   }
 }
