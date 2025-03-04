@@ -165,6 +165,7 @@ function RestoreAmount($cardID, $player, $index)
     case "0753794638": $amount += 2; break;//Corvus
     case "9430527677": $amount += 1; break;//Hera Syndulla
     case "7610382003": $amount += 2; break;//CR90 Relief Runner
+    case "7500360419": $amount += 2; break;//Adept ARC-170
     default: break;
   }
   if($amount > 0 && $ally->LostAbilities()) return 0;
