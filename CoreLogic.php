@@ -3576,7 +3576,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       IndirectDamage($otherPlayer, 5, false);
       break;
     case "6938023363"://Piercing Shot
-      
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 3 damage to");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "PIERCINGSHOT", 1);
       break;
     case "2758597010"://Maximum Firepower
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "-", 1);
