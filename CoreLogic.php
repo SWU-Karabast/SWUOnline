@@ -6270,6 +6270,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         CreateXWing($currentPlayer);
       }
       break;
+    case "8382691367"://Dedicated Wingmen
+      if($from != "PLAY") {
+        CreateXWing($currentPlayer);
+        CreateXWing($currentPlayer);
+      }
+      break;
     case "3427170256"://Captain Phasma Unit
       if($from != "PLAY") {
         CaptainPhasmaUnit($currentPlayer, $playAlly->Index());
