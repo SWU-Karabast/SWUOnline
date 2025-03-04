@@ -1101,6 +1101,13 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities, $isUp
           AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
           AddDecisionQueue("MZOP", $player, "MOVEUPGRADE", 1);
           break;
+        case "3291001746"://Grim Valor
+          AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
+          AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to exhaust");
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+          AddDecisionQueue("MZOP", $player, "REST", 1);
+          break;
+        default: break;
       }
     }
   }
