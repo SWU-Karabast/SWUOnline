@@ -2016,6 +2016,13 @@ function SpecificAllyAttackAbilities($attackID)
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $mainPlayer, "ADDEXPERIENCE", 1);
         break;
+      case "5016817239"://Superheavy Ion Cannon
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY:leader=0");
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a non-leader unit to exhaust");
+        AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "REST", 1);
+        AddDecisionQueue("SPECIFICCARD", $mainPlayer, "SUPERHEAVYIONCANNON", 1);
+        break;
       case "0414253215"://General's Blade
         if(TraitContains($attackerAlly->CardID(), "Jedi", $mainPlayer)) AddCurrentTurnEffect($upgrades[$i], $mainPlayer, from:"PLAY");
         break;
@@ -2075,6 +2082,17 @@ function SpecificAllyAttackAbilities($attackID)
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
         AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "d8a5bf1a15,PLAY", 1);
+        break;
+      case "0086781673"://Tam Ryvora pilot
+        $arena = $attackerAlly->CurrentArena();
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY:arena=$arena");
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to give -1/-1", 1);
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        AddDecisionQueue("SETDQVAR", $mainPlayer, 0, 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
+        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "0086781673,PLAY", 1);
+        AddDecisionQueue("PASSPARAMETER", $mainPlayer, "{0}", 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "REDUCEHEALTH,1", 1);
         break;
       default: break;
     }
@@ -2998,6 +3016,21 @@ function AllyDamageTakenAbilities($player, $index, $damage, $fromCombat=false, $
           PrependDecisionQueue("NOPASS", $otherPlayer, "-");
           PrependDecisionQueue("YESNO", $otherPlayer, "if you want use Jango Fett's ability");
         }
+        break;
+      default: break;
+    }
+  }
+}
+
+function OpponentUnitDrawEffects($player) {
+  $allies = &GetAllies($player);
+  for($i=0; $i<count($allies); $i+=AllyPieces()) {
+    switch($allies[$i]) {
+      case "8247495024"://Seasoned Fleet Admiral
+        AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to add an experience");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+        AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
         break;
       default: break;
     }

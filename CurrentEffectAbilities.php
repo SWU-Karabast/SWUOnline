@@ -270,6 +270,7 @@ function EffectAttackModifier($cardID, $playerID="")
     case "8656409691": return 1;//Rio Durant
     case "8943696478": return 2;//Admiral Holdo
     case "1397553238": return -1;//Desperate Commando
+    case "0086781673": return -1;//Tam Ryvora
     case "3427170256": return 2;//Captain Phasma Unit
     case "6600603122": return 1;//Massassi Tactical Officer
     case "2922063712": return SearchCount(SearchAllies($defPlayer, damagedOnly:true));//Sith Trooper
@@ -388,6 +389,12 @@ function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
               $remove = true;
             }
             break;
+          case "7461173274"://They Hate That Ship
+            if($from != "PLAY") {
+              $costModifier -= 3;
+              $remove = true;
+            }
+            break;
           case "3426168686"://Sneak Attack
             if($from != "PLAY") {
               $costModifier -= 3;
@@ -489,6 +496,13 @@ function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
           case "4030832630"://Admiral Piett
             $costModifier -= 1;
             $remove = true;
+            break;
+          case "5329736697"://Jump to Lightspeed card
+            $discountedID = $currentTurnEffects[$i + 2];
+            if($from != "PLAY" && $discountedID == $cardID) {
+              $costModifier -= 99;
+              $remove = true;
+            }
             break;
           case "0011262813"://Wedge Antilles Leader
             $costModifier -= 1;

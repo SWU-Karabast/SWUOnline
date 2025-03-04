@@ -538,6 +538,40 @@ function SpecificCardLogic($player, $parameter, $lastResult)
         if(!IsToken($upgrades[$i]) && !CardIDIsLeader($upgrades[$i])) AddHand($upgrades[$i+1], $upgrades[$i]);
       }
       return $lastResult;
+    case "JUMPTOLIGHTSPEED":
+      $upgradesReturned = [];
+      $owner = MZPlayerID($player, $lastResult);
+      $ally = new Ally($lastResult, $owner);
+      $upgrades = $ally->GetUpgrades(true);
+      for($i=0; $i<count($upgrades); $i+=SubcardPieces()) {
+        $ally->RemoveSubcard($upgrades[$i]);
+        if(!IsToken($upgrades[$i]) && !CardIDIsLeader($upgrades[$i])) AddHand($upgrades[$i+1], $upgrades[$i]);
+      }
+      AddCurrentTurnEffect("5329736697", $player, "EFFECT", $ally->CardID());
+      return $lastResult;
+    case "SHOOTDOWN":
+      $owner = MZPlayerID($player, $lastResult);
+      $ally = new Ally($lastResult, $owner);
+      $wasDestroyed = $ally->DealDamage(3);
+      if($wasDestroyed) {
+        DealDamageAsync($player == 1 ? 2 : 1, 2, "DAMAGE", "7730475388");
+      }
+      break;
+    case "PIERCINGSHOT":
+      $owner = MZPlayerID($player, $lastResult);
+      $ally = new Ally($lastResult, $owner);
+      foreach ($ally->GetUpgrades(true) as $upgrade) {
+        if ($upgrade == "8752877738") { // Shield token
+          $ally->DefeatUpgrade($upgrade);
+        }
+      }
+      $ally->DealDamage(3);
+      break;
+    case "SUPERHEAVYIONCANNON":
+      $owner = MZPlayerID($player, $lastResult);
+      $ally = new Ally($lastResult, $owner);
+      IndirectDamage($owner, $ally->CurrentPower(), true);
+      break;
     case "DONTGETCOCKY":
       $deck = new Deck($player);
       $deck->Reveal();

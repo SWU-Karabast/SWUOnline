@@ -975,7 +975,15 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
               $match = $ally->UniqueID() == $params[1];
             }
             break;
-          case "trait": if(TraitContains(GetMZCard($player, $arr[$i]), $params[1], $player)) $match = true; break;
+          case "trait":
+            $traitParams = explode("&", $parameter);
+            for($j=0; $j<count($traitParams); ++$j) {
+              $traitString = str_replace("_", " ", explode("=", $traitParams[$j])[1]);
+              if(TraitContains(GetMZCard($player, $arr[$i]), $traitString, $player)) {
+                $match = true;
+              }
+            }
+            break;
           case "aspect": if(AspectContains(GetMZCard($player, $arr[$i]), $params[1],$player)) $match = true; break;
           case "definedType": if(DefinedTypesContains(GetMZCard($player, $arr[$i]), $params[1], $player)) $match = true; break;
           case "token":

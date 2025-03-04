@@ -289,6 +289,7 @@ function RaidAmount($cardID, $player, $index, $reportMode = false)
     case "8991513192": $amount += SearchCount(SearchAllies($player, aspect:"Aggression")) > 1 ? 2 : 0; break;//Hunting Nexu
     case "1810342362": $amount += 2; break;//Lurking TIE Phantom
     case "8426882030": $amount += 1; break;//Ryloth Militia
+    case "8247495024": $amount += 1; break;//Seasoned Fleet Admiral
     case "5936350569": $amount += 1; break;//Jesse
     case "2800918480": $amount += 1; break;//Soldier of the 501st
     case "7494987248": $amount += IsCoordinateActive($player) ? 3 : 0; break;//Plo Koon
@@ -626,6 +627,7 @@ function HasOverwhelm($cardID, $player, $index)
     case "c9ff9863d7"://Hunter (Outcast Sergeant)
     case "3722493191"://IG-2000
     case "7072861308"://Profundity
+    case "1087522061"://AT-DP Occupier
     case "9752523457"://Finalizer
     case "2870117979"://Executor
       return true;
@@ -748,6 +750,7 @@ function HasAmbush($cardID, $player, $index, $from)
     case "7198833142"://X-34 Landspeeder
     case "7458361203"://Corporate Light Cruiser
     case "2913957813"://Eager Escort Fighter
+    case "0728753133"://The Starhawk
       return true;
 
     //conditional ambush
@@ -1840,6 +1843,8 @@ function UpgradeFilter($cardID)
     case "9338356823"://Dorsal Turret
     case "9981313319"://Twin Laser Turret
       return "trait!=Vehicle";
+    case "5016817239"://Superheavy Ion Cannon
+      return "trait!=Capital_Ship&trait!=Transport";
     default: return "";
   }
 }
