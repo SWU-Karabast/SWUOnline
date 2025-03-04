@@ -3590,6 +3590,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $vehicleCount = SearchCount(SearchAllies($currentPlayer, trait:"Vehicle"));
       IndirectDamage($otherPlayer, $vehicleCount, true);
       break;
+    case "8606123385"://Lightspeed Assault
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:arena=Space");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a friendly space unit");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "LIGHTSPEEDASSAULT", 1);
+      break;
     case "7730475388"://Shoot Down
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:arena=Space");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a space unit to deal 3 damage to");

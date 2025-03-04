@@ -2185,6 +2185,9 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $ally->GetUpgrades(), $ally->GetUpgrades(true), $ally->CurrentPower(), $ally->Health()), $ally->CardID());
       }
       break;
+    case "INDIRECTDAMAGE":
+      IndirectDamage($player, $parameter);
+      break;
     default:
       return "NOTSTATIC";
   }

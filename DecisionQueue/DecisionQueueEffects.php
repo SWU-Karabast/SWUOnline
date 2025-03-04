@@ -614,6 +614,25 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       AddDecisionQueue("PASSPARAMETER", $player, $lastResult);
       AddDecisionQueue("MZOP", $player, DamageStringBuilder($damage,$player,isUnitEffect:1), 1);
       return $lastResult;
+    case "LIGHTSPEEDASSAULT":
+      $owner = MZPlayerID($player, $lastResult);
+      $ally = new Ally($lastResult, $owner);
+      $currentPower = $ally->CurrentPower();
+      $ally->Destroy();
+      AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:arena=Space");
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose an enemy space unit to deal " . $currentPower . " damage to");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+      AddDecisionQueue("SETDQVAR", $player, 0, 1);
+      AddDecisionQueue("SPECIFICCARD", $player, "LIGHTSPEEDASSAULT2", 1);
+      AddDecisionQueue("PASSPARAMETER", $player, "{0}", 1);
+      AddDecisionQueue("MZOP", $player, "DEALDAMAGE," . $currentPower, 1);
+      return $lastResult;
+    case "LIGHTSPEEDASSAULT2":
+      $owner = MZPlayerID($player, $lastResult);
+      $ally = new Ally($lastResult, $owner);
+      $power = $ally->CurrentPower();
+      IndirectDamage(($player == 1 ? 2 : 1), $power, false);
+      return $lastResult;
     case "GUERILLAINSURGENCY":
       DamageAllAllies(4, "7235023816", arena: "Ground");
       return $lastResult;
