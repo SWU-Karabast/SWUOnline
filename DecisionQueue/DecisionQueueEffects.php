@@ -549,6 +549,14 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       }
       AddCurrentTurnEffect("5329736697", $player, "EFFECT", $ally->CardID());
       return $lastResult;
+    case "SHOOTDOWN":
+      $owner = MZPlayerID($player, $lastResult);
+      $ally = new Ally($lastResult, $owner);
+      $wasDestroyed = $ally->DealDamage(3);
+      if($wasDestroyed) {
+        DealDamageAsync($player == 1 ? 2 : 1, 2, "DAMAGE", "7730475388");
+      }
+      break;
     case "DONTGETCOCKY":
       $deck = new Deck($player);
       $deck->Reveal();
