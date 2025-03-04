@@ -6536,6 +6536,16 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "9595202461,HAND", 1);
       break;
+    case "3660641793"://Echo Base Engineer
+      if($from != "PLAY") {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Vehicle&THEIRALLY:trait=Vehicle");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "status=1");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "damaged=0");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a damaged vehicle to give a shield token to");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "ADDSHIELD", 1);
+      }
+      break;
     //PlayAbility End
     default: break;
   }
