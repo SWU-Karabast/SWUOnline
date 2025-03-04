@@ -6984,7 +6984,10 @@ function Draw($player, $mainPhase = true)
   $hand[] = array_shift($deck);
   PermanentDrawCardAbilities($player);
   $hand = array_values($hand);
-  if($mainPhase) IncrementClassState($player, $CS_CardsDrawn);
+  if($mainPhase) {
+    IncrementClassState($player, $CS_CardsDrawn);
+    OpponentUnitDrawEffects($otherPlayer);
+  }
   return $hand[count($hand) - 1];
 }
 

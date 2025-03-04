@@ -3001,6 +3001,21 @@ function AllyDamageTakenAbilities($player, $index, $damage, $fromCombat=false, $
   }
 }
 
+function OpponentUnitDrawEffects($player) {
+  $allies = &GetAllies($player);
+  for($i=0; $i<count($allies); $i+=AllyPieces()) {
+    switch($allies[$i]) {
+      case "8247495024"://Seasoned Fleet Admiral
+        AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
+        AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to add an experience");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+        AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
+        break;
+      default: break;
+    }
+  }
+}
+
 function AllyTakeDamageAbilities($player, $index, $damage, $preventable)
 {
   $allies = &GetAllies($player);

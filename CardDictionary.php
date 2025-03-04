@@ -289,6 +289,7 @@ function RaidAmount($cardID, $player, $index, $reportMode = false)
     case "8991513192": $amount += SearchCount(SearchAllies($player, aspect:"Aggression")) > 1 ? 2 : 0; break;//Hunting Nexu
     case "1810342362": $amount += 2; break;//Lurking TIE Phantom
     case "8426882030": $amount += 1; break;//Ryloth Militia
+    case "8247495024": $amount += 1; break;//Seasoned Fleet Admiral
     case "5936350569": $amount += 1; break;//Jesse
     case "2800918480": $amount += 1; break;//Soldier of the 501st
     case "7494987248": $amount += IsCoordinateActive($player) ? 3 : 0; break;//Plo Koon
