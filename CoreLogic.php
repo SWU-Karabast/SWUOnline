@@ -4346,6 +4346,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
       }
       break;
+    case "2301911685"://Timely Reinforcements
+      $numResources = floor(NumResources($otherPlayer) / 2);
+      for ($i = 0; $i < $numResources; $i++) {
+        $xwingUniqueId = CreateXWing($currentPlayer);
+        AddCurrentTurnEffect($cardID, $currentPlayer, uniqueID: $xwingUniqueId);
+      }
+      break;
     case "0931441928"://Ma Klounkee
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Underworld");
       AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
