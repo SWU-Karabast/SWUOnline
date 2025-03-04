@@ -3545,12 +3545,6 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         $playAlly->Attach("8752877738");//Shield Token
       }
       break;
-    case "8382691367"://Dedicated Wingmen
-      if($from != "PLAY") {
-        CreateXWing($currentPlayer);
-        CreateXWing($currentPlayer);
-      }
-      break;
     case "3208391441"://Make an Opening
       Restore(2, $currentPlayer);
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
