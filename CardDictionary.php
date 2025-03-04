@@ -627,6 +627,7 @@ function HasOverwhelm($cardID, $player, $index)
     case "c9ff9863d7"://Hunter (Outcast Sergeant)
     case "3722493191"://IG-2000
     case "7072861308"://Profundity
+    case "1087522061"://AT-DP Occupier
     case "9752523457"://Finalizer
     case "2870117979"://Executor
       return true;
@@ -748,6 +749,7 @@ function HasAmbush($cardID, $player, $index, $from)
     case "7489502985"://Contracted Hunter
     case "7198833142"://X-34 Landspeeder
     case "7458361203"://Corporate Light Cruiser
+    case "0728753133"://The Starhawk
       return true;
 
     //conditional ambush

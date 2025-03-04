@@ -2009,6 +2009,10 @@ function SelfCostModifier($cardID, $from, $reportMode=false)
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
       if(GetClassState($otherPlayer, $CS_NumAlliesDestroyed) > 0) $modifier -= 2;
       break;
+    case "1087522061"://AT-DP Occupier
+      $modifier -= SearchCount(SearchAllies(1, arena: "Ground", damagedOnly: true));
+      $modifier -= SearchCount(SearchAllies(2, arena: "Ground", damagedOnly: true));
+      break;
     case "8380936981"://Jabba's Rancor
       if(ControlsNamedCard($currentPlayer, "Jabba the Hutt")) $modifier -= 1;
       break;
@@ -2072,6 +2076,9 @@ function SelfCostModifier($cardID, $from, $reportMode=false)
         break;
       case "6311662442"://Director Krennic
         if(GetClassState($currentPlayer, $CS_NumWhenDefeatedPlayed) == 0 && HasWhenDestroyed($cardID)) $modifier -= 1;
+        break;
+      case "0728753133"://The Starhawk
+        $modifier -= floor(CardCost($cardID)/2);
         break;
       default: break;
     }
@@ -3564,6 +3571,17 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "JUMPTOLIGHTSPEED", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "BOUNCE", 1);
+      break;
+    case "2579248092"://Covering the Wing
+      CreateXWing($currentPlayer);
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to give a shield");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "ADDSHIELD", 1);
+      break;
+    case "3622750563"://Dornean Gunship
+      $vehicleCount = SearchCount(SearchAllies($currentPlayer, trait:"Vehicle"));
+      IndirectDamage($otherPlayer, $vehicleCount, true);
       break;
     case "7730475388"://Shoot Down
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:arena=Space");
