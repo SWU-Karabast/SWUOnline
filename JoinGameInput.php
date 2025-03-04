@@ -336,9 +336,11 @@ function CardIDOverride($cardID) {
     case "GG_004": return "SOR_026"; //Jabba's Palace
     case "GG_005": return "SOR_001"; //Experience (Token Upgrade)
     case "GG_006": return "SOR_002"; //Shield (Token Upgrade)
-    
-    
-
+    case "JTL_258": return "SOR_250"; //Corellian Freighter
+    case "JTL_113": return "SOR_113"; //Homestead Militia
+    case "JTL_167": return "SOR_165"; //Occupier Siege Tank
+    case "JTL_128": return "SOR_125"; //Prepare Prepare for Takeoff
+    case "JTL_075": return "SOR_074"; //Repair
     default: return $cardID;
   }
 }
