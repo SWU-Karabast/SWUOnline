@@ -3558,6 +3558,26 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{1}", 1);
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "EQUALIZE", 1);
       break;
+    case "5329736697"://Jump to Lightspeed card
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:arena=Space");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a space unit to bounce");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "JUMPTOLIGHTSPEED", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "BOUNCE", 1);
+      break;
+    case "7730475388"://Shoot Down
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:arena=Space");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a space unit to deal 3 damage to");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "SHOOTDOWN", 1);
+      break;
+    case "7456670756"://Torpedo Barrage
+      $otherPlayer = $currentPlayer == 1 ? 2 : 1;
+      IndirectDamage($otherPlayer, 5, false);
+      break;
+    case "6938023363"://Piercing Shot
+      
+      break;
     case "2758597010"://Maximum Firepower
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "-", 1);
       AddDecisionQueue("SETDQVAR", $currentPlayer, 0, 1);
@@ -6977,7 +6997,10 @@ function Draw($player, $mainPhase = true)
   $hand[] = array_shift($deck);
   PermanentDrawCardAbilities($player);
   $hand = array_values($hand);
-  if($mainPhase) IncrementClassState($player, $CS_CardsDrawn);
+  if($mainPhase) {
+    IncrementClassState($player, $CS_CardsDrawn);
+    OpponentUnitDrawEffects($otherPlayer);
+  }
   return $hand[count($hand) - 1];
 }
 
