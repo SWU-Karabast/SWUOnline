@@ -572,6 +572,24 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       $ally = new Ally($lastResult, $owner);
       IndirectDamage($owner, $ally->CurrentPower(), true);
       break;
+    case "THEANNIHILATOR":
+      $owner = $player == 1 ? 2 : 1;
+      $destroyedID = $lastResult;
+      $hand = &GetHand($owner);
+      for($i = count($hand) - 1; $i >= 0; $i -= HandPieces()) {
+        if($hand[$i] == $destroyedID) {
+          DiscardCard($owner, $i);
+        }
+      }
+      $deck = &GetDeck($owner);
+      $deckClass = new Deck($owner);
+      for ($i = count($deck) - 1; $i >= 0; $i -= DeckPieces()) {
+        if ($deck[$i] == $destroyedID) {
+          $deckClass->Remove($i);
+          AddGraveyard($destroyedID, $owner, "DECK");
+        }
+      }
+      break;
     case "DONTGETCOCKY":
       $deck = new Deck($player);
       $deck->Reveal();
@@ -595,6 +613,25 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       $damage = SearchCount(SearchAllies($player, arena:$targetAlly->CurrentArena()));
       AddDecisionQueue("PASSPARAMETER", $player, $lastResult);
       AddDecisionQueue("MZOP", $player, DamageStringBuilder($damage,$player,isUnitEffect:1), 1);
+      return $lastResult;
+    case "LIGHTSPEEDASSAULT":
+      $owner = MZPlayerID($player, $lastResult);
+      $ally = new Ally($lastResult, $owner);
+      $currentPower = $ally->CurrentPower();
+      $ally->Destroy();
+      AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:arena=Space");
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose an enemy space unit to deal " . $currentPower . " damage to");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+      AddDecisionQueue("SETDQVAR", $player, 0, 1);
+      AddDecisionQueue("SPECIFICCARD", $player, "LIGHTSPEEDASSAULT2", 1);
+      AddDecisionQueue("PASSPARAMETER", $player, "{0}", 1);
+      AddDecisionQueue("MZOP", $player, "DEALDAMAGE," . $currentPower, 1);
+      return $lastResult;
+    case "LIGHTSPEEDASSAULT2":
+      $owner = MZPlayerID($player, $lastResult);
+      $ally = new Ally($lastResult, $owner);
+      $power = $ally->CurrentPower();
+      IndirectDamage(($player == 1 ? 2 : 1), $power, false);
       return $lastResult;
     case "GUERILLAINSURGENCY":
       DamageAllAllies(4, "7235023816", arena: "Ground");

@@ -411,6 +411,7 @@ function DealDamageAsync($player, $damage, $type="DAMAGE", $source="NA")
   if($type == "COMBAT" || $type == "ATTACKHIT") $source = $combatChain[0];
   $damage = max($damage, 0);
   $damageThreatened = $damage;
+  $damage = CurrentEffectPreventDamagePrevention($player, $type, $damage, $source);
   // $preventable = CanDamageBePrevented($player, $damage, $type, $source);//FAB
   // if($preventable)
   // {
@@ -3579,9 +3580,21 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "ADDSHIELD", 1);
       break;
+    case "8582806124"://The Annihilator
+      TheAnnihilatorJTL($currentPlayer);
+      break;
+    case "8736422150"://Close the Shield Gate
+      AddCurrentTurnEffect($cardID, $currentPlayer);
+      break;
     case "3622750563"://Dornean Gunship
       $vehicleCount = SearchCount(SearchAllies($currentPlayer, trait:"Vehicle"));
       IndirectDamage($otherPlayer, $vehicleCount, true);
+      break;
+    case "8606123385"://Lightspeed Assault
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:arena=Space");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a friendly space unit");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "LIGHTSPEEDASSAULT", 1);
       break;
     case "7730475388"://Shoot Down
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:arena=Space");

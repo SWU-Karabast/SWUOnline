@@ -875,6 +875,9 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities, $isUp
         AddDecisionQueue("MZOP", $player, "ADDEXPERIENCE", 1);
         AddDecisionQueue("SPECIFICCARD", $player, "OBIWANKENOBI", 1);
         break;
+      case "8582806124"://The Annihilator JTL
+        TheAnnihilatorJTL($player);
+        break;
       case "5184505570"://Chimaera JTL
         CreateTieFighter($player);
         CreateTieFighter($player);
@@ -3170,4 +3173,12 @@ function LukePilotPlotArmor($player, $turnsInPlay) {
   AddDecisionQueue("NOPASS", $player, "-");
   AddDecisionQueue("PASSPARAMETER", $player, "5942811090,$turnsInPlay", 1);//Luke Skywalker (You Still With Me?)
   AddDecisionQueue("MZOP", $player, "FALLENPILOTUPGRADE", 1);
+}
+
+function TheAnnihilatorJTL($player) {
+  AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY");
+  AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to destroy");
+  AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
+  AddDecisionQueue("MZOP", $player, "DESTROY", 1);
+  AddDecisionQueue("SPECIFICCARD", $player, "THEANNIHILATOR", 1);
 }
