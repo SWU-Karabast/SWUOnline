@@ -3579,6 +3579,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "ADDSHIELD", 1);
       break;
+    case "8582806124"://The Annihilator
+      TheAnnihilatorJTL($currentPlayer);
+      break;
     case "3622750563"://Dornean Gunship
       $vehicleCount = SearchCount(SearchAllies($currentPlayer, trait:"Vehicle"));
       IndirectDamage($otherPlayer, $vehicleCount, true);

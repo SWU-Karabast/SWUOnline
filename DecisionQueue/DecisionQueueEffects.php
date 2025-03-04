@@ -572,6 +572,24 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       $ally = new Ally($lastResult, $owner);
       IndirectDamage($owner, $ally->CurrentPower(), true);
       break;
+    case "THEANNIHILATOR":
+      $owner = $player == 1 ? 2 : 1;
+      $destroyedID = $lastResult;
+      $hand = &GetHand($owner);
+      for($i = count($hand) - 1; $i >= 0; $i -= HandPieces()) {
+        if($hand[$i] == $destroyedID) {
+          DiscardCard($owner, $i);
+        }
+      }
+      $deck = &GetDeck($owner);
+      $deckClass = new Deck($owner);
+      for ($i = count($deck) - 1; $i >= 0; $i -= DeckPieces()) {
+        if ($deck[$i] == $destroyedID) {
+          $deckClass->Remove($i);
+          AddGraveyard($destroyedID, $owner, "DECK");
+        }
+      }
+      break;
     case "DONTGETCOCKY":
       $deck = new Deck($player);
       $deck->Reveal();
