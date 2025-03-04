@@ -2897,6 +2897,9 @@ function SpecificAllyAttackAbilities($attackID)
     case "c1700fc85b"://Kazuda pilot Leader unit
       KazudaXionoBestPilotInTheGalaxy($mainPlayer);
       break;
+    case "3310100725"://Insurgent Saboteurs
+      DefeatUpgrade($mainPlayer, true);
+      break;
   }
 
   // Current Effect Abilities
