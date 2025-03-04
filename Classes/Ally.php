@@ -42,6 +42,10 @@ class Ally {
 
     $this->playerID = $player;
   }
+  //static functional constructors
+  public static function FromMyIndex($index, $player) { return new Ally("MYALLY-" . $index, $player); }
+  public static function FromTheirIndex($index, $player) { return new Ally("THEIRALLY-" . $index, $player); }
+  public static function FromUniqueId($uniqueId) { return new Ally($uniqueId); }
 
   // Methods
   function MZIndex() {
@@ -578,12 +582,13 @@ class Ally {
   }
 
   function Attach($cardID, $ownerID = null, $epicAction = false, $turnsInPlay = 0) {
-    $receivingPilot = $this->ReceivingPilot($cardID);
+    $receivingPilot = $this->ReceivingPilot($cardID) || $cardID == "0979322247";//Sidon Ithano
     $subcardUniqueID = $this->AddSubcard($cardID, $ownerID, $receivingPilot, $epicAction, $turnsInPlay);
     if (CardIsUnique($cardID)) {
       $this->CheckUniqueUpgrade($cardID);
       if($receivingPilot) {
         $this->CheckUniqueAllyForPilot($cardID);
+        if($cardID == "0979322247") $this->DefeatIfNoRemainingHP();
       }
     }
     //Pilot attach side effects
