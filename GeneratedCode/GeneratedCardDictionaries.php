@@ -9374,7 +9374,6 @@ function HasWhenPlayed($cardID) {
   1330473789 => true,
   5540797366 => true,
   7072861308 => true,
-  4159101997 => true,
   4019449999 => true,
   4203363893 => true,
   1965647391 => true,
