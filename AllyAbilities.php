@@ -1361,7 +1361,7 @@ function AllyPlayedAsUpgradeAbility($cardID, $player, $targetAlly) {
       AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY", 1);
       AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal $damage damage", 1);
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-      AddDecisionQueue("MZOP", $player, "DEALDAMAGE,$damage,$player,1", 1);
+      AddDecisionQueue("MZOP", $player, DamageStringBuilder($damage, $player), 1);
       break;
     case "2283726359"://BB-8
       if(GetResources($player) >= 2) {
