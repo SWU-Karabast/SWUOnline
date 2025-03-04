@@ -1101,6 +1101,13 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities, $isUp
           AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
           AddDecisionQueue("MZOP", $player, "MOVEUPGRADE", 1);
           break;
+        case "3291001746"://Grim Valor
+          AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
+          AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to exhaust");
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+          AddDecisionQueue("MZOP", $player, "REST", 1);
+          break;
+        default: break;
       }
     }
   }
@@ -2847,6 +2854,9 @@ function SpecificAllyAttackAbilities($attackID)
         $ally->DealDamage(1, fromUnitEffect:true);
       }
       break;
+    case "3278986026"://Rafa Martez
+      RafaMartezJTL($mainPlayer);
+      break;
     case "7192849828"://Mist Hunter
       global $CS_NumBountyHuntersPlayed;
       global $CS_NumPilotsPlayed;
@@ -3193,4 +3203,12 @@ function TheAnnihilatorJTL($player) {
   AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
   AddDecisionQueue("MZOP", $player, "DESTROY", 1);
   AddDecisionQueue("SPECIFICCARD", $player, "THEANNIHILATOR", 1);
+}
+
+function RafaMartezJTL($player) {
+  AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
+  AddDecisionQueue("SETDQCONTEXT", $player, "Choose a friendly unit to deal 1 damage to");
+  AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
+  AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1,$player,1", 1);
+  ReadyResource($player);
 }
