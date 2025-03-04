@@ -1839,6 +1839,8 @@ function UpgradeFilter($cardID)
     case "9338356823"://Dorsal Turret
     case "9981313319"://Twin Laser Turret
       return "trait!=Vehicle";
+    case "5016817239"://Superheavy Ion Cannon
+      return "trait!=Capital_Ship&trait!=Transport";
     default: return "";
   }
 }
