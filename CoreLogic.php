@@ -2009,6 +2009,10 @@ function SelfCostModifier($cardID, $from, $reportMode=false)
       $otherPlayer = $currentPlayer == 1 ? 2 : 1;
       if(GetClassState($otherPlayer, $CS_NumAlliesDestroyed) > 0) $modifier -= 2;
       break;
+    case "1087522061"://AT-DP Occupier
+      $modifier -= SearchCount(SearchAllies(1, arena: "Ground", damagedOnly: true));
+      $modifier -= SearchCount(SearchAllies(2, arena: "Ground", damagedOnly: true));
+      break;
     case "8380936981"://Jabba's Rancor
       if(ControlsNamedCard($currentPlayer, "Jabba the Hutt")) $modifier -= 1;
       break;
