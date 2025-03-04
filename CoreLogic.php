@@ -4145,6 +4145,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "ADDSHIELD", 1);
       }
       break;
+    case "1996597848"://Cloaked StarViper
+      if($from != "PLAY") {
+        $playAlly->Attach("8752877738");//Shield Token
+        $playAlly->Attach("8752877738");//Shield Token
+      }
+      break;
     case "3329959260"://Fell the Dragon
       MZChooseAndDestroy($currentPlayer, "MYALLY:minAttack=5&THEIRALLY:minAttack=5", filter:"leader=1");
       break;
