@@ -3039,6 +3039,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "2359136621_" . ($hasInitiative ? "2" : "0") . ",PLAY", 1);
       break;
+    case "7214707216"://Diversion
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to give Sentinel");
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "WRITECHOICE", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "7214707216,PLAY", 1);
+      break;
     case "8022262805"://Bold Resistance
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
       AddDecisionQueue("OP", $currentPlayer, "MZTONORMALINDICES");
@@ -6489,14 +6497,6 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "99999999999"://Dilapidated Ski Speeder
       $playAlly->DealDamage(3);
-      break;
-    case "99999999999"://Diversion
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to give Sentinel for this phase");
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
-        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "WRITECHOICE", 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
-        AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "99999999999,HAND", 1);
       break;
     //PlayAbility End
     default: break;

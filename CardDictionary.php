@@ -325,6 +325,7 @@ function HasSentinel($cardID, $player, $index)
       case "3572356139": $hasSentinel = true; break;//Chewbacca (Walking Carpet)
       case "3468546373": $hasSentinel = true; break;//General Rieekan
       case "2359136621": $hasSentinel = true; break;//Guarding The Way
+      case "7214707216": $hasSentinel = true; break;//Diversion
       case "9070397522": return false;//SpecForce Soldier
       case "2872203891": $hasSentinel = true; break;//General Grievous
       case "fb7af4616c": $hasSentinel = true; break;//General Grievous
