@@ -371,6 +371,12 @@ function CurrentEffectCostModifiers($cardID, $from, $reportMode=false)
               $remove = true;
             }
             break;
+          case "7461173274"://They Hate That Ship
+            if($from != "PLAY") {
+              $costModifier -= 3;
+              $remove = true;
+            }
+            break;
           case "3426168686"://Sneak Attack
             if($from != "PLAY") {
               $costModifier -= 3;
