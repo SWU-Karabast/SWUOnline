@@ -550,7 +550,10 @@ function CurrentEffectPreventDamagePrevention($player, $type, $damage, $source)
     $remove = false;
     if($currentTurnEffects[$i + 1] == $player) {
       switch ($currentTurnEffects[$i]) {
-
+        case "8736422150"://Close the Shield Gate
+          $remove = true;
+          $damage = 0;
+          break;
         default: break;
       }
     }

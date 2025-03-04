@@ -411,6 +411,7 @@ function DealDamageAsync($player, $damage, $type="DAMAGE", $source="NA")
   if($type == "COMBAT" || $type == "ATTACKHIT") $source = $combatChain[0];
   $damage = max($damage, 0);
   $damageThreatened = $damage;
+  $damage = CurrentEffectPreventDamagePrevention($player, $type, $damage, $source);
   // $preventable = CanDamageBePrevented($player, $damage, $type, $source);//FAB
   // if($preventable)
   // {
@@ -3581,6 +3582,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "8582806124"://The Annihilator
       TheAnnihilatorJTL($currentPlayer);
+      break;
+    case "8736422150"://Close the Shield Gate
+      AddCurrentTurnEffect($cardID, $currentPlayer);
       break;
     case "3622750563"://Dornean Gunship
       $vehicleCount = SearchCount(SearchAllies($currentPlayer, trait:"Vehicle"));
