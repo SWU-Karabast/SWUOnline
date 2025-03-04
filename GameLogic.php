@@ -299,6 +299,14 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
     //     PlayAura($lastResult, $player);
     //   }
     //   return $lastResult;
+    case "CREATECLONETROOPER":
+      return CreateCloneTrooper($player, $parameter);
+    case "CREATEBATTLEDROID":
+      return CreateBattleDroid($player, $parameter);
+    case "CREATEXWING":
+      return CreateXWing($player, $parameter);
+    case "CREATETIEFIGHTER":
+      return CreateTieFighter($player, $parameter);
     case "PLAYALLY":
       $params = explode(";", $parameter);
       $subCards = "-";

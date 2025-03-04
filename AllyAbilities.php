@@ -926,7 +926,7 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities, $isUp
         AddDecisionQueue("MZREMOVE", $player, "-", 1);
         break;
       case "8919416985"://Outspoken Representative
-        CreateCloneTrooper($player, from:"ABILITY");
+        CreateCloneTrooper($player);
         break;
       case "6404471739"://Senatorial Corvette
         PummelHit($otherPlayer);

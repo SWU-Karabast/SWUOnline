@@ -4353,6 +4353,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddCurrentTurnEffect($cardID, $currentPlayer, uniqueID: $xwingUniqueId);
       }
       break;
+    case "8323555870"://Commence Patrol
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a discard pile to put a card on the bottom of its owner's deck");
+      AddDecisionQueue("BUTTONINPUT", $currentPlayer, "Yours,Opoonentʼs"); // Some weird bug with the normal apostrophe (')
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "COMMENCEPATROL", 1);
+      break;
     case "3858069945"://Power From Pain
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to give +1/+0 for each damage on it");
@@ -6594,9 +6599,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, "WRITECHOICE", 1);
       break;
     case "8382691367"://Dedicated Wingmen
-        CreateXWing($currentPlayer);
-        CreateXWing($currentPlayer);
-        break;
+      CreateXWing($currentPlayer);
+      CreateXWing($currentPlayer);
+      break;
     case "6413979593"://Punch It
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Vehicle");
       AddDecisionQueue("MZFILTER", $currentPlayer, "status=1");
