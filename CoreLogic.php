@@ -3572,6 +3572,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "JUMPTOLIGHTSPEED", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "BOUNCE", 1);
       break;
+    case "2579248092"://Covering the Wing
+      CreateXWing($currentPlayer);
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to give a shield");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "ADDSHIELD", 1);
+      break;
     case "7730475388"://Shoot Down
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:arena=Space");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a space unit to deal 3 damage to");
