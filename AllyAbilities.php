@@ -2094,6 +2094,15 @@ function SpecificAllyAttackAbilities($attackID)
         AddDecisionQueue("PASSPARAMETER", $mainPlayer, "{0}", 1);
         AddDecisionQueue("MZOP", $mainPlayer, "REDUCEHEALTH,1", 1);
         break;
+      case "2532510371"://Trace Martez pilot
+        for($i=0; $i<2;++$i) {
+          AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY", $i == 0 ? 0 : 1);
+          AddDecisionQueue("MZFILTER", $mainPlayer, "damaged=0");
+          AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to restore 1 (Remaining: " . (2-$i) . ")", $i == 0 ? 0 : 1);
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+          AddDecisionQueue("MZOP", $mainPlayer, "RESTORE,1", 1);
+        }
+        break;
       default: break;
     }
   }
