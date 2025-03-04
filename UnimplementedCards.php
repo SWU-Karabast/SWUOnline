@@ -67,7 +67,8 @@ $cardsList = [];
                     echo "<img src='UnimplementedCards/$filename' alt='$cardName' style='$imgStyle $rotateStyle'>";
                     echo "</div>";
                     echo "</div>";
-                    echo "<div style='margin-top: 10px; margin-bottom: 4px; text-align: center; font-size: 14px; font-weight: 500; color: #fff; display: flex; align-items: center; justify-content: center; flex: 1;'>$cardName</div>";
+                    echo "<div style='margin-top: 10px; text-align: center; font-size: 14px; font-weight: 500; color: #fff; display: flex; align-items: center; justify-content: center; flex: 1;'>$cardName</div>";
+                    echo "<div style='margin-top: 2px; margin-bottom: 4px; text-align: center; font-size: 12px; font-weight: 600; color: #ffffff80; display: flex; align-items: center; justify-content: center; flex: 1;'>$cardId</div>";
                     echo "</div>";
                 }
                 ?>

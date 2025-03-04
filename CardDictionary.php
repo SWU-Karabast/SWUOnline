@@ -354,7 +354,7 @@ function HasSentinel($cardID, $player, $index)
   {
     //Spark of Rebellion
     case "2524528997"://Cell Block Guard
-    case "6385228745"://Correllian Freighter
+    case "6385228745"://Corellian Freighter
     case "6912684909"://Echo Base Defender
     case "7751685516"://System Patrol Craft
     case "9702250295"://Cloud City Wing Guard
