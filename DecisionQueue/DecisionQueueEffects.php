@@ -567,6 +567,11 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       }
       $ally->DealDamage(3);
       break;
+    case "SUPERHEAVYIONCANNON":
+      $owner = MZPlayerID($player, $lastResult);
+      $ally = new Ally($lastResult, $owner);
+      IndirectDamage($owner, $ally->CurrentPower(), true);
+      break;
     case "DONTGETCOCKY":
       $deck = new Deck($player);
       $deck->Reveal();

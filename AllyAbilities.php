@@ -2016,6 +2016,13 @@ function SpecificAllyAttackAbilities($attackID)
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $mainPlayer, "ADDEXPERIENCE", 1);
         break;
+      case "5016817239"://Superheavy Ion Cannon
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY:leader=0");
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a non-leader unit to exhaust");
+        AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "REST", 1);
+        AddDecisionQueue("SPECIFICCARD", $mainPlayer, "SUPERHEAVYIONCANNON", 1);
+        break;
       case "0414253215"://General's Blade
         if(TraitContains($attackerAlly->CardID(), "Jedi", $mainPlayer)) AddCurrentTurnEffect($upgrades[$i], $mainPlayer, from:"PLAY");
         break;
