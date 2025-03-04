@@ -6499,6 +6499,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "7214707216,HAND", 1);
       break;
+    case "9347873117"://Veteran Fleet Officer
+      CreateXWing($currentPlayer);
+      break;
     //PlayAbility End
     default: break;
   }
