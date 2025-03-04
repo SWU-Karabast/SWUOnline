@@ -884,6 +884,7 @@ function HasSaboteur($cardID, $player, $index)
     case "3434956158"://Fives
     //Jump to Lightspeed
     case "81a416eb1f"://Rio Durant leader unit
+    case "3310100725"://Insurgent Saboteurs
     case "1107172562"://Orbiting K-Wing
       return true;
 

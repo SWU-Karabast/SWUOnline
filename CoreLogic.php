@@ -4286,6 +4286,35 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "8734471238,PLAY", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
       break;
+    case "7461173274"://They Hate That Ship
+      global $CS_AfterPlayedBy;
+      for ($i = 0; $i < 2; $i++) {
+        $tieFighterUniqueId = CreateTieFighter($otherPlayer);
+        $tieFighterAlly = new Ally($tieFighterUniqueId, $otherPlayer);
+        $tieFighterAlly->Ready();
+      }
+      
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a vehicle unit to play (costs 3 less)");
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND:definedType=Unit&trait=Vehicle");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, $cardID, 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "PLAYCARD", 1);
+      break;
+    case "4942377291"://Face Off
+      global $initiativeTaken;
+      if (!$initiativeTaken) {
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an enemy unit to ready");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "GETARENA", 1);
+        AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:arena={0}", 1);
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a friendly unit in the same arena to ready", 1);
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
+      }
+      break;
     case "0931441928"://Ma Klounkee
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Underworld");
       AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
@@ -6420,6 +6449,20 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "MOVEPILOTUNIT", 1);
       }
       break;
+    case "0979322247"://Sidon Ithano
+      if(Ally::FromUniqueId($uniqueId)->Exists()) {
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Attach Sidon to a Vehicle?");
+        AddDecisionQueue("YESNO", $currentPlayer, "-", 1);
+        AddDecisionQueue("NOPASS", $currentPlayer, "-", 1);
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY:trait=Vehicle", 1);
+        AddDecisionQueue("MZFILTER", $currentPlayer, "hasPilot=1", 1);
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+        AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, $uniqueId, 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "MOVEPILOTUNIT", 1);
+      }
+      break;
     case "3905028200"://Admiral Trench
       if(GetResolvedAbilityName($cardID, $from) == "Rummage" && SearchCount(SearchHand($currentPlayer, minCost:3)) > 0) {
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYHAND:minCost=3");
@@ -6552,6 +6595,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       $ally = new Ally($target);
       $ally->AddRoundHealthModifier(-5);
       AddCurrentTurnEffect($cardID, $currentPlayer, "PLAY", $ally->UniqueID());
+      break;
+    case "4159101997"://Crackshot V-Wing
+      if($from != "PLAY" && SearchCount(SearchAllies($currentPlayer, trait:"Fighter")) <= 1) {
+        $playAlly->DealDamage(1); 
+      }
       break;
     //PlayAbility End
     default: break;

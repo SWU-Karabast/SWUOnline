@@ -9374,7 +9374,6 @@ function HasWhenPlayed($cardID) {
   1330473789 => true,
   5540797366 => true,
   7072861308 => true,
-  4159101997 => true,
   4019449999 => true,
   4203363893 => true,
   1965647391 => true,
@@ -12804,10 +12803,8 @@ function CardTitles() {
 
 function IsUnimplemented($cardID) {
   $unimplementedCards = array (
-  '0086781673' => true,
   '0728753133' => true,
   '0753707056' => true,
-  '0979322247' => true,
   1087522061 => true,
   1996597848 => true,
   2301911685 => true,
@@ -12825,7 +12822,6 @@ function IsUnimplemented($cardID) {
   3278986026 => true,
   3287404938 => true,
   3291001746 => true,
-  3310100725 => true,
   3356393152 => true,
   3622750563 => true,
   3658858659 => true,
@@ -12833,7 +12829,6 @@ function IsUnimplemented($cardID) {
   3858069945 => true,
   4159101997 => true,
   4332645242 => true,
-  4942377291 => true,
   5306772000 => true,
   5763330426 => true,
   5841647666 => true,
@@ -12848,7 +12843,6 @@ function IsUnimplemented($cardID) {
   7021680131 => true,
   7039711282 => true,
   7232609585 => true,
-  7461173274 => true,
   7500360419 => true,
   7501988286 => true,
   7660822254 => true,
