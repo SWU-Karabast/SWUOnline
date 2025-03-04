@@ -1160,6 +1160,19 @@ function DiscardCard($player, $index)
   return $discarded;
 }
 
+function NumDiscards($player) {
+  $discard = &GetDiscard($player);
+  return count($discard)/DiscardPieces();
+}
+
+// Returns the MZ index of the last card discarded
+function GetLastDiscardedMZ($player) {
+  global $mainPlayer;
+  $numDiscards = NumDiscards($player);
+  $indice = ($numDiscards - 1) * DiscardPieces();
+  return $mainPlayer == $player ? "MYDISCARD-" . $indice : "THEIRDISCARD-" . $indice;
+}
+
 function CardDiscarded($player, $discarded, $source = "")
 {
   global $mainPlayer;

@@ -4358,6 +4358,29 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
       }
       break;
+    case "2301911685"://Timely Reinforcements
+      $numResources = floor(NumResources($otherPlayer) / 2);
+      for ($i = 0; $i < $numResources; $i++) {
+        $xwingUniqueId = CreateXWing($currentPlayer);
+        AddCurrentTurnEffect($cardID, $currentPlayer, uniqueID: $xwingUniqueId);
+      }
+      break;
+    case "8323555870"://Commence Patrol
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a discard pile to put a card on the bottom of its owner's deck");
+      AddDecisionQueue("BUTTONINPUT", $currentPlayer, "Yours,Opoonentʼs"); // Some weird bug with the normal apostrophe (')
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "COMMENCEPATROL", 1);
+      break;
+    case "3858069945"://Power From Pain
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to give +1/+0 for each damage on it");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETDAMAGE", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "1", 1);
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "3858069945-{1}" , 1);
+      break;
     case "0931441928"://Ma Klounkee
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Underworld");
       AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
@@ -6588,9 +6611,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, "WRITECHOICE", 1);
       break;
     case "8382691367"://Dedicated Wingmen
-        CreateXWing($currentPlayer);
-        CreateXWing($currentPlayer);
-        break;
+      CreateXWing($currentPlayer);
+      CreateXWing($currentPlayer);
+      break;
     case "6413979593"://Punch It
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Vehicle");
       AddDecisionQueue("MZFILTER", $currentPlayer, "status=1");
@@ -6664,7 +6687,6 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "3660641793"://Echo Base Engineer
       if($from != "PLAY") {
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Vehicle&THEIRALLY:trait=Vehicle");
-        AddDecisionQueue("MZFILTER", $currentPlayer, "status=1");
         AddDecisionQueue("MZFILTER", $currentPlayer, "damaged=0");
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a damaged vehicle to give a shield token to");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);

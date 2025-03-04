@@ -902,6 +902,19 @@ function SpecificCardLogic($player, $parameter, $lastResult)
 
       AddDecisionQueue("PASSPARAMETER", $player, $ally->MZIndex());
       AddDecisionQueue("MZOP", $player, "ATTACK");
+      break;    
+    case "COMMENCEPATROL":
+      if ($lastResult == "Yours") {
+        $search = "MYDISCARD";
+        $where = "MYBOTDECK";
+        $filter = "index=" . GetLastDiscardedMZ($player);
+      } else {
+        $search = "THEIRDISCARD";
+        $where = "THEIRBOTDECK";
+        $filter = "";
+      }
+      MZMoveCard($player, $search, $where, filter:$filter, context:"Choose a card to put on the bottom of its owner's deck");
+      AddDecisionQueue("CREATEXWING", $player, "-", 1);
       break;
     case "YODAOLDMASTER":
       if($lastResult == "Both") {
