@@ -749,6 +749,7 @@ function HasAmbush($cardID, $player, $index, $from)
     case "7489502985"://Contracted Hunter
     case "7198833142"://X-34 Landspeeder
     case "7458361203"://Corporate Light Cruiser
+    case "0728753133"://The Starhawk
       return true;
 
     //conditional ambush

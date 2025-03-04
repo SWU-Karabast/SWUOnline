@@ -2077,6 +2077,9 @@ function SelfCostModifier($cardID, $from, $reportMode=false)
       case "6311662442"://Director Krennic
         if(GetClassState($currentPlayer, $CS_NumWhenDefeatedPlayed) == 0 && HasWhenDestroyed($cardID)) $modifier -= 1;
         break;
+      case "0728753133"://The Starhawk
+        $modifier -= floor(CardCost($cardID)/2);
+        break;
       default: break;
     }
   }
