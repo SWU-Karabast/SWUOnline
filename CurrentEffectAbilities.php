@@ -277,6 +277,7 @@ function EffectAttackModifier($cardID, $playerID="")
     case "9763190770": return 1;//Major Vonreg
     case "d8a5bf1a15": return 1;//Major Vonreg pilot
     case "3782661648": return -5;//Out the Airlock
+    case "9595202461": return 2;//Coordinated Front
     default: return 0;
   }
 }
