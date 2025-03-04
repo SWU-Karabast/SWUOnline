@@ -6510,6 +6510,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
         break;
+    case "3782661648"://Out the Airlock
+        $ally = new Ally($target);
+        $ally->AddRoundHealthModifier(-5);
+        AddCurrentTurnEffect($cardID, $currentPlayer, "PLAY", $ally->UniqueID());
+        break;
     //PlayAbility End
     default: break;
   }
@@ -6629,7 +6634,7 @@ function AfterPlayedByAbility($cardID) {
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "9763190770,PLAY", 1);
-      break;
+      break; 
     default: break;
   }
 }
@@ -6846,6 +6851,7 @@ function PlayRequiresTarget($cardID)
     case "1973545191": return 6;//Unexpected Escape
     case "0598830553": return 7;//Dryden Vos
     case "8576088385": return 6;//Detention Block Rescue
+    case "3782661648": return 6;//Out the Airlock
     default: return -1;
   }
 }
