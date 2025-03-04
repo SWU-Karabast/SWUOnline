@@ -348,7 +348,9 @@ function MainCharacterPlayCardAbilities($cardID, $from)
         }
         break;
       case "9334480612"://Boba Fett (Daimyo)
-        if($from != "PLAY" && DefinedTypesContains($cardID, "Unit", $currentPlayer)
+        if($from != "PLAY"
+            && DefinedTypesContains($cardID, "Unit", $currentPlayer)
+            && !PilotWasPlayed($currentPlayer, $cardID)
             && HasKeyword($cardID, "Any", $currentPlayer)
             && !SearchCurrentLayers("TRIGGER", $currentPlayer, "9334480612")) {
           AddLayer("TRIGGER", $currentPlayer, "9334480612");
@@ -1346,7 +1348,8 @@ function HasKeyword($cardID, $keyword, $player="", $index=-1){
         HasSentinel($cardID, $player, $index) ||
         HasAmbush($cardID, $player, $index, "") ||
         HasCoordinate($cardID, $player, $index) ||
-        ExploitAmount($cardID, $player, true) > 0;
+        ExploitAmount($cardID, $player, true) > 0 ||
+        PilotingCost($cardID) > -1;
     default: return false;
   }
 }
