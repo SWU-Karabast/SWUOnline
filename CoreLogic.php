@@ -6762,6 +6762,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL", 1);
       }
       break;
+    case "6757031085"://Kimogila Heavy Fighter
+      if($from != "PLAY") {
+        IndirectDamage($otherPlayer, 3, fromUnitEffect:true, uniqueID:$playAlly->UniqueID(), alsoExhausts:true);
+      }
     //PlayAbility End
     default: break;
   }

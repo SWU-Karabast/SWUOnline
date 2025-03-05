@@ -594,6 +594,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $sourcePlayer = count($parameterArr) > 2 ? $parameterArr[2] : ($targetPlayer == 1 ? 2 : 1);
           $fromUnitEffect = count($parameterArr) > 3 && (bool)$parameterArr[3];
           $preventable = count($parameterArr) > 4 ? $parameterArr[4] == 1 : 1;
+          $alsoExhausts = count($parameterArr) > 5 ? $parameterArr[5] == 1 : 0;
           if($targetArr[0] == "MYALLY" || $targetArr[0] == "THEIRALLY") {
             $isAttackTarget = GetAttackTarget() == $lastResult;
             $isAttacker = AttackerMZID($player) == $lastResult;
@@ -607,6 +608,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             if($destroyed) {
               if(($isAttackTarget || $isAttacker) && !$attackerHasOverwhelm) CloseCombatChain();
               return "";
+            } else if($alsoExhausts && !$ally->IsExhausted()) {
+              $ally->Exhaust();
             }
           } else {
             PrependDecisionQueue("TAKEDAMAGE", $targetPlayer, $parameterArr[1]);
@@ -2080,7 +2083,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $maxPerTarget = count($parameter) > 2 ? $parameter[2] : 0;
       $sourcePlayer = count($parameter) > 3 ? $parameter[3] : $player;
       $preventable = count($parameter) > 4 ? $parameter[4] : 1;
-      $zones = count($parameter) > 5 ? $parameter[5] : "THEIRALLY";
+      $alsoExhausts = count($parameter) > 5 ? $parameter[5] : 0;
+      $zones = count($parameter) > 6 ? $parameter[6] : "THEIRALLY";
       $mineArr = [];
       if($zones == "OURALLIES") {
         $mineArr = $lastResult[1];
@@ -2151,7 +2155,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         $nextZones = $sourcePlayer == $player ? "THEIRCHAR" : "MYCHAR";
       }
       if(count($lastResult) > 0) {
-        PrependDecisionQueue("MULTIDISTRIBUTEDAMAGE", $player, "-,$parameter[1],$maxPerTarget,$sourcePlayer,$preventable,$nextZones");
+        PrependDecisionQueue("MULTIDISTRIBUTEDAMAGE", $player, "-,$parameter[1],$maxPerTarget,$sourcePlayer,$preventable,$alsoExhausts,$nextZones");
         PrependDecisionQueue("PASSPARAMETER", $player, implode(",", $lastResult));
       }
 
@@ -2162,7 +2166,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       if($dqVars[0] > 0) {
       $cardLink = str_contains($zones, "CHAR") ? CardLink($char[0], $char[0]) : CardLink($allies[$index], $allies[$index]);
       $dqContext = "Choose an amount of damage to deal to " . $cardLink;
-      PrependDecisionQueue("MZOP", $player, "DEALDAMAGE,{1},$sourcePlayer,$parameter[1],$preventable");
+      PrependDecisionQueue("MZOP", $player, "DEALDAMAGE,{1},$sourcePlayer,$parameter[1],$preventable,$alsoExhausts");
       PrependDecisionQueue("PASSPARAMETER", $player, "$zones-" . $index);
       PrependDecisionQueue("SETDQVAR", $player, "1");
       PrependDecisionQueue("BUTTONINPUTNOPASS", $player, $damageIndices);
