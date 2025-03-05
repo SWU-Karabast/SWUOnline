@@ -593,8 +593,9 @@ class Ally {
     if (CardIsUnique($cardID)) {
       $this->CheckUniqueUpgrade($cardID);
       if($receivingPilot) {
-        $this->CheckUniqueAllyForPilot($cardID);
-        if($cardID == "0979322247") $this->DefeatIfNoRemainingHP();
+        $allyDestroyed = $this->CheckUniqueAllyForPilot($cardID);
+        if($allyDestroyed) $this->index = min(0, $this->index - AllyPieces());
+        if($cardID == "0979322247") $this->DefeatIfNoRemainingHP();//Sidon Ithano
       }
     }
     //Pilot attach side effects
@@ -715,8 +716,11 @@ class Ally {
       if($ally->CardID() == $attachedPilotCardID) {
         WriteLog(CardLink($attachedPilotCardID, $attachedPilotCardID) . " unit was defeated due to unique rule.");
         $ally->Destroy();
+        return true;
       }
     }
+
+    return false;
   }
 
   function HasUpgrade($upgradeID) {
