@@ -511,12 +511,18 @@ class Ally {
     $this->DefeatIfNoRemainingHP();
   }
 
-  function Ready() {
+  function Ready($resolvedSpecialCase=false) {
     $upgrades = $this->GetUpgrades();
     for($i=0; $i<count($upgrades); ++$i) {
       switch($upgrades[$i]) {
         case "7718080954"://Frozen in Carbonite
           return false;
+        case "7962923506"://In Debt to Crimson Dawn
+          if($this->IsExhausted() && !$resolvedSpecialCase) {
+             AddDecisionQueue("SPECIFICCARD", $this->Controller(), "PAY_READY_TAX,2," . $this->UniqueID());
+            return false;
+          }
+          break;
         default: break;
       }
     }
