@@ -1099,7 +1099,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
     case "VADER_UNIT_JTL":
       $pingedAlly = new Ally($lastResult);
       $enemyDamage = str_starts_with($lastResult, "MYALLY-") ? false : true;
-      $defeated = $pingedAlly->DealDamage(1, $enemyDamage, fromUnitEffect:true);
+      $defeated = $pingedAlly->DealDamage(1, enemyDamage: $enemyDamage, fromUnitEffect:true);
       if($defeated) {
         AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
         AddDecisionQueue("PREPENDLASTRESULT", $player, "MYCHAR-0,THEIRCHAR-0,");
