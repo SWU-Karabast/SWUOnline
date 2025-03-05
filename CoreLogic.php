@@ -5176,14 +5176,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "8095362491"://Frontier Trader
       if($from != "PLAY") {
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYRESOURCES");
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a resource to return to hand", 1);
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a resource to return to hand");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "BOUNCE", 1);
         AddDecisionQueue("YESNO", $currentPlayer, "if you want to add a resource from the top of your deck", 1);
         AddDecisionQueue("NOPASS", $currentPlayer, "-", 1);
         AddDecisionQueue("OP", $currentPlayer, "ADDTOPDECKASRESOURCE", 1);
       }
-        break;
+      break;
     case "8709191884"://Hunter (Outcast Sergeant)
       $abilityName = GetResolvedAbilityName($cardID, $from);
       if($abilityName == "Replace Resource") {
