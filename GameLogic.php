@@ -968,10 +968,11 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         }
         if($passFilter) $output[] = $inputArr[1];
       }
-      if (count($output) == 0) {
+      if (count($output) == 0 && !str_starts_with($parameter, "Deck")) {
         WriteLog("Invalid target. Reverting gamestate.");
         RevertGamestate();
-      }
+      } else if (count($output) == 0) return "PASS";
+
       return implode(",", $output);
     case "MZFILTER":
       $params = explode("=", $parameter);
