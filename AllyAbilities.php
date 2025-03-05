@@ -2045,7 +2045,9 @@ function SpecificAllyAttackAbilities($attackID)
         AddDecisionQueue("MZOP", $mainPlayer, "ADDEXPERIENCE", 1);
         break;
       case "5016817239"://Superheavy Ion Cannon
-        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY:leader=0");
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY");
+        AddDecisionQueue("MZFILTER", $mainPlayer, "leader=1");
+        AddDecisionQueue("MZFILTER", $mainPlayer, "status=1");
         AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a non-leader unit to exhaust");
         AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $mainPlayer, "REST", 1);
