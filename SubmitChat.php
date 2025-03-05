@@ -43,6 +43,7 @@ $filteredChatText = explode(" ", $chatText);
 $meanPhrases = [
   "kill yourself", "die in a fire", "can you just die irl", "hit by a bus", "fake and gay", "ass monkey", "carpet muncher", "f u c k", "f u c k e r", "go to hell",
   "motha fucker, motha fuker, motha fukkah, motha fukker, mother fucker, mother fukah, mother fuker, mother fukkah, mother fukker, mutha fucker, mutha fukah, mutha fuker, mutha fukkah, mutha fukker",
+  "kys", "eat a gun"
 ];
 
 for($i=0; $i<count($filteredChatText);++$i) {
