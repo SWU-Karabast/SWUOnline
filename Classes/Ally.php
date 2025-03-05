@@ -582,7 +582,7 @@ class Ally {
   }
 
   function Attach($cardID, $ownerID = null, $epicAction = false, $turnsInPlay = 0) {
-    $receivingPilot = $this->ReceivingPilot($cardID) || $cardID == "0979322247";//Sidon Ithano
+    $receivingPilot = $this->ReceivingPilot($cardID) || IsUnconventionalPilot($cardID);
     $subcardUniqueID = $this->AddSubcard($cardID, $ownerID, $receivingPilot, $epicAction, $turnsInPlay);
     if (CardIsUnique($cardID)) {
       $this->CheckUniqueUpgrade($cardID);

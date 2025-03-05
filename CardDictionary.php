@@ -2599,6 +2599,15 @@ function PilotingCost($cardID, $player = "") {
   return $minCost;
 }
 
+function IsUnconventionalPilot($cardID) {
+  switch($cardID) {
+    case "0979322247"://Sidon Ithano
+    case "6515230001"://Pantoran Starship Thief
+      return true;
+    default: return false;
+  }
+}
+
 function isBountyRecollectable($cardID) {
   switch ($cardID) {
     case "7642980906"://Stolen Landspeeder
