@@ -6138,13 +6138,15 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       IndirectDamage($otherPlayer, 4, true, $playAlly->UniqueID());
       break;
     case "2388374331"://Blue Leader
-      AddDecisionQueue("YESNO", $currentPlayer, "Do you want to pay 2 to gain 2 experience tokens?", 1);
-      AddDecisionQueue("NOPASS", $currentPlayer, "-", 1);
-      AddDecisionQueue("PAYRESOURCES", $currentPlayer, "2", 1);
-      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYALLY-" . $playAlly->Index(), 1);
-      AddDecisionQueue("MZOP", $currentPlayer, "ADDEXPERIENCE", 1);
-      AddDecisionQueue("MZOP", $currentPlayer, "ADDEXPERIENCE", 1);
-      AddDecisionQueue("MZOP", $currentPlayer, "MOVEARENA,Ground", 1);
+      if($from != "PLAY" && NumResourcesAvailable($currentPlayer) >= 2) {
+        AddDecisionQueue("YESNO", $currentPlayer, "Do you want to pay 2 to gain 2 experience tokens?", 1);
+        AddDecisionQueue("NOPASS", $currentPlayer, "-", 1);
+        AddDecisionQueue("PAYRESOURCES", $currentPlayer, "2", 1);
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYALLY-" . $playAlly->Index(), 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "ADDEXPERIENCE", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "ADDEXPERIENCE", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "MOVEARENA,Ground", 1);
+      }
       break;
     case "4179470615"://Asajj Ventress
       $abilityName = GetResolvedAbilityName($cardID, $from);
@@ -6740,6 +6742,24 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         $allyUid = CreateTieFighter($currentPlayer);
         Ally::FromUniqueId($allyUid)->Ready();
         AddCurrentTurnEffect($cardID, $currentPlayer, "PLAY", $allyUid);
+      }
+      break;
+    case "6515230001"://Pantoran Starship Thief
+      if($from != "PLAY" && NumResourcesAvailable($currentPlayer) >= 3) {
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Pay 3 resources to take control of a Fighter or Transport?");
+        AddDecisionQueue("YESNO", $currentPlayer, "-", 1);
+        AddDecisionQueue("NOPASS", $currentPlayer, "-", 1);
+        AddDecisionQueue("PAYRESOURCES", $currentPlayer, "3", 1);
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Fighter&MYALLY:trait=Transport&THEIRALLY:trait=Fighter&THEIRALLY:trait=Transport", 1);
+        AddDecisionQueue("MZFILTER", $currentPlayer, "hasPilot=1", 1);
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a Fighter or Transport to take control of", 1);
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+        AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, $uniqueId, 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "MOVEPILOTUNIT", 1);
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL", 1);
       }
       break;
     //PlayAbility End

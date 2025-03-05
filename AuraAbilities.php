@@ -33,6 +33,7 @@ function PlayAura($cardID, $player, $number = 1, $isToken = false, $rogueHeronSp
 function UpgradeDetached($upgradeCardID, $player, $formerBearerMZIndex, $turnsInPlay, $ownerId) {
   switch($upgradeCardID) {
     case "8055390529"://Traitorous
+    case "6515230001"://Pantoran Starship Thief
       $formerBearer = new Ally($formerBearerMZIndex, $player);
       if($formerBearer->Owner() != $formerBearer->Controller()) AllyTakeControl($formerBearer->Owner(), $formerBearer->UniqueID());
       break;
