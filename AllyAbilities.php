@@ -2958,6 +2958,13 @@ function SpecificAllyAttackAbilities($attackID)
     case "3310100725"://Insurgent Saboteurs
       DefeatUpgrade($mainPlayer, true);
       break;
+    case "7232609585"://Supporting Eta-2
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:arena=Ground&THEIRALLY:arena=Ground");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "WRITECHOICE", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "7232609585,HAND", 1);
+      break;
   }
 
   // Current Effect Abilities
