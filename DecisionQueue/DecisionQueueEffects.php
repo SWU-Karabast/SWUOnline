@@ -973,6 +973,24 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       AddDecisionQueue("PASSPARAMETER", $player, $ally->MZIndex());
       AddDecisionQueue("MZOP", $player, "ATTACK");
       break;
+    case "SWEEPTHEAREA":
+      $totalCost = 0;
+      for($i=count($lastResult)-1; $i>=0; --$i) {
+        $owner = MZPlayerID($player, $lastResult[$i]);
+        $ally = new Ally($lastResult[$i], $owner);
+        $totalCost += CardCost($ally->CardID());
+      }
+      if($totalCost > 3) {
+        WriteLog("<span style='color:red;'>The unit cost was too high. Reverting gamestate.</span>");
+        RevertGamestate();
+        return "";
+      } else {
+        for($i=count($lastResult)-1; $i>=0; --$i) {
+          $owner = MZPlayerID($player, $lastResult[$i]);
+          MZBounce($player, $lastResult[$i]);
+        }
+      }
+      break;
     case "THRAWN_JTL":
       $data = explode(";", $dqVars[1]);
       $target = $data[0];
