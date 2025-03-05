@@ -1094,6 +1094,21 @@ function SpecificCardLogic($player, $parameter, $lastResult)
         AddDecisionQueue("MZOP", $player, DamageStringBuilder(1, $player, isUnitEffect:1), 1);
       }
       break;
+    case "PAY_READY_TAX":
+      $tax = $parameterArr[1];
+      if(NumResourcesAvailable($player) >= $tax) {
+        $affectedUid = $parameterArr[2];
+        $ally = Ally::FromUniqueId($affectedUid);
+        $cardID = $ally->CardID();
+        AddDecisionQueue("YESNO", $player, "Pay $tax resources to ready " . CardLink($cardID, $cardID) . "?", 1);
+        AddDecisionQueue("NOPASS", $player, "-", 1);
+        AddDecisionQueue("PAYRESOURCES", $player, $tax, 1);
+        AddDecisionQueue("SPECIFICCARD", $player, "PAID_READY_TAX,$affectedUid", 1);
+      }
+      break;
+    case "PAID_READY_TAX":
+      Ally::FromUniqueId($parameterArr[1])->Ready(resolvedSpecialCase:true);
+      break;
     //SpecificCardLogic End
     default: return "";
   }
