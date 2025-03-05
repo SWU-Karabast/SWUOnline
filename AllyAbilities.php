@@ -680,7 +680,6 @@ function CheckForUpgradesPlayableExhausted(Ally $ally, $theirCard=false) {
       switch($upgrades[$i]) {
         case "3eb545eb4b"://Poe Dameron JTL leader
           return $upgrades[$i+1] == $playableBy && GetClassState($playableBy, $CS_NumUsesLeaderUpgrade1) > 0;
-          break;
         default: break;
       }
     }
