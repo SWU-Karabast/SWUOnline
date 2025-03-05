@@ -6779,19 +6779,19 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "HEARTLESSTACTICS", 1);
       break;
     case "2454329668"://System Shock
-      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:hasUpgradeOnly=true&THEIRALLY:hasUpgradeOnly=true");
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to defeat an upgrade from");
-      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
-      AddDecisionQueue("SETDQVAR", $currentPlayer, "1", 1);
-      AddDecisionQueue("MZOP", $currentPlayer, "GETUPGRADES", 1);
-      AddDecisionQueue("FILTER", $currentPlayer, "LastResult-exclude-isLeader", 1);
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a non-leader upgrade to defeat.", 1);
-      AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
-      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
-      AddDecisionQueue("OP", $currentPlayer, "DEFEATUPGRADE", 1);
-      AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{1}", 1);
-      AddDecisionQueue("MZOP", $currentPlayer, DamageStringBuilder(1, $currentPlayer), 1);
+      // AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:hasUpgradeOnly=true&THEIRALLY:hasUpgradeOnly=true");
+      // AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to defeat an upgrade from");
+      // AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      // AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+      // AddDecisionQueue("SETDQVAR", $currentPlayer, "1", 1);
+      // AddDecisionQueue("MZOP", $currentPlayer, "GETUPGRADES", 1);
+      // AddDecisionQueue("FILTER", $currentPlayer, "LastResult-exclude-isLeader", 1);
+      // AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a non-leader upgrade to defeat.", 1);
+      // AddDecisionQueue("CHOOSECARD", $currentPlayer, "<-", 1);
+      // AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+      // AddDecisionQueue("OP", $currentPlayer, "DEFEATUPGRADE", 1);
+      // AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{1}", 1);
+      // AddDecisionQueue("MZOP", $currentPlayer, DamageStringBuilder(1, $currentPlayer), 1);
       break;
     //PlayAbility End
     default: break;
