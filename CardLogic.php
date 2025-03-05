@@ -1455,7 +1455,6 @@ function IndirectDamage($player, $amount, $fromUnitEffect=false, $uniqueID="")
   $sourcePlayer = $player == 1 ? 2 : 1;
   $amount += SearchCount(SearchAlliesForCard($sourcePlayer, "4560739921"));//Hunting Aggressor
   if(SearchCount(SearchAlliesForCard($sourcePlayer, "1330473789")) > 0) $sourcePlayerTargets = true;
-  WriteLog($uniqueID);
   if(!$sourcePlayerTargets && $uniqueID != "") {
     $sourceIndex = SearchAlliesForUniqueID($uniqueID, $sourcePlayer);
     $ally = new Ally("MYALLY-" . $sourceIndex, $sourcePlayer);
