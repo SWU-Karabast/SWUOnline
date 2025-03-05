@@ -498,7 +498,6 @@ function HasGrit($cardID, $player, $index)
     if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
     switch($currentTurnEffects[$i]) {
       case "6669050232": return true;//Grim Resolve
-        break;
       default: break;
     }
   }
@@ -787,11 +786,11 @@ function HasAmbush($cardID, $player, $index, $from)
 function HasShielded($cardID, $player)
 {
   global $currentTurnEffects;
-  $ally = new Ally("MYALLY-" . $index, $player);
+
   for($i=count($currentTurnEffects)-CurrentTurnPieces(); $i>=0; $i-=CurrentTurnPieces()) {
     if($currentTurnEffects[$i+1] != $player) continue;
     if($currentTurnEffects[$i] == "3148212344_Shielded" && TraitContains($cardID, "Vehicle", $player)) return true;//Admiral Yularen (Must be outside applies to loop because that's for Yularen)
-    if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
+    //if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
     switch($currentTurnEffects[$i]) {
       default: break;
     }
@@ -1110,9 +1109,9 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
 
   $set = CardSet($cardID);
   switch($set) {
-    case "SOR": $abilityTypes = CheckSORAbilityTypes($cardID, $index); break;
-    case "SHD": $abilityTypes = CheckSHDAbilityTypes($cardID, $index); break;
-    case "TWI": $abilityTypes = CheckTWIAbilityTypes($cardID, $index); break;
+    case "SOR": $abilityTypes = CheckSORAbilityTypes($cardID); break;
+    case "SHD": $abilityTypes = CheckSHDAbilityTypes($cardID); break;
+    case "TWI": $abilityTypes = CheckTWIAbilityTypes($cardID); break;
     case "JTL": $abilityTypes = CheckJTLAbilityTypes($cardID); break;
     default: break;//maybe throw error?
   }

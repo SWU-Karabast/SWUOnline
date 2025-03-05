@@ -1109,6 +1109,16 @@ function SpecificCardLogic($player, $parameter, $lastResult)
     case "PAID_READY_TAX":
       Ally::FromUniqueId($parameterArr[1])->Ready(resolvedSpecialCase:true);
       break;
+    case "HEARTLESSTACTICS":
+      $ally = Ally::FromUniqueId($lastResult);
+      if(!$ally->IsLeader() && $ally->CurrentPower() == 0) {
+        AddDecisionQueue("SETDQCONTEXT", $player, "Bounce " . CardLink($ally->CardID(), $ally->CardID()) . "?");
+        AddDecisionQueue("YESNO", $player, "-", 1);
+        AddDecisionQueue("NOPASS", $player, "-", 1);
+        AddDecisionQueue("PASSPARAMETER", $player, $ally->MZIndex(), 1);
+        AddDecisionQueue("MZOP", $player, "BOUNCE", 1);
+      }
+      break;
     //SpecificCardLogic End
     default: return "";
   }
