@@ -219,6 +219,7 @@ function AllyHasStaticHealthModifier($cardID)
     case "9017877021"://Clone Commander Cody
     case "9811031405"://Victor Leader
     case "5052103576"://Resistance X-Wing
+    case "3213928129"://Clone Combat Squadron
       return true;
     default: return false;
   }
@@ -269,7 +270,9 @@ function AllyStaticHealthModifier($cardID, $index, $player, $myCardID, $myIndex,
       }
       break;
     case "3213928129"://Clone Combat Squadron
-      return SearchCount(SearchAllies($player, arena:"Space"))-1;
+      if($index == $myIndex && $player == $myPlayer) {
+        return SearchCount(SearchAllies($player, arena:"Space"))-1;
+      }
       break;
     case "3731235174"://Supreme Leader Snoke
       if($player != $myPlayer) {
