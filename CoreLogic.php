@@ -6741,6 +6741,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         Ally::FromUniqueId($allyUid)->Ready();
         AddCurrentTurnEffect($cardID, $currentPlayer, "PLAY", $allyUid);
       }
+      break;
     //PlayAbility End
     default: break;
   }
