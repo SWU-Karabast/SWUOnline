@@ -1076,6 +1076,20 @@ function SpecificCardLogic($player, $parameter, $lastResult)
         AddDecisionQueue("MZOP", $player, DamageStringBuilder(1, $player, isUnitEffect:1), 1);
       }
       break;
+    case "FOCUS_FIRE":
+      $target = new Ally($lastResult);
+      $targetArena = CardArenas($target->CardID());
+      $allies = &GetAllies($player);
+      $damage = 0;
+      for ($i = 0; $i < count($allies); $i += AllyPieces()) {
+        if (TraitContains($allies[$i], "Vehicle", $player) && CardArenas($allies[$i]) == $targetArena) {
+          $ally = new Ally($allies[$i+5], $player);
+          $damage += $ally->CurrentPower();
+        }
+      }
+      AddDecisionQueue("PASSPARAMETER", $player, $lastResult, 1);
+      AddDecisionQueue("MZOP", $player, DamageStringBuilder($damage, $player, isUnitEffect:1), 1);
+      break;
     //SpecificCardLogic End
     default: return "";
   }
