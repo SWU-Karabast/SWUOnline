@@ -1612,6 +1612,7 @@ function NumEquipBlock()
       case "MULTICHOOSEUNIT": return 0;
       case "MULTICHOOSETHEIRUNIT": return 0;
       case "MULTICHOOSEOURUNITS": return 0;
+      case "MULTICHOOSEMULTIZONE": return 0;
       case "MULTICHOOSEMYUNITSANDBASE": return 0;
       case "MULTICHOOSETHEIRUNITSANDBASE": return 0;
       case "MULTICHOOSEOURUNITSANDBASE": return 0;
@@ -3593,14 +3594,29 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "6588309727"://All Wings Report In
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:arena=Space");
       AddDecisionQueue("MZFILTER", $currentPlayer, "status=1", 1);
-      AddDecisionQueue("OP", $currentPlayer, "MZTONORMALINDICES");
+      AddDecisionQueue("OP", $currentPlayer, "MZTONORMALINDICES", 1);
       AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "2-", 1);
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose up to two friendly space units to exhaust");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose up to two friendly space units to exhaust", 1);
       AddDecisionQueue("MULTICHOOSEUNIT", $currentPlayer, "<-", 1);
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "ALLWINGSREPORTIN", 1);
       break;
     case "3278986026"://Rafa Martez
       RafaMartezJTL($currentPlayer);
+      break;
+    case "3148212344"://Admiral Yularen
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an ability to grant");
+      AddDecisionQueue("BUTTONINPUT", $currentPlayer, "Grit,Restore_1,Sentinel,Shielded", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, $uniqueId, 1);
+      AddDecisionQueue("ADDLIMITEDPERMANENTEFFECT", $currentPlayer, "3148212344_{0},HAND," . $currentPlayer, 1);
+      break;
+    case "7039711282"://Sweep the Area
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1", 1);
+      AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "2-", 1);
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose up to two units", 1);
+      AddDecisionQueue("MULTICHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "SWEEPTHEAREA", 1);
       break;
     case "2579248092"://Covering the Wing
       CreateXWing($currentPlayer);

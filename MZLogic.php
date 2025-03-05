@@ -322,7 +322,7 @@ function MZBounce($player, $target)
 {
   global $CS_NumLeftPlay;
   $mzArr = explode("-", $target);
-  $controller = (str_starts_with($mzArr[0], "MY") ? $player : ($player == 1 ? 2 : 1));
+  $controller = MZPlayerID($player, $target);
   switch($mzArr[0]) {
     case "THEIRALLY": case "MYALLY":
       $ally = new Ally($target, $controller);
