@@ -3633,7 +3633,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "3622750563"://Dornean Gunship
       $vehicleCount = SearchCount(SearchAllies($currentPlayer, trait:"Vehicle"));
-      IndirectDamage($otherPlayer, $vehicleCount, true);
+      IndirectDamage($otherPlayer, $vehicleCount, true, $playAlly->UniqueID());
       break;
     case "8606123385"://Lightspeed Assault
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:arena=Space");
@@ -6135,7 +6135,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "1330473789"://Devastator
-      IndirectDamage($otherPlayer, 4, true);
+      IndirectDamage($otherPlayer, 4, true, $playAlly->UniqueID());
       break;
     case "2388374331"://Blue Leader
       AddDecisionQueue("YESNO", $currentPlayer, "Do you want to pay 2 to gain 2 experience tokens?", 1);
@@ -6259,7 +6259,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "6648978613"://Fett's Firespray (Feared Silhouettte)
       $damage = ControlsNamedCard($currentPlayer, "Boba Fett") ? 2 : 1;
-      IndirectDamage($otherPlayer, $damage, true);
+      IndirectDamage($otherPlayer, $damage, true, $playAlly->UniqueID());
       break;
     case "4819196588"://Electromagnetic Pulse
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Vehicle&THEIRALLY:trait=Vehicle&MYALLY:trait=Droid&THEIRALLY:trait=Droid");
@@ -6460,7 +6460,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "3567283316":
       if($from != "PLAY") {
-        IndirectDamage($otherPlayer, 5, true);
+        IndirectDamage($otherPlayer, 5, true, $playAlly->UniqueID());
       }
       break;
     case "0753794638"://Corvus
@@ -6508,7 +6508,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "2711104544"://Guerilla Soldier
       if($from != "PLAY") {
         AddCurrentTurnEffect("2711104544", $currentPlayer, $from, $uniqueId);
-        IndirectDamage($otherPlayer, 3, true);
+        IndirectDamage($otherPlayer, 3, true, $playAlly->UniqueID());
         AddDecisionQueue("REMOVECURRENTEFFECT", $currentPlayer, "2711104544", 1);
       }
       break;
