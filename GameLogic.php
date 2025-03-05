@@ -965,7 +965,11 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         }
         if($passFilter) $output[] = $inputArr[1];
       }
-      return (count($output) > 0 ? implode(",", $output) : "PASS");
+      if (count($output) == 0) {
+        WriteLog("Invalid target. Reverting gamestate.");
+        RevertGamestate();
+      }
+      return implode(",", $output);
     case "MZFILTER":
       $params = explode("=", $parameter);
       $arr = explode(",", $lastResult);
@@ -1109,7 +1113,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         else if(!$invertedMatching && $match) unset($arr[$i]);
       }
       $rv = implode(",", $arr);
-      return ($rv == "" ? "PASS" : $rv);
+      return $rv == "" ? "PASS" : $rv;
     case "PASSPARAMETER":
       return $parameter;
     case "DISCARDCARD":

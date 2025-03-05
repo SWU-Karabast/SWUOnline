@@ -2971,6 +2971,22 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "7232609585,HAND", 1);
       break;
+    case "2644994192"://Hondo Ohnaka
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:hasUpgradeOnly=true&THEIRALLY:hasUpgradeOnly=true");
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to take an upgrade from.");
+      AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("SETDQVAR", $mainPlayer, "1", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "GETUPGRADES", 1);
+      AddDecisionQueue("FILTER", $mainPlayer, "LastResult-exclude-trait-Pilot", 1);
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose an upgrade to take.", 1);
+      AddDecisionQueue("CHOOSECARD", $mainPlayer, "<-", 1);
+      AddDecisionQueue("SETDQVAR", $mainPlayer, "0", 1);
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("MZFILTER", $mainPlayer, "canAttach={0}", 1);
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to move <0> to.", 1);
+      AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "MOVEUPGRADE", 1);
+      break;
   }
 
   // Current Effect Abilities

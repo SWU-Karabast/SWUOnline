@@ -833,6 +833,7 @@ function HasShielded($cardID, $player)
     case "9325037410"://Iden Versio
     case "7385763727"://Techno Union Transport
     case "3770706835"://Outer Rim Outlaws
+    case "2644994192"://Hondo Ohnaka
       return true;
     default: return false;
   }
