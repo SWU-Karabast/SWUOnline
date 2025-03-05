@@ -1,9 +1,10 @@
 <?php
 
-function ModalAbilities($player, $card, $lastResult)
+function ModalAbilities($player, $parameter, $lastResult)
 {
   global $combatChain, $defPlayer;
-  switch($card)
+  $paramArr = explode(",", $parameter);
+  switch($paramArr[0])
   {
     case "K2SO":
       $otherPlayer = ($player == 1 ? 2 : 1);
@@ -272,8 +273,21 @@ function ModalAbilities($player, $card, $lastResult)
         default: break;
       }
       return $lastResult;
+    case "YULAREN_JTL":
+      $effectType = intval($lastResult);
+      $effectName = "3148212344_" . match($effectType) {
+        0 => "Grit",
+        1 => "Restore_1",
+        2 => "Sentinel",
+        3 => "Shielded",
+      };
+      $yularenUniqueID = $paramArr[1];
+      AddDecisionQueue("PASSPARAMETER", $player, $yularenUniqueID, 1);
+      AddDecisionQueue("ADDLIMITEDPERMANENTEFFECT", $player, "$effectName,HAND," . $player, 1);
+      return $yularenUniqueID;
     default: return "";
   }
+  //ModalAbilities end
 }
 
 function PlayerTargetedAbility($player, $card, $lastResult)
