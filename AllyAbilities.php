@@ -268,6 +268,11 @@ function AllyStaticHealthModifier($cardID, $index, $player, $myCardID, $myIndex,
         if(SearchCount(SearchAllies($player, trait:"Force"))) return 1;
       }
       break;
+    case "3213928129"://Clone Combat Squadron
+      return 10;
+      
+     // SearchCount(SearchAllies($player, arena:"Space"))-1;
+      break;
     case "3731235174"://Supreme Leader Snoke
       if($player != $myPlayer) {
         $ally = new Ally("MYALLY-" . $index, $player);
