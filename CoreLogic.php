@@ -3602,6 +3602,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "3278986026"://Rafa Martez
       RafaMartezJTL($currentPlayer);
       break;
+    case "3148212344"://Admiral Yularen
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an ability to grant");
+      AddDecisionQueue("BUTTONINPUT", $currentPlayer, "Grit,Restore_1,Sentinel,Shielded", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, $uniqueId, 1);
+      AddDecisionQueue("ADDLIMITEDPERMANENTEFFECT", $currentPlayer, "3148212344_{0},HAND," . $currentPlayer, 1);
+      break;
     case "2579248092"://Covering the Wing
       CreateXWing($currentPlayer);
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
