@@ -1612,6 +1612,7 @@ function NumEquipBlock()
       case "MULTICHOOSEUNIT": return 0;
       case "MULTICHOOSETHEIRUNIT": return 0;
       case "MULTICHOOSEOURUNITS": return 0;
+      case "MULTICHOOSEMULTIZONE": return 0;
       case "MULTICHOOSEMYUNITSANDBASE": return 0;
       case "MULTICHOOSETHEIRUNITSANDBASE": return 0;
       case "MULTICHOOSEOURUNITSANDBASE": return 0;
@@ -3593,14 +3594,29 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "6588309727"://All Wings Report In
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:arena=Space");
       AddDecisionQueue("MZFILTER", $currentPlayer, "status=1", 1);
-      AddDecisionQueue("OP", $currentPlayer, "MZTONORMALINDICES");
+      AddDecisionQueue("OP", $currentPlayer, "MZTONORMALINDICES", 1);
       AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "2-", 1);
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose up to two friendly space units to exhaust");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose up to two friendly space units to exhaust", 1);
       AddDecisionQueue("MULTICHOOSEUNIT", $currentPlayer, "<-", 1);
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "ALLWINGSREPORTIN", 1);
       break;
     case "3278986026"://Rafa Martez
       RafaMartezJTL($currentPlayer);
+      break;
+    case "3148212344"://Admiral Yularen
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an ability to grant");
+      AddDecisionQueue("BUTTONINPUT", $currentPlayer, "Grit,Restore_1,Sentinel,Shielded", 1);
+      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+      AddDecisionQueue("PASSPARAMETER", $currentPlayer, $uniqueId, 1);
+      AddDecisionQueue("ADDLIMITEDPERMANENTEFFECT", $currentPlayer, "3148212344_{0},HAND," . $currentPlayer, 1);
+      break;
+    case "7039711282"://Sweep the Area
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1", 1);
+      AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "2-", 1);
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose up to two units", 1);
+      AddDecisionQueue("MULTICHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "SWEEPTHEAREA", 1);
       break;
     case "2579248092"://Covering the Wing
       CreateXWing($currentPlayer);
@@ -3617,7 +3633,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "3622750563"://Dornean Gunship
       $vehicleCount = SearchCount(SearchAllies($currentPlayer, trait:"Vehicle"));
-      IndirectDamage($otherPlayer, $vehicleCount, true);
+      IndirectDamage($otherPlayer, $vehicleCount, true, $playAlly->UniqueID());
       break;
     case "8606123385"://Lightspeed Assault
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:arena=Space");
@@ -6119,7 +6135,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "1330473789"://Devastator
-      IndirectDamage($otherPlayer, 4, true);
+      IndirectDamage($otherPlayer, 4, true, $playAlly->UniqueID());
       break;
     case "2388374331"://Blue Leader
       AddDecisionQueue("YESNO", $currentPlayer, "Do you want to pay 2 to gain 2 experience tokens?", 1);
@@ -6243,7 +6259,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "6648978613"://Fett's Firespray (Feared Silhouettte)
       $damage = ControlsNamedCard($currentPlayer, "Boba Fett") ? 2 : 1;
-      IndirectDamage($otherPlayer, $damage, true);
+      IndirectDamage($otherPlayer, $damage, true, $playAlly->UniqueID());
       break;
     case "4819196588"://Electromagnetic Pulse
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Vehicle&THEIRALLY:trait=Vehicle&MYALLY:trait=Droid&THEIRALLY:trait=Droid");
@@ -6444,7 +6460,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "3567283316":
       if($from != "PLAY") {
-        IndirectDamage($otherPlayer, 5, true);
+        IndirectDamage($otherPlayer, 5, true, $playAlly->UniqueID());
       }
       break;
     case "0753794638"://Corvus
@@ -6492,7 +6508,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "2711104544"://Guerilla Soldier
       if($from != "PLAY") {
         AddCurrentTurnEffect("2711104544", $currentPlayer, $from, $uniqueId);
-        IndirectDamage($otherPlayer, 3, true);
+        IndirectDamage($otherPlayer, 3, true, $playAlly->UniqueID());
         AddDecisionQueue("REMOVECURRENTEFFECT", $currentPlayer, "2711104544", 1);
       }
       break;

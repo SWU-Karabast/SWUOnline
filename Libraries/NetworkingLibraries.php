@@ -201,6 +201,8 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
         }
         $skipWriteGamestate = ResolveMultichooseXSet($onlyUnits, $onlyUnitsChkInput, $input);
         if ($includeBase) array_unshift($input, "BASE");
+      } else if($turn[0] == "MULTICHOOSEMULTIZONE") {
+        $skipWriteGamestate = ResolveMultiChooseMultizone($turn[2], $chkInput, $input);
       } else {
         $skipWriteGamestate = ResolveMultichooseXSet($turn[2], $chkInput, $input);
       }
@@ -1167,6 +1169,27 @@ function ResolveCombatDamage($damageDone)
   }
   $currentPlayer = $mainPlayer;
   ProcessDecisionQueue(); //Any combat related decision queue logic should be main player gamestate
+}
+
+function ResolveMultiChooseMultizone($data, $chkInput, &$input) {
+  $dataArr = explode("-", $data);
+  $max = intval($dataArr[0]);
+  $options = explode(",", implode("-", array_slice($dataArr, 1)));
+  if(count($chkInput) > $max) {
+    WriteLog("You selected " . count($chkInput) . " items, but a maximum of " . $max . " is allowed. Reverting gamestate prior to that effect.");
+    RevertGamestate();
+    return true;
+  }
+  for ($i = 0; $i < count($chkInput); ++$i) {
+    if ($chkInput[$i] < 0 || $chkInput[$i] >= count($options)) {
+      WriteLog("You selected option " . $chkInput[$i] . " but that was not one of the original options. Reverting gamestate prior to that effect.");
+      RevertGamestate();
+      return true;
+    } else {
+      $input[] = $options[$chkInput[$i]];
+    }
+  }
+  return false;
 }
 
 function ResolveMultichooseXSet($data, $chkInput, &$input) {

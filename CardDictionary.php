@@ -103,6 +103,7 @@ function RestoreAmount($cardID, $player, $index)
   $ally = new Ally("MYALLY-" . $index, $player);
   for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnPieces()) {
     if($currentTurnEffects[$i+1] != $player) continue;
+    if($currentTurnEffects[$i] ==  "3148212344_Restore_1" && TraitContains($cardID, "Vehicle", $player)) $amount += 1;//Admiral Yularen - unique ID belongs to Yularen
     if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
     switch($currentTurnEffects[$i]) {
       case "1272825113"://In Defense of Kamino
@@ -319,6 +320,7 @@ function HasSentinel($cardID, $player, $index)
   $hasSentinel = false;
   for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnPieces()) {
     if($currentTurnEffects[$i+1] != $player) continue;
+    if($currentTurnEffects[$i] ==  "3148212344_Sentinel" && TraitContains($cardID, "Vehicle", $player)) return true;//Admiral Yularen - unique ID belongs to Yularen
     if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
     $effectParams = explode("_", $currentTurnEffects[$i]);
     $effectCardID = $effectParams[0];
@@ -486,14 +488,17 @@ function HasGrit($cardID, $player, $index)
         return true;
       case "2633842896"://Biggs Darklighter
         if(TraitContains($cardID, "Speeder", $player)) return true;
+        break;
       default: break;
     }
   }
   for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnPieces()) {
     if($currentTurnEffects[$i+1] != $player) continue;
+    if($currentTurnEffects[$i] ==  "3148212344_Grit" && TraitContains($cardID, "Vehicle", $player)) return true;//Admiral Yularen - unique ID belongs to Yularen
     if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
     switch($currentTurnEffects[$i]) {
       case "6669050232": return true;//Grim Resolve
+        break;
       default: break;
     }
   }
@@ -781,6 +786,16 @@ function HasAmbush($cardID, $player, $index, $from)
 
 function HasShielded($cardID, $player)
 {
+  global $currentTurnEffects;
+  $ally = new Ally("MYALLY-" . $index, $player);
+  for($i=count($currentTurnEffects)-CurrentTurnPieces(); $i>=0; $i-=CurrentTurnPieces()) {
+    if($currentTurnEffects[$i+1] != $player) continue;
+    if($currentTurnEffects[$i] == "3148212344_Shielded" && TraitContains($cardID, "Vehicle", $player)) return true;//Admiral Yularen (Must be outside applies to loop because that's for Yularen)
+    if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
+    switch($currentTurnEffects[$i]) {
+      default: break;
+    }
+  }
   switch($cardID)
   {
     //Spark of Rebellion
