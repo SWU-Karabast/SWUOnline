@@ -219,6 +219,7 @@ function AllyHasStaticHealthModifier($cardID)
     case "9017877021"://Clone Commander Cody
     case "9811031405"://Victor Leader
     case "5052103576"://Resistance X-Wing
+    case "3213928129"://Clone Combat Squadron
       return true;
     default: return false;
   }
@@ -266,6 +267,11 @@ function AllyStaticHealthModifier($cardID, $index, $player, $myCardID, $myIndex,
     case "4718895864"://Padawan Starfighter
       if($index == $myIndex && $player == $myPlayer) {
         if(SearchCount(SearchAllies($player, trait:"Force"))) return 1;
+      }
+      break;
+    case "3213928129"://Clone Combat Squadron
+      if($index == $myIndex && $player == $myPlayer) {
+        return SearchCount(SearchAllies($player, arena:"Space"))-1;
       }
       break;
     case "3731235174"://Supreme Leader Snoke
@@ -2957,6 +2963,13 @@ function SpecificAllyAttackAbilities($attackID)
       break;
     case "3310100725"://Insurgent Saboteurs
       DefeatUpgrade($mainPlayer, true);
+      break;
+    case "7232609585"://Supporting Eta-2
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:arena=Ground&THEIRALLY:arena=Ground");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "WRITECHOICE", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "7232609585,HAND", 1);
       break;
   }
 

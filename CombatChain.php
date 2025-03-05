@@ -255,6 +255,9 @@ function AttackModifier($cardID, $player, $index, $reportMode = false)
       $modifier += SearchCount(SearchAllies($player, damagedOnly:true));
       $modifier += SearchCount(SearchAllies($otherPlayer, damagedOnly:true));
       break;
+    case "3213928129"://Clone Combat Squadron
+      $modifier += SearchCount(SearchAllies($player, arena:"Space"))-1;
+      break; 
     default: break;
   }
 
