@@ -6766,6 +6766,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       if($from != "PLAY") {
         IndirectDamage($otherPlayer, 3, fromUnitEffect:true, uniqueID:$playAlly->UniqueID(), alsoExhausts:true);
       }
+      break;
     //PlayAbility End
     default: break;
   }
