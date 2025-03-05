@@ -3604,7 +3604,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       RafaMartezJTL($currentPlayer);
       break;
     case "3148212344"://Admiral Yularen
-      $options = "Grit;Restore_1;Sentinel;Shielded";
+      $options = "Grit;Restore 1;Sentinel;Shielded";
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose one");
       AddDecisionQueue("CHOOSEOPTION", $currentPlayer, "$cardID&$options");
       AddDecisionQueue("SHOWOPTIONS", $currentPlayer, "$cardID&$options");
