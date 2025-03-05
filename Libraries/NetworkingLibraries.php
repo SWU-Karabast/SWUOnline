@@ -1856,17 +1856,31 @@ function AddPrePitchDecisionQueue($cardID, $from, $index = -1, $skipAbilityType 
 
 function GetTargetsForAttack(Ally $attacker, bool $canAttackBase)
 {
-  global $mainPlayer;
+  global $mainPlayer, $currentTurnEffects;
 
   $defPlayer = $mainPlayer == 1 ? 2 : 1;
   $targets = $canAttackBase ? "THEIRCHAR-0" : "";
   $sentinelTargets = "";
-
   // Check upgrades
-  $attackerUpgrades = $attacker->GetUpgrades();
-  for ($i = 0; $i < count($attackerUpgrades); ++$i) {
-    if ($attackerUpgrades[$i] == "3099663280") { //Entrenched
-      $targets = "";
+  if($targets != "") {
+    $attackerUpgrades = $attacker->GetUpgrades();
+    for ($i = 0; $i < count($attackerUpgrades); ++$i) {
+      if ($attackerUpgrades[$i] == "3099663280") { //Entrenched
+        $targets = "";
+      }
+    }
+  }
+  //check current phase effects
+  if($targets != "") {
+    for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnEffectPieces()) {
+      switch($currentTurnEffects[$i]) {
+        case "2948553808"://Fly Casual
+        case "5841647666"://Scramble Fighters
+          if($attacker->UniqueID() == $currentTurnEffects[$i+2]) $targets = "";
+          break;
+        default:
+          break;
+      }
     }
   }
 

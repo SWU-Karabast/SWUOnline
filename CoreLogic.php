@@ -6726,6 +6726,21 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "ADDSHIELD", 1);
       }
       break;
+    case "2948553808"://Fly Casual
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Vehicle");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "status=0");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to ready");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "READY", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "2948553808,PLAY", 1);
+      break;
+    case "5841647666"://Scramble Fighters
+      for($i=0;$i<8;++$i) {
+        $allyUid = CreateTieFighter($currentPlayer);
+        Ally::FromUniqueId($allyUid)->Ready();
+        AddCurrentTurnEffect($cardID, $currentPlayer, "PLAY", $allyUid);
+      }
     //PlayAbility End
     default: break;
   }
