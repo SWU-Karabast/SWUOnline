@@ -3604,11 +3604,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       RafaMartezJTL($currentPlayer);
       break;
     case "3148212344"://Admiral Yularen
-      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an ability to grant");
-      AddDecisionQueue("BUTTONINPUT", $currentPlayer, "Grit,Restore_1,Sentinel,Shielded", 1);
-      AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
-      AddDecisionQueue("PASSPARAMETER", $currentPlayer, $uniqueId, 1);
-      AddDecisionQueue("ADDLIMITEDPERMANENTEFFECT", $currentPlayer, "3148212344_{0},HAND," . $currentPlayer, 1);
+      $options = "Grit;Restore 1;Sentinel;Shielded";
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose one");
+      AddDecisionQueue("CHOOSEOPTION", $currentPlayer, "$cardID&$options");
+      AddDecisionQueue("SHOWOPTIONS", $currentPlayer, "$cardID&$options");
+      AddDecisionQueue("MODAL", $currentPlayer, "YULAREN_JTL,$uniqueId");
       break;
     case "7039711282"://Sweep the Area
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
