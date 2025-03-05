@@ -931,10 +931,10 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       switch($from)
       {
         case "LastResult": $input = explode(",", $lastResult); for($i=0; $i<count($input); ++$i) $input[$i] = $input[$i] . "-" . $input[$i]; break;
-        case "CombatChain":
-          $lastResultArr = explode(",", $lastResult);
-          for($i=0; $i<count($lastResultArr); ++$i) $input[] = $combatChain[$lastResultArr[$i]+CCOffset($type)] . "-" . $lastResultArr[$i];
-          break;
+        // case "CombatChain"://FAB
+        //   $lastResultArr = explode(",", $lastResult);
+        //   for($i=0; $i<count($lastResultArr); ++$i) $input[] = $combatChain[$lastResultArr[$i]+CCOffset($type)] . "-" . $lastResultArr[$i];
+        //   break;
         case "Deck":
           $lastResultArr = explode(",", $lastResult);
           $deck = &GetDeck($player);
@@ -958,6 +958,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           case "aspect": if(AspectContains($inputArr[0], $compareValue, $player)) $passFilter = !$passFilter; break;
           case "maxCost": if(CardCost($inputArr[0]) <= $compareValue) $passFilter = !$passFilter; break;
           case "isToken": if(IsToken($inputArr[0])) $passFilter = !$passFilter; break;
+          case "isLeader": if(CardIDIsLeader($inputArr[0])) $passFilter = !$passFilter; break;
           default: break;
         }
         if($passFilter) $output[] = $inputArr[1];
