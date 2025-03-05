@@ -6673,6 +6673,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "9347873117"://Veteran Fleet Officer
       CreateXWing($currentPlayer);
       break;
+    case "3272995563"://In the Heat of Battle
+      foreach ([1, 2] as $p) {
+        $allies = &GetAllies($p);
+        for ($i = 0; $i < count($allies); $i += AllyPieces()) {
+          AddCurrentTurnEffect($cardID, $p, "PLAY", $allies[$i+5]);
+        }
+      }
+      break;  
     case "1355075014"://Attack Run
       AddCurrentTurnEffect($cardID, $currentPlayer);
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:arena=Space");
