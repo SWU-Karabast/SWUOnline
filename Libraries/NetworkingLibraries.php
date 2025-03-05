@@ -989,7 +989,7 @@ function ResolveMultiTarget(Ally $attacker, $mainPlayer, $defPlayer)
     $attackerDestroyed = $attackerDestroyed || $attacker->DealDamage($defDamage, fromCombat: true, enemyDamage: true, fromUnitEffect: true);
     if ($destroyed) {
       if ($hasOverwhelm && $excess > 0) {
-        DealDamageAsync($defPlayer, $excess, "OVERWHELM", $attackerID);
+        DealDamageAsync($defPlayer, $excess, "OVERWHELM", $attackerID, sourcePlayer: $mainPlayer);
         WriteLog("OVERWHELM : <span style='color:Crimson;'>$excess damage</span> done on base");
       }
       for ($j = $i; $j < $numTargets; ++$j) {
@@ -1017,7 +1017,7 @@ function ResolveSingleTarget($mainPlayer, $defPlayer, $target, $attackerPrefix, 
 
   if ($target == "THEIRALLY--1") {//Means the target was already destroyed
     if ($hasOverwhelm) {
-      DealDamageAsync($defPlayer, $totalAttack, "OVERWHELM", $attackerID);
+      DealDamageAsync($defPlayer, $totalAttack, "OVERWHELM", $attackerID, sourcePlayer:$mainPlayer);
       WriteLog("OVERWHELM : <span style='color:Crimson;'>$totalAttack damage</span> done on base");
     } else if ($attackerID == "3830969722") { //Blizzard Assault AT-AT
       BlizzardAssaultATAT($mainPlayer, $totalAttack);
@@ -1057,7 +1057,7 @@ function ResolveSingleTarget($mainPlayer, $defPlayer, $target, $attackerPrefix, 
       }
     }
     if ($hasOverwhelm && $destroyed) {
-      DealDamageAsync($defPlayer, $excess, "OVERWHELM", $attackerID);
+      DealDamageAsync($defPlayer, $excess, "OVERWHELM", $attackerID, sourcePlayer: $mainPlayer);
       WriteLog("OVERWHELM : <span style='color:Crimson;'>$excess damage</span> done on base");
     } else if ($attackerID == "3830969722") { //Blizzard Assault AT-AT
       BlizzardAssaultATAT($mainPlayer, $excess);

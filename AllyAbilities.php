@@ -581,6 +581,7 @@ function AllyTakeControl($player, $uniqueID) {
     switch($effectCardID) {
       case "3503494534"://Regional Governor
       case "7964782056"://Qi'Ra unit
+      case "3148212344"://Admiral Yularen JTL
         $skipSwap = true;
         break;
       default: break;
@@ -853,7 +854,7 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities, $isUp
         PlayerOpt($player, 2);
         break;
       case "1047592361"://Ruthless Raider
-        DealDamageAsync($otherPlayer, 2, "DAMAGE", "1047592361");
+        DealDamageAsync($otherPlayer, 2, "DAMAGE", "1047592361", sourcePlayer:$player);
         AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY");
         AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal 2 damage to");
         AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
@@ -966,7 +967,7 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities, $isUp
         AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1,$player,1", 1);
         break;
       case "6022703929"://OOM-Series Officer
-        DealDamageAsync($otherPlayer, 2, "DAMAGE", "6022703929");
+        DealDamageAsync($otherPlayer, 2, "DAMAGE", "6022703929", sourcePlayer:$player);
         break;
       case "9479767991"://Favorable Deligate
         PummelHit($player);
@@ -1145,7 +1146,7 @@ function CollectBounty($player, $unitCardID, $bountyCardID, $isExhausted, $owner
     case "2740761445"://Guild Target
       if($reportMode) break;
       $damage = CardIsUnique($unitCardID) ? 3 : 2;
-      DealDamageAsync($player, $damage, "DAMAGE", "2740761445");
+      DealDamageAsync($player, $damage, "DAMAGE", "2740761445", sourcePlayer:$opponent);
       break;
     case "4117365450"://Wanted
       if($reportMode) break;
@@ -1220,7 +1221,7 @@ function CollectBounty($player, $unitCardID, $bountyCardID, $isExhausted, $owner
     case "0252207505"://Synara San
       if ($isExhausted) {
         if ($reportMode) break;
-        DealDamageAsync($player, 5, "DAMAGE", "0252207505");
+        DealDamageAsync($player, 5, "DAMAGE", "0252207505", sourcePlayer:$opponent);
         break;
       }
     case "2965702252"://Unlicensed Headhunter
@@ -1324,7 +1325,7 @@ function OnKillAbility($player, $uniqueID)
     switch($upgrades[$i]) {
       case "4897501399"://Ruthlessness
         WriteLog("Ruthlessness deals 2 damage to the defender's base");
-        DealDamageAsync($defPlayer, 2, "DAMAGE", $attackerAlly->CardID());
+        DealDamageAsync($defPlayer, 2, "DAMAGE", $attackerAlly->CardID(), sourcePlayer:$mainPlayer);
         break;
       default: break;
     }
@@ -1813,7 +1814,7 @@ function AllyPlayCardAbility($player, $cardID, $uniqueID, $numUses, $playedCardI
         break;
       case "5907868016"://Fighters for Freedom
         if(AspectContains($playedCardID, "Aggression", $player)) {
-          DealDamageAsync($otherPlayer, 1, "DAMAGE", "5907868016");
+          DealDamageAsync($otherPlayer, 1, "DAMAGE", "5907868016", sourcePlayer:$player);
           WriteLog(CardLink("5907868016", "5907868016") . " is dealing 1 damage.");
         }
         break;
@@ -1852,7 +1853,7 @@ function AllyPlayCardAbility($player, $cardID, $uniqueID, $numUses, $playedCardI
         break;
       case "0981852103"://Lady Proxima
         if(TraitContains($playedCardID, "Underworld", $player)) {
-          DealDamageAsync($otherPlayer, 1, "DAMAGE", "0981852103");
+          DealDamageAsync($otherPlayer, 1, "DAMAGE", "0981852103", sourcePlayer:$player);
         }
         break;
       case "3589814405"://Tactical Droid Commander
@@ -1935,7 +1936,7 @@ function AllyPlayCardAbility($player, $cardID, $uniqueID, $numUses, $playedCardI
         }
         break;
       case "5555846790"://Saw Gerrera
-        DealDamageAsync($otherPlayer, 2, "DAMAGE", "5555846790");
+        DealDamageAsync($otherPlayer, 2, "DAMAGE", "5555846790", sourcePlayer:$player);
         break;
       case "4935319539"://Krayt Dragon
         if ($playedCardID == "0345124206") break; //Clone - When Clone is played, Krayt Dragon's ability is not triggered. It'll be triggered later after the Clone's resolution with the new printed attributes.
@@ -2222,7 +2223,7 @@ function SpecificAllyAttackAbilities($attackID)
       AddCurrentTurnEffect("6570091935", $mainPlayer, from:"PLAY");
       break;
     case "51e8757e4c"://Sabine Wren Leader Unit
-      DealDamageAsync($defPlayer, 1, "DAMAGE", "51e8757e4c");
+      DealDamageAsync($defPlayer, 1, "DAMAGE", "51e8757e4c", sourcePlayer:$mainPlayer);
       break;
     case "3389903389"://Black One JTL
       if (ControlsNamedCard($mainPlayer, "Poe Dameron")) {

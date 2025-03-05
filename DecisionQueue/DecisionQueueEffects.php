@@ -9,7 +9,7 @@ function ModalAbilities($player, $card, $lastResult)
       $otherPlayer = ($player == 1 ? 2 : 1);
       switch($lastResult) {
         case 0: // Deal damage
-          DealDamageAsync($otherPlayer, 3, "DAMAGE", "3232845719");
+          DealDamageAsync($otherPlayer, 3, "DAMAGE", "3232845719", sourcePlayer:$player);
           break;
         case 1: // Discard a card
           PummelHit($otherPlayer);
@@ -292,7 +292,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
   global $dqVars;
   $parameterArr = explode(",", $parameter);
   $card = $parameterArr[0];
-  $otherPlayer = ($player == 1 ? 2 : 1);
+  $otherPlayer = $player == 1 ? 2 : 1;
   switch($card)
   {
     case "SABINEWREN_TWI":
@@ -380,7 +380,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       if(TraitContains($cardID, "Force", $player)) Draw($player);
       break;
     case "GALACTICAMBITION":
-      DealDamageAsync($player, CardCost($lastResult), "DAMAGE", "5494760041");
+      DealDamageAsync($player, CardCost($lastResult), "DAMAGE", "5494760041", sourcePlayer:$player);
       break;
     case "C3PO":
       $deck = new Deck($player);
@@ -554,7 +554,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       $ally = new Ally($lastResult, $owner);
       $wasDestroyed = $ally->DealDamage(3);
       if($wasDestroyed) {
-        DealDamageAsync($player == 1 ? 2 : 1, 2, "DAMAGE", "7730475388");
+        DealDamageAsync($otherPlayer, 2, "DAMAGE", "7730475388", sourcePlayer:$player);
       }
       break;
     case "PIERCINGSHOT":
@@ -944,7 +944,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       AddDecisionQueue("MZOP", $player, DamageStringBuilder($power, $player, isUnitEffect:1), 1);
       break;
     case "LETHALCRACKDOWN":
-      DealDamageAsync($player, CardPower($lastResult), "DAMAGE", "1389085256");
+      DealDamageAsync($player, CardPower($lastResult), "DAMAGE", "1389085256", sourcePlayer:$player);
       break;
     case "LUXBONTERI":
       $ally = new Ally($lastResult, MZPlayerID($player, $lastResult));
