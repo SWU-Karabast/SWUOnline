@@ -20,17 +20,12 @@
 </head>
 <body>
   <div style="height:600px; width: 800px; padding: 4px 32px 64px 32px; position:relative; top:10%; left: 25%; background-color: rgba(100,100,100,0.7);font-family:barlow;color: white;margin: 0;">
-    <p style="font-size: 64px; font-weight: 700;">Big Things are on the Way!</p>
+    <p style="font-size: 64px; font-weight: 700;">Set 4 cards</p>
     <p style="font-size: 28px;">
-      The Karabast team is getting ready to release the new engine under <a href="https://beta.karabast.net">public beta here</a>
-      <br/><br/>
-      To continue playing using the previous engine, please head on over to <a href="https://petranaki.net">Petranaki.net</a>!
+      Most set 4 cards are now live on <a href="https://petranaki.net">Petranaki.net</a>!
     </p>
-    <p style="font-size: 28px;">
-      There, you will still be able to test out your decks and strategies, preview the new set, and play with your friends as before.
-    </p>
-    <br/><br/><br/>
-    <p style="font-size: 18px;">Be sure to check out the <a href="https://discord.gg/hKRaqHND4v">Karabast</a> Discord for updates and announcements on the new engine.</p>
-    <p style="font-size: 18px;">For the Petranaki Discord, please visit <a href="https://discord.gg/AN5GEXSu">here</a>.</p>
+    <br/><br/>
+    <p style="font-size: 18px;">Be sure to join the new <a href="https://discord.gg/AN5GEXSu">discord</a> to stay up to date on card implementation and new features!</p>
+    <p style="font-size: 18px;">Please reach out to us if you'd like to help improve the site!</p>
   </div>
 </body>
