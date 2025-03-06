@@ -1134,14 +1134,15 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       }
       break;
     case "SYSTEMSHOCK":
-      $targetAlly = Ally::FromUniqueId($lastResult);
-      AddDecisionQueue("PASSPARAMETER", $player, $targetAlly->UniqueID(), 1);
+      $targetAllyUID = Ally::FromUniqueId($lastResult)->UniqueID();
+      AddDecisionQueue("PASSPARAMETER", $player, $targetAllyUID, 1);
+      AddDecisionQueue("SETDQVAR", $player, "0", 1);
       AddDecisionQueue("MZOP", $player, "GETUPGRADES", 1);
       AddDecisionQueue("FILTER", $player, "LastResult-exclude-isLeader", 1);
       AddDecisionQueue("SETDQCONTEXT", $player, "Choose a non-leader upgrade to defeat.", 1);
       AddDecisionQueue("CHOOSECARD", $player, "<-", 1);
       AddDecisionQueue("OP", $player, "DEFEATUPGRADE", 1);
-      AddDecisionQueue("PASSPARAMETER", $player, $targetAlly->MZIndex(), 1);
+      AddDecisionQueue("UNIQUETOMZ", $player, $targetAllyUID, 1);
       AddDecisionQueue("MZOP", $player, DamageStringBuilder(1, $player), 1);
       break;
     //SpecificCardLogic End

@@ -587,6 +587,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           return implode(",", array_map(function($x) {return "MYALLY-$x";}, $lastResult));
         case "DEALDAMAGE":
           // Important: use MZOpHelpers.php DamageStringBuilder() function for param structure
+          if($lastResult == "") return "";
           $targetArr = explode("-", $lastResult);
           $targetPlayer = ($targetArr[0] == "MYCHAR" || $targetArr[0] == "MYALLY" ? $player : ($player == 1 ? 2 : 1));
           $sourcePlayer = count($parameterArr) > 2 ? $parameterArr[2] : ($targetPlayer == 1 ? 2 : 1);
