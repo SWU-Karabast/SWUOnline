@@ -761,6 +761,10 @@
     <div id='mainDiv' style='position:fixed; z-index:20; left:0; top:0; width:100%; height:100%;'></div>
     <div id='chatbox' style='z-index:40; position:fixed; bottom:20px; right:18px; display:flex;'>
         <?php if ($playerID != 3 && !IsChatMuted()): ?>
+            <?php
+            $playerAspects = explode(",", CardAspects($myCharacter[CharacterPieces()]));
+            echo ("<input type='hidden' id='playerAspect' name='playerAspect' value='" . $playerAspects[0] . "'>");
+            ?>
             <input id='chatText'
                   style='background: black; color: white; font-size:16px; font-family:barlow; margin-left: 8px; height: 32px; border: 1px solid #454545; border-radius: 5px 0 0 5px;'
                   type='text'
@@ -769,7 +773,8 @@
                   autocomplete='off'
                   onkeypress='ChatKey(event)'>
             <button style='border: 1px solid #454545; border-radius: 0 5px 5px 0; width:55px; height:32px; color: white; margin: 0 0 0 -1px; padding: 0 5px; font-size:16px; font-weight:600; box-shadow: none;'
-                    onclick='SubmitChat()'>Chat
+                    onclick='SubmitChat()'>
+                    Chat
             </button>
             <button title='Disable Chat'
                     <?= ProcessInputLink($playerID, 26, $SET_MuteChat . "-1", fullRefresh:true); ?>

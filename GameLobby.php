@@ -128,8 +128,6 @@ $isMobile = IsMobile();
               <input class='GameLobby_Input' type='text' id='chatText' name='chatText' value='' autocomplete='off' onkeypress='ChatKey(event)'>
               <button class='GameLobby_Button' style='cursor:pointer;' onclick='SubmitChat()'>Chat</button>
             </div>
-
-
           </div>
         </div>
       </div>
@@ -148,6 +146,8 @@ $isMobile = IsMobile();
           echo ("<h3>$displayName</h3>");
           if ($handler) {
             $material = GetArray($handler);
+            $playerAspects = explode(",", CardAspects($material[1]));
+            echo ("<input type='hidden' id='playerAspect' name='playerAspect' value='" . $playerAspects[0] . "'>");
 
             echo ("<div style='position:relative; display: inline-block;'>");
             $overlayURL = ($contentCreator != null ? $contentCreator->HeroOverlayURL($material[1]) : "");

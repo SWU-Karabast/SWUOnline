@@ -244,7 +244,7 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
   if ($controller != 0 && IsPatron($controller) && CardHasAltArt($cardNumber))
     $folderPath = "PatreonImages/" . $folderPath;
   $altText = IsScreenReaderMode($playerID) ? " alt='" . CardTitle($cardNumber) . "' " : "";
-  $rv .= "<img " . ($id != "" ? "id='" . $id . "-img' " : "") . $altText . "data-orientation='" . ($rotate ? "portrait' " : "portrait' ") . "class='cardImage'" . "style='$border height: {$height}px; width: {$width}px; position:relative; border-radius:10px" . ($isExhausted ? "; transform: rotate(5deg)" : "") . "' src='$folderPath/$cardNumber$fileExt' />";
+  $rv .= "<img " . ($id != "" ? "id='" . $id . "-img' " : "") . $altText . "data-orientation='" . ($rotate ? "landscape' " : "portrait' ") . "class='cardImage'" . "style='$border height: {$height}px; width: {$width}px; position:relative; border-radius:10px" . ($isExhausted ? "; transform: rotate(5deg)" : "") . "' src='$folderPath/$cardNumber$fileExt' />";
   $rv .= "<div " . ($id != "" ? "id='" . $id . "-ovr' " : "") . "class='overlay'" . "style='visibility:" . ($overlay == 1 ? "visible" : "hidden") . "; height: {$height}px; width: {$width}px; top:2px; left:2px; position:absolute; background: rgba(0, 0, 0, 0.5); z-index: 1; border-radius: 8px;'></div>";
 
   // Counters Style
@@ -477,7 +477,7 @@ function getSubcardAspect($subcardID)
       return "blue";
     case "Heroism":
       return "white";
-    case "Villany":
+    case "Villainy":
       return "black";
     default:
       return "grey";
