@@ -98,7 +98,7 @@
     <head>
       <meta charset="utf-8">
       <title>Petranaki</title>
-      <link rel="stylesheet" href="./css/chat2.css">
+      <link rel="stylesheet" href="./css/chat3.css">
       <link rel="stylesheet" href="./css/gamestyle250305.css">
       <link rel="preconnect" href="https://fonts.googleapis.com">
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -515,7 +515,7 @@
       }
     </script>
 
-    <script src="./jsInclude.js"></script>
+    <script src="./jsInclude2.js"></script>
     <script src="./GeneratedCode/GeneratedCardDictionaries.js"></script>
 
     <?php

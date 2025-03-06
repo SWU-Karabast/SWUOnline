@@ -82,7 +82,7 @@ $isMobile = IsMobile();
   <meta http-equiv="content-type" content="text/html; charset=utf-8" >
   <title>Game Lobby</title>
   <link id="icon" rel="shortcut icon" type="image/png" href="./Images/<?= $icon ?>"/>
-  <link rel="stylesheet" href="./css/chat2.css">
+  <link rel="stylesheet" href="./css/chat3.css">
   <link rel="stylesheet" href="./css/petranaki250301.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -215,7 +215,7 @@ $isMobile = IsMobile();
   <audio id="playerJoinedAudio">
     <source src="./Assets/playerJoinedSound.mp3" type="audio/mpeg">
   </audio>
-  <script src="./jsInclude.js"></script>
+  <script src="./jsInclude2.js"></script>
   <script>
     function copyText() {
       var gameLink = document.getElementById("gameLink");
