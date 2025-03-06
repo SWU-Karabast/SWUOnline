@@ -2456,7 +2456,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
   }
 
   if($from == "EQUIP" && DefinedTypesContains($cardID, "Leader", $currentPlayer)) {
+    global $dqVars;
     $abilityName = GetResolvedAbilityName($cardID, $from);
+    if ($dqVars[0] == "Deploy" && $dqVars[1] == "Pilot") {
+      $abilityName = "Pilot";
+    }
+
     if($abilityName == "Deploy" || $abilityName == "Pilot" || $abilityName == "") {
       $notEnoughResources = NumResources($currentPlayer) < CardCost($cardID);
       if($cardID == "8520821318") {//Poe Dameron JTL leader

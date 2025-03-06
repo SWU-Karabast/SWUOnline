@@ -1163,9 +1163,6 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
       if(IsNotFlipatine($char) && IsNotExhaustedTrench($char)) {
         if($abilityTypes != "") $abilityTypes .= ",";
         $abilityTypes .= "A";
-        if(LeaderCanPilot($char[CharacterPieces()])) {
-          $abilityTypes .= ",A";
-        }
       }
     }
   }
@@ -1434,9 +1431,6 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       if(IsNotFlipatine($char) && IsNotExhaustedTrench($char)) {
         if($abilityNames != "") $abilityNames .= ",";
         $abilityNames .= "Deploy";
-        if(LeaderCanPilot($char[CharacterPieces()])) {
-          $abilityNames .= ",Pilot";
-        }
       }
     }
   }
