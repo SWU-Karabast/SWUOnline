@@ -216,7 +216,8 @@ function CheckAllySpecialCaseArena($zone, $array)
   if($zone == "ALLY") {
     for($i=0;$i<count($array);$i+=AllyPieces()) {
       switch($array[$i]) {
-        case "2388374331": return new Ally($array[$i+5]);
+        case "2388374331"://Blue Leader JTL
+          return new Ally($array[$i+5]);
         default: break;
       }
     }
