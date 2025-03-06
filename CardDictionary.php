@@ -1778,7 +1778,7 @@ function IsPlayable($cardID, $phase, $from, $index = -1, &$restriction = null, $
       + CurrentEffectCostModifiers($cardID, $from, reportMode:true);
   if($from == "HAND"
     && $potentialCost > NumResourcesAvailable($currentPlayer)
-    && ($potentialPilotingCost == -1 || $potentialPilotingCost > NumResourcesAvailable($currentPlayer))
+    && ($potentialPilotingCost == -1 || $potentialPilotingCost > NumResourcesAvailable($currentPlayer) || SearchCount(SearchAllies($player, trait:"Vehicle")) == 0)
     && !HasAlternativeCost($cardID)) return false;
   if($from == "RESOURCES") {
     if(!PlayableFromResources($cardID, index:$index)) return false;
