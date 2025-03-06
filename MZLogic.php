@@ -456,9 +456,11 @@ function MZPlayerID($me, $MZIndex)
 {
   $indexArr = explode("-", $MZIndex);
   if ($indexArr[0] == "MYCHAR") return $me;
-  if ($indexArr[0] == "THEIRCHAR") return ($me == 1 ? 2 : 1);
+  if ($indexArr[0] == "THEIRCHAR") return $me == 1 ? 2 : 1;
   if ($indexArr[0] == "MYALLY") return $me;
-  if ($indexArr[0] == "THEIRALLY") return ($me == 1 ? 2 : 1);
+  if ($indexArr[0] == "THEIRALLY") return $me == 1 ? 2 : 1;
+  if ($indexArr[0] == "MYRESOURCES") return $me;
+  if ($indexArr[0] == "THEIRRESOURCES") return $me == 1 ? 2 : 1;
   return -1;
 }
 

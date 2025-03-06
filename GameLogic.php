@@ -583,10 +583,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           break;
         case "MAPTHEIRINDICES"://to be used after "MULTICHOOSETHEIRUNITS"
           return implode(",", array_map(function($x) {return "THEIRALLY-$x";}, $lastResult));
-          break;
         case "MAPMYINDICES"://to be used after "MULTICHOOSEUNIT"
           return implode(",", array_map(function($x) {return "MYALLY-$x";}, $lastResult));
-          break;
         case "DEALDAMAGE":
           // Important: use MZOpHelpers.php DamageStringBuilder() function for param structure
           $targetArr = explode("-", $lastResult);
@@ -682,12 +680,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           [$fromEpicAction, $turnsInPlay] = TupleFirstUpgradeWithCardID($upgrades, $lastResult);
           $attachedAlly->RemoveSubcard($lastResult, movingPilot:true);
           $newUID = PlayAlly($lastResult, $attachedAlly->Owner(), epicAction:$fromEpicAction, playedAsUnit:false, turnsInPlay: $turnsInPlay);
-          if($subcardIsLeader) {
-            $newAlly = new Ally($newUID);
-            $newAlly->Exhaust();
-          }
+          if($subcardIsLeader) Ally::FromUniqueId($newUID)->Exhaust();
           return $newUID;
-          break;
         case "FALLENPILOTUPGRADE":
           $params = explode(",", $lastResult);
           $newUID = PlayAlly($params[0], $player, epicAction:false, playedAsUnit:false, turnsInPlay:$params[1]);//so far only Luke Skywalker JTL
@@ -937,10 +931,10 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       switch($from)
       {
         case "LastResult": $input = explode(",", $lastResult); for($i=0; $i<count($input); ++$i) $input[$i] = $input[$i] . "-" . $input[$i]; break;
-        case "CombatChain":
-          $lastResultArr = explode(",", $lastResult);
-          for($i=0; $i<count($lastResultArr); ++$i) $input[] = $combatChain[$lastResultArr[$i]+CCOffset($type)] . "-" . $lastResultArr[$i];
-          break;
+        // case "CombatChain"://FAB
+        //   $lastResultArr = explode(",", $lastResult);
+        //   for($i=0; $i<count($lastResultArr); ++$i) $input[] = $combatChain[$lastResultArr[$i]+CCOffset($type)] . "-" . $lastResultArr[$i];
+        //   break;
         case "Deck":
           $lastResultArr = explode(",", $lastResult);
           $deck = &GetDeck($player);
@@ -964,6 +958,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           case "aspect": if(AspectContains($inputArr[0], $compareValue, $player)) $passFilter = !$passFilter; break;
           case "maxCost": if(CardCost($inputArr[0]) <= $compareValue) $passFilter = !$passFilter; break;
           case "isToken": if(IsToken($inputArr[0])) $passFilter = !$passFilter; break;
+          case "isLeader": if(CardIDIsLeader($inputArr[0])) $passFilter = !$passFilter; break;
           default: break;
         }
         if($passFilter) $output[] = $inputArr[1];
@@ -1804,9 +1799,9 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
     case "DQVARPASSIFSET":
       if ($dqVars[$parameter] == "1") return "PASS";
       return "PROCEED";
-    // case "ADDCARDTOCHAIN"://unused
-    //   AddCombatChain($lastResult, $player, $parameter, 0);
-      return $lastResult;
+    //case "ADDCARDTOCHAIN"://unused
+    //  AddCombatChain($lastResult, $player, $parameter, 0);
+    //  return $lastResult;
     case "ATTACKWITHIT":
       PlayCardSkipCosts($lastResult, "DECK");
       return $lastResult;
@@ -2069,7 +2064,6 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
     case "DRAWINTOMEMORY":
       DrawIntoMemory($player);
       return "";
-      break;
     case "MULTIDAMAGE":
       $lastResultArr = explode(",", $lastResult);
       for($i=count($lastResultArr)-1; $i>=0; --$i) {

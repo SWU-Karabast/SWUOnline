@@ -411,9 +411,9 @@ function ResetCombatChainState()
         case "HAND":
           AddPlayerHand($chainLinks[$i][$j], $mainPlayer, "CC");
           break;
-        // case "SOUL"://FAB
-        //   AddSoul($chainLinks[$i][$j], $chainLinks[$i][$j + 1], "CC");
-          break;
+        //case "SOUL"://FAB
+        //  AddSoul($chainLinks[$i][$j], $chainLinks[$i][$j + 1], "CC");
+        //break;
         default:
           break;
       }

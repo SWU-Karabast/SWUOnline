@@ -1,15 +1,16 @@
 <?php
 
-function ModalAbilities($player, $card, $lastResult)
+function ModalAbilities($player, $parameter, $lastResult)
 {
   global $combatChain, $defPlayer;
-  switch($card)
+  $paramArr = explode(",", $parameter);
+  switch($paramArr[0])
   {
     case "K2SO":
       $otherPlayer = ($player == 1 ? 2 : 1);
       switch($lastResult) {
         case 0: // Deal damage
-          DealDamageAsync($otherPlayer, 3, "DAMAGE", "3232845719");
+          DealDamageAsync($otherPlayer, 3, "DAMAGE", "3232845719", sourcePlayer:$player);
           break;
         case 1: // Discard a card
           PummelHit($otherPlayer);
@@ -272,8 +273,21 @@ function ModalAbilities($player, $card, $lastResult)
         default: break;
       }
       return $lastResult;
+    case "YULAREN_JTL":
+      $effectType = intval($lastResult);
+      $effectName = "3148212344_" . match($effectType) {
+        0 => "Grit",
+        1 => "Restore_1",
+        2 => "Sentinel",
+        3 => "Shielded",
+      };
+      $yularenUniqueID = $paramArr[1];
+      AddDecisionQueue("PASSPARAMETER", $player, $yularenUniqueID, 1);
+      AddDecisionQueue("ADDLIMITEDPERMANENTEFFECT", $player, "$effectName,HAND," . $player, 1);
+      return $yularenUniqueID;
     default: return "";
   }
+  //ModalAbilities end
 }
 
 function PlayerTargetedAbility($player, $card, $lastResult)
@@ -292,7 +306,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
   global $dqVars;
   $parameterArr = explode(",", $parameter);
   $card = $parameterArr[0];
-  $otherPlayer = ($player == 1 ? 2 : 1);
+  $otherPlayer = $player == 1 ? 2 : 1;
   switch($card)
   {
     case "SABINEWREN_TWI":
@@ -380,7 +394,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       if(TraitContains($cardID, "Force", $player)) Draw($player);
       break;
     case "GALACTICAMBITION":
-      DealDamageAsync($player, CardCost($lastResult), "DAMAGE", "5494760041");
+      DealDamageAsync($player, CardCost($lastResult), "DAMAGE", "5494760041", sourcePlayer:$player);
       break;
     case "C3PO":
       $deck = new Deck($player);
@@ -554,7 +568,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       $ally = new Ally($lastResult, $owner);
       $wasDestroyed = $ally->DealDamage(3);
       if($wasDestroyed) {
-        DealDamageAsync($player == 1 ? 2 : 1, 2, "DAMAGE", "7730475388");
+        DealDamageAsync($otherPlayer, 2, "DAMAGE", "7730475388", sourcePlayer:$player);
       }
       break;
     case "PIERCINGSHOT":
@@ -944,7 +958,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       AddDecisionQueue("MZOP", $player, DamageStringBuilder($power, $player, isUnitEffect:1), 1);
       break;
     case "LETHALCRACKDOWN":
-      DealDamageAsync($player, CardPower($lastResult), "DAMAGE", "1389085256");
+      DealDamageAsync($player, CardPower($lastResult), "DAMAGE", "1389085256", sourcePlayer:$player);
       break;
     case "LUXBONTERI":
       $ally = new Ally($lastResult, MZPlayerID($player, $lastResult));
@@ -1085,7 +1099,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
     case "VADER_UNIT_JTL":
       $pingedAlly = new Ally($lastResult);
       $enemyDamage = str_starts_with($lastResult, "MYALLY-") ? false : true;
-      $defeated = $pingedAlly->DealDamage(1, $enemyDamage, fromUnitEffect:true);
+      $defeated = $pingedAlly->DealDamage(1, enemyDamage: $enemyDamage, fromUnitEffect:true);
       if($defeated) {
         AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
         AddDecisionQueue("PREPENDLASTRESULT", $player, "MYCHAR-0,THEIRCHAR-0,");
@@ -1108,6 +1122,16 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       break;
     case "PAID_READY_TAX":
       Ally::FromUniqueId($parameterArr[1])->Ready(resolvedSpecialCase:true);
+      break;
+    case "HEARTLESSTACTICS":
+      $ally = Ally::FromUniqueId($lastResult);
+      if(!$ally->IsLeader() && $ally->CurrentPower() == 0) {
+        AddDecisionQueue("SETDQCONTEXT", $player, "Bounce " . CardLink($ally->CardID(), $ally->CardID()) . "?");
+        AddDecisionQueue("YESNO", $player, "-", 1);
+        AddDecisionQueue("NOPASS", $player, "-", 1);
+        AddDecisionQueue("PASSPARAMETER", $player, $ally->MZIndex(), 1);
+        AddDecisionQueue("MZOP", $player, "BOUNCE", 1);
+      }
       break;
     //SpecificCardLogic End
     default: return "";
