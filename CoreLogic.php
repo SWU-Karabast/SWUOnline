@@ -6690,9 +6690,23 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $currentPlayer, "7214707216,HAND", 1);
       break;
+      case "8905858173"://Focus Fire
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal damage to");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "FOCUS_FIRE", 1);
+      break;  
     case "9347873117"://Veteran Fleet Officer
       CreateXWing($currentPlayer);
       break;
+    case "3272995563"://In the Heat of Battle
+      foreach ([1, 2] as $p) {
+        $allies = &GetAllies($p);
+        for ($i = 0; $i < count($allies); $i += AllyPieces()) {
+          AddCurrentTurnEffect($cardID, $p, "PLAY", $allies[$i+5]);
+        }
+      }
+      break;  
     case "1355075014"://Attack Run
       AddCurrentTurnEffect($cardID, $currentPlayer);
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:arena=Space");
@@ -6700,6 +6714,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to attack with");
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "ATTACK", 1);
+      break;
+    case "3658858659"://Cat and Mouse
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "status=1");
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to exhaust");
+      AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "CAT_AND_MOUSE", 1);
       break;
     case "3782661648"://Out the Airlock
       $ally = new Ally($target);

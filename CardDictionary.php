@@ -332,6 +332,7 @@ function HasSentinel($cardID, $player, $index)
       case "9070397522": return false;//SpecForce Soldier
       case "2872203891": $hasSentinel = true; break;//General Grievous
       case "fb7af4616c": $hasSentinel = true; break;//General Grievous
+      case "3272995563": $hasSentinel = true; break;//In The Heat of Battle
       case "1039828081": if ($cardID == "1039828081") {$hasSentinel = true;} break;//Calculating MagnaGuard
       case "3033790509": $hasSentinel = true; break;//Captain Typho
       case "8719468890"://Sword and Shield Maneuver
@@ -852,6 +853,7 @@ function HasSaboteur($cardID, $player, $index)
       case "4910017138": return true;//Breaking In
       case "5610901450": return true;//Heroes on Both Sides
       //Jump to Lightspeed
+      case "3272995563": return false;//In The Heat of Battle
       case "8656409691": return true;//Rio Durant leader
       default: break;
     }
