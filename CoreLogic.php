@@ -2042,6 +2042,10 @@ function SelfCostModifier($cardID, $from, $reportMode=false)
       $controlsSeparatist = $controlsSeparatist || SearchUpgrades($currentPlayer, trait:"Separatist", uniqueOnly:true) > 0;
       $modifier -= $controlsSeparatist ? 1 : 0;
       break;
+    case "6576881465"://Decimator of Dissidents
+      global $CS_NumIndirectDamageGiven;
+      if(GetClassState($currentPlayer, $CS_NumIndirectDamageGiven) > 0) $modifier -= 1;
+      break;
     default: break;
   }
   //Target cost modifier
