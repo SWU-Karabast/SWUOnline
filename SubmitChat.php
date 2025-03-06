@@ -32,7 +32,7 @@ $displayName = ($uid != "-" ? $uid : "Player " . $playerID);
 $displayIcon = "./Images/" . strtolower($playerAspect) . "-icon.webp";
 
 //This is the code for Contributor's icon.
-$contributors = array("OotTheMonk", "love", "ninin", "Brubraz", "Mobyus1");
+$contributors = array("OotTheMonk", "love", "ninin", "Brubraz", "Mobyus1", "Leobraz");
 if (isset($_SESSION['useruid']) && in_array($_SESSION['useruid'], $contributors)) {
   $displayIcon = "./Images/legendary-icon.webp";
 } else 
