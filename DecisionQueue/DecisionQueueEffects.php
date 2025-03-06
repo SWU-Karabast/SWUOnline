@@ -1044,15 +1044,13 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       break;
     case "CAT_AND_MOUSE":
       $enemyAlly = new Ally($lastResult);
-      if (!$enemyAlly->IsExhausted()) {
-        $enemyArena = $enemyAlly->CurrentArena();
-        $enemyPower = $enemyAlly->CurrentPower();
-        $enemyAlly->Exhaust();
-        AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:arena=" . $enemyArena . ";maxAttack=" . $enemyPower);
-        AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit in the same arena to ready", 1);
-        AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
-        AddDecisionQueue("MZOP", $player, "READY", 1);
-      }
+      $enemyArena = $enemyAlly->CurrentArena();
+      $enemyPower = $enemyAlly->CurrentPower();
+      $enemyAlly->Exhaust();
+      AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:arena=" . $enemyArena . ";maxAttack=" . $enemyPower);
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit in the same arena to ready", 1);
+      AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
+      AddDecisionQueue("MZOP", $player, "READY", 1);
       break;
     case "KAZUDA_JTL":
       for($i=0; $i<count($lastResult); ++$i) {

@@ -6691,6 +6691,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "3658858659"://Cat and Mouse
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
+      AddDecisionQueue("MZFILTER", $currentPlayer, "status=1");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to exhaust");
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "CAT_AND_MOUSE", 1);
