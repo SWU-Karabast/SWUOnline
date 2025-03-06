@@ -1354,10 +1354,11 @@ function HasKeyword($cardID, $keyword, $player="", $index=-1){
   }
 }
 
-function ArenaContains($cardID, $arena, $player="")
+function ArenaContains($cardID, $arena, Ally $ally = null)
 {
   $cardArena = CardArenas($cardID);
-  return DelimStringContains($cardArena, $arena);
+  return DelimStringContains($cardArena, $arena)
+    || ($ally != null && $ally->ArenaOverride() == $arena);
 }
 
 function SubtypeContains($cardID, $subtype, $player="")
@@ -2184,7 +2185,7 @@ function PlayerAspects($player)
     if($ally->IsUpgraded()) {
       $upgrades = $ally->GetUpgrades(withMetadata:true);
       for($j=0; $j<count($upgrades); $j+=SubcardPieces()) {
-        if(CardIDIsLeader($upgrades[$j]) && $upgrades[$j+1 == $player]) {
+        if(CardIDIsLeader($upgrades[$j]) && $upgrades[$j+1] == $player) {
           $cardAspects = explode(",", CardAspects($upgrades[$j]));
           for($k=0; $k<count($cardAspects); ++$k) {
             ++$aspects[$cardAspects[$k]];
@@ -7024,8 +7025,8 @@ function DamagePlayerAllies($player, $damage, $source, $type="-", $arena="")
   $allies = &GetAllies($player);
   for($i=count($allies)-AllyPieces(); $i>=0; $i-=AllyPieces())
   {
-    if($arena != "" && !ArenaContains($allies[$i], $arena, $player)) continue;
-    $ally = new Ally("MYALLY-" . $i, $player);
+    $ally = Ally::FromUniqueId($allies[$i+5]);
+    if($arena != "" && !ArenaContains($allies[$i], $arena, $ally)) continue;
     $ally->DealDamage($damage, enemyDamage: $enemyDamage, fromUnitEffect: $fromUnitEffect);
   }
 }
@@ -7037,20 +7038,20 @@ function DamageAllAllies($amount, $source, $alsoRest=false, $alsoFreeze=false, $
   $theirAllies = &GetAllies($otherPlayer);
   for($i=count($theirAllies) - AllyPieces(); $i>=0; $i-=AllyPieces())
   {
-    if(!ArenaContains($theirAllies[$i], $arena, $otherPlayer) && $theirAllies[$i+15] != $arena) continue;
+    $ally = Ally::FromUniqueId($theirAllies[$i+5]);
+    if(!ArenaContains($theirAllies[$i], $arena, $ally)) continue;
     if($alsoRest) $theirAllies[$i+1] = 1;
     if($alsoFreeze) $theirAllies[$i+3] = 1;
-    $ally = new Ally("THEIRALLY-$i");
     $ally->DealDamage($amount, enemyDamage:true);
   }
   $allies = &GetAllies($currentPlayer);
   for($i=count($allies) - AllyPieces(); $i>=0; $i-=AllyPieces())
   {
-    if(!ArenaContains($allies[$i], $arena, $currentPlayer) && $theirAllies[$i+15] != $arena) continue;
+    $ally = Ally::FromUniqueId($allies[$i+5]);
+    if(!ArenaContains($allies[$i], $arena, $ally)) continue;
     if($except != "" && $except == ("MYALLY-" . $i)) continue;
     if($alsoRest) $allies[$i+1] = 1;
     if($alsoFreeze) $allies[$i+3] = 1;
-    $ally = new Ally("MYALLY-$i");
     $ally->DealDamage($amount);
   }
 }
