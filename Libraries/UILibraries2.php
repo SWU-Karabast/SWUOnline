@@ -484,6 +484,19 @@ function getSubcardAspect($subcardID)
   }
 }
 
+function subcardBorder($name) {
+  return match($name) {
+    "red" => "border: 2px solid rgb(240, 170, 150);",
+    "green" => "border: 2px solid rgb(170, 240, 150);",
+    "yellow" => "border: 2px solid rgb(240, 240, 150);",
+    "blue" => "border: 2px solid rgb(150, 170, 240);",
+    "white" => "border: 2px solid rgb(240, 240, 240);",
+    "black" => "border: 2px solid rgb(150, 130, 150);",
+    "grey" => "border: 2px solid rgb(200, 200, 200);",
+    default => "border: 2px solid rgb(0,0,0);"
+  };
+}
+
 function BorderColorMap($code)
 {
   switch ($code) {

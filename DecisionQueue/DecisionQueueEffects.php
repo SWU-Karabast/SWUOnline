@@ -1145,6 +1145,33 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       AddDecisionQueue("UNIQUETOMZ", $player, $targetAllyUID, 1);
       AddDecisionQueue("MZOP", $player, DamageStringBuilder(1, $player), 1);
       break;
+    case "THEREISNOESCAPE":
+      foreach($lastResult as $index) {
+        $mzArr = explode("-", $index);
+        $allyPlayer = $mzArr[0] == "MYALLY" ? $player : $otherPlayer;
+        $ally = new Ally("MYALLY-" . $mzArr[1], $allyPlayer);
+        AddRoundEffect("9184947464", $allyPlayer, "PLAY", $ally->UniqueID());
+      }
+      break;
+    case "UWINGLANDER":
+      $ally = Ally::FromUniqueId($parameterArr[1]);
+      AddDecisionQueue("PASSPARAMETER", $player, $ally->MZIndex(), 1);
+      AddDecisionQueue("SETDQVAR", $player, "1", 1);
+      if(PilotingCost($lastResult) > -1) {
+        global $CS_PlayedAsUpgrade;
+        SetClassState($player, $CS_PlayedAsUpgrade, 1);
+        AddDecisionQueue("PASSPARAMETER", $player, "1", 1);
+        AddDecisionQueue("SETDQVAR", $player, "2", 1);//set movingPilot to true
+        AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:trait=Vehicle", 1);
+        AddDecisionQueue("MZFILTER", $player, "hasPilot=1", 1);
+        AddDecisionQueue("PASSREVERT", $player, "-");
+      } else {
+        AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:trait=Vehicle");
+        AddDecisionQueue("MZFILTER", $player, "canAttach={0}", 1);
+      }
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to move <0> to.", 1);
+      AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
+      AddDecisionQueue("MZOP", $player, "MOVEUPGRADE", 1);
     //SpecificCardLogic End
     default: return "";
   }
