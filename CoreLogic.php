@@ -2066,29 +2066,6 @@ function SelfCostModifier($cardID, $from, $reportMode=false)
       }
     }
   }
-  //My ally cost modifier
-  $allies = &GetAllies($currentPlayer);
-  for($i=0; $i<count($allies); $i+=AllyPieces())
-  {
-    //Shadows of the Galaxy
-    if($allies[$i+1] == 0) continue;
-    switch($allies[$i]) {
-      case "5035052619"://Jabba the Hutt
-        if(DefinedTypesContains($cardID, "Event", $currentPlayer) && TraitContains($cardID, "Trick", $currentPlayer)) $modifier -= 1;
-        break;
-      //Jump to Lightspeed
-      case "649c6a9dbd"://Admiral Piett
-        if(TraitContains($cardID, "Capital Ship", $currentPlayer)) $modifier -= 2;
-        break;
-      case "6311662442"://Director Krennic
-        if(GetClassState($currentPlayer, $CS_NumWhenDefeatedPlayed) == 0 && HasWhenDestroyed($cardID)) $modifier -= 1;
-        break;
-      case "0728753133"://The Starhawk
-        $modifier -= floor(CardCost($cardID)/2);
-        break;
-      default: break;
-    }
-  }
   //Opponent ally cost modifier
   $otherPlayer = $currentPlayer == 1 ? 2 : 1;
   $allies = &GetAllies($otherPlayer);
@@ -2119,6 +2096,29 @@ function SelfCostModifier($cardID, $from, $reportMode=false)
             $modifier += 3;
           }
         }
+        break;
+      default: break;
+    }
+  }
+  //My ally cost modifier
+  $allies = &GetAllies($currentPlayer);
+  for($i=0; $i<count($allies); $i+=AllyPieces())
+  {
+    //Shadows of the Galaxy
+    if($allies[$i+1] == 0) continue;
+    switch($allies[$i]) {
+      case "5035052619"://Jabba the Hutt
+        if(DefinedTypesContains($cardID, "Event", $currentPlayer) && TraitContains($cardID, "Trick", $currentPlayer)) $modifier -= 1;
+        break;
+      //Jump to Lightspeed
+      case "649c6a9dbd"://Admiral Piett
+        if(TraitContains($cardID, "Capital Ship", $currentPlayer)) $modifier -= 2;
+        break;
+      case "6311662442"://Director Krennic
+        if(GetClassState($currentPlayer, $CS_NumWhenDefeatedPlayed) == 0 && HasWhenDestroyed($cardID)) $modifier -= 1;
+        break;
+      case "0728753133"://The Starhawk
+        if($reportMode) $modifier -= (CardCost($cardID) + $modifier);//TODO: find a better way to check potential costs
         break;
       default: break;
     }
@@ -6695,7 +6695,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal damage to");
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "FOCUS_FIRE", 1);
-      break;  
+      break;
     case "9347873117"://Veteran Fleet Officer
       CreateXWing($currentPlayer);
       break;
@@ -6706,7 +6706,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
           AddCurrentTurnEffect($cardID, $p, "PLAY", $allies[$i+5]);
         }
       }
-      break;  
+      break;
     case "1355075014"://Attack Run
       AddCurrentTurnEffect($cardID, $currentPlayer);
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:arena=Space");

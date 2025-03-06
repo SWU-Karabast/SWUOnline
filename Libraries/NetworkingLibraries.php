@@ -1551,6 +1551,9 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
         : CardCost($cardID) + SelfCostModifier($cardID, $from),
         default => CardCost($cardID) + SelfCostModifier($cardID, $from)
       };
+      if(SearchCount(SearchAlliesForCard($currentPlayer, "0728753133")) > 0) {//The Starhawk
+        $baseCost = $baseCost - floor($baseCost / 2);
+      }
 
       if (!$playingCard)
         $resources[1] += $dynCostResolved;
