@@ -254,7 +254,7 @@ function AttackModifier($cardID, $player, $index, $reportMode = false)
       break;
     case "5422802110"://D'Qar Cargo Frigate
       $ally = new Ally("MYALLY-" . $index, $player);
-      $modifier -= $ally->Damage();
+      if(!$ally->LostAbilities()) $modifier -= $ally->Damage();
       break;
     case "5052103576"://Resistance X-Wing
       $ally = new Ally("MYALLY-" . $index, $player);
