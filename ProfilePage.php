@@ -1,5 +1,5 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="./jsInclude.js"></script>
+<script src="./jsInclude2.js"></script>
 <?php
 require "MenuBar.php";
 include_once './AccountFiles/AccountDatabaseAPI.php';

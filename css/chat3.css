@@ -5,6 +5,7 @@
     border-left: solid 2px #afafaf;
     border-right: solid 2px #afafaf;
     border-radius: 4px;
+    overflow-wrap: break-word;
 }
 
 .bold {

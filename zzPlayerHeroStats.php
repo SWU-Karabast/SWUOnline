@@ -26,7 +26,7 @@ if (!isset($_SESSION["isPatron"])) {
 
 $detailHeroID = $_GET["heroID"];
 
-echo ("<script src=\"./jsInclude.js\"></script>");
+echo ("<script src=\"./jsInclude2.js\"></script>");
 
 echo ("<style>
 
