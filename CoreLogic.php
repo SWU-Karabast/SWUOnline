@@ -3991,7 +3991,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("ADDLIMITEDROUNDEFFECT", $currentPlayer, "1626462639,PLAY", 1);
       break;
     case "2855740390"://Lieutenant Childsen
-      if($from != "PLAY") {
+      if($from != "PLAY" && $playAlly->Exists()) {
         AddDecisionQueue("FINDINDICES", $currentPlayer, "HANDASPECT,Vigilance");
         AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "4-", 1);
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose up to 4 cards to reveal", 1);
@@ -6134,15 +6134,19 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       CreateXWing($currentPlayer);
       break;
     case "1303370295"://Death Space Skirmisher
-      if (SearchCount(SearchAllies($currentPlayer, arena: "Space")) > 1) {
-        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to exhaust");
-        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
+      if($from != "PLAY") {
+        if (SearchCount(SearchAllies($currentPlayer, arena: "Space")) > 1) {
+          AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+          AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to exhaust");
+          AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+          AddDecisionQueue("MZOP", $currentPlayer, "REST", 1);
+        }
       }
       break;
     case "1330473789"://Devastator
-      IndirectDamage($otherPlayer, 4, true, $playAlly->UniqueID());
+      if($from != "PLAY") {
+        IndirectDamage($otherPlayer, 4, true, $playAlly->UniqueID());
+      }
       break;
     case "2388374331"://Blue Leader
       if($from != "PLAY" && NumResourcesAvailable($currentPlayer) >= 2) {
@@ -6155,7 +6159,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("MZOP", $currentPlayer, "MOVEARENA,Ground", 1);
       }
       break;
-    case "4179470615"://Asajj Ventress
+    case "4179470615"://Asajj Ventress Leader
       $abilityName = GetResolvedAbilityName($cardID, $from);
       if($abilityName == "Damage") {
         AsajjVentressIWorkAlone($currentPlayer);
@@ -6267,8 +6271,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "6648978613"://Fett's Firespray (Feared Silhouettte)
-      $damage = ControlsNamedCard($currentPlayer, "Boba Fett") ? 2 : 1;
-      IndirectDamage($otherPlayer, $damage, true, $playAlly->UniqueID());
+      if($from != "PLAY") {
+        $damage = ControlsNamedCard($currentPlayer, "Boba Fett") ? 2 : 1;
+        IndirectDamage($otherPlayer, $damage, true, $playAlly->UniqueID());
+      }
       break;
     case "4819196588"://Electromagnetic Pulse
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:trait=Vehicle&THEIRALLY:trait=Vehicle&MYALLY:trait=Droid&THEIRALLY:trait=Droid");
@@ -6466,9 +6472,9 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,3," . $currentPlayer . ",0,1,0" , 1);
       break;
     case "0524529055"://Snap Wexley
-      if($target == "-") AddCurrentTurnEffect("0524529055-P", $currentPlayer, from:$from);
+      if($from != "PLAY" && $target == "-") AddCurrentTurnEffect("0524529055-P", $currentPlayer, from:$from);
       break;
-    case "3567283316":
+    case "3567283316"://Radiant VII
       if($from != "PLAY") {
         IndirectDamage($otherPlayer, 5, true, $playAlly->UniqueID());
       }
@@ -6544,7 +6550,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AttackWithMyUnitEvenIfExhaustedNoBases($currentPlayer);
       break;
     case "8757741946"://Poe Dameron (One Hell of a Pilot)
-      if($target == "-") {
+      if($from != "PLAY" && $target == "-") {
         CreateXWing($currentPlayer);
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Attach Poe to a Vehicle?");
         AddDecisionQueue("YESNO", $currentPlayer, "-", 1);
@@ -6559,7 +6565,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "0979322247"://Sidon Ithano
-      if(Ally::FromUniqueId($uniqueId)->Exists()) {
+      if($from != "PLAY" && $playAlly->Exists()) {
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Attach Sidon to an enemy Vehicle?");
         AddDecisionQueue("YESNO", $currentPlayer, "-", 1);
         AddDecisionQueue("NOPASS", $currentPlayer, "-", 1);
@@ -6680,7 +6686,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, "ADDEXPERIENCE", 1);
       break;
     case "5012301077"://Dilapidated Ski Speeder
-      $playAlly->DealDamage(3);
+      if($from != "PLAY") $playAlly->DealDamage(3);
       break;
     case "7214707216"://Diversion
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
@@ -6697,7 +6703,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "FOCUS_FIRE", 1);
       break;
     case "9347873117"://Veteran Fleet Officer
-      CreateXWing($currentPlayer);
+      if($from != "PLAY") CreateXWing($currentPlayer);
       break;
     case "3272995563"://In the Heat of Battle
       foreach ([1, 2] as $p) {
@@ -6774,7 +6780,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       }
       break;
     case "6515230001"://Pantoran Starship Thief
-      if($from != "PLAY" && NumResourcesAvailable($currentPlayer) >= 3) {
+      if($from != "PLAY" && $playAlly->Exists() && NumResourcesAvailable($currentPlayer) >= 3) {
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Pay 3 resources to take control of a Fighter or Transport?");
         AddDecisionQueue("YESNO", $currentPlayer, "-", 1);
         AddDecisionQueue("NOPASS", $currentPlayer, "-", 1);
