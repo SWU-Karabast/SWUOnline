@@ -483,7 +483,7 @@ function ResetChainLinkState()
 
 function ResetClassState($player)
 {
-  global $CS_NumVillainyPlayed, $CS_PlayedAsUpgrade, $CS_AtksWWeapon, $CS_NumNonTokenVehicleAttacks, $CS_DamagePrevention, $CS_CardsDrawn, $CS_NumBountyHuntersPlayed, $CS_NumPilotsPlayed, $CS_NumIndirectDamageTaken;
+  global $CS_NumVillainyPlayed, $CS_PlayedAsUpgrade, $CS_AtksWWeapon, $CS_NumNonTokenVehicleAttacks, $CS_DamagePrevention, $CS_CardsDrawn, $CS_NumBountyHuntersPlayed, $CS_NumPilotsPlayed, $CS_NumIndirectDamageGiven;
   global $CS_DamageTaken, $CS_NumActionsPlayed, $CS_CharacterIndex, $CS_PlayIndex, $CS_OppIndex, $CS_OppCardActive, $CS_NumNonAttackCards;
   global $CS_PreparationCounters, $CS_NextNAACardGoAgain, $CS_NumAlliesDestroyed, $CS_NumWhenDefeatedPlayed, $CS_ResolvingLayerUniqueID, $CS_NextWizardNAAInstant;
   global $CS_ArcaneDamageTaken, $CS_NextNAAInstant, $CS_NextDamagePrevented, $CS_LastAttack, $CS_PlayCCIndex;
