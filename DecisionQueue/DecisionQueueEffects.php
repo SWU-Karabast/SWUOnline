@@ -1133,6 +1133,18 @@ function SpecificCardLogic($player, $parameter, $lastResult)
         AddDecisionQueue("MZOP", $player, "BOUNCE", 1);
       }
       break;
+    case "SYSTEMSHOCK":
+      $targetAllyUID = Ally::FromUniqueId($lastResult)->UniqueID();
+      AddDecisionQueue("PASSPARAMETER", $player, $targetAllyUID, 1);
+      AddDecisionQueue("SETDQVAR", $player, "0", 1);
+      AddDecisionQueue("MZOP", $player, "GETUPGRADES", 1);
+      AddDecisionQueue("FILTER", $player, "LastResult-exclude-isLeader", 1);
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a non-leader upgrade to defeat.", 1);
+      AddDecisionQueue("CHOOSECARD", $player, "<-", 1);
+      AddDecisionQueue("OP", $player, "DEFEATUPGRADE", 1);
+      AddDecisionQueue("UNIQUETOMZ", $player, $targetAllyUID, 1);
+      AddDecisionQueue("MZOP", $player, DamageStringBuilder(1, $player), 1);
+      break;
     //SpecificCardLogic End
     default: return "";
   }
