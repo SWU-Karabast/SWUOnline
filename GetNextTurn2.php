@@ -997,6 +997,9 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       $options = [$optionsTheirs, $optionsMine];
     }
     if(!$all) {
+      $otherPlayer = $playerID == 2 ? 1 : 2;
+      $theirAllies = &GetAllies($otherPlayer);
+      $myAllies = &GetAllies($playerID);
       $caption = "<div>Choose up to " . $params[0] . " card" . ($optionParams > 1 ? "s." : ".") . "</div>";
       $content .= CreateForm($playerID, "Submit", 19, count($options));
       $content .= "<table class='table-border-a'><tr>";
@@ -1007,7 +1010,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       }
       $content .= "</tr><tr>";
       for ($i = 0; $i < count($options); ++$i) {
-        $content .= "<td>";
+        $content .= "<td style='text-align:center;vertical-align:top;'>";
         $content .= "<div class='container'>";
         if ($turn[0] == "MULTICHOOSEDISCARD")
           $content .= "<label class='multichoose' for=chk" . $i . ">" . Card($myDiscard[$options[$i]], "concat", $cardSize, 0, 1) . "</label>";
@@ -1032,12 +1035,28 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
               $source = $myAllies;
               break;
             case "THEIRALLY":
-              $source = &GetAllies($playerID == 1 ? 2 : 1);
+              $source = $theirAllies;
               break;
             default: break;
           }
-          //$content .= $option[0] . " abc " . $option[1] . "<BR>";
-          $content .= "<label class='multichoose' for=chk" . $i . ">" . Card($source[$option[1]], "concat", $cardSize, 0, 1) . "</label>";
+          $subcards = "";
+          if($option[0] == "MYALLY" || $option[0] == "THEIRALLY") {
+            $ally = new Ally("MYALLY-" . $option[1], $option[0] == "MYALLY" ? $playerID : $otherPlayer);
+            $subcards = $ally->GetSubcards();
+            $subtitle = "<div>";
+            $subtitle .= "<div>" . ($option[0] == "MYALLY" ? "Mine" : "Theirs") . "</div>";
+            if(count($subcards) > 0) {
+              $subtitle .= "<ul>";
+              for($j = 0; $j < count($subcards); $j+=SubcardPieces()) {
+                $subcardStyle = "list-style: none;margin: 0 0 0 -40px;". subcardBorder(getSubcardAspect($subcards[$j])) . ";
+                  border-radius:16px;text-transform: uppercase;background-size: 120px;line-height: 1.2;font-size: 14px;";
+                $subtitle .= "<li style='$subcardStyle'>" . CardTitle($subcards[$j]) . "</li>";
+              }
+              $subtitle .= "</ul>";
+            }
+            $subtitle .= "</div>";
+          }
+          $content .= "<label class='multichoose' for=chk" . $i . ">" . Card($source[$option[1]], "concat", $cardSize, 0, 1) . $subtitle . "</label>";
         }
         else if ($turn[0] == "MULTICHOOSEMYUNITSANDBASE")
           $content .= "<label class='multichoose' for=chk" . $i . ">" . (

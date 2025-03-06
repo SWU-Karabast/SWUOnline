@@ -6790,6 +6790,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "SYSTEMSHOCK", 1);
       break;
+    case "9184947464"://There Is No Escape
+      AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "3-", 1);
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose up to 3 units to lose abilities this round.", 1);
+      AddDecisionQueue("MULTICHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+      AddDecisionQueue("SPECIFICCARD", $currentPlayer, "THEREISNOESCAPE", 1);
     //PlayAbility End
     default: break;
   }

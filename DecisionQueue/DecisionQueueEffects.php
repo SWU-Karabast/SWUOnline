@@ -1145,6 +1145,14 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       AddDecisionQueue("UNIQUETOMZ", $player, $targetAllyUID, 1);
       AddDecisionQueue("MZOP", $player, DamageStringBuilder(1, $player), 1);
       break;
+    case "THEREISNOESCAPE":
+      foreach($lastResult as $index) {
+        $mzArr = explode("-", $index);
+        $allyPlayer = $mzArr[0] == "MYALLY" ? $player : $otherPlayer;
+        $ally = new Ally("MYALLY-" . $mzArr[1], $allyPlayer);
+        AddRoundEffect("9184947464", $allyPlayer, "PLAY", $ally->UniqueID());
+      }
+      break;
     //SpecificCardLogic End
     default: return "";
   }
