@@ -213,7 +213,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $groundAllies = "";
           $groundCount = 0;
           for($i = 0; $i < count($allies); $i+=AllyPieces()) {
-            if(ArenaContains($allies[$i], "Ground", $player)) {
+            $ally = Ally::FromUniqueId($allies[$i+5]);
+            if(ArenaContains($allies[$i], "Ground", $ally)) {
               if($groundAllies != "") $groundAllies .= ",";
               $groundAllies .= $i;
               $groundCount++;
@@ -225,7 +226,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $allies = &GetAllies($player == 1 ? 2 : 1);
           $groundAllies = "";
           for($i = 0; $i < count($allies); $i+=AllyPieces()) {
-            if(ArenaContains($allies[$i], "Ground", $player)) {
+            $ally = Ally::FromUniqueId($allies[$i+5]);
+            if(ArenaContains($allies[$i], "Ground", $ally)) {
               if($groundAllies != "") $groundAllies .= ",";
               $groundAllies .= $i;
             }
@@ -237,7 +239,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $spaceAllies = "";
           $spaceCount = 0;
           for($i = 0; $i < count($allies); $i+=AllyPieces()) {
-            if(ArenaContains($allies[$i], "Space", $player)) {
+            $ally = Ally::FromUniqueId($allies[$i+5]);
+            if(ArenaContains($allies[$i], "Space", $ally)) {
               if($spaceAllies != "") $spaceAllies .= ",";
               $spaceAllies .= $i;
               $spaceCount++;
@@ -249,7 +252,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $allies = &GetAllies($player == 1 ? 2 : 1);
           $spaceAllies = "";
           for($i = 0; $i < count($allies); $i+=AllyPieces()) {
-            if(ArenaContains($allies[$i], "Space", $player)) {
+            $ally = Ally::FromUniqueId($allies[$i+5]);
+            if(ArenaContains($allies[$i], "Space", $ally)) {
               if($spaceAllies != "") $spaceAllies .= ",";
               $spaceAllies .= $i;
             }
@@ -771,7 +775,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             for($i=count($allies)-AllyPieces(); $i>=0; $i-=AllyPieces())
             {
               $ally = new Ally("MYALLY-" . $i, $player);
-              if(ArenaContains($ally->CardID(), "Ground", $player)) $ally->DealDamage(3);
+              if(ArenaContains($ally->CardID(), "Ground", $ally)) $ally->DealDamage(3);
             }
             WriteLog(CardLink($cardID, $cardID) . " resisted capture.");
             return $cardID;
