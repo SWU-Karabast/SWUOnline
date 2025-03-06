@@ -1777,13 +1777,22 @@ function AddPrePitchDecisionQueue($cardID, $from, $index = -1, $skipAbilityType 
   if (!$skipAbilityType && IsStaticType(CardType($cardID), $from, $cardID)) {
     $names = $oppCardActive ? GetOpponentControlledAbilityNames($cardID) : GetAbilityNames($cardID, $index, validate: true);
     if ($names != "") {
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose which ability to activate");
+      AddDecisionQueue("BUTTONINPUT", $currentPlayer, $names);
+
+      if (LeaderCanPilot($cardID)) {
+        AddDecisionQueue("SETDQVAR", $currentPlayer, "0");
+        AddDecisionQueue("SETDQVAR", $currentPlayer, "1");
+        AddDecisionQueue("NOTEQUALPASS", $currentPlayer, "Deploy");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose to deploy as a pilot or unit", 1);
+        AddDecisionQueue("BUTTONINPUT", $currentPlayer, "Pilot,Unit", 1);
+        AddDecisionQueue("SETDQVAR", $currentPlayer, "1", 1);
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}");
+      }
+
       if (!$oppCardActive) {
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose which ability to activate");
-        AddDecisionQueue("BUTTONINPUT", $currentPlayer, $names);
         AddDecisionQueue("SETABILITYTYPE", $currentPlayer, $cardID);
       } else {
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose which ability to activate");
-        AddDecisionQueue("BUTTONINPUT", $currentPlayer, $names);
         AddDecisionQueue("SETABILITYTYPEOPP", $currentPlayer, $cardID);
       }
     }
@@ -1805,9 +1814,9 @@ function AddPrePitchDecisionQueue($cardID, $from, $index = -1, $skipAbilityType 
     $pilotCost = PilotingCost($cardID, $currentPlayer);
     if ($pilotCost >= 0 && !CurrentTurnEffectsPlayingUnit($currentPlayer)) {
       if (!SearchCurrentTurnEffects("0011262813", $currentPlayer)) {//Wedge Antilles Leader
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose if you want to play this unit as a pilot?");
-        AddDecisionQueue("YESNO", $currentPlayer, "if you want to play this unit as a pilot");
-        AddDecisionQueue("NOPASS", $currentPlayer, "-");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose to play as a pilot or unit");
+        AddDecisionQueue("BUTTONINPUT", $currentPlayer, "Pilot,Unit");
+        AddDecisionQueue("NOTEQUALPASS", $currentPlayer, "Pilot");
         AddDecisionQueue("PASSPARAMETER", $currentPlayer, 1, 1);
       } else {
         AddDecisionQueue("PASSPARAMETER", $currentPlayer, 1, 1);
