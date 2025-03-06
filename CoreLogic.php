@@ -6796,6 +6796,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose up to 3 units to lose abilities this round.", 1);
       AddDecisionQueue("MULTICHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "THEREISNOESCAPE", 1);
+      break;
+    case "8544209291"://U-Wing Lander
+      if($from != "PLAY") {
+        $ally = Ally::FromUniqueId($uniqueId);
+        for($i=0; $i<3; ++$i) {
+          $ally->Attach("2007868442");//Experience token
+        }
+      }
     //PlayAbility End
     default: break;
   }
