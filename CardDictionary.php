@@ -103,6 +103,7 @@ function RestoreAmount($cardID, $player, $index)
   $ally = new Ally("MYALLY-" . $index, $player);
   for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnPieces()) {
     if($currentTurnEffects[$i+1] != $player) continue;
+    if($currentTurnEffects[$i] ==  "3148212344_Restore_1" && TraitContains($cardID, "Vehicle", $player)) $amount += 1;//Admiral Yularen - unique ID belongs to Yularen
     if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
     switch($currentTurnEffects[$i]) {
       case "1272825113"://In Defense of Kamino
@@ -319,6 +320,7 @@ function HasSentinel($cardID, $player, $index)
   $hasSentinel = false;
   for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnPieces()) {
     if($currentTurnEffects[$i+1] != $player) continue;
+    if($currentTurnEffects[$i] ==  "3148212344_Sentinel" && TraitContains($cardID, "Vehicle", $player)) return true;//Admiral Yularen - unique ID belongs to Yularen
     if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
     $effectParams = explode("_", $currentTurnEffects[$i]);
     $effectCardID = $effectParams[0];
@@ -487,11 +489,13 @@ function HasGrit($cardID, $player, $index)
         return true;
       case "2633842896"://Biggs Darklighter
         if(TraitContains($cardID, "Speeder", $player)) return true;
+        break;
       default: break;
     }
   }
   for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnPieces()) {
     if($currentTurnEffects[$i+1] != $player) continue;
+    if($currentTurnEffects[$i] ==  "3148212344_Grit" && TraitContains($cardID, "Vehicle", $player)) return true;//Admiral Yularen - unique ID belongs to Yularen
     if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
     switch($currentTurnEffects[$i]) {
       case "6669050232": return true;//Grim Resolve
@@ -782,6 +786,16 @@ function HasAmbush($cardID, $player, $index, $from)
 
 function HasShielded($cardID, $player)
 {
+  global $currentTurnEffects;
+
+  for($i=count($currentTurnEffects)-CurrentTurnPieces(); $i>=0; $i-=CurrentTurnPieces()) {
+    if($currentTurnEffects[$i+1] != $player) continue;
+    if($currentTurnEffects[$i] == "3148212344_Shielded" && TraitContains($cardID, "Vehicle", $player)) return true;//Admiral Yularen (Must be outside applies to loop because that's for Yularen)
+    //if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
+    switch($currentTurnEffects[$i]) {
+      default: break;
+    }
+  }
   switch($cardID)
   {
     //Spark of Rebellion
@@ -819,6 +833,7 @@ function HasShielded($cardID, $player)
     case "9325037410"://Iden Versio
     case "7385763727"://Techno Union Transport
     case "3770706835"://Outer Rim Outlaws
+    case "2644994192"://Hondo Ohnaka
       return true;
     default: return false;
   }
@@ -1096,9 +1111,9 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
 
   $set = CardSet($cardID);
   switch($set) {
-    case "SOR": $abilityTypes = CheckSORAbilityTypes($cardID, $index); break;
-    case "SHD": $abilityTypes = CheckSHDAbilityTypes($cardID, $index); break;
-    case "TWI": $abilityTypes = CheckTWIAbilityTypes($cardID, $index); break;
+    case "SOR": $abilityTypes = CheckSORAbilityTypes($cardID); break;
+    case "SHD": $abilityTypes = CheckSHDAbilityTypes($cardID); break;
+    case "TWI": $abilityTypes = CheckTWIAbilityTypes($cardID); break;
     case "JTL": $abilityTypes = CheckJTLAbilityTypes($cardID); break;
     default: break;//maybe throw error?
   }
@@ -1149,9 +1164,6 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
       if(IsNotFlipatine($char) && IsNotExhaustedTrench($char)) {
         if($abilityTypes != "") $abilityTypes .= ",";
         $abilityTypes .= "A";
-        if(LeaderCanPilot($char[CharacterPieces()])) {
-          $abilityTypes .= ",A";
-        }
       }
     }
   }
@@ -1420,9 +1432,6 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
       if(IsNotFlipatine($char) && IsNotExhaustedTrench($char)) {
         if($abilityNames != "") $abilityNames .= ",";
         $abilityNames .= "Deploy";
-        if(LeaderCanPilot($char[CharacterPieces()])) {
-          $abilityNames .= ",Pilot";
-        }
       }
     }
   }
@@ -1771,7 +1780,7 @@ function IsPlayable($cardID, $phase, $from, $index = -1, &$restriction = null, $
       + CurrentEffectCostModifiers($cardID, $from, reportMode:true);
   if($from == "HAND"
     && $potentialCost > NumResourcesAvailable($currentPlayer)
-    && ($potentialPilotingCost == -1 || $potentialPilotingCost > NumResourcesAvailable($currentPlayer))
+    && ($potentialPilotingCost == -1 || $potentialPilotingCost > NumResourcesAvailable($currentPlayer) || SearchCount(SearchAllies($player, trait:"Vehicle")) == 0)
     && !HasAlternativeCost($cardID)) return false;
   if($from == "RESOURCES") {
     if(!PlayableFromResources($cardID, index:$index)) return false;
@@ -2583,6 +2592,15 @@ function PilotingCost($cardID, $player = "") {
     default: break;
   }
   return $minCost;
+}
+
+function IsUnconventionalPilot($cardID) {
+  switch($cardID) {
+    case "0979322247"://Sidon Ithano
+    case "6515230001"://Pantoran Starship Thief
+      return true;
+    default: return false;
+  }
 }
 
 function isBountyRecollectable($cardID) {

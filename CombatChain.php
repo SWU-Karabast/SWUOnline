@@ -111,6 +111,15 @@ function CompletesAttackEffect($cardID) {
     case "7138400365"://The Invisible Hand JTL
       InvisibleHandJTL($mainPlayer);
       break;
+    case "8544209291"://U-Wing Lander
+      $uid = $attackerAlly->UniqueID();
+      AddDecisionQueue("PASSPARAMETER", $mainPlayer,$uid);
+      AddDecisionQueue("MZOP", $mainPlayer, "GETUPGRADES", 1);
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose an upgrade to move.", 1);
+      AddDecisionQueue("CHOOSECARD", $mainPlayer, "<-", 1);
+      AddDecisionQueue("SETDQVAR", $mainPlayer, "0", 1);
+      AddDecisionQueue("SPECIFICCARD", $mainPlayer, "UWINGLANDER,$uid", 1);
+      break;
     default: break;
   }
 }
@@ -254,6 +263,9 @@ function AttackModifier($cardID, $player, $index, $reportMode = false)
     case "4203363893"://War Juggernaut
       $modifier += SearchCount(SearchAllies($player, damagedOnly:true));
       $modifier += SearchCount(SearchAllies($otherPlayer, damagedOnly:true));
+      break;
+    case "3213928129"://Clone Combat Squadron
+      $modifier += SearchCount(SearchAllies($player, arena:"Space"))-1;
       break;
     default: break;
   }

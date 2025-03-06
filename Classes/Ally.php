@@ -511,12 +511,18 @@ class Ally {
     $this->DefeatIfNoRemainingHP();
   }
 
-  function Ready() {
+  function Ready($resolvedSpecialCase=false) {
     $upgrades = $this->GetUpgrades();
     for($i=0; $i<count($upgrades); ++$i) {
       switch($upgrades[$i]) {
         case "7718080954"://Frozen in Carbonite
           return false;
+        case "7962923506"://In Debt to Crimson Dawn
+          if($this->IsExhausted() && !$resolvedSpecialCase) {
+             AddDecisionQueue("SPECIFICCARD", $this->Controller(), "PAY_READY_TAX,2," . $this->UniqueID());
+            return false;
+          }
+          break;
         default: break;
       }
     }
@@ -582,13 +588,14 @@ class Ally {
   }
 
   function Attach($cardID, $ownerID = null, $epicAction = false, $turnsInPlay = 0) {
-    $receivingPilot = $this->ReceivingPilot($cardID) || $cardID == "0979322247";//Sidon Ithano
+    $receivingPilot = $this->ReceivingPilot($cardID) || IsUnconventionalPilot($cardID);
     $subcardUniqueID = $this->AddSubcard($cardID, $ownerID, $receivingPilot, $epicAction, $turnsInPlay);
     if (CardIsUnique($cardID)) {
       $this->CheckUniqueUpgrade($cardID);
       if($receivingPilot) {
-        $this->CheckUniqueAllyForPilot($cardID);
-        if($cardID == "0979322247") $this->DefeatIfNoRemainingHP();
+        $allyDestroyed = $this->CheckUniqueAllyForPilot($cardID);
+        if($allyDestroyed) $this->index = min(0, $this->index - AllyPieces());
+        if($cardID == "0979322247") $this->DefeatIfNoRemainingHP();//Sidon Ithano
       }
     }
     //Pilot attach side effects
@@ -709,8 +716,11 @@ class Ally {
       if($ally->CardID() == $attachedPilotCardID) {
         WriteLog(CardLink($attachedPilotCardID, $attachedPilotCardID) . " unit was defeated due to unique rule.");
         $ally->Destroy();
+        return true;
       }
     }
+
+    return false;
   }
 
   function HasUpgrade($upgradeID) {
@@ -784,6 +794,7 @@ class Ally {
         case "2639435822": //Force Lightning
         case "4531112134": //Kazuda Xiono leader side
         case "c1700fc85b": //Kazuda Xiono pilot Leader Unit
+        case "9184947464": //There Is No Escape
           return true;
         default: break;
       }

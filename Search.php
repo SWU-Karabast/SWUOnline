@@ -128,7 +128,7 @@ function SearchInner(&$array, $player, $zone, $count, $type, $definedType,
         && ($maxCost == -1 || CardCost($cardID) <= $maxCost)
         && ($minCost == -1 || CardCost($cardID) >= $minCost)
         && ($aspect == "" || AspectContains($cardID, $aspect, $player))
-        && ($arena == "" || ArenaContains($cardID, $arena, $player))
+        && ($arena == "" || ArenaContains($cardID, $arena, CheckAllySpecialCaseArena($zone, $array)))
         && ($cardTitle == "" || CardTitle($cardID) == GamestateUnsanitize($cardTitle))
         && ($trait == -1 || TraitContains($cardID, $trait, $player, $i))
         && ($keyword == "" || HasKeyword($cardID, $keyword, $player, $i))
@@ -209,6 +209,20 @@ function isPriorityStep($cardID)
       return true;
     default: return false;
   }
+}
+
+function CheckAllySpecialCaseArena($zone, $array)
+{
+  if($zone == "ALLY") {
+    for($i=0;$i<count($array);$i+=AllyPieces()) {
+      switch($array[$i]) {
+        case "2388374331"://Blue Leader JTL
+          return new Ally($array[$i+5]);
+        default: break;
+      }
+    }
+  };
+  return null;
 }
 
 function SearchHandForCard($player, $card)
@@ -487,12 +501,16 @@ function SearchMultizoneFormat($search, $zone)
   return implode(",", $searchArr);
 }
 
-function SearchCurrentTurnEffects($cardID, $player, $remove = false)
+function SearchCurrentTurnEffects($cardID, $player, $remove = false, $startsWith = false)
 {
   global $currentTurnEffects;
   for ($i = 0; $i < count($currentTurnEffects); $i += CurrentTurnEffectPieces()) {
     $currentCardID = explode("_", $currentTurnEffects[$i])[0];
     if ($currentCardID == $cardID && $currentTurnEffects[$i + 1] == $player) {
+      if ($remove) RemoveCurrentTurnEffect($i);
+      return true;
+    }
+    else if ($startsWith && str_starts_with($currentCardID, $cardID)) {
       if ($remove) RemoveCurrentTurnEffect($i);
       return true;
     }

@@ -405,6 +405,7 @@ function AddGraveyard($cardID, $player, $from, $modifier="-")
   global $myDiscard, $theirDiscard, $mainDiscard, $defDiscard;
   global $myStateBuiltFor, $CS_CardsEnteredGY;
   IncrementClassState($player, $CS_CardsEnteredGY);
+  if($modifier == "TTFREE" || $modifier == "TTOPFREE") WriteLog(CardLink($cardID, $cardID) . " can be played from the Discard for free this phase.");
   if ($mainPlayerGamestateStillBuilt) {
     if ($player == $mainPlayer) AddSpecificGraveyard($cardID, $mainDiscard, $from, $player, $modifier);
     else AddSpecificGraveyard($cardID, $defDiscard, $from, $player, $modifier);

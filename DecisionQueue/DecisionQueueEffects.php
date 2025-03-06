@@ -1,15 +1,16 @@
 <?php
 
-function ModalAbilities($player, $card, $lastResult)
+function ModalAbilities($player, $parameter, $lastResult)
 {
   global $combatChain, $defPlayer;
-  switch($card)
+  $paramArr = explode(",", $parameter);
+  switch($paramArr[0])
   {
     case "K2SO":
       $otherPlayer = ($player == 1 ? 2 : 1);
       switch($lastResult) {
         case 0: // Deal damage
-          DealDamageAsync($otherPlayer, 3, "DAMAGE", "3232845719");
+          DealDamageAsync($otherPlayer, 3, "DAMAGE", "3232845719", sourcePlayer:$player);
           break;
         case 1: // Discard a card
           PummelHit($otherPlayer);
@@ -272,8 +273,21 @@ function ModalAbilities($player, $card, $lastResult)
         default: break;
       }
       return $lastResult;
+    case "YULAREN_JTL":
+      $effectType = intval($lastResult);
+      $effectName = "3148212344_" . match($effectType) {
+        0 => "Grit",
+        1 => "Restore_1",
+        2 => "Sentinel",
+        3 => "Shielded",
+      };
+      $yularenUniqueID = $paramArr[1];
+      AddDecisionQueue("PASSPARAMETER", $player, $yularenUniqueID, 1);
+      AddDecisionQueue("ADDLIMITEDPERMANENTEFFECT", $player, "$effectName,HAND," . $player, 1);
+      return $yularenUniqueID;
     default: return "";
   }
+  //ModalAbilities end
 }
 
 function PlayerTargetedAbility($player, $card, $lastResult)
@@ -292,7 +306,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
   global $dqVars;
   $parameterArr = explode(",", $parameter);
   $card = $parameterArr[0];
-  $otherPlayer = ($player == 1 ? 2 : 1);
+  $otherPlayer = $player == 1 ? 2 : 1;
   switch($card)
   {
     case "SABINEWREN_TWI":
@@ -380,7 +394,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       if(TraitContains($cardID, "Force", $player)) Draw($player);
       break;
     case "GALACTICAMBITION":
-      DealDamageAsync($player, CardCost($lastResult), "DAMAGE", "5494760041");
+      DealDamageAsync($player, CardCost($lastResult), "DAMAGE", "5494760041", sourcePlayer:$player);
       break;
     case "C3PO":
       $deck = new Deck($player);
@@ -554,7 +568,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       $ally = new Ally($lastResult, $owner);
       $wasDestroyed = $ally->DealDamage(3);
       if($wasDestroyed) {
-        DealDamageAsync($player == 1 ? 2 : 1, 2, "DAMAGE", "7730475388");
+        DealDamageAsync($otherPlayer, 2, "DAMAGE", "7730475388", sourcePlayer:$player);
       }
       break;
     case "PIERCINGSHOT":
@@ -944,7 +958,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       AddDecisionQueue("MZOP", $player, DamageStringBuilder($power, $player, isUnitEffect:1), 1);
       break;
     case "LETHALCRACKDOWN":
-      DealDamageAsync($player, CardPower($lastResult), "DAMAGE", "1389085256");
+      DealDamageAsync($player, CardPower($lastResult), "DAMAGE", "1389085256", sourcePlayer:$player);
       break;
     case "LUXBONTERI":
       $ally = new Ally($lastResult, MZPlayerID($player, $lastResult));
@@ -972,6 +986,24 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $player, "7924461681,HAND");
       AddDecisionQueue("PASSPARAMETER", $player, $ally->MZIndex());
       AddDecisionQueue("MZOP", $player, "ATTACK");
+      break;
+    case "SWEEPTHEAREA":
+      $totalCost = 0;
+      for($i=count($lastResult)-1; $i>=0; --$i) {
+        $owner = MZPlayerID($player, $lastResult[$i]);
+        $ally = new Ally($lastResult[$i], $owner);
+        $totalCost += CardCost($ally->CardID());
+      }
+      if($totalCost > 3) {
+        WriteLog("<span style='color:red;'>The unit cost was too high. Reverting gamestate.</span>");
+        RevertGamestate();
+        return "";
+      } else {
+        for($i=count($lastResult)-1; $i>=0; --$i) {
+          $owner = MZPlayerID($player, $lastResult[$i]);
+          MZBounce($player, $lastResult[$i]);
+        }
+      }
       break;
     case "THRAWN_JTL":
       $data = explode(";", $dqVars[1]);
@@ -1091,7 +1123,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
     case "VADER_UNIT_JTL":
       $pingedAlly = new Ally($lastResult);
       $enemyDamage = str_starts_with($lastResult, "MYALLY-") ? false : true;
-      $defeated = $pingedAlly->DealDamage(1, $enemyDamage, fromUnitEffect:true);
+      $defeated = $pingedAlly->DealDamage(1, enemyDamage: $enemyDamage, fromUnitEffect:true);
       if($defeated) {
         AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
         AddDecisionQueue("PREPENDLASTRESULT", $player, "MYCHAR-0,THEIRCHAR-0,");
@@ -1100,6 +1132,70 @@ function SpecificCardLogic($player, $parameter, $lastResult)
         AddDecisionQueue("MZOP", $player, DamageStringBuilder(1, $player, isUnitEffect:1), 1);
       }
       break;
+    case "PAY_READY_TAX":
+      $tax = $parameterArr[1];
+      if(NumResourcesAvailable($player) >= $tax) {
+        $affectedUid = $parameterArr[2];
+        $ally = Ally::FromUniqueId($affectedUid);
+        $cardID = $ally->CardID();
+        AddDecisionQueue("YESNO", $player, "Pay $tax resources to ready " . CardLink($cardID, $cardID) . "?", 1);
+        AddDecisionQueue("NOPASS", $player, "-", 1);
+        AddDecisionQueue("PAYRESOURCES", $player, $tax, 1);
+        AddDecisionQueue("SPECIFICCARD", $player, "PAID_READY_TAX,$affectedUid", 1);
+      }
+      break;
+    case "PAID_READY_TAX":
+      Ally::FromUniqueId($parameterArr[1])->Ready(resolvedSpecialCase:true);
+      break;
+    case "HEARTLESSTACTICS":
+      $ally = Ally::FromUniqueId($lastResult);
+      if(!$ally->IsLeader() && $ally->CurrentPower() == 0) {
+        AddDecisionQueue("SETDQCONTEXT", $player, "Bounce " . CardLink($ally->CardID(), $ally->CardID()) . "?");
+        AddDecisionQueue("YESNO", $player, "-", 1);
+        AddDecisionQueue("NOPASS", $player, "-", 1);
+        AddDecisionQueue("PASSPARAMETER", $player, $ally->MZIndex(), 1);
+        AddDecisionQueue("MZOP", $player, "BOUNCE", 1);
+      }
+      break;
+    case "SYSTEMSHOCK":
+      $targetAllyUID = Ally::FromUniqueId($lastResult)->UniqueID();
+      AddDecisionQueue("PASSPARAMETER", $player, $targetAllyUID, 1);
+      AddDecisionQueue("SETDQVAR", $player, "0", 1);
+      AddDecisionQueue("MZOP", $player, "GETUPGRADES", 1);
+      AddDecisionQueue("FILTER", $player, "LastResult-exclude-isLeader", 1);
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a non-leader upgrade to defeat.", 1);
+      AddDecisionQueue("CHOOSECARD", $player, "<-", 1);
+      AddDecisionQueue("OP", $player, "DEFEATUPGRADE", 1);
+      AddDecisionQueue("UNIQUETOMZ", $player, $targetAllyUID, 1);
+      AddDecisionQueue("MZOP", $player, DamageStringBuilder(1, $player), 1);
+      break;
+    case "THEREISNOESCAPE":
+      foreach($lastResult as $index) {
+        $mzArr = explode("-", $index);
+        $allyPlayer = $mzArr[0] == "MYALLY" ? $player : $otherPlayer;
+        $ally = new Ally("MYALLY-" . $mzArr[1], $allyPlayer);
+        AddRoundEffect("9184947464", $allyPlayer, "PLAY", $ally->UniqueID());
+      }
+      break;
+    case "UWINGLANDER":
+      $ally = Ally::FromUniqueId($parameterArr[1]);
+      AddDecisionQueue("PASSPARAMETER", $player, $ally->MZIndex(), 1);
+      AddDecisionQueue("SETDQVAR", $player, "1", 1);
+      if(PilotingCost($lastResult) > -1) {
+        global $CS_PlayedAsUpgrade;
+        SetClassState($player, $CS_PlayedAsUpgrade, 1);
+        AddDecisionQueue("PASSPARAMETER", $player, "1", 1);
+        AddDecisionQueue("SETDQVAR", $player, "2", 1);//set movingPilot to true
+        AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:trait=Vehicle", 1);
+        AddDecisionQueue("MZFILTER", $player, "hasPilot=1", 1);
+        AddDecisionQueue("PASSREVERT", $player, "-");
+      } else {
+        AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:trait=Vehicle");
+        AddDecisionQueue("MZFILTER", $player, "canAttach={0}", 1);
+      }
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to move <0> to.", 1);
+      AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
+      AddDecisionQueue("MZOP", $player, "MOVEUPGRADE", 1);
     //SpecificCardLogic End
     default: return "";
   }

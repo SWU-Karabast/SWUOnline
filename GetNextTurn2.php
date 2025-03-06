@@ -950,7 +950,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       || $turn[0] == "MULTICHOOSEUNIT" || $turn[0] == "MULTICHOOSETHEIRUNIT" || $turn[0] == "MULTICHOOSEOURUNITS"
       || $turn[0] == "MULTICHOOSEDECK" || $turn[0] == "MULTICHOOSETEXT" || $turn[0] == "MAYMULTICHOOSETEXT" || $turn[0] == "MULTICHOOSETHEIRDECK"
       || $turn[0] == "MULTICHOOSEMYUNITSANDBASE" || $turn[0] == "MULTICHOOSETHEIRUNITSANDBASE" || $turn[0] == "MULTICHOOSEOURUNITSANDBASE"
-      || $turn[0] == "MAYMULTICHOOSEAURAS") && $currentPlayer == $playerID) {
+      || $turn[0] == "MAYMULTICHOOSEAURAS" || $turn[0] == "MULTICHOOSEMULTIZONE") && $currentPlayer == $playerID) {
     $content = "";
     $multiTheirAllies = &GetAllies($playerID == 1 ? 2 : 1);
     $multiAllies = &GetAllies($playerID);
@@ -962,6 +962,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     $options = [];
     if(!$all) {
       $params = explode("-", $sets[0]);
+      $optionParams = implode("-", array_slice($params, 1));
       if($turn[0] == "MULTICHOOSEMYUNITSANDBASE") {
         if($params[0] == "0;0") {
           $options[] = "BASE";
@@ -984,7 +985,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
           $params[0] = $pieces[1];
         }
       }
-      $options = array_merge($options, $params[1] != "" ? explode(",", $params[1]) : []);
+      $options = array_merge($options, $optionParams != "" ? explode(",", $optionParams) : []);
     } else {
       //TODO: Redemption
       $paramsTheirs = explode("-", $sets[0]);
@@ -996,7 +997,10 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       $options = [$optionsTheirs, $optionsMine];
     }
     if(!$all) {
-      $caption = "<div>Choose up to " . $params[0] . " card" . ($params[1] > 1 ? "s." : ".") . "</div>";
+      $otherPlayer = $playerID == 2 ? 1 : 2;
+      $theirAllies = &GetAllies($otherPlayer);
+      $myAllies = &GetAllies($playerID);
+      $caption = "<div>Choose up to " . $params[0] . " card" . ($optionParams > 1 ? "s." : ".") . "</div>";
       $content .= CreateForm($playerID, "Submit", 19, count($options));
       $content .= "<table class='table-border-a'><tr>";
       for ($i = 0; $i < count($options); ++$i) {
@@ -1006,7 +1010,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       }
       $content .= "</tr><tr>";
       for ($i = 0; $i < count($options); ++$i) {
-        $content .= "<td>";
+        $content .= "<td style='text-align:center;vertical-align:top;'>";
         $content .= "<div class='container'>";
         if ($turn[0] == "MULTICHOOSEDISCARD")
           $content .= "<label class='multichoose' for=chk" . $i . ">" . Card($myDiscard[$options[$i]], "concat", $cardSize, 0, 1) . "</label>";
@@ -1018,6 +1022,42 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
           $content .= "<label class='multichoose' for=chk" . $i . ">" . Card($multiAllies[$options[$i]], "concat", $cardSize, 0, 1) . "</label>";
         else if ($turn[0] == "MULTICHOOSETHEIRUNIT")
           $content .= "<label class='multichoose' for=chk" . $i . ">" . Card($multiTheirAllies[$options[$i]], "concat", $cardSize, 0, 1) . "</label>";
+        else if($turn[0] == "MULTICHOOSEMULTIZONE") {
+          $option = explode("-", $options[$i]);
+          switch($option[0]) {
+            case "MYCHAR":
+              $source = $myCharacter;
+              break;
+            case "THEIRCHAR":
+              $source = $theirCharacter;
+              break;
+            case "MYALLY":
+              $source = $myAllies;
+              break;
+            case "THEIRALLY":
+              $source = $theirAllies;
+              break;
+            default: break;
+          }
+          $subcards = "";
+          if($option[0] == "MYALLY" || $option[0] == "THEIRALLY") {
+            $ally = new Ally("MYALLY-" . $option[1], $option[0] == "MYALLY" ? $playerID : $otherPlayer);
+            $subcards = $ally->GetSubcards();
+            $subtitle = "<div>";
+            $subtitle .= "<div>" . ($option[0] == "MYALLY" ? "Mine" : "Theirs") . "</div>";
+            if(count($subcards) > 0) {
+              $subtitle .= "<ul>";
+              for($j = 0; $j < count($subcards); $j+=SubcardPieces()) {
+                $subcardStyle = "list-style: none;margin: 0 0 0 -40px;". subcardBorder(getSubcardAspect($subcards[$j])) . ";
+                  border-radius:16px;text-transform: uppercase;background-size: 120px;line-height: 1.2;font-size: 14px;";
+                $subtitle .= "<li style='$subcardStyle'>" . CardTitle($subcards[$j]) . "</li>";
+              }
+              $subtitle .= "</ul>";
+            }
+            $subtitle .= "</div>";
+          }
+          $content .= "<label class='multichoose' for=chk" . $i . ">" . Card($source[$option[1]], "concat", $cardSize, 0, 1) . $subtitle . "</label>";
+        }
         else if ($turn[0] == "MULTICHOOSEMYUNITSANDBASE")
           $content .= "<label class='multichoose' for=chk" . $i . ">" . (
             $options[$i] == "BASE"

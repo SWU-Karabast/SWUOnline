@@ -290,6 +290,8 @@ function EffectAttackModifier($cardID, $playerID="")
     case "3782661648": return -5;//Out the Airlock
     case "9595202461": return 2;//Coordinated Front
     case "3858069945": return $subparam;//Power From Pain
+    case "7232609585": return 2;//Supporting Eta-2
+    case "2384695376": return -2;//Heartless Tactics
     default: return 0;
   }
 }

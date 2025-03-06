@@ -219,6 +219,7 @@ function AllyHasStaticHealthModifier($cardID)
     case "9017877021"://Clone Commander Cody
     case "9811031405"://Victor Leader
     case "5052103576"://Resistance X-Wing
+    case "3213928129"://Clone Combat Squadron
       return true;
     default: return false;
   }
@@ -266,6 +267,11 @@ function AllyStaticHealthModifier($cardID, $index, $player, $myCardID, $myIndex,
     case "4718895864"://Padawan Starfighter
       if($index == $myIndex && $player == $myPlayer) {
         if(SearchCount(SearchAllies($player, trait:"Force"))) return 1;
+      }
+      break;
+    case "3213928129"://Clone Combat Squadron
+      if($index == $myIndex && $player == $myPlayer) {
+        return SearchCount(SearchAllies($player, arena:"Space"))-1;
       }
       break;
     case "3731235174"://Supreme Leader Snoke
@@ -575,6 +581,7 @@ function AllyTakeControl($player, $uniqueID) {
     switch($effectCardID) {
       case "3503494534"://Regional Governor
       case "7964782056"://Qi'Ra unit
+      case "3148212344"://Admiral Yularen JTL
         $skipSwap = true;
         break;
       default: break;
@@ -674,7 +681,6 @@ function CheckForUpgradesPlayableExhausted(Ally $ally, $theirCard=false) {
       switch($upgrades[$i]) {
         case "3eb545eb4b"://Poe Dameron JTL leader
           return $upgrades[$i+1] == $playableBy && GetClassState($playableBy, $CS_NumUsesLeaderUpgrade1) > 0;
-          break;
         default: break;
       }
     }
@@ -791,6 +797,9 @@ function AllyLeavesPlayAbility($player, $index)
         if ($resourceFound) break;
       }
       break;
+    case "3148212344"://Admiral Yularen JTL
+      SearchCurrentTurnEffects("3148212344", $player, remove:true, startsWith:true);
+      break;
     default: break;
   }
   //Opponent character abilities
@@ -845,7 +854,7 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities, $isUp
         PlayerOpt($player, 2);
         break;
       case "1047592361"://Ruthless Raider
-        DealDamageAsync($otherPlayer, 2, "DAMAGE", "1047592361");
+        DealDamageAsync($otherPlayer, 2, "DAMAGE", "1047592361", sourcePlayer:$player);
         AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY");
         AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal 2 damage to");
         AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
@@ -958,7 +967,7 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities, $isUp
         AddDecisionQueue("MZOP", $player, "DEALDAMAGE,1,$player,1", 1);
         break;
       case "6022703929"://OOM-Series Officer
-        DealDamageAsync($otherPlayer, 2, "DAMAGE", "6022703929");
+        DealDamageAsync($otherPlayer, 2, "DAMAGE", "6022703929", sourcePlayer:$player);
         break;
       case "9479767991"://Favorable Deligate
         PummelHit($player);
@@ -995,13 +1004,13 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities, $isUp
         Restore(2, $player);
         break;
       case "6861397107"://First Order Stormtrooper
-        IndirectDamage($otherPlayer, 1, true);
+        IndirectDamage($otherPlayer, 1, true, $uniqueID);
         break;
       case "8287246260"://Droid Missile Platform
-        IndirectDamage($otherPlayer, 3, true);
+        IndirectDamage($otherPlayer, 3, true, $uniqueID);
         break;
       case "7389195577"://Zygerrian Starhopper
-        IndirectDamage($otherPlayer, 2, true);
+        IndirectDamage($otherPlayer, 2, true, $uniqueID);
         break;
       case "1519837763"://Shuttle ST-149
         ShuttleST149($player);
@@ -1137,7 +1146,7 @@ function CollectBounty($player, $unitCardID, $bountyCardID, $isExhausted, $owner
     case "2740761445"://Guild Target
       if($reportMode) break;
       $damage = CardIsUnique($unitCardID) ? 3 : 2;
-      DealDamageAsync($player, $damage, "DAMAGE", "2740761445");
+      DealDamageAsync($player, $damage, "DAMAGE", "2740761445", sourcePlayer:$opponent);
       break;
     case "4117365450"://Wanted
       if($reportMode) break;
@@ -1212,7 +1221,7 @@ function CollectBounty($player, $unitCardID, $bountyCardID, $isExhausted, $owner
     case "0252207505"://Synara San
       if ($isExhausted) {
         if ($reportMode) break;
-        DealDamageAsync($player, 5, "DAMAGE", "0252207505");
+        DealDamageAsync($player, 5, "DAMAGE", "0252207505", sourcePlayer:$opponent);
         break;
       }
     case "2965702252"://Unlicensed Headhunter
@@ -1316,7 +1325,7 @@ function OnKillAbility($player, $uniqueID)
     switch($upgrades[$i]) {
       case "4897501399"://Ruthlessness
         WriteLog("Ruthlessness deals 2 damage to the defender's base");
-        DealDamageAsync($defPlayer, 2, "DAMAGE", $attackerAlly->CardID());
+        DealDamageAsync($defPlayer, 2, "DAMAGE", $attackerAlly->CardID(), sourcePlayer:$mainPlayer);
         break;
       default: break;
     }
@@ -1805,7 +1814,7 @@ function AllyPlayCardAbility($player, $cardID, $uniqueID, $numUses, $playedCardI
         break;
       case "5907868016"://Fighters for Freedom
         if(AspectContains($playedCardID, "Aggression", $player)) {
-          DealDamageAsync($otherPlayer, 1, "DAMAGE", "5907868016");
+          DealDamageAsync($otherPlayer, 1, "DAMAGE", "5907868016", sourcePlayer:$player);
           WriteLog(CardLink("5907868016", "5907868016") . " is dealing 1 damage.");
         }
         break;
@@ -1844,7 +1853,7 @@ function AllyPlayCardAbility($player, $cardID, $uniqueID, $numUses, $playedCardI
         break;
       case "0981852103"://Lady Proxima
         if(TraitContains($playedCardID, "Underworld", $player)) {
-          DealDamageAsync($otherPlayer, 1, "DAMAGE", "0981852103");
+          DealDamageAsync($otherPlayer, 1, "DAMAGE", "0981852103", sourcePlayer:$player);
         }
         break;
       case "3589814405"://Tactical Droid Commander
@@ -1927,7 +1936,7 @@ function AllyPlayCardAbility($player, $cardID, $uniqueID, $numUses, $playedCardI
         }
         break;
       case "5555846790"://Saw Gerrera
-        DealDamageAsync($otherPlayer, 2, "DAMAGE", "5555846790");
+        DealDamageAsync($otherPlayer, 2, "DAMAGE", "5555846790", sourcePlayer:$player);
         break;
       case "4935319539"://Krayt Dragon
         if ($playedCardID == "0345124206") break; //Clone - When Clone is played, Krayt Dragon's ability is not triggered. It'll be triggered later after the Clone's resolution with the new printed attributes.
@@ -2039,7 +2048,9 @@ function SpecificAllyAttackAbilities($attackID)
         AddDecisionQueue("MZOP", $mainPlayer, "ADDEXPERIENCE", 1);
         break;
       case "5016817239"://Superheavy Ion Cannon
-        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY:leader=0");
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY");
+        AddDecisionQueue("MZFILTER", $mainPlayer, "leader=1");
+        AddDecisionQueue("MZFILTER", $mainPlayer, "status=1");
         AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a non-leader unit to exhaust");
         AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $mainPlayer, "REST", 1);
@@ -2054,7 +2065,7 @@ function SpecificAllyAttackAbilities($attackID)
         break;
       case "3282713547"://Dengar pilot
         $damage = TraitContains($attackerAlly->CardID(), "Underworld", $mainPlayer) ? 3 : 2;
-        IndirectDamage($defPlayer, $damage, true);
+        IndirectDamage($defPlayer, $damage, true, $attackerAlly->UniqueID());
         break;
       case "4573745395"://Bossk pilot
         if(IsAllyAttackTarget()) {
@@ -2212,7 +2223,7 @@ function SpecificAllyAttackAbilities($attackID)
       AddCurrentTurnEffect("6570091935", $mainPlayer, from:"PLAY");
       break;
     case "51e8757e4c"://Sabine Wren Leader Unit
-      DealDamageAsync($defPlayer, 1, "DAMAGE", "51e8757e4c");
+      DealDamageAsync($defPlayer, 1, "DAMAGE", "51e8757e4c", sourcePlayer:$mainPlayer);
       break;
     case "3389903389"://Black One JTL
       if (ControlsNamedCard($mainPlayer, "Poe Dameron")) {
@@ -2830,13 +2841,13 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MZOP", $mainPlayer, DamageStringBuilder("{0}", $mainPlayer, isUnitEffect:1), 1);
       break;
     case "7831643253"://Red Squadron Y-Wing
-      IndirectDamage($defPlayer, 3, true);
+      IndirectDamage($defPlayer, 3, true, $attackerAlly->UniqueID());
       break;
     case "6861397107"://First Order Stormtrooper
-      IndirectDamage($defPlayer, 1, true);
+      IndirectDamage($defPlayer, 1, true, $attackerAlly->UniqueID());
       break;
     case "3504944818"://Tie Bomber
-      IndirectDamage($defPlayer, 3, true);
+      IndirectDamage($defPlayer, 3, true, $attackerAlly->UniqueID());
       break;
     case "1990020761"://Shuttle Tydirium
       $card = Mill($mainPlayer, 1);
@@ -2850,7 +2861,7 @@ function SpecificAllyAttackAbilities($attackID)
       break;
     case "6648978613"://Fett's Firespray (Feared Silhouettte)
       $damage = ControlsNamedCard($mainPlayer, "Boba Fett") ? 2 : 1;
-      IndirectDamage($defPlayer, $damage, true);
+      IndirectDamage($defPlayer, $damage, true, $attackerAlly->UniqueID());
       break;
     case "4573745395"://Bossk
       if(IsAllyAttackTarget()) {
@@ -2872,7 +2883,7 @@ function SpecificAllyAttackAbilities($attackID)
       break;
     case "9611596703"://Allegiant General Pryde
       if($initiativePlayer == $mainPlayer) {
-        IndirectDamage($defPlayer, 2, true);
+        IndirectDamage($defPlayer, 2, true, $attackerAlly->UniqueID());
       }
       break;
     case "590b638b18"://Rose Tico leader unit
@@ -2938,7 +2949,7 @@ function SpecificAllyAttackAbilities($attackID)
       break;
     case "6228218834"://Tactical Heavy Bomber
       AddCurrentTurnEffect("6228218834", $mainPlayer, 'PLAY');
-      IndirectDamage($defPlayer, $attackerAlly->CurrentPower(), true);
+      IndirectDamage($defPlayer, $attackerAlly->CurrentPower(), true, $attackerAlly->UniqueID());
       break;
     case "4147863169"://Relentless Firespray
       if($attackerAlly->Exists() && $attackerAlly->NumUses() > 0) {
@@ -2957,6 +2968,29 @@ function SpecificAllyAttackAbilities($attackID)
       break;
     case "3310100725"://Insurgent Saboteurs
       DefeatUpgrade($mainPlayer, true);
+      break;
+    case "7232609585"://Supporting Eta-2
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:arena=Ground&THEIRALLY:arena=Ground");
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "WRITECHOICE", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "GETUNIQUEID", 1);
+      AddDecisionQueue("ADDLIMITEDCURRENTEFFECT", $mainPlayer, "7232609585,HAND", 1);
+      break;
+    case "2644994192"://Hondo Ohnaka
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:hasUpgradeOnly=true&THEIRALLY:hasUpgradeOnly=true");
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to take an upgrade from.");
+      AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("SETDQVAR", $mainPlayer, "1", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "GETUPGRADES", 1);
+      AddDecisionQueue("FILTER", $mainPlayer, "LastResult-exclude-trait-Pilot", 1);
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose an upgrade to take.", 1);
+      AddDecisionQueue("CHOOSECARD", $mainPlayer, "<-", 1);
+      AddDecisionQueue("SETDQVAR", $mainPlayer, "0", 1);
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY");
+      AddDecisionQueue("MZFILTER", $mainPlayer, "canAttach={0}", 1);
+      AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to move <0> to.", 1);
+      AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "MOVEUPGRADE", 1);
       break;
   }
 

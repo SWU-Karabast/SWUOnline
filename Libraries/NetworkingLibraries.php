@@ -201,6 +201,8 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
         }
         $skipWriteGamestate = ResolveMultichooseXSet($onlyUnits, $onlyUnitsChkInput, $input);
         if ($includeBase) array_unshift($input, "BASE");
+      } else if($turn[0] == "MULTICHOOSEMULTIZONE") {
+        $skipWriteGamestate = ResolveMultiChooseMultizone($turn[2], $chkInput, $input);
       } else {
         $skipWriteGamestate = ResolveMultichooseXSet($turn[2], $chkInput, $input);
       }
@@ -987,7 +989,7 @@ function ResolveMultiTarget(Ally $attacker, $mainPlayer, $defPlayer)
     $attackerDestroyed = $attackerDestroyed || $attacker->DealDamage($defDamage, fromCombat: true, enemyDamage: true, fromUnitEffect: true);
     if ($destroyed) {
       if ($hasOverwhelm && $excess > 0) {
-        DealDamageAsync($defPlayer, $excess, "OVERWHELM", $attackerID);
+        DealDamageAsync($defPlayer, $excess, "OVERWHELM", $attackerID, sourcePlayer: $mainPlayer);
         WriteLog("OVERWHELM : <span style='color:Crimson;'>$excess damage</span> done on base");
       }
       for ($j = $i; $j < $numTargets; ++$j) {
@@ -1015,7 +1017,7 @@ function ResolveSingleTarget($mainPlayer, $defPlayer, $target, $attackerPrefix, 
 
   if ($target == "THEIRALLY--1") {//Means the target was already destroyed
     if ($hasOverwhelm) {
-      DealDamageAsync($defPlayer, $totalAttack, "OVERWHELM", $attackerID);
+      DealDamageAsync($defPlayer, $totalAttack, "OVERWHELM", $attackerID, sourcePlayer:$mainPlayer);
       WriteLog("OVERWHELM : <span style='color:Crimson;'>$totalAttack damage</span> done on base");
     } else if ($attackerID == "3830969722") { //Blizzard Assault AT-AT
       BlizzardAssaultATAT($mainPlayer, $totalAttack);
@@ -1055,7 +1057,7 @@ function ResolveSingleTarget($mainPlayer, $defPlayer, $target, $attackerPrefix, 
       }
     }
     if ($hasOverwhelm && $destroyed) {
-      DealDamageAsync($defPlayer, $excess, "OVERWHELM", $attackerID);
+      DealDamageAsync($defPlayer, $excess, "OVERWHELM", $attackerID, sourcePlayer: $mainPlayer);
       WriteLog("OVERWHELM : <span style='color:Crimson;'>$excess damage</span> done on base");
     } else if ($attackerID == "3830969722") { //Blizzard Assault AT-AT
       BlizzardAssaultATAT($mainPlayer, $excess);
@@ -1167,6 +1169,27 @@ function ResolveCombatDamage($damageDone)
   }
   $currentPlayer = $mainPlayer;
   ProcessDecisionQueue(); //Any combat related decision queue logic should be main player gamestate
+}
+
+function ResolveMultiChooseMultizone($data, $chkInput, &$input) {
+  $dataArr = explode("-", $data);
+  $max = intval($dataArr[0]);
+  $options = explode(",", implode("-", array_slice($dataArr, 1)));
+  if(count($chkInput) > $max) {
+    WriteLog("You selected " . count($chkInput) . " items, but a maximum of " . $max . " is allowed. Reverting gamestate prior to that effect.");
+    RevertGamestate();
+    return true;
+  }
+  for ($i = 0; $i < count($chkInput); ++$i) {
+    if ($chkInput[$i] < 0 || $chkInput[$i] >= count($options)) {
+      WriteLog("You selected option " . $chkInput[$i] . " but that was not one of the original options. Reverting gamestate prior to that effect.");
+      RevertGamestate();
+      return true;
+    } else {
+      $input[] = $options[$chkInput[$i]];
+    }
+  }
+  return false;
 }
 
 function ResolveMultichooseXSet($data, $chkInput, &$input) {
@@ -1754,13 +1777,22 @@ function AddPrePitchDecisionQueue($cardID, $from, $index = -1, $skipAbilityType 
   if (!$skipAbilityType && IsStaticType(CardType($cardID), $from, $cardID)) {
     $names = $oppCardActive ? GetOpponentControlledAbilityNames($cardID) : GetAbilityNames($cardID, $index, validate: true);
     if ($names != "") {
+      AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose which ability to activate");
+      AddDecisionQueue("BUTTONINPUT", $currentPlayer, $names);
+
+      if (LeaderCanPilot($cardID)) {
+        AddDecisionQueue("SETDQVAR", $currentPlayer, "0");
+        AddDecisionQueue("SETDQVAR", $currentPlayer, "1");
+        AddDecisionQueue("NOTEQUALPASS", $currentPlayer, "Deploy");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose to deploy as a pilot or unit", 1);
+        AddDecisionQueue("BUTTONINPUT", $currentPlayer, "Pilot,Unit", 1);
+        AddDecisionQueue("SETDQVAR", $currentPlayer, "1", 1);
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, "{0}");
+      }
+
       if (!$oppCardActive) {
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose which ability to activate");
-        AddDecisionQueue("BUTTONINPUT", $currentPlayer, $names);
         AddDecisionQueue("SETABILITYTYPE", $currentPlayer, $cardID);
       } else {
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose which ability to activate");
-        AddDecisionQueue("BUTTONINPUT", $currentPlayer, $names);
         AddDecisionQueue("SETABILITYTYPEOPP", $currentPlayer, $cardID);
       }
     }
@@ -1782,9 +1814,9 @@ function AddPrePitchDecisionQueue($cardID, $from, $index = -1, $skipAbilityType 
     $pilotCost = PilotingCost($cardID, $currentPlayer);
     if ($pilotCost >= 0 && !CurrentTurnEffectsPlayingUnit($currentPlayer)) {
       if (!SearchCurrentTurnEffects("0011262813", $currentPlayer)) {//Wedge Antilles Leader
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose if you want to play this unit as a pilot?");
-        AddDecisionQueue("YESNO", $currentPlayer, "if you want to play this unit as a pilot");
-        AddDecisionQueue("NOPASS", $currentPlayer, "-");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose to play as a pilot or unit");
+        AddDecisionQueue("BUTTONINPUT", $currentPlayer, "Pilot,Unit");
+        AddDecisionQueue("NOTEQUALPASS", $currentPlayer, "Pilot");
         AddDecisionQueue("PASSPARAMETER", $currentPlayer, 1, 1);
       } else {
         AddDecisionQueue("PASSPARAMETER", $currentPlayer, 1, 1);
@@ -1833,17 +1865,31 @@ function AddPrePitchDecisionQueue($cardID, $from, $index = -1, $skipAbilityType 
 
 function GetTargetsForAttack(Ally $attacker, bool $canAttackBase)
 {
-  global $mainPlayer;
+  global $mainPlayer, $currentTurnEffects;
 
   $defPlayer = $mainPlayer == 1 ? 2 : 1;
   $targets = $canAttackBase ? "THEIRCHAR-0" : "";
   $sentinelTargets = "";
-
   // Check upgrades
-  $attackerUpgrades = $attacker->GetUpgrades();
-  for ($i = 0; $i < count($attackerUpgrades); ++$i) {
-    if ($attackerUpgrades[$i] == "3099663280") { //Entrenched
-      $targets = "";
+  if($targets != "") {
+    $attackerUpgrades = $attacker->GetUpgrades();
+    for ($i = 0; $i < count($attackerUpgrades); ++$i) {
+      if ($attackerUpgrades[$i] == "3099663280") { //Entrenched
+        $targets = "";
+      }
+    }
+  }
+  //check current phase effects
+  if($targets != "") {
+    for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnEffectPieces()) {
+      switch($currentTurnEffects[$i]) {
+        case "2948553808"://Fly Casual
+        case "5841647666"://Scramble Fighters
+          if($attacker->UniqueID() == $currentTurnEffects[$i+2]) $targets = "";
+          break;
+        default:
+          break;
+      }
     }
   }
 

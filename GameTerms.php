@@ -84,6 +84,8 @@ function TypeToPlay($phase)
       return "unit";
     case "MULTICHOOSEOURUNITS":
       return "unit";
+    case "MULTICHOOSEMULTIZONE":
+      return "card";
     case "MULTICHOOSEMYUNITSANDBASE":
       return "unit and/or base";
     case "MULTICHOOSETHEIRUNITSANDBASE":
