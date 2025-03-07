@@ -180,7 +180,7 @@ include_once 'Header.php';
       <div style='vertical-align:middle; text-align:center;'>
         <img src="./Images/TWI Starter.png" width="320">
         <h3 style="margin: 15px 0; display: block;">We got a new look!</h3>
-        <p>Petranaki.net will continue to be maintained by familiar devs OotTheMonk, Brubraz, ninin, Leobraz and LVE while Karabast.net will be reserved for the New Engine Team and all the work they've been making excellent progress with! This is to ensure we still have the engine available to those who have been enjoying it in its current state</p>
+        <p>Join our new Discord server at <a href="https://discord.com/invite/AN5GEXSu" target="_blank" rel="noopener noreferrer">Petranaki</a> for the latest updates, news, and to share your feedback. We look forward to connecting with you!</p>
       </div>
     </div>
     <?php
@@ -193,7 +193,7 @@ include_once 'Header.php';
         <ins class="adsbygoogle"
             style="display:block"
             data-ad-client="ca-pub-8442966023291783"
-            data-ad-slot="5060625180"
+            data-ad-slot="5060625180"x
             data-ad-format="auto"
             data-full-width-responsive="true"></ins>
         <script>
