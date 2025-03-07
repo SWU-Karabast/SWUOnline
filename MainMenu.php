@@ -180,7 +180,7 @@ include_once 'Header.php';
       <div style='vertical-align:middle; text-align:center;'>
         <img src="./Images/TWI Starter.png" width="320">
         <h3 style="margin: 15px 0; display: block;">We got a new look!</h3>
-        <p>Join our new Discord server at <a href="https://discord.gg/uyHRx4BD" target="_blank" rel="noopener noreferrer">Petranaki</a> for the latest updates, news, and to share your feedback. We look forward to connecting with you!</p>
+        <p>Join our new Discord server at <a href="https://discord.gg/ep9fj8Vj3F" target="_blank" rel="noopener noreferrer">Petranaki</a> for the latest updates, news, and to share your feedback. We look forward to connecting with you!</p>
       </div>
     </div>
     <?php
