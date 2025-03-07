@@ -128,7 +128,7 @@ function IsNotAllowed($cardID, $format): bool {
       || in_array($cardID, $banned)
       ,
     //Only Commons, any unbanned leader, no rare bases, no special cards unless they have a common variant
-    Formats::$PadawanFormat => CardRarity($cardID) != "Common"
+    Formats::$PadawanFormat => !CardIDIsLeader($cardID) && CardRarity($cardID) != "Common"
       || !in_array(CardSet($cardID), $padawanRotation)
       || in_array($cardID, $banned)
       || IsRareBase($cardID)
