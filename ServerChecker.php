@@ -44,6 +44,10 @@ if ($handle = opendir($path)) {
       if ($currentTime - $lastGamestateUpdate < 30000) {
         $p1Hero = GetCachePiece($gameToken, 7);
         $p2Hero = GetCachePiece($gameToken, 8);
+        $p1Base = GetCachePiece($gameToken, 20);
+        $p2Base = GetCachePiece($gameToken, 21);
+        //$p1SecondHero = GetCachePiece($gameToken, 22);
+        //$p2SecondHero = GetCachePiece($gameToken, 23);
         //if($p2Hero != "") $gameInProgressCount += 1;
         $gameInProgressCount += 1;
         $visibility = GetCachePiece($gameToken, 9);
@@ -76,8 +80,10 @@ if ($handle = opendir($path)) {
           } else {
             $spectateLinks .= <<<HTML
               <img class='hero-image' src='./WebpImages2/$p1Hero.webp' alt='Player 1 Hero Image' />
+              <img class='hero-image' src='./WebpImages2/$p1Base.webp' alt='Player 1 Base Image' />
               <span class='versus'>vs</span>
               <img class='hero-image' src='./WebpImages2/$p2Hero.webp' alt='Player 2 Hero Image' />
+              <img class='hero-image' src='./WebpImages2/$p2Base.webp' alt='Player 2 Base Image' />
             HTML;
           }
 
@@ -127,13 +133,14 @@ if ($handle = opendir($path)) {
 
     if ($status == 0 && $visibility == "public" && intval(GetCachePiece($gameName, 11)) < 3) {
       $p1Hero = GetCachePiece($gameName, 7);
+      $p1Base = GetCachePiece($gameName, 20);
       $formatName = "";
-      if ($format == "commoner")
-        $formatName = "Commoner ";
-      else if ($format == "openform")
+      if ($format == "openform")
         $formatName = "Open Format ";
-      else if ($format == "clash")
-        $formatName = "Clash";
+      else if ($format == "sndcrawl")
+        $formatName == "Sandcrawler";
+      else if ($format == "padawanf")
+        $formatName = "Padawan Format ";
 
       $link = "<form style='text-align:center;' action='" . $redirectPath . "/JoinGame.php'>";
       $link .= "<table class='game-item' cellspacing='0'><tr>";
@@ -143,7 +150,26 @@ if ($handle = opendir($path)) {
       }
       $description = ($gameDescription == "" ? "Game #" . $gameName : $gameDescription);
       $link .= "<p>" . $description . "</p></td>";
-      $link .= "<td><input class='ServerChecker_Button' type='submit' id='joinGame' value='Join Game' /></td></tr>";
+      $link .= "<td>" . <<<HTML
+        <style>
+          .hero-container {
+            display: flex;
+            align-items: center;
+            column-gap: 10px
+          }
+
+          .hero-image {
+            height: 50px;
+            max-width: inherit;
+          }
+        </style>
+        <div class='hero-container'>
+          <img class='hero-image' src='./WebpImages2/$p1Hero.webp' alt='Player 1 Hero Image' />
+          <img class='hero-image' src='./WebpImages2/$p1Base.webp' alt='Player 1 Base Image' />
+        </div>
+      HTML
+      . "</td>";
+      $link .= "<td><input style='margin-left: 24px;' class='ServerChecker_Button' type='submit' id='joinGame' value='Join Game' /></td></tr>";
       $link .= "</table>";
       $link .= "<input type='hidden' name='gameName' value='$gameToken' />";
       $link .= "<input type='hidden' name='playerID' value='2' />";
@@ -182,9 +208,9 @@ if ($canSeeQueue) {
   echo ("<h3>Premier</h3>");
   echo ("<hr/>");
   echo ($ccLinks);
-  echo ("<h3>Request-Undo Premier</h3>");
-  echo ("<hr/>");
-  echo ($compCCLinks);
+  // echo ("<h3>Request-Undo Premier</h3>");
+  // echo ("<hr/>");
+  // echo ($compCCLinks);
   echo ("<h3>Other Formats</h3>");
   echo ("<hr/>");
   echo ($otherFormatsLinks);

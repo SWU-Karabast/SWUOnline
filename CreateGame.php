@@ -77,11 +77,6 @@ if(isset($_SESSION["userid"]))
 }
 
 session_write_close();
-if($isUserBanned) {
-  if($format == "premierf" || $format == "openform") $format = "shadowcc";
-  //else if($format == "reqsundo") $format = "shadowcompcc";
-  else if($format == "blitz" || $format == "compblitz" || $format == "commoner") $format = "shadowblitz";
-}
 
 $gameName = GetGameCounter();
 
@@ -123,5 +118,5 @@ CreateLog($gameName);
 
 $currentTime = round(microtime(true) * 1000);
 $cacheVisibility = ($visibility == "public" ? "1" : "0");
-WriteCache($gameName, 1 . "!" . $currentTime . "!" . $currentTime . "!0!-1!" . $currentTime . "!!!" . $cacheVisibility . "!0!0!0!" . FormatCode($format) . "!" . $gameStatus . "!0!0!$currentTime!0!0"); //Initialize SHMOP cache for this game
+WriteCache($gameName, 1 . "!" . $currentTime . "!" . $currentTime . "!0!-1!" . $currentTime . "!!!" . $cacheVisibility . "!0!0!0!" . FormatCode($format) . "!" . $gameStatus . "!0!0!$currentTime!0!0!!!!"); //Initialize SHMOP cache for this game
 header("Location:" . $redirectPath . "/JoinGameInput.php?gameName=$gameName&playerID=1&deck=$deck&fabdb=$decklink&format=$format&set=$set&decksToTry=$decksToTry&favoriteDeck=$favoriteDeck&favoriteDecks=$favoriteDeckLink");

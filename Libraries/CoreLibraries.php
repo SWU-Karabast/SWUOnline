@@ -23,7 +23,7 @@ function ArrayShares(array $list1, array $list2): bool {
 function RandomizeArray(&$arr, $skipSeed = false){
   global $randomSeeded;
   if(!$randomSeeded) SeedRandom();
-  
+
   $n = count($arr);
   for ($i = $n - 1; $i > 0; $i--) {
     $j = $skipSeed ? random_int(0, $i) : mt_rand(0, $i);

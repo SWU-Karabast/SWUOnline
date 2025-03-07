@@ -16,7 +16,25 @@ if (isset($_SESSION["userid"]) && IsBanned($_SESSION["userid"])) {
 if (!empty($_SESSION['error'])) {
   $error = $_SESSION['error'];
   unset($_SESSION['error']);
-  echo "<script>alert('" . $error . "')</script>";
+    echo "<script>
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('mainMenuError').innerHTML = '$error';
+      document.getElementById('mainMenuError').classList.remove('error-popup-hidden');
+      document.getElementById('mainMenuError').classList.add('error-popup');
+    });
+
+    setTimeout(function() {
+      document.getElementById('mainMenuError').classList.remove('error-popup');
+      document.getElementById('mainMenuError').classList.add('error-popup-hidden');
+    }, 10000);
+
+    document.addEventListener('click', function(event) {
+      if (!event.target.closest('#mainMenuError')) {
+        document.getElementById('mainMenuError').classList.remove('error-popup');
+        document.getElementById('mainMenuError').classList.add('error-popup-hidden');
+      }
+    });
+  </script>";
 }
 
 $language = TryGet("language", 1);
@@ -60,7 +78,8 @@ include_once 'Header.php';
       ?>
     </div>
   </div>
-
+  <div id="mainMenuError" class="error-popup-hidden">
+  </div>
   <div class='create-game-wrapper'>
   <?php
 
@@ -119,6 +138,8 @@ include_once 'Header.php';
     //echo ("<option value='reqsundo' " . ($defaultFormat == 1 ? " selected" : "") . ">Request-Undo Premier</option>");
   }
   echo ("<option value='openform'" . ($defaultFormat == 4 ? " selected" : "") . ">Open Format</option>");
+  echo ("<option value='sndcrawl'" . ($defaultFormat == 3 ? " selected" : "") . ">Sandcrawler</option>");
+  echo ("<option value='padawanf'" . ($defaultFormat == 5 ? " selected" : "") . ">Padawan</option>");
   echo ("</select>");
   ?>
 
