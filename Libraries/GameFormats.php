@@ -19,11 +19,12 @@ class DeckValidation {
     $this->_sideboardString = $sideboardString;
   }
 
-  public function Error() {
+  public function Error($format) {
+    $display = str_replace(" Format", "", FormatDisplayName($format));
     return match($this->_errorCode) {
       ValidationCode::DeckSize => "⚠️ Your deck does not meet the minimum size requirement",
       ValidationCode::SideboardSize => "⚠️ Your sideboard exceeds the maximum size",
-      ValidationCode::FormatInvalid => "⚠️ Your deck contains cards that are not allowed in the ??? Format",
+      ValidationCode::FormatInvalid => "⚠️ Your deck contains cards that are not allowed in the $display Format",
       default => "",
     };
   }
@@ -62,8 +63,6 @@ function ValidateDeck($format, $usesUuid, $leader, $base, $deckArr, $sideboardAr
     if(IsNotAllowed($cardID, $format)) {
       if(!in_array($cardID, $invalidCards)) $invalidCards[] = $cardID;
     }
-    //if not common oor uncommon
-    //iif not common
     for($j=0; $j<$deckArr[$i]->count; ++$j) {
       if($cards != "") $cards .= " ";
       $cards .= $cardID;
@@ -89,8 +88,7 @@ function ValidateDeck($format, $usesUuid, $leader, $base, $deckArr, $sideboardAr
       if($sideboardCards != "") $sideboardCards .= " ";
       $sideboardCards .= $cardID;
     }
-    //if not common oor uncommon
-    //iif not common
+
     if($sideboardSize > 10 && $format != Formats::$OpenFormat) {
       return new DeckValidation(ValidationCode::SideboardSize, [], "", "");
     }
@@ -129,7 +127,7 @@ function IsNotAllowed($cardID, $format): bool {
       ,
     //Only Uncommons and Commons, any unbanned leader, no rare bases, any special cards that aren't convention exclusives
     Formats::$SandcrawlerFormat => CardRarity ($cardID) == "Rare" || CardRarity($cardID) == "Legendary"
-      || !in_array(CardSet($cardID), $sandcrawlerRotation )
+      || !in_array(CardSet($cardID), $sandcrawlerRotation)
       || in_array($cardID, $banned)
       || IsRareBase($cardID)
       ,
@@ -154,6 +152,16 @@ function IsRareBase($cardID) {
     ,"1672815328"//Lake Country
       => true,
     default => false
+  };
+}
+
+function FormatDisplayName($format) {
+  return match($format) {
+    Formats::$PremierFormat => "Premier",
+    Formats::$PadawanFormat => "Padawan",
+    Formats::$SandcrawlerFormat => "Sandcrawler",
+    Formats::$OpenFormat => "Open Format",
+    default => "Unknown",
   };
 }
 

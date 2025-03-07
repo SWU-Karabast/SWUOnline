@@ -186,7 +186,7 @@ if ($decklink != "") {
   }
   $validation = ValidateDeck($format, $usesUuid, $leader, $base, $deck, $sideboard);
   if (!$validation->IsValid()) {
-    $_SESSION['error'] = "<div>" . ParseFormatError($format, $validation->Error()) . "</div>";
+    $_SESSION['error'] = "<div>" . $validation->Error($format) . "</div>";
     if(count($validation->InvalidCards()) > 0)
       $_SESSION['error'] .= "<div><h2>Invalid Cards:</h2><ul>"
         . implode("", array_map(function($x) {
@@ -286,16 +286,6 @@ function JsHtmlTitleAndSub($cardID) {
   $forJS = CardTitle($cardID);
   if(CardSubtitle($cardID) != "") $forJS .= " (" . CardSubtitle($cardID) . ")";
   return str_replace("'", "\'", $forJS);
-}
-
-function ParseFormatError($format, $str) {
-  $replaceWith = match($format) {
-    "premierf" => "Premier",
-    "openf" => "Open",
-    "padawanf" => "Padawan",
-    "sndcrawl" => "Sandcrawler"
-  };
-  return str_replace("???", $replaceWith, $str);
 }
 
 function CardIDOverride($cardID) {

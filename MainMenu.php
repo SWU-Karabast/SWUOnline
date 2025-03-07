@@ -6,6 +6,7 @@ include_once "Libraries/PlayerSettings.php";
 include_once 'Assets/patreon-php-master/src/PatreonDictionary.php';
 include_once "APIKeys/APIKeys.php";
 include_once './AccountFiles/AccountDatabaseAPI.php';
+include_once 'Libraries/GameFormats.php';
 
 // Check if the user is banned
 if (isset($_SESSION["userid"]) && IsBanned($_SESSION["userid"])) {
@@ -133,13 +134,12 @@ include_once 'Header.php';
   <?php
   echo ("<label for='format' class='SelectDeckInput'>Format</label>");
   echo ("<select name='format' id='format' onchange='toggleInfoBox()'>");
-  if ($canSeeQueue) {
-    echo ("<option value='premierf' " . ($defaultFormat == 0 ? " selected" : "") . ">Premier</option>");
-    //echo ("<option value='reqsundo' " . ($defaultFormat == 1 ? " selected" : "") . ">Request-Undo Premier</option>");
-  }
-  echo ("<option value='openform'" . ($defaultFormat == 4 ? " selected" : "") . ">Open Format</option>");
-  echo ("<option value='sndcrawl'" . ($defaultFormat == 3 ? " selected" : "") . ">Sandcrawler</option>");
-  echo ("<option value='padawanf'" . ($defaultFormat == 5 ? " selected" : "") . ">Padawan</option>");
+  if ($canSeeQueue) echo ("<option value='premierf' " . ($defaultFormat == 0 ? " selected" : "") . ">Premier</option>");
+  $funFormatIndex = 5;//see FormatName function and related functions for index to rotate
+  $funFormatBackendName = FormatName($funFormatIndex);
+  $funFormatDisplayName = FormatDisplayName($funFormatBackendName);
+  echo ("<option value='openform'" . ($defaultFormat == 4 ? " selected" : "") . ">" . FormatDisplayName(FormatName(4)) . "</option>");
+  if($canSeeQueue) echo ("<option value='$funFormatBackendName'" . ">Cantina Brawl ($funFormatDisplayName)</option>");
   echo ("</select>");
   ?>
 
