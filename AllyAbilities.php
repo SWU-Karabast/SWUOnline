@@ -417,7 +417,7 @@ function DestroyAlly($player, $index,
   $isSuperlaserTech = $cardID === "8954587682";
   $isL337JTL = $cardID == "6032641503";
   $discardPileModifier = "-";
-  if(!$skipDestroy && !($isL337JTL && !$skipSpecialCase)) {
+  if(!$skipDestroy && !$isL337JTL || $skipSpecialCase) {
     OnKillAbility($player, $uniqueID);
     $whenDestroyData="";$whenResourceData="";$whenBountiedData="";
     $shouldLayerDestroyTriggers = (HasWhenDestroyed($cardID) && !$isSuperlaserTech && !GivesWhenDestroyedToAllies($cardID))
@@ -454,9 +454,7 @@ function DestroyAlly($player, $index,
     AppendClassState($player, $CS_AlliesDestroyed, $cardID);
   } else if (!$skipDestroy && $isL337JTL && !$skipSpecialCase) {
     if(SearchCount(SearchAllies($player, trait:"Vehicle")) > 0) {
-      AddDecisionQueue("SETDQCONTEXT", $player, "Move L3's brain to a vehicle?", 1);
-      AddDecisionQueue("YESNO", $player, "-", 1);
-      AddDecisionQueue("SPECIFICCARD", $player, "L337_JTL", 1);
+      AddLayer("TRIGGER", $player, $cardID, $uniqueID);
     } else {
       DestroyAlly($player, $index, skipSpecialCase:true);
     }

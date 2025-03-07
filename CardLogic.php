@@ -927,6 +927,10 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       $targetAlly = new Ally($target);
       DefeatUpgrade($player, may:true, upgradeFilter:"unique=1", mzIndex:$targetAlly->MZIndex());
       break;
+    case "6032641503"://L3-37
+      AddDecisionQueue("SETDQCONTEXT", $player, "Move L3's brain to a vehicle?");
+      AddDecisionQueue("YESNO", $player, "-", 1);
+      AddDecisionQueue("SPECIFICCARD", $player, "L337_JTL,$target", 1);
     default: break;
   }
 }
@@ -1456,7 +1460,7 @@ function IndirectDamage($player, $amount, $fromUnitEffect=false, $uniqueID="", $
   $sourcePlayer = $player == 1 ? 2 : 1;
   $amount += SearchCount(SearchAlliesForCard($sourcePlayer, "4560739921"));//Hunting Aggressor
   if(SearchCount(SearchAlliesForCard($sourcePlayer, "1330473789")) > 0) $sourcePlayerTargets = true;
-  IncrementClassState($sourcePlayer, $CS_NumIndirectDamageGiven); 
+  IncrementClassState($sourcePlayer, $CS_NumIndirectDamageGiven);
   if(!$sourcePlayerTargets && $uniqueID != "") {
     $sourceIndex = SearchAlliesForUniqueID($uniqueID, $sourcePlayer);
     $ally = new Ally("MYALLY-" . $sourceIndex, $sourcePlayer);

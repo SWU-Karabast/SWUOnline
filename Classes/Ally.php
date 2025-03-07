@@ -174,7 +174,10 @@ class Ally {
   //Returns true if the ally is destroyed
   function DefeatIfNoRemainingHP() {
     if (!$this->Exists()) return true;
-    if ($this->Health() <= 0 && ($this->CardID() != "d1a7b76ae7" || $this->LostAbilities()) && ($this->CardID() != "0345124206")) {  //Clone - Ensure that Clone remains in play while resolving its ability
+    if ($this->Health() <= 0
+        && ($this->CardID() != "d1a7b76ae7" || $this->LostAbilities())//Chirrut Imwe Leader
+        && ($this->CardID() != "6032641503" || $this->LostAbilities())//L3-37 JTL
+        && ($this->CardID() != "0345124206")) {  //Clone - Ensure that Clone remains in play while resolving its ability
       DestroyAlly($this->playerID, $this->index);
       return true;
     }
