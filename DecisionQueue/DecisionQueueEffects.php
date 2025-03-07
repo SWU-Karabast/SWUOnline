@@ -1105,7 +1105,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       AddDecisionQueue("MZOP", $player, DamageStringBuilder($damage, $player, isUnitEffect:1), 1);
       break;
     case "L337_JTL":
-      $L3Ally = Ally::FromMyIndex(SearchAlliesForCard($player, "6032641503"), $player);
+      $L3Ally = Ally::FromUniqueId($parameterArr[1]);
       if($lastResult == "YES") {
         AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:trait=Vehicle");
         AddDecisionQueue("MZFILTER", $player, "hasPilot=1");
