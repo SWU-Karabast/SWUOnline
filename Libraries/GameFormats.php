@@ -72,13 +72,13 @@ function ValidateDeck($format, $usesUuid, $leader, $base, $deckArr, $sideboardAr
   if($deckSize < (50 + DeckModifier($base)) && $format != Formats::$OpenFormat) {
     return new DeckValidation(ValidationCode::DeckSize, [], "", "");
   }
-  $sidebaordize = 0;
+  $sideboardSize = 0;
   $sideboardCards = "";
   for($i=0; $i<count($sideboardArr); ++$i) {
     if($usesUuid) $sideboardArr[$i]->id = CardIDLookup($sideboardArr[$i]->id);
     $sideboardArr[$i]->id = CardIDOverride($sideboardArr[$i]->id);
     $cardID = CardUUIDOverride(UUIDLookup($sideboardArr[$i]->id));
-    $sidebaordize += $sideboardArr[$i]->count;
+    $sideboardSize += $sideboardArr[$i]->count;
     if(CardSet($cardID) == $previewSet && $format != Formats::$OpenFormat) {
       if(!in_array($cardID, $invalidCards)) $invalidCards[] = $cardID;
     }
@@ -91,7 +91,7 @@ function ValidateDeck($format, $usesUuid, $leader, $base, $deckArr, $sideboardAr
     }
     //if not common oor uncommon
     //iif not common
-    if($sidebaordize > 10 && $format != Formats::$OpenFormat) {
+    if($sideboardSize > 10 && $format != Formats::$OpenFormat) {
       return new DeckValidation(ValidationCode::SideboardSize, [], "", "");
     }
   }
