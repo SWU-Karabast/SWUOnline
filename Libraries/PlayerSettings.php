@@ -267,7 +267,7 @@ function GetCardBack($player)
     case 33:
       return "CB_OuterRimCCG";
     case 34:
-      return "Central Spacers";
+      return "Central";
     default:
       return "CardBack";
   }
