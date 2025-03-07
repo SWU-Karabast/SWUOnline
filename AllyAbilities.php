@@ -2,19 +2,19 @@
 require __DIR__ . "/Libraries/LayerHelpers.php";
 
 function CreateCloneTrooper($player, $from = "-") {
-  return PlayAlly("3941784506", $player, from:$from); //Clone Trooper
+  return PlayAlly("3941784506", $player, from:$from, playAbility:true); //Clone Trooper
 }
 
 function CreateBattleDroid($player, $from = "-") {
-  return PlayAlly("3463348370", $player, from:$from); //Battle Droid
+  return PlayAlly("3463348370", $player, from:$from, playAbility:true); //Battle Droid
 }
 
 function CreateXWing($player, $from = "-") {
-  return PlayAlly("9415311381", $player, from:$from); //X-Wing
+  return PlayAlly("9415311381", $player, from:$from, playAbility:true); //X-Wing
 }
 
 function CreateTieFighter($player, $from = "-") {
-  return PlayAlly("7268926664", $player, from:$from); //Tie Fighter
+  return PlayAlly("7268926664", $player, from:$from, playAbility:true); //Tie Fighter
 }
 
 // This function put an ally into play for a player, which means no when played abilities are triggered.
