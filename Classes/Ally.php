@@ -597,8 +597,6 @@ class Ally {
         if($allyDestroyed) $this->index = min(0, $this->index - AllyPieces());
         if($cardID == "0979322247")//Sidon Ithano
           $this->DefeatIfNoRemainingHP();
-        if($cardID == "5306772000")//Phantom II
-          AddPermanentEffect($cardID, $this->Controller(), uniqueID:$this->UniqueID());
       }
     }
     //Pilot attach side effects
@@ -853,6 +851,16 @@ class Ally {
 
   function HasBounty(): bool {
     if(!$this->LostAbilities()) return CollectBounties($this->PlayerID(), $this->CardID(), $this->UniqueID(), $this->IsExhausted(), $this->Owner(), $this->GetUpgrades(), reportMode:true) > 0;
+    return false;
+  }
+
+  function IsSpectreWithGhostBounty(): bool {
+    //The Ghost JTL
+    $theGhostIndex = SearchAlliesForCard($this->Controller(), "5763330426");
+    if($theGhostIndex != "" && TraitContains($this->CardID(), "Spectre", $this->Controller()) && $this->Index() != $theGhostIndex) {
+      $theGhost = new Ally("MYALLY-" . $theGhostIndex, $this->Controller());
+      return $theGhost->HasBounty();
+    }
     return false;
   }
 

@@ -2248,7 +2248,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
       }
     }
     if ($from != "PLAY" && $from != "EQUIP" && $from != "CHAR") {
-      if (HasShielded($cardID, $currentPlayer)) {
+      if (HasShielded($cardID, $currentPlayer, $index)) {
         AddLayer("TRIGGER", $currentPlayer, "SHIELDED", "-", "-", $uniqueID);
       }
       if (HasAmbush($cardID, $currentPlayer, $index, $from)) {
