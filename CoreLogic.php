@@ -2426,6 +2426,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       Mill($otherPlayer, ceil($ally->Health()/2));
       return "";
     } else if ($abilityName == "Poe Pilot") {
+      global $CS_OppCardActive;
+      if(GetClassState($currentPlayer, $CS_OppCardActive) == "1") {
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, -1, 1);
+        AddDecisionQueue("SETCLASSSTATE", $currentPlayer, $CS_OppCardActive, 1);
+      }
       DecrementClassState($currentPlayer, $CS_NumUsesLeaderUpgrade1, 1);
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "3eb545eb4b", 1);
       AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
