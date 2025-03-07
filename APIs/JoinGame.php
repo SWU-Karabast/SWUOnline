@@ -465,7 +465,8 @@ function IsCardBanned($cardID, $format)
           return true;
         default: return false;
       }
-    case "premierf": case "reqsundo":
+    case "premierf":
+    //case "reqsundo":
       switch($cardID) {
         case "MON001": case "MON003": //TODO:look into this for Boba Fett leader
           return true;

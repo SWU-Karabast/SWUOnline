@@ -160,9 +160,9 @@ if ($handle = opendir($path)) {
           case "premierf":
             $ccLinks .= $link;
             break;
-          case "reqsundo":
-            $compCCLinks .= $link;
-            break;
+          // case "reqsundo":
+          //   $compCCLinks .= $link;
+          //   break;
           default:
             if ($format != "shadowblitz" && $format != "shadowcc")
               $otherFormatsLinks .= $link;

@@ -79,7 +79,7 @@ if(isset($_SESSION["userid"]))
 session_write_close();
 if($isUserBanned) {
   if($format == "premierf" || $format == "openform") $format = "shadowcc";
-  else if($format == "reqsundo") $format = "shadowcompcc";
+  //else if($format == "reqsundo") $format = "shadowcompcc";
   else if($format == "blitz" || $format == "compblitz" || $format == "commoner") $format = "shadowblitz";
 }
 

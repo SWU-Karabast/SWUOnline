@@ -116,7 +116,7 @@ include_once 'Header.php';
   echo ("<select name='format' id='format' onchange='toggleInfoBox()'>");
   if ($canSeeQueue) {
     echo ("<option value='premierf' " . ($defaultFormat == 0 ? " selected" : "") . ">Premier</option>");
-    echo ("<option value='reqsundo' " . ($defaultFormat == 1 ? " selected" : "") . ">Request-Undo Premier</option>");
+    //echo ("<option value='reqsundo' " . ($defaultFormat == 1 ? " selected" : "") . ">Request-Undo Premier</option>");
   }
   echo ("<option value='openform'" . ($defaultFormat == 4 ? " selected" : "") . ">Open Format</option>");
   echo ("</select>");

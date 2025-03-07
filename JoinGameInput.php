@@ -391,13 +391,13 @@ function IsBanned($cardID, $format)
       }
       break;
     case "premierf":
-    case "reqsundo":
-      switch ($cardID) {
-        case "WTR152"://maybe add Boba Fett leader?
-          return true;
-        default:
-          return false;
-      }
+    // case "reqsundo":
+    //   switch ($cardID) {
+    //     case "WTR152"://maybe add Boba Fett leader?
+    //       return true;
+    //     default:
+    //       return false;
+    //   }
       break;
     case "commoner":
       switch ($cardID) {

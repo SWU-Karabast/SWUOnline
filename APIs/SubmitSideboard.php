@@ -66,7 +66,7 @@ $deck = (isset($submission->deck) ? implode(" ", $submission->deck) : "");
 
 $playerDeck = $submission->deck;
 $deckCount = count($playerDeck);//TODO: see if this gets called..
-if($deckCount < 60 && ($format == "premierf" || $format == "reqsundo" || $format == "llcc")) {
+if($deckCount < 60 && ($format == "premierf" /*|| $format == "reqsundo"*/ || $format == "llcc")) {
   $response->status = "FAIL";
   $response->deckError = "Unable to submit player " . $playerID . "'s deck. " . $deckCount . " cards selected is below the minimum.";
   echo json_encode($response);

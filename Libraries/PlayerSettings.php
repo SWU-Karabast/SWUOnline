@@ -655,8 +655,8 @@ function FormatCode($format)
   switch ($format) {
     case "premierf":
       return 0;
-    case "reqsundo":
-      return 1;
+    // case "reqsundo"://DEPRECATED
+    //   return 1;
     case "blitz":
       return 2;
     case "compblitz":
@@ -679,8 +679,8 @@ function FormatName($formatCode)
   switch ($formatCode) {
     case 0:
       return "premierf";
-    case 1:
-      return "reqsundo";
+    // case 1://DEPRECATED
+    //   return "reqsundo";
     case 2:
       return "blitz";
     case 3:
