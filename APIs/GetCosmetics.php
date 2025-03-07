@@ -143,6 +143,10 @@ $cardBack = new stdClass();
 $cardBack->name = "Enigma";
 $cardBack->id = 35;
 $response->cardBacks[] = $cardBack;
+$cardBack = new stdClass();
+$cardBack->name = "PrairiePirates";
+$cardBack->id = 36;
+$response->cardBacks[] = $cardBack;
 
 $response->playmats = [];
 if(IsUserLoggedIn()) {
