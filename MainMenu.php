@@ -159,7 +159,7 @@ include_once 'Header.php';
       <div style='vertical-align:middle; text-align:center;'>
         <img src="./Images/TWI Starter.png" width="320">
         <h3 style="margin: 15px 0; display: block;">We got a new look!</h3>
-        <p>Petranaki.net will continue to be maintained by familiar devs OotTheMonk, Brubraz, ninin, and LVE while Karabast.net will be reserved for the New Engine Team and all the work they've been making excellent progress with! This is to ensure we still have the engine available to those who have been enjoying it in its current state</p>
+        <p>Petranaki.net will continue to be maintained by familiar devs OotTheMonk, Brubraz, ninin, Leobraz and LVE while Karabast.net will be reserved for the New Engine Team and all the work they've been making excellent progress with! This is to ensure we still have the engine available to those who have been enjoying it in its current state</p>
       </div>
     </div>
     <?php
