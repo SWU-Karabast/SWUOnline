@@ -61,7 +61,7 @@ $isMobile = IsMobile();
         <div class='nav-bar-links'>
             <ul>
                 <?php
-                echo '<li><a target="_blank" href="https://discord.gg/AN5GEXSu"><img src="./Images/icons/discord.svg" alt="Discord"></a></li>';
+                echo '<li><a target="_blank" href="https://discord.gg/uyHRx4BD"><img src="./Images/icons/discord.svg" alt="Discord"></a></li>';
                 echo '<li><a target="_blank" href="https://github.com/SWU-Petranaki/SWUOnline"><img src="./Images/icons/github.svg" alt="GitHub"></a></li>';
                 echo '<li>
                 <a href="javascript:void(0);" onclick="toggleLanguages()">
