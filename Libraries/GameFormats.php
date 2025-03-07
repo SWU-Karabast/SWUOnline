@@ -47,8 +47,8 @@ class DeckValidation {
 
   public function RejectionDetail($format) {
     return match($format) {
-      Formats::$PadawanFormat => "Only Common cards are allowed, with the exception of Leaders. No Rare bases are allowed, and no special cards unless they have a common variant.",
-      Formats::$SandcrawlerFormat => "Only Uncommon and Common cards are allowed, with the exception of Leaders. No Rare bases are allowed, and any special cards that don't have a Rare or Legendary variant are allowed.",
+      Formats::$PadawanFormat => "Only Common cards are allowed, with the exception of Leaders. No Rare Bases are allowed, and no Special rarity cards unless they have a Common variant.",
+      Formats::$SandcrawlerFormat => "Only Uncommon and Common cards are allowed, with the exception of Leaders. No Rare Bases are allowed, and any Special rarity cards that don't have a Rare or Legendary variant are allowed.",
       default => "",
     };
   }
