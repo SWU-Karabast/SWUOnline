@@ -281,6 +281,7 @@ $CS_NumDragonAttacks = 53;             //free//number
 $CS_NumIllusionistAttacks = 54;       //free//number
 $CS_LastDynCost = 55;
 $CS_NumIllusionistActionCardAttacks = 56;//free//number
+$CS_NumIndirectDamageGiven = 57;
 $CS_LayerPlayIndex = 58;
 $CS_NumCardsPlayed = 59; //Amulet of Ignition
 $CS_NamesOfCardsPlayed = 60;          //free//string;default "-"
@@ -298,7 +299,7 @@ $CS_SeparatistUnitsThatAttacked = 71;
 $CS_AlliesDestroyed = 72; // List of allies (CardID) destroyed concatenated with a comma
 $CS_NumBountyHuntersPlayed = 73;
 $CS_NumPilotsPlayed = 74;
-$CS_NumIndirectDamageGiven = 57;
+
 
 
 function SetAfterPlayedBy($player, $cardID)
@@ -555,7 +556,7 @@ function ResetClassState($player)
   $classState[$CS_NumIllusionistAttacks] = 0;
   $classState[$CS_LastDynCost] = 0;
   $classState[$CS_NumIllusionistActionCardAttacks] = 0;
-  $classState[$CS_ArcaneDamageDealt] = 0;
+  $classState[$CS_NumIndirectDamageGiven] = 0;
   $classState[$CS_LayerPlayIndex] = -1;
   $classState[$CS_NumCardsPlayed] = 0;
   $classState[$CS_NamesOfCardsPlayed] = "-";
@@ -572,7 +573,7 @@ function ResetClassState($player)
   $classState[$CS_AlliesDestroyed] = "-";
   $classState[$CS_NumBountyHuntersPlayed] = 0;
   $classState[$CS_NumPilotsPlayed] = 0;
-  $classState[$CS_NumIndirectDamageGiven] = 0;
+
 }
 
 function ResetCharacterEffects()
