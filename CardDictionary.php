@@ -2819,21 +2819,3 @@ function DefinedCardType2Wrapper($cardID)
     default: return DefinedCardType2($cardID);
   }
 }
-
-//FAB
-// function HasDominate($cardID)
-// {
-//   global $mainPlayer, $combatChainState;
-//   switch ($cardID)
-//   {
-
-//     default: break;
-//   }
-//   return false;
-// }
-
-//FAB
-// function Rarity($cardID)
-// {
-//   return GeneratedRarity($cardID);
-// }

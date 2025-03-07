@@ -27,8 +27,9 @@
   $hasDestroyedArray = [];
   $setArray = [];
   $cardIDArray = [];
+  $cardRarityArray = [];
   $pos = 1;
-  
+
   $language = "EN";
 
   while ($hasMoreData)
@@ -71,7 +72,7 @@
       }
 
       AddToArrays($cardID, $card->cardUid);
-      
+
       //$imageUrl = "https://swudb.com/cards/" . $set . "/" . $cardNumber . ".png";
       $imageUrl = $card->artFront->data->attributes->formats->card->url;
       $imageWidth = $card->artFront->data->attributes->width;
@@ -97,21 +98,24 @@
         'TWI_291',
         'TWI_293',
     ];
+    $jtl_codes = [ //temp hardcode to skip OP
+
+    ];
       if ($card->artBack->data != null && !in_array($cardID, $twi_codes)) {
         $imageUrl = $card->artBack->data->attributes->formats->card->url;
-      
+
         $imageWidth = $card->artBack->data->attributes->width;
         $imageHeight = $card->artBack->data->attributes->height;
         $isLandscape = $imageWidth > $imageHeight;
         $arr = explode("_", $imageUrl);
         $arr = explode(".", $arr[count($arr)-1]);
         $uuid = $arr[0];
-        if ($language != 'EN'){ 
-          $uuid = getENUids($pos); 
+        if ($language != 'EN'){
+          $uuid = getENUids($pos);
         } //Other Language cards have different UIDS for leader flips
 
-        //if ($language == 'EN') saveENUids($uuid, $cardID); <--- Needed for when new leaders are spoiled.  
-        
+        //if ($language == 'EN') saveENUids($uuid, $cardID); <--- Needed for when new leaders are spoiled.
+
         CheckImage($uuid, $imageUrl, $language, isLandscape:$isLandscape, isBottomPosition:false);
         AddToArrays($cardID, $uuid);
       }
@@ -150,6 +154,7 @@
     $DEFAULT_CARD_HAS_WHEN_DESTROYED = false;
     $DEFAULT_CARD_SET = "";
     $DEFAULT_CARD_UUID = "";
+    $DEFAULT_CARD_RARITY = "";
 
     GenerateFunction($titleArray, $handler, "CardTitle", true, $DEFAULT_CARD_TITLE);
     GenerateFunction($subtitleArray, $handler, "CardSubtitle", true, $DEFAULT_CARD_SUBTITLE);
@@ -169,6 +174,7 @@
     GenerateFunction($setArray, $handler, "CardSet", true, $DEFAULT_CARD_SET);
     GenerateFunction($uuidLookupArray, $handler, "UUIDLookup", true, $DEFAULT_CARD_UUID);
     GenerateFunction($cardIDArray, $handler, "CardIDLookup", true, $DEFAULT_CARD_UUID);
+    GenerateFunction($cardRarityArray, $handler, "CardRarity", true, $DEFAULT_CARD_RARITY);
     GenerateCardTitles($titleArray, $handler);
     GenerateUnimplementedCards($handler);
     fwrite($handler, "?>");
@@ -190,14 +196,14 @@
       $cardId = pathinfo($filename, PATHINFO_FILENAME);
       $unimplementedCards[$cardId] = true;
     }
-    
+
     fwrite($handler, "function IsUnimplemented(\$cardID) {\r\n");
     fwrite($handler, "  \$unimplementedCards = " . var_export($unimplementedCards, true) . ";\r\n");
     fwrite($handler, "  return isset(\$unimplementedCards[\$cardID]);\r\n");
     fwrite($handler, "}\r\n");
   }
 
-  
+
   function GenerateCardTitles($titleArray, $handler) {
     echo "Generating CardTitles<br>";
     $uniqueTitles = array_unique($titleArray);
@@ -229,10 +235,10 @@
   {
     global $uuidLookupArray, $titleArray, $subtitleArray, $costArray, $hpArray, $powerArray, $upgradeHPArray, $upgradePowerArray;
     global $typeArray, $type2Array, $uniqueArray, $card, $aspectsArray, $traitsArray, $arenasArray, $hasPlayArray;
-    global $hasDestroyedArray, $setArray, $cardIDArray;
+    global $hasDestroyedArray, $setArray, $cardIDArray, $cardRarityArray;
     global $DEFAULT_CARD_TITLE, $DEFAULT_CARD_SUBTITLE, $DEFAULT_CARD_COST, $DEFAULT_CARD_HP, $DEFAULT_CARD_POWER, $DEFAULT_CARD_UPGRADE_HP;
     global $DEFAULT_CARD_UPGRADE_POWER, $DEFAULT_CARD_ASPECTS, $DEFAULT_CARD_TRAITS, $DEFAULT_CARD_ARENAS, $DEFAULT_CARD_TYPE, $DEFAULT_CARD_TYPE2;
-    global $DEFAULT_CARD_UNIQUE, $DEFAULT_CARD_HAS_WHEN_PLAYED, $DEFAULT_CARD_HAS_WHEN_DESTROYED, $DEFAULT_CARD_SET, $DEFAULT_CARD_UUID;
+    global $DEFAULT_CARD_UNIQUE, $DEFAULT_CARD_HAS_WHEN_PLAYED, $DEFAULT_CARD_HAS_WHEN_DESTROYED, $DEFAULT_CARD_SET, $DEFAULT_CARD_UUID, $DEFAULT_CARD_RARITY;
 
     // UUID Lookup
     if ($uuid != "8752877738" && $uuid != "2007868442" && $uuid != $DEFAULT_CARD_UUID && !isset($uuidLookupArray[$cardID])) {
@@ -298,6 +304,12 @@
     // Card ID
     if ($cardID && $cardID != $DEFAULT_CARD_UUID) {
       $cardIDArray[$uuid] = $cardID;
+    }
+
+    // Rarity
+    $rarity = $card->rarity->data->attributes->name;
+    if ($rarity && $rarity != $DEFAULT_CARD_RARITY) {
+      $cardRarityArray[$uuid] = $rarity;
     }
 
     // Unique
@@ -372,7 +384,7 @@ function getENUids($pos) {
         $lineNumber++;
         if ($lineNumber == $pos) {
             fclose($file);
-            return trim(explode(',', $line)[0]); 
+            return trim(explode(',', $line)[0]);
         }
     }
     fclose($file);

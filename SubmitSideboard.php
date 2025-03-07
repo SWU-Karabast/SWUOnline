@@ -39,24 +39,18 @@ if ($playerCharacter != "" && $playerDeck != "") //If they submitted before load
     else if(DefinedCardType($char[$i]) == "Leader") $leader = $char[$i];
   }
   //TODO: look into this for Data Vault
-  /*
-  if ($deckCount < 60 && ($format == "premierf" || $format == "reqsundo")) {
-    WriteLog("Unable to submit player " . $playerID . "'s deck. " . $deckCount . " cards selected is under the legal minimum.");
-    header("Location: " . $redirectPath . "/GameLobby.php?gameName=$gameName&playerID=$playerID");
-    exit;
-  }
-  if ($deckCount < 40 && ($format == "blitz" || $format == "compblitz" || $format == "commoner")) {
-    WriteLog("Unable to submit player " . $playerID . "'s deck. " . $deckCount . " cards selected is under the legal minimum.");
-    header("Location: " . $redirectPath . "/GameLobby.php?gameName=$gameName&playerID=$playerID");
-    exit;
-  }
+  // if ($deckCount < 50 && ($format == "premierf" || $format == "reqsundo")) {
+  //   WriteLog("Unable to submit player " . $playerID . "'s deck. " . $deckCount . " cards selected is under the legal minimum.");
+  //   header("Location: " . $redirectPath . "/GameLobby.php?gameName=$gameName&playerID=$playerID");
+  //   exit;
+  // }
 
-  for ($i = $deckCount - 1; $i >= 0; --$i) {
-    $cardType = CardType($playerDeck[$i]);
-    if ($cardType == "" || $cardType == "C" || $cardType == "E" || $cardType == "W") unset($playerDeck[$i]);
-  }
-  $playerDeck = array_values($playerDeck);
-  */
+  // for ($i = $deckCount - 1; $i >= 0; --$i) {
+  //   $cardType = CardType($playerDeck[$i]);
+  //   if ($cardType == "" || $cardType == "C" || $cardType == "E" || $cardType == "W") unset($playerDeck[$i]);
+  // }
+  // $playerDeck = array_values($playerDeck);
+
   $filename = "./Games/" . $gameName . "/p" . $playerID . "Deck.txt";
   $deckFile = fopen($filename, "w");
   fwrite($deckFile, $base . " " . $leader . "\r\n");
