@@ -169,6 +169,13 @@ function RestoreAmount($cardID, $player, $index)
     case "7500360419": $amount += 2; break;//Adept ARC-170
     default: break;
   }
+  //The Ghost JTL
+  $theGhostIndex = SearchAlliesForCard($player, "5763330426");
+  if($theGhostIndex != "" && TraitContains($cardID, "Spectre", $player)
+      && $index != $theGhostIndex
+      && RestoreAmount("5763330426", $player, $theGhostIndex) > 0)
+    $amount += RestoreAmount("5763330426", $player, $theGhostIndex);
+
   if($amount > 0 && $ally->LostAbilities()) return 0;
   return $amount;
 }
@@ -308,6 +315,13 @@ function RaidAmount($cardID, $player, $index, $reportMode = false)
     case "2948071304": $amount += ($ally->CurrentPower(reportMode:true) + $amount) >= 6 ? 1 : 0; break;//Vonreg's TIE Interceptor
     default: break;
   }
+  //The Ghost JTL
+  $theGhostIndex = SearchAlliesForCard($player, "5763330426");
+  if($theGhostIndex != "" && TraitContains($cardID, "Spectre", $player)
+      && $index != $theGhostIndex
+      && RaidAmount("5763330426", $player, $theGhostIndex, $reportMode) > 0)
+    $amount += RaidAmount("5763330426", $player, $theGhostIndex, $reportMode);
+
   if($amount > 0 && $ally->LostAbilities()) return 0;
   return $amount;
 }
@@ -318,6 +332,7 @@ function HasSentinel($cardID, $player, $index)
   $ally = new Ally("MYALLY-" . $index, $player);
   if($ally->LostAbilities()) return false;
   $hasSentinel = false;
+  //Effect Sentinel
   for($i=0; $i<count($currentTurnEffects); $i+=CurrentTurnPieces()) {
     if($currentTurnEffects[$i+1] != $player) continue;
     if($currentTurnEffects[$i] ==  "3148212344_Sentinel" && TraitContains($cardID, "Vehicle", $player)) return true;//Admiral Yularen - unique ID belongs to Yularen
@@ -344,6 +359,7 @@ function HasSentinel($cardID, $player, $index)
     }
   }
   if($hasSentinel) return true;
+  //Upgrades Sentinel
   $upgrades = $ally->GetUpgrades();
   for($i=0; $i<count($upgrades); ++$i)
   {
@@ -360,6 +376,7 @@ function HasSentinel($cardID, $player, $index)
       default: break;
     }
   }
+  //Self Sentinel
   switch($cardID)
   {
     //Spark of Rebellion
@@ -453,8 +470,16 @@ function HasSentinel($cardID, $player, $index)
       return SearchCount(SearchAllies($player, trait:"Vehicle")) > 1;
     case "5763330426"://The Ghost
       return $ally->IsUpgraded();
-    default: return false;
+    default: break;
   }
+  //The Ghost JTL
+  $theGhostIndex = SearchAlliesForCard($player, "5763330426");
+  if($theGhostIndex != "" && TraitContains($cardID, "Spectre", $player)
+      && $index != $theGhostIndex
+      && HasSentinel("5763330426", $player, $theGhostIndex))
+    return true;
+
+  return false;
 }
 
 function HasGrit($cardID, $player, $index)
@@ -479,6 +504,7 @@ function HasGrit($cardID, $player, $index)
     switch($upgrades[$i]) {
       case "3f0b5622a7"://Asajj Leader Unit
       case "3878744555"://Interceptor Ace
+      case "5306772000"://Phantom II
         return true;
       case "2633842896"://Biggs Darklighter
         if(TraitContains($cardID, "Speeder", $player)) return true;
@@ -492,7 +518,6 @@ function HasGrit($cardID, $player, $index)
     if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
     switch($currentTurnEffects[$i]) {
       case "6669050232": return true;//Grim Resolve
-      case "5306772000": return true;//Phantom II on The Ghost
       default: break;
     }
   }
@@ -525,9 +550,16 @@ function HasGrit($cardID, $player, $index)
       return true;
     case "9832122703"://Luminara Unduli
       return IsCoordinateActive($player);
-    default:
-      return false;
+    default: break;
   }
+  //The Ghost JTL
+  $theGhostIndex = SearchAlliesForCard($player, "5763330426");
+  if($theGhostIndex != "" && TraitContains($cardID, "Spectre", $player)
+      && $index != $theGhostIndex
+      && HasGrit("5763330426", $player, $theGhostIndex))
+    return true;
+
+  return false;
 }
 
 function HasCoordinate($cardID, $player, $index)
@@ -669,8 +701,16 @@ function HasOverwhelm($cardID, $player, $index)
       return SearchCount(SearchAllies($player, trait:"Mandalorian")) > 1;
     case "2948071304"://Vonreg's TIE Interceptor
       return $ally->CurrentPower(reportMode:true) >= 4;
-    default: return false;
+    default: break;
   }
+  //The Ghost JTL
+  $theGhostIndex = SearchAlliesForCard($player, "5763330426");
+  if($theGhostIndex != "" && TraitContains($cardID, "Spectre", $player)
+      && $index != $theGhostIndex
+      && HasOverwhelm("5763330426", $player, $theGhostIndex))
+    return true;
+
+  return false;
 }
 
 function HasAmbush($cardID, $player, $index, $from)
@@ -775,11 +815,19 @@ function HasAmbush($cardID, $player, $index, $from)
       return true;
     case "7144880397"://Ahsoka Tano
       return HasMoreUnits($player == 1 ? 2 : 1);
-    default: return false;
+    default: break;
   }
+  //The Ghost JTL
+  $theGhostIndex = SearchAlliesForCard($player, "5763330426");
+  if($theGhostIndex != "" && TraitContains($cardID, "Spectre", $player)
+      && $index != $theGhostIndex
+      && HasAmbush("5763330426", $player, $theGhostIndex, $from))
+    return true;
+
+  return false;
 }
 
-function HasShielded($cardID, $player)
+function HasShielded($cardID, $player, $index)
 {
   global $currentTurnEffects;
 
@@ -830,8 +878,16 @@ function HasShielded($cardID, $player)
     case "3770706835"://Outer Rim Outlaws
     case "2644994192"://Hondo Ohnaka
       return true;
-    default: return false;
+    default: break;
   }
+  //The Ghost JTL
+  $theGhostIndex = SearchAlliesForCard($player, "5763330426");
+  if($theGhostIndex != "" && TraitContains($cardID, "Spectre", $player)
+      && $index != $theGhostIndex
+      && HasShielded("5763330426", $player, $theGhostIndex))
+    return true;
+
+  return false;
 }
 
 function HasSaboteur($cardID, $player, $index)
@@ -922,8 +978,15 @@ function HasSaboteur($cardID, $player, $index)
       global $CS_NumAlliesDestroyed;
       $otherPlayer = $player == 1 ? 2 : 1;
       return GetClassState($otherPlayer, $CS_NumAlliesDestroyed) > 0;
-    default: return false;
+    default: break;
   }
+  //The Ghost JTL
+  $theGhostIndex = SearchAlliesForCard($player, "5763330426");
+  if($theGhostIndex != "" && TraitContains($cardID, "Spectre", $player)
+      && $index != $theGhostIndex
+      && HasSaboteur("5763330426", $player, $theGhostIndex))
+    return true;
+
   return false;
 }
 

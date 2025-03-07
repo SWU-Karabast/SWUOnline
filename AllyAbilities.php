@@ -49,7 +49,7 @@ function PlayAlly($cardID, $player, $subCards = "-", $from = "-",
   CheckUniqueAlly($uniqueID);
 
   if ($playAbility || $cardID == "0345124206") { //Clone - Ensure that the Clone will always choose a unit to clone whenever it enters play.
-    if(HasShielded($cardID, $player)) {
+    if(HasShielded($cardID, $player, $index)) {
       AddLayer("TRIGGER", $player, "SHIELDED", "-", "-", $uniqueID);
     }
     if(HasAmbush($cardID, $player, $index, $from)) {
@@ -310,7 +310,7 @@ function AllyStaticHealthModifier($cardID, $index, $player, $myCardID, $myIndex,
     //The Ghost with Phantom II
     case "6931439330"://The Ghost SOR
     case "5763330426"://The Ghost JTL
-      return SearchLimitedCurrentTurnEffects("5306772000", $player) == $ally->UniqueID() ? 3 : 0;
+      return $index == $myIndex && $ally->HasUpgrade("5306772000") ? 3 : 0;
     default: break;
   }
   return 0;
@@ -429,6 +429,12 @@ function DestroyAlly($player, $index,
       $whenResourceData=SerializeResourceData("PLAY","DOWN",0,"0","-1");
     if(!$lostAbilities && ($hasBounty || UpgradesContainBounty($upgrades)))
       $whenBountiedData=SerializeBountiesData($uniqueID, $isExhausted, $owner, $upgrades);
+    if($ally->IsSpectreWithGhostBounty()) {
+      //The Ghost JTL
+      $theGhostIndex = SearchAlliesForCard($player, "5763330426");
+      $theGhost = new Ally("MYALLY-" . $theGhostIndex, $player);
+      $whenBountiedData=SerializeBountiesData($theGhost->UniqueID(), $theGhost->IsExhausted(), $theGhost->Owner(), $theGhost->GetUpgrades());
+    }
     if($whenDestroyData || $whenResourceData || $whenBountiedData)
       LayerDestroyTriggers($player, $cardID, $uniqueID, $whenDestroyData, $whenResourceData, $whenBountiedData);
     $wasUnique = CardIsUnique($cardID);

@@ -1330,7 +1330,7 @@ function HasKeyword($cardID, $keyword, $player="", $index=-1){
     case "Bounty": return CollectBounty($player, $cardID, $cardID, false, $player, true) > 0; // Since we don't have information about "exhausted" and "owner," this data may be imprecise in very rare cases.
     case "Overwhelm": return HasOverwhelm($cardID, $player, $index);
     case "Saboteur": return HasSaboteur($cardID, $player, $index);
-    case "Shielded": return HasShielded($cardID, $player);
+    case "Shielded": return HasShielded($cardID, $player, $index);
     case "Sentinel": return HasSentinel($cardID, $player, $index);
     case "Ambush": return HasAmbush($cardID, $player, $index,"");
     case "Coordinate": return HasCoordinate($cardID, $player, $index);
@@ -1344,7 +1344,7 @@ function HasKeyword($cardID, $keyword, $player="", $index=-1){
         CollectBounty($player, $cardID, $cardID, false, $player, true) > 0 || // Since we don't have information about "exhausted" and "owner," this data may be imprecise in very rare cases.
         HasOverwhelm($cardID, $player, $index) ||
         HasSaboteur($cardID, $player, $index) ||
-        HasShielded($cardID, $player) ||
+        HasShielded($cardID, $player, $index) ||
         HasSentinel($cardID, $player, $index) ||
         HasAmbush($cardID, $player, $index, "") ||
         HasCoordinate($cardID, $player, $index) ||
@@ -2481,7 +2481,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       if($abilityName == "Deploy" || $abilityName == "") {
         $epicAction = $cardID != "3905028200" ? 1 : 0;//Admiral Trench leader (so far the only one)
         $playUniqueID = PlayAlly(LeaderUnit($cardID), $currentPlayer, epicAction:$epicAction);
-        if (HasShielded(LeaderUnit($cardID), $currentPlayer)) {
+        if (HasShielded(LeaderUnit($cardID), $currentPlayer, Ally::FromUniqueId($playUniqueID)->Index())) {
           AddLayer("TRIGGER", $currentPlayer, "SHIELDED", "-", "-", $playUniqueID);
         }
         PlayAbility(LeaderUnit($cardID), "CHAR", 0, "-", "-", false, $uniqueId);
@@ -6840,7 +6840,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "5306772000"://Phantom II
       if(GetResolvedAbilityName($cardID, "PLAY") == "Dock") {
-        $ghosts = array_map(function ($x) { return "MYALLY-" . $x; }, explode(",", SearchAllies($currentPlayer, cardTitle:"The Ghost")));
+        $ghosts = implode(",",array_map(function ($x) { return "MYALLY-" . $x; }, explode(",", SearchAllies($currentPlayer, cardTitle:"The Ghost"))));
         AddDecisionQueue("PASSPARAMETER", $currentPlayer, $ghosts);
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose which of The Ghost you would like to attach to.", 1);
         AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
