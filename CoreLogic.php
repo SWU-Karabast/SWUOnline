@@ -5015,6 +5015,20 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,2,$currentPlayer", 1);
       break;
+    case "0753707056"://Unity of Purpose
+      $allies = &GetAllies($currentPlayer);
+      $uniqueCards = [];
+      for($i=0; $i<count($allies); $i+=AllyPieces()) {
+        $cardID = $allies[$i];
+        if (!in_array($cardID, $uniqueCards)) array_push($uniqueCards, $cardID);
+      }
+      $buffAmount = count($uniqueCards);
+      for($i=0; $i<count($allies); $i+=AllyPieces()) {
+        $ally = new Ally("MYALLY-" . $i, $currentPlayer);
+        $ally->AddRoundHealthModifier($buffAmount);
+        AddCurrentTurnEffect("0753707056-" . $buffAmount, $currentPlayer, uniqueID:$allies[$i+5]);
+      }
+      break;
     case "4772866341"://Pillage
       $player = $additionalCosts == "Yourself" ? $currentPlayer : $otherPlayer;
       PummelHit($player);

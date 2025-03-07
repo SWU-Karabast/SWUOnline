@@ -293,6 +293,7 @@ function EffectAttackModifier($cardID, $playerID="")
     case "7232609585": return 2;//Supporting Eta-2
     case "2384695376": return -2;//Heartless Tactics
     case "9667260960": return -1;//Retrofitted Airspeeder
+    case "0753707056": return $subparam;//Unity of Purpose
     default: return 0;
   }
 }
