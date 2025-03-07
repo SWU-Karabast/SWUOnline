@@ -6837,6 +6837,19 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
           $ally->Attach("2007868442");//Experience token
         }
       }
+      break;
+    case "5306772000"://Phantom II
+      if(GetResolvedAbilityName($cardID, "PLAY") == "Dock") {
+        $ghosts = array_map(function ($x) { return "MYALLY-" . $x; }, explode(",", SearchAllies($currentPlayer, cardTitle:"The Ghost")));
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, $ghosts);
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose which of The Ghost you would like to attach to.", 1);
+        AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
+        AddDecisionQueue("SETDQVAR", $currentPlayer, "0", 1);
+        AddDecisionQueue("PASSPARAMETER", $currentPlayer, $uniqueId, 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "MOVEPILOTUNIT", 1);
+      }
+      break;
     //PlayAbility End
     default: break;
   }

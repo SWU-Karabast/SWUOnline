@@ -595,7 +595,10 @@ class Ally {
       if($receivingPilot) {
         $allyDestroyed = $this->CheckUniqueAllyForPilot($cardID);
         if($allyDestroyed) $this->index = min(0, $this->index - AllyPieces());
-        if($cardID == "0979322247") $this->DefeatIfNoRemainingHP();//Sidon Ithano
+        if($cardID == "0979322247")//Sidon Ithano
+          $this->DefeatIfNoRemainingHP();
+        if($cardID == "5306772000")//Phantom II
+          AddPermanentEffect($cardID, $this->Controller(), uniqueID:$this->UniqueID());
       }
     }
     //Pilot attach side effects

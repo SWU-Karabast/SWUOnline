@@ -220,6 +220,8 @@ function AllyHasStaticHealthModifier($cardID)
     case "9811031405"://Victor Leader
     case "5052103576"://Resistance X-Wing
     case "3213928129"://Clone Combat Squadron
+    case "6931439330"://The Ghost SOR (with Phantom II)
+    case "5763330426"://The Ghost JTL (with Phantom II)
       return true;
     default: return false;
   }
@@ -245,7 +247,6 @@ function AllyStaticHealthModifier($cardID, $index, $player, $myCardID, $myIndex,
       break;
     case "4511413808"://Follower of the Way
       if($index == $myIndex && $player == $myPlayer) {
-        $ally = new Ally("MYALLY-" . $index, $player);
         if($ally->IsUpgraded()) return 1;
       }
       break;
@@ -276,13 +277,11 @@ function AllyStaticHealthModifier($cardID, $index, $player, $myCardID, $myIndex,
       break;
     case "3731235174"://Supreme Leader Snoke
       if($player != $myPlayer) {
-        $ally = new Ally("MYALLY-" . $index, $player);
         return !$ally->IsLeader() ? -2 : 0;
       }
       break;
     case "8418001763"://Huyang
       if ($player == $myPlayer) {
-        $ally = new Ally("MYALLY-" . $index, $player);
         return SearchLimitedCurrentTurnEffects($myCardID, $player) == $ally->UniqueID() ? 2 : 0;
       }
       return 0;
@@ -308,6 +307,10 @@ function AllyStaticHealthModifier($cardID, $index, $player, $myCardID, $myIndex,
         if($ally->HasPilot()) return 1;
       }
       break;
+    //The Ghost with Phantom II
+    case "6931439330"://The Ghost SOR
+    case "5763330426"://The Ghost JTL
+      return SearchLimitedCurrentTurnEffects("5306772000", $player) == $ally->UniqueID() ? 3 : 0;
     default: break;
   }
   return 0;
