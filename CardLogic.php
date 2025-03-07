@@ -1452,10 +1452,11 @@ function CheckThrawnJTL($player, $serializedAllyDestroyData, $target) {
 
 function IndirectDamage($player, $amount, $fromUnitEffect=false, $uniqueID="", $alsoExhausts=false)
 {
+  global $CS_NumIndirectDamageGiven;
   $sourcePlayer = $player == 1 ? 2 : 1;
   $amount += SearchCount(SearchAlliesForCard($sourcePlayer, "4560739921"));//Hunting Aggressor
   if(SearchCount(SearchAlliesForCard($sourcePlayer, "1330473789")) > 0) $sourcePlayerTargets = true;
-  IncrementClassState($sourcePlayer, $CS_NumIndirectDamageGiven);
+  IncrementClassState($currentPlayer, $CS_NumIndirectDamageGiven); 
   if(!$sourcePlayerTargets && $uniqueID != "") {
     $sourceIndex = SearchAlliesForUniqueID($uniqueID, $sourcePlayer);
     $ally = new Ally("MYALLY-" . $sourceIndex, $sourcePlayer);
