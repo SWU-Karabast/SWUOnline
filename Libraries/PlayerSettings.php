@@ -268,6 +268,8 @@ function GetCardBack($player)
       return "CB_OuterRimCCG";
     case 34:
       return "Central";
+    case 35:
+      return "CB_Enigma";
     default:
       return "CardBack";
   }
@@ -496,6 +498,7 @@ function GetSettingsUI($player)
   $rv .= CreateSelectOption($SET_Cardback . "-" . 32, "Tropa do Boba", $SET_Cardback . "-" . $settings[$SET_Cardback]);
   $rv .= CreateSelectOption($SET_Cardback . "-" . 33, "Outer Rim CCG", $SET_Cardback . "-" . $settings[$SET_Cardback]);
   $rv .= CreateSelectOption($SET_Cardback . "-" . 34, "Central Spacers", $SET_Cardback . "-" . $settings[$SET_Cardback]);
+  $rv .= CreateSelectOption($SET_Cardback . "-" . 35, "Enigma", $SET_Cardback . "-" . $settings[$SET_Cardback]);
   $rv .= "</select>";
   $rv .= "<BR>";
 

@@ -139,6 +139,10 @@ $cardBack = new stdClass();
 $cardBack->name = "Central Spacers";
 $cardBack->id = 34;
 $response->cardBacks[] = $cardBack;
+$cardBack = new stdClass();
+$cardBack->name = "Enigma";
+$cardBack->id = 35;
+$response->cardBacks[] = $cardBack;
 
 $response->playmats = [];
 if(IsUserLoggedIn()) {
