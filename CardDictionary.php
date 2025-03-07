@@ -499,6 +499,7 @@ function HasGrit($cardID, $player, $index)
     if($currentTurnEffects[$i+2] != -1 && $currentTurnEffects[$i+2] != $ally->UniqueID()) continue;
     switch($currentTurnEffects[$i]) {
       case "6669050232": return true;//Grim Resolve
+      case "5306772000": return true;//Phantom II on The Ghost
       default: break;
     }
   }
@@ -527,6 +528,7 @@ function HasGrit($cardID, $player, $index)
     case "3f0b5622a7"://Asajj Leader Unit
     case "5412384703"://Royal Security Fighter
     case "3878744555"://Interceptor Ace
+    case "5306772000"://Phantom II
       return true;
     case "9832122703"://Luminara Unduli
       return IsCoordinateActive($player);
@@ -1018,6 +1020,8 @@ function AbilityCost($cardID)
       return $abilityName == "Pilot" ? 1 : 0;
     case "3905028200"://Admiral Trench
       return $abilityName == "Deploy" ? 3 : 0;
+    case "5306772000"://Phantom II
+      return $abilityName == "Dock" ? 1 : 0;
     default: break;
   }
   if(IsAlly($cardID)) return 0;
@@ -1332,6 +1336,8 @@ function CheckTWIAbilityTypes($cardID) {
 }
 
 function CheckJTLAbilityTypes($cardID) {
+  global $currentPlayer;
+
   switch($cardID) {
     case "4179470615"://Asajj Ventress Leader
       return LeaderAbilitiesIgnored() ? "" : "A";
@@ -1369,6 +1375,10 @@ function CheckJTLAbilityTypes($cardID) {
       return LeaderAbilitiesIgnored() ? "" : "A";
     case "9763190770"://Major Vonreg
       return LeaderAbilitiesIgnored() ? "" : "A";
+    case "5306772000"://Phantom II
+      if(SearchCount(SearchAlliesForTitle($currentPlayer, "The Ghost")) > 0)
+        return "A,AA";
+      return "A";
     default: return "";
   }
 }
@@ -1639,6 +1649,8 @@ function CheckTWIAbilityNames($cardID, $index, $validate) {
 }
 
 function CheckJTLAbilityNames($cardID) {
+  global $currentPlayer;
+
   switch($cardID) {
     case "4179470615"://Asajj Ventress
       return LeaderAbilitiesIgnored() ? "" : "Damage";
@@ -1676,6 +1688,10 @@ function CheckJTLAbilityNames($cardID) {
       return "Draw,Attack";
     case "9763190770"://Major Vonreg
       return LeaderAbilitiesIgnored() ? "" : "Play";
+    case "5306772000"://Phantom II
+      if(SearchCount(SearchAlliesForTitle($currentPlayer, "The Ghost")) > 0)
+        return "Dock,Attack";
+      return "Attack";
     default: return "";
   }
 }
@@ -2598,6 +2614,7 @@ function IsUnconventionalPilot($cardID) {
   switch($cardID) {
     case "0979322247"://Sidon Ithano
     case "6515230001"://Pantoran Starship Thief
+    case "5306772000"://Phantom II
       return true;
     default: return false;
   }

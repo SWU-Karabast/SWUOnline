@@ -1901,9 +1901,11 @@ function GetTargetsForAttack(Ally $attacker, bool $canAttackBase)
   for ($i = 0; $i < count($allies); $i += AllyPieces()) {
     // Check if the target is in the same arena, except for Strafing Gunship, Swoop Down
     $defAlly = new Ally("MYALLY-" . $i, $defPlayer);
-    if ($attacker->CurrentArena() != $defAlly->CurrentArena() && $attacker->CardID() != "5464125379" && !SearchCurrentTurnEffects("4663781580", $mainPlayer)) {
-      continue;
-    }
+    if ($attacker->CurrentArena() != $defAlly->CurrentArena()
+        && $attacker->CardID() != "5464125379"//Strafing Gunship
+        && $attacker->CardID() != "9667260960"//Retrofitted Airspeeder
+        && !SearchCurrentTurnEffects("4663781580", $mainPlayer)//Swoop Down
+    ) continue;
 
     // Check if the target can be attacked
     if (!AllyCanBeAttackTarget($defPlayer, $i, $allies[$i])) {

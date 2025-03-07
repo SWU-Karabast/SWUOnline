@@ -210,8 +210,8 @@ function EffectAttackModifier($cardID, $playerID="")
     case "6476609909"://Corner The Prey
       $attackTarget = GetAttackTarget();
       if(!IsAllyAttackTarget()) return 0;
-      $ally = new Ally($attackTarget, $defPlayer);
-      return $ally->Damage();
+      $defAlly = new Ally($attackTarget, $defPlayer);
+      return $defAlly->Damage();
     case "5896817672": if(!$subparam) return 2; else return 0;//Headhunting
     case "2359136621": return $subparam;//Guarding The Way
     case "8297630396": return 1;//Shoot First
@@ -248,9 +248,9 @@ function EffectAttackModifier($cardID, $playerID="")
     case "4663781580"://Swoop Down
       $attackTarget = GetAttackTarget();
       if(!IsAllyAttackTarget()) return 0;
-      $ally = new Ally($attackTarget, $defPlayer);
+      $defAlly = new Ally($attackTarget, $defPlayer);
       $modifier = $playerID == $defPlayer ? -2 : 2;
-      return CardArenas($ally->CardID()) == "Ground" ? $modifier : 0;
+      return $defAlly->CurrentArena() == "Ground" ? $modifier : 0;
     case "3399023235": return isset($subparam) && $subparam == "2" ? -2 : 0;//Fenn Rau
     case "8777351722": return IsAllyAttackTarget() ? 2 : 0;//Anakin Skywalker Leader
     case "4910017138": return 2;//Breaking In
@@ -292,6 +292,8 @@ function EffectAttackModifier($cardID, $playerID="")
     case "3858069945": return $subparam;//Power From Pain
     case "7232609585": return 2;//Supporting Eta-2
     case "2384695376": return -2;//Heartless Tactics
+    case "9667260960": return -1;//Retrofitted Airspeeder
+    case "5306772000": return 3;//Phantom II
     default: return 0;
   }
 }
@@ -933,6 +935,7 @@ function IsCombatEffectActive($cardID)
     case "6413979593"://Punch it
     case "1355075014"://Air Assault
     case "7660822254"://Barrel Roll
+    case "9667260960"://Retrofitted Airspeeder
       return true;
     default: return false;
   }

@@ -220,6 +220,8 @@ function AllyHasStaticHealthModifier($cardID)
     case "9811031405"://Victor Leader
     case "5052103576"://Resistance X-Wing
     case "3213928129"://Clone Combat Squadron
+    case "6931439330"://The Ghost SOR (with Phantom II)
+    case "5763330426"://The Ghost JTL (with Phantom II)
       return true;
     default: return false;
   }
@@ -245,7 +247,6 @@ function AllyStaticHealthModifier($cardID, $index, $player, $myCardID, $myIndex,
       break;
     case "4511413808"://Follower of the Way
       if($index == $myIndex && $player == $myPlayer) {
-        $ally = new Ally("MYALLY-" . $index, $player);
         if($ally->IsUpgraded()) return 1;
       }
       break;
@@ -276,13 +277,11 @@ function AllyStaticHealthModifier($cardID, $index, $player, $myCardID, $myIndex,
       break;
     case "3731235174"://Supreme Leader Snoke
       if($player != $myPlayer) {
-        $ally = new Ally("MYALLY-" . $index, $player);
         return !$ally->IsLeader() ? -2 : 0;
       }
       break;
     case "8418001763"://Huyang
       if ($player == $myPlayer) {
-        $ally = new Ally("MYALLY-" . $index, $player);
         return SearchLimitedCurrentTurnEffects($myCardID, $player) == $ally->UniqueID() ? 2 : 0;
       }
       return 0;
@@ -308,6 +307,10 @@ function AllyStaticHealthModifier($cardID, $index, $player, $myCardID, $myIndex,
         if($ally->HasPilot()) return 1;
       }
       break;
+    //The Ghost with Phantom II
+    case "6931439330"://The Ghost SOR
+    case "5763330426"://The Ghost JTL
+      return SearchLimitedCurrentTurnEffects("5306772000", $player) == $ally->UniqueID() ? 3 : 0;
     default: break;
   }
   return 0;
@@ -2004,8 +2007,8 @@ function SpecificAllyAttackAbilities($attackID)
         if(TraitContains($attackID, "Force", $mainPlayer) && IsAllyAttackTarget()) {
           WriteLog("Jedi Lightsaber gives the defending unit -2/-2");
           $target = GetAttackTarget();
-          $ally = new Ally($target);
-          $ally->AddRoundHealthModifier(-2);
+          $defAlly = new Ally($target);
+          $defAlly->AddRoundHealthModifier(-2);
           AddCurrentTurnEffect("8495694166", $defPlayer, from:"PLAY");
         }
         break;
@@ -2013,8 +2016,8 @@ function SpecificAllyAttackAbilities($attackID)
         if(IsAllyAttackTarget()) {
           WriteLog("Vambrace Grappleshot exhausts the defender");
           $target = GetAttackTarget();
-          $ally = new Ally($target);
-          $ally->Exhaust();
+          $defAlly = new Ally($target);
+          $defAlly->Exhaust();
         }
         break;
       case "6471336466"://Vambrace Flamethrower
@@ -2027,8 +2030,8 @@ function SpecificAllyAttackAbilities($attackID)
         $allies = &GetAllies($mainPlayer);
         for($j=0; $j<count($allies); $j+=AllyPieces()) {
           if($j == $attackerAlly->Index()) continue;
-          $ally = new Ally("MYALLY-" . $j, $mainPlayer);
-          if(TraitContains($ally->CardID(), "Mandalorian", $mainPlayer, $j)) $ally->Attach("2007868442");//Experience token
+          $myAlly = new Ally("MYALLY-" . $j, $mainPlayer);
+          if(TraitContains($myAlly->CardID(), "Mandalorian", $mainPlayer, $j)) $myAlly->Attach("2007868442");//Experience token
         }
         break;
       case "1938453783"://Armed to the Teeth
@@ -2070,9 +2073,9 @@ function SpecificAllyAttackAbilities($attackID)
       case "4573745395"://Bossk pilot
         if(IsAllyAttackTarget()) {
           $target = GetAttackTarget();
-          $ally = new Ally($target, $defPlayer);
-          $ally->Exhaust();
-          $ally->DealDamage(1, fromUnitEffect:true);
+          $defAlly = new Ally($target, $defPlayer);
+          $defAlly->Exhaust();
+          $defAlly->DealDamage(1, fromUnitEffect:true);
         }
         break;
       case "6414788e89"://Wedged Antilles pilot Leader Unit
@@ -2263,8 +2266,8 @@ function SpecificAllyAttackAbilities($attackID)
     case "4156799805"://Boba Fett (Disintegrator)
       if(IsAllyAttackTarget()) {
         $target = GetAttackTarget();
-        $ally = new Ally($target, $defPlayer);
-        if($ally->IsExhausted() && $ally->TurnsInPlay() > 0) {
+        $defAlly = new Ally($target, $defPlayer);
+        if($defAlly->IsExhausted() && $defAlly->TurnsInPlay() > 0) {
           AddDecisionQueue("PASSPARAMETER", $mainPlayer, $target, 1);
           AddDecisionQueue("MZOP", $mainPlayer, "DEALDAMAGE,3,$mainPlayer,1", 1);
         }
@@ -2318,8 +2321,8 @@ function SpecificAllyAttackAbilities($attackID)
     case "5464125379"://Strafing Gunship
       if(IsAllyAttackTarget()) {
         $target = GetAttackTarget();
-        $ally = new Ally($target, $defPlayer);
-        if(CardArenas($ally->CardID()) == "Ground") {
+        $defAlly = new Ally($target, $defPlayer);
+        if($defAlly->CurrentArena() == "Ground") {
           AddCurrentTurnEffect("5464125379", $defPlayer, from:"PLAY");
         }
       }
@@ -2332,8 +2335,8 @@ function SpecificAllyAttackAbilities($attackID)
     case "9725921907"://Kintan Intimidator
       if(IsAllyAttackTarget()) {
         $target = GetAttackTarget();
-        $ally = new Ally($target, $defPlayer);
-        $ally->Exhaust();
+        $defAlly = new Ally($target, $defPlayer);
+        $defAlly->Exhaust();
       }
       break;
     case "8190373087"://Gentle Giant
@@ -2405,9 +2408,9 @@ function SpecificAllyAttackAbilities($attackID)
     case "7171636330"://Chain Code Collector
       if(IsAllyAttackTarget()) {
         $target = GetAttackTarget();
-        $ally = new Ally($target, $defPlayer);
-        if($ally->HasBounty()) {
-          AddCurrentTurnEffect("7171636330", $defPlayer, "PLAY", $ally->UniqueID());
+        $defAlly = new Ally($target, $defPlayer);
+        if($defAlly->HasBounty()) {
+          AddCurrentTurnEffect("7171636330", $defPlayer, "PLAY", $defAlly->UniqueID());
           UpdateLinkAttack();
         }
       }
@@ -2866,9 +2869,9 @@ function SpecificAllyAttackAbilities($attackID)
     case "4573745395"://Bossk
       if(IsAllyAttackTarget()) {
         $target = GetAttackTarget();
-        $ally = new Ally($target, $defPlayer);
-        $ally->Exhaust();
-        $ally->DealDamage(1, fromUnitEffect:true);
+        $defAlly = new Ally($target, $defPlayer);
+        $defAlly->Exhaust();
+        $defAlly->DealDamage(1, fromUnitEffect:true);
       }
       break;
     case "3278986026"://Rafa Martez
@@ -2991,6 +2994,15 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to move <0> to.", 1);
       AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "MOVEUPGRADE", 1);
+      break;
+    case "9667260960"://Retrofitted Airspeeder
+      if(IsAllyAttackTarget()) {
+        $target = GetAttackTarget();
+        $defAlly = new Ally($target, $defPlayer);
+        if($defAlly->CurrentArena() == "Space") {
+          AddCurrentTurnEffect("9667260960", $mainPlayer, from:"PLAY");
+        }
+      }
       break;
   }
 
