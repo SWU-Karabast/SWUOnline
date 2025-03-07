@@ -65,25 +65,26 @@ $deck = (isset($submission->deck) ? implode(" ", $submission->deck) : "");
 
 
 $playerDeck = $submission->deck;
-$deckCount = count($playerDeck);//TODO: see if this gets called..
-if($deckCount < 60 && ($format == "premierf" /*|| $format == "reqsundo"*/ || $format == "llcc")) {
-  $response->status = "FAIL";
-  $response->deckError = "Unable to submit player " . $playerID . "'s deck. " . $deckCount . " cards selected is below the minimum.";
-  echo json_encode($response);
-  exit;
-}
-if($deckCount < 40 && ($format == "blitz" || $format == "compblitz" || $format == "commoner" || $format == "llblitz")) {
-  $response->status = "FAIL";
-  $response->deckError = "Unable to submit player " . $playerID . "'s deck. " . $deckCount . " cards selected is below the minimum.";
-  echo json_encode($response);
-  exit;
-}
-if($deckCount > 40 && ($format == "blitz" || $format == "compblitz" || $format == "llblitz")) {
-  $response->status = "FAIL";
-  $response->deckError = "Unable to submit player " . $playerID . "'s deck. " . $deckCount . " cards selected is above the maximum.";
-  echo json_encode($response);
-  exit;
-}
+//doesn't seem like this gets called, or at least the response is not used
+// $deckCount = count($playerDeck);//TODO: see if this gets called..
+// if($deckCount < 60 && ($format == "premierf" /*|| $format == "reqsundo"*/ || $format == "llcc")) {
+//   $response->status = "FAIL";
+//   $response->deckError = "Unable to submit player " . $playerID . "'s deck. " . $deckCount . " cards selected is below the minimum.";
+//   echo json_encode($response);
+//   exit;
+// }
+// if($deckCount < 40 && ($format == "blitz" || $format == "compblitz" || $format == "commoner" || $format == "llblitz")) {
+//   $response->status = "FAIL";
+//   $response->deckError = "Unable to submit player " . $playerID . "'s deck. " . $deckCount . " cards selected is below the minimum.";
+//   echo json_encode($response);
+//   exit;
+// }
+// if($deckCount > 40 && ($format == "blitz" || $format == "compblitz" || $format == "llblitz")) {
+//   $response->status = "FAIL";
+//   $response->deckError = "Unable to submit player " . $playerID . "'s deck. " . $deckCount . " cards selected is above the maximum.";
+//   echo json_encode($response);
+//   exit;
+// }
 
 $filename = "../Games/" . $gameName . "/p" . $playerID . "Deck.txt";
 $deckFile = fopen($filename, "w");
