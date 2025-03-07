@@ -44,6 +44,14 @@ class DeckValidation {
   public function SideboardString() {
     return $this->_sideboardString;
   }
+
+  public function RejectionDetail($format) {
+    return match($format) {
+      Formats::$PadawanFormat => "Only Common cards are allowed, with the exception of Leaders. No Rare bases are allowed, and no special cards unless they have a common variant.",
+      Formats::$SandcrawlerFormat => "Only Uncommon and Common cards are allowed, with the exception of Leaders. No Rare bases are allowed, and any special cards that don't have a Rare or Legendary variant are allowed.",
+      default => "",
+    };
+  }
 }
 
 function ValidateDeck($format, $usesUuid, $leader, $base, $deckArr, $sideboardArr): DeckValidation {

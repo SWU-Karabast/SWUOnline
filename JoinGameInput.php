@@ -187,11 +187,13 @@ if ($decklink != "") {
   $validation = ValidateDeck($format, $usesUuid, $leader, $base, $deck, $sideboard);
   if (!$validation->IsValid()) {
     $_SESSION['error'] = "<div>" . $validation->Error($format) . "</div>";
-    if(count($validation->InvalidCards()) > 0)
-      $_SESSION['error'] .= "<div><h2>Invalid Cards:</h2><ul>"
+    if(count($validation->InvalidCards()) > 0) {
+      $rejectionDetail = $validation->RejectionDetail($format);
+      $_SESSION['error'] .= "<div><div><h3>" . $rejectionDetail . "</h3><h2>Invalid Cards:</h2></div><ul>"
         . implode("", array_map(function($x) {
           return "<li>" . JsHtmlTitleAndSub($x) . "</li>";
         }, $validation->InvalidCards())) . "</ul></div>";
+    }
     header("Location: " . $redirectPath . "/MainMenu.php");
     WriteGameFile();
     exit;
