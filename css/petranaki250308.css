@@ -403,7 +403,7 @@ select {
   width: 45%;
   max-width: 800px;
   max-height: 400px;
-  background: rgba(200, 200, 200, 0.84);
+  background: rgba(200, 200, 200, 0.87);
   border-radius: 8px;
   box-shadow: 0 16px 16px rgba(0, 0, 0, 0.4);
   color: black;
@@ -418,12 +418,13 @@ select {
   overflow-y: scroll;
 }
 
-.error-popup h2 {
+.error-popup h3, .error-popup h2 {
   display: block;
   color: black;
 }
 
 .error-popup ul {
+  align-items: center;
   margin: 10px 0;
   color: black;
   display: flex;

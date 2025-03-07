@@ -20,7 +20,7 @@ if(!$isUserBanned) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>You Have Been Banned</title>
-  <link rel="stylesheet" href="./css/petranaki250307.css">
+  <link rel="stylesheet" href="./css/petranaki250308.css">
   <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
