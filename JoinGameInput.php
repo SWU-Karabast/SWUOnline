@@ -168,6 +168,12 @@ if ($decklink != "") {
   $deckName = $deckObj->metadata->{"name"};
   $leader = !$usesUuid ? UUIDLookup($deckObj->leader->id) : $deckObj->leader->id;
   $character = $leader;//TODO: Change to leader name
+  if($leader == "") {
+    $_SESSION['error'] = "<div>⚠️ Error: Deck link not supported. <br/>Make sure it is not private and that the deck link is correct.</div>";
+    header("Location: " . $redirectPath . "/MainMenu.php");
+    WriteGameFile();
+    exit;
+  }
   $deckFormat = 1;
   $base = !$usesUuid ? UUIDLookup($deckObj->base->id) : $deckObj->base->id;
   $deck = $deckObj->deck;
