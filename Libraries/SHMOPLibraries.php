@@ -20,6 +20,10 @@
 17 - Last Action Time
 18 - Last Action Warning (0 = no warning, 1 = player 1, 2 = player 2)
 19 - Player Autopassed Last Turn (0 = none, 1 = player 1, 2 = player 2)
+20 - P1 Base
+21 - P2 Base
+22 - P1 Second Hero
+23 - P2 Second Hero
 */
 
 // $useRedis = getenv('REDIS_ENABLED') ?? false;

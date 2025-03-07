@@ -392,6 +392,44 @@ select {
   margin-bottom: 5px;
 }
 
+.error-popup-hidden {
+  display: none;
+}
+
+.error-popup {
+  position: absolute;
+  padding: 32px 0;
+  margin: 0 25%;
+  width: 45%;
+  max-width: 800px;
+  max-height: 400px;
+  background: rgba(200, 200, 200, 0.84);
+  border-radius: 8px;
+  box-shadow: 0 16px 16px rgba(0, 0, 0, 0.4);
+  color: black;
+  display: flex;
+  flex-direction: column;
+  justify-content: top;
+  align-items: center;
+  z-index: 1000;
+  font-size: 20px;
+  font-weight: 600;
+  text-align: center;
+  overflow-y: scroll;
+}
+
+.error-popup h2 {
+  display: block;
+  color: black;
+}
+
+.error-popup ul {
+  margin: 10px 0;
+  color: black;
+  display: flex;
+  flex-direction: column;
+}
+
 /* Create Game */
 
 .create-game-wrapper {

@@ -90,7 +90,7 @@ if (file_exists("../Games/$gameName") || !mkdir("../Games/$gameName", 0700, true
 
 if($isUserBanned) {
   if($format == "premierf" || $format == "openform" || $format == "llcc") $format = "shadowcc";
-  else if($format == "reqsundo") $format = "shadowcompcc";
+  //else if($format == "reqsundo") $format = "shadowcompcc";
   else if($format == "blitz" || $format == "compblitz" || $format == "commoner" || $format == "llblitz") $format = "shadowblitz";
 }
 
@@ -129,7 +129,7 @@ CreateLog($gameName, "../");
 
 $currentTime = round(microtime(true) * 1000);
 $cacheVisibility = ($visibility == "public" ? "1" : "0");
-WriteCache($gameName, 1 . "!" . $currentTime . "!" . $currentTime . "!0!-1!" . $currentTime . "!!!" . $cacheVisibility . "!0!0!0!" . FormatCode($format) . "!" . $gameStatus . "!0!0!$currentTime!0!0"); //Initialize SHMOP cache for this game
+WriteCache($gameName, 1 . "!" . $currentTime . "!" . $currentTime . "!0!-1!" . $currentTime . "!!!" . $cacheVisibility . "!0!0!0!" . FormatCode($format) . "!" . $gameStatus . "!0!0!$currentTime!0!0!!!!"); //Initialize SHMOP cache for this game
 
 $playerID = 1;
 

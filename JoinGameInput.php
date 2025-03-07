@@ -2,6 +2,7 @@
 
 include "Libraries/HTTPLibraries.php";
 include "Libraries/SHMOPLibraries.php";
+include "Libraries/GameFormats.php";
 include "APIKeys/APIKeys.php";
 include_once 'includes/functions.inc.php';
 include_once 'includes/dbh.inc.php';
@@ -170,44 +171,33 @@ if ($decklink != "") {
   $deckFormat = 1;
   $base = !$usesUuid ? UUIDLookup($deckObj->base->id) : $deckObj->base->id;
   $deck = $deckObj->deck;
-  $cards = "";
-  $bannedSet = "JTL";
-  $hasBannedCard = false;
-  for($i=0; $i<count($deck); ++$i) {
-    if($usesUuid) $deck[$i]->id = CardIDLookup($deck[$i]->id);
-    $deck[$i]->id = CardIDOverride($deck[$i]->id);
-    $cardID = UUIDLookup($deck[$i]->id);
-    $cardID = CardUUIDOverride($cardID);
-    if(CardSet($cardID) == $bannedSet) {
-      $hasBannedCard = true;
-    }
-    for($j=0; $j<$deck[$i]->count; ++$j) {
-      if($cards != "") $cards .= " ";
-      $cards .= $cardID;
-    }
-  }
-  $sideboard = $deckObj->sideboard ?? [];
-  $sideboardCards = "";
-  for($i=0; $i<count($sideboard); ++$i) {
-    if($usesUuid) $sideboard[$i]->id = CardIDLookup($sideboard[$i]->id);
-    $sideboard[$i]->id = CardIDOverride($sideboard[$i]->id);
-    $cardID = CardUUIDOverride(UUIDLookup($sideboard[$i]->id));
-    if(CardSet($cardID) == $bannedSet) {
-      $hasBannedCard = true;
-    }
-    for($j=0; $j<$sideboard[$i]->count; ++$j) {
-      if($sideboardCards != "") $sideboardCards .= " ";
-      $sideboardCards .= $cardID;
-    }
-  }
-
-  if ($format != "openform" && $hasBannedCard) {//Open Format
-    $_SESSION['error'] = '⚠️ Unreleased cards must be played in the open format.';
+  $sideboard = $deckObj->sideboard;
+  if(IsNotAllowed($leader, $format)) {
+    $_SESSION['error'] = "<div>⚠️ Your deck contains a leader that is not allowed in this format.</div>";
     header("Location: " . $redirectPath . "/MainMenu.php");
     WriteGameFile();
     exit;
   }
-
+  if(IsNotAllowed($base, $format)) {
+    $_SESSION['error'] = "<div>⚠️ Your deck contains a base that is not allowed in this format.</div>";
+    header("Location: " . $redirectPath . "/MainMenu.php");
+    WriteGameFile();
+    exit;
+  }
+  $validation = ValidateDeck($format, $usesUuid, $leader, $base, $deck, $sideboard);
+  if (!$validation->IsValid()) {
+    $_SESSION['error'] = "<div>" . $validation->Error($format) . "</div>";
+    if(count($validation->InvalidCards()) > 0)
+      $_SESSION['error'] .= "<div><h2>Invalid Cards:</h2><ul>"
+        . implode("", array_map(function($x) {
+          return "<li>" . JsHtmlTitleAndSub($x) . "</li>";
+        }, $validation->InvalidCards())) . "</ul></div>";
+    header("Location: " . $redirectPath . "/MainMenu.php");
+    WriteGameFile();
+    exit;
+  }
+  $cards = $validation->CardString();
+  $sideboardCards = $validation->SideboardString();
   //We have the decklist, now write to file
   $filename = "./Games/" . $gameName . "/p" . $playerID . "Deck.txt";
   $deckFile = fopen($filename, "w");
@@ -223,7 +213,7 @@ if ($decklink != "") {
     include_once "./includes/dbh.inc.php";
     $saveLink = explode("https://", $originalLink);
     $saveLink = count($saveLink) > 1 ? $saveLink[1] : $originalLink;
-    addFavoriteDeck($_SESSION["userid"], $saveLink, $deckName, $character, $deckFormat);
+    addFavoriteDeck($_SESSION["userid"], $saveLink, $deckName, $leader, $deckFormat);
   }
 } else {
   copy($deckFile, "./Games/" . $gameName . "/p" . $playerID . "Deck.txt");
@@ -273,6 +263,7 @@ if ($matchup == "") {
   SetCachePiece($gameName, $playerID + 1, strval(round(microtime(true) * 1000)));
   SetCachePiece($gameName, $playerID + 3, "0");
   SetCachePiece($gameName, $playerID + 6, $leader ?? "-");
+  SetCachePiece($gameName, $playerID + 19, $base ?? "-");
   SetCachePiece($gameName, 14, $gameStatus);
   GamestateUpdated($gameName);
 
@@ -290,6 +281,12 @@ if ($matchup == "") {
 
 session_write_close();
 header("Location: " . $redirectPath . "/GameLobby.php?gameName=$gameName&playerID=$playerID");
+
+function JsHtmlTitleAndSub($cardID) {
+  $forJS = CardTitle($cardID);
+  if(CardSubtitle($cardID) != "") $forJS .= " (" . CardSubtitle($cardID) . ")";
+  return str_replace("'", "\'", $forJS);
+}
 
 function CardIDOverride($cardID) {
   switch($cardID) {
@@ -391,13 +388,13 @@ function IsBanned($cardID, $format)
       }
       break;
     case "premierf":
-    case "reqsundo":
-      switch ($cardID) {
-        case "WTR152"://maybe add Boba Fett leader?
-          return true;
-        default:
-          return false;
-      }
+    // case "reqsundo":
+    //   switch ($cardID) {
+    //     case "WTR152"://maybe add Boba Fett leader?
+    //       return true;
+    //     default:
+    //       return false;
+    //   }
       break;
     case "commoner":
       switch ($cardID) {
