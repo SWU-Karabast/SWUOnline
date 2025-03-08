@@ -154,6 +154,18 @@ if ($decklink != "") {
     $json = $apiDeck;
     echo($json);
   }
+  else if (str_contains($decklink, "swu-decks.com/decks")) {
+    $decklinkArr = explode("/", $decklink);
+    $deckId = trim($decklinkArr[count($decklinkArr) - 1]);
+    $curl = curl_init();
+    curl_setopt($curl, CURLOPT_URL, "https://swu-decks.com/decks/" . $deckId . "/json");
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+    $apiDeck = curl_exec($curl);
+    $apiInfo = curl_getinfo($curl);
+    $errorMessage = curl_error($curl);
+    curl_close($curl);
+    $json = $apiDeck;
+  }
   else $json = $decklink;
 
   if($json == "") {
