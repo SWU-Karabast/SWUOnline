@@ -1608,7 +1608,7 @@ function CanConfirmPhase($phase) {
       }
       return $totalCounters == $totalMaxCounters;
     default:
-      return false;
+      return 0;
   }
 }
 
@@ -3484,15 +3484,15 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "1900571801"://Overwhelming Barrage
       if ($target != "-") {
-        include_once "Libraries/MZOpHelpers.php";
         $ally = new Ally($target);
         $ally->AddRoundHealthModifier(2);
         AddCurrentTurnEffect($cardID, $currentPlayer, "PLAY", $ally->UniqueID());
-        AddDecisionQueue("FINDINDICES", $currentPlayer, "ALLOURUNITSMULTI");
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose units to damage", 1);
-        AddDecisionQueue("MULTICHOOSEOURUNITS", $currentPlayer, "<-", 1);
-        AddDecisionQueue("MULTIDISTRIBUTEDAMAGE", $currentPlayer,
-          MultiDistributeDamageStringBuilder($ally->CurrentPower(),$currentPlayer,isUnitEffect:"1",zones:"OURALLIES"), 1);
+        $amount = $ally->CurrentPower();
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+        AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, $amount . "-");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Deal " . $amount . " damage as you choose among the units");
+        AddDecisionQueue("MULTIDAMAGEMULTIZONE", $currentPlayer, "<-");
+        AddDecisionQueue("MZOP", $currentPlayer, "DEALMULTIDAMAGE");
       }
       break;
     case "3974134277"://Prepare for Takeoff

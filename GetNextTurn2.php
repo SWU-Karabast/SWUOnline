@@ -849,16 +849,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     $totalMaxCounters = $params[0];
     $mzIndexes = implode("-", array_slice($params, 1));
     $options = explode(",", $mzIndexes);
-    $optionsIndex = [];
-
-    if ($turn[1] != $playerID) { // Invert the multizone indexes for the opponent, to show the correct counters
-      for ($i = 0; $i < count($options); $i++) {
-        $mzParams = explode("-", $options[$i]);
-        $optionsIndex[] = $mzParams[0] == "MYALLY" ? "THEIRALLY-" . $mzParams[1] : "MYALLY-" . $mzParams[1];
-      }
-    } else {
-      $optionsIndex = [...$options];
-    }
+    $optionsIndex = [...$options];
 
     // Check if the total counters are greater than the total max counters
     $totalCounters = 0;
@@ -1299,6 +1290,8 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         $action = $currentPlayer == $playerID && $turn[0] != "P" && $playable ? 105 : 0; // 105 is the Ally Ability for opponent-controlled abilities like Mercenary Gunship
         $actionDataOverride = strval($i);
       } else if ($mzMultiDamage) {
+        $mzIndex = $ally->MZIndex();
+        $inOptions = in_array($mzIndex, $optionsIndex);
         if ($inOptions) {
           $showCounterControls = $turn[1] == $playerID;
           $border = $showCounterControls ? 4 : 0;
@@ -1454,8 +1447,6 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         break;
       $ally = new Ally("MYALLY-" . $i, $playerID);
 
-      $mzIndex = "MYALLY-" . $i;
-      $inOptions = in_array($mzIndex, $optionsIndex);
       $showCounterControls = false;
       $action = 0;
       $border = 0;
@@ -1465,12 +1456,14 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       $maxCounters = 0;
 
       if ($mzChooseFromPlay) {
+        $mzIndex = "MYALLY-" . $i;
+        $inOptions = in_array($mzIndex, $optionsIndex);
+        $action = $inOptions ? 16 : 0;
+        $actionDataOverride = $inOptions ? $mzIndex : 0;
         $border = CardBorderColor($myAllies[$i], "PLAY", $action == 16);
-        if ($inOptions) {
-          $action = 16;
-          $actionDataOverride = $mzIndex;
-        }
       } else if ($mzMultiDamage) {
+        $mzIndex = $ally->MZIndex();
+        $inOptions = in_array($mzIndex, $optionsIndex);
         if ($inOptions) {
           $showCounterControls = $turn[1] == $playerID;
           $border = $showCounterControls ? 4 : 0;

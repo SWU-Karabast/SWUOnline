@@ -3149,6 +3149,7 @@ function ResetAllies($player) {
     if ($allies[$i+1] != 0) {
       $allies[$i+3] = 0;
       $allies[$i+8] = 1;
+      $allies[$i+6] = 0;//Reset counters
       $allies[$i+10] = 0;//Reset times attacked
       ++$allies[$i+12];//Increase number of turns in play
       $allies[$i+14] = 0;//Reset was healed
