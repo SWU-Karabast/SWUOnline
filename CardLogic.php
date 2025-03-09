@@ -931,6 +931,19 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       AddDecisionQueue("SETDQCONTEXT", $player, "Move L3's brain to a vehicle?");
       AddDecisionQueue("YESNO", $player, "-", 1);
       AddDecisionQueue("SPECIFICCARD", $player, "L337_JTL,$target", 1);
+    case "1935873883"://Razor Crest
+      AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:maxCost=2");
+      AddDecisionQueue("MZFILTER", $player, "leader=1", 1);
+      AddDecisionQueue("SETDQVAR", $player, 0, 1);
+      AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:maxCost=4");
+      AddDecisionQueue("MZFILTER", $player, "leader=1", 1);
+      AddDecisionQueue("MZFILTER", $player, "status=0", 1);
+      AddDecisionQueue("PREPENDLASTRESULT", $player, "{0},", 1);
+      AddDecisionQueue("CLEANEMPTYINDICES", $player, 1);
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to bounce", 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
+      AddDecisionQueue("MZOP", $player, "BOUNCE", 1);
+      break;
     default: break;
   }
 }
