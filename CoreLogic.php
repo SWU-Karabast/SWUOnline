@@ -2143,6 +2143,7 @@ function PlayerAspects($player)
   for($i=0; $i<count($char); $i+=CharacterPieces())
   {
     $cardAspects = explode(",", CardAspects($char[$i]));
+    if($cardAspects[0] == "") continue;
     for($j=0; $j<count($cardAspects); ++$j) {
       ++$aspects[$cardAspects[$j]];
     }
