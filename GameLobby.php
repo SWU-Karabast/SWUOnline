@@ -215,7 +215,7 @@ $isMobile = IsMobile();
   <audio id="playerJoinedAudio">
     <source src="./Assets/playerJoinedSound.mp3" type="audio/mpeg">
   </audio>
-  <script src="./jsInclude2.js"></script>
+  <script src="./jsInclude250308.js"></script>
   <script>
     function copyText() {
       var gameLink = document.getElementById("gameLink");

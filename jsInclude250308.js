@@ -125,3 +125,23 @@ function TogglePopup(name) {
     xmlhttp.send();
   }
 }
+
+function OnDamageControlMouseEnter(e) {
+  document.getElementById('cardDetail').classList.add('hidden');
+}
+
+function OnDamageControlMouseLeave(e) {
+  document.getElementById('cardDetail').classList.remove('hidden');
+}
+
+function SubmitIncreaseCounters(that, cardID) {
+  if(that.disabled) return;
+  that.disabled = true;
+  SubmitInput(14, "&cardID=" + cardID);
+}
+
+function SubmitDecreaseCounters(that, cardID) {
+  if(that.classList.contains('disabled')) return;
+  that.classList.add('disabled');
+  SubmitInput(15, "&cardID=" + cardID);
+}
