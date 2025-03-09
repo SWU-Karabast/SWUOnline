@@ -215,14 +215,14 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
   if ($folder == "crops")
     $margin = "0px;";
   if ($from == "SUBCARD") {
-    $rv = "<a class='not-selectable' style='" . $margin . " position:absolute; display:inline-block;" . ($action > 0 ? "cursor:pointer;" : "") . "'" . ($showHover > 0 ? " onmouseenter='ShowCardDetail(event, this)' onmouseleave='HideCardDetail()'" : "") . ($action > 0 ? " onclick='SubmitInput(\"" . $action . "\", \"&cardID=" . $actionData . "\");'" : "") . ">";
+    $rv = "<a class='not-selectable' style='" . $margin . " position:absolute; display:inline-block;" . ($action > 0 ? "cursor:pointer;" : "") . "'" . ($showHover > 0 ? " onmouseover='ShowCardDetail(event, this)' onmouseout='HideCardDetail()'" : "") . ($action > 0 ? " onclick='SubmitInput(\"" . $action . "\", \"&cardID=" . $actionData . "\");'" : "") . ">";
   } else {
-    $rv = "<a class='not-selectable' style='" . $margin . " position:relative; display:inline-block;" . ($action > 0 ? "cursor:pointer;" : "") . "'" . ($showHover > 0 ? " onmouseenter='ShowCardDetail(event, this)' onmouseleave='HideCardDetail()'" : "") . ($action > 0 ? " onclick='SubmitInput(\"" . $action . "\", \"&cardID=" . $actionData . "\");'" : "") . ">";
+    $rv = "<a class='not-selectable' style='" . $margin . " position:relative; display:inline-block;" . ($action > 0 ? "cursor:pointer;" : "") . "'" . ($showHover > 0 ? " onmouseover='ShowCardDetail(event, this)' onmouseout='HideCardDetail()'" : "") . ($action > 0 ? " onclick='SubmitInput(\"" . $action . "\", \"&cardID=" . $actionData . "\");'" : "") . ">";
   }
   if ($borderColor > 0) $margin = "margin-bottom:" . (8 + $subcardNum * 16) . "px; top: " . (0 + $subcardNum * 16) . "px;";
   if ($borderColor != -1 && $from == "HASSUBCARD") $margin = "margin-bottom:" . (6 + $subcardNum * 16) . "px; top: " . ($subcardNum * 16) . "px;";
   if ($folder == "crops") $margin = "0px;";
-  $rv = "<a class='not-selectable' style='" . $margin . " position:relative; display:inline-block;" . ($action > 0 ? "cursor:pointer;" : "") . "'" . ($showHover > 0 ? " onmouseenter='ShowCardDetail(event, this)' onmouseleave='HideCardDetail()'" : "") . ($action > 0 ? " onclick='SubmitInput(\"" . $action . "\", \"&cardID=" . $actionData . "\");'" : "") . ">";
+  $rv = "<a class='not-selectable' style='" . $margin . " position:relative; display:inline-block;" . ($action > 0 ? "cursor:pointer;" : "") . "'" . ($showHover > 0 ? " onmouseover='ShowCardDetail(event, this)' onmouseout='HideCardDetail()'" : "") . ($action > 0 ? " onclick='SubmitInput(\"" . $action . "\", \"&cardID=" . $actionData . "\");'" : "") . ">";
 
   if ($borderColor > 0) {
     $border = "border-radius:10px; border:2px solid " . BorderColorMap($borderColor) . ";";
@@ -317,43 +317,6 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
   if ($showCounterControls) {
     $canIncrease = !$maxCountersReached && ($maxCounters == 0 || $counters < $maxCounters);
     $canDecrease = $counters > 0;
-    $increaseColor = $canIncrease ? "#fff" : "#666";
-    $decreaseColor = $canDecrease ? "#fff" : "#666";
-
-
-    // <button class='counter-control' style='
-    // width: 100%;
-    // height: 50%;
-    // display: flex;
-    // align-items: center;
-    // justify-content: center;
-    // font-size: 22px;
-    // font-weight: 600;
-    // border-bottom: 2px solid Gray;
-    // cursor: " . ($canIncrease ? "pointer" : "unset") . ";'
-    // " . ($canIncrease ? "" : "class='disabled'") . "
-    // onclick='SubmitIncreaseCounters(this, \"" . $actionData . "\");'
-    // ><span class='not-selectable' style='margin-top: -4px; color: " . $increaseColor . ";'>+</span></button>
-
-    // $rv .= "<div style='margin: 0px;
-    // top: 15px;
-    // left: -10px;
-    // border-radius: 8px;
-    // width:28px;
-    // height:56px;
-    // display: flex;
-    // flex-direction: column;
-    // align-items: center;
-    // justify-content: center;
-    // position:absolute; z-index: 10;
-    // border: 1px solid Gray;
-    // background: #292929;
-    // box-shadow: inset 0 0 0 1px #454545;
-    // transition: 150ms ease-in-out;
-    // font-family: 'barlow', sans-serif;
-    // user-select: none;
-    // " . ($showHover > 0 ? " onmouseenter='OnDamageControlMouseEnter()' onmouseleave='OnDamageControlMouseLeave()'" : "") . "
-    // >
 
     // Container for both buttons
     $rv .= "<div style='margin: 0px;
@@ -363,8 +326,7 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    position:absolute; z-index: 10;
-    " . ($showHover > 0 ? " onmouseenter='OnDamageControlMouseEnter()' onmouseleave='OnDamageControlMouseLeave()'" : "") . "
+    position:absolute; z-index: 10;'
     >
       <button class='counter-control increase-control' " . ($canIncrease ? "" : "disabled") . " onclick='SubmitIncreaseCounters(this, \"" . $actionData . "\");' " . ($showHover > 0 ? " onmouseenter='OnDamageControlMouseEnter()' onmouseleave='OnDamageControlMouseLeave()'" : "") . ">+</button>
       <button class='counter-control decrease-control' " . ($canDecrease ? "" : "disabled") . " onclick='SubmitDecreaseCounters(this, \"" . $actionData . "\");' " . ($showHover > 0 ? " onmouseenter='OnDamageControlMouseEnter()' onmouseleave='OnDamageControlMouseLeave()'" : "") . ">-</button>
