@@ -2287,7 +2287,6 @@ function CurrentTurnEffectsPlayingUnit($player) {
       case "3426168686"://Sneak Attack
       case "5494760041"://Galactic Ambition
       //Shadows of the Galaxy
-      //TODO: look into if we have any TTFREE on upgrades..
       case "4643489029"://Palpatine's Return
       case "5576996578"://Endless Legions
       case "9642863632"://Bounty Hunter's Quarry

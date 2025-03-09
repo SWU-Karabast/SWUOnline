@@ -2143,6 +2143,7 @@ function PlayerAspects($player)
   for($i=0; $i<count($char); $i+=CharacterPieces())
   {
     $cardAspects = explode(",", CardAspects($char[$i]));
+    if($cardAspects[0] == "") continue;
     for($j=0; $j<count($cardAspects); ++$j) {
       ++$aspects[$cardAspects[$j]];
     }
@@ -4743,7 +4744,6 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to return to hand");
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-      AddDecisionQueue("ADDCURRENTEFFECT", $currentPlayer, $cardID, 1);
       AddDecisionQueue("MZOP", $currentPlayer, "BOUNCE", 1);
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "ANEWADVENTURE", 1);
       break;

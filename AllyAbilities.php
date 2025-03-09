@@ -647,6 +647,9 @@ function AllyPlayableExhausted(Ally $ally) {
     case "5630404651"://MagnaGuard Wing Leader
     case "040a3e81f3"://Lando Leader Unit
       return $ally->NumUses() > 0;
+    case "5306772000"://Phantom II
+      return SearchCount(SearchAlliesForTitle($ally->Controller(), "The Ghost")) > 0
+        && NumResourcesAvailable($ally->Controller()) >= 1;
     case "4300219753"://Fett's Firespray
     case "2471223947"://Frontline Shuttle
     case "1885628519"://Crosshair

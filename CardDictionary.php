@@ -1432,9 +1432,12 @@ function CheckJTLAbilityTypes($cardID) {
     case "9763190770"://Major Vonreg
       return LeaderAbilitiesIgnored() ? "" : "A";
     case "5306772000"://Phantom II
-      if(SearchCount(SearchAlliesForTitle($currentPlayer, "The Ghost")) > 0)
-        return "A,AA";
-      return "A";
+      $abilityTypes = "";
+      if(SearchCount(SearchAlliesForTitle($currentPlayer, "The Ghost")) > 0 && NumResourcesAvailable($currentPlayer) >= 1)
+        $abilityTypes = "A";
+      if($abilityTypes != "") $abilityTypes .= ",";
+      $abilityTypes .= "AA";
+      return $abilityTypes;
     default: return "";
   }
 }
@@ -1449,7 +1452,7 @@ function GetAbilityNames($cardID, $index = -1, $validate=false)
     case "SOR": $abilityNames = CheckSORAbilityNames($cardID, $index, $validate); break;
     case "SHD": $abilityNames = CheckSHDAbilityNames($cardID, $index, $validate); break;
     case "TWI": $abilityNames = CheckTWIAbilityNames($cardID, $index, $validate); break;
-    case "JTL": $abilityNames = CheckJTLAbilityNames($cardID); break;
+    case "JTL": $abilityNames = CheckJTLAbilityNames($cardID, $index, $validate); break;
     default: break;//maybe throw error?
   }
 
@@ -1704,7 +1707,7 @@ function CheckTWIAbilityNames($cardID, $index, $validate) {
   }
 }
 
-function CheckJTLAbilityNames($cardID) {
+function CheckJTLAbilityNames($cardID, $index, $validate) {
   global $currentPlayer;
 
   switch($cardID) {
@@ -1745,9 +1748,17 @@ function CheckJTLAbilityNames($cardID) {
     case "9763190770"://Major Vonreg
       return LeaderAbilitiesIgnored() ? "" : "Play";
     case "5306772000"://Phantom II
-      if(SearchCount(SearchAlliesForTitle($currentPlayer, "The Ghost")) > 0)
-        return "Dock,Attack";
-      return "Attack";
+      $abilityNames = "";
+      if(SearchCount(SearchAlliesForTitle($currentPlayer, "The Ghost")) > 0 && NumResourcesAvailable($currentPlayer) >= 1) {
+        $abilityNames .= "Dock";
+      }
+      if($abilityNames != "") $abilityNames .= ",";
+      $abilityNames .= "Attack";
+      if($validate) {
+        $ally = new Ally("MYALLY-" . $index, $currentPlayer);
+        if($ally->IsExhausted()) $abilityNames = FilterOutAttackAbilityName($abilityNames);
+      }
+      return $abilityNames;
     default: return "";
   }
 }
