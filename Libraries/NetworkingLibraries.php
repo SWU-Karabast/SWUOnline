@@ -1547,6 +1547,9 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
         : CardCost($cardID) + SelfCostModifier($cardID, $from),
         default => CardCost($cardID) + SelfCostModifier($cardID, $from)
       };
+      if(SearchCount(SearchAlliesForCard($currentPlayer, "0728753133")) > 0) {//The Starhawk
+        $baseCost = $baseCost - floor($baseCost / 2);
+      }
 
       if (!$playingCard)
         $resources[1] += $dynCostResolved;
@@ -1894,9 +1897,11 @@ function GetTargetsForAttack(Ally $attacker, bool $canAttackBase)
   for ($i = 0; $i < count($allies); $i += AllyPieces()) {
     // Check if the target is in the same arena, except for Strafing Gunship, Swoop Down
     $defAlly = new Ally("MYALLY-" . $i, $defPlayer);
-    if ($attacker->CurrentArena() != $defAlly->CurrentArena() && $attacker->CardID() != "5464125379" && !SearchCurrentTurnEffects("4663781580", $mainPlayer)) {
-      continue;
-    }
+    if ($attacker->CurrentArena() != $defAlly->CurrentArena()
+        && $attacker->CardID() != "5464125379"//Strafing Gunship
+        && $attacker->CardID() != "9667260960"//Retrofitted Airspeeder
+        && !SearchCurrentTurnEffects("4663781580", $mainPlayer)//Swoop Down
+    ) continue;
 
     // Check if the target can be attacked
     if (!AllyCanBeAttackTarget($defPlayer, $i, $allies[$i])) {
@@ -2239,7 +2244,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
       }
     }
     if ($from != "PLAY" && $from != "EQUIP" && $from != "CHAR") {
-      if (HasShielded($cardID, $currentPlayer)) {
+      if (HasShielded($cardID, $currentPlayer, $index)) {
         AddLayer("TRIGGER", $currentPlayer, "SHIELDED", "-", "-", $uniqueID);
       }
       if (HasAmbush($cardID, $currentPlayer, $index, $from)) {

@@ -1074,14 +1074,38 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       AddHand($player, $lastResult);
       AddGraveyard($cardLeft, $player, "DECK");
       break;
+    case "CAT_AND_MOUSE":
+      $enemyAlly = new Ally($lastResult);
+      $enemyArena = $enemyAlly->CurrentArena();
+      $enemyPower = $enemyAlly->CurrentPower();
+      $enemyAlly->Exhaust();
+      AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:arena=" . $enemyArena . ";maxAttack=" . $enemyPower);
+      AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit in the same arena to ready", 1);
+      AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
+      AddDecisionQueue("MZOP", $player, "READY", 1);
+      break;
     case "KAZUDA_JTL":
       for($i=0; $i<count($lastResult); ++$i) {
         $ally = new Ally("MYALLY-" . $lastResult[$i], $player);
         AddRoundEffect("c1700fc85b", $player, "c1700fc85b", $ally->UniqueID());
       }
       break;
+    case "FOCUS_FIRE":
+      $target = new Ally($lastResult);
+      $targetArena = CardArenas($target->CardID());
+      $allies = &GetAllies($player);
+      $damage = 0;
+      for ($i = 0; $i < count($allies); $i += AllyPieces()) {
+        if (TraitContains($allies[$i], "Vehicle", $player) && CardArenas($allies[$i]) == $targetArena) {
+          $ally = new Ally($allies[$i+5], $player);
+          $damage += $ally->CurrentPower();
+        }
+      }
+      AddDecisionQueue("PASSPARAMETER", $player, $lastResult, 1);
+      AddDecisionQueue("MZOP", $player, DamageStringBuilder($damage, $player, isUnitEffect:1), 1);
+      break;
     case "L337_JTL":
-      $L3Ally = Ally::FromMyIndex(SearchAlliesForCard($player, "6032641503"), $player);
+      $L3Ally = Ally::FromUniqueId($parameterArr[1]);
       if($lastResult == "YES") {
         AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:trait=Vehicle");
         AddDecisionQueue("MZFILTER", $player, "hasPilot=1");

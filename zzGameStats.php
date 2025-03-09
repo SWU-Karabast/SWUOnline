@@ -61,7 +61,7 @@ We can probably remove numDays at this point but I just want to get everything w
 
 $numDays = TryGet("numDays", 365);
 
-echo ("<script src=\"./jsInclude.js\"></script>");
+echo ("<script src=\"./jsInclude2.js\"></script>");
 
 echo ("<style>
 

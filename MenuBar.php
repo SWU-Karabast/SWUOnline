@@ -29,7 +29,7 @@ $isMobile = IsMobile();
     <link rel="shortcut icon" href="Images/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="Images/apple-touch-icon.png" />
     <link rel="manifest" href="site.webmanifest" />
-    <link rel="stylesheet" href="./css/petranaki250301.css">
+    <link rel="stylesheet" href="./css/petranaki250308.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -61,7 +61,7 @@ $isMobile = IsMobile();
         <div class='nav-bar-links'>
             <ul>
                 <?php
-                echo '<li><a target="_blank" href="https://discord.gg/AN5GEXSu"><img src="./Images/icons/discord.svg" alt="Discord"></a></li>';
+                echo '<li><a target="_blank" href="https://discord.gg/ep9fj8Vj3F"><img src="./Images/icons/discord.svg" alt="Discord"></a></li>';
                 echo '<li><a target="_blank" href="https://github.com/SWU-Petranaki/SWUOnline"><img src="./Images/icons/github.svg" alt="GitHub"></a></li>';
                 echo '<li>
                 <a href="javascript:void(0);" onclick="toggleLanguages()">

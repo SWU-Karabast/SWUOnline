@@ -6,6 +6,7 @@ include_once "Libraries/PlayerSettings.php";
 include_once 'Assets/patreon-php-master/src/PatreonDictionary.php';
 include_once "APIKeys/APIKeys.php";
 include_once './AccountFiles/AccountDatabaseAPI.php';
+include_once 'Libraries/GameFormats.php';
 
 // Check if the user is banned
 if (isset($_SESSION["userid"]) && IsBanned($_SESSION["userid"])) {
@@ -16,7 +17,25 @@ if (isset($_SESSION["userid"]) && IsBanned($_SESSION["userid"])) {
 if (!empty($_SESSION['error'])) {
   $error = $_SESSION['error'];
   unset($_SESSION['error']);
-  echo "<script>alert('" . $error . "')</script>";
+    echo "<script>
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('mainMenuError').innerHTML = '$error';
+      document.getElementById('mainMenuError').classList.remove('error-popup-hidden');
+      document.getElementById('mainMenuError').classList.add('error-popup');
+    });
+
+    setTimeout(function() {
+      document.getElementById('mainMenuError').classList.remove('error-popup');
+      document.getElementById('mainMenuError').classList.add('error-popup-hidden');
+    }, 10000);
+
+    document.addEventListener('click', function(event) {
+      if (!event.target.closest('#mainMenuError')) {
+        document.getElementById('mainMenuError').classList.remove('error-popup');
+        document.getElementById('mainMenuError').classList.add('error-popup-hidden');
+      }
+    });
+  </script>";
 }
 
 $language = TryGet("language", 1);
@@ -60,7 +79,8 @@ include_once 'Header.php';
       ?>
     </div>
   </div>
-
+  <div id="mainMenuError" class="error-popup-hidden">
+  </div>
   <div class='create-game-wrapper'>
   <?php
 
@@ -114,11 +134,12 @@ include_once 'Header.php';
   <?php
   echo ("<label for='format' class='SelectDeckInput'>Format</label>");
   echo ("<select name='format' id='format' onchange='toggleInfoBox()'>");
-  if ($canSeeQueue) {
-    echo ("<option value='premierf' " . ($defaultFormat == 0 ? " selected" : "") . ">Premier</option>");
-    echo ("<option value='reqsundo' " . ($defaultFormat == 1 ? " selected" : "") . ">Request-Undo Premier</option>");
-  }
-  echo ("<option value='openform'" . ($defaultFormat == 4 ? " selected" : "") . ">Open Format</option>");
+  if ($canSeeQueue) echo ("<option value='premierf' " . ($defaultFormat == 0 ? " selected" : "") . ">Premier</option>");
+  $funFormatIndex = 5;//see FormatName function and related functions for index to rotate
+  $funFormatBackendName = FormatName($funFormatIndex);
+  $funFormatDisplayName = FormatDisplayName($funFormatBackendName);
+  echo ("<option value='openform'" . ($defaultFormat == 4 ? " selected" : "") . ">" . FormatDisplayName(FormatName(4)) . "</option>");
+  if($canSeeQueue) echo ("<option value='$funFormatBackendName'" . ">Cantina Brawl ($funFormatDisplayName)</option>");
   echo ("</select>");
   ?>
 
@@ -159,7 +180,7 @@ include_once 'Header.php';
       <div style='vertical-align:middle; text-align:center;'>
         <img src="./Images/TWI Starter.png" width="320">
         <h3 style="margin: 15px 0; display: block;">We got a new look!</h3>
-        <p>Petranaki.net will continue to be maintained by familiar devs OotTheMonk, Brubraz, ninin, and LVE while Karabast.net will be reserved for the New Engine Team and all the work they've been making excellent progress with! This is to ensure we still have the engine available to those who have been enjoying it in its current state</p>
+        <p>Join our new Discord server at <a href="https://discord.gg/ep9fj8Vj3F" target="_blank" rel="noopener noreferrer">Petranaki</a> for the latest updates, news, and to share your feedback. We look forward to connecting with you!</p>
       </div>
     </div>
     <?php
@@ -172,7 +193,7 @@ include_once 'Header.php';
         <ins class="adsbygoogle"
             style="display:block"
             data-ad-client="ca-pub-8442966023291783"
-            data-ad-slot="5060625180"
+            data-ad-slot="5060625180"x
             data-ad-format="auto"
             data-full-width-responsive="true"></ins>
         <script>

@@ -1,0 +1,18 @@
+.log-entry {
+    background-color: rgba(48, 48, 48, 0.67);
+    margin: 8px 0px;
+    padding: 4px 8px;
+    border-left: solid 2px #afafaf;
+    border-right: solid 2px #afafaf;
+    border-radius: 4px;
+    overflow-wrap: break-word;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.keyword {
+    color: Gray;
+    font-weight: bold;
+}

@@ -132,7 +132,7 @@ class Ally {
           $player = $this->Controller();
           AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:arena=Space&THEIRALLY:arena=Space");
           AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal 1 damage to");
-          AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
+          AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
           AddDecisionQueue("MZOP", $player, DamageStringBuilder(1, $player, isUnitEffect:1));
         }
         break;
@@ -190,7 +190,10 @@ class Ally {
   //Returns true if the ally is destroyed
   function DefeatIfNoRemainingHP() {
     if (!$this->Exists()) return true;
-    if ($this->Health() <= 0 && ($this->CardID() != "d1a7b76ae7" || $this->LostAbilities()) && ($this->CardID() != "0345124206")) {  //Clone - Ensure that Clone remains in play while resolving its ability
+    if ($this->Health() <= 0
+        && ($this->CardID() != "d1a7b76ae7" || $this->LostAbilities())//Chirrut Imwe Leader
+        && ($this->CardID() != "6032641503" || $this->LostAbilities())//L3-37 JTL
+        && ($this->CardID() != "0345124206")) {  //Clone - Ensure that Clone remains in play while resolving its ability
       DestroyAlly($this->playerID, $this->index);
       return true;
     }
@@ -621,7 +624,8 @@ class Ally {
       if($receivingPilot) {
         $allyDestroyed = $this->CheckUniqueAllyForPilot($cardID);
         if($allyDestroyed) $this->index = min(0, $this->index - AllyPieces());
-        if($cardID == "0979322247") $this->DefeatIfNoRemainingHP();//Sidon Ithano
+        if($cardID == "0979322247")//Sidon Ithano
+          $this->DefeatIfNoRemainingHP();
       }
     }
     //Pilot attach side effects
@@ -875,7 +879,18 @@ class Ally {
   }
 
   function HasBounty(): bool {
-    return CollectBounties($this->PlayerID(), $this->CardID(), $this->UniqueID(), $this->IsExhausted(), $this->Owner(), $this->GetUpgrades(), reportMode:true) > 0;
+    if(!$this->LostAbilities()) return CollectBounties($this->PlayerID(), $this->CardID(), $this->UniqueID(), $this->IsExhausted(), $this->Owner(), $this->GetUpgrades(), reportMode:true) > 0;
+    return false;
+  }
+
+  function IsSpectreWithGhostBounty(): bool {
+    //The Ghost JTL
+    $theGhostIndex = SearchAlliesForCard($this->Controller(), "5763330426");
+    if($theGhostIndex != "" && TraitContains($this->CardID(), "Spectre", $this->Controller()) && $this->Index() != $theGhostIndex) {
+      $theGhost = new Ally("MYALLY-" . $theGhostIndex, $this->Controller());
+      return $theGhost->HasBounty();
+    }
+    return false;
   }
 
   function Serialize() {

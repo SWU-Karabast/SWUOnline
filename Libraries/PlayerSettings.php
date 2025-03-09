@@ -266,6 +266,12 @@ function GetCardBack($player)
       return "tropa-do-boba";
     case 33:
       return "CB_OuterRimCCG";
+    case 34:
+      return "Central";
+    case 35:
+      return "CB_Enigma";
+    case 36:
+      return "PrairiePirates";
     default:
       return "CardBack";
   }
@@ -493,6 +499,9 @@ function GetSettingsUI($player)
   $rv .= CreateSelectOption($SET_Cardback . "-" . 31, "Galactic Shuffle", $SET_Cardback . "-" . $settings[$SET_Cardback]);
   $rv .= CreateSelectOption($SET_Cardback . "-" . 32, "Tropa do Boba", $SET_Cardback . "-" . $settings[$SET_Cardback]);
   $rv .= CreateSelectOption($SET_Cardback . "-" . 33, "Outer Rim CCG", $SET_Cardback . "-" . $settings[$SET_Cardback]);
+  $rv .= CreateSelectOption($SET_Cardback . "-" . 34, "Central Spacers", $SET_Cardback . "-" . $settings[$SET_Cardback]);
+  $rv .= CreateSelectOption($SET_Cardback . "-" . 35, "Enigma", $SET_Cardback . "-" . $settings[$SET_Cardback]);
+  $rv .= CreateSelectOption($SET_Cardback . "-" . 36, "PrairiePirates", $SET_Cardback . "-" . $settings[$SET_Cardback]);
   $rv .= "</select>";
   $rv .= "<BR>";
 
@@ -620,51 +629,24 @@ function SaveSettingInDatabase($setting)
   }
 }
 
-function TranslationExist($Language, $cardID)
-{
-  switch ($Language) {
-    case "JP": //Japanese
-      switch ($cardID) {
-        case "CRU046":
-        case "CRU050":
-        case "CRU063":
-        case "CRU069":
-        case "CRU072":
-        case "CRU073":
-        case "CRU074":
-        case "CRU186":
-        case "CRU187":
-        case "CRU194":
-        case "WTR100":
-        case "WTR191":
-          return true;
-        default:
-          return false;
-      }
-      break;
-    default:
-      return false;
-  }
-}
-
 function FormatCode($format)
 {
   switch ($format) {
     case "premierf":
       return 0;
-    case "reqsundo":
-      return 1;
-    case "blitz":
+    // case "reqsundo"://DEPRECATED
+    //   return 1;
+    case "12345678"://free 8 characters format
       return 2;
-    case "compblitz":
+    case "sndcrawl":
       return 3;
     case "openform":
       return 4;
-    case "commoner":
+    case "padawanf":
       return 5;
-    case "sealed":
+    case "sealedfm":
       return 6;
-    case "draft":
+    case "draftfmt":
       return 7;
     default:
       return -1;
@@ -676,20 +658,20 @@ function FormatName($formatCode)
   switch ($formatCode) {
     case 0:
       return "premierf";
-    case 1:
-      return "reqsundo";
+    // case 1://DEPRECATED
+    //   return "reqsundo";
     case 2:
-      return "blitz";
+      return "12345678";//free 8 characters format
     case 3:
-      return "compblitz";
+      return "sndcrawl";
     case 4:
       return "openform";
     case 5:
-      return "commoner";
+      return "padawanf";
     case 6:
-      return "sealed";
+      return "sealedfm";
     case 7:
-      return "draft";
+      return "draftfmt";
     default:
       return "-";
   }

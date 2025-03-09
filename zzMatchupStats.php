@@ -19,7 +19,7 @@ if (!$forIndividual) exit;
 $detailHeroID = $_GET["heroID"];
 $detailMatchupID = $_GET["matchupID"];
 
-echo ("<script src=\"./jsInclude.js\"></script>");
+echo ("<script src=\"./jsInclude2.js\"></script>");
 
 echo (
 "<style>

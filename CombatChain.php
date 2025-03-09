@@ -137,11 +137,11 @@ function AttackModifier($cardID, $player, $index, $reportMode = false)
     $mzArr = explode("-", $attacker);
     if($mzArr[1] == $index && !$reportMode) $modifier = RaidAmount($cardID, $mainPlayer, $mzArr[1]);
   }
+  $ally = new Ally("MYALLY-" . $index, $player);
   //Base attack modifiers
   $char = &GetPlayerCharacter($player);
   switch($char[0]) {
     case "9652861741"://Petranaki Arena
-      $ally = new Ally("MYALLY-" . $index, $player);
       $modifier += $ally->IsLeader() ? 1 : 0;
       break;
     default: break;
@@ -158,8 +158,8 @@ function AttackModifier($cardID, $player, $index, $reportMode = false)
       if(count($combatChain) == 0 || $combatChain[0] !== "4619930426" || $player == $defPlayer) break;
       $target = GetAttackTarget();
       if($target == "THEIRCHAR-0") break;
-      $ally = new Ally($target, $defPlayer);
-      $modifier += $ally->IsDamaged() ? 2 : 0;
+      $defAlly = new Ally($target, $defPlayer);
+      $modifier += $defAlly->IsDamaged() ? 2 : 0;
       break;
     case "7648077180"://97th Legion
       $modifier += NumResources($player);
@@ -174,12 +174,11 @@ function AttackModifier($cardID, $player, $index, $reportMode = false)
       break;
     case "6769342445"://Jango Fett
       if(IsAllyAttackTarget() && $player == $mainPlayer) {
-        $ally = new Ally(GetAttackTarget(), $defPlayer);
-        if($ally->HasBounty()) $modifier += 3;
+        $defAlly = new Ally(GetAttackTarget(), $defPlayer);
+        if($defAlly->HasBounty()) $modifier += 3;
       }
       break;
     case "4511413808"://Follower of the Way
-      $ally = new Ally("MYALLY-" . $index, $player);
       if($ally->IsUpgraded()) $modifier += 1;
       break;
     case "58f9f2d4a0"://Dr. Aphra
@@ -233,14 +232,12 @@ function AttackModifier($cardID, $player, $index, $reportMode = false)
       break;
     //Jump to Lightspeed
     case "3389903389"://Black One JTL
-      $ally = new Ally("MYALLY-" . $index, $player);
       if ($ally->IsUpgraded()) $modifier += 1;
       break;
     case "2177194044"://Swarming Vulture Droid
       $modifier += (SearchCount(SearchAllies($player, cardTitle:"Swarming Vulture Droid")) - 1);
       break;
     case "8845408332"://Millennium Falcon (Get Out and Push)
-      $ally = new Ally("MYALLY-" . $index, $player);
       $upgrades = $ally->GetUpgrades();
       for($i = 0; $i < count($upgrades); ++$i) {
         if(TraitContains($upgrades[$i], "Pilot", $player)) $modifier += 1;
@@ -253,11 +250,9 @@ function AttackModifier($cardID, $player, $index, $reportMode = false)
       $modifier += CountPilotUnitsAndPilotUpgrades($player, other: true);
       break;
     case "5422802110"://D'Qar Cargo Frigate
-      $ally = new Ally("MYALLY-" . $index, $player);
-      $modifier -= $ally->Damage();
+      if(!$ally->LostAbilities()) $modifier -= $ally->Damage();
       break;
     case "5052103576"://Resistance X-Wing
-      $ally = new Ally("MYALLY-" . $index, $player);
       if($ally->HasPilot()) $modifier += 1;
       break;
     case "4203363893"://War Juggernaut
@@ -266,6 +261,10 @@ function AttackModifier($cardID, $player, $index, $reportMode = false)
       break;
     case "3213928129"://Clone Combat Squadron
       $modifier += SearchCount(SearchAllies($player, arena:"Space"))-1;
+      break;
+    case "6931439330"://The Ghost SOR (with Phantom II)
+    case "5763330426"://The Ghost JTL (with Phantom II)
+      $modifier += $ally->HasUpgrade("5306772000") ? 3 : 0;
       break;
     default: break;
   }
