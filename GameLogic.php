@@ -613,6 +613,12 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             }
           }
 
+          // Reset target's counters
+          foreach ($targets as $target) {
+            $ally = new Ally($target);
+            $ally->ResetCounters();
+          }
+
           // If there are no targets, return PASS
           if (count($targets) == 0) return "PASS";
 
