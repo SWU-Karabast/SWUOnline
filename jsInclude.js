@@ -6,6 +6,14 @@ function OnLoadCallback(lastUpdate) {
   reload();
 }
 
+function OnDamageControlMouseEnter(e) {
+  document.getElementById('cardDetail').classList.add('hidden');
+}
+
+function OnDamageControlMouseLeave(e) {
+  document.getElementById('cardDetail').classList.remove('hidden');
+}
+
 function ShowCardDetail(e, that) {
   if (e.target.hasAttribute("data-subcard-id")) {
     var subCardID = e.target.getAttribute("data-subcard-id");
@@ -82,6 +90,18 @@ function SubmitChat() {
 function AddCardToHand() {
   var card = document.getElementById("manualAddCardToHand").value;
   SubmitInput(10011, "&cardID=" + card);
+}
+
+function SubmitIncreaseCounters(that, cardID) {
+  if(that.disabled) return;
+  that.disabled = true;
+  SubmitInput(14, "&cardID=" + cardID);
+}
+
+function SubmitDecreaseCounters(that, cardID) {
+  if(that.classList.contains('disabled')) return;
+  that.classList.add('disabled');
+  SubmitInput(15, "&cardID=" + cardID);
 }
 
 function SubmitInput(mode, params, fullRefresh = false) {

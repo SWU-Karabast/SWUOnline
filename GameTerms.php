@@ -131,6 +131,21 @@ function TypeToPlay($phase)
       return "a card from soul";
     case "INPUTCARDNAME":
       return "a card name";
+    case "INDIRECTDAMAGEMULTIZONE":
+      return "indirect damage";
+    case "MULTIDAMAGEMULTIZONE":
+      return "damage";
+  }
+}
+
+function VerbToPlay($phase)
+{
+  switch ($phase) {
+    case "MULTIDAMAGEMULTIZONE":
+    case "INDIRECTDAMAGEMULTIZONE":
+      return "assign";
+    default:
+      return "choose";
   }
 }
 

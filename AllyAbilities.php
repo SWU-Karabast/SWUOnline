@@ -20,7 +20,7 @@ function CreateTieFighter($player, $from = "-") {
 // This function put an ally into play for a player, which means no when played abilities are triggered.
 function PlayAlly($cardID, $player, $subCards = "-", $from = "-",
   $owner = null, $cloned = false, $playAbility = false,
-  $epicAction = false, $playedAsUnit = true, $turnsInPlay = 0) {
+  $epicAction = false, $turnsInPlay = 0) {
   if($from == "TGY") {
     $owner = $player == 1 ? 2 : 1;
   }
@@ -33,8 +33,8 @@ function PlayAlly($cardID, $player, $subCards = "-", $from = "-",
   $allies[] = 0; //Frozen
   $allies[] = $subCards; //Subcards
   $allies[] = $uniqueID; //Unique ID
-  $allies[] = $playedAsUnit ? 1 : 0;//Played as unit
-  $allies[] = 0; //Unused
+  $allies[] = 0;//Counters
+  $allies[] = 0; //Power
   $allies[] = 1; //Ability/effect uses
   $allies[] = 0; //Round health modifier
   $allies[] = 0; //Times attacked
@@ -367,11 +367,6 @@ function BaseHealthModifiers($cardID, $index, $player, $stackingBuff = false) {
 function DealAllyDamage($targetPlayer, $index, $damage, $type="")
 {
   $allies = &GetAllies($targetPlayer);
-  if($allies[$index+6] > 0) {
-    $damage -= 3;
-    if($damage < 0) $damage = 0;
-    --$allies[$index+6];
-  }
   $allies[$index+2] -= $damage;
   if($allies[$index+2] <= 0) DestroyAlly($targetPlayer, $index, fromCombat: $type == "COMBAT");
 }

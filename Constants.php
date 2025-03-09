@@ -130,7 +130,7 @@ function ResourcePieces() { return ArsenalPieces(); }
 //4 - Subcards , delimited
 //5 - Unique ID
 //6 - Originally played as unit (1 = yes, 0 = no)
-//7 - Unused
+//7 - Power
 //8 - Ability/effect Uses
 //9 - Round health modifier
 //10 - Times Attacked

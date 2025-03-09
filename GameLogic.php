@@ -589,6 +589,10 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           return implode(",", array_map(function($x) {return "THEIRALLY-$x";}, $lastResult));
         case "MAPMYINDICES"://to be used after "MULTICHOOSEUNIT"
           return implode(",", array_map(function($x) {return "MYALLY-$x";}, $lastResult));
+        case "DEALMULTIDAMAGE":
+          // Important: use MZOpHelpers.php DamageStringBuilder() function for param structure
+          // TODO: Implement this
+          return $lastResult;
         case "DEALDAMAGE":
           // Important: use MZOpHelpers.php DamageStringBuilder() function for param structure
           if($lastResult == "") return "";
@@ -684,12 +688,12 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $upgrades = $attachedAlly->GetUpgrades(withMetadata:true);
           [$fromEpicAction, $turnsInPlay] = TupleFirstUpgradeWithCardID($upgrades, $lastResult);
           $attachedAlly->RemoveSubcard($lastResult, movingPilot:true);
-          $newUID = PlayAlly($lastResult, $attachedAlly->Owner(), epicAction:$fromEpicAction, playedAsUnit:false, turnsInPlay: $turnsInPlay);
+          $newUID = PlayAlly($lastResult, $attachedAlly->Owner(), epicAction:$fromEpicAction, turnsInPlay: $turnsInPlay);
           if($subcardIsLeader) Ally::FromUniqueId($newUID)->Exhaust();
           return $newUID;
         case "FALLENPILOTUPGRADE":
           $params = explode(",", $lastResult);
-          $newUID = PlayAlly($params[0], $player, epicAction:false, playedAsUnit:false, turnsInPlay:$params[1]);//so far only Luke Skywalker JTL
+          $newUID = PlayAlly($params[0], $player, epicAction:false, turnsInPlay:$params[1]);//so far only Luke Skywalker JTL
           $discard = &GetDiscard($player);
           for($i=0; $i<count($discard); $i+=DiscardPieces()) {
             if($discard[$i] == $params[0]) {

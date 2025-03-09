@@ -75,6 +75,22 @@ class Ally {
     return $this->index;
   }
 
+  function ResetCounters() {
+    $this->allies[$this->index+6] = 0;
+  }
+
+  function Counters() {
+    return $this->allies[$this->index+6];
+  }
+
+  function IncreaseCounters() {
+    $this->allies[$this->index+6]++;
+  }
+
+  function DecreaseCounters() {
+    $this->allies[$this->index+6]--;
+  }
+
   function Damage() {
     return $this->allies[$this->index+2];
   }
@@ -232,6 +248,16 @@ class Ally {
 
   function IsExhausted() {
     return $this->allies[$this->index+1] == 1;
+  }
+
+  function HasShield() {
+    $subcards = $this->GetSubcards();
+    for($i=0; $i<count($subcards); $i+=SubcardPieces()) {
+      if($subcards[$i] == "8752877738") { //Shield Token
+        return true;
+      }
+    }
+    return false;
   }
 
   function WasHealed() {

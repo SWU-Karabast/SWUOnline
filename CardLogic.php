@@ -1452,6 +1452,7 @@ function CheckThrawnJTL($player, $serializedAllyDestroyData, $target) {
 
 function IndirectDamage($player, $amount, $fromUnitEffect=false, $uniqueID="", $alsoExhausts=false)
 {
+  $sourcePlayerTargets = false;
   $sourcePlayer = $player == 1 ? 2 : 1;
   $amount += SearchCount(SearchAlliesForCard($sourcePlayer, "4560739921"));//Hunting Aggressor
   if(SearchCount(SearchAlliesForCard($sourcePlayer, "1330473789")) > 0) $sourcePlayerTargets = true;
@@ -1475,11 +1476,18 @@ function IndirectDamage($player, $amount, $fromUnitEffect=false, $uniqueID="", $
     AddDecisionQueue("MULTIDISTRIBUTEDAMAGE", $sourcePlayer,
       MultiDistributeDamageStringBuilder($amount, $sourcePlayer, $fromUnitEffect ? 1 : 0, isPreventable: 0, alsoExhausts:$alsoExhausts, zones:"THEIRALLIESANDBASE"), 1);
   } else {
-    AddDecisionQueue("FINDINDICES", $player, "UNITSANDBASE");
-    AddDecisionQueue("SETDQCONTEXT", $player, "Choose units and/or base to damage (any remaining will go to base)", 1);
-    AddDecisionQueue("MULTICHOOSEMYUNITSANDBASE", $player, "<-", 1);
-    AddDecisionQueue("MULTIDISTRIBUTEDAMAGE", $player,
-      MultiDistributeDamageStringBuilder($amount, $sourcePlayer, $fromUnitEffect ? 1 : 0, isPreventable: 0, alsoExhausts:$alsoExhausts, zones:"MYALLIESANDBASE"), 1);
+    AddDecisionQueue("SETDQCONTEXT", $player, "Indirect Damage");
+    AddDecisionQueue("OK", $player, CardLink("9611596703", "9611596703") . " deals " . $amount . " indirect damage to you.");
+    AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
+    AddDecisionQueue("PREPENDLASTRESULT", $player, $amount . "-MYCHAR-0");
+    AddDecisionQueue("SETDQCONTEXT", $player, "Assign " . $amount . " unpreventable damage among your base and units");
+    AddDecisionQueue("INDIRECTDAMAGEMULTIZONE", $player, "<-");
+    AddDecisionQueue("MZOP", $player, "DEALMULTIDAMAGE"); // TODO: Implement this
+    // AddDecisionQueue("FINDINDICES", $player, "UNITSANDBASE");
+    // AddDecisionQueue("SETDQCONTEXT", $player, "Choose units and/or base to damage (any remaining will go to base)", 1);
+    // AddDecisionQueue("MULTICHOOSEMYUNITSANDBASE", $player, "<-", 1);
+    // AddDecisionQueue("MULTIDISTRIBUTEDAMAGE", $player,
+    //   MultiDistributeDamageStringBuilder($amount, $sourcePlayer, $fromUnitEffect ? 1 : 0, isPreventable: 0, alsoExhausts:$alsoExhausts, zones:"MYALLIESANDBASE"), 1);
   }
 }
 

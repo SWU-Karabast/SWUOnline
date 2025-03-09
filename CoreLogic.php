@@ -1591,9 +1591,30 @@ function NumEquipBlock()
   return $numEquipBlock;
 }
 
+function CanConfirmPhase($phase) {
+  global $turn;
+  switch ($phase) {
+    case "INDIRECTDAMAGEMULTIZONE":      
+      $params = explode("-", $turn[2]);
+      $totalMaxCounters = $params[0];
+      $mzIndexes = implode("-", array_slice($params, 1));
+      $mzArr = explode(",", $mzIndexes);
+      $totalCounters = 0;
+      for ($i = 0; $i < count($mzArr); $i++) {
+        if (str_contains($mzArr[$i], "ALLY")) {
+          $ally = new Ally($mzArr[$i]);
+          $totalCounters += $ally->Counters();
+        }
+      }
+      return $totalCounters == $totalMaxCounters;
+    default:
+      return false;
+  }
+}
+
   function CanPassPhase($phase)
   {
-    global $combatChainState, $CCS_RequiredEquipmentBlock, $currentPlayer;
+    global $combatChainState, $CCS_RequiredEquipmentBlock, $currentPlayer, $turn;
     if($phase == "B" && HaveUnblockedEquip($currentPlayer) && NumEquipBlock() < $combatChainState[$CCS_RequiredEquipmentBlock]) return false;
     switch($phase)
     {
@@ -1617,6 +1638,7 @@ function NumEquipBlock()
       case "MULTICHOOSEMYUNITSANDBASE": return 0;
       case "MULTICHOOSETHEIRUNITSANDBASE": return 0;
       case "MULTICHOOSEOURUNITSANDBASE": return 0;
+      case "INDIRECTDAMAGEMULTIZONE": return 0;
       case "CHOOSEMULTIZONE": return 0;
       case "CHOOSEBANISH": return 0;
       case "BUTTONINPUTNOPASS": return 0;

@@ -143,23 +143,16 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
         WriteLog("Player " . $playerID . " put a card on the bottom of the deck.");
       }
       break;
-    case 14: //Banish - can be reused for something else
-      //FAB
-      // $index = $cardID;
-      // $banish = &GetBanish($playerID);
-      // $theirChar = &GetPlayerCharacter($playerID == 1 ? 2 : 1);
-      // if($index < 0 || $index >= count($banish))
-      // {
-      //   echo("Banish Index " . $index . " Invalid Input<BR>");
-      //   return false;
-      // }
-      // $cardID = $banish[$index];
-      // if($banish[$index + 1] == "INST") SetClassState($currentPlayer, $CS_NextNAAInstant, 1);
-      // if($banish[$index + 1] == "MON212" && TalentContains($theirChar[0], "LIGHT", $currentPlayer)) AddCurrentTurnEffect("MON212", $currentPlayer);
-      // SetClassState($currentPlayer, $CS_PlayIndex, $index);
-      // PlayCard($cardID, "BANISH", -1, $index, $banish[$index + 2]);
+    case 14: // Increase damage/healing amount
+      $mzIndex = $cardID;
+      $ally = new Ally($mzIndex);
+      $ally->IncreaseCounters();
       break;
-
+    case 15: // Decrease damage/healing amount
+      $mzIndex = $cardID;
+      $ally = new Ally($mzIndex);
+      $ally->DecreaseCounters();
+      break;
     case 16:
     case 18: //Decision Queue (15 and 18 deprecated)
       if (count($decisionQueue) > 0) {
@@ -415,6 +408,9 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
         RemoveDiscard($otherP, $found);
         PlayCard($cardID, "TGY");
       }
+      break;
+    case 38: //Continue
+      ContinueDecisionQueue($buttonInput);
       break;
     case 99: //Pass
       global $isPass, $initiativeTaken, $dqState;
