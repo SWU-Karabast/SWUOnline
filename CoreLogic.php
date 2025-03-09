@@ -3682,7 +3682,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE," . $numCards . ",$currentPlayer,1", 1);
       break;
     case "5941636047"://Resistance Blue Squadron
-      $spaceUnits = SearchCount(SearchAllies($currentPlayer, "arena=Space")) + 1;//+1 for the card itself
+      $spaceUnits = SearchCount(SearchAllies($currentPlayer, arena: "Space")) + 1;//+1 for the card itself
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal " . $spaceUnits . " damage to");
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
