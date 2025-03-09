@@ -841,11 +841,12 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   }
 
   $mzMultiDamage = false;
-  $totalMaxCounters = 0;
+  $canOverkillUnits = false;
   $maxCountersReached = false;
-  if (($turn[0] == "INDIRECTDAMAGEMULTIZONE" || $turn[0] == "MULTIDAMAGEMULTIZONE")) {
+  if (($turn[0] == "INDIRECTDAMAGEMULTIZONE" || $turn[0] == "MULTIDAMAGEMULTIZONE" || $turn[0] == "MAYMULTIDAMAGEMULTIZONE")) {
     $params = explode("-", $turn[2]);
     $mzMultiDamage = true;
+    $canOverkillUnits = $turn[0] != "INDIRECTDAMAGEMULTIZONE";
     $totalMaxCounters = $params[0];
     $mzIndexes = implode("-", array_slice($params, 1));
     $options = explode(",", $mzIndexes);
@@ -1298,7 +1299,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
           $actionDataOverride = $mzIndex;
           $counterType = 1;
           $counters = $ally->Counters();
-          $maxCounters = $ally->HasShield() ? 0 : $ally->Health();
+          $maxCounters = ($ally->HasShield() || $canOverkillUnits) ? 0 : $ally->Health();
         }
       }
 
@@ -1470,7 +1471,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
           $actionDataOverride = $mzIndex;
           $counterType = 1;
           $counters = $ally->Counters();
-          $maxCounters = $ally->HasShield() ? 0 : $ally->Health();
+          $maxCounters = ($ally->HasShield() || $canOverkillUnits) ? 0 : $ally->Health();
         }
       } else {
         $playable = IsPlayable($myAllies[$i], $turn[0], "PLAY", $i, $restriction) && (!$ally->IsExhausted() || AllyPlayableExhausted($ally));

@@ -1594,6 +1594,8 @@ function NumEquipBlock()
 function CanConfirmPhase($phase) {
   global $turn;
   switch ($phase) {
+    case "MAYMULTIDAMAGEMULTIZONE":
+    case "MULTIDAMAGEMULTIZONE":
     case "INDIRECTDAMAGEMULTIZONE":      
       $params = explode("-", $turn[2]);
       $totalMaxCounters = $params[0];
@@ -1605,6 +1607,7 @@ function CanConfirmPhase($phase) {
           $ally = new Ally($mzArr[$i]);
           $totalCounters += $ally->Counters();
         }
+        // TODO: check base counters
       }
       return $totalCounters == $totalMaxCounters;
     default:
@@ -1638,7 +1641,6 @@ function CanConfirmPhase($phase) {
       case "MULTICHOOSEMYUNITSANDBASE": return 0;
       case "MULTICHOOSETHEIRUNITSANDBASE": return 0;
       case "MULTICHOOSEOURUNITSANDBASE": return 0;
-      case "INDIRECTDAMAGEMULTIZONE": return 0;
       case "CHOOSEMULTIZONE": return 0;
       case "CHOOSEBANISH": return 0;
       case "BUTTONINPUTNOPASS": return 0;
@@ -1649,6 +1651,22 @@ function CanConfirmPhase($phase) {
       case "CHOOSEOPTION": return 0;
       case "CHOOSEMYSOUL": return 0;
       case "OVER": return 0;
+      case "INDIRECTDAMAGEMULTIZONE": return 0;
+      case "MULTIDAMAGEMULTIZONE": return 0;
+      case "MAYMULTIDAMAGEMULTIZONE":
+        $params = explode("-", $turn[2]);
+        $mzIndexes = implode("-", array_slice($params, 1));
+        $mzArr = explode(",", $mzIndexes);
+        for ($i = 0; $i < count($mzArr); $i++) {
+          if (str_contains($mzArr[$i], "ALLY")) {
+            $ally = new Ally($mzArr[$i]);
+            if ($ally->Counters() > 0) {
+              return 0;
+            }
+            // TODO: check base counters
+          }
+        }
+        return 1;
       default: return 1;
     }
   }
@@ -3489,10 +3507,11 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddCurrentTurnEffect($cardID, $currentPlayer, "PLAY", $ally->UniqueID());
         $amount = $ally->CurrentPower();
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "index=" . $ally->MZIndex());
         AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, $amount . "-");
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Deal " . $amount . " damage as you choose among the units");
-        AddDecisionQueue("MULTIDAMAGEMULTIZONE", $currentPlayer, "<-");
-        AddDecisionQueue("MZOP", $currentPlayer, "DEALMULTIDAMAGE");
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Deal " . $amount . " damage divided as you choose");
+        AddDecisionQueue("MAYMULTIDAMAGEMULTIZONE", $currentPlayer, "<-");
+        AddDecisionQueue("MZOP", $currentPlayer, MultiDamageStringBuilder($amount, $currentPlayer, isUnitEffect:1));
       }
       break;
     case "3974134277"://Prepare for Takeoff

@@ -482,6 +482,9 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
     case "UIDOP":
       $parameterArr = explode(",", $parameter);
       switch ($parameterArr[0]) {
+        case "GETMZINDEX":
+          $ally = new Ally($lastResult);
+          return $ally->MZIndex();
         case "REVERTCONTROL": // Revert control of a unit to its owner
           $ally = new Ally($lastResult);
           if (!$ally->Exists() || $ally->Controller() == $ally->Owner()) return "PASS";
@@ -590,9 +593,30 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         case "MAPMYINDICES"://to be used after "MULTICHOOSEUNIT"
           return implode(",", array_map(function($x) {return "MYALLY-$x";}, $lastResult));
         case "DEALMULTIDAMAGE":
-          // Important: use MZOpHelpers.php DamageStringBuilder() function for param structure
-          // TODO: Implement this
-          return $lastResult;
+          $sourcePlayer = $parameterArr[2];
+          $isUnitEffect = $parameterArr[3];
+          $isPreventable = $parameterArr[4];
+          $targets = [];
+
+          // Get the targets and their counters
+          foreach ([1, 2] as $p) {
+            $allies = &GetAllies($p);
+            for ($i = count($allies) - AllyPieces(); $i >= 0; $i -= AllyPieces()) {
+              $counters = $allies[$i+6];
+              if ($counters > 0) {
+                $target = $allies[$i+5];
+                $targets[] = $target;
+                AddDecisionQueue("PASSPARAMETER", $player, $target); // Pass the unique ID of the unit to prevent bugs
+                AddDecisionQueue("UIDOP", $player, "GETMZINDEX");
+                AddDecisionQueue("MZOP", $player, DamageStringBuilder($counters, $sourcePlayer, isUnitEffect:$isUnitEffect, isPreventable:$isPreventable));
+              }
+            }
+          }
+
+          // If there are no targets, return PASS
+          if (count($targets) == 0) return "PASS";
+
+          return implode(",", $targets);
         case "DEALDAMAGE":
           // Important: use MZOpHelpers.php DamageStringBuilder() function for param structure
           if($lastResult == "") return "";

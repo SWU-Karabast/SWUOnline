@@ -13,6 +13,12 @@ function DamageStringBuilder($damage, $player, $isUnitEffect = 0, $isPreventable
   return "DEALDAMAGE,$damage,$player,$isUnitEffect,$isPreventable,$alsoExhausts";
 }
 
+function MultiDamageStringBuilder($damage, $player, $isUnitEffect = 0, $isPreventable = 1) {
+  $isUnitEffect = $isUnitEffect ? 1 : 0;
+  $isPreventable = $isPreventable ? 1 : 0;
+  return "DEALMULTIDAMAGE,$damage,$player,$isUnitEffect,$isPreventable";
+}
+
 // Parameter structure:
 //0 - total damage
 //1 - from unit effect (1 = yes, 0 = no)

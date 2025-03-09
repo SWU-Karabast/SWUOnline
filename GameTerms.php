@@ -142,6 +142,7 @@ function VerbToPlay($phase)
 {
   switch ($phase) {
     case "MULTIDAMAGEMULTIZONE":
+      return "deal";
     case "INDIRECTDAMAGEMULTIZONE":
       return "assign";
     default:

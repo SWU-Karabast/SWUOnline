@@ -129,7 +129,7 @@ function ResourcePieces() { return ArsenalPieces(); }
 //3 - Frozen - 0 = no, 1 = yes
 //4 - Subcards , delimited
 //5 - Unique ID
-//6 - Originally played as unit (1 = yes, 0 = no)
+//6 - Counters (damage/healing counters)
 //7 - Power
 //8 - Ability/effect Uses
 //9 - Round health modifier
