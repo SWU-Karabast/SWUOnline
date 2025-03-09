@@ -4449,6 +4449,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,3,$currentPlayer", 1);
       break;
+    case "6544277158"://Hotshot Maneuver
+      if ($target != "-") {
+        $ally = new Ally($target);
+        $totalOnAttackAbilities = SpecificAllyAttackAbilities($ally->CardID());
+      }
+      break;
     case "0302968596"://Calculated Lethality
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:maxCost=3&THEIRALLY:maxCost=3");
       AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
@@ -7202,6 +7208,7 @@ function PlayRequiresTarget($cardID)
     case "6515891401": return 7;//Karabast
     case "2651321164": return 6;//Tactical Advantage
     case "1900571801": return 7;//Overwhelming Barrage
+    case "6544277158": return 7;//Hotshot Maneuver
     case "5013139687": return 3;//Caught In The Crossfire
     case "7861932582": return 6;//The Force is With Me
     case "2758597010": return 6;//Maximum Firepower
