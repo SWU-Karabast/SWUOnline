@@ -81,6 +81,7 @@ function ValidateDeck($format, $usesUuid, $leader, $base, $deckArr, $sideboardAr
   }
   $sideboardSize = 0;
   $sideboardCards = "";
+  if($sideboardArr == null) $sideboardArr = [];
   for($i=0; $i<count($sideboardArr); ++$i) {
     if($usesUuid) $sideboardArr[$i]->id = CardIDLookup($sideboardArr[$i]->id);
     $sideboardArr[$i]->id = CardIDOverride($sideboardArr[$i]->id);
