@@ -368,14 +368,15 @@ function HasSentinel($cardID, $player, $index)
       case "4991712618"://Unshakeable Will
       case "3874382333"://Academy Graduate
       case "3064aff14f"://Lando Calrissian leader unit
-        return true;
+        $hasSentinel = true;
       //conditional upgrade sentinel
       case "9706341387"://Jarek Yeager
-        return SearchCount(SearchAllies($player, arena:"Ground")) > 0
+        $hasSentinel = SearchCount(SearchAllies($player, arena:"Ground")) > 0
           && SearchCount(SearchAllies($player, arena:"Space")) > 0;
       default: break;
     }
   }
+  if($hasSentinel) return true;
   //Self Sentinel
   switch($cardID)
   {
