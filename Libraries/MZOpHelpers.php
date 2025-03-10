@@ -6,7 +6,7 @@
 // 2? - Player causing the damage
 // 3? - Indicates if the damage is caused by unit effects (1 = yes, 0 = no)
 // 4? - Indicates if the damage is preventable (1 = yes, 0 = no) (not preventable = indirect)
-function DamageStringBuilder($damage, $sourcePlayer, $isUnitEffect = 0, $isPreventable = 1) {
+function DealDamageBuilder($damage, $sourcePlayer, $isUnitEffect = 0, $isPreventable = 1) {
   $isUnitEffect = $isUnitEffect ? 1 : 0;
   $isPreventable = $isPreventable ? 1 : 0;
   return "DEALDAMAGE,$damage,$sourcePlayer,$isUnitEffect,$isPreventable";
@@ -28,7 +28,7 @@ function DamageStringBuilder($damage, $sourcePlayer, $isUnitEffect = 0, $isPreve
  * @param int $isPreventable Whether the damage is preventable (1 = yes, 0 = no)
  * @return string The formatted damage string for the decision queue
  */
-function MultiDamageStringBuilder($damage, $sourcePlayer, $isUnitEffect = 0, $isPreventable = 1) {
+function DealMultiDamageBuilder($damage, $sourcePlayer, $isUnitEffect = 0, $isPreventable = 1) {
   $isUnitEffect = $isUnitEffect ? 1 : 0;
   $isPreventable = $isPreventable ? 1 : 0;
   return "DEALMULTIDAMAGE,$damage,$sourcePlayer,$isUnitEffect,$isPreventable";

@@ -45,6 +45,30 @@ function ProcessMacros()
         $somethingChanged = true;
         ContinueDecisionQueue($turn[2]);
       }
+      else if(AutoconfirmPhaseWithOneOption($turn[0]) && SearchCount($turn[2]) == 1) {
+        $params = explode("-", $turn[2]);
+        $totalMaxCounters = $params[0];
+        $mzIndexes = explode(",", implode("-", array_slice($params, 1)));
+        
+        if (count($mzIndexes) == 0) {
+          PassInput(true);
+          return;
+        }
+
+        $mzIndex = $mzIndexes[0];
+        if (str_contains($mzIndex, "ALLY")) {
+          $ally = new Ally($mzIndex);
+          $ally->SetCounters($totalMaxCounters);
+        } else if (str_contains($mzIndex, "CHAR")) {
+          $mzArr = explode("-", $mzIndex);
+          $p = $mzArr[0] == "MYCHAR" ? $turn[1] : ($turn[1] == 1 ? 2 : 1);
+          $character = &GetPlayerCharacter($p);
+          $character[$mzArr[1]+10] = $totalMaxCounters;
+        }
+
+        $somethingChanged = true;
+        ProcessInput($turn[1], 38, $turn[2], -1, 0, 0, true);
+      }
       if($turn[0] == "B" || $turn[0] == "D")
       {
         $threshold = ShortcutAttackThreshold($currentPlayer);
@@ -64,6 +88,16 @@ function AutopassPhaseWithOneOption($phase)
   switch($phase)
   {
     case "BUTTONINPUT": case "CHOOSEMULTIZONE": case "CHOOSECHARACTER": case "CHOOSECOMBATCHAIN":
+      return true;
+    default: return false;
+  }
+}
+
+function AutoconfirmPhaseWithOneOption($phase)
+{
+  switch($phase)
+  {
+    case "MULTIDAMAGEMULTIZONE": case "INDIRECTDAMAGEMULTIZONE":
       return true;
     default: return false;
   }

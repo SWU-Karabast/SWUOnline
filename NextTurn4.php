@@ -775,7 +775,7 @@
     <div id='chatbox' style='z-index:40; position:fixed; bottom:20px; right:18px; display:flex;'>
         <?php if ($playerID != 3 && !IsChatMuted()): ?>
             <?php
-            $playerAspects = explode(",", CardAspects($myCharacter[CharacterPieces()]));
+            $playerAspects = explode(",", LeaderMainAspect($playerID));
             echo ("<input type='hidden' id='playerAspect' name='playerAspect' value='" . $playerAspects[0] . "'>");
             ?>
             <input id='chatText'

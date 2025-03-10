@@ -91,6 +91,10 @@ class Ally {
     $this->allies[$this->index+6]--;
   }
 
+  function SetCounters($amount) {
+    $this->allies[$this->index+6] = $amount;
+  }
+
   function Damage() {
     return $this->allies[$this->index+2];
   }
@@ -133,7 +137,7 @@ class Ally {
           AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:arena=Space&THEIRALLY:arena=Space");
           AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal 1 damage to");
           AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-          AddDecisionQueue("MZOP", $player, DamageStringBuilder(1, $player, isUnitEffect:1));
+          AddDecisionQueue("MZOP", $player, DealDamageBuilder(1, $player, isUnitEffect:1));
         }
         break;
       default: break;

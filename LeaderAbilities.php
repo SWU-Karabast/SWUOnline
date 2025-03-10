@@ -12,10 +12,10 @@ function LeaderPilotDeploy($player, $leader, $target) {
     //Jump to Lightspeed
     case "f6eb711cf3"://Boba Fett
       AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
-      AddDecisionQueue("PREPENDLASTRESULT", $player, "4-");
-      AddDecisionQueue("SETDQCONTEXT", $player, "Deal 4 damage divided as you choose");
-      AddDecisionQueue("MAYMULTIDAMAGEMULTIZONE", $player, "<-");
-      AddDecisionQueue("MZOP", $player, MultiDamageStringBuilder(4, $player));
+      AddDecisionQueue("PREPENDLASTRESULT", $player, "4-", 1);
+      AddDecisionQueue("SETDQCONTEXT", $player, "Deal 4 damage divided as you choose", 1);
+      AddDecisionQueue("PARTIALMULTIDAMAGEMULTIZONE", $player, "<-", 1);
+      AddDecisionQueue("MZOP", $player, DealMultiDamageBuilder(4, $player), 1);
       break;
     case "a015eb5c5e"://Han Solo
       HanSoloPilotLeaderJTL($player);

@@ -598,6 +598,8 @@ function CreateButton($playerID, $caption, $mode, $input, $size = "", $image = "
 
   if ($mode == 34) {
     $classes = "claimButton";
+  } else if ($mode == 38) {
+    $classes = "confirmButton";
   } else {
     $classes = "";
   }

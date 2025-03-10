@@ -304,6 +304,18 @@ td {
   position: relative;
 }
 
+.confirmButton {
+  background: linear-gradient(180deg, #292929 0%, #292929 100%) padding-box,
+              linear-gradient(180deg, #454545 0%, #394B51 40%, #00ad45 100%) border-box;
+  border-radius: 5px;
+  border: 1px solid transparent;
+  margin: 0 0 0 10px !important;
+  height:40px;
+  padding: 8px 19px 10px;
+  box-shadow: none;
+  position: relative;
+}
+
 .MenuButtons {
   cursor: pointer;
   transition: 150ms ease-in-out;
@@ -1517,9 +1529,29 @@ button.counter-control {
   margin: 0;
   box-shadow: none;
   color: #fff;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.15s ease-in-out;
 
   &:hover {
     transform: unset;
+
+    &:not(:disabled) {
+      background-color: #373737;
+    }
+  }
+
+  &.animate::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 100%;
+    transform: translate(-50%, -50%);
+    animation: ripple 0.6s linear forwards;
   }
 
   &:disabled {
@@ -1534,6 +1566,19 @@ button.counter-control {
   &.decrease-control {
     padding-bottom: 5px;
     border-radius: 0 0 8px 8px;
+  }
+}
+
+@keyframes ripple {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 0.5;
+  }
+  100% {
+    width: 100px;
+    height: 100px;
+    opacity: 0;
   }
 }
 

@@ -1594,6 +1594,7 @@ function NumEquipBlock()
 function CanConfirmPhase($phase) {
   global $turn;
   switch ($phase) {
+    case "PARTIALMULTIDAMAGEMULTIZONE":
     case "MAYMULTIDAMAGEMULTIZONE":
     case "MULTIDAMAGEMULTIZONE":
     case "INDIRECTDAMAGEMULTIZONE":      
@@ -1602,6 +1603,7 @@ function CanConfirmPhase($phase) {
       $mzIndexes = implode("-", array_slice($params, 1));
       $mzIndexesArr = explode(",", $mzIndexes);
       $totalCounters = 0;
+      
       for ($i = 0; $i < count($mzIndexesArr); $i++) {
         if (str_contains($mzIndexesArr[$i], "ALLY")) {
           $ally = new Ally($mzIndexesArr[$i]);
@@ -1612,7 +1614,12 @@ function CanConfirmPhase($phase) {
           $character = &GetPlayerCharacter($player);
           $totalCounters += $character[$mzArr[1]+10];
         }
+
+        if ($phase == "PARTIALMULTIDAMAGEMULTIZONE" && $totalCounters > 0) {
+          return 1;
+        }
       }
+
       return $totalCounters == $totalMaxCounters;
     default:
       return 0;
@@ -1657,19 +1664,28 @@ function CanConfirmPhase($phase) {
       case "OVER": return 0;
       case "INDIRECTDAMAGEMULTIZONE": return 0;
       case "MULTIDAMAGEMULTIZONE": return 0;
+      case "PARTIALMULTIDAMAGEMULTIZONE":
       case "MAYMULTIDAMAGEMULTIZONE":
         $params = explode("-", $turn[2]);
-        $mzIndexes = implode("-", array_slice($params, 1));
-        $mzArr = explode(",", $mzIndexes);
-        for ($i = 0; $i < count($mzArr); $i++) {
-          if (str_contains($mzArr[$i], "ALLY")) {
-            $ally = new Ally($mzArr[$i]);
+        $mzIndexes = explode(",", implode("-", array_slice($params, 1)));
+
+        for ($i = 0; $i < count($mzIndexes); $i++) {
+          $mzIndex = $mzIndexes[$i];
+          if (str_contains($mzIndex, "ALLY")) {
+            $ally = new Ally($mzIndex);
             if ($ally->Counters() > 0) {
               return 0;
             }
-            // TODO: check base counters
+          } else if (str_contains($mzIndex, "CHAR")) {
+            $mzArr = explode("-", $mzIndex);
+            $p = $mzArr[0] == "MYCHAR" ? $turn[1] : ($turn[1] == 1 ? 2 : 1);
+            $character = &GetPlayerCharacter($p);
+            if ($character[$mzArr[1]+10] > 0) {
+              return 0;
+            }
           }
         }
+
         return 1;
       default: return 1;
     }
@@ -2245,6 +2261,21 @@ function PlayerAspects($player)
   }
 
   return $aspects;
+}
+
+function LeaderMainAspect($player) {
+  $character = &GetPlayerCharacter($player);
+  $baseAspects = explode(",", CardAspects($character[0]));
+  $aspects = PlayerAspects($player);
+  foreach($aspects as $aspect => $count) {
+    if (in_array($aspect, $baseAspects)) {
+      continue;
+    }
+    if ($aspect != "Heroism" && $aspect != "Villainy") {
+      return $aspect;
+    }
+  }
+  return $baseAspects[0];
 }
 
 function IsAlternativeCostPaid($cardID, $from)
@@ -3008,10 +3039,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
     case "9097316363"://Emperor Palpatine (Master of the Dark Side)
       if($from != "PLAY") {
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "THEIRALLY");
-        AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "6-");
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Deal 6 damage divided as you choose");
-        AddDecisionQueue("MULTIDAMAGEMULTIZONE", $currentPlayer, "<-");
-        AddDecisionQueue("MZOP", $currentPlayer, MultiDamageStringBuilder(6, $currentPlayer, isUnitEffect:1));
+        AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "6-", 1);
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Deal 6 damage divided as you choose", 1);
+        AddDecisionQueue("MULTIDAMAGEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, DealMultiDamageBuilder(6, $currentPlayer, isUnitEffect:1), 1);
       }
       break;
     case "1208707254"://Rallying Cry
@@ -3514,10 +3545,10 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         $amount = $ally->CurrentPower();
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
         AddDecisionQueue("MZFILTER", $currentPlayer, "index=" . $ally->MZIndex());
-        AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, $amount . "-");
-        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Deal " . $amount . " damage divided as you choose");
-        AddDecisionQueue("MAYMULTIDAMAGEMULTIZONE", $currentPlayer, "<-");
-        AddDecisionQueue("MZOP", $currentPlayer, MultiDamageStringBuilder($amount, $currentPlayer, isUnitEffect:1));
+        AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, $amount . "-", 1);
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Deal " . $amount . " damage divided as you choose", 1);
+        AddDecisionQueue("MAYMULTIDAMAGEMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, DealMultiDamageBuilder($amount, $currentPlayer, isUnitEffect:1), 1);
       }
       break;
     case "3974134277"://Prepare for Takeoff
@@ -4700,14 +4731,14 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("YESNO", $currentPlayer, "-");
       AddDecisionQueue("NOPASS", $currentPlayer, "-");
       AddDecisionQueue("PASSPARAMETER", $currentPlayer, "MYALLY-" . $playAlly->Index(), 1);
-      AddDecisionQueue("MZOP", $currentPlayer, DamageStringBuilder(2, $currentPlayer, isUnitEffect:true), 1);
+      AddDecisionQueue("MZOP", $currentPlayer, DealDamageBuilder(2, $currentPlayer, isUnitEffect:true), 1);
       AddDecisionQueue("DRAW", $currentPlayer, "-", 1);
       break;
     case "7157369742"://TIE Dagger Vanguard
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY:damagedOnly=true&THEIRALLY:damagedOnly=true");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 2 damage to");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-      AddDecisionQueue("MZOP", $currentPlayer, DamageStringBuilder(2, $currentPlayer, isUnitEffect:true), 1);
+      AddDecisionQueue("MZOP", $currentPlayer, DealDamageBuilder(2, $currentPlayer, isUnitEffect:true), 1);
       break;
     case "5830140660"://Bazine Netal
       AddDecisionQueue("REVEALHANDCARDS", $otherPlayer, "-");
@@ -6366,7 +6397,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("FINDINDICES", $currentPlayer, "ALLTHEIRUNITSMULTILIMITED,3", 1);
         AddDecisionQueue("MULTICHOOSETHEIRUNIT", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "MAPTHEIRINDICES", 1);
-        AddDecisionQueue("MULTIDAMAGE", $currentPlayer, DamageStringBuilder(1, $currentPlayer, 1), 1);
+        AddDecisionQueue("MULTIDAMAGE", $currentPlayer, DealDamageBuilder(1, $currentPlayer, 1), 1);
       }
         break;
     case "0964312065"://It's A Trap!
@@ -6694,7 +6725,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose units to damage", 1);
         AddDecisionQueue("MULTICHOOSEOURUNITS", $currentPlayer, "<-", 1);
         AddDecisionQueue("MZOP", $currentPlayer, "COMBINEMYANDTHEIRINDICIES", 1);
-        AddDecisionQueue("MULTIDAMAGE", $currentPlayer, DamageStringBuilder(1, $currentPlayer, 1), 1);
+        AddDecisionQueue("MULTIDAMAGE", $currentPlayer, DealDamageBuilder(1, $currentPlayer, 1), 1);
       }
       break;
     case "6410144226"://Air Superiority

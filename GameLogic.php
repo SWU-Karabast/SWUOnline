@@ -608,7 +608,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
                 $targets[] = $target;
                 AddDecisionQueue("PASSPARAMETER", $player, $target); // Pass the unique ID of the unit to prevent bugs
                 AddDecisionQueue("UIDOP", $player, "GETMZINDEX");
-                AddDecisionQueue("MZOP", $player, DamageStringBuilder($counters, $sourcePlayer, isUnitEffect:$isUnitEffect, isPreventable:$isPreventable));
+                AddDecisionQueue("MZOP", $player, DealDamageBuilder($counters, $sourcePlayer, isUnitEffect:$isUnitEffect, isPreventable:$isPreventable));
               }
             }
             $character = &GetPlayerCharacter($p);
@@ -617,7 +617,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
               $targets[] = "BASE-" . $p; // We just introduced BASE-1 and BASE-2 as uniqueIDs for bases
               $mzIndex = $p == $player ? "MYCHAR-0" : "THEIRCHAR-0";
               AddDecisionQueue("PASSPARAMETER", $player, $mzIndex);
-              AddDecisionQueue("MZOP", $player, DamageStringBuilder($baseCounters, $sourcePlayer, isUnitEffect:$isUnitEffect, isPreventable:$isPreventable));
+              AddDecisionQueue("MZOP", $player, DealDamageBuilder($baseCounters, $sourcePlayer, isUnitEffect:$isUnitEffect, isPreventable:$isPreventable));
             }
           }
 

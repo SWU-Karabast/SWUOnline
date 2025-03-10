@@ -873,7 +873,7 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
         AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY", 1);
         AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a unit to deal 1 damage to", 1);
         AddDecisionQueue("CHOOSEMULTIZONE", $otherPlayer, "<-", 1);
-        AddDecisionQueue("MZOP", $otherPlayer, DamageStringBuilder(1, $player), 1);
+        AddDecisionQueue("MZOP", $otherPlayer, DealDamageBuilder(1, $player), 1);
       }
       break;
     case "9005139831"://Mandalorian Leader Ability
@@ -890,7 +890,7 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:minCost=" . $cost . ";maxCost=" . $cost);
       AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal 1 damage", 1);
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-      AddDecisionQueue("MZOP", $player, DamageStringBuilder(1, $player), 1);
+      AddDecisionQueue("MZOP", $player, DealDamageBuilder(1, $player), 1);
       AddDecisionQueue("EXHAUSTCHARACTER", $player, FindCharacterIndex($player, "2358113881"), 1);
       break;
     case "3045538805"://Hondo Ohnaka Leader
@@ -1502,14 +1502,14 @@ function IndirectDamage($cardID, $player, $amount, $fromUnitEffect=false, $uniqu
     AddDecisionQueue("PREPENDLASTRESULT", $sourcePlayer, $amount . "-THEIRCHAR-0,");
     AddDecisionQueue("SETDQCONTEXT", $sourcePlayer, "Assign " . $amount . " unpreventable damage among their base and units");
     AddDecisionQueue("INDIRECTDAMAGEMULTIZONE", $sourcePlayer, "<-");
-    AddDecisionQueue("MZOP", $sourcePlayer, MultiDamageStringBuilder($amount, $sourcePlayer, isUnitEffect:$fromUnitEffect, isPreventable:true));  
+    AddDecisionQueue("MZOP", $sourcePlayer, DealMultiDamageBuilder($amount, $sourcePlayer, isUnitEffect:$fromUnitEffect, isPreventable:true));  
   } else {
     AddDecisionQueue("OK", $player, CardLink($cardID, $cardID) . " deals " . $amount . " indirect damage to you.");
     AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
     AddDecisionQueue("PREPENDLASTRESULT", $player, $amount . "-MYCHAR-0,");
     AddDecisionQueue("SETDQCONTEXT", $player, "Assign " . $amount . " unpreventable damage among your base and units");
     AddDecisionQueue("INDIRECTDAMAGEMULTIZONE", $player, "<-");
-    AddDecisionQueue("MZOP", $player, MultiDamageStringBuilder($amount, $sourcePlayer, isUnitEffect:$fromUnitEffect, isPreventable:true));  
+    AddDecisionQueue("MZOP", $player, DealMultiDamageBuilder($amount, $sourcePlayer, isUnitEffect:$fromUnitEffect, isPreventable:true));  
   }
 }
 

@@ -138,11 +138,13 @@ function OnDamageControlMouseLeave(e) {
 function SubmitIncreaseCounters(that, cardID) {
   if(that.disabled) return;
   that.disabled = true;
+  that.classList.add('animate');
   SubmitInput(14, "&cardID=" + cardID);
 }
 
 function SubmitDecreaseCounters(that, cardID) {
-  if(that.classList.contains('disabled')) return;
-  that.classList.add('disabled');
+  if(that.disabled) return;
+  that.disabled = true;
+  that.classList.add('animate');
   SubmitInput(15, "&cardID=" + cardID);
 }

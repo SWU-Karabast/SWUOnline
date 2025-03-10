@@ -175,6 +175,8 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   include "Libraries/UILibraries2.php";
   include "Libraries/StatFunctions.php";
   include "Libraries/PlayerSettings.php";
+  
+  $isActivePlayer = $turn[1] == $playerID;
 
   if ($turn[0] == "REMATCH" && intval($playerID) != 3) {
     include "MenuFiles/ParseGamefile.php";
@@ -584,7 +586,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     echo CreatePopup("OVER", [], 1, 1, "You {$verb}", 1, $content, "./", true);
   }
 
-  if ($turn[0] == "DYNPITCH" && $turn[1] == $playerID) {
+  if ($turn[0] == "DYNPITCH" && $isActivePlayer) {
     $content = "<div display:inline;'>";
     $options = explode(",", $turn[2]);
     for ($i = 0; $i < count($options); ++$i) {
@@ -594,7 +596,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     echo CreatePopup("DYNPITCH", [], 0, 1, Capitalize(VerbToPlay($turn[0])) . " " . TypeToPlay($turn[0]), 1, $content);
   }
 
-  if (($turn[0] == "BUTTONINPUT" || $turn[0] == "CHOOSEARCANE" || $turn[0] == "BUTTONINPUTNOPASS") && $turn[1] == $playerID) {
+  if (($turn[0] == "BUTTONINPUT" || $turn[0] == "CHOOSEARCANE" || $turn[0] == "BUTTONINPUTNOPASS") && $isActivePlayer) {
     $content = "<div display:inline;'>";
     if ($turn[0] == "CHOOSEARCANE") {
       $vars = explode("-", $dqVars[0]);
@@ -608,7 +610,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     echo CreatePopup("BUTTONINPUT", [], 0, 1, GetPhaseHelptext(), 1, $content);
   }
 
-  if ($turn[0] == "YESNO" && $turn[1] == $playerID) {
+  if ($turn[0] == "YESNO" && $isActivePlayer) {
     $content = "<div style='display:flex;justify-content:center;margin-top:24px;'>";
     $content .= CreateButton($playerID, "Yes", 20, "YES", "20px");
     $content .= CreateButton($playerID, "No", 20, "NO", "20px");
@@ -620,7 +622,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     echo CreatePopup("YESNO", [], 0, 1, $caption, 1, $content);
   }
 
-  if ($turn[0] == "OK" && $turn[1] == $playerID) {
+  if ($turn[0] == "OK" && $isActivePlayer) {
     $description = $turn[2];
     if ($description == "-" || $description == "<-") {
       $description = "";
@@ -640,7 +642,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     echo CreatePopup("OK", [], 0, 1, $caption, 1, $content);
   }
 
-  if (($turn[0] == "OPT" || $turn[0] == "CHOOSETOP" || $turn[0] == "MAYCHOOSETOP" || $turn[0] == "CHOOSEBOTTOM" || $turn[0] == "CHOOSECARD" || $turn[0] == "MAYCHOOSECARD") && $turn[1] == $playerID) {
+  if (($turn[0] == "OPT" || $turn[0] == "CHOOSETOP" || $turn[0] == "MAYCHOOSETOP" || $turn[0] == "CHOOSEBOTTOM" || $turn[0] == "CHOOSECARD" || $turn[0] == "MAYCHOOSECARD") && $isActivePlayer) {
     $content = "<table style='margin: 0 auto;'><tr>";
     $options = isset($turn[2]) ? explode(",", $turn[2]) : [];
     for ($i = 0; $i < count($options); ++$i) {
@@ -668,7 +670,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     echo CreatePopup("OPT", [], 0, 1, GetPhaseHelptext(), 1, $content);
   }
 
-  if (($turn[0] == "CHOOSETOPOPPONENT") && $turn[1] == $playerID) { //Use when you have to reorder the top of your opponent library e.g. Righteous Cleansing
+  if (($turn[0] == "CHOOSETOPOPPONENT") && $isActivePlayer) { //Use when you have to reorder the top of your opponent library e.g. Righteous Cleansing
     $otherPlayer = ($playerID == 1 ? 2 : 1);
     $content = "<table><tr>";
     $options = explode(",", $turn[2]);
@@ -687,7 +689,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     echo CreatePopup("CHOOSETOPOPPONENT", [], 0, 1, Capitalize(VerbToPlay($turn[0])) . " " . TypeToPlay($turn[0]), 1, $content);
   }
 
-  if ($turn[0] == "LOOKHAND" && $turn[1] == $playerID) {
+  if ($turn[0] == "LOOKHAND" && $isActivePlayer) {
     $content = "<table style='margin: 0 auto;'><tr>";
     for ($i = 0; $i < count($theirHand); ++$i) {
       $content .= "<td>";
@@ -701,7 +703,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     echo CreatePopup("LOOKHAND", [], 0, 1, "Opponent's hand", 1, $content);
   }
 
-  if ($turn[0] == "HANDTOPBOTTOM" && $turn[1] == $playerID) {
+  if ($turn[0] == "HANDTOPBOTTOM" && $isActivePlayer) {
     $content = "<table><tr>";
     for ($i = 0; $i < count($myHand); ++$i) {
       $content .= "<td>";
@@ -723,7 +725,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
 
   $mzChooseFromPlay = false;
   $optionsIndex = [];
-  if (($turn[0] == "MAYCHOOSEMULTIZONE" || $turn[0] == "CHOOSEMULTIZONE") && $turn[1] == $playerID) {
+  if (($turn[0] == "MAYCHOOSEMULTIZONE" || $turn[0] == "CHOOSEMULTIZONE") && $isActivePlayer) {
     $content = "<div display:inline;'>";
     $options = explode(",", $turn[2]);
     $mzChooseFromPlay = true;
@@ -843,14 +845,12 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   $mzMultiDamage = false;
   $canOverkillUnits = false;
   $maxCountersReached = false;
-  if (($turn[0] == "INDIRECTDAMAGEMULTIZONE" || $turn[0] == "MULTIDAMAGEMULTIZONE" || $turn[0] == "MAYMULTIDAMAGEMULTIZONE")) {
+  if (($turn[0] == "INDIRECTDAMAGEMULTIZONE" || $turn[0] == "MULTIDAMAGEMULTIZONE" || $turn[0] == "MAYMULTIDAMAGEMULTIZONE" || $turn[0] == "PARTIALMULTIDAMAGEMULTIZONE")) {
     $params = explode("-", $turn[2]);
     $mzMultiDamage = true;
     $canOverkillUnits = $turn[0] != "INDIRECTDAMAGEMULTIZONE";
     $totalMaxCounters = $params[0];
-    $mzIndexes = implode("-", array_slice($params, 1));
-    $options = explode(",", $mzIndexes);
-    $optionsIndex = [...$options];
+    $optionsIndex = explode(",", implode("-", array_slice($params, 1)));
 
     // Check if the total counters are greater than the total max counters
     $totalCounters = 0;
@@ -865,41 +865,42 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         $totalCounters += $character[$mzArr[1]+10];
       }
     }
+
     $maxCountersReached = $totalCounters >= $totalMaxCounters;
   }
 
-  if (($turn[0] == "MAYCHOOSEDECK" || $turn[0] == "CHOOSEDECK") && $turn[1] == $playerID) {
+  if (($turn[0] == "MAYCHOOSEDECK" || $turn[0] == "CHOOSEDECK") && $isActivePlayer) {
     ChoosePopup($myDeck, $turn[2], 11, "Choose a card from your deck");
   }
 
-  if ($turn[0] == "CHOOSEBANISH" && $turn[1] == $playerID) {
+  if ($turn[0] == "CHOOSEBANISH" && $isActivePlayer) {
     ChoosePopup($myBanish, $turn[2], 16, "Choose a card from your banish", BanishPieces());
   }
 
-  if (($turn[0] == "CHOOSETHEIRHAND") && $turn[1] == $playerID) {
+  if (($turn[0] == "CHOOSETHEIRHAND") && $isActivePlayer) {
     ChoosePopup($theirHand, $turn[2], 16, "Choose a card from your opponent's hand");
   }
 
-  if (($turn[0] == "CHOOSEDISCARD" || $turn[0] == "MAYCHOOSEDISCARD" || $turn[0] == "CHOOSEDISCARDCANCEL") && $turn[1] == $playerID) {
+  if (($turn[0] == "CHOOSEDISCARD" || $turn[0] == "MAYCHOOSEDISCARD" || $turn[0] == "CHOOSEDISCARDCANCEL") && $isActivePlayer) {
     $caption = "Choose a card from your discard";
     if (GetDQHelpText() != "-")
       $caption = implode(" ", explode("_", GetDQHelpText()));
     ChoosePopup($myDiscard, $turn[2], 16, $caption, zoneSize: DiscardPieces());
   }
 
-  if (($turn[0] == "MAYCHOOSETHEIRDISCARD") && $turn[1] == $playerID) {
+  if (($turn[0] == "MAYCHOOSETHEIRDISCARD") && $isActivePlayer) {
     ChoosePopup($theirDiscard, $turn[2], 16, "Choose a card from your opponent's graveyard", zoneSize: DiscardPieces());
   }
 
-  if (($turn[0] == "CHOOSECOMBATCHAIN" || $turn[0] == "MAYCHOOSECOMBATCHAIN") && $turn[1] == $playerID) {
+  if (($turn[0] == "CHOOSECOMBATCHAIN" || $turn[0] == "MAYCHOOSECOMBATCHAIN") && $isActivePlayer) {
     ChoosePopup($combatChain, $turn[2], 16, "Choose a card from the combat chain", CombatChainPieces());
   }
 
-  if ($turn[0] == "CHOOSECHARACTER" && $turn[1] == $playerID) {
+  if ($turn[0] == "CHOOSECHARACTER" && $isActivePlayer) {
     ChoosePopup($myCharacter, $turn[2], 16, "Choose a card from your character/equipment", CharacterPieces());
   }
 
-  if ($turn[0] == "CHOOSETHEIRCHARACTER" && $turn[1] == $playerID) {
+  if ($turn[0] == "CHOOSETHEIRCHARACTER" && $isActivePlayer) {
     ChoosePopup($theirCharacter, $turn[2], 16, "Choose a card from your opponent character/equipment", CharacterPieces());
   }
 
@@ -1216,7 +1217,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     echo CreatePopup("MULTICHOOSE", [], 0, 1, $caption, 1, $content);
   }
 
-  if ($turn[0] == "INPUTCARDNAME" && $turn[1] == $playerID) {
+  if ($turn[0] == "INPUTCARDNAME" && $isActivePlayer) {
     $caption = "<div>Name a card</div>";
     $content = CreateAutocompleteForm($playerID, "Submit", 30, explode("|", CardTitles()));
     echo CreatePopup("INPUTCARDNAME", [], 0, 1, $caption, 1, $content);
@@ -1287,10 +1288,11 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       $ally = new Ally($mzIndex, $otherPlayer);
       $playable = GetOpponentControlledAbilityNames($ally->CardID()) != "";
 
+      $showCounterControls = false;
       $counters = 0;
       $counterType = 0;
-      $showCounterControls = false;
       $maxCounters = 0;
+
       if (!$mzChooseFromPlay && $playable && TheirAllyPlayableExhausted($ally)) {
         $border = CardBorderColor($theirAllies[$i], "PLAY", $playable);
         $action = $currentPlayer == $playerID && $turn[0] != "P" && $playable ? 105 : 0; // 105 is the Ally Ability for opponent-controlled abilities like Mercenary Gunship
@@ -1299,11 +1301,11 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         $mzIndex = $ally->MZIndex();
         $inOptions = in_array($mzIndex, $optionsIndex);
         if ($inOptions) {
-          $showCounterControls = $turn[1] == $playerID;
+          $showCounterControls = $isActivePlayer;
           $border = $showCounterControls ? 4 : 0;
           $actionDataOverride = $mzIndex;
-          $counterType = 1;
           $counters = $ally->Counters();
+          $counterType = 1;
           $maxCounters = ($ally->HasShield() || $canOverkillUnits) ? 0 : $ally->Health();
         }
       }
@@ -1367,18 +1369,18 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     }
 
     $showCounterControls = false;
-    $counterType = 0;
     $counters = 0;
+    $counterType = 0;
+
     if ($mzMultiDamage) {
-      $isActivePlayer = $turn[1] == $playerID;
       $mzIndex =  $isActivePlayer ? "THEIRCHAR-" . $i : "MYCHAR-" . $i;
       $inOptions = in_array($mzIndex, $optionsIndex);
       if ($inOptions) {
         $showCounterControls = $isActivePlayer;
         $actionDataOverride = $mzIndex;
         $border = $showCounterControls ? 4 : 0;
-        $counterType = 1;
         $counters = $theirCharacter[$i + 10];
+        $counterType = 1;
       }
     }
 
@@ -1469,12 +1471,12 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         break;
       $ally = new Ally("MYALLY-" . $i, $playerID);
 
-      $showCounterControls = false;
       $action = 0;
       $border = 0;
-      $counterType = 0;
       $actionDataOverride = 0;
+      $showCounterControls = false;
       $counters = 0;
+      $counterType = 0;
       $maxCounters = 0;
 
       if ($mzChooseFromPlay) {
@@ -1487,11 +1489,11 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         $mzIndex = $ally->MZIndex();
         $inOptions = in_array($mzIndex, $optionsIndex);
         if ($inOptions) {
-          $showCounterControls = $turn[1] == $playerID;
+          $showCounterControls = $isActivePlayer;
           $border = $showCounterControls ? 4 : 0;
           $actionDataOverride = $mzIndex;
-          $counterType = 1;
           $counters = $ally->Counters();
+          $counterType = 1;
           $maxCounters = ($ally->HasShield() || $canOverkillUnits) ? 0 : $ally->Health();
         }
       } else {
@@ -1556,7 +1558,6 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   $myCharData = "";
   for ($i = 0; $i < count($myCharacter); $i += CharacterPieces()) {
     $restriction = "";
-    $counters = 0;
     $atkCounters = 0;
     $epicActionUsed = 0;
     $overlay = $myCharacter[$i + 1] != 2 ? 1 : 0;
@@ -1570,9 +1571,10 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     }
 
     $showCounterControls = false;
-    $counterType = 0;
     $counters = 0;
+    $counterType = 0;
     $border = 0;
+
     if ($mzChooseFromPlay) {
       $mzIndex = "MYCHAR-" . $i;
       $inOptions = in_array($mzIndex, $optionsIndex);
@@ -1580,15 +1582,14 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       $actionDataOverride = $inOptions ? $mzIndex : 0;
       $border = CardBorderColor($myCharacter[$i], "CHAR", $action == 16);
     } else if ($mzMultiDamage) {
-      $isActivePlayer = $turn[1] == $playerID;
       $mzIndex =  $isActivePlayer ? "MYCHAR-" . $i : "THEIRCHAR-" . $i;
       $inOptions = in_array($mzIndex, $optionsIndex);
       if ($inOptions) {
         $showCounterControls = $isActivePlayer;
         $actionDataOverride = $mzIndex;
         $border = $showCounterControls ? 4 : 0;
-        $counterType = 1;
         $counters = $myCharacter[$i + 10];
+        $counterType = 1;
       }
     } else {
       $playable = $playerID == $currentPlayer && IsPlayable($myCharacter[$i], $turn[0], "CHAR", $i, $restriction) && ($myCharacter[$i + 1] == 2 || $epicActionUsed == 0);
