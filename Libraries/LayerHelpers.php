@@ -30,9 +30,16 @@ function LayerDestroyTriggers($player, $cardID, $uniqueID,
     $valSplitLayers = explode(LAYER_PIECE_SEPARATOR, $dataBuilder);
     AddLayer("TRIGGER", $player, "AFTERDESTROYABILITY", $cardID, $valSplitLayers[1], $uniqueID);
     AddLayer("TRIGGER", $player, "AFTERDESTROYABILITY", $cardID, $valSplitLayers[0], $uniqueID);
+    if(ShadowCasterJTLIsInPlay($player)) {
+      AddLayer("TRIGGER", $player, "AFTERDESTROYABILITY", $cardID, $valSplitLayers[0], $uniqueID);
+    }
   }
-  else
+  else {
     AddLayer("TRIGGER", $player, "AFTERDESTROYABILITY", $cardID, $dataBuilder, $uniqueID);
+    if(ShadowCasterJTLIsInPlay($player)) {
+      AddLayer("TRIGGER", $player, "AFTERDESTROYABILITY", $cardID, $dataBuilder, $uniqueID);
+    }
+  }
 }
 
 function LayerTheirsDestroyedTriggers($player, $arr) {
@@ -57,6 +64,9 @@ function LayerFriendlyDestroyedTriggers($player, $arr) {
 
   $data=implode(",", $arr);
   AddLayer("TRIGGER", $player, "AFTERDESTROYFRIENDLYABILITY", $data);
+  if(ShadowCasterJTLIsInPlay($player)) {
+    AddLayer("TRIGGER", $player, "AFTERDESTROYFRIENDLYABILITY", $data);
+  }
 }
 
 function GetAllyWhenDestroyTheirsEffects($mainPlayer, $player,
@@ -193,4 +203,11 @@ function DeserializeBountiesData($data) {
     "BountyUnitOverride" => str_replace("^","-", $arr[5]),
     "CapturerUniqueID" => str_replace("^","-", $arr[6]),
   ];
+}
+
+function ShadowCasterJTLIsInPlay($player) {
+  if(SearchCount(SearchAlliesForCard($player, "9033398895")) > 0) {
+    return true;
+  }
+  return false;
 }

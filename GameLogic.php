@@ -1779,6 +1779,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $rv = "";
       for($i = 0; $i < count($indices); ++$i) {
         if($rv != "") $rv .= ",";
+        $mzPieces = explode("-", $indices[$i]);
+        if($mzPieces[1] == "") continue;
         $rv .= $indices[$i];
       }
       return $rv;

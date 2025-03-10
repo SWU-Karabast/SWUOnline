@@ -642,6 +642,9 @@ function AllyPlayableExhausted(Ally $ally) {
     case "5630404651"://MagnaGuard Wing Leader
     case "040a3e81f3"://Lando Leader Unit
       return $ally->NumUses() > 0;
+    case "5306772000"://Phantom II
+      return SearchCount(SearchAlliesForTitle($ally->Controller(), "The Ghost")) > 0
+        && NumResourcesAvailable($ally->Controller()) >= 1;
     case "4300219753"://Fett's Firespray
     case "2471223947"://Frontline Shuttle
     case "1885628519"://Crosshair
@@ -763,7 +766,8 @@ function AllyLeavesPlayAbility($player, $index)
       }
     }
   }
-
+  $owner = $ally->Owner();
+  $notOwner = $owner == 1 ? 2 : 1;
   switch($ally->CardID())
   {
     case "3401690666"://Relentless
@@ -771,15 +775,15 @@ function AllyLeavesPlayAbility($player, $index)
       SearchCurrentTurnEffects("3401690666", $otherPlayer, remove:true);
       break;
     case "8418001763"://Huyang
-      SearchCurrentTurnEffects("8418001763", $player, remove:true);
+      SearchCurrentTurnEffects("8418001763", $owner, remove:true);
       break;
     case "7964782056"://Qi'Ra unit
       $otherPlayer = $player == 1 ? 2 : 1;
-      SearchLimitedCurrentTurnEffects("7964782056", $otherPlayer, uniqueID:$ally->UniqueID(), remove:true);
+      SearchLimitedCurrentTurnEffects("7964782056", $notOwner, uniqueID:$ally->UniqueID(), remove:true);
       break;
     case "3503494534"://Regional Governor
       $otherPlayer = $player == 1 ? 2 : 1;
-      SearchLimitedCurrentTurnEffects("3503494534", $otherPlayer, uniqueID:$ally->UniqueID(), remove:true);
+      SearchLimitedCurrentTurnEffects("3503494534", $notOwner, uniqueID:$ally->UniqueID(), remove:true);
       break;
     case "4002861992"://DJ (Blatant Thief)
       $djAlly = new Ally("MYALLY-" . $index, $player);
@@ -800,7 +804,7 @@ function AllyLeavesPlayAbility($player, $index)
       }
       break;
     case "3148212344"://Admiral Yularen JTL
-      SearchCurrentTurnEffects("3148212344", $player, remove:true, startsWith:true);
+      SearchCurrentTurnEffects("3148212344", $owner, remove:true, startsWith:true);
       break;
     default: break;
   }

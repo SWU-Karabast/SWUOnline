@@ -637,17 +637,7 @@ class Ally {
           break;
         case "1935873883"://Razor Crest
           $player = $this->Controller();
-          AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:maxCost=2");
-          AddDecisionQueue("MZFILTER", $player, "leader=1", 1);
-          AddDecisionQueue("SETDQVAR", $player, 0, 1);
-          AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:maxCost=4");
-          AddDecisionQueue("MZFILTER", $player, "leader=1", 1);
-          AddDecisionQueue("MZFILTER", $player, "status=0", 1);
-          AddDecisionQueue("PREPENDLASTRESULT", $player, "{0},", 1);
-          AddDecisionQueue("CLEANEMPTYINDICES", $player, 1);
-          AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to bounce", 1);
-          AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-          AddDecisionQueue("MZOP", $player, "BOUNCE", 1);
+          AddLayer("TRIGGER", $player, $this->CardID());
           break;
         default: break;
       }

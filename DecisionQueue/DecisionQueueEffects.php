@@ -579,7 +579,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
           $ally->DefeatUpgrade($upgrade);
         }
       }
-      $ally->DealDamage(3);
+      $ally->DealDamage(3, enemyDamage:$ally->Controller() != $player);
       break;
     case "SUPERHEAVYIONCANNON":
       $owner = MZPlayerID($player, $lastResult);
