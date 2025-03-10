@@ -593,15 +593,6 @@ class Ally {
   function Attach($cardID, $ownerID = null, $epicAction = false, $turnsInPlay = 0) {
     $receivingPilot = $this->ReceivingPilot($cardID) || IsUnconventionalPilot($cardID);
     $subcardUniqueID = $this->AddSubcard($cardID, $ownerID, $receivingPilot, $epicAction, $turnsInPlay);
-    if (CardIsUnique($cardID)) {
-      $this->CheckUniqueUpgrade($cardID);
-      if($receivingPilot) {
-        $allyDestroyed = $this->CheckUniqueAllyForPilot($cardID);
-        if($allyDestroyed) $this->index = min(0, $this->index - AllyPieces());
-        if($cardID == "0979322247")//Sidon Ithano
-          $this->DefeatIfNoRemainingHP();
-      }
-    }
     //Pilot attach side effects
     if($receivingPilot) {
       switch($this->CardID()) {
@@ -614,6 +605,15 @@ class Ally {
           AddLayer("TRIGGER", $player, $this->CardID());
           break;
         default: break;
+      }
+    }
+    if (CardIsUnique($cardID)) {
+      $this->CheckUniqueUpgrade($cardID);
+      if($receivingPilot) {
+        $allyDestroyed = $this->CheckUniqueAllyForPilot($cardID);
+        if($allyDestroyed) $this->index = min(0, $this->index - AllyPieces());
+        if($cardID == "0979322247")//Sidon Ithano
+          $this->DefeatIfNoRemainingHP();
       }
     }
     //end Pilot attach side effects
