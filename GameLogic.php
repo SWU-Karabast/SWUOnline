@@ -622,9 +622,9 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         case "REDUCEHEALTH":
           MZAddHealth($player, $lastResult, count($parameterArr) > 1 ? -1 * $parameterArr[1] : 1); return $lastResult;
         case "DESTROY":
-          $enemyEffects = count($parameterArr) > 1 ? $parameterArr[1] : "1";
           $ally = new Ally($lastResult);
           $id = $ally->CardID();
+          $enemyEffects = count($parameterArr) > 1 ? $parameterArr[1] != $ally->Controller(): true;
           $ally->Destroy($enemyEffects);
           return $id;
         case "EXPLOIT":
