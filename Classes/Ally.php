@@ -206,7 +206,9 @@ class Ally {
         "5375722883" => 1,//R2-D2 (Artooooooooo!)
         default => 0
       };
-      $currentPilots += $subcards[$i+2] == "1" ? 1 : 0;
+      $currentPilots += ($subcards[$i+2] == "1"
+          && $subcards[$i] != "5306772000") //Phantom II exception (added as Pilot but not really a Pilot)
+        ? 1 : 0;
     }
 
     return $currentPilots < $maxPilots;
@@ -215,7 +217,9 @@ class Ally {
   function HasPilot() {
     $subcards = $this->GetUpgrades(withMetadata:true);
     for($i=0; $i<count($subcards); $i+=SubcardPieces()) {
-      if($subcards[$i+2] == "1") return true;
+      if($subcards[$i+2] == "1"
+          && $subcards[$i] != "5306772000")//Phantom II exception (added as Pilot but not really a Pilot)
+        return true;
     }
     return false;
   }
