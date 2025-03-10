@@ -71,6 +71,7 @@ function SubmitChat() {
     "SubmitChat.php?gameName=" + document.getElementById("gameName").value;
   ajaxLink +=
     "&playerID=" + document.getElementById("playerID").value +
+    "&playerAspect=" + document.getElementById("playerAspect").value +
     "&chatText=" + encodeURIComponent(chatBox.value) +
     "&authKey=" + document.getElementById("authKey").value;
   xmlhttp.open("GET", ajaxLink, true);
@@ -124,4 +125,24 @@ function TogglePopup(name) {
     xmlhttp.open("GET", ajaxLink, true);
     xmlhttp.send();
   }
+}
+
+function OnDamageControlMouseEnter(e) {
+  document.getElementById('cardDetail').classList.add('hidden');
+}
+
+function OnDamageControlMouseLeave(e) {
+  document.getElementById('cardDetail').classList.remove('hidden');
+}
+
+function SubmitIncreaseCounters(that, cardID) {
+  if(that.disabled) return;
+  that.disabled = true;
+  SubmitInput(14, "&cardID=" + cardID);
+}
+
+function SubmitDecreaseCounters(that, cardID) {
+  if(that.classList.contains('disabled')) return;
+  that.classList.add('disabled');
+  SubmitInput(15, "&cardID=" + cardID);
 }

@@ -20,7 +20,7 @@ function CreateTieFighter($player, $from = "-") {
 // This function put an ally into play for a player, which means no when played abilities are triggered.
 function PlayAlly($cardID, $player, $subCards = "-", $from = "-",
   $owner = null, $cloned = false, $playAbility = false,
-  $epicAction = false, $playedAsUnit = true, $turnsInPlay = 0) {
+  $epicAction = false, $turnsInPlay = 0) {
   if($from == "TGY") {
     $owner = $player == 1 ? 2 : 1;
   }
@@ -33,8 +33,8 @@ function PlayAlly($cardID, $player, $subCards = "-", $from = "-",
   $allies[] = 0; //Frozen
   $allies[] = $subCards; //Subcards
   $allies[] = $uniqueID; //Unique ID
-  $allies[] = $playedAsUnit ? 1 : 0;//Played as unit
-  $allies[] = 0; //Unused
+  $allies[] = 0;//Counters
+  $allies[] = 0; //Power
   $allies[] = 1; //Ability/effect uses
   $allies[] = 0; //Round health modifier
   $allies[] = 0; //Times attacked
@@ -370,11 +370,6 @@ function BaseHealthModifiers($cardID, $index, $player, $stackingBuff = false) {
 function DealAllyDamage($targetPlayer, $index, $damage, $type="")
 {
   $allies = &GetAllies($targetPlayer);
-  if($allies[$index+6] > 0) {
-    $damage -= 3;
-    if($damage < 0) $damage = 0;
-    --$allies[$index+6];
-  }
   $allies[$index+2] -= $damage;
   if($allies[$index+2] <= 0) DestroyAlly($targetPlayer, $index, fromCombat: $type == "COMBAT");
 }
@@ -1015,13 +1010,13 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities, $isUp
         Restore(2, $player);
         break;
       case "6861397107"://First Order Stormtrooper
-        IndirectDamage($otherPlayer, 1, true, $uniqueID);
+        IndirectDamage($cardID, $otherPlayer, 1, true, $uniqueID);
         break;
       case "8287246260"://Droid Missile Platform
-        IndirectDamage($otherPlayer, 3, true, $uniqueID);
+        IndirectDamage($cardID, $otherPlayer, 3, true, $uniqueID);
         break;
       case "7389195577"://Zygerrian Starhopper
-        IndirectDamage($otherPlayer, 2, true, $uniqueID);
+        IndirectDamage($cardID, $otherPlayer, 2, true, $uniqueID);
         break;
       case "1519837763"://Shuttle ST-149
         ShuttleST149($player);
@@ -2029,10 +2024,11 @@ function SpecificAllyAttackAbilities($attackID)
         }
         break;
       case "6471336466"://Vambrace Flamethrower
-        AddDecisionQueue("FINDINDICES", $mainPlayer, "ALLTHEIRGROUNDUNITSMULTI");
-        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose units to damage", 1);
-        AddDecisionQueue("MULTICHOOSETHEIRUNIT", $mainPlayer, "<-", 1);
-        AddDecisionQueue("MULTIDISTRIBUTEDAMAGE", $mainPlayer, "3,1", 1);
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY:arena=Ground");
+        AddDecisionQueue("PREPENDLASTRESULT", $mainPlayer, "3-");
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Deal 3 damage divided as you choose");
+        AddDecisionQueue("MAYMULTIDAMAGEMULTIZONE", $mainPlayer, "<-");
+        AddDecisionQueue("MZOP", $mainPlayer, MultiDamageStringBuilder(3, $mainPlayer, isUnitEffect:1));
         break;
       case "3141660491"://The Darksaber
         $allies = &GetAllies($mainPlayer);
@@ -2076,7 +2072,7 @@ function SpecificAllyAttackAbilities($attackID)
         break;
       case "3282713547"://Dengar pilot
         $damage = TraitContains($attackerAlly->CardID(), "Underworld", $mainPlayer) ? 3 : 2;
-        IndirectDamage($defPlayer, $damage, true, $attackerAlly->UniqueID());
+        IndirectDamage($upgrades[$i], $defPlayer, $damage, true, $attackerAlly->UniqueID());
         break;
       case "4573745395"://Bossk pilot
         if(IsAllyAttackTarget()) {
@@ -2852,13 +2848,13 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MZOP", $mainPlayer, DamageStringBuilder("{0}", $mainPlayer, isUnitEffect:1), 1);
       break;
     case "7831643253"://Red Squadron Y-Wing
-      IndirectDamage($defPlayer, 3, true, $attackerAlly->UniqueID());
+      IndirectDamage($attackerCardID, $defPlayer, 3, true, $attackerAlly->UniqueID());
       break;
     case "6861397107"://First Order Stormtrooper
-      IndirectDamage($defPlayer, 1, true, $attackerAlly->UniqueID());
+      IndirectDamage($attackerCardID, $defPlayer, 1, true, $attackerAlly->UniqueID());
       break;
     case "3504944818"://Tie Bomber
-      IndirectDamage($defPlayer, 3, true, $attackerAlly->UniqueID());
+      IndirectDamage($attackerCardID, $defPlayer, 3, true, $attackerAlly->UniqueID());
       break;
     case "1990020761"://Shuttle Tydirium
       $card = Mill($mainPlayer, 1);
@@ -2872,7 +2868,7 @@ function SpecificAllyAttackAbilities($attackID)
       break;
     case "6648978613"://Fett's Firespray (Feared Silhouettte)
       $damage = ControlsNamedCard($mainPlayer, "Boba Fett") ? 2 : 1;
-      IndirectDamage($defPlayer, $damage, true, $attackerAlly->UniqueID());
+      IndirectDamage($attackerCardID, $defPlayer, $damage, true, $attackerAlly->UniqueID());
       break;
     case "4573745395"://Bossk
       if(IsAllyAttackTarget()) {
@@ -2894,7 +2890,7 @@ function SpecificAllyAttackAbilities($attackID)
       break;
     case "9611596703"://Allegiant General Pryde
       if($initiativePlayer == $mainPlayer) {
-        IndirectDamage($defPlayer, 2, true, $attackerAlly->UniqueID());
+        IndirectDamage($attackerCardID, $defPlayer, 2, true, $attackerAlly->UniqueID());
       }
       break;
     case "590b638b18"://Rose Tico leader unit
@@ -2960,7 +2956,7 @@ function SpecificAllyAttackAbilities($attackID)
       break;
     case "6228218834"://Tactical Heavy Bomber
       AddCurrentTurnEffect("6228218834", $mainPlayer, 'PLAY');
-      IndirectDamage($defPlayer, $attackerAlly->CurrentPower(), true, $attackerAlly->UniqueID());
+      IndirectDamage($attackerCardID, $defPlayer, $attackerAlly->CurrentPower(), true, $attackerAlly->UniqueID());
       break;
     case "4147863169"://Relentless Firespray
       if($attackerAlly->Exists() && $attackerAlly->NumUses() > 0) {
@@ -3158,6 +3154,7 @@ function ResetAllies($player) {
     if ($allies[$i+1] != 0) {
       $allies[$i+3] = 0;
       $allies[$i+8] = 1;
+      $allies[$i+6] = 0;//Reset counters
       $allies[$i+10] = 0;//Reset times attacked
       ++$allies[$i+12];//Increase number of turns in play
       $allies[$i+14] = 0;//Reset was healed

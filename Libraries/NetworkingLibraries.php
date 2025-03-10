@@ -143,23 +143,27 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
         WriteLog("Player " . $playerID . " put a card on the bottom of the deck.");
       }
       break;
-    case 14: //Banish - can be reused for something else
-      //FAB
-      // $index = $cardID;
-      // $banish = &GetBanish($playerID);
-      // $theirChar = &GetPlayerCharacter($playerID == 1 ? 2 : 1);
-      // if($index < 0 || $index >= count($banish))
-      // {
-      //   echo("Banish Index " . $index . " Invalid Input<BR>");
-      //   return false;
-      // }
-      // $cardID = $banish[$index];
-      // if($banish[$index + 1] == "INST") SetClassState($currentPlayer, $CS_NextNAAInstant, 1);
-      // if($banish[$index + 1] == "MON212" && TalentContains($theirChar[0], "LIGHT", $currentPlayer)) AddCurrentTurnEffect("MON212", $currentPlayer);
-      // SetClassState($currentPlayer, $CS_PlayIndex, $index);
-      // PlayCard($cardID, "BANISH", -1, $index, $banish[$index + 2]);
+    case 14: // Increase damage/healing amount
+    case 15: // Decrease damage/healing amount
+      $mzIndex = $cardID;
+      if (str_contains($mzIndex, "ALLY")) {
+        $ally = new Ally($mzIndex);
+        if ($mode == 14) {
+          $ally->IncreaseCounters();
+        } else {
+          $ally->DecreaseCounters();
+        }
+      } else if (str_contains($mzIndex, "CHAR")) {
+        $mzArr = explode("-", $mzIndex);
+        $player = $mzArr[0] == "MYCHAR" ? $playerID : ($playerID == 1 ? 2 : 1);
+        $character = &GetPlayerCharacter($player);
+        if ($mode == 14) {
+          $character[$mzArr[1]+10] = intval($character[$mzArr[1]+10]) + 1;
+        } else {
+          $character[$mzArr[1]+10] = intval($character[$mzArr[1]+10]) - 1;
+        }
+      }
       break;
-
     case 16:
     case 18: //Decision Queue (15 and 18 deprecated)
       if (count($decisionQueue) > 0) {
@@ -415,6 +419,9 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
         RemoveDiscard($otherP, $found);
         PlayCard($cardID, "TGY");
       }
+      break;
+    case 38: //Confirm
+      ContinueDecisionQueue($buttonInput);
       break;
     case 99: //Pass
       global $isPass, $initiativeTaken, $dqState;
@@ -844,7 +851,7 @@ function Passed(&$turn, $playerID)
 function PassInput($autopass = false)
 {
   global $turn, $currentPlayer, $initiativeTaken, $initiativePlayer;
-  if ($turn[0] == "END" || $turn[0] == "MAYCHOOSEOPTION" || $turn[0] == "MAYMULTICHOOSETEXT" || $turn[0] == "MAYCHOOSECOMBATCHAIN" || $turn[0] == "MAYCHOOSEMULTIZONE" || $turn[0] == "MAYMULTICHOOSEAURAS" || $turn[0] == "MAYMULTICHOOSEHAND" || $turn[0] == "MAYCHOOSEHAND" || $turn[0] == "MAYCHOOSEDISCARD" || $turn[0] == "MAYCHOOSEARSENAL" || $turn[0] == "MAYCHOOSEPERMANENT" || $turn[0] == "MAYCHOOSEDECK" || $turn[0] == "MAYCHOOSEMYSOUL" || $turn[0] == "MAYCHOOSETOP" || $turn[0] == "MAYCHOOSECARD" || $turn[0] == "INSTANT" || $turn[0] == "OK" || $turn[0] == "LOOKHAND" || $turn[0] == "BUTTONINPUT") {
+  if ($turn[0] == "END" || $turn[0] == "MAYCHOOSEOPTION" || $turn[0] == "MAYMULTICHOOSETEXT" || $turn[0] == "MAYCHOOSECOMBATCHAIN" || $turn[0] == "MAYCHOOSEMULTIZONE" || $turn[0] == "MAYMULTICHOOSEAURAS" || $turn[0] == "MAYMULTICHOOSEHAND" || $turn[0] == "MAYCHOOSEHAND" || $turn[0] == "MAYCHOOSEDISCARD" || $turn[0] == "MAYCHOOSEARSENAL" || $turn[0] == "MAYCHOOSEPERMANENT" || $turn[0] == "MAYCHOOSEDECK" || $turn[0] == "MAYCHOOSEMYSOUL" || $turn[0] == "MAYCHOOSETOP" || $turn[0] == "MAYCHOOSECARD" || $turn[0] == "INSTANT" || $turn[0] == "OK" || $turn[0] == "LOOKHAND" || $turn[0] == "BUTTONINPUT" || $turn[0] == "MAYMULTIDAMAGEMULTIZONE") {
     ContinueDecisionQueue("PASS");
   } else {
     if ($autopass == true)

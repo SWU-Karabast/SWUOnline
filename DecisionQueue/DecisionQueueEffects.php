@@ -584,7 +584,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
     case "SUPERHEAVYIONCANNON":
       $owner = MZPlayerID($player, $lastResult);
       $ally = new Ally($lastResult, $owner);
-      IndirectDamage($owner, $ally->CurrentPower(), true);
+      IndirectDamage("5016817239", $owner, $ally->CurrentPower(), true);
       break;
     case "THEANNIHILATOR":
       $owner = $player == 1 ? 2 : 1;
@@ -645,7 +645,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       $owner = MZPlayerID($player, $lastResult);
       $ally = new Ally($lastResult, $owner);
       $power = $ally->CurrentPower();
-      IndirectDamage(($player == 1 ? 2 : 1), $power, false);
+      IndirectDamage("8606123385", ($player == 1 ? 2 : 1), $power, false);
       return $lastResult;
     case "ALLWINGSREPORTIN":
       foreach ($lastResult as $index) {
@@ -966,8 +966,19 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       else $ally->Exhaust();
       break;
     //Jump to Lightspeed
+    case "KIMOGILAHEAVYFIGHTER":
+      $targets = explode(",", $lastResult);
+      for ($i=0; $i<count($targets); $i++) {
+        if (str_starts_with("BASE", $targets[$i])) continue;
+
+        $ally = new Ally($targets[$i]);
+        if ($ally->Exists()) {
+          $ally->Exhaust();
+        }
+      }
+      break;
     case "BOBA_FETT_LEADER_JTL":
-      IndirectDamage($otherPlayer, 1);
+      IndirectDamage("9831674351", $otherPlayer, 1);
       break;
     case "HAN_SOLO_LEADER_JTL":
       $ally = new Ally($lastResult, $player);

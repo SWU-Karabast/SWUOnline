@@ -337,7 +337,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
 
   //Tell the player what to pick
   if ($turn[0] != "OVER") {
-    $helpText = ($currentPlayer != $playerID ? " Waiting for other player to choose " . TypeToPlay($turn[0]) . "&nbsp" : " " . GetPhaseHelptext() . "&nbsp;");
+    $helpText = ($currentPlayer != $playerID ? " Waiting for other player to " . VerbToPlay($turn[0]) . " " . TypeToPlay($turn[0]) . "&nbsp" : " " . GetPhaseHelptext() . "&nbsp;");
 
     echo ("<span class='playerpick-span'><img class='playerpick-img' title='" . $readyText . "' src='./Images/" . $icon . "'/>");
     if ($currentPlayer == $playerID) {
@@ -379,6 +379,9 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
 
     <?php
   }
+
+  if ($currentPlayer == $playerID && CanConfirmPhase($turn[0]))
+    echo ("&nbsp;" . CreateButton($playerID, "Confirm", 38, "-", "18px"));
 
   if ($turn[0] == "M" && $initiativeTaken != 1 && $currentPlayer == $playerID)
     echo ("&nbsp;" . CreateButton($playerID, "Claim Initiative", 34, "-", "18px"));
@@ -588,7 +591,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       $content .= CreateButton($playerID, $options[$i], 7, $options[$i], "24px");
     }
     $content .= "</div>";
-    echo CreatePopup("DYNPITCH", [], 0, 1, "Choose " . TypeToPlay($turn[0]), 1, $content);
+    echo CreatePopup("DYNPITCH", [], 0, 1, Capitalize(VerbToPlay($turn[0])) . " " . TypeToPlay($turn[0]), 1, $content);
   }
 
   if (($turn[0] == "BUTTONINPUT" || $turn[0] == "CHOOSEARCANE" || $turn[0] == "BUTTONINPUTNOPASS") && $turn[1] == $playerID) {
@@ -613,16 +616,27 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     if (GetDQHelpText() != "-")
       $caption = implode(" ", explode("_", GetDQHelpText()));
     else
-      $caption = "Choose " . TypeToPlay($turn[0]);
+      $caption = Capitalize(VerbToPlay($turn[0])) . " " . TypeToPlay($turn[0]);
     echo CreatePopup("YESNO", [], 0, 1, $caption, 1, $content);
   }
 
   if ($turn[0] == "OK" && $turn[1] == $playerID) {
-    $content = CreateButton($playerID, "Ok", 99, "OK", "20px");
+    $description = $turn[2];
+    if ($description == "-" || $description == "<-") {
+      $description = "";
+    }
+
+    $content = "";
+    if ($description != "") {
+      $description = implode(" ", explode("_", $description));
+      $content .= "<div style='text-align: center; margin-bottom: 24px; color: rgba(255, 255, 255, 0.8);'>" . $description . "</div>";
+    }
+
+    $content .= CreateButton($playerID, "Ok", 99, "OK", "20px");
     if (GetDQHelpText() != "-")
       $caption = implode(" ", explode("_", GetDQHelpText()));
     else
-      $caption = "Choose " . TypeToPlay($turn[0]);
+      $caption = Capitalize(VerbToPlay($turn[0])) . " " . TypeToPlay($turn[0]);
     echo CreatePopup("OK", [], 0, 1, $caption, 1, $content);
   }
 
@@ -670,7 +684,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       $content .= "</td>";
     }
     $content .= "</tr></table>";
-    echo CreatePopup("CHOOSETOPOPPONENT", [], 0, 1, "Choose " . TypeToPlay($turn[0]), 1, $content);
+    echo CreatePopup("CHOOSETOPOPPONENT", [], 0, 1, Capitalize(VerbToPlay($turn[0])) . " " . TypeToPlay($turn[0]), 1, $content);
   }
 
   if ($turn[0] == "LOOKHAND" && $turn[1] == $playerID) {
@@ -704,7 +718,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       $content .= "</td>";
     }
     $content .= "</tr></table>";
-    echo CreatePopup("HANDTOPBOTTOM", [], 0, 1, "Choose " . TypeToPlay($turn[0]), 1, $content);
+    echo CreatePopup("HANDTOPBOTTOM", [], 0, 1, Capitalize(VerbToPlay($turn[0])) . " " . TypeToPlay($turn[0]), 1, $content);
   }
 
   $mzChooseFromPlay = false;
@@ -771,7 +785,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
 
       $counters = 0;
       $lifeCounters = 0;
-      $enduranceCounters = 0;
+      $defCounters = 0;
       $atkCounters = 0;
 
       $index = intval($option[1]);
@@ -804,14 +818,14 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       if ($option[0] == "THEIRALLY") {
         $ally = new Ally("MYALLY-" . $index, $otherPlayer);
         $lifeCounters = $ally->Health();
-        $enduranceCounters = $theirAllies[$index + 6];
+        $defCounters = 0;
         $attackCounters = $ally->CurrentPower();
         if ($ally->IsExhausted())
           $overlay = 1;
       } elseif ($option[0] == "MYALLY") {
         $ally = new Ally("MYALLY-" . $index, $playerID);
         $lifeCounters = $ally->Health();
-        $enduranceCounters = $myAllies[$index + 6];
+        $defCounters = 0;
         $attackCounters = $ally->CurrentPower();
         if ($ally->IsExhausted())
           $overlay = 1;
@@ -819,11 +833,39 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         if ($myArsenal[$index + 4] == 1)
           $overlay = 1;
       }
-      $content .= Card($card, "concat", $cardSize, 16, 1, $overlay, $playerBorderColor, $counters, $options[$i], "", false, $lifeCounters, $enduranceCounters, $attackCounters, controller: $playerBorderColor);
+      $content .= Card($card, "concat", $cardSize, 16, 1, $overlay, $playerBorderColor, $counters, $options[$i], "", false, $lifeCounters, $defCounters, $attackCounters, controller: $playerBorderColor);
     }
     $content .= "</div>";
     if (!$mzChooseFromPlay)
       echo CreatePopup("CHOOSEMULTIZONE", [], 0, 1, GetPhaseHelptext(), 1, $content);
+  }
+
+  $mzMultiDamage = false;
+  $canOverkillUnits = false;
+  $maxCountersReached = false;
+  if (($turn[0] == "INDIRECTDAMAGEMULTIZONE" || $turn[0] == "MULTIDAMAGEMULTIZONE" || $turn[0] == "MAYMULTIDAMAGEMULTIZONE")) {
+    $params = explode("-", $turn[2]);
+    $mzMultiDamage = true;
+    $canOverkillUnits = $turn[0] != "INDIRECTDAMAGEMULTIZONE";
+    $totalMaxCounters = $params[0];
+    $mzIndexes = implode("-", array_slice($params, 1));
+    $options = explode(",", $mzIndexes);
+    $optionsIndex = [...$options];
+
+    // Check if the total counters are greater than the total max counters
+    $totalCounters = 0;
+    for ($i = 0; $i < count($optionsIndex); $i++) {
+      if (str_contains($optionsIndex[$i], "ALLY")) {
+        $ally = new Ally($optionsIndex[$i]);
+        $totalCounters += $ally->Counters();
+      } else if (str_contains($optionsIndex[$i], "CHAR")) {
+        $mzArr = explode("-", $optionsIndex[$i]);
+        $p = $mzArr[0] == "MYCHAR" ? $turn[1] : ($turn[1] == 1 ? 2 : 1);
+        $character = &GetPlayerCharacter($p);
+        $totalCounters += $character[$mzArr[1]+10];
+      }
+    }
+    $maxCountersReached = $totalCounters >= $totalMaxCounters;
   }
 
   if (($turn[0] == "MAYCHOOSEDECK" || $turn[0] == "CHOOSEDECK") && $turn[1] == $playerID) {
@@ -862,7 +904,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   }
 
   if (($turn[0] == "CHOOSEOPTION" || $turn[0] == "MAYCHOOSEOPTION") && $currentPlayer == $playerID) {
-    $caption = "<div>Choose " . TypeToPlay($turn[0]) . "</div>";
+    $caption = "<div>" . Capitalize(VerbToPlay($turn[0])) . " " . TypeToPlay($turn[0]) . "</div>";
     if (GetDQHelpText() != "-")
       $caption = "<div>" . implode(" ", explode("_", GetDQHelpText())) . "</div>";
     $params = explode("&", $turn[2]);
@@ -1245,10 +1287,25 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       $ally = new Ally($mzIndex, $otherPlayer);
       $playable = GetOpponentControlledAbilityNames($ally->CardID()) != "";
 
+      $counters = 0;
+      $counterType = 0;
+      $showCounterControls = false;
+      $maxCounters = 0;
       if (!$mzChooseFromPlay && $playable && TheirAllyPlayableExhausted($ally)) {
         $border = CardBorderColor($theirAllies[$i], "PLAY", $playable);
         $action = $currentPlayer == $playerID && $turn[0] != "P" && $playable ? 105 : 0; // 105 is the Ally Ability for opponent-controlled abilities like Mercenary Gunship
         $actionDataOverride = strval($i);
+      } else if ($mzMultiDamage) {
+        $mzIndex = $ally->MZIndex();
+        $inOptions = in_array($mzIndex, $optionsIndex);
+        if ($inOptions) {
+          $showCounterControls = $turn[1] == $playerID;
+          $border = $showCounterControls ? 4 : 0;
+          $actionDataOverride = $mzIndex;
+          $counterType = 1;
+          $counters = $ally->Counters();
+          $maxCounters = ($ally->HasShield() || $canOverkillUnits) ? 0 : $ally->Health();
+        }
       }
 
       $opts = array(
@@ -1257,13 +1314,17 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         'border' => $border,
         'currentHP' => $ally->Health(),
         'maxHP' => $ally->MaxHealth(),
-        'enduranceCounters' => $theirAllies[$i + 6],
         'subcard' => $theirAllies[$i + 4],
         'subcards' => $theirAllies[$i + 4] != "-" ? explode(",", $theirAllies[$i + 4]) : [],
         'currentPower' => $ally->CurrentPower(),
         'hasSentinel' => HasSentinel($theirAllies[$i], $otherPlayer, $i),
         'overlay' => $theirAllies[$i + 1] != 2 ? 1 : 0,
         'cloned' => $theirAllies[$i + 13] == 1,
+        'counters' => $counters,
+        'counterType' => $counterType,
+        'showCounterControls' => $showCounterControls,
+        'maxCounters' => $maxCounters,
+        'maxCountersReached' => $maxCountersReached,
       );
       $isUnimplemented = IsUnimplemented($theirAllies[$i]);
       $cardArena = $ally->CurrentArena();
@@ -1294,7 +1355,6 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     $actionDataOverride = $mzChooseFromPlay && $inOptions ? $mzIndex : 0;
     $border = CardBorderColor($theirCharacter[$i], "CHAR", $action == 16, "THEIRS");
     $atkCounters = 0;
-    $counters = 0;
     $epicActionUsed = 0;
     $overlay = $theirCharacter[$i + 1] != 2 ? 1 : 0;
     $type = CardType($theirCharacter[$i]);
@@ -1305,9 +1365,26 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     } else if ($type == "C") {
       $epicActionUsed = $theirCharacter[$i + 2] > 0 ? 1 : 0;
     }
+
+    $showCounterControls = false;
+    $counterType = 0;
+    $counters = 0;
+    if ($mzMultiDamage) {
+      $isActivePlayer = $turn[1] == $playerID;
+      $mzIndex =  $isActivePlayer ? "THEIRCHAR-" . $i : "MYCHAR-" . $i;
+      $inOptions = in_array($mzIndex, $optionsIndex);
+      if ($inOptions) {
+        $showCounterControls = $isActivePlayer;
+        $actionDataOverride = $mzIndex;
+        $border = $showCounterControls ? 4 : 0;
+        $counterType = 1;
+        $counters = $theirCharacter[$i + 10];
+      }
+    }
+
     if ($characterContents != "")
       $characterContents .= "|";
-    $characterContents .= ClientRenderedCard(cardNumber: $theirCharacter[$i], action: $action, actionDataOverride: $actionDataOverride, borderColor: $border, overlay: $overlay, counters: $counters, defCounters: 0, atkCounters: $atkCounters, controller: $otherPlayer, type: $type, sType: $sType, isFrozen: ($theirCharacter[$i + 8] == 1), onChain: ($theirCharacter[$i + 6] == 1), isBroken: ($theirCharacter[$i + 1] == 0), rotate: 0, landscape: 1, epicActionUsed: $epicActionUsed);
+    $characterContents .= ClientRenderedCard(cardNumber: $theirCharacter[$i], action: $action, actionDataOverride: $actionDataOverride, borderColor: $border, overlay: $overlay, counters: $counters, defCounters: 0, atkCounters: $atkCounters, controller: $otherPlayer, type: $type, sType: $sType, isFrozen: ($theirCharacter[$i + 8] == 1), onChain: ($theirCharacter[$i + 6] == 1), isBroken: ($theirCharacter[$i + 1] == 0), rotate: 0, landscape: 1, epicActionUsed: $epicActionUsed, showCounterControls: $showCounterControls, counterType: $counterType, maxCountersReached: $maxCountersReached);
   }
   echo ($characterContents);
 
@@ -1392,12 +1469,31 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         break;
       $ally = new Ally("MYALLY-" . $i, $playerID);
 
+      $showCounterControls = false;
+      $action = 0;
+      $border = 0;
+      $counterType = 0;
+      $actionDataOverride = 0;
+      $counters = 0;
+      $maxCounters = 0;
+
       if ($mzChooseFromPlay) {
         $mzIndex = "MYALLY-" . $i;
         $inOptions = in_array($mzIndex, $optionsIndex);
         $action = $inOptions ? 16 : 0;
         $actionDataOverride = $inOptions ? $mzIndex : 0;
         $border = CardBorderColor($myAllies[$i], "PLAY", $action == 16);
+      } else if ($mzMultiDamage) {
+        $mzIndex = $ally->MZIndex();
+        $inOptions = in_array($mzIndex, $optionsIndex);
+        if ($inOptions) {
+          $showCounterControls = $turn[1] == $playerID;
+          $border = $showCounterControls ? 4 : 0;
+          $actionDataOverride = $mzIndex;
+          $counterType = 1;
+          $counters = $ally->Counters();
+          $maxCounters = ($ally->HasShield() || $canOverkillUnits) ? 0 : $ally->Health();
+        }
       } else {
         $playable = IsPlayable($myAllies[$i], $turn[0], "PLAY", $i, $restriction) && (!$ally->IsExhausted() || AllyPlayableExhausted($ally));
         $border = CardBorderColor($myAllies[$i], "PLAY", $playable);
@@ -1408,7 +1504,6 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       $opts = array(
         'currentHP' => $ally->Health(),
         'maxHP' => $ally->MaxHealth(),
-        'enduranceCounters' => $myAllies[$i + 6],
         'subcard' => $myAllies[$i + 4],
         'subcards' => $myAllies[$i + 4] != "-" ? explode(",", $myAllies[$i + 4]) : [],
         'currentPower' => $ally->CurrentPower(),
@@ -1418,6 +1513,11 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         'border' => $border,
         'overlay' => $myAllies[$i + 1] != 2 ? 1 : 0,
         'cloned' => $myAllies[$i + 13] == 1,
+        'counters' => $counters,
+        'counterType' => $counterType,
+        'showCounterControls' => $showCounterControls,
+        'maxCounters' => $maxCounters,
+        'maxCountersReached' => $maxCountersReached,
       );
       $isUnimplemented = IsUnimplemented($myAllies[$i]);
       $cardArena = $ally->CurrentArena();
@@ -1469,12 +1569,27 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       $epicActionUsed = $myCharacter[$i + 2] > 0 ? 1 : 0;
     }
 
+    $showCounterControls = false;
+    $counterType = 0;
+    $counters = 0;
+    $border = 0;
     if ($mzChooseFromPlay) {
       $mzIndex = "MYCHAR-" . $i;
       $inOptions = in_array($mzIndex, $optionsIndex);
       $action = $inOptions ? 16 : 0;
       $actionDataOverride = $inOptions ? $mzIndex : 0;
       $border = CardBorderColor($myCharacter[$i], "CHAR", $action == 16);
+    } else if ($mzMultiDamage) {
+      $isActivePlayer = $turn[1] == $playerID;
+      $mzIndex =  $isActivePlayer ? "MYCHAR-" . $i : "THEIRCHAR-" . $i;
+      $inOptions = in_array($mzIndex, $optionsIndex);
+      if ($inOptions) {
+        $showCounterControls = $isActivePlayer;
+        $actionDataOverride = $mzIndex;
+        $border = $showCounterControls ? 4 : 0;
+        $counterType = 1;
+        $counters = $myCharacter[$i + 10];
+      }
     } else {
       $playable = $playerID == $currentPlayer && IsPlayable($myCharacter[$i], $turn[0], "CHAR", $i, $restriction) && ($myCharacter[$i + 1] == 2 || $epicActionUsed == 0);
       $border = CardBorderColor($myCharacter[$i], "CHAR", $playable);
@@ -1485,7 +1600,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     if ($myCharData != "")
       $myCharData .= "|";
     $restriction = implode("_", explode(" ", $restriction));
-    $myCharData .= ClientRenderedCard($myCharacter[$i], $action, $myCharacter[$i + 1] != 2 ? 1 : 0, $border, $myCharacter[$i + 1] != 0 ? $counters : 0, $actionDataOverride, 0, 0, $atkCounters, $playerID, $type, $sType, $restriction, $myCharacter[$i + 1] == 0, $myCharacter[$i + 6] == 1, $myCharacter[$i + 8] == 1, gem: 0, rotate: 0, landscape: 1, epicActionUsed: $epicActionUsed);
+    $myCharData .= ClientRenderedCard($myCharacter[$i], $action, $myCharacter[$i + 1] != 2 ? 1 : 0, $border, $counters, $actionDataOverride, 0, 0, $atkCounters, $playerID, $type, $sType, $restriction, $myCharacter[$i + 1] == 0, $myCharacter[$i + 6] == 1, $myCharacter[$i + 8] == 1, gem: 0, rotate: 0, landscape: 1, epicActionUsed: $epicActionUsed, showCounterControls: $showCounterControls, counterType: $counterType, maxCountersReached: $maxCountersReached);
   }
   echo ("<div id='myChar' style='display:none;'>");
   echo ($myCharData);
@@ -1771,10 +1886,14 @@ function DisplayTiles($player)
   }
 }
 
+function Capitalize($string) {
+  return ucfirst(strtolower($string));
+}
+
 function GetPhaseHelptext()
 {
   global $turn;
-  $defaultText = "Choose " . TypeToPlay($turn[0]);
+  $defaultText = Capitalize(VerbToPlay($turn[0])) . " " . TypeToPlay($turn[0]);
   return (GetDQHelpText() != "-" ? implode(" ", explode("_", GetDQHelpText())) : $defaultText);
 }
 
