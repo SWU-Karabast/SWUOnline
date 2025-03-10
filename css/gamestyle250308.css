@@ -1488,6 +1488,22 @@ h3 {
   user-select: none;
 }
 
+.counters-control-wrapper {
+  margin: 0px;
+  top: 15px;
+  left: -10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position:absolute;
+  z-index: 10;
+
+  &.base-controls {
+    top: 22px;
+  }
+}
+
 button.counter-control {
   width: 28px;
   height: 28px;
@@ -1518,5 +1534,33 @@ button.counter-control {
   &.decrease-control {
     padding-bottom: 5px;
     border-radius: 0 0 8px 8px;
+  }
+}
+
+.base-counter {
+  position:absolute;
+  background: url('../Images/dmgbg-l.png') left no-repeat, url('../Images/dmgbg-r.png') right no-repeat;
+  background-size: contain;
+  top: 31px;
+  left: -42px;
+  border-radius: 0%;
+  height: 26px;
+  width: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  background: linear-gradient(90deg, rgba(255, 0, 0, 0.00) 0%, rgba(221, 17, 35, 0.90) 50%, rgba(221, 17, 35, 1) 100%), linear-gradient(270deg, rgba(0, 0, 0, 0.90) 0%, rgba(0, 0, 0, 0.90) 45%, rgba(0, 0, 0, 0.00) 100%);
+  line-height: 30px;
+  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.60);
+  padding: 5px 0 7px 8px;
+  font-size: 24px;
+  font-weight: 700;
+  color: #fff;
+  user-select: none;
+
+  &.no-controls {
+    left: -31px;
+    top: 30px;
   }
 }

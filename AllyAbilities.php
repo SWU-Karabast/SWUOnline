@@ -1006,13 +1006,13 @@ function AllyDestroyedAbility($player, $cardID, $uniqueID, $lostAbilities, $isUp
         Restore(2, $player);
         break;
       case "6861397107"://First Order Stormtrooper
-        IndirectDamage($otherPlayer, 1, true, $uniqueID);
+        IndirectDamage($cardID, $otherPlayer, 1, true, $uniqueID);
         break;
       case "8287246260"://Droid Missile Platform
-        IndirectDamage($otherPlayer, 3, true, $uniqueID);
+        IndirectDamage($cardID, $otherPlayer, 3, true, $uniqueID);
         break;
       case "7389195577"://Zygerrian Starhopper
-        IndirectDamage($otherPlayer, 2, true, $uniqueID);
+        IndirectDamage($cardID, $otherPlayer, 2, true, $uniqueID);
         break;
       case "1519837763"://Shuttle ST-149
         ShuttleST149($player);
@@ -2067,7 +2067,7 @@ function SpecificAllyAttackAbilities($attackID)
         break;
       case "3282713547"://Dengar pilot
         $damage = TraitContains($attackerAlly->CardID(), "Underworld", $mainPlayer) ? 3 : 2;
-        IndirectDamage($defPlayer, $damage, true, $attackerAlly->UniqueID());
+        IndirectDamage($upgrades[$i], $defPlayer, $damage, true, $attackerAlly->UniqueID());
         break;
       case "4573745395"://Bossk pilot
         if(IsAllyAttackTarget()) {
@@ -2843,13 +2843,13 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MZOP", $mainPlayer, DamageStringBuilder("{0}", $mainPlayer, isUnitEffect:1), 1);
       break;
     case "7831643253"://Red Squadron Y-Wing
-      IndirectDamage($defPlayer, 3, true, $attackerAlly->UniqueID());
+      IndirectDamage($attackerCardID, $defPlayer, 3, true, $attackerAlly->UniqueID());
       break;
     case "6861397107"://First Order Stormtrooper
-      IndirectDamage($defPlayer, 1, true, $attackerAlly->UniqueID());
+      IndirectDamage($attackerCardID, $defPlayer, 1, true, $attackerAlly->UniqueID());
       break;
     case "3504944818"://Tie Bomber
-      IndirectDamage($defPlayer, 3, true, $attackerAlly->UniqueID());
+      IndirectDamage($attackerCardID, $defPlayer, 3, true, $attackerAlly->UniqueID());
       break;
     case "1990020761"://Shuttle Tydirium
       $card = Mill($mainPlayer, 1);
@@ -2863,7 +2863,7 @@ function SpecificAllyAttackAbilities($attackID)
       break;
     case "6648978613"://Fett's Firespray (Feared Silhouettte)
       $damage = ControlsNamedCard($mainPlayer, "Boba Fett") ? 2 : 1;
-      IndirectDamage($defPlayer, $damage, true, $attackerAlly->UniqueID());
+      IndirectDamage($attackerCardID, $defPlayer, $damage, true, $attackerAlly->UniqueID());
       break;
     case "4573745395"://Bossk
       if(IsAllyAttackTarget()) {
@@ -2885,7 +2885,7 @@ function SpecificAllyAttackAbilities($attackID)
       break;
     case "9611596703"://Allegiant General Pryde
       if($initiativePlayer == $mainPlayer) {
-        IndirectDamage($defPlayer, 2, true, $attackerAlly->UniqueID());
+        IndirectDamage($attackerCardID, $defPlayer, 2, true, $attackerAlly->UniqueID());
       }
       break;
     case "590b638b18"://Rose Tico leader unit
@@ -2951,7 +2951,7 @@ function SpecificAllyAttackAbilities($attackID)
       break;
     case "6228218834"://Tactical Heavy Bomber
       AddCurrentTurnEffect("6228218834", $mainPlayer, 'PLAY');
-      IndirectDamage($defPlayer, $attackerAlly->CurrentPower(), true, $attackerAlly->UniqueID());
+      IndirectDamage($attackerCardID, $defPlayer, $attackerAlly->CurrentPower(), true, $attackerAlly->UniqueID());
       break;
     case "4147863169"://Relentless Firespray
       if($attackerAlly->Exists() && $attackerAlly->NumUses() > 0) {

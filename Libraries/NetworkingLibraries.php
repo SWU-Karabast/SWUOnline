@@ -144,14 +144,25 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
       }
       break;
     case 14: // Increase damage/healing amount
-      $mzIndex = $cardID;
-      $ally = new Ally($mzIndex);
-      $ally->IncreaseCounters();
-      break;
     case 15: // Decrease damage/healing amount
       $mzIndex = $cardID;
-      $ally = new Ally($mzIndex);
-      $ally->DecreaseCounters();
+      if (str_contains($mzIndex, "ALLY")) {
+        $ally = new Ally($mzIndex);
+        if ($mode == 14) {
+          $ally->IncreaseCounters();
+        } else {
+          $ally->DecreaseCounters();
+        }
+      } else if (str_contains($mzIndex, "CHAR")) {
+        $mzArr = explode("-", $mzIndex);
+        $player = $mzArr[0] == "MYCHAR" ? $playerID : ($playerID == 1 ? 2 : 1);
+        $character = &GetPlayerCharacter($player);
+        if ($mode == 14) {
+          $character[$mzArr[1]+10] = intval($character[$mzArr[1]+10]) + 1;
+        } else {
+          $character[$mzArr[1]+10] = intval($character[$mzArr[1]+10]) - 1;
+        }
+      }
       break;
     case 16:
     case 18: //Decision Queue (15 and 18 deprecated)
@@ -409,7 +420,7 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
         PlayCard($cardID, "TGY");
       }
       break;
-    case 38: //Continue
+    case 38: //Confirm
       ContinueDecisionQueue($buttonInput);
       break;
     case 99: //Pass

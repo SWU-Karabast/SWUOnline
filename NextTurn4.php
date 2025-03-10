@@ -127,7 +127,7 @@
       }
 
       //Rotate is deprecated
-      function Card(cardNumber, folder, maxHeight, action = 0, showHover = 0, overlay = 0, borderColor = 0, counters = 0, actionDataOverride = "", id = "", rotate = 0, lifeCounters = 0, defCounters = 0, atkCounters = 0, controller = 0, restriction = "", isBroken = 0, onChain = 0, isFrozen = 0, gem = 0, landscape = 0, epicActionUsed = 0, isUnimplemented = 0) {
+      function Card(cardNumber, folder, maxHeight, action = 0, showHover = 0, overlay = 0, borderColor = 0, counters = 0, actionDataOverride = "", id = "", rotate = 0, lifeCounters = 0, defCounters = 0, atkCounters = 0, controller = 0, restriction = "", isBroken = 0, onChain = 0, isFrozen = 0, gem = 0, landscape = 0, epicActionUsed = 0, isUnimplemented = 0, showCounterControls = 0, counterType = 0, maxCountersReached = 0) {
         if (folder == "crops") {
           cardNumber += "_cropped";
         }
@@ -148,6 +148,19 @@
         if (folder == "crops/") margin = "0px;";
 
         var rv = "<a style='" + margin + " position:relative; display:inline-block;" + (action > 0 ? "cursor:pointer;" : "") + "'" + (showHover > 0 ? " onmouseover='ShowCardDetail(event, this)' onmouseout='HideCardDetail()'" : "") + (action > 0 ? " onclick='SubmitInput(\"" + action + "\", \"&cardID=" + actionData + "\");'" : "") + ">";
+  
+        // Counters (damage and heal)
+        if (showCounterControls != 0) {
+          var canIncrease = maxCountersReached != 1;
+          var canDecrease = counters > 0;
+          rv += "<div class='counters-control-wrapper base-controls'>";
+          rv += "<button class='counter-control increase-control' " + (canIncrease ? "" : "disabled") + " onclick='SubmitIncreaseCounters(this, \"" + actionData + "\");' " + (showHover > 0 ? " onmouseenter='OnDamageControlMouseEnter()' onmouseleave='OnDamageControlMouseLeave()'" : "") + ">+</button>";
+          rv += "<button class='counter-control decrease-control' " + (canDecrease ? "" : "disabled") + " onclick='SubmitDecreaseCounters(this, \"" + actionData + "\");' " + (showHover > 0 ? " onmouseenter='OnDamageControlMouseEnter()' onmouseleave='OnDamageControlMouseLeave()'" : "") + ">-</button>";
+          rv += "</div>";
+        }
+        if (counterType > 0) {
+          rv += "<div class='base-counter " + (showCounterControls > 0 ? "" : "no-controls") + "'>" + counters + "</div>";
+        }
 
         if (borderColor > 0) {
           border = "border-radius:8px; border:2px solid " + BorderColorMap(borderColor) + ";";
@@ -180,7 +193,7 @@
         var altText = " alt='" + CardTitle(cardNumber) + "' ";
         rv += "<img " + (id != "" ? "id='" + id + "-img' " : "") + altText + orientation + "style='" + border + " height:" + height + "; width:" + width + "px; position:relative;' src='./" + folderPath + "/" + cardNumber + fileExt + "' />";
 
-        if (isUnimplemented) {
+        if (isUnimplemented != 0) {
           rv += "<img style='position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); width:40%; height:40%; z-index:2;' src='./Images/restricted.png' />";
         }
 
@@ -189,20 +202,20 @@
         var darkMode = false;
         counterHeight = 28;
         imgCounterHeight = 42;
-        //Attacker Label Style
-        if (counters == "Attacker" || counters == "Arsenal") {
-          rv += "<div style='margin: 0px; top: 80%; left: 50%; margin-right: -50%; border-radius: 7px; width: fit-content; text-align: center; line-height: 16px; height: 16px; padding: 5px; border: 3px solid " + PopupBorderColor(darkMode) + ";";
-          rv += "transform: translate(-50%, -50%); -ms-transform: translate(-50%, -50%); position:absolute; z-index: 10; background:" + BackgroundColor(darkMode) + "; font-size:20px; font-weight:800; color:" + PopupBorderColor(darkMode) + ";'>" + counters + "</div>";
-        }
-        //Equipments, Hero and default counters style
-        else if (counters != 0) {
-          var left = "72%";
-          if (lifeCounters == 0 && defCounters == 0 && atkCounters == 0) {
-            left = "50%";
-          }
-          rv += "<div style='margin: 0px; top: 50%; left:" + left + "; margin-right: -50%; border-radius: 50%; width:" + counterHeight + "px; height:" + counterHeight + "px; padding: 5px; border: 3px solid " + PopupBorderColor(darkMode) + "; text-align: center; line-height:" + imgCounterHeight / 1.5 + "px;";
-          rv += "transform: translate(-50%, -50%); -ms-transform: translate(-50%, -50%); position:absolute; z-index: 10; background:" + BackgroundColor(darkMode) + "; font-family: Helvetica; font-size:" + (counterHeight - 2) + "px; font-weight:550; color:" + TextCounterColor(darkMode) + "; text-shadow: 2px 0 0 " + PopupBorderColor(darkMode) + ", 0 -2px 0 " + PopupBorderColor(darkMode) + ", 0 2px 0 " + PopupBorderColor(darkMode) + ", -2px 0 0 " + PopupBorderColor(darkMode) + ";'>" + counters + "</div>";
-        }
+        // //Attacker Label Style
+        // if (counters == "Attacker" || counters == "Arsenal") {
+        //   rv += "<div style='margin: 0px; top: 80%; left: 50%; margin-right: -50%; border-radius: 7px; width: fit-content; text-align: center; line-height: 16px; height: 16px; padding: 5px; border: 3px solid " + PopupBorderColor(darkMode) + ";";
+        //   rv += "transform: translate(-50%, -50%); -ms-transform: translate(-50%, -50%); position:absolute; z-index: 10; background:" + BackgroundColor(darkMode) + "; font-size:20px; font-weight:800; color:" + PopupBorderColor(darkMode) + ";'>" + counters + "</div>";
+        // }
+        // //Equipments, Hero and default counters style
+        // else if (counters != 0) {
+        //   var left = "72%";
+        //   if (lifeCounters == 0 && defCounters == 0 && atkCounters == 0) {
+        //     left = "50%";
+        //   }
+        //   rv += "<div style='margin: 0px; top: 50%; left:" + left + "; margin-right: -50%; border-radius: 50%; width:" + counterHeight + "px; height:" + counterHeight + "px; padding: 5px; border: 3px solid " + PopupBorderColor(darkMode) + "; text-align: center; line-height:" + imgCounterHeight / 1.5 + "px;";
+        //   rv += "transform: translate(-50%, -50%); -ms-transform: translate(-50%, -50%); position:absolute; z-index: 10; background:" + BackgroundColor(darkMode) + "; font-family: Helvetica; font-size:" + (counterHeight - 2) + "px; font-weight:550; color:" + TextCounterColor(darkMode) + "; text-shadow: 2px 0 0 " + PopupBorderColor(darkMode) + ", 0 -2px 0 " + PopupBorderColor(darkMode) + ", 0 2px 0 " + PopupBorderColor(darkMode) + ", -2px 0 0 " + PopupBorderColor(darkMode) + ";'>" + counters + "</div>";
+        // }
         //-1 Defense & Endurance Counters style
         if (defCounters != 0 && isBroken != 1) {
           var left = "-42%";
@@ -431,7 +444,7 @@
               restriction = restriction.replace(/_/g, ' ');
               folder = zone == "myChar" || zone == "theirChar" ? "WebpImages2" : "concat";
               if(selectedLanguage != "EN") folder = folder + "/" + selectedLanguage;
-              newHTML += Card(cardArr[0], folder, size, cardArr[1], 1, cardArr[2], cardArr[3], cardArr[4], cardArr[5], "", cardArr[17], cardArr[6], cardArr[7], cardArr[8], cardArr[9], restriction, cardArr[13], cardArr[14], cardArr[15], cardArr[16], cardArr[18], cardArr[19], cardArr[20]);
+              newHTML += Card(cardArr[0], folder, size, cardArr[1], 1, cardArr[2], cardArr[3], cardArr[4], cardArr[5], "", cardArr[17], cardArr[6], cardArr[7], cardArr[8], cardArr[9], restriction, cardArr[13], cardArr[14], cardArr[15], cardArr[16], cardArr[18], cardArr[19], cardArr[20], cardArr[21], cardArr[22], cardArr[23]);
               newHTML += "</span>";
           }
           zoneEl.innerHTML = newHTML;

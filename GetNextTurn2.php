@@ -858,6 +858,11 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       if (str_contains($optionsIndex[$i], "ALLY")) {
         $ally = new Ally($optionsIndex[$i]);
         $totalCounters += $ally->Counters();
+      } else if (str_contains($optionsIndex[$i], "CHAR")) {
+        $mzArr = explode("-", $optionsIndex[$i]);
+        $p = $mzArr[0] == "MYCHAR" ? $turn[1] : ($turn[1] == 1 ? 2 : 1);
+        $character = &GetPlayerCharacter($p);
+        $totalCounters += $character[$mzArr[1]+10];
       }
     }
     $maxCountersReached = $totalCounters >= $totalMaxCounters;
@@ -1350,7 +1355,6 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     $actionDataOverride = $mzChooseFromPlay && $inOptions ? $mzIndex : 0;
     $border = CardBorderColor($theirCharacter[$i], "CHAR", $action == 16, "THEIRS");
     $atkCounters = 0;
-    $counters = 0;
     $epicActionUsed = 0;
     $overlay = $theirCharacter[$i + 1] != 2 ? 1 : 0;
     $type = CardType($theirCharacter[$i]);
@@ -1361,9 +1365,26 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     } else if ($type == "C") {
       $epicActionUsed = $theirCharacter[$i + 2] > 0 ? 1 : 0;
     }
+
+    $showCounterControls = false;
+    $counterType = 0;
+    $counters = 0;
+    if ($mzMultiDamage) {
+      $isActivePlayer = $turn[1] == $playerID;
+      $mzIndex =  $isActivePlayer ? "THEIRCHAR-" . $i : "MYCHAR-" . $i;
+      $inOptions = in_array($mzIndex, $optionsIndex);
+      if ($inOptions) {
+        $showCounterControls = $isActivePlayer;
+        $actionDataOverride = $mzIndex;
+        $border = $showCounterControls ? 4 : 0;
+        $counterType = 1;
+        $counters = $theirCharacter[$i + 10];
+      }
+    }
+
     if ($characterContents != "")
       $characterContents .= "|";
-    $characterContents .= ClientRenderedCard(cardNumber: $theirCharacter[$i], action: $action, actionDataOverride: $actionDataOverride, borderColor: $border, overlay: $overlay, counters: $counters, defCounters: 0, atkCounters: $atkCounters, controller: $otherPlayer, type: $type, sType: $sType, isFrozen: ($theirCharacter[$i + 8] == 1), onChain: ($theirCharacter[$i + 6] == 1), isBroken: ($theirCharacter[$i + 1] == 0), rotate: 0, landscape: 1, epicActionUsed: $epicActionUsed);
+    $characterContents .= ClientRenderedCard(cardNumber: $theirCharacter[$i], action: $action, actionDataOverride: $actionDataOverride, borderColor: $border, overlay: $overlay, counters: $counters, defCounters: 0, atkCounters: $atkCounters, controller: $otherPlayer, type: $type, sType: $sType, isFrozen: ($theirCharacter[$i + 8] == 1), onChain: ($theirCharacter[$i + 6] == 1), isBroken: ($theirCharacter[$i + 1] == 0), rotate: 0, landscape: 1, epicActionUsed: $epicActionUsed, showCounterControls: $showCounterControls, counterType: $counterType, maxCountersReached: $maxCountersReached);
   }
   echo ($characterContents);
 
@@ -1548,12 +1569,27 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       $epicActionUsed = $myCharacter[$i + 2] > 0 ? 1 : 0;
     }
 
+    $showCounterControls = false;
+    $counterType = 0;
+    $counters = 0;
+    $border = 0;
     if ($mzChooseFromPlay) {
       $mzIndex = "MYCHAR-" . $i;
       $inOptions = in_array($mzIndex, $optionsIndex);
       $action = $inOptions ? 16 : 0;
       $actionDataOverride = $inOptions ? $mzIndex : 0;
       $border = CardBorderColor($myCharacter[$i], "CHAR", $action == 16);
+    } else if ($mzMultiDamage) {
+      $isActivePlayer = $turn[1] == $playerID;
+      $mzIndex =  $isActivePlayer ? "MYCHAR-" . $i : "THEIRCHAR-" . $i;
+      $inOptions = in_array($mzIndex, $optionsIndex);
+      if ($inOptions) {
+        $showCounterControls = $isActivePlayer;
+        $actionDataOverride = $mzIndex;
+        $border = $showCounterControls ? 4 : 0;
+        $counterType = 1;
+        $counters = $myCharacter[$i + 10];
+      }
     } else {
       $playable = $playerID == $currentPlayer && IsPlayable($myCharacter[$i], $turn[0], "CHAR", $i, $restriction) && ($myCharacter[$i + 1] == 2 || $epicActionUsed == 0);
       $border = CardBorderColor($myCharacter[$i], "CHAR", $playable);
@@ -1564,7 +1600,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     if ($myCharData != "")
       $myCharData .= "|";
     $restriction = implode("_", explode(" ", $restriction));
-    $myCharData .= ClientRenderedCard($myCharacter[$i], $action, $myCharacter[$i + 1] != 2 ? 1 : 0, $border, $myCharacter[$i + 1] != 0 ? $counters : 0, $actionDataOverride, 0, 0, $atkCounters, $playerID, $type, $sType, $restriction, $myCharacter[$i + 1] == 0, $myCharacter[$i + 6] == 1, $myCharacter[$i + 8] == 1, gem: 0, rotate: 0, landscape: 1, epicActionUsed: $epicActionUsed);
+    $myCharData .= ClientRenderedCard($myCharacter[$i], $action, $myCharacter[$i + 1] != 2 ? 1 : 0, $border, $counters, $actionDataOverride, 0, 0, $atkCounters, $playerID, $type, $sType, $restriction, $myCharacter[$i + 1] == 0, $myCharacter[$i + 6] == 1, $myCharacter[$i + 8] == 1, gem: 0, rotate: 0, landscape: 1, epicActionUsed: $epicActionUsed, showCounterControls: $showCounterControls, counterType: $counterType, maxCountersReached: $maxCountersReached);
   }
   echo ("<div id='myChar' style='display:none;'>");
   echo ($myCharData);

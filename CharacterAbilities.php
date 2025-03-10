@@ -2,7 +2,7 @@
 
 //0 - Card ID
 //1 - Status (2=ready, 1=unavailable, 0=destroyed)
-//2 - Num counters
+//2 - Num counters (used for epic action on leaders)
 //3 - Num attack counters
 //4 - Num defense counters
 //5 - Num uses
@@ -10,7 +10,7 @@
 //7 - Flagged for destruction (1 = yes, 0 = no)
 //8 - Frozen (1 = yes, 0 = no)
 //9 - Is Active (2 = always active, 1 = yes, 0 = no)
-//10 - Position (0 = normal, 1 = distant)
+//10 - Counters (damage/healing counters)
 class Character
 {
     // property declaration
@@ -24,7 +24,7 @@ class Character
     public $flaggedForDestruction = 0;
     public $frozen = 0;
     public $isActive = 2;
-    public $position = 0;
+    public $counters = 0;
 
     private $player = null;
     private $arrIndex = -1;
@@ -45,7 +45,7 @@ class Character
       $this->flaggedForDestruction = $array[$index+7];
       $this->frozen = $array[$index+8];
       $this->isActive = $array[$index+9];
-      $this->position = $array[$index+10];
+      $this->counters = $array[$index+10];
     }
 
     public function Finished()
@@ -61,7 +61,7 @@ class Character
       $array[$this->arrIndex+7] = $this->flaggedForDestruction;
       $array[$this->arrIndex+8] = $this->frozen;
       $array[$this->arrIndex+9] = $this->isActive;
-      $array[$this->arrIndex+10] = $this->position;
+      $array[$this->arrIndex+10] = $this->counters;
     }
 
 }
@@ -195,12 +195,13 @@ function CharacterDestroyEffect($cardID, $player)
 
 function ResetCharacter($player) {
   $char = &GetPlayerCharacter($player);
-  for ($i = 1; $i < count($char); $i += CharacterPieces()) {
-    if ($char[$i + 6] == 1) $char[$i] = 0; //Destroy if it was flagged for destruction
-    if ($char[$i] != 0) {
-      $char[$i] = 2;
-      $char[$i + 4] = CharacterNumUsesPerTurn($char[$i - 1]);
+  for ($i = 0; $i < count($char); $i += CharacterPieces()) {
+    if ($char[$i+7] == 1) $char[$i+1] = 0; //Destroy if it was flagged for destruction
+    if ($char[$i+1] != 0) {
+      $char[$i+1] = 2;
     }
+    $char[$i+5] = CharacterNumUsesPerTurn($char[$i]);
+    $char[$i+10] = 0;
   }
 }
 
