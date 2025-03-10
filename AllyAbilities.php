@@ -2020,10 +2020,11 @@ function SpecificAllyAttackAbilities($attackID)
         }
         break;
       case "6471336466"://Vambrace Flamethrower
-        AddDecisionQueue("FINDINDICES", $mainPlayer, "ALLTHEIRGROUNDUNITSMULTI");
-        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose units to damage", 1);
-        AddDecisionQueue("MULTICHOOSETHEIRUNIT", $mainPlayer, "<-", 1);
-        AddDecisionQueue("MULTIDISTRIBUTEDAMAGE", $mainPlayer, "3,1", 1);
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY:arena=Ground");
+        AddDecisionQueue("PREPENDLASTRESULT", $mainPlayer, "3-");
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Deal 3 damage divided as you choose");
+        AddDecisionQueue("MAYMULTIDAMAGEMULTIZONE", $mainPlayer, "<-");
+        AddDecisionQueue("MZOP", $mainPlayer, MultiDamageStringBuilder(3, $mainPlayer, isUnitEffect:1));
         break;
       case "3141660491"://The Darksaber
         $allies = &GetAllies($mainPlayer);
