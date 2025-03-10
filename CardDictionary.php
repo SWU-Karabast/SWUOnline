@@ -431,7 +431,7 @@ function HasSentinel($cardID, $player, $index)
     //conditional sentinel
     //Spark of Rebellion
     case "2739464284"://Gamorrean Guards
-      return SearchCount(SearchAllies($player, aspect:"Cunning")) > 1;
+      return SearchCount(SearchAllies($player, aspect:"Cunning")) > 0;
     case "3138552659"://Homestead Militia
       return NumResources($player) >= 6;
     case "7622279662"://Vigilant Honor Guards
@@ -446,7 +446,7 @@ function HasSentinel($cardID, $player, $index)
       $ally = new Ally("MYALLY-" . $index, $player);
       return $ally->IsUpgraded();
     case "4590862665"://Gamorrean Retainer
-        return SearchCount(SearchAllies($player, aspect:"Command")) > 1;
+        return SearchCount(SearchAllies($player, aspect:"Command")) > 0;
     case "4341703515"://Supercommando Squad
       $ally = new Ally("MYALLY-" . $index, $player);
       return $ally->IsUpgraded();
@@ -455,7 +455,7 @@ function HasSentinel($cardID, $player, $index)
       return SearchCount(SearchAllies($otherPlayer, hasUpgradeOnly:true)) > 0;
     //Twilight of the Republic
     case "8919416985"://Outspoken Representative
-      return SearchCount(SearchAllies($player, trait:"Republic")) > 1;
+      return SearchCount(SearchAllies($player, trait:"Republic")) > 0;
     case "4179773207"://Infantry of the 212th
       return IsCoordinateActive($player);
     case "7289764651"://Duchess's Champion
@@ -464,10 +464,10 @@ function HasSentinel($cardID, $player, $index)
     //Jump to Lightspeed
     case "8779760486"://Raddus
       return SearchCount(SearchUpgrades($player, trait:"Resistance")) > 0
-        || SearchCount(SearchAllies($player, trait:"Resistance")) > 1
+        || SearchCount(SearchAllies($player, trait:"Resistance")) > 0
         || SearchCount(SearchCharacter($player, trait:"Resistance")) > 0;
     case "8248876187"://Bunker Defender
-      return SearchCount(SearchAllies($player, trait:"Vehicle")) > 1;
+      return SearchCount(SearchAllies($player, trait:"Vehicle")) > 0;
     case "5763330426"://The Ghost
       return $ally->IsUpgraded();
     default: break;

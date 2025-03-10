@@ -117,7 +117,7 @@ class Ally {
           AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:arena=Space&THEIRALLY:arena=Space");
           AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal 1 damage to");
           AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-          AddDecisionQueue("MZOP", $player, DamageStringBuilder(1, $player, isUnitEffect:1));
+          AddDecisionQueue("MZOP", $player, DamageStringBuilder(1, $player, isUnitEffect:1),1);
         }
         break;
       default: break;
