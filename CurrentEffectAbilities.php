@@ -930,7 +930,7 @@ function IsCombatEffectActive($cardID)
     case "4334684518+2"://Tandem Assault
     case "8656409691"://Rio Durant
     case "6720065735"://Han Solo (Has His Moments)
-    case "6228218834"://Tactival Heavy Bomber
+    case "6228218834"://Tactical Heavy Bomber
     case "6600603122"://Massassi Tactical Officer
     case "6413979593"://Punch it
     case "1355075014"://Air Assault
