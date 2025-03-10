@@ -2997,8 +2997,8 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose an upgrade to take.", 1);
       AddDecisionQueue("CHOOSECARD", $mainPlayer, "<-", 1);
       AddDecisionQueue("SETDQVAR", $mainPlayer, "0", 1);
-      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY");
-      AddDecisionQueue("MZFILTER", $mainPlayer, "canAttach={0}", 1);
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, parameter: "MYALLY&THEIRALLY");
+      AddDecisionQueue("MZFILTER", $mainPlayer, "filterUpgradeEligible={0}", 1);
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to move <0> to.", 1);
       AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "MOVEUPGRADE", 1);

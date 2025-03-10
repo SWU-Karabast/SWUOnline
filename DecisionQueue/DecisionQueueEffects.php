@@ -847,7 +847,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
     case "SURVIVORS'GAUNTLET":
       $prefix = str_starts_with($dqVars[1], "MY") ? "MY" : "THEIR";
       AddDecisionQueue("MULTIZONEINDICES", $player, $prefix . "ALLY", 1);
-      AddDecisionQueue("MZFILTER", $player, "canAttach={0}", 1);
+      AddDecisionQueue("MZFILTER", $player, "filterUpgradeEligible={0}", 1);
       AddDecisionQueue("MZFILTER", $player, "index=" . $dqVars[1], 1);
       AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to move <0> to.", 1);
       AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
@@ -861,7 +861,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
         AddDecisionQueue("NOPASS", $player, "-", 1);
         AddDecisionQueue("PAYRESOURCES", $player, $upgradeCost . ",1", 1);
         $preIndex = "MYALLY-" . SearchAlliesForCard($player, "3086868510");
-        if(DecisionQueueStaticEffect("MZFILTER", $player, "canAttach=" . $upgradeID, $preIndex) != "PASS") {
+        if(DecisionQueueStaticEffect("MZFILTER", $player, "filterUpgradeEligible=" . $upgradeID, $preIndex) != "PASS") {
           AddDecisionQueue("PASSPARAMETER", $player, $preIndex, 1);
           AddDecisionQueue("MZOP", $player, "MOVEUPGRADE", 1);
         }
@@ -1191,7 +1191,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
         AddDecisionQueue("PASSREVERT", $player, "-");
       } else {
         AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:trait=Vehicle");
-        AddDecisionQueue("MZFILTER", $player, "canAttach={0}", 1);
+        AddDecisionQueue("MZFILTER", $player, "filterUpgradeEligible={0}", 1);
       }
       AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to move <0> to.", 1);
       AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
