@@ -467,7 +467,7 @@ function HasSentinel($cardID, $player, $index)
         || SearchCount(SearchAllies($player, trait:"Resistance")) > 1
         || SearchCount(SearchCharacter($player, trait:"Resistance")) > 0;
     case "8248876187"://Bunker Defender
-      return SearchCount(SearchAllies($player, trait:"Vehicle")) > 1;
+      return SearchCount(SearchAllies($player, trait:"Vehicle")) > 0;
     case "5763330426"://The Ghost
       return $ally->IsUpgraded();
     default: break;
