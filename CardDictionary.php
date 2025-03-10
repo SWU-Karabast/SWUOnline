@@ -1921,6 +1921,8 @@ function GoesWhereAfterResolving($cardID, $from = null, $player = "", $playedFro
 
 function UpgradeFilter($cardID)
 {
+  //TODO: allow upgrade filters to use & syntax on more than just traits
+  if($cardID == "5375722883") return "trait!=Vehicle";//R2-D2 (Artooooooooo!)
   if(PilotingCost($cardID) >= 0) return "trait!=Vehicle";
   switch($cardID) {
     case "0160548661"://Fallen Lightsaber
