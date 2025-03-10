@@ -3079,7 +3079,7 @@ function AllyDamageTakenAbilities($player, $index, $damage, $fromCombat=false, $
           PrependDecisionQueue("MZOP", $player, "REST", 1);
           PrependDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $index, 1);
           PrependDecisionQueue("NOPASS", $otherPlayer, "-");
-          PrependDecisionQueue("YESNO", $otherPlayer, "if you want use Jango Fett's ability");
+          PrependDecisionQueue("YESNO", $otherPlayer, "if you want use Jango Fett's ability on " . CardLink($damagedAlly->CardID(), $damagedAlly->CardID()));
         }
         break;
       //Jump to Lightspeed
@@ -3108,7 +3108,7 @@ function AllyDamageTakenAbilities($player, $index, $damage, $fromCombat=false, $
           PrependDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $index, 1);
           PrependDecisionQueue("EXHAUSTCHARACTER", $otherPlayer, FindCharacterIndex($otherPlayer, "9155536481"), 1);
           PrependDecisionQueue("NOPASS", $otherPlayer, "-");
-          PrependDecisionQueue("YESNO", $otherPlayer, "if you want use Jango Fett's ability");
+          PrependDecisionQueue("YESNO", $otherPlayer, "if you want use Jango Fett's ability on " . CardLink($damagedAlly->CardID(), $damagedAlly->CardID()));
         }
         break;
       default: break;
