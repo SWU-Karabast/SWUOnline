@@ -690,6 +690,7 @@ function HasOverwhelm($cardID, $player, $index)
     case "3476041913"://Low Altitude Gunship
     case "8655450523"://Count Dooku (Fallen Jedi)
     case "0756051511"://MC30 Assault Frigate
+    case "6576881465"://Decimator of Dissidents
     case "9017877021"://Clone Commander Cody
       return true;
     case "4484318969"://Moff Gideon Leader Unit
