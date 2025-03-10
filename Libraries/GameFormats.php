@@ -47,7 +47,7 @@ class DeckValidation {
 
   public function RejectionDetail($format) {
     return match($format) {
-      Formats::$PadawanFormat => "Only Common cards are allowed, with the exception of Leaders. No Rare Bases are allowed, and no Special rarity cards unless they have a Common variant.",
+      Formats::$PadawanFormat => "Only Common cards are allowed, with the exception of Rare Leaders. No Rare Bases are allowed, and no Special rarity cards unless they have a Common variant.",
       Formats::$SandcrawlerFormat => "Only Uncommon and Common cards are allowed, with the exception of Leaders. No Rare Bases are allowed, and any Special rarity cards that don't have a Rare or Legendary variant are allowed.",
       default => "",
     };
@@ -129,7 +129,8 @@ function IsNotAllowed($cardID, $format): bool {
       || in_array($cardID, $banned)
       ,
     //Only Commons, any unbanned leader, no rare bases, no special cards unless they have a common variant
-    Formats::$PadawanFormat => !CardIDIsLeader($cardID) && CardRarity($cardID) != "Common"
+    Formats::$PadawanFormat => CardRarity($cardID) != "Common"
+      || (CardIDIsLeader($cardID) && CardRarity($cardID) != "Rare")
       || !in_array(CardSet($cardID), $padawanRotation)
       || in_array($cardID, $banned)
       || IsRareBase($cardID)
