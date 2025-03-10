@@ -870,9 +870,7 @@ class Ally {
   }
 
   function AvoidsDestroyByEnemyEffects() {
-    global $mainPlayer;
-    return $mainPlayer != $this->playerID
-      && !$this->LostAbilities()
+    return !$this->LostAbilities()
       && ($this->CardID() == "1810342362"//Lurking TIE Phantom
         || $this->CardID() == "7208848194"//Chewbacca
         || $this->HasUpgrade("7208848194")//Chewbacca

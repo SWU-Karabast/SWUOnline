@@ -5420,12 +5420,12 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to destroy");
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-      AddDecisionQueue("MZOP", $currentPlayer, "DESTROY", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "DESTROY,$currentPlayer", 1);
       AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY");
       AddDecisionQueue("MZFILTER", $otherPlayer, "leader=1");
       AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a unit to destroy");
       AddDecisionQueue("CHOOSEMULTIZONE", $otherPlayer, "<-", 1);
-      AddDecisionQueue("MZOP", $otherPlayer, "DESTROY", 1);
+      AddDecisionQueue("MZOP", $otherPlayer, "DESTROY,$currentPlayer", 1);
       break;
     case "3840495762"://Old Access Codes
       if(TheyControlMoreUnits($currentPlayer)) {
