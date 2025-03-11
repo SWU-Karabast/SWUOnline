@@ -544,8 +544,8 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       break;
     case "BAMBOOZLE":
       $upgradesReturned = [];
-      $owner = MZPlayerID($player, $lastResult);
-      $ally = new Ally($lastResult, $owner);
+      $controller = MZPlayerID($player, $lastResult);
+      $ally = new Ally($lastResult, $controller);
       $upgrades = $ally->GetUpgrades(true);
       for($i=0; $i<count($upgrades); $i+=SubcardPieces()) {
         $ally->RemoveSubcard($upgrades[$i], skipDestroy:true);
@@ -554,8 +554,8 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       return $lastResult;
     case "JUMPTOLIGHTSPEED":
       $upgradesReturned = [];
-      $owner = MZPlayerID($player, $lastResult);
-      $ally = new Ally($lastResult, $owner);
+      $controller = MZPlayerID($player, $lastResult);
+      $ally = new Ally($lastResult, $controller);
       $upgrades = $ally->GetUpgrades(true);
       for($i=0; $i<count($upgrades); $i+=SubcardPieces()) {
         $ally->RemoveSubcard($upgrades[$i], skipDestroy:true);
@@ -564,16 +564,16 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       AddCurrentTurnEffect("5329736697", $player, "EFFECT", $ally->CardID());
       return $lastResult;
     case "SHOOTDOWN":
-      $owner = MZPlayerID($player, $lastResult);
-      $ally = new Ally($lastResult, $owner);
+      $controller = MZPlayerID($player, $lastResult);
+      $ally = new Ally($lastResult, $controller);
       $wasDestroyed = $ally->DealDamage(3);
       if($wasDestroyed) {
         DealDamageAsync($otherPlayer, 2, "DAMAGE", "7730475388", sourcePlayer:$player);
       }
       break;
     case "PIERCINGSHOT":
-      $owner = MZPlayerID($player, $lastResult);
-      $ally = new Ally($lastResult, $owner);
+      $controller = MZPlayerID($player, $lastResult);
+      $ally = new Ally($lastResult, $controller);
       foreach ($ally->GetUpgrades(true) as $upgrade) {
         if ($upgrade == "8752877738") { // Shield token
           $ally->DefeatUpgrade($upgrade);
@@ -582,25 +582,25 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       $ally->DealDamage(3, enemyDamage:$ally->Controller() != $player);
       break;
     case "SUPERHEAVYIONCANNON":
-      $owner = MZPlayerID($player, $lastResult);
-      $ally = new Ally($lastResult, $owner);
-      IndirectDamage($owner, $ally->CurrentPower(), true);
+      $controller = MZPlayerID($player, $lastResult);
+      $ally = new Ally($lastResult, $controller);
+      IndirectDamage($controller, $ally->CurrentPower(), true);
       break;
     case "THEANNIHILATOR":
-      $owner = $player == 1 ? 2 : 1;
+      $otherPlayer = $player == 1 ? 2 : 1;
       $destroyedID = $lastResult;
-      $hand = &GetHand($owner);
+      $hand = &GetHand($otherPlayer);
       for($i = count($hand) - 1; $i >= 0; $i -= HandPieces()) {
         if($hand[$i] == $destroyedID) {
-          DiscardCard($owner, $i);
+          DiscardCard($otherPlayer, $i);
         }
       }
-      $deck = &GetDeck($owner);
-      $deckClass = new Deck($owner);
+      $deck = &GetDeck($otherPlayer);
+      $deckClass = new Deck($otherPlayer);
       for ($i = count($deck) - 1; $i >= 0; $i -= DeckPieces()) {
         if ($deck[$i] == $destroyedID) {
           $deckClass->Remove($i);
-          AddGraveyard($destroyedID, $owner, "DECK");
+          AddGraveyard($destroyedID, $otherPlayer, "DECK");
         }
       }
       break;
@@ -629,8 +629,8 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       AddDecisionQueue("MZOP", $player, DamageStringBuilder($damage,$player,isUnitEffect:1), 1);
       return $lastResult;
     case "LIGHTSPEEDASSAULT":
-      $owner = MZPlayerID($player, $lastResult);
-      $ally = new Ally($lastResult, $owner);
+      $controller = MZPlayerID($player, $lastResult);
+      $ally = new Ally($lastResult, $otherPlayer);
       $currentPower = $ally->CurrentPower();
       $ally->Destroy();
       AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:arena=Space");
@@ -642,8 +642,8 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       AddDecisionQueue("MZOP", $player, "DEALDAMAGE," . $currentPower, 1);
       return $lastResult;
     case "LIGHTSPEEDASSAULT2":
-      $owner = MZPlayerID($player, $lastResult);
-      $ally = new Ally($lastResult, $owner);
+      $controller = MZPlayerID($player, $lastResult);
+      $ally = new Ally($lastResult, $controller);
       $power = $ally->CurrentPower();
       IndirectDamage(($player == 1 ? 2 : 1), $power, false);
       return $lastResult;
@@ -761,8 +761,8 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       }
       return $lastResult;
     case "CALCULATEDLETHALITY":
-      $owner = MZPlayerID($player, $lastResult);
-      $target = new Ally($lastResult, $owner);
+      $controller = MZPlayerID($player, $lastResult);
+      $target = new Ally($lastResult, $controller);
       $numUpgrades = $target->NumUpgrades();
       $target->Destroy();
       if($numUpgrades > 0) {
