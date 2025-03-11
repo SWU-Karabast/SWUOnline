@@ -723,9 +723,9 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         case "REDUCEHEALTH":
           MZAddHealth($player, $lastResult, count($parameterArr) > 1 ? -1 * $parameterArr[1] : 1); return $lastResult;
         case "DESTROY":
-          $enemyEffects = count($parameterArr) > 1 ? $parameterArr[1] : "1";
           $ally = new Ally($lastResult);
           $id = $ally->CardID();
+          $enemyEffects = count($parameterArr) > 1 ? $parameterArr[1] != $ally->Controller(): true;
           $ally->Destroy($enemyEffects);
           return $id;
         case "EXPLOIT":
@@ -843,7 +843,19 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
               break;
             default: break;
           }
-
+          //temp hack, will revise upgrade filters later
+          $upgradeIsPilot = TraitContains($upgradeID, "Pilot");
+          if($upgradeID != "5375722883" && $upgradeIsPilot) {
+            if(!$targetAlly->CanAddPilot()) {
+              WriteLog("Cannot add pilot to " . CardLink($targetAlly->CardID(), $targetAlly->CardID()) . ". Reverting gamestate.");
+              RevertGamestate();
+              return;
+            }
+          }
+          if($upgradeIsPilot) {
+            global $CS_PlayedAsUpgrade;
+            SetClassState($player, $CS_PlayedAsUpgrade, 1);
+          }
           $targetAlly->Attach($upgradeID, $upgradeOwnerID, $epicAction ?? false, $turnsInPlay ?? 0);
           CheckHealthAllAllies();
           return $lastResult;
@@ -1078,7 +1090,8 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
     case "MZFILTER":
       $params = explode("=", $parameter);
       $arr = explode(",", $lastResult);
-      if($params[0] == "canAttach") $params = explode("=", UpgradeFilter($params[1]));
+      $forUpgradeEligible = $params[0] == "filterUpgradeEligible";
+      if($forUpgradeEligible) $params = explode("=", UpgradeFilter($params[1]));
       $invertedMatching = str_ends_with($params[0], "!");
       $params[0] = rtrim($params[0], "!");
       for($i=count($arr)-1; $i>=0; --$i) {
@@ -1093,7 +1106,7 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             }
             break;
           case "trait":
-            $traitParams = explode("&", $parameter);
+            $traitParams = explode("&", implode("=",$params));
             for($j=0; $j<count($traitParams); ++$j) {
               $traitString = str_replace("_", " ", explode("=", $traitParams[$j])[1]);
               if(TraitContains(GetMZCard($player, $arr[$i]), $traitString, $player)) {

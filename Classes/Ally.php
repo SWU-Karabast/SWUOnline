@@ -137,7 +137,7 @@ class Ally {
           AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:arena=Space&THEIRALLY:arena=Space");
           AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal 1 damage to");
           AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-          AddDecisionQueue("MZOP", $player, DealDamageBuilder(1, $player, isUnitEffect:1));
+          AddDecisionQueue("MZOP", $player, DealDamageBuilder(1, $player, isUnitEffect:1),1);
         }
         break;
       default: break;
@@ -226,7 +226,9 @@ class Ally {
         "5375722883" => 1,//R2-D2 (Artooooooooo!)
         default => 0
       };
-      $currentPilots += $subcards[$i+2] == "1" ? 1 : 0;
+      $currentPilots += ($subcards[$i+2] == "1"
+          && $subcards[$i] != "5306772000") //Phantom II exception (added as Pilot but not really a Pilot)
+        ? 1 : 0;
     }
 
     return $currentPilots < $maxPilots;
@@ -235,7 +237,9 @@ class Ally {
   function HasPilot() {
     $subcards = $this->GetUpgrades(withMetadata:true);
     for($i=0; $i<count($subcards); $i+=SubcardPieces()) {
-      if($subcards[$i+2] == "1") return true;
+      if($subcards[$i+2] == "1"
+          && $subcards[$i] != "5306772000")//Phantom II exception (added as Pilot but not really a Pilot)
+        return true;
     }
     return false;
   }
@@ -582,7 +586,7 @@ class Ally {
     return $subCardUniqueID;
   }
 
-  function RemoveSubcard($subcardID, $subcardUniqueID = "", $movingPilot = false) {
+  function RemoveSubcard($subcardID, $subcardUniqueID = "", $movingPilot = false, $skipDestroy = false) {
     global $CS_PlayIndex, $CS_CachedLeader1EpicAction, $CS_CachedLeader2EpicAction;
     if($this->index == -1) return false;
     $subcards = $this->GetSubcards();
@@ -601,7 +605,7 @@ class Ally {
         $subcards = array_values($subcards);
         $this->allies[$this->index + 4] = count($subcards) > 0 ? implode(",", $subcards) : "-";
         if(DefinedTypesContains($subcardID, "Upgrade") || $isPilot)
-          UpgradeDetached($subcardID, $this->playerID, "MYALLY-" . $this->index, $turnsInPlay, $ownerId);
+          UpgradeDetached($subcardID, $this->playerID, "MYALLY-" . $this->index, $turnsInPlay, $ownerId, $skipDestroy);
         if(CardIDIsLeader($subcardID) && !$movingPilot) {
           $leaderUndeployed = LeaderUndeployed($subcardID);
           if($leaderUndeployed != "") {
@@ -623,15 +627,6 @@ class Ally {
   function Attach($cardID, $ownerID = null, $epicAction = false, $turnsInPlay = 0) {
     $receivingPilot = $this->ReceivingPilot($cardID) || IsUnconventionalPilot($cardID);
     $subcardUniqueID = $this->AddSubcard($cardID, $ownerID, $receivingPilot, $epicAction, $turnsInPlay);
-    if (CardIsUnique($cardID)) {
-      $this->CheckUniqueUpgrade($cardID);
-      if($receivingPilot) {
-        $allyDestroyed = $this->CheckUniqueAllyForPilot($cardID);
-        if($allyDestroyed) $this->index = min(0, $this->index - AllyPieces());
-        if($cardID == "0979322247")//Sidon Ithano
-          $this->DefeatIfNoRemainingHP();
-      }
-    }
     //Pilot attach side effects
     if($receivingPilot) {
       switch($this->CardID()) {
@@ -644,6 +639,15 @@ class Ally {
           AddLayer("TRIGGER", $player, $this->CardID());
           break;
         default: break;
+      }
+    }
+    if (CardIsUnique($cardID)) {
+      $this->CheckUniqueUpgrade($cardID);
+      if($receivingPilot) {
+        $allyDestroyed = $this->CheckUniqueAllyForPilot($cardID);
+        if($allyDestroyed) $this->index = min(0, $this->index - AllyPieces());
+        if($cardID == "0979322247")//Sidon Ithano
+          $this->DefeatIfNoRemainingHP();
       }
     }
     //end Pilot attach side effects
@@ -896,9 +900,7 @@ class Ally {
   }
 
   function AvoidsDestroyByEnemyEffects() {
-    global $mainPlayer;
-    return $mainPlayer != $this->playerID
-      && !$this->LostAbilities()
+    return !$this->LostAbilities()
       && ($this->CardID() == "1810342362"//Lurking TIE Phantom
         || $this->CardID() == "7208848194"//Chewbacca
         || $this->HasUpgrade("7208848194")//Chewbacca

@@ -54,7 +54,8 @@ function ProcessHitEffect($cardID)
 }
 
 function CompletesAttackEffect($cardID) {
-  global $mainPlayer, $defPlayer, $CS_NumLeftPlay;
+  global $mainPlayer, $defPlayer, $currentTurnEffects;
+  global  $CS_NumLeftPlay;
 
   //uogrades
   $mzId = AttackerMZID($mainPlayer);
@@ -70,6 +71,19 @@ function CompletesAttackEffect($cardID) {
         AddDecisionQueue("SETDQVAR", $mainPlayer, "0", 1);
         AddDecisionQueue("PASSPARAMETER", $mainPlayer, "8523415830", 1);
         AddDecisionQueue("OP", $mainPlayer, "BOUNCEUPGRADE", 1);
+        break;
+      default: break;
+    }
+  }
+
+  for($i=0;$i<count($currentTurnEffects);$i+=CurrentTurnPieces()) {
+    switch($currentTurnEffects[$i]) {
+      case "7660822254"://Barrel Roll
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:arena=Space&THEIRALLY:arena=Space");
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a space unit to exhaust");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "REST", 1);
+        AddDecisionQueue("REMOVECURRENTEFFECT", $mainPlayer, $currentTurnEffects[$i], 1);
         break;
       default: break;
     }

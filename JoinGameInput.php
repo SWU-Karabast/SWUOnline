@@ -224,8 +224,12 @@ if ($decklink != "") {
     addFavoriteDeck($_SESSION["userid"], $saveLink, $deckName, $leader, $deckFormat);
   }
 } else {
-  copy($deckFile, "./Games/" . $gameName . "/p" . $playerID . "Deck.txt");
-  copy($deckFile, "./Games/" . $gameName . "/p" . $playerID . "DeckOrig.txt");
+  $_SESSION['error'] = '⚠️ Deck link is empty. Did you maybe copy your deck link into the Game Name field?';
+  header("Location: " . $redirectPath . "/MainMenu.php");
+  WriteGameFile();
+  exit;
+  // copy($deckFile, "./Games/" . $gameName . "/p" . $playerID . "Deck.txt");
+  // copy($deckFile, "./Games/" . $gameName . "/p" . $playerID . "DeckOrig.txt");
 }
 
 if ($playerID == 1) {

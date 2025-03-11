@@ -2315,7 +2315,7 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MZFILTER", $mainPlayer, "index=MYALLY-" . $attackerAlly->Index());
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to destroy");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
-      AddDecisionQueue("MZOP", $mainPlayer, "DESTROY", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "DESTROY,$mainPlayer", 1);
       AddDecisionQueue("DRAW", $mainPlayer, "-", 1);
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY", 1);
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 1 damage", 1);
@@ -2619,7 +2619,7 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to sacrifice to draw a card");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
-      AddDecisionQueue("MZOP", $mainPlayer, "DESTROY", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "DESTROY,$mainPlayer", 1);
       AddDecisionQueue("DRAW", $mainPlayer, "-", 1);
       break;
     case "6436543702"://Providence Destroyer
@@ -2808,7 +2808,7 @@ function SpecificAllyAttackAbilities($attackID)
             AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY", 1);
             AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to defeat", 1);//not optional
             AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
-            AddDecisionQueue("MZOP", $mainPlayer, "DESTROY", 1);
+            AddDecisionQueue("MZOP", $mainPlayer, "DESTROY,$mainPlayer", 1);
           }
         }
       }
@@ -2986,15 +2986,15 @@ function SpecificAllyAttackAbilities($attackID)
     case "2644994192"://Hondo Ohnaka
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:hasUpgradeOnly=true&THEIRALLY:hasUpgradeOnly=true");
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to take an upgrade from.");
-      AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+      AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("SETDQVAR", $mainPlayer, "1", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "GETUPGRADES", 1);
       AddDecisionQueue("FILTER", $mainPlayer, "LastResult-exclude-trait-Pilot", 1);
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose an upgrade to take.", 1);
       AddDecisionQueue("CHOOSECARD", $mainPlayer, "<-", 1);
       AddDecisionQueue("SETDQVAR", $mainPlayer, "0", 1);
-      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY");
-      AddDecisionQueue("MZFILTER", $mainPlayer, "canAttach={0}", 1);
+      AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY",1);
+      AddDecisionQueue("MZFILTER", $mainPlayer, "filterUpgradeEligible={0}", 1);
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to move <0> to.", 1);
       AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $mainPlayer, "MOVEUPGRADE", 1);
@@ -3075,7 +3075,7 @@ function AllyDamageTakenAbilities($player, $index, $damage, $fromCombat=false, $
           PrependDecisionQueue("MZOP", $player, "REST", 1);
           PrependDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $index, 1);
           PrependDecisionQueue("NOPASS", $otherPlayer, "-");
-          PrependDecisionQueue("YESNO", $otherPlayer, "if you want use Jango Fett's ability");
+          PrependDecisionQueue("YESNO", $otherPlayer, "if you want use Jango Fett's ability on " . CardLink($damagedAlly->CardID(), $damagedAlly->CardID()));
         }
         break;
       //Jump to Lightspeed
@@ -3104,7 +3104,7 @@ function AllyDamageTakenAbilities($player, $index, $damage, $fromCombat=false, $
           PrependDecisionQueue("PASSPARAMETER", $player, "MYALLY-" . $index, 1);
           PrependDecisionQueue("EXHAUSTCHARACTER", $otherPlayer, FindCharacterIndex($otherPlayer, "9155536481"), 1);
           PrependDecisionQueue("NOPASS", $otherPlayer, "-");
-          PrependDecisionQueue("YESNO", $otherPlayer, "if you want use Jango Fett's ability");
+          PrependDecisionQueue("YESNO", $otherPlayer, "if you want use Jango Fett's ability on " . CardLink($damagedAlly->CardID(), $damagedAlly->CardID()));
         }
         break;
       default: break;
@@ -3258,7 +3258,7 @@ function TheAnnihilatorJTL($player) {
   AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY");
   AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to destroy");
   AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
-  AddDecisionQueue("MZOP", $player, "DESTROY", 1);
+  AddDecisionQueue("MZOP", $player, "DESTROY,$player", 1);
   AddDecisionQueue("SPECIFICCARD", $player, "THEANNIHILATOR", 1);
 }
 
