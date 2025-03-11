@@ -931,6 +931,7 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       AddDecisionQueue("SETDQCONTEXT", $player, "Move L3's brain to a vehicle?");
       AddDecisionQueue("YESNO", $player, "-", 1);
       AddDecisionQueue("SPECIFICCARD", $player, "L337_JTL,$target", 1);
+      break;
     case "1935873883"://Razor Crest
       AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:maxCost=2");
       AddDecisionQueue("MZFILTER", $player, "leader=1", 1);
