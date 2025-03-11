@@ -2590,7 +2590,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
             AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
             AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to destroy");
             AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-            AddDecisionQueue("MZOP", $currentPlayer, "DESTROY", 1);
+            AddDecisionQueue("MZOP", $currentPlayer, "DESTROY,$currentPlayer", 1);
           }
           break;
           case "3905028200"://Admiral Trench flip
@@ -3980,7 +3980,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an ally to destroy");
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
         AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-        AddDecisionQueue("MZOP", $currentPlayer, "DESTROY", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "DESTROY,$currentPlayer", 1);
         AddDecisionQueue("DRAW", $currentPlayer, "-", 1);
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose an ally to deal 1 damage");
         AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
@@ -5046,7 +5046,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose something to sacrifice");
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-      AddDecisionQueue("MZOP", $currentPlayer, "DESTROY", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "DESTROY,$currentPlayer", 1);
       AddDecisionQueue("DRAW", $currentPlayer, "-", 1);
       AddDecisionQueue("DRAW", $currentPlayer, "-", 1);
       break;
@@ -5658,7 +5658,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to sacrifice");
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-      AddDecisionQueue("MZOP", $currentPlayer, "DESTROY", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "DESTROY,$currentPlayer", 1);
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY", 1);
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to deal 4 damage to", 1);
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
@@ -5691,7 +5691,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to destroy");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-      AddDecisionQueue("MZOP", $currentPlayer, "DESTROY", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "DESTROY,$currentPlayer", 1);
       AddDecisionQueue("SPECIFICCARD", $currentPlayer, "LETHALCRACKDOWN", 1);
       break;
     case "5683908835"://Count Dooku
@@ -6377,7 +6377,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MZFILTER", $currentPlayer, "leader=1");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a vehicle unit to defeat");
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-      AddDecisionQueue("MZOP", $currentPlayer, "DESTROY", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "DESTROY,$currentPlayer", 1);
       break;
     case "5345999887"://Kijimi patrollers
       if($from != "PLAY") {
@@ -6543,7 +6543,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "GETUNIQUEID", 1);
       AddDecisionQueue("MZOP", $currentPlayer, "TAKECONTROL", 1);
-      AddDecisionQueue("MZOP", $currentPlayer, "DESTROY", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "DESTROY,$currentPlayer", 1);
       break;
     case "2870117979"://Executor
       if($from != "PLAY") {
@@ -6709,7 +6709,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a friendly unit to defeat", 1);
       AddDecisionQueue("CHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-      AddDecisionQueue("MZOP", $currentPlayer, "DESTROY", 1);
+      AddDecisionQueue("MZOP", $currentPlayer, "DESTROY,$currentPlayer", 1);
       AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
       AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a unit to give 2 experience tokens to", 1);
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);

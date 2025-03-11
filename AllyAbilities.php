@@ -2319,7 +2319,7 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MZFILTER", $mainPlayer, "index=MYALLY-" . $attackerAlly->Index());
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to destroy");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
-      AddDecisionQueue("MZOP", $mainPlayer, "DESTROY", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "DESTROY,$mainPlayer", 1);
       AddDecisionQueue("DRAW", $mainPlayer, "-", 1);
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY", 1);
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 1 damage", 1);
@@ -2623,7 +2623,7 @@ function SpecificAllyAttackAbilities($attackID)
       AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
       AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to sacrifice to draw a card");
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
-      AddDecisionQueue("MZOP", $mainPlayer, "DESTROY", 1);
+      AddDecisionQueue("MZOP", $mainPlayer, "DESTROY,$mainPlayer", 1);
       AddDecisionQueue("DRAW", $mainPlayer, "-", 1);
       break;
     case "6436543702"://Providence Destroyer
@@ -2812,7 +2812,7 @@ function SpecificAllyAttackAbilities($attackID)
             AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY", 1);
             AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to defeat", 1);//not optional
             AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
-            AddDecisionQueue("MZOP", $mainPlayer, "DESTROY", 1);
+            AddDecisionQueue("MZOP", $mainPlayer, "DESTROY,$mainPlayer", 1);
           }
         }
       }
@@ -3261,7 +3261,7 @@ function TheAnnihilatorJTL($player) {
   AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY");
   AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to destroy");
   AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
-  AddDecisionQueue("MZOP", $player, "DESTROY", 1);
+  AddDecisionQueue("MZOP", $player, "DESTROY,$player", 1);
   AddDecisionQueue("SPECIFICCARD", $player, "THEANNIHILATOR", 1);
 }
 
