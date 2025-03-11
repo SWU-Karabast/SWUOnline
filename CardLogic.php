@@ -1423,18 +1423,18 @@ function CheckBobaFettJTL($targetPlayer, $enemyDamage, $fromCombat) {
     ? ($targetPlayer == 1 ? 2 : 1)
     : $targetPlayer;
   $charArr = &GetPlayerCharacter($playerToCheck);
-    for($i=0; $i<count($charArr); $i+=CharacterPieces()) {
-      switch($charArr[$i]) {
-        case "9831674351"://Boba Fett Leader
-          if(!LeaderAbilitiesIgnored() && $charArr[$i+1] == 2) {
-            if(!SearchCurrentLayers("TRIGGER", $playerToCheck, "9831674351")) {
-              AddLayer("TRIGGER", $playerToCheck, "9831674351");
-            }
+  for($i=0; $i<count($charArr); $i+=CharacterPieces()) {
+    switch($charArr[$i]) {
+      case "9831674351"://Boba Fett Leader
+        if(!LeaderAbilitiesIgnored() && $charArr[$i+1] == 2) {
+          if(!SearchCurrentLayers("TRIGGER", $playerToCheck, "9831674351")) {
+            AddLayer("TRIGGER", $playerToCheck, "9831674351");
           }
-          break;
-        default: break;
-      }
+        }
+        break;
+      default: break;
     }
+  }
 }
 
 function CheckThrawnJTL($player, $serializedAllyDestroyData, $target) {

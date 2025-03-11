@@ -451,25 +451,22 @@ function DealDamageAsync($player, $damage, $type="DAMAGE", $source="NA", $source
   //$damage = PermanentTakeDamageAbilities($player, $damage, $type);//FAB
   //$damage = ItemTakeDamageAbilities($player, $damage, $type);
   //if($damage == 1 && $preventable && SearchItemsForCard("EVR069", $player) != "") $damage = 0;//Must be last//FAB
-  $dqVars[0] = $damage;
+  // $dqVars[0] = $damage;
   if($type == "COMBAT") $dqState[6] = $damage;
-  PrependDecisionQueue("FINALIZEDAMAGE", $player, $damageThreatened . "," . $type . "," . $source);
-  if($damage > 0)
-  {
-    //AddDamagePreventionSelection($player, $damage, $preventable);//FAB
-    AddDamagePreventionSelection($player, $damage, false);
+  FinalizeDamage($player, $damage, $damageThreatened, $type, $source);
+  if ($damage > 0) {
     CheckBobaFettJTL($player, $sourcePlayer != $player, $type == "COMBAT" || $type == "OVERWHELM");
   }
   return $damage;
 }
 
-function AddDamagePreventionSelection($player, $damage, $preventable)
-{
-  PrependDecisionQueue("PROCESSDAMAGEPREVENTION", $player, $damage . "-" . $preventable, 1);
-  PrependDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
-  PrependDecisionQueue("SETDQCONTEXT", $player, "Choose a card to prevent damage", 1);
-  PrependDecisionQueue("FINDINDICES", $player, "DAMAGEPREVENTION");
-}
+// function AddDamagePreventionSelection($player, $damage, $preventable)
+// {
+//   PrependDecisionQueue("PROCESSDAMAGEPREVENTION", $player, $damage . "-" . $preventable, 1);
+//   PrependDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
+//   PrependDecisionQueue("SETDQCONTEXT", $player, "Choose a card to prevent damage", 1);
+//   PrependDecisionQueue("FINDINDICES", $player, "DAMAGEPREVENTION");
+// }
 
 function FinalizeDamage($player, $damage, $damageThreatened, $type, $source)
 {

@@ -639,23 +639,27 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           $isUnitEffect = $parameterArr[2];
           $isPreventable = $parameterArr[3];
           $targets = explode(",", $lastResult);
-          $targetUniqueIDs = [];
+          $damagedTargets = [];
 
           foreach ($targets as $target) {
             $targetArr = explode("-", $target);
             $targetDamage = $targetArr[0];
             $targetUniqueID = $targetArr[1];
-            $targetUniqueIDs[] = $targetUniqueID;
             if ($targetUniqueID[0] == "B") {
               DealDamageAsync($targetUniqueID[1], $targetDamage, sourcePlayer:$sourcePlayer);
+              $damagedTargets[] = $targetUniqueID;
             } else {
               $ally = new Ally($targetUniqueID);
               $isEnemeyDamage = $sourcePlayer != $ally->Controller();
-              $ally->DealDamage($targetDamage, enemyDamage:$isEnemeyDamage, fromUnitEffect:$isUnitEffect, preventable:$isPreventable);
+              $currentHealth = $ally->Health();
+              $destroyed = $ally->DealDamage($targetDamage, enemyDamage:$isEnemeyDamage, fromUnitEffect:$isUnitEffect, preventable:$isPreventable);
+              if ($destroyed || $ally->Health() < $currentHealth) {
+                $damagedTargets[] = $targetUniqueID;
+              }
             }          
           }
 
-          return implode(",", $targetUniqueIDs);
+          return implode(",", $damagedTargets);
         case "DEALDAMAGE":
           // Important: use MZOpHelpers.php DamageStringBuilder() function for param structure
           if($lastResult == "") return "";
@@ -1551,7 +1555,6 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         $dqState[6] = $damage;
       }
       $damage = DealDamageAsync($player, $damage, $type, $source);
-      CheckBobaFettJTL($player, $mainPlayer != $player, $type == "COMBAT");
       return $damage;
     // case "AFTERQUELL"://FAB
     //   $maxQuell = GetClassState($player, $CS_MaxQuellUsed);
@@ -1838,17 +1841,6 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $character[$lastResult+2] -= 1;
       WriteLog(CardLink($parameter, $parameter) . " removed a counter from " . CardLink($character[$lastResult], $character[$lastResult]));
       return $lastResult;
-    case "FINALIZEDAMAGE":
-      $params = explode(",", $parameter);
-      $damage = $dqVars[0];
-      $damageThreatened = $params[0];
-      if($damage > $damageThreatened)//Means there was excess damage prevention prevention
-      {
-        $damage = $damageThreatened;
-        $dqVars[0] = $damage;
-        $dqState[6] = $damage;
-      }
-      return FinalizeDamage($player, $damage, $damageThreatened, $params[1], $params[2]);
     case "APPENDDQVAR":
       if($dqVars[$parameter] == "-") $dqVars[$parameter] = $lastResult;
       else $dqVars[$parameter] .= "," . $lastResult;
