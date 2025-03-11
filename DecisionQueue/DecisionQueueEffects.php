@@ -933,6 +933,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
     case "REDEMPTION":
       $ally = new Ally($parameterArr[1]);
       $healedTargets = explode(",", $lastResult);
+
       $totalHealAmount = 0;
       foreach ($healedTargets as $healedTarget) {
         $healAmount = explode("-", $healedTarget)[0];

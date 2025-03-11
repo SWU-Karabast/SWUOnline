@@ -666,13 +666,17 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
             }       
           }
 
+          if (count($healedTargets) == 0) {
+            return "PASS";
+          }
+
           return implode(",", $healedTargets);
         case "DEALMULTIDAMAGE":
           $sourcePlayer = $parameterArr[1];
           $isUnitEffect = $parameterArr[2];
           $isPreventable = $parameterArr[3];
           $targets = explode(",", $lastResult);
-          $healedTargets = [];
+          $damagedTargets = [];
 
           foreach ($targets as $target) {
             $targetArr = explode("-", $target);
@@ -684,15 +688,19 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
               $currentHealth = $ally->Health();
               $destroyed = $ally->DealDamage($targetHeal, enemyDamage:$isEnemeyDamage, fromUnitEffect:$isUnitEffect, preventable:$isPreventable);
               if ($destroyed || $ally->Health() < $currentHealth) {
-                $healedTargets[] = $targetUniqueID;
+                $damagedTargets[] = $targetUniqueID;
               }
             } else {
               DealDamageAsync($targetUniqueID[1], $targetHeal, sourcePlayer:$sourcePlayer);
-              $healedTargets[] = $targetUniqueID;
+              $damagedTargets[] = $targetUniqueID;
             }          
           }
 
-          return implode(",", $healedTargets);
+          if (count($damagedTargets) == 0) {
+            return "PASS";
+          }
+
+          return implode(",", $damagedTargets);
         case "DEALDAMAGE":
           // Important: use MZOpHelpers.php DamageStringBuilder() function for param structure
           if($lastResult == "") return "";

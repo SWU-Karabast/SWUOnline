@@ -627,6 +627,7 @@
                   if(!popup) popup = document.getElementById("MAYCHOOSEMULTIZONE");
                   if(popup) popup.style.display = "none";
                   var timeoutAmount = 0;
+                  var eventsArr = reduceDamageAndRestoreEvents(eventsArr);
                   for(var i=0; i<eventsArr.length; i+=2) {
                     var eventType = eventsArr[i];//DAMAGE
                     if(eventType == "DAMAGE") {
@@ -686,6 +687,49 @@
         if (lastUpdate == "NaN") window.location.replace("https://www.petranaki.net/game/MainMenu.php");
         else xmlhttp.open("GET", "GetNextTurn2.php?gameName=<?php echo ($gameName); ?>&playerID=<?php echo ($playerID); ?>&lastUpdate=" + lastUpdate + lastCurrentPlayer + "&authKey=<?php echo ($authKey); ?>" + dimensions, true);
         xmlhttp.send();
+      }
+
+      function reduceDamageAndRestoreEvents(events) {
+        var groupedByTarget = {};
+        var newEvents = [];
+        console.log(events);
+
+        for (var i = 0; i < events.length; i += 2) {
+          var eventType = events[i];
+          var eventData = events[i+1];
+
+          if (eventType == "DAMAGE" || eventType == "RESTORE") {
+            var eventArr = eventData.split("!");
+            var target = eventArr[0];
+            if (!groupedByTarget[target]) {
+              groupedByTarget[target] = 0;
+            }
+
+            if (eventType == "DAMAGE") {
+              groupedByTarget[target] -= parseInt(eventArr[1]);
+            } else if (eventType == "RESTORE") {
+              groupedByTarget[target] += parseInt(eventArr[1]);
+            }
+          } else {
+            newEvents.push(eventType);
+            newEvents.push(eventData);
+          }
+        }
+
+        // iterate through groupedByTarget and add the events to the newEvents array
+        for (var target in groupedByTarget) {
+          if (groupedByTarget[target] > 0) {
+            newEvents.push("RESTORE");
+            newEvents.push(target + "!" + groupedByTarget[target]);
+          } else if (groupedByTarget[target] < 0) {
+            newEvents.push("DAMAGE");
+            newEvents.push(target + "!" + Math.abs(groupedByTarget[target]));
+          }
+        }
+
+        console.log(newEvents);
+
+        return newEvents;
       }
 
       function RenderUpdate(updatedHTML) {
