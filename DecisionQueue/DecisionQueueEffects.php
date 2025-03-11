@@ -92,7 +92,7 @@ function ModalAbilities($player, $parameter, $lastResult)
           AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:maxHealth=3&THEIRALLY:maxHealth=3");
           AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to defeat");
           AddDecisionQueue("CHOOSEMULTIZONE", $player, "<-", 1);
-          AddDecisionQueue("MZOP", $player, "DESTROY", 1);
+          AddDecisionQueue("MZOP", $player, "DESTROY,$player", 1);
           break;
         case 3: // Give a Shield token
           AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY");
@@ -713,7 +713,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
 
         foreach ($uniqueIDs as $uniqueID) {
           AddDecisionQueue("PASSPARAMETER", $player, $uniqueID, 1);
-          AddDecisionQueue("MZOP", $player, "DESTROY", 1);
+          AddDecisionQueue("MZOP", $player, "DESTROY,$player", 1);
         }
       }
       return $lastResult;
