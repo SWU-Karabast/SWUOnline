@@ -8,6 +8,7 @@ include_once "../Libraries/HTTPLibraries.php";
 require_once '../Assets/patreon-php-master/src/PatreonLibraries.php';
 include_once '../Assets/patreon-php-master/src/API.php';
 include_once '../Assets/patreon-php-master/src/PatreonDictionary.php';
+include_once '../Libraries/GameFormats.php';
 
 SetHeaders();
 
@@ -47,7 +48,7 @@ if (IsUserLoggedIn()) {
   }
 
   //Load other settings
-  if (isset($settingArray[$SET_Format])) $response->lastFormat = FormatName($settingArray[$SET_Format]);
+  if (isset($settingArray[$SET_Format])) $response->lastFormat = Formats::FromCode($settingArray[$SET_Format]);
   if (isset($settingArray[$SET_GameVisibility])) $response->lastVisibility = $settingArray[$SET_GameVisibility];
 }
 echo json_encode($response);

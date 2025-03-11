@@ -178,13 +178,13 @@ if ($decklink != "") {
   $base = !$usesUuid ? UUIDLookup($deckObj->base->id) : $deckObj->base->id;
   $deck = $deckObj->deck;
   $sideboard = $deckObj->sideboard;
-  if(IsNotAllowed($leader, $format)) {
+  if(!IsAllowed($leader, $format)) {
     $_SESSION['error'] = "<div>⚠️ Your deck contains a leader that is not allowed in this format.</div>";
     header("Location: " . $redirectPath . "/MainMenu.php");
     WriteGameFile();
     exit;
   }
-  if(IsNotAllowed($base, $format)) {
+  if(!IsAllowed($base, $format)) {
     $_SESSION['error'] = "<div>⚠️ Your deck contains a base that is not allowed in this format.</div>";
     header("Location: " . $redirectPath . "/MainMenu.php");
     WriteGameFile();
@@ -372,51 +372,5 @@ function CardUUIDOverride($cardID)
     //case "5866567543"://con exclusive 2024 Darth Maul (Revenge at Last)
       //return "8613680163";
     default: return $cardID;
-  }
-}
-
-function IsBanned($cardID, $format)
-{
-  switch ($format) {
-    case "blitz":
-    case "compblitz":
-      switch ($cardID) {
-        case "WTR152":
-        case "ARC076": case "ARC077": //Viserai
-        case "ARC129": case "ARC130": case "ARC131":
-        case "ELE006":
-        case "ELE186": case "ELE187": case "ELE188":
-        case "ELE223":
-        case "CRU141":
-        case "CRU174": case "CRU175": case "CRU176":
-        case "MON239":
-        case "MON183": case "MON184": case "MON185":
-        case "EVR037":
-        case "EVR123": // Aether Wildfire
-        case "UPR103": case "EVR120": case "ELE002": case "ELE003": case "EVR121":
-          return true;
-        default:
-          return false;
-      }
-      break;
-    case "premierf":
-    // case "reqsundo":
-    //   switch ($cardID) {
-    //     case "WTR152"://maybe add Boba Fett leader?
-    //       return true;
-    //     default:
-    //       return false;
-    //   }
-      break;
-    case "commoner":
-      switch ($cardID) {
-        case "WTR152"://TODO: this could be a fun format to implement
-          return true;
-        default:
-          return false;
-      }
-      break;
-    default:
-      return false;
   }
 }

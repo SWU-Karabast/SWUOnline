@@ -132,14 +132,21 @@ include_once 'Header.php';
   <input type="text" id="gameDescription" name="gameDescription" placeholder="Game #">
 
   <?php
+  $standardFormatCasual = Formats::$PremierFormat;
+  $standardFormatCompetitive = Formats::$PremierStrict;
+  $previewFormat = Formats::$PreviewFormat;
+  $openFormat = Formats::$OpenFormat;
   echo ("<label for='format' class='SelectDeckInput'>Format</label>");
   echo ("<select name='format' id='format' onchange='toggleInfoBox()'>");
-  if ($canSeeQueue) echo ("<option value='premierf' " . ($defaultFormat == 0 ? " selected" : "") . ">Premier</option>");
-  $funFormatIndex = 5;//see FormatName function and related functions for index to rotate
-  $funFormatBackendName = FormatName($funFormatIndex);
-  $funFormatDisplayName = FormatDisplayName($funFormatBackendName);
-  echo ("<option value='openform'" . ($defaultFormat == 4 ? " selected" : "") . ">" . FormatDisplayName(FormatName(4)) . "</option>");
-  if($canSeeQueue) echo ("<option value='$funFormatBackendName'" . ">Cantina Brawl ($funFormatDisplayName)</option>");
+  echo ("<option value='$standardFormatCasual' " . ($defaultFormat == FormatCode($standardFormatCasual) ? " selected" : "") . ">Premier</option>");
+  if($canSeeQueue) {
+    echo ("<option value='$standardFormatCompetitive' " . ($defaultFormat == FormatCode($standardFormatCompetitive) ? " selected" : "") . ">Premier Strict</option>");
+    //echo ("<option value='$previewFormat'" . ($defaultFormat == FormatCode($previewFormat) ? " selected" : "") . ">" . FormatDisplayName($previewFormat) . "</option>");
+    $funFormatBackendName = Formats::$PadawanFormat;
+    $funFormatDisplayName = FormatDisplayName($funFormatBackendName);
+    echo ("<option value='$funFormatBackendName'" . ($defaultFormat == FormatCode($funFormatBackendName) ? " selected" : "") . ">Cantina Brawl ($funFormatDisplayName)</option>");
+    //echo ("<option value='$openFormat'" . ($defaultFormat == FormatCode($openFormat) ? " selected" : "") . ">" . FormatDisplayName($openFormat) . "</option>");
+  }
   echo ("</select>");
   ?>
 
