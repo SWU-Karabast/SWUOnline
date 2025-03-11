@@ -692,7 +692,6 @@
       function reduceDamageAndRestoreEvents(events) {
         var groupedByTarget = {};
         var newEvents = [];
-        console.log(events);
 
         for (var i = 0; i < events.length; i += 2) {
           var eventType = events[i];
@@ -726,8 +725,6 @@
             newEvents.push(target + "!" + Math.abs(groupedByTarget[target]));
           }
         }
-
-        console.log(newEvents);
 
         return newEvents;
       }
