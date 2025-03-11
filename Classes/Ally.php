@@ -556,7 +556,7 @@ class Ally {
     return $subCardUniqueID;
   }
 
-  function RemoveSubcard($subcardID, $subcardUniqueID = "", $movingPilot = false) {
+  function RemoveSubcard($subcardID, $subcardUniqueID = "", $movingPilot = false, $skipDestroy = false) {
     global $CS_PlayIndex, $CS_CachedLeader1EpicAction, $CS_CachedLeader2EpicAction;
     if($this->index == -1) return false;
     $subcards = $this->GetSubcards();
@@ -575,7 +575,7 @@ class Ally {
         $subcards = array_values($subcards);
         $this->allies[$this->index + 4] = count($subcards) > 0 ? implode(",", $subcards) : "-";
         if(DefinedTypesContains($subcardID, "Upgrade") || $isPilot)
-          UpgradeDetached($subcardID, $this->playerID, "MYALLY-" . $this->index, $turnsInPlay, $ownerId);
+          UpgradeDetached($subcardID, $this->playerID, "MYALLY-" . $this->index, $turnsInPlay, $ownerId, $skipDestroy);
         if(CardIDIsLeader($subcardID) && !$movingPilot) {
           $leaderUndeployed = LeaderUndeployed($subcardID);
           if($leaderUndeployed != "") {

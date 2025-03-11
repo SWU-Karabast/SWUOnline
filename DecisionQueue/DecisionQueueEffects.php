@@ -548,7 +548,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       $ally = new Ally($lastResult, $owner);
       $upgrades = $ally->GetUpgrades(true);
       for($i=0; $i<count($upgrades); $i+=SubcardPieces()) {
-        $ally->RemoveSubcard($upgrades[$i]);
+        $ally->RemoveSubcard($upgrades[$i], skipDestroy:true);
         if(!IsToken($upgrades[$i]) && !CardIDIsLeader($upgrades[$i])) AddHand($upgrades[$i+1], $upgrades[$i]);
       }
       return $lastResult;
@@ -558,7 +558,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       $ally = new Ally($lastResult, $owner);
       $upgrades = $ally->GetUpgrades(true);
       for($i=0; $i<count($upgrades); $i+=SubcardPieces()) {
-        $ally->RemoveSubcard($upgrades[$i]);
+        $ally->RemoveSubcard($upgrades[$i], skipDestroy:true);
         if(!IsToken($upgrades[$i]) && !CardIDIsLeader($upgrades[$i])) AddHand($upgrades[$i+1], $upgrades[$i]);
       }
       AddCurrentTurnEffect("5329736697", $player, "EFFECT", $ally->CardID());
