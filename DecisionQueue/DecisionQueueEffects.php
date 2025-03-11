@@ -930,6 +930,18 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       MZMoveCard($player, $search, $where, filter:$filter, context:"Choose a card to put on the bottom of its owner's deck");
       AddDecisionQueue("CREATEXWING", $player, "-", 1);
       break;
+    case "REDEMPTION":
+      $ally = new Ally($parameterArr[1]);
+      $healedTargets = explode(",", $lastResult);
+      $totalHealAmount = 0;
+      foreach ($healedTargets as $healedTarget) {
+        $healAmount = explode("-", $healedTarget)[0];
+        $totalHealAmount += $healAmount;
+      }
+      if ($totalHealAmount > 0) {
+        $ally->DealDamage($totalHealAmount, fromUnitEffect:true);
+      }
+      break;
     case "YODAOLDMASTER":
       if($lastResult == "Both") {
         WriteLog("Both player drew a card from Yoda, Old Master");

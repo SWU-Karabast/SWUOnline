@@ -1604,6 +1604,14 @@ button.counter-control {
   color: #fff;
   user-select: none;
 
+  &.dmg-counter {
+    background: linear-gradient(90deg, rgba(255, 0, 0, 0.00) 0%, rgba(221, 17, 35, 0.90) 50%, rgba(221, 17, 35, 1) 100%), linear-gradient(270deg, rgba(0, 0, 0, 0.90) 0%, rgba(0, 0, 0, 0.90) 45%, rgba(0, 0, 0, 0.00) 100%);
+  }
+
+  &.heal-counter {
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.00) 0%, rgba(34, 142, 245, 0.90) 50%, rgba(34, 142, 245, 1) 100%), linear-gradient(270deg, rgba(0, 0, 0, 0.90) 0%, rgba(0, 0, 0, 0.90) 45%, rgba(0, 0, 0, 0.00) 100%);
+  }
+
   &.no-controls {
     left: -31px;
     top: 30px;

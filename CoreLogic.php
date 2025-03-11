@@ -1594,7 +1594,10 @@ function CanConfirmPhase($phase) {
     case "PARTIALMULTIDAMAGEMULTIZONE":
     case "MAYMULTIDAMAGEMULTIZONE":
     case "MULTIDAMAGEMULTIZONE":
-    case "INDIRECTDAMAGEMULTIZONE":    
+    case "INDIRECTDAMAGEMULTIZONE":
+    case "PARTIALMULTIHEALMULTIZONE":
+    case "MAYMULTIHEALMULTIZONE":
+    case "MULTIHEALMULTIZONE":
       $parsedParams = ParseDQParameter($turn[0], $turn[1], $turn[2]);
       $counterLimit = $parsedParams["counterLimit"];
       $allies = $parsedParams["allies"];
@@ -1611,7 +1614,7 @@ function CanConfirmPhase($phase) {
         $totalCounters += $character->Counters();
       }
 
-      if ($phase == "PARTIALMULTIDAMAGEMULTIZONE" && $totalCounters > 0) {
+      if ($totalCounters > 0 && str_starts_with($phase, "PARTIAL")) {
         return 1;
       }
 
@@ -1659,8 +1662,11 @@ function CanConfirmPhase($phase) {
       case "OVER": return 0;
       case "INDIRECTDAMAGEMULTIZONE": return 0;
       case "MULTIDAMAGEMULTIZONE": return 0;
+      case "MULTIHEALMULTIZONE": return 0;
       case "PARTIALMULTIDAMAGEMULTIZONE":
       case "MAYMULTIDAMAGEMULTIZONE":
+      case "PARTIALMULTIHEALMULTIZONE":
+      case "MAYMULTIHEALMULTIZONE":
         $parsedParams = ParseDQParameter($turn[0], $turn[1], $turn[2]);
         $allies = $parsedParams["allies"];
         $characters = $parsedParams["characters"];
@@ -3551,17 +3557,13 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
       break;
     case "3896582249"://Redemption
       if($from != "PLAY") {
-        for($i=0; $i<8; ++$i) {
-          AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY", $i == 0 ? 0 : 1);
-          AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "MYCHAR-0,THEIRCHAR-0,", $i == 0 ? 0 : 1);
-          AddDecisionQueue("MZFILTER", $currentPlayer, "index=MYALLY-" . $playAlly->Index());
-          AddDecisionQueue("MZFILTER", $currentPlayer, "damaged=0");
-          AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Choose a card to restore 1 (Remaining: " . (8-$i) . ")", $i == 0 ? 0 : 1);
-          AddDecisionQueue("MAYCHOOSEMULTIZONE", $currentPlayer, "<-", 1);
-          AddDecisionQueue("MZOP", $currentPlayer, "RESTORE,1", 1);
-          AddDecisionQueue("UNIQUETOMZ", $currentPlayer, $playAlly->UniqueID(), 1);
-          AddDecisionQueue("MZOP", $currentPlayer, "DEALDAMAGE,1,$currentPlayer", 1);
-        }
+        AddDecisionQueue("MULTIZONEINDICES", $currentPlayer, "MYALLY&THEIRALLY");
+        AddDecisionQueue("MZFILTER", $currentPlayer, "index=" . $playAlly->MZIndex(), 1);
+        AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "8-MYCHAR-0,THEIRCHAR-0,", 1);
+        AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Heal up to 8 total damage from any number of units and/or bases", 1);
+        AddDecisionQueue("PARTIALMULTIHEALMULTIZONE", $currentPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $currentPlayer, "MULTIHEAL", 1);
+        AddDecisionQueue("SPECIFICCARD", $currentPlayer, "REDEMPTION," . $playAlly->UniqueID(), 1);
       }
       break;
     case "7861932582"://The Force is With Me

@@ -159,7 +159,7 @@
           rv += "</div>";
         }
         if (counterType > 0) {
-          rv += "<div class='base-counter " + (showCounterControls > 0 ? "" : "no-controls") + "'>" + counters + "</div>";
+          rv += "<div class='base-counter " + (showCounterControls > 0 ? "" : "no-controls") + (counterType == 1 ? " dmg-counter" : " heal-counter") + "'>" + counters + "</div>";
         }
 
         if (borderColor > 0) {

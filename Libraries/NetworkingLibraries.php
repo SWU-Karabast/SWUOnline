@@ -143,22 +143,22 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
         WriteLog("Player " . $playerID . " put a card on the bottom of the deck.");
       }
       break;
-    case 14: // Increase damage/healing amount
-    case 15: // Decrease damage/healing amount
+    case 14: // Increase damage/heal amount
+    case 15: // Decrease damage/heal amount
       $uniqueID = $cardID;
-      if ($uniqueID[0] == "B") {
-        $character = new Character($uniqueID);
-        if ($mode == 14) {
-          $character->IncreaseCounters();
-        } else {
-          $character->DecreaseCounters();
-        }
-      } else {
+      if (is_numeric($uniqueID)) {
         $ally = new Ally($uniqueID);
         if ($mode == 14) {
           $ally->IncreaseCounters();
         } else {
           $ally->DecreaseCounters();
+        }
+      } else {
+        $character = new Character($uniqueID);
+        if ($mode == 14) {
+          $character->IncreaseCounters();
+        } else {
+          $character->DecreaseCounters();
         }
       }
       break;
@@ -876,7 +876,7 @@ function Passed(&$turn, $playerID)
 function PassInput($autopass = false)
 {
   global $turn, $currentPlayer, $initiativeTaken, $initiativePlayer;
-  if ($turn[0] == "END" || $turn[0] == "MAYCHOOSEOPTION" || $turn[0] == "MAYMULTICHOOSETEXT" || $turn[0] == "MAYCHOOSECOMBATCHAIN" || $turn[0] == "MAYCHOOSEMULTIZONE" || $turn[0] == "MAYMULTICHOOSEAURAS" || $turn[0] == "MAYMULTICHOOSEHAND" || $turn[0] == "MAYCHOOSEHAND" || $turn[0] == "MAYCHOOSEDISCARD" || $turn[0] == "MAYCHOOSEARSENAL" || $turn[0] == "MAYCHOOSEPERMANENT" || $turn[0] == "MAYCHOOSEDECK" || $turn[0] == "MAYCHOOSEMYSOUL" || $turn[0] == "MAYCHOOSETOP" || $turn[0] == "MAYCHOOSECARD" || $turn[0] == "INSTANT" || $turn[0] == "OK" || $turn[0] == "LOOKHAND" || $turn[0] == "BUTTONINPUT" || $turn[0] == "MAYMULTIDAMAGEMULTIZONE" || $turn[0] == "PARTIALMULTIDAMAGEMULTIZONE") {
+  if ($turn[0] == "END" || $turn[0] == "MAYCHOOSEOPTION" || $turn[0] == "MAYMULTICHOOSETEXT" || $turn[0] == "MAYCHOOSECOMBATCHAIN" || $turn[0] == "MAYCHOOSEMULTIZONE" || $turn[0] == "MAYMULTICHOOSEAURAS" || $turn[0] == "MAYMULTICHOOSEHAND" || $turn[0] == "MAYCHOOSEHAND" || $turn[0] == "MAYCHOOSEDISCARD" || $turn[0] == "MAYCHOOSEARSENAL" || $turn[0] == "MAYCHOOSEPERMANENT" || $turn[0] == "MAYCHOOSEDECK" || $turn[0] == "MAYCHOOSEMYSOUL" || $turn[0] == "MAYCHOOSETOP" || $turn[0] == "MAYCHOOSECARD" || $turn[0] == "INSTANT" || $turn[0] == "OK" || $turn[0] == "LOOKHAND" || $turn[0] == "BUTTONINPUT" || $turn[0] == "MAYMULTIDAMAGEMULTIZONE" || $turn[0] == "PARTIALMULTIDAMAGEMULTIZONE" || $turn[0] == "PARTIALMULTIHEALMULTIZONE" || $turn[0] == "MAYMULTIHEALMULTIZONE") {
     ContinueDecisionQueue("PASS");
   } else {
     if ($autopass == true);

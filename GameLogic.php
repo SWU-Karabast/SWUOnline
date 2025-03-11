@@ -25,6 +25,9 @@ function ParseDQParameter($phase, $player, $parameter) {
     case "MAYMULTIDAMAGEMULTIZONE":
     case "MULTIDAMAGEMULTIZONE":
     case "INDIRECTDAMAGEMULTIZONE":
+    case "PARTIALMULTIHEALMULTIZONE":
+    case "MAYMULTIHEALMULTIZONE":
+    case "MULTIHEALMULTIZONE":      
       $params = explode("-", $parameter);
       $counterLimit = $params[0];
       $mzIndexes = explode(",", implode("-", array_slice($params, 1)));
@@ -520,12 +523,12 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $parameterArr = explode(",", $parameter);
       switch ($parameterArr[0]) {
         case "GETMZINDEX":
-          if ($lastResult[0] == "B") {
-            $character = new Character($lastResult);
-            return $character->MZIndex();
-          } else {
+          if (is_numeric($lastResult)) {
             $ally = new Ally($lastResult);
             return $ally->MZIndex();
+          } else {
+            $character = new Character($lastResult);
+            return $character->MZIndex();
           }
         case "REVERTCONTROL": // Revert control of a unit to its owner
           $ally = new Ally($lastResult);
@@ -634,32 +637,62 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
           return implode(",", array_map(function($x) {return "THEIRALLY-$x";}, $lastResult));
         case "MAPMYINDICES"://to be used after "MULTICHOOSEUNIT"
           return implode(",", array_map(function($x) {return "MYALLY-$x";}, $lastResult));
+        case "MULTIHEAL":
+          $targets = explode(",", $lastResult);
+          $healedTargets = [];
+
+          foreach ($targets as $target) {
+            $targetArr = explode("-", $target);
+            $targetHeal = $targetArr[0];
+            $targetUniqueID = $targetArr[1];
+
+            $healAmount = 0;
+            if (is_numeric($targetUniqueID)) {
+              $ally = new Ally($targetUniqueID);
+              $currentHealth = $ally->Health();
+              $ally->Heal($targetHeal);
+              $afterHealth = $ally->Health();
+              $healAmount = $afterHealth - $currentHealth;
+            } else {
+              $targetPlayer = $targetUniqueID[1];
+              $currentHealth = GetHealth($targetPlayer);
+              Restore($targetHeal, $targetPlayer);
+              $afterHealth = GetHealth($targetPlayer);
+              $healAmount = $currentHealth - $afterHealth;
+            }   
+
+            if ($healAmount > 0) {
+              $healedTargets[] = $healAmount . "-" . $targetUniqueID;
+            }       
+          }
+
+          return implode(",", $healedTargets);
         case "DEALMULTIDAMAGE":
           $sourcePlayer = $parameterArr[1];
           $isUnitEffect = $parameterArr[2];
           $isPreventable = $parameterArr[3];
           $targets = explode(",", $lastResult);
-          $damagedTargets = [];
+          $healedTargets = [];
 
           foreach ($targets as $target) {
             $targetArr = explode("-", $target);
-            $targetDamage = $targetArr[0];
+            $targetHeal = $targetArr[0];
             $targetUniqueID = $targetArr[1];
-            if ($targetUniqueID[0] == "B") {
-              DealDamageAsync($targetUniqueID[1], $targetDamage, sourcePlayer:$sourcePlayer);
-              $damagedTargets[] = $targetUniqueID;
-            } else {
+            if (is_numeric($targetUniqueID)) {
               $ally = new Ally($targetUniqueID);
               $isEnemeyDamage = $sourcePlayer != $ally->Controller();
               $currentHealth = $ally->Health();
-              $destroyed = $ally->DealDamage($targetDamage, enemyDamage:$isEnemeyDamage, fromUnitEffect:$isUnitEffect, preventable:$isPreventable);
+              $destroyed = $ally->DealDamage($targetHeal, enemyDamage:$isEnemeyDamage, fromUnitEffect:$isUnitEffect, preventable:$isPreventable);
               if ($destroyed || $ally->Health() < $currentHealth) {
-                $damagedTargets[] = $targetUniqueID;
+                $healedTargets[] = $targetUniqueID;
               }
+            } else {
+              DealDamageAsync($targetUniqueID[1], $targetHeal, sourcePlayer:$sourcePlayer);
+              $healedTargets[] = $targetUniqueID;
             }          
           }
 
-          return implode(",", $damagedTargets);
+          return implode(",", $healedTargets);
         case "DEALDAMAGE":
           // Important: use MZOpHelpers.php DamageStringBuilder() function for param structure
           if($lastResult == "") return "";

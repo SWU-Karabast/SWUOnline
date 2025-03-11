@@ -20,11 +20,10 @@ class Character {
   public function __construct($mzIndexOrUniqueID, $player = "") {
     global $currentPlayer;
 
-    $c = $mzIndexOrUniqueID[0];
-    if ($c == "B") {
+    if (str_contains($mzIndexOrUniqueID, "BASE")) {
       $this->index = 0;
       $player = $mzIndexOrUniqueID[1];
-    } else if ($c == "L") {
+    } else if (str_contains($mzIndexOrUniqueID, "LEADER")) {
       $this->index = CharacterPieces();
       $player = $mzIndexOrUniqueID[1];
     } else {
@@ -48,8 +47,8 @@ class Character {
   // B<playerID> for base character
   // L<playerID> for leader character
   public function UniqueId() {
-    $c = $this->index === 0 ? "B" : "L";
-    return $c . $this->playerID;
+    $characterType = $this->index === 0 ? "BASE" : "LEADER";
+    return "P" . $this->playerID . $characterType;
   }
 
   public function CardId() {
