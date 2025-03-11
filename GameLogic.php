@@ -18,6 +18,43 @@ include "CombatChain.php";
 include_once "WriteLog.php";
 
 
+
+function ParseDQParameter($phase, $player, $parameter) {
+  switch ($phase) {
+    case "PARTIALMULTIDAMAGEMULTIZONE":
+    case "MAYMULTIDAMAGEMULTIZONE":
+    case "MULTIDAMAGEMULTIZONE":
+    case "INDIRECTDAMAGEMULTIZONE":
+      $params = explode("-", $parameter);
+      $counterLimit = $params[0];
+      $mzIndexes = explode(",", implode("-", array_slice($params, 1)));
+      $allies = [];
+      $characters = [];
+  
+      // Get the allies and characters from the mzIndexes
+      for ($i = 0; $i < count($mzIndexes); $i++) {
+        $mzIndex = $mzIndexes[$i];
+        if (str_contains($mzIndex, "ALLY")) {
+          $ally = new Ally($mzIndex);
+          $allies[] = $ally->UniqueId();
+        } else if (str_contains($mzIndex, "CHAR")) {
+          $character = new Character($mzIndex, $player);
+          $characters[] = $character->UniqueId();
+        }
+      }
+
+      return array(
+        "counterLimit" => $counterLimit,
+        "allies" => $allies,
+        "characters" => $characters
+      );
+    default:
+      break;
+  }
+  return "";
+}
+
+
 function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
 {
   global $redirectPath, $playerID, $gameName;
@@ -483,8 +520,13 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
       $parameterArr = explode(",", $parameter);
       switch ($parameterArr[0]) {
         case "GETMZINDEX":
-          $ally = new Ally($lastResult);
-          return $ally->MZIndex();
+          if ($lastResult[0] == "B") {
+            $character = new Character($lastResult);
+            return $character->MZIndex();
+          } else {
+            $ally = new Ally($lastResult);
+            return $ally->MZIndex();
+          }
         case "REVERTCONTROL": // Revert control of a unit to its owner
           $ally = new Ally($lastResult);
           if (!$ally->Exists() || $ally->Controller() == $ally->Owner()) return "PASS";
@@ -593,50 +635,27 @@ function DecisionQueueStaticEffect($phase, $player, $parameter, $lastResult)
         case "MAPMYINDICES"://to be used after "MULTICHOOSEUNIT"
           return implode(",", array_map(function($x) {return "MYALLY-$x";}, $lastResult));
         case "DEALMULTIDAMAGE":
-          $sourcePlayer = $parameterArr[2];
-          $isUnitEffect = $parameterArr[3];
-          $isPreventable = $parameterArr[4];
-          $targets = [];
+          $sourcePlayer = $parameterArr[1];
+          $isUnitEffect = $parameterArr[2];
+          $isPreventable = $parameterArr[3];
+          $targets = explode(",", $lastResult);
+          $targetUniqueIDs = [];
 
-          // Get the targets and their counters
-          foreach ([1, 2] as $p) {
-            $allies = &GetAllies($p);
-            for ($i = count($allies) - AllyPieces(); $i >= 0; $i -= AllyPieces()) {
-              $counters = $allies[$i+6];
-              if ($counters > 0) {
-                $target = $allies[$i+5];
-                $targets[] = $target;
-                AddDecisionQueue("PASSPARAMETER", $player, $target); // Pass the unique ID of the unit to prevent bugs
-                AddDecisionQueue("UIDOP", $player, "GETMZINDEX");
-                AddDecisionQueue("MZOP", $player, DealDamageBuilder($counters, $sourcePlayer, isUnitEffect:$isUnitEffect, isPreventable:$isPreventable));
-              }
-            }
-            $character = &GetPlayerCharacter($p);
-            $baseCounters = $character[10];
-            if ($baseCounters > 0) {
-              $targets[] = "BASE-" . $p; // We just introduced BASE-1 and BASE-2 as uniqueIDs for bases
-              $mzIndex = $p == $player ? "MYCHAR-0" : "THEIRCHAR-0";
-              AddDecisionQueue("PASSPARAMETER", $player, $mzIndex);
-              AddDecisionQueue("MZOP", $player, DealDamageBuilder($baseCounters, $sourcePlayer, isUnitEffect:$isUnitEffect, isPreventable:$isPreventable));
-            }
-          }
-
-          // Reset target's counters
           foreach ($targets as $target) {
-            if (str_contains($target, "BASE")) {
-              $targetPlayer = $target == "BASE-1" ? 1 : 2;
-              $character = &GetPlayerCharacter($targetPlayer);
-              $character[10] = 0;
+            $targetArr = explode("-", $target);
+            $targetDamage = $targetArr[0];
+            $targetUniqueID = $targetArr[1];
+            $targetUniqueIDs[] = $targetUniqueID;
+            if ($targetUniqueID[0] == "B") {
+              DealDamageAsync($targetUniqueID[1], $targetDamage, sourcePlayer:$sourcePlayer);
             } else {
-              $ally = new Ally($target);
-              $ally->ResetCounters();
-            }
+              $ally = new Ally($targetUniqueID);
+              $isEnemeyDamage = $sourcePlayer != $ally->Controller();
+              $ally->DealDamage($targetDamage, enemyDamage:$isEnemeyDamage, fromUnitEffect:$isUnitEffect, preventable:$isPreventable);
+            }          
           }
 
-          // If there are no targets, return PASS
-          if (count($targets) == 0) return "PASS";
-
-          return implode(",", $targets);
+          return implode(",", $targetUniqueIDs);
         case "DEALDAMAGE":
           // Important: use MZOpHelpers.php DamageStringBuilder() function for param structure
           if($lastResult == "") return "";

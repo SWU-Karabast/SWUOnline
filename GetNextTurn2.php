@@ -843,30 +843,32 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   }
 
   $mzMultiDamage = false;
+  $mzMultiHeal = false;
   $canOverkillUnits = false;
-  $maxCountersReached = false;
+  $counterLimitReached = false;
+  $mzMultiAllies = [];
+  $mzMultiCharacters = [];
   if (($turn[0] == "INDIRECTDAMAGEMULTIZONE" || $turn[0] == "MULTIDAMAGEMULTIZONE" || $turn[0] == "MAYMULTIDAMAGEMULTIZONE" || $turn[0] == "PARTIALMULTIDAMAGEMULTIZONE")) {
-    $params = explode("-", $turn[2]);
-    $mzMultiDamage = true;
-    $canOverkillUnits = $turn[0] != "INDIRECTDAMAGEMULTIZONE";
-    $totalMaxCounters = $params[0];
-    $optionsIndex = explode(",", implode("-", array_slice($params, 1)));
+    $mzMultiDamage = str_contains($turn[0], "DAMAGE");
+    $mzMultiHeal = str_contains($turn[0], "HEAL");
+    $canOverkillUnits = $mzMultiDamage && $turn[0] != "INDIRECTDAMAGEMULTIZONE";
+    $parsedParams = ParseDQParameter($turn[0], $turn[1], $turn[2]);
+    $counterLimit = $parsedParams["counterLimit"];
+    $mzMultiAllies = $parsedParams["allies"];
+    $mzMultiCharacters = $parsedParams["characters"];
 
-    // Check if the total counters are greater than the total max counters
+    // Get the total counters of the allies and bases
     $totalCounters = 0;
-    for ($i = 0; $i < count($optionsIndex); $i++) {
-      if (str_contains($optionsIndex[$i], "ALLY")) {
-        $ally = new Ally($optionsIndex[$i]);
-        $totalCounters += $ally->Counters();
-      } else if (str_contains($optionsIndex[$i], "CHAR")) {
-        $mzArr = explode("-", $optionsIndex[$i]);
-        $p = $mzArr[0] == "MYCHAR" ? $turn[1] : ($turn[1] == 1 ? 2 : 1);
-        $character = &GetPlayerCharacter($p);
-        $totalCounters += $character[$mzArr[1]+10];
-      }
+    foreach ($mzMultiAllies as $ally) {
+      $ally = new Ally($ally);
+      $totalCounters += $ally->Counters();
+    }
+    foreach ($mzMultiCharacters as $base) {
+      $base = new Character($base);
+      $totalCounters += $base->Counters();
     }
 
-    $maxCountersReached = $totalCounters >= $totalMaxCounters;
+    $counterLimitReached = $totalCounters >= $counterLimit;
   }
 
   if (($turn[0] == "MAYCHOOSEDECK" || $turn[0] == "CHOOSEDECK") && $isActivePlayer) {
@@ -1291,22 +1293,21 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       $showCounterControls = false;
       $counters = 0;
       $counterType = 0;
-      $maxCounters = 0;
+      $counterLimit = 0;
 
       if (!$mzChooseFromPlay && $playable && TheirAllyPlayableExhausted($ally)) {
         $border = CardBorderColor($theirAllies[$i], "PLAY", $playable);
         $action = $currentPlayer == $playerID && $turn[0] != "P" && $playable ? 105 : 0; // 105 is the Ally Ability for opponent-controlled abilities like Mercenary Gunship
         $actionDataOverride = strval($i);
-      } else if ($mzMultiDamage) {
-        $mzIndex = $ally->MZIndex();
-        $inOptions = in_array($mzIndex, $optionsIndex);
-        if ($inOptions) {
+      } else if ($mzMultiDamage || $mzMultiHeal) {
+        $isTarget = in_array($ally->UniqueID(), $mzMultiAllies);
+        if ($isTarget) {
           $showCounterControls = $isActivePlayer;
           $border = $showCounterControls ? 4 : 0;
-          $actionDataOverride = $mzIndex;
+          $actionDataOverride = $ally->UniqueID();
           $counters = $ally->Counters();
-          $counterType = 1;
-          $maxCounters = ($ally->HasShield() || $canOverkillUnits) ? 0 : $ally->Health();
+          $counterType = $mzMultiDamage ? 1 : 2;
+          $counterLimit = ($ally->HasShield() || $canOverkillUnits) ? 0 : $ally->Health();
         }
       }
 
@@ -1325,8 +1326,8 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         'counters' => $counters,
         'counterType' => $counterType,
         'showCounterControls' => $showCounterControls,
-        'maxCounters' => $maxCounters,
-        'maxCountersReached' => $maxCountersReached,
+        'counterLimit' => $counterLimit,
+        'counterLimitReached' => $counterLimitReached,
       );
       $isUnimplemented = IsUnimplemented($theirAllies[$i]);
       $cardArena = $ally->CurrentArena();
@@ -1372,21 +1373,21 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     $counters = 0;
     $counterType = 0;
 
-    if ($mzMultiDamage) {
-      $mzIndex =  $isActivePlayer ? "THEIRCHAR-" . $i : "MYCHAR-" . $i;
-      $inOptions = in_array($mzIndex, $optionsIndex);
-      if ($inOptions) {
+    if ($mzMultiDamage || $mzMultiHeal) {
+      $character = new Character("THEIRCHAR-" . $i, $playerID);
+      $isTarget = in_array($character->UniqueID(), $mzMultiCharacters);
+      if ($isTarget) {
         $showCounterControls = $isActivePlayer;
-        $actionDataOverride = $mzIndex;
+        $actionDataOverride = $character->UniqueID();
         $border = $showCounterControls ? 4 : 0;
-        $counters = $theirCharacter[$i + 10];
-        $counterType = 1;
+        $counters = $character->Counters();
+        $counterType = $mzMultiDamage ? 1 : 2;
       }
     }
 
     if ($characterContents != "")
       $characterContents .= "|";
-    $characterContents .= ClientRenderedCard(cardNumber: $theirCharacter[$i], action: $action, actionDataOverride: $actionDataOverride, borderColor: $border, overlay: $overlay, counters: $counters, defCounters: 0, atkCounters: $atkCounters, controller: $otherPlayer, type: $type, sType: $sType, isFrozen: ($theirCharacter[$i + 8] == 1), onChain: ($theirCharacter[$i + 6] == 1), isBroken: ($theirCharacter[$i + 1] == 0), rotate: 0, landscape: 1, epicActionUsed: $epicActionUsed, showCounterControls: $showCounterControls, counterType: $counterType, maxCountersReached: $maxCountersReached);
+    $characterContents .= ClientRenderedCard(cardNumber: $theirCharacter[$i], action: $action, actionDataOverride: $actionDataOverride, borderColor: $border, overlay: $overlay, counters: $counters, defCounters: 0, atkCounters: $atkCounters, controller: $otherPlayer, type: $type, sType: $sType, isFrozen: ($theirCharacter[$i + 8] == 1), onChain: ($theirCharacter[$i + 6] == 1), isBroken: ($theirCharacter[$i + 1] == 0), rotate: 0, landscape: 1, epicActionUsed: $epicActionUsed, showCounterControls: $showCounterControls, counterType: $counterType, counterLimitReached: $counterLimitReached);
   }
   echo ($characterContents);
 
@@ -1477,7 +1478,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       $showCounterControls = false;
       $counters = 0;
       $counterType = 0;
-      $maxCounters = 0;
+      $counterLimit = 0;
 
       if ($mzChooseFromPlay) {
         $mzIndex = "MYALLY-" . $i;
@@ -1485,16 +1486,15 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         $action = $inOptions ? 16 : 0;
         $actionDataOverride = $inOptions ? $mzIndex : 0;
         $border = CardBorderColor($myAllies[$i], "PLAY", $action == 16);
-      } else if ($mzMultiDamage) {
-        $mzIndex = $ally->MZIndex();
-        $inOptions = in_array($mzIndex, $optionsIndex);
-        if ($inOptions) {
+      } else if ($mzMultiDamage || $mzMultiHeal) {
+        $isTarget = in_array($ally->UniqueID(), $mzMultiAllies);
+        if ($isTarget) {
           $showCounterControls = $isActivePlayer;
           $border = $showCounterControls ? 4 : 0;
-          $actionDataOverride = $mzIndex;
+          $actionDataOverride = $ally->UniqueID();
           $counters = $ally->Counters();
-          $counterType = 1;
-          $maxCounters = ($ally->HasShield() || $canOverkillUnits) ? 0 : $ally->Health();
+          $counterType = $mzMultiDamage ? 1 : 2;
+          $counterLimit = ($ally->HasShield() || $canOverkillUnits) ? 0 : $ally->Health();
         }
       } else {
         $playable = IsPlayable($myAllies[$i], $turn[0], "PLAY", $i, $restriction) && (!$ally->IsExhausted() || AllyPlayableExhausted($ally));
@@ -1518,8 +1518,8 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
         'counters' => $counters,
         'counterType' => $counterType,
         'showCounterControls' => $showCounterControls,
-        'maxCounters' => $maxCounters,
-        'maxCountersReached' => $maxCountersReached,
+        'counterLimit' => $counterLimit,
+        'counterLimitReached' => $counterLimitReached,
       );
       $isUnimplemented = IsUnimplemented($myAllies[$i]);
       $cardArena = $ally->CurrentArena();
@@ -1581,15 +1581,15 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
       $action = $inOptions ? 16 : 0;
       $actionDataOverride = $inOptions ? $mzIndex : 0;
       $border = CardBorderColor($myCharacter[$i], "CHAR", $action == 16);
-    } else if ($mzMultiDamage) {
-      $mzIndex =  $isActivePlayer ? "MYCHAR-" . $i : "THEIRCHAR-" . $i;
-      $inOptions = in_array($mzIndex, $optionsIndex);
-      if ($inOptions) {
+    } else if ($mzMultiDamage || $mzMultiHeal) {
+      $character = new Character("MYCHAR-" . $i, $playerID);
+      $isTarget = in_array($character->UniqueID(), $mzMultiCharacters);
+      if ($isTarget) {
         $showCounterControls = $isActivePlayer;
-        $actionDataOverride = $mzIndex;
+        $actionDataOverride = $character->UniqueID();
         $border = $showCounterControls ? 4 : 0;
-        $counters = $myCharacter[$i + 10];
-        $counterType = 1;
+        $counters = $character->Counters();
+        $counterType = $mzMultiDamage ? 1 : 2;
       }
     } else {
       $playable = $playerID == $currentPlayer && IsPlayable($myCharacter[$i], $turn[0], "CHAR", $i, $restriction) && ($myCharacter[$i + 1] == 2 || $epicActionUsed == 0);
@@ -1601,7 +1601,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
     if ($myCharData != "")
       $myCharData .= "|";
     $restriction = implode("_", explode(" ", $restriction));
-    $myCharData .= ClientRenderedCard($myCharacter[$i], $action, $myCharacter[$i + 1] != 2 ? 1 : 0, $border, $counters, $actionDataOverride, 0, 0, $atkCounters, $playerID, $type, $sType, $restriction, $myCharacter[$i + 1] == 0, $myCharacter[$i + 6] == 1, $myCharacter[$i + 8] == 1, gem: 0, rotate: 0, landscape: 1, epicActionUsed: $epicActionUsed, showCounterControls: $showCounterControls, counterType: $counterType, maxCountersReached: $maxCountersReached);
+    $myCharData .= ClientRenderedCard($myCharacter[$i], $action, $myCharacter[$i + 1] != 2 ? 1 : 0, $border, $counters, $actionDataOverride, 0, 0, $atkCounters, $playerID, $type, $sType, $restriction, $myCharacter[$i + 1] == 0, $myCharacter[$i + 6] == 1, $myCharacter[$i + 8] == 1, gem: 0, rotate: 0, landscape: 1, epicActionUsed: $epicActionUsed, showCounterControls: $showCounterControls, counterType: $counterType, counterLimitReached: $counterLimitReached);
   }
   echo ("<div id='myChar' style='display:none;'>");
   echo ($myCharData);

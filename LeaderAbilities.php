@@ -15,7 +15,7 @@ function LeaderPilotDeploy($player, $leader, $target) {
       AddDecisionQueue("PREPENDLASTRESULT", $player, "4-", 1);
       AddDecisionQueue("SETDQCONTEXT", $player, "Deal 4 damage divided as you choose", 1);
       AddDecisionQueue("PARTIALMULTIDAMAGEMULTIZONE", $player, "<-", 1);
-      AddDecisionQueue("MZOP", $player, DealMultiDamageBuilder(4, $player), 1);
+      AddDecisionQueue("MZOP", $player, DealMultiDamageBuilder($player), 1);
       break;
     case "a015eb5c5e"://Han Solo
       HanSoloPilotLeaderJTL($player);

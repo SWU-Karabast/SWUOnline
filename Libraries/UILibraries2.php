@@ -48,7 +48,7 @@ function TextCounterColor($darkMode)
 //14 onChain = 1 if card is on combat chain (mostly for equipment)
 //15 isFrozen = 1 if frozen
 //16 shows gem = (0, 1, 2) (0 off, 1 active, 2 inactive)
-function ClientRenderedCard($cardNumber, $action = 0, $overlay = 0, $borderColor = 0, $counters = 0, $actionDataOverride = "-", $lifeCounters = 0, $defCounters = 0, $atkCounters = 0, $controller = 0, $type = "", $sType = "", $restriction = "", $isBroken = 0, $onChain = 0, $isFrozen = 0, $gem = 0, $rotate = 0, $landscape = 0, $epicActionUsed = 0, $showCounterControls = 0, $counterType = 0, $maxCountersReached = 0)
+function ClientRenderedCard($cardNumber, $action = 0, $overlay = 0, $borderColor = 0, $counters = 0, $actionDataOverride = "-", $lifeCounters = 0, $defCounters = 0, $atkCounters = 0, $controller = 0, $type = "", $sType = "", $restriction = "", $isBroken = 0, $onChain = 0, $isFrozen = 0, $gem = 0, $rotate = 0, $landscape = 0, $epicActionUsed = 0, $showCounterControls = 0, $counterType = 0, $counterLimitReached = 0)
 {
   $rvArr = [];
   $rvArr[0] = $cardNumber;
@@ -74,7 +74,7 @@ function ClientRenderedCard($cardNumber, $action = 0, $overlay = 0, $borderColor
   $rvArr[20] = IsUnimplemented($cardNumber) ? 1 : 0;
   $rvArr[21] = $showCounterControls ? 1 : 0;
   $rvArr[22] = $counterType;
-  $rvArr[23] = $maxCountersReached ? 1 : 0;
+  $rvArr[23] = $counterLimitReached ? 1 : 0;
   return implode(" ", $rvArr);
 }
 
@@ -173,7 +173,7 @@ function JSONRenderedCard(
   return $card;
 }
 // $counterType = 0 for amount, 1 for damage, 2 for healing
-function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $overlay = 0, $borderColor = 0, $counters = 0, $actionDataOverride = "", $id = "", $rotate = false, $lifeCounters = 0, $defCounters = 0, $atkCounters = -1, $from = "", $controller = 0, $subcardNum = 0, $isExhausted = false, $isUnimplemented = false, $showCounterControls = false, $counterType = 0, $maxCounters = 0, $maxCountersReached = false)
+function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $overlay = 0, $borderColor = 0, $counters = 0, $actionDataOverride = "", $id = "", $rotate = false, $lifeCounters = 0, $defCounters = 0, $atkCounters = -1, $from = "", $controller = 0, $subcardNum = 0, $isExhausted = false, $isUnimplemented = false, $showCounterControls = false, $counterType = 0, $counterLimit = 0, $counterLimitReached = false)
 {
   if (isset($_COOKIE['selectedLanguage'])) {
     $selectedLanguage = $_COOKIE['selectedLanguage'];
@@ -192,8 +192,8 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
     $showCounterControls = $opts['showCounterControls'] ?? false;
     $counterType = $opts['counterType'] ?? 0;
     $counters = $opts['counters'] ?? 0;
-    $maxCounters = $opts['maxCounters'] ?? 0;
-    $maxCountersReached = $opts['maxCountersReached'] ?? false;
+    $counterLimit = $opts['counterLimit'] ?? 0;
+    $counterLimitReached = $opts['counterLimitReached'] ?? false;
   }
 
   if ($darkMode == null)
@@ -338,7 +338,7 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
 
   // Counter Controls
   if ($showCounterControls) {
-    $canIncrease = !$maxCountersReached && ($maxCounters == 0 || $counters < $maxCounters);
+    $canIncrease = !$counterLimitReached && ($counterLimit == 0 || $counters < $counterLimit);
     $canDecrease = $counters > 0;
 
     // Container for both buttons

@@ -41,33 +41,29 @@ function ProcessMacros()
           }
         }
       }
-      else if(AutopassPhaseWithOneOption($turn[0]) && SearchCount($turn[2]) == 1) {
+      else if(AutoPassPhaseWithOneOption($turn[0]) && SearchCount($turn[2]) == 1) {
         $somethingChanged = true;
         ContinueDecisionQueue($turn[2]);
       }
-      else if(AutoconfirmPhaseWithOneOption($turn[0]) && SearchCount($turn[2]) == 1) {
-        $params = explode("-", $turn[2]);
-        $totalMaxCounters = $params[0];
-        $mzIndexes = explode(",", implode("-", array_slice($params, 1)));
+      else if(AutoConfirmPhaseWithOneOption($turn[0]) && SearchCount($turn[2]) == 1) {
+        $parsedParams = ParseDQParameter($turn[0], $turn[1], $turn[2]);
+        $counterLimit = $parsedParams["counterLimit"];
+        $allies = $parsedParams["allies"];
+        $characters = $parsedParams["characters"];
         
-        if (count($mzIndexes) == 0) {
+        if (count($allies) == 1) {
+          $ally = new Ally($allies[0]);
+          $ally->SetCounters($counterLimit);
+        } else if (count($characters) == 1) {
+          $character = new Character($characters[0]);
+          $character->SetCounters($counterLimit);
+        } else {
           PassInput(true);
           return;
-        }
-
-        $mzIndex = $mzIndexes[0];
-        if (str_contains($mzIndex, "ALLY")) {
-          $ally = new Ally($mzIndex);
-          $ally->SetCounters($totalMaxCounters);
-        } else if (str_contains($mzIndex, "CHAR")) {
-          $mzArr = explode("-", $mzIndex);
-          $p = $mzArr[0] == "MYCHAR" ? $turn[1] : ($turn[1] == 1 ? 2 : 1);
-          $character = &GetPlayerCharacter($p);
-          $character[$mzArr[1]+10] = $totalMaxCounters;
-        }
+        }        
 
         $somethingChanged = true;
-        ProcessInput($turn[1], 38, $turn[2], -1, 0, 0, true);
+        ProcessInput($turn[1], 38, "-", "", 0, []);
       }
       if($turn[0] == "B" || $turn[0] == "D")
       {
@@ -83,7 +79,7 @@ function ProcessMacros()
   }
 }
 
-function AutopassPhaseWithOneOption($phase)
+function AutoPassPhaseWithOneOption($phase)
 {
   switch($phase)
   {
@@ -93,7 +89,7 @@ function AutopassPhaseWithOneOption($phase)
   }
 }
 
-function AutoconfirmPhaseWithOneOption($phase)
+function AutoConfirmPhaseWithOneOption($phase)
 {
   switch($phase)
   {

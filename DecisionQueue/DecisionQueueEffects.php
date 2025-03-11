@@ -969,7 +969,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
     case "KIMOGILAHEAVYFIGHTER":
       $targets = explode(",", $lastResult);
       for ($i=0; $i<count($targets); $i++) {
-        if (str_starts_with("BASE", $targets[$i])) continue;
+        if (str_starts_with("B", $targets[$i])) continue; // Skip base
 
         $ally = new Ally($targets[$i]);
         if ($ally->Exists()) {

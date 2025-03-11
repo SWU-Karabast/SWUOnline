@@ -2027,8 +2027,8 @@ function SpecificAllyAttackAbilities($attackID)
         AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY:arena=Ground");
         AddDecisionQueue("PREPENDLASTRESULT", $mainPlayer, "3-", 1);
         AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Deal 3 damage divided as you choose", 1);
-        AddDecisionQueue("PARTIALMULTIDAMAGEMULTIZONE", $mainPlayer, "<-", 1);
-        AddDecisionQueue("MZOP", $mainPlayer, DealMultiDamageBuilder(3, $mainPlayer, isUnitEffect:1), 1);
+        AddDecisionQueue("MAYMULTIDAMAGEMULTIZONE", $mainPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $mainPlayer, DealMultiDamageBuilder($mainPlayer, isUnitEffect:1), 1);
         break;
       case "3141660491"://The Darksaber
         $allies = &GetAllies($mainPlayer);
@@ -2851,7 +2851,7 @@ function SpecificAllyAttackAbilities($attackID)
       IndirectDamage($attackerCardID, $defPlayer, 3, true, $attackerAlly->UniqueID());
       break;
     case "6861397107"://First Order Stormtrooper
-      // IndirectDamage($attackerCardID, $defPlayer, 1, true, $attackerAlly->UniqueID());
+      IndirectDamage($attackerCardID, $defPlayer, 1, true, $attackerAlly->UniqueID());
       break;
     case "3504944818"://Tie Bomber
       IndirectDamage($attackerCardID, $defPlayer, 3, true, $attackerAlly->UniqueID());

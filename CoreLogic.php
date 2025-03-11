@@ -1597,30 +1597,28 @@ function CanConfirmPhase($phase) {
     case "PARTIALMULTIDAMAGEMULTIZONE":
     case "MAYMULTIDAMAGEMULTIZONE":
     case "MULTIDAMAGEMULTIZONE":
-    case "INDIRECTDAMAGEMULTIZONE":      
-      $params = explode("-", $turn[2]);
-      $totalMaxCounters = $params[0];
-      $mzIndexes = implode("-", array_slice($params, 1));
-      $mzIndexesArr = explode(",", $mzIndexes);
+    case "INDIRECTDAMAGEMULTIZONE":    
+      $parsedParams = ParseDQParameter($turn[0], $turn[1], $turn[2]);
+      $counterLimit = $parsedParams["counterLimit"];
+      $allies = $parsedParams["allies"];
+      $characters = $parsedParams["characters"];
       $totalCounters = 0;
-      
-      for ($i = 0; $i < count($mzIndexesArr); $i++) {
-        if (str_contains($mzIndexesArr[$i], "ALLY")) {
-          $ally = new Ally($mzIndexesArr[$i]);
-          $totalCounters += $ally->Counters();
-        } else if (str_contains($mzIndexesArr[$i], "CHAR")) {
-          $mzArr = explode("-", $mzIndexesArr[$i]);
-          $player = $mzArr[0] == "MYCHAR" ? $turn[1] : ($turn[1] == 1 ? 2 : 1);
-          $character = &GetPlayerCharacter($player);
-          $totalCounters += $character[$mzArr[1]+10];
-        }
 
-        if ($phase == "PARTIALMULTIDAMAGEMULTIZONE" && $totalCounters > 0) {
-          return 1;
-        }
+      foreach ($allies as $ally) {
+        $ally = new Ally($ally);
+        $totalCounters += $ally->Counters();
       }
 
-      return $totalCounters == $totalMaxCounters;
+      foreach ($characters as $character) {
+        $character = new Character($character);
+        $totalCounters += $character->Counters();
+      }
+
+      if ($phase == "PARTIALMULTIDAMAGEMULTIZONE" && $totalCounters > 0) {
+        return 1;
+      }
+
+      return $totalCounters == $counterLimit;
     default:
       return 0;
   }
@@ -1666,23 +1664,21 @@ function CanConfirmPhase($phase) {
       case "MULTIDAMAGEMULTIZONE": return 0;
       case "PARTIALMULTIDAMAGEMULTIZONE":
       case "MAYMULTIDAMAGEMULTIZONE":
-        $params = explode("-", $turn[2]);
-        $mzIndexes = explode(",", implode("-", array_slice($params, 1)));
+        $parsedParams = ParseDQParameter($turn[0], $turn[1], $turn[2]);
+        $allies = $parsedParams["allies"];
+        $characters = $parsedParams["characters"];
 
-        for ($i = 0; $i < count($mzIndexes); $i++) {
-          $mzIndex = $mzIndexes[$i];
-          if (str_contains($mzIndex, "ALLY")) {
-            $ally = new Ally($mzIndex);
-            if ($ally->Counters() > 0) {
-              return 0;
-            }
-          } else if (str_contains($mzIndex, "CHAR")) {
-            $mzArr = explode("-", $mzIndex);
-            $p = $mzArr[0] == "MYCHAR" ? $turn[1] : ($turn[1] == 1 ? 2 : 1);
-            $character = &GetPlayerCharacter($p);
-            if ($character[$mzArr[1]+10] > 0) {
-              return 0;
-            }
+        foreach ($allies as $ally) {
+          $ally = new Ally($ally);
+          if ($ally->Counters() > 0) {
+            return 0;
+          }
+        }
+
+        foreach ($characters as $character) {
+          $character = new Character($character);
+          if ($character->Counters() > 0) {
+            return 0;
           }
         }
 
@@ -3042,7 +3038,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, "6-", 1);
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Deal 6 damage divided as you choose", 1);
         AddDecisionQueue("MULTIDAMAGEMULTIZONE", $currentPlayer, "<-", 1);
-        AddDecisionQueue("MZOP", $currentPlayer, DealMultiDamageBuilder(6, $currentPlayer, isUnitEffect:1), 1);
+        AddDecisionQueue("MZOP", $currentPlayer, DealMultiDamageBuilder($currentPlayer, isUnitEffect:1), 1);
       }
       break;
     case "1208707254"://Rallying Cry
@@ -3548,7 +3544,7 @@ function PlayAbility($cardID, $from, $resourcesPaid, $target = "-", $additionalC
         AddDecisionQueue("PREPENDLASTRESULT", $currentPlayer, $amount . "-", 1);
         AddDecisionQueue("SETDQCONTEXT", $currentPlayer, "Deal " . $amount . " damage divided as you choose", 1);
         AddDecisionQueue("MAYMULTIDAMAGEMULTIZONE", $currentPlayer, "<-", 1);
-        AddDecisionQueue("MZOP", $currentPlayer, DealMultiDamageBuilder($amount, $currentPlayer, isUnitEffect:1), 1);
+        AddDecisionQueue("MZOP", $currentPlayer, DealMultiDamageBuilder($currentPlayer, isUnitEffect:1), 1);
       }
       break;
     case "3974134277"://Prepare for Takeoff

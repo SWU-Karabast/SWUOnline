@@ -127,7 +127,7 @@
       }
 
       //Rotate is deprecated
-      function Card(cardNumber, folder, maxHeight, action = 0, showHover = 0, overlay = 0, borderColor = 0, counters = 0, actionDataOverride = "", id = "", rotate = 0, lifeCounters = 0, defCounters = 0, atkCounters = 0, controller = 0, restriction = "", isBroken = 0, onChain = 0, isFrozen = 0, gem = 0, landscape = 0, epicActionUsed = 0, isUnimplemented = 0, showCounterControls = 0, counterType = 0, maxCountersReached = 0) {
+      function Card(cardNumber, folder, maxHeight, action = 0, showHover = 0, overlay = 0, borderColor = 0, counters = 0, actionDataOverride = "", id = "", rotate = 0, lifeCounters = 0, defCounters = 0, atkCounters = 0, controller = 0, restriction = "", isBroken = 0, onChain = 0, isFrozen = 0, gem = 0, landscape = 0, epicActionUsed = 0, isUnimplemented = 0, showCounterControls = 0, counterType = 0, counterLimitReached = 0) {
         if (folder == "crops") {
           cardNumber += "_cropped";
         }
@@ -151,7 +151,7 @@
   
         // Counters (damage and heal)
         if (showCounterControls != 0) {
-          var canIncrease = maxCountersReached != 1;
+          var canIncrease = counterLimitReached != 1;
           var canDecrease = counters > 0;
           rv += "<div class='counters-control-wrapper base-controls'>";
           rv += "<button class='counter-control increase-control' " + (canIncrease ? "" : "disabled") + " onclick='SubmitIncreaseCounters(this, \"" + actionData + "\");' " + (showHover > 0 ? " onmouseenter='OnDamageControlMouseEnter()' onmouseleave='OnDamageControlMouseLeave()'" : "") + ">+</button>";
