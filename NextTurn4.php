@@ -197,7 +197,7 @@
           rv += "<img style='position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); width:40%; height:40%; z-index:2;' src='./Images/restricted.png' />";
         }
 
-        rv += "<div " + (id != "" ? "id='" + id + "-ovr' " : "") + "style='visibility:" + (overlay == 1 ? "visible" : "hidden") + "; width:calc(100% - 4px); height:calc(100% - 4px); top:2px; left:2px; border-radius:10px; position:absolute; background: rgba(0, 0, 0, 0.5); z-index: 1;'></div>";
+        rv += "<div " + orientation + " " + (id != "" ? "id='" + id + "-ovr' " : "") + "style='visibility:" + (overlay == 1 ? "visible" : "hidden") + "; width:calc(100% - 4px); height:calc(100% - 4px); top:2px; left:2px; border-radius:10px; position:absolute; background: rgba(0, 0, 0, 0.5); z-index: 1;'></div>";
 
         var darkMode = false;
         counterHeight = 28;
