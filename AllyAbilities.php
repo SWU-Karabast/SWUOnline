@@ -1665,13 +1665,21 @@ function AllyAttackAbilities($attackID)
 }
 
 function AllyAttackedAbility($attackTarget, $index) {
-  global $mainPlayer, $defPlayer;
+  global $mainPlayer, $defPlayer, $dqVars;
   $ally = new Ally("MYALLY-" . $index, $defPlayer);
   $upgrades = $ally->GetUpgrades();
-  for($i=0; $i<count($upgrades); ++$i) {
+  for($i=count($upgrades)-1; $i>=0; --$i) {
     switch($upgrades[$i]) {
       case "1323728003"://Electrostaff
         AddCurrentTurnEffect("1323728003", $mainPlayer, from:"PLAY");
+        break;
+      case "7501988286"://Death Star Plans
+        $dqVars[0] = "7501988286";
+        $dqVars[1] = $attackTarget;
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a friendly unit to steal the Death Star Plans");
+        AddDecisionQueue("CHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "MOVEUPGRADE", 1);
         break;
       default: break;
     }
