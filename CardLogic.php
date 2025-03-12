@@ -1503,14 +1503,14 @@ function IndirectDamage($cardID, $player, $amount, $fromUnitEffect=false, $uniqu
     AddDecisionQueue("PREPENDLASTRESULT", $sourcePlayer, $amount . "-THEIRCHAR-0,");
     AddDecisionQueue("SETDQCONTEXT", $sourcePlayer, "Assign " . $amount . " unpreventable damage among their base and units");
     AddDecisionQueue("INDIRECTDAMAGEMULTIZONE", $sourcePlayer, "<-");
-    AddDecisionQueue("MZOP", $sourcePlayer, DealMultiDamageBuilder($sourcePlayer, isUnitEffect:$fromUnitEffect, isPreventable:true));  
+    AddDecisionQueue("MZOP", $sourcePlayer, DealMultiDamageBuilder($sourcePlayer, isUnitEffect:$fromUnitEffect, isPreventable:false));  
   } else {
     AddDecisionQueue("OK", $player, CardLink($cardID, $cardID) . " deals " . $amount . " indirect damage to you.");
     AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
     AddDecisionQueue("PREPENDLASTRESULT", $player, $amount . "-MYCHAR-0,");
     AddDecisionQueue("SETDQCONTEXT", $player, "Assign " . $amount . " unpreventable damage among your base and units");
     AddDecisionQueue("INDIRECTDAMAGEMULTIZONE", $player, "<-");
-    AddDecisionQueue("MZOP", $player, DealMultiDamageBuilder($sourcePlayer, isUnitEffect:$fromUnitEffect, isPreventable:true));  
+    AddDecisionQueue("MZOP", $player, DealMultiDamageBuilder($sourcePlayer, isUnitEffect:$fromUnitEffect, isPreventable:false));  
   }
 }
 
