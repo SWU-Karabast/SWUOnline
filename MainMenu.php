@@ -1,3 +1,4 @@
+<meta name="viewport" content="width=device-width, initial-scale=0.67">
 <?php
 
 include_once 'MenuBar.php';
@@ -153,17 +154,17 @@ include_once 'Header.php';
   <?php
   echo ("<label for='visibility' class='SelectDeckInput'>Game Visibility</label>");
   echo ("<select name='visibility' id='visibility'>");
-  
+
   if ($canSeeQueue) {
     echo ("<option value='public'" . ($defaultVisibility == 1 ? " selected" : "") . ">Public</option>");
   } else {
     echo '<p class="login-notice">&#10071;<a href="./LoginPage.php">Log In</a> to be able to create public games.</p>';
   }
-  
+
   echo ("<option value='private'" . ($defaultVisibility == 0 ? " selected" : "") . ">Private</option>");
   echo ("</select>");
   ?>
-  
+
   <!--
   <label for="deckTestMode">
     <input class='SelectDeckInput' type="checkbox" id="deckTestMode" name="deckTestMode" value="deckTestMode">
