@@ -97,6 +97,7 @@
 
     <head>
       <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=0.5">
       <title>Petranaki</title>
       <link rel="stylesheet" href="./css/chat3.css">
       <link rel="stylesheet" href="./css/gamestyle250308.css">
@@ -148,7 +149,7 @@
         if (folder == "crops/") margin = "0px;";
 
         var rv = "<a style='" + margin + " position:relative; display:inline-block;" + (action > 0 ? "cursor:pointer;" : "") + "'" + (showHover > 0 ? " onmouseover='ShowCardDetail(event, this)' onmouseout='HideCardDetail()'" : "") + (action > 0 ? " onclick='SubmitInput(\"" + action + "\", \"&cardID=" + actionData + "\");'" : "") + ">";
-  
+
         // Counters (damage and heal)
         if (showCounterControls != 0) {
           var canIncrease = counterLimitReached != 1;

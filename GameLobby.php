@@ -1,3 +1,4 @@
+<meta name="viewport" content="width=device-width, initial-scale=0.67">
 <?php
 ob_start();
 include "CardDictionary.php";
