@@ -1287,8 +1287,9 @@ function TraitContainsAll($cardID, $traits, $player="", $index=-1) {
 
 function TraitContains($cardID, $trait, $player="", $index=-1) {
   $trait = str_replace("_", " ", $trait); //"MZALLCARDTRAITORPASS" and possibly other decision queue options call this function with $trait having been underscoreified, so I undo that here.
+  $isBase = CardIDIsBase($cardID);
   $isLeaderSide = CardIDIsLeader($cardID) && LeaderUndeployed($cardID) == "";
-  if($index != -1 && !$isLeaderSide) {
+  if($index != -1 && !$isLeaderSide && !$isBase) {
     $ally = new Ally("MYALLY-" . $index, $player);
 
     // // Check for upgrades
