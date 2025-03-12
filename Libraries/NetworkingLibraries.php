@@ -1226,7 +1226,7 @@ function ResolveMultichooseXSet($data, $chkInput, &$input) {
 function FinalizeChainLink($chainClosed = false)
 {
   global $turn, $actionPoints, $combatChain, $mainPlayer, $currentTurnEffects, $currentPlayer, $combatChainState, $actionPoints, $CCS_DamageDealt;
-  global $mainClassState, $CS_AtksWWeapon, $CCS_GoesWhereAfterLinkResolves, $CS_LastAttack, $CCS_LinkTotalAttack, $CS_NumSwordAttacks, $chainLinks, $chainLinkSummary;
+  global $mainClassState, $CCS_GoesWhereAfterLinkResolves, $CS_LastAttack, $CCS_LinkTotalAttack, $CS_NumSwordAttacks, $chainLinks, $chainLinkSummary;
   global $CS_AnotherWeaponGainedGoAgain, $CCS_HitThisLink, $initiativeTaken, $CS_PlayedAsUpgrade;
   $chainClosed = true;
   UpdateGameState($currentPlayer);
@@ -1503,6 +1503,7 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
   global $decisionQueue, $CS_PlayIndex, $CS_OppIndex, $CS_OppCardActive, $CS_PlayUniqueID, $CS_LayerPlayIndex, $CS_LastDynCost, $CS_NumCardsPlayed;
   global $CS_DynCostResolved, $CS_NumVillainyPlayed, $CS_NumEventsPlayed, $CS_NumClonesPlayed;
   global $CS_PlayedAsUpgrade, $CS_NumWhenDefeatedPlayed, $CS_NumBountyHuntersPlayed, $CS_NumPilotsPlayed, $CS_NumFirstOrderPlayed;
+  global $CS_NumUnitsPlayed;
   $resources = &GetResources($currentPlayer);
   $dynCostResolved = intval($dynCostResolved);
   $layerPriority[0] = ShouldHoldPriority(1);
@@ -1697,6 +1698,8 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
         IncrementClassState($currentPlayer, $CS_NumWhenDefeatedPlayed);
       if (DefinedTypesContains($cardID, "Event", $currentPlayer))
         IncrementClassState($currentPlayer, $CS_NumEventsPlayed);
+      if (DefinedTypesContains($cardID, "Unit", $currentPlayer))
+        IncrementClassState($currentPlayer, $CS_NumUnitsPlayed);
       if (TraitContains($cardID, "Clone", $currentPlayer))
         IncrementClassState($currentPlayer, $CS_NumClonesPlayed);
       if (TraitContains($cardID, "First Order", $currentPlayer))

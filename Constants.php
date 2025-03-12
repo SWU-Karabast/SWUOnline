@@ -226,7 +226,7 @@ $SHMOP_ISREPLAY = 10;//0 = not replay, 1 = replay
 //Class State (one for each player)
 $CS_NumVillainyPlayed = 0;
 $CS_PlayedAsUpgrade = 1;
-$CS_AtksWWeapon = 2;                    //free//number
+$CS_NumUnitsPlayed = 2;
 $CS_NumNonTokenVehicleAttacks = 3;
 $CS_DamagePrevention = 4;
 $CS_CardsDrawn = 5;
@@ -484,7 +484,7 @@ function ResetChainLinkState()
 
 function ResetClassState($player)
 {
-  global $CS_NumVillainyPlayed, $CS_PlayedAsUpgrade, $CS_AtksWWeapon, $CS_NumNonTokenVehicleAttacks, $CS_DamagePrevention, $CS_CardsDrawn, $CS_NumBountyHuntersPlayed, $CS_NumPilotsPlayed, $CS_NumIndirectDamageGiven;
+  global $CS_NumVillainyPlayed, $CS_PlayedAsUpgrade, $CS_NumUnitsPlayed, $CS_NumNonTokenVehicleAttacks, $CS_DamagePrevention, $CS_CardsDrawn, $CS_NumBountyHuntersPlayed, $CS_NumPilotsPlayed, $CS_NumIndirectDamageGiven;
   global $CS_DamageTaken, $CS_NumActionsPlayed, $CS_CharacterIndex, $CS_PlayIndex, $CS_OppIndex, $CS_OppCardActive, $CS_NumNonAttackCards;
   global $CS_PreparationCounters, $CS_NextNAACardGoAgain, $CS_NumAlliesDestroyed, $CS_NumWhenDefeatedPlayed, $CS_ResolvingLayerUniqueID, $CS_NextWizardNAAInstant;
   global $CS_ArcaneDamageTaken, $CS_NextNAAInstant, $CS_NextDamagePrevented, $CS_LastAttack, $CS_PlayCCIndex;
@@ -500,7 +500,7 @@ function ResetClassState($player)
   $classState = &GetPlayerClassState($player);
   $classState[$CS_NumVillainyPlayed] = 0;
   $classState[$CS_PlayedAsUpgrade] = 0;
-  $classState[$CS_AtksWWeapon] = 0;
+  $classState[$CS_NumUnitsPlayed] = 0;
   $classState[$CS_NumNonTokenVehicleAttacks] = 0;
   $classState[$CS_DamagePrevention] = 0;
   $classState[$CS_CardsDrawn] = 0;
