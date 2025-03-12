@@ -177,8 +177,8 @@ select {
 }
 
 .core-wrapper {
-  margin-top: -136px;
-  height: calc(100% - 230px);
+  margin-top: -116px;
+  height: calc(100% - 223px);
   display: flex;
   flex-direction: row;
 }
@@ -195,29 +195,35 @@ select {
 
 .home-header {
   height: 276px;
-  padding: 20px 0 20px 40px;
+  padding: 20px 0 0 20px;
   position: relative;
 }
 
 .title {
   text-decoration: none;
-  margin-top: 10px;
+  letter-spacing: 0.05em;
 }
 
 .title-container {
   display: flex;
   flex-direction: column;
   align-items: left;
-  width: calc(33% - 39px);
-  margin-left: -20px;
-  padding: 8px 16px;
-  border-radius: 16px;
+  width: calc(33% - 50px);
+  padding: 16px 18px 18px 18px;
+  border-radius: 10px;
 }
 
 .home-header h1 {
   font-size: 50px;
-  font-weight: 400;
+  font-weight: 500;
   margin-bottom: 4px;
+  letter-spacing: 0.025em;
+}
+
+.home-title span {
+  display: inline-block;
+  transform: scaleX(-1);
+  margin-right: 2px;
 }
 
 .home-header p {
@@ -296,7 +302,7 @@ select {
     text-decoration: underline;
 
     &:hover {
-      color: rgba(233, 150, 122, 0.8);
+      color: lightsalmon;
     }
   }
 }
@@ -357,6 +363,15 @@ select {
 
 .game-browser, .create-game {
   height: calc(100% - 40px);
+
+  a {
+    color: darksalmon;
+    text-decoration: underline;
+
+    &:hover {
+      color: lightsalmon;
+    }
+  }
 }
 
 .game-browser h3 {
@@ -523,6 +538,15 @@ select {
 
 .petranaki-news {
   margin-top: 20px;
+
+  a {
+    color: darksalmon;
+    text-decoration: underline;
+
+    &:hover {
+      color: lightsalmon;
+    }
+  }
 }
 
 .petranaki-unimplemented-list {
@@ -819,7 +843,7 @@ select {
 }
 
 .lobby-footer .disclaimer {
-  position: relative;
+  position: static;
   padding: 12px 0;
   bottom: 0;
 }
@@ -827,17 +851,20 @@ select {
 /* DISCLAIMER ---------------------------------------------------------------------------------------------- */
 
 .disclaimer {
-  position: absolute;
-  bottom: 15px;
-  width: 100%;
-  display: flex;
-  justify-content: center;
+  position: fixed;
+  bottom: 0;
+  left: 20px;
+  right: 20px;
+  border-radius: 10px 10px 0 0;
+  background-color: rgb(0, 0, 0, 40%);
+  backdrop-filter: blur(20px);
 }
 
 .disclaimer p {
   font-size: 12px;
-  font-weight: 300;
-  margin: 0 auto;
-  padding: 2px 8px;
-  border-radius: 4px;
+  font-weight: 400;
+  width: 100%;
+  text-align: center;
+  padding: 10px 4px 8px 4px;
+  color: rgba(255, 255, 255, 0.9);
 }
