@@ -475,7 +475,7 @@ select {
   border-radius: 10px;
 }
 
-@media screen and (max-height: 780px) { .create-game-wrapper { height:auto; max-height: 503px; } }
+/* @media screen and (max-height: 780px) { .create-game-wrapper { height:auto; max-height: 503px; } } */
 
 .create-game-wrapper input, .create-game-wrapper select {
   width: 100%;
@@ -679,36 +679,44 @@ select {
 
 .lobby-header {
   grid-area: header;
-  height: 40px;
-  padding: 20px;
+  height: 64px;
+  padding: 0px 20px;
+  position: relative;
+  background-color: transparent;
 }
 
-.lobby-header h1 {
+.lobby-header h2 {
   float: left;
-  padding-left: 20px;
-  margin-top: 3px;
+  padding: 12px 20px;
+  border-radius: 10px;
+  text-transform: unset;
+  width: calc(33% - 88px);
+  font-size: 26px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
-.leave-lobby a {
-  float: right;
-  margin: 15px 0 0 0;
-  padding: 0 20px 0 0;
+.leave-lobby {
+  font-size: 18px;
   text-decoration: none;
+  display: flex;
+  align-items: center;
   font-weight: 600;
-  color: white;
+  gap: 5px;
 }
 
-.leave-lobby a:hover {
-  text-decoration: underline;
+.leave-lobby:hover {
+  /* text-decoration: underline; */
 }
 
 /* Sizing Wrapper */
 
 .lobby-wrapper {
-  max-height: calc(100vh - 120px);
+  max-height: calc(100vh - 75px);
   grid-area: main;
   display: flex;
-  }
+  margin-top: 32px;
+}
 
 /* Game Set Up */
 
@@ -839,13 +847,7 @@ select {
 
 .lobby-footer {
   grid-area: footer;
-  height: 40px;
-}
-
-.lobby-footer .disclaimer {
-  position: static;
-  padding: 12px 0;
-  bottom: 0;
+  /* height: 40px; */
 }
 
 /* DISCLAIMER ---------------------------------------------------------------------------------------------- */
@@ -856,15 +858,18 @@ select {
   left: 20px;
   right: 20px;
   border-radius: 10px 10px 0 0;
-  background-color: rgb(0, 0, 0, 40%);
-  backdrop-filter: blur(20px);
 }
 
 .disclaimer p {
   font-size: 12px;
   font-weight: 400;
-  width: 100%;
+  /* width: 100%; */
   text-align: center;
   padding: 10px 4px 8px 4px;
   color: rgba(255, 255, 255, 0.9);
+}
+
+.bg-blur {
+  background-color: rgb(0, 0, 0, 40%);
+  backdrop-filter: blur(20px);
 }

@@ -93,20 +93,20 @@ $isMobile = IsMobile();
   </style>
 </head>
 
-
-
 <body onload='OnLoadCallback(<?php echo (filemtime(LogPath($gameName))); ?>)'>
   <div class="lobby-container">
     <div id="cardDetail" style="display:none; position:absolute;"></div>
-    <div class="lobby-header">
-      <h1>Game Lobby</h1>
+    <!-- <div class="lobby-header">
+      <h2 class="lobby-title bg-yellow">Game Lobby</h2>
       <p class="leave-lobby"><a href='MainMenu.php'>Leave Lobby</a></p>
-    </div>
+    </div> -->
     <div class="lobby-wrapper">
       <div class="game-lobby">
         <div id='mainPanel' style='text-align:center;'>
           <div class='game-set-up container bg-yellow'>
-            <h2>Set Up</h2>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+              <h2 style="margin: 0;">Set Up</h2>
+            </div>
             <div id="setup-content"></div>
             <div id='submitForm' style='width:100%; text-align: center; display: none;'>
               <form action='./SubmitSideboard.php'>
@@ -175,11 +175,20 @@ $isMobile = IsMobile();
         </div>
       </div>
 
-      <div class="deck-info container bg-yellow">
+      <div class="deck-info container bg-yellow" style="padding-bottom: 0;">
         <div id="deckTab" class="deck-header">
           <?php if (isset($deck)): ?>
-            <h2 class='deck-title'>Your Deck</h2>
-            <h2 class='deck-count'><span id='mbCount'><?= count($deck) ?></span>/<?= count($deck) + count($deckSB) ?></h2>
+            <div style="display: flex; align-items: center; width: 100%; gap: 16px; margin-bottom: 20px;">
+            <h2 class='deck-title' style="margin: 0;">Your Deck</h2>
+            <h2 class='deck-count' style="flex-grow: 1; margin: 0;"><span id='mbCount'>(<?= count($deck) ?></span>/<?= count($deck) + count($deckSB) ?>)</h2>
+
+            <a href='MainMenu.php' class="leave-lobby">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24">
+                <path fill="currentColor" d="m17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4z" />
+              </svg>
+              Leave Lobby
+            </a>
+            </div>
           <?php endif; ?>
         </div>
 
