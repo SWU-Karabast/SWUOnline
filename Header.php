@@ -1,13 +1,13 @@
 <div class="home-header">
-    <a href="./MainMenu.php" class="title">
-        <div class="title title-container bg-yellow">
+    <div class="title">
+        <a href="./MainMenu.php" class="title title-container bg-yellow">
             <h1 class="home-title">Petranaki</h1>
             <p>
               Fan-Made, Open-Source
               <br/>Star Wars Unlimited Simulator
             </p>
-        </div>
-    </a>
+        </a>
+    </div>
 
     <div class="home-banner">
         <!-- <div class="banner block-1"></div>

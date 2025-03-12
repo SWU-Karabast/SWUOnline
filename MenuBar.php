@@ -40,53 +40,58 @@ $isMobile = IsMobile();
 
 <body>
 
-    <div class='nav-bar'>
+    <div class='nav-bar' style="display: block;">
+        <div style="display: flex;">
+            <div class='nav-bar-user'>
+                <ul class='rightnav'>
+                    <?php
+                    if (isset($_SESSION["useruid"])) {
+                        echo "<li><a href='UnimplementedCards.php' class='NavBarItem'>Preview Cards</a></li>";
+                        echo "<li><a href='https://swustats.net/TCGEngine/SharedUI/MainMenu.php' target='_blank' class='NavBarItem'>SWU Stats</a></li>";
+                        echo "<li><a href='ProfilePage.php' class='NavBarItem'>Profile</a></li>";
+                        echo "<li><a href='./AccountFiles/LogoutUser.php' class='NavBarItem'>Log Out</a></li>";
+                    } else {
+                        echo "<li><a href='Signup.php' class='NavBarItem'>Sign Up</a></li>";
+                        echo "<li><a href='./LoginPage.php' class='NavBarItem'>Log In</a></li>";
+                    }
+                    ?>
+                </ul>
+            </div>
 
-        <div class='nav-bar-user'>
-            <ul class='rightnav'>
-                <?php
-                if (isset($_SESSION["useruid"])) {
-                    echo "<li><a href='UnimplementedCards.php' class='NavBarItem'>Preview Cards</a></li>";
-                    echo "<li><a href='https://swustats.net/TCGEngine/SharedUI/MainMenu.php' target='_blank' class='NavBarItem'>SWU Stats</a></li>";
-                    echo "<li><a href='ProfilePage.php' class='NavBarItem'>Profile</a></li>";
-                    echo "<li><a href='./AccountFiles/LogoutUser.php' class='NavBarItem'>Log Out</a></li>";
-                } else {
-                    echo "<li><a href='Signup.php' class='NavBarItem'>Sign Up</a></li>";
-                    echo "<li><a href='./LoginPage.php' class='NavBarItem'>Log In</a></li>";
-                }
-                ?>
-            </ul>
+            <div class='nav-bar-links'>
+                <ul>
+                    <?php
+                    echo '<li><a target="_blank" href="https://discord.gg/ep9fj8Vj3F"><img src="./Images/icons/discord.svg" alt="Discord"></a></li>';
+                    echo '<li><a target="_blank" href="https://github.com/SWU-Petranaki/SWUOnline"><img src="./Images/icons/github.svg" alt="GitHub"></a></li>';
+                    echo '<li>
+                    <a href="javascript:void(0);" onclick="toggleLanguages()">
+                        <img src="./Images/icons/globe.svg" alt="Languages">
+                    </a>
+                    <ul id="languageList" style="display: none;">';
+
+                    $languages = [
+                        'EN' => 'English',
+                        'DE' => 'German',
+                        'FR' => 'French',
+                        'ES' => 'Spanish',
+                        'IT' => 'Italian',
+                    ];
+
+                    foreach ($languages as $code => $lang) {
+                        echo "<li onclick=\"setLanguage('$code')\"><img src='./Images/icons/$code.svg' alt='$lang' class='language-icon'>   $lang</li>";
+                    }
+
+                    echo '</ul>
+                </li>';
+                    ?>
+                </ul>
+            </div>
         </div>
-
-        <div class='nav-bar-links'>
-            <ul>
-                <?php
-                echo '<li><a target="_blank" href="https://discord.gg/ep9fj8Vj3F"><img src="./Images/icons/discord.svg" alt="Discord"></a></li>';
-                echo '<li><a target="_blank" href="https://github.com/SWU-Petranaki/SWUOnline"><img src="./Images/icons/github.svg" alt="GitHub"></a></li>';
-                echo '<li>
-                <a href="javascript:void(0);" onclick="toggleLanguages()">
-                    <img src="./Images/icons/globe.svg" alt="Languages">
-                </a>
-                <ul id="languageList" style="display: none;">';
-
-                $languages = [
-                    'EN' => 'English',
-                    'DE' => 'German',
-                    'FR' => 'French',
-                    'ES' => 'Spanish',
-                    'IT' => 'Italian',
-                ];
-
-                foreach ($languages as $code => $lang) {
-                    echo "<li onclick=\"setLanguage('$code')\"><img src='./Images/icons/$code.svg' alt='$lang' class='language-icon'>   $lang</li>";
-                }
-
-                echo '</ul>
-              </li>';
-                ?>
-            </ul>
+        <div class="nav-bar-karabast">
+            Looking for the <a href="https://karabast.net" target="_blank">new Karabast</a>?
         </div>
     </div>
+
 
     <script>
         function toggleLanguages() {

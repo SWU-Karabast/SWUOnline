@@ -208,8 +208,8 @@ select {
   display: flex;
   flex-direction: column;
   align-items: left;
-  width: 30%;
-  margin-left: -16px;
+  width: calc(33% - 39px);
+  margin-left: -20px;
   padding: 8px 16px;
   border-radius: 16px;
 }
@@ -267,20 +267,38 @@ select {
   text-decoration: underline;
 }
 
-.nav-bar-user, .nav-bar-links {
+.nav-bar-user, .nav-bar-links, .nav-bar-karabast {
   background-color: rgb(0, 0, 0, 40%);
 
   backdrop-filter: blur(20px);
   padding: 10px 20px;
 }
 
-.nav-bar-links {
+.nav-bar-links, .nav-bar-karabast {
   border-radius: 50px 0 0 50px;
 }
 
 .nav-bar-user {
   margin: 0 20px 0 0;
   border-radius: 50px;
+}
+
+.nav-bar-karabast {
+  width: fit-content;
+  right: 0;
+  margin-top: 16px;
+  position: absolute;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 12.5px 20px;
+
+  a {
+    text-decoration: underline;
+
+    &:hover {
+      color: rgba(233, 150, 122, 0.8);
+    }
+  }
 }
 
 .nav-bar img {
@@ -337,7 +355,7 @@ select {
   flex: 1;
 }
 
-.game-browser {
+.game-browser, .create-game {
   height: calc(100% - 40px);
 }
 
@@ -436,7 +454,6 @@ select {
 .create-game-wrapper {
   margin-left: 20px;
   flex: 1;
-  height:fit-content;
   overflow-y: auto;
   scrollbar-color: #888888 rgba(0, 0, 0, 0);
   scrollbar-width: thin;
