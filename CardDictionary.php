@@ -1234,6 +1234,10 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
   return $abilityTypes;
 }
 
+function CardIDIsBase($cardID) {
+  return DefinedTypesContains($cardID, "Base");
+}
+
 function CardIDIsLeader($cardID, $playerID = "") {
   return DefinedTypesContains($cardID, "Leader", $playerID);
 }
