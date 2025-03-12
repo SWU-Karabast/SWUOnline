@@ -1905,6 +1905,7 @@ function SelfCostModifier($cardID, $from, $reportMode=false)
 {
   global $currentPlayer, $layers;
   global $CS_LastAttack, $CS_LayerTarget, $CS_NumClonesPlayed, $CS_PlayedAsUpgrade, $CS_NumWhenDefeatedPlayed;
+  global $CS_NumUnitsPlayed;
 
   $modifier = 0;
   //Aspect Penalty
@@ -2104,6 +2105,7 @@ function SelfCostModifier($cardID, $from, $reportMode=false)
       default: break;
     }
   }
+  if(GetClassState($currentPlayer, $CS_NumUnitsPlayed) == 0 && SearchUpgradesForCard($currentPlayer, "7501988286") != "") $modifier -= 2;//Death Star Plans
   //My ally cost modifier
   $allies = &GetAllies($currentPlayer);
   for($i=0; $i<count($allies); $i+=AllyPieces())

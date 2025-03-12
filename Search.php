@@ -370,6 +370,24 @@ function SearchUpgradesForTitle($player, $title) {
   return $cardList;
 }
 
+function SearchUpgradesForCard($player, $card1)
+{
+  $allies = &GetAllies($player);
+  $cardList = "";
+  for ($i = 0; $i < count($allies); $i += AllyPieces()) {
+    $ally = new Ally("MYALLY-" . $i, $player);
+    $upgrades = $ally->GetUpgrades(withMetadata:true);
+    for ($j = 0; $j < count($upgrades); $j+=SubcardPieces()) {
+      $id = $upgrades[$j];
+      if ($id == $card1 && $id != "") {
+        if ($cardList != "") $cardList = $cardList . ",";
+        $cardList = $cardList . $i . "," . $j;
+      }
+    }
+  }
+  return $cardList;
+}
+
 function SearchAlliesUniqueIDForTrait($player, $trait) {
   $allies = &GetAllies($player);
   $cardList = [];
