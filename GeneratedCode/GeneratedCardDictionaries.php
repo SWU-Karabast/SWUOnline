@@ -14235,7 +14235,6 @@ function IsUnimplemented($cardID) {
   6354077246 => true,
   6544277158 => true,
   7232609585 => true,
-  7501988286 => true,
 );
   return isset($unimplementedCards[$cardID]);
 }
