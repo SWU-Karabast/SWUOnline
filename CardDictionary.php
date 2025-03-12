@@ -368,14 +368,15 @@ function HasSentinel($cardID, $player, $index)
       case "4991712618"://Unshakeable Will
       case "3874382333"://Academy Graduate
       case "3064aff14f"://Lando Calrissian leader unit
-        return true;
+        $hasSentinel = true;
       //conditional upgrade sentinel
       case "9706341387"://Jarek Yeager
-        return SearchCount(SearchAllies($player, arena:"Ground")) > 0
+        $hasSentinel = SearchCount(SearchAllies($player, arena:"Ground")) > 0
           && SearchCount(SearchAllies($player, arena:"Space")) > 0;
       default: break;
     }
   }
+  if($hasSentinel) return true;
   //Self Sentinel
   switch($cardID)
   {
@@ -467,7 +468,7 @@ function HasSentinel($cardID, $player, $index)
         || SearchCount(SearchAllies($player, trait:"Resistance")) > 1
         || SearchCount(SearchCharacter($player, trait:"Resistance")) > 0;
     case "8248876187"://Bunker Defender
-      return SearchCount(SearchAllies($player, trait:"Vehicle")) > 1;
+      return SearchCount(SearchAllies($player, trait:"Vehicle")) > 0;
     case "5763330426"://The Ghost
       return $ally->IsUpgraded();
     default: break;
@@ -690,6 +691,7 @@ function HasOverwhelm($cardID, $player, $index)
     case "3476041913"://Low Altitude Gunship
     case "8655450523"://Count Dooku (Fallen Jedi)
     case "0756051511"://MC30 Assault Frigate
+    case "6576881465"://Decimator of Dissidents
     case "9017877021"://Clone Commander Cody
       return true;
     case "4484318969"://Moff Gideon Leader Unit
@@ -797,6 +799,7 @@ function HasAmbush($cardID, $player, $index, $from)
     case "7458361203"://Corporate Light Cruiser
     case "2913957813"://Eager Escort Fighter
     case "0728753133"://The Starhawk
+    case "9667260960"://Retrofitted Airspeeder
       return true;
 
     //conditional ambush
@@ -1229,6 +1232,10 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
   }
 
   return $abilityTypes;
+}
+
+function CardIDIsBase($cardID) {
+  return DefinedTypesContains($cardID, "Base");
 }
 
 function CardIDIsLeader($cardID, $playerID = "") {
@@ -1921,6 +1928,8 @@ function GoesWhereAfterResolving($cardID, $from = null, $player = "", $playedFro
 
 function UpgradeFilter($cardID)
 {
+  //TODO: allow upgrade filters to use & syntax on more than just traits
+  if($cardID == "5375722883") return "trait!=Vehicle";//R2-D2 (Artooooooooo!)
   if(PilotingCost($cardID) >= 0) return "trait!=Vehicle";
   switch($cardID) {
     case "0160548661"://Fallen Lightsaber

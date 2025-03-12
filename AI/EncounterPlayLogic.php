@@ -177,7 +177,7 @@ function ArsenalIsFrozen($storedPriorityNode)
 
 function ReactionRequirementsMet($storedPriorityNode)
 {
-  global $combatChain, $combatChainState, $CCS_NumChainLinks, $mainPlayer, $currentPlayer, $CS_NumNonAttackCards, $CS_AtksWWeapon;
+  global $combatChain, $combatChainState, $CCS_NumChainLinks, $mainPlayer, $currentPlayer, $CS_NumNonAttackCards;
   switch($storedPriorityNode[0])
   {
 

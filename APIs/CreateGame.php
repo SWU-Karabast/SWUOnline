@@ -88,11 +88,12 @@ if (file_exists("../Games/$gameName") || !mkdir("../Games/$gameName", 0700, true
   exit;
 }
 
-if($isUserBanned) {
-  if($format == "premierf" || $format == "openform" || $format == "llcc") $format = "shadowcc";
-  //else if($format == "reqsundo") $format = "shadowcompcc";
-  else if($format == "blitz" || $format == "compblitz" || $format == "commoner" || $format == "llblitz") $format = "shadowblitz";
-}
+//currently unreachable because of the redirect above
+// if($isUserBanned) {
+//   if($format == "premierf" || $format == "openform" || $format == "llcc") $format = "shadowcc";
+//   //else if($format == "reqsundo") $format = "shadowcompcc";
+//   else if($format == "blitz" || $format == "compblitz" || $format == "commoner" || $format == "llblitz") $format = "shadowblitz";
+// }
 
 $p1Data = [1];
 $p2Data = [2];

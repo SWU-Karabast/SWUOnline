@@ -14,12 +14,10 @@ $path = ROOTPATH . "/Games";
 
 $currentlyActiveGames = "";
 $spectateLinks = "";
-$blitzLinks = "";
-$compBlitzLinks = "";
-$ccLinks = "";
-$compCCLinks = "";
+$premierLinks = "";
+$premierStrictLinks = "";
+$previewLinks = "";
 $otherFormatsLinks = "";
-$livingLegendsCCLinks = "";//TODO:see how this is used..
 // TODO: Have as a global variable.
 $reactFE = "https://fe.talishar.net/game/play";
 
@@ -134,13 +132,7 @@ if ($handle = opendir($path)) {
     if ($status == 0 && $visibility == "public" && intval(GetCachePiece($gameName, 11)) < 3) {
       $p1Hero = GetCachePiece($gameName, 7);
       $p1Base = GetCachePiece($gameName, 20);
-      $formatName = "";
-      if ($format == "openform")
-        $formatName = "Open Format ";
-      else if ($format == "sndcrawl")
-        $formatName == "Sandcrawler";
-      else if ($format == "padawanf")
-        $formatName = "Padawan Format ";
+      $formatName = FormatDisplayName($format);
 
       $link = "<form style='text-align:center;' action='" . $redirectPath . "/JoinGame.php'>";
       $link .= "<table class='game-item' cellspacing='0'><tr>";
@@ -177,18 +169,15 @@ if ($handle = opendir($path)) {
 
       if (!$isUserBanned) {
         switch ($format) {
-          case "blitz":
-            $blitzLinks .= $link;
-            break;
-          case "compblitz":
-            $compBlitzLinks .= $link;
-            break;
           case "premierf":
-            $ccLinks .= $link;
+            $premierLinks .= $link;
             break;
-          // case "reqsundo":
-          //   $compCCLinks .= $link;
-          //   break;
+          case "prstrict":
+            $premierStrictLinks .= $link;
+            break;
+          case "previewf":
+            $previewLinks .= $link;
+            break;
           default:
             if ($format != "shadowblitz" && $format != "shadowcc")
               $otherFormatsLinks .= $link;
@@ -205,12 +194,18 @@ if ($handle = opendir($path)) {
   closedir($handle);
 }
 if ($canSeeQueue) {
-  echo ("<h3>Premier</h3>");
+  echo ("<h3>Premier Casual</h3>");
   echo ("<hr/>");
-  echo ($ccLinks);
-  // echo ("<h3>Request-Undo Premier</h3>");
+  echo ($premierLinks);
+  echo ("<h3>Premier Strict</h3>");
+  echo ("<hr/>");
+  echo ($premierStrictLinks);
+  // echo ("<h3>Preview</h3>");
   // echo ("<hr/>");
-  // echo ($compCCLinks);
+  // echo ($previewLinks);
+  // echo ("<h3>Open Format</h3>");
+  // echo ("<hr/>");
+  // echo ($openFormatLinks);
   echo ("<h3>Other Formats</h3>");
   echo ("<hr/>");
   echo ($otherFormatsLinks);

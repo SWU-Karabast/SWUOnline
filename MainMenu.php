@@ -118,7 +118,7 @@ include_once 'Header.php';
   */
 
   ?>
-  <label for="fabdb"><u><a style='color:darksalmon;' href='https://swustats.net/' target='_blank'>SWU Stats</a></u> or <u><a style='color:darksalmon;' href='https://www.swudb.com/' target='_blank'>SWUDB</a></u> or <u><a style='color:darksalmon;' href='https://sw-unlimited-db.com/' target='_blank'>SW-Unlimited-DB</a></u> Deck Link <span class="secondary">(use the url or 'Deck Link' button)</span></label>
+  <label for="fabdb">Deck Link (<u><a href='https://swustats.net/' target='_blank'>SWU Stats</a></u>, <u><a href='https://www.swudb.com/' target='_blank'>SWUDB</a></u>, or <u><a href='https://sw-unlimited-db.com/' target='_blank'>SW-Unlimited-DB</a></u>)</label>
   <input type="text" id="fabdb" name="fabdb" value='<?= $deckUrl ?>'>
   <?php
   if (isset($_SESSION["userid"])) {
@@ -132,28 +132,39 @@ include_once 'Header.php';
   <input type="text" id="gameDescription" name="gameDescription" placeholder="Game #">
 
   <?php
+  $standardFormatCasual = Formats::$PremierFormat;
+  $standardFormat = Formats::$PremierStrict;
+  $previewFormat = Formats::$PreviewFormat;
+  $openFormat = Formats::$OpenFormat;
   echo ("<label for='format' class='SelectDeckInput'>Format</label>");
   echo ("<select name='format' id='format' onchange='toggleInfoBox()'>");
-  if ($canSeeQueue) echo ("<option value='premierf' " . ($defaultFormat == 0 ? " selected" : "") . ">Premier</option>");
-  $funFormatIndex = 5;//see FormatName function and related functions for index to rotate
-  $funFormatBackendName = FormatName($funFormatIndex);
-  $funFormatDisplayName = FormatDisplayName($funFormatBackendName);
-  echo ("<option value='openform'" . ($defaultFormat == 4 ? " selected" : "") . ">" . FormatDisplayName(FormatName(4)) . "</option>");
-  if($canSeeQueue) echo ("<option value='$funFormatBackendName'" . ">Cantina Brawl ($funFormatDisplayName)</option>");
+  echo ("<option value='$standardFormatCasual' " . ($defaultFormat == FormatCode($standardFormatCasual) ? " selected" : "") . ">Premier Casual</option>");
+  if($canSeeQueue) {
+    echo ("<option value='$standardFormat' " . ($defaultFormat == FormatCode($standardFormat) ? " selected" : "") . ">Premier Strict</option>");
+    //echo ("<option value='$previewFormat'" . ($defaultFormat == FormatCode($previewFormat) ? " selected" : "") . ">" . FormatDisplayName($previewFormat) . "</option>");
+    $funFormatBackendName = Formats::$PadawanFormat;
+    $funFormatDisplayName = FormatDisplayName($funFormatBackendName);
+    echo ("<option value='$funFormatBackendName'" . ($defaultFormat == FormatCode($funFormatBackendName) ? " selected" : "") . ">Cantina Brawl ($funFormatDisplayName)</option>");
+    //echo ("<option value='$openFormat'" . ($defaultFormat == FormatCode($openFormat) ? " selected" : "") . ">" . FormatDisplayName($openFormat) . "</option>");
+  }
   echo ("</select>");
   ?>
 
   <?php
+  echo ("<label for='visibility' class='SelectDeckInput'>Game Visibility</label>");
+  echo ("<select name='visibility' id='visibility'>");
+  
   if ($canSeeQueue) {
-    echo '<label for="public" class="privacy-label"><input class="privacy-input" type="radio" id="public" name="visibility" value="public" ' . ($defaultVisibility == 1 ? 'checked="checked"' : "") . '>';
-    echo ('Public</label>');
+    echo ("<option value='public'" . ($defaultVisibility == 1 ? " selected" : "") . ">Public</option>");
   } else {
     echo '<p class="login-notice">&#10071;<a href="./LoginPage.php">Log In</a> to be able to create public games.</p>';
   }
+  
+  echo ("<option value='private'" . ($defaultVisibility == 0 ? " selected" : "") . ">Private</option>");
+  echo ("</select>");
   ?>
-  <label for="private" class='privacy-label'>
-    <input type="radio" class='privacy-input' id="private" name="visibility" value="private" <?php if ($defaultVisibility == 0) echo 'checked="checked"'; ?> />Private</label>
-    <!--
+  
+  <!--
   <label for="deckTestMode">
     <input class='SelectDeckInput' type="checkbox" id="deckTestMode" name="deckTestMode" value="deckTestMode">
     Single Player</label>
@@ -169,18 +180,19 @@ include_once 'Header.php';
 
 <div class="petranaki-column" >
   <div class="petranaki-overview container bg-yellow" >
-    <p><b>Petranaki is an open-source, fan-made platform.</b></p>
-    <p>It is an educational tool only, meant to facilitate researching decks and strategies that is supportive of in-person play. As such, direct competition through the form of automated tournaments or rankings will not be added.</p>
-    <p>This tool is free to use and is published non-commercially. Payment is not required to access any functionality.</p>
+    <p style="font-size: 18px"><b>Petranaki is an Open-Source, Fan-Made Platform</b></p>
+    <p>This is a free educational tool for researching decks and strategies for in-person play. It does not include automated tournaments or rankings. All features are accessible without payment and are not intended for commercial use.</p>
   </div>
 
-  <div class="petranaki-news container bg-yellow" style='<?php if (IsMobile()) echo ("display:none; "); ?>'>
+  <div class="petranaki-news container bg-yellow">
     <h2>News</h2>
     <div style="position: relative;">
-      <div style='vertical-align:middle; text-align:center;'>
-        <img src="./Images/TWI Starter.png" width="320">
-        <h3 style="margin: 15px 0; display: block;">We got a new look!</h3>
-        <p>Join our new Discord server at <a href="https://discord.gg/ep9fj8Vj3F" target="_blank" rel="noopener noreferrer">Petranaki</a> for the latest updates, news, and to share your feedback. We look forward to connecting with you!</p>
+      <div style='vertical-align:middle; text-align: start;'>
+        <img src="./Images/jtl-han-solo.webp" style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px;">
+        <h3 style="margin: 15px 0; display: block;">The Classic Force Awakens</h3>
+        <p>Petranaki is the original version of Karabast, and it will continue to be available for those who prefer to stick with the classic experience. The project will keep evolving with updates designed to enhance gameplay, offering a fast and easy way to enjoy and sharpen your skills with your favorite decks.</p>
+        <p>Join our <a href="https://discord.gg/ep9fj8Vj3F" target="_blank" rel="noopener noreferrer">new Discord server</a> to stay up-to-date, get the latest news, and share your feedback. May the Force guide your cards!</p>
+        <!-- <p>Join our new Discord server at <a href="https://discord.gg/ep9fj8Vj3F" target="_blank" rel="noopener noreferrer">Petranaki</a> for the latest updates, news, and to share your feedback. We look forward to connecting with you!</p> -->
       </div>
     </div>
     <?php

@@ -873,7 +873,7 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
         AddDecisionQueue("MULTIZONEINDICES", $otherPlayer, "MYALLY", 1);
         AddDecisionQueue("SETDQCONTEXT", $otherPlayer, "Choose a unit to deal 1 damage to", 1);
         AddDecisionQueue("CHOOSEMULTIZONE", $otherPlayer, "<-", 1);
-        AddDecisionQueue("MZOP", $otherPlayer, DamageStringBuilder(1, $player), 1);
+        AddDecisionQueue("MZOP", $otherPlayer, DealDamageBuilder(1, $player), 1);
       }
       break;
     case "9005139831"://Mandalorian Leader Ability
@@ -890,7 +890,7 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:minCost=" . $cost . ";maxCost=" . $cost);
       AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal 1 damage", 1);
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-      AddDecisionQueue("MZOP", $player, DamageStringBuilder(1, $player), 1);
+      AddDecisionQueue("MZOP", $player, DealDamageBuilder(1, $player), 1);
       AddDecisionQueue("EXHAUSTCHARACTER", $player, FindCharacterIndex($player, "2358113881"), 1);
       break;
     case "3045538805"://Hondo Ohnaka Leader
@@ -931,6 +931,7 @@ function ProcessTrigger($player, $parameter, $uniqueID, $additionalCosts, $targe
       AddDecisionQueue("SETDQCONTEXT", $player, "Move L3's brain to a vehicle?");
       AddDecisionQueue("YESNO", $player, "-", 1);
       AddDecisionQueue("SPECIFICCARD", $player, "L337_JTL,$target", 1);
+      break;
     case "1935873883"://Razor Crest
       AddDecisionQueue("MULTIZONEINDICES", $player, "THEIRALLY:maxCost=2");
       AddDecisionQueue("MZFILTER", $player, "leader=1", 1);
@@ -1423,18 +1424,18 @@ function CheckBobaFettJTL($targetPlayer, $enemyDamage, $fromCombat) {
     ? ($targetPlayer == 1 ? 2 : 1)
     : $targetPlayer;
   $charArr = &GetPlayerCharacter($playerToCheck);
-    for($i=0; $i<count($charArr); $i+=CharacterPieces()) {
-      switch($charArr[$i]) {
-        case "9831674351"://Boba Fett Leader
-          if(!LeaderAbilitiesIgnored() && $charArr[$i+1] == 2) {
-            if(!SearchCurrentLayers("TRIGGER", $playerToCheck, "9831674351")) {
-              AddLayer("TRIGGER", $playerToCheck, "9831674351");
-            }
+  for($i=0; $i<count($charArr); $i+=CharacterPieces()) {
+    switch($charArr[$i]) {
+      case "9831674351"://Boba Fett Leader
+        if(!LeaderAbilitiesIgnored() && $charArr[$i+1] == 2) {
+          if(!SearchCurrentLayers("TRIGGER", $playerToCheck, "9831674351")) {
+            AddLayer("TRIGGER", $playerToCheck, "9831674351");
           }
-          break;
-        default: break;
-      }
+        }
+        break;
+      default: break;
     }
+  }
 }
 
 function CheckThrawnJTL($player, $serializedAllyDestroyData, $target) {
@@ -1467,13 +1468,19 @@ function CheckThrawnJTL($player, $serializedAllyDestroyData, $target) {
   }
 }
 
-function IndirectDamage($player, $amount, $fromUnitEffect=false, $uniqueID="", $alsoExhausts=false)
+function IndirectDamage($cardID, $player, $amount, $fromUnitEffect=false, $uniqueID="")
 {
   global $CS_NumIndirectDamageGiven;
+  $sourcePlayerTargets = false;
+  $sourceModifierCardID = "";
   $sourcePlayer = $player == 1 ? 2 : 1;
   $amount += SearchCount(SearchAlliesForCard($sourcePlayer, "4560739921"));//Hunting Aggressor
-  if(SearchCount(SearchAlliesForCard($sourcePlayer, "1330473789")) > 0) $sourcePlayerTargets = true;
+  if(SearchCount(SearchAlliesForCard($sourcePlayer, "1330473789")) > 0) {//Devastator JTL
+    $sourcePlayerTargets = true;
+    $sourceModifierCardID = "1330473789";
+  }
   IncrementClassState($sourcePlayer, $CS_NumIndirectDamageGiven);
+
   if(!$sourcePlayerTargets && $uniqueID != "") {
     $sourceIndex = SearchAlliesForUniqueID($uniqueID, $sourcePlayer);
     $ally = new Ally("MYALLY-" . $sourceIndex, $sourcePlayer);
@@ -1482,23 +1489,28 @@ function IndirectDamage($player, $amount, $fromUnitEffect=false, $uniqueID="", $
       switch($upgrades[$i]) {
         case "7021680131"://Targeting Computer
           $sourcePlayerTargets = true;
+          $sourceModifierCardID = "7021680131";
           break;
         default: break;
       }
     }
   }
-  if($sourcePlayerTargets) { //Devastator
-    AddDecisionQueue("FINDINDICES", $sourcePlayer, "THEIRUNITSANDBASE");
-    AddDecisionQueue("SETDQCONTEXT", $sourcePlayer, "Choose units and/or base to damage (any remaining will go to base)", 1);
-    AddDecisionQueue("MULTICHOOSETHEIRUNITSANDBASE", $sourcePlayer, "<-", 1);
-    AddDecisionQueue("MULTIDISTRIBUTEDAMAGE", $sourcePlayer,
-      MultiDistributeDamageStringBuilder($amount, $sourcePlayer, $fromUnitEffect ? 1 : 0, isPreventable: 0, alsoExhausts:$alsoExhausts, zones:"THEIRALLIESANDBASE"), 1);
+
+  AddDecisionQueue("SETDQCONTEXT", $player, "Indirect Damage");
+  if ($sourcePlayerTargets) {
+    AddDecisionQueue("OK", $player, CardLink($cardID, $cardID) . " deals " . $amount . " indirect damage to you, and your opponent will assign the indirect damage due to the " . CardLink($sourceModifierCardID, $sourceModifierCardID) . ".");
+    AddDecisionQueue("MULTIZONEINDICES", $sourcePlayer, "THEIRALLY");
+    AddDecisionQueue("PREPENDLASTRESULT", $sourcePlayer, $amount . "-THEIRCHAR-0,");
+    AddDecisionQueue("SETDQCONTEXT", $sourcePlayer, "Assign " . $amount . " unpreventable damage among their base and units");
+    AddDecisionQueue("INDIRECTDAMAGEMULTIZONE", $sourcePlayer, "<-");
+    AddDecisionQueue("MZOP", $sourcePlayer, DealMultiDamageBuilder($sourcePlayer, isUnitEffect:$fromUnitEffect, isPreventable:false));  
   } else {
-    AddDecisionQueue("FINDINDICES", $player, "UNITSANDBASE");
-    AddDecisionQueue("SETDQCONTEXT", $player, "Choose units and/or base to damage (any remaining will go to base)", 1);
-    AddDecisionQueue("MULTICHOOSEMYUNITSANDBASE", $player, "<-", 1);
-    AddDecisionQueue("MULTIDISTRIBUTEDAMAGE", $player,
-      MultiDistributeDamageStringBuilder($amount, $sourcePlayer, $fromUnitEffect ? 1 : 0, isPreventable: 0, alsoExhausts:$alsoExhausts, zones:"MYALLIESANDBASE"), 1);
+    AddDecisionQueue("OK", $player, CardLink($cardID, $cardID) . " deals " . $amount . " indirect damage to you.");
+    AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY");
+    AddDecisionQueue("PREPENDLASTRESULT", $player, $amount . "-MYCHAR-0,");
+    AddDecisionQueue("SETDQCONTEXT", $player, "Assign " . $amount . " unpreventable damage among your base and units");
+    AddDecisionQueue("INDIRECTDAMAGEMULTIZONE", $player, "<-");
+    AddDecisionQueue("MZOP", $player, DealMultiDamageBuilder($sourcePlayer, isUnitEffect:$fromUnitEffect, isPreventable:false));  
   }
 }
 

@@ -14,6 +14,7 @@ if (!IsGameNameValid($gameName)) {
 }
 $playerID = $_GET["playerID"];
 $chatText = htmlspecialchars($_GET["chatText"]);
+$playerAspect = $_GET["playerAspect"];
 $authKey = $_GET["authKey"];
 
 session_start();
@@ -28,16 +29,22 @@ if($targetAuthKey != "" && $authKey != $targetAuthKey) exit;
 $uid = "-";
 if (isset($_SESSION['useruid'])) $uid = $_SESSION['useruid'];
 $displayName = ($uid != "-" ? $uid : "Player " . $playerID);
-
-//array for contributors
-$contributors = array("OotTheMonk", "love", "ninin", "Brubraz", "Mobyus1");
-
-//its sort of sloppy, but it this will fail if you're in the contributors array because we want to give you the contributor icon, not the patron icon.
-//TODO: see about content creator icons for Patreon
-//if (isset($_SESSION["isPatron"]) && isset($_SESSION['useruid']) && !in_array($_SESSION['useruid'], $contributors)) $displayName = "<img style='margin-bottom:-4px; margin-right:-6px; height:18px;' src='./Images/greenPhaseMarker.png' /> " . $displayName;
+$displayIcon = "./Images/" . strtolower($playerAspect) . "-icon.webp";
+$displayIconTitle = "";
 
 //This is the code for Contributor's icon.
-if (isset($_SESSION['useruid']) && in_array($_SESSION['useruid'], $contributors)) $displayName = "<img title='Contributor' style='margin-bottom:-4px; margin-right:-4px; height:18px;' src='./Images/beskar-tiny.png' /> " . $displayName;
+$contributors = array("OotTheMonk", "love", "ninin", "Brubraz", "Mobyus1", "Leobraz");
+if (isset($_SESSION['useruid']) && in_array($_SESSION['useruid'], $contributors)) {
+  $displayIcon = "./Images/legendary-icon.webp";
+  $displayIconTitle = "Contributor";
+} else 
+if (isset($_SESSION['useruid']) && $_SESSION["isPatron"]) {
+  $displayIcon = "./Images/rare-icon.webp";
+  $displayIconTitle = "Patron";
+}
+
+$displayName = "<img title='" . $displayIconTitle . "' style='margin-bottom:-4px; margin-right:2px; height:18px;' src='" . $displayIcon . "' /> " . $displayName;
+
 //profanity filter
 $filteredChatText = explode(" ", $chatText);
 $meanPhrases = [
