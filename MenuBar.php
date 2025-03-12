@@ -88,7 +88,7 @@ $isMobile = IsMobile();
             </div>
         </div>
         <div class="nav-bar-karabast">
-            Looking for the <a href="https://karabast.net" target="_blank">new Karabast</a>?
+            Looking for <a href="https://karabast.net">new Karabast</a>?
         </div>
     </div>
 
