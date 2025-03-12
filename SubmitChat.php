@@ -30,17 +30,20 @@ $uid = "-";
 if (isset($_SESSION['useruid'])) $uid = $_SESSION['useruid'];
 $displayName = ($uid != "-" ? $uid : "Player " . $playerID);
 $displayIcon = "./Images/" . strtolower($playerAspect) . "-icon.webp";
+$displayIconTitle = "";
 
 //This is the code for Contributor's icon.
 $contributors = array("OotTheMonk", "love", "ninin", "Brubraz", "Mobyus1", "Leobraz");
 if (isset($_SESSION['useruid']) && in_array($_SESSION['useruid'], $contributors)) {
   $displayIcon = "./Images/legendary-icon.webp";
+  $displayIconTitle = "Contributor";
 } else 
 if (isset($_SESSION['useruid']) && $_SESSION["isPatron"]) {
   $displayIcon = "./Images/rare-icon.webp";
+  $displayIconTitle = "Patron";
 }
 
-$displayName = "<img style='margin-bottom:-4px; margin-right:2px; height:18px;' src='" . $displayIcon . "' /> " . $displayName;
+$displayName = "<img title='" . $displayIconTitle . "' style='margin-bottom:-4px; margin-right:2px; height:18px;' src='" . $displayIcon . "' /> " . $displayName;
 
 //profanity filter
 $filteredChatText = explode(" ", $chatText);
