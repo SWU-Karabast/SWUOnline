@@ -143,23 +143,25 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
         WriteLog("Player " . $playerID . " put a card on the bottom of the deck.");
       }
       break;
-    case 14: //Banish - can be reused for something else
-      //FAB
-      // $index = $cardID;
-      // $banish = &GetBanish($playerID);
-      // $theirChar = &GetPlayerCharacter($playerID == 1 ? 2 : 1);
-      // if($index < 0 || $index >= count($banish))
-      // {
-      //   echo("Banish Index " . $index . " Invalid Input<BR>");
-      //   return false;
-      // }
-      // $cardID = $banish[$index];
-      // if($banish[$index + 1] == "INST") SetClassState($currentPlayer, $CS_NextNAAInstant, 1);
-      // if($banish[$index + 1] == "MON212" && TalentContains($theirChar[0], "LIGHT", $currentPlayer)) AddCurrentTurnEffect("MON212", $currentPlayer);
-      // SetClassState($currentPlayer, $CS_PlayIndex, $index);
-      // PlayCard($cardID, "BANISH", -1, $index, $banish[$index + 2]);
+    case 14: // Increase damage/heal amount
+    case 15: // Decrease damage/heal amount
+      $uniqueID = $cardID;
+      if (is_numeric($uniqueID)) {
+        $ally = new Ally($uniqueID);
+        if ($mode == 14) {
+          $ally->IncreaseCounters();
+        } else {
+          $ally->DecreaseCounters();
+        }
+      } else {
+        $character = new Character($uniqueID);
+        if ($mode == 14) {
+          $character->IncreaseCounters();
+        } else {
+          $character->DecreaseCounters();
+        }
+      }
       break;
-
     case 16:
     case 18: //Decision Queue (15 and 18 deprecated)
       if (count($decisionQueue) > 0) {
@@ -415,6 +417,36 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
         RemoveDiscard($otherP, $found);
         PlayCard($cardID, "TGY");
       }
+      break;
+    case 38: //Confirm Multi Damage/Heal
+      $parsedParams = ParseDQParameter($turn[0], $turn[1], $turn[2]);
+      $counterLimit = $parsedParams["counterLimit"];
+      $allies = $parsedParams["allies"];
+      $characters = $parsedParams["characters"];
+      $targets = [];
+
+      foreach ($allies as $allyUniqueID) {
+        $ally = new Ally($allyUniqueID);
+        $counters = $ally->Counters();
+        if ($counters > 0) {
+          $targets[] = $counters . "-" . $ally->UniqueID();
+          $ally->SetCounters(0);
+        }
+      }
+
+      foreach ($characters as $characterUniqueID) {
+        $character = new Character($characterUniqueID);
+        $counters = $character->Counters();
+        if ($counters > 0) {
+          $targets[] = $counters . "-" . $character->UniqueID();
+          $character->SetCounters(0);
+        }
+      }
+
+      // If there are no targets, return PASS
+      if (count($targets) == 0) return "PASS";
+      
+      ContinueDecisionQueue(implode(",", $targets));
       break;
     case 99: //Pass
       global $isPass, $initiativeTaken, $dqState;
@@ -844,11 +876,10 @@ function Passed(&$turn, $playerID)
 function PassInput($autopass = false)
 {
   global $turn, $currentPlayer, $initiativeTaken, $initiativePlayer;
-  if ($turn[0] == "END" || $turn[0] == "MAYCHOOSEOPTION" || $turn[0] == "MAYMULTICHOOSETEXT" || $turn[0] == "MAYCHOOSECOMBATCHAIN" || $turn[0] == "MAYCHOOSEMULTIZONE" || $turn[0] == "MAYMULTICHOOSEAURAS" || $turn[0] == "MAYMULTICHOOSEHAND" || $turn[0] == "MAYCHOOSEHAND" || $turn[0] == "MAYCHOOSEDISCARD" || $turn[0] == "MAYCHOOSEARSENAL" || $turn[0] == "MAYCHOOSEPERMANENT" || $turn[0] == "MAYCHOOSEDECK" || $turn[0] == "MAYCHOOSEMYSOUL" || $turn[0] == "MAYCHOOSETOP" || $turn[0] == "MAYCHOOSECARD" || $turn[0] == "INSTANT" || $turn[0] == "OK" || $turn[0] == "LOOKHAND" || $turn[0] == "BUTTONINPUT") {
+  if ($turn[0] == "END" || $turn[0] == "MAYCHOOSEOPTION" || $turn[0] == "MAYMULTICHOOSETEXT" || $turn[0] == "MAYCHOOSECOMBATCHAIN" || $turn[0] == "MAYCHOOSEMULTIZONE" || $turn[0] == "MAYMULTICHOOSEAURAS" || $turn[0] == "MAYMULTICHOOSEHAND" || $turn[0] == "MAYCHOOSEHAND" || $turn[0] == "MAYCHOOSEDISCARD" || $turn[0] == "MAYCHOOSEARSENAL" || $turn[0] == "MAYCHOOSEPERMANENT" || $turn[0] == "MAYCHOOSEDECK" || $turn[0] == "MAYCHOOSEMYSOUL" || $turn[0] == "MAYCHOOSETOP" || $turn[0] == "MAYCHOOSECARD" || $turn[0] == "INSTANT" || $turn[0] == "OK" || $turn[0] == "LOOKHAND" || $turn[0] == "BUTTONINPUT" || $turn[0] == "MAYMULTIDAMAGEMULTIZONE" || $turn[0] == "PARTIALMULTIDAMAGEMULTIZONE" || $turn[0] == "PARTIALMULTIHEALMULTIZONE" || $turn[0] == "MAYMULTIHEALMULTIZONE") {
     ContinueDecisionQueue("PASS");
   } else {
-    if ($autopass == true)
-      ;
+    if ($autopass == true);
     else
       WriteLog("Player " . $currentPlayer . " passed.");
     if (Pass($turn, $currentPlayer, $currentPlayer)) {

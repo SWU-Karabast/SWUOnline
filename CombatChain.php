@@ -26,7 +26,7 @@ function ProcessHitEffect($cardID)
         AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY:arena=Ground");
         AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to deal 3 damage", 1);
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
-        AddDecisionQueue("MZOP", $mainPlayer, DamageStringBuilder(3, $mainPlayer, isUnitEffect:1), 1);
+        AddDecisionQueue("MZOP", $mainPlayer, DealDamageBuilder(3, $mainPlayer, isUnitEffect:1), 1);
       }
       break;
     case "3280523224"://Rukh
@@ -102,7 +102,7 @@ function CompletesAttackEffect($cardID) {
         AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY:arena=Ground");
         AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 4 damage to");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
-        AddDecisionQueue("MZOP", $mainPlayer, DamageStringBuilder(4, $mainPlayer, isUnitEffect:1), 1);
+        AddDecisionQueue("MZOP", $mainPlayer, DealDamageBuilder(4, $mainPlayer, isUnitEffect:1), 1);
       }
       break;
     case "0518313150"://Embo

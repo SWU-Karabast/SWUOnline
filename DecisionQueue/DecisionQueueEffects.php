@@ -584,7 +584,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
     case "SUPERHEAVYIONCANNON":
       $controller = MZPlayerID($player, $lastResult);
       $ally = new Ally($lastResult, $controller);
-      IndirectDamage($controller, $ally->CurrentPower(), true);
+      IndirectDamage("5016817239", $controller, $ally->CurrentPower(), true);
       break;
     case "THEANNIHILATOR":
       $otherPlayer = $player == 1 ? 2 : 1;
@@ -626,7 +626,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       $targetAlly = new Ally($lastResult, MZPlayerID($player, $lastResult));
       $damage = SearchCount(SearchAllies($player, arena:$targetAlly->CurrentArena()));
       AddDecisionQueue("PASSPARAMETER", $player, $lastResult);
-      AddDecisionQueue("MZOP", $player, DamageStringBuilder($damage,$player,isUnitEffect:1), 1);
+      AddDecisionQueue("MZOP", $player, DealDamageBuilder($damage,$player,isUnitEffect:1), 1);
       return $lastResult;
     case "LIGHTSPEEDASSAULT":
       $controller = MZPlayerID($player, $lastResult);
@@ -645,7 +645,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       $controller = MZPlayerID($player, $lastResult);
       $ally = new Ally($lastResult, $controller);
       $power = $ally->CurrentPower();
-      IndirectDamage(($player == 1 ? 2 : 1), $power, false);
+      IndirectDamage("8606123385", ($player == 1 ? 2 : 1), $power, false);
       return $lastResult;
     case "ALLWINGSREPORTIN":
       foreach ($lastResult as $index) {
@@ -930,6 +930,19 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       MZMoveCard($player, $search, $where, filter:$filter, context:"Choose a card to put on the bottom of its owner's deck");
       AddDecisionQueue("CREATEXWING", $player, "-", 1);
       break;
+    case "REDEMPTION":
+      $ally = new Ally($parameterArr[1]);
+      $healedTargets = explode(",", $lastResult);
+
+      $totalHealAmount = 0;
+      foreach ($healedTargets as $healedTarget) {
+        $healAmount = explode("-", $healedTarget)[0];
+        $totalHealAmount += $healAmount;
+      }
+      if ($totalHealAmount > 0) {
+        $ally->DealDamage($totalHealAmount, fromUnitEffect:true);
+      }
+      break;
     case "YODAOLDMASTER":
       if($lastResult == "Both") {
         WriteLog("Both player drew a card from Yoda, Old Master");
@@ -955,7 +968,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY&THEIRALLY", 1);
       AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal " . $power . " damage to", 1);
       AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-      AddDecisionQueue("MZOP", $player, DamageStringBuilder($power, $player, isUnitEffect:1), 1);
+      AddDecisionQueue("MZOP", $player, DealDamageBuilder($power, $player, isUnitEffect:1), 1);
       break;
     case "LETHALCRACKDOWN":
       DealDamageAsync($player, CardPower($lastResult), "DAMAGE", "1389085256", sourcePlayer:$player);
@@ -966,8 +979,19 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       else $ally->Exhaust();
       break;
     //Jump to Lightspeed
+    case "KIMOGILAHEAVYFIGHTER":
+      $targets = explode(",", $lastResult);
+      for ($i=0; $i<count($targets); $i++) {
+        if (str_starts_with("B", $targets[$i])) continue; // Skip base
+
+        $ally = new Ally($targets[$i]);
+        if ($ally->Exists()) {
+          $ally->Exhaust();
+        }
+      }
+      break;
     case "BOBA_FETT_LEADER_JTL":
-      IndirectDamage($otherPlayer, 1);
+      IndirectDamage("9831674351", $otherPlayer, 1);
       break;
     case "HAN_SOLO_LEADER_JTL":
       $ally = new Ally($lastResult, $player);
@@ -1102,7 +1126,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
         }
       }
       AddDecisionQueue("PASSPARAMETER", $player, $lastResult, 1);
-      AddDecisionQueue("MZOP", $player, DamageStringBuilder($damage, $player, isUnitEffect:1), 1);
+      AddDecisionQueue("MZOP", $player, DealDamageBuilder($damage, $player, isUnitEffect:1), 1);
       break;
     case "L337_JTL":
       $L3Ally = Ally::FromUniqueId($parameterArr[1]);
@@ -1129,7 +1153,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
         AddDecisionQueue("PREPENDLASTRESULT", $player, "MYCHAR-0,THEIRCHAR-0,");
         AddDecisionQueue("SETDQCONTEXT", $player, "Choose something to deal 1 damage to");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-        AddDecisionQueue("MZOP", $player, DamageStringBuilder(1, $player, isUnitEffect:1), 1);
+        AddDecisionQueue("MZOP", $player, DealDamageBuilder(1, $player, isUnitEffect:1), 1);
       }
       break;
     case "PAY_READY_TAX":
@@ -1167,7 +1191,7 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       AddDecisionQueue("CHOOSECARD", $player, "<-", 1);
       AddDecisionQueue("OP", $player, "DEFEATUPGRADE", 1);
       AddDecisionQueue("UNIQUETOMZ", $player, $targetAllyUID, 1);
-      AddDecisionQueue("MZOP", $player, DamageStringBuilder(1, $player), 1);
+      AddDecisionQueue("MZOP", $player, DealDamageBuilder(1, $player), 1);
       break;
     case "THEREISNOESCAPE":
       foreach($lastResult as $index) {

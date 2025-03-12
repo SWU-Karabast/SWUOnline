@@ -99,7 +99,7 @@
       <meta charset="utf-8">
       <title>Petranaki</title>
       <link rel="stylesheet" href="./css/chat3.css">
-      <link rel="stylesheet" href="./css/gamestyle250305.css">
+      <link rel="stylesheet" href="./css/gamestyle250308.css">
       <link rel="preconnect" href="https://fonts.googleapis.com">
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
       <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
@@ -127,7 +127,7 @@
       }
 
       //Rotate is deprecated
-      function Card(cardNumber, folder, maxHeight, action = 0, showHover = 0, overlay = 0, borderColor = 0, counters = 0, actionDataOverride = "", id = "", rotate = 0, lifeCounters = 0, defCounters = 0, atkCounters = 0, controller = 0, restriction = "", isBroken = 0, onChain = 0, isFrozen = 0, gem = 0, landscape = 0, epicActionUsed = 0, isUnimplemented = 0) {
+      function Card(cardNumber, folder, maxHeight, action = 0, showHover = 0, overlay = 0, borderColor = 0, counters = 0, actionDataOverride = "", id = "", rotate = 0, lifeCounters = 0, defCounters = 0, atkCounters = 0, controller = 0, restriction = "", isBroken = 0, onChain = 0, isFrozen = 0, gem = 0, landscape = 0, epicActionUsed = 0, isUnimplemented = 0, showCounterControls = 0, counterType = 0, counterLimitReached = 0) {
         if (folder == "crops") {
           cardNumber += "_cropped";
         }
@@ -148,6 +148,19 @@
         if (folder == "crops/") margin = "0px;";
 
         var rv = "<a style='" + margin + " position:relative; display:inline-block;" + (action > 0 ? "cursor:pointer;" : "") + "'" + (showHover > 0 ? " onmouseover='ShowCardDetail(event, this)' onmouseout='HideCardDetail()'" : "") + (action > 0 ? " onclick='SubmitInput(\"" + action + "\", \"&cardID=" + actionData + "\");'" : "") + ">";
+  
+        // Counters (damage and heal)
+        if (showCounterControls != 0) {
+          var canIncrease = counterLimitReached != 1;
+          var canDecrease = counters > 0;
+          rv += "<div class='counters-control-wrapper base-controls'>";
+          rv += "<button class='counter-control increase-control' " + (canIncrease ? "" : "disabled") + " onclick='SubmitIncreaseCounters(this, \"" + actionData + "\");' " + (showHover > 0 ? " onmouseenter='OnDamageControlMouseEnter()' onmouseleave='OnDamageControlMouseLeave()'" : "") + ">+</button>";
+          rv += "<button class='counter-control decrease-control' " + (canDecrease ? "" : "disabled") + " onclick='SubmitDecreaseCounters(this, \"" + actionData + "\");' " + (showHover > 0 ? " onmouseenter='OnDamageControlMouseEnter()' onmouseleave='OnDamageControlMouseLeave()'" : "") + ">-</button>";
+          rv += "</div>";
+        }
+        if (counterType > 0) {
+          rv += "<div class='base-counter " + (showCounterControls > 0 ? "" : "no-controls") + (counterType == 1 ? " dmg-counter" : " heal-counter") + "'>" + counters + "</div>";
+        }
 
         if (borderColor > 0) {
           border = "border-radius:8px; border:2px solid " + BorderColorMap(borderColor) + ";";
@@ -180,7 +193,7 @@
         var altText = " alt='" + CardTitle(cardNumber) + "' ";
         rv += "<img " + (id != "" ? "id='" + id + "-img' " : "") + altText + orientation + "style='" + border + " height:" + height + "; width:" + width + "px; position:relative;' src='./" + folderPath + "/" + cardNumber + fileExt + "' />";
 
-        if (isUnimplemented) {
+        if (isUnimplemented != 0) {
           rv += "<img style='position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); width:40%; height:40%; z-index:2;' src='./Images/restricted.png' />";
         }
 
@@ -189,20 +202,20 @@
         var darkMode = false;
         counterHeight = 28;
         imgCounterHeight = 42;
-        //Attacker Label Style
-        if (counters == "Attacker" || counters == "Arsenal") {
-          rv += "<div style='margin: 0px; top: 80%; left: 50%; margin-right: -50%; border-radius: 7px; width: fit-content; text-align: center; line-height: 16px; height: 16px; padding: 5px; border: 3px solid " + PopupBorderColor(darkMode) + ";";
-          rv += "transform: translate(-50%, -50%); -ms-transform: translate(-50%, -50%); position:absolute; z-index: 10; background:" + BackgroundColor(darkMode) + "; font-size:20px; font-weight:800; color:" + PopupBorderColor(darkMode) + ";'>" + counters + "</div>";
-        }
-        //Equipments, Hero and default counters style
-        else if (counters != 0) {
-          var left = "72%";
-          if (lifeCounters == 0 && defCounters == 0 && atkCounters == 0) {
-            left = "50%";
-          }
-          rv += "<div style='margin: 0px; top: 50%; left:" + left + "; margin-right: -50%; border-radius: 50%; width:" + counterHeight + "px; height:" + counterHeight + "px; padding: 5px; border: 3px solid " + PopupBorderColor(darkMode) + "; text-align: center; line-height:" + imgCounterHeight / 1.5 + "px;";
-          rv += "transform: translate(-50%, -50%); -ms-transform: translate(-50%, -50%); position:absolute; z-index: 10; background:" + BackgroundColor(darkMode) + "; font-family: Helvetica; font-size:" + (counterHeight - 2) + "px; font-weight:550; color:" + TextCounterColor(darkMode) + "; text-shadow: 2px 0 0 " + PopupBorderColor(darkMode) + ", 0 -2px 0 " + PopupBorderColor(darkMode) + ", 0 2px 0 " + PopupBorderColor(darkMode) + ", -2px 0 0 " + PopupBorderColor(darkMode) + ";'>" + counters + "</div>";
-        }
+        // //Attacker Label Style
+        // if (counters == "Attacker" || counters == "Arsenal") {
+        //   rv += "<div style='margin: 0px; top: 80%; left: 50%; margin-right: -50%; border-radius: 7px; width: fit-content; text-align: center; line-height: 16px; height: 16px; padding: 5px; border: 3px solid " + PopupBorderColor(darkMode) + ";";
+        //   rv += "transform: translate(-50%, -50%); -ms-transform: translate(-50%, -50%); position:absolute; z-index: 10; background:" + BackgroundColor(darkMode) + "; font-size:20px; font-weight:800; color:" + PopupBorderColor(darkMode) + ";'>" + counters + "</div>";
+        // }
+        // //Equipments, Hero and default counters style
+        // else if (counters != 0) {
+        //   var left = "72%";
+        //   if (lifeCounters == 0 && defCounters == 0 && atkCounters == 0) {
+        //     left = "50%";
+        //   }
+        //   rv += "<div style='margin: 0px; top: 50%; left:" + left + "; margin-right: -50%; border-radius: 50%; width:" + counterHeight + "px; height:" + counterHeight + "px; padding: 5px; border: 3px solid " + PopupBorderColor(darkMode) + "; text-align: center; line-height:" + imgCounterHeight / 1.5 + "px;";
+        //   rv += "transform: translate(-50%, -50%); -ms-transform: translate(-50%, -50%); position:absolute; z-index: 10; background:" + BackgroundColor(darkMode) + "; font-family: Helvetica; font-size:" + (counterHeight - 2) + "px; font-weight:550; color:" + TextCounterColor(darkMode) + "; text-shadow: 2px 0 0 " + PopupBorderColor(darkMode) + ", 0 -2px 0 " + PopupBorderColor(darkMode) + ", 0 2px 0 " + PopupBorderColor(darkMode) + ", -2px 0 0 " + PopupBorderColor(darkMode) + ";'>" + counters + "</div>";
+        // }
         //-1 Defense & Endurance Counters style
         if (defCounters != 0 && isBroken != 1) {
           var left = "-42%";
@@ -431,7 +444,7 @@
               restriction = restriction.replace(/_/g, ' ');
               folder = zone == "myChar" || zone == "theirChar" ? "WebpImages2" : "concat";
               if(selectedLanguage != "EN") folder = folder + "/" + selectedLanguage;
-              newHTML += Card(cardArr[0], folder, size, cardArr[1], 1, cardArr[2], cardArr[3], cardArr[4], cardArr[5], "", cardArr[17], cardArr[6], cardArr[7], cardArr[8], cardArr[9], restriction, cardArr[13], cardArr[14], cardArr[15], cardArr[16], cardArr[18], cardArr[19], cardArr[20]);
+              newHTML += Card(cardArr[0], folder, size, cardArr[1], 1, cardArr[2], cardArr[3], cardArr[4], cardArr[5], "", cardArr[17], cardArr[6], cardArr[7], cardArr[8], cardArr[9], restriction, cardArr[13], cardArr[14], cardArr[15], cardArr[16], cardArr[18], cardArr[19], cardArr[20], cardArr[21], cardArr[22], cardArr[23]);
               newHTML += "</span>";
           }
           zoneEl.innerHTML = newHTML;
@@ -515,7 +528,7 @@
       }
     </script>
 
-    <script src="./jsInclude2.js"></script>
+    <script src="./jsInclude250308.js"></script>
     <script src="./GeneratedCode/GeneratedCardDictionaries.js"></script>
 
     <?php
@@ -614,6 +627,7 @@
                   if(!popup) popup = document.getElementById("MAYCHOOSEMULTIZONE");
                   if(popup) popup.style.display = "none";
                   var timeoutAmount = 0;
+                  var eventsArr = reduceDamageAndRestoreEvents(eventsArr);
                   for(var i=0; i<eventsArr.length; i+=2) {
                     var eventType = eventsArr[i];//DAMAGE
                     if(eventType == "DAMAGE") {
@@ -673,6 +687,46 @@
         if (lastUpdate == "NaN") window.location.replace("https://www.petranaki.net/game/MainMenu.php");
         else xmlhttp.open("GET", "GetNextTurn2.php?gameName=<?php echo ($gameName); ?>&playerID=<?php echo ($playerID); ?>&lastUpdate=" + lastUpdate + lastCurrentPlayer + "&authKey=<?php echo ($authKey); ?>" + dimensions, true);
         xmlhttp.send();
+      }
+
+      function reduceDamageAndRestoreEvents(events) {
+        var groupedByTarget = {};
+        var newEvents = [];
+
+        for (var i = 0; i < events.length; i += 2) {
+          var eventType = events[i];
+          var eventData = events[i+1];
+
+          if (eventType == "DAMAGE" || eventType == "RESTORE") {
+            var eventArr = eventData.split("!");
+            var target = eventArr[0];
+            if (!groupedByTarget[target]) {
+              groupedByTarget[target] = 0;
+            }
+
+            if (eventType == "DAMAGE") {
+              groupedByTarget[target] -= parseInt(eventArr[1]);
+            } else if (eventType == "RESTORE") {
+              groupedByTarget[target] += parseInt(eventArr[1]);
+            }
+          } else {
+            newEvents.push(eventType);
+            newEvents.push(eventData);
+          }
+        }
+
+        // iterate through groupedByTarget and add the events to the newEvents array
+        for (var target in groupedByTarget) {
+          if (groupedByTarget[target] > 0) {
+            newEvents.push("RESTORE");
+            newEvents.push(target + "!" + groupedByTarget[target]);
+          } else if (groupedByTarget[target] < 0) {
+            newEvents.push("DAMAGE");
+            newEvents.push(target + "!" + Math.abs(groupedByTarget[target]));
+          }
+        }
+
+        return newEvents;
       }
 
       function RenderUpdate(updatedHTML) {
@@ -761,6 +815,10 @@
     <div id='mainDiv' style='position:fixed; z-index:20; left:0; top:0; width:100%; height:100%;'></div>
     <div id='chatbox' style='z-index:40; position:fixed; bottom:20px; right:18px; display:flex;'>
         <?php if ($playerID != 3 && !IsChatMuted()): ?>
+            <?php
+            $playerAspects = explode(",", LeaderMainAspect($playerID));
+            echo ("<input type='hidden' id='playerAspect' name='playerAspect' value='" . $playerAspects[0] . "'>");
+            ?>
             <input id='chatText'
                   style='background: black; color: white; font-size:16px; font-family:barlow; margin-left: 8px; height: 32px; border: 1px solid #454545; border-radius: 5px 0 0 5px;'
                   type='text'
@@ -769,7 +827,8 @@
                   autocomplete='off'
                   onkeypress='ChatKey(event)'>
             <button style='border: 1px solid #454545; border-radius: 0 5px 5px 0; width:55px; height:32px; color: white; margin: 0 0 0 -1px; padding: 0 5px; font-size:16px; font-weight:600; box-shadow: none;'
-                    onclick='SubmitChat()'>Chat
+                    onclick='SubmitChat()'>
+                    Chat
             </button>
             <button title='Disable Chat'
                     <?= ProcessInputLink($playerID, 26, $SET_MuteChat . "-1", fullRefresh:true); ?>

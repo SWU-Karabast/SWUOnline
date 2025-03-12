@@ -75,6 +75,26 @@ class Ally {
     return $this->index;
   }
 
+  function ResetCounters() {
+    $this->allies[$this->index+6] = 0;
+  }
+
+  function Counters() {
+    return $this->allies[$this->index+6];
+  }
+
+  function IncreaseCounters() {
+    $this->allies[$this->index+6]++;
+  }
+
+  function DecreaseCounters() {
+    $this->allies[$this->index+6]--;
+  }
+
+  function SetCounters($amount) {
+    $this->allies[$this->index+6] = $amount;
+  }
+
   function Damage() {
     return $this->allies[$this->index+2];
   }
@@ -117,7 +137,7 @@ class Ally {
           AddDecisionQueue("MULTIZONEINDICES", $player, "MYALLY:arena=Space&THEIRALLY:arena=Space");
           AddDecisionQueue("SETDQCONTEXT", $player, "Choose a unit to deal 1 damage to");
           AddDecisionQueue("MAYCHOOSEMULTIZONE", $player, "<-", 1);
-          AddDecisionQueue("MZOP", $player, DamageStringBuilder(1, $player, isUnitEffect:1),1);
+          AddDecisionQueue("MZOP", $player, DealDamageBuilder(1, $player, isUnitEffect:1),1);
         }
         break;
       default: break;
@@ -239,6 +259,16 @@ class Ally {
 
   function IsExhausted() {
     return $this->allies[$this->index+1] == 1;
+  }
+
+  function HasShield() {
+    $subcards = $this->GetSubcards();
+    for($i=0; $i<count($subcards); $i+=SubcardPieces()) {
+      if($subcards[$i] == "8752877738") { //Shield Token
+        return true;
+      }
+    }
+    return false;
   }
 
   function WasHealed() {
