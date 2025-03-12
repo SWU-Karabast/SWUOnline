@@ -133,14 +133,14 @@ include_once 'Header.php';
 
   <?php
   $standardFormatCasual = Formats::$PremierFormat;
-  $standardFormatCompetitive = Formats::$PremierStrict;
+  $standardFormat = Formats::$PremierStrict;
   $previewFormat = Formats::$PreviewFormat;
   $openFormat = Formats::$OpenFormat;
   echo ("<label for='format' class='SelectDeckInput'>Format</label>");
   echo ("<select name='format' id='format' onchange='toggleInfoBox()'>");
   echo ("<option value='$standardFormatCasual' " . ($defaultFormat == FormatCode($standardFormatCasual) ? " selected" : "") . ">Premier</option>");
   if($canSeeQueue) {
-    echo ("<option value='$standardFormatCompetitive' " . ($defaultFormat == FormatCode($standardFormatCompetitive) ? " selected" : "") . ">Premier Strict</option>");
+    echo ("<option value='$standardFormat' " . ($defaultFormat == FormatCode($standardFormat) ? " selected" : "") . ">Premier Strict</option>");
     //echo ("<option value='$previewFormat'" . ($defaultFormat == FormatCode($previewFormat) ? " selected" : "") . ">" . FormatDisplayName($previewFormat) . "</option>");
     $funFormatBackendName = Formats::$PadawanFormat;
     $funFormatDisplayName = FormatDisplayName($funFormatBackendName);
