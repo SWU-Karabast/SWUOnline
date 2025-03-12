@@ -184,7 +184,7 @@ include_once 'Header.php';
     <p>This is a free educational tool for researching decks and strategies for in-person play. It does not include automated tournaments or rankings. All features are accessible without payment and are not intended for commercial use.</p>
   </div>
 
-  <div class="petranaki-news container bg-yellow" style='<?php if (IsMobile()) echo ("display:none; "); ?>'>
+  <div class="petranaki-news container bg-yellow">
     <h2>News</h2>
     <div style="position: relative;">
       <div style='vertical-align:middle; text-align: start;'>
