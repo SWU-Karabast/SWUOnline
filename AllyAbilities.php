@@ -3414,6 +3414,7 @@ function SpecificAllyAttackAbilities($attackerUniqueID=0, $reportMode=false)
         }
       }
       break;
+    default: break;
   }
 
   // Current Effect Abilities
