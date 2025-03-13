@@ -427,11 +427,14 @@ function AllyDealDamageAbilities($player, $damage, $type) {
   //currentt turn effects from allies
   for($i=0;$i<count($currentTurnEffects);$i+=CurrentTurnPieces()) {
     switch($currentTurnEffects[$i]) {
+      case "8734471238"://Stay On Target
+        Draw($currentTurnEffects[$i+1]);
+        break;
       case "6228218834"://Tactical Heavy Bomber
-        if($type != "COMBAT") Draw($currentTurnEffects[$i+1]);
+        if($type != "COMBAT") Draw($currentTurnEffects[$i+1]); // TODO: should check for indirect damage only
         break;
       case "2711104544"://Guerilla Soldier
-        if($type != "COMBAT") {
+        if($type != "COMBAT") {  // TODO: should check for indirect damage only
           $ally = new Ally($currentTurnEffects[$i+2]);
           $ally->Ready();
         }
