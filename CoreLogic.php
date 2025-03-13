@@ -2270,7 +2270,7 @@ function LeaderMainAspect($player) {
   $baseAspects = explode(",", CardAspects($character[0]));
   $aspects = PlayerAspects($player);
   foreach($aspects as $aspect => $count) {
-    if (in_array($aspect, $baseAspects)) {
+    if ($count == 0 || in_array($aspect, $baseAspects)) {
       continue;
     }
     if ($aspect != "Heroism" && $aspect != "Villainy") {
