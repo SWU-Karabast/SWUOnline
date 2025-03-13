@@ -2151,7 +2151,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
         //AuraAttackAbilities($cardID);//FAB
         if ($from == "PLAY" && IsAlly($cardID)) {
           AllyAttackAbilities($cardID);
-          SpecificAllyAttackAbilities($cardID);
+          SpecificAllyAttackAbilities();
         }
       }
     } else { //On chain, but not index 0
@@ -2252,11 +2252,8 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
         if ($from == "PLAY" || $from == "EQUIP") {
           $layerName = (GetResolvedAbilityType($cardID, $oppCardActive) == "A" || ($oppCardActive == true)) ? "ACTIVATEDABILITY" : "ATTACKABILITY";
         }
-        if ($layerName == "ATTACKABILITY") {
-          if (HasAttackAbility($cardID)) {
-            PlayAbility($cardID, "PLAY", "0");
-          }
-        }
+        
+        if ($layerName == "ATTACKABILITY") {}
         //TODO: Fix this Relentless and first light and The Mandalorian hack
         // Events and abilities that are not played should be resolved before any ally abilities
         else if ($from == "PLAY" || $from == "EQUIP" || IsUnitException($cardID) || DefinedTypesContains($cardID, "Event", $currentPlayer)) {

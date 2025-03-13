@@ -141,7 +141,7 @@ if ($handle = opendir($path)) {
           $link .= "<p class='format-title'>" . $formatName . "</p>";
       }
       $description = ($gameDescription == "" ? "Game #" . $gameName : $gameDescription);
-      $link .= "<p>" . $description . "</p></td>";
+      $link .= "<p style='word-break: break-word;'>" . $description . "</p></td>";
       $link .= "<td>" . <<<HTML
         <style>
           .hero-container {
