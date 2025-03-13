@@ -14,12 +14,6 @@ function EffectHitEffect($cardID)
         $ally->Destroy();
       }
       break;
-    case "8734471238"://Stay On Target
-      $ally = new Ally(AttackerMZID($mainPlayer), $mainPlayer);
-      if (GetAttackTarget() == "THEIRCHAR-0" && !$ally->LostAbilities()) {
-        Draw($mainPlayer);
-      }
-      break;
     case "8988732248-1"://Rebel Assault
       AddCurrentTurnEffect("8988732248-2", $mainPlayer);
       break;

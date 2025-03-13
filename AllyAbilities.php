@@ -2439,9 +2439,9 @@ function SpecificAllyAttackAbilities($attackerUniqueID=0, $reportMode=false)
       DealDamageAsync($defPlayer, 1, "DAMAGE", "51e8757e4c", sourcePlayer:$mainPlayer);
       break;
     case "3389903389"://Black One JTL
+      $totalOnAttackAbilities++;
+      if ($reportMode) break;
       if (ControlsNamedCard($mainPlayer, "Poe Dameron")) {
-        $totalOnAttackAbilities++;
-        if ($reportMode) break;
         AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY&THEIRALLY");
         AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 1 damage to");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);

@@ -69,8 +69,8 @@ include_once 'Header.php';
 
 <div class="core-wrapper">
 
-  <div class="game-browser-wrapper">
-    <div class="game-browser container bg-yellow" style='overflow-y:auto; min-width: 0px;'>
+  <div class="game-browser-wrapper" style="min-width: 0px;">
+    <div class="game-browser container bg-yellow" style='overflow-y:auto;'>
       <?php
       try {
         include "ServerChecker.php";
