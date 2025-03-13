@@ -279,6 +279,49 @@ td {
 
 }
 
+@media only screen and (max-device-width: 599px) {
+  div#myHand span a, div#theirHand span a {
+    transform: scale(0.85);
+  }
+
+  div#myHand span, div#theirHand span {
+    margin: 0 !important;
+  }
+
+  div#myHand {
+    bottom: 5vh;
+    left: 8vw !important;
+    max-width: calc(50vw);
+    display: flex !important;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .my-leader {
+    bottom: calc(45% - 177px);
+  }
+
+  .my-base {
+    bottom: calc(45% - 72px);
+  }
+
+  .their-leader {
+    top: calc(45% - 240px);
+  }
+
+  .their-base {
+    top: calc(45% - 135px);
+  }
+
+  .base-my-dmg {
+    bottom: calc(45% - 36px);
+  }
+
+  .base-their-dmg{
+    top: calc(45% - 99px);
+  }
+}
 
 /* Buttons */
 
@@ -494,17 +537,6 @@ td {
   column-gap: 16px;
 }
 
-@media screen and (max-device-width: 600px) {
-  .spaceAlliesContainer, .groundAlliesContainer,
-  .spaceEnemiesContainer, .groundEnemiesContainer {
-    max-height: 40vh;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: start !important;
-    justify-content: center;
-  }
-}
-
 .spaceAlliesContainer, .spaceEnemiesContainer {
   flex-direction: row-reverse;
   align-items: flex-start;
@@ -524,6 +556,28 @@ td {
 .spaceAlliesContainer .cardImage, .groundAlliesContainer .cardImage,
 .spaceEnemiesContainer .cardImage, .groundEnemiesContainer .cardImage {
   filter: drop-shadow(2px 2px 6px rgb(0, 0, 0, 0.3));
+}
+
+@media only screen and (max-device-width: 479px) {
+  .spaceAlliesContainer, .groundAlliesContainer,
+  .spaceEnemiesContainer, .groundEnemiesContainer {
+    max-height: 40vh;
+    display: grid;
+    grid-template-columns: 1fr;
+    row-gap: 8px;
+  }
+}
+
+@media only screen and (min-device-width:480px) and (max-device-width: 767px) {
+  .spaceAlliesContainer, .groundAlliesContainer,
+  .spaceEnemiesContainer, .groundEnemiesContainer {
+    max-height: 40vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    row-gap: 16px;
+    align-items: start !important;
+    justify-content: center;
+  }
 }
 
 .my-units-manual {

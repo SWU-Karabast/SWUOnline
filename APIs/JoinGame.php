@@ -1,6 +1,5 @@
+<meta name="viewport" content="width=device-width, initial-scale=0.67">
 <?php
-
-
 include_once "../WriteLog.php";
 include_once "../Libraries/HTTPLibraries.php";
 include_once "../Libraries/SHMOPLibraries.php";
