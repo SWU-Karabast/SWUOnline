@@ -75,7 +75,6 @@ function MZRemove($player, $lastResult)
       case "MYDECK":
         $deck = new Deck($player);
         return $deck->Remove($mzIndex[1]);
-        break;
       default: break;
     }
   }
