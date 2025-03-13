@@ -2379,34 +2379,6 @@ function LeaderCanPilot($cardID) {
   }
 }
 
-function HasAttackAbility($cardID) {
-  switch($cardID) {
-    case "1746195484"://Jedha Agitator
-    case "5707383130"://Bendu
-    case "1862616109"://Snowspeeder
-    case "3613174521"://Outer Rim Headhunter
-    case "4599464590"://Rugged Survivors
-    case "4299027717"://Mining Guild Tie Fighter
-    case "7728042035"://Chimaera
-    case "8691800148"://Reinforcement Walker
-    case "9568000754"://R2-D2
-    case "8009713136"://C-3PO
-    case "7533529264"://Wolffe
-    case "5818136044"://Xanadu Blood
-    case "1304452249"://Covetous Rivals
-    case "3086868510"://Pre Vizsla
-    case "8380936981"://Jabba's Rancor
-    case "1503633301"://Survivors' Gauntlet
-    case "8240629990"://Avenger
-    case "6931439330"://The Ghost
-    case "3468546373"://General Rieekan
-    case "7192849828"://Mist Hunter
-    case "3427170256"://Captain Phasma Unit
-      return true;
-    default: return false;
-  }
-}
-
 function CardHP($cardID) {
   switch($cardID) {
     default:
