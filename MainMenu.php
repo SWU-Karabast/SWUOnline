@@ -1,3 +1,4 @@
+<meta name="viewport" content="width=device-width, initial-scale=0.67">
 <?php
 
 include_once 'MenuBar.php';
@@ -67,10 +68,9 @@ $canSeeQueue = isset($_SESSION["useruid"]);
 include_once 'Header.php';
 ?>
 
-<div class="core-wrapper">
-
-  <div class="game-browser-wrapper" style="min-width: 0px;">
-    <div class="game-browser container bg-yellow" style='overflow-y:auto;'>
+<div class="core-wrapper grid-container">
+  <div class="game-browser-wrapper">
+    <div class="game-browser container bg-yellow" style='overflow-y:auto; min-width: 0px;'>
       <?php
       try {
         include "ServerChecker.php";
@@ -78,10 +78,10 @@ include_once 'Header.php';
       }
       ?>
     </div>
-  </div>
+  </div><!-- close game-browser-wrapper -->
   <div id="mainMenuError" class="error-popup-hidden">
-  </div>
-  <div class='create-game-wrapper' style="min-width: 0px;">
+  </div><!-- close error-popup -->
+  <div class='create-game-wrapper'>
   <?php
 
   if (IsMobile()) echo ("<div class='create-game container bg-yellow' style='overflow-y:visible'>");
@@ -153,17 +153,17 @@ include_once 'Header.php';
   <?php
   echo ("<label for='visibility' class='SelectDeckInput'>Game Visibility</label>");
   echo ("<select name='visibility' id='visibility'>");
-  
+
   if ($canSeeQueue) {
     echo ("<option value='public'" . ($defaultVisibility == 1 ? " selected" : "") . ">Public</option>");
   } else {
     echo '<p class="login-notice">&#10071;<a href="./LoginPage.php">Log In</a> to be able to create public games.</p>';
   }
-  
+
   echo ("<option value='private'" . ($defaultVisibility == 0 ? " selected" : "") . ">Private</option>");
   echo ("</select>");
   ?>
-  
+
   <!--
   <label for="deckTestMode">
     <input class='SelectDeckInput' type="checkbox" id="deckTestMode" name="deckTestMode" value="deckTestMode">
@@ -175,9 +175,8 @@ include_once 'Header.php';
   </form>
 
   </div>
-</div>
-
-<div class="petranaki-column" style="min-width: 0px;">
+</div><!-- close create-game-wrapper -->
+<div class="petranaki-column" >
   <div class="petranaki-overview container bg-yellow" >
     <p style="font-size: 18px"><b>Petranaki is an Open-Source, Fan-Made Platform</b></p>
     <p>This is a free educational tool for researching decks and strategies for in-person play. It does not include automated tournaments or rankings. All features are accessible without payment and are not intended for commercial use.</p>
@@ -216,10 +215,8 @@ include_once 'Header.php';
     ?>
   </div>
 
-  </div>
-
-</div>
-</div>
+</div><!-- close petranaki-column -->
+</div><!-- close core-wrapper -->
 
 <script>
   function changeLanguage() {
@@ -238,6 +235,7 @@ include_once 'Header.php';
 
   // Ensure the info box is displayed correctly based on the default selected format
   window.onload = function() {
+    screen.orientation.lock('portrait');
     toggleInfoBox();
   };
 </script>

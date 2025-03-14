@@ -175,7 +175,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   include "Libraries/UILibraries2.php";
   include "Libraries/StatFunctions.php";
   include "Libraries/PlayerSettings.php";
-  
+
   $isActivePlayer = $turn[1] == $playerID;
 
   if ($turn[0] == "REMATCH" && intval($playerID) != 3) {
@@ -214,7 +214,7 @@ if ($lastUpdate != 0 && $cacheVal <= $lastUpdate) {
   }
 
   $targetAuth = ($playerID == 1 ? $p1Key : $p2Key);
-  if ($playerID != 3 && $authKey != $targetAuth) {
+  if (!$isDev && $playerID != 3 && $authKey != $targetAuth) {
     echo ("999999" . $ReturnDelim);
     exit;
   }

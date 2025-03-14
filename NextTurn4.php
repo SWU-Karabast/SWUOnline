@@ -14,7 +14,6 @@
       }
 
     </style>
-
     <?php
 
     include 'Libraries/HTTPLibraries.php';
@@ -97,15 +96,15 @@
 
     <head>
       <meta charset="utf-8">
+      <meta id="viewportMeta" name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Petranaki</title>
       <link rel="stylesheet" href="./css/chat3.css">
-      <link rel="stylesheet" href="./css/gamestyle250308.css">
+      <link rel="stylesheet" href="./css/gamestyle250313.css">
       <link rel="preconnect" href="https://fonts.googleapis.com">
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
       <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
       <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Gemunu+Libre:wght@200..800&display=swap" rel="stylesheet">
     </head>
-
     <script>
       var IsDynamicScalingEnabled = <?php echo (IsDynamicScalingEnabled($playerID) ? "true" : "false"); ?>;
       var cardSize = IsDynamicScalingEnabled == 1 ? window.innerWidth / 13 : 96;
@@ -148,7 +147,7 @@
         if (folder == "crops/") margin = "0px;";
 
         var rv = "<a style='" + margin + " position:relative; display:inline-block;" + (action > 0 ? "cursor:pointer;" : "") + "'" + (showHover > 0 ? " onmouseover='ShowCardDetail(event, this)' onmouseout='HideCardDetail()'" : "") + (action > 0 ? " onclick='SubmitInput(\"" + action + "\", \"&cardID=" + actionData + "\");'" : "") + ">";
-  
+
         // Counters (damage and heal)
         if (showCounterControls != 0) {
           var canIncrease = counterLimitReached != 1;
@@ -528,7 +527,7 @@
       }
     </script>
 
-    <script src="./jsInclude250308.js"></script>
+    <script src="./jsInclude250313.js"></script>
     <script src="./GeneratedCode/GeneratedCardDictionaries.js"></script>
 
     <?php
