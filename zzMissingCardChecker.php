@@ -1,6 +1,6 @@
 <?php
-$webpimages2Path = 'WebpImages2';
-$folders = ['DE', 'ES', 'FR', 'IT'];
+$webpimages2Path = 'WebpImages2/';
+$folders = ['black border'];
 
 $webpimages2Files = scandir($webpimages2Path);
 $missingCards = [];

@@ -72,9 +72,7 @@
 
       AddToArrays($cardID, $card->cardUid);
 
-      //$imageUrl = "https://swudb.com/cards/" . $set . "/" . $cardNumber . ".png";
-      // $imageUrl = $card->artFront->data->attributes->formats->card->url;
-      $imageUrl = $card->attributes->variants->data[0]->attributes->artBack->data->attributes->formats->card->url;
+      $imageUrl = $card->variants->data[0]->attributes->artFront->data->attributes->formats->card->url;
 
       $imageWidth = $card->artFront->data->attributes->width;
       $imageHeight = $card->artFront->data->attributes->height;
@@ -105,8 +103,7 @@
     ];
 
       if ($card->artBack->data != null && !in_array($cardID, $twi_codes)) {
-       // $imageUrl = $card->variants->data[0]->attributes->artBack->data->attributes->formats->card->url;
-        $imageUrl = $card->artFront->data->attributes->formats->card->url;
+        $imageUrl = $card->variants->data[0]->attributes->artBack->data->attributes->formats->card->url;
         $imageWidth = $card->artBack->data->attributes->width;
         $imageHeight = $card->artBack->data->attributes->height;
         $isLandscape = $imageWidth > $imageHeight;
@@ -121,7 +118,6 @@
 
         CheckImage($uuid, $imageUrl, $language, isLandscape:$isLandscape, isBottomPosition:false); //unit said
         AddToArrays($cardID, $uuid);
-        exit();
       }
     }
 
