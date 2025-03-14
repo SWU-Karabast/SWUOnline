@@ -179,6 +179,8 @@ select {
 .core-wrapper {
   margin-top: -116px;
   height: calc(100% - 223px);
+  display: flex;
+  flex-direction: row;
 }
 
 .info-box {
@@ -186,71 +188,6 @@ select {
   padding: 10px;
   background: rgba(24, 50, 81, 0.60);
   margin-bottom: 20px;
-}
-
-/*Grid*/
-.grid-container {
-  display: grid;
-}
-
-@media only screen and (max-device-width: 1019px) {
-  @viewport {
-    orientation: portrait;
-  }
-
-  .core-wrapper {
-    margin-top: -80px;
-  }
-
-  .grid-container {
-    gap: 8px;
-    grid-template-columns: auto auto;
-    grid-template-rows: auto;
-  }
-
-  .grid-container > div.create-game-wrapper {
-    grid-row-start: 2;
-    grid-column-start: 1;
-    width: 90vw;
-  }
-
-  .grid-container > div.petranaki-column {
-    grid-row-start: 3;
-    grid-column-start: 1;
-    width: 90vw;
-  }
-
-  .grid-container > div.game-browser-wrapper {
-    grid-row-start: 1;
-    grid-column-start: 1;
-    width: 90vw;
-    overflow-y: scroll;
-  }
-
-  .hero-container {
-    flex-wrap: wrap;
-  }
-
-  .hero-container .spectate-button {
-    margin: 8px;
-  }
-}
-@media only screen and (min-device-width: 1020px) {
-  .grid-container {
-    gap: 16px;
-  }
-
-  .create-game-wrapper {
-    grid-column-start: 2;
-  }
-
-  .petranaki-column {
-    grid-column-start: 3;
-  }
-
-  .game-browser-wrapper {
-    grid-column-start: 1;
-  }
 }
 
 
@@ -271,16 +208,9 @@ select {
   display: flex;
   flex-direction: column;
   align-items: left;
-  width: calc(50% - 48px);
+  width: calc(33% - 50px);
   padding: 16px 18px 18px 18px;
   border-radius: 10px;
-}
-
-@media only screen and (max-device-width: 767px) {
-  .title-container {
-    width: calc(64% - 40px);
-    margin-top: 40px;
-  }
 }
 
 .home-header h1 {
@@ -382,19 +312,6 @@ select {
   height: 25px;
 }
 
-@media only screen and (max-device-width: 767px) {
-  .nav-bar {
-    position: absolute;
-    left: 16px;
-    top: 8px;
-  }
-
-  .nav-bar-links {
-    position: absolute;
-    right: 0;
-  }
-}
-
 
 /* Language List */
 #languageList {
@@ -445,6 +362,8 @@ select {
 }
 
 .game-browser, .create-game {
+  height: calc(100% - 40px);
+
   a {
     color: darksalmon;
     text-decoration: underline;
@@ -498,6 +417,7 @@ select {
 
 .game-browser .spectate-button {
   height: 38px;
+  margin-top: 5px;
 }
 
 .format-title {
@@ -603,6 +523,9 @@ select {
 
 .petranaki-column {
   margin: 0 20px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
   overflow-y: auto;
   scrollbar-color: #888888 rgba(0, 0, 0, 0);
   scrollbar-width: thin;
@@ -640,14 +563,8 @@ select {
 /* GAME INVITE ---------------------------------------------------------------------------------------------- */
 
 .game-invite {
-  width: 60%;
-  margin: 24px auto;
-}
-
-@media only screen and (max-device-width: 767px) {
-  .game-invite {
-    width: 90%;
-  }
+  margin: 0 0 20px 0;
+  padding-bottom: 0;
 }
 
 .game-invite #fabdb, .game-invite #favoriteDecks {
@@ -695,22 +612,6 @@ select {
 
 /* SIGN UP -------------------------------------------------------------------------------------------------- */
 
-.signup-wrapper {
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.login {
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.remember-me-message {
-  max-width: 600px;
-  margin: 0 auto;
-  margin-top: 24px;
-}
-
 .signup-form input {
   width: 100%;
 }
@@ -727,15 +628,13 @@ select {
 }
 
 .fav-decks {
-  max-width: 800px;
-  margin: 0 auto;
+  margin: 0 20px;
   overflow-y: auto;
   flex-grow: 1.8;
 }
 
 .stats {
- max-width: 800px;
- margin: 20px auto;
+ margin: 0 20px 0 0;
  overflow-y: auto;
  flex-grow: 1;
 }
@@ -807,13 +706,15 @@ select {
 }
 
 .leave-lobby:hover {
-  text-decoration: underline;
+  /* text-decoration: underline; */
 }
 
 /* Sizing Wrapper */
 
 .lobby-wrapper {
   max-height: calc(100vh - 75px);
+  grid-area: main;
+  display: flex;
   margin-top: 32px;
 }
 
@@ -821,6 +722,11 @@ select {
 
 .game-lobby {
   margin-left: 20px;
+  flex-basis: calc(33% - 60px);
+  flex-grow: 0;
+  padding-bottom: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .game-lobby h2 {
@@ -835,10 +741,9 @@ select {
   margin: 0 0 10px;
 }
 
-div.lobby-wrapper > div.chat-log {
+.chat-log {
   display: flex;
   flex-direction: column;
-  margin-left: 20px;
   min-height: 0;
 }
 
@@ -894,13 +799,25 @@ div.lobby-wrapper > div.chat-log {
 }
 
 .player-info img {
-  height: 15vh !important;
+  height: 177px !important;
   max-width: 250px !important;
   width: auto !important;
   aspect-ratio: 16 / 11.4;
   object-fit:contain;
   background-color: black;
 }
+
+@media screen and (max-height: 1050px) { .player-info img { height: 16vh !important; } }
+@media screen and (max-height: 950px)  { .player-info img { height: 15vh !important; } }
+@media screen and (max-height: 840px)  { .player-info img { height: 110px !important; }
+  .player-info {
+  flex: 0;
+  flex-basis: 157px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  scrollbar-color: #888888 rgba(0, 0, 0, 0);
+  scrollbar-width: thin;
+  } }
 
 /* Deck */
 
@@ -909,7 +826,6 @@ div.lobby-wrapper > div.chat-log {
   flex-grow: 3;
   display: flex;
   flex-direction: column;
-  overflow-y: scroll;
 }
 
 .deck-header {
@@ -932,135 +848,6 @@ div.lobby-wrapper > div.chat-log {
 .lobby-footer {
   grid-area: footer;
   /* height: 40px; */
-}
-
-@media only screen and (min-device-width: 1440px) {
-  .lobby-wrapper {
-    display: grid;
-    grid-template-columns: 0.9fr 0.4fr 1.7fr;
-    grid-template-rows: 0.6fr 1.4fr;
-    gap: 0px 0px;
-    grid-template-areas:
-      "L P S"
-      "C P S";
-  }
-
-  div.lobby-wrapper > div.game-lobby {
-    grid-area: L;
-  }
-
-  div.lobby-wrapper > div.chat-log {
-    grid-area: C;
-    margin-top: calc(-8vh + 64px);
-  }
-
-  div.lobby-wrapper > div.player-info {
-    grid-area: P;
-  }
-
-  div.lobby-wrapper > div.deck-info {
-    grid-area: S;
-  }
-}
-
-@media only screen and (min-device-width: 768px) and (max-device-width: 1439px) {
-  @viewport {
-    orientation: portrait;
-  }
-  .lobby-wrapper {
-    display: grid;
-    grid-template-columns: 0.9fr 0.4fr;
-    grid-template-rows: 1fr 1fr 2fr;
-    grid-template-areas:
-      "L P"
-      "C P"
-      "S S";
-  }
-
-  div.lobby-wrapper > div.game-lobby {
-    grid-area: L;
-  }
-
-  div.lobby-wrapper > div.chat-log {
-    grid-area: C;
-    margin-top: -32px;
-  }
-
-  div.lobby-wrapper > div.player-info {
-    grid-area: P;
-    margin: 0 20px 0 0;
-  }
-
-  div.lobby-wrapper > div.player-info div#my-info,div#their-info {
-   margin: 0 0 0 24px;
-  }
-
-  div.lobby-wrapper > div.player-info img {
-    height: 64px !important;
-  }
-
-  div.lobby-wrapper > div.deck-info {
-    grid-area: S;
-  }
-}
-
-@media only screen and (max-device-width: 767px) {
-  @viewport {
-    orientation: portrait;
-  }
-
-  .lobby-wrapper {
-    display: grid;
-    grid-template-areas:
-      "L P"
-      "C C"
-      "S S";
-  }
-
-  .lobby-footer {
-    transform: scale(0.5);
-    transform-origin: top center;
-    margin-bottom: 1vh;
-  }
-
-  div.lobby-wrapper input.invite-link {
-    display: none;
-  }
-
-  div.lobby-wrapper > div.game-lobby {
-    grid-area: L;
-    transform: scale(0.75);
-    width: 50vw;
-    transform-origin: top left;
-    margin-right: -20vw;
-  }
-
-  div.lobby-wrapper > div.chat-log {
-    grid-area: C;
-    transform: scale(0.85);
-    transform-origin: top left;
-    margin-top: calc(-18vh/2);
-  }
-
-  div.lobby-wrapper > div.player-info {
-    grid-area: P;
-    transform: scale(0.7);
-    transform-origin: top left;
-  }
-
-  div.lobby-wrapper > div.player-info img {
-    height: 48px !important;
-  }
-
-  div.lobby-wrapper > div.deck-info {
-    grid-area: S;
-    transform: scale(0.50);
-    transform-origin: top left;
-    margin-top: calc(-8vh/2);
-    width: 150%;
-    height: 200%;
-    overflow-y: scroll;
-  }
 }
 
 /* DISCLAIMER ---------------------------------------------------------------------------------------------- */
@@ -1086,4 +873,3 @@ div.lobby-wrapper > div.chat-log {
   background-color: rgb(0, 0, 0, 40%);
   backdrop-filter: blur(20px);
 }
-
