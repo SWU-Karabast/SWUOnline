@@ -243,11 +243,9 @@ td {
   .display-game-screen {
     z-index: 1000;
   }
-
 }
 
 @media only screen and (max-height: 740px) {
-
   #myHand {
     bottom: calc(50% - 290px) !important;
   }
@@ -256,11 +254,9 @@ td {
     top: calc(50% - 367px) !important;
     position: absolute;
   }
-
 }
 
 @media only screen and (max-height: 720px) {
-
   .display-game-screen {
     bottom: 0px !important;
   }
@@ -276,10 +272,13 @@ td {
     top: 130px;
     height: calc(100% - 320px);
   }
-
 }
 
 @media only screen and (max-device-width: 599px) {
+  @viewport {
+    orientation: landscape;
+  }
+
   div#myHand span a, div#theirHand span a {
     transform: scale(0.85);
   }
@@ -1474,7 +1473,6 @@ input[type="button"]:focus {
 /* Responsive Layouts */
 
 @media screen and (max-width: 1199px) {
-
   .their-discard {
     right:258px;
     top:20px;

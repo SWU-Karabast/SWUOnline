@@ -194,6 +194,10 @@ select {
 }
 
 @media only screen and (max-device-width: 1019px) {
+  @viewport {
+    orientation: portrait;
+  }
+
   .core-wrapper {
     margin-top: -80px;
   }
@@ -872,7 +876,7 @@ div.lobby-wrapper > div.chat-log {
 }
 
 .player-info img {
-  height: 177px !important;
+  height: 15vh !important;
   max-width: 250px !important;
   width: auto !important;
   aspect-ratio: 16 / 11.4;
@@ -929,7 +933,7 @@ div.lobby-wrapper > div.chat-log {
 
   div.lobby-wrapper > div.chat-log {
     grid-area: C;
-    margin-top: -64px;
+    margin-top: calc(-8vh + 64px);
   }
 
   div.lobby-wrapper > div.player-info {
@@ -942,6 +946,9 @@ div.lobby-wrapper > div.chat-log {
 }
 
 @media only screen and (min-device-width: 768px) and (max-device-width: 1439px) {
+  @viewport {
+    orientation: portrait;
+  }
   .lobby-wrapper {
     display: grid;
     grid-template-columns: 0.9fr 0.4fr;
@@ -966,6 +973,10 @@ div.lobby-wrapper > div.chat-log {
     margin: 0 20px 0 0;
   }
 
+  div.lobby-wrapper > div.player-info div#my-info,div#their-info {
+   margin: 0 0 0 24px;
+  }
+
   div.lobby-wrapper > div.player-info img {
     height: 64px !important;
   }
@@ -976,6 +987,10 @@ div.lobby-wrapper > div.chat-log {
 }
 
 @media only screen and (max-device-width: 767px) {
+  @viewport {
+    orientation: portrait;
+  }
+
   .lobby-wrapper {
     display: grid;
     grid-template-areas:
