@@ -147,6 +147,10 @@ $cardBack = new stdClass();
 $cardBack->name = "PrairiePirates";
 $cardBack->id = 36;
 $response->cardBacks[] = $cardBack;
+$cardBack = new stdClass();
+$cardBack->name = "Colorado Cantina Crew";
+$cardBack->id = 37;
+$response->cardBacks[] = $cardBack;
 
 $response->playmats = [];
 if(IsUserLoggedIn()) {
