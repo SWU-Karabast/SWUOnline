@@ -193,8 +193,8 @@ if ($handle = opendir($path)) {
   }
   closedir($handle);
 }
-$debug = getenv("STAGE") == "dev";
-if($debug) {
+$isDev = getenv("STAGE") == "dev";
+if($isDev) {
   $fakeSpectate = <<<HTML
   <style>
 
