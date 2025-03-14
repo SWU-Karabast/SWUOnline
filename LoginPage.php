@@ -46,7 +46,7 @@ include_once 'Header.php';
     ?>
   </div>
 
-  <div class="remember-me-message container bg-yellow">
+  <div class="container bg-yellow">
     <p>By using the Remember Me function, you consent to a cookie being stored in your browser for the purpose of identifying
       your account on future visits.</p>
     <a href='./MenuFiles/PrivacyPolicy.php'>Privacy Policy</a>
