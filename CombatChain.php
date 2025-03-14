@@ -26,7 +26,7 @@ function ProcessHitEffect($cardID)
         AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY:arena=Ground");
         AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a card to deal 3 damage", 1);
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
-        AddDecisionQueue("MZOP", $mainPlayer, DamageStringBuilder(3, $mainPlayer, isUnitEffect:1), 1);
+        AddDecisionQueue("MZOP", $mainPlayer, DealDamageBuilder(3, $mainPlayer, isUnitEffect:1), 1);
       }
       break;
     case "3280523224"://Rukh
@@ -54,7 +54,8 @@ function ProcessHitEffect($cardID)
 }
 
 function CompletesAttackEffect($cardID) {
-  global $mainPlayer, $defPlayer, $CS_NumLeftPlay;
+  global $mainPlayer, $defPlayer, $currentTurnEffects;
+  global  $CS_NumLeftPlay;
 
   //uogrades
   $mzId = AttackerMZID($mainPlayer);
@@ -75,6 +76,19 @@ function CompletesAttackEffect($cardID) {
     }
   }
 
+  for($i=0;$i<count($currentTurnEffects);$i+=CurrentTurnPieces()) {
+    switch($currentTurnEffects[$i]) {
+      case "7660822254"://Barrel Roll
+        AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:arena=Space&THEIRALLY:arena=Space");
+        AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a space unit to exhaust");
+        AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
+        AddDecisionQueue("MZOP", $mainPlayer, "REST", 1);
+        AddDecisionQueue("REMOVECURRENTEFFECT", $mainPlayer, $currentTurnEffects[$i], 1);
+        break;
+      default: break;
+    }
+  }
+
   switch($cardID)
   {
     case "9560139036"://Ezra Bridger
@@ -88,7 +102,7 @@ function CompletesAttackEffect($cardID) {
         AddDecisionQueue("MULTIZONEINDICES", $mainPlayer, "THEIRALLY:arena=Ground");
         AddDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to deal 4 damage to");
         AddDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
-        AddDecisionQueue("MZOP", $mainPlayer, DamageStringBuilder(4, $mainPlayer, isUnitEffect:1), 1);
+        AddDecisionQueue("MZOP", $mainPlayer, DealDamageBuilder(4, $mainPlayer, isUnitEffect:1), 1);
       }
       break;
     case "0518313150"://Embo

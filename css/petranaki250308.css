@@ -177,8 +177,8 @@ select {
 }
 
 .core-wrapper {
-  margin-top: -136px;
-  height: calc(100% - 230px);
+  margin-top: -116px;
+  height: calc(100% - 223px);
   display: flex;
   flex-direction: row;
 }
@@ -195,29 +195,35 @@ select {
 
 .home-header {
   height: 276px;
-  padding: 20px 0 20px 40px;
+  padding: 20px 0 0 20px;
   position: relative;
 }
 
 .title {
   text-decoration: none;
-  margin-top: 10px;
+  letter-spacing: 0.05em;
 }
 
 .title-container {
   display: flex;
   flex-direction: column;
   align-items: left;
-  width: 30%;
-  margin-left: -16px;
-  padding: 8px 16px;
-  border-radius: 16px;
+  width: calc(33% - 50px);
+  padding: 16px 18px 18px 18px;
+  border-radius: 10px;
 }
 
 .home-header h1 {
   font-size: 50px;
-  font-weight: 400;
+  font-weight: 500;
   margin-bottom: 4px;
+  letter-spacing: 0.025em;
+}
+
+.home-title span {
+  display: inline-block;
+  transform: scaleX(-1);
+  margin-right: 2px;
 }
 
 .home-header p {
@@ -267,20 +273,38 @@ select {
   text-decoration: underline;
 }
 
-.nav-bar-user, .nav-bar-links {
+.nav-bar-user, .nav-bar-links, .nav-bar-karabast {
   background-color: rgb(0, 0, 0, 40%);
 
   backdrop-filter: blur(20px);
   padding: 10px 20px;
 }
 
-.nav-bar-links {
+.nav-bar-links, .nav-bar-karabast {
   border-radius: 50px 0 0 50px;
 }
 
 .nav-bar-user {
   margin: 0 20px 0 0;
   border-radius: 50px;
+}
+
+.nav-bar-karabast {
+  width: fit-content;
+  right: 0;
+  margin-top: 16px;
+  position: absolute;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 12.5px 20px;
+
+  a {
+    text-decoration: underline;
+
+    &:hover {
+      color: lightsalmon;
+    }
+  }
 }
 
 .nav-bar img {
@@ -337,8 +361,17 @@ select {
   flex: 1;
 }
 
-.game-browser {
+.game-browser, .create-game {
   height: calc(100% - 40px);
+
+  a {
+    color: darksalmon;
+    text-decoration: underline;
+
+    &:hover {
+      color: lightsalmon;
+    }
+  }
 }
 
 .game-browser h3 {
@@ -436,14 +469,13 @@ select {
 .create-game-wrapper {
   margin-left: 20px;
   flex: 1;
-  height:fit-content;
   overflow-y: auto;
   scrollbar-color: #888888 rgba(0, 0, 0, 0);
   scrollbar-width: thin;
   border-radius: 10px;
 }
 
-@media screen and (max-height: 780px) { .create-game-wrapper { height:auto; max-height: 503px; } }
+/* @media screen and (max-height: 780px) { .create-game-wrapper { height:auto; max-height: 503px; } } */
 
 .create-game-wrapper input, .create-game-wrapper select {
   width: 100%;
@@ -506,6 +538,15 @@ select {
 
 .petranaki-news {
   margin-top: 20px;
+
+  a {
+    color: darksalmon;
+    text-decoration: underline;
+
+    &:hover {
+      color: lightsalmon;
+    }
+  }
 }
 
 .petranaki-unimplemented-list {
@@ -638,36 +679,44 @@ select {
 
 .lobby-header {
   grid-area: header;
-  height: 40px;
-  padding: 20px;
+  height: 64px;
+  padding: 0px 20px;
+  position: relative;
+  background-color: transparent;
 }
 
-.lobby-header h1 {
+.lobby-header h2 {
   float: left;
-  padding-left: 20px;
-  margin-top: 3px;
+  padding: 12px 20px;
+  border-radius: 10px;
+  text-transform: unset;
+  width: calc(33% - 88px);
+  font-size: 26px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
-.leave-lobby a {
-  float: right;
-  margin: 15px 0 0 0;
-  padding: 0 20px 0 0;
+.leave-lobby {
+  font-size: 18px;
   text-decoration: none;
+  display: flex;
+  align-items: center;
   font-weight: 600;
-  color: white;
+  gap: 5px;
 }
 
-.leave-lobby a:hover {
-  text-decoration: underline;
+.leave-lobby:hover {
+  /* text-decoration: underline; */
 }
 
 /* Sizing Wrapper */
 
 .lobby-wrapper {
-  max-height: calc(100vh - 120px);
+  max-height: calc(100vh - 75px);
   grid-area: main;
   display: flex;
-  }
+  margin-top: 32px;
+}
 
 /* Game Set Up */
 
@@ -798,29 +847,29 @@ select {
 
 .lobby-footer {
   grid-area: footer;
-  height: 40px;
-}
-
-.lobby-footer .disclaimer {
-  position: relative;
-  padding: 12px 0;
-  bottom: 0;
+  /* height: 40px; */
 }
 
 /* DISCLAIMER ---------------------------------------------------------------------------------------------- */
 
 .disclaimer {
-  position: absolute;
-  bottom: 15px;
-  width: 100%;
-  display: flex;
-  justify-content: center;
+  position: fixed;
+  bottom: 0;
+  left: 20px;
+  right: 20px;
+  border-radius: 10px 10px 0 0;
 }
 
 .disclaimer p {
   font-size: 12px;
-  font-weight: 300;
-  margin: 0 auto;
-  padding: 2px 8px;
-  border-radius: 4px;
+  font-weight: 400;
+  /* width: 100%; */
+  text-align: center;
+  padding: 10px 4px 8px 4px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.bg-blur {
+  background-color: rgb(0, 0, 0, 40%);
+  backdrop-filter: blur(20px);
 }

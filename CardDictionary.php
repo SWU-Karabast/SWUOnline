@@ -368,14 +368,15 @@ function HasSentinel($cardID, $player, $index)
       case "4991712618"://Unshakeable Will
       case "3874382333"://Academy Graduate
       case "3064aff14f"://Lando Calrissian leader unit
-        return true;
+        $hasSentinel = true;
       //conditional upgrade sentinel
       case "9706341387"://Jarek Yeager
-        return SearchCount(SearchAllies($player, arena:"Ground")) > 0
+        $hasSentinel = SearchCount(SearchAllies($player, arena:"Ground")) > 0
           && SearchCount(SearchAllies($player, arena:"Space")) > 0;
       default: break;
     }
   }
+  if($hasSentinel) return true;
   //Self Sentinel
   switch($cardID)
   {
@@ -690,6 +691,7 @@ function HasOverwhelm($cardID, $player, $index)
     case "3476041913"://Low Altitude Gunship
     case "8655450523"://Count Dooku (Fallen Jedi)
     case "0756051511"://MC30 Assault Frigate
+    case "6576881465"://Decimator of Dissidents
     case "9017877021"://Clone Commander Cody
       return true;
     case "4484318969"://Moff Gideon Leader Unit
@@ -797,6 +799,7 @@ function HasAmbush($cardID, $player, $index, $from)
     case "7458361203"://Corporate Light Cruiser
     case "2913957813"://Eager Escort Fighter
     case "0728753133"://The Starhawk
+    case "9667260960"://Retrofitted Airspeeder
       return true;
 
     //conditional ambush
@@ -1229,6 +1232,10 @@ function GetAbilityTypes($cardID, $index = -1, $from="-")
   }
 
   return $abilityTypes;
+}
+
+function CardIDIsBase($cardID) {
+  return DefinedTypesContains($cardID, "Base");
 }
 
 function CardIDIsLeader($cardID, $playerID = "") {
@@ -1921,6 +1928,8 @@ function GoesWhereAfterResolving($cardID, $from = null, $player = "", $playedFro
 
 function UpgradeFilter($cardID)
 {
+  //TODO: allow upgrade filters to use & syntax on more than just traits
+  if($cardID == "5375722883") return "trait!=Vehicle";//R2-D2 (Artooooooooo!)
   if(PilotingCost($cardID) >= 0) return "trait!=Vehicle";
   switch($cardID) {
     case "0160548661"://Fallen Lightsaber
@@ -2365,34 +2374,6 @@ function LeaderCanPilot($cardID) {
     case "7661383869"://Darth Vader
     case "4531112134"://Kazuda Xiono
     case "9763190770"://Major Vonreg
-      return true;
-    default: return false;
-  }
-}
-
-function HasAttackAbility($cardID) {
-  switch($cardID) {
-    case "1746195484"://Jedha Agitator
-    case "5707383130"://Bendu
-    case "1862616109"://Snowspeeder
-    case "3613174521"://Outer Rim Headhunter
-    case "4599464590"://Rugged Survivors
-    case "4299027717"://Mining Guild Tie Fighter
-    case "7728042035"://Chimaera
-    case "8691800148"://Reinforcement Walker
-    case "9568000754"://R2-D2
-    case "8009713136"://C-3PO
-    case "7533529264"://Wolffe
-    case "5818136044"://Xanadu Blood
-    case "1304452249"://Covetous Rivals
-    case "3086868510"://Pre Vizsla
-    case "8380936981"://Jabba's Rancor
-    case "1503633301"://Survivors' Gauntlet
-    case "8240629990"://Avenger
-    case "6931439330"://The Ghost
-    case "3468546373"://General Rieekan
-    case "7192849828"://Mist Hunter
-    case "3427170256"://Captain Phasma Unit
       return true;
     default: return false;
   }

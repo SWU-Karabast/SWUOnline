@@ -2,7 +2,7 @@
 
 //0 - Card ID
 //1 - Status (2=ready, 1=unavailable, 0=destroyed)
-//2 - Num counters
+//2 - Num counters (used for epic action on leaders)
 //3 - Num attack counters
 //4 - Num defense counters
 //5 - Num uses
@@ -10,60 +10,83 @@
 //7 - Flagged for destruction (1 = yes, 0 = no)
 //8 - Frozen (1 = yes, 0 = no)
 //9 - Is Active (2 = always active, 1 = yes, 0 = no)
-//10 - Position (0 = normal, 1 = distant)
-class Character
-{
-    // property declaration
-    public $cardID = "";
-    public $status = 2;
-    public $numCounters = 0;
-    public $numAttackCounters = 0;
-    public $numDefenseCounters = 0;
-    public $numUses = 0;
-    public $onChain = 0;
-    public $flaggedForDestruction = 0;
-    public $frozen = 0;
-    public $isActive = 2;
-    public $position = 0;
+//10 - Counters (damage/healing counters)
+class Character {
+  // property declaration
+  private $characters = [];
+  private $playerID;
+  private $index;
 
-    private $player = null;
-    private $arrIndex = -1;
+  public function __construct($mzIndexOrUniqueID, $player = "") {
+    global $currentPlayer;
 
-    public function __construct($player, $index)
-    {
-      $this->player = $player;
-      $this->arrIndex = $index;
-      $array = &GetPlayerCharacter($player);
+    if (str_contains($mzIndexOrUniqueID, "BASE")) {
+      $this->index = 0;
+      $player = $mzIndexOrUniqueID[1];
+    } else if (str_contains($mzIndexOrUniqueID, "LEADER")) {
+      $this->index = CharacterPieces();
+      $player = $mzIndexOrUniqueID[1];
+    } else {
+      $mzArr = explode("-", $mzIndexOrUniqueID);
+      $player = $player == "" ? $currentPlayer : $player;
+      $player = $mzArr[0] == "MYCHAR" ? $player : ($player == 1 ? 2 : 1); // Unlike the Ally class, Character doesn't ignore the mzIndex's prefix
 
-      $this->cardID = $array[$index];
-      $this->status = $array[$index+1];
-      $this->numCounters = $array[$index+2];
-      $this->numAttackCounters = $array[$index+3];
-      $this->numDefenseCounters = $array[$index+4];
-      $this->numUses = $array[$index+5];
-      $this->onChain = $array[$index+6];
-      $this->flaggedForDestruction = $array[$index+7];
-      $this->frozen = $array[$index+8];
-      $this->isActive = $array[$index+9];
-      $this->position = $array[$index+10];
+      if ($mzArr[1] == "") {
+        for($i=0; $i<CharacterPieces(); ++$i) $this->characters[] = 9999;
+        $this->index = -1;
+      } else {
+        $this->index = intval($mzArr[1]);
+      }
     }
 
-    public function Finished()
-    {
-      $array = &GetPlayerCharacter($this->player);
-      $array[$this->arrIndex] = $this->cardID;
-      $array[$this->arrIndex+1] = $this->status;
-      $array[$this->arrIndex+2] = $this->numCounters;
-      $array[$this->arrIndex+3] = $this->numAttackCounters;
-      $array[$this->arrIndex+4] = $this->numDefenseCounters;
-      $array[$this->arrIndex+5] = $this->numUses;
-      $array[$this->arrIndex+6] = $this->onChain;
-      $array[$this->arrIndex+7] = $this->flaggedForDestruction;
-      $array[$this->arrIndex+8] = $this->frozen;
-      $array[$this->arrIndex+9] = $this->isActive;
-      $array[$this->arrIndex+10] = $this->position;
-    }
+    $this->playerID = $player;
+    $this->characters = &GetPlayerCharacter($player);
+  }
 
+  // Returns the unique ID of the character
+  // B<playerID> for base character
+  // L<playerID> for leader character
+  public function UniqueId() {
+    $characterType = $this->index === 0 ? "BASE" : "LEADER";
+    return "P" . $this->playerID . $characterType;
+  }
+
+  public function CardId() {
+    return $this->characters[$this->index];
+  }
+
+  public function Status() {
+    return $this->characters[$this->index + 1];
+  }
+
+  public function Counters() {
+    return $this->characters[$this->index + 10];
+  }
+
+  public function SetCounters($amount) {
+    $this->characters[$this->index + 10] = $amount;
+  }
+
+  public function IncreaseCounters() {
+    $this->characters[$this->index + 10]++;
+  }
+
+  public function DecreaseCounters() {
+    $this->characters[$this->index + 10]--;
+  }
+
+  public function PlayerID() {
+    return $this->playerID;
+  }
+
+  public function Index() {
+    return $this->index;
+  }
+
+  public function MZIndex() {
+    global $currentPlayer;
+    return ($currentPlayer == $this->playerID ? "MYCHAR-" : "THEIRCHAR-") . $this->index;
+  }  
 }
 
 function PutCharacterIntoPlayForPlayer($cardID, $player)
@@ -195,12 +218,13 @@ function CharacterDestroyEffect($cardID, $player)
 
 function ResetCharacter($player) {
   $char = &GetPlayerCharacter($player);
-  for ($i = 1; $i < count($char); $i += CharacterPieces()) {
-    if ($char[$i + 6] == 1) $char[$i] = 0; //Destroy if it was flagged for destruction
-    if ($char[$i] != 0) {
-      $char[$i] = 2;
-      $char[$i + 4] = CharacterNumUsesPerTurn($char[$i - 1]);
+  for ($i = 0; $i < count($char); $i += CharacterPieces()) {
+    if ($char[$i+7] == 1) $char[$i+1] = 0; //Destroy if it was flagged for destruction
+    if ($char[$i+1] != 0) {
+      $char[$i+1] = 2;
     }
+    $char[$i+5] = CharacterNumUsesPerTurn($char[$i]);
+    $char[$i+10] = 0;
   }
 }
 
@@ -403,11 +427,14 @@ function AllyDealDamageAbilities($player, $damage, $type) {
   //currentt turn effects from allies
   for($i=0;$i<count($currentTurnEffects);$i+=CurrentTurnPieces()) {
     switch($currentTurnEffects[$i]) {
+      case "8734471238"://Stay On Target
+        Draw($currentTurnEffects[$i+1]);
+        break;
       case "6228218834"://Tactical Heavy Bomber
-        if($type != "COMBAT") Draw($currentTurnEffects[$i+1]);
+        if($type != "COMBAT") Draw($currentTurnEffects[$i+1]); // TODO: should check for indirect damage only
         break;
       case "2711104544"://Guerilla Soldier
-        if($type != "COMBAT") {
+        if($type != "COMBAT") {  // TODO: should check for indirect damage only
           $ally = new Ally($currentTurnEffects[$i+2]);
           $ally->Ready();
         }

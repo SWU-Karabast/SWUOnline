@@ -634,9 +634,9 @@ function FormatCode($format)
   switch ($format) {
     case "premierf":
       return 0;
-    // case "reqsundo"://DEPRECATED
-    //   return 1;
-    case "12345678"://free 8 characters format
+    case "prstrict":
+      return 1;
+    case "previewf":
       return 2;
     case "sndcrawl":
       return 3;
@@ -648,32 +648,12 @@ function FormatCode($format)
       return 6;
     case "draftfmt":
       return 7;
+    case "civilwar":
+      return 8;
+    case "clonewar":
+      return 9;
     default:
       return -1;
-  }
-}
-
-function FormatName($formatCode)
-{
-  switch ($formatCode) {
-    case 0:
-      return "premierf";
-    // case 1://DEPRECATED
-    //   return "reqsundo";
-    case 2:
-      return "12345678";//free 8 characters format
-    case 3:
-      return "sndcrawl";
-    case 4:
-      return "openform";
-    case 5:
-      return "padawanf";
-    case 6:
-      return "sealedfm";
-    case 7:
-      return "draftfmt";
-    default:
-      return "-";
   }
 }
 

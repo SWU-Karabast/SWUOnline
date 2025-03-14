@@ -48,11 +48,34 @@ function TextCounterColor($darkMode)
 //14 onChain = 1 if card is on combat chain (mostly for equipment)
 //15 isFrozen = 1 if frozen
 //16 shows gem = (0, 1, 2) (0 off, 1 active, 2 inactive)
-function ClientRenderedCard($cardNumber, $action = 0, $overlay = 0, $borderColor = 0, $counters = 0, $actionDataOverride = "-", $lifeCounters = 0, $defCounters = 0, $atkCounters = 0, $controller = 0, $type = "", $sType = "", $restriction = "", $isBroken = 0, $onChain = 0, $isFrozen = 0, $gem = 0, $rotate = 0, $landscape = 0, $epicActionUsed = 0)
+function ClientRenderedCard($cardNumber, $action = 0, $overlay = 0, $borderColor = 0, $counters = 0, $actionDataOverride = "-", $lifeCounters = 0, $defCounters = 0, $atkCounters = 0, $controller = 0, $type = "", $sType = "", $restriction = "", $isBroken = 0, $onChain = 0, $isFrozen = 0, $gem = 0, $rotate = 0, $landscape = 0, $epicActionUsed = 0, $showCounterControls = 0, $counterType = 0, $counterLimitReached = 0)
 {
-  $rv = $cardNumber . " " . $action . " " . $overlay . " " . $borderColor . " " . $counters . " " . $actionDataOverride . " " . $lifeCounters . " " . $defCounters . " " . $atkCounters . " ";
-  $rv .= $controller . " " . $type . " " . $sType . " " . $restriction . " " . $isBroken . " " . $onChain . " " . $isFrozen . " " . $gem . " " . $rotate . " " . $landscape . " " . $epicActionUsed . " " . IsUnimplemented($cardNumber);
-  return $rv;
+  $rvArr = [];
+  $rvArr[0] = $cardNumber;
+  $rvArr[1] = $action;
+  $rvArr[2] = $overlay;
+  $rvArr[3] = $borderColor;
+  $rvArr[4] = $counters;
+  $rvArr[5] = $actionDataOverride;
+  $rvArr[6] = $lifeCounters;
+  $rvArr[7] = $defCounters;
+  $rvArr[8] = $atkCounters;
+  $rvArr[9] = $controller;
+  $rvArr[10] = $type;
+  $rvArr[11] = $sType;
+  $rvArr[12] = $restriction;
+  $rvArr[13] = $isBroken;
+  $rvArr[14] = $onChain;
+  $rvArr[15] = $isFrozen;
+  $rvArr[16] = $gem;
+  $rvArr[17] = $rotate;
+  $rvArr[18] = $landscape;
+  $rvArr[19] = $epicActionUsed;
+  $rvArr[20] = IsUnimplemented($cardNumber) ? 1 : 0;
+  $rvArr[21] = $showCounterControls ? 1 : 0;
+  $rvArr[22] = $counterType;
+  $rvArr[23] = $counterLimitReached ? 1 : 0;
+  return implode(" ", $rvArr);
 }
 
 function JSONRenderedCard(
@@ -149,8 +172,8 @@ function JSONRenderedCard(
 
   return $card;
 }
-//Rotate is deprecated
-function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $overlay = 0, $borderColor = 0, $counters = 0, $actionDataOverride = "", $id = "", $rotate = false, $lifeCounters = 0, $defCounters = 0, $atkCounters = -1, $from = "", $controller = 0, $subcardNum = 0, $isExhausted = false, $isUnimplemented = false)
+// $counterType = 0 for amount, 1 for damage, 2 for healing
+function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $overlay = 0, $borderColor = 0, $counters = 0, $actionDataOverride = "", $id = "", $rotate = false, $lifeCounters = 0, $defCounters = 0, $atkCounters = -1, $from = "", $controller = 0, $subcardNum = 0, $isExhausted = false, $isUnimplemented = false, $showCounterControls = false, $counterType = 0, $counterLimit = 0, $counterLimitReached = false)
 {
   if (isset($_COOKIE['selectedLanguage'])) {
     $selectedLanguage = $_COOKIE['selectedLanguage'];
@@ -166,6 +189,11 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
     $borderColor = $opts['border'] ?? 0;
     $actionDataOverride = $opts['actionOverride'] ?? "";
     $overlay = $opts['overlay'] ?? 0;
+    $showCounterControls = $opts['showCounterControls'] ?? false;
+    $counterType = $opts['counterType'] ?? 0;
+    $counters = $opts['counters'] ?? 0;
+    $counterLimit = $opts['counterLimit'] ?? 0;
+    $counterLimitReached = $opts['counterLimitReached'] ?? false;
   }
 
   if ($darkMode == null)
@@ -210,14 +238,14 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
   if ($folder == "crops")
     $margin = "0px;";
   if ($from == "SUBCARD") {
-    $rv = "<a style='" . $margin . " position:absolute; display:inline-block;" . ($action > 0 ? "cursor:pointer;" : "") . "'" . ($showHover > 0 ? " onmouseover='ShowCardDetail(event, this)' onmouseout='HideCardDetail()'" : "") . ($action > 0 ? " onclick='SubmitInput(\"" . $action . "\", \"&cardID=" . $actionData . "\");'" : "") . ">";
+    $rv = "<a class='not-selectable' style='" . $margin . " position:absolute; display:inline-block;" . ($action > 0 ? "cursor:pointer;" : "") . "'" . ($showHover > 0 ? " onmouseover='ShowCardDetail(event, this)' onmouseout='HideCardDetail()'" : "") . ($action > 0 ? " onclick='SubmitInput(\"" . $action . "\", \"&cardID=" . $actionData . "\");'" : "") . ">";
   } else {
-    $rv = "<a style='" . $margin . " position:relative; display:inline-block;" . ($action > 0 ? "cursor:pointer;" : "") . "'" . ($showHover > 0 ? " onmouseover='ShowCardDetail(event, this)' onmouseout='HideCardDetail()'" : "") . ($action > 0 ? " onclick='SubmitInput(\"" . $action . "\", \"&cardID=" . $actionData . "\");'" : "") . ">";
+    $rv = "<a class='not-selectable' style='" . $margin . " position:relative; display:inline-block;" . ($action > 0 ? "cursor:pointer;" : "") . "'" . ($showHover > 0 ? " onmouseover='ShowCardDetail(event, this)' onmouseout='HideCardDetail()'" : "") . ($action > 0 ? " onclick='SubmitInput(\"" . $action . "\", \"&cardID=" . $actionData . "\");'" : "") . ">";
   }
   if ($borderColor > 0) $margin = "margin-bottom:" . (8 + $subcardNum * 16) . "px; top: " . (0 + $subcardNum * 16) . "px;";
   if ($borderColor != -1 && $from == "HASSUBCARD") $margin = "margin-bottom:" . (6 + $subcardNum * 16) . "px; top: " . ($subcardNum * 16) . "px;";
   if ($folder == "crops") $margin = "0px;";
-  $rv = "<a style='" . $margin . " position:relative; display:inline-block;" . ($action > 0 ? "cursor:pointer;" : "") . "'" . ($showHover > 0 ? " onmouseover='ShowCardDetail(event, this)' onmouseout='HideCardDetail()'" : "") . ($action > 0 ? " onclick='SubmitInput(\"" . $action . "\", \"&cardID=" . $actionData . "\");'" : "") . ">";
+  $rv = "<a class='not-selectable' style='" . $margin . " position:relative; display:inline-block;" . ($action > 0 ? "cursor:pointer;" : "") . "'" . ($showHover > 0 ? " onmouseover='ShowCardDetail(event, this)' onmouseout='HideCardDetail()'" : "") . ($action > 0 ? " onclick='SubmitInput(\"" . $action . "\", \"&cardID=" . $actionData . "\");'" : "") . ">";
 
   if ($borderColor > 0) {
     $border = "border-radius:10px; border:2px solid " . BorderColorMap($borderColor) . ";";
@@ -244,7 +272,7 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
   if ($controller != 0 && IsPatron($controller) && CardHasAltArt($cardNumber))
     $folderPath = "PatreonImages/" . $folderPath;
   $altText = IsScreenReaderMode($playerID) ? " alt='" . CardTitle($cardNumber) . "' " : "";
-  $rv .= "<img " . ($id != "" ? "id='" . $id . "-img' " : "") . $altText . "data-orientation='" . ($rotate ? "portrait' " : "portrait' ") . "class='cardImage'" . "style='$border height: {$height}px; width: {$width}px; position:relative; border-radius:10px" . ($isExhausted ? "; transform: rotate(5deg)" : "") . "' src='$folderPath/$cardNumber$fileExt' />";
+  $rv .= "<img " . ($id != "" ? "id='" . $id . "-img' " : "") . $altText . "data-orientation='" . ($rotate ? "landscape' " : "portrait' ") . "class='cardImage'" . "style='$border height: {$height}px; width: {$width}px; position:relative; border-radius:10px" . ($isExhausted ? "; transform: rotate(5deg)" : "") . "' src='$folderPath/$cardNumber$fileExt' />";
   $rv .= "<div " . ($id != "" ? "id='" . $id . "-ovr' " : "") . "class='overlay'" . "style='visibility:" . ($overlay == 1 ? "visible" : "hidden") . "; height: {$height}px; width: {$width}px; top:2px; left:2px; position:absolute; background: rgba(0, 0, 0, 0.5); z-index: 1; border-radius: 8px;'></div>";
 
   // Counters Style
@@ -255,36 +283,69 @@ function Card($cardNumber, $folder, $maxHeight, $action = 0, $showHover = 0, $ov
   //$imgCounterHeight = $dynamicScaling ? intval($maxHeight / 2) : 44;
   $imgCounterHeight = $dynamicScaling ? intval($maxHeight / 2) : 35;
   $imgCounterFontSize = 24;
-  //Attacker Label Style
-  if (!is_numeric($counters)) {
-    $rv .= "<div style='margin: 0px; top: 101px; left: 50%;
-    margin-right: -50%; border-radius: 0 0 8px 8px; width: 120px; text-align: center; line-height: normal; padding:10px 0 13px;
-    transform: translate(-50%, -50%); position:absolute; z-index: 10; background:rgb(0, 0, 0, 0.8);
-    font-size:16px; font-weight:600; color:white; user-select: none; line-height:normal;'>" . $counters . "</div>";
-  }
-
-  //Default Counters Style (Deck, Discard, Hero, Equipment)
-  elseif ($counters != 0) {
-    if ($lifeCounters == 0 && $defCounters == 0 && $atkCounters == 0) {
-      $left = "50%";
-    } else {
-      $left = "30%";
+  
+  if ($counterType == 0) {
+    if (!is_numeric($counters)) {
+      $rv .= "<div style='margin: 0px; top: 101px; left: 50%;
+      margin-right: -50%; border-radius: 0 0 8px 8px; width: 120px; text-align: center; line-height: normal; padding:10px 0 13px;
+      transform: translate(-50%, -50%); position:absolute; z-index: 10; background:rgb(0, 0, 0, 0.8);
+      font-size:16px; font-weight:600; color:white; user-select: none; line-height:normal;'>" . $counters . "</div>";
     }
+    //Default Counters Style (Deck, Discard, Hero, Equipment)
+    elseif ($counters != 0) {
+      if ($lifeCounters == 0 && $defCounters == 0 && $atkCounters == 0) {
+        $left = "50%";
+      } else {
+        $left = "30%";
+      }
+      $rv .= "<div style='margin: 0px;
+      top: calc(50% - 8px - (" . $counterHeight . "px / 2)); left:calc(50% - 8px - (" . $counterHeight . "px / 2));
+      margin-right: -50%;
+      border-radius: 50%;
+      width:" . $counterHeight . "px;
+      height:" . $counterHeight . "px;
+      padding: 8px;
+      text-align: center;
+      position:absolute; z-index: 10;
+      background: rgba(0, 0, 0, 0.8);
+      line-height: 1.2;
+      font-size: 24px;
+      font-weight:700;
+      color: #fff;
+      user-select: none;'>" . $counters . "</div>";
+    }
+  } else {
+    $counterImgPrefix = $counterType == 1 ? "dmgbg" : "healbg";
     $rv .= "<div style='margin: 0px;
-    top: calc(50% - 8px - (" . $counterHeight . "px / 2)); left:calc(50% - 8px - (" . $counterHeight . "px / 2));
-    margin-right: -50%;
-    border-radius: 50%;
-    width:" . $counterHeight . "px;
-    height:" . $counterHeight . "px;
-    padding: 8px;
-    text-align: center;
-    position:absolute; z-index: 10;
-    background: rgba(0, 0, 0, 0.8);
+    top: calc(" . $maxHeight . "px / 2 - 18px);
+    left: calc(" . $maxHeight . "px / 2 - 18px);
+    border-radius: 0%;
+    width:36px;
+    height:36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position:absolute;
+    z-index: 10;
+    background: url(./Images/" . $counterImgPrefix . "-l.png) left no-repeat, url(./Images/" . $counterImgPrefix . "-r.png) right no-repeat;
+    background-size: contain;
     line-height: 1.2;
     font-size: 24px;
     font-weight:700;
     color: #fff;
     user-select: none;'>" . $counters . "</div>";
+  }
+
+  // Counter Controls
+  if ($showCounterControls) {
+    $canIncrease = !$counterLimitReached && ($counterLimit == 0 || $counters < $counterLimit);
+    $canDecrease = $counters > 0;
+
+    // Container for both buttons
+    $rv .= "<div class='counters-control-wrapper'>
+      <button class='counter-control increase-control' " . ($canIncrease ? "" : "disabled") . " onclick='SubmitIncreaseCounters(this, \"" . $actionData . "\");' " . ($showHover > 0 ? " onmouseenter='OnDamageControlMouseEnter()' onmouseleave='OnDamageControlMouseLeave()'" : "") . ">+</button>
+      <button class='counter-control decrease-control' " . ($canDecrease ? "" : "disabled") . " onclick='SubmitDecreaseCounters(this, \"" . $actionData . "\");' " . ($showHover > 0 ? " onmouseenter='OnDamageControlMouseEnter()' onmouseleave='OnDamageControlMouseLeave()'" : "") . ">-</button>
+    </div>";
   }
 
   // Shield Icon Style
@@ -477,7 +538,7 @@ function getSubcardAspect($subcardID)
       return "blue";
     case "Heroism":
       return "white";
-    case "Villany":
+    case "Villainy":
       return "black";
     default:
       return "grey";
@@ -537,6 +598,8 @@ function CreateButton($playerID, $caption, $mode, $input, $size = "", $image = "
 
   if ($mode == 34) {
     $classes = "claimButton";
+  } else if ($mode == 38) {
+    $classes = "confirmButton";
   } else {
     $classes = "";
   }
@@ -1123,7 +1186,7 @@ function CardLink($caption, $cardNumber, $recordMenu = false)
   //if (function_exists("IsColorblindMode") && !IsColorblindMode($playerID)) $pitchText = "";
   $file = "'./" . "WebpImages2" . "/" . $cardNumber . ".webp'";
   $dataOrientation = CardOrientation($cardNumber) == 0 ? "portrait" : "landscape";
-  return "<b><span data-orientation='$dataOrientation' style='color:" . $color . "; cursor:default;' onmouseover=\"ShowDetail(event," . $file . ")\" onmouseout='HideCardDetail()'>" . $name . "</span></b>";
+  return "<b><span data-orientation='$dataOrientation' style='color:" . $color . "; cursor:default;' onmouseenter=\"ShowDetail(event," . $file . ")\" onmouseleave='HideCardDetail()'>" . $name . "</span></b>";
 }
 
 function MainMenuUI()

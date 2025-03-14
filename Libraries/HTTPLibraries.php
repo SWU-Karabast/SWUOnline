@@ -44,7 +44,8 @@ function GetGameCounter($path = "./")
     ++$attemptCount;
   }
   if ($attemptCount == 30) {
-    header("Location: " . $redirectorPath . "MainMenu.php"); //We never actually got the lock
+    // It is commented because there is no redirector path
+    // header("Location: " . $redirectorPath . "MainMenu.php"); //We never actually got the lock
   }
   $counter = intval(fgets($gcFile));
   //$gameName = hash("sha256", $counter);

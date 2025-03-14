@@ -14,20 +14,11 @@ function EffectHitEffect($cardID)
         $ally->Destroy();
       }
       break;
-    case "8734471238"://Stay On Target
-      $ally = new Ally(AttackerMZID($mainPlayer), $mainPlayer);
-      if (GetAttackTarget() == "THEIRCHAR-0" && !$ally->LostAbilities()) {
-        Draw($mainPlayer);
-      }
-      break;
     case "8988732248-1"://Rebel Assault
       AddCurrentTurnEffect("8988732248-2", $mainPlayer);
       break;
     case "0802973415"://Outflank
       AddCurrentTurnEffect("0802973415-1", $mainPlayer);
-      break;
-    case "7660822254"://Barrel Roll
-      AddCurrentTurnEffectFromCombat("7660822254-1", $mainPlayer);
       break;
     case "5896817672-1"://Headhunting
     case "5896817672-2":
@@ -78,13 +69,6 @@ function FinalizeChainLinkEffects()
         PrependDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a unit to attack with");
         PrependDecisionQueue("MZFILTER", $mainPlayer, "status=1");
         PrependDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY");
-        return true;
-      case "7660822254-1"://Barrel Roll
-        PrependDecisionQueue("REMOVECURRENTEFFECT", $mainPlayer, $currentTurnEffects[$i]);
-        PrependDecisionQueue("MZOP", $mainPlayer, "REST", 1);
-        PrependDecisionQueue("MAYCHOOSEMULTIZONE", $mainPlayer, "<-", 1);
-        PrependDecisionQueue("SETDQCONTEXT", $mainPlayer, "Choose a space unit to exhaust");
-        PrependDecisionQueue("MULTIZONEINDICES", $mainPlayer, "MYALLY:arena=Space&THEIRALLY:arena=Space");
         return true;
       case "5896817672-2"://Headhunting
       case "5896817672-3":
@@ -930,11 +914,10 @@ function IsCombatEffectActive($cardID)
     case "4334684518+2"://Tandem Assault
     case "8656409691"://Rio Durant
     case "6720065735"://Han Solo (Has His Moments)
-    case "6228218834"://Tactival Heavy Bomber
+    case "6228218834"://Tactical Heavy Bomber
     case "6600603122"://Massassi Tactical Officer
     case "6413979593"://Punch it
     case "1355075014"://Air Assault
-    case "7660822254"://Barrel Roll
     case "9667260960"://Retrofitted Airspeeder
       return true;
     default: return false;

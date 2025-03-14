@@ -143,23 +143,25 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
         WriteLog("Player " . $playerID . " put a card on the bottom of the deck.");
       }
       break;
-    case 14: //Banish - can be reused for something else
-      //FAB
-      // $index = $cardID;
-      // $banish = &GetBanish($playerID);
-      // $theirChar = &GetPlayerCharacter($playerID == 1 ? 2 : 1);
-      // if($index < 0 || $index >= count($banish))
-      // {
-      //   echo("Banish Index " . $index . " Invalid Input<BR>");
-      //   return false;
-      // }
-      // $cardID = $banish[$index];
-      // if($banish[$index + 1] == "INST") SetClassState($currentPlayer, $CS_NextNAAInstant, 1);
-      // if($banish[$index + 1] == "MON212" && TalentContains($theirChar[0], "LIGHT", $currentPlayer)) AddCurrentTurnEffect("MON212", $currentPlayer);
-      // SetClassState($currentPlayer, $CS_PlayIndex, $index);
-      // PlayCard($cardID, "BANISH", -1, $index, $banish[$index + 2]);
+    case 14: // Increase damage/heal amount
+    case 15: // Decrease damage/heal amount
+      $uniqueID = $cardID;
+      if (is_numeric($uniqueID)) {
+        $ally = new Ally($uniqueID);
+        if ($mode == 14) {
+          $ally->IncreaseCounters();
+        } else {
+          $ally->DecreaseCounters();
+        }
+      } else {
+        $character = new Character($uniqueID);
+        if ($mode == 14) {
+          $character->IncreaseCounters();
+        } else {
+          $character->DecreaseCounters();
+        }
+      }
       break;
-
     case 16:
     case 18: //Decision Queue (15 and 18 deprecated)
       if (count($decisionQueue) > 0) {
@@ -415,6 +417,36 @@ function ProcessInput($playerID, $mode, $buttonInput, $cardID, $chkCount, $chkIn
         RemoveDiscard($otherP, $found);
         PlayCard($cardID, "TGY");
       }
+      break;
+    case 38: //Confirm Multi Damage/Heal
+      $parsedParams = ParseDQParameter($turn[0], $turn[1], $turn[2]);
+      $counterLimit = $parsedParams["counterLimit"];
+      $allies = $parsedParams["allies"];
+      $characters = $parsedParams["characters"];
+      $targets = [];
+
+      foreach ($allies as $allyUniqueID) {
+        $ally = new Ally($allyUniqueID);
+        $counters = $ally->Counters();
+        if ($counters > 0) {
+          $targets[] = $counters . "-" . $ally->UniqueID();
+          $ally->SetCounters(0);
+        }
+      }
+
+      foreach ($characters as $characterUniqueID) {
+        $character = new Character($characterUniqueID);
+        $counters = $character->Counters();
+        if ($counters > 0) {
+          $targets[] = $counters . "-" . $character->UniqueID();
+          $character->SetCounters(0);
+        }
+      }
+
+      // If there are no targets, return PASS
+      if (count($targets) == 0) return "PASS";
+      
+      ContinueDecisionQueue(implode(",", $targets));
       break;
     case 99: //Pass
       global $isPass, $initiativeTaken, $dqState;
@@ -844,11 +876,10 @@ function Passed(&$turn, $playerID)
 function PassInput($autopass = false)
 {
   global $turn, $currentPlayer, $initiativeTaken, $initiativePlayer;
-  if ($turn[0] == "END" || $turn[0] == "MAYCHOOSEOPTION" || $turn[0] == "MAYMULTICHOOSETEXT" || $turn[0] == "MAYCHOOSECOMBATCHAIN" || $turn[0] == "MAYCHOOSEMULTIZONE" || $turn[0] == "MAYMULTICHOOSEAURAS" || $turn[0] == "MAYMULTICHOOSEHAND" || $turn[0] == "MAYCHOOSEHAND" || $turn[0] == "MAYCHOOSEDISCARD" || $turn[0] == "MAYCHOOSEARSENAL" || $turn[0] == "MAYCHOOSEPERMANENT" || $turn[0] == "MAYCHOOSEDECK" || $turn[0] == "MAYCHOOSEMYSOUL" || $turn[0] == "MAYCHOOSETOP" || $turn[0] == "MAYCHOOSECARD" || $turn[0] == "INSTANT" || $turn[0] == "OK" || $turn[0] == "LOOKHAND" || $turn[0] == "BUTTONINPUT") {
+  if ($turn[0] == "END" || $turn[0] == "MAYCHOOSEOPTION" || $turn[0] == "MAYMULTICHOOSETEXT" || $turn[0] == "MAYCHOOSECOMBATCHAIN" || $turn[0] == "MAYCHOOSEMULTIZONE" || $turn[0] == "MAYMULTICHOOSEAURAS" || $turn[0] == "MAYMULTICHOOSEHAND" || $turn[0] == "MAYCHOOSEHAND" || $turn[0] == "MAYCHOOSEDISCARD" || $turn[0] == "MAYCHOOSEARSENAL" || $turn[0] == "MAYCHOOSEPERMANENT" || $turn[0] == "MAYCHOOSEDECK" || $turn[0] == "MAYCHOOSEMYSOUL" || $turn[0] == "MAYCHOOSETOP" || $turn[0] == "MAYCHOOSECARD" || $turn[0] == "INSTANT" || $turn[0] == "OK" || $turn[0] == "LOOKHAND" || $turn[0] == "BUTTONINPUT" || $turn[0] == "MAYMULTIDAMAGEMULTIZONE" || $turn[0] == "PARTIALMULTIDAMAGEMULTIZONE" || $turn[0] == "PARTIALMULTIHEALMULTIZONE" || $turn[0] == "MAYMULTIHEALMULTIZONE") {
     ContinueDecisionQueue("PASS");
   } else {
-    if ($autopass == true)
-      ;
+    if ($autopass == true);
     else
       WriteLog("Player " . $currentPlayer . " passed.");
     if (Pass($turn, $currentPlayer, $currentPlayer)) {
@@ -1226,7 +1257,7 @@ function ResolveMultichooseXSet($data, $chkInput, &$input) {
 function FinalizeChainLink($chainClosed = false)
 {
   global $turn, $actionPoints, $combatChain, $mainPlayer, $currentTurnEffects, $currentPlayer, $combatChainState, $actionPoints, $CCS_DamageDealt;
-  global $mainClassState, $CS_AtksWWeapon, $CCS_GoesWhereAfterLinkResolves, $CS_LastAttack, $CCS_LinkTotalAttack, $CS_NumSwordAttacks, $chainLinks, $chainLinkSummary;
+  global $mainClassState, $CCS_GoesWhereAfterLinkResolves, $CS_LastAttack, $CCS_LinkTotalAttack, $CS_NumSwordAttacks, $chainLinks, $chainLinkSummary;
   global $CS_AnotherWeaponGainedGoAgain, $CCS_HitThisLink, $initiativeTaken, $CS_PlayedAsUpgrade;
   $chainClosed = true;
   UpdateGameState($currentPlayer);
@@ -1503,6 +1534,7 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
   global $decisionQueue, $CS_PlayIndex, $CS_OppIndex, $CS_OppCardActive, $CS_PlayUniqueID, $CS_LayerPlayIndex, $CS_LastDynCost, $CS_NumCardsPlayed;
   global $CS_DynCostResolved, $CS_NumVillainyPlayed, $CS_NumEventsPlayed, $CS_NumClonesPlayed;
   global $CS_PlayedAsUpgrade, $CS_NumWhenDefeatedPlayed, $CS_NumBountyHuntersPlayed, $CS_NumPilotsPlayed, $CS_NumFirstOrderPlayed;
+  global $CS_NumUnitsPlayed;
   $resources = &GetResources($currentPlayer);
   $dynCostResolved = intval($dynCostResolved);
   $layerPriority[0] = ShouldHoldPriority(1);
@@ -1697,6 +1729,8 @@ function PlayCard($cardID, $from, $dynCostResolved = -1, $index = -1, $uniqueID 
         IncrementClassState($currentPlayer, $CS_NumWhenDefeatedPlayed);
       if (DefinedTypesContains($cardID, "Event", $currentPlayer))
         IncrementClassState($currentPlayer, $CS_NumEventsPlayed);
+      if (DefinedTypesContains($cardID, "Unit", $currentPlayer))
+        IncrementClassState($currentPlayer, $CS_NumUnitsPlayed);
       if (TraitContains($cardID, "Clone", $currentPlayer))
         IncrementClassState($currentPlayer, $CS_NumClonesPlayed);
       if (TraitContains($cardID, "First Order", $currentPlayer))
@@ -2117,7 +2151,7 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
         //AuraAttackAbilities($cardID);//FAB
         if ($from == "PLAY" && IsAlly($cardID)) {
           AllyAttackAbilities($cardID);
-          SpecificAllyAttackAbilities($cardID);
+          SpecificAllyAttackAbilities();
         }
       }
     } else { //On chain, but not index 0
@@ -2218,11 +2252,8 @@ function PlayCardEffect($cardID, $from, $resourcesPaid, $target = "-", $addition
         if ($from == "PLAY" || $from == "EQUIP") {
           $layerName = (GetResolvedAbilityType($cardID, $oppCardActive) == "A" || ($oppCardActive == true)) ? "ACTIVATEDABILITY" : "ATTACKABILITY";
         }
-        if ($layerName == "ATTACKABILITY") {
-          if (HasAttackAbility($cardID)) {
-            PlayAbility($cardID, "PLAY", "0");
-          }
-        }
+        
+        if ($layerName == "ATTACKABILITY") {}
         //TODO: Fix this Relentless and first light and The Mandalorian hack
         // Events and abilities that are not played should be resolved before any ally abilities
         else if ($from == "PLAY" || $from == "EQUIP" || IsUnitException($cardID) || DefinedTypesContains($cardID, "Event", $currentPlayer)) {
