@@ -193,61 +193,6 @@ if ($handle = opendir($path)) {
   }
   closedir($handle);
 }
-$isDev = getenv("STAGE") == "dev";
-if($isDev) {
-  $fakeSpectate = <<<HTML
-  <style>
-
-  .hero-container {
-    display: flex;
-    align-items: center;
-    column-gap: 10px
-  }
-
-  .hero-image {
-    height: 50px;
-    max-width: inherit;
-  }
-
-  </style>
-  <form class="spectate-form" action="https://petranaki.net/Arena/NextTurn4.php?gameName=52&amp;playerID=3">
-    <div class="spectate-container">
-      <div class="hero-container">  <img class="hero-image" src="./WebpImages2/7514405173.webp" alt="Player 1 Hero Image">
-        <img class="hero-image" src="./WebpImages2/8129465864.webp" alt="Player 1 Base Image">
-        <span class="versus">vs</span>
-        <img class="hero-image" src="./WebpImages2/9005139831.webp" alt="Player 2 Hero Image">
-        <img class="hero-image" src="./WebpImages2/2547571983.webp" alt="Player 2 Base Image">
-        <input class="spectate-button" type="submit" id="joinGame" value="Spectate">
-      </div>
-      <input type="hidden" name="gameName" value="52">
-      <input type="hidden" name="playerID" value="3">
-    </div>
-  </form>
-  HTML;
-  $spectateLinks .= $fakeSpectate;
-  $spectateLinks .= $fakeSpectate;
-
-  $fakePremLink = <<<HTML
-  <form style="text-align:center;" action="http://localhost:8080/Arena/JoinGame.php"><table class="game-item" cellspacing="0"><tbody><tr><td class="game-name"><p class="format-title">Premier</p><p>some game name</p></td><td>  <style>
-    .hero-container {
-      display: flex;
-      align-items: center;
-      column-gap: 10px
-    }
-
-    .hero-image {
-      height: 50px;
-      max-width: inherit;
-    }
-  </style>
-  <div class="hero-container">
-    <img class="hero-image" src="./WebpImages2/9831674351.webp" alt="Player 1 Hero Image">
-    <img class="hero-image" src="./WebpImages2/6366665313.webp" alt="Player 1 Base Image">
-  </div></td><td><input style="margin-left: 24px;" class="ServerChecker_Button" type="submit" id="joinGame" value="Join Game"></td></tr></tbody></table><input type="hidden" name="gameName" value="53"><input type="hidden" name="playerID" value="2"></form>
-  HTML;
-  $premierLinks .= $fakePremLink;
-  $premierLinks .= $fakePremLink;
-}
 if ($canSeeQueue) {
   echo ("<h3>Premier Casual</h3>");
   echo ("<hr/>");

@@ -1,4 +1,3 @@
-<meta name="viewport" content="width=device-width, initial-scale=0.67">
 <?php
 include_once 'MenuBar.php';
 include "HostFiles/Redirector.php";
@@ -88,7 +87,7 @@ include_once 'Header.php';
     <div style='text-align:center;'><input class="JoinGame_Button" type="submit" value="Join Game"></div>
     </form>
   </div>
-  <div class="container game-invite bg-yellow">
+  <div class="container bg-yellow">
       <h3>Instructions</h3>
       <p>Choose a deck, then click 'Join Game' to be taken to the game lobby.</p>
       <p>Once in the game lobby, the player who win the dice roll choose if the go first. Then the host can start the game.</p>
