@@ -83,7 +83,7 @@ $isMobile = IsMobile();
   <title>Game Lobby</title>
   <link id="icon" rel="shortcut icon" type="image/png" href="./Images/<?= $icon ?>"/>
   <link rel="stylesheet" href="./css/chat3.css">
-  <link rel="stylesheet" href="./css/petranaki250314.css">
+  <link rel="stylesheet" href="./css/petranaki250308.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
@@ -100,7 +100,7 @@ $isMobile = IsMobile();
       <h2 class="lobby-title bg-yellow">Game Lobby</h2>
       <p class="leave-lobby"><a href='MainMenu.php'>Leave Lobby</a></p>
     </div> -->
-    <div class="lobby-wrapper grid-container">
+    <div class="lobby-wrapper">
       <div class="game-lobby">
         <div id='mainPanel' style='text-align:center;'>
           <div class='game-set-up container bg-yellow'>
@@ -120,14 +120,14 @@ $isMobile = IsMobile();
             </div>
           </div>
         </div>
-      </div>
-      <div class='chat-log container bg-yellow'>
-        <h2>Chat</h2>
-        <div id='gamelog' class="gamelog"></div>
-        <div id='chatbox' class="chatbox">
-          <div class="lobby-chat-input">
-            <input class='GameLobby_Input' type='text' id='chatText' name='chatText' value='' autocomplete='off' onkeypress='ChatKey(event)'>
-            <button class='GameLobby_Button' style='cursor:pointer;' onclick='SubmitChat()'>Chat</button>
+        <div class='chat-log container bg-yellow'>
+          <h2>Chat</h2>
+          <div id='gamelog' class="gamelog"></div>
+          <div id='chatbox' class="chatbox">
+            <div class="lobby-chat-input">
+              <input class='GameLobby_Input' type='text' id='chatText' name='chatText' value='' autocomplete='off' onkeypress='ChatKey(event)'>
+              <button class='GameLobby_Button' style='cursor:pointer;' onclick='SubmitChat()'>Chat</button>
+            </div>
           </div>
         </div>
       </div>
@@ -224,17 +224,17 @@ $isMobile = IsMobile();
   <audio id="playerJoinedAudio">
     <source src="./Assets/playerJoinedSound.mp3" type="audio/mpeg">
   </audio>
-  <script src="./jsInclude250314.js"></script>
+  <script src="./jsInclude250308.js"></script>
   <script>
     function copyText() {
       var gameLink = document.getElementById("gameLink");
       gameLink.select();
       gameLink.setSelectionRange(0, 99999);
+
       // Copy it to clipboard
-      navigator.clipboard.writeText( gameLink.value )
+      document.execCommand("copy");
     }
     function OnLoadCallback(lastUpdate) {
-      screen.orientation.lock('portrait');
       <?php
       if ($playerID == "1" && $gameStatus == $MGS_ChooseFirstPlayer) {
         echo ("var audio = document.getElementById('playerJoinedAudio');");

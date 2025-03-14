@@ -1,11 +1,6 @@
 var _openPopup = null;
 
 function OnLoadCallback(lastUpdate) {
-  screen.orientation.lock("landscape");
-  if(screen.width < 768 || screen.height < 768) {
-    var metaTag = document.getElementById("viewportMeta");
-    if(metaTag) metaTag.setAttribute("content", "width=device-width, initial-scale=0.5");
-  }
   var log = document.getElementById("gamelog");
   if (log !== null) log.scrollTop = log.scrollHeight;
   reload();
@@ -19,6 +14,7 @@ function ShowCardDetail(e, that) {
     ShowDetail(e, that.getElementsByTagName("IMG")[0].src);
   }
 }
+
 
 function ShowDetail(e, imgSource) {
   imgSource = imgSource.replace("_cropped", "");
