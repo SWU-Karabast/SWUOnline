@@ -975,10 +975,8 @@ function SpecificCardLogic($player, $parameter, $lastResult)
       break;
     case "LUXBONTERI":
       $ally = new Ally($lastResult, MZPlayerID($player, $lastResult));
-      AddDecisionQueue("SETDQCONTEXT", $player, "Choose to exhaust or ready " . CardLink($ally->CardID(), $ally->CardID()));
-      AddDecisionQueue("BUTTONINPUT", $player, "Exhaust,Ready", 1);
-      AddDecisionQueue("PASSPARAMETER", $player, $lastResult, 1);
-      AddDecisionQueue("MZOP", $player, ($dqVars[0] == "Exhaust" ? "REST" : "READY"), 1);
+      if($ally->IsExhausted()) $ally->Ready();
+      else $ally->Exhaust();
       break;
     //Jump to Lightspeed
     case "KIMOGILAHEAVYFIGHTER":
